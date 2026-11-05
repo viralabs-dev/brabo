@@ -5,10 +5,8 @@ name: tag-release
 # sobre a base 0.0.0 de `proximaVersao`, coberto em brabo-ci `version.spec.ts`).
 #
 # Só roda com `PRODUTO_RELEASE_LIGADA=true` (variável de repositório; o dono liga).
-# BOT_TOKEN: o token do App (create-github-app-token) é mascarado e não atravessa jobs,
-# então não dá para passá-lo ao reutilizável. Sem ele a tag nasce pelo GITHUB_TOKEN e NÃO
-# dispara o `release.yml`; o job `publicar` fecha isso despachando-o na própria tag.
-# Hotfix exige o BOT_TOKEN (lacuna declarada).
+# O reutilizável gera o token do GitHub App (APP_ID/APP_PRIVATE_KEY) dentro do próprio job,
+# então a tag dispara o `release.yml` sozinha.
 on:
   push:
     branches: [dev, main]
@@ -16,32 +14,13 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  actions: write
 
 jobs:
   carimbar:
     if: vars.PRODUTO_RELEASE_LIGADA == 'true'
-    uses: viralabs-dev/brabo-ci/.github/workflows/tag-release.yml@236dc29d9e64a95ba278bd2ec1109940ce3d6e20  # v1.0.0
+    uses: viralabs-dev/brabo-ci/.github/workflows/tag-release.yml@242598dff5b306bfc7c2f71f28317826538f887a  # v1.0.0
     with:
-      ci_ref: 236dc29d9e64a95ba278bd2ec1109940ce3d6e20
-
-  publicar:
-    name: Despachar o release da tag final
-    needs: carimbar
-    if: github.ref_name == 'main'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-        with:
-          fetch-depth: 0
-      - name: Despachar release.yml na tag
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          git fetch --tags --force origin
-          tag="$(git tag --points-at "${GITHUB_SHA}" | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 || true)"
-          if [ -z "${tag}" ]; then echo "sem tag final neste commit"; exit 0; fi
-          gh workflow run release.yml --ref "${tag}"
-          echo "release despachado em ${tag}"
+      ci_ref: 242598dff5b306bfc7c2f71f28317826538f887a
+    secrets:
+      APP_ID: ${{ secrets.BRABO_APP_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.BRABO_APP_PRIVATE_KEY }}
