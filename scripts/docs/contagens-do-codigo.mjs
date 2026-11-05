@@ -231,21 +231,14 @@ function hospedeiroDe(ctx, padrao) {
 
 export const AFERICOES = [
   // overrides — "já são catorze na raiz e treze no website"
-  { arquivo: '.claude/contexto/stack.md', padrao: /já são (\S+(?: e \S+)?) na raiz e \S+(?: e \S+)? no website/, fonte: 'overridesRaiz', forma: 'pt_m' },
-  { arquivo: '.claude/contexto/stack.md', padrao: /já são \S+(?: e \S+)? na raiz e (\S+(?: e \S+)?) no website/, fonte: 'overridesWebsite', forma: 'pt_m' },
 
   // golden-set do RAG
-  { arquivo: '.claude/contexto/estado-atual.md', padrao: /um corpo de (\S+) perguntas medindo/, fonte: 'goldenSetRagCasos', forma: 'digito' },
   { arquivo: 'docs/explanation/gates.md', padrao: /\((\S+) perguntas compostas a partir de RNs/, fonte: 'goldenSetRagCasos', forma: 'digito' },
-  { arquivo: '.claude/contexto/estado-atual.md', padrao: /corpus CURADO \((\S+) arquivos, não os/, fonte: 'goldenSetRagCorpus', forma: 'digito' },
-  { arquivo: '.claude/contexto/estado-atual.md', padrao: /corpus CURADO \((\S+) arquivos\), não os/, fonte: 'goldenSetRagCorpus', forma: 'digito' },
-  { arquivo: '.claude/contexto/estado-atual.md', padrao: /medido de verdade \((\d+\/\d+),/, fonte: 'goldenSetRagPiso', forma: 'digito' },
 
   // imagens de terceiro presas por digest
   { arquivo: 'scripts/ci/docs/explanation/cadeia-de-suprimentos-do-ci.md', padrao: /todas as (\S+) referências de terceiros/, fonte: 'imagensDeTerceiro', forma: 'digito' },
 
   // imagens que o produto publica / que o smoke confere
-  { arquivo: '.claude/contexto/stack.md', padrao: /As (\S+) imagens de\s+produção são PUBLICADAS/, fonte: 'imagensPublicadas', forma: 'pt_f' },
   // RN-524 e RN-527 (AT-192): ficaram em "quatro" depois do ADR 0162
   { arquivo: HOSPEDEIRO_RN, padrao: /- as \*\*(\S+) imagens\*\* são assinadas \*\*por DIGEST\*\*/, fonte: 'imagensPublicadas', forma: 'pt_f' },
   { arquivo: HOSPEDEIRO_RN, padrao: /- as (\S+) imagens vêm de \*\*variável obrigatória\*\*/, fonte: 'imagensPublicadas', forma: 'pt_f' },
@@ -258,12 +251,10 @@ export const AFERICOES = [
   { arquivo: 'docs/architecture.md', padrao: /`GitProviderContract` — (\S+) operações, \*\*tipos/, fonte: 'operacoesDoGit', forma: 'pt_f' },
 
   // porta de Docker
-  { arquivo: '.claude/rules/runner.md', padrao: /PORTA de\s+(\S+) operações \(`packages\/docker-port`/, fonte: 'operacoesDoDocker', forma: 'pt_f' },
   { arquivo: '.claude/rules/broker-e-containers.md', padrao: /das (\S+) operações da `DockerPort`/, fonte: 'operacoesDoDocker', forma: 'pt_f' },
   { arquivo: 'docs/architecture.md', padrao: /a PORTA do Docker \((\S+) operações\)/, fonte: 'operacoesDoDocker', forma: 'pt_f' },
 
   // web, compose, ações, banco
-  { arquivo: '.claude/contexto/convencoes-repositorio-e-dominio.md', padrao: /Os (\S+) serviços do compose de DEV têm healthcheck/, fonte: 'servicosDoComposeDeDev', forma: 'pt_m' },
   { arquivo: 'docs/glossary.md', padrao: /nunca executa direto\.\s+São (\d+) tipos/, fonte: 'tiposDeAcao', forma: 'digito' },
   { arquivo: 'docs/glossary.md', padrao: /nunca executa direto\.\s+São \d+ tipos e (\d+) estados/, fonte: 'estadosDeAcao', forma: 'digito' },
   { arquivo: 'docs/architecture.md', padrao: /^(\d+) tabelas no total\./m, fonte: 'tabelasDoBanco', forma: 'digito' },
@@ -271,7 +262,6 @@ export const AFERICOES = [
   // artefatos e providers
   { arquivo: 'README.md', padrao: /os (\S+) schemas e quem pode emitir/, fonte: 'schemasDeArtefato', forma: 'pt_m' },
   { arquivo: 'apps/api/docs/reference/artifacts.md', padrao: /^description: Os (\S+) schemas de artefato/m, fonte: 'schemasDeArtefato', forma: 'pt_m' },
-  { arquivo: '.claude/contexto/stack.md', padrao: /; (\d+) providers \(ADR 0043\)/, fonte: 'providersDeLlm', forma: 'digito' },
 ];
 
 /**

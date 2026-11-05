@@ -46,10 +46,19 @@ for par in "${DESTINOS[@]}"; do
     echo "::warning::$repo: não consegui clonar '$REF' (repositório vazio ou ref ausente) — raiz omitida"
     continue
   fi
+  # os workflows de CI do QA têm imagens literais que o `imagens-pinadas` do infra reprova; são conferidos no CI do próprio brabo-qa
+  [ "$repo" = "brabo-qa" ] && rm -rf "$fonte/.github"
   mkdir -p "$destino"
   # -n: nunca sobrescreve; README/LICENSE/CHANGELOG/workflows daqui vencem
-  cp -a -n "$fonte/." "$destino/"
+  cp -a --update=none "$fonte/." "$destino/"
   echo "layout: $repo@$REF -> $destino"
+  # os workflows de publicação do runner são citados pelo runbook no caminho da raiz
+  if [ "$repo" = "brabo-runner" ]; then
+    mkdir -p .github/workflows
+    for w in build-runner-binaries publish-runner; do
+      [ -f "$fonte/.github/workflows/$w.yml" ] && cp -a --update=none "$fonte/.github/workflows/$w.yml" .github/workflows/
+    done
+  fi
 done
 
 # ignorados pelo .gitignore daqui (ex.: node_modules) não entram
