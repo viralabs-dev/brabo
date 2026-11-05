@@ -153,6 +153,7 @@ keywords: [scripts, pnpm, make, commands]
 
 | 目标 | 作用 |
 |---|---|
+| `make dev` | Brings up the dev environment (preflight + docker compose up) from the sibling clones |
 | `make help` | Lists the available targets |
 | `make deploy-local` | Brings up the local cluster, installs everything and runs the smoke test (TAG=vX.Y.Z-qa.N optional) |
 | `make deploy-local-clean` | Same as deploy-local, but without rebuilding the images |
@@ -173,4 +174,4 @@ keywords: [scripts, pnpm, make, commands]
 
 ---
 
-共 113 条命令。没有 `## 描述` 注释的 Makefile 目标不会出现在这里——请在源码中添加注释。
+共 114 条命令。没有 `## 描述` 注释的 Makefile 目标不会出现在这里——请在源码中添加注释。

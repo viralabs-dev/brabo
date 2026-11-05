@@ -153,6 +153,7 @@ keywords: [scripts, pnpm, make, commands]
 
 | цель | делает |
 |---|---|
+| `make dev` | Brings up the dev environment (preflight + docker compose up) from the sibling clones |
 | `make help` | Lists the available targets |
 | `make deploy-local` | Brings up the local cluster, installs everything and runs the smoke test (TAG=vX.Y.Z-qa.N optional) |
 | `make deploy-local-clean` | Same as deploy-local, but without rebuilding the images |
@@ -173,4 +174,4 @@ keywords: [scripts, pnpm, make, commands]
 
 ---
 
-Всего команд: 113. Цель Makefile без аннотации `## описание` здесь не появляется — добавьте её в исходнике.
+Всего команд: 114. Цель Makefile без аннотации `## описание` здесь не появляется — добавьте её в исходнике.

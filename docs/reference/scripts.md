@@ -153,6 +153,7 @@ Fonte: o `package.json` de cada pacote e o `Makefile` da raiz.
 
 | alvo | faz |
 |---|---|
+| `make dev` | Brings up the dev environment (preflight + docker compose up) from the sibling clones |
 | `make help` | Lists the available targets |
 | `make deploy-local` | Brings up the local cluster, installs everything and runs the smoke test (TAG=vX.Y.Z-qa.N optional) |
 | `make deploy-local-clean` | Same as deploy-local, but without rebuilding the images |
@@ -173,4 +174,4 @@ Fonte: o `package.json` de cada pacote e o `Makefile` da raiz.
 
 ---
 
-113 comandos no total. Alvo do Makefile sem a anotação `## descrição` não aparece aqui — anote-o na fonte.
+114 comandos no total. Alvo do Makefile sem a anotação `## descrição` não aparece aqui — anote-o na fonte.

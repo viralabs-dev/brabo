@@ -153,6 +153,7 @@ Source: each package's `package.json` and the root `Makefile`.
 
 | target | does |
 |---|---|
+| `make dev` | Brings up the dev environment (preflight + docker compose up) from the sibling clones |
 | `make help` | Lists the available targets |
 | `make deploy-local` | Brings up the local cluster, installs everything and runs the smoke test (TAG=vX.Y.Z-qa.N optional) |
 | `make deploy-local-clean` | Same as deploy-local, but without rebuilding the images |
@@ -173,4 +174,4 @@ Source: each package's `package.json` and the root `Makefile`.
 
 ---
 
-113 commands total. A Makefile target without a `## description` annotation doesn't appear here — annotate it at the source.
+114 commands total. A Makefile target without a `## description` annotation doesn't appear here — annotate it at the source.
