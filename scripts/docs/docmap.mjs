@@ -40,7 +40,7 @@ export function lerDocmap({ base = RAIZ, arquivos = arquivosVersionados(base), r
 
 /** Todos os arquivos versionados, que é o universo que os globs descrevem. */
 export function arquivosVersionados(base = RAIZ) {
-  return execFileSync('git', ['ls-files'], { cwd: base, encoding: 'utf8' })
+  return execFileSync('git', ['ls-files'], { cwd: base, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 })
     .split('\n')
     .filter(Boolean);
 }

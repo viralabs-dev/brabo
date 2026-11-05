@@ -69,7 +69,7 @@ export function ler(rel) {
 
 function lsFiles(nome, base, pathspec) {
   if (!existsSync(base)) throw new Error(`fonte "${nome}": raiz inexistente ${base}`);
-  return execFileSync('git', ['ls-files', '--', ...pathspec], { cwd: base, encoding: 'utf8' })
+  return execFileSync('git', ['ls-files', '--', ...pathspec], { cwd: base, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 })
     .split('\n')
     .filter(Boolean);
 }
