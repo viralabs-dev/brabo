@@ -841,4 +841,5 @@ test.
 - <a id="rn-995"></a>[RN-995](business-rules/api.md#rn-995) — O catálogo do agente vem do engine e é só leitura: identidade e ferramentas do engine, instrução vigente do banco, sem prompt composto e sem schema, e engine fora do ar é "não sei", nunca "sem ferramentas"
 - <a id="rn-996"></a>[RN-996](business-rules/engine.md#rn-996) — O parecer de QA leva o resultado por teste lido do relatório JUnit pelo engine; sem relatório, diz por quê
 - <a id="rn-997"></a>[RN-997](business-rules/api.md#rn-997) — O catálogo da Anthropic nasce com preço de lista datado e `supportsReasoning` do SDK; preço manual nunca é sobrescrito
+- <a id="rn-998"></a>[RN-998](business-rules/produto.md#rn-998) — A migração restaura o banco num banco vazio, mantém a chave mestra, é retomável e entende a linha de versões
 <!-- END:GENERATED:indice-de-rn -->
