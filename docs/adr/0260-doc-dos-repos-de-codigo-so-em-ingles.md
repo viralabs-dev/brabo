@@ -28,7 +28,7 @@ O contrato que torna isso possível já existia: `idioma_original: en` no frontm
 - Cada irmão converte a doc dele para inglês em lane própria, promovendo o `i18n/en` a fonte RN por RN e apagando `docs/i18n/`; os `ru` e `zh-Hans` dos irmãos são apagados (o git guarda).
 - Enquanto um irmão não converte, o site mostra a fonte pt-BR com a faixa de sempre. Depois que converte, o leitor russo ou chinês vê o inglês com a faixa nova.
 - `RNS_SEM_TRADUCAO` em `links.mjs` continua: o índice cai na fonte por ARQUIVO, não por RN, então a RN que falta numa tradução parcial ainda quebra a âncora no locale até a lane do irmão apagar o `i18n/`.
-- Fica para a Rodada D uma guarda no `docs:check`: página de irmão sem `idioma_original: en`, ou `i18n/` existente num irmão, reprova.
+- **Guarda implementada (Rodada 201):** `scripts/docs/idioma-dos-irmaos.mjs`, chamada pelo `docs:check`, reprova página `.md` de raiz de irmão sem `idioma_original: en` e qualquer `i18n/` numa raiz de irmão, nomeando o arquivo e este ADR. As raízes do próprio `brabo` (`docs/`, `scripts/ci/docs/`) seguem multilíngues. Um contador de pt-BR (palavras funcionais e `ção`/`ções` fora de código, citação, URL e link) avisa, sem reprovar, quando uma página que já declara `en` ainda tem prosa em português; o resultado sobre a doc atual é zero linhas.
 
 ### Frases em inglês que as lanes de tradução copiam
 
