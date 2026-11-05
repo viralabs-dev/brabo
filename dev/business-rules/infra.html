@@ -549,7 +549,7 @@ event log. Ele verifica por default e só escreve com <code>--restaurar</code>; 
 extrair por cima de repos existentes (a mistura de dois estados não levanta erro
 nenhum e só aparece num <code>fetch</code> com história errada); e — achado da execução
 real — recusa ANTES do <code>tar</code> quando o volume não aceita escrita, nomeando
-<code>--user 0:0</code>. <code>git_local_repos</code> é compartilhado por três imagens com uids
+<code>--user &lt;dono do volume&gt;</code> (lido por <code>stat</code>; root não serve com <code>cap_drop: ALL</code>). <code>git_local_repos</code> é compartilhado por três imagens com uids
 diferentes e carrega o dono de quem o montou primeiro (medido: <code>1000:1000</code>,
 modo 0755) enquanto esta imagem roda como uid 70. Quando a extração roda como
 root, o que sai é devolvido ao dono do DIRETÓRIO e nunca deixado como root:
@@ -565,10 +565,10 @@ vive no pgvector e vem no dump. Desde a <a href="api.html#rn-569">RN-569</a> ela
 <ul>
 <li><strong>Onde:</strong> <code>docker/backup/lib.sh:28</code> (<code>destino_tipo</code>, a inferência que mantém o
 CronJob intacto), <code>:65</code> (<code>destino_esperar</code> perguntando por ESCRITA e não por
-existência), <code>:105</code> (<code>destino_enviar</code>, escrita em <code>.parcial</code> e rename),
+existência), <code>:116</code> (<code>destino_enviar</code>, escrita em <code>.parcial</code> e rename),
 <code>:181</code> (a garantia dos bare repos, escrita junto do código que a produz),
-<code>:221</code> (<code>git_arquivar</code>, o status do <code>tar</code> num arquivo), <code>:259</code>
-(<code>git_restaurar</code>, a devolução do dono) e <code>:273</code> (<code>git_raiz_gravavel</code>);
+<code>:232</code> (<code>git_arquivar</code>, o status do <code>tar</code> num arquivo), <code>:272</code>
+(<code>git_restaurar</code>, a devolução do dono) e <code>:286</code> (<code>git_raiz_gravavel</code>);
 <code>docker/backup/backup.sh:31</code> (<code>destino_preparar</code> — as cinco variáveis de S3
 deixando de ser obrigatórias), <code>:149</code> (os três desfechos do volume de repos,
 sem colapsar &quot;não montado&quot; com &quot;vazio&quot;), <code>:170</code> (a conferência do status do
@@ -632,9 +632,11 @@ origem (ADR 0152), e restaurar sobre um banco já populado é operação
 destrutiva que o instalador não toma sozinho. Os repositórios git locais, sim —
 eles são fonte de verdade que nasceria vazia.</p>
 <p><strong>Onde:</strong> <code>install.sh</code>, <code>migrar_instalacao_anterior</code> e <code>restaurar_apos_migrar</code>.
-<strong>Teste:</strong> <code>scripts/dev/install.spec.ts</code> — o plano declara
-<code>apagar-sem-backup-provado: nunca</code>, e um teste afere que a chamada da prova
-vem <strong>antes</strong> da chamada de deleção no código.
+<strong>Teste:</strong> <code>scripts/dev/prova-de-restauracao-env.spec.ts</code> (neste repositório: o
+<code>.env</code> do instalador passa pelo Compose da prova) e, no repositório <code>brabo</code>,
+<code>scripts/dev/install-arquivos-da-instalacao.spec.ts</code> (a prova viaja na Release e
+é conferida). A ordem &quot;prova antes da deleção&quot; não tem spec próprio hoje: o
+<code>scripts/dev/install.spec.ts</code> que esta regra citava não existe (AT-738, achado 10).
 <strong>Origem:</strong> FASE 29, sessão 6 (<a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150</a>,
 <a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152</a>).</p>
 <h2 id="o-repositório-nasce-no-aceite-do-handoff-ao-arquiteto-e-a-execução-não-começa-sem-ele-rn-582">O repositório nasce no aceite do handoff ao Arquiteto, e a execução não começa sem ele (RN-582)</h2>
