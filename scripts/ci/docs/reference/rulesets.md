@@ -17,9 +17,13 @@ registro.
 A política que estas regras aplicam está em
 [Política de branches](../explanation/branching-policy.md).
 
-> **Estado atual:** `gh api repos/daneiel/brabo/rulesets` devolve **0**.
-> Nada aplicado ainda. Até lá, tudo aqui é intenção declarada, não proteção
-> real.
+> **Estado decidido (ADR 0255, 05/11/2026):** `Política de branches` e
+> `Escada de aprovação` são checks **required** no ruleset de `dev` e `main`
+> dos 11 repositórios `viralabs-dev/brabo*`; `brabo`, `brabo-qa` e `brabo-infra`
+> ganham o ruleset "main e dev sem force push"; e a PR do GitHub App
+> `viralabs-dev-brabo` na branch `chore/regenera-gerados` → `dev` dispensa a
+> escada (autor E branch; a `main` segue com a escada inteira). A aplicação no
+> GitHub continua manual.
 
 ## Pré-requisito: as três branches precisam existir
 

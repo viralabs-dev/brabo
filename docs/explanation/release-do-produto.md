@@ -75,5 +75,10 @@ cinco imagens ou nenhuma: Release de produto com componente sem `imagem.json` é
 > **TODO(humano):** o `componentes.json` é editado à mão; falta decidir se um bot o atualiza quando
 > um componente carimba tag nova ou se continua sendo decisão de PR.
 
-> **TODO(humano):** hotfix de um componente (nasce de `main`) e a tag do produto que o carrega: o
-> processo de hotfix do produto ainda não foi escrito.
+## Hotfix de um componente {#hotfix}
+
+O hotfix é PATCH pela escada normal (decisão do dono, AT-728); não se usa `hotfix/` direto na `main`.
+
+1. O componente corrige pela própria `dev` → `main` e ganha `vX.Y.Z+1`.
+2. Uma PR no `brabo` sobe a tag do componente no `componentes.json`.
+3. A promoção do `brabo` sai como patch do produto.
