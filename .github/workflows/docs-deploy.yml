@@ -22,8 +22,8 @@ on:
   push:
     branches: [dev, main]
     paths: ['docs/**', 'scripts/ci/docs/**', 'scripts/docs/**', 'website/**', '.github/workflows/docs-deploy.yml']
-  # republicar à mão quando um repositório irmão mudou (o disparo automático por
-  # repository_dispatch só roda na branch default, e publicaria `prd` por engano)
+  # republicar à mão quando um repositório irmão mudou (não há repository_dispatch:
+  # a branch default é `dev`, e ele publicaria `dev` quando o alvo pode ser `prd`)
   workflow_dispatch:
 
 # `contents: write` porque a publicação agora é um COMMIT na `gh-pages`, não um

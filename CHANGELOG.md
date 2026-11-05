@@ -6,6 +6,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ### Funcionalidades
 
+- **docs**: `regenera-gerados.yml` regenera por agenda (6 h) os gerados que dependem dos irmãos e abre a PR `chore/regenera-gerados` na `dev`; `montar-layout.sh` passa a limpar o que trouxe antes (manifesto em `.git/layout-irmaos.lst`) (AT-726).
 - **instalador**: o `install.sh` baixa o binário do runner da Release de `viralabs-dev/brabo-runner` (tag fixada em `componentes.json`, campo `runner`) e o confere contra o `checksums.txt` assinado de lá (cosign, identidade `build-runner-binaries.yml`); o fallback por npm continua; o `install-invocacao` volta à régua estrita (AT-704).
 - **docs**: `docs/explanation/release-do-produto.md` descreve a release coordenada (tag-release do `brabo-ci`, imagens por digest com `imagem.json`, `images.json` e `checksums.txt` assinado no `brabo`, portão `PRODUTO_RELEASE_LIGADA`) (AT-704).
 - **release**: a release do produto nasce no `viralabs-dev/brabo` (AT-704): `release.yml` monta o `images.json` com os digests do `imagem.json` de cada repo de app (versões em `componentes.json`), confere Trivy por digest, junta `install.sh` e os assets `brabo-install-*` e assina um `checksums.txt` único (cosign keyless); `tag-release.yml` chama o do `brabo-ci`; ensaio por `workflow_dispatch` num ramo; o `install.sh` passa a `viralabs-dev/brabo` e à identidade `release.yml` (BREAKING: instalações antigas não verificam a assinatura nova)
