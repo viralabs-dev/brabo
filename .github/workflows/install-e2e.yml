@@ -51,7 +51,7 @@ jobs:
     # (RN-547) ele ainda espera o agente entrar na espera e, depois do projeto
     # nascer, a cadência de 15s/30s/60s da RN-550 — os dois com teto próprio,
     # somando até 7min no pior caso.
-    timeout-minutes: 40
+    timeout-minutes: 60 # +20min da migração (AT-738): backup, prova, apagar, recriar e restaurar
     steps:
       - name: Qual tag
         id: alvo
@@ -652,6 +652,186 @@ jobs:
           rm -f "$cfg"
           [ "$codigo" = '409' ] \
             || { echo "::error::a segunda first-account respondeu ${codigo}, e 409 é o desfecho esperado"; exit 1; }
+
+      # A MIGRAÇÃO (AT-738), que o E2E nunca exercitou: até aqui ele só provava a
+      # máquina LIMPA, e foi por isso que a 1.0.0 saiu com a migração quebrada em
+      # TODO Linux (backup sem permissão de escrita no uid do runner, Postgres
+      # não restaurado, segredos regenerados que deixam as credenciais
+      # ilegíveis, marcador não gravado, grafo vazio).
+      #
+      # Semeia dado de verdade pela api, guarda as contagens, roda o MESMO
+      # instalador pelo MESMO driver de TTY, e confere o que tem de sobreviver.
+      # Reinstalar a mesma tag é a relação `igual`: o caminho é o de sempre
+      # (backup, prova, apagar, recriar, restaurar) e a pergunta é a dela.
+      #
+      # Este passo FALHA contra o `install.sh` que não consertou a migração, e é
+      # isso que ele prova. Como o workflow só roda em tag, o verde ou o vermelho
+      # real vem na tag; em PR, `scripts/dev/install-e2e.spec.ts` reprova o passo
+      # que sumir ou deixar de conferir contagem, credencial, marcador, grafo,
+      # `brabo_restore_test` e o dono da pasta de backup.
+      - name: Migração com dado semeado — contagens, credencial, marcador, grafo e backup
+        if: runner.os == 'Linux'
+        env:
+          TAG: ${{ steps.alvo.outputs.tag }}
+        run: |
+          set -euo pipefail
+          api='http://localhost:3000'
+          estado="${XDG_STATE_HOME:-$HOME/.local/state}/brabo/install-state.json"
+          dc() { docker compose -f docker/docker-compose.install.yml --env-file .env "$@"; }
+          sql() { dc exec -T postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -tAc "$1"' _ "$1"; }
+          repos_bare() { dc exec -T api sh -c "find /data/git-repos -maxdepth 1 -name '*.git' | wc -l" | tr -d '[:space:]'; }
+          nos_do_grafo() {
+            dc exec -T neo4j sh -c 'cypher-shell -u "${NEO4J_USER:-neo4j}" -p "${NEO4J_AUTH#*/}" --format plain "MATCH (n) RETURN count(n)"' \
+              | tail -n 1 | tr -d '[:space:]'
+          }
+
+          # --- 1. Semear: conta (já existe), projeto com repositório LOCAL, sessão
+          # com eventos e UMA credencial de LLM falsa, cifrada pela própria api.
+          E2E_EMAIL="$(sed -n 1p "${RUNNER_TEMP}/credencial")"
+          E2E_SENHA="$(sed -n 2p "${RUNNER_TEMP}/credencial")"
+          export E2E_EMAIL E2E_SENHA
+          echo "::add-mask::${E2E_SENHA}"
+          token="$(jq -n '{email: env.E2E_EMAIL, senha: env.E2E_SENHA}' \
+            | curl -fsS -X POST "${api}/auth/login" -H 'Content-Type: application/json' --data-binary @- \
+            | jq -r '.accessToken')"
+          [ -n "$token" ] && [ "$token" != 'null' ] || { echo '::error::login do dono falhou antes da migração'; exit 1; }
+          echo "::add-mask::${token}"
+          chamar() { curl -fsS -H "Authorization: Bearer ${token}" -H 'Content-Type: application/json' "$@"; }
+
+          ws="$(chamar "${api}/workspaces" | jq -r '.[0].workspace.id')"
+          projeto="$(jq -n '{name: "Migracao E2E", slug: "migracao-e2e"}' \
+            | chamar -X POST "${api}/workspaces/${ws}/projects" --data-binary @- | jq -r '.id')"
+          [ -n "$projeto" ] && [ "$projeto" != 'null' ] || { echo '::error::não semeei o projeto da migração'; exit 1; }
+          jq -n '{name: "migracao-e2e", visibility: "private"}' \
+            | chamar -X POST "${api}/projects/${projeto}/git/local/repository" --data-binary @- >/dev/null \
+            || { echo '::error::não semeei o repositório local (bare) do projeto'; exit 1; }
+          sessao="$(jq -n '{kind: "consultiva", name: "Sessao da migracao"}' \
+            | chamar -X POST "${api}/projects/${projeto}/sessions" --data-binary @- | jq -r '.id')"
+          [ -n "$sessao" ] && [ "$sessao" != 'null' ] || { echo '::error::não semeei a sessão da migração'; exit 1; }
+          for n in 1 2 3; do
+            jq -n --arg c "mensagem ${n} da migracao" \
+              '{type: "chat.message", actor: {kind: "system", id: "e2e"}, payload: {role: "user", content: $c}}' \
+              | chamar -X POST "${api}/projects/${projeto}/sessions/${sessao}/events" --data-binary @- >/dev/null
+          done
+          # A chave falsa é GERADA aqui; ela só precisa ser cifrada e decifrada.
+          chave_falsa="sk-or-v1-falsa-$(openssl rand -hex 16)"
+          echo "::add-mask::${chave_falsa}"
+          jq -n --arg k "$chave_falsa" '{provider: "openrouter", apiKey: $k}' \
+            | chamar -X POST "${api}/users/me/credentials" --data-binary @- >/dev/null \
+            || { echo '::error::a api não gravou a credencial semeada'; exit 1; }
+
+          # --- 2. Guardar o que tem de sobreviver.
+          antes="${RUNNER_TEMP}/contagens-antes.txt"
+          {
+            echo "users $(sql 'select count(*) from users')"
+            echo "projects $(sql 'select count(*) from projects')"
+            echo "sessions $(sql 'select count(*) from sessions')"
+            echo "session_events $(sql 'select count(*) from session_events')"
+            echo "bare_repos $(repos_bare)"
+          } | tee "$antes"
+          awk '$2 < 1 { bad=1 } END { exit bad }' "$antes" \
+            || { echo '::error::a semeadura não deixou dado em alguma das cinco contagens — a prova seria vazia'; exit 1; }
+
+          # --- 3. Migrar: o MESMO instalador, o MESMO driver de TTY. A ordem é a
+          # da máquina com marcador: a pergunta de migração, a de apagar/restaurar
+          # (`s`), e depois as da máquina limpa. A conta já existe e volta pelo
+          # restore; o instalador a trata como 409 (RN-547), sem pendência.
+          respostas="${RUNNER_TEMP}/respostas-migracao.json"
+          E2E_SENHA="$E2E_SENHA" E2E_EMAIL="$E2E_EMAIL" E2E_BASE="${HOME}/projetos-brabo" \
+            jq -n '[
+              {espera: "Reinstalar do zero mesmo assim", resposta: "s"},
+              {espera: "Apagar os volumes e reinstalar?", resposta: "s"},
+              {espera: "Gravar o marcador de instalação", resposta: "s"},
+              {espera: "Base [", resposta: env.E2E_BASE},
+              {espera: "Ligar o broker de container? [s/N] ", resposta: "s"},
+              {espera: "Ligar os modelos locais? [s/N] ", resposta: "n"},
+              {espera: "Criar a primeira conta agora?", resposta: "s"},
+              {espera: "E-mail: ", resposta: env.E2E_EMAIL},
+              {espera: "Senha (não aparece na tela): ", resposta: env.E2E_SENHA, segredo: true},
+              {espera: "Repita a senha: ", resposta: env.E2E_SENHA, segredo: true},
+              {espera: "Nome (opcional, Enter para pular): ", resposta: ""}
+            ]' > "$respostas"
+          chmod 600 "$respostas"
+          codigo=0
+          NO_COLOR=1 python3 -I "${RUNNER_TEMP}/terminal-do-e2e.py" "$respostas" bash install.sh --source=ghcr \
+            > migracao.txt || codigo=$?
+          rm -f "$respostas"
+          cat migracao.txt
+          [ "$codigo" -eq 0 ] \
+            || { echo "::error::a migração terminou com código ${codigo} (3/4 = o driver do TTY parou)"; exit 1; }
+
+          exigir() { grep -qF -- "$2" migracao.txt || { echo "::error::$1 (não achei na saída: $2)"; exit 1; }; }
+          exigir 'o backup não foi provado antes de apagar' 'backup provado'
+          exigir 'os volumes não foram removidos' 'volumes removidos'
+          exigir 'os repositórios git não foram restaurados' 'repositórios git restaurados'
+          if grep -qF 'O que ficou pendente' migracao.txt; then
+            echo '::error::a migração terminou com pendências'
+            sed -n '/O que ficou pendente/,$p' migracao.txt
+            exit 1
+          fi
+
+          # --- 4. Conferir.
+          # (a) contagens e bare repos IGUAIS: o Postgres tem de voltar sozinho.
+          depois="${RUNNER_TEMP}/contagens-depois.txt"
+          {
+            echo "users $(sql 'select count(*) from users')"
+            echo "projects $(sql 'select count(*) from projects')"
+            echo "sessions $(sql 'select count(*) from sessions')"
+            echo "session_events $(sql 'select count(*) from session_events')"
+            echo "bare_repos $(repos_bare)"
+          } > "$depois"
+          diff -u "$antes" "$depois" \
+            || { echo '::error::as contagens (ou os repositórios bare) depois da migração diferem das de antes'; exit 1; }
+
+          # (b) a credencial semeada ainda DECIFRA. A api decifra para testar: se a
+          # chave mestra mudou, `decrypt` lança e a rota responde 5xx (`curl -f`
+          # reprova). Com a chave falsa o desfecho é `recusado` — o que vale é ter
+          # chegado ao provider com o texto claro, nunca o erro de autenticação.
+          token="$(jq -n '{email: env.E2E_EMAIL, senha: env.E2E_SENHA}' \
+            | curl -fsS -X POST "${api}/auth/login" -H 'Content-Type: application/json' --data-binary @- \
+            | jq -r '.accessToken')"
+          [ -n "$token" ] && [ "$token" != 'null' ] || { echo '::error::o dono não entra depois da migração'; exit 1; }
+          echo "::add-mask::${token}"
+          teste="$(curl -sS -X POST -H "Authorization: Bearer ${token}" -w '\n%{http_code}' \
+            "${api}/users/me/credentials/openrouter/test")"
+          [ "$(tail -n 1 <<<"$teste")" = '200' ] \
+            || { echo '::error::a credencial semeada NÃO decifra depois da migração (a chave mestra mudou?)'; echo "$teste"; exit 1; }
+          if grep -qiE 'unable to authenticate|unsupported state' <<<"$teste"; then
+            echo '::error::a credencial semeada NÃO decifra depois da migração: unable to authenticate data'
+            echo "$teste"; exit 1
+          fi
+
+          # (c) o marcador registra a versão instalada.
+          [ "$(jq -r '.versao' "$estado")" = "${TAG#v}" ] \
+            || { echo "::error::o marcador não registra a versão ${TAG#v}"; cat "$estado"; exit 1; }
+
+          # (d) o grafo foi reprojetado. A projeção é assíncrona: espera com teto.
+          limite=$(( SECONDS + 120 ))
+          until [ "$(nos_do_grafo || echo 0)" -gt 0 ] 2>/dev/null; do
+            if [ "$SECONDS" -ge "$limite" ]; then
+              echo '::error::o grafo ficou com 0 nós depois da migração — a reprojeção não aconteceu'
+              exit 1
+            fi
+            sleep 5
+          done
+
+          # (e) a database de prova da restauração não sobra.
+          [ "$(sql "select count(*) from pg_database where datname = 'brabo_restore_test'" | tr -d '[:space:]')" = '0' ] \
+            || { echo '::error::sobrou a database brabo_restore_test'; exit 1; }
+
+          # (f) a pasta de backup é do uid do RUNNER, com tudo o que o container
+          # gravou nela: a imagem de backup roda como 70:70 por padrão, e uma
+          # pasta do uid 1001 não aceitava escrita dela.
+          mapfile -t pastas < <(compgen -G 'brabo-backup-*' || true)
+          [ "${#pastas[@]}" -eq 1 ] \
+            || { echo "::error::esperava UMA pasta brabo-backup-*, achei ${#pastas[@]}"; exit 1; }
+          [ "$(stat -c '%u' "${pastas[0]}")" = "$(id -u)" ] \
+            || { echo "::error::a pasta de backup não é do uid do runner ($(id -u))"; exit 1; }
+          intrusos="$(find "${pastas[0]}" ! -user "$(id -u)" | head -5)"
+          [ -z "$intrusos" ] \
+            || { echo "::error::há arquivos no backup que não são do uid do runner:"; echo "$intrusos"; exit 1; }
+          [ -n "$(find "${pastas[0]}" -type f | head -1)" ] \
+            || { echo '::error::a pasta de backup está vazia'; exit 1; }
 
       - name: O que ficou de pé
         if: always() && runner.os == 'Linux'
