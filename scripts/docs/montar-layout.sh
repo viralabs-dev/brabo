@@ -20,6 +20,19 @@ ORG="${BRABO_ORG:-viralabs-dev}"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
+# Manifesto do que a rodada anterior trouxe dos irmãos. Sem limpá-lo, o
+# `--update=none` abaixo deixava a cópia velha no disco e escondia o diff (AT-726).
+MANIFESTO="$(git rev-parse --git-dir)/layout-irmaos.lst"
+if [ -f "$MANIFESTO" ]; then
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    git cat-file -e "HEAD:$f" 2>/dev/null && continue
+    git rm -q --cached -f -- "$f" 2>/dev/null || true
+    rm -f -- "$f"
+  done < "$MANIFESTO"
+  rm -f "$MANIFESTO"
+fi
+
 # repo:destino-no-layout (o destino "." mescla na raiz SEM sobrescrever o que é daqui)
 DESTINOS=(
   "brabo-api:apps/api"
@@ -63,4 +76,6 @@ done
 
 # ignorados pelo .gitignore daqui (ex.: node_modules) não entram
 git add -f -A -- . ':!node_modules' ':!**/node_modules' >/dev/null 2>&1 || true
+# o que está no índice e não está em HEAD veio dos irmãos
+git diff --cached --name-only --diff-filter=A -z | tr '\0' '\n' > "$MANIFESTO"
 echo "layout reconstruído: $(git ls-files | wc -l) arquivo(s) no índice"
