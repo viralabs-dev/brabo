@@ -1,0 +1,217 @@
+@import '../design/tokens.css';
+
+
+:root {
+  color-scheme: dark light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100svh;
+  font-family: var(--font-body);
+  background: var(--surface-0);
+  color: var(--text-primary);
+  line-height: 1.5;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+/*
+ * Scrollbar do handoff — `--border-strong`, raio 6px e uma borda de 2px na cor
+ * da superfície, que é o que dá o efeito de polegar "flutuando" em vez de
+ * encostar nas paredes da calha.
+ *
+ * Vale nos DOIS temas sem `[data-theme]` nenhum, porque as duas cores saem de
+ * token: no claro `--border-strong` e `--surface-0` viram os valores de papel
+ * sozinhos. `color-scheme: dark light` acima continua servindo o Firefox e
+ * qualquer navegador sem `::-webkit-scrollbar`; `scrollbar-color` cobre o
+ * Firefox com as mesmas duas cores.
+ */
+html {
+  /* `scrollbar-color` é herdado — declarar na raiz cobre todo elemento rolável
+     sem um seletor universal a mais. */
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border: 2px solid var(--surface-0);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* O preflight (ADR 0237) zera tamanho dos títulos, margem de parágrafo/lista e
+   marcador; aqui volta o padrão do navegador, só para o elemento SEM classe
+   (o que tem classe é do módulo CSS ou do utilitário do shadcn). */
+h1:not([class]) { font-size: 2em; }
+h2:not([class]) { font-size: 1.5em; }
+h3:not([class]) { font-size: 1.17em; }
+h4:not([class]),
+h5:not([class]),
+h6:not([class]) {
+  font-weight: 700;
+  margin: 1.33em 0;
+}
+h4:not([class]) { font-size: 1em; }
+h5:not([class]) { font-size: 0.83em; }
+h6:not([class]) { font-size: 0.67em; }
+p:not([class]),
+ul:not([class]),
+ol:not([class]) {
+  margin: 1em 0;
+}
+ul:not([class]),
+ol:not([class]) {
+  list-style: revert;
+  padding-inline-start: 2.5rem;
+}
+
+code,
+pre {
+  font-family: var(--font-mono);
+}
+
+#root {
+  min-height: 100svh;
+}
+
+/* Animações compartilhadas — extraídas do design system (ver
+   design/COMPONENTS.md). Nomes preservados do spec original. */
+@keyframes bpulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+}
+
+@keyframes bfade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Rotação do spinner de `loading` do Button (ADR 0036). */
+@keyframes bspin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bpop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes balert {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes btoast {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bblink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* Skeleton de carregamento (net-new — sem contraparte no design/, ver
+   COMPONENTS.md; segue a mesma convenção de nome "b*" das demais). */
+@keyframes bshimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Traço dos ícones lucide igual ao dos ícones da casa (components/ui/icons.tsx). AT-682 */
+svg.lucide {
+  stroke-width: 1.6;
+}

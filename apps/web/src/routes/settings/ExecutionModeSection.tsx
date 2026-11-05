@@ -1,0 +1,505 @@
+import { useState } from 'react';
+import { Server } from 'lucide-react';
+import { Save } from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+import {
+  convertProjectExecutionMode,
+  getContainerLifecycle,
+  getProject,
+  getProjectsBase,
+  listSessions,
+  mensagemDaApi,
+} from '../../lib/api-client';
+import { useCurrentWorkspaceWithRole } from '../../lib/hooks';
+import { roleAtLeast } from '../../lib/roles';
+import { conversaoSemBroker } from '../containers-subida';
+import type { CicloDeVidaDoContainer, ExecutionMode, Project } from '../../lib/api-types';
+import { Ajuda } from '../../components/ui/Ajuda';
+import { Perigo } from '../../components/ui/Perigo';
+import { Select } from '../../components/ui/Select';
+import { Input } from '../../components/ui/Input';
+import { Button } from '../../components/ui/Button';
+import { FolderIcon } from '../../components/ui/icons';
+import { FolderBrowserModal } from '../../components/FolderBrowserModal';
+import { RunnerOnboardingPanel } from '../../components/RunnerOnboardingPanel';
+import { useToast } from '../../components/ui/ToastProvider';
+import styles from '../ProjectSettingsTab.module.css';
+import { SecaoDeConfiguracoes } from './SecaoDeConfiguracoes';
+import { FRESCOR_DA_CONFIGURACAO_MS } from '../../lib/query-policy';
+import { Item } from '@/components/shadcn/item';
+
+/**
+ * Onde o código do projeto mora — `container` (padrão), `mounted` (pasta do
+ * usuário montada por bind-mount) ou `runner` (pasta do usuário confirmada
+ * pelo CLI `brabo-runner`, sem bind-mount). Rótulo/descrição REUSADOS do
+ * wizard de criação (`newProject:workspaceMode.*`, `NewProjectWizard.tsx`)
+ * — a pergunta é a mesma, só o MOMENTO muda (criação vs. projeto já
+ * existente).
+ */
+const MODOS_DE_EXECUCAO: {
+  id: ExecutionMode;
+  labelKey: string;
+  descKey: string;
+}[] = [
+  {
+    id: 'container',
+    labelKey: 'newProject:workspaceMode.container.label',
+    descKey: 'newProject:workspaceMode.container.desc',
+  },
+  {
+    id: 'mounted',
+    labelKey: 'newProject:workspaceMode.mounted.label',
+    descKey: 'newProject:workspaceMode.mounted.desc',
+  },
+  {
+    id: 'runner',
+    labelKey: 'newProject:workspaceMode.runner.label',
+    descKey: 'newProject:workspaceMode.runner.desc',
+  },
+];
+
+/**
+ * O que se sabe sobre a base de projetos montados desta instalação
+ * (`BRABO_PROJECTS_BASE`, ADR 0141/RN-500), do ponto de vista desta seção.
+ *
+ * QUATRO estados e não dois, pela régua da RN-088/RN-468: "ainda não
+ * perguntei", "perguntei e não consegui saber" e "perguntei e não existe"
+ * são coisas diferentes, e colapsá-las faria a tela afirmar ausência sobre
+ * o que ela só não conseguiu ler. É a mesma distinção que `NewProjectWizard`
+ * já faz para decidir se OFERECE o modo `mounted` (RN-513) — aqui ela decide
+ * outra coisa (se o navegador de pastas é oferecido), porque um projeto que
+ * JÁ é `mounted` não pode sumir do seletor por causa de uma consulta em voo.
+ */
+type EstadoDaBase =
+  | { tipo: 'carregando' }
+  | { tipo: 'falhou' }
+  | { tipo: 'ausente' }
+  | { tipo: 'presente'; base: string };
+
+/**
+ * O que se sabe sobre o container REGISTRADO deste projeto, do ponto de vista
+ * do aviso (AT-144). Três estados e não dois (RN-468): "tem", "não tem" e
+ * "não consegui ler" — a leitura que falhou nunca vira "não tem".
+ */
+export type ContainerParaOAviso = 'registrado' | 'ausente' | 'naoSei';
+
+/**
+ * As consequências CONDICIONAIS da conversão (AT-144, RN-560): só o que vale
+ * para ESTE projeto, e nada do que não se aplica. Cada uma espelha uma linha
+ * de `ConvertProjectExecutionModeUseCase`, e a condição é a MESMA do caso de
+ * uso — nunca uma régua própria da tela:
+ *
+ * - `espelho`: `mirrorPath` preenchido. Toda conversão o zera (RN-515).
+ * - `container`: o projeto é `container` HOJE e tem linha em
+ *   `project_containers` fora de `removed`. O caso de uso só desprovisiona ao
+ *   SAIR de `container` (`removerContainerSeExistir`, RN-449) — em
+ *   `mounted`/`runner` ele não toca o container, e o aviso não diz o
+ *   contrário. Como todo destino a partir de `container` é "sair" (converter
+ *   para o próprio `container` não tem caminho a mudar), a condição não
+ *   depende do modo escolhido no seletor.
+ * - `pastaConfirmada`: `workspaceVerifiedAt` preenchido. Toda conversão o
+ *   zera (RN-450).
+ *
+ * Os dados são os que a seção já tem (`Project`) mais o ciclo de vida do
+ * container, lido pela rota que JÁ existe (`GET .../container/lifecycle`,
+ * `viewer`) — nenhum endpoint novo.
+ */
+function consequenciasCondicionais(
+  project: Pick<Project, 'executionMode' | 'mirrorPath' | 'workspaceVerifiedAt'>,
+  container: ContainerParaOAviso | null,
+): {
+  espelho: string | null;
+  container: ContainerParaOAviso | null;
+  pastaConfirmada: string | null;
+} {
+  return {
+    espelho: project.mirrorPath,
+    container:
+      project.executionMode === 'container' && container !== 'ausente' ? container : null,
+    pastaConfirmada: project.workspaceVerifiedAt,
+  };
+}
+
+function containerParaOAviso(consulta: {
+  isSuccess: boolean;
+  isError: boolean;
+  data?: CicloDeVidaDoContainer | null;
+}): ContainerParaOAviso | null {
+  if (consulta.isError) return 'naoSei';
+  if (!consulta.isSuccess) return null;
+  return consulta.data && consulta.data.status !== 'removed' ? 'registrado' : 'ausente';
+}
+
+/**
+ * Converte o `execution_mode` de um projeto EXISTENTE (RN-447..450, ADR
+ * 0111) — via `PUT .../execution-mode`, rota DEDICADA e separada do PATCH
+ * genérico de `ExecutionSection`/`ParallelismSection` acima: a api move o
+ * `permissions.json` para o novo escopo, encerra o ciclo de vida do
+ * container ao SAIR de `container`, e recusa com 409 se algum dev agent do
+ * projeto estiver trabalhando ou travado agora — o aviso fixo abaixo é
+ * sobre essa mesma condição, e o toast de erro mostra a explicação exata
+ * que a api devolve quando ela dispara (`mensagemDaApi`).
+ *
+ * ## O aviso não promete migração (RN-560)
+ *
+ * Ele dizia *"isto migra a pasta de trabalho do agente"*, e o caso de uso
+ * não tem uma linha que copie ou mova conteúdo: ele move o
+ * `permissions.json` (a POLÍTICA), zera `workspaceVerifiedAt`/`mirrorPath`
+ * e desprovisiona o container. O que estiver na pasta ANTIGA — trabalho não
+ * commitado incluído — fica lá, órfão, e essa é uma lacuna declarada no
+ * `CLAUDE.md` desde a RN-447..450. O aviso agora diz as três coisas
+ * separadamente (o que recusa, o que leva, o que NÃO leva) e NOMEIA o
+ * caminho antigo, que some da tela no instante em que a conversão salva.
+ *
+ * Ele não promete detecção: perguntar ao disco "há trabalho não commitado?"
+ * é I/O por modo e impossível de responder para `runner` do lado da api.
+ * Não se mede, não se afirma.
+ *
+ * ## O navegador de pastas, só no ramo `mounted` (RN-559)
+ *
+ * Esta era a única das cinco telas de escolha de pasta em que se digitava o
+ * caminho no escuro. O ramo `mounted` passa a abrir o MESMO
+ * `FolderBrowserModal` da criação de projeto, com `origem: { tipo: 'api',
+ * workspaceId }` — mesmo componente, mesmo endpoint, nenhuma régua nova: a
+ * api continua sendo quem valida o caminho (`validarExecutionModeEWorkspacePath`
+ * e o CHECK do banco), e o navegador não "garante" nada.
+ *
+ * ## O ramo `runner`: converte, DEPOIS onboarda (RN-612, AT-143)
+ *
+ * Onboardar antes de a conversão salvar registra chave num projeto que ainda
+ * não é `runner`, e `ConfirmProjectWorkspaceUseCase` recusa com 400 — então a
+ * ordem é a outra, e a tela a torna UM gesto seguido do outro: salvar a
+ * conversão para `runner` monta, logo abaixo, o MESMO `RunnerOnboardingPanel`
+ * da aba Código e do wizard, já com o `projectId` de um projeto que agora É
+ * `runner`. Nada de régua nova: quem valida o caminho continua sendo a api
+ * (léxico) e o runner (disco), e a confirmação do runner SOBRESCREVE o
+ * caminho digitado (RN-423) — por isso o campo é dito provisório.
+ *
+ * O painel fica enquanto o projeto é `runner` sem pasta confirmada, ou até o
+ * fim da visita em que a conversão salvou (para a `EsperaDoRunner` poder
+ * mostrar a confirmação em vez de sumir no instante em que ela chega).
+ *
+ * O que foi MEDIDO no código, e está dito na tela: com chave de MÁQUINA
+ * (RN-543/548) o painel reconhece a máquina pareada; o agente de máquina que
+ * está ESPERANDO (zero projetos, RN-550) pega o projeto sozinho em até 60 s
+ * (cadência 15/30/60 s de `espera-de-projetos.ts`); o que já atende OUTRO
+ * projeto NÃO pega — a lista é lida uma vez, no start, com conexão viva — e o
+ * gesto é reiniciar o serviço. Sem chave de máquina, o atrito é o mesmo da
+ * criação de projeto (parear e rodar um comando).
+ *
+ * O navegador de pastas NÃO é oferecido no ramo `runner`, e não por falta de
+ * ordem: `origem: { tipo: 'runner', projectId }` exige um runner conectado a
+ * ESTE projeto, e um runner conectado já confirmou a PRÓPRIA pasta (`--dir`,
+ * ou `<base>/<workspaceDirName>` no agente de máquina) — escolher outra ali
+ * seria uma segunda conversão que a próxima reconexão desfaria. A seção diz
+ * isso em texto (ADR 0064).
+ *
+ * Salvar só habilita quando algo de fato MUDOU em relação ao par (modo,
+ * caminho) atual do projeto — reenviar o mesmo par seria uma chamada que a
+ * api já trata como no-op, mas o botão desabilitado evita a viagem de rede
+ * e deixa claro que nada foi digitado. O controle é campo DIGITADO (ou
+ * escolhido no navegador, que é a mesma coisa: um valor que a pessoa
+ * compõe), então ele confirma por BOTÃO e nunca por `onChange` — a régua da
+ * RN-469, que esta seção não converte para autosave.
+ */
+export function ExecutionModeSection({ projectId }: { projectId: string }) {
+  const { t, i18n } = useTranslation('settings');
+  const queryClient = useQueryClient();
+  const { showToast } = useToast();
+  const { data: comPapel } = useCurrentWorkspaceWithRole();
+  // O mínimo é o do ENDPOINT (`@RequireRole('maintainer')` em
+  // `PUT projects/:projectId/execution-mode`), lido por `roleAtLeast` sobre a
+  // `ROLE_ORDER` e nunca por uma lista de papéis à mão — que acerta por
+  // acidente enquanto o mínimo é alto e erra calada quando ele baixa (RN-102).
+  const papel = comPapel?.role;
+  const workspaceId = comPapel?.workspace?.id;
+  const podeEditar = roleAtLeast(papel, 'maintainer');
+  const { data: project } = useQuery({
+    queryKey: ['project', projectId],
+    queryFn: () => getProject(projectId),
+    staleTime: FRESCOR_DA_CONFIGURACAO_MS,
+  });
+  // A base é da INSTALAÇÃO e a rota pede `maintainer` — o mesmo mínimo da
+  // conversão. Para quem não alcança esse mínimo a consulta nem sai: ela
+  // terminaria em 403 garantido, e o estado "não sei" que ela produziria
+  // seria sobre a autorização, não sobre a base.
+  const baseQuery = useQuery({
+    queryKey: ['projects-base', workspaceId],
+    queryFn: () => getProjectsBase(workspaceId!),
+    enabled: !!workspaceId && podeEditar,
+    staleTime: 10 * 60 * 1000,
+  });
+  const [modoDraft, setModoDraft] = useState<ExecutionMode | null>(null);
+  const [caminhoDraft, setCaminhoDraft] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [navegadorAberto, setNavegadorAberto] = useState(false);
+  // A conversão para `runner` salvou NESTA visita — mantém o painel de
+  // onboarding na tela depois de a pasta ser confirmada (ver o docblock).
+  const [convertidoParaRunner, setConvertidoParaRunner] = useState(false);
+  // O container só entra no aviso quando o projeto é `container` HOJE (o caso
+  // de uso só desprovisiona ao sair dele), então a consulta só sai nesse caso.
+  // `viewer` na rota: o aviso é informação, e vale para quem não converte.
+  const cicloQuery = useQuery({
+    queryKey: ['container-lifecycle', projectId],
+    queryFn: () => getContainerLifecycle(projectId),
+    enabled: project?.executionMode === 'container',
+    retry: false,
+  });
+
+  // AT-372: o aviso de conversão fala do trabalho dos agentes (o que fica na
+  // pasta antiga, o container removido). Num projeto sem sessão nenhuma não
+  // há agente nem trabalho, e o aviso amarelo era ruído — ele aparece quando
+  // há sessão, ou assim que a pessoa escolhe outro modo. Sem poll: a lista de
+  // sessões só importa aqui no momento de ler a seção.
+  // Mesma `queryKey` de `useProjectSessions` — o cache da página serve.
+  const sessoes = useQuery({
+    queryKey: ['sessions', projectId],
+    queryFn: () => listSessions(projectId),
+    staleTime: FRESCOR_DA_CONFIGURACAO_MS,
+  });
+
+  if (!project) return null;
+
+  const condicionais = consequenciasCondicionais(project, containerParaOAviso(cicloQuery));
+
+  const modo = modoDraft ?? project.executionMode;
+  const caminhoAtual = project.workspacePath ?? '';
+  // Trocar de modo começa o caminho em branco — copiar o caminho ANTIGO
+  // (de um modo diferente) seria oferecer um valor que quase certamente
+  // não serve para o modo novo.
+  const caminho =
+    caminhoDraft ?? (modoDraft && modoDraft !== project.executionMode ? '' : caminhoAtual);
+  const precisaCaminho = modo !== 'container';
+  const mudouAlgo =
+    modo !== project.executionMode || (precisaCaminho && caminho !== caminhoAtual);
+  const valido = !precisaCaminho || caminho.trim().length > 0;
+  const descricaoDoModo = MODOS_DE_EXECUCAO.find((m) => m.id === modo)?.descKey;
+
+  const estadoDaBase: EstadoDaBase = baseQuery.isSuccess
+    ? baseQuery.data.projectsBase !== null
+      ? { tipo: 'presente', base: baseQuery.data.projectsBase }
+      : { tipo: 'ausente' }
+    : baseQuery.isError
+      ? { tipo: 'falhou' }
+      : { tipo: 'carregando' };
+
+  // O navegador só monta com o que ele exige para existir: o ramo `mounted`,
+  // um `workspaceId` e uma base CONFIRMADA. "Não sei" nunca vira "tem"
+  // (RN-513), e o botão sem base abriria um modal que listaria o nada.
+  // AT-105/RN-591: só a ausência CONFIRMADA bloqueia; carregando ou consulta
+  // falha não afirmam nada (a mesma leitura de três estados da criação).
+  const semBroker = conversaoSemBroker({
+    atual: project.executionMode,
+    alvo: modo,
+    brokerConfigurado: baseQuery.isSuccess
+      ? baseQuery.data.brokerConfigurado
+      : null,
+  });
+  const podeNavegar =
+    modo === 'mounted' && !!workspaceId && estadoDaBase.tipo === 'presente';
+
+  // O próximo passo aparece quando o projeto JÁ É `runner` (a conversão
+  // salvou) e não há troca de modo pendente no seletor.
+  const mostrarProximoPasso =
+    project.executionMode === 'runner' &&
+    modoDraft === null &&
+    (project.workspaceVerifiedAt === null || convertidoParaRunner);
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      await convertProjectExecutionMode(projectId, {
+        executionMode: modo,
+        ...(precisaCaminho ? { workspacePath: caminho.trim() } : {}),
+      });
+      await queryClient.invalidateQueries({ queryKey: ['project', projectId] });
+      if (modo === 'runner') setConvertidoParaRunner(true);
+      setModoDraft(null);
+      setCaminhoDraft(null);
+      showToast({ title: t('executionMode.toast.success'), tone: 'success' });
+    } catch (erro) {
+      showToast({
+        title: mensagemDaApi(erro, t('executionMode.toast.error')),
+        tone: 'danger',
+      });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const avisoDaConversao = (
+    <div data-testid="aviso-conversao">
+        <div>{t('executionMode.warning.refuses')}</div>
+        <div style={{ marginTop: 6 }}>{t('executionMode.warning.carries')}</div>
+        <div style={{ marginTop: 6 }}>
+          {caminhoAtual
+            ? t('executionMode.warning.leavesPath', { caminho: caminhoAtual })
+            : t('executionMode.warning.leavesManaged')}
+        </div>
+        {/* As condicionais (AT-144): só o que vale para ESTE projeto. Nenhuma
+            linha para o que não se aplica, e "não consegui ler" tem texto
+            próprio — nunca vira "não há container". */}
+        {condicionais.espelho && (
+          <div style={{ marginTop: 6 }} data-testid="aviso-espelho">
+            {t('executionMode.warning.mirrorCleared', { destino: condicionais.espelho })}
+          </div>
+        )}
+        {condicionais.container === 'registrado' && (
+          <div style={{ marginTop: 6 }} data-testid="aviso-container">
+            {t('executionMode.warning.containerRemoved')}
+          </div>
+        )}
+        {condicionais.container === 'naoSei' && (
+          <div style={{ marginTop: 6 }} data-testid="aviso-container">
+            {t('executionMode.warning.containerUnknown')}
+          </div>
+        )}
+        {condicionais.pastaConfirmada && (
+          <div style={{ marginTop: 6 }} data-testid="aviso-pasta-confirmada">
+            {t('executionMode.warning.verifiedLost', {
+              data: new Date(condicionais.pastaConfirmada).toLocaleString(i18n.language),
+            })}
+          </div>
+        )}
+      </div>
+  );
+  const mostrarAviso = (!sessoes.data || sessoes.data.length > 0 || modo !== project.executionMode);
+
+  return (
+    <SecaoDeConfiguracoes chave="execution-mode">
+      <div className={styles.sectionHead}>
+        <h2 className={styles.title}><Server aria-hidden="true" className={styles.tituloIcone} />{t('executionMode.title')}</h2>
+        <Ajuda assunto={t('executionMode.title')}>
+          {t('executionMode.subtitle')}
+          {descricaoDoModo ? ` ${t(descricaoDoModo)}` : null}
+        </Ajuda>
+        <span className={styles.eyebrow}>{t('executionMode.eyebrow')}</span>
+      </div>
+      {!podeEditar && (
+        <div className={styles.subtitle}>{t('executionMode.needsMaintainer')}</div>
+      )}
+
+      <Item variant="outline" className={styles.ajusteCard} style={{ marginTop: 12 }}>
+        <div className={styles.ajusteInfo}>
+          <div className={styles.ajusteTitulo}>{t('executionMode.card.title')}</div>
+        </div>
+        <div className={styles.ajusteControle}>
+          <Select
+            value={modo}
+            disabled={!podeEditar || saving}
+            aria-label={t('executionMode.selectAria')}
+            onChange={(e) => {
+              setModoDraft(e.target.value as ExecutionMode);
+              setCaminhoDraft(null);
+            }}
+          >
+            {MODOS_DE_EXECUCAO.map((m) => (
+              <option key={m.id} value={m.id}>
+                {t(m.labelKey)}
+              </option>
+            ))}
+          </Select>
+          {/* O aviso da conversão (RN-560/AT-144) mora no botão de perigo
+              (ADR 0243): mesmas condições, mesmo conteúdo, só o lugar mudou. */}
+          {mostrarAviso && (
+            <Perigo assunto={t('executionMode.warning.assunto')}>{avisoDaConversao}</Perigo>
+          )}
+        </div>
+      </Item>
+
+      {precisaCaminho && (
+        <div style={{ marginTop: 12 }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <Input
+              mono
+              value={caminho}
+              disabled={!podeEditar || saving}
+              onChange={(e) => setCaminhoDraft(e.target.value)}
+              placeholder={t('newProject:workspace.pathPlaceholder')}
+              aria-label={t('executionMode.pathAria')}
+              style={{ flex: 1, minWidth: 0 }}
+            />
+            {modo === 'mounted' && (
+              // O botão FICA na tela sem base, apagado, com o motivo dito em
+              // TEXTO logo abaixo (ADR 0064). Escondê-lo deixaria a pessoa
+              // sem saber que existe um navegador, e `title` em elemento
+              // `disabled` não abre no Chromium.
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setNavegadorAberto(true)}
+                disabled={!podeEditar || saving || !podeNavegar}
+              >
+                <FolderIcon size={14} />
+                {t('newProject:workspace.browseButton')}
+              </Button>
+            )}
+          </div>
+          <div className={styles.ajusteHint} style={{ marginTop: 6 }}>
+            {modo === 'runner'
+              ? (<>{t('executionMode.path.runnerTypedCurto')}<Ajuda assunto={t('executionMode.path.runnerTypedCurto')}>{t('executionMode.path.runnerTyped')}</Ajuda></>)
+              : estadoDaBase.tipo === 'presente'
+                ? t('executionMode.path.underBase', { base: estadoDaBase.base })
+                : estadoDaBase.tipo === 'ausente'
+                  ? t('executionMode.path.noBase')
+                  : estadoDaBase.tipo === 'falhou'
+                    ? t('executionMode.path.baseUnknown')
+                    : t('executionMode.path.baseLoading')}
+          </div>
+        </div>
+      )}
+
+      {semBroker && (
+        <div className={styles.ajusteHint} style={{ marginTop: 6 }}>
+          {t('executionMode.noBrokerCurto')}
+          <Ajuda assunto={t('executionMode.noBrokerAssunto')}>{t('executionMode.noBroker')}</Ajuda>
+        </div>
+      )}
+
+      <Button
+        style={{ marginTop: 12 }}
+        onClick={() => void handleSave()}
+        disabled={!podeEditar || !mudouAlgo || !valido || saving || semBroker}
+      >
+        <Save aria-hidden="true" />
+        {saving ? t('executionMode.saving') : t('executionMode.save')}
+      </Button>
+
+      {mostrarProximoPasso && (
+        // O segundo passo da conversão para `runner` (RN-612): o MESMO painel
+        // da aba Código, com o `projectId` de um projeto que agora É `runner`.
+        <div style={{ marginTop: 16 }} data-testid="proximo-passo-runner">
+          <div className={styles.ajusteTitulo}>{t('executionMode.nextStep.title')}</div>
+          <div className={styles.ajusteHint} style={{ marginTop: 6 }}>
+            {t('executionMode.nextStep.intro')}
+          </div>
+          <div className={styles.ajusteHint} style={{ marginTop: 6 }}>
+            {t('executionMode.nextStep.machineAgentCurto')}
+            <Ajuda assunto={t('executionMode.nextStep.machineAgentCurto')}>{t('executionMode.nextStep.machineAgent')}</Ajuda>
+          </div>
+          <code style={{ display: 'block', marginTop: 6 }}>
+            {t('executionMode.nextStep.restartLinux')}
+          </code>
+          <code style={{ display: 'block', marginTop: 4, marginBottom: 12 }}>
+            {t('executionMode.nextStep.restartMac')}
+          </code>
+          <RunnerOnboardingPanel projectId={projectId} />
+        </div>
+      )}
+
+      {navegadorAberto && podeNavegar && workspaceId && (
+        // `origem: { tipo: 'api', workspaceId }` — o MESMO transporte do
+        // wizard para o modo `mounted` (RN-504/RN-533): a pasta mora dentro
+        // da base, no SERVIDOR, e é o servidor quem a enxerga. Nunca
+        // `{ tipo: 'runner', projectId }` aqui: ver o docblock acima.
+        <FolderBrowserModal
+          origem={{ tipo: 'api', workspaceId }}
+          caminhoInicial={caminho.trim() || undefined}
+          onSelecionar={(escolhido) => setCaminhoDraft(escolhido)}
+          onClose={() => setNavegadorAberto(false)}
+        />
+      )}
+    </SecaoDeConfiguracoes>
+  );
+}

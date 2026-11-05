@@ -1,0 +1,208 @@
+.card {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 12px);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--agent-color) var(--tint-avatar), var(--surface-2));
+  border: 1px solid color-mix(in srgb, var(--agent-color) var(--tint-line), transparent);
+  color: var(--agent-color);
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Selo "Lead" (área, Fase 8d) — mesma linguagem visual do .branch abaixo,
+   sem competir com a cor de status. */
+/* Cor, tinta, borda e pílula vêm de `ui/Badge tone="agent"` (AT-287); aqui só
+   o que o badge do CARD tem de próprio: caixa alta. */
+.badge {
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Card de subagente aninhado sob o lead da área (Fase 8d) — mesmos tokens,
+   menos respiro, sem virar uma variante visual nova. */
+.card.compact {
+  padding: 10px 12px;
+  gap: 6px;
+}
+
+.card.compact .avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-md);
+}
+
+.card.compact .name {
+  font-size: 13px;
+}
+
+.card.compact .role {
+  font-size: 11px;
+}
+
+.role {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  border-radius: var(--radius-full);
+  padding: 3px 8px;
+  margin-top: 6px;
+  color: var(--status-color);
+  background: color-mix(in srgb, var(--status-color) var(--tint-soft), transparent);
+  border: 1px solid color-mix(in srgb, var(--status-color) var(--tint-line), transparent);
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.statusDot.pulsing {
+  animation: bpulse 1.4s ease-in-out infinite;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.footer .modelIcon {
+  color: var(--text-muted);
+  display: flex;
+}
+
+.model {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Empurra o custo pra direita quando há modelo, e o mantém à esquerda quando
+   é o único conteúdo do rodapé. */
+.tokens {
+  margin-left: auto;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Task/atividade corrente: fica ENTRE o cabeçalho e o rodapé, com o título
+   truncado numa linha — nome de task é livre e não pode quebrar o card. */
+.activity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.activityLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.branch {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+}
+
+.autonomy {
+  display: inline-flex;
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 2px;
+  gap: 2px;
+  align-self: flex-start;
+}
+
+/*
+ * `min-height: 24px` — piso de alvo de toque da WCAG 2.2 AA (2.5.8) que
+ * `scripts/dev/validacao-visual.js` cobra (PROGRAMA 28, Onda 5/H5). Era
+ * 19px de altura efetiva (`padding: 3px` + `font-size: 10px`); o `padding`
+ * horizontal não muda, só ganha `display: inline-flex` para centralizar o
+ * texto na altura nova.
+ */
+
+.autonomyHint {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.catalog {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.scroll {
+  max-height: 160px;
+  overflow: auto;
+  margin: 0;
+  padding-left: 0;
+  white-space: pre-wrap;
+  list-style: none;
+}

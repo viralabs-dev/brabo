@@ -1,0 +1,90 @@
+.topbar {
+  height: 60px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  flex-shrink: 0;
+  margin: 0;
+}
+
+/* `max-width` em vw porque a busca é o único item elástico da barra: sem ele,
+   260px fixos empurram o sino e o "Novo projeto" para fora em viewport
+   estreita — que é justamente o que `validacao-visual.js` acusa. */
+.search {
+  width: 260px;
+  max-width: 32vw;
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* O rótulo do botão nunca quebra ("Novo / projeto", AT-330). */
+.novoProjeto {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/*
+ * Layout móvel (AT-330, RN-643): a barra quebra em duas linhas — título, sino
+ * e "Novo projeto" em cima; a busca embaixo, na largura inteira. A classe vem
+ * de `useLayoutMovel`, nunca de um `@media` próprio (a regra de `layout-movel.ts`).
+ */
+.topbarMovel {
+  height: auto;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  padding: 10px 16px;
+}
+
+.topbarMovel .search {
+  order: 10;
+  flex: 1 0 100%;
+  width: 100%;
+  max-width: none;
+}
+
+.content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/*
+ * O handoff parte esta linha em duas vozes — a contagem de projetos em
+ * `--text-secondary` e o resto recuado para `--text-muted`. Fica em UMA voz, e
+ * a razão é o tema claro: `--text-muted` sobre `--surface-0` dá 4.81:1 no
+ * escuro (fecharia) mas 2.76:1 no claro. Não vale trocar legibilidade por meio
+ * tom de hierarquia numa linha de 12px.
+ */
+.summary {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.summaryFallback {
+  color: var(--text-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+.empty {
+  padding: 60px 20px;
+}

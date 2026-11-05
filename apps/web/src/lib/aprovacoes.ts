@@ -1,0 +1,516 @@
+import type { ActionType, PsychologistHypothesis } from './api-types';
+import { AGENTS } from './agents';
+
+/**
+ * A LINGUAGEM das decisões que o produto pede ao usuário — verbo e frase, num
+ * módulo só (FASE 19, RN-096).
+ *
+ * O que existia antes era um verbo por tipo dentro do `ApprovalCard` e, para
+ * todo tipo sem corpo visual próprio, um despejo de `chave: JSON.stringify(
+ * valor)` do payload cru. Quem lia a fila de aprovações via `{"worktree":
+ * "/w/dev-api","branch":"feature/x","author":"dev-api[bot]"}` e tinha de
+ * adivinhar o que ia acontecer se clicasse em Aprovar. A frase existe para
+ * responder essa pergunta — o que ACONTECE — antes de qualquer detalhe.
+ *
+ * Três decisões que valem registro:
+ *
+ * - **A frase é derivada do payload, e degrada.** Nenhuma delas assume que a
+ *   chave existe: payload vazio ainda produz uma frase verdadeira, só menos
+ *   específica. É o que permite o teste exigir frase para TODO tipo do backend
+ *   sem precisar de uma fixture realista por tipo.
+ * - **O tipo desconhecido não quebra e não despeja.** `verboDaAcao` e
+ *   `fraseDaAcao` aceitam `string`, não `ActionType`: um tipo que o backend
+ *   ganhou e o web ainda não conhece cai no verbo neutro e em `frase: null`, e
+ *   quem renderiza mostra "ver detalhes" com o payload COLAPSADO. A união do
+ *   web já ficou defasada duas vezes (ver `api-types.ts`), então o caminho do
+ *   tipo desconhecido é um caminho real, não teórico.
+ * - **A hipótese do Psicólogo fala a mesma língua.** Aceitar uma hipótese não
+ *   é uma `proposed_action`, mas é a MESMA pergunta ("o que acontece se eu
+ *   disser sim?"), e o efeito dela chega depois como `instruction_patch`. Por
+ *   isso o verbo da hipótese é literalmente o verbo do `instruction_patch`, e
+ *   não um vocabulário paralelo que um dia diverge.
+ */
+
+/** O que a UI mostra no lugar da frase quando o tipo não tem uma. */
+export const SEM_FRASE = 'ver detalhes';
+
+export interface AcaoLegivel {
+  /** Complemento do nome do ator: "Dev API **quer executar comando**". */
+  verbo: string;
+  /** A frase inteira do que vai acontecer. `null` quando o tipo não tem uma. */
+  frase: string | null;
+}
+
+/**
+ * Um pedaço da frase, dizendo se é CÓDIGO (comando, branch, caminho, imagem)
+ * ou prosa (AT-322). Quem renderiza põe o código em mono e SEM aspas — antes o
+ * comando vinha entre aspas retas, em fonte proporcional, e a aspa se lia como
+ * parte do comando. A frase em texto puro (`frase`) continua existindo, sem as
+ * aspas também, para quem só precisa da string.
+ */
+export interface TrechoDaFrase {
+  texto: string;
+  codigo: boolean;
+}
+
+export interface AcaoLegivelEmTrechos extends AcaoLegivel {
+  /** A mesma frase, em trechos. `null` exatamente quando `frase` é `null`. */
+  trechos: TrechoDaFrase[] | null;
+}
+
+// Marcas de uso privado do Unicode: nenhum payload real as contém, e elas
+// nunca saem deste módulo — `fraseDaAcao` as remove, `trechosDaFrase` as usa
+// para cortar. É o que deixa cada frase continuar sendo UMA template string.
+const ABRE_CODIGO = '\u{E000}';
+const FECHA_CODIGO = '\u{E001}';
+const MARCAS = /[\u{E000}\u{E001}]/gu;
+
+function codigo(valor: string): string {
+  return `${ABRE_CODIGO}${valor}${FECHA_CODIGO}`;
+}
+
+function semMarcas(marcada: string): string {
+  return marcada.replace(MARCAS, '');
+}
+
+function emTrechos(marcada: string): TrechoDaFrase[] {
+  const trechos: TrechoDaFrase[] = [];
+  let resto = marcada;
+  while (resto.length > 0) {
+    const abre = resto.indexOf(ABRE_CODIGO);
+    if (abre === -1) {
+      trechos.push({ texto: resto, codigo: false });
+      break;
+    }
+    if (abre > 0) trechos.push({ texto: resto.slice(0, abre), codigo: false });
+    const fecha = resto.indexOf(FECHA_CODIGO, abre);
+    const fim = fecha === -1 ? resto.length : fecha;
+    trechos.push({ texto: resto.slice(abre + ABRE_CODIGO.length, fim), codigo: true });
+    resto = fecha === -1 ? '' : resto.slice(fecha + FECHA_CODIGO.length);
+  }
+  return trechos;
+}
+
+const VERBO_DESCONHECIDO = 'propõe uma ação';
+
+export const VERBO_DA_ACAO: Record<ActionType, string> = {
+  terminal: 'quer executar comando',
+  git_commit: 'propõe alteração',
+  git_push: 'quer enviar alterações',
+  pr_open: 'quer abrir pull request',
+  spend: 'solicita gasto extra',
+  git_repo_create: 'quer criar o repositório',
+  git_branch_create: 'quer criar uma branch',
+  git_branch_protect: 'quer proteger uma branch',
+  write_file: 'propõe escrever um arquivo',
+  open_adr_pr: 'quer abrir pull request de ADR',
+  open_infra_pr: 'quer abrir pull request de infra',
+  git_merge: 'quer fazer merge',
+  instruction_patch: 'propõe ajustar a instrução de um agente',
+  parallelize: 'quer mais um agente em paralelo',
+  raise_max_parallel: 'propõe subir o teto de paralelismo',
+  propose_execution_plan: 'propõe o plano de execução',
+  assess_implementability: 'avalia a implementabilidade de uma story',
+  container_start: 'quer subir o container do projeto',
+  container_stop: 'quer parar o container do projeto',
+  container_remove: 'quer remover o container do projeto',
+  container_recreate: 'quer recriar o container do projeto',
+  container_start_via_runner: 'quer subir o container do projeto na sua máquina',
+  qa_environment_start: 'quer subir a instância de QA da tarefa',
+};
+
+/**
+ * O verbo do que JÁ aconteceu (AT-371, RN-709). `VERBO_DA_ACAO` fala da
+ * proposta — o card pendente dizia "abriu pull request" antes de abrir. Só
+ * os tipos cujo verbo muda de tempo entram aqui; o resto mantém o da proposta.
+ */
+export const VERBO_DA_ACAO_EXECUTADA: Partial<Record<ActionType, string>> = {
+  pr_open: 'abriu pull request',
+  open_adr_pr: 'abriu pull request de ADR',
+  open_infra_pr: 'abriu pull request de infra',
+};
+
+type Payload = Record<string, unknown>;
+
+function texto(payload: Payload, chave: string): string | undefined {
+  const valor = payload[chave];
+  return typeof valor === 'string' && valor.trim() !== '' ? valor : undefined;
+}
+
+function numero(payload: Payload, chave: string): number | undefined {
+  const valor = payload[chave];
+  return typeof valor === 'number' && Number.isFinite(valor) ? valor : undefined;
+}
+
+function quantidade(payload: Payload, chave: string): number | undefined {
+  const valor = payload[chave];
+  return Array.isArray(valor) ? valor.length : undefined;
+}
+
+/** Primeiro valor de texto entre várias chaves — payloads da mesma família
+ *  nomeiam a mesma coisa de formas diferentes (`message`/`motivo`/`rationale`). */
+function primeiro(payload: Payload, ...chaves: string[]): string | undefined {
+  for (const chave of chaves) {
+    const valor = texto(payload, chave);
+    if (valor) return valor;
+  }
+  return undefined;
+}
+
+/** Corta o que é longo demais para uma frase — o valor inteiro continua no
+ *  corpo do card, que é onde se lê um comando de 300 caracteres. */
+function curto(valor: string, limite = 120): string {
+  const linha = valor.replace(/\s+/g, ' ').trim();
+  return linha.length > limite ? `${linha.slice(0, limite - 1)}…` : linha;
+}
+
+function nomeDoAgente(id: string | undefined): string {
+  if (!id) return 'um agente';
+  return AGENTS[id as keyof typeof AGENTS]?.name ?? id;
+}
+
+function dolares(micros: number): string {
+  return `US$ ${(micros / 1_000_000).toFixed(2).replace('.', ',')}`;
+}
+
+function plural(n: number, singular: string, pluralForma: string): string {
+  return `${n} ${n === 1 ? singular : pluralForma}`;
+}
+
+/**
+ * A frase de cada tipo. Escritas no PRESENTE e na voz do efeito ("Executa…",
+ * "Abre…"), não na voz da intenção ("gostaria de…"): o que o usuário decide é
+ * se isso acontece.
+ */
+const FRASE_DA_ACAO: Record<ActionType, (payload: Payload) => string> = {
+  terminal: (p) => {
+    const comando = texto(p, 'command');
+    return comando
+      ? `Executa ${codigo(curto(comando))} no terminal do projeto.`
+      : 'Executa um comando no terminal do projeto.';
+  },
+
+  git_commit: (p) => {
+    const arquivos = quantidade(p, 'files');
+    const caminho = texto(p, 'path');
+    const branch = texto(p, 'branch');
+    const mensagem = texto(p, 'message');
+
+    const alvo = arquivos
+      ? ` de ${plural(arquivos, 'arquivo', 'arquivos')}`
+      : caminho
+        ? ` do arquivo ${codigo(caminho)}`
+        : '';
+    const onde = branch ? ` na branch ${codigo(branch)}` : ' no repositório do projeto';
+    const porque = mensagem ? `: "${curto(mensagem)}"` : '';
+    return `Registra um commit${alvo}${onde}${porque}.`;
+  },
+
+  git_push: (p) => {
+    const branch = texto(p, 'branch');
+    return branch
+      ? `Envia a branch ${codigo(branch)} para o repositório remoto do projeto.`
+      : 'Envia a branch de trabalho para o repositório remoto do projeto.';
+  },
+
+  pr_open: (p) => {
+    const origem = texto(p, 'sourceBranch');
+    const destino = texto(p, 'targetBranch');
+    const titulo = texto(p, 'title');
+    const rota =
+      origem && destino
+        ? ` de ${codigo(origem)} para ${codigo(destino)}`
+        : origem
+          ? ` a partir de ${codigo(origem)}`
+          : '';
+    const nome = titulo ? `: "${curto(titulo)}"` : '';
+    return `Abre uma pull request${rota}${nome}.`;
+  },
+
+  spend: (p) => {
+    const motivo = primeiro(p, 'motivo', 'rationale', 'reason');
+    const base = 'Autoriza gasto de tokens acima do orçamento já definido';
+    return motivo ? `${base} — ${curto(motivo)}.` : `${base}.`;
+  },
+
+  git_repo_create: (p) => {
+    const nome = texto(p, 'name');
+    const provider = texto(p, 'provider');
+    const visibilidade = texto(p, 'visibility');
+    const qual = nome ? ` ${nome}` : ' do projeto';
+    const onde = provider ? ` no ${provider}` : ' no provider de git configurado';
+    const como = visibilidade ? `, com visibilidade ${visibilidade}` : '';
+    return `Cria o repositório${qual}${onde}${como}.`;
+  },
+
+  git_branch_create: (p) => {
+    const branch = texto(p, 'branchName');
+    const origem = texto(p, 'fromRef');
+    const qual = branch ? ` ${codigo(branch)}` : '';
+    const partindo = origem ? ` a partir de ${codigo(origem)}` : '';
+    return `Cria a branch${qual}${partindo} no repositório do projeto.`;
+  },
+
+  git_branch_protect: (p) => {
+    const branch = texto(p, 'branchName');
+    const qual = branch ? ` ${codigo(branch)}` : '';
+    return `Liga a proteção da branch${qual} — depois disso, nada entra nela sem pull request.`;
+  },
+
+  write_file: (p) => {
+    const caminho = texto(p, 'path');
+    const qual = caminho ? ` ${codigo(caminho)}` : '';
+    return `Escreve o arquivo${qual} no workspace — fora da área que este agente altera sozinho.`;
+  },
+
+  open_adr_pr: (p) => {
+    const titulo = texto(p, 'title');
+    const slug = texto(p, 'slug');
+    const nome = titulo ? ` "${curto(titulo)}"` : '';
+    const arquivo = slug ? ` em ${codigo(`docs/adr/${slug}.md`)}` : '';
+    return `Abre uma pull request com a ADR${nome}${arquivo}.`;
+  },
+
+  open_infra_pr: (p) => {
+    const titulo = texto(p, 'title');
+    const arquivos = quantidade(p, 'files');
+    const nome = titulo ? ` "${curto(titulo)}"` : '';
+    const quantos = arquivos ? ` com ${plural(arquivos, 'arquivo', 'arquivos')}` : '';
+    // AT-610 (ADR 0228): com `run.app` a PR põe um comando para rodar no container.
+    const run = p.run as { app?: { command?: unknown; port?: unknown } } | undefined;
+    const app = run?.app;
+    const comando =
+      app && typeof app.command === 'string'
+        ? ` O container passa a rodar ${codigo(app.command)}` +
+          (typeof app.port === 'number' ? ` na porta ${app.port}` : '') +
+          '.'
+        : '';
+    return `Abre uma pull request de infraestrutura${nome}${quantos}.${comando}`;
+  },
+
+  git_merge: (p) => {
+    const pr = primeiro(p, 'pullRequestId');
+    const destino = texto(p, 'targetBranch');
+    // RN-705: o provider local tem id `pr-N` — o que se mostra é o NÚMERO.
+    const qual = pr ? ` #${String(pr).replace(/^pr-/, '')}` : '';
+    const onde = destino ? ` em ${codigo(destino)}` : '';
+    return `Faz o merge da pull request${qual}${onde} no repositório do projeto.`;
+  },
+
+  instruction_patch: (p) => {
+    const agente = nomeDoAgente(texto(p, 'agent'));
+    const versao = numero(p, 'fromVersion');
+    const transicao = versao !== undefined ? `, da v${versao} para a v${versao + 1}` : '';
+    return `Altera o arquivo de instrução de ${agente}${transicao} — vale para os próximos turnos dele.`;
+  },
+
+  parallelize: (p) => {
+    const modulo = texto(p, 'module');
+    const ativos = numero(p, 'ativosNaSessao');
+    const teto = numero(p, 'maxParallel');
+    const onde = modulo ? ` no módulo ${modulo}` : '';
+    const conta =
+      ativos !== undefined && teto !== undefined
+        ? ` — a sessão já tem ${plural(ativos, 'agente ativo', 'agentes ativos')} para um teto de ${teto}`
+        : '';
+    return `Põe mais um agente para trabalhar em paralelo${onde}${conta}.`;
+  },
+
+  raise_max_parallel: (p) => {
+    const area = texto(p, 'area');
+    const atual = numero(p, 'atual');
+    const proposto = numero(p, 'proposto');
+    const qual = area ? ` da área ${area}` : '';
+    const salto = atual !== undefined && proposto !== undefined ? ` de ${atual} para ${proposto}` : '';
+    return `Sobe o teto de agentes em paralelo${qual}${salto} — muda quanto o produto gasta sem perguntar.`;
+  },
+
+  propose_execution_plan: (p) => {
+    const total = numero(p, 'totalAgentes');
+    const modulos = quantidade(p, 'modulos');
+    const resumo = texto(p, 'resumo');
+    // RN-747 (AT-437): a ativação sobe UM dev agent por módulo; o que o plano
+    // pede além disso é paralelização (teto RN-154), decisão do usuário depois.
+    const aMais = total !== undefined && modulos !== undefined ? total - modulos : 0;
+    const quantos =
+      modulos !== undefined
+        ? ` — sobe ${plural(modulos, 'dev agent', 'dev agents')}, um por módulo` +
+          (aMais > 0
+            ? ` (o plano pede ${plural(total!, 'agente', 'agentes')}; ${aMais === 1 ? 'o 1 a mais só sobe' : `os ${aMais} a mais só sobem`} se você aceitar paralelizar depois)`
+            : '')
+        : '';
+    // A aspa do modelo dentro do resumo não pode sobrar ao lado da nossa.
+    const resumoLimpo = resumo ? curto(resumo).replace(/^["“”']+|["“”']+$/g, '').trim() : '';
+    const porque = resumoLimpo ? `: "${resumoLimpo}"` : '';
+    const tarefas = quantidade(p, 'tarefas');
+    const comTarefas =
+      tarefas !== undefined && tarefas > 0
+        ? ` Cada uma das ${plural(tarefas, 'tarefa', 'tarefas')} vai para o dev do módulo que o Dev Lead escolheu.`
+        : '';
+    // AT-381 (RN-709): a api põe no payload o orçamento por tarefa VIGENTE (o
+    // mesmo que a ativação usa). RN-802 (AT-473): e o multiplicador da
+    // primeira tarefa de cada módulo (RN-774) — a estimativa soma o teto
+    // EFETIVO: (tarefas − módulos) × teto + módulos × multiplicador × teto. O
+    // número vem do payload, nunca de uma constante daqui; sem ele, a conta
+    // antiga.
+    const orcamento = numero(p, 'orcamentoPorTarefaMicros');
+    const multiplicador = numero(p, 'multiplicadorDaPrimeiraDoModulo');
+    const listaDeTarefas = Array.isArray(p.tarefas) ? (p.tarefas as unknown[]) : [];
+    const modulosComTarefa = new Set(
+      listaDeTarefas
+        .map((t) => (t && typeof t === 'object' ? (t as { modulo?: unknown }).modulo : undefined))
+        .filter((m): m is string => typeof m === 'string' && m.length > 0),
+    ).size;
+    let estimativa = '';
+    if (orcamento !== undefined && tarefas !== undefined && tarefas > 0) {
+      if (multiplicador !== undefined && multiplicador > 1 && modulosComTarefa > 0) {
+        const primeiras = Math.min(modulosComTarefa, tarefas);
+        const total = (tarefas - primeiras) * orcamento + primeiras * multiplicador * orcamento;
+        estimativa = ` Estimativa: até ${dolares(total)} (${plural(tarefas, 'tarefa', 'tarefas')} × ${dolares(orcamento)}; a primeira de cada módulo vale ${multiplicador === 2 ? 'o dobro' : `${multiplicador}×`}) — é o teto por tarefa, não o preço.`;
+      } else {
+        estimativa = ` Estimativa: até ${dolares(orcamento * tarefas)} (${plural(tarefas, 'tarefa', 'tarefas')} × ${dolares(orcamento)}) — é o teto por tarefa, não o preço.`;
+      }
+    }
+    // RN-677 (AT-263, ADR 0194): aprovar o plano É ativar a execução — sobe
+    // os dev agents e começa o gasto. A frase diz isso antes do clique.
+    return `Aprova o plano de execução do Dev Lead${quantos}${porque} e ATIVA a execução: os dev agents sobem e começam a gastar.${comTarefas}${estimativa}`;
+  },
+
+  assess_implementability: (p) => {
+    const parecer = texto(p, 'parecer');
+    const justificativa = texto(p, 'justificativa');
+    const rotulo = parecer === 'inviavel' ? 'INVIÁVEL' : 'implementável';
+    const porque = justificativa ? `: "${curto(justificativa)}"` : '';
+    // Gate `implementavel` (docs/gates.yml, ADR 0090) — o parecer do Dev
+    // Lead, a partir da história e do `module_map` (desde o ADR 0192 o plano
+    // de teste nasce depois da entrega). Aprovar registra o parecer; não sobe
+    // agente nenhum.
+    return `Registra a story como ${rotulo}${porque}.`;
+  },
+
+  container_start: (p) => {
+    const imagem = texto(p, 'imagem');
+    const network = texto(p, 'network');
+    const resources = p.resources as
+      | { cpus?: unknown; memoryMb?: unknown }
+      | undefined;
+    const cpus = typeof resources?.cpus === 'number' ? resources.cpus : undefined;
+    const memoriaMb =
+      typeof resources?.memoryMb === 'number' ? resources.memoryMb : undefined;
+
+    const qual = imagem ? ` de ${codigo(imagem)}` : '';
+    const specs =
+      cpus !== undefined && memoriaMb !== undefined
+        ? ` com ${cpus} CPU e ${memoriaMb} MB de memória`
+        : '';
+    const rede = network ? `, rede ${network}` : '';
+    // A Infra elege entre as candidatas do roteamento do Arquiteto (ADR
+    // 0130/0133) — o container sobe com esta imagem/rede/recursos, montando
+    // a pasta do projeto. NÃO diz que os dev agents passam a trabalhar
+    // dentro dele: essa etapa ainda não existe (CLAUDE.md, "Estado atual e
+    // aberto") — prometer isso aqui seria a tela afirmando o que o código
+    // não faz.
+    return `Sobe o container${qual}${specs}${rede}, montando a pasta do projeto.`;
+  },
+
+  // ADR 0136 (RN-495) — a página global de containers propõe estas duas.
+  // Nenhuma decide imagem: só pedem ao broker para agir sobre o que já
+  // existe.
+  container_stop: () =>
+    'Para o container do projeto — a pasta e o disco continuam intactos, ' +
+    'e o container pode voltar a subir sem reprovisionar.',
+
+  container_remove: () =>
+    'Remove o container do projeto de vez — descarta o que existe. Para ' +
+    'voltar a ter um, é preciso subir de novo do zero.',
+
+  // AT-608 (ADR 0228): remove + sobe de novo, para valer o comando do app e a
+  // rede declarados. O que está dentro do container se perde.
+  container_recreate: () =>
+    `Recria o container do projeto: ${codigo('remove')} o atual e ${codigo('sobe')} ` +
+    'outro com o comando do app e a rede declarados — o que está só dentro do container se perde.',
+
+  // RN-508 (ADR 0145) — segundo tipo pra subir o container real do projeto,
+  // exclusivo do modo Runner: sobe pelo `brabo-runner`, na máquina do
+  // usuário, com o Docker DELE — nunca elege imagem candidata nenhuma (a
+  // que já estiver decidida é a que sobe), diferente de `container_start`.
+  // AT-612 (ADR 0229): instância efêmera do QA, removida sozinha no fim do gate.
+  qa_environment_start: () =>
+    `Sobe a instância de QA ${codigo('efêmera')} da tarefa, com a infra que o app declarou — ` +
+    'ela some sozinha quando o gate termina.',
+
+  container_start_via_runner: (p) => {
+    const rationale = texto(p, 'rationale');
+    const porque = rationale ? `: "${curto(rationale)}"` : '';
+    return `Sobe o container do projeto na SUA máquina, via o runner conectado${porque}.`;
+  },
+};
+
+/** O verbo do tipo, ou um verbo neutro quando o web ainda não o conhece. */
+export function verboDaAcao(actionType: string, status?: string): string {
+  if (status === 'executed') {
+    const feito = VERBO_DA_ACAO_EXECUTADA[actionType as ActionType];
+    if (feito) return feito;
+  }
+  return VERBO_DA_ACAO[actionType as ActionType] ?? VERBO_DESCONHECIDO;
+}
+
+function fraseMarcada(actionType: string, payload: Payload): string | null {
+  const escrever = FRASE_DA_ACAO[actionType as ActionType];
+  return escrever ? escrever(payload) : null;
+}
+
+/** A frase do tipo, ou `null` quando o web ainda não o conhece. */
+export function fraseDaAcao(actionType: string, payload: Payload = {}): string | null {
+  const marcada = fraseMarcada(actionType, payload);
+  return marcada === null ? null : semMarcas(marcada);
+}
+
+/** A mesma frase de {@link fraseDaAcao}, em trechos de prosa e de código. */
+export function trechosDaFraseDaAcao(actionType: string, payload: Payload = {}): TrechoDaFrase[] | null {
+  const marcada = fraseMarcada(actionType, payload);
+  return marcada === null ? null : emTrechos(marcada);
+}
+
+export function descreverAcao(
+  actionType: string,
+  payload: Payload = {},
+  status?: string,
+): AcaoLegivelEmTrechos {
+  const marcada = fraseMarcada(actionType, payload);
+  return {
+    verbo: verboDaAcao(actionType, status),
+    frase: marcada === null ? null : semMarcas(marcada),
+    trechos: marcada === null ? null : emTrechos(marcada),
+  };
+}
+
+/**
+ * A hipótese do Psicólogo na mesma língua da aprovação.
+ *
+ * Aceitar NÃO cria uma `proposed_action` (o Psicólogo é só leitura): manda a
+ * hipótese para a fila da Anamnese, e é ela que depois propõe o
+ * `instruction_patch` — que aí sim vem para aprovação. A frase diz isso, e não
+ * "a instrução será alterada": a diferença é a única coisa que o usuário
+ * precisa saber para decidir sem medo.
+ */
+export function descreverHipotese(hypothesis: PsychologistHypothesis): AcaoLegivel {
+  const agente = nomeDoAgente(hypothesis.agenteAlvo);
+  const verbo = VERBO_DA_ACAO.instruction_patch;
+
+  if (hypothesis.status === 'accepted') {
+    return {
+      verbo,
+      frase: `Aceita — seguiu para a Anamnese, que decide se propõe um ajuste na instrução de ${agente}.`,
+    };
+  }
+  if (hypothesis.status === 'dismissed') {
+    return { verbo, frase: `Descartada — nada mudou na instrução de ${agente}.` };
+  }
+  return {
+    verbo,
+    frase:
+      `Aceitar manda esta hipótese para a Anamnese, que pode propor um ajuste na instrução de ` +
+      `${agente} — o ajuste ainda vem para você aprovar.`,
+  };
+}

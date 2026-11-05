@@ -1,0 +1,466 @@
+/*
+ * Métricas de `design_handoff_brabo/designs/Brabo Approvals.dc.html` (seção 6
+ * do README do handoff).
+ *
+ * A diferença estrutural em relação à versão anterior: o card não tem mais
+ * padding próprio e `gap` entre blocos. Ele RECORTA (`overflow: hidden`) e cada
+ * região tem o padding e a divisória dela — cabeçalho 14×16 com borda embaixo,
+ * corpo colado nas bordas, ações 12×16 com borda em cima. É o que faz o corpo
+ * de terminal e de diff encostarem no card, como o desenho mostra; com padding
+ * no card eles flutuavam numa moldura de 16px que o desenho não tem.
+ */
+/* A superfície, a borda, o raio e o recorte vêm de `ui/Card` (`padding="none"
+   recorta`, AT-286). `.card` fica só como gancho dos seletores compostos
+   abaixo (`.card.critical`). */
+
+/*
+ * AT-322 — UMA variante só. O card não conhece mais a superfície em que está:
+ * ele preenche o contêiner, e quem decide a largura é o contêiner. No fio da
+ * sessão é `.acaoNoFio` (`SessionPage.module.css`) que o centraliza com teto
+ * de 560px (RN-173); na fila de Aprovações ele preenche a coluna; no painel
+ * "precisa de você" e nas pendências de outras sessões, a largura do painel.
+ * Antes a variante `chat` morava aqui, e cada superfície tinha botões,
+ * largura e notas diferentes para a mesma decisão.
+ */
+.card {
+  width: 100%;
+}
+
+.card.critical {
+  border-color: var(--danger-panel-border);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* `Checkbox` do kit; o desenho pede um quadrado de 20px com raio 6. */
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+}
+
+.headerIcon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  color: var(--accent);
+}
+
+.headerText {
+  flex: 1;
+  min-width: 0;
+}
+
+/*
+ * Duas tipografias na mesma linha, como no desenho: o nome do agente em
+ * Space Grotesk 600/14 e o verbo em corpo 12 `text-muted`. Antes era uma frase
+ * só em 13,5px com um `<b>`, e o nome do agente não se destacava de quem lê a
+ * fila de cima para baixo procurando QUEM pediu.
+ */
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.actorName {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.verb {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.urgency {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  padding: 3px 9px;
+  align-self: center;
+  flex-shrink: 0;
+  color: var(--urgency-color);
+  background: color-mix(in srgb, var(--urgency-color) var(--tint-soft), transparent);
+  border: 1px solid color-mix(in srgb, var(--urgency-color) var(--tint-line), transparent);
+}
+
+.urgencyDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.urgencyDot.pulsing {
+  animation: bpulse 2.4s ease-in-out infinite;
+}
+
+/*
+ * O corpo NÃO é code-bg por padrão. No desenho só terminal e diff ficam sobre
+ * `--code-bg`; o corpo de PR é texto sobre a superfície do card. Enquanto a
+ * regra era única, o resumo da PR aparecia dentro de uma caixa de código que
+ * ninguém tinha desenhado.
+ */
+.body {
+  min-width: 0;
+}
+
+.bodyCode {
+  background: var(--code-bg);
+}
+
+.commandLine {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding: 14px 16px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Mensagem de payload malformado (comando/conteúdo vazio) — texto normal
+ * apagado, nunca o prompt `$ ` em branco que parece bug de renderização. */
+.vazio {
+  color: var(--text-muted);
+}
+
+.outputBlock {
+  border-top: 1px solid var(--border);
+}
+
+.outputHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 16px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.outputBody {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding: 0 16px 10px;
+  white-space: pre-wrap;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+/*
+ * A linha do arquivo é a FAIXA que abre o diff, e no desenho ela vive sobre
+ * `--surface-2` — é o que a distingue do diff em si, que fica em `--code-bg`.
+ */
+.fileRow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 10px 16px;
+  background: var(--surface-2);
+  border: none;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.fileRow:hover {
+  background: color-mix(in srgb, var(--border-strong) 30%, var(--surface-2));
+}
+
+.chevron {
+  display: inline-flex;
+  transition: transform 0.15s;
+  color: var(--text-muted);
+}
+
+.chevron.open {
+  transform: rotate(90deg);
+}
+
+.filePath {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary);
+}
+
+.diffStat {
+  display: inline-flex;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 10px;
+}
+
+.diffAdd {
+  color: var(--success);
+}
+
+.diffDel {
+  color: var(--danger);
+}
+
+.diffLines {
+  background: var(--code-bg);
+  padding: 6px 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.75;
+  overflow-x: auto;
+}
+
+.diffLine {
+  display: flex;
+}
+
+.diffLine.add {
+  background: var(--diff-add);
+}
+
+.diffLine.del {
+  background: var(--diff-del);
+}
+
+.lineNo {
+  opacity: 0.6;
+  width: 34px;
+  padding-right: 10px;
+  flex-shrink: 0;
+  text-align: right;
+  color: var(--text-muted);
+}
+
+.sign {
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.sign.add {
+  color: var(--success);
+}
+
+.sign.del {
+  color: var(--danger);
+}
+
+.diffContent {
+  white-space: pre;
+  color: var(--text-secondary);
+}
+
+.prTitle {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+  padding: 14px 16px 8px;
+}
+
+.prBranches {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+.arrow {
+  color: var(--text-muted);
+  display: inline-flex;
+}
+
+/* Retângulo com borda (raio 6), não pílula: é o que o desenho mostra. */
+/* Os nomes de branch são `ui/Badge tone="neutral" square size="md"` (AT-287). */
+
+.prSummary {
+  padding: 0 16px 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+/*
+ * O fallback genérico é feio de propósito e a FASE 19 é dona dele — aqui ele só
+ * herda o padding das outras regiões, sem mudar o que despeja.
+ */
+/*
+ * A FRASE (FASE 19, RN-096). Fonte de CORPO e não mono: ela é uma frase em
+ * português, e o mono a fazia parecer mais um pedaço de payload — que é
+ * exatamente o que ela veio substituir. `--text-primary` porque é a linha mais
+ * importante do card: o verbo no cabeçalho fica apagado justamente para ela
+ * ganhar o contraste.
+ */
+.frase {
+  margin: 0;
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+/* AT-148 (RN-614): o motivo da política e a raiz do escopo — linha de
+   contexto logo abaixo da frase, mais apagada que ela: responde "qual regra
+   decidiu", pergunta de auditoria e não de decisão. */
+.motivoDaPolitica {
+  margin: -6px 0 0;
+  padding: 0 16px 12px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+/*
+ * O colapso. A margem de 16px vai no CABEÇALHO, não no bloco: os corpos ricos
+ * (comando, diff, PR) já trazem o próprio `padding: … 16px`, e um padding no
+ * bloco somaria com o deles — o diff ficaria recuado 32px do card enquanto o
+ * cabeçalho ficaria em 16.
+ */
+.detalhes {
+  border-top: 1px solid var(--border);
+}
+
+.detalhesCabecalho {
+  padding: 8px 16px;
+}
+
+/*
+ * O payload cru, quando alguém abre o colapso: indentado e num bloco de código
+ * de verdade. `overflow-x: auto` porque valor longo (um `content` de arquivo,
+ * um comando de 300 caracteres) rolava a página inteira na horizontal em vez do
+ * próprio bloco.
+ */
+.payloadCru {
+  margin: 0 16px 12px;
+  padding: 12px;
+  background: var(--code-bg);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.semPayload {
+  padding: 0 16px 12px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/*
+ * Os botões têm largura NATURAL em toda superfície (AT-322), como no desenho.
+ * Esticar os dois primeiros no fio fazia "Modo automático" cair para outra
+ * linha a 1024px, e esticá-los na fila transformava "Aprovar" numa faixa.
+ */
+
+/*
+ * A nota: corpo 12px apagado, NUNCA mono (AT-322, achado A4 da auditoria de
+ * 30/09). Em mono de 11px, três a cinco linhas pesavam mais que a própria
+ * decisão. O ícone tem 14px, não encolhe, e se alinha à PRIMEIRA linha
+ * (`flex-start` + a altura da linha) em vez de flutuar no meio do parágrafo.
+ */
+.note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  line-height: 18px;
+  color: var(--text-muted);
+  padding: 0 16px 12px;
+}
+
+.noteIcon {
+  flex-shrink: 0;
+  /* (18px de linha − 14px de ícone) / 2: centro do ícone no centro da 1ª linha. */
+  margin-top: 2px;
+}
+
+/* AT-322 (achado A5): o código dentro da frase — comando, branch, caminho —
+   em mono, sem aspas, num fundo que o separa da prosa sem virar botão. */
+.codigoNaFrase {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0 4px;
+  overflow-wrap: anywhere;
+}
+
+.decided {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.decidedDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--decided-color);
+  flex-shrink: 0;
+}
+
+.decidedText {
+  color: var(--decided-color);
+}
+
+/* AT-256: a recusa da api dita no card — mesma forma da nota, em `--danger`. */
+.recusa {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  line-height: 18px;
+  color: var(--danger);
+  padding: 0 16px 12px;
+}
+
+.acoesDoCard {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

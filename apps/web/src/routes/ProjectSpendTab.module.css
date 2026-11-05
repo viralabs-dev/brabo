@@ -1,0 +1,80 @@
+/* Aba de Gastos (FASE 22). Duas audiências, um layout. */
+
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.titulo {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Os três estados da RN-088. O erro vem ANTES do vazio, e diz o que fazer. */
+.estado {
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.estadoErro {
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-4);
+}
+
+.nota {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 68ch;
+}
+
+/* O bloco "por projeto" (RN-212) — TokenMeter mais o alerta de custo, quando
+   houver. Largura própria: o card cheio do TokenMeter é pensado pra ocupar
+   uma coluna, não a faixa inteira da aba. */
+.orcamentoProjeto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 360px;
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-4);
+}
+
+/* Editor de orçamento: grade de largura natural, botão do kit sem esticar. */
+.formulario {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 260px));
+  gap: var(--space-3);
+  align-items: end;
+}
+
+.formulario > .nota,
+.formulario > [data-slot="alert"] {
+  grid-column: 1 / -1;
+}
+
+.acoes {
+  display: flex;
+}
+
+/* O <figure> do gráfico vinha com a margem do navegador (40px) dentro da faixa. */
+
+.grupoTeto {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+}

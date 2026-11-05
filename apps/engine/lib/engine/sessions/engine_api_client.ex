@@ -1,0 +1,2245 @@
+defmodule Engine.Sessions.EngineApiClient do
+  @moduledoc """
+  Contrato pros callbacks engine -> api. Trocável em teste via
+  `Application.get_env(:engine, :engine_api_client, ...)`, sem Mox.
+  """
+
+  alias Engine.Harness.IdiomaDaResposta
+  alias Engine.Harness.AmbienteDoAgente
+  alias Engine.Harness.PerfilDoAutor
+  alias Engine.Harness.FluxoDoTime
+  alias Engine.Harness.DecisoesDoProjeto
+  alias Engine.Harness.RetomadaDoTurno
+  alias Engine.Harness.RoteamentoDeFerramenta
+
+  @callback report_termination(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              reason :: String.t(),
+              to :: String.t()
+            ) ::
+              :ok | {:error, term()}
+
+  @callback append_event(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              event :: map()
+            ) ::
+              :ok | {:error, term()}
+
+  @doc """
+  Igual `append_event`, mas devolve o evento criado (`%{"id" => ..., "seq"
+  => ...}`) — usado quando o chamador precisa do id do artefato (ex.: o
+  Criativo referenciar o product_brief no handoff).
+  """
+  @callback append_event_returning(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              event :: map()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Lê os eventos da sessão (engine -> api, endpoint interno) — usado só pra
+  REHIDRATAR o histórico de conversa de um agente no restart. Retorna
+  `{:ok, [event_map]}` em ordem de seq.
+  """
+  @callback list_events(project_id :: String.t(), session_id :: String.t()) ::
+              {:ok, [map()]} | {:error, term()}
+
+  @doc """
+  Leitura dos eventos da sessão COM opções (RN-580) — o que a reidratação dos
+  agentes conversacionais e as leituras dos kickoffs usam. Opções (todas
+  opcionais, `keyword`):
+
+    * `:latest` — `true` pede a CAUDA (os `:limit` mais recentes), ainda em
+      ordem crescente de `seq`; ignora `:after_seq`;
+    * `:types` — lista de tipos; só eventos desses tipos voltam;
+    * `:after_seq` — só eventos com `seq` maior que este;
+    * `:limit` — teto da página; a api corta em 200 (ADR 0060) de qualquer jeito.
+
+  `list_events/2` continua existindo, byte a byte, para os chamadores que não
+  migraram (os PRIMEIROS 200, todos os tipos).
+  """
+  @callback list_events(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              opts :: keyword()
+            ) ::
+              {:ok, [map()]} | {:error, term()}
+
+  @doc """
+  Turno de LLM STREAMADO pros agentes conversacionais (Criativo). Consome a
+  SSE da api chamando `on_delta.(text)` por delta de texto; retorna
+  `{:ok, %{"message" => ..., "usage" => ...}}` (turno completo acumulado) ou
+  `{:error, term}`. `on_delta` é livre pra rebroadcastar (ex.: canal Phoenix).
+  """
+  @callback llm_turn_stream(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              agent :: String.t(),
+              messages :: [map()],
+              tools :: [map()],
+              on_delta :: (String.t() -> any()),
+              opts :: keyword()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  A sessão tem trabalho pendente que impeça encerrá-la por heartbeat?
+
+  Fechar sessão é sobre o TRABALHO ter acabado, não sobre quem está olhando. O
+  timeout de 30s matava a sessão assim que a aba saía da tela — e numa execução
+  real deixou um handoff `offered` para o Arquiteto preso numa sessão fechada,
+  com épico e quatro histórias prontos e a cadeia sem como seguir.
+  """
+  @callback session_pending_work(session_id :: String.t()) ::
+              {:ok,
+               %{
+                 pending: boolean(),
+                 motivo: String.t() | nil,
+                 aguardando_usuario_desde: DateTime.t() | nil
+               }}
+              | {:error, term()}
+
+  @doc """
+  O remoto de trabalho de um projeto (ADR 0056): `%{kind, origin, default_branch,
+  token, username}`.
+
+  O engine não tem a chave mestra e não deve ter — quem decifra é a api. Quem
+  consome o `token` injeta por invocação e NUNCA o escreve em arquivo; ver
+  `Engine.Actions.GitAuth`.
+  """
+  @callback get_git_remote(project_id :: String.t()) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Cria um handoff (offered) na api — o Criativo oferece ao PO ao emitir o
+  product_brief. Retorna `{:ok, handoff_map}` ou `{:error, term}`.
+  """
+  @callback create_handoff(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              from_agent :: String.t(),
+              to_agent :: String.t(),
+              artifact_id :: String.t() | nil
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Mesmo `create_handoff/5`, no modo "só se ninguém recebeu ainda" (ADR 0182,
+  RN-636): com oferta pendente ao destino em QUALQUER sessão do projeto, a api
+  devolve a existente (`"desfecho" => "ja_oferecido"`) em vez de substituí-la;
+  com o destino já ativo no projeto, recusa com 409 `agente_ja_ativo`. É o
+  modo do AppSec, que oferece um parecer por história aos mesmos destinos. A
+  decisão mora na api, sob o lock do destino — perguntar antes, daqui, seria
+  corrida com outra oferta.
+  """
+  @callback create_handoff_if_absent(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              from_agent :: String.t(),
+              to_agent :: String.t(),
+              artifact_id :: String.t() | nil
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Ferramentas do PO (create_epic/create_story/create_task) — criam linhas de
+  backlog na api (nunca SQL direto). `fields` é o corpo camelCase da linha;
+  retornam `{:ok, %{"id" => ...}}` (a story também traz `"status"`) ou
+  `{:error, term}` (ex.: business_rule_id inválido → 4xx da api).
+  """
+  @callback create_epic(project_id :: String.t(), session_id :: String.t(), fields :: map()) ::
+              {:ok, map()} | {:error, term()}
+  @callback create_story(project_id :: String.t(), session_id :: String.t(), fields :: map()) ::
+              {:ok, map()} | {:error, term()}
+  @callback create_task(project_id :: String.t(), session_id :: String.t(), fields :: map()) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Ferramenta `complete_story` do PO (RN-720): completa uma história `draft`
+  existente em vez de recriá-la. Devolve a história atualizada.
+  """
+  @callback complete_story(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              story_id :: String.t(),
+              fields :: map()
+            ) :: {:ok, map()} | {:error, term()}
+
+  @doc """
+  Ferramentas `update_story`/`archive_story` do PO (RN-727): corrigem o
+  título/descrição ou arquivam uma história `draft` sem tarefa em execução.
+  A recusa da api volta como `{:error, {409, %{"reason" => ..., "message" => ...}}}`.
+  """
+  @callback update_story(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              story_id :: String.t(),
+              fields :: map()
+            ) :: {:ok, map()} | {:error, term()}
+  @callback archive_story(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              story_id :: String.t(),
+              fields :: map()
+            ) :: {:ok, map()} | {:error, term()}
+
+  @doc """
+  A duplicata SEMÂNTICA de regra de negócio (RN-681, ADR 0198): chamada por
+  `emit_artifact` DEPOIS de gravar a regra. `fields` leva `kind`
+  (`"business_rule"`) e `title`; devolve `{:ok, %{"status" => ..., "message"
+  => texto | nil}}`. Nunca recusa a regra — ela já existe —, e quem chama
+  não deixa uma falha desta chamada virar falha da emissão. A história não
+  passa por aqui: a api checa dentro da própria criação, e o aviso volta no
+  corpo de `create_story` (`"semanticDuplicate"`).
+  """
+  @callback check_semantic_duplicate(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              fields :: map()
+            ) :: {:ok, map()} | {:error, term()}
+
+  @doc """
+  Ferramentas de LEITURA do PO (RN-164) — as três escopadas ao PROJETO, não à
+  sessão: regra de negócio, backlog e métricas de produto atravessam as
+  sessões, e limitar a leitura à sessão corrente é justamente o que fazia o
+  PO não enxergar o que já existia.
+
+  `list_business_rules/1` devolve `%{"rules" => [...], "uncoveredCount" => n}`;
+  `list_backlog/1` devolve a árvore épico → história → tarefa;
+  `list_product_metrics/1` devolve o relatório de funil/DORA parcial (ADR
+  0089, RN-407) — o MESMO shape do `Relatorio` de `analise-funil.ts`, sem
+  campo para as três ausências permanentes (a ferramenta do PO as declara no
+  TEXTO, não no JSON). Nenhuma das três leva `session_id` — não há o que
+  escopar por sessão aqui.
+  """
+  @callback list_business_rules(project_id :: String.t()) ::
+              {:ok, map()} | {:error, term()}
+  @callback list_backlog(project_id :: String.t()) ::
+              {:ok, [map()]} | {:error, term()}
+  @callback list_product_metrics(project_id :: String.t()) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Ferramentas do Arquiteto: `create_module_map` (modules validado contra ciclos
+  na api) e `assign_story_modules`. Retornam `{:ok, map}` ou `{:error, term}`
+  (ex.: ciclo / módulo inexistente → 4xx da api).
+  """
+  @callback create_module_map(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              modules :: [map()]
+            ) ::
+              {:ok, map()} | {:error, term()}
+  @callback assign_story_modules(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              fields :: map()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Ferramenta `create_c4_diagram` do Arquiteto: gera o diagrama C4 (Context +
+  Container, modelo de Simon Brown) a partir do module_map vigente. `entrada`
+  carrega `system_name`/`system_description`/`actors` — o Container level é
+  DERIVADO do module_map na api, nunca redigitado aqui. `{:error, _}` quando
+  não há module_map vigente (400) ou a entrada é inválida.
+  """
+  @callback create_c4_diagram(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              entrada :: map()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Ferramenta `choose_project_image` do Arquiteto (FASE 25a, ADR 0065): fixa a
+  imagem de container do projeto. Imagem sem tag explícita, `latest`, rationale
+  curto ou recurso acima do teto voltam como `{:error, _}` — a regra é de
+  domínio na api, e o motivo chega inteiro ao modelo pelo tool-result.
+  """
+  @callback decide_project_image(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              decisao :: map()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Ferramenta `route_modules_to_infra` do Arquiteto (ADR 0131): roteia CADA
+  módulo do module_map vigente para uma imagem CANDIDATA, com o porquê.
+  `roteamento` é a lista `[%{modulo, imagemCandidata, porque}, ...]`. Módulo
+  fora do module_map vigente, lista vazia, módulo repetido, ou imagem que
+  falha a mesma regra de `choose_project_image` voltam como `{:error, _}`.
+  """
+  @callback route_modules_to_infra(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              roteamento :: [map()]
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Ciclo de task dos dev agents (Fase 4a). `claim_task` pega a próxima task
+  pegável do módulo (atômico na api) — retorna `{:ok, task_map}` ou `{:ok, nil}`
+  se não há. `mark_task` atualiza o status.
+  """
+  @callback claim_task(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              module :: String.t(),
+              agent_id :: String.t()
+            ) ::
+              {:ok, map() | nil} | {:error, term()}
+  @callback mark_task(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              task_id :: String.t(),
+              status :: String.t(),
+              agent_id :: String.t()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Contexto rico da task (Fase 4a) — story completa, regras de negócio e ADRs
+  do projeto. Alimenta as camadas `regras_negocio`/`estado_tarefa` do
+  DevAgent (`Engine.Dev.ContextBuilder`).
+  """
+  @callback get_dev_context(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              task_id :: String.t(),
+              module :: String.t() | nil
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Devolve a task pra `ready` com diagnóstico (Fase 4a) — o `DevAgentServer`
+  chama quando não consegue concluir (bloqueio explícito, limite de
+  iterações, ou orçamento de tokens excedido). Nunca deixa a task presa em
+  `in_progress` sem desfecho.
+
+  `origin` (Fase 8b, ADR 0020/0038): a ORIGEM da falha
+  (`infra`/`modelo`/`codigo`/`politica`), quando conhecida — nunca por
+  eliminação. Nasce `nil` de propósito: os ~18 pontos de chamada da Fase 4a
+  (`Engine.Dev.AgentIo.block_task/3` e afins) não foram retrofitados nesta
+  entrega, só o caminho novo do `QaLeadServer`, que sempre sabe a origem
+  porque a recebe do subagente que falhou.
+  """
+  @callback mark_task_blocked(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              task_id :: String.t(),
+              reason :: String.t(),
+              diagnosis :: String.t(),
+              agent_id :: String.t(),
+              origin :: String.t() | nil
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  RN-864 (AT-525): desbloqueia a task pela retomada automática depois de falha
+  passageira de rede — o MESMO caso de uso do "Desbloquear" humano, ator
+  `system`, no-op se a task já não está bloqueada.
+  """
+  @callback unblock_task(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              task_id :: String.t(),
+              agent_id :: String.t()
+            ) :: {:ok, map() | nil} | {:error, term()}
+
+  @doc """
+  RN-856 (AT-522): tarefas `in_progress` do projeto da sessão de EXECUÇÃO
+  (vazio em outra) com dono `dev-*`, fora de
+  gate e não bloqueadas — `[%{"taskId" => _, "assignedTo" => _}]`. O
+  encerramento da execução bloqueia as que nenhuma linha de
+  `dev_agent_states` segura.
+  """
+  @callback list_tarefas_em_curso_de_dev(session_id :: String.t()) ::
+              {:ok, [map()]} | {:error, term()}
+
+  @doc """
+  Abre o fluxo de gates de uma PR (Fase 4a) — o `DevAgentServer` chama logo
+  depois de `pr_open` executar com sucesso.
+  """
+  @callback open_gate(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              task_id :: String.t(),
+              agent_id :: String.t()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Parecer de um gate de PR (Fase 4a — QA/SecOps): retorna `{:ok, %{"nextAction"
+  => "correct"|"run_secops"|"done"|"blocked", "task" => task_map}}` — o
+  chamador (QaLeadServer/SecOpsAgentServer) decide o próximo passo a partir
+  de `nextAction`. `max_corrections` opcional (nil usa o default da api).
+  """
+  @callback record_gate_verdict(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              task_id :: String.t(),
+              gate :: String.t(),
+              veredito :: String.t(),
+              resumo :: String.t(),
+              itens :: [String.t()],
+              max_corrections :: integer() | nil,
+              extras :: map()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Registra o desfecho de UMA delegação da área de QA (Fase 8b, ADR 0038) —
+  `completed` (com `parecerArtifactId`), `failed` (com `failureOrigin`) ou
+  `dispensed` (com `justification`). O `QaLeadServer` chama isto pra cada
+  subespecialidade, SEPARADO da chamada a `record_gate_verdict` — a api nunca
+  vê o consolidado como delegação, só o `qa_verdict` final.
+  """
+  @callback record_delegation(payload :: map()) :: {:ok, map()} | {:error, term()}
+
+  @doc """
+  Contexto inicial do InfraAgent (Fase 4a): module_map vigente + ADRs
+  `infraRelevant` do projeto. Mirror de `get_dev_context`, sem task/story.
+  """
+  @callback get_infra_context(project_id :: String.t(), session_id :: String.t()) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Parecer de um gate de PR DE INFRA (Fase 4a — InfraAgent): mesma forma de
+  `record_gate_verdict`, mas chaveado por `pr_action_id` (id da
+  proposed_action `open_infra_pr`) em vez de `task_id` — o artefato de
+  infra não tem task por trás.
+  """
+  @callback record_infra_gate_verdict(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              pr_action_id :: String.t(),
+              gate :: String.t(),
+              veredito :: String.t(),
+              resumo :: String.t(),
+              itens :: [String.t()],
+              max_corrections :: integer() | nil
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Lê de volta title+files do payload da proposed_action `open_infra_pr` já
+  proposta (Fase 4a) — o `Engine.Infra.InfraGateRunner` usa isso pra rodar
+  hadolint/gitleaks/semgrep sobre os arquivos SEM worktree (a PR de infra
+  não tem um).
+  """
+  @callback get_infra_pr_files(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              pr_action_id :: String.t()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Contexto do Psicólogo (Fase 4b): `alreadyAnalyzed` (idempotência),
+  `sessionStatus`/`terminationReason` (causa de término), regras de
+  negócio do projeto e hipóteses anteriores não descartadas. Os eventos da
+  sessão o worker lê direto do Postgres (`Engine.SessionEvents.Event.count/1`
+  pra triagem, `list_recent/2` pro prompt), não passam por aqui.
+  """
+  @callback get_psychologist_context(
+              project_id :: String.t(),
+              session_id :: String.t()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Registra o lote de hipóteses do Psicólogo (Fase 4b). A api valida que
+  TODA evidência aponta pra um event id real da sessão e rejeita o lote
+  inteiro (4xx) se qualquer uma falhar — o erro vira o próximo
+  tool-result pro modelo corrigir, dentro do teto de max_iterations.
+  """
+  @callback propose_hypotheses(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              tier :: String.t(),
+              triggered_by :: String.t(),
+              event_count :: integer(),
+              cause :: String.t(),
+              hypotheses :: [map()]
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Contexto da rodada da Anamnese (Fase 4b): catálogo de competências
+  permitidas, membros elegíveis (já sem quem optou por sair), hipóteses
+  aceitas na fila, perfis atuais e a janela a analisar. A janela de
+  eventos em si o worker lê direto do Postgres.
+  """
+  @callback get_anamnese_context(project_id :: String.t()) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Registra os perfis de proficiência da rodada (Fase 4b). A api valida
+  contra o catálogo permitido (guarda-corpo: nada de atributo sensível) e
+  contra evidência real; rejeição volta como tool-result pro modelo.
+  """
+  @callback record_proficiency(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              payload :: map()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Fecha a janela de uma rodada da Anamnese que encerrou SEM perfil
+  (`skip_proficiency`): grava `anamnese_runs` com zero perfis, para a próxima
+  rodada começar em `windowTo` (RN-722).
+  """
+  @callback close_anamnese_window(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              payload :: map()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Dispara o sync de catálogo de modelos na api (Fase 9c).
+
+  Não leva projeto nem sessão: o catálogo é global e a chamada não roda em
+  nome de ninguém. Quem AGENDA é o engine (Oban), quem tem as credenciais e o
+  registry de providers é a api — duplicar o registry aqui significaria manter
+  dois catálogos.
+
+  Retorna o relatório por provider (`%{"porProvider" => [...]}`), que traz o
+  motivo do pulo e a ORIGEM da falha de cada um.
+  """
+  @callback sync_model_catalog() :: {:ok, map()} | {:error, term()}
+
+  @doc """
+  Propõe um patch de instrução (Fase 4b). A api calcula o diff e recusa
+  repropor um patch já negado antes.
+  """
+  @callback propose_instruction_patch(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              payload :: map()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @callback propose_max_parallel(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              payload :: map()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Um turno de LLM pro harness (ToolLoop/ContextManager) — o engine nunca
+  fala com provider direto. `messages`/`tools` no formato do contrato
+  compartilhado; retorna `{:ok, %{"message" => ..., "usage" => ..., "error"
+  => ...}}` (JSON da api) ou `{:error, term}`.
+  """
+  @callback llm_turn(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              agent :: String.t(),
+              messages :: [map()],
+              tools :: [map()],
+              opts :: keyword()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Busca no RAG do projeto (pgvector, busca híbrida vetor+léxico — ADR
+  0080/0082) — `POST /internal/rag/search`. Rota fechada por uma frente
+  PARALELA em `apps/api` (N2): o contrato é `{projectId, query, topK}` →
+  `{hits: [...], degraded}`, mas o roundtrip real depende dela terminar.
+
+  `top_k` é o teto que a CHAMADORA (a ferramenta `rag_search`, RN-150) já
+  clampou — este client não impõe teto próprio, só encaminha. `opts` é
+  repassado ao `Req` (ex.: `receive_timeout` num teste), vazio no caminho
+  normal.
+
+  Retorna `{:ok, %{"hits" => [%{"path"=>, "chunk"=>, "score"=>, "excerpt"=>},
+  ...], "degraded" => bool}}` (corpo cru da api, chaves string) ou
+  `{:error, motivo}`.
+  """
+  @callback rag_search(
+              project_id :: String.t(),
+              query :: String.t(),
+              top_k :: integer(),
+              opts :: keyword()
+            ) :: {:ok, map()} | {:error, term()}
+
+  @doc """
+  Vota num trecho que a busca devolveu — `POST /internal/rag/feedback`
+  (RN-480). É o único sinal de VERDADE da medição do RAG: latência e taxa de
+  degradação dizem se a busca RODOU, nunca se ela ACERTOU.
+
+  `search_id`/`chunk_id` vêm do resultado da PRÓPRIA `rag_search`; a api
+  recusa (400) id que ela não reconheça, e a ferramenta converte essa recusa
+  em tool-result de erro para o modelo corrigir (RN-061), nunca em crash.
+
+  Retorna `{:ok, %{"searchId"=>, "chunkId"=>, "verdict"=>, "rank"=>}}` ou
+  `{:error, motivo}`.
+  """
+  @callback rag_feedback(
+              project_id :: String.t(),
+              search_id :: String.t(),
+              chunk_id :: String.t(),
+              verdict :: String.t(),
+              agent :: String.t()
+            ) :: {:ok, map()} | {:error, term()}
+
+  @doc """
+  Lê um prompt template versionado do grafo de prompts (ADR pendente da
+  frente N2) — `GET /internal/graph/prompt-templates/:name`, com
+  `?version=` quando `version` não é `nil` (sem parâmetro busca a versão
+  vigente). Rota fechada pela mesma frente PARALELA de `rag_search/4`.
+
+  Retorna `{:ok, %{"name"=>, "version"=>, "body"=>, "hash"=>}}`,
+  `{:error, :not_found}` se a api responder 404, ou `{:error, motivo}` para
+  qualquer outra falha.
+  """
+  @callback get_prompt_template(name :: String.t(), version :: String.t() | nil) ::
+              {:ok, map()} | {:error, :not_found} | {:error, term()}
+
+  @doc """
+  Cria uma proposed_action a partir de uma ferramenta do agente (terminal,
+  write_file fora da whitelist) — passa pelo decide/permissions da api.
+  Retorna `{:ok, action_map}` (com `"status"`, `"executionResult"` etc.) ou
+  `{:error, term}`.
+  """
+  @callback propose_action(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              action_type :: String.t(),
+              actor :: map(),
+              payload :: map()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Confirma o caminho de um projeto `execution_mode: runner` (RN-423, ADR
+  0104) — o runner é a fonte da verdade: a api SOBRESCREVE `workspacePath`
+  com `path` e marca `workspaceVerifiedAt`. `session_id` é `nil` quando o
+  projeto ainda não tem sessão nenhuma (`ProjectSession.latest_id/1`) — a
+  api atualiza o projeto mesmo assim e só PULA o evento de auditoria nesse
+  caso (mesma degradação de `registrar_evento_terminal/3`). `user_id` vem
+  do ticket consumido no join (`socket.assigns.user_id`), mesmo padrão de
+  `registrar_evento_terminal/3` — é quem aparece como ator do evento.
+  Retorna `{:ok, %{"verified" => bool, "workspacePath" => path}}` ou
+  `{:error, term}` (400 quando `path` é lexicamente inválido, ou o projeto
+  não é `runner`).
+  """
+  @callback confirm_workspace(
+              project_id :: String.t(),
+              session_id :: String.t() | nil,
+              path :: String.t(),
+              user_id :: String.t()
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Reporta o DESFECHO de uma rodada do espelho (RN-517, ADR 0147 ponto 7) —
+  telemetria de conexão, gravada numa tabela própria da api e NUNCA no event
+  log (a rodada não tem sessão, e `session_events.session_id` é `NOT NULL`;
+  é o mesmo raciocínio que fez `rag_searches` virar tabela, RN-479).
+
+  `resultado` é o mapa que o runner empurrou em `mirror_sync_result`, já
+  normalizado por `EngineWeb.TerminalChannel`: `ok` (obrigatório) mais
+  `destination`/`filesCopied`/`filesSkipped`/`filesRefused`/`error`.
+
+  `{:ok, %{"recorded" => true, "status" => _}}` ou `{:error, term}`. Quem
+  chama só LOGA o erro: gravar telemetria jamais derruba o que ela mede — a
+  cópia já terminou quando isto é chamado, e uma falha aqui não pode derrubar
+  o canal do runner.
+  """
+  @callback report_mirror_sync(project_id :: String.t(), resultado :: map()) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  Roda um comando de terminal DENTRO do container real do projeto (ADR
+  0134, RN-492) — proxy síncrono até o broker, via
+  `POST internal/projects/:projectId/container-exec`. Só chamado por
+  `Engine.Actions.TerminalExecutor` quando `decisao_de_execucao/1` resolveu
+  `:executar_no_container`; `cwd`, quando presente, já chega TRADUZIDO para
+  dentro de `/work` — este cliente não traduz nada.
+
+  `{:ok, %{"sucesso" => true, "exitCode" => _, "output" => _, "timedOut" =>
+  _}}` no caminho feliz; `{:ok, %{"sucesso" => false, "motivo" => _}}` é a
+  forma NORMAL de "o broker recusou ou não respondeu" (RN-486: container
+  registrado `running` não garante que está de pé agora) — não é
+  `{:error, _}`. `{:error, reason}` sobra só para falha de TRANSPORTE
+  (a api não respondeu, ou respondeu um status que não é 2xx por um motivo
+  que não é o broker).
+  """
+  @callback executar_comando_no_container(
+              project_id :: String.t(),
+              comando :: String.t(),
+              cwd :: String.t() | nil,
+              timeout_ms :: pos_integer() | nil
+            ) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  AT-612: o mesmo `container-exec`, mas na instância de QA da tarefa
+  (`alvo: {qa: true, taskId}`). O `task_id` vem do ctx do agente, nunca do modelo.
+  """
+  @callback executar_comando_na_instancia_de_qa(
+              project_id :: String.t(),
+              task_id :: String.t(),
+              comando :: String.t(),
+              cwd :: String.t() | nil,
+              timeout_ms :: pos_integer() | nil
+            ) :: {:ok, map()} | {:error, term()}
+
+  @doc """
+  AT-612: remove a instância de QA efêmera da tarefa
+  (`POST internal/projects/:projectId/qa-environments/:taskId/remove`,
+  idempotente). `{:ok, %{"sucesso" => _, "motivo" => _}}` ou `{:error, _}`.
+  """
+  @callback remover_instancia_de_qa(project_id :: String.t(), task_id :: String.t()) ::
+              {:ok, map()} | {:error, term()}
+
+  @doc """
+  AT-612: limpeza de órfãs (`POST internal/qa-environments/sweep`): remove toda
+  instância de QA cuja tarefa NÃO está em `task_ids_em_voo`.
+  """
+  @callback varrer_instancias_de_qa(task_ids_em_voo :: [String.t()]) ::
+              {:ok, map()} | {:error, term()}
+
+  # RN-622: a orientação de idioma entra AQUI, no fim da lista, e em nenhum
+  # outro lugar — toda chamada de LLM do engine passa por esta fachada (ver
+  # `Engine.Harness.IdiomaDaResposta`). Ela nunca volta para o `state` de quem
+  # chamou: é efêmera por construção. As `tools` vão junto porque é por elas
+  # que a orientação sabe se o agente pode gravar artefato do projeto (RN-623).
+  #
+  # RN-625 (ADR 0179): a MESMA fachada narra o passo em que o Jev escolheu a
+  # ferramenta (`tool_router.decided`) e, se o menu restrito fez o modelo
+  # responder sem chamar ferramenta, repete o passo UMA vez com o catálogo
+  # inteiro (`opts: [catalogo_completo: true]`). Ver `RoteamentoDeFerramenta`.
+  #
+  # RN-680 (ADR 0196): os fatos do perfil do AUTOR do turno entram pelo mesmo
+  # lugar, ANTES do idioma — que continua sendo a última mensagem.
+  #
+  # RN-711: o fluxo do time (onde o conversacional está, o próximo passo e
+  # quem o dispara, `Engine.Harness.FluxoDoTime`) entra depois do ambiente e
+  # antes do perfil. RN-874 (AT-526): logo depois do fluxo, o PO recebe as
+  # decisões do usuário e as perguntas ABERTAS (`Engine.Harness.DecisoesDoProjeto`).
+  def llm_turn(project_id, session_id, agent, messages, tools) do
+    enviadas =
+      messages
+      |> Engine.Harness.AnexosDoTurno.anexar()
+      |> AmbienteDoAgente.anexar(agent)
+      |> FluxoDoTime.anexar(agent)
+      |> DecisoesDoProjeto.anexar(project_id, agent)
+      |> RetomadaDoTurno.anexar(agent)
+      |> PerfilDoAutor.anexar(agent)
+      |> IdiomaDaResposta.anexar(project_id, agent, tools)
+      |> Engine.Harness.CitacaoDasFontes.anexar()
+
+    enviadas = Engine.Agents.RaciocinioDoTurno.anexar_blocos(enviadas)
+
+    impl().llm_turn(project_id, session_id, agent, enviadas, tools, [])
+    |> repetir_com_catalogo_inteiro(tools, fn ->
+      impl().llm_turn(project_id, session_id, agent, enviadas, tools, catalogo_completo: true)
+    end)
+    |> registrar_raciocinio()
+    |> RoteamentoDeFerramenta.registrar(project_id, session_id, agent, &append_event/3)
+    |> Engine.Harness.RespostaCortada.registrar(project_id)
+  end
+
+  # O menu restrito errou (o modelo não chamou ferramenta nenhuma)? Uma volta
+  # a mais com o catálogo inteiro. Falha da segunda volta mantém a primeira.
+  defp repetir_com_catalogo_inteiro({:ok, resp} = primeira, tools, repetir) do
+    if RoteamentoDeFerramenta.repetir_com_catalogo_inteiro?(resp, tools) do
+      case repetir.() do
+        {:ok, segunda} -> {:ok, RoteamentoDeFerramenta.mesclar_repeticao(resp, segunda)}
+        _ -> primeira
+      end
+    else
+      primeira
+    end
+  end
+
+  defp repetir_com_catalogo_inteiro(outro, _tools, _repetir), do: outro
+
+  def propose_action(project_id, session_id, action_type, actor, payload),
+    do:
+      impl().propose_action(project_id, session_id, action_type, actor, payload)
+      |> avisar_canal(session_id, "proposed_action.created", campo(actor, :id))
+
+  def confirm_workspace(project_id, session_id, path, user_id),
+    do: impl().confirm_workspace(project_id, session_id, path, user_id)
+
+  def executar_comando_no_container(project_id, comando, cwd, timeout_ms),
+    do: impl().executar_comando_no_container(project_id, comando, cwd, timeout_ms)
+
+  def report_mirror_sync(project_id, resultado),
+    do: impl().report_mirror_sync(project_id, resultado)
+
+  def executar_comando_na_instancia_de_qa(project_id, task_id, comando, cwd, timeout_ms),
+    do: impl().executar_comando_na_instancia_de_qa(project_id, task_id, comando, cwd, timeout_ms)
+
+  def remover_instancia_de_qa(project_id, task_id),
+    do: impl().remover_instancia_de_qa(project_id, task_id)
+
+  def varrer_instancias_de_qa(task_ids_em_voo),
+    do: impl().varrer_instancias_de_qa(task_ids_em_voo)
+
+  def rag_search(project_id, query, top_k, opts \\ []),
+    do: impl().rag_search(project_id, query, top_k, opts)
+
+  def rag_feedback(project_id, search_id, chunk_id, verdict, agent),
+    do: impl().rag_feedback(project_id, search_id, chunk_id, verdict, agent)
+
+  def get_prompt_template(name, version \\ nil),
+    do: impl().get_prompt_template(name, version)
+
+  def report_termination(project_id, session_id, reason, to),
+    do: impl().report_termination(project_id, session_id, reason, to)
+
+  def append_event(project_id, session_id, event),
+    do:
+      impl().append_event(project_id, session_id, event)
+      |> avisar_canal(session_id, campo(event, :type), campo(event, :actorId))
+
+  def append_event_returning(project_id, session_id, event),
+    do:
+      impl().append_event_returning(project_id, session_id, event)
+      |> avisar_canal(session_id, campo(event, :type), campo(event, :actorId))
+
+  def list_events(project_id, session_id),
+    do: impl().list_events(project_id, session_id)
+
+  def list_events(project_id, session_id, opts),
+    do: impl().list_events(project_id, session_id, opts)
+
+  def llm_turn_stream(project_id, session_id, agent, messages, tools, on_delta) do
+    enviadas =
+      messages
+      |> Engine.Harness.AnexosDoTurno.anexar()
+      |> AmbienteDoAgente.anexar(agent)
+      |> FluxoDoTime.anexar(agent)
+      |> DecisoesDoProjeto.anexar(project_id, agent)
+      |> RetomadaDoTurno.anexar(agent)
+      |> PerfilDoAutor.anexar(agent)
+      |> IdiomaDaResposta.anexar(project_id, agent, tools)
+      |> Engine.Harness.CitacaoDasFontes.anexar()
+
+    enviadas = Engine.Agents.RaciocinioDoTurno.anexar_blocos(enviadas)
+
+    # AT-676: o raciocínio ao vivo sai por evento EFÊMERO do canal (nunca no log).
+    ao_vivo = fn text ->
+      EngineWeb.Endpoint.broadcast("session:" <> session_id, "agent.reasoning_delta", %{
+        text: text,
+        agent: agent
+      })
+    end
+
+    impl().llm_turn_stream(project_id, session_id, agent, enviadas, tools, on_delta,
+      on_raciocinio: ao_vivo
+    )
+    |> repetir_stream_sem_texto(tools, fn ->
+      impl().llm_turn_stream(project_id, session_id, agent, enviadas, tools, on_delta,
+        catalogo_completo: true,
+        on_raciocinio: ao_vivo
+      )
+    end)
+    |> registrar_raciocinio()
+    |> RoteamentoDeFerramenta.registrar(project_id, session_id, agent, &append_event/3)
+    |> Engine.Harness.RespostaCortada.registrar(project_id)
+  end
+
+  defp registrar_raciocinio({:ok, resp} = r) do
+    Engine.Agents.RaciocinioDoTurno.registrar(resp)
+    r
+  end
+
+  defp registrar_raciocinio(outro), do: outro
+
+  # No stream só se repete quando NADA foi escrito para a pessoa: um delta já
+  # entregue não se desfaz, e duplicar texto é pior que o menu errado.
+  defp repetir_stream_sem_texto({:ok, %{"message" => message} = resp} = primeira, tools, repetir) do
+    if Map.get(message, "content") in [nil, ""] do
+      repetir_com_catalogo_inteiro({:ok, resp}, tools, repetir)
+    else
+      primeira
+    end
+  end
+
+  defp repetir_stream_sem_texto(outro, _tools, _repetir), do: outro
+
+  def session_pending_work(session_id), do: impl().session_pending_work(session_id)
+
+  def get_git_remote(project_id), do: impl().get_git_remote(project_id)
+
+  def create_handoff(project_id, session_id, from_agent, to_agent, artifact_id),
+    do:
+      impl().create_handoff(project_id, session_id, from_agent, to_agent, artifact_id)
+      |> avisar_canal(session_id, "handoff.offered", from_agent)
+
+  def create_handoff_if_absent(project_id, session_id, from_agent, to_agent, artifact_id),
+    do:
+      impl().create_handoff_if_absent(project_id, session_id, from_agent, to_agent, artifact_id)
+      |> avisar_canal(session_id, "handoff.offered", from_agent)
+
+  def create_epic(project_id, session_id, fields),
+    do:
+      impl().create_epic(project_id, session_id, fields)
+      |> avisar_canal(session_id, "backlog.epic_created", nil)
+
+  def complete_story(project_id, session_id, story_id, fields),
+    do:
+      impl().complete_story(project_id, session_id, story_id, fields)
+      |> avisar_canal(session_id, "backlog.story_completed", nil)
+
+  def update_story(project_id, session_id, story_id, fields),
+    do:
+      impl().update_story(project_id, session_id, story_id, fields)
+      |> avisar_canal(session_id, "backlog.story_updated", nil)
+
+  def archive_story(project_id, session_id, story_id, fields),
+    do:
+      impl().archive_story(project_id, session_id, story_id, fields)
+      |> avisar_canal(session_id, "backlog.story_archived", nil)
+
+  def create_story(project_id, session_id, fields),
+    do:
+      impl().create_story(project_id, session_id, fields)
+      |> avisar_canal(session_id, "backlog.story_created", nil)
+
+  def create_task(project_id, session_id, fields),
+    do:
+      impl().create_task(project_id, session_id, fields)
+      |> avisar_canal(session_id, "backlog.task_created", nil)
+
+  # A api grava `backlog.semantic_duplicate_warned`/`_check_skipped` por uma
+  # rota `/internal/*`, que não avisa o canal sozinha (AT-157) — a fachada
+  # avisa, e só quando houve evento: `clean` e `nothing_to_compare` não narram.
+  def check_semantic_duplicate(project_id, session_id, fields) do
+    resultado = impl().check_semantic_duplicate(project_id, session_id, fields)
+
+    tipo =
+      case resultado do
+        {:ok, %{"status" => "warned"}} -> "backlog.semantic_duplicate_warned"
+        {:ok, %{"status" => "skipped"}} -> "backlog.semantic_duplicate_check_skipped"
+        _ -> nil
+      end
+
+    avisar_canal(resultado, session_id, tipo, "duplicata-semantica")
+  end
+
+  def list_business_rules(project_id), do: impl().list_business_rules(project_id)
+
+  def list_backlog(project_id), do: impl().list_backlog(project_id)
+
+  def list_product_metrics(project_id), do: impl().list_product_metrics(project_id)
+
+  def create_module_map(project_id, session_id, modules),
+    do: impl().create_module_map(project_id, session_id, modules)
+
+  def create_c4_diagram(project_id, session_id, entrada),
+    do: impl().create_c4_diagram(project_id, session_id, entrada)
+
+  def assign_story_modules(project_id, session_id, fields),
+    do: impl().assign_story_modules(project_id, session_id, fields)
+
+  def decide_project_image(project_id, session_id, decisao),
+    do: impl().decide_project_image(project_id, session_id, decisao)
+
+  def route_modules_to_infra(project_id, session_id, roteamento),
+    do: impl().route_modules_to_infra(project_id, session_id, roteamento)
+
+  def claim_task(project_id, session_id, module, agent_id),
+    do: impl().claim_task(project_id, session_id, module, agent_id)
+
+  def mark_task(project_id, session_id, task_id, status, agent_id),
+    do: impl().mark_task(project_id, session_id, task_id, status, agent_id)
+
+  def unblock_task(project_id, session_id, task_id, agent_id),
+    do: impl().unblock_task(project_id, session_id, task_id, agent_id)
+
+  def get_dev_context(project_id, session_id, task_id, module \\ nil),
+    do: impl().get_dev_context(project_id, session_id, task_id, module)
+
+  def mark_task_blocked(
+        project_id,
+        session_id,
+        task_id,
+        reason,
+        diagnosis,
+        agent_id,
+        origin \\ nil
+      ),
+      do:
+        impl().mark_task_blocked(
+          project_id,
+          session_id,
+          task_id,
+          reason,
+          diagnosis,
+          agent_id,
+          origin
+        )
+
+  def list_tarefas_em_curso_de_dev(session_id),
+    do: impl().list_tarefas_em_curso_de_dev(session_id)
+
+  def open_gate(project_id, session_id, task_id, agent_id),
+    do: impl().open_gate(project_id, session_id, task_id, agent_id)
+
+  def record_gate_verdict(
+        project_id,
+        session_id,
+        task_id,
+        gate,
+        veredito,
+        resumo,
+        itens,
+        max_corrections \\ nil,
+        extras \\ %{}
+      ),
+      do:
+        impl().record_gate_verdict(
+          project_id,
+          session_id,
+          task_id,
+          gate,
+          veredito,
+          resumo,
+          itens,
+          max_corrections,
+          extras
+        )
+
+  def record_delegation(payload), do: impl().record_delegation(payload)
+
+  def get_infra_context(project_id, session_id),
+    do: impl().get_infra_context(project_id, session_id)
+
+  def get_infra_pr_files(project_id, session_id, pr_action_id),
+    do: impl().get_infra_pr_files(project_id, session_id, pr_action_id)
+
+  def get_psychologist_context(project_id, session_id),
+    do: impl().get_psychologist_context(project_id, session_id)
+
+  def get_anamnese_context(project_id),
+    do: impl().get_anamnese_context(project_id)
+
+  def record_proficiency(project_id, session_id, payload),
+    do: impl().record_proficiency(project_id, session_id, payload)
+
+  def close_anamnese_window(project_id, session_id, payload),
+    do: impl().close_anamnese_window(project_id, session_id, payload)
+
+  def propose_instruction_patch(project_id, session_id, payload),
+    do: impl().propose_instruction_patch(project_id, session_id, payload)
+
+  def propose_max_parallel(project_id, session_id, payload),
+    do: impl().propose_max_parallel(project_id, session_id, payload)
+
+  def propose_hypotheses(
+        project_id,
+        session_id,
+        tier,
+        triggered_by,
+        event_count,
+        cause,
+        hypotheses
+      ),
+      do:
+        impl().propose_hypotheses(
+          project_id,
+          session_id,
+          tier,
+          triggered_by,
+          event_count,
+          cause,
+          hypotheses
+        )
+
+  def record_infra_gate_verdict(
+        project_id,
+        session_id,
+        pr_action_id,
+        gate,
+        veredito,
+        resumo,
+        itens,
+        max_corrections \\ nil
+      ),
+      do:
+        impl().record_infra_gate_verdict(
+          project_id,
+          session_id,
+          pr_action_id,
+          gate,
+          veredito,
+          resumo,
+          itens,
+          max_corrections
+        )
+
+  defp impl,
+    do: Application.get_env(:engine, :engine_api_client, Engine.Sessions.EngineApiClient.Live)
+
+  # AT-093 (RN-579): toda escrita que a api CONFIRMOU numa sessão vira um
+  # `event.appended` no canal `session:<id>` — é o que deixa a web trocar o
+  # poll de 3s por invalidação enquanto o canal está vivo. O aviso sai DAQUI,
+  # da fachada, e não de cada chamador: antes só `ArtifactEmitter` e o Infra
+  # Lead avisavam, e o resto dos chamadores de `append_event` (o `EventLog` do
+  # harness, o `ToolLoop`, o `AgentIo` dos dev agents, o `agent.status`) e as
+  # escritas que a api registra como evento (`proposed_action.created`,
+  # `handoff.offered`, `backlog.*_created`) chegavam à tela só pelo poll.
+  #
+  # Só depois do `:ok`/`{:ok, _}`: avisar do que a api RECUSOU faria a web
+  # buscar para não achar nada. E o aviso leva o TIPO e o ator, nunca o
+  # `payload`: a web o usa só como gatilho de refetch, e um `tool.result`
+  # inteiro atravessando o socket a cada ferramenta seria tráfego sem leitor.
+  defp avisar_canal(resultado, session_id, type, actor_id)
+       when is_binary(session_id) and is_binary(type) do
+    if confirmado?(resultado) do
+      Engine.Sessions.LiveBroadcast.event_appended(session_id, type, actor_id)
+    end
+
+    resultado
+  end
+
+  defp avisar_canal(resultado, _session_id, _type, _actor_id), do: resultado
+
+  defp confirmado?(:ok), do: true
+  defp confirmado?({:ok, _}), do: true
+  defp confirmado?(_), do: false
+
+  defp campo(%{} = mapa, chave),
+    do: Map.get(mapa, chave) || Map.get(mapa, Atom.to_string(chave))
+
+  defp campo(_, _), do: nil
+
+  # --- Contrato entre módulos (ADR 0200, RN-684) ---
+  #
+  # No FIM da fachada, e a implementação no fim do `Live`, de propósito: as
+  # RNs citam este arquivo por linha, e um bloco no meio deslocaria dezenas de
+  # referências que nada têm a ver com ele.
+
+  @doc """
+  O Arquiteto DECLARA o contrato (a lista inteira, nova versão a cada chamada)
+  e o dev agent o LÊ — um item por módulo do module_map vigente, com o que ele
+  consome (`dependsOn`) e o que expõe. A leitura não leva `session_id`: o
+  recurso é do projeto.
+  """
+  @callback declare_module_contracts(
+              project_id :: String.t(),
+              session_id :: String.t(),
+              contratos :: [map()]
+            ) ::
+              {:ok, map()} | {:error, term()}
+  @callback list_module_contracts(project_id :: String.t()) ::
+              {:ok, map()} | {:error, term()}
+
+  def declare_module_contracts(project_id, session_id, contratos),
+    do: impl().declare_module_contracts(project_id, session_id, contratos)
+
+  def list_module_contracts(project_id), do: impl().list_module_contracts(project_id)
+end
+
+defmodule Engine.Sessions.EngineApiClient.Live do
+  @moduledoc """
+  Cliente HTTP real: chama os endpoints internos da api
+  (POST .../termination, POST .../events) autenticado pelo segredo
+  compartilhado `BRABO_SERVICE_TOKEN`.
+
+  Até a Fase 7a isto buscava um token client-credentials no Keycloak e o
+  cacheava em `:persistent_term` até expirar. Removido o Keycloak, o valor é
+  uma variável de ambiente — ler env por chamada custa menos do que a
+  invalidação que o cache exigia, e some um caminho de rede que podia falhar
+  no meio de qualquer operação.
+  """
+
+  @behaviour Engine.Sessions.EngineApiClient
+  @cabecalho_service_token "x-brabo-service-token"
+
+  require Logger
+
+  @impl true
+  def report_termination(project_id, session_id, reason, to) do
+    post("/internal/sessions/#{session_id}/termination", %{
+      projectId: project_id,
+      reason: reason,
+      to: to
+    })
+  end
+
+  @impl true
+  def append_event(project_id, session_id, event) do
+    "/internal/sessions/#{session_id}/events"
+    |> post(Map.put(event, :projectId, project_id))
+    |> narrar_recusa_de_sessao_encerrada(session_id, event)
+  end
+
+  # RN-581: a api recusa evento de CONVERSA em sessão encerrada com 409 e
+  # `reason: "sessao_encerrada"`. Quase todo chamador de `append_event/3`
+  # descarta o retorno (`_ = ...`), então sem esta linha a recusa seria
+  # silenciosa — e é justamente o sinal de que algo ainda conversa numa
+  # sessão que fechou (RN-059: falha nunca calada). O retorno segue igual.
+  defp narrar_recusa_de_sessao_encerrada(
+         {:error, {409, %{"reason" => "sessao_encerrada"} = corpo}} = erro,
+         session_id,
+         event
+       ) do
+    tipo = Map.get(event, :type) || Map.get(event, "type")
+
+    Logger.warning(
+      "sessão #{session_id}: a api recusou o evento #{inspect(tipo)} — " <>
+        "sessão encerrada (#{Map.get(corpo, "status")}), não aceita mais conversa"
+    )
+
+    erro
+  end
+
+  defp narrar_recusa_de_sessao_encerrada(resultado, _session_id, _event), do: resultado
+
+  @impl true
+  def append_event_returning(project_id, session_id, event) do
+    post_returning(
+      "/internal/sessions/#{session_id}/events",
+      Map.put(event, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def list_events(project_id, session_id) do
+    url =
+      api_url() <>
+        "/internal/sessions/#{session_id}/events?projectId=#{project_id}&limit=200"
+
+    case req_get(url, headers: headers()) do
+      {:ok, %Req.Response{status: status, body: %{"items" => items}}}
+      when status in 200..299 ->
+        {:ok, items}
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @impl true
+  def list_events(project_id, session_id, opts) do
+    # Os parâmetros viajam por `params:` (o Req codifica), nunca interpolados
+    # na URL: `types` é lista de tipos com ponto (`artifact.business_rule`).
+    params =
+      [projectId: project_id, limit: Keyword.get(opts, :limit, 200)] ++
+        if(Keyword.get(opts, :latest, false), do: [latest: "true"], else: []) ++
+        case Keyword.get(opts, :after_seq) do
+          nil -> []
+          seq -> [afterSeq: seq]
+        end ++
+        case Keyword.get(opts, :types) do
+          [_ | _] = tipos -> [types: Enum.join(tipos, ",")]
+          _ -> []
+        end
+
+    url = api_url() <> "/internal/sessions/#{session_id}/events"
+
+    case req_get(url, headers: headers(), params: params) do
+      {:ok, %Req.Response{status: status, body: %{"items" => items}}}
+      when status in 200..299 ->
+        {:ok, items}
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @impl true
+  def sync_model_catalog do
+    post_returning("/internal/models/sync", %{})
+  end
+
+  @impl true
+  def create_handoff(project_id, session_id, from_agent, to_agent, artifact_id) do
+    post_returning("/internal/sessions/#{session_id}/handoffs", %{
+      projectId: project_id,
+      fromAgent: from_agent,
+      toAgent: to_agent,
+      artifactId: artifact_id
+    })
+  end
+
+  @impl true
+  def create_handoff_if_absent(project_id, session_id, from_agent, to_agent, artifact_id) do
+    post_returning("/internal/sessions/#{session_id}/handoffs", %{
+      projectId: project_id,
+      fromAgent: from_agent,
+      toAgent: to_agent,
+      artifactId: artifact_id,
+      seAusente: true
+    })
+  end
+
+  @impl true
+  def create_epic(project_id, session_id, fields) do
+    post_returning(
+      "/internal/sessions/#{session_id}/epics",
+      Map.put(fields, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def create_story(project_id, session_id, fields) do
+    post_returning(
+      "/internal/sessions/#{session_id}/stories",
+      Map.put(fields, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def complete_story(project_id, session_id, story_id, fields) do
+    post_returning(
+      "/internal/sessions/#{session_id}/stories/#{story_id}/complete",
+      Map.put(fields, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def update_story(project_id, session_id, story_id, fields) do
+    post_returning(
+      "/internal/sessions/#{session_id}/stories/#{story_id}/update",
+      Map.put(fields, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def archive_story(project_id, session_id, story_id, fields) do
+    post_returning(
+      "/internal/sessions/#{session_id}/stories/#{story_id}/archive",
+      Map.put(fields, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def check_semantic_duplicate(project_id, session_id, fields) do
+    post_returning(
+      "/internal/sessions/#{session_id}/semantic-duplicate-check",
+      Map.put(fields, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def create_task(project_id, session_id, fields) do
+    post_returning(
+      "/internal/sessions/#{session_id}/tasks",
+      Map.put(fields, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def create_module_map(project_id, session_id, modules) do
+    post_returning("/internal/sessions/#{session_id}/module-map", %{
+      projectId: project_id,
+      modules: modules
+    })
+  end
+
+  @impl true
+  def create_c4_diagram(project_id, session_id, entrada) do
+    post_returning(
+      "/internal/sessions/#{session_id}/c4-diagram",
+      Map.put(entrada, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def assign_story_modules(project_id, session_id, fields) do
+    post_returning(
+      "/internal/sessions/#{session_id}/story-modules",
+      Map.put(fields, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def decide_project_image(project_id, session_id, decisao) do
+    post_returning(
+      "/internal/sessions/#{session_id}/project-image",
+      Map.put(decisao, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def route_modules_to_infra(project_id, session_id, roteamento) do
+    post_returning("/internal/sessions/#{session_id}/module-routing", %{
+      projectId: project_id,
+      roteamento: roteamento
+    })
+  end
+
+  @impl true
+  def claim_task(project_id, session_id, module, agent_id) do
+    # Sem task pegável NÃO é erro — e não chega como `null`.
+    #
+    # O caso de uso devolve `null`, mas o NestJS serializa isso como resposta
+    # VAZIA: `201` com `content-length: 0`. O `Req` entrega `body: ""`, que não
+    # é `nil` — então `AgentIo.try_claim/2` casava com a cláusula de task
+    # encontrada e chamava `run_task("")`, estourando `BadMapError` em
+    # `Map.get("", "id", nil)`. Como o server é `restart: :temporary`, o agente
+    # morria de vez e o `Monitor` apagava a linha de estado logo atrás.
+    #
+    # O efeito é o oposto do que a Fase 12b entregou: em vez de `dev.idle`
+    # supervisionado e acordável por evento, processo morto — e no momento MAIS
+    # comum que existe, o da fila do módulo esvaziando. Vale para o dev agent
+    # REAL, não só para o Noop: `try_claim/2` mora no `AgentIo` compartilhado.
+    #
+    # Normalizado aqui, no consumidor, e não mudando o status HTTP da rota:
+    # corpo vazio é "nada pegável" venha de onde vier, e o contrato que outros
+    # consumidores observam fica intocado.
+    case post_returning("/internal/sessions/#{session_id}/tasks/claim", %{
+           projectId: project_id,
+           module: module,
+           agentId: agent_id
+         }) do
+      {:ok, corpo} when corpo in ["", nil] -> {:ok, nil}
+      outro -> outro
+    end
+  end
+
+  @impl true
+  def mark_task(project_id, session_id, task_id, status, agent_id) do
+    post_returning("/internal/sessions/#{session_id}/tasks/#{task_id}/status", %{
+      projectId: project_id,
+      agentId: agent_id,
+      status: status
+    })
+  end
+
+  @impl true
+  def unblock_task(project_id, session_id, task_id, agent_id) do
+    post_returning("/internal/sessions/#{session_id}/tasks/#{task_id}/unblock", %{
+      projectId: project_id,
+      agentId: agent_id
+    })
+  end
+
+  @impl true
+  def mark_task_blocked(project_id, session_id, task_id, reason, diagnosis, agent_id, origin) do
+    post_returning("/internal/sessions/#{session_id}/tasks/#{task_id}/block", %{
+      projectId: project_id,
+      agentId: agent_id,
+      reason: reason,
+      diagnosis: diagnosis,
+      origin: origin
+    })
+  end
+
+  @impl true
+  def list_tarefas_em_curso_de_dev(session_id) do
+    case get_json("/internal/sessions/#{session_id}/tasks/in-progress-by-dev") do
+      {:ok, lista} when is_list(lista) -> {:ok, lista}
+      {:ok, outro} -> {:error, {:resposta_inesperada, outro}}
+      erro -> erro
+    end
+  end
+
+  @impl true
+  def open_gate(project_id, session_id, task_id, agent_id) do
+    post_returning("/internal/sessions/#{session_id}/tasks/#{task_id}/gate/open", %{
+      projectId: project_id,
+      agentId: agent_id
+    })
+  end
+
+  @impl true
+  def record_gate_verdict(
+        project_id,
+        session_id,
+        task_id,
+        gate,
+        veredito,
+        resumo,
+        itens,
+        max_corrections,
+        extras
+      ) do
+    # ADR 0214 (RN-862): `extras` leva `pergunta`/`sugestao`/`openQuestionId`
+    # do veredito `needs_user_decision`; vazio nos outros, corpo de sempre.
+    post_returning(
+      "/internal/sessions/#{session_id}/gates/verdict",
+      Map.merge(
+        %{
+          projectId: project_id,
+          taskId: task_id,
+          gate: gate,
+          veredito: veredito,
+          resumo: resumo,
+          itens: itens,
+          maxCorrections: max_corrections
+        },
+        extras
+      )
+    )
+  end
+
+  @impl true
+  def record_delegation(%{session_id: session_id} = payload) do
+    post_returning("/internal/sessions/#{session_id}/delegations", %{
+      projectId: payload.project_id,
+      taskId: Map.get(payload, :task_id),
+      area: payload.area,
+      leadAgent: payload.lead_agent,
+      subagent: payload.subagent,
+      status: payload.status,
+      parecerArtifactId: Map.get(payload, :parecer_artifact_id),
+      failureOrigin: Map.get(payload, :failure_origin),
+      failureReason: Map.get(payload, :failure_reason),
+      justification: Map.get(payload, :justification)
+    })
+  end
+
+  @impl true
+  def get_dev_context(project_id, session_id, task_id, module \\ nil) do
+    # `module` filtra os ADRs pro módulo do dev (ADR sem módulo é transversal
+    # e entra sempre). Nulo = sem filtro — é o caso dos gates QA/SecOps, que
+    # reusam este contexto e querem o acervo inteiro.
+    module_query = if module, do: "&module=#{URI.encode_www_form(module)}", else: ""
+
+    url =
+      api_url() <>
+        "/internal/sessions/#{session_id}/dev-context?projectId=#{project_id}&taskId=#{task_id}" <>
+        module_query
+
+    case req_get(url, headers: headers()) do
+      {:ok, %Req.Response{status: status, body: body}} when status in 200..299 ->
+        {:ok, body}
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @doc false
+  # Público só para o teste da forma: o módulo não tem harness HTTP.
+  def pendencia_da_resposta(body) do
+    with {:ok, desde} <- instante(Map.get(body, "aguardandoUsuarioDesde")) do
+      {:ok,
+       %{
+         pending: Map.get(body, "pending", false),
+         motivo: Map.get(body, "motivo"),
+         aguardando_usuario_desde: desde
+       }}
+    end
+  end
+
+  # Instante ISO-8601 da api (RN-581). `nil` é "sem espera de conversa". Um
+  # valor PRESENTE que não parseia vira erro, e não nil, de propósito: nil com
+  # `pending: true` é pendência SEM teto, e um formato quebrado viraria sessão
+  # imortal. Como erro, cai no mesmo caminho da api fora do ar — encerra por
+  # heartbeat, dizendo por quê.
+  defp instante(nil), do: {:ok, nil}
+
+  defp instante(texto) when is_binary(texto) do
+    case DateTime.from_iso8601(texto) do
+      {:ok, dt, _offset} -> {:ok, dt}
+      _ -> {:error, {:aguardando_usuario_desde_invalido, texto}}
+    end
+  end
+
+  defp instante(outro), do: {:error, {:aguardando_usuario_desde_invalido, outro}}
+
+  @impl true
+  def session_pending_work(session_id) do
+    url = api_url() <> "/internal/sessions/#{session_id}/pending-work"
+
+    case req_get(url, headers: headers()) do
+      {:ok, %Req.Response{status: status, body: body}} when status in 200..299 ->
+        pendencia_da_resposta(body)
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @impl true
+  def get_git_remote(project_id) do
+    url = api_url() <> "/internal/projects/#{project_id}/git-remote"
+
+    case req_get(url, headers: headers()) do
+      {:ok, %Req.Response{status: status, body: body}} when status in 200..299 ->
+        {:ok,
+         %{
+           kind: Map.get(body, "kind"),
+           origin: Map.get(body, "origin"),
+           default_branch: Map.get(body, "defaultBranch"),
+           token: Map.get(body, "token"),
+           username: Map.get(body, "username")
+         }}
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @impl true
+  def list_business_rules(project_id) do
+    get_json("/internal/projects/#{project_id}/business-rules")
+  end
+
+  @impl true
+  def list_backlog(project_id) do
+    get_json("/internal/projects/#{project_id}/backlog")
+  end
+
+  @impl true
+  def list_product_metrics(project_id) do
+    get_json("/internal/projects/#{project_id}/product-metrics")
+  end
+
+  # GET que devolve o corpo decodificado. Existe para as leituras do PO
+  # (RN-164) e NÃO foi retrofitado nos seis GETs anteriores de propósito:
+  # cada um deles normaliza o corpo do seu jeito (o `get_git_remote` recasa
+  # chave por chave, o `session_pending_work` extrai dois campos), e trocar
+  # isso por um helper comum seria refatorar caminho que já está provado.
+  defp get_json(path) do
+    case req_get(api_url() <> path, headers: headers()) do
+      {:ok, %Req.Response{status: status, body: body}} when status in 200..299 ->
+        {:ok, body}
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @impl true
+  def get_infra_context(project_id, session_id) do
+    url =
+      api_url() <>
+        "/internal/sessions/#{session_id}/infra-context?projectId=#{project_id}"
+
+    case req_get(url, headers: headers()) do
+      {:ok, %Req.Response{status: status, body: body}} when status in 200..299 ->
+        {:ok, body}
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @impl true
+  def get_infra_pr_files(project_id, session_id, pr_action_id) do
+    url =
+      api_url() <>
+        "/internal/sessions/#{session_id}/infra-artifacts/#{pr_action_id}/files?projectId=#{project_id}"
+
+    case req_get(url, headers: headers()) do
+      {:ok, %Req.Response{status: status, body: body}} when status in 200..299 ->
+        {:ok, body}
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @impl true
+  def get_psychologist_context(project_id, session_id) do
+    url =
+      api_url() <>
+        "/internal/sessions/#{session_id}/psychologist-context?projectId=#{project_id}"
+
+    case req_get(url, headers: headers()) do
+      {:ok, %Req.Response{status: status, body: body}} when status in 200..299 ->
+        {:ok, body}
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @impl true
+  def get_anamnese_context(project_id) do
+    # O endpoint mora sob /sessions só pela convenção do
+    # EngineServiceGuard; o contexto é do PROJETO, então o segmento de
+    # sessão é irrelevante aqui.
+    url = api_url() <> "/internal/sessions/_/anamnese-context?projectId=#{project_id}"
+
+    case req_get(url, headers: headers()) do
+      {:ok, %Req.Response{status: status, body: body}} when status in 200..299 ->
+        {:ok, body}
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @impl true
+  def record_proficiency(project_id, session_id, payload) do
+    post_returning(
+      "/internal/sessions/#{session_id}/proficiency",
+      Map.put(payload, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def close_anamnese_window(project_id, session_id, payload) do
+    post_returning(
+      "/internal/sessions/#{session_id}/anamnese-window",
+      Map.put(payload, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def propose_instruction_patch(project_id, session_id, payload) do
+    post_returning(
+      "/internal/sessions/#{session_id}/instruction-patches",
+      Map.put(payload, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def propose_max_parallel(project_id, session_id, payload) do
+    post_returning(
+      "/internal/sessions/#{session_id}/max-parallel-proposals",
+      Map.put(payload, :projectId, project_id)
+    )
+  end
+
+  @impl true
+  def propose_hypotheses(
+        project_id,
+        session_id,
+        tier,
+        triggered_by,
+        event_count,
+        cause,
+        hypotheses
+      ) do
+    post_returning("/internal/sessions/#{session_id}/hypotheses", %{
+      projectId: project_id,
+      tier: tier,
+      triggeredBy: triggered_by,
+      eventCount: event_count,
+      cause: cause,
+      hypotheses: hypotheses
+    })
+  end
+
+  @impl true
+  def record_infra_gate_verdict(
+        project_id,
+        session_id,
+        pr_action_id,
+        gate,
+        veredito,
+        resumo,
+        itens,
+        max_corrections
+      ) do
+    post_returning("/internal/sessions/#{session_id}/infra-gates/verdict", %{
+      projectId: project_id,
+      prActionId: pr_action_id,
+      gate: gate,
+      veredito: veredito,
+      resumo: resumo,
+      itens: itens,
+      maxCorrections: max_corrections
+    })
+  end
+
+  @impl true
+  def llm_turn_stream(project_id, session_id, agent, messages, tools, on_delta, opts) do
+    body =
+      %{projectId: project_id, agentId: agent, messages: messages, tools: tools}
+      |> com_catalogo_completo(opts)
+
+    key = {__MODULE__, :sse, make_ref()}
+    Process.put(key, %{buffer: "", final: nil})
+
+    into = fn {:data, data}, {req, resp} ->
+      Process.put(key, consume_sse(Process.get(key), data, on_delta, opts[:on_raciocinio]))
+      {:cont, {req, resp}}
+    end
+
+    # O MESMO teto do `llm_turn/5`. Sem ele valia o default do Req (15s), e o
+    # turno dos quatro agentes conversacionais — que só passam por aqui —
+    # morria com `%Req.TransportError{reason: :timeout}` antes do modelo
+    # responder. Com Ollama local o turno cabia nos 15s e o defeito não
+    # aparecia; com provider de API e contexto grande, não cabe.
+    #
+    # Em resposta streamada o `receive_timeout` do Req vale por CHUNK, então
+    # aqui ele é o teto de inatividade que o ADR 0041 pede — não o da resposta
+    # inteira.
+    result =
+      Req.post(api_url() <> "/internal/sessions/#{session_id}/llm-turn-stream",
+        json: body,
+        headers: headers(),
+        into: into,
+        receive_timeout: llm_turn_timeout_ms()
+      )
+
+    state = Process.get(key)
+    Process.delete(key)
+
+    case result do
+      {:ok, %Req.Response{status: status}} when status in 200..299 ->
+        if state.final, do: {:ok, state.final}, else: {:error, :no_final_event}
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  # Parseia frames SSE (`data: <json>\n\n`) de um chunk, chamando `on_delta`
+  # por delta de texto e guardando o evento `final`. Mantém no `buffer` o
+  # resto de um frame ainda incompleto entre chunks.
+  @doc false
+  def consume_sse(state, data, on_delta, on_raciocinio) do
+    buffer = state.buffer <> data
+    parts = String.split(buffer, "\n\n")
+    {frames, [rest]} = Enum.split(parts, -1)
+
+    final =
+      Enum.reduce(frames, state.final, fn frame, acc ->
+        case parse_sse_frame(frame) do
+          {:ok, %{"type" => "delta", "text" => text}} ->
+            on_delta.(text)
+            acc
+
+          {:ok, %{"type" => "raciocinio", "text" => text}} when is_function(on_raciocinio, 1) ->
+            on_raciocinio.(text)
+            acc
+
+          # `final.raciocinio` é o texto INTEIRO e vale sobre o que veio ao vivo.
+          {:ok, %{"type" => "final"} = f} ->
+            f
+
+          _ ->
+            acc
+        end
+      end)
+
+    %{buffer: rest, final: final}
+  end
+
+  defp parse_sse_frame(frame) do
+    frame
+    |> String.split("\n")
+    |> Enum.filter(&String.starts_with?(&1, "data:"))
+    |> Enum.map_join("", fn line ->
+      line |> String.replace_prefix("data:", "") |> String.trim()
+    end)
+    |> case do
+      "" -> :error
+      json -> Jason.decode(json)
+    end
+  end
+
+  @impl true
+  def llm_turn(project_id, session_id, agent, messages, tools, opts) do
+    # Timeout generoso e configurável: um turno de LLM não é uma chamada de
+    # API comum. Com modelo local (Ollama), o PRIMEIRO turno ainda carrega
+    # vários GB de pesos na memória antes de gerar o primeiro token — no
+    # default do Req isso estoura, o ToolLoop recebe {:error, :timeout} e a
+    # task é bloqueada com "parou sem concluir", sem o operador entender por
+    # quê. Ver DEFAULT_LLM_TURN_TIMEOUT_MS / LLM_TURN_TIMEOUT_MS.
+    Engine.Telemetry.Span.with_span(
+      "llm.turn",
+      %{
+        "brabo.agent" => agent,
+        "brabo.session_id" => session_id,
+        "brabo.llm.messages" => length(messages),
+        "brabo.llm.tools" => length(tools)
+      },
+      fn ->
+        result =
+          post_returning(
+            "/internal/sessions/#{session_id}/llm-turn",
+            com_catalogo_completo(
+              %{
+                projectId: project_id,
+                agentId: agent,
+                messages: messages,
+                tools: tools
+              },
+              opts
+            ),
+            receive_timeout: llm_turn_timeout_ms()
+          )
+
+        # A api responde 200 com `error` no CORPO quando o provider falha (não
+        # um status de erro). Sem registrar isso como atributo, um turno que
+        # falhou apareceria no Tempo indistinguível de um que deu certo.
+        annotate_llm_turn(result)
+        result
+      end
+    )
+  end
+
+  # ADR 0179: o engine repete o passo pedindo o catálogo INTEIRO (a api não
+  # consulta o Jev). Só isso: nunca uma ferramenta que o agente não tinha.
+  defp com_catalogo_completo(body, opts) do
+    if Keyword.get(opts, :catalogo_completo, false),
+      do: Map.put(body, :catalogoCompleto, true),
+      else: body
+  end
+
+  defp annotate_llm_turn({:ok, %{"usage" => %{"costMicros" => cost}} = resp}) do
+    Engine.Telemetry.Span.set_attributes(%{
+      "brabo.llm.cost_micros" => cost,
+      "brabo.llm.error" => Map.get(resp, "error") || false
+    })
+  end
+
+  defp annotate_llm_turn({:ok, resp}) when is_map(resp) do
+    Engine.Telemetry.Span.set_attributes(%{
+      "brabo.llm.error" => Map.get(resp, "error") || false
+    })
+  end
+
+  defp annotate_llm_turn(_), do: :ok
+
+  defp llm_turn_timeout_ms,
+    do: Application.get_env(:engine, :llm_turn_timeout_ms, 300_000)
+
+  @impl true
+  def propose_action(project_id, session_id, action_type, actor, payload) do
+    post_returning(
+      "/internal/sessions/#{session_id}/actions",
+      %{
+        projectId: project_id,
+        actionType: action_type,
+        actor: actor,
+        payload: payload
+      },
+      opcoes_do_propose_action(action_type)
+    )
+  end
+
+  # AT-234 (RN-605). Quando a ação nasce AUTO-APROVADA, a api a EXECUTA na
+  # mesma requisição (`ProposeActionUseCase`), e as de ciclo de vida de
+  # container esperam o broker (`TETO_DE_MUTACAO_MS`, 195s: contexto + seis
+  # chamadas de controle de 30s + margem) ou o runner
+  # (`Engine.Runners.RunnerRouter`, 185s no `start`). No default de 15s do Req
+  # um `start` longo — mesmo sem pull — voltava como timeout de transporte
+  # aqui, e o desfecho nomeado da api (inclusive o `PullExcedeuTetoError` do
+  # broker) chegava a ninguém. 225s = o teto da api + 30s de folga. A api
+  # espelha este número como `TETO_DO_PROPOSE_ACTION_DE_CONTAINER_NO_ENGINE_MS`,
+  # e os testes dos dois lados conferem a ordem broker < api < engine.
+  # `container_remove` fica de fora de propósito: ele nunca nasce auto-aprovado
+  # (teto absoluto de `decide.ts`), então a api nunca o executa aqui dentro.
+  @teto_do_propose_action_de_container_ms 225_000
+
+  @acoes_de_container_executadas_no_propose ~w(
+    container_start
+    container_start_via_runner
+    container_stop
+    qa_environment_start
+  )
+
+  @doc false
+  def teto_do_propose_action_de_container_ms, do: @teto_do_propose_action_de_container_ms
+
+  # AT-440 (RN-757). Uma ação `terminal` auto-aprovada também é EXECUTADA na
+  # mesma requisição: a api chama `/internal/actions/execute` neste engine,
+  # que roda o comando (no container, pelo `container-exec`, até
+  # `TERMINAL_ACTION_TIMEOUT_MS` + 90s). No default de 15s do Req — o MESMO
+  # número do teto antigo do comando — todo comando que passasse de ~15s
+  # (`npm install`, o primeiro de toda tarefa Node) voltava
+  # `%Req.TransportError{reason: :timeout}` ao agente, sem dizer qual teto nem
+  # quanto. A cadeia fica: broker (T) < api->broker (T + ~45s) <
+  # engine->api `container-exec` (T + 90s) < este (T + 120s); com o T padrão
+  # de 120s, este (240s) segue abaixo dos 300s de cabeçalhos do `fetch` do
+  # Node com que a api chama `/internal/actions/execute`.
+  @folga_do_propose_action_de_terminal_ms 120_000
+
+  @doc false
+  def teto_do_propose_action_de_terminal_ms,
+    do:
+      Application.fetch_env!(:engine, :terminal_action_timeout_ms) +
+        @folga_do_propose_action_de_terminal_ms
+
+  @doc false
+  def opcoes_do_propose_action(action_type)
+      when action_type in @acoes_de_container_executadas_no_propose,
+      do: [receive_timeout: @teto_do_propose_action_de_container_ms]
+
+  def opcoes_do_propose_action("terminal"),
+    do: [receive_timeout: teto_do_propose_action_de_terminal_ms()]
+
+  def opcoes_do_propose_action(_action_type), do: []
+
+  @impl true
+  def confirm_workspace(project_id, session_id, path, user_id) do
+    post_returning("/internal/projects/#{project_id}/workspace-verification", %{
+      sessionId: session_id,
+      path: path,
+      actorId: user_id
+    })
+  end
+
+  @impl true
+  def report_mirror_sync(project_id, resultado) do
+    post_returning("/internal/projects/#{project_id}/mirror-sync-result", resultado)
+  end
+
+  # A remoção desmonta o QA e seus serviços: até seis `docker rm` de 30s.
+  @impl true
+  def remover_instancia_de_qa(project_id, task_id) do
+    post_returning("/internal/projects/#{project_id}/qa-environments/#{task_id}/remove", %{},
+      receive_timeout: 195_000
+    )
+  end
+
+  @impl true
+  def varrer_instancias_de_qa(task_ids_em_voo) do
+    post_returning("/internal/qa-environments/sweep", %{taskIdsEmVoo: task_ids_em_voo},
+      receive_timeout: 195_000
+    )
+  end
+
+  @impl true
+  def executar_comando_no_container(project_id, comando, cwd, timeout_ms),
+    do: container_exec(project_id, comando, cwd, timeout_ms, %{})
+
+  @impl true
+  def executar_comando_na_instancia_de_qa(project_id, task_id, comando, cwd, timeout_ms),
+    do:
+      container_exec(project_id, comando, cwd, timeout_ms, %{alvo: %{qa: true, taskId: task_id}})
+
+  defp container_exec(project_id, comando, cwd, timeout_ms, extra) do
+    corpo =
+      %{comando: comando}
+      |> Map.merge(extra)
+      |> por_se_presente(:cwd, cwd)
+      |> por_se_presente(:timeoutMs, timeout_ms)
+
+    post_returning("/internal/projects/#{project_id}/container-exec", corpo,
+      receive_timeout: teto_do_container_exec_ms(timeout_ms)
+    )
+  end
+
+  # AT-233 (RN-604). O comando atravessa engine -> api -> broker, e cada salto
+  # tem de esperar MAIS que o de baixo: o broker corta em `timeout_ms`, a api
+  # espera `timeout_ms` + contexto + `ps` + margem (`tetoDaOperacao` em
+  # `container-broker.client.ts`, no máximo `timeout_ms` + 45s), e este lado
+  # espera `timeout_ms` + 90s. Sem isso a chamada caía no default do Req (15s)
+  # — o MESMO número de `TERMINAL_ACTION_TIMEOUT_MS` —, e o desfecho honesto
+  # (`timedOut: true` do broker, ou a recusa nomeada da api) chegava a ninguém.
+  # A api espelha este número como `FOLGA_DO_EXEC_NO_ENGINE_MS`, e os testes
+  # dos dois lados conferem a ordem.
+  @folga_do_exec_no_container_ms 90_000
+
+  # O broker usa 15s quando o pedido vem sem `timeoutMs`
+  # (`TIMEOUT_DE_EXEC_PADRAO_MS`, `packages/docker-port/src/docker-cli.ts`).
+  @exec_padrao_do_broker_ms 15_000
+
+  @doc false
+  def teto_do_container_exec_ms(nil),
+    do: teto_do_container_exec_ms(@exec_padrao_do_broker_ms)
+
+  def teto_do_container_exec_ms(timeout_ms) when is_integer(timeout_ms),
+    do: timeout_ms + @folga_do_exec_no_container_ms
+
+  @impl true
+  def rag_search(project_id, query, top_k, opts \\ []) do
+    # `:session_id`/`:agent` são de DOMÍNIO — entram no CORPO, e é o que
+    # permite a api gravar o ator da telemetria e narrar `rag.search` na
+    # timeline (RN-479/481). O resto de `opts` continua indo para o `Req`,
+    # como sempre foi. Separá-los aqui evita um quinto parâmetro posicional
+    # que todo chamador teria de passar mesmo sem ter o que dizer.
+    {session_id, opts} = Keyword.pop(opts, :session_id)
+    {agent, opts} = Keyword.pop(opts, :agent)
+
+    corpo =
+      %{projectId: project_id, query: query, topK: top_k}
+      |> por_se_presente(:sessionId, session_id)
+      |> por_se_presente(:agent, agent)
+
+    post_returning("/internal/rag/search", corpo, opts)
+  end
+
+  @impl true
+  def rag_feedback(project_id, search_id, chunk_id, verdict, agent) do
+    post_returning("/internal/rag/feedback", %{
+      projectId: project_id,
+      searchId: search_id,
+      chunkId: chunk_id,
+      verdict: verdict,
+      agent: agent
+    })
+  end
+
+  # A api distingue campo AUSENTE de campo NULO: mandar `sessionId: null` faria
+  # o DTO recusar o corpo pela validação de UUID. Ausente é o contrato.
+  defp por_se_presente(mapa, _chave, nil), do: mapa
+  defp por_se_presente(mapa, chave, valor), do: Map.put(mapa, chave, valor)
+
+  @impl true
+  def get_prompt_template(name, version \\ nil) do
+    query_part = if version, do: "?version=#{URI.encode_www_form(version)}", else: ""
+
+    url =
+      api_url() <>
+        "/internal/graph/prompt-templates/#{URI.encode_www_form(name)}" <> query_part
+
+    case req_get(url, headers: headers()) do
+      {:ok, %Req.Response{status: 404}} ->
+        {:error, :not_found}
+
+      {:ok, %Req.Response{status: status, body: body}} when status in 200..299 ->
+        {:ok, body}
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  # O funil ÚNICO de headers de toda chamada engine -> api (ADR 0035).
+  #
+  # `auth_headers/0` sozinho era o bug: ele já era um funil, mas só do token.
+  # O `traceparent` era injetado uma camada acima, dentro de `post_returning/3`,
+  # e por isso cobria apenas os POSTs. Ficavam de fora os seis `Req.get` (que
+  # incluem `list_events` e as leituras que montam o contexto do agente) e o
+  # `llm_turn_stream`, o turno de LLM em streaming — indiscutivelmente a chamada
+  # mais interessante do sistema. Toda a metade de LEITURA da conversa entre os
+  # dois serviços aparecia no Tempo como trace órfã.
+  #
+  # Agora é um só: quem chama a api usa `headers/0`, e `auth_headers/0` existe
+  # apenas para ser composta aqui.
+  # Pública (e `@doc false`) só para ser testável: `engine_api_client_headers_test.exs`
+  # afirma que o token sobrevive e que o traceparent aparece dentro de span. Não
+  # faz parte do contrato do módulo — o behaviour lá em cima é que faz.
+  @doc false
+  def headers, do: trace_headers(auth_headers())
+
+  # Acrescenta o `traceparent` do contexto ativo (Fase 5, item 3). O parâmetro se
+  # chama `base` e não `headers` para não sombrear a `headers/0` acima.
+  defp trace_headers(base) do
+    case Engine.Telemetry.Span.current_traceparent() do
+      nil -> base
+      tp -> [{"traceparent", tp} | base]
+    end
+  end
+
+  # AT-428 (RN-742). A chamada HTTP roda num processo PRÓPRIO e descartável,
+  # nunca na caixa de mensagens de quem chama. Em 08/10 o `npm install` do dev
+  # estourou o `receive_timeout` (`Req.TransportError{reason: :timeout}`), a
+  # resposta atrasada da conexão ficou na caixa do `DevAgentServer`, e a
+  # chamada SEGUINTE morreu com `CaseClauseError` em
+  # `Finch.HTTP1.Conn.receive_response/8` — o GenServer caiu calado. Com o
+  # pedido numa Task, a mensagem tardia chega a um processo que já acabou.
+  # Os cabeçalhos (o `traceparent` vem do contexto do processo) são montados
+  # ANTES, no chamador. Exceção dentro da Task volta como `{:error, _}`, nunca
+  # como `EXIT` ligado. O `llm_turn_stream/6` fica FORA: o `into:` dele grava
+  # no dicionário do chamador, e os conversacionais já o chamam de dentro da
+  # Task do turno (`TurnoAssincrono`).
+  @doc false
+  def isolado(fun) do
+    Task.async(fn ->
+      try do
+        fun.()
+      rescue
+        e -> {:error, e}
+      end
+    end)
+    |> Task.await(:infinity)
+  end
+
+  # RN-955: resposta atrasada que ficou no socket de uma conexão do pool
+  # (Finch devolve a conexão após `receive_timeout`) chega ao GET seguinte como
+  # `CaseClauseError {:status, ref_antigo, _}`. O Finch fecha essa conexão ao
+  # lançar, então repetir UMA vez pega conexão nova. Só GET: POST pode ter tido efeito.
+  defp req_get(url, opts), do: get_repetindo(fn -> Req.get(url, opts) end)
+
+  @doc false
+  def get_repetindo(fun) do
+    case isolado(fun) do
+      {:error, %CaseClauseError{term: {_, ref, _}}} when is_reference(ref) ->
+        isolado(fun)
+
+      outro ->
+        outro
+    end
+  end
+
+  defp post(path, body) do
+    case post_returning(path, body) do
+      {:ok, _body} -> :ok
+      error -> error
+    end
+  end
+
+  # Igual `post/2` mas devolve o corpo da resposta (llm_turn/propose_action
+  # precisam do JSON de volta, não só do :ok).
+  defp post_returning(path, body, opts \\ []) do
+    req_opts = [url: api_url() <> path, json: body, headers: headers()] ++ opts
+
+    case isolado(fn -> Req.post(req_opts) end) do
+      {:ok, %Req.Response{status: status, body: resp}} when status in 200..299 ->
+        {:ok, resp}
+
+      {:ok, %Req.Response{status: status, body: resp}} ->
+        {:error, {status, resp}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  # Um lugar só monta o cabeçalho de auth. Antes eram oito literais iguais
+  # espalhados pelos GETs, pelo stream e pelo funil de POST — e um deles
+  # esquecido numa troca de mecanismo é uma rota que passa a falhar sozinha.
+  defp auth_headers, do: [{@cabecalho_service_token, service_token()}]
+
+  defp service_token, do: Application.fetch_env!(:engine, :service_token)
+
+  defp api_url, do: Application.fetch_env!(:engine, :api_url)
+
+  # RN-684 (ADR 0200): no fim do módulo, pelo mesmo motivo do bloco da fachada.
+  @impl true
+  def declare_module_contracts(project_id, session_id, contratos) do
+    post_returning("/internal/sessions/#{session_id}/module-contracts", %{
+      projectId: project_id,
+      contratos: contratos
+    })
+  end
+
+  @impl true
+  def list_module_contracts(project_id) do
+    get_json("/internal/projects/#{project_id}/module-contracts")
+  end
+end

@@ -1,0 +1,209 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+  min-width: 0;
+}
+
+/*
+ * Dentro da tabela de bindings o gatilho ocupa a CÉLULA inteira, como no
+ * handoff (seção 7, item 6) — fundo `--surface-0` para se destacar da linha e
+ * raio 7. Antes ele era `inline-block` sobre `--surface-1`, a mesma cor do
+ * hover da linha, e sobrava um vão à direita que não pertencia a nada.
+ */
+.wrapper.inline,
+.wrapper.inline .trigger {
+  display: flex;
+  width: 100%;
+}
+
+.wrapper.inline .trigger {
+  background: var(--surface-0);
+  border-radius: var(--r-sm);
+  padding: 7px 10px;
+  text-align: left;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.trigger:hover {
+  border-color: var(--border-strong);
+}
+
+.trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.trigger:disabled:hover {
+  border-color: var(--border);
+}
+
+.triggerLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.triggerIcon {
+  color: var(--text-muted);
+  display: flex;
+}
+
+.chevron {
+  color: var(--text-muted);
+  display: flex;
+  margin-left: 2px;
+  flex-shrink: 0;
+}
+
+/* Posição, largura e teto de altura vêm do Popover (kit) e do style do componente. */
+.dropdown {
+  /* Chegar ao fim da lista não continua rolando a página atrás. */
+  overscroll-behavior: contain;
+  background: var(--surface-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+}
+
+.groupHeader {
+  position: sticky;
+  top: 0;
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding: 6px 12px;
+}
+
+.filtro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.filtro input {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* O aviso de que o filtro escondeu o modelo VIGENTE. Fica logo abaixo do
+   checkbox que o causa, e num tom de atenção — não é lista vazia (essa é
+   `.vazio`, com `--text-muted`), é a lista contradizendo o gatilho. */
+.vigenteEscondido {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  line-height: 1.5;
+  color: var(--warning);
+}
+
+.vazio {
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 9px 12px;
+  cursor: pointer;
+  text-align: left;
+}
+
+/* Esmaecido, e ainda assim selecionável: o binding que aponta pra ele
+   continua existindo, e trocá-lo é justamente o que a pessoa veio fazer. */
+.option.indisponivel .corpo {
+  opacity: 0.6;
+}
+
+.corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+}
+
+.selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.option:hover {
+  background: var(--surface-2);
+}
+
+.option.selected {
+  background: var(--accent-soft);
+}
+
+.radio {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Alinha com a primeira linha do nome, agora que a opção tem duas linhas. */
+  margin-top: 2px;
+}
+
+.radio.checked {
+  border-color: var(--accent);
+}
+
+.radioDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.optionName {
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.optionProvider {
+  color: var(--text-muted);
+}

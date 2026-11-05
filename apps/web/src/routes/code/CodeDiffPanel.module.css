@@ -1,0 +1,248 @@
+.painel {
+  padding: 10px 14px 16px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.cabecalhoDiff {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.tituloDiff {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.tituloDiffTexto {
+  font-size: var(--fs-body);
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.branches {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* O filtro por estado é `ui/SegmentedControl` (AT-327); aqui só o espaço. */
+.filtros {
+  margin-bottom: 10px;
+}
+
+.listaPr {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* A linha inteira do item — o botão que abre o diff (`.itemPr`) e o extra
+   por linha (`.itemPrExtra`, Onda 2: botão de merge/card de decisão) são
+   IRMÃOS aqui dentro, nunca aninhados: um `<button>` dentro de outro
+   `<button>` é HTML inválido, e faria o clique no extra também abrir o
+   diff. */
+.itemPrLinha {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--border);
+}
+
+.itemPrLinha:last-child {
+  border-bottom: none;
+}
+
+.itemPr {
+  justify-content: flex-start;
+  height: auto;
+  border-radius: 0;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.itemPr:hover {
+  background: var(--surface-2);
+}
+
+.itemPrExtra {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px 9px 0;
+}
+
+.itemPrCorpo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.itemPrTitulo {
+  font-size: var(--fs-body);
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemPrMeta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemPrEstado {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+}
+
+.estadoIcone_open { color: var(--success); flex-shrink: 0; }
+.estadoIcone_merged { color: var(--violet); flex-shrink: 0; }
+.estadoIcone_closed { color: var(--text-muted); flex-shrink: 0; }
+
+.estadoSelo_open { color: var(--success); border-color: var(--success); }
+.estadoSelo_merged { color: var(--violet); border-color: var(--violet); }
+.estadoSelo_closed { color: var(--text-muted); }
+
+.formularioManual {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.input {
+  width: 260px;
+  height: 28px;
+}
+
+.estado {
+  padding: 10px 2px;
+  font-size: var(--fs-body);
+  color: var(--text-muted);
+  max-width: 480px;
+}
+
+.estadoErro {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--fs-body);
+  color: var(--danger);
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tituloArquivo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.caminho {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selo {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+}
+
+.contadores {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.add { color: var(--success); }
+.del { color: var(--danger); }
+
+.semTexto {
+  padding: 10px 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.patch {
+  margin: 0;
+  padding: 6px 0;
+  background: var(--code-bg);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  overflow-x: auto;
+}
+
+.linhaPatch {
+  padding: 0 10px;
+  white-space: pre;
+  color: var(--text-secondary);
+}
+
+.linhaAdd {
+  background: var(--diff-add);
+  border-left: 2px solid var(--success);
+  color: var(--text-primary);
+}
+
+.linhaDel {
+  background: var(--diff-del);
+  border-left: 2px solid var(--danger);
+  color: var(--text-primary);
+}
+
+.truncado {
+  padding: 6px 2px;
+  font-size: 11px;
+  color: var(--warning);
+}

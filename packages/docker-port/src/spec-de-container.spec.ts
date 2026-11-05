@@ -1,0 +1,283 @@
+import { describe, expect, it } from 'vitest';
+import {
+  EspecificacaoInvalidaError,
+  especificacaoValidada,
+  referenciaDeImagemAceitavel,
+  TETO_DE_RECURSOS,
+} from './spec-de-container.ts';
+import { PONTO_DE_MONTAGEM } from './docker-port.ts';
+
+/**
+ * O que se prova aqui é o PARSE — a fronteira entre um JSON que veio de outro
+ * processo e o tipo fechado que a porta aceita. Cada caso de recusa abaixo é
+ * uma frase que alguém poderia escrever no corpo de uma requisição e que este
+ * lado não deixa virar `docker run`.
+ */
+
+const VALIDA = {
+  workspaceDirName: 'exp002-f52be111',
+  projectId: 'f52be111-0000-4000-8000-000000000000',
+  projectSlug: 'exp002',
+  workspaceId: 'aaaaaaaa-0000-4000-8000-000000000000',
+  imagem: 'node:22-bookworm-slim',
+  imagemVersao: 3,
+  rede: 'none',
+  raizDoProjeto: '/home/alguem/projetos/exp002',
+  cpus: 2,
+  memoriaMb: 4096,
+  pidsLimit: 512,
+};
+
+describe('especificacaoValidada — usuario (ADR 0180)', () => {
+  it('ausente e null são "como sempre"', () => {
+    expect(especificacaoValidada(VALIDA)).not.toHaveProperty('usuario');
+    expect(especificacaoValidada({ ...VALIDA, usuario: null })).not.toHaveProperty('usuario');
+  });
+
+  it('aceita {uid, gid} inteiros positivos', () => {
+    expect(
+      especificacaoValidada({ ...VALIDA, usuario: { uid: 1000, gid: 1000 } }).usuario,
+    ).toEqual({ uid: 1000, gid: 1000 });
+  });
+
+  it.each([
+    [{ uid: 0, gid: 1000 }, 'usuario.uid'],
+    [{ uid: 1000, gid: 0 }, 'usuario.gid'],
+    [{ uid: -1, gid: 1 }, 'usuario.uid'],
+    [{ uid: 1.5, gid: 1 }, 'usuario.uid'],
+    [{ uid: '1000', gid: 1 }, 'usuario.uid'],
+    [{ uid: 1, gid: 3_000_000_000 }, 'usuario.gid'],
+    ['1000:1000', 'usuario.uid'],
+  ])('recusa %j nomeando o campo', (usuario, campo) => {
+    try {
+      especificacaoValidada({ ...VALIDA, usuario });
+      throw new Error('deveria recusar');
+    } catch (e) {
+      expect(e).toBeInstanceOf(EspecificacaoInvalidaError);
+      expect((e as EspecificacaoInvalidaError).campo).toBe(campo);
+    }
+  });
+});
+
+describe('especificacaoValidada — caminho feliz', () => {
+  it('devolve a especificação fechada, com a versão do artefato como texto', () => {
+    const spec = especificacaoValidada(VALIDA);
+
+    expect(spec.workspaceDirName).toBe('exp002-f52be111');
+    expect(spec.imagem).toBe('node:22-bookworm-slim');
+    // `version` é número no artefato e vira rótulo (`brabo.image.version`),
+    // que é texto. A conversão é aqui para o adaptador nunca decidir formato.
+    expect(spec.imagemVersao).toBe('3');
+    expect(spec.rede).toBe('none');
+    expect(spec.cpus).toBe(2);
+    expect(spec.memoriaMb).toBe(4096);
+    expect(spec.pidsLimit).toBe(512);
+    // A marca só sai de `raizDeProjetoValidada` — o valor chega normalizado.
+    expect(spec.raizDoProjeto).toBe('/home/alguem/projetos/exp002');
+  });
+
+  it('aceita digest no lugar da tag, e `egress` no lugar de `none`', () => {
+    const spec = especificacaoValidada({
+      ...VALIDA,
+      imagem: 'ghcr.io/org/app@sha256:abc123',
+      rede: 'egress',
+    });
+
+    expect(spec.imagem).toBe('ghcr.io/org/app@sha256:abc123');
+    expect(spec.rede).toBe('egress');
+  });
+
+  it('o destino do mount não é parâmetro nenhum, aqui nem em lugar nenhum', () => {
+    expect(PONTO_DE_MONTAGEM).toBe('/work');
+    expect(Object.keys(especificacaoValidada(VALIDA))).not.toContain('destino');
+  });
+});
+
+describe('especificacaoValidada — o que ela recusa', () => {
+  it('recusa imagem que começa com `-`, porque o CLI a leria como FLAG', () => {
+    // `execFile` sem shell resolve injeção de COMANDO. Injeção de ARGUMENTO é
+    // outra coisa, e é esta linha que a fecha.
+    expect(() =>
+      especificacaoValidada({ ...VALIDA, imagem: '--privileged' }),
+    ).toThrow(EspecificacaoInvalidaError);
+  });
+
+  it('recusa `latest` — o nome não determina a imagem', () => {
+    expect(() =>
+      especificacaoValidada({ ...VALIDA, imagem: 'node:latest' }),
+    ).toThrow(/latest/);
+  });
+
+  it('recusa referência sem tag nem digest', () => {
+    expect(referenciaDeImagemAceitavel('node')).toBe(false);
+    // Dois-pontos de PORTA não é tag.
+    expect(referenciaDeImagemAceitavel('registry.local:5000/app')).toBe(false);
+    expect(referenciaDeImagemAceitavel('registry.local:5000/app:1.2')).toBe(
+      true,
+    );
+  });
+
+  it('recusa metacaractere de shell na referência', () => {
+    expect(referenciaDeImagemAceitavel('node:22 && rm -rf /')).toBe(false);
+    expect(referenciaDeImagemAceitavel('node:22;id')).toBe(false);
+  });
+
+  it('recusa `host` como rede — ela não é um valor deste produto', () => {
+    const erro = pegar(() =>
+      especificacaoValidada({ ...VALIDA, rede: 'host' }),
+    );
+
+    expect(erro).toBeInstanceOf(EspecificacaoInvalidaError);
+    expect((erro as EspecificacaoInvalidaError).campo).toBe('rede');
+    expect(erro?.message).toContain('ADR 0065');
+  });
+
+  it('recusa recurso acima do teto em vez de rebaixar em silêncio', () => {
+    const erro = pegar(() =>
+      especificacaoValidada({ ...VALIDA, cpus: TETO_DE_RECURSOS.cpus + 1 }),
+    );
+
+    expect((erro as EspecificacaoInvalidaError).campo).toBe('cpus');
+    // A mensagem diz o teto: rebaixar calado faria o container ser uma coisa e
+    // o registro dizer outra.
+    expect(erro?.message).toContain(String(TETO_DE_RECURSOS.cpus));
+  });
+
+  it('recusa `workspaceDirName` com travessia — ele vira caminho e nome', () => {
+    for (const nome of ['../fora', 'com/barra', 'com espaço', '']) {
+      expect(() =>
+        especificacaoValidada({ ...VALIDA, workspaceDirName: nome }),
+      ).toThrow(EspecificacaoInvalidaError);
+    }
+  });
+
+  it('recusa a raiz do filesystem e pasta de sistema como raiz do projeto', () => {
+    // A recusa vem de `raizDeProjetoValidada` (a marca), não daqui — este
+    // teste existe para provar que o parse NÃO tem um caminho que a contorne.
+    expect(() =>
+      especificacaoValidada({ ...VALIDA, raizDoProjeto: '/' }),
+    ).toThrow(/raiz do filesystem/);
+    expect(() =>
+      especificacaoValidada({ ...VALIDA, raizDoProjeto: '/var/run' }),
+    ).toThrow(/pasta de sistema/);
+  });
+
+  it('nomeia o CAMPO recusado, sempre', () => {
+    const casos: Array<[string, Record<string, unknown>]> = [
+      ['projectId', { projectId: null }],
+      ['projectSlug', { projectSlug: { nome: 'exp002' } }],
+      ['imagemVersao', { imagemVersao: undefined }],
+      ['memoriaMb', { memoriaMb: 0 }],
+    ];
+
+    for (const [campo, patch] of casos) {
+      const erro = pegar(() => especificacaoValidada({ ...VALIDA, ...patch }));
+      expect(erro, `esperava recusa em ${campo}`).toBeInstanceOf(
+        EspecificacaoInvalidaError,
+      );
+      expect((erro as EspecificacaoInvalidaError).campo).toBe(campo);
+    }
+  });
+
+  it('declara ORIGEM política — a recusa é deliberada, não falha de infra', () => {
+    const erro = pegar(() =>
+      especificacaoValidada({ ...VALIDA, imagem: 'node:latest' }),
+    );
+
+    expect((erro as EspecificacaoInvalidaError).origem).toBe('politica');
+  });
+});
+
+function pegar(f: () => unknown): Error | undefined {
+  try {
+    f();
+    return undefined;
+  } catch (erro) {
+    return erro as Error;
+  }
+}
+
+describe('especificacaoValidada — app, rede e QA (ADR 0228/0229)', () => {
+  const EGRESS = { ...VALIDA, rede: 'egress' };
+  const DIG = `pg@sha256:${'b'.repeat(64)}`;
+  const recusa = (e: object, campo: string) => {
+    try {
+      especificacaoValidada({ ...EGRESS, ...e });
+    } catch (x) {
+      expect((x as { campo: string }).campo).toContain(campo);
+      return;
+    }
+    throw new Error(`devia recusar ${campo}`);
+  };
+
+  it('campos novos ausentes: spec idêntica à de antes', () => {
+    const s = especificacaoValidada(VALIDA);
+    for (const k of ['comandoDoApp', 'portas', 'dns', 'hostsExtras', 'qa']) {
+      expect(s).not.toHaveProperty(k);
+    }
+  });
+
+  it('aceita o caminho feliz', () => {
+    const s = especificacaoValidada({
+      ...EGRESS,
+      comandoDoApp: 'npm start',
+      portas: [{ host: 8080, container: 3000, protocolo: 'tcp' }],
+      dns: ['1.1.1.1', '2001:db8::1'],
+      hostsExtras: [{ nome: 'x.example', ip: '10.0.0.1' }],
+    });
+    expect(s.portas).toHaveLength(1);
+    expect(s.comandoDoApp).toBe('npm start');
+  });
+
+  it('recusa comando com quebra de linha ou longo demais', () => {
+    recusa({ comandoDoApp: 'a\nb' }, 'comandoDoApp');
+    recusa({ comandoDoApp: 'a'.repeat(301) }, 'comandoDoApp');
+  });
+
+  it('recusa portas: da instalação, baixas, duplicadas, udp, em excesso e com rede none', () => {
+    const p = (host: number) => ({ host, container: 80, protocolo: 'tcp' });
+    recusa({ portas: [p(5432)] }, 'portas[0].host');
+    recusa({ portas: [p(80)] }, 'portas[0].host');
+    recusa({ portas: [p(9000), p(9000)] }, 'portas[1].host');
+    recusa({ portas: [{ ...p(9000), protocolo: 'udp' }] }, 'protocolo');
+    recusa({ portas: Array.from({ length: 11 }, (_, i) => p(9000 + i)) }, 'portas');
+    expect(() => especificacaoValidada({ ...VALIDA, portas: [p(9000)] })).toThrow(/egress/);
+  });
+
+  it('recusa dns/hosts: não-IP, localhost, nome da instalação, caracteres fora da lista', () => {
+    recusa({ dns: ['dns.example'] }, 'dns[0]');
+    recusa({ dns: ['1.1.1.1', '1.1.1.2', '1.1.1.3', '1.1.1.4'] }, 'dns');
+    recusa({ hostsExtras: [{ nome: 'localhost', ip: '10.0.0.1' }] }, 'nome');
+    recusa({ hostsExtras: [{ nome: 'api', ip: '10.0.0.1' }] }, 'nome');
+    recusa({ hostsExtras: [{ nome: 'A_b', ip: '10.0.0.1' }] }, 'nome');
+    recusa({ hostsExtras: [{ nome: 'ok.com', ip: '::1' }] }, 'ip');
+  });
+
+  it('QA: exige digest, chave de 8, env em maiúsculas, sem app nem porta', () => {
+    const svc = { nome: 'db', imagem: DIG };
+    const qa = (o: object) => ({ qa: { chave: 'abcd1234', servicos: [{ ...svc, ...o }] } });
+    expect(
+      especificacaoValidada({ ...EGRESS, ...qa({ env: { A_B: '1' } }) }).qa?.servicos[0]?.nome,
+    ).toBe('db');
+    recusa(qa({ imagem: 'pg:16' }), 'imagem');
+    recusa(qa({ env: { 'a b': '1' } }), 'env');
+    recusa(qa({ dados: ['/a/../b'] }), 'dados');
+    expect(
+      especificacaoValidada({ ...EGRESS, ...qa({ usuario: '70:70', comando: ['httpd', '-f'] }) })
+        .qa?.servicos[0],
+    ).toMatchObject({ usuario: '70:70', comando: ['httpd', '-f'] });
+    for (const u of ['0:0', '0:70', '70:0', 'root', '70', '070:70', '70:70:1', 1, '4294967295:1']) {
+      recusa(qa({ usuario: u }), 'usuario');
+    }
+    recusa(qa({ comando: Array(17).fill('a') }), 'comando');
+    recusa(qa({ comando: ['a'.repeat(201)] }), 'comando');
+    recusa(qa({ comando: ['a\nb'] }), 'comando');
+    recusa(qa({ comando: ['a\0b'] }), 'comando');
+    recusa(qa({ comando: [1] }), 'comando');
+    recusa({ qa: { chave: 'curta', servicos: [] } }, 'qa.chave');
+    recusa({ ...qa({}), comandoDoApp: 'x' }, 'qa');
+    expect(() => especificacaoValidada({ ...VALIDA, ...qa({ compartilhado: true }) })).toThrow(
+      /egress/,
+    );
+  });
+});

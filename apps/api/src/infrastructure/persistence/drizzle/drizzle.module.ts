@@ -1,0 +1,366 @@
+import { Global, Module, OnModuleDestroy } from '@nestjs/common';
+import { ChatAttachmentRepository } from '../../../application/ports/chat-attachment-repository.port';
+import { DrizzleChatAttachmentRepository } from './chat-attachment.repository';
+import { UnitOfWork } from '../../../application/ports/unit-of-work.port';
+import { UserRepository } from '../../../application/ports/user-repository.port';
+import { SessionLanguageOverrideRepository } from '../../../application/ports/session-language-override-repository.port';
+import { DeteccaoDeIdiomaRepository } from '../../../application/ports/deteccao-de-idioma-repository.port';
+import { WorkspaceRepository } from '../../../application/ports/workspace-repository.port';
+import { ProjectRepository } from '../../../application/ports/project-repository.port';
+import { SessionRepository } from '../../../application/ports/session-repository.port';
+import { SessionEventRepository } from '../../../application/ports/session-event-repository.port';
+import { SessionSocketTicketRepository } from '../../../application/ports/session-socket-ticket-repository.port';
+import { OutboxRepository } from '../../../application/ports/outbox-repository.port';
+import { ModelRepository } from '../../../application/ports/model-repository.port';
+import { WorkspaceModelRepository } from '../../../application/ports/workspace-model-repository.port';
+import { ModelPriceChangeRepository } from '../../../application/ports/model-price-change-repository.port';
+import { ModelBindingRepository } from '../../../application/ports/model-binding-repository.port';
+import { UserCredentialRepository } from '../../../application/ports/user-credential-repository.port';
+import { TokenUsageRepository } from '../../../application/ports/token-usage-repository.port';
+import { BudgetRepository } from '../../../application/ports/budget-repository.port';
+import { ProposedActionRepository } from '../../../application/ports/proposed-action-repository.port';
+import { ModelPullRequestRepository } from '../../../application/ports/model-pull-request-repository.port';
+import { AgentAutonomyRepository } from '../../../application/ports/agent-autonomy-repository.port';
+import { GitConnectionRepository } from '../../../application/ports/git-connection-repository.port';
+import { ProvisionedRepositoryRepository } from '../../../application/ports/provisioned-repository-repository.port';
+import { RepoBootstrapRepository } from '../../../application/ports/repo-bootstrap-repository.port';
+import { HandoffRepository } from '../../../application/ports/handoff-repository.port';
+import { DelegationRepository } from '../../../application/ports/delegation-repository.port';
+import { AgentInstructionRepository } from '../../../application/ports/agent-instruction-repository.port';
+import {
+  EpicRepository,
+  StoryRepository,
+  TaskRepository,
+} from '../../../application/ports/backlog-repository.port';
+import { ModuleMapRepository } from '../../../application/ports/module-map-repository.port';
+import { ChunkRepository } from '../../../application/ports/chunk-repository.port';
+import { RagTelemetryRepository } from '../../../application/ports/rag-telemetry-repository.port';
+import { ContainersOverviewRepository } from '../../../application/ports/containers-overview-repository.port';
+import { QaEnvironmentRepository } from '../../../application/ports/qa-environment-repository.port';
+import { DrizzleQaEnvironmentRepository } from './qa-environment.repository';
+import { ContainerRepository } from '../../../application/ports/container-repository.port';
+import { MirrorStateRepository } from '../../../application/ports/mirror-state-repository.port';
+import { ProjectsSummaryRepository } from '../../../application/ports/projects-summary-repository.port';
+import { DevAgentActivityPort } from '../../../application/ports/dev-agent-activity.port';
+import { AgentAreaRepository } from '../../../application/ports/agent-area-repository.port';
+import { InfraArtifactRepository } from '../../../application/ports/infra-artifact-repository.port';
+import { PsychologistAnalysisRepository } from '../../../application/ports/psychologist-analysis-repository.port';
+import { PsychologistHypothesisRepository } from '../../../application/ports/psychologist-hypothesis-repository.port';
+import { AgentInstructionVersionRepository } from '../../../application/ports/agent-instruction-version-repository.port';
+import {
+  AnamneseOptOutRepository,
+  ProficiencyProfileRepository,
+} from '../../../application/ports/proficiency-profile-repository.port';
+import {
+  AnamneseQueueRepository,
+  AnamneseRunRepository,
+} from '../../../application/ports/anamnese-repository.port';
+import { AuthCredentialRepository } from '../../../application/ports/auth-credential-repository.port';
+import { RefreshTokenRepository } from '../../../application/ports/refresh-token-repository.port';
+import { AccountTokenRepository } from '../../../application/ports/account-token-repository.port';
+import { PersonalAccessTokenRepository } from '../../../application/ports/personal-access-token-repository.port';
+import { RunnerDeviceKeyRepository } from '../../../application/ports/runner-device-key-repository.port';
+import { AuthEventRecorder } from '../../../application/ports/auth-event-recorder.port';
+import { LoginThrottle } from '../../../application/ports/login-throttle.port';
+import { SocialIdentityRepository } from '../../../application/ports/social-identity-repository.port';
+import { DrizzleAuthCredentialRepository } from './auth-credential.repository';
+import { DrizzleSocialIdentityRepository } from './social-identity.repository';
+import { DrizzleRefreshTokenRepository } from './refresh-token.repository';
+import { DrizzleAccountTokenRepository } from './account-token.repository';
+import { DrizzlePersonalAccessTokenRepository } from './personal-access-token.repository';
+import { DrizzleRunnerDeviceKeyRepository } from './runner-device-key.repository';
+import { DrizzleAuthEventRepository } from './auth-event.repository';
+import { DrizzleLoginThrottle } from './drizzle-login-throttle';
+import { createDrizzleClient, DRIZZLE } from './drizzle-client';
+import { DrizzleUnitOfWork } from './drizzle-unit-of-work';
+import { DrizzleUserRepository } from './user.repository';
+import { DrizzleSessionLanguageOverrideRepository } from './session-language-override.repository';
+import { DrizzleDeteccaoDeIdiomaRepository } from './deteccao-de-idioma.repository';
+import { DrizzleWorkspaceRepository } from './workspace.repository';
+import { DrizzleProjectRepository } from './project.repository';
+import { DrizzleProjectsSummaryRepository } from './projects-summary.repository';
+import { DrizzleDevAgentActivityRepository } from './dev-agent-activity.repository';
+import { DrizzleSessionRepository } from './session.repository';
+import { DrizzleSessionEventRepository } from './session-event.repository';
+import { DrizzleSessionSocketTicketRepository } from './session-socket-ticket.repository';
+import { DrizzleOutboxRepository } from './outbox.repository';
+import { DrizzleModelRepository } from './model.repository';
+import { DrizzleWorkspaceModelRepository } from './workspace-model.repository';
+import { DrizzleModelPriceChangeRepository } from './model-price-change.repository';
+import { DrizzleModelBindingRepository } from './model-binding.repository';
+import { DrizzleUserCredentialRepository } from './user-credential.repository';
+import { DrizzleTokenUsageRepository } from './token-usage.repository';
+import { DrizzleBudgetRepository } from './budget.repository';
+import { DrizzleProposedActionRepository } from './proposed-action.repository';
+import { DrizzleModelPullRequestRepository } from './model-pull-request.repository';
+import { DrizzleAgentAutonomyRepository } from './agent-autonomy.repository';
+import { DrizzleGitConnectionRepository } from './git-connection.repository';
+import { DrizzleProvisionedRepositoryRepository } from './provisioned-repository.repository';
+import { DrizzleRepoBootstrapRepository } from './repo-bootstrap.repository';
+import { DrizzleHandoffRepository } from './handoff.repository';
+import { DrizzleDelegationRepository } from './delegation.repository';
+import { DrizzleAgentInstructionRepository } from './agent-instruction.repository';
+import {
+  DrizzleEpicRepository,
+  DrizzleStoryRepository,
+  DrizzleTaskRepository,
+} from './backlog.repository';
+import { DrizzleModuleMapRepository } from './module-map.repository';
+import { DrizzleChunkRepository } from './chunk.repository';
+import { DrizzleRagTelemetryRepository } from './rag-telemetry.repository';
+import { DrizzleContainerRepository } from './container.repository';
+import { DrizzleMirrorStateRepository } from './mirror-state.repository';
+import { SessionContextSummaryRepository } from '../../../application/ports/session-context-summary-repository.port';
+import { DrizzleSessionContextSummaryRepository } from './session-context-summary.repository';
+import { DrizzleContainersOverviewRepository } from './containers-overview.repository';
+import { DrizzleAgentAreaRepository } from './agent-area.repository';
+import { DrizzleInfraArtifactRepository } from './infra-artifact.repository';
+import { DrizzlePsychologistAnalysisRepository } from './psychologist-analysis.repository';
+import { DrizzlePsychologistHypothesisRepository } from './psychologist-hypothesis.repository';
+import { DrizzleAgentInstructionVersionRepository } from './agent-instruction-version.repository';
+import {
+  DrizzleAnamneseOptOutRepository,
+  DrizzleProficiencyProfileRepository,
+} from './proficiency-profile.repository';
+import {
+  DrizzleAnamneseQueueRepository,
+  DrizzleAnamneseRunRepository,
+} from './anamnese.repository';
+
+const { db, pool } = createDrizzleClient();
+
+@Global()
+@Module({
+  providers: [
+    { provide: DRIZZLE, useValue: db },
+    { provide: 'PG_POOL', useValue: pool },
+    { provide: UnitOfWork, useClass: DrizzleUnitOfWork },
+    { provide: UserRepository, useClass: DrizzleUserRepository },
+    {
+      provide: SessionLanguageOverrideRepository,
+      useClass: DrizzleSessionLanguageOverrideRepository,
+    },
+    {
+      provide: DeteccaoDeIdiomaRepository,
+      useClass: DrizzleDeteccaoDeIdiomaRepository,
+    },
+    // --- Auth first-party (Fase 7a) ---
+    {
+      provide: AuthCredentialRepository,
+      useClass: DrizzleAuthCredentialRepository,
+    },
+    {
+      provide: RefreshTokenRepository,
+      useClass: DrizzleRefreshTokenRepository,
+    },
+    {
+      provide: AccountTokenRepository,
+      useClass: DrizzleAccountTokenRepository,
+    },
+    {
+      provide: PersonalAccessTokenRepository,
+      useClass: DrizzlePersonalAccessTokenRepository,
+    },
+    {
+      provide: RunnerDeviceKeyRepository,
+      useClass: DrizzleRunnerDeviceKeyRepository,
+    },
+    { provide: AuthEventRecorder, useClass: DrizzleAuthEventRepository },
+    { provide: LoginThrottle, useClass: DrizzleLoginThrottle },
+    {
+      provide: SocialIdentityRepository,
+      useClass: DrizzleSocialIdentityRepository,
+    },
+    { provide: WorkspaceRepository, useClass: DrizzleWorkspaceRepository },
+    { provide: ProjectRepository, useClass: DrizzleProjectRepository },
+    { provide: SessionRepository, useClass: DrizzleSessionRepository },
+    {
+      provide: SessionEventRepository,
+      useClass: DrizzleSessionEventRepository,
+    },
+    {
+      provide: SessionSocketTicketRepository,
+      useClass: DrizzleSessionSocketTicketRepository,
+    },
+    { provide: OutboxRepository, useClass: DrizzleOutboxRepository },
+    { provide: ModelRepository, useClass: DrizzleModelRepository },
+    {
+      provide: WorkspaceModelRepository,
+      useClass: DrizzleWorkspaceModelRepository,
+    },
+    {
+      provide: ModelPriceChangeRepository,
+      useClass: DrizzleModelPriceChangeRepository,
+    },
+    {
+      provide: ModelBindingRepository,
+      useClass: DrizzleModelBindingRepository,
+    },
+    {
+      provide: UserCredentialRepository,
+      useClass: DrizzleUserCredentialRepository,
+    },
+    { provide: TokenUsageRepository, useClass: DrizzleTokenUsageRepository },
+    { provide: BudgetRepository, useClass: DrizzleBudgetRepository },
+    {
+      provide: ProposedActionRepository,
+      useClass: DrizzleProposedActionRepository,
+    },
+    {
+      provide: ModelPullRequestRepository,
+      useClass: DrizzleModelPullRequestRepository,
+    },
+    {
+      provide: AgentAutonomyRepository,
+      useClass: DrizzleAgentAutonomyRepository,
+    },
+    {
+      provide: GitConnectionRepository,
+      useClass: DrizzleGitConnectionRepository,
+    },
+    {
+      provide: ProvisionedRepositoryRepository,
+      useClass: DrizzleProvisionedRepositoryRepository,
+    },
+    {
+      provide: RepoBootstrapRepository,
+      useClass: DrizzleRepoBootstrapRepository,
+    },
+    { provide: HandoffRepository, useClass: DrizzleHandoffRepository },
+    { provide: DelegationRepository, useClass: DrizzleDelegationRepository },
+    {
+      provide: AgentInstructionRepository,
+      useClass: DrizzleAgentInstructionRepository,
+    },
+    { provide: EpicRepository, useClass: DrizzleEpicRepository },
+    { provide: StoryRepository, useClass: DrizzleStoryRepository },
+    { provide: TaskRepository, useClass: DrizzleTaskRepository },
+    {
+      provide: ProjectsSummaryRepository,
+      useClass: DrizzleProjectsSummaryRepository,
+    },
+    {
+      provide: DevAgentActivityPort,
+      useClass: DrizzleDevAgentActivityRepository,
+    },
+    { provide: ModuleMapRepository, useClass: DrizzleModuleMapRepository },
+    { provide: ChunkRepository, useClass: DrizzleChunkRepository },
+    {
+      provide: RagTelemetryRepository,
+      useClass: DrizzleRagTelemetryRepository,
+    },
+    { provide: ContainerRepository, useClass: DrizzleContainerRepository },
+    {
+      provide: QaEnvironmentRepository,
+      useClass: DrizzleQaEnvironmentRepository,
+    },
+    { provide: MirrorStateRepository, useClass: DrizzleMirrorStateRepository },
+    {
+      provide: ContainersOverviewRepository,
+      useClass: DrizzleContainersOverviewRepository,
+    },
+    {
+      provide: SessionContextSummaryRepository,
+      useClass: DrizzleSessionContextSummaryRepository,
+    },
+    { provide: AgentAreaRepository, useClass: DrizzleAgentAreaRepository },
+    {
+      provide: InfraArtifactRepository,
+      useClass: DrizzleInfraArtifactRepository,
+    },
+    {
+      provide: PsychologistAnalysisRepository,
+      useClass: DrizzlePsychologistAnalysisRepository,
+    },
+    {
+      provide: PsychologistHypothesisRepository,
+      useClass: DrizzlePsychologistHypothesisRepository,
+    },
+    {
+      provide: AgentInstructionVersionRepository,
+      useClass: DrizzleAgentInstructionVersionRepository,
+    },
+    {
+      provide: ChatAttachmentRepository,
+      useClass: DrizzleChatAttachmentRepository,
+    },
+    {
+      provide: ProficiencyProfileRepository,
+      useClass: DrizzleProficiencyProfileRepository,
+    },
+    {
+      provide: AnamneseOptOutRepository,
+      useClass: DrizzleAnamneseOptOutRepository,
+    },
+    {
+      provide: AnamneseQueueRepository,
+      useClass: DrizzleAnamneseQueueRepository,
+    },
+    { provide: AnamneseRunRepository, useClass: DrizzleAnamneseRunRepository },
+  ],
+  exports: [
+    DRIZZLE,
+    UnitOfWork,
+    UserRepository,
+    SessionLanguageOverrideRepository,
+    DeteccaoDeIdiomaRepository,
+    AuthCredentialRepository,
+    RefreshTokenRepository,
+    AccountTokenRepository,
+    PersonalAccessTokenRepository,
+    RunnerDeviceKeyRepository,
+    AuthEventRecorder,
+    LoginThrottle,
+    SocialIdentityRepository,
+    WorkspaceRepository,
+    ProjectRepository,
+    SessionRepository,
+    SessionEventRepository,
+    SessionSocketTicketRepository,
+    OutboxRepository,
+    ModelRepository,
+    WorkspaceModelRepository,
+    ModelPriceChangeRepository,
+    ModelBindingRepository,
+    UserCredentialRepository,
+    TokenUsageRepository,
+    BudgetRepository,
+    ProposedActionRepository,
+    ModelPullRequestRepository,
+    AgentAutonomyRepository,
+    GitConnectionRepository,
+    ProvisionedRepositoryRepository,
+    RepoBootstrapRepository,
+    HandoffRepository,
+    DelegationRepository,
+    AgentInstructionRepository,
+    EpicRepository,
+    StoryRepository,
+    TaskRepository,
+    ProjectsSummaryRepository,
+    DevAgentActivityPort,
+    AgentAreaRepository,
+    ModuleMapRepository,
+    ChunkRepository,
+    RagTelemetryRepository,
+    ContainerRepository,
+    QaEnvironmentRepository,
+    MirrorStateRepository,
+    ContainersOverviewRepository,
+    SessionContextSummaryRepository,
+    InfraArtifactRepository,
+    PsychologistAnalysisRepository,
+    PsychologistHypothesisRepository,
+    AgentInstructionVersionRepository,
+    ChatAttachmentRepository,
+    ProficiencyProfileRepository,
+    AnamneseOptOutRepository,
+    AnamneseQueueRepository,
+    AnamneseRunRepository,
+  ],
+})
+export class DrizzleModule implements OnModuleDestroy {
+  async onModuleDestroy() {
+    await pool.end();
+  }
+}
