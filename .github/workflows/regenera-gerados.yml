@@ -86,7 +86,12 @@ jobs:
             xargs -d '\n' -a "$RUNNER_TEMP/meus.lst" git add --
             git -c user.name='viralabs-dev-brabo[bot]' -c user.email='noreply@github.com' \
               commit -q -m 'docs: regenera os gerados que dependem dos irmãos' -m 'Gerado por regenera-gerados.yml (AT-726).'
-            git push -f origin "HEAD:refs/heads/$BRANCH"
+            # mesma árvore que a PR aberta já tem: não reempurra (re-rodaria o CI e derrubaria a aprovação)
+            if git fetch -q origin "$BRANCH" 2>/dev/null && [ "$(git rev-parse 'HEAD^{tree}')" = "$(git rev-parse 'FETCH_HEAD^{tree}')" ]; then
+              echo "A PR já tem estes gerados; nada a empurrar."
+            else
+              git push -f origin "HEAD:refs/heads/$BRANCH"
+            fi
             if [ -z "$aberta" ]; then
               gh pr create -R "$REPO" --base dev --head "$BRANCH" \
                 --title 'docs: regenera os gerados que dependem dos irmãos' \
