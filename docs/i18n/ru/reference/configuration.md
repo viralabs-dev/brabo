@@ -4,7 +4,7 @@ title: Конфигурация
 sidebar_position: 1
 description: Все переменные окружения api, engine и web, с умолчаниями и тем, что ломается, когда они заданы неверно.
 keywords: [конфигурация, переменные окружения, env, deploy]
-traducao_de: e34fb776731c09e64de832912893157dace42817
+traducao_de: e018c045407daa7a92211fac958c4bc2ff981545
 ---
 
 # Конфигурация

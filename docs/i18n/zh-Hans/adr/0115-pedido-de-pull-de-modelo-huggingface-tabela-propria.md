@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0115 — 从 Hugging Face 拉取模型：独立的表、两步确认以及官方发布者 allowlist——绝不使用 `proposed_actions`

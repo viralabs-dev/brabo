@@ -4,7 +4,7 @@ title: 事件
 sidebar_position: 2
 description: 不可变日志中的事件类型、通道的 broadcast 以及 trace 的 span——名字相似的三种不同东西。
 keywords: [事件, event log, session_events, broadcast, span, outbox]
-traducao_de: d3101ffe96915a5cd6862a885323d13108f1d1e2
+traducao_de: 5c8b2358773a5a9c46596ec50d9e5b8c29afaaf8
 ---
 
 # 事件

@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0172 — 发布在签名之前按 digest 用 Trivy 扫描它所发布的东西

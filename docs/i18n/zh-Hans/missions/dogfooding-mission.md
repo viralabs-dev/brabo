@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # 任务：第一次 dogfooding——由智能体亲手实现 Bitbucket 和 Generic

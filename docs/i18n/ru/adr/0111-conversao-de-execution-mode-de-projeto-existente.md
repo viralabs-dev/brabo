@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0111 — Конвертация `execution_mode` существующего проекта: отказ при активном dev agent, перемещение `permissions.json`, вывод из эксплуатации строки контейнера

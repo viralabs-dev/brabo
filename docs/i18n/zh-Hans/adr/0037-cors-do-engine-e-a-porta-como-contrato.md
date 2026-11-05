@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0037 — engine 所缺的 CORS，以及端口作为契约的一部分

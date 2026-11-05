@@ -2,7 +2,7 @@
 id: localizacao-ru
 title: Локализация — русский (ru)
 description: Терминология, формы множественного числа и то, что не переводится при переводе Brabo на русский.
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # Локализация — русский (`ru`)

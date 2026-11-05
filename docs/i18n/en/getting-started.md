@@ -5,7 +5,7 @@ sidebar_label: Getting Started
 sidebar_position: 5
 description: From clone to a first agent turn, with what to check when each step doesn't work.
 keywords: [installation, setup, onboarding, first project, ollama]
-traducao_de: 504041e6506e0dc6341e30836aaa2a38efa393e4
+traducao_de: c8911f3416983ed754a0274de9bf168cc5a25a49
 ---
 
 # Getting Started

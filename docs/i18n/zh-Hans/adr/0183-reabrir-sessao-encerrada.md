@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0183 — 已结束的会话可以重新打开：终止状态的专属出口，通向 `active`，带新事件

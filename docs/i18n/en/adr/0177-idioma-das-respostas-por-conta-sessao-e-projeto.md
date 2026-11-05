@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0177 — The response language lives in three places — account, session and project —, as an open BCP-47 list and never in `users.locale`

@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0111 — Converting `execution_mode` on an existing project: refuse with an active dev agent, relocate `permissions.json`, retire the container row

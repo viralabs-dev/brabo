@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0133 — Infra 在路由的候选项中做出选择，选择结果成为 `artifact.project_image` 的新版本

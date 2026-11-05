@@ -2,7 +2,7 @@
 id: localizacao-en
 title: Локализация — английский (en)
 description: Терминология и то, что не переводится при переводе Brabo на английский.
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # Локализация — английский (`en`)

@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0179 — 循环向 Jev 询问用哪个工具，用户的模型只看到剩下的菜单

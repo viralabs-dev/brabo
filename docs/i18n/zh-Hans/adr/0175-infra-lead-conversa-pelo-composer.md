@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0175 — Infra Lead 通过 composer 对话，在此之前它的回合先经过 `TurnoAssincrono`

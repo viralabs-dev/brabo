@@ -5,7 +5,7 @@ sidebar_label: 快速开始
 sidebar_position: 5
 description: 从克隆到智能体的第一个回合，以及每一步不工作时该检查什么。
 keywords: [instalação, setup, onboarding, primeiro projeto, ollama]
-traducao_de: 504041e6506e0dc6341e30836aaa2a38efa393e4
+traducao_de: c8911f3416983ed754a0274de9bf168cc5a25a49
 ---
 
 # 快速开始 {#primeiros-passos}

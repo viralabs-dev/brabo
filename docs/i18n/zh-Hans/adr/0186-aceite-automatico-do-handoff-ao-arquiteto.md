@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0186 — 当 backlog 已覆盖且仓库为本地时，PO 给 Arquiteto 的 handoff 无需点击即被接受

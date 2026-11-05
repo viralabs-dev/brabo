@@ -5,7 +5,7 @@ sidebar_label: FASE 28 — 用户的目录
 sidebar_position: 15
 description: FASE 28 的切分——在引导中征得同意的 base，mounted 作为本地默认，以及一个声明能力的本地 agent。决策位于 ADR 0146 和 0147。
 keywords: [fase 28, 用户的目录, 项目 base, runner, 镜像, 能力]
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # FASE 28 — 用户的目录

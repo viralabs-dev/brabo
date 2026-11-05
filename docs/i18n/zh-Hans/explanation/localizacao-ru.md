@@ -2,7 +2,7 @@
 id: localizacao-ru
 title: 本地化——俄语（ru）
 description: Brabo 俄语翻译中的术语、复数形式以及不翻译的内容。
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # 本地化——俄语（`ru`）

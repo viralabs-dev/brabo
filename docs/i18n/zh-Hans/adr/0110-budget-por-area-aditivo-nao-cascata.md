@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0110 — 按区域的预算是叠加的，与项目/会话并列——不是级联，也不是新表

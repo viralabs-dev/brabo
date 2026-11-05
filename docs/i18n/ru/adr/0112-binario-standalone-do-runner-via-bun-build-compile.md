@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0112 — Автономный бинарник `@brabo/runner` через `bun build --compile`, со встроенным нативным аддоном `.node` через реальное извлечение во временный каталог

@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0176 — `SessionPage.tsx` below 1,000 lines, in ten mechanical PRs, and the lock only afterwards

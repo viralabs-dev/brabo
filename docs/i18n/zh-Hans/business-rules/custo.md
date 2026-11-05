@@ -4,7 +4,7 @@ title: '业务规则——成本'
 sidebar_label: 成本与计量
 description: '关于预算、计量（metering）、支出报告和成本上限的 RN——因篇幅原因从 business-rules.md 中拆出。'
 keywords: [业务规则, 成本, 预算, metering, token]
-traducao_de: 715e7330f7f738c55bc7cd3a0d770a0fc9304e11
+traducao_de: de061f649879891150d8c35e4aef5f9d65a09242
 ---
 
 # 成本

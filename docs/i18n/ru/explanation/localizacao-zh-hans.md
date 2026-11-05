@@ -2,7 +2,7 @@
 id: localizacao-zh-hans
 title: Локализация — упрощённый китайский (zh-Hans)
 description: Терминология, множественное число и то, что не переводится при переводе Brabo на упрощённый китайский.
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # Локализация — упрощённый китайский (`zh-Hans`)

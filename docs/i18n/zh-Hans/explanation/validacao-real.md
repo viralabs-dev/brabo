@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 id: validacao-real
 title: 真实验证——远程 GitHub 与真实模型
 sidebar_label: 真实验证（13b）

@@ -4,7 +4,7 @@ title: События
 sidebar_position: 2
 description: Типы событий неизменяемого журнала, broadcasts канала и spans трассировки — три разные вещи с похожими именами.
 keywords: [события, event log, session_events, broadcast, span, outbox]
-traducao_de: d3101ffe96915a5cd6862a885323d13108f1d1e2
+traducao_de: 5c8b2358773a5a9c46596ec50d9e5b8c29afaaf8
 ---
 
 # События

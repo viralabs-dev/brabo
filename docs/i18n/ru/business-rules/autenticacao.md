@@ -4,7 +4,7 @@ title: 'Бизнес-правила — Аутентификация'
 sidebar_label: Аутентификация
 description: 'RN first-party auth: refresh с ротацией, сессия в cookie, PAT, OAuth и ключ устройства.'
 keywords: [бизнес-правила, аутентификация, refresh, cookie, PAT, OAuth]
-traducao_de: 35a0dc07ccbd159e749036b48dc8d249d4e3b8f8
+traducao_de: b21e556fb001c975b4d848dfbf48d663c631b3ca
 ---
 
 # Аутентификация

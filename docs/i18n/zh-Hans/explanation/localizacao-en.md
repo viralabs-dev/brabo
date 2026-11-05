@@ -2,7 +2,7 @@
 id: localizacao-en
 title: 本地化——英语（en）
 description: Brabo 英语翻译中的术语以及不翻译的内容。
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # 本地化——英语（`en`）

@@ -1,5 +1,5 @@
 ---
-traducao_de: 35a0dc07ccbd159e749036b48dc8d249d4e3b8f8
+traducao_de: b21e556fb001c975b4d848dfbf48d663c631b3ca
 id: autenticacao
 title: 'Business rules — Authentication'
 sidebar_label: Authentication

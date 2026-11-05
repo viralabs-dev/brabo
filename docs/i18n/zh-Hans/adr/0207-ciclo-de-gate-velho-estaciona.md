@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0207 — 停滞超过 2 小时的 gate 周期会被搁置，只有人工操作才能恢复

@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0196 — The Anamnese turned back on: it does not run without a subject, and the accepted hypothesis becomes a profile fact
