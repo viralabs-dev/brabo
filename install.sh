@@ -3,7 +3,7 @@
 #
 # USO — e a forma importa:
 #
-#   curl -fsSLO https://github.com/daneiel/brabo/releases/latest/download/install.sh && bash install.sh
+#   curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh && bash install.sh
 #
 # BAIXAR e rodar um ARQUIVO, com `bash`. As duas formas que parecem equivalentes
 # não são, e as duas são RECUSADAS com nome:
@@ -48,7 +48,7 @@
 # Este bloco é POSIX e vem ANTES de tudo, porque é o único que roda sob
 # qualquer `sh`: o `dash` do Debian/Ubuntu morria na linha seguinte, no
 # `set -o pipefail`, com um "Illegal option" que não diz o que fazer.
-REPO="${BRABO_REPO:-daneiel/brabo}"
+REPO="${BRABO_REPO:-viralabs-dev/brabo}"
 if [ -z "${BASH_VERSION:-}" ]; then
   printf '%s\n' '✗ este instalador é um script de bash, e está rodando sob outro shell. Baixe o arquivo e rode com bash:' >&2
   printf '%s\n' "    curl -fsSLO https://github.com/${REPO}/releases/latest/download/install.sh && bash install.sh" >&2
@@ -98,7 +98,7 @@ sha_do_cosign() {
 # A identidade que assinou. Sem estas duas, `cosign verify-blob` aceitaria uma
 # assinatura válida DE QUALQUER UM — que é exatamente o defeito que assinar
 # existe para fechar.
-IDENTIDADE_REGEX="^https://github.com/${REPO}/\.github/workflows/build-runner-binaries\.yml@"
+IDENTIDADE_REGEX="^https://github.com/${REPO}/\.github/workflows/release\.yml@"
 EMISSOR_OIDC='https://token.actions.githubusercontent.com'
 
 # Subiu para 3 quando o marcador ganhou o `ownerEmail` (RN-547) — pelo mesmo

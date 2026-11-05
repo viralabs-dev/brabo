@@ -1,299 +1,47 @@
 name: tag-release
 
-# DORMENTE ATÉ A AT-704 (Rodada 180, AT-702): o workflow veio do monorepo com os
-# gatilhos originais (o `docs:check` do runbook confere `push: tags` no `on:`), mas
-# CADA job só roda com a variável de repositório `PRODUTO_RELEASE_LIGADA=true`.
-# Sem ela, nenhum push cria tag nem publica nada. A release do PRODUTO (1.0.0)
-# nasce aqui e depende dos `scripts/ci/*` de release do `brabo-infra`.
-
-
-# Carimba a tag do estágio a cada merge numa permanente, e — quando o merge é
-# um hotfix — trava o gate de retropropagação e abre os PRs que o resolvem.
-# Fonte da política: scripts/ci/docs/explanation/branching-policy.md
+# Carimba a tag do estágio a cada push em dev/main (tag-release do brabo-ci, AT-704).
+# A 1ª tag final na `main` sai `v1.0.0`: o ciclo inicial traz uma PR `breaking/` (MAJOR
+# sobre a base 0.0.0 de `proximaVersao`, coberto em brabo-ci `version.spec.ts`).
 #
-# NENHUM JOB DE DEPLOY. A tag é o produto final deste workflow e o registro do
-# que ESTARIA em cada estágio — vale mesmo sem ambiente. Quando houver deploy,
-# ele será um workflow próprio disparado pela tag, não um passo escondido aqui
-# atrás de uma variável desligada: passo que nunca roda é passo que apodrece.
-#
-# A trava do gate mora AQUI, e não num workflow próprio, por ordem: a tag PATCH
-# do hotfix tem que nascer antes da trava, e é ela que os PRs de
-# retropropagação citam. Dois workflows reagindo ao mesmo push correriam soltos,
-# e metade das vezes o PR nasceria sem saber o número da tag.
-#
-# `push` e não `pull_request`: a tag nasce do commit que ENTROU na permanente,
-# depois do merge. É o único workflow do repositório que reage a push, e é por
-# isso que ele existe separado do `ci.yml`.
+# Só roda com `PRODUTO_RELEASE_LIGADA=true` (variável de repositório; o dono liga).
+# BOT_TOKEN: o token do App (create-github-app-token) é mascarado e não atravessa jobs,
+# então não dá para passá-lo ao reutilizável. Sem ele a tag nasce pelo GITHUB_TOKEN e NÃO
+# dispara o `release.yml`; o job `publicar` fecha isso despachando-o na própria tag.
+# Hotfix exige o BOT_TOKEN (lacuna declarada).
 on:
   push:
-    branches:
-      - dev
-      - main
+    branches: [dev, main]
 
 permissions:
-  contents: write # criar tag e escrever o gate
-  pull-requests: write # abrir os PRs de retropropagação
-
-concurrency:
-  # Sem cancelamento: cada merge precisa da sua tag. Cancelar o anterior
-  # deixaria um commit sem carimbo, e o N passaria a mentir.
-  group: tag-release-${{ github.ref }}
-  cancel-in-progress: false
+  contents: write
+  pull-requests: write
+  actions: write
 
 jobs:
   carimbar:
     if: vars.PRODUTO_RELEASE_LIGADA == 'true'
-    name: Tag do estágio
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    outputs:
-      tag: ${{ steps.calculo.outputs.tag }}
-      hotfix: ${{ steps.calculo.outputs.hotfix }}
-      retropropagacao: ${{ steps.calculo.outputs.retropropagacao }}
-    env:
-      # `secrets` não existe no `if:` de um step — só em `env`. Passar por aqui
-      # é o que torna a presença do PAT testável dentro do job.
-      TEM_PAT: ${{ secrets.BRABO_BOT_TOKEN != '' }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-        with:
-          # O cálculo lê TODAS as tags e o histórico desde a última final.
-          fetch-depth: 0
-          # A tag precisa ser empurrada pelo PAT. Tag criada com o
-          # `GITHUB_TOKEN` NÃO dispara workflow (regra do GitHub contra
-          # recursão), e foi por isso que a Release da v0.2.0 nunca publicou.
-          # Sem o segredo, cai no token padrão: a tag ainda nasce, só não
-          # dispara a Release — degradação visível, não silenciosa.
-          token: ${{ secrets.BRABO_BOT_TOKEN || github.token }}
+    uses: viralabs-dev/brabo-ci/.github/workflows/tag-release.yml@236dc29d9e64a95ba278bd2ec1109940ce3d6e20  # v1.0.0
+    with:
+      ci_ref: 236dc29d9e64a95ba278bd2ec1109940ce3d6e20
 
-      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413  # v6.1.0
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
-        with:
-          node-version: 26.10.0
-
-      - name: O PAT está configurado?
-        if: env.TEM_PAT != 'true'
-        run: |
-          echo "::warning::sem BRABO_BOT_TOKEN: a tag nasce, mas não dispara a Release nem abre PR com checks."
-
-      - name: Calcular a tag
-        id: calculo
-        env:
-          GH_TOKEN: ${{ github.token }}
-          BRANCH: ${{ github.ref_name }}
-          SHA: ${{ github.sha }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: node scripts/ci/tag-release.ts
-
-      - name: Criar a tag
-        if: steps.calculo.outputs.tag != ''
-        env:
-          TAG: ${{ steps.calculo.outputs.tag }}
-          MENSAGEM: ${{ steps.calculo.outputs.mensagem }}
-          SHA: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          git config user.name  'brabo-release[bot]'
-          git config user.email 'brabo-release[bot]@users.noreply.github.com'
-          git tag -a "$TAG" "$SHA" -m "$MENSAGEM"
-          git push origin "$TAG"
-          echo "::notice::tag $TAG criada em ${SHA::8}"
-          {
-            echo "### tag-release"
-            echo
-            echo "Tag **\`$TAG\`** criada em \`${SHA::8}\`."
-            echo
-            echo "$MENSAGEM"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-  # -------------------------------------------------------------------- gate
-
-  travar:
-    name: Travar o gate e abrir as retropropagações
+  publicar:
+    name: Despachar o release da tag final
     needs: carimbar
-    if: ${{ vars.PRODUTO_RELEASE_LIGADA == 'true' && (github.ref_name == 'main' && needs.carimbar.outputs.hotfix == 'sim') }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    env:
-      TEM_PAT: ${{ secrets.BRABO_BOT_TOKEN != '' }}
-    steps:
-      # Falha ANTES de mexer em qualquer coisa. Sem o PAT, os PRs de
-      # retropropagação nasceriam sem check e nunca ficariam verdes: a cadeia
-      # travaria para sempre e ninguém saberia por quê. Vermelho aqui é o
-      # sintoma no lugar certo.
-      - name: O PAT é obrigatório aqui
-        if: env.TEM_PAT != 'true'
-        run: |
-          echo "::error title=hotfix-gate::sem BRABO_BOT_TOKEN a cadeia de retropropagação não fecha."
-          echo "Crie o segredo (PAT com \`repo\` + \`workflow\`) e rode este job de novo." >&2
-          exit 1
-
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-        with:
-          fetch-depth: 0
-          # Escrever em `main` e abrir PR que NASÇA COM CHECKS exige o PAT: PR
-          # aberto com o `GITHUB_TOKEN` não dispara workflow.
-          token: ${{ secrets.BRABO_BOT_TOKEN }}
-
-      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413  # v6.1.0
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
-        with:
-          node-version: 26.10.0
-
-      - name: Abrir os PRs e calcular a trava
-        env:
-          GH_TOKEN: ${{ secrets.BRABO_BOT_TOKEN }}
-          HOTFIX_TAG: ${{ needs.carimbar.outputs.tag }}
-          HOTFIX_SHA: ${{ github.sha }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GATE_OUT: ${{ runner.temp }}/gate.json
-        run: node scripts/ci/hotfix-gate.ts
-
-      - name: Commitar o gate em `main`
-        env:
-          TAG: ${{ needs.carimbar.outputs.tag }}
-          GATE_OUT: ${{ runner.temp }}/gate.json
-        run: |
-          set -euo pipefail
-          # Escrita direta em branch permanente. É a única além das tags, é do
-          # bot, e está registrada na convenção de porta única da política. O
-          # ruleset precisa do bypass correspondente.
-          git config user.name  'brabo-release[bot]'
-          git config user.email 'brabo-release[bot]@users.noreply.github.com'
-          git fetch --no-tags origin main
-          git checkout -B publicar-gate origin/main
-          mkdir -p .release
-          cp "$GATE_OUT" .release/gate.json
-          git add .release/gate.json
-          if git diff --cached --quiet; then
-            echo "::notice::gate já estava neste estado — nada a commitar."
-            exit 0
-          fi
-          git commit -m "chore(gate): trava dev aguardando a retropropagação de ${TAG}"
-          git push origin HEAD:main
-          echo "::notice::gate travado em main"
-
-  destravar:
-    name: Destravar o gate
-    needs: carimbar
-    if: ${{ vars.PRODUTO_RELEASE_LIGADA == 'true' && (needs.carimbar.outputs.retropropagacao == 'sim') }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    env:
-      TEM_PAT: ${{ secrets.BRABO_BOT_TOKEN != '' }}
-    steps:
-      - name: O PAT é obrigatório aqui
-        if: env.TEM_PAT != 'true'
-        run: |
-          echo "::error title=destravar-gate::sem BRABO_BOT_TOKEN o gate não pode ser atualizado em main."
-          exit 1
-
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.BRABO_BOT_TOKEN }}
-
-      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413  # v6.1.0
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
-        with:
-          node-version: 26.10.0
-
-      - name: Calcular a destrava
-        env:
-          BRANCH: ${{ github.ref_name }}
-          SHA: ${{ github.sha }}
-          GATE_OUT: ${{ runner.temp }}/gate.json
-        run: |
-          set -euo pipefail
-          git fetch --no-tags origin main
-          node scripts/ci/destravar-gate.ts
-
-      - name: Commitar o gate em `main`
-        env:
-          BRANCH: ${{ github.ref_name }}
-          GATE_OUT: ${{ runner.temp }}/gate.json
-        run: |
-          set -euo pipefail
-          # O script só escreve o arquivo quando REALMENTE destravou. Ausência
-          # aqui é resposta legítima: "não havia trava desta branch".
-          if [ ! -s "$GATE_OUT" ]; then
-            echo "::notice::nada a destravar."
-            exit 0
-          fi
-          git config user.name  'brabo-release[bot]'
-          git config user.email 'brabo-release[bot]@users.noreply.github.com'
-          git checkout -B publicar-gate origin/main
-          mkdir -p .release
-          cp "$GATE_OUT" .release/gate.json
-          git add .release/gate.json
-          if git diff --cached --quiet; then
-            echo "::notice::gate já estava neste estado — nada a commitar."
-            exit 0
-          fi
-          git commit -m "chore(gate): destrava ${BRANCH} após a retropropagação"
-          git push origin HEAD:main
-          echo "::notice::${BRANCH} destravada"
-
-  # ------------------------------------------------------------------ alarme
-
-  # DÁ DESTINATÁRIO À FALHA. Sem este job, o `carimbar` falha e o mundo não
-  # sabe: workflow de `push` numa permanente não tem PR onde ficar vermelho —
-  # o merge já aconteceu —, então sobra um run na aba Actions que ninguém abre.
-  #
-  # Isso não é hipótese. O `carimbar` detectou corretamente as promoções
-  # squashadas #367 (2026-08-24) e #394 (2026-08-25), falhou nas duas, e o
-  # histórico ficou quebrado do mesmo jeito até a promoção seguinte aparecer
-  # com 11 arquivos em "conflito" que eram só ancestralidade perdida. A
-  # detecção estava certa; faltava para quem tocar.
-  avisar:
-    name: Avisar que o carimbo falhou
-    needs: carimbar
-    # `!cancelled()`: o verde também passa por aqui, para FECHAR a issue (AT-664).
-    if: ${{ vars.PRODUTO_RELEASE_LIGADA == 'true' && (!cancelled()) }}
+    if: github.ref_name == 'main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    permissions:
-      contents: read
-      issues: write
     steps:
-      # `github.token`, nunca o PAT: uma das causas de falha do `carimbar` É o
-      # `BRABO_BOT_TOKEN` inválido (o `checkout` morre com "could not read
-      # Username"). Um alarme que depende do que pode estar quebrado é um
-      # alarme que cala justamente na hora em que precisa tocar.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
-          token: ${{ github.token }}
-
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
-        with:
-          node-version: 26.10.0
-
-      - name: Compor o alarme
-        id: alarme
-        env:
-          BRANCH: ${{ github.ref_name }}
-          SHA: ${{ github.sha }}
-          URL_DO_RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          ARQUIVO_DO_CORPO: ${{ runner.temp }}/alarme.md
-          FECHAMENTO: ${{ runner.temp }}/fechamento.md
-        run: node scripts/ci/alarme-de-tag.ts
-
-      # Uma issue POR BRANCH, reaproveitada: a segunda falha na mesma
-      # permanente vira COMENTÁRIO, nunca issue nova. Enxurrada de issues
-      # idênticas ensina a ignorar, que é o defeito que este job existe para
-      # corrigir.
-      #
-      # A busca é `--json` + comparação EXATA de título, não `--search`: o
-      # título tem crases e colchetes, e a sintaxe de busca do GitHub os trata
-      # como operadores. Listar e comparar é determinístico.
-      - name: Abrir ou atualizar a issue
+          fetch-depth: 0
+      - name: Despachar release.yml na tag
         env:
           GH_TOKEN: ${{ github.token }}
-          TITULO: ${{ steps.alarme.outputs.titulo }}
-          CORPO: ${{ runner.temp }}/alarme.md
-          FECHAMENTO: ${{ runner.temp }}/fechamento.md
-          DESFECHO: ${{ needs.carimbar.result }}
         run: |
           set -euo pipefail
-          source scripts/ci/alarmar-tag.sh
-          alarmar_tag "${DESFECHO}"
+          git fetch --tags --force origin
+          tag="$(git tag --points-at "${GITHUB_SHA}" | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 || true)"
+          if [ -z "${tag}" ]; then echo "sem tag final neste commit"; exit 0; fi
+          gh workflow run release.yml --ref "${tag}"
+          echo "release despachado em ${tag}"

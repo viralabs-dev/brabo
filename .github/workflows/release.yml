@@ -1,38 +1,14 @@
 name: Release
 
-# DORMENTE ATÉ A AT-704 (Rodada 180, AT-702): o workflow veio do monorepo com os
-# gatilhos originais (o `docs:check` do runbook confere `push: tags` no `on:`), mas
-# CADA job só roda com a variável de repositório `PRODUTO_RELEASE_LIGADA=true`.
-# Sem ela, nenhum push cria tag nem publica nada. A release do PRODUTO (1.0.0)
-# nasce aqui e depende dos `scripts/ci/*` de release do `brabo-infra`.
-
-
-# Fase 5, item 6. Disparado pela TAG, não por push em branch: a decisão de
-# publicar uma versão é do usuário, e uma tag é o registro explícito dessa
-# decisão. O CLAUDE.md já trata merge em branch protegida como ato manual; a
-# release segue a mesma regra.
-# SÓ tag FINAL. O padrão `v[0-9]+.[0-9]+.[0-9]+` não casa com sufixo de
-# pré-lançamento, então `v0.2.0-qa.1` e `v0.2.0-dev.3` não disparam nada.
+# Release do PRODUTO (AT-704): monta o `images.json` com os DIGESTS que cada repo de app
+# publicou, junta o `install.sh` e os assets `brabo-install-*` e assina UM `checksums.txt`
+# (cosign keyless) com a identidade DESTE workflow — a que o `install.sh` confere.
 #
-# Antes era `v*`, e isso quebraria assim que a esteira da FASE 6 começasse a
-# carimbar: as tags de estágio nascem a cada merge, e cada uma dispararia uma
-# tentativa de publicar release — falhando na conferência de versão, porque
-# `0.2.0-qa.1` nunca vai bater com o `0.2.0` declarado nos arquivos.
-#
-# E TEM SEGUNDA CHANCE, que é a lição de seis tags órfãs. Com só o gatilho de
-# `push: tags`, uma Release que não sai não sai mais: republicar exigiria apagar
-# e recriar a tag, ou seja, reescrever o registro para consertar o efeito dele.
-#
-# Aconteceu, e não uma vez: `v0.2.0`, `v0.3.0`, `v0.3.1`, `v1.0.0`, `v1.0.1` e
-# `v1.1.0` existem sem Release. A causa era o `tag-release` cair no
-# `GITHUB_TOKEN` sem o `BRABO_BOT_TOKEN` configurado — tag empurrada com o token
-# padrão NÃO dispara workflow (regra do GitHub contra recursão), e o comentário
-# do `tag-release.yml` já registrava isso desde a `v0.2.0`.
-#
-# O PAT foi configurado e a `v1.1.1` fechou a esteira sozinha, então o automático
-# está resolvido. As seis de cima NÃO: o PAT vale para tag nova, e recuperar
-# aquelas é justamente o que o `workflow_dispatch` abaixo existe para permitir.
-# São dois problemas, e o segundo continuaria aberto mesmo com o PAT no lugar.
+# Portão: `PRODUTO_RELEASE_LIGADA=true` (variável de repositório) é a única chave que
+# publica. `workflow_dispatch` num ramo (sem tag) é o ENSAIO: monta, escaneia e confere
+# tudo, mas NÃO assina nem publica — e roda mesmo com o portão desligado.
+# Entrada: `componentes.json` (versão de cada componente) e o `imagem.json` anexado à
+# Release de cada tag de app: {"imagem","tag","digest"}.
 on:
   push:
     tags:
@@ -40,47 +16,25 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag final a publicar (ex.: v1.1.0)'
-        required: true
+        description: 'Tag final a publicar (vazio = ENSAIO; numa tag, o carimbo despacha sem preencher)'
+        required: false
         type: string
 
 permissions:
-  contents: write # criar a GitHub Release e a branch do corte do CHANGELOG
-  pull-requests: write # abrir a PR do CHANGELOG para `dev`
-  packages: write # publicar as cinco imagens no GHCR (ADR 0119, ADR 0162)
-  id-token: write # assinar as imagens com cosign keyless (ADR 0149) — o token
-  # OIDC é a IDENTIDADE que assina, e é ela que a verificação cobra depois.
-  # Escopado a este workflow: não amplia o que `packages: write` já permitia.
+  contents: write # criar a GitHub Release
+  id-token: write # cosign keyless: o OIDC é a identidade que assina
 
 env:
-  NODE_VERSION: '26.10.0'
-  PNPM_VERSION: '11.3.0'
-  # O MESMO trivy do job `images` do `ci.yml` (ADR 0172). Duplicado, e não
-  # num lugar só, porque `env:` de workflow não se importa de outro arquivo e
-  # uma action composta só para duas variáveis seria um terceiro lugar a
-  # manter; a duplicação é GUARDADA por `scripts/ci/trivy-do-release.spec.ts`,
-  # que reprova se versão ou sha256 divergirem entre os dois workflows.
   TRIVY_VERSION: '0.70.0'
   TRIVY_SHA256: '8b4376d5d6befe5c24d503f10ff136d9e0c49f9127a4279fd110b727929a5aa9'
 
 jobs:
   release:
-    if: vars.PRODUTO_RELEASE_LIGADA == 'true'
-    name: Publicar release
+    if: vars.PRODUTO_RELEASE_LIGADA == 'true' || (github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' && inputs.tag == '')
+    name: Release do produto
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      # `secrets` não existe no `if:` de um step — só em `env`. Mesmo padrão do
-      # `tag-release.yml`.
-      TEM_PAT: ${{ secrets.BRABO_BOT_TOKEN != '' }}
     steps:
-      # PRIMEIRO passo, antes de qualquer checkout: quem republica é restrito,
-      # pela mesma razão e com a mesma lógica do `promote.yml`. `workflow_dispatch`
-      # já exige escrita no repo, mas isso não é a mesma coisa que ser o
-      # responsável de release — e a política nomeia um responsável.
-      #
-      # O gatilho de `push: tags` NÃO passa por aqui: ali quem "autorizou" foi a
-      # tag, que só nasce da esteira.
       - name: Quem pode republicar
         if: github.event_name == 'workflow_dispatch'
         env:
@@ -89,474 +43,206 @@ jobs:
           OWNER: ${{ vars.OWNER_HANDLE }}
         run: |
           set -euo pipefail
-          if [ "$MODO" != 'solo' ]; then
-            echo "::notice::APPROVAL_MODE=$MODO — a restrição de dispatch por owner vale no modo solo."
-            exit 0
-          fi
-          if [ -z "${OWNER:-}" ]; then
-            echo "::error::OWNER_HANDLE não está definido. Sem ele não há como saber quem é o responsável de release."
-            exit 1
-          fi
-          if [ "$ATOR" != "$OWNER" ]; then
-            echo "::error::'$ATOR' não pode republicar uma release."
-            exit 1
-          fi
-          echo "ator autorizado: $ATOR"
+          [ "$MODO" = 'solo' ] || exit 0
+          [ -n "${OWNER:-}" ] || { echo "::error::OWNER_HANDLE não está definido."; exit 1; }
+          [ "$ATOR" = "$OWNER" ] || { echo "::error::'$ATOR' não pode republicar uma release."; exit 1; }
 
-      # DE ONDE VEM A TAG, e por que isto não é `github.ref_name` direto.
-      #
-      # No gatilho de `push: tags`, `GITHUB_REF_NAME` É a tag. Num
-      # `workflow_dispatch` ele é a BRANCH (a padrão, `main`) — usar o mesmo
-      # `${GITHUB_REF_NAME}` nos dois casos faria a republicação gerar uma Release
-      # chamada "main", com o changelog de `main`, e sem erro nenhum.
-      #
-      # Um lugar só resolve, valida e publica o resultado como output. Os passos
-      # seguintes leem daqui e nunca de `github.ref_name`.
+      # A tag vem do input, ou da própria tag em que o carimbo despachou; sem nenhuma, é ENSAIO.
       - name: Qual tag publicar
         id: alvo
         env:
           ENTRADA: ${{ inputs.tag }}
+          TIPO: ${{ github.ref_type }}
         run: |
           set -euo pipefail
-          if [ "${GITHUB_EVENT_NAME}" = 'workflow_dispatch' ]; then
-            tag="$ENTRADA"
-          else
-            tag="${GITHUB_REF_NAME}"
+          tag="$ENTRADA"
+          [ -n "$tag" ] || { [ "$TIPO" = 'tag' ] && tag="${GITHUB_REF_NAME}"; } || true
+          if [ -z "$tag" ]; then
+            echo "tag=" >> "$GITHUB_OUTPUT"
+            echo "versao=0.0.0-ensaio" >> "$GITHUB_OUTPUT"
+            echo "::notice::ENSAIO: monta e confere, não assina nem publica."
+            exit 0
           fi
-
-          # A validação de formato existe porque o `workflow_dispatch` aceita
-          # texto livre — o filtro do gatilho de push não protege este caminho.
-          # Sufixo de pré-lançamento é recusado: `-qa.1` nunca bate com a versão
-          # declarada nos manifests, e a Release sairia de algo que ninguém
-          # validou como final.
-          if ! printf '%s' "$tag" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
-            echo "::error::'$tag' não é tag final. O formato é vX.Y.Z, sem sufixo -dev.N nem -qa.N."
-            exit 1
-          fi
-
+          printf '%s' "$tag" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+            || { echo "::error::'$tag' não é tag final (vX.Y.Z)."; exit 1; }
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
-          echo "tag a publicar: $tag"
+          echo "versao=${tag#v}" >> "$GITHUB_OUTPUT"
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
-          # O checkout é NA TAG, não no ref do evento. No push isso é o mesmo
-          # commit; num dispatch é a diferença entre publicar a versão pedida e
-          # publicar o topo da `main`.
-          ref: ${{ steps.alvo.outputs.tag }}
-          # O changelog é gerado a partir do histórico: sem `fetch-depth: 0` o
-          # checkout raso traz um commit só e a release sai com o changelog
-          # vazio, sem erro nenhum.
-          fetch-depth: 0
-          # O PAT porque o último passo EMPURRA a branch do corte do CHANGELOG
-          # e abre PR com ela. Branch empurrada com o `GITHUB_TOKEN` abre PR
-          # cujos checks nascem em `action_required` — o mesmo defeito que o
-          # `promote.yml` tinha.
-          token: ${{ secrets.BRABO_BOT_TOKEN || github.token }}
+          ref: ${{ steps.alvo.outputs.tag || github.ref }}
 
-      # RECUSA republicar sobre o que já existe, e isso é escolha, não limitação:
-      # uma Release publicada é registro, e sobrescrevê-la em silêncio apagaria as
-      # notas que alguém pode já ter lido ou linkado. Se a intenção for refazer,
-      # apagar a Release é ato deliberado seu, na interface.
-      #
-      # Falha rápido de propósito: descobrir a colisão aqui custa segundos, contra
-      # 20 minutos de build para bater no `gh release create` no fim. No gatilho de
-      # push isto nunca acontece; num dispatch, significa tag errada no input.
       - name: A Release já existe?
+        if: steps.alvo.outputs.tag != ''
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.alvo.outputs.tag }}
         run: |
-          set -euo pipefail
           if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "::error::a Release de $TAG já existe, e este workflow não sobrescreve."
-            {
-              echo "### Release já publicada"
-              echo
-              echo "\`$TAG\` já tem Release, e ela não é sobrescrita — nota publicada é"
-              echo "registro. Para refazer, apague a Release primeiro, na interface."
-            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::a Release de $TAG já existe; nota publicada é registro e não é sobrescrita."
             exit 1
           fi
-          echo "$TAG ainda não tem Release."
 
-      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413  # v6.1.0
+      - name: Qual ref do brabo-infra
+        id: infra
+        run: echo "ref=$(jq -r .infra.ref componentes.json)" >> "$GITHUB_OUTPUT"
+
+      # De lá vêm os arquivos do instalador (compose, init.sql…), o `.trivyignore.yaml` e o
+      # `trivy-do-release.ts`: o `brabo` não os duplica.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
-          version: ${{ env.PNPM_VERSION }}
+          repository: viralabs-dev/brabo-infra
+          ref: ${{ steps.infra.outputs.ref }}
+          path: infra
 
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: '26.10.0'
 
-      # PRIMEIRO passo depois do checkout, de propósito: falhar aqui custa
-      # segundos, e evita descobrir a divergência depois de 20 minutos de build.
-      #
-      # A verificação existe porque a tag e os manifests são fontes de verdade
-      # independentes. Taggear v0.2.0 com os package.json ainda em 0.1.0 produz
-      # imagens rotuladas com uma versão que o código não declara — e o sintoma
-      # aparece semanas depois, quando alguém tenta correlacionar um bug com
-      # uma versão.
-      - name: A tag bate com as versões declaradas?
+      - name: Baixar o imagem.json de cada componente
+        id: imagens
         env:
-          TAG: ${{ steps.alvo.outputs.tag }}
+          GH_TOKEN: ${{ github.token }}
+          ENSAIO: ${{ steps.alvo.outputs.tag == '' }}
         run: |
-          set -euo pipefail
-          versao="${TAG#v}"
-          echo "tag: ${TAG} -> versão ${versao}"
-
-          # AVISO, não reprovação: desde a FASE 6 a versão é CALCULADA e vive
-          # na tag. Ninguém pode commitar direto numa permanente para bumpar
-          # `package.json`, então exigir que os arquivos acompanhem obrigaria a
-          # um PR de bump por ciclo — cerimônia que o cálculo automático existe
-          # para eliminar. Os arquivos viram metadado, e a divergência fica
-          # visível no log em vez de travar a publicação.
-          divergentes=0
-          conferir() {
-            local arquivo="$1" encontrado="$2"
-            if [ "${encontrado}" != "${versao}" ]; then
-              echo "::warning file=${arquivo}::declara ${encontrado}, mas a tag é ${versao}"
-              divergentes=$((divergentes + 1))
+          set -uo pipefail
+          mkdir -p "${RUNNER_TEMP}/imagens"
+          faltam=0
+          for alvo in $(jq -r '.imagens | keys[]' componentes.json); do
+            repo="$(jq -r ".imagens.$alvo.repo" componentes.json)"
+            tag="$(jq -r ".imagens.$alvo.tag" componentes.json)"
+            if gh release download "$tag" -R "$repo" -p imagem.json -O "${RUNNER_TEMP}/imagens/${alvo}.json"; then
+              echo "ok: $alvo <- $repo@$tag"
             else
-              echo "ok: ${arquivo} = ${encontrado}"
+              echo "::warning::$alvo: $repo@$tag não tem imagem.json"
+              faltam=$((faltam + 1))
             fi
-          }
-
-          conferir package.json           "$(node -p "require('./package.json').version")"
-          conferir apps/api/package.json  "$(node -p "require('./apps/api/package.json').version")"
-          conferir apps/web/package.json  "$(node -p "require('./apps/web/package.json').version")"
-          conferir apps/engine/mix.exs    "$(grep -oP 'version:\s*"\K[^"]+' apps/engine/mix.exs | head -1)"
-
-          if [ "${divergentes}" -gt 0 ]; then
-            echo "::notice::${divergentes} arquivo(s) com versão diferente da tag — a fonte de verdade é a TAG."
+          done
+          if [ "$faltam" -gt 0 ]; then
+            [ "$ENSAIO" = 'true' ] || { echo "::error::$faltam componente(s) sem imagem.json — cinco de cinco ou nenhuma."; exit 1; }
+            echo "::notice::ENSAIO: imagens não montadas ($faltam sem Release); Trivy e verificação de imagem ficam para a 1ª tag."
           fi
+          echo "completo=$([ "$faltam" -eq 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
 
-      - name: Gerar o changelog desta versão
+      - name: Montar o images.json do produto
+        if: steps.imagens.outputs.completo == 'true'
         env:
-          TAG: ${{ steps.alvo.outputs.tag }}
+          VERSAO: ${{ steps.alvo.outputs.versao }}
         run: |
           set -euo pipefail
-          # A tag anterior é a penúltima FINAL em ordem de versão — `HEAD^`
-          # daria o commit anterior, que não é a mesma coisa.
-          #
-          # O `grep -v -- '-'` não é detalhe: `--sort=-v:refname` coloca
-          # `v1.4.0-qa.1` ACIMA de `v1.4.0`, então sem o filtro a "penúltima"
-          # era uma PRÉ-RELEASE da própria versão sendo lançada. O intervalo
-          # sobrava só os merges de promoção, que o `--no-merges` do gerador
-          # descarta — e a Release saía com "_Nenhum commit em conventional
-          # commits neste intervalo._". Aconteceu em seis releases.
-          anterior="$(git tag --list 'v*' --sort=-v:refname | grep -v -- '-' | sed -n '2p')"
-          node scripts/changelog.mjs "${TAG}" ${anterior:+"${anterior}"} --stdout \
-            | tee RELEASE_NOTES.md
+          mkdir -p dist
+          node scripts/ci/montar-images.ts componentes.json "${RUNNER_TEMP}/imagens" "$VERSAO" "${GITHUB_SHA::12}" > dist/images.json
+          cat dist/images.json
 
-      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069  # v4.4.1
-
-      # As duas tags de cada imagem, calculadas num passo só porque agora são
-      # entrada de uma action e não de um `run` — expressão de workflow não
-      # enxerga variável de shell.
-      - name: As duas tags desta release
-        id: versao
-        env:
-          TAG: ${{ steps.alvo.outputs.tag }}
-        run: |
-          set -euo pipefail
-          echo "versao=${TAG#v}" >> "$GITHUB_OUTPUT"
-          echo "sha=${GITHUB_SHA::12}" >> "$GITHUB_OUTPUT"
-
-      # As cinco imagens (o broker desde o ADR 0162), cada uma com DUAS tags: a versão (legível, é o que
-      # se cita numa conversa) e o SHA do commit (imutável, é o que identifica
-      # o build sem ambiguidade quando uma tag é movida). O `TAG_EXTRA` do
-      # `docker-bake.hcl` existe exatamente para a segunda.
-      #
-      # BAKE, não cinco `docker build` em loop. O `ci.yml` já usa este mesmo
-      # bakefile desde a Fase 5, e o comentário no topo dele MEDE o motivo: em
-      # sequência os builds somavam ~359s (api 130, engine 160, web 49, backup
-      # 20); em paralelo num builder só, ~195s. O loop daqui pagava aquele preço
-      # a cada tag para chegar ao mesmo veredito.
-      #
-      # `push: false` continua valendo, e agora vem do `output = ["type=docker"]`
-      # do alvo `_comum`: publicar em registry ainda não está resolvido — o
-      # overlay de produção aponta para `ghcr.io/OWNER/*`, um placeholder. As
-      # imagens são construídas aqui para provar que a tag é CONSTRUÍVEL; a
-      # publicação entra quando o registry for decidido (ver ADR 0027).
-      #
-      # Sobre o cache `type=gha` que o bakefile declara: aqui ele é BÔNUS, não a
-      # razão da troca. O cache do Actions é escopado por branch, e quem popula
-      # aqueles escopos é o `ci.yml` em `pull_request` — cache escrito por PR não
-      # é legível de uma tag em `main`. O ganho garantido é o PARALELISMO; se o
-      # cache pegar, melhor.
-      #
-      # `VERSION` é a terceira variável e não é redundante com `TAG`, apesar de
-      # receber o mesmo valor aqui: ela vira `BRABO_VERSION` na imagem da api e
-      # `VITE_BRABO_VERSION` no bundle do web, assando a versão NO ARTEFATO (ADR
-      # 0036). É o único caminho pelo qual a tag chega ao rodapé da tela de login
-      # e ao `service.version` dos spans. Fora deste workflow o default do
-      # bakefile é "dev" — o `ci.yml` põe `TAG=prod`, e "prod" não é versão de
-      # nada.
-      # `GITHUB_TOKEN` com `packages: write` — nenhum segredo novo a rotacionar.
-      # O escopo morre com o job, que é a diferença entre isto e um PAT de
-      # registry guardado em `secrets`.
-      - name: Login no GHCR
-        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6  # v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build e publicação das imagens taggeadas
-        id: bake
-        uses: docker/bake-action@59cb1203cd42bcefd40a1b6d73b589e48c86040e  # v7.5.0
-        with:
-          files: docker-bake.hcl
-          targets: default
-        env:
-          TAG: ${{ steps.versao.outputs.versao }}
-          TAG_EXTRA: ${{ steps.versao.outputs.sha }}
-          VERSION: ${{ steps.versao.outputs.versao }}
-          # O prefixo TEM barra final: o bakefile concatena direto, para que o
-          # valor vazio (default, usado pelo `ci.yml`) produza exatamente o
-          # nome curto de antes.
-          REGISTRY: ghcr.io/${{ github.repository_owner }}/
-          # `type=registry` EMPURRA — e é o único modo em que o bake devolve
-          # `containerimage.digest`. Com `type=docker` (o default, que o
-          # `ci.yml` usa) o digest não existe: ele nasce do push.
-          OUTPUT: type=registry
-          # AT-722: tag de release nasce da main. Nunca `local`.
-          AMBIENTE: prd
-          # AT-722: tag de release nasce da main. Nunca `local`.
-
-      # O registro por DIGEST do que esta tag publicou. Reprova se qualquer um
-      # dos cinco alvos vier sem digest — quatro imagens novas e uma velha em
-      # produção é pior que release nenhum, e nada no arquivo diria que faltou.
-      - name: Registrar as imagens publicadas
-        run: |
-          set -euo pipefail
-          mkdir -p .release
-          printf '%s' "${BAKE_METADATA}" > "${RUNNER_TEMP}/bake-metadata.json"
-          node scripts/ci/images-manifest.ts \
-            "${RUNNER_TEMP}/bake-metadata.json" "${TAG}" "${TAG_EXTRA}" \
-            > .release/images.json
-        env:
-          BAKE_METADATA: ${{ steps.bake.outputs.metadata }}
-          TAG: ${{ steps.versao.outputs.versao }}
-          TAG_EXTRA: ${{ steps.versao.outputs.sha }}
-
-      # ADR 0172 (AT-179). O Trivy sobre o que esta tag ACABOU de publicar, por
-      # DIGEST, ANTES da assinatura — imagem reprovada não recebe `cosign sign`,
-      # e sem assinatura o `install.sh` não a instala. Até aqui a imagem que o
-      # instalador baixa nunca tinha sido escaneada: o `ci.yml` escaneia um
-      # build LOCAL do PR, e a tag publica uma build FRIA diferente (o cache de
-      # PR não é legível de uma tag, medido na AT-110).
-      #
-      # Consequência DECLARADA de reprovar aqui: o push já aconteceu (é ele que
-      # cria o digest), então as tags da versão ficam no GHCR SEM assinatura e
-      # SEM Release. É o estado certo — nada instala imagem sem assinatura —, e
-      # refazer é apagar a tag e cortar de novo com a base corrigida.
-      #
-      # Binário e não a action, pelo mesmo motivo do `ci.yml` e com a MESMA
-      # versão e o MESMO sha256 (guardados por spec).
+      # Trivy por digest ANTES de assinar, com as flags do monorepo e o MESMO
+      # `.trivyignore.yaml` (sem allowlist nova).
       - name: Instalar o binário do trivy
+        if: steps.imagens.outputs.completo == 'true'
         run: |
           set -euo pipefail
           curl -fsSL -o /tmp/trivy.tar.gz \
             "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
           echo "${TRIVY_SHA256}  /tmp/trivy.tar.gz" | sha256sum -c -
           sudo tar -xzf /tmp/trivy.tar.gz -C /usr/local/bin trivy
-          sudo chmod 0755 /usr/local/bin/trivy
-          trivy --version
+          trivy image --cache-dir /tmp/trivy-cache --no-progress --download-db-only
 
-      - name: Baixar a base de vulnerabilidades do trivy
-        run: trivy image --cache-dir /tmp/trivy-cache --no-progress --download-db-only
-
-      # O RELATÓRIO vem antes do portão de propósito: se o portão reprovar, o
-      # resumo do job já está escrito e diz os dois números por imagem. Este
-      # scan NÃO tem `--ignore-unfixed` e sai sempre com 0 — ele existe para o
-      # CVE SEM correção, que é relatado (resumo do job e asset da Release) e
-      # não bloqueia, por decisão do mantenedor. Quem lê o JSON e monta o
-      # markdown é `scripts/ci/trivy-do-release.ts`; o veredito NUNCA sai de lá.
-      # Sequencial, com um `--cache-dir` só: são cinco imagens por rede, e a
-      # disputa de lock que obrigou o `ci.yml` a isolar caches só existe em
-      # paralelo.
       - name: Trivy — relatório do que não tem correção
+        if: steps.imagens.outputs.completo == 'true'
         env:
-          VERSAO: ${{ steps.versao.outputs.versao }}
+          VERSAO: ${{ steps.alvo.outputs.versao }}
         run: |
           set -euo pipefail
           mkdir -p "${RUNNER_TEMP}/trivy"
-          node scripts/ci/trivy-do-release.ts referencias .release/images.json \
+          node infra/scripts/ci/trivy-do-release.ts referencias dist/images.json \
             | while read -r alvo referencia; do
-                trivy image \
-                  --cache-dir /tmp/trivy-cache \
-                  --image-src remote \
-                  --no-progress \
-                  --format json \
-                  --output "${RUNNER_TEMP}/trivy/${alvo}.json" \
-                  --scanners vuln \
-                  --severity HIGH,CRITICAL \
-                  --ignorefile .trivyignore.yaml \
-                  --skip-db-update \
-                  --exit-code 0 \
-                  "${referencia}"
+                trivy image --cache-dir /tmp/trivy-cache --image-src remote --no-progress \
+                  --format json --output "${RUNNER_TEMP}/trivy/${alvo}.json" --scanners vuln \
+                  --severity HIGH,CRITICAL --ignorefile infra/.trivyignore.yaml \
+                  --skip-db-update --exit-code 0 "${referencia}"
               done
-          node scripts/ci/trivy-do-release.ts resumo .release/images.json \
-            "${RUNNER_TEMP}/trivy" "${VERSAO}" > "${RUNNER_TEMP}/trivy-sem-correcao.md"
-          cat "${RUNNER_TEMP}/trivy-sem-correcao.md" >> "$GITHUB_STEP_SUMMARY"
+          node infra/scripts/ci/trivy-do-release.ts resumo dist/images.json \
+            "${RUNNER_TEMP}/trivy" "${VERSAO}" > dist/trivy-sem-correcao.md
+          cat dist/trivy-sem-correcao.md >> "$GITHUB_STEP_SUMMARY"
 
-      # O PORTÃO. As flags são as do job `images` do `ci.yml`, byte a byte
-      # (`--severity HIGH,CRITICAL --ignore-unfixed --exit-code 1` e o MESMO
-      # `.trivyignore.yaml`, que tem `expired_at` em toda entrada) — a spec
-      # compara as duas invocações. Sem allowlist nova: este passo não aceita
-      # outro arquivo de exceções. Todas as imagens são escaneadas antes de
-      # reprovar, para o log dizer QUAIS falharam, e não só a primeira.
       - name: Trivy — HIGH/CRITICAL com correção reprova, antes de assinar
+        if: steps.imagens.outputs.completo == 'true'
         run: |
           set -uo pipefail
           reprovadas=()
           while read -r alvo referencia; do
-            if ! trivy image \
-                --cache-dir /tmp/trivy-cache \
-                --image-src remote \
-                --no-progress \
-                --format table \
-                --scanners vuln \
-                --severity HIGH,CRITICAL \
-                --ignore-unfixed \
-                --ignorefile .trivyignore.yaml \
-                --skip-db-update \
-                --exit-code 1 \
-                "${referencia}"; then
-              echo "::error::Trivy reprovou ${alvo} (${referencia}): HIGH/CRITICAL com correção disponível."
+            if ! trivy image --cache-dir /tmp/trivy-cache --image-src remote --no-progress \
+                --format table --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed \
+                --ignorefile infra/.trivyignore.yaml --skip-db-update --exit-code 1 "${referencia}"; then
+              echo "::error::Trivy reprovou ${alvo} (${referencia})."
               reprovadas+=("${alvo}")
             fi
-          done < <(node scripts/ci/trivy-do-release.ts referencias .release/images.json)
-          if [ "${#reprovadas[@]}" -gt 0 ]; then
-            {
-              echo
-              echo "**Reprovado:** ${reprovadas[*]} — nada foi assinado nem publicado como Release."
-            } >> "$GITHUB_STEP_SUMMARY"
-            exit 1
-          fi
-          echo "Trivy: nenhuma imagem com HIGH/CRITICAL corrigível."
+          done < <(node infra/scripts/ci/trivy-do-release.ts referencias dist/images.json)
+          [ "${#reprovadas[@]}" -eq 0 ] || { echo "Reprovado: ${reprovadas[*]} — nada assinado."; exit 1; }
 
-      # ADR 0149 (BRB-005). Assina as CINCO imagens por DIGEST, lido do
-      # manifesto que o passo acima acabou de gerar — nunca por tag, que é
-      # ponteiro móvel: assinar `:5.0.0` garantiria o que aquela tag apontava
-      # no instante da assinatura, e não o que ela aponta quando alguém baixa.
-      #
-      # Keyless: quem assina é a IDENTIDADE deste workflow (OIDC), sem chave
-      # em lugar nenhum. A alternativa — par de chaves próprio — significaria
-      # custódia, rotação e MAIS UM segredo de CI, e este repositório já viu
-      # um PAT expirar em silêncio e reprovar duas runs do `tag-release`
-      # (ADR 0139). Credencial derivada da execução não expira no armário.
-      - name: Instalar o cosign
-        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6  # v4.1.2
-
-      - name: Assinar as imagens publicadas
+      # `install.sh`, a oferta de fonte e os assets `brabo-install-*` entram no MESMO
+      # `checksums.txt` — o que o instalador confere antes de gravar.
+      - name: Reunir os arquivos e gerar o checksums.txt
         run: |
           set -euo pipefail
+          mkdir -p dist
+          assets="$(node scripts/ci/assets-do-instalador.ts preparar infra dist)"
+          [ -n "$assets" ] || { echo "::error::nenhum asset do instalador"; exit 1; }
+          cp install.sh dist/
+          [ ! -f THIRD_PARTY_NOTICES.md ] || cp THIRD_PARTY_NOTICES.md dist/
+          cd dist
+          arquivos="install.sh $assets"
+          [ ! -f THIRD_PARTY_NOTICES.md ] || arquivos="$arquivos THIRD_PARTY_NOTICES.md"
+          [ ! -f images.json ] || arquivos="$arquivos images.json"
+          # shellcheck disable=SC2086
+          sha256sum $arquivos > checksums.txt
+          sha256sum -c --strict checksums.txt
+          cat checksums.txt
 
-          # `--yes` porque não há TTY para confirmar a submissão ao log de
-          # transparência; sem ele o passo trava até o timeout do job.
-          jq -r '.imagens[] | "\(.repositorio)@\(.digest)"' .release/images.json \
-            | while read -r referencia; do
-                echo "assinando ${referencia}"
-                cosign sign --yes "${referencia}"
-              done
+      - name: Instalar o cosign
+        if: steps.alvo.outputs.tag != ''
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6  # v4.1.2
 
-          # Prova que o que acabou de ser assinado VERIFICA, aqui, antes de a
-          # Release existir. Assinatura que ninguém tenta verificar é um
-          # arquivo a mais no registry — e a falha apareceria só na máquina de
-          # quem instala, que é o pior lugar para descobri-la.
-          jq -r '.imagens[] | "\(.repositorio)@\(.digest)"' .release/images.json \
-            | while read -r referencia; do
-                cosign verify \
-                  --certificate-identity-regexp "^https://github.com/${GITHUB_REPOSITORY}/\.github/workflows/release\.yml@" \
-                  --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
-                  "${referencia}" > /dev/null
-                echo "verificado: ${referencia}"
-              done
+      # As imagens já foram assinadas pelos repos de app (identidade deles): aqui só se
+      # confere, por digest, que a assinatura existe e é de um workflow da org.
+      - name: Verificar a assinatura das imagens
+        if: steps.alvo.outputs.tag != ''
+        run: |
+          set -euo pipefail
+          jq -r '.imagens[] | "\(.repositorio)@\(.digest)"' dist/images.json | while read -r ref; do
+            cosign verify \
+              --certificate-identity-regexp '^https://github.com/viralabs-dev/brabo-[a-z-]+/\.github/workflows/[^/]+@' \
+              --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+              "$ref" > /dev/null
+            echo "verificado: $ref"
+          done
+
+      - name: Assinar e verificar o checksums.txt
+        if: steps.alvo.outputs.tag != ''
+        working-directory: dist
+        run: |
+          set -euo pipefail
+          cosign sign-blob --yes --bundle checksums.txt.bundle checksums.txt
+          cosign verify-blob \
+            --bundle checksums.txt.bundle \
+            --certificate-identity-regexp "^https://github.com/${GITHUB_REPOSITORY}/\.github/workflows/release\.yml@" \
+            --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+            checksums.txt
 
       - name: Publicar a GitHub Release
+        if: steps.alvo.outputs.tag != ''
+        working-directory: dist
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.alvo.outputs.tag }}
         run: |
-          # `.release/images.json` como ASSET: é a cópia autoritativa do que
-          # esta tag publicou, disponível no mesmo instante em que a tag
-          # existe. A cópia versionada entra depois, pela PR do CHANGELOG.
-          # `trivy-sem-correcao.md` é o relatório do passo do Trivy (ADR 0172):
-          # o que tem correção reprovou antes daqui, então o que sobra nele é o
-          # HIGH/CRITICAL SEM correção, relatado e não bloqueante.
-          gh release create "${TAG}" \
-            --title "${TAG}" \
-            --notes-file RELEASE_NOTES.md \
-            .release/images.json \
-            "${RUNNER_TEMP}/trivy-sem-correcao.md"
-
-      # O CHANGELOG.md do repositório volta por PR para `dev`, não por push.
-      #
-      # `main` não aceita push (só tag pelo bot de release e
-      # `.release/gate.json` pelo bot do gate), e commitar em `dev` antes
-      # de abrir a promoção quebraria o "range limpo" do check de promoção.
-      # Sobra o caminho que a política já prevê para tudo: entrar por PR.
-      #
-      # Consequência aceita: o `CHANGELOG.md` de `main` fica um ciclo atrás. A
-      # fonte autoritativa das notas é a GitHub Release, publicada acima no
-      # mesmo instante da tag.
-      #
-      # Antes disto NADA nunca escrevia no arquivo: o gerador só era chamado
-      # com `--stdout` para montar o corpo da Release, e o `CHANGELOG.md`
-      # acumulou doze versões dentro de um único "Unreleased".
-      - name: O PAT está configurado?
-        if: env.TEM_PAT != 'true'
-        run: |
-          echo "::warning::sem BRABO_BOT_TOKEN: a PR do CHANGELOG abre, mas os checks dela nascem em 'action_required' e precisam ser liberados à mão."
-
-      - name: Levar o CHANGELOG desta versão para `dev`
-        env:
-          # PAT pelo mesmo motivo do `promote.yml`: PR aberto pelo
-          # `GITHUB_TOKEN` nasce com os checks travados em `action_required`.
-          GH_TOKEN: ${{ secrets.BRABO_BOT_TOKEN || github.token }}
-          TAG: ${{ steps.alvo.outputs.tag }}
-        run: |
           set -euo pipefail
-          git fetch origin dev --no-tags
-          git checkout -B "chore/changelog-${TAG}" origin/dev
+          gh release create "$TAG" --title "$TAG" --generate-notes --verify-tag ./*
 
-          anterior="$(git tag --list 'v*' --sort=-v:refname | grep -v -- '-' | sed -n '2p')"
-          node scripts/changelog.mjs "${TAG}" ${anterior:+"${anterior}"} "${TAG}"
-
-          # A versão anunciada em prosa vem JUNTO, no mesmo commit — no README e
-          # na primeira página do site (`docs/intro.md`). Ela é gerável — o
-          # release sabe qual é —, e deixá-la para depois faria todo release
-          # nascer com o drift check vermelho numa PR que o bot abre e ninguém
-          # pode consertar sem um segundo commit à mão.
-          node scripts/ci/readme-version.ts "${TAG}"
-
-          # O registro por digest desta tag entra na MESMA PR: ele foi
-          # gerado antes do checkout desta branch e sobrevive a ele (o
-          # `git checkout -B` preserva arquivo não rastreado). Sem terceira
-          # exceção de push — ver branching-policy.md, "rides the same PR".
-          git add -f .release/images.json
-
-          if git diff --quiet --cached -- .release/images.json &&
-             git diff --quiet -- CHANGELOG.md README.md docs/intro.md; then
-            echo "::notice::CHANGELOG, README, docs/intro.md e images.json já contêm ${TAG} — nada a abrir."
-            exit 0
-          fi
-
-          git config user.name  'brabo-release[bot]'
-          git config user.email 'brabo-release[bot]@users.noreply.github.com'
-          git add CHANGELOG.md README.md docs/intro.md
-          git commit -m "docs(changelog): ${TAG}"
-          git push -u origin "chore/changelog-${TAG}"
-
-          gh pr create --base dev --head "chore/changelog-${TAG}" \
-            --title "docs(changelog): ${TAG}" \
-            --body "Corte do CHANGELOG na versão \`${TAG}\`, gerado por \`scripts/changelog.mjs\`,
-          mais a versão anunciada no README e em \`docs/intro.md\`, gerada por
-          \`scripts/ci/readme-version.ts\`, mais \`.release/images.json\` — o registro
-          por DIGEST das cinco imagens que esta tag publicou no GHCR (ADR 0119),
-          que também está anexado à GitHub Release.
-
-          Entra por PR porque \`main\` não aceita push, e commitar em \`dev\`
-          antes da promoção quebraria o \"range limpo\" do check de promoção.
-          Sobe para \`main\` no próximo ciclo, como qualquer mudança." 
+      - name: Resumo do ensaio
+        if: steps.alvo.outputs.tag == ''
+        run: |
+          {
+            echo "### Ensaio da release do produto"
+            echo "Nada foi assinado nem publicado. checksums.txt montado e conferido:"
+            echo '```'; cat dist/checksums.txt; echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
