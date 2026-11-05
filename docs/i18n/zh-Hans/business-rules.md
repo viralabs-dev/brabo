@@ -5,7 +5,7 @@ sidebar_label: 业务规则
 sidebar_position: 3
 description: Brabo 的领域规则，带编号，注明它们在代码中的位置以及覆盖每一条的测试。
 keywords: [业务规则, 领域, 状态机, 审批, RBAC]
-traducao_de: e6dc35de643740217772aa51fbe06e28020a16fb
+traducao_de: 222baae244342a1d7b5d879bcee93229b036ed86
 ---
 
 # 业务规则

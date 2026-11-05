@@ -5,7 +5,7 @@ sidebar_label: Бизнес-правила
 sidebar_position: 3
 description: Пронумерованные доменные правила Brabo — где каждое находится в коде и какой тест его покрывает.
 keywords: [бизнес-правила, домен, машина состояний, одобрение, RBAC]
-traducao_de: e6dc35de643740217772aa51fbe06e28020a16fb
+traducao_de: 222baae244342a1d7b5d879bcee93229b036ed86
 ---
 
 # Бизнес-правила

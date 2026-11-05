@@ -5,7 +5,7 @@ sidebar_label: Глоссарий
 sidebar_position: 9
 description: Единый язык Brabo — термины, которые встречаются в коде, на экранах и в ADR, со значением, которое они имеют здесь.
 keywords: [glossary, ubiquitous language, harness, gate, handoff, DEK, outbox]
-traducao_de: 093f918421b29e274e4f77c0a40f80a4a3ea1545
+traducao_de: 4990612012ed4b363b8a96f95efb89c0d0c9d26c
 ---
 
 # Глоссарий {#glossary}

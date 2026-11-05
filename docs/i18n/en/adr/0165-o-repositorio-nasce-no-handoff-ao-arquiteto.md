@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0165 — The repository is born at the acceptance of the handoff to the Arquiteto, and execution does not start without it

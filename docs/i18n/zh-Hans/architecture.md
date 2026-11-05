@@ -5,7 +5,7 @@ sidebar_label: 架构
 sidebar_position: 2
 description: Brabo 的地图——容器、代码地图、一次智能体轮次的流程、层级不变量和已知债务。
 keywords: [架构, 代码地图, 不变量, harness, event log]
-traducao_de: b9d61abd7060c5a35f8eba1155204e01a065ab40
+traducao_de: 4cc1b596659af65abb89f0dc4ed3ec7525de5906
 ---
 
 # 架构

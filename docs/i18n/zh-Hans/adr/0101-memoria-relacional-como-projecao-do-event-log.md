@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0101 — 关系记忆作为事件日志的投影；在不触碰 GenServer 的情况下使用模板

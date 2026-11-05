@@ -4,7 +4,7 @@ title: 'Бизнес-правила — Стоимость'
 sidebar_label: Стоимость и metering
 description: 'RN бюджета, metering, отчёта о расходах и потолка стоимости — вынесенные из business-rules.md по размеру.'
 keywords: [бизнес-правила, стоимость, бюджет, metering, token]
-traducao_de: 715e7330f7f738c55bc7cd3a0d770a0fc9304e11
+traducao_de: de061f649879891150d8c35e4aef5f9d65a09242
 ---
 
 # Стоимость

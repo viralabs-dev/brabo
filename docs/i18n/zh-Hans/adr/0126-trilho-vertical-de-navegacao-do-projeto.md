@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0126 — 项目页面通过垂直轨道导航，代码标签页不再自行折叠侧边栏

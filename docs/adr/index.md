@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 249 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 252 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -44,6 +44,7 @@ O contrato do provider de git, o nascimento e a adoção do repositório, a prot
 | [0217](0217-promocao-automatica-para-qa-em-fase-de-teste.md) | Enquanto o QA está em fase de teste (`QA_FASE_DE_TESTE=true`), todo merge na `dev` abre e mergeia sozinho a promoção `dev` → `qa`, depois que todos os checks terminam verdes; a escada de aprovação dispensa só esse par aberto pelo bot, e `qa` → `main` continua manual |
 | [0235](0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.md) | A `qa` é aposentada por hora no repositório do Brabo (AT-660): esteira `dev → main`, âncora de versão `-dev.N`, `qa` arquivada em `refs/archive/qa` e receita da volta; o Gitflow do produto não muda. Revisa o 0030, revoga o mecanismo do 0217. |
 | [0236](0236-o-dependabot-dispensa-revisao-na-dev.md) | PR do Dependabot para a `dev` passa na escada de aprovação sem revisão, nos dois modos, reconhecido por autor E branch (a régua do `pr-police`); fica mergeável quando os outros checks passam, e a `main` segue com a escada inteira (AT-668). |
+| [0255](0255-politica-de-pr-obrigatoria-em-todos-os-repos.md) | A política de PR é obrigatória em todos os repositórios (checks `Política de branches` e `Escada de aprovação` required, ruleset sem force push em `brabo`, `brabo-qa` e `brabo-infra`) e a PR do bot `chore/regenera-gerados` dispensa a escada na `dev`. |
 
 ## Harness de agente, turnos e sessões {#tema-agentes}
 
@@ -268,6 +269,7 @@ O contrato de provider, o catálogo de modelos e a curadoria, os bindings de mod
 | [0227](0227-provider-opencode-zen-de-llm.md) | O **OpenCode Zen** entra como o 11º provider, só no dialeto OpenAI (`/chat/completions`): `listModels: false` (a rota de modelos é outra e pública), sem teste de conexão da credencial, seed só com os dois grátis de retenção zero (`deepseek-v4.1-flash-free`, `glm-5.3-flash-free`) e capabilities `false` até o smoke. Referencia o 0043 e o 0222. |
 | [0233](0233-membro-ve-o-gasto-do-projeto-sem-credencial.md) | O **membro** vê o gasto do PROJETO (total e custo por agente/área, `GET /projects/:projectId/spend/team`) e o próprio consumo por projeto (`GET /workspaces/:workspaceId/spend/me`), nunca provider nem credencial. Revisa o [0063](0063-duas-audiencias-para-o-mesmo-gasto.md); o relatório do owner ganha `?projectId=` (404 entre workspaces) e a dimensão `session`, e a marca curada `billing` separa assinatura do US$ pago. |
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | Preço de lista da tabela ÚNICA do fabricante (RN-965) para provider que não informa preço (Anthropic), casado pelo ID sem sufixo de data; `manual_pricing` segue vencendo o sync e `supportsReasoning` vem do SDK (ADR 0042 intacto). |
+| [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | Na Anthropic direta o raciocínio desligado é POR MODELO (Haiku 5.5 `thinking: disabled`, Sonnet 5.5 `between_tools`, Opus 5.5 `effort: low`, que só REDUZ), o adaptativo ligado ganha folga no `max_tokens`, `aceitaRaciocinioDesligado` é declarado e `reasoning_tokens` vem do `message_delta`. Revisa o item 4 do [0223](0223-orcamento-de-raciocinio-por-modelo.md) só para a Anthropic. |
 
 ## RAG, grafo de conhecimento e artefatos {#tema-conhecimento}
 
@@ -345,6 +347,7 @@ Imagens de produção, Kubernetes, observabilidade, backup, o compose de dev e o
 | [0169](0169-seaweedfs-no-lugar-do-minio-no-overlay-local.md) | O destino S3 de backup do overlay local deixa de ser o MinIO e vira o SeaweedFS (`docker.io/chrislusf/seaweedfs` 4.47, pinado por digest de ÍNDICE, `server -s3 -s3.port=9000`). O MinIO parou de publicar a imagem da comunidade — o digest pinado responde 401 no quay.io e o repositório do Docker Hub 404 —, então o bootstrap morria no `rollout status` e nenhuma prova de propriedade rodava (issue #633). Medido contra os critérios do mantenedor, em ordem: o SeaweedFS passa nos quatro (oficial, anônimo, índice amd64+arm64; o fluxo real do `lib.sh` pelo `aws-cli` — autenticação, `mb`, upload multipart de 30 MiB por stdin, `head-object`, download conferido por sha256, cópia do lado do servidor, `list-objects-v2`, `rm`; só o servidor muda; Apache-2.0); o Garage é descartado no terceiro (arquivo de config mais layout pós-boot e importação de chave); o Bitnami, o espelho legado congelado dele e o MinIO só `:latest` da Chainguard, no primeiro. Os recursos ganham um nome neutro (`s3-local`); o cliente, os scripts de backup, o Secret e a porta não mudam. Declarado: um digest garante imutabilidade, não disponibilidade; a compatibilidade S3 é por operação, então uma operação nova no `lib.sh` é medida contra ele primeiro |
 | [0170](0170-compose-de-dev-brabo-dev.md) | O compose de dev vira o projeto Docker **`brabo-dev`**, e o dev se recusa a subir ao lado de uma instalação. Medido em 2026-09-19: o compose de dev e o compose de instalação eram os dois `name: brabo` — UM projeto Docker numa máquina com os dois, compartilhando containers, rede e volumes (`brabo_pgdata`…); o banco de uma instalação recebeu migration do dev, e o `reset-total.sh` teria apagado os schemas dele. A instalação continua `brabo` (renomeá-la desligaria toda instalação existente dos próprios volumes); o dev é que muda de nome, e o overlay de observabilidade repete o nome porque o último `-f` vence. O `preflight.mjs` e o `reset-total.sh` RECUSAM, nomeando os containers e o `down` (sem `-v`) de cada arquivo, enquanto existir qualquer container cujo rótulo `config_files` aponte para o compose de instalação (em qualquer estado, sob qualquer `-p`), ou enquanto o compose de dev resolveria para `brabo`; a guarda do reset roda antes de tudo. Os volumes `brabo_*` antigos do dev só geram AVISO — chaves que só o dev tem, derivadas dos dois arquivos de compose, os provam, chaves compartilhadas continuam ambíguas e o aviso diz isso — e o runbook leva o procedimento de copiar ou recomeçar. Preço declarado: desenvolver numa máquina com uma instalação exige derrubar a instalação antes |
 | [0209](0209-engine-em-otp-29.md) | O engine passa para Elixir 1.20.4 / OTP 29.1.1 sobre Alpine 3.24.2 em dev, produção e CI (AT-398): o OTP 27 abortava no boot com `sys_sigaltstack(): Internal error` sob a musl 1.2.6 do Alpine 3.24 em hosts com AMX (erlang/otp#11349), corrigido só a partir do OTP 29.1; o preço é reconstruir os volumes `_build`/`deps` de dev. |
+| [0256](0256-a-migracao-restaura-o-banco-num-banco-vazio.md) | A migração do instalador restaura o Postgres sozinha, num banco recém-criado e vazio (`brabo-restore --banco-vazio`), antes das migrations; depois os repositórios git como o dono do volume e a reprojeção do grafo e dos artefatos. Esclarece a decisão 5 do [0152](0152-backup-de-volumes-contra-compose.md) (nunca sobrescrever vale para banco com dado), revisa a [RN-530](../business-rules/infra.md#rn-530), e traz junto a migração retomável (`restauracaoPendente` no marcador, schema 4), os segredos que cifram dado mantidos do `.env` anterior e a `linha` de versões |
 
 ## CI, release e cadeia de suprimentos {#tema-engenharia}
 
@@ -390,7 +393,7 @@ Como a documentação é gerada, verificada e publicada.
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0255**.
+  é substituído — o próximo é **0258**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml` e a linha do índice sob a seção desse
   tema, em ordem numérica. Quem revisa confirma. Um tema novo é uma

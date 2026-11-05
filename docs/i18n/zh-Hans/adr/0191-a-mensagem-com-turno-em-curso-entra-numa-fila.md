@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0191 — 在轮次进行中到达的消息进入持久化队列，并在轮次结束时被读取

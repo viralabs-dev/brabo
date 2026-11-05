@@ -2,7 +2,7 @@
 id: localizacao-zh-hans
 title: 本地化——简体中文（zh-Hans）
 description: Brabo 简体中文翻译中的术语、复数以及不翻译的内容。
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # 本地化——简体中文（`zh-Hans`）

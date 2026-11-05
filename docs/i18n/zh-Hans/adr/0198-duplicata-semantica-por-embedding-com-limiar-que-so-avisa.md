@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0198 — 故事与规则的语义重复通过带阈值的 embedding 提醒，花费进入计量

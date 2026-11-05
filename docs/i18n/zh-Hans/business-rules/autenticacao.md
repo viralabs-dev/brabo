@@ -4,7 +4,7 @@ title: '业务规则——认证'
 sidebar_label: 认证
 description: 'first-party 认证的 RN：带轮换的 refresh、cookie 中的会话、PAT、OAuth 和设备密钥。'
 keywords: [业务规则, 认证, refresh, cookie, PAT, OAuth]
-traducao_de: 35a0dc07ccbd159e749036b48dc8d249d4e3b8f8
+traducao_de: b21e556fb001c975b4d848dfbf48d663c631b3ca
 ---
 
 # 认证

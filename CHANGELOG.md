@@ -6,6 +6,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ### Funcionalidades
 
+- **testes**: o `install-e2e` ganha o passo da MIGRAÇÃO (AT-738, só em tag, só Linux): semeia conta, projeto com repositório local, sessão com eventos e uma credencial pela api, migra pelo mesmo driver de TTY e confere contagens, bare repos, credencial que ainda decifra, marcador com a versão, grafo com nós, nenhum `brabo_restore_test` e a pasta de backup com o uid do runner; falha contra o `install.sh` sem o conserto, de propósito. `install-e2e.spec.ts` reprova o passo que sumir ou parar de conferir.
+- **docs**: ADR 0255 (política de PR required nos 11 repositórios, ruleset sem force push em `brabo`/`brabo-qa`/`brabo-infra`, PR do bot `chore/regenera-gerados` dispensa a escada na `dev`), `rulesets.md` com o estado decidido e o hotfix do produto como PATCH pela escada (AT-733, AT-728).
 - **docs**: `regenera-gerados.yml` regenera por agenda (6 h) os gerados que dependem dos irmãos e abre a PR `chore/regenera-gerados` na `dev`; `montar-layout.sh` passa a limpar o que trouxe antes (manifesto em `.git/layout-irmaos.lst`) (AT-726).
 - **instalador**: o `install.sh` baixa o binário do runner da Release de `viralabs-dev/brabo-runner` (tag fixada em `componentes.json`, campo `runner`) e o confere contra o `checksums.txt` assinado de lá (cosign, identidade `build-runner-binaries.yml`); o fallback por npm continua; o `install-invocacao` volta à régua estrita (AT-704).
 - **docs**: `docs/explanation/release-do-produto.md` descreve a release coordenada (tag-release do `brabo-ci`, imagens por digest com `imagem.json`, `images.json` e `checksums.txt` assinado no `brabo`, portão `PRODUTO_RELEASE_LIGADA`) (AT-704).

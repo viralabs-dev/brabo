@@ -1,6 +1,6 @@
 ---
 sidebar_position: 13
-traducao_de: 929963d24eb727bd64875486f2f1889172f3084a
+traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
 ---
 
 # Аудит: fluxo.yml × код (v3, ADR 0085) {#audit-fluxoyml--code-v3-adr-0085}

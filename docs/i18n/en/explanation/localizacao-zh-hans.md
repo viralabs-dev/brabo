@@ -2,7 +2,7 @@
 id: localizacao-zh-hans
 title: Localization — Simplified Chinese (zh-Hans)
 description: Terminology, plural and what is not translated in Brabo's Simplified Chinese translation.
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # Localization — Simplified Chinese (`zh-Hans`)

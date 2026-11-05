@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0021 — 阶段 4a 的收尾：真正做校验的 infra gate，以及说真话的面板

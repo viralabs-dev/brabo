@@ -383,12 +383,108 @@ describe('o E2E prova o agente, e diz o que ele NÃO prova', () => {
   });
 });
 
+describe('a MIGRAÇÃO tem prova no E2E (AT-738)', () => {
+  // O E2E só exercitava a máquina limpa, e a 1.0.0 saiu com a migração quebrada
+  // em todo Linux. O passo novo semeia dado, migra e confere. Ele roda só em
+  // tag (e FALHA contra um `install.sh` sem o conserto, de propósito); estes
+  // casos reprovam em PR quem o apagar ou o esvaziar.
+  const NOME = 'Migração com dado semeado';
+
+  it('existe, só em Linux, depois da instalação completa e antes do relatório final', () => {
+    const nomes = passos().map((p) => p.name);
+    const i = nomes.findIndex((n) => n.includes(NOME));
+    expect(i, 'o passo de migração sumiu do workflow').toBeGreaterThan(-1);
+    expect(i).toBeGreaterThan(nomes.findIndex((n) => n.includes('Instalação completa')));
+    expect(i).toBeLessThan(nomes.findIndex((n) => n.includes('O que ficou de pé')));
+
+    const doc = parse(workflow()) as {
+      jobs: Record<string, { steps: ReadonlyArray<{ name?: string; if?: string }> }>;
+    };
+    const passoYaml = Object.values(doc.jobs)
+      .flatMap((j) => j.steps)
+      .find((p) => p.name?.includes(NOME));
+    expect(passoYaml?.if).toBe("runner.os == 'Linux'");
+  });
+
+  it('roda o MESMO instalador pelo MESMO driver de TTY, e o gatilho segue sem `pull_request`', () => {
+    const m = comandos(passo(NOME));
+    expect(m).toContain('python3 -I "${RUNNER_TEMP}/terminal-do-e2e.py"');
+    expect(m).toContain('bash install.sh --source=ghcr');
+    expect(m).not.toContain('./install.sh');
+    expect(m).not.toContain('script -qec');
+    // E o driver que ele usa é o que o passo anterior grava (e que o spec roda).
+    expect(comandos(passo('Instalação completa'))).toContain('terminal-do-e2e.py');
+    const doc = parse(workflow()) as Record<string, unknown>;
+    expect(Object.keys((doc.on ?? doc.true) as Record<string, unknown>)).not.toContain('pull_request');
+  });
+
+  it('semeia conta, projeto com repositório local, sessão com eventos e UMA credencial pela api', () => {
+    const m = comandos(passo(NOME));
+    expect(m).toContain('/git/local/repository');
+    expect(m).toContain('/sessions"');
+    expect(m).toContain('/events"');
+    expect(m).toContain('/users/me/credentials"');
+  });
+
+  it('confere as contagens de users, projects, sessions, session_events e os bare repos', () => {
+    const m = comandos(passo(NOME));
+    for (const tabela of ['users', 'projects', 'sessions', 'session_events']) {
+      expect(m, `não conta mais ${tabela}`).toContain(`from ${tabela}'`);
+    }
+    expect(m).toContain('bare_repos');
+    expect(m).toContain('diff -u "$antes" "$depois"');
+    // Compara com o que foi guardado ANTES de migrar, e a prova não é vazia.
+    expect(m.indexOf('contagens-antes')).toBeLessThan(m.indexOf('bash install.sh --source=ghcr'));
+    expect(m).toContain('$2 < 1');
+  });
+
+  it('confere que a credencial semeada ainda DECIFRA, e reprova o erro de autenticação do GCM', () => {
+    const m = comandos(passo(NOME));
+    expect(m).toContain('/users/me/credentials/openrouter/test');
+    expect(m).toMatch(/unable to authenticate/);
+    expect(m.indexOf('credentials/openrouter/test')).toBeGreaterThan(m.indexOf('bash install.sh --source=ghcr'));
+  });
+
+  it('confere marcador com a versão, grafo com nós, database de prova e dono da pasta de backup', () => {
+    const m = comandos(passo(NOME));
+    expect(m).toContain('"${TAG#v}"');
+    expect(m).toContain('MATCH (n) RETURN count(n)');
+    expect(m).toContain("datname = 'brabo_restore_test'");
+    expect(m).toContain('stat -c \'%u\'');
+    expect(m).toContain('$(id -u)');
+    expect(m).toContain('brabo-backup-*');
+  });
+
+  it('reprova se o instalador deixar pendência ou não provar o backup e restaurar os repositórios', () => {
+    const m = comandos(passo(NOME));
+    expect(m).toContain("'O que ficou pendente'");
+    for (const frase of ['backup provado', 'volumes removidos', 'repositórios git restaurados']) {
+      expect(m).toContain(`'${frase}'`);
+      expect(instalador()).toContain(frase);
+    }
+  });
+
+  it('as respostas da migração começam pelas perguntas de migrar e restaurar, que o install.sh faz', () => {
+    const lista = respostasDoWorkflow(NOME);
+    expect(lista[0]).toEqual({ espera: 'Reinstalar do zero mesmo assim', resposta: '"s"', segredo: false });
+    expect(lista[1]).toEqual({ espera: 'Apagar os volumes e reinstalar?', resposta: '"s"', segredo: false });
+    expect(lista[2]?.espera).toBe('Gravar o marcador de instalação');
+    for (const { espera } of lista) {
+      expect(instalador(), `o install.sh não imprime mais: ${espera}`).toContain(espera);
+    }
+    expect(lista.filter((r) => r.segredo)).toHaveLength(2);
+    expect(comandos(passo(NOME))).not.toContain('--arg senha');
+  });
+});
+
 /**
  * A lista de respostas do driver, lida do `jq -n` do passo — o TRECHO de
  * pergunta que cada uma espera, a expressão que a produz e se é segredo.
  */
-function respostasDoWorkflow(): ReadonlyArray<{ espera: string; resposta: string; segredo: boolean }> {
-  const run = passo('Instalação completa').run;
+function respostasDoWorkflow(
+  nomeDoPasso = 'Instalação completa',
+): ReadonlyArray<{ espera: string; resposta: string; segredo: boolean }> {
+  const run = passo(nomeDoPasso).run;
   const itens = [...run.matchAll(/\{espera: "([^"]*)", resposta: ([^,}]+)(, segredo: true)?\}/g)];
   return itens.map((m) => ({ espera: m[1]!, resposta: m[2]!.trim(), segredo: Boolean(m[3]) }));
 }
