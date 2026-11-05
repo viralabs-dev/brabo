@@ -62,5 +62,5 @@ for par in "${DESTINOS[@]}"; do
 done
 
 # ignorados pelo .gitignore daqui (ex.: node_modules) não entram
-git add -f -A -- . >/dev/null 2>&1 || true
+git add -f -A -- . ':!node_modules' ':!**/node_modules' >/dev/null 2>&1 || true
 echo "layout reconstruído: $(git ls-files | wc -l) arquivo(s) no índice"
