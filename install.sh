@@ -101,16 +101,6 @@ sha_do_cosign() {
 IDENTIDADE_REGEX="^https://github.com/${REPO}/\.github/workflows/release\.yml@"
 EMISSOR_OIDC='https://token.actions.githubusercontent.com'
 
-# O binário do runner NÃO mora na Release do produto: ele é publicado, com o
-# `checksums.txt` assinado dele, pelo `build-runner-binaries.yml` do
-# `viralabs-dev/brabo-runner`. A tag é a que `componentes.json` fixa (`.runner.tag`);
-# o spec `install-runner-release` reprova a divergência. É o hash DESTE script que o
-# manifesto do produto assina, então a tag pinada aqui é tão confiável quanto ele.
-RUNNER_REPO='viralabs-dev/brabo-runner'
-RUNNER_TAG='v1.0.0'
-URL_DO_RUNNER="https://github.com/${RUNNER_REPO}/releases/download/${RUNNER_TAG}"
-IDENTIDADE_REGEX_RUNNER="^https://github.com/${RUNNER_REPO}/\.github/workflows/build-runner-binaries\.yml@"
-
 # Subiu para 3 quando o marcador ganhou o `ownerEmail` (RN-547) — pelo mesmo
 # motivo que subiu para 2 ao ganhar a `versao`: um sobe sem o outro e um
 # marcador novo passa por antigo. A AUSÊNCIA de `ownerEmail` num marcador de
@@ -1202,6 +1192,16 @@ conferir_o_broker() {
     pendencia "a raiz da pasta gerenciada: calculei ${RAIZ_GERENCIADA_NO_HOST}, e o daemon diz que o volume ${VOLUME_DA_PASTA_GERENCIADA} está em '${montado:-lugar nenhum}'. Corrija PROJECT_WORKSPACES_HOST_ROOT no .env e rode \`docker compose -f ${COMPOSE_DE_INSTALACAO} --env-file ${env_arquivo} up -d --wait broker\` — até lá, projeto em modo Container não sobe."
   fi
 }
+
+# O binário do runner NÃO mora na Release do produto: ele é publicado, com o
+# `checksums.txt` assinado dele, pelo `build-runner-binaries.yml` do
+# `viralabs-dev/brabo-runner`. A tag é a que `componentes.json` fixa (`.runner.tag`);
+# o spec `install-runner-release` reprova a divergência. É o hash DESTE script que o
+# manifesto do produto assina, então a tag pinada aqui é tão confiável quanto ele.
+RUNNER_REPO='viralabs-dev/brabo-runner'
+RUNNER_TAG='v1.0.0'
+URL_DO_RUNNER="https://github.com/${RUNNER_REPO}/releases/download/${RUNNER_TAG}"
+IDENTIDADE_REGEX_RUNNER="^https://github.com/${RUNNER_REPO}/\.github/workflows/build-runner-binaries\.yml@"
 
 # Instala o binário do agente local — e é isto que mata o `chmod +x` manual do
 # ADR 0118 (BRB-031): o navegador não preserva o bit de execução, um script
