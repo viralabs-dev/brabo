@@ -5,7 +5,7 @@ sidebar_label: 文档同步
 sidebar_position: 1
 description: 阻止文档腐烂的机制——每个部件做什么、为什么存在，以及当检查不公正地抱怨时该怎么办。
 keywords: [documentation, drift, docmap, CI, generation]
-traducao_de: 4cc1b596659af65abb89f0dc4ed3ec7525de5906
+traducao_de: 2d508b95c379df9edb51cc94523fd3f05edd83b2
 ---
 
 # 文档如何保持鲜活 {#how-documentation-stays-alive}
@@ -477,6 +477,8 @@ pt-BR 之外，`metadata.source` 位于 `@site/docs/` 下的页面是 pt-BR 回�
 页面有横幅（样本来自第一个仍有未翻译页面的 locale，`en`、`ru` 或 `zh-Hans`；全部完成时就没有可核对的
 回落），而根路径上的同一页面以及一个不过时的 `en` 翻译页面没有。给译者的规则在
 [本地化](localizacao.md) 中。
+
+**代码仓库的文档只用英文（AT-745、ADR 0260）。** 带 `idioma_original: en` 的页面不计入一致性（`ehFonteTraduzivel`），在 `/en/` 中不带横幅，在其他语言中带横幅“此页仅有英文版本”（`paginas.mjs` 设置 `somenteIngles`；`faixa-de-traducao-check.mjs` 检查 HTML）。每种语言的 RN 索引在译文存在时使用译文，否则使用原文（`rnsDoLocale`），英文原文中的生成块以英文文本输出（`textosDaFonte`），锚定在同级仓库正文中的句子（`contagens-do-codigo.mjs`、runbook）接受 pt-BR 或英文（`padraoEn`）。`openapi-textos.json` 目录位于 `brabo` 的 `docs/i18n/<locale>/` 中。
 
 ### API 页面按目录翻译（ADR 0220） {#the-api-page-is-translated-by-catalog-adr-0220}
 

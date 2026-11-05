@@ -2,12 +2,14 @@
 id: localizacao
 title: 本地化
 description: Brabo 的四种语言（pt-BR 作为来源，以及 en、ru 和 zh-Hans）、语言代码、复数形式、语言如何解析、缺失文本如何处理，以及永不翻译的内容。
-traducao_de: 8e484d595305b002e81cb1e86be2739b3b963123
+traducao_de: 2d508b95c379df9edb51cc94523fd3f05edd83b2
 ---
 
 # 本地化
 
 Brabo 在文档和界面中使用四种语言，而**巴西葡萄牙语是这两个产品的来源和默认语言**（[ADR 0216](../adr/0216-quatro-idiomas-com-pt-br-como-fonte.md)）。所有新文本都以 pt-BR 写成；其他语言是它的翻译。
+
+**例外（ADR [0260](../adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md)）：** 这条规则只适用于面向客户的入口 `brabo`。十个代码仓库的文档**只用英文**：英文的同级页面在 frontmatter 中带 `idioma_original: en`，且没有 `docs/i18n/`。它们的 `CLAUDE.md` 和 `.claude/` 保持 pt-BR。
 
 ## 语言与代码 {#idiomas-e-códigos}
 
@@ -37,6 +39,7 @@ agent **回答**所用的语言是另一项偏好，有自己的机制（ADR 017
 ## 缺失的文本 {#o-texto-que-falta}
 
 - **在站点中**，某个 locale 下没有翻译的页面会在同一地址以 pt-BR 来源提供，顶部的横幅用读者的语言**说明**这一点。翻译之后来源又发生变化的已翻译页面，会说明翻译日期以及原文已改变。
+- **在站点上，带 `idioma_original: en` 的同级页面**在 `/en/` 中就是原文本身，没有横幅；在 pt-BR、`ru` 和 `zh-Hans` 中，站点提供同一份英文原文，并带横幅“此页仅有英文版本”。如果同级仓库仍有该语言的译文，则在该语言中生效（逐页的混合状态）。
 - **在界面中**，文本不会缺失：键和复数的一致性是被测量的，`fallbackLng` 是 pt-BR。
 
 每个已翻译页面的 frontmatter 中都带有 `traducao_de: <SHA>`——它所翻译的来源的最后一次提交。正是它区分“最新”与“过时”。当前的测量见[翻译一致性](../reference/paridade-de-traducao.md)，由 `pnpm docs:generate` 生成。

@@ -5,7 +5,7 @@ sidebar_label: Синхронизация документации
 sidebar_position: 1
 description: Механизм, который не даёт документации загнить, — что делает каждая часть, зачем она существует и что делать, когда проверка жалуется несправедливо.
 keywords: [documentation, drift, docmap, CI, generation]
-traducao_de: 4cc1b596659af65abb89f0dc4ed3ec7525de5906
+traducao_de: 2d508b95c379df9edb51cc94523fd3f05edd83b2
 ---
 
 # Как документация остаётся живой {#how-documentation-stays-alive}
@@ -693,6 +693,8 @@ pt-BR и говорит об этом; переведённая страница
 запасной вариант нечего), тогда как та же страница в корне и переведённая на
 `en` неустаревшая страница её не имеют. Правила для переводчиков — в
 [Localização](localizacao.md).
+
+**Документация репозиториев с кодом — только на английском (AT-745, ADR 0260).** Страница с `idioma_original: en` не входит в паритет (`ehFonteTraduzivel`), отдаётся без полосы в `/en/` и с полосой «эта страница существует только на английском» в остальных локалях (`paginas.mjs` ставит `somenteIngles`; `faixa-de-traducao-check.mjs` проверяет HTML). Индекс RN каждой локали берёт перевод, если он есть, и источник, если нет (`rnsDoLocale`), генерируемый блок в английском источнике выходит с английскими текстами (`textosDaFonte`), а фразы, привязанные к прозе соседних репозиториев (`contagens-do-codigo.mjs`, runbook), принимают pt-BR или английский (`padraoEn`). Каталоги `openapi-textos.json` живут в `brabo`, в `docs/i18n/<locale>/`.
 
 ### Страница API переводится по каталогу (ADR 0220) {#the-api-page-is-translated-by-catalog-adr-0220}
 
