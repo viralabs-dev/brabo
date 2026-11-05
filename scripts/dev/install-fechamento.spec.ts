@@ -201,8 +201,9 @@ describe('install.sh — a senha nunca entra em argv nem em disco', () => {
 
   it('o schema do marcador subiu junto com o campo', () => {
     // Um sobe sem o outro e um marcador novo passa por antigo — a mesma régua
-    // que fez o schema ir a 2 quando ele ganhou a `versao`.
-    expect(fonte()).toMatch(/^MARCADOR_SCHEMA=3$/m);
+    // que fez o schema ir a 2 quando ele ganhou a `versao`. Foi a 4 com a
+    // `linha` e a `restauracaoPendente` (AT-738).
+    expect(fonte()).toMatch(/^MARCADOR_SCHEMA=4$/m);
   });
 });
 

@@ -774,11 +774,13 @@ uma por relação:
 | maior | `Atualizar 5.0.0 → 5.1.0?` | **sim** — é o que a pessoa veio fazer, e o backup provado torna reversível |
 | igual | `Já é a 5.0.0. Reinstalar do zero mesmo assim?` | não — não há ganho a oferecer |
 | menor | nomeia **rebaixamento**, avisando que migração de banco não anda para trás | não — pode não ter volta |
+| nova-linha | `Atualizar 7.0.0 (linha anterior) → 1.0.0 (linha nova)?` — a [RN-998](#rn-998) | **sim** — o recomeço das versões em 1.0.0 não é rebaixamento |
 | desconhecida | marcador de schema 1 não tem versão: diz isso, e **não adivinha** | não |
 
-O ramo `maior` é o **único** com default sim, e é o único que pode tê-lo: o
-passo é reversível pelo backup que acabou de ser provado. Os outros três exigem
-um `s` digitado.
+O ramo `maior` era o **único** com default sim, e é o único que pode tê-lo: o
+passo é reversível pelo backup que acabou de ser provado. Desde a
+[RN-998](#rn-998) a relação `nova-linha` divide esse default, pelo mesmo motivo
+(é atualização, só com outra numeração). Os outros três exigem um `s` digitado.
 
 **Em qualquer ramo a instalação é apagada e recriada do zero**, nunca subida por
 cima — decisão do dono do produto, e a mesma razão da RN-530: um `up` sobre
@@ -1181,15 +1183,15 @@ de LLM; senha gravada em qualquer lugar; e qualquer caminho que crie conta sem
 TTY — sem terminal interativo o script relata e **sai 0**, no passo que já
 existia, antes de qualquer escrita.
 
-- **Código:** `install.sh:1684` (`fechar_a_instalacao`, o encadeamento e o
-  "sempre 0"), `:1483` (`perguntar_e_criar_a_conta`, o consentimento, o laço e
-  o teto), `:1583` (`parear_esta_maquina`, o `id` virando `--id`), `:1660`
-  (`subir_o_agente_como_servico`, a recusa repassada inteira), `:1386`
+- **Código:** `install.sh:1835` (`fechar_a_instalacao`, o encadeamento e o
+  "sempre 0"), `:1634` (`perguntar_e_criar_a_conta`, o consentimento, o laço e
+  o teto), `:1734` (`parear_esta_maquina`, o `id` virando `--id`), `:1811`
+  (`subir_o_agente_como_servico`, a recusa repassada inteira), `:1537`
   (`post_interno`, o corpo pelo stdin e o cabeçalho pelo `--config` 600),
-  `:1405` (`criar_primeira_conta`) e `:1446` (`registrar_chave_de_maquina`) —
-  os vereditos das duas rotas —, `:1461` (`ler_sem_eco`), `:1365`
-  (`nome_da_maquina`), `:1606` (`avisar_chave_parcial`), `:1208`/`:1215`
-  (`escapar_json`/`sem_controle`), `:108` (`MARCADOR_SCHEMA=3`), `:1871` (a
+  `:1578` (`criar_primeira_conta`) e `:1597` (`registrar_chave_de_maquina`) —
+  os vereditos das duas rotas —, `:1612` (`ler_sem_eco`), `:1516`
+  (`nome_da_maquina`), `:1798` (`avisar_chave_parcial`), `:1208`/`:1215`
+  (`escapar_json`/`sem_controle`), `:109` (`MARCADOR_SCHEMA=4`, AT-738), `:1871` (a
   chamada, depois do runner e antes do marcador), `:1882` (o `ownerEmail`).
   Números relidos pelo símbolo em 18/09 (AT-096), em 27/09 (AT-065, que
   acrescentou o ramo do Mac Intel em `instalar_o_runner`) e em 01/10 (AT-122);
@@ -1408,7 +1410,7 @@ caminhos relativos) e o compose de instalação declara o volume `backup_local`
 que o serviço `backup` referencia, cuja falta recusava o arquivo inteiro com o
 profile ligado. Coberto por `scripts/dev/prova-de-restauracao-env.spec.ts`.
 
-- **Código:** `install.sh:128` (`COMPOSE_DE_INSTALACAO` vazio até materializar),
+- **Código:** `install.sh:129` (`COMPOSE_DE_INSTALACAO` vazio até materializar),
   `:587` (`ASSETS_DO_INSTALADOR`), `:589` (`destino_do_asset_do_instalador`, a
   tabela do lado que baixa), `:614` (`baixar_e_verificar_os_arquivos_da_instalacao`),
   `:607`/`:615`/`:617` (as três recusas), `:648`
@@ -1485,8 +1487,8 @@ no Linux. Docker rootless ou remoto não tem o socket em `/var/run/docker.sock`,
 que é o caminho que o compose monta, e cai na recusa do item 2 — ligar o broker
 ali não é oferecido por outro caminho.
 
-- **Código:** `install.sh:1050` (`consentir_broker`), `:1002`
-  (`medir_gid_do_socket`), `:1037` (`calcular_raiz_gerenciada`), `:1034`
+- **Código:** `install.sh:1196` (`consentir_broker`), `:1148`
+  (`medir_gid_do_socket`), `:1183` (`calcular_raiz_gerenciada`), `:1320`
   (`conferir_o_broker`), `:792` (`escrever_env_do_broker`), `:855` (o broker no
   manifesto), `:1812` (a ordem: depois da base, antes do `.env`);
   `docker/docker-compose.install.yml` (o serviço `broker` e a rede `broker`)
@@ -1531,8 +1533,8 @@ pulada (lado da api, outra frente); e o E2E da tag responde NÃO (ligar
 baixaria GBs de modelo), então a subida com o profile `llm` não é provada ponta
 a ponta.
 
-- **Onde:** `install.sh:1128` (`consentir_llm`), `:1113`
-  (`escolher_porta_do_ollama`), `:1103` (`porta_em_uso`), `:800`
+- **Onde:** `install.sh:1274` (`consentir_llm`), `:1259`
+  (`escolher_porta_do_ollama`), `:1249` (`porta_em_uso`), `:800`
   (`escrever_env_do_llm`), `:821` (`escrever_env_dos_profiles`)
 - **Teste:** `scripts/dev/install-llm.spec.ts` (sem terminal fica desligado
   dizendo o custo; 11434 ocupada escolhe a próxima; faixa inteira ocupada falha
@@ -1551,15 +1553,74 @@ oferecia migrar o ambiente de desenvolvimento. Agora casa só o nome EXATO
 E a confirmação da migração ganha uma terceira resposta: `z` reinstala DO
 ZERO. A ordem do ADR 0150 não muda — backup, PROVA, pergunta, apaga, instala —,
 mas os dados antigos NÃO são restaurados: o backup provado fica na pasta, e
-restaurá-lo depois é o `#restore` do runbook. `s` segue restaurando, e Enter
-continua não apagando nada.
+restaurá-lo depois é o `#restore` do runbook. `s` restaura — e, desde a
+[RN-998](#rn-998), restaura TUDO: o Postgres num banco recém-criado e vazio, os
+repositórios git e a reprojeção do grafo e dos artefatos; até ali voltavam só
+os repositórios git. Enter continua não apagando nada.
 
 Junto, o fechamento deixa de dizer que parear uma pasta pela tela do projeto
 "continua existindo (ADR 0118)": esse fluxo saiu no ADR 0203 ([RN-687](web.md#rn-687)).
 
-- **Onde:** `install.sh:370` (`detectar_por_sinais`), `:1714`
+- **Onde:** `install.sh:440` (`detectar_por_sinais`), `:1918`
   (`migrar_instalacao_anterior`)
 - **Teste:** `scripts/dev/install-llm.spec.ts` (`brabo-dev` não conta e `brabo`
   conta; `z` apaga depois da prova e deixa `MIGRAR_DE` vazio; Enter não apaga —
   caso de falha; a frase do ADR 0118 não volta)
 - **Origem:** AT-358
+
+## A migração do instalador traz a instalação anterior inteira de volta (RN-998)
+
+### RN-998 — A migração restaura o banco num banco vazio, mantém a chave mestra, é retomável e entende a linha de versões {#rn-998}
+
+A primeira migração real de uma 7.0.0 para o produto 1.0.0 (AT-710) subiu uma
+instalação VAZIA e com as credenciais ilegíveis. O [ADR 0256](../adr/0256-a-migracao-restaura-o-banco-num-banco-vazio.md)
+fecha os achados da AT-738, e as regras são estas:
+
+1. **O Postgres volta sozinho.** Depois do `down -v`, o instalador sobe SÓ o
+   `postgres`, roda `brabo-restore --banco-vazio` (recusa banco com qualquer
+   tabela) e só então sobe o resto, com as migrations por cima do dump. Em
+   seguida, os repositórios git e a reprojeção do grafo e dos artefatos; a
+   reprojeção que falha é PENDÊNCIA com o comando, nunca recusa.
+2. **O git volta como o dono do volume**, lido no container da api (`stat`),
+   nunca suposto: o uid 70 da imagem de backup não escreve num volume de outro
+   dono, e `--user 0:0` também não, por causa do `cap_drop`.
+3. **Os segredos que cifram dado restaurado vêm do `.env` anterior**, no mínimo
+   a `CREDENTIALS_MASTER_KEY` (ambiente → `.env` anterior → gerada), e toda
+   chave que o `.env` novo não declara volta com o último valor
+   (`CREDENTIALS_MASTER_KEY_PREVIOUS`, `ANAMNESE_ENABLED`, `BRABO_BIND`…). Ficam
+   de fora as que o instalador decide na hora (`COMPOSE_PROFILES`,
+   `BROKER_URL`, `DOCKER_GID`, `PROJECT_WORKSPACES_HOST_ROOT`, `OLLAMA_PORT`) e o
+   `_PREVIOUS` dos segredos efêmeros, que nascem novos.
+4. **Backup, prova e deleção rodam com o ambiente da migração:** as cinco
+   `BRABO_*_IMAGE` desta versão (o `.env` anterior pode citar imagem local que
+   sumiu), `BRABO_BACKUP_USER` = uid:gid de quem roda (a pasta é dele) e
+   `BRABO_BACKUP_HOST_DIR` = o destino, para a prova restaurar o MESMO backup
+   que fica na pasta. A pasta nasce `0755`, declarado.
+5. **A migração é retomável.** O marcador (schema 4) é gravado logo depois do
+   `down -v` com `restauracaoPendente` (`destino` e `etapas`: `banco git grafo
+   artefatos`), e de novo a cada etapa e quando a versão nova sobe. A execução
+   seguinte que acha a pendência RETOMA a restauração, sem migrar de novo e sem
+   apagar nada; pasta de backup ausente é recusa nomeada.
+6. **Linha de versões.** O marcador grava `linha`. Sem ela, a instalação é da
+   linha anterior, salvo imagens em `ghcr.io/viralabs-dev/` (a 1.0.0 desta linha
+   gravou schema 3). Entre linhas a relação é `nova-linha`, com frase própria e
+   default sim ([RN-542](#rn-542)).
+7. **Download com nova tentativa.** Todo download passa por `baixar` (`curl
+   --retry 6 --retry-delay 10 --retry-connrefused`); 404 é "a Release não
+   publica", e o resto é "o servidor não entregou, rode de novo" — frases
+   diferentes.
+
+Ela revisa a [RN-530](infra.md#rn-530) (o dump deixa de ficar só na pasta) e
+a frase de `s` da [RN-692](#rn-692).
+
+- **Onde:** `install.sh:1918` (`migrar_instalacao_anterior`), `:1903`
+  (`com_ambiente_do_backup`), `:1993` (`restaurar_o_banco`), `:2009`
+  (`restaurar_os_repositorios_git`), `:2025` (`reprojetar`), `:2062`
+  (`gravar_marcador`), `:930` (`relacao_com_o_instalado`), `:949`
+  (`restauracao_pendente`), `:736` (`gerar_segredos`), `:971`
+  (`preservar_do_env_anterior`), `:194` (`baixar`)
+- **Teste:** `scripts/dev/install-migracao.spec.ts` (um caso por item, com
+  `docker`, `curl` e a prova de mentira no PATH; o caso de falha de cada um —
+  backup que falha não apaga, restore recusado fica pendente, dono ilegível
+  recusa, 404 ≠ 504); `scripts/dev/install-fechamento.spec.ts` (o schema 4)
+- **Origem:** AT-738 (EP-033), decisões do dono de 05/11/2026

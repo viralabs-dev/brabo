@@ -106,7 +106,7 @@ EMISSOR_OIDC='https://token.actions.githubusercontent.com'
 # marcador novo passa por antigo. A AUSÊNCIA de `ownerEmail` num marcador de
 # schema 3 é estado normal (migração, ou o passo de conta recusado), e nada
 # deriva comportamento dela.
-MARCADOR_SCHEMA=3
+MARCADOR_SCHEMA=4
 
 # Onde a Release desta instalação publica o que ele baixa. As descargas que já
 # existiam escrevem a URL inteira; os arquivos da instalação (ADR 0160) passam
@@ -455,6 +455,7 @@ imprimir_plano() {
   printf 'detectar\tfaz\tmarcador quando existe; sinais quando não, nomeando o que achou\n'
   printf 'comparar-versao\tfaz\ta do marcador contra a do manifesto, ANTES de perguntar o que quer que seja\n'
   printf 'atualizar\tpergunta\tversão maior: default SIM, e a instalação atual é recriada do zero\n'
+  printf 'atualizar-de-outra-linha\tpergunta\tmarcador de outra linha de versões (sem o campo linha e imagens fora de %s): default SIM — o recomeço em 1.0.0 não é rebaixamento\n' "$PREFIXO_DA_LINHA"
   printf 'reinstalar-mesma-versao\tpergunta\tversão igual: default NÃO — não há ganho a oferecer\n'
   printf 'rebaixar\tpergunta\tversão menor: default NÃO, avisando que migração de banco não anda para trás\n'
   printf 'instalar-por-cima\tnunca\tou se migra (com backup provado), ou se para\n'
@@ -462,6 +463,7 @@ imprimir_plano() {
   printf 'gravar-marcador\tfaz\t%s\n' "$(caminho_do_marcador)"
   printf 'escolher-fonte\tfaz\t--source=ghcr (digest verificado) ou --source=local (bake, árvore limpa em tag)\n'
   printf 'gerar-segredos\tfaz\tos cinco de RN-114 mais NEO4J_PASSWORD e AUTH_TOKEN_PEPPER, no .env com modo 600 (o pepper de quem migra é o AUTH_JWT_SECRET atual, RN-613)\n'
+  printf 'manter-do-env-anterior\tfaz\ta CREDENTIALS_MASTER_KEY (cifra as credenciais que voltam no dump) e toda chave que o .env novo não declara; nunca as que este script decide agora (profiles, broker, Ollama)\n'
   printf 'subir-compose\tfaz\tdocker/docker-compose.install.yml (a cópia verificada, sob a pasta de onde o script roda), com --wait; as migrações vêm no encadeamento\n'
   printf 'conferir-saude\tfaz\t/health da api e do engine, antes de dizer que instalou\n'
   printf 'consentir-base\tfaz\tUMA base para os dois lados: .env do servidor e runner.json do agente\n'
@@ -475,7 +477,9 @@ imprimir_plano() {
   printf 'instalar-servico-do-agente\tfaz\tservice install --machine; unit por projeto instalada é RECUSA relatada, nunca engolida\n'
   printf 'ligar-smtp\tnunca\tMAIL_TRANSPORT=log continua o default; a instalação deixa de DEPENDER de e-mail para fechar\n'
   printf 'pedir-credencial-de-llm\tnunca\té decisão de quem vai gastar\n'
-  printf 'migrar-instalacao-anterior\tfaz\tbackup, PROVA que restaura, pergunta, e só então apaga\n'
+  printf 'migrar-instalacao-anterior\tfaz\tbackup, PROVA que restaura (o MESMO backup que fica na pasta), pergunta, e só então apaga\n'
+  printf 'restaurar-postgres\tfaz\tnum banco recém-criado e vazio, antes das migrations (brabo-restore --banco-vazio, ADR 0256); depois os repositórios git e a reprojeção do grafo e dos artefatos\n'
+  printf 'retomar-restauracao\tfaz\to marcador registra a restauração pendente desde o down -v; a execução seguinte a retoma, sem migrar de novo\n'
   printf 'reinstalar-do-zero\tpergunta\ta mesma ordem da migração, mas os dados antigos NÃO são restaurados; o backup provado fica na pasta\n'
   printf 'apagar-sem-backup-provado\tnunca\tbackup que não restaurou não autoriza deleção nenhuma\n'
   printf 'apagar-volumes\tso-com-confirmacao\tlistados um a um antes de perguntar\n'
@@ -494,9 +498,8 @@ baixar_cosign() {
     recusar "sem hash pinado do cosign para '${plataforma}' — este script não baixa binário que não sabe conferir."
   fi
 
-  curl -fsSL -o "$destino" \
-    "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSAO}/cosign-${plataforma}" \
-    || recusar "não consegui baixar o cosign ${COSIGN_VERSAO}."
+  baixar_ou_recusar "https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSAO}/cosign-${plataforma}" \
+    "$destino" "o cosign ${COSIGN_VERSAO} não está publicado para '${plataforma}'."
 
   conferir_hash "$destino" "$esperado" \
     "o cosign baixado NÃO bate com o hash pinado neste script. Isso não é um aviso: pare e investigue."
@@ -537,12 +540,10 @@ verificar_a_si_mesmo() {
 
   dizer "Verificando a origem deste instalador…"
 
-  curl -fsSL -o "${tmp}/checksums.txt" \
-    "https://github.com/${REPO}/releases/latest/download/checksums.txt" \
-    || recusar "a Release não tem checksums.txt — não há contra o que verificar. Isto é recusa, não aviso."
-  curl -fsSL -o "${tmp}/checksums.txt.bundle" \
-    "https://github.com/${REPO}/releases/latest/download/checksums.txt.bundle" \
-    || recusar "a Release não tem a assinatura do checksums.txt (checksums.txt.bundle)."
+  baixar_ou_recusar "https://github.com/${REPO}/releases/latest/download/checksums.txt" "${tmp}/checksums.txt" \
+    "a Release não tem checksums.txt — não há contra o que verificar. Isto é recusa, não aviso."
+  baixar_ou_recusar "https://github.com/${REPO}/releases/latest/download/checksums.txt.bundle" "${tmp}/checksums.txt.bundle" \
+    "a Release não tem a assinatura do checksums.txt (checksums.txt.bundle)."
 
   baixar_cosign "$plataforma" "${tmp}/cosign"
 
@@ -618,9 +619,8 @@ baixar_e_verificar_os_arquivos_da_instalacao() {
   mkdir -p "$pasta"
 
   for asset in $ASSETS_DO_INSTALADOR; do
-    if ! curl -fsSL -o "${pasta}/${asset}" "${url}/${asset}"; then
-      recusar "a Release não publica ${asset}, e sem ele a instalação não sobe. Nada foi gravado — e este script não usa, no lugar dele, um arquivo que já esteja nesta pasta."
-    fi
+    baixar_ou_recusar "${url}/${asset}" "${pasta}/${asset}" \
+      "a Release não publica ${asset}, e sem ele a instalação não sobe. Nada foi gravado — e este script não usa, no lugar dele, um arquivo que já esteja nesta pasta."
 
     # `awk` com igualdade EXATA de campo, e não `grep`: o nome tem pontos, que
     # num padrão casam qualquer caractere. O `*` é o modo binário do
@@ -732,6 +732,7 @@ valor_no_env_anterior() {
 # `ORIGEM_DO_PEPPER` diz qual dos cinco valeu, para `main` DIZER no terminal —
 # nunca o valor. Aqui não se imprime nada: o spec lê a saída desta função.
 ORIGEM_DO_PEPPER=''
+ORIGEM_DA_CHAVE_MESTRA=''
 gerar_segredos() {
   local env_anterior="${1:-}" jwt_exportado="${AUTH_JWT_SECRET:-}" anterior
   if [ -n "${AUTH_TOKEN_PEPPER:-}" ]; then
@@ -750,10 +751,10 @@ gerar_segredos() {
     ORIGEM_DO_PEPPER='gerado'
   fi
 
+  resolver_a_chave_mestra "$env_anterior"
   GIT_OAUTH_STATE_SECRET="${GIT_OAUTH_STATE_SECRET:-$(segredo_base64 32)}"
   AUTH_JWT_SECRET="${AUTH_JWT_SECRET:-$(segredo_base64 32)}"
   BRABO_SERVICE_TOKEN="${BRABO_SERVICE_TOKEN:-$(segredo_base64 32)}"
-  CREDENTIALS_MASTER_KEY="${CREDENTIALS_MASTER_KEY:-$(segredo_base64 32)}"
   SECRET_KEY_BASE="${SECRET_KEY_BASE:-$(segredo_base64 64)}"
   NEO4J_PASSWORD="${NEO4J_PASSWORD:-$(openssl rand -hex 24)}"
 }
@@ -842,6 +843,151 @@ dizer_a_origem_do_pepper() {
   esac
 }
 
+# O mesmo para a chave mestra (AT-738): de onde veio, nunca o valor.
+dizer_a_origem_da_chave_mestra() {
+  case "$ORIGEM_DA_CHAVE_MESTRA" in
+    anterior) ok 'CREDENTIALS_MASTER_KEY: mantida a da instalação anterior (não impressa) — as credenciais restauradas continuam legíveis.' ;;
+    ambiente) ok 'CREDENTIALS_MASTER_KEY: a do ambiente (não impressa).' ;;
+    *) ok 'CREDENTIALS_MASTER_KEY: gerada, própria desta instalação.' ;;
+  esac
+}
+
+# A chave mestra (AT-738, achado 9), fora de `gerar_segredos` e com a mesma
+# forma de lá. O `.env` gravado diz "gerados com openssl rand" no cabeçalho; numa
+# migração ela é, ao contrário, a da instalação ANTERIOR.
+resolver_a_chave_mestra() {
+  local env_anterior="${1:-}" anterior
+  # A chave mestra cifra os envelopes de `user_credentials` e
+  # `project_git_connections`, que voltam no dump: trocá-la numa migração deixa
+  # toda credencial restaurada ilegível ("unable to authenticate data", AT-738,
+  # achado 9). Mesma precedência do pepper — ambiente, `.env` anterior, gerada —,
+  # e ela é a ÚNICA dos segredos abaixo que cifra dado PERSISTIDO. Os outros são
+  # efêmeros e nascem novos sem perda: `AUTH_JWT_SECRET` assina o access token de
+  # 15 min (o refresh, no banco, depende do pepper, mantido acima);
+  # `GIT_OAUTH_STATE_SECRET` assina o `state` de um fluxo OAuth em curso;
+  # `BRABO_SERVICE_TOKEN` autentica api↔engine e este script, e nenhum dado o
+  # guarda; `SECRET_KEY_BASE` assina sessão do Phoenix; `NEO4J_PASSWORD` só vale
+  # na CRIAÇÃO do `neo4j_data`, que a migração recria (o grafo é reprojetado).
+  ORIGEM_DA_CHAVE_MESTRA='gerada'
+  if [ -n "${CREDENTIALS_MASTER_KEY:-}" ]; then
+    ORIGEM_DA_CHAVE_MESTRA='ambiente'
+  elif anterior="$(valor_no_env_anterior CREDENTIALS_MASTER_KEY "$env_anterior")" && [ -n "$anterior" ]; then
+    CREDENTIALS_MASTER_KEY="$anterior"
+    ORIGEM_DA_CHAVE_MESTRA='anterior'
+  else
+    CREDENTIALS_MASTER_KEY="$(segredo_base64 32)"
+  fi
+}
+
+# Download — com nova tentativa, e 404 dito diferente de "fora do ar" (AT-738).
+#
+# A CDN do GitHub deu 504 por ~10 min em 05/11, e o instalador recusava na
+# primeira tentativa dizendo que a Release "não publica" o arquivo. Seis novas
+# tentativas, 10 s entre elas: o `curl` só repete erro TRANSITÓRIO (timeout,
+# 408/429/5xx, conexão recusada), nunca um 404. Repetir não enfraquece nada: o
+# conteúdo continua conferido pelo hash do manifesto assinado depois.
+#
+# Retorno, nunca recusa (quem chama decide se é fatal): 0 baixou; 4 o servidor
+# respondeu 404 — o arquivo NÃO existe ali; 1 qualquer outra falha — o arquivo
+# pode existir, o servidor é que não o entregou.
+baixar() {
+  local url="$1" destino="$2" codigo
+  if codigo="$(curl -fsSL --retry 6 --retry-delay 10 --retry-connrefused \
+    -o "$destino" -w '%{http_code}' "$url" 2>/dev/null)"; then
+    return 0
+  fi
+  rm -f "$destino"
+  [ "$codigo" = '404' ] && return 4
+  return 1
+}
+
+# `baixar`, e a recusa com a frase do desfecho: `$3` é a do 404 (o que falta na
+# Release); a do servidor indisponível é uma só, e manda tentar de novo.
+baixar_ou_recusar() {
+  local rc=0
+  baixar "$1" "$2" || rc=$?
+  case "$rc" in
+    0) ;;
+    4) recusar "$3" ;;
+    *) recusar "não consegui baixar ${1}: o servidor não o entregou nem depois de 6 novas tentativas (rede, ou o GitHub fora do ar). Não é falta na Release — rode de novo daqui a pouco." ;;
+  esac
+}
+
+# A LINHA de versões (AT-738, decisão do dono de 05/11). Na separação em
+# repositórios (ADR 0252) as versões recomeçaram em 1.0.0, e o semver puro dizia
+# "rebaixar 7.0.0 → 1.0.0" a quem só estava atualizando. Marcador SEM `linha` é
+# da linha anterior, salvo quando as imagens dele já vêm de `PREFIXO_DA_LINHA` —
+# o marcador de schema 3 que a 1.0.0 desta linha gravou antes do campo existir.
+# (O `MARCADOR_SCHEMA` foi a 4 com a `linha` e a `restauracaoPendente`, pela régua
+# de sempre: campo novo sem o schema faria o marcador novo passar por antigo.)
+LINHA_DO_PRODUTO='multirrepo'
+PREFIXO_DA_LINHA='ghcr.io/viralabs-dev/'
+
+# A relação entre o que vai ser instalado ($1) e o que o marcador ($2) registra:
+# `nova-linha`, `maior`, `igual`, `menor` ou `desconhecida`. A LINHA vem antes
+# da versão: entre linhas o número não se compara (o recomeço em 1.0.0 é ponto
+# de partida, não rebaixamento).
+relacao_com_o_instalado() {
+  local a_instalar="$1" marcador="$2" versao linha
+  versao="$(campo_do_marcador versao "$marcador")"
+  if [ -z "$versao" ]; then printf 'desconhecida\n'; return 0; fi
+  linha="$(campo_do_marcador linha "$marcador")"
+  if [ -z "$linha" ]; then
+    case "$(campo_do_marcador api "$marcador")" in
+      "${PREFIXO_DA_LINHA}"*) linha="$LINHA_DO_PRODUTO" ;;
+      *) linha='anterior' ;;
+    esac
+  fi
+  if [ "$linha" != "$LINHA_DO_PRODUTO" ]; then printf 'nova-linha\n'; return 0; fi
+  comparar_versoes "$a_instalar" "$versao"
+}
+
+# A restauração que uma migração deixou pela metade (AT-738, ADR 0256): o bloco
+# `restauracaoPendente` do marcador, com o `destino` do backup e as `etapas` que
+# faltam (`banco git grafo artefatos`, nessa ordem). Ecoa `destino<TAB>etapas`, ou
+# nada quando não há pendência — `null`, ou um marcador anterior ao schema 4.
+restauracao_pendente() {
+  local bloco
+  bloco="$(printf '%s' "$1" | tr -d '\n' | grep -o '"restauracaoPendente": *{[^}]*}' || true)"
+  [ -n "$bloco" ] || return 0
+  printf '%s\t%s\n' "$(campo_do_marcador destino "$bloco")" "$(campo_do_marcador etapas "$bloco")"
+}
+
+# O que o `.env` ANTERIOR tinha e o novo não declara volta, linha por linha
+# (AT-738, achado 9): configuração da pessoa (`ANAMNESE_ENABLED`, `BRABO_BIND`,
+# `BRABO_AMBIENTE`, SMTP, OAuth…) e, de segredo, o `CREDENTIALS_MASTER_KEY_PREVIOUS`
+# — a chave anterior de uma rotação em curso, que ainda abre os envelopes que o
+# `rewrap` não alcançou. A regra é genérica de propósito: uma lista de "o que
+# preservar" esqueceria a próxima variável, e o achado foi exatamente esse.
+#
+# Ficam de FORA, além do que o novo `.env` já declara (o novo vence), as chaves
+# que ESTE script grava ou omite por decisão tomada agora — trazê-las de volta
+# religaria calado o que a pessoa acabou de recusar — e o `_PREVIOUS` dos
+# segredos efêmeros, que nascem novos: um `BRABO_SERVICE_TOKEN_PREVIOUS` antigo
+# seguiria abrindo as rotas internas.
+ENV_DO_INSTALADOR=' COMPOSE_PROFILES BROKER_URL DOCKER_GID PROJECT_WORKSPACES_HOST_ROOT OLLAMA_PORT AUTH_JWT_SECRET_PREVIOUS BRABO_SERVICE_TOKEN_PREVIOUS '
+# Os NOMES que voltaram, para `main` dizer — nunca os valores.
+PRESERVADAS_DO_ENV=''
+preservar_do_env_anterior() {
+  local anterior="$1" novo="$2" linhas
+  [ -n "$anterior" ] && [ -f "$anterior" ] || return 0
+  # Vale a ÚLTIMA ocorrência de cada chave (é a que o Compose usa), na ordem da
+  # primeira; comentário e linha sem `CHAVE=` não voltam.
+  linhas="$(awk -v fora="$ENV_DO_INSTALADOR" '
+    FNR == NR { if (match($0, /^[A-Za-z_][A-Za-z0-9_]*=/)) declarada[substr($0, 1, RLENGTH - 1)] = 1; next }
+    match($0, /^[A-Za-z_][A-Za-z0-9_]*=/) {
+      k = substr($0, 1, RLENGTH - 1)
+      if ((k in declarada) || index(fora, " " k " ")) next
+      if (!(k in valor)) ordem[++n] = k
+      valor[k] = $0
+    }
+    END { for (i = 1; i <= n; i++) print valor[ordem[i]] }
+  ' "$novo" "$anterior")"
+  [ -n "$linhas" ] || return 0
+  printf '# Do .env anterior (AT-738): o que este instalador não declara, mantido.\n%s\n' "$linhas" >> "$novo"
+  PRESERVADAS_DO_ENV="$(printf '%s\n' "$linhas" | cut -d= -f1 | tr '\n' ' ')"
+}
+
 # O bloco do broker, SEMPRE junto — as linhas não existem uma sem a outra:
 # `COMPOSE_PROFILES` sem `BROKER_URL` sobe um broker que ninguém chama, e
 # `BROKER_URL` sem o profile aponta a api para um serviço que não sobe. E sem o
@@ -879,9 +1025,8 @@ ENV
 resolver_imagens_do_ghcr() {
   local tmp="$1" json="$1/images.json"
 
-  curl -fsSL -o "$json" \
-    "https://github.com/${REPO}/releases/latest/download/images.json" \
-    || recusar "a Release não publica images.json — sem ele não há digest para instalar. Use --source=local para construir do checkout."
+  baixar_ou_recusar "https://github.com/${REPO}/releases/latest/download/images.json" "$json" \
+    "a Release não publica images.json — sem ele não há digest para instalar. Use --source=local para construir do checkout."
 
   # O manifesto é JSON INDENTADO, e `grep` trabalha linha a linha: `"alvo"` e
   # `"digest"` moram em linhas diferentes, então um padrão `[^}]*` sobre o
@@ -1235,8 +1380,14 @@ instalar_o_runner() {
   dizer ''
   dizer "${C_BOLD}Agente local${C_RESET}"
   local nome="brabo-runner-${alvo}"
-  if ! curl -fsSL -o "${tmp}/${nome}" "${URL_DO_RUNNER}/${nome}"; then
-    dizer "A Release ${RUNNER_TAG} do ${RUNNER_REPO} não publica ${nome}." >&2
+  local rc=0
+  baixar "${URL_DO_RUNNER}/${nome}" "${tmp}/${nome}" || rc=$?
+  if [ "$rc" -ne 0 ]; then
+    if [ "$rc" -eq 4 ]; then
+      dizer "A Release ${RUNNER_TAG} do ${RUNNER_REPO} não publica ${nome}." >&2
+    else
+      dizer "Não consegui baixar ${nome} da Release ${RUNNER_TAG} do ${RUNNER_REPO}: o servidor não o entregou nem depois de 6 novas tentativas." >&2
+    fi
     dizer 'O agente local NÃO foi instalado; o resto da instalação está de pé.' >&2
     dizer "Alternativa: npm install -g @brabo/runner" >&2
     # `RUNNER_BIN` fica vazio de propósito: é por ele que o fechamento sabe que
@@ -1247,10 +1398,10 @@ instalar_o_runner() {
 
   # O manifesto do runner é OUTRO (o do repo dele, assinado pela identidade do
   # workflow dele): o do produto, que este script já verificou, não o cobre.
-  curl -fsSL -o "${tmp}/runner-checksums.txt" "${URL_DO_RUNNER}/checksums.txt" \
-    || recusar "a Release ${RUNNER_TAG} do ${RUNNER_REPO} não tem checksums.txt — não há contra o que verificar o binário."
-  curl -fsSL -o "${tmp}/runner-checksums.txt.bundle" "${URL_DO_RUNNER}/checksums.txt.bundle" \
-    || recusar "a Release ${RUNNER_TAG} do ${RUNNER_REPO} não tem a assinatura do checksums.txt."
+  baixar_ou_recusar "${URL_DO_RUNNER}/checksums.txt" "${tmp}/runner-checksums.txt" \
+    "a Release ${RUNNER_TAG} do ${RUNNER_REPO} não tem checksums.txt — não há contra o que verificar o binário."
+  baixar_ou_recusar "${URL_DO_RUNNER}/checksums.txt.bundle" "${tmp}/runner-checksums.txt.bundle" \
+    "a Release ${RUNNER_TAG} do ${RUNNER_REPO} não tem a assinatura do checksums.txt."
   "${tmp}/cosign" verify-blob \
     --bundle "${tmp}/runner-checksums.txt.bundle" \
     --certificate-identity-regexp "$IDENTIDADE_REGEX_RUNNER" \
@@ -1711,12 +1862,73 @@ fechar_a_instalacao() {
 # O destino é uma pasta do HOST, e isso importa: o default do compose é o
 # volume nomeado `backup_local`, que o `down -v` apagaria JUNTO com o que se
 # quer preservar (ADR 0152).
+#
+# Desde o ADR 0256 (AT-738) o restore é INTEIRO e sozinho: o Postgres volta num
+# banco recém-criado e vazio (`brabo-restore --banco-vazio`, que recusa banco com
+# qualquer tabela), ANTES das migrations da versão nova; depois os repositórios
+# git, e por fim a reprojeção do grafo e dos artefatos, que são derivados.
+
+# As etapas da restauração que ainda faltam, na ordem em que rodam. Vazia fora
+# de uma migração com restauração. Vai para o marcador (`restauracaoPendente`)
+# a cada etapa concluída: é ela que deixa a próxima execução RETOMAR em vez de
+# migrar de novo uma instalação que já foi apagada.
+ETAPAS_DA_RESTAURACAO='banco git grafo artefatos'
+ETAPAS_PENDENTES=''
+MIGRAR_DE=''
+
+etapa_pendente() {
+  case " ${ETAPAS_PENDENTES} " in *" $1 "*) return 0 ;; *) return 1 ;; esac
+}
+
+concluir_etapa() {
+  local etapa resto=''
+  for etapa in $ETAPAS_PENDENTES; do
+    [ "$etapa" = "$1" ] || resto="${resto:+${resto} }${etapa}"
+  done
+  ETAPAS_PENDENTES="$resto"
+}
+
+# O ambiente das chamadas que tocam o backup — backup, prova, restauração e o
+# `down -v` —, PREFIXADO porque o Compose prefere o ambiente ao `--env-file`, e
+# na migração o `.env` ainda é o da instalação ANTERIOR (AT-738):
+#   - as cinco `BRABO_*_IMAGE` resolvidas AGORA (achado 3): o `.env` anterior
+#     pode apontar para imagem local que já sumiu (`brabo-*:prod`) ou nem ter a
+#     quinta, que o compose desta versão exige; o backup roda com a imagem que
+#     este script verificou;
+#   - `BRABO_BACKUP_USER` = quem roda o script (achado 1): a pasta de backup é
+#     dele, e o 70:70 da imagem não escreve numa pasta de outro dono;
+#   - `BRABO_BACKUP_HOST_DIR` = o destino (achado 9b): sem ela, a PROVA gravava e
+#     restaurava no volume `backup_local`, que o `down -v` apaga — provava OUTRO
+#     backup, e não o que fica;
+#   - `BACKUP_DIR=/backups`: um `.env` que esvaziou a variável (destino S3)
+#     mandaria o backup da migração para o bucket, não para a pasta.
+com_ambiente_do_backup() {
+  local destino="$1"
+  shift
+  env BRABO_BACKUP_USER="$(id -u):$(id -g)" BRABO_BACKUP_HOST_DIR="$destino" BACKUP_DIR=/backups \
+    BRABO_API_IMAGE="${BRABO_API_IMAGE:-}" BRABO_ENGINE_IMAGE="${BRABO_ENGINE_IMAGE:-}" \
+    BRABO_WEB_IMAGE="${BRABO_WEB_IMAGE:-}" BRABO_BACKUP_IMAGE="${BRABO_BACKUP_IMAGE:-}" \
+    BRABO_BROKER_IMAGE="${BRABO_BROKER_IMAGE:-}" "$@"
+}
+
+compose_do_backup() {
+  local destino="$1"
+  shift
+  com_ambiente_do_backup "$destino" docker compose -f "$COMPOSE_DE_INSTALACAO" --env-file "$PWD/.env" "$@"
+}
+
 migrar_instalacao_anterior() {
   local destino="$1"
 
   dizer ''
   dizer "${C_BOLD}Migrando a instalação existente${C_RESET}"
-  mkdir -p "$destino" || recusar "não consegui criar a pasta de backup: ${destino}"
+  # 0755 DECLARADO (achado 12), e não o umask de quem roda: o container escreve
+  # o dump com o próprio umask, então os arquivos ficam legíveis pelos outros
+  # usuários desta máquina. O que o dump não traz é a chave mestra — as
+  # credenciais seguem cifradas — e as senhas estão em argon2. Quem precisa de
+  # menos fecha a pasta depois; o instalador só não promete o que não faz.
+  # Pasta que já existe (`BRABO_BACKUP_HOST_DIR` apontada pela pessoa) fica como está.
+  [ -d "$destino" ] || mkdir -m 0755 "$destino" || recusar "não consegui criar a pasta de backup: ${destino}"
 
   # O backup e a prova sobem pelo compose DESTA versão, verificado — nunca pelo
   # que a instalação anterior deixou na pasta.
@@ -1724,13 +1936,13 @@ migrar_instalacao_anterior() {
 
   # 1. backup
   dizer 'Backup do Postgres e dos repositórios git locais…'
-  BACKUP_DIR=/backups docker compose -f "$COMPOSE_DE_INSTALACAO" --env-file "$PWD/.env" \
-    run --rm -v "${destino}:/backups" backup brabo-backup \
+  compose_do_backup "$destino" run --rm backup brabo-backup \
     || recusar "o backup falhou. NADA foi apagado — a migração para aqui, de propósito."
 
-  # 2. provar que restaura, ANTES de apagar
+  # 2. provar que restaura, ANTES de apagar — o MESMO destino, então o backup
+  # provado é o que fica na pasta e o que a restauração vai usar.
   dizer 'Provando que o backup restaura…'
-  BRABO_COMPOSE_FILE="$COMPOSE_DE_INSTALACAO" BRABO_ENV_FILE="$PWD/.env" BACKUP_DIR=/backups \
+  com_ambiente_do_backup "$destino" env BRABO_COMPOSE_FILE="$COMPOSE_DE_INSTALACAO" BRABO_ENV_FILE="$PWD/.env" \
     bash "$PROVA_DE_RESTAURACAO" \
     || recusar "o backup NÃO restaurou. Nada foi apagado. Um backup que não restaura não autoriza deleção nenhuma."
   ok 'backup provado'
@@ -1748,7 +1960,8 @@ migrar_instalacao_anterior() {
   dizer "  - o backup que acabou de ser provado, em ${destino}"
   dizer ''
   dizer 'Duas formas de seguir, as duas DEPOIS do backup provado:'
-  dizer '  s — apagar, reinstalar e restaurar os dados antigos'
+  dizer '  s — apagar, reinstalar e restaurar os dados antigos: o Postgres, os'
+  dizer '      repositórios git, e a reprojeção do grafo e dos artefatos'
   dizer '  z — apagar e reinstalar DO ZERO: os dados antigos NÃO voltam; o backup'
   dizer "      provado fica em ${destino}, e restaurá-lo depois é deploy/docs/runbook.md#restore"
   printf 'Apagar os volumes e reinstalar? [s = restaurar / z = do zero / N = parar] '
@@ -1760,32 +1973,126 @@ migrar_instalacao_anterior() {
     *) dizer "Nada foi apagado. O backup provado continua em ${destino}."; exit 0 ;;
   esac
 
-  docker compose -f "$COMPOSE_DE_INSTALACAO" --env-file "$PWD/.env" down -v \
+  compose_do_backup "$destino" down -v \
     || recusar "a deleção falhou pela metade. O backup provado está em ${destino} — não prossiga sem olhar."
   ok 'volumes removidos'
 
   if [ "$restaurar" = 'sim' ]; then
     MIGRAR_DE="$destino"
+    ETAPAS_PENDENTES="$ETAPAS_DA_RESTAURACAO"
   else
     MIGRAR_DE=''
+    ETAPAS_PENDENTES=''
     ok "reinstalação do zero: nada será restaurado; o backup provado fica em ${destino}"
   fi
 }
 
-# Chamado DEPOIS da subida, com o banco novo de pé.
-restaurar_apos_migrar() {
+# O Postgres, num banco recém-criado e VAZIO, e ANTES do `up` inteiro: as
+# migrations da versão nova rodam por cima do dump restaurado, nunca o dump por
+# cima de um banco que elas já criaram (o `--banco-vazio` recusaria). Uma falha
+# aqui RECUSA, e nada sobe por cima: a etapa fica no marcador e a próxima
+# execução a retoma.
+restaurar_o_banco() {
   local destino="$1"
   dizer ''
-  dizer "${C_BOLD}Restaurando${C_RESET}"
-  BACKUP_DIR=/backups docker compose -f "$COMPOSE_DE_INSTALACAO" --env-file "$PWD/.env" \
-    run --rm -v "${destino}:/backups" backup brabo-restore-git --restaurar \
-    || recusar "a restauração dos repositórios git falhou. O backup continua em ${destino}."
-  ok 'repositórios git restaurados'
+  dizer "${C_BOLD}Restaurando o Postgres${C_RESET} (num banco recém-criado e vazio, ADR 0256)"
+  compose_do_backup "$destino" up -d --wait postgres \
+    || recusar "o Postgres novo não subiu, e nada foi restaurado. A restauração fica PENDENTE no marcador: rode o instalador de novo para retomá-la. O backup continua em ${destino}."
+  compose_do_backup "$destino" run --rm backup brabo-restore --banco-vazio \
+    || recusar "o Postgres NÃO foi restaurado (a saída acima diz por quê), e nada subiu por cima do banco. A restauração fica PENDENTE no marcador: rode o instalador de novo para retomá-la. O backup continua em ${destino}."
+  ok 'Postgres restaurado e validado'
+}
+
+# Os repositórios git, como o DONO do volume (achado 4): o volume é da api/do
+# engine, e o uid 70 da imagem de backup não escreve nele. `--user 0:0` também
+# não serve — o serviço tem `cap_drop`, e root sem `DAC_OVERRIDE` não escreve
+# numa pasta 755 de outro dono. O dono se LÊ, nunca se supõe: ele depende de
+# quem montou o volume primeiro.
+restaurar_os_repositorios_git() {
+  local destino="$1" dono
+  dono="$(docker compose -f "$COMPOSE_DE_INSTALACAO" --env-file "$PWD/.env" \
+    exec -T api stat -c '%u:%g' /data/git-repos 2>/dev/null | tr -d '[:space:]' || true)"
+  case "$dono" in
+    [0-9]*:[0-9]*) ;;
+    *) recusar "não consegui ler o dono de /data/git-repos no container da api, e sem ele não há como restaurar os repositórios git. A restauração fica PENDENTE no marcador: rode o instalador de novo para retomá-la. O backup continua em ${destino}." ;;
+  esac
+  compose_do_backup "$destino" run --rm --user "$dono" backup brabo-restore-git --restaurar \
+    || recusar "a restauração dos repositórios git falhou. Ela fica PENDENTE no marcador: rode o instalador de novo para retomá-la. O backup continua em ${destino}."
+  ok "repositórios git restaurados (como ${dono}, o dono do volume)"
+}
+
+# O grafo e os artefatos são DERIVADOS do event log (ADR 0152, decisão 4), e o
+# `down -v` os deixa vazios (achado 8). Falhar aqui não perde dado — o event log
+# já voltou —, então é PENDÊNCIA nomeada, com o comando, e nunca recusa.
+reprojetar() {
+  local alvo="$1" comando
+  comando="docker compose -f ${COMPOSE_DE_INSTALACAO} --env-file ${PWD}/.env exec api node scripts/reprojetar-${alvo}.js"
+  if docker compose -f "$COMPOSE_DE_INSTALACAO" --env-file "$PWD/.env" \
+    exec -T api node "scripts/reprojetar-${alvo}.js"; then
+    ok "${alvo} reprojetado"
+  else
+    pendencia "o ${alvo} não foi reprojetado (o event log está restaurado; nada se perdeu). Rode: ${comando}"
+  fi
+}
+
+# Chamado DEPOIS da subida, com a versão nova de pé e o Postgres já restaurado.
+# Cada etapa concluída sai do marcador na hora.
+restaurar_apos_migrar() {
+  local destino="$1" plataforma="$2" alvo
   dizer ''
-  dizer "O dump do Postgres está em ${destino}. Restaurá-lo sobre um banco JÁ"
-  dizer 'populado é operação destrutiva, e por isso não acontece sozinha aqui:'
-  dizer '`brabo-restore` valida contra uma database de teste, nunca sobrescreve'
-  dizer 'a origem (ADR 0152). Ver deploy/docs/runbook.md#restore.'
+  dizer "${C_BOLD}Restaurando${C_RESET}"
+  if etapa_pendente git; then
+    restaurar_os_repositorios_git "$destino"
+    concluir_etapa git
+    gravar_marcador "$plataforma"
+  fi
+  for alvo in grafo artefatos; do
+    if etapa_pendente "$alvo"; then
+      reprojetar "$alvo"
+      concluir_etapa "$alvo"
+      gravar_marcador "$plataforma"
+    fi
+  done
+}
+
+# O marcador, numa função porque agora ele é gravado em TRÊS momentos (AT-738,
+# achado 6): logo depois do `down -v` de uma migração com restauração (a partir
+# dali a instalação anterior não existe mais, e a próxima execução precisa saber
+# que tem de RETOMAR), a cada etapa da restauração, e no fim. Antes ele só era
+# gravado no fim, e um restore que falhava deixava o marcador na versão antiga
+# com a instalação já trocada — a próxima execução tentaria migrar de novo.
+gravar_marcador() {
+  local plataforma="$1" pendente='null' arquivo
+  if [ -n "$ETAPAS_PENDENTES" ]; then
+    pendente="{ \"destino\": \"$(escapar_json "$MIGRAR_DE")\", \"etapas\": \"${ETAPAS_PENDENTES}\" }"
+  fi
+  arquivo="$(caminho_do_marcador)"
+  mkdir -p "$(dirname "$arquivo")"
+  cat > "$arquivo" <<JSON
+{
+  "schemaVersion": ${MARCADOR_SCHEMA},
+  "linha": "${LINHA_DO_PRODUTO}",
+  "versao": "${VERSAO_A_INSTALAR}",
+  "commit": "${COMMIT_A_INSTALAR}",
+  "instaladoEm": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "plataforma": "${plataforma}",
+  "fonte": "${FONTE}",
+  "ownerEmail": "$(escapar_json "$CONTA_EMAIL")",
+  "restauracaoPendente": ${pendente},
+  "imagens": {
+    "api": "${BRABO_API_IMAGE}",
+    "engine": "${BRABO_ENGINE_IMAGE}",
+    "web": "${BRABO_WEB_IMAGE}",
+    "backup": "${BRABO_BACKUP_IMAGE}",
+    "broker": "${BRABO_BROKER_IMAGE}"
+  },
+  "caminhos": {
+    "env": "${PWD}/.env",
+    "baseDeProjetos": "${BASE_DE_PROJETOS:-}",
+    "compose": "${COMPOSE_DE_INSTALACAO}"
+  }
+}
+JSON
 }
 
 # --------------------------------------------------------------------------
@@ -1867,8 +2174,9 @@ main() {
     ok "marcador de instalação: $(caminho_do_marcador)"
     VERSAO_INSTALADA="$(campo_do_marcador versao "$marcador")"
     if [ -n "$VERSAO_INSTALADA" ]; then
-      RELACAO="$(comparar_versoes "$VERSAO_A_INSTALAR" "$VERSAO_INSTALADA")"
+      RELACAO="$(relacao_com_o_instalado "$VERSAO_A_INSTALAR" "$marcador")"
       case "$RELACAO" in
+        nova-linha) ok "instalada ${VERSAO_INSTALADA}, da linha ANTERIOR do Brabo → esta é ${VERSAO_A_INSTALAR}, da linha nova: é ATUALIZAÇÃO (as versões recomeçaram em 1.0.0 na separação dos repositórios)." ;;
         maior) ok "instalada ${VERSAO_INSTALADA} → esta é ${VERSAO_A_INSTALAR}: é ATUALIZAÇÃO." ;;
         igual) ok "instalada ${VERSAO_INSTALADA}: é a MESMA versão que esta." ;;
         menor) dizer "  Instalada ${VERSAO_INSTALADA}, esta é ${VERSAO_A_INSTALAR}: seria REBAIXAMENTO." ;;
@@ -1904,11 +2212,33 @@ main() {
   # por cima é a decisão do usuário desta entrega — `up` sobre volumes de outra
   # versão é o tipo de estrago que não avisa, e meia migração é pior que
   # nenhuma.
-  MIGRAR_DE=''
-  if [ -n "$marcador" ] || [ -n "$sinais" ]; then
+  # Uma migração anterior que apagou a instalação antiga e não terminou de
+  # restaurar (AT-738, achado 6, decisão do dono): esta execução RETOMA a
+  # restauração a partir do backup que o marcador registra, e NÃO migra de novo
+  # — não há o que migrar, e um backup da instalação vazia de agora seria pior
+  # que nenhum. Nada é apagado neste caminho.
+  local pendente
+  pendente="$(restauracao_pendente "$marcador")"
+  if [ -n "${pendente#*	}" ]; then
+    MIGRAR_DE="${pendente%%	*}"
+    ETAPAS_PENDENTES="${pendente#*	}"
+    dizer ''
+    dizer "${C_BOLD}Restauração pendente${C_RESET}"
+    dizer 'Uma migração anterior apagou a instalação antiga e não terminou de restaurar.'
+    detalhe "  backup: ${MIGRAR_DE}"
+    detalhe "  falta:  ${ETAPAS_PENDENTES}"
+    [ -d "$MIGRAR_DE" ] \
+      || recusar "o marcador registra uma restauração pendente a partir de ${MIGRAR_DE}, e a pasta não existe. Nada foi apagado nem gravado. Devolva o backup a esse caminho, ou siga deploy/docs/runbook.md#restore-compose-banco-vazio."
+    dizer 'Esta execução RETOMA a restauração a partir desse backup, sem migrar de novo — nada é apagado.'
+  fi
+
+  if [ -z "$MIGRAR_DE" ] && { [ -n "$marcador" ] || [ -n "$sinais" ]; }; then
     if [ -t 0 ]; then
       local pergunta resposta_migrar
       case "$RELACAO" in
+        nova-linha)
+          pergunta="Atualizar ${VERSAO_INSTALADA} (linha anterior) → ${VERSAO_A_INSTALAR} (linha nova)? A instalação atual é apagada e recriada do zero, depois do backup ser PROVADO, e os dados voltam pelo restore. [S/n] "
+          ;;
         maior)
           pergunta="Atualizar ${VERSAO_INSTALADA} → ${VERSAO_A_INSTALAR}? A instalação atual é apagada e recriada do zero, depois do backup ser PROVADO. [S/n] "
           ;;
@@ -1927,12 +2257,12 @@ main() {
       printf '%s' "$pergunta"
       read -r resposta_migrar || resposta_migrar=''
 
-      # Só o ramo `maior` tem default SIM, e é o único que pode: atualizar é o
-      # que a pessoa veio fazer, e o passo é reversível pelo backup que acabou
-      # de ser provado. Reinstalar a mesma versão e rebaixar exigem um "s"
-      # digitado — o primeiro porque não tem ganho nenhum a oferecer, o segundo
-      # porque pode não ter volta.
-      if [ "$RELACAO" = 'maior' ]; then
+      # Só `maior` e `nova-linha` têm default SIM, e são os únicos que podem:
+      # atualizar é o que a pessoa veio fazer, e o passo é reversível pelo
+      # backup que acabou de ser provado. Reinstalar a mesma versão e rebaixar
+      # exigem um "s" digitado — o primeiro porque não tem ganho nenhum a
+      # oferecer, o segundo porque pode não ter volta.
+      if [ "$RELACAO" = 'maior' ] || [ "$RELACAO" = 'nova-linha' ]; then
         case "$resposta_migrar" in
           n|N|nao|NAO|não|NÃO) recusar 'instalar por cima de uma instalação existente não é oferecido: ou se migra, ou se para.' ;;
         esac
@@ -1944,6 +2274,13 @@ main() {
       fi
 
       migrar_instalacao_anterior "${BRABO_BACKUP_HOST_DIR:-${PWD}/brabo-backup-$(date -u +%Y%m%d%H%M%S)}"
+      # A partir do `down -v` a instalação anterior não existe mais: o marcador
+      # vai para o disco AGORA, com a restauração inteira pendente, para que uma
+      # execução interrompida daqui em diante seja RETOMADA, e não migrada de novo.
+      if [ -n "$ETAPAS_PENDENTES" ]; then
+        gravar_marcador "$plataforma"
+        ok "marcador gravado com a restauração PENDENTE (${ETAPAS_PENDENTES}): se esta execução parar, a próxima a retoma"
+      fi
     fi
   fi
 
@@ -1964,7 +2301,14 @@ main() {
   read -r resposta || resposta=''
   case "$resposta" in
     s|S|sim|SIM) ;;
-    *) dizer 'Nada foi gravado.'; exit 0 ;;
+    *)
+      if [ -n "$ETAPAS_PENDENTES" ]; then
+        dizer "Nada mais foi gravado. O marcador já registra a restauração pendente de ${MIGRAR_DE} (a instalação anterior foi apagada), e a próxima execução a retoma."
+      else
+        dizer 'Nada foi gravado.'
+      fi
+      exit 0
+      ;;
   esac
 
   consentir_base
@@ -1974,15 +2318,26 @@ main() {
   # Mesmo lugar e mesma razão do broker: uma recusa (porta) não deixa nada gravado.
   consentir_llm
 
-  # O `.env` que existir aqui é LIDO antes de ser sobrescrito — só para o
-  # pepper (RN-613), e sem ser executado. Numa migração ele ainda está no lugar:
-  # `migrar_instalacao_anterior` apaga volumes, nunca o arquivo.
-  local env_arquivo="${PWD}/.env"
-  gerar_segredos "$env_arquivo"
+  # O `.env` que existir aqui é LIDO antes de ser sobrescrito, e sem ser
+  # executado: o pepper (RN-613), a chave mestra e tudo o que o novo não declara
+  # (AT-738). Numa migração ele ainda está no lugar — `migrar_instalacao_anterior`
+  # apaga volumes, nunca o arquivo. A cópia vai para a pasta temporária da
+  # verificação (apagada na saída), com modo 600: é o arquivo dos segredos.
+  local env_arquivo="${PWD}/.env" env_anterior=''
+  if [ -f "$env_arquivo" ]; then
+    env_anterior="${TMP_VERIFICACAO}/env-anterior"
+    (umask 077 && cp "$env_arquivo" "$env_anterior") || recusar "não consegui ler o .env anterior (${env_arquivo})."
+  fi
+  gerar_segredos "$env_anterior"
   dizer_a_origem_do_pepper
+  dizer_a_origem_da_chave_mestra
 
   escrever_env "$env_arquivo"
+  preservar_do_env_anterior "$env_anterior" "$env_arquivo"
   ok ".env gravado com modo 600"
+  if [ -n "$PRESERVADAS_DO_ENV" ]; then
+    ok "do .env anterior, mantidas (valores não impressos): ${PRESERVADAS_DO_ENV% }"
+  fi
 
   dizer ''
   dizer "${C_BOLD}Subindo${C_RESET}"
@@ -1992,6 +2347,11 @@ main() {
   # espera por elas. Não há passo de migrate separado, e não deve haver: dois
   # lugares mandando migrar é a segunda fonte da mesma verdade.
   materializar_os_arquivos_da_instalacao "$PWD"
+  if etapa_pendente banco; then
+    restaurar_o_banco "$MIGRAR_DE"
+    concluir_etapa banco
+    gravar_marcador "$plataforma"
+  fi
   docker compose -f "$COMPOSE_DE_INSTALACAO" --env-file "$env_arquivo" up -d --wait \
     || recusar 'a subida falhou. Nada foi desfeito: `docker compose -f '"$COMPOSE_DE_INSTALACAO"' logs` mostra o quê.'
 
@@ -2004,11 +2364,15 @@ main() {
   curl -fsS "http://localhost:${engine_port}/health" >/dev/null \
     || recusar "o engine subiu mas não respondeu em /health (porta ${engine_port})."
   ok 'api e engine respondendo'
+  # A versão nova está de pé: o marcador a registra JÁ (AT-738, achado 6), com o
+  # que ainda falta restaurar — antes ele só era gravado no fim, e uma recusa no
+  # meio deixava a próxima execução achando que a versão antiga estava instalada.
+  gravar_marcador "$plataforma"
 
   conferir_o_broker "$env_arquivo"
 
-  if [ -n "$MIGRAR_DE" ]; then
-    restaurar_apos_migrar "$MIGRAR_DE"
+  if [ -n "$ETAPAS_PENDENTES" ]; then
+    restaurar_apos_migrar "$MIGRAR_DE" "$plataforma"
   fi
 
   instalar_o_runner "$plataforma" "$TMP_VERIFICACAO"
@@ -2019,30 +2383,7 @@ main() {
   # razão), e o marcador registra o e-mail do dono que este passo cria.
   fechar_a_instalacao "http://localhost:${api_port}"
 
-  mkdir -p "$(dirname "$(caminho_do_marcador)")"
-  cat > "$(caminho_do_marcador)" <<JSON
-{
-  "schemaVersion": ${MARCADOR_SCHEMA},
-  "versao": "${VERSAO_A_INSTALAR}",
-  "commit": "${COMMIT_A_INSTALAR}",
-  "instaladoEm": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-  "plataforma": "${plataforma}",
-  "fonte": "${FONTE}",
-  "ownerEmail": "$(escapar_json "$CONTA_EMAIL")",
-  "imagens": {
-    "api": "${BRABO_API_IMAGE}",
-    "engine": "${BRABO_ENGINE_IMAGE}",
-    "web": "${BRABO_WEB_IMAGE}",
-    "backup": "${BRABO_BACKUP_IMAGE}",
-    "broker": "${BRABO_BROKER_IMAGE}"
-  },
-  "caminhos": {
-    "env": "${env_arquivo}",
-    "baseDeProjetos": "${BASE_DE_PROJETOS}",
-    "compose": "${COMPOSE_DE_INSTALACAO}"
-  }
-}
-JSON
+  gravar_marcador "$plataforma"
   ok "marcador gravado"
 
   dizer ''
