@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 export const PENDENTES = [];
 
 /** RNs que as traduções ainda não trazem (defasagem de tradução, não link quebrado do gerador); só valem fora do pt-BR. Saem quando o lote de tradução as cobrir. */
-export const RNS_SEM_TRADUCAO = ['rn-907', 'rn-914', 'rn-915', 'rn-917', 'rn-918', 'rn-924', 'rn-928', 'rn-929', 'rn-930', 'rn-950', 'rn-952'];
+export const RNS_SEM_TRADUCAO = ['rn-907', 'rn-1002', 'rn-914', 'rn-915', 'rn-917', 'rn-918', 'rn-924', 'rn-928', 'rn-929', 'rn-930', 'rn-950', 'rn-952'];
 
 const arquivosDe = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((e) =>

@@ -847,5 +847,9 @@ test.
 - <a id="rn-1001"></a>[RN-1001](business-rules/api.md#rn-1001) — The tracing decorator forwards `aceitaRaciocinioDesligado`, so the retry without reasoning really runs
 - <a id="rn-1002"></a>[RN-1002](business-rules/api.md#rn-1002) — The agent closes the open question the user answered in chat; the human answer and the agent share one core
 - <a id="rn-1003"></a>[RN-1003](business-rules/engine.md#rn-1003) — The agent closes an open question the user already answered in the chat, only when the answer is unambiguous
+- <a id="rn-1004"></a>[RN-1004](business-rules/api.md#rn-1004) — The Dev Lead's execution plan is refused when a module with no task is a dependency of a module that has one
+- <a id="rn-1005"></a>[RN-1005](business-rules/api.md#rn-1005) — The claim does not hand out a module's task while a task of a module in its direct `dependsOn` is open
 - <a id="rn-1006"></a>[RN-1006](business-rules/engine.md#rn-1006) — The Dev Lead creates the foundation task of a module that others depend on
+- <a id="rn-1007"></a>[RN-1007](business-rules/api.md#rn-1007) — Claude Haiku 5.5 on Anthropic direct has a curated reasoning allowance of 12288 tokens
+- <a id="rn-1008"></a>[RN-1008](business-rules/api.md#rn-1008) — The direct Anthropic provider uses prompt caching, sums the cache parcels into the input and prices the call from the vendor table
 <!-- END:GENERATED:indice-de-rn -->
