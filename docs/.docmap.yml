@@ -587,6 +587,17 @@ rules:
   # `Makefile`, `package.json`, `GOVERNANCE.md`). Um instalador que roda na
   # máquina de quem instala é precisamente o que não pode mudar sem a doc
   # acompanhar — o que ele verifica, e o que ele NUNCA apaga, são contrato.
+  - id: release-do-produto
+    watch:
+      - ".github/workflows/release.yml"
+      - ".github/workflows/tag-release.yml"
+      - "componentes.json"
+      - "scripts/ci/montar-images.ts"
+    docs:
+      - "docs/explanation/release-do-produto.md"
+    severity: warn
+    note: "Quem carimba, quem publica e o que o produto assina são o contrato da release."
+
   - id: instalador
     watch:
       - "install.sh"

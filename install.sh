@@ -101,6 +101,16 @@ sha_do_cosign() {
 IDENTIDADE_REGEX="^https://github.com/${REPO}/\.github/workflows/release\.yml@"
 EMISSOR_OIDC='https://token.actions.githubusercontent.com'
 
+# O binário do runner NÃO mora na Release do produto: ele é publicado, com o
+# `checksums.txt` assinado dele, pelo `build-runner-binaries.yml` do
+# `viralabs-dev/brabo-runner`. A tag é a que `componentes.json` fixa (`.runner.tag`);
+# o spec `install-runner-release` reprova a divergência. É o hash DESTE script que o
+# manifesto do produto assina, então a tag pinada aqui é tão confiável quanto ele.
+RUNNER_REPO='viralabs-dev/brabo-runner'
+RUNNER_TAG='v1.0.0'
+URL_DO_RUNNER="https://github.com/${RUNNER_REPO}/releases/download/${RUNNER_TAG}"
+IDENTIDADE_REGEX_RUNNER="^https://github.com/${RUNNER_REPO}/\.github/workflows/build-runner-binaries\.yml@"
+
 # Subiu para 3 quando o marcador ganhou o `ownerEmail` (RN-547) — pelo mesmo
 # motivo que subiu para 2 ao ganhar a `versao`: um sobe sem o outro e um
 # marcador novo passa por antigo. A AUSÊNCIA de `ownerEmail` num marcador de
@@ -1196,8 +1206,8 @@ conferir_o_broker() {
 # Instala o binário do agente local — e é isto que mata o `chmod +x` manual do
 # ADR 0118 (BRB-031): o navegador não preserva o bit de execução, um script
 # preserva. O binário passa pela MESMA verificação do resto (RN-524): hash
-# contra o `checksums.txt` assinado, que este script já baixou e verificou para
-# conferir a si mesmo.
+# contra o `checksums.txt` assinado do repo do runner (AT-704), verificado com o
+# cosign que `verificar_a_si_mesmo` já baixou e conferiu em `$tmp`.
 instalar_o_runner() {
   local plataforma="$1" tmp="$2" alvo destino esperado
   case "$plataforma" in
@@ -1225,9 +1235,8 @@ instalar_o_runner() {
   dizer ''
   dizer "${C_BOLD}Agente local${C_RESET}"
   local nome="brabo-runner-${alvo}"
-  if ! curl -fsSL -o "${tmp}/${nome}" \
-      "https://github.com/${REPO}/releases/latest/download/${nome}"; then
-    dizer "A Release não publica ${nome}." >&2
+  if ! curl -fsSL -o "${tmp}/${nome}" "${URL_DO_RUNNER}/${nome}"; then
+    dizer "A Release ${RUNNER_TAG} do ${RUNNER_REPO} não publica ${nome}." >&2
     dizer 'O agente local NÃO foi instalado; o resto da instalação está de pé.' >&2
     dizer "Alternativa: npm install -g @brabo/runner" >&2
     # `RUNNER_BIN` fica vazio de propósito: é por ele que o fechamento sabe que
@@ -1236,10 +1245,20 @@ instalar_o_runner() {
     return 0
   fi
 
-  # O manifesto já foi baixado e teve a assinatura verificada em
-  # `verificar_a_si_mesmo`; aqui só se confere a linha deste binário.
-  esperado="$(grep -i "  ${nome}\$" "${tmp}/checksums.txt" | cut -d' ' -f1 || true)"
-  [ -n "$esperado" ] || recusar "o manifesto assinado não cobre ${nome} — recusa, não aviso."
+  # O manifesto do runner é OUTRO (o do repo dele, assinado pela identidade do
+  # workflow dele): o do produto, que este script já verificou, não o cobre.
+  curl -fsSL -o "${tmp}/runner-checksums.txt" "${URL_DO_RUNNER}/checksums.txt" \
+    || recusar "a Release ${RUNNER_TAG} do ${RUNNER_REPO} não tem checksums.txt — não há contra o que verificar o binário."
+  curl -fsSL -o "${tmp}/runner-checksums.txt.bundle" "${URL_DO_RUNNER}/checksums.txt.bundle" \
+    || recusar "a Release ${RUNNER_TAG} do ${RUNNER_REPO} não tem a assinatura do checksums.txt."
+  "${tmp}/cosign" verify-blob \
+    --bundle "${tmp}/runner-checksums.txt.bundle" \
+    --certificate-identity-regexp "$IDENTIDADE_REGEX_RUNNER" \
+    --certificate-oidc-issuer "$EMISSOR_OIDC" \
+    "${tmp}/runner-checksums.txt" >/dev/null 2>&1 \
+    || recusar "a assinatura do checksums.txt do runner NÃO confere. O manifesto não foi publicado pelo build-runner-binaries.yml do ${RUNNER_REPO}."
+  esperado="$(grep -i "  ${nome}\$" "${tmp}/runner-checksums.txt" | cut -d' ' -f1 || true)"
+  [ -n "$esperado" ] || recusar "o manifesto assinado do runner não cobre ${nome} — recusa, não aviso."
   conferir_hash "${tmp}/${nome}" "$esperado" \
     "o binário do runner NÃO bate com o manifesto assinado."
   ok 'binário do runner verificado'
