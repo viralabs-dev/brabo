@@ -16,7 +16,7 @@ const listarReal = (glob: string) =>
   execFileSync('git', ['ls-files', glob], { cwd: RAIZ, encoding: 'utf8' }).split('\n').filter(Boolean);
 
 const EXTERNAS = { schemas: 11, providers: 9 };
-const FONTES_EXTERNAS = new Set(['schemasDeArtefato', 'providersDeLlm']);
+const FONTES_EXTERNAS = new Set(['schemasDeArtefato']);
 
 // `imagens-pinadas.ts` é rodado de verdade uma vez só; as mutações trocam a
 // SAÍDA dele, porque o que se testa aqui é a leitura do número.
@@ -69,15 +69,10 @@ describe('contagens derivadas do código (AT-123)', () => {
 
   // Uma mutação por fonte: o ARTEFATO muda, a prosa não — tem que reprovar.
   const mutacoes: Array<[string, Troca]> = [
-    ['overridesRaiz', { arquivo: 'pnpm-workspace.yaml', de: /^overrides:\n/m, para: 'overrides:\n  x@<1: 1.0.0\n' }],
-    ['overridesWebsite', { arquivo: 'website/pnpm-workspace.yaml', de: /^overrides:\n/m, para: 'overrides:\n  x@<1: 1.0.0\n' }],
     ['goldenSetRagCasos', { arquivo: 'apps/api/scripts/seed-golden-set-rag.ts', de: 'const CASOS: CasoRag[] = [', para: "const CASOS: CasoRag[] = [\n  { id: 'x', query: 'x',\n    expectedPath: 'x' }," }],
-    ['goldenSetRagCorpus', { arquivo: 'apps/api/scripts/seed-golden-set-rag.ts', de: 'const ARQUIVOS_CURADOS = [', para: "const ARQUIVOS_CURADOS = [\n  'docs/x.md'," }],
-    ['goldenSetRagPiso', { arquivo: 'apps/engine/test/fixtures/golden_set_rag/floor.json', de: '"passRate": 17', para: '"passRate": 16' }],
     ['imagensPublicadas', { arquivo: 'scripts/ci/images-manifest.ts', de: 'export const ALVOS = [', para: "export const ALVOS = ['x-y', " }],
     ['operacoesDoGit', { arquivo: 'packages/shared/src/index.ts', de: 'export interface GitProviderContract {', para: 'export interface GitProviderContract {\n  deleteRepo(input: unknown): Promise<void>;' }],
     ['operacoesDoDocker', { arquivo: 'packages/docker-port/src/docker-port.ts', de: 'export abstract class DockerPort {', para: 'export abstract class DockerPort {\n  abstract logs(x: string): Promise<string>;' }],
-    ['servicosDoComposeDeDev', { arquivo: 'docker/docker-compose.yml', de: /^services:\n/m, para: 'services:\n  novo:\n    image: x\n\n' }],
     ['tiposDeAcao', { arquivo: 'apps/api/src/domain/actions/decide.ts', de: /export const ACTION_TYPES: readonly ActionType\[\] = \[/, para: "export const ACTION_TYPES: readonly ActionType[] = [\n  'novo_tipo'," }],
     ['estadosDeAcao', { arquivo: 'apps/api/src/db/schema/actions.ts', de: "pgEnum('action_status', [", para: "pgEnum('action_status', [\n  'novo'," }],
     ['tabelasDoBanco', { arquivo: 'apps/api/src/db/schema/actions.ts', de: /$/, para: "\nexport const nova = pgTable('nova', {});\n" }],
@@ -104,15 +99,6 @@ describe('contagens derivadas do código (AT-123)', () => {
     expect(new Set(cegos.map((r) => r.estado))).toEqual(new Set(['CEGO']));
   });
 
-  it('serviço padrão SEM healthcheck reprova mesmo que a contagem bata', () => {
-    const ctx = contexto([
-      { arquivo: 'docker/docker-compose.yml', de: /^ {2}neo4j:\n/m, para: '  semhc:\n    image: x\n\n  neo4j:\n' },
-    ]);
-    const r = aferirContagens(ctx).find((_, i) => AFERICOES[i]!.fonte === 'servicosDoComposeDeDev')!;
-    expect(r.estado).toBe('DESATUAL');
-    expect(r.esperado).toMatch(/sem healthcheck/);
-  });
-
   it('a fonte sumir é CEGO, nunca comparação contra vazio', () => {
     const ctx = contexto([
       { arquivo: 'packages/shared/src/index.ts', de: 'export interface GitProviderContract {', para: 'export interface OutroNome {' },
@@ -125,13 +111,6 @@ describe('contagens derivadas do código (AT-123)', () => {
       { arquivo: 'docs/glossary.md', de: 'nunca executa direto.', para: 'nunca roda direto.' },
     ]);
     expect(estadosDa('tiposDeAcao', ctx)).toEqual(['CEGO']);
-  });
-
-  it('mudar a PROSA sem mudar o artefato reprova como DESATUAL', () => {
-    const ctx = contexto([
-      { arquivo: '.claude/contexto/stack.md', de: /já são (\S+(?: e \S+)?) na raiz/, para: 'já são treze na raiz' },
-    ]);
-    expect(estadosDa('overridesRaiz', ctx)).toEqual(['DESATUAL']);
   });
 
   it('naForma: extenso em pt (m/f) e en, algarismo fora da tabela', () => {

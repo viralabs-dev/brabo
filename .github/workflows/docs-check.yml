@@ -88,6 +88,12 @@ jobs:
       - name: Reconstruir o layout dos irmãos (dev)
         run: bash scripts/docs/montar-layout.sh
 
+      # Os specs dos geradores e do instalador (precisam do layout acima).
+      # `openapi-por-locale.spec.ts` fica de fora até o brabo-api regenerar os
+      # catálogos `openapi-textos.json` (entrada órfã 606f9805e6ba).
+      - name: Specs dos scripts
+        run: pnpm test:scripts
+
       - name: Integridade do .docmap.yml
         run: node scripts/docs/docmap.mjs
 

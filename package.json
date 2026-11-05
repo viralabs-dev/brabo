@@ -17,10 +17,12 @@
     "docs:check": "node scripts/docs/docmap.mjs && node scripts/docs/generate.mjs --check",
     "docs:drift": "node scripts/docs/drift.mjs",
     "docs:audit": "node scripts/docs/audit.mjs",
-    "docs:fontes": "bash scripts/docs/montar-layout.sh"
+    "docs:fontes": "bash scripts/docs/montar-layout.sh",
+    "test:scripts": "vitest run scripts/docs scripts/dev/install- scripts/ci/assets-do-instalador --exclude scripts/docs/openapi-por-locale.spec.ts"
   },
   "devDependencies": {
-    "@types/node": "^26.1.1"
+    "@types/node": "^26.1.1",
+    "vitest": "^4.1.11"
   },
   "dependencies": {
     "markdown-it": "14.1.0",

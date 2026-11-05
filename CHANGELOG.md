@@ -63,6 +63,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ### Correções
 
+- **docs**: `packages/docs/` (as RNs de contratos e traduções) passa a morar no `brabo-contracts`, com o histórico, e o `montar-layout.sh` o busca de lá; a cópia daqui foi removida (AT-693).
+- **ci**: o `docs-check` roda os specs de `scripts/docs`, `scripts/dev/install-*` e `scripts/ci/assets-do-instalador` (`pnpm test:scripts`, depois do layout). Saíram os testes das contagens das partes de `.claude/` (`overridesRaiz`, `overridesWebsite`, golden-set e serviços do compose), cuja prosa não mora mais aqui, e o bloco "a esteira publica e assina os assets", que lia um `build-runner-binaries.yml` sem os assets do instalador (lacuna na assinatura deles, a tratar no `brabo-runner`/`brabo-ci`). `design/tokens.css` virou `apps/web/design/tokens.css` nos specs. `openapi-por-locale.spec.ts` fica fora até o `brabo-api` regenerar os catálogos.
 - **docs**: a página da API no site novo fica legível sem JavaScript: sem a barra lateral e a busca do Redoc (a navegação é a do site), operações na largura da coluna com os exemplos abaixo, sem "Show N more", e o tema do Redoc segue o do site
 - **web**: as opções em cartão do assistente de novo projeto (modo, provider, visibilidade, credencial) voltam a quebrar linha e crescer: o item do `ToggleGroup` do kit tem `h-8` e `nowrap`, e cortava título e descrição com rolagem horizontal.
 - **web**: o campo de mensagem da Sessão volta a ocupar a largura do composer: a âncora do menu de `@`/`/` ficava sem classe e o campo saía com ~179px dentro de uma barra de 1224px (teste estrutural do CSS e da classe aplicada).

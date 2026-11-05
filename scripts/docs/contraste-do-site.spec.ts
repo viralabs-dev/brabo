@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 // O site de docs segue os tokens do produto (AT-561, ADR 0181): este spec
 // resolve os --site-* do site até hex, nos dois temas, e cobra 4,5:1.
 const raiz = resolve(__dirname, '../..');
-const TOKENS = readFileSync(resolve(raiz, 'design/tokens.css'), 'utf8');
+const TOKENS = readFileSync(resolve(raiz, 'apps/web/design/tokens.css'), 'utf8');
 const SITE = readFileSync(resolve(raiz, 'scripts/docs/site/assets/site.css'), 'utf8');
 
 function bloco(css: string, seletor: string): Record<string, string> {

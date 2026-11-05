@@ -30,6 +30,7 @@ keywords: [scripts, pnpm, make, commands]
 | `pnpm docs:drift` | `node scripts/docs/drift.mjs` |
 | `pnpm docs:audit` | `node scripts/docs/audit.mjs` |
 | `pnpm docs:fontes` | `bash scripts/docs/montar-layout.sh` |
+| `pnpm test:scripts` | `vitest run scripts/docs scripts/dev/install- scripts/ci/assets-do-instalador --exclude scripts/docs/openapi-por-locale.spec.ts` |
 
 ## api — `apps/api/package.json`
 
@@ -152,6 +153,7 @@ keywords: [scripts, pnpm, make, commands]
 
 | 目标 | 作用 |
 |---|---|
+| `make dev` | Brings up the dev environment (preflight + docker compose up) from the sibling clones |
 | `make help` | Lists the available targets |
 | `make deploy-local` | Brings up the local cluster, installs everything and runs the smoke test (TAG=vX.Y.Z-qa.N optional) |
 | `make deploy-local-clean` | Same as deploy-local, but without rebuilding the images |
@@ -172,4 +174,4 @@ keywords: [scripts, pnpm, make, commands]
 
 ---
 
-共 112 条命令。没有 `## 描述` 注释的 Makefile 目标不会出现在这里——请在源码中添加注释。
+共 114 条命令。没有 `## 描述` 注释的 Makefile 目标不会出现在这里——请在源码中添加注释。
