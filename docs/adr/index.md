@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 252 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 254 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -102,6 +102,7 @@ Quais agentes existem, o que cada um entrega a quem, a delegação dentro de uma
 | [0194](0194-aprovar-o-plano-ativa-a-execucao.md) | APROVAR o `propose_execution_plan` do Dev Lead é o que ativa a execução, e aceitar o handoff ao Dev Lead só o traz para PLANEJAR (AT-263, decisão do dono de 01/10, revisando a fusão do [ADR 0069](0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.md), RN-161). O plano ganha um executor na api que o relê contra o `module_map` vigente, grava o MÓDULO de cada tarefa e chama o MESMO `ActivateExecutionUseCase` do botão, então o 409 sem repositório, o 409 de sessão consultiva e `findActiveExecutionSession` ficam como estavam. As tarefas ganham a coluna `module` (migration `0068`), atribuída pelo Dev Lead no plano (`tarefas: [{ taskId, modulo }]`, AT-274); tarefa sem módulo ou com módulo fora do `module_map` é recusada com 400 nomeado na proposta. Só o dev daquele módulo a pega; tarefa sem módulo só é pegável quando a história dela tem exatamente um módulo |
 | [0212](0212-historia-arquivada.md) | Uma história pode ser ARQUIVADA, e isso é coluna — `stories.archived_at`/`archived_reason` (migration `0069`) — e não um valor novo de `story_status`, porque o status é o portão do claim e arquivar não é passo de progresso (AT-406, decisão do dono de 03/10 "PO e usuário"). Toda leitura que DECIDE (backlog, cobertura, fila de promoção, o plano do Dev Lead, claim) filtra `archived_at IS NULL`, e as tarefas saem junto com a história; nada é apagado, e os eventos imutáveis novos `backlog.story_archived`/`backlog.story_updated` registram isso. Uma régua para a ferramenta do PO e a aba Backlog: só `draft` sem tarefa em execução, 409 nomeado no resto |
 | [0213](0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.md) | O entregável roda na máquina do usuário pelo compose da Infra, nunca por uma porta publicada pelo broker (AT-517, decisão do dono de 11/10; ADR 0130 intocado). O compose constrói o APP a partir do Dockerfile do módulo com `FROM` = a imagem decidida, na porta do host `${APP_PORT:-8080}`, com um `.env.example` commitado; `propose_infra_pr` ganha um payload `run` obrigatório (`command`, 1–5 `urls` de localhost, `envExample`) que a api transforma no `artifact.run_instructions` versionado. Os devs servem `/openapi.json` e `/docs` (Swagger de um CDN sob rede `none`), o QA os prova DENTRO do container, e o card da Visão geral diz "declarado pela Infra, não verificado na sua máquina" — o `docker compose up` real fica como lacuna declarada |
+| [0259](0259-o-modulo-de-que-outros-dependem-tem-dono.md) | O módulo de que outros dependem tem dono no plano: o Dev Lead ganha `create_task` para a tarefa de fundação, a api recusa com 400 o plano que deixa sem tarefa uma dependência de outro módulo, e o claim espera o `dependsOn` direto. Preço: menos paralelismo. Revisa a RN-678 do [0194](0194-aprovar-o-plano-ativa-a-execucao.md) só para a fundação. |
 
 ## Gates, QA e revisão de segurança {#tema-gates}
 
@@ -124,6 +125,7 @@ O registro de gates, os vereditos de QA e SecOps e os golden-sets que os medem.
 | [0207](0207-ciclo-de-gate-velho-estaciona.md) | Um ciclo de gate parado há mais de 2 horas desde a última atividade é estacionado com um evento `gate.rescue_parked` e só um gesto humano o retoma; o resgatador pergunta ao lead sobre a TAREFA, não sobre o projeto, e deixa em paz um ciclo com decisão humana pendente (AT-391, revisa o 0067). |
 | [0214](0214-pergunta-em-aberto-vira-pendencia.md) | Uma pergunta em aberto ao usuário vira pendência com estado no log (`artifact.open_question` + `open_question.answered` + um `decision_record`), declarada só pela ferramenta `declare_open_question` e respondida só pelo autor da sessão; o QA ganha o veredito `needs_user_decision`, que não consome o ciclo de correção e estaciona o gate pelo mecanismo do ADR 0207 até a resposta; a decisão chega ao dev-context e ao corte do QA, e o PO pode corrigir uma história `ready` a partir de uma pergunta respondida (AT-521, estende o 0207, revisa parte do 0212). |
 | [0215](0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.md) | O `openQuestionId` de um veredito de gate tem de existir no projeto e estar em aberto (desconhecido é 404, já respondido é 409 com a decisão), `afeta.regras` aceita o título exato da regra e guarda o id, e o dev-context devolve também as outras decisões do projeto como `decisoesDoProjeto` dentro do mesmo teto de 10 (AT-526, revisa parte do 0214). |
+| [0258](0258-a-resposta-pelo-chat-fecha-a-pergunta-em-aberto.md) | A resposta do usuário pelo chat fecha a pergunta em aberto: os quatro perguntadores ganham `answer_open_question`, só fecham com resposta INEQUÍVOCA, e a rota interna divide o núcleo com o `responder` humano (o mesmo `decision_record` + `open_question.answered`, religando o gate como o clique). Estende o [0214](0214-pergunta-em-aberto-vira-pendencia.md). |
 
 > **Critério de aceite ainda aberto.** O [0020](0020-destravar-gates-qa-secops.md)
 > registra explicitamente que a demo dos gates está **"FECHADA, mas NÃO
@@ -393,7 +395,7 @@ Como a documentação é gerada, verificada e publicada.
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0258**.
+  é substituído — o próximo é **0260**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml` e a linha do índice sob a seção desse
   tema, em ordem numérica. Quem revisa confirma. Um tema novo é uma
