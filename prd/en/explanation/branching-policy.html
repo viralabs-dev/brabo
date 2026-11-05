@@ -1,0 +1,1489 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Branch and versioning policy | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../index.html">Brabo</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../explanation/branching-policy.html">pt-BR</option><option value="../../en/explanation/branching-policy.html" selected>en</option><option value="../../ru/explanation/branching-policy.html">ru</option><option value="../../zh-Hans/explanation/branching-policy.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../dev/en/explanation/branching-policy.html">dev</option><option value="../../../prd/en/explanation/branching-policy.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><h2>🚀 Start here</h2><ul><li><a href="../index.html">Introduction</a></li><li><a href="../getting-started.html">Getting Started</a></li><li><a href="../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li></ul></section><section><h2>🏗️ Architecture</h2><ul><li><a href="../architecture.html">Architecture</a></li><li><a href="../adr.html">Decisions (ADR)</a><ul><li><span>Git, repositório e política de branches</span><ul><li><a href="../adr/0001-git-provider-contract-shape.html">ADR 0001 — Shape of the normalized GitProvider contract</a></li><li><a href="../adr/0002-git-error-normalization.html">ADR 0002 — GitProvider error normalization</a></li><li><a href="../adr/0003-git-provider-retry-policy.html">ADR 0003 — Retry policy for remote providers</a></li><li><a href="../adr/0004-git-credential-registration.html">ADR 0004 — Registration of the user's git credentials</a></li><li><a href="../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005 — Idempotent and resumable Gitflow bootstrap</a></li><li><a href="../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028 — Branch protection: divergence between providers and the approval matrix</a></li><li><a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030 — Mechanized branch policy</a></li><li><a href="../adr/0044-adocao-de-repositorio-existente.html">ADR 0044 — Adoption of an existing repository, and the plan as a gate</a></li><li><a href="../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056 — The engine works on a remote repository</a></li><li><a href="../adr/0139-o-alarme-de-esteira-ganha-destinatario.html">ADR 0139 — The pipeline merge alarm gains a recipient, and the rule covers `dev`</a></li><li><a href="../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165 — The repository is born at the acceptance of the handoff to the Arquiteto, and execution does not start without it</a></li><li><a href="../adr/0217-promocao-automatica-para-qa-em-fase-de-teste.html">ADR 0217 — Automatic `dev` → `qa` promotion while QA is in a test phase</a></li><li><a href="../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.html">ADR 0235 — A `qa` é aposentada por hora e a esteira do repositório fica `dev → main`</a></li><li><a href="../adr/0236-o-dependabot-dispensa-revisao-na-dev.html">ADR 0236 — O Dependabot dispensa revisão na `dev` e fica mergeável com os outros checks verdes</a></li></ul></li><li><span>Harness de agente, turnos e sessões</span><ul><li><a href="../adr/0006-prompt-assembler-context-harness.html">ADR 0006 — Agent harness: deterministic context assembly</a></li><li><a href="../adr/0007-toolloop-tools-context-manager.html">ADR 0007 — ToolLoop, tools, ContextManager (harness with LLM)</a></li><li><a href="../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061 — The session's type is data set at creation, and execution stays an event</a></li><li><a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098 — Consistent transport limits and effective compaction window</a></li><li><a href="../adr/0163-o-clique-responde-ao-aceitar.html">ADR 0163 — The click answers on ACCEPTING the command, and the turn continues through the channel</a></li><li><a href="../adr/0175-infra-lead-conversa-pelo-composer.html">ADR 0175 — The Infra Lead converses through the composer, and first its turn goes through `TurnoAssincrono`</a></li><li><a href="../adr/0177-idioma-das-respostas-por-conta-sessao-e-projeto.html">ADR 0177 — The response language lives in three places — account, session and project —, as an open BCP-47 list and never in `users.locale`</a></li><li><a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179 — The loop asks Jev which tool, and the user's model sees only the menu that remains</a></li><li><a href="../adr/0183-reabrir-sessao-encerrada.html">ADR 0183 — A closed session can be reopened: a dedicated exit from the terminal states, to `active`, with a new event</a></li><li><a href="../adr/0184-reabrir-sessao-decisoes-do-dono.html">ADR 0184 — Reopening a session: the owner's three decisions, and `developer` reopens</a></li><li><a href="../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191 — A message arriving during a turn enters a persisted queue and is read at the end of the turn</a></li><li><a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226 — Diário vivo e retomada dos agentes: o turno interrompido volta uma vez, do plano</a></li><li><a href="../adr/0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.html">ADR 0246 — Anexos do chat: bytes no Postgres, referência no evento, visão por capability</a></li><li><a href="../adr/0247-uma-mensagem-varios-destinatarios.html">ADR 0247 — Uma mensagem, vários destinatários</a></li><li><a href="../adr/0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.html">ADR 0249 — O raciocínio do agente é gravado e mostrado só a developer ou mais</a></li></ul></li><li><span>O time de agentes — papéis, áreas e handoffs</span><ul><li><a href="../adr/0008-agente-criativo-conversacional-handoffs.html">ADR 0008 — Conversational Creative agent in the harness + handoff foundation</a></li><li><a href="../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009 — PO agent, backlog (epics/stories/tasks) and traceability</a></li><li><a href="../adr/0010-agente-arquiteto-adr-pr-module-map.html">ADR 0010 — Architect agent: ADRs via a real PR, module_map and cross-validation</a></li><li><a href="../adr/0014-infra-agent-painel-phoenix.html">ADR 0014 — InfraAgent and the live team panel (Phase 4a closure)</a></li><li><a href="../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015 — Real Psychologist: ToolLoop, evidence-backed hypotheses and cost triage</a></li><li><a href="../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016 — Anamnesis: proficiency profile, instruction patches and closed loop</a></li><li><a href="../adr/0022-fechamento-4b-psicologo.html">ADR 0022 — Closing Phase 4b (session 1): evidence that arrives, cost that shows up, analysis that survives a kill</a></li><li><a href="../adr/0023-fechamento-4b-anamnese.html">ADR 0023 — Closing Phase 4b (session 2): a catalog that works, a dedup that distinguishes who denied, and a queue that survives the run</a></li><li><a href="../adr/0038-hierarquia-de-agentes.html">ADR 0038 — Agent hierarchy: areas, leads and delegation</a></li><li><a href="../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046 — Story promotion with user authority</a></li><li><a href="../adr/0053-dev-lead-e-paralelismo-autorizado.html">ADR 0053 — Dev Lead as an area, and parallelism authorized by the user</a></li><li><a href="../adr/0068-diagrama-c4-do-arquiteto.html">ADR 0068 — Architect's C4 diagram</a></li><li><a href="../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069 — Conditional merge of handoff acceptance with execution activation</a></li><li><a href="../adr/0085-fluxo-como-registro-declarativo.html">ADR 0085 — Role flow as a declarative registry (fluxo.yml)</a></li><li><a href="../adr/0086-dev-lead-plano-suspende-para-aprovacao.html">ADR 0086 — The Dev Lead's plan suspends the turn for approval</a></li><li><a href="../adr/0087-ux-designer-agente.html">ADR 0087 — The UX Designer enters as a conversational agent</a></li><li><a href="../adr/0088-staff-agente-dormente-para-disparo-automatico.html">ADR 0088 — Staff: code ready, dormant for automatic trigger</a></li><li><a href="../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">ADR 0089 — `analytics` and `delivery-metricas` become a report script</a></li><li><a href="../adr/0092-platform-relatorio-de-telemetria-sob-demanda.html">ADR 0092 — `platform` starts as an on-demand reporting script, not an agent</a></li><li><a href="../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">ADR 0093 — The `dbre` role becomes two scripts: migration linter and backup report</a></li><li><a href="../adr/0094-delegacao-dev-lead-vira-dado.html">ADR 0094 — The Dev Lead → dev delegation becomes data, with `parecerArtifactId` redefined</a></li><li><a href="../adr/0109-handoff-manual-a-agente-a-escolha.html">ADR 0109 — Manual handoff to an agent of choice reuses offer+accept, never a third handoff state</a></li><li><a href="../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182 — The handoff offer gains a lifecycle: one pending per destination, and `superseded`</a></li><li><a href="../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185 — &quot;I'm ready — the need is validated&quot;: one click closes readiness, the `necessidade-validada` gate and the PO's acceptance</a></li><li><a href="../adr/0186-aceite-automatico-do-handoff-ao-arquiteto.html">ADR 0186 — The PO's handoff to the Arquiteto is accepted without a click when the backlog is covered and the repository is local</a></li><li><a href="../adr/0194-aprovar-o-plano-ativa-a-execucao.html">ADR 0194 — Approving the Dev Lead's plan activates execution, and the task gains the module it assigns</a></li><li><a href="../adr/0212-historia-arquivada.html">ADR 0212 — The archived story: a column, not a state of the machine</a></li><li><a href="../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213 — The deliverable runs on the user's machine through Infra's compose</a></li></ul></li><li><span>Gates, QA e revisão de segurança</span><ul><li><a href="../adr/0013-gates-qa-secops-pr.html">ADR 0013 — PR gates: QAAgent and SecOpsAgent</a></li><li><a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020 — Unblocking the QA and SecOps gates: gitleaks on the tree, validated verdicts, and tool call in text</a></li><li><a href="../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021 — Closing Phase 4a: an infra gate that actually validates, and a panel that tells the truth</a></li><li><a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054 — Gates as a declarative registry</a></li><li><a href="../adr/0057-o-gate-espera-a-aprovacao.html">ADR 0057 — The gate agent waits for approval, like the dev agent waits</a></li><li><a href="../adr/0067-o-gate-sobrevive-ao-restart.html">ADR 0067 — The gate survives a restart</a></li><li><a href="../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090 — QA-strategy and AppSec as a second MOMENT, not a new agent</a></li><li><a href="../adr/0091-secops-runtime-relatorio-de-abuso.html">ADR 0091 — `secops-runtime` as a report script over `rate_limit_hits`</a></li><li><a href="../adr/0095-gate-necessidade-validada.html">ADR 0095 — The `necessidade-validada` gate closes with a separate human confirmation, not with the Creative self-validating</a></li><li><a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123 — Golden-set of regression cases for the QA Automation agent's semantic judgment</a></li><li><a href="../adr/0168-golden-set-do-qa-em-ci-semanal.html">ADR 0168 — The QA golden-set now runs in CI, scheduled and weekly</a></li><li><a href="../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192 — The test plan is born after the dev's delivery, and the `implementavel` gate starts judging itself on the story and the `module_map`</a></li><li><a href="../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207 — A gate cycle stalled for more than 2 h parks, and only a human gesture resumes it</a></li><li><a href="../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214 — An open question becomes a pending item to resolve</a></li><li><a href="../adr/0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.html">ADR 0215 — The project's decision reaches the dev and QA</a></li></ul></li><li><span>Execução, política de terminal e aprovações</span><ul><li><a href="../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011 — Dev agent infrastructure: worktrees, git executors and the merge lock</a></li><li><a href="../adr/0012-dev-agent-real-toolloop-orcamento-bloqueio.html">ADR 0012 — Real DevAgent: ToolLoop, per-task budget and blocking discipline</a></li><li><a href="../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017 — Workspace initialization lock, dev agent Monitor and ceiling inheritance</a></li><li><a href="../adr/0018-noop-dev-agent-modo-de-execucao.html">ADR 0018 — NoopDevAgent as a permanent execution mode</a></li><li><a href="../adr/0019-destravar-dev-agent-adr-por-modulo-orcamento-projeto.html">ADR 0019 — Unblocking the real DevAgent: writing, terminal, ADR by module, and per-project budget</a></li><li><a href="../adr/0045-reagendamento-por-evento-do-dev-agent.html">ADR 0045 — Event-based rescheduling of the dev agent, and the circuit breaker</a></li><li><a href="../adr/0047-operabilidade-pos-dogfooding.html">ADR 0047 — Post-dogfooding operability: closing Phase 12</a></li><li><a href="../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048 — The decision in the event log, and the gate's ordering</a></li><li><a href="../adr/0052-dev-agent-espera-aprovacao-no-meio-do-laco.html">ADR 0052 — The dev agent waits for approval mid-loop</a></li><li><a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055 — Path scope in the terminal policy</a></li><li><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102 — Revision of ADR 0065: the external-effect boundary stops being `deny` and becomes an absolute ceiling</a></li><li><a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167 — Automatic mode releases the path scope, and only it</a></li><li><a href="../adr/0189-o-piloto-automatico.html">ADR 0189 — The autopilot: automatic mode approves everything except the ceilings, the scope compares against the real execution folder, and &quot;Always allow&quot; records verb + subcommand</a></li><li><a href="../adr/0204-modo-automatico-libera-push-e-pr.html">ADR 0204 — Automatic mode releases push and PR</a></li></ul></li><li><span>Onde o código mora — modos de execução</span><ul><li><a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066 — Readable workspace folder name</a></li><li><a href="../adr/0072-projeto-local-ou-container.html">ADR 0072 — The project chooses where the code lives: user folder or managed folder</a></li><li><a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104 — `execution_mode` in three values, and the workspace is born `unverified` when the runner is the one who verifies it</a></li><li><a href="../adr/0107-navegacao-de-pasta-local-via-o-runner.html">ADR 0107 — Local folder navigation via the Runner</a></li><li><a href="../adr/0108-projeto-runner-nasce-ao-navegar-pasta-no-wizard.html">ADR 0108 — In `runner` mode, the project is born when clicking &quot;Browse folder...&quot;, not only at confirmation</a></li><li><a href="../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">ADR 0111 — Converting `execution_mode` on an existing project: refuse with an active dev agent, relocate `permissions.json`, retire the container row</a></li><li><a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141 — The single base for mounted projects, mounted by identity</a></li><li><a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142 — Validation of the mounted workspace is deferred until materialization</a></li><li><a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146 — The base consented at bootstrap, and `mounted` as the local default</a></li></ul></li><li><span>Container do projeto e broker</span><ul><li><a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065 — Container per project: the boundary stops being policy</a></li><li><a href="../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">ADR 0081 — Container lifecycle: state table, no orchestrator</a></li><li><a href="../adr/0083-terminal-mostra-estado-real-do-container.html">ADR 0083 — The Terminal tab gets the real consumer of the lifecycle, not the terminal</a></li><li><a href="../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128 — The Docker port, and the packaging proof that chose the implementation</a></li><li><a href="../adr/0130-broker-de-container.html">ADR 0130 — The container broker: who talks to the server's Docker, and why it does not accept a specification</a></li><li><a href="../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131 — The Arquiteto routes modules to infra: it NOMINATES, Infra ELECTS</a></li><li><a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133 — Infra elects among the routing's candidates, and the election becomes a new version of `artifact.project_image`</a></li><li><a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134 — Dev agents execute INSIDE the project's real container, and the terminal gains an auto-approval floor in there</a></li><li><a href="../adr/0135-portao-de-imagem-nos-tres-modos.html">ADR 0135 — The Arquiteto's image gate (RN-105) now applies in all three execution modes</a></li><li><a href="../adr/0136-pagina-global-de-containers.html">ADR 0136 — Global containers page: a per-load ceiling on the broker, and `container_remove` under the absolute ceiling</a></li><li><a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137 — `brabo-runner` brings up the project's container on the user's machine</a></li><li><a href="../adr/0143-agentes-de-dev-so-depois-do-container.html">ADR 0143 — Dev agents only after the container</a></li><li><a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144 — The broker's second root, and the discriminated locator that chooses it</a></li><li><a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180 — The project container runs as the folder's owner, measured by the api</a></li><li><a href="../adr/0190-a-infra-sobe-o-container-no-aceite.html">ADR 0190 — Infra brings up the container on handoff acceptance, as a server step and with seeded autonomy, and it is Infra that hands over to the Dev Lead</a></li><li><a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199 — The container's minimum resource is derived from the `module_map`: each module declares its own, and Infra starts with the sum</a></li><li><a href="../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208 — Infra inherits the network the Arquiteto declared</a></li><li><a href="../adr/0228-comando-do-app-e-rede-do-container.html">ADR 0228 — O container do projeto sobe o app pelo comando declarado e publica porta só no loopback</a></li><li><a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229 — O QA testa numa instância efêmera, com os serviços que a Infra declarou</a></li></ul></li><li><span>O runner local</span><ul><li><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — Local runner: execution on the user's machine over a Phoenix channel with a single-use ticket</a></li><li><a href="../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105 — Personal Access Token (`brb_…`) for the runner, scoped by construction to a single route</a></li><li><a href="../adr/0106-distribuicao-do-runner-via-tsup-e-npm-publish.html">ADR 0106 — Distribution of `@brabo/runner` via `tsup` and `npm publish`, version injected only in CI</a></li><li><a href="../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112 — Standalone binary of `@brabo/runner` via `bun build --compile`, native `.node` addon embedded by real extraction to a temp directory</a></li><li><a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118 — Browser-driven runner setup: an Ed25519 device key as a second `runner-ticket` credential, a GitHub Releases proxy for the binary, and the File System Access API for a one-click configured folder</a></li><li><a href="../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145 — Docker becomes a real prerequisite of the `runner` mode</a></li><li><a href="../adr/0147-agente-local-com-capacidades.html">ADR 0147 — One local agent, capabilities declared on connection</a></li><li><a href="../adr/0151-base-consentida-no-runner.html">ADR 0151 — The base consented in the runner, and folder creation through the channel</a></li><li><a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154 — The machine device key</a></li><li><a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174 — The runner's standalone binary stops promising Intel Mac</a></li><li><a href="../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187 — The runner's standalone binary stops promising Windows</a></li><li><a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193 — Credentialed git runs on the runner's HOST; the code runs in the container</a></li><li><a href="../adr/0201-revogacao-por-chave.html">ADR 0201 — Revocation targets the KEY, not the `{project, user}` pair</a></li><li><a href="../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.html">ADR 0203 — The runner flow through the browser is retired, and the path is the installer</a></li><li><a href="../adr/0230-importar-chave-de-llm-pelo-runner.html">ADR 0230 — O runner importa a chave de API de LLM que o usuário já tem na máquina</a></li></ul></li><li><span>Autenticação, acesso e segredos</span><ul><li><a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031 — First-party auth: argon2id, EdDSA and refresh rotation</a></li><li><a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032 — Cutting Keycloak: our own issuer, service token and cookie-based session</a></li><li><a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037 — The CORS the engine didn't have, and the port as part of the contract</a></li><li><a href="../adr/0050-credencial-sempre-cifrada-verificacao-explicita.html">ADR 0050 — Credential always encrypted; verification becomes an explicit action</a></li><li><a href="../adr/0058-csp-fechado-na-api-e-escopo-de-projeto-contido.html">ADR 0058 — Closed CSP on the api, and project scope contained at the root</a></li><li><a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059 — The key that signs the git OAuth `state` has no default</a></li><li><a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084 — Social login (GitHub/GitLab), revising the ADR 0031/0032 backlog</a></li><li><a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096 — Real SMTP in `MailSender`, behind an explicit toggle</a></li><li><a href="../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127 — Two downgrade ceilings on `project_members`, and the override stays</a></li><li><a href="../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156 — The self-downgrade ceiling also on project member removal</a></li><li><a href="../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157 — The self-movement ceiling on the workspace upsert, and the self-promotion that was a loophole</a></li><li><a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158 — The master key's id recorded in the envelope, as observability and never as authority</a></li><li><a href="../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173 — Workspace member removal is born, protected by the same clause</a></li><li><a href="../adr/0245-acesso-rapido-por-papel-so-no-ambiente-local.html">ADR 0245 — Acesso rápido por papel só no ambiente local</a></li></ul></li><li><span>Providers de LLM, modelos e gasto</span><ul><li><a href="../adr/0040-moeda-do-dashboard.html">ADR 0040 — Dashboard currency: USD for now, manual per-workspace exchange rate deferred</a></li><li><a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041 — An OpenAI-compatible base, an LLM provider contract, and capabilities that refuse a binding</a></li><li><a href="../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042 — Living catalog, model lifecycle and auditable price</a></li><li><a href="../adr/0043-seis-providers-de-llm-e-o-fechamento-da-fase-9b.html">ADR 0043 — Six LLM providers on top of the base, and Phase 9b finally closed</a></li><li><a href="../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049 — Model curation per workspace</a></li><li><a href="../adr/0051-facetas-de-capability-e-curadoria-por-uso.html">ADR 0051 — Proven capability facets; &quot;what it's good for&quot; is curation</a></li><li><a href="../adr/0063-duas-audiencias-para-o-mesmo-gasto.html">ADR 0063 — Two audiences for the same spend: the owner's bill and the member's consumption</a></li><li><a href="../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064 — Area scope in the model cascade, and the global agent binding</a></li><li><a href="../adr/0075-embeddings-no-contrato-de-llm-provider.html">ADR 0075 — Embeddings in the LLMProvider contract</a></li><li><a href="../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076 — `provider` becomes a spend dimension again, and containment moves to the type</a></li><li><a href="../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">ADR 0077 — Model ranking by capability, with no invented score</a></li><li><a href="../adr/0110-budget-por-area-aditivo-nao-cascata.html">ADR 0110 — Budget per area is ADDITIVE, next to project/session — not a cascade, and not a new table</a></li><li><a href="../adr/0114-deteccao-de-ollama-nativo-no-bootstrap-dev.html">ADR 0114 — Native Ollama detection in dev bootstrap: ask once, persist to `.env`, gate the compose services behind a profile</a></li><li><a href="../adr/0115-pedido-de-pull-de-modelo-huggingface-tabela-propria.html">ADR 0115 — Hugging Face model pull: a dedicated table, two-step confirmation, and an official-publisher allowlist — never `proposed_actions`</a></li><li><a href="../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166 — The routing preference lives in the model binding, travels with it, and freezes in metering</a></li><li><a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188 — The real cost the provider returns becomes the metering number</a></li><li><a href="../adr/0198-duplicata-semantica-por-embedding-com-limiar-que-so-avisa.html">ADR 0198 — Semantic duplicates of stories and rules are warned by embedding with a threshold, and the spending enters metering</a></li><li><a href="../adr/0221-upstream-preso-por-sessao.html">ADR 0221 — O hub prende a conversa de cada agente ao upstream que a atendeu, por `session_id`</a></li><li><a href="../adr/0222-provider-9router-de-llm.html">ADR 0222 — O 9Router entra como o 10º provider de LLM, com URL por instalação</a></li><li><a href="../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223 — O orçamento de raciocínio é capability POR MODELO, curada à mão</a></li><li><a href="../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224 — O raciocínio é contado no stream e abortado no limite, e o custo é estimado e reconciliado</a></li><li><a href="../adr/0225-teto-de-preco-do-upstream-no-openrouter.html">ADR 0225 — O OpenRouter recebe um teto de preço por chamada (`provider.max_price` = catálogo × 1,5)</a></li><li><a href="../adr/0227-provider-opencode-zen-de-llm.html">ADR 0227 — O OpenCode Zen entra como o 11º provider de LLM, só no dialeto OpenAI</a></li><li><a href="../adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233 — O membro vê o gasto do projeto por agente e por área, nunca por provider</a></li><li><a href="../adr/0251-preco-de-lista-datado-para-provider-sem-preco.html">ADR 0251 — Preço de lista datado no código para provider que não informa preço</a></li></ul></li><li><span>RAG, grafo de conhecimento e artefatos</span><ul><li><a href="../adr/0079-tabela-de-chunks-vetor-e-tsvector-juntos.html">ADR 0079 — Chunks table: vector and `tsvector` on the same row</a></li><li><a href="../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">ADR 0080 — Hybrid search: weights, threshold, and what counts as a citation</a></li><li><a href="../adr/0082-chat-rag-aba-de-busca-hibrida.html">ADR 0082 — Chat RAG: its own hybrid-search tab, without renaming &quot;Chat&quot;</a></li><li><a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099 — Neo4j as knowledge graph and prompt templates, driver in the api</a></li><li><a href="../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100 — `rag_search` for agents and Ollama models guaranteed at boot</a></li><li><a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101 — Relational memory as an event log projection; templates consumed without touching GenServers</a></li><li><a href="../adr/0113-pasta-local-anexada-via-navegador-vira-chunks-scope-local.html">ADR 0113 — Locally attached folder becomes `chunks.scope = 'local'`, read by the BROWSER, never a host path</a></li><li><a href="../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">ADR 0129 — RAG search telemetry is a TABLE, with the weights frozen in the row</a></li><li><a href="../adr/0132-golden-set-de-acerto-do-rag.html">ADR 0132 — RAG accuracy golden-set, and the `rag-acertivo` gate</a></li><li><a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138 — The RAG golden-set now runs in CI, scheduled — and remains `warn`</a></li><li><a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148 — The agents' artifacts projected to files, in a `docs/` folder</a></li><li><a href="../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196 — The Anamnese turned back on: it does not run without a subject, and the accepted hypothesis becomes a profile fact</a></li><li><a href="../adr/0200-contrato-entre-modulos-artefato-do-arquiteto.html">ADR 0200 — The contract between modules becomes a versioned Arquiteto artifact, and the dev agent reads it instead of someone else's worktree</a></li><li><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205 — The agent deviation the Anamnese observes becomes a product signal, without personal data</a></li></ul></li><li><span>Interface web e design system</span><ul><li><a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036 — Auth screens faithful to the design, and the three fonts that weren't loading</a></li><li><a href="../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060 — The code-reading surface, contained and budgeted</a></li><li><a href="../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">ADR 0074 — Reachable theme, and the boot under CSP</a></li><li><a href="../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">ADR 0078 — Screen frame, and the tab registry diverges from the handoff on purpose</a></li><li><a href="../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097 — Direct read of the engine schema for the dashboard's &quot;N agents online&quot;</a></li><li><a href="../adr/0116-tipos-do-web-gerados-do-openapi.html">ADR 0116 — `ActionType` (and future types) generated from the OpenAPI contract, not hand-copied</a></li><li><a href="../adr/0122-sessionpage-dividido-em-cinco-prs.html">ADR 0122 — `SessionPage.tsx` split into five mechanical PRs, declared upfront</a></li><li><a href="../adr/0124-hook-do-canal-de-turno-do-sessionpage.html">ADR 0124 — Turn-channel state cluster extracted into `useTurnoDoAgente`</a></li><li><a href="../adr/0125-projectsettingstab-dividido-por-secao.html">ADR 0125 — `ProjectSettingsTab.tsx` split into one file per section, behind a barrel</a></li><li><a href="../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126 — The project page navigates by a vertical rail, and the Code tab stops auto-collapsing the sidebar</a></li><li><a href="../adr/0176-sessionpage-abaixo-de-mil-linhas.html">ADR 0176 — `SessionPage.tsx` below 1,000 lines, in ten mechanical PRs, and the lock only afterwards</a></li><li><a href="../adr/0181-tema-preto-neutro.html">ADR 0181 — The dark theme becomes neutral black, and the contrast debt ends</a></li><li><a href="../adr/0210-animacao-de-texto-com-motion.html">ADR 0210 — Text animation with `motion`</a></li><li><a href="../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211 — A single navigation: the sidebar absorbs the project rail</a></li><li><a href="../adr/0232-shadcn-com-base-ui-no-apps-web.html">ADR 0232 — shadcn/ui com Base UI e Tailwind 4 no `apps/web`</a></li><li><a href="../adr/0234-shiki-e-recharts-por-carga-dinamica.html">ADR 0234 — `shiki` no Code Block e `recharts` no Chart, sempre por carga dinâmica</a></li><li><a href="../adr/0237-o-visual-v3-liga-o-preflight-e-sobe-os-raios.html">ADR 0237 — O visual v3 liga o preflight e sobe os raios</a></li><li><a href="../adr/0238-o-grafo-de-modulos-vira-canvas-xyflow.html">ADR 0238 — O grafo de módulos da Arquitetura vira Canvas (`@xyflow/react`)</a></li><li><a href="../adr/0239-csp-frame-src-local-para-o-web-preview.html">ADR 0239 — CSP `frame-src` local para o Web preview do entregável</a></li><li><a href="../adr/0240-o-motivo-de-controle-inerte-mora-num-ponto-de-interrogacao-nos-containers.html">ADR 0240 — O motivo de controle inerte pode morar num &quot;?&quot; ativo na página de Containers</a></li><li><a href="../adr/0241-a-sidebar-adota-o-block-sidebar-07-do-shadcn.html">ADR 0241 — A sidebar adota o block `sidebar-07` do shadcn</a></li><li><a href="../adr/0242-containers-em-tabela-linear-com-tanstack-react-table.html">ADR 0242 — Containers em tabela linear com `@tanstack/react-table`</a></li><li><a href="../adr/0243-consequencia-irreversivel-pode-morar-num-botao-de-perigo.html">ADR 0243 — Consequência irreversível pode morar num botão de perigo</a></li><li><a href="../adr/0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.html">ADR 0244 — Coluna das abas do projeto alinhada à esquerda</a></li><li><a href="../adr/0248-conteudo-das-paginas-ocupa-a-largura-inteira.html">ADR 0248 — O conteúdo das páginas ocupa a largura inteira</a></li><li><a href="../adr/0250-chat-da-sessao-ocupa-a-largura-inteira.html">ADR 0250 — O chat da Sessão ocupa a largura inteira</a></li></ul></li><li><span>Operação, deploy e instalação</span><ul><li><a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024 — Phase 5 (session 1): production images, compose.prod, CI, and smoke test</a></li><li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025 — Phase 5 (session 2): Kubernetes deploy with Kustomize, queue metric and local overlay</a></li><li><a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026 — Phase 5 (session 3): graceful shutdown, OpenTelemetry, metrics, logs and dashboards</a></li><li><a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027 — Backup/restore, api hardening, exposed surface and release</a></li><li><a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035 — Trace without a collector, and the path between layers in the log</a></li><li><a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070 — Observability in the local Compose: metric and log, no trace</a></li><li><a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150 — The one-line installer, with a chosen source and a marker</a></li><li><a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152 — Volume backup and restore, against compose</a></li><li><a href="../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153 — `DEPLOY_ENABLED`: the trigger ten documents cite and none creates</a></li><li><a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155 — The first account is born in the terminal, and the local agent comes up paired</a></li><li><a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160 — The installer's compose travels with it, as a signed asset</a></li><li><a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161 — The screen only offers the mode the installation executes, and the Release installation has no broker</a></li><li><a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162 — The broker becomes the fifth published image, and the installer ASKS whether to turn it on</a></li><li><a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169 — The local overlay's S3 destination stops being MinIO and becomes SeaweedFS</a></li><li><a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170 — The dev compose becomes `brabo-dev`, and dev refuses to come up next to an installation</a></li><li><a href="../adr/0209-engine-em-otp-29.html">ADR 0209 — The engine moves up to Elixir 1.20.4 / OTP 29.1.1</a></li></ul></li><li><span>CI, release e cadeia de suprimentos</span><ul><li><a href="../adr/0039-actionlint-e-validacao-do-pipeline-de-ci-gerado.html">ADR 0039 — actionlint and validation of the generated CI pipeline</a></li><li><a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119 — Images published to GHCR on every final tag, and the production overlay pinned by digest</a></li><li><a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120 — Browser E2E against the production compose, in a package outside the workspace</a></li><li><a href="../adr/0121-schema-dividido-por-agregado-de-dominio.html">ADR 0121 — The schema split by domain aggregate, behind a barrel</a></li><li><a href="../adr/0140-timeout-do-audit-como-risco-assumido.html">ADR 0140 — A repeated `pnpm audit` timeout is an accepted risk; a finding still fails</a></li><li><a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149 — Signature of published artifacts</a></li><li><a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159 — A third-party image comes in by digest, and the lint fails whoever forgets</a></li><li><a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172 — The release scans with Trivy what it publishes, by digest, before signing</a></li><li><a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178 — The third-party image tag lives INSIDE the reference, before the digest</a></li><li><a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197 — The workflows' image comes from the compose, and image Dependabot is turned on</a></li><li><a href="../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252 — O Brabo vira um conjunto de repositórios em `viralabs-dev`</a></li></ul></li><li><span>Documentação</span><ul><li><a href="../adr/0029-sincronizacao-continua-da-documentacao.html">ADR 0029 — Continuous documentation synchronization</a></li><li><a href="../adr/0033-referencia-de-api-gerada-do-openapi.html">ADR 0033 — The API reference comes out of code, and the table test enforces the metadata</a></li><li><a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034 — Documentation published per stage, in a Pages subdirectory</a></li><li><a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071 — Symmetric publishing per stage, and a root that chooses</a></li><li><a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073 — The published path names the environment, not the branch</a></li><li><a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117 — `website/` gets its own lockfile, out of the product's `pnpm audit`</a></li><li><a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202 — The ADR index by theme, with the theme outside the ADR</a></li><li><a href="../adr/0206-referencia-da-api-numa-pagina-redoc.html">ADR 0206 — The API reference becomes a Redoc page</a></li><li><a href="../adr/0216-quatro-idiomas-com-pt-br-como-fonte.html">ADR 0216 — Four languages, with pt-BR as SOURCE and default: documentation and interface in Portuguese, English, Russian and Simplified Chinese</a></li><li><a href="../adr/0218-titulo-de-adr-com-prefixo.html">ADR 0218 — Every ADR is titled &quot;ADR NNNN — title&quot;</a></li><li><a href="../adr/0219-referencia-entra-na-traducao.html">ADR 0219 — The reference enters translation</a></li><li><a href="../adr/0220-api-traduzida-por-catalogo.html">ADR 0220 — The API page is translated by catalog</a></li><li><a href="../adr/0253-o-site-de-docs-deixa-o-docusaurus.html">ADR 0253 — O site de docs deixa o Docusaurus</a></li><li><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html">ADR 0254 — A doc de cada área mora na raiz dela</a></li></ul></li></ul></li></ul></section><section><h2>📐 Rules</h2><ul><li><a href="../business-rules.html">Business rules</a></li><li><a href="../business-rules/custo.html">Custo e metering</a></li><li><a href="../business-rules/autenticacao.html">Authentication</a></li><li><a href="../business-rules/api.html">API</a></li><li><a href="../business-rules/broker.html">Broker</a></li><li><a href="../business-rules/ci.html">CI</a></li><li><a href="../business-rules/contracts.html">Contratos</a></li><li><a href="../business-rules/engine.html">Engine</a></li><li><a href="../business-rules/infra.html">Infra</a></li><li><a href="../business-rules/produto.html">Produto</a></li><li><a href="../business-rules/runner.html">Runner</a></li><li><a href="../business-rules/web.html">Web</a></li></ul></section><section><h2>📖 Reference</h2><ul><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Api's Exposed Surface</a></li><li><span>API reference</span></li></ul></section><section><h2>💡 Explanation</h2><ul><li><span>Process and pipeline</span><ul><li><a href="../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../explanation/branching-policy.html" aria-current="page">Branching policy</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../explanation/observability.html">Observability</a></li><li><a href="../explanation/modelo-de-time.html">Team model and deliverable flow</a></li></ul></li><li><span>Validations and measurements</span><ul><li><a href="../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../explanation/aceite-providers.html">Provider acceptance</a></li><li><a href="../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></li><li><span>Phase history</span><ul><li><a href="../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../explanation/backlog.html">Triaged backlog</a></li></ul></li><li><span>Localization</span><ul><li><a href="../explanation/localizacao.html">Localization</a></li><li><a href="../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></li><li><span>Technical notes</span><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — not adopted</a></li></ul></li></ul></section><section><h2>🛠️ Operations</h2><ul><li><a href="../runbook.html">Runbook</a></li></ul></section><section><h2>📚 Vocabulary</h2><ul><li><a href="../glossary.html">Glossary</a></li></ul></section><section><h2>🤝 Contributing</h2><ul><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="branch-and-versioning-policy">Branch and versioning policy</h1>
+<p>This page is the <strong>source</strong> of the policy. The workflows that apply it
+derive from here — if a mechanism diverges from what's written, the
+mechanism is wrong.</p>
+<h2 id="why-mechanize-it">Why mechanize it</h2>
+<p>A branching policy agreed upon in a meeting survives until the first
+Friday night. The rush isn't bad faith: it's that the rule lives in
+people's heads, and a head under pressure optimizes for the short term.</p>
+<p>So the policy here <strong>doesn't ask for cooperation</strong> — it's enforced by CI.
+Not out of distrust, but because a rule that depends on individual
+discipline doesn't survive an incident, and it's exactly during an
+incident that it matters most.</p>
+<p>Two consequences we accept on purpose:</p>
+<ul>
+<li><strong>The PR becomes more bureaucratic.</strong> A wrong branch name fails the
+check. That's the cost.</li>
+<li><strong>The error message has to teach.</strong> A check that only says &quot;invalid&quot;
+trains people to work around it. Every error cites the rule, what came
+in, and the correct example.</li>
+</ul>
+<h2 id="the-ladder">The ladder</h2>
+<p>Three permanent branches, <strong>one per environment</strong>. Code climbs one step
+at a time.</p>
+<pre class="mermaid" data-mermaid>flowchart LR
+  D[dev&lt;br/&gt;development] --&gt;|promotion| Q[qa&lt;br/&gt;staging]
+  Q --&gt;|promotion| M[main&lt;br/&gt;production]
+  M -.-&gt;|back-merge| Q
+  Q -.-&gt;|back-merge| D
+</pre>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>branch</th>
+<th>environment</th>
+<th>what being here means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dev</code></td>
+<td>development</td>
+<td>integrated, tested by CI</td>
+</tr>
+<tr>
+<td><code>qa</code></td>
+<td>staging</td>
+<td>under functional validation</td>
+</tr>
+<tr>
+<td><code>main</code></td>
+<td>production</td>
+<td>what's live</td>
+</tr>
+</tbody>
+</table></div>
+<p>There used to be a fourth step, <code>rc</code> (pre-prod), between <code>qa</code> and <code>main</code>.
+It was removed: with a single maintainer and a short cycle, the extra step
+cost a whole promotion and an environment to separate &quot;validated&quot; from
+&quot;almost ready&quot; — a distinction that wasn't paying for itself. <code>qa</code> becomes
+the only gate before production.</p>
+<p>The removal took a while to fully land. <code>pr-police</code> started operating
+with three steps immediately, but the <strong>Gitflow bootstrap</strong> kept creating
+<code>rc</code>, protecting <code>rc</code> and committing a <code>branching-policy.md</code> into the
+user's repository that taught the four-step ladder — the product
+documenting, for whoever used it, a policy it had itself already dropped.
+It was finding #3 of the
+<a href="primeiro-dogfooding.html">first dogfooding round</a>, closed afterward
+(<a href="../business-rules/api.html#rn-029">RN-029</a>).</p>
+<p>Two loose ends were left standing on purpose, and for different reasons:
+the value <code>create_rc_branch</code> remains in the database's <code>bootstrap_step</code>
+enum (already-run bootstraps have rows with it), and <code>rc</code> remains in the
+<strong>protected-merge</strong> list — see the note in
+<a href="../reference/permissions.html">permissions.md</a>.</p>
+<p><strong>No step can be skipped.</strong> <code>dev → main</code> doesn't exist, not even in an
+emergency — an emergency has its own path (<code>hotfix</code>, below), and it too
+respects the ladder, just starting from the top.</p>
+<h2 id="taxonomy">Taxonomy</h2>
+<p>Every branch is <code>function/descriptor</code>, validated by
+<code>^.{0,30}/\S{0,32}$</code> — up to 30 characters for the function, up to 32 for
+the descriptor, no spaces.</p>
+<pre class="codigo"><code>✅ feature/pr-police          ✅ bugfix/rate-limit-off-by-one
+✅ hotfix/vaza-token          ✅ docs/politica-de-branches
+
+❌ minha-branch               (no function)
+❌ ci/build-paralelo          (`ci` isn't on the list; use `chore`)
+❌ fix/algo                   (`fix` isn't on the list; use `bugfix`)
+</code></pre>
+<p>The regex alone isn't enough: the function needs to be on the <strong>closed
+list</strong>.</p>
+<h3 id="whos-born-where">Who's born where</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>function</th>
+<th>born from</th>
+<th>PR targets</th>
+<th>for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>breaking</code></td>
+<td><code>dev</code></td>
+<td><code>dev</code></td>
+<td>incompatible change</td>
+</tr>
+<tr>
+<td><code>feature</code></td>
+<td><code>dev</code></td>
+<td><code>dev</code></td>
+<td>new functionality</td>
+</tr>
+<tr>
+<td><code>bugfix</code></td>
+<td><code>dev</code></td>
+<td><code>dev</code></td>
+<td>ordinary fix</td>
+</tr>
+<tr>
+<td><code>perf</code></td>
+<td><code>dev</code></td>
+<td><code>dev</code></td>
+<td>performance</td>
+</tr>
+<tr>
+<td><code>refactor</code></td>
+<td><code>dev</code></td>
+<td><code>dev</code></td>
+<td>restructuring without behavior change</td>
+</tr>
+<tr>
+<td><code>chore</code></td>
+<td><code>dev</code></td>
+<td><code>dev</code></td>
+<td>maintenance, tooling, CI</td>
+</tr>
+<tr>
+<td><code>docs</code></td>
+<td><code>dev</code></td>
+<td><code>dev</code></td>
+<td>documentation</td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td><code>dev</code></td>
+<td><code>dev</code></td>
+<td>coverage</td>
+</tr>
+<tr>
+<td><code>hotfix</code></td>
+<td><code>main</code></td>
+<td><code>main</code></td>
+<td>production incident</td>
+</tr>
+</tbody>
+</table></div>
+<p>A fix found in <strong>staging</strong> has no prefix of its own: it becomes a
+<code>bugfix/</code> starting from <code>dev</code> and climbs the ladder. There used to be an
+<code>rcfix/</code> for pre-prod, and it left along with the <code>rc</code> step — a prefix
+with no origin branch is a trap.</p>
+<p>The origin isn't a suggestion — it's <strong>verified by merge-base</strong>. A
+<code>hotfix</code> born from <code>dev</code> carries along everything that's in <code>dev</code> and
+hasn't been validated yet; rushing that into production during an
+incident is how disaster happens.</p>
+<h3 id="a-fix-born-high-goes-back-down">A fix born high goes back down</h3>
+<p><code>hotfix</code> enters directly at the step where the problem showed up. That
+leaves the steps below it <strong>out of date</strong> — the fix exists in <code>main</code> and
+not in <code>dev</code>.</p>
+<p>That's why every high-born fix generates a <strong>back-merge</strong>: <code>main → qa → dev</code>, in a chain, in order. While it hasn't completed, the affected steps
+stay locked — see <a href="#the-back-merge-gate">The back-merge gate</a>.</p>
+<p>The full chain for a hotfix is <strong>three PRs</strong>: the hotfix plus the two
+back-merges.</p>
+<h2 id="pr-families">PR families</h2>
+<p>Every PR gets a family label, applied automatically:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>family</th>
+<th>when</th>
+<th>example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>trabalho</code> (work)</td>
+<td>a work function → <code>dev</code></td>
+<td><code>feature/pr-police</code> → <code>dev</code></td>
+</tr>
+<tr>
+<td><code>correcao-alta</code> (high fix)</td>
+<td><code>hotfix</code> → <code>main</code></td>
+<td><code>hotfix/vaza-token</code> → <code>main</code></td>
+</tr>
+<tr>
+<td><code>promocao</code> (promotion)</td>
+<td>adjacent step, going up</td>
+<td><code>dev</code> → <code>qa</code></td>
+</tr>
+<tr>
+<td><code>retropropagacao</code> (back-merge)</td>
+<td>adjacent step, going down</td>
+<td><code>main</code> → <code>qa</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The label isn't decoration: it's what lets you answer &quot;how many hotfixes
+did we have this quarter?&quot; without git archaeology.</p>
+<p><a id="push-direto-é-bloqueado"></a></p>
+<h2 id="direct-push-is-blocked">Direct push is blocked</h2>
+<p>None of the three permanents accept direct push. Every change enters via
+PR. It's the <strong>single door</strong> — and it has exactly three exceptions, all
+bots, all written here because an undocumented exception becomes a
+precedent:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>exception</th>
+<th>who</th>
+<th>why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v*</code> tags</td>
+<td><code>brabo-release[bot]</code></td>
+<td>a version is born from a workflow, never by hand</td>
+</tr>
+<tr>
+<td><code>.release/gate.json</code> on <code>main</code></td>
+<td><code>brabo-release[bot]</code></td>
+<td>the gate needs to write itself when it locks and unlocks</td>
+</tr>
+<tr>
+<td>the <code>gh-pages</code> branch</td>
+<td><code>github-actions[bot]</code></td>
+<td>publishing documentation per step requires a mutable tree (<a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>The third is the easiest of the three to accept, and it's worth saying
+why, so it doesn't set a precedent for the hard ones.</strong> <code>gh-pages</code> <strong>is
+not a code branch</strong>: nothing in it is source, everything is generated
+from <code>docs/</code> and <code>website/</code>, and deleting it entirely loses nothing — the
+next push rebuilds it. There's no possible reviewer for a generated site,
+and a PR per publication would be ceremony with no reader. Its <code>git log</code>
+is the record of every publication, with date and origin sha.</p>
+<p>It's also <strong>not permanent</strong>, so it doesn't enter the rulesets — which is
+why the <code>GITHUB_TOKEN</code> is enough, no bypass and no <code>BRABO_BOT_TOKEN</code>.</p>
+<p>The second is the most uncomfortable of the three, so it's worth saying
+why the gate exists instead of going through a PR: the gate locks the
+branches, and a PR to open the lock would be blocked by the gate itself.
+The alternative — storing the state outside the repository — would trade
+a visible exception in the history for an invisible state in some
+dashboard. The bot's commit stays in <code>git log</code>, with date and content.</p>
+<p><code>tag-release</code> recognizes that commit <strong>by its content</strong> (it only touches
+<code>.release/</code>), never by author or message: who wrote it is verifiable,
+who <em>claims</em> to have written it isn't.</p>
+<p>The exact configuration is in <a href="../reference/rulesets.html">Rulesets</a>, and
+applying it is a manual step — the repository versions the source, GitHub
+receives the application.</p>
+<h2 id="merged-branches-get-archived">Merged branches get archived</h2>
+<p>Every branch whose PR merged gets moved out of the branch list <strong>7 days
+after the merge</strong> — mechanically, by <code>archive-merged-branch.yml</code>, which runs
+once a day (<code>schedule:</code>, plus <code>workflow_dispatch</code>) and walks every branch of
+the repository (AT-557, owner's decision of 2026-10-15). Until then the
+branch stays where it is, so a follow-up fix can still go on top of it. A
+branch is archived only when all of these hold:</p>
+<ul>
+<li>it is not one of the excluded names below, and not from a fork;</li>
+<li>no PR with that head is <strong>open</strong>;</li>
+<li>a PR with that head <strong>merged</strong> in this repository, and the most recent
+one merged 7 or more days ago (<code>DIAS_ATE_ARQUIVAR</code>);</li>
+<li>the branch tip is still that PR's <code>head.sha</code> — a branch that received a
+commit after the merge <strong>stays</strong>.</li>
+</ul>
+<p>A branch that never had a merged PR has no merge date and is <strong>never</strong>
+archived by this job; removing it stays a manual call. The job summary
+lists what was archived, what was kept (with the reason) and what failed;
+a failure on one branch doesn't stop the others, and turns the job red.</p>
+<p>&quot;Archived&quot; is literal, not a
+euphemism for deleted: the branch moves from <code>refs/heads/&lt;name&gt;</code> to
+<code>refs/archive/&lt;name&gt;</code>, a namespace GitHub's UI doesn't show as a branch.
+The commit object and its history stay in the repository exactly as they
+were — recoverable by anyone who knows the ref, with a single
+<code>git push origin refs/archive/&lt;name&gt;:refs/heads/&lt;name&gt;</code> to bring it back.</p>
+<p>Four names are never archived, and the reason is the same for all four:
+none of them is disposable feature work.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>name</th>
+<th>why it's excluded</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dev</code>, <code>qa</code>, <code>main</code></td>
+<td>the three permanents — they appear as the <code>head</code> of every merged promotion PR (<code>dev</code>→<code>qa</code>, <code>qa</code>→<code>main</code>), which is exactly the case this exclusion exists to catch</td>
+</tr>
+<tr>
+<td><code>gh-pages</code></td>
+<td>the documentation site's deploy branch (see &quot;Direct push is blocked&quot; above) — not a feature branch, and deleting <code>refs/heads/gh-pages</code> would take the live site down with it</td>
+</tr>
+</tbody>
+</table></div>
+<p>A fifth condition isn't a name, it's a boundary: a PR whose head branch
+lives in a <strong>fork</strong> (<code>head.repo.full_name != base.repo.full_name</code>) is
+never touched. The workflow's <code>GITHUB_TOKEN</code> is scoped to this
+repository — it has no business rewriting refs in someone else's.</p>
+<p>The decision itself — which four names are excluded, and the fork check —
+is a tested pure function
+(<a href="https://github.com/daneiel/brabo/blob/dev/scripts/ci/archive-branch.ts"><code>scripts/ci/archive-branch.ts</code></a>),
+not inline shell: it's the part of this mechanism that's actually worth
+getting wrong tests for — and so is the 7-day eligibility
+(<code>aptaParaArquivar</code>, same file). The same script then calls the GitHub
+API: create the <code>refs/archive/</code> ref (or force it, when the name was archived
+before), read it back and check it points at the branch's SHA, and only then
+delete the <code>refs/heads/</code> one — so a failure never drops a branch without
+leaving the archived copy behind.</p>
+<h2 id="bots-skip-the-ladder">Bots skip the ladder</h2>
+<p>PRs opened by <code>dependabot[bot]</code> and <code>github-actions[bot]</code> are <strong>exempt</strong>
+from name, origin and destination validation.</p>
+<p>The reason is practical: Dependabot names branches like
+<code>dependabot/npm_and_yarn/brace-expansion-5.0.8</code>, and there's no way to
+teach it the taxonomy. Rejecting it would mean renaming branches by hand
+on every security alert — friction on top of exactly the flow that needs
+to be fast.</p>
+<p>A pedagogical message doesn't teach a bot. The exemption is by
+<strong>author</strong>, not by prefix, so no one uses it as a loophole by naming a
+branch <code>dependabot/</code>.</p>
+<h3 id="dependabot-branches-are-allowed-with-no-character-limit">Dependabot branches are allowed with no character limit</h3>
+<p>Besides the generic bot exemption, the policy names Dependabot's branches
+explicitly: <strong><code>dependabot/…</code> is an allowed branch name, with no character
+criterion</strong> — no 30/32 limit, any number of slashes. Real names from this
+repository: <code>dependabot/npm_and_yarn/npm_and_yarn-582a9020a7</code>,
+<code>dependabot/github_actions/dev/anthropics/claude-code-action-1.0.221</code> — the
+second one would fail the <code>funcao/descritivo</code> format as a work branch.</p>
+<p>It is a named rule (<code>PREFIXO_DO_DEPENDABOT</code> and <code>ehBranchDoDependabot</code> in
+<code>scripts/ci/pr-police.ts</code>), and it holds only when <strong>both</strong> are true: the head
+starts with <code>dependabot/</code> <strong>and</strong> the author is Dependabot itself
+(<code>dependabot[bot]</code>, <code>app/dependabot</code>, or <code>dependabot</code> with the API's
+<code>type: Bot</code>). A human who names a branch <code>dependabot/…</code> still goes through
+the whole rule and fails in <code>FUNCAO-DESCONHECIDA</code>, with a message saying the
+prefix is reserved and that a hand-made dependency bump is <code>chore/</code>. The rule
+does not check the destination: bringing a security PR from <code>main</code> to <code>dev</code>
+is the job of <code>dependabot-para-dev.yml</code> (next section).</p>
+<h2 id="dependabot-enters-through-dev">Dependabot enters through dev</h2>
+<p>The exemption above is about the branch <strong>name</strong>. The <strong>destination</strong> is not
+exempt: a dependency update enters through <code>dev</code>, like everything else, and
+reaches <code>main</code> through the <code>dev → qa → main</code> promotion. A dependency merged
+straight into <code>main</code> skips the ladder and makes <code>main</code> diverge from the branch
+where the work happens.</p>
+<p>Two mechanisms, because GitHub treats the two kinds of update differently:</p>
+<ul>
+<li><strong>Version updates</strong> obey <code>target-branch: dev</code> in <code>.github/dependabot.yml</code>.</li>
+<li><strong>Security updates</strong> are switched on in the repository interface and GitHub
+always opens them against the <strong>default</strong> branch (<code>main</code>), ignoring
+<code>target-branch</code>. <code>.github/workflows/dependabot-para-dev.yml</code> takes each open
+Dependabot PR against <code>main</code> and does one of two things, decided by a tested
+pure function
+(<a href="https://github.com/daneiel/brabo/blob/dev/scripts/ci/dependabot-para-dev.ts"><code>scripts/ci/dependabot-para-dev.ts</code></a>):
+<ul>
+<li><strong>close</strong> it with the justification, when <code>dev</code>'s lockfile already
+resolves every dependency of the PR only at versions <code>&gt;=</code> the threshold;</li>
+<li><strong>retarget</strong> it to <code>dev</code> in every other case — a version below the
+threshold, a package missing from the lockfile, a version that doesn't
+compare, a body it can't read.</li>
+</ul>
+</li>
+</ul>
+<p>The <strong>threshold</strong> is the first <em>patched</em> version of the open alerts for that
+package in that lockfile, and only without an alert is it the PR's target
+version. The difference was measured on PR #553: it bumped <code>@vitest/mocker</code>
+to <code>5.0.0</code> while <code>dev</code> resolved <code>4.1.11</code>, which is exactly the alert's first
+patched version — Dependabot proposes the <strong>newest</strong> version, not the smallest
+one that fixes. If the alerts can't be read, the comparison falls back to the
+target version, which is stricter: it can only retarget more, never close
+more. <strong>In doubt, the PR is retargeted, never closed.</strong></p>
+<p>The workflow runs on <strong>push to <code>dev</code></strong>, and that trigger is the one that
+matters. <code>pull_request_target</code> and <code>schedule</code> only see workflows on the
+default branch, and <code>pull_request</code> runs the workflow from the merge of a head
+Dependabot created from <code>main</code> with <code>main</code> — none of them sees a file that
+exists only on <code>dev</code>, and <code>main</code> only advances through the ladder (the same
+trap measured in <code>pr-police.yml</code>). A push to <code>dev</code> runs <code>dev</code>'s copy, so every
+merge there sweeps the open Dependabot PRs against <code>main</code>. <code>workflow_dispatch</code>
+avoids waiting for the next merge; <code>pull_request_target</code> becomes effective,
+and immediate, once the file reaches <code>main</code>.</p>
+<p><strong>Measured on the first run (2026-09-13):</strong> the alert read <strong>failed</strong> with the
+workflow's <code>GITHUB_TOKEN</code>, so today every decision falls back to the PR's
+target version. The consequence is the safe one — a security PR that <code>dev</code>
+already fixes, like #553, is <strong>retargeted</strong> instead of closed, and closing it
+stays a manual step. The warning in the run log now carries the API's message;
+reading the alerts with a different credential is a separate decision.</p>
+<p><strong>Declared:</strong> after a retarget, <code>dev</code>'s required checks do <strong>not</strong> run on
+their own — events created by <code>GITHUB_TOKEN</code> don't trigger workflows, and
+Dependabot doesn't accept commands from that bot. Someone with write access
+comments <code>@dependabot rebase</code>; the workflow's comment says so on the PR.</p>
+<h3 id="a-pin-bump-justifies-itself">A pin bump justifies itself</h3>
+<p>A Dependabot PR that bumps an action touches workflow files, and the
+documentation drift check fires by <strong>file</strong>: <code>release.yml</code> is watched by the
+<code>politica-de-branches</code> rule, in <code>block</code>. When the whole diff is the <code>uses:</code> SHA
+and the version comment beside it, that rule has nothing to ask — PRs #578 and
+#580 were unblocked by hand, with a human writing <code>docs-not-needed:</code> in the
+body.</p>
+<p>Since AT-094 the <strong>bot writes that line</strong>, and only in that class of PR. A
+step of the <code>Drift, gerados e build</code> job (<code>.github/workflows/docs-check.yml</code>),
+right before the drift, calls
+<a href="https://github.com/daneiel/brabo/blob/dev/scripts/ci/dependabot-justifica-pin.ts"><code>scripts/ci/dependabot-justifica-pin.ts</code></a>
+on the same range the drift evaluates. It writes the line when <strong>both</strong> hold:</p>
+<ul>
+<li>the <strong>author</strong> is Dependabot (<code>ehBranchDoDependabot</code>: the <code>dependabot/</code>
+prefix <strong>and</strong> the app login — the prefix alone would be a door for a human);</li>
+<li>the <strong>diff</strong> is only pin changes: every file is YAML under
+<code>.github/workflows/</code> or <code>.github/actions/</code>, modified in place (never created,
+deleted, renamed, or mode-changed), and every changed line is a
+<code>uses: &lt;action&gt;@&lt;sha&gt;  # &lt;version&gt;</code> paired with another of the <strong>same</strong>
+action, at the <strong>same</strong> indentation, changing only the SHA and/or the version
+token.</li>
+</ul>
+<p>Anything else — a job, a trigger, a <code>with:</code>, a <code>package.json</code>, a lockfile, a
+new workflow, a human author — and nothing is written: the docmap judges as it
+always does. The rule never becomes &quot;a bot's PR skips the docmap&quot;. The line
+carries an HTML marker (<code>&lt;!-- dependabot-justifica-pin --&gt;</code>), and the marker is
+what makes it <strong>reversible</strong>: if a later push adds something that isn't a pin,
+the bot's line is <strong>removed</strong>. A <code>docs-not-needed:</code> written by a human is never
+touched, neither to duplicate nor to delete, and on <code>edited</code> the step only
+evaluates when the editor is the bot itself, so a human who deletes the bot's
+line wins.</p>
+<p>Since AT-100 that <code>edited</code> case is explicit: <code>@dependabot rebase</code> emits
+<code>synchronize</code> <strong>and</strong> <code>edited</code> at once, <code>concurrency</code> cancels one, and when the
+survivor was the <code>edited</code> the step was skipped and the drift read a body
+without the line (#578, runs <code>35412983999</code>/<code>35412984299</code>). The bot's own
+<code>edited</code> now evaluates; a human's does not.</p>
+<p><strong>Why a step in the drift job and not a sibling workflow</strong> — three measurements:</p>
+<ul>
+<li>editing the body with <code>GITHUB_TOKEN</code> doesn't fire <code>edited</code>, so a separate
+workflow would write the line and leave the required check red;</li>
+<li>re-running the drift job doesn't help: a re-run reuses the original event
+<strong>payload</strong>, with the old body (run 34898913072, attempt 2, on 2026-09-17:
+the body already had the line, <code>PR_BODY</code> didn't, and the drift failed);</li>
+<li><code>pull_request_target</code>, where the token writes without asking, only runs the
+workflow from the <strong>default</strong> branch — the trap measured in <code>pr-police.yml</code>.</li>
+</ul>
+<p>In the same job the drift reads the new body from <code>PR_BODY_FILE</code>, in order,
+with no race and no re-dispatch. If the edit fails, no file is written and the
+drift reads the event's body: fail-closed, the PR stays blocked as before.
+Measured against every Dependabot PR in the repository's history: the ten
+<code>github_actions</code> ones (#561–#565, #577–#581) are pure pin changes; the
+<code>npm_and_yarn</code> one (#553) is not.</p>
+<h2 id="who-approves">Who approves</h2>
+<p>The approval requirement has <strong>two modes</strong>, chosen by the repository
+variable <code>APPROVAL_MODE</code>. Both are implemented and tested; switching from
+one to the other is <strong>just changing variables</strong>, no code touched.</p>
+<h3 id="solo-mode--what-applies-today"><code>solo</code> mode — what applies today</h3>
+<p>The project has <strong>one maintainer</strong>. The full approver ladder assumes
+teams that don't exist yet, and a rule that can't be fulfilled is a rule
+that teaches people to cheat.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>situation</th>
+<th>requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PR from a third party</td>
+<td><strong>1 approval from the owner</strong></td>
+</tr>
+<tr>
+<td>PR authored by the owner</td>
+<td>passes the check <strong>without review</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>The second line isn't a privilege, it's how GitHub works: <strong>no one can
+approve their own PR through the interface</strong>. In a BDFL project, the
+<strong>owner's manual merge is the approval</strong> — it's their deliberate act, at
+the moment they choose to click the button. Requiring a review the
+platform doesn't allow would only produce a permanently red check.</p>
+<p>The requirement for <strong>distinct people is suspended</strong> in this mode, and
+it's suspended on purpose: with a single maintainer, it's arithmetically
+impossible.</p>
+<h3 id="community-mode--for-when-there-are-people"><code>community</code> mode — for when there are people</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>target</th>
+<th>requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dev</code></td>
+<td>1 × devs</td>
+</tr>
+<tr>
+<td><code>qa</code></td>
+<td>2 × devs</td>
+</tr>
+<tr>
+<td><code>main</code></td>
+<td>1 × PO <strong>+</strong> 1 × management</td>
+</tr>
+</tbody>
+</table></div>
+<p>For <code>main</code>, <strong>distinct people</strong> — the requirement applies again. For
+<code>dev</code> and <code>qa</code> the distinction is automatic: the slots are the same role
+and each person only gets one review.</p>
+<p>The roles are <strong>lists of handles</strong> in repository variables, not GitHub
+teams:</p>
+<pre class="codigo"><code>APROVADORES_DEVS    = ana,bruno,carla
+APROVADORES_PO      = paula
+APROVADORES_GESTAO  = gustavo
+</code></pre>
+<p>Teams would be the obvious path and <strong>don't work here</strong>: they only exist
+inside an organization, this repository belongs to a user, and the
+<code>GITHUB_TOKEN</code> can't read team membership even inside an org — that would
+need a PAT with <code>read:org</code>. With lists, <code>community</code> mode is activatable
+today and the switch really is just a variable.</p>
+<p>The honest cost: keeping the lists up to date is manual work, and a
+person who leaves the project keeps approving until someone edits the
+variable. If the project becomes an org with real teams, changing the
+source is a one-function change — the ladder and the distinct-people rule
+don't change.</p>
+<h4 id="why-distinct-people-needs-more-than-counting">Why &quot;distinct people&quot; needs more than counting</h4>
+<p>For <code>main</code>, whoever is on <strong>both lists</strong> (<code>po</code> and <code>gestao</code>) could
+satisfy both slots alone, if the check simply counted approvals per role.
+The check treats this as an <strong>assignment</strong> problem instead: does there
+exist a distribution of distinct approvers that fills every slot?</p>
+<p>This also avoids the opposite error. If <code>paula</code> is the only one in <code>po</code>
+but is also in <code>gestao</code>, giving the <code>gestao</code> slot to her would leave <code>po</code>
+uncovered — even though another person could have filled it. The correct
+assignment exists, and the check finds it.</p>
+<h3 id="rules-common-to-both-modes">Rules common to both modes</h3>
+<ul>
+<li>Only reviews <strong><code>APPROVED</code> on the last commit</strong> count. An approval on an
+old commit doesn't count: what was approved isn't what's about to be
+merged.</li>
+<li>The check's summary shows <strong>the active mode, who approved and what's
+missing</strong>. A check that only says &quot;approvals missing&quot; forces you to
+guess.</li>
+</ul>
+<h3 id="migrating-to-community-mode">Migrating to <code>community</code> mode</h3>
+<p>Prerequisites, before flipping any variable:</p>
+<ol>
+<li><strong>Every role with real people.</strong> <code>main</code> requires PO <strong>and</strong>
+management; if both lists point to the same person, no PR to <code>main</code>
+ever passes — the distinct-people rule can't be satisfied. <code>qa</code>
+requires <strong>two</strong> distinct devs: a list with a single name blocks
+promotion.</li>
+<li><strong>A criterion for who joins each list</strong>, defined and written down —
+who joins, who leaves, and based on what.</li>
+</ol>
+<p>Step by step for the switch:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> variable</span><span style="color:var(--shiki-token-string)"> set</span><span style="color:var(--shiki-token-string)"> APROVADORES_DEVS</span><span style="color:var(--shiki-token-string)">   --body</span><span style="color:var(--shiki-token-string-expression)"> "ana,bruno,carla"</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> variable</span><span style="color:var(--shiki-token-string)"> set</span><span style="color:var(--shiki-token-string)"> APROVADORES_PO</span><span style="color:var(--shiki-token-string)">     --body</span><span style="color:var(--shiki-token-string-expression)"> "paula"</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> variable</span><span style="color:var(--shiki-token-string)"> set</span><span style="color:var(--shiki-token-string)"> APROVADORES_GESTAO</span><span style="color:var(--shiki-token-string)"> --body</span><span style="color:var(--shiki-token-string-expression)"> "gustavo"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># last: with empty lists, community rejects everything</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> variable</span><span style="color:var(--shiki-token-string)"> set</span><span style="color:var(--shiki-token-string)"> APPROVAL_MODE</span><span style="color:var(--shiki-token-string)"> --body</span><span style="color:var(--shiki-token-string)"> community</span></span>
+<span class="line"></span></code></pre>
+<p>The order matters. With <code>APPROVAL_MODE=community</code> and the lists still
+empty, every PR turns red saying which variable is missing — correct, but
+needlessly noisy. Fill them in first.</p>
+<p>To go back: <code>gh variable set APPROVAL_MODE --body solo</code>.</p>
+<p><strong>No deploy, no merge, no code change</strong> — the switch is configuration
+only, and there's a test that runs the same input through both modes
+asserting different verdicts.</p>
+<p>The criterion for who joins each list — who joins, who leaves, and based
+on what — lives in <code>GOVERNANCE.md</code>, at the repository root. This section
+remains the source of the MECHANISM (the ladder, the distinct-people
+requirement, the switch's step by step); <code>GOVERNANCE.md</code> is the source of
+the CRITERION for who fills each role.</p>
+<h2 id="promotion">Promotion</h2>
+<p>Code climbs a step via a <strong>promotion PR</strong>, opened by the <code>promote</code>
+workflow (<code>workflow_dispatch</code>, input: the pipeline pair).</p>
+<p>The workflow <strong>doesn't merge anything</strong> — it computes and opens the PR.
+The merge remains a manual act, like every entry into a permanent branch.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>step</th>
+<th>what</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>who triggers it</strong> — under <code>APPROVAL_MODE=solo</code>, only</td>
+</tr>
+<tr>
+<td><code>OWNER_HANDLE</code>. Any other actor fails, naming who's allowed</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>adjacent pair</strong> — <code>dev→qa</code> and <code>qa→main</code>. <code>dev→main</code> is refused,</td>
+</tr>
+<tr>
+<td>pointing to the staged path</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>cycle version</strong> — computed from the PRs merged since the last</td>
+</tr>
+<tr>
+<td>final tag</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>PR opened</strong> — body listing each PR, its function, its impact and</td>
+</tr>
+<tr>
+<td>the proposed version</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Step 4's body is a <strong>markdown table</strong>, and a PR's title is text no one
+controls — so it's escaped before becoming a table cell
+(<code>celulaDeTabela</code>, in <code>scripts/ci/promote.ts</code>). Escaping the <code>|</code> isn't
+enough — the backslash has to be escaped <strong>first</strong>, otherwise a title
+ending in <code>\</code> right before a <code>|</code> produces <code>\\|</code>, which GFM reads as an
+escaped backslash followed by a column DELIMITER — the row gains an
+extra cell and the table breaks. That's why the order of the two
+substitutions is load-bearing, and the test in <code>promote.spec.ts</code> counts
+the line's REAL delimiters instead of comparing the whole string.</p>
+<h3 id="automatic-promotion-to-qa">Automatic promotion to qa (test phase)</h3>
+<p>While QA is in its <strong>test phase</strong>, <code>dev</code> → <code>qa</code> promotes itself (ADR 0217,
+owner's decision of 15/10). The switch is the repository variable
+<strong><code>QA_FASE_DE_TESTE</code></strong> (Settings → Variables): <code>true</code> turns it on; deleting
+it or any other value turns it off, and promotion goes back to the manual
+<code>promote</code> workflow above.</p>
+<p>With it on, every push to <code>dev</code> runs <code>promote-auto-qa.yml</code>: the same version
+calculation (<code>promote.ts</code>) and the same opening step
+(<code>scripts/ci/abrir-pr-de-promocao.sh</code>) open or update the <code>dev</code> → <code>qa</code> PR
+through <code>BRABO_BOT_TOKEN</code>. Then <code>scripts/ci/promocao-automatica.ts</code> waits
+until <strong>every</strong> check run on the PR head has finished — the repository has
+no required checks, so <code>--auto</code> would not wait — and merges with a merge
+commit only if none ended <code>failure</code>, <code>cancelled</code> or <code>timed_out</code> (among
+others). Any failure stops the promotion and the job summary names the check
+and its link. Without <code>BRABO_BOT_TOKEN</code> the job fails visibly. A push with
+nothing new in the cycle (a promotion merge, a back-merge, <code>dev</code> already
+equal to <code>qa</code>) is a normal outcome, not a failure: a <code>::notice::</code> and &quot;nada a
+promover: o ciclo está vazio&quot; in the summary, exit 0, no PR. In the manual
+<code>promote</code> an empty cycle still fails.</p>
+<p>The approval ladder waives the owner's approval <strong>only</strong> for that PR: pair
+<code>dev</code> → <code>qa</code>, variable on, and author equal to the <code>BRABO_BOT_TOKEN</code> user
+(resolved with <code>gh api user</code>). <code>qa</code> → <code>main</code> and every other pair still
+require approval.</p>
+<blockquote>
+<p><strong>Fase de teste: a QA é promovida automaticamente a cada merge na dev e
+ainda não é considerada ambiente validado.</strong> The <code>/brabo/qa/</code> site shows
+this in its announcement bar, and the automatic PR body opens with it.
+Each automatic promotion also produces a <code>-qa.N</code> tag and republishes
+<code>/brabo/qa/</code>.</p>
+</blockquote>
+<h3 id="the-promotion-check">The promotion check</h3>
+<p>A promotion PR goes through a check of its own, separate from
+<code>pr-police</code>. That one validates the <strong>shape</strong> (name, origin, destination);
+this one validates the <strong>state</strong>:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>check</th>
+<th>why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>clean range</strong></td>
+<td>the PR's head is the tip of the origin branch. If</td>
+</tr>
+<tr>
+<td>someone pushed something after the PR opened, what would be promoted</td>
+<td></td>
+</tr>
+<tr>
+<td>isn't what's there</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>prior step stamped</strong></td>
+<td>the commit has the stage-below's tag.</td>
+</tr>
+<tr>
+<td>Promoting without it means promoting something that never went through</td>
+<td></td>
+</tr>
+<tr>
+<td>there</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>merge commit possible</strong></td>
+<td>promotion is <code>--no-ff</code>. A squash would</td>
+</tr>
+<tr>
+<td>flatten the lower step's commits, and the stage's tag would end up</td>
+<td></td>
+</tr>
+<tr>
+<td>pointing to a commit that no longer exists</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>A check that <strong>couldn't be performed</strong> counts as failed, never as
+passed — a ref that fails to resolve is ignorance, not permission.</p>
+<p>The first two checks are exercised by
+<code>scripts/ci/promotion-check.spec.ts</code>, in the same spirit as
+<code>pr-police</code>'s and <code>approval-ladder</code>'s specs. What it fixes isn't the
+implementation but the rule: which stamp each destination requires, and
+that the stamp has to be <strong>that commit's</strong> — a tag on another commit, on
+another stage, or one that failed to resolve a sha don't count. Accepting
+any of those would let <code>qa</code> receive code that never went through <code>dev</code>.</p>
+<p>The exception is reading the <strong>merge configuration</strong>: the workflow's
+token legitimately lacks permission to read it, and blocking every
+promotion over that would be worse than the failure it's meant to
+prevent. There, the impossibility becomes a <strong>warning</strong>, and the real
+guarantee lives in <code>tag-release</code>: after the merge, it confirms the
+commit has <strong>two parents</strong>. That doesn't depend on any permission, and it
+looks at the fact on the ground rather than the declared intent.</p>
+<h2 id="versioning">Versioning</h2>
+<p>Every tag is born from a workflow, in the format <code>vX.Y.Z-dev.N</code> /
+<code>-qa.N</code> / final.</p>
+<p><strong>The version lives in the TAG, not in files.</strong> No one can commit
+directly to a permanent branch to bump <code>package.json</code>, so requiring the
+four version files to keep up would force a bump PR every cycle — the
+ceremony automated calculation exists to eliminate.
+<code>release.yml</code> checks the files as a <strong>warning</strong> and only fires on a final
+tag.</p>
+<h3 id="what-the-final-tag-produces">What the final tag produces</h3>
+<p><code>release.yml</code> is the end of the pipeline, and what it delivers is
+deliberately modest:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>delivery</th>
+<th>what</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitHub Release</td>
+<td>with notes generated from the CHANGELOG by</td>
+</tr>
+<tr>
+<td><code>scripts/changelog.mjs</code></td>
+<td></td>
+</tr>
+<tr>
+<td>version check</td>
+<td>the four versioned files, as a <strong>warning</strong></td>
+</tr>
+<tr>
+<td>the five production images</td>
+<td>built to prove the tag is <strong>buildable</strong> — the fifth, the container broker, since <a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a></td>
+</tr>
+<tr>
+<td>the version baked into three of them</td>
+<td>baked in as an <code>ARG</code> in the api,</td>
+</tr>
+<tr>
+<td>the web and the broker — see below</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Trivy on the five published images</strong></td>
+<td><strong>by digest</strong>, from the registry, <strong>before</strong> signing — HIGH/CRITICAL with a fix fails the release; what has no fix is reported in the job summary and as the <code>trivy-sem-correcao.md</code> Release asset (<a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172</a>)</td>
+</tr>
+<tr>
+<td><strong>signatures for the five images</strong></td>
+<td><code>cosign</code> keyless, <strong>by digest</strong>,</td>
+</tr>
+<tr>
+<td>signed and then verified in the same run</td>
+<td></td>
+</tr>
+<tr>
+<td>(<a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149</a>)</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>The last row is what a final tag gained in FASE 29, and it is worth being
+precise about <strong>why by digest</strong>: signing <code>:5.0.0</code> would attest whatever
+that tag pointed at in the instant of signing, and a tag is a movable
+pointer. The digest is what <code>.release/images.json</code> already records and
+what the production overlay already applies.</p>
+<p>The scan comes <strong>before</strong> the signature, and the order is the rule: an image
+Trivy fails is never signed, so the installer never takes it. It uses the
+exact flags and <code>.trivyignore.yaml</code> of <code>ci.yml</code>'s scan, because the image a
+tag publishes is a cold build from another run — not the one the PR scanned.
+The push has already happened when the scan runs (it is what creates the
+digest), so a failed tag leaves unsigned images in the GHCR and no Release;
+<code>scripts/ci/trivy-do-release.spec.ts</code> guards the order and the flags, since no
+PR ever runs this workflow.</p>
+<p>The signature is <strong>verified in the same run, before the Release exists</strong>.
+A signature nobody tries to verify is one more file in the registry, and
+the failure would otherwise surface on the machine of whoever installs —
+the worst possible place to discover it.</p>
+<p>The runner binaries follow in <code>build-runner-binaries.yml</code>, with <strong>one</strong>
+signed <code>checksums.txt</code> covering the four targets rather than one
+signature per binary: verifying three and forgetting the fourth is a failure
+mode nobody notices, and a single manifest removes it.</p>
+<h4 id="the-version-lives-in-the-tag-and-the-release-is-what-carries-it-to-the-artifact">The version lives in the tag, and the release is what carries it to the artifact</h4>
+<p>The tag is the source of the version, but an image can't read its own
+tag: the container doesn't know what name it was published under, and
+the tag can be moved. So <code>release.yml</code> <strong>passes the version into the
+build</strong> — and it's the only place in the repository that does this.</p>
+<p><code>VERSION</code> is a <code>docker-bake.hcl</code> variable, separate from <code>TAG</code>, with a
+default of <code>dev</code>. The <code>api</code> and <code>broker</code> targets convert it into
+<code>BRABO_VERSION</code> and the <code>web</code> target into <code>VITE_BRABO_VERSION</code>; each <code>Dockerfile.prod</code>
+declares it as an <code>ARG</code> with the same default. From there it reaches the
+api's spans' <code>service.version</code> and the auth screens' footer on the web
+(<a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036</a>).</p>
+<p>Two consequences, and both are intentional:</p>
+<ul>
+<li><strong>Only a release stamps a version.</strong> <code>ci.yml</code> uses the same bakefile
+with <code>TAG=prod</code> and doesn't set <code>VERSION</code>, so its images report <code>dev</code>.
+If the version came from <code>TAG</code>, every CI span would come out with
+<code>service.version=prod</code>, which isn't a version of anything.</li>
+<li><strong>Version isn't configuration.</strong> It's a build <code>ARG</code>, not a ConfigMap
+key, because it's a property of the artifact:
+<code>brabo-web:1.1.2</code> shouldn't be able to report anything else. URLs stay
+runtime-configured, via <code>/config.js</code>, because those are a property of
+the environment (ADR 0024).</li>
+</ul>
+<p>Touching this chain is touching policy: whoever changes <code>VERSION</code> in the
+bakefile or in the <code>ARG</code>s needs to change both sides together, or the
+version silently reverts to <code>dev</code> — with no error anywhere, because
+<code>dev</code> is a valid value.</p>
+<p><strong>The images aren't published</strong> — <code>push: false</code>. Publishing to a
+registry hasn't been decided yet (the production overlay points to
+<code>ghcr.io/OWNER/*</code>, a placeholder), and the decision is recorded in
+<a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027</a>. Building
+without publishing isn't a half-measure: it's what prevents a tag from
+existing for a commit that doesn't compile.</p>
+<p>They're built from the same <code>docker-bake.hcl</code> that <code>ci.yml</code> uses, in
+parallel. They used to be four sequential <code>docker build</code>s — same
+verdict, ~160s more per release.</p>
+<p><strong>There's no deploy step, here or anywhere.</strong> The tag is the record of
+what <strong>would be</strong> in each environment, and that holds even without an
+environment. A step that never runs rots: no one tests it, no one
+notices when it breaks, and on the day it's flipped on it'll be wrong.
+When there's an environment, the deploy will be its <strong>own</strong> workflow,
+triggered by the tag.</p>
+<h4 id="the-release-depends-on-the-pat-and-its-absence-has-already-cost-six">The Release depends on the PAT, and its absence has already cost six</h4>
+<p><code>release.yml</code> fires on a final tag <code>push</code>. But <strong>a tag pushed with the
+<code>GITHUB_TOKEN</code> doesn't trigger a workflow</strong> — it's GitHub's anti-recursion
+rule. <code>tag-release</code> uses <code>secrets.BRABO_BOT_TOKEN || github.token</code>:
+without the PAT, the tag is born and the Release doesn't go out.</p>
+<p>The degradation is visible on purpose (there's a warning on every run),
+but visible isn't the same as prevented: <strong><code>v0.2.0</code>, <code>v0.3.0</code>, <code>v0.3.1</code>,
+<code>v1.0.0</code>, <code>v1.0.1</code> and <code>v1.1.0</code> exist with no Release</strong> — six whole
+cycles where the warning showed up and no one acted on it.</p>
+<p>With the PAT configured, <code>v1.1.1</code> closed the pipeline on its own: tag
+pushed by the token, <code>release.yml</code> triggered by it, Release published.
+Before it, only <code>v0.1.0</code> had a Release, and by a manual push. <strong>The PAT
+doesn't recover the previous six</strong> — it only applies to new tags.</p>
+<p>This separates two problems that are easy to confuse:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>problem</th>
+<th>fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>the Release doesn't go out <strong>on its own</strong></td>
+<td>configure the</td>
+</tr>
+<tr>
+<td><code>BRABO_BOT_TOKEN</code></td>
+<td></td>
+</tr>
+<tr>
+<td>a Release that didn't go out <strong>can't go out later</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>release.yml</code>'s <code>workflow_dispatch</code></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>The second would remain open even with the PAT in place: any workflow
+failure would leave the tag orphaned forever, because republishing would
+require deleting and recreating the tag — rewriting the record to fix
+its own effect. Whoever republishes is the release owner, the same
+restriction as <code>promote</code>. The procedure is in
+<a href="../reference/rulesets.html#republishing-a-tag-that-was-orphaned">Rulesets</a>.</p>
+<h3 id="the-changelog-comes-back-via-pr-and-why-not-by-push">The CHANGELOG comes back via PR, and why not by push</h3>
+<p>Once the Release is published, <code>release.yml</code> opens a <code>chore/changelog-&lt;tag&gt;</code>
+PR to <strong><code>dev</code></strong> with the version's cut in <code>CHANGELOG.md</code> — and, in the
+same commit, with the version announced in prose in the <strong>two</strong> files
+that write it: <code>README.md</code> and <code>docs/intro.md</code>, the published site's
+first page. Whoever rewrites both is <code>scripts/ci/readme-version.ts</code>, and
+it reads and swaps all of them before writing any one of them: a phrase
+missing in either fails the whole release rather than leaving it half
+written.</p>
+<p><strong>The cut CONSUMES the <code>## Unreleased</code> section</strong>, it does not prepend past
+it. That distinction is not cosmetic: prose written in each PR's
+<code>Unreleased</code> block is the <em>explanation</em> of what changed, and for five
+releases it never reached the published version — <code>changelog.mjs</code>
+prepended the generated section and left the hand-written one buried
+underneath, forever. The merge is per subsection title, with the
+<strong>written</strong> entries first (they explain) and the commit inventory after
+(it proves what went in).</p>
+<p>The three things move together on purpose. The version is <strong>generatable</strong>
+(the release knows what it is), and <code>docs:check</code> confirms it matches the
+CHANGELOG's most recent cut in each of the files; separating the two
+ends would make every changelog PR born red, opened by the bot and
+waiting for a human hand the policy doesn't provide for. A phrase not
+found FAILS the step instead of sliding through — this script's regex and
+<code>scripts/docs/generate.mjs</code>'s are the two sides of the same contract, and
+a test guards the agreement.</p>
+<p>By PR, and not by push, because none of the direct paths exist: <code>main</code>
+only accepts a tag (release bot) and <code>.release/gate.json</code> (gate bot), and
+committing to <code>qa</code> or <code>dev</code> before promotion would break the promotion
+check's <strong>clean range</strong> — the PR's head would stop being the origin's
+tip.</p>
+<p><strong>Accepted consequence:</strong> <code>main</code>'s <code>CHANGELOG.md</code> stays one cycle behind.
+It's not information loss: the authoritative source of the notes is the
+<strong>GitHub Release</strong>, published at the same moment as the tag, and the cut
+lands in the next cycle like any other change.</p>
+<h3 id="releaseimagesjson-rides-the-same-pr--and-adds-no-exception"><code>.release/images.json</code> rides the same PR — and adds no exception</h3>
+<p>Since <a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119</a>,
+<code>release.yml</code> publishes the production images to GHCR — five since
+<a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a> —
+and records what that tag published, <strong>by digest</strong>, in
+<code>.release/images.json</code>. The installer reads all five from it; the
+Kubernetes overlay applies the four its base declares (there is no broker
+Deployment, by decision).</p>
+<p>The obvious implementation — the bot writing the digests into
+<code>deploy/k8s/overlays/prod/kustomization.yaml</code> and pushing — was rejected
+<strong>here</strong>, in this policy, before it was rejected in the ADR: the single
+door has exactly three exceptions, and a mechanism that needs a fourth
+every time it grows stops being a policy and becomes a habit. It would
+also let a tag decide by itself what is running in production, which is
+not the tag's decision to make.</p>
+<p>So the file takes the two paths that already exist. It is an <strong>asset of
+the GitHub Release</strong>, published in the same step as the notes — the
+authoritative copy, available the instant the tag exists — and it is
+<code>git add</code>ed onto the <strong>same <code>chore/changelog-&lt;tag&gt;</code> PR</strong> described above,
+which is how the versioned copy reaches <code>dev</code> and climbs the ladder like
+any other change. Same accepted consequence as the CHANGELOG's, for the
+same reason: <code>main</code>'s copy is one cycle behind, and the Release asset is
+the one to trust in the meantime.</p>
+<blockquote>
+<p>Before this, <strong>nothing ever wrote to the file</strong>. The generator was only
+ever called with <code>--stdout</code>, to build the Release's body, and
+<code>CHANGELOG.md</code> had accumulated twelve versions inside a single
+&quot;Unreleased&quot; — while six Releases went out with an empty body, because
+the &quot;previous tag&quot; included that same version's own pre-releases.</p>
+</blockquote>
+<h3 id="the-cycles-version">The cycle's version</h3>
+<p>Comes from the <strong>largest impact</strong> among the PRs merged since the last
+final tag:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>branch function</th>
+<th>impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>breaking/</code></td>
+<td>MAJOR</td>
+</tr>
+<tr>
+<td><code>feature/</code></td>
+<td>MINOR</td>
+</tr>
+<tr>
+<td>everything else</td>
+<td>PATCH</td>
+</tr>
+</tbody>
+</table></div>
+<p>A single <code>breaking</code> among ten <code>docs</code> makes the whole cycle MAJOR. And
+it's the <strong>branch's function</strong> that decides, not the family label:
+<code>breaking/x</code> and <code>docs/y</code> are both in the <code>trabalho</code> family.</p>
+<h4 id="breaking-requires-the-marker-on-the-commit"><code>breaking/</code> requires the marker on the commit</h4>
+<p><code>pr-police</code> rejects a <code>breaking/</code> PR whose commits don't mark the break
+— <code>!</code> in the subject (<code>feat(api)!: …</code>) or <code>BREAKING CHANGE:</code> in the body
+— and it also rejects the inverse: a marked commit on a branch that isn't
+<code>breaking/</code>.</p>
+<p>The rule exists because these are <strong>two mechanisms for the same fact</strong>,
+and they used to live apart: the version comes from the branch's
+FUNCTION (the table above), and the CHANGELOG detects a break by the
+commit's MARKER. Nothing connected them.</p>
+<p>The cost was measured. <code>breaking/fase-7-auth-e-openapi</code> removed
+Keycloak, logged everyone out and correctly bumped MAJOR — and the
+CHANGELOG records no breakage at all, in <strong>none</strong> of the twelve versions,
+because no commit in the history had ever used the markers. Both halves
+worked; the information just never crossed from one to the other.</p>
+<p>Both directions matter, and the second is worse:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>situation</th>
+<th>what used to happen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>breaking/</code> with no marker</td>
+<td>the version jumps MAJOR and the</td>
+</tr>
+<tr>
+<td>changelog doesn't say what broke</td>
+<td></td>
+</tr>
+<tr>
+<td>marker outside <code>breaking/</code></td>
+<td>the changelog announces a break and the</td>
+</tr>
+<tr>
+<td>version comes out PATCH — whoever trusts the number breaks without</td>
+<td></td>
+</tr>
+<tr>
+<td>warning</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>A check that couldn't be performed (shallow checkout, ref not fetched)
+<strong>doesn't fail</strong>: the rule only runs when the <code>base..head</code> range is
+readable, the same doctrine as the contamination check.</p>
+<p>An <strong>empty</strong> cycle — no PR since the last final — fails with a message
+instead of generating a tag. A new tag pointing at the same commit as the
+previous one would make the version history lie.</p>
+<h4 id="where-the-cycles-prs-come-from">Where the cycle's PRs come from</h4>
+<p>From the <code>git log</code> between the last final tag and <code>dev</code>, reading the PR
+number from the commit's subject. The <strong>two merge styles</strong> need to be
+understood, because the number lands in different places:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>style</th>
+<th>subject</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>squash</td>
+<td><code>feat(ci): faz coisa (#53)</code></td>
+</tr>
+<tr>
+<td>merge commit</td>
+<td><code>Merge pull request #56 from daneiel/feature/x</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Reading only the first was a real bug: the range's <code>--no-merges</code> was
+hiding exactly the line that cites the number in a merge commit, and the
+whole cycle looked empty — merging #56 into <code>dev</code> generated no tag at
+all.</p>
+<p><strong>Promotion and back-merge don't count.</strong> They're born from a permanent
+branch, and what they carry has already been counted or already
+released. Without this exclusion, a solo hotfix back-merge would
+generate a whole new cycle: a <code>-dev.N</code> tag on a version that changed
+nothing.</p>
+<p>Two pieces do this discovery and <strong>have to agree</strong>: <code>tag-release</code>, which
+stamps at merge time, and <code>promote</code>, which computes the version for the
+promotion PR. If they diverge, the promotion PR announces one version and
+the tag comes out with another. Both use the same function — the logic's
+duplication has already cost one promotion, rejected as &quot;empty cycle&quot;
+right after <code>tag-release</code> had stamped <code>-dev.2</code>.</p>
+<blockquote>
+<p><strong><code>promote</code> runs with the code from the DEFAULT branch.</strong> It's
+<code>workflow_dispatch</code> (see the trigger table in
+<a href="../reference/rulesets.html">Rulesets</a>), so fixing the calculation in
+<code>dev</code> does <strong>not</strong> fix the dispatch until the fix reaches <code>main</code>. Until
+then, the workaround is the one already documented: run
+<code>node scripts/ci/promote.ts</code> by hand, with the same script.</p>
+</blockquote>
+<h3 id="the-n">The <code>N</code></h3>
+<p><code>N</code> is however many tags of that version already exist at that stage,
+plus one.</p>
+<p>There's no state stored anywhere: <strong>the tags themselves are the
+counter</strong>. That's what makes &quot;promoted, rejected, fixed, re-promoted&quot;
+become <code>-qa.2</code> with no one recording the rejection — and the number ends
+up saying how many laps the cycle took before passing.</p>
+<h3 id="the-final-tags-anchor">The final tag's anchor</h3>
+<p>The final tag is only born if what's in <code>main</code> is <strong>exactly</strong> what
+passed through <code>qa</code>. If it isn't, the workflow fails loudly instead of
+publishing.</p>
+<p>Since promotion is <code>--no-ff</code>, the merge <strong>creates a new commit</strong> —
+<code>main</code>'s sha will never be <code>qa</code>'s sha. Comparing shas would be a check
+impossible to pass. What gets compared are two things, and together
+they're stronger:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>check</th>
+<th>what it guarantees</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>the <code>-qa.N</code> is the <strong>parent</strong> of the commit on <code>main</code></td>
+<td>it was that</td>
+</tr>
+<tr>
+<td>one that entered, not some ancestor</td>
+<td></td>
+</tr>
+<tr>
+<td>the <strong>tree</strong> is identical</td>
+<td>the content is byte-for-byte what was</td>
+</tr>
+<tr>
+<td>validated</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>The second is the one that really matters. If the other side of the
+merge brought in a file, the tree would change and the check would fail
+— exactly the case the anchor exists to catch. Tree equality is stronger
+than commit equality: it looks at content, not identity.</p>
+<h3 id="mains-two-paths"><code>main</code>'s two paths</h3>
+<p><code>main</code> receives merges in two ways, and they call for different
+versions. The distinction comes from the merge commit's <strong>second
+parent</strong> — the side that entered:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>second parent</th>
+<th>path</th>
+<th>version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>the commit of a <code>-qa.N</code></td>
+<td>promotion</td>
+<td>the cycle's, <strong>with anchor</strong></td>
+</tr>
+<tr>
+<td>anything else</td>
+<td>hotfix</td>
+<td>last final <strong>+ PATCH</strong>, no anchor</td>
+</tr>
+</tbody>
+</table></div>
+<p>The hotfix is born from <code>main</code> and never goes through <code>qa</code>. Requiring an
+anchor from it would demand the impossible — and the PATCH tag has to be
+born, because it's the one the back-merge PRs cite.</p>
+<p>A <code>-dev.N</code> as second parent does <strong>not</strong> count as a promotion: a merge
+straight from <code>dev</code> into <code>main</code> skips <code>qa</code>, and the final tag would end
+up stamping code no one validated.</p>
+<p>Cases that fail loudly instead of guessing:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>situation</th>
+<th>why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a merge into <code>main</code> with a single parent</td>
+<td>a squash erases the side</td>
+</tr>
+<tr>
+<td>that entered; without it the path can't be determined</td>
+<td></td>
+</tr>
+<tr>
+<td>a hotfix with no final tag published yet</td>
+<td>PATCH is an increment over</td>
+</tr>
+<tr>
+<td>something already released</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>And two cases that generate <strong>no tag at all</strong>, on purpose: the gate's
+commit (touches only <code>.release/</code>) and the <code>main → qa</code>/<code>dev</code> back-merge,
+which carries content already in <code>main</code>. Without this second escape
+hatch, the back-merge would stamp a <code>-qa.N</code> on a commit that was never
+promoted from <code>dev</code> — a tag saying &quot;this passed through qa&quot; on something
+that didn't.</p>
+<h3 id="theres-no-deploy">There's no deploy</h3>
+<p>The workflows <strong>end at the tag</strong>. There's no environment, no GitHub
+Environments, no deploy step — not even a disabled one. The tag is the
+record of what <em>would be</em> at each stage, and stands on its own.</p>
+<p>A deploy step that never runs is a step that rots: no one tests it, no
+one notices when it breaks, and on the day it's turned on it'll be
+wrong. When there's an environment, the deploy will be its own workflow,
+triggered <strong>by the tag</strong>.</p>
+<p>To look with your own eyes at what a tag stamped:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> deploy-local</span><span style="color:var(--shiki-token-string)"> TAG=v0.2.0-qa.1</span></span>
+<span class="line"></span></code></pre>
+<h3 id="squash-on-a-conveyor-merge-and-the-alarm-that-has-an-addressee">Squash on a conveyor merge, and the alarm that has an addressee</h3>
+<p>Promotion is <code>--no-ff</code>, and this is the rule that has been broken the most:
+<strong>three times</strong> (#367, #394, #464). It deserves its own section because the
+damage is invisible at the moment it happens and only surfaces one cycle
+later.</p>
+<p>A squash produces a commit with <strong>one parent</strong>. On a promotion, the second
+parent was the only thing tying the two steps together: without it, <code>qa</code>'s
+history no longer contains <code>dev</code>'s commits, the stage's tag points at a commit
+that is not in this history anymore, and — the symptom people actually meet —
+<strong>the next promotion PR opens with files in &quot;conflict&quot; that are not conflicts
+at all</strong>, just lost ancestry. Merging that &quot;conflict&quot; by taking either side is
+how content silently diverges between steps.</p>
+<p><strong>Where this is enforced, and why it cannot be earlier.</strong> The merge method is
+chosen at the click, after every PR check has already run. No pre-merge check
+can observe it: <code>promotion-check</code> reads the repository's <em>configuration</em> at
+best, and often lacks permission even for that. The verification that counts
+looks at the accomplished fact, in <code>tag-release</code> (<code>conferirMergeDeEsteira</code>,
+<code>scripts/ci/version.ts</code>), and the rule differs per branch because the base rate
+does:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>branch</th>
+<th>what enters</th>
+<th>rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>qa</code>, <code>main</code></td>
+<td>only conveyor traffic</td>
+<td>one parent is always a defect</td>
+</tr>
+<tr>
+<td><code>dev</code></td>
+<td>work, all day, by squash <strong>on purpose</strong></td>
+<td>a defect only when the PR carried a <strong>new edge</strong> — its head was a merge whose second parent was not already in the base</td>
+</tr>
+</tbody>
+</table></div>
+<p>That <code>dev</code> distinction is narrow on purpose. A work PR that pulled <code>dev</code> into
+itself before merging also has a merge for a head — but its second parent is
+already in the base, so a squash loses nothing. The PR that must not be
+squashed is the one whose <em>whole delivery is the edge</em>, like #464: it existed
+only to restore ancestry, was squashed, and delivered nothing while looking
+merged. An alarm that fired on every work PR would be an alarm nobody reads,
+which is the failure mode this section exists to prevent.</p>
+<p><strong>Detection was never the gap — the addressee was.</strong> The <code>qa</code> check has existed
+since 2026-07-27 and fired correctly on both #367 and #394. Nothing came of it:
+a <code>push</code>-triggered workflow failing on a permanent branch has no PR to turn
+red — the merge already happened — so it leaves a red run in the Actions tab
+and nothing else. The repository had zero issues in its whole history; there
+was no channel. So <code>tag-release</code> now has an <code>avisar</code> job that <strong>opens an issue</strong>
+naming the branch, the commit, the run, and the fix, and comments on the
+existing one instead of opening a second for the same branch. It authenticates
+with <code>github.token</code>, never the PAT — an invalid <code>BRABO_BOT_TOKEN</code> is itself one
+of the failures it has to report, and an alarm that depends on what may be
+broken is an alarm that goes quiet exactly when it is needed.</p>
+<p><strong>Fixing it after the fact.</strong> The content is already correct on both sides; what
+is missing is one edge in the graph. A merge with strategy <code>ours</code> restores it
+without changing a line:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">git</span><span style="color:var(--shiki-token-string)"> checkout</span><span style="color:var(--shiki-token-string)"> -b</span><span style="color:var(--shiki-token-string)"> chore/reconciliar-</span><span style="color:var(--shiki-token-keyword)">&#x3C;</span><span style="color:var(--shiki-token-string)">alg</span><span style="color:var(--shiki-foreground)">o</span><span style="color:var(--shiki-token-keyword)">></span><span style="color:var(--shiki-token-string)"> origin/dev</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">git</span><span style="color:var(--shiki-token-string)"> merge</span><span style="color:var(--shiki-token-string)"> -s</span><span style="color:var(--shiki-token-string)"> ours</span><span style="color:var(--shiki-token-string)"> origin/qa</span><span style="color:var(--shiki-token-string)"> -m</span><span style="color:var(--shiki-token-string-expression)"> "chore: reconcilia ancestralidade"</span></span>
+<span class="line"></span></code></pre>
+<p>And that PR <strong>also</strong> has to enter as a merge commit. Squashing it is
+mathematically guaranteed not to work: the correction <em>is</em> the second parent.
+That is precisely how #464 failed.</p>
+<h2 id="the-back-merge-gate">The back-merge gate</h2>
+<p><code>hotfix</code> solves the incident and creates a new problem: the fix is in
+<code>main</code> and not in <code>qa</code> or <code>dev</code>. If someone promotes <code>dev → qa → main</code>
+before the fix comes down, the release <strong>undoes the hotfix</strong> — no
+conflict, no warning, months later, and no one will connect the bug back
+to that merge.</p>
+<p>The gate closes that hole by locking the lower steps until the fix comes
+down.</p>
+<h3 id="the-state">The state</h3>
+<p>The gate lives at <code>.release/gate.json</code>, on <code>main</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-foreground)">{</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  "versao"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-token-constant)"> 1</span><span style="color:var(--shiki-token-punctuation)">,</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  "locked"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-foreground)"> [</span><span style="color:var(--shiki-token-string-expression)">"qa"</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-string-expression)"> "dev"</span><span style="color:var(--shiki-foreground)">]</span><span style="color:var(--shiki-token-punctuation)">,</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  "awaiting"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-token-string-expression)"> "v0.2.1"</span><span style="color:var(--shiki-token-punctuation)">,</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  "order"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-foreground)"> [</span><span style="color:var(--shiki-token-string-expression)">"qa"</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-string-expression)"> "dev"</span><span style="color:var(--shiki-foreground)">]</span><span style="color:var(--shiki-token-punctuation)">,</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  "historico"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-foreground)"> [</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">    { </span><span style="color:var(--shiki-token-keyword)">"tag"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-token-string-expression)"> "v0.2.1"</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-keyword)"> "sha"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-token-string-expression)"> "…"</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-keyword)"> "em"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-token-string-expression)"> "…"</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-keyword)"> "prs"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-foreground)"> { </span><span style="color:var(--shiki-token-keyword)">"qa"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-token-constant)"> 60</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-keyword)"> "dev"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-token-constant)"> 61</span><span style="color:var(--shiki-foreground)"> } }</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">  ]</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">}</span></span>
+<span class="line"></span></code></pre>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>field</th>
+<th>what</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>locked</code></td>
+<td>branches that accept no merge at all</td>
+</tr>
+<tr>
+<td><code>awaiting</code></td>
+<td>the most recent hotfix's tag — <code>null</code> when clean</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>the order the locks come off in: always top to bottom</td>
+</tr>
+<tr>
+<td><code>historico</code></td>
+<td>every hotfix in this round; resets when the chain closes</td>
+</tr>
+</tbody>
+</table></div>
+<p>It's read <strong>always from <code>main</code></strong>, never from the PR's branch: the
+back-merge PRs carry a copy of the file along, and reading that copy
+would give the stale state precisely during the chain it changes at
+every merge.</p>
+<h3 id="what-happens-when-a-hotfix-merges">What happens when a hotfix merges</h3>
+<p>All in the same workflow (<code>tag-release</code>), in this order — and the order
+matters, because the PRs need to cite the tag:</p>
+<ol>
+<li>the <strong>PATCH</strong> tag is born normally (<code>v0.2.0</code> + hotfix → <code>v0.2.1</code>);</li>
+<li>the <strong>two back-merge PRs</strong> are opened: <code>main → qa</code> and <code>main → dev</code>;</li>
+<li><code>.release/gate.json</code> is written on <code>main</code>, locking <code>qa</code> and <code>dev</code>.</li>
+</ol>
+<h3 id="accumulation-comes-free">Accumulation comes free</h3>
+<p>A second hotfix during an active gate <strong>doesn't open a new PR and
+doesn't create a parallel queue</strong>. The <code>main → qa</code> and <code>main → dev</code> PRs
+are already open and carry whatever <code>main</code> has — including the new
+hotfix. The gate only appends the entry to <code>historico</code> and re-affirms the
+lock. A branch already unlocked <strong>locks again</strong>, because now there's new
+content that needs to come down.</p>
+<h3 id="the-check-on-every-pr">The check, on every PR</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>situation</th>
+<th>verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>locked</code> empty</td>
+<td>✓ passes</td>
+</tr>
+<tr>
+<td><code>main</code> → first still-locked step</td>
+<td>✓ it's that step's back-merge</td>
+</tr>
+<tr>
+<td><code>main</code> → step out of order</td>
+<td>✗ &quot;unlock <code>qa</code> before <code>dev</code>&quot;</td>
+</tr>
+<tr>
+<td>any PR to a locked branch</td>
+<td>✗ with the link to the PR that resolves</td>
+</tr>
+<tr>
+<td>it</td>
+<td></td>
+</tr>
+<tr>
+<td><code>hotfix/</code> → <code>main</code></td>
+<td>✓ <code>main</code> is never locked</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>bugfix/</code> to <code>dev</code> during an active gate is <strong>blocked</strong>. The temptation is
+to think &quot;it's a fix, so it should pass&quot;: it can't. It's born from <code>dev</code>,
+doesn't carry the hotfix, doesn't resolve the lock, and just piles more
+work on top of the hole.</p>
+<h3 id="the-order-isnt-bureaucracy">The order isn't bureaucracy</h3>
+<p>Unlocking <code>dev</code> before <code>qa</code> would leave the middle step without the fix
+— exactly the hole the gate exists to close. The last unlock clears
+<code>awaiting</code> and resets the history.</p>
+<h3 id="the-lock-is-checked-not-just-declared">The lock is checked, not just declared</h3>
+<p><code>locked</code> is the <strong>record of intent</strong>; the truth is the containment.
+Before evaluating, the check asks git whether the hotfix commit is
+<strong>already</strong> in each locked branch, and lets fall whichever locks reality
+has already satisfied.</p>
+<p>This isn't fussiness: it's the fix for a real trap. The back-merge PRs
+carry <code>gate.json</code> to <code>qa</code> and <code>dev</code>; months later, a <code>qa → main</code> promotion
+could bring that stale copy back up. Without the check, a phantom lock
+would reappear on <code>main</code> with no hotfix behind it — and nothing would
+unlock it, because there's no pending back-merge. The repository would
+stay stuck forever.</p>
+<p><strong>Failing to verify keeps the lock.</strong> Unknown isn't permission.</p>
+<h2 id="what-the-policy-doesnt-solve">What the policy doesn't solve</h2>
+<p><strong>It doesn't prevent bad code.</strong> It guarantees the code went through the
+steps, not that it's good. That's review, testing and the QA/SecOps gates'
+job.</p>
+<p><strong>It doesn't replace judgment during an incident.</strong> It gives a fast, safe
+path (<code>hotfix</code>) so no one has to choose between &quot;follow the rule&quot; and
+&quot;fix it now.&quot; If the policy is getting in the way during an incident, the
+policy is the problem — open an issue afterward, don't cheat during.</p>
+<h2 id="roles">Roles</h2>
+<p>While <code>APPROVAL_MODE=solo</code>, the two roles below are held by the
+<strong>owner</strong>. It's not concentration by neglect — it's the acknowledgment,
+written down instead of left implicit, that a single-maintainer project
+has no one to delegate to.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>role</th>
+<th>who</th>
+<th>what they do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>release owner</strong></td>
+<td>owner</td>
+<td>the only one authorized to trigger</td>
+</tr>
+<tr>
+<td><code>promote</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>hotfix on-call</strong></td>
+<td>owner</td>
+<td>approves the merge into <code>main</code> during an</td>
+</tr>
+<tr>
+<td>incident</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Both assignments <strong>reopen once migrating to <code>community</code></strong>. There, on-call
+becomes a real question again: the ladder will require a PO + a manager
+for <code>main</code>, and someone needs to be able to act at 3am when both of them
+are asleep. That fallback will have to be a <strong>documented exception in the
+requirements map</strong> — with who can exercise it and what gets recorded
+afterward —, never an informal workaround.</p>
+<hr>
+<blockquote>
+<p><strong>TODO(humano):</strong> this page was rebuilt from <code>CLAUDE.md</code>, not from the
+policy's original presentation. If the presentation says something
+that's not here — back-merge SLA, named roles, an obsolete branch
+policy —, check and complete it.</p>
+</blockquote>
+<hr>
+<p><sub>Pipeline exercised end to end on 2026-07-27: <code>v0.2.0-dev.1</code> → <code>-dev.2</code>
+→ <code>-qa.1</code> → <code>-qa.2</code> → final, with a staged rejection between the two <code>qa</code>
+stamps to prove that <code>N</code> counts on its own.</sub></p>
+<nav class="site-pager"><a href="../explanation/documentation-workflow.html"></a><a href="../explanation/cadeia-de-suprimentos-do-ci.html"></a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/scripts/ci/docs/explanation/branching-policy.md">Edit this page</a><span>Updated 2026-11-04T23:32:20-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#why-mechanize-it">Why mechanize it</a></li><li class="n2"><a href="#the-ladder">The ladder</a></li><li class="n2"><a href="#taxonomy">Taxonomy</a></li><li class="n3"><a href="#whos-born-where">Who's born where</a></li><li class="n3"><a href="#a-fix-born-high-goes-back-down">A fix born high goes back down</a></li><li class="n2"><a href="#pr-families">PR families</a></li><li class="n2"><a href="#direct-push-is-blocked">Direct push is blocked</a></li><li class="n2"><a href="#merged-branches-get-archived">Merged branches get archived</a></li><li class="n2"><a href="#bots-skip-the-ladder">Bots skip the ladder</a></li><li class="n3"><a href="#dependabot-branches-are-allowed-with-no-character-limit">Dependabot branches are allowed with no character limit</a></li><li class="n2"><a href="#dependabot-enters-through-dev">Dependabot enters through dev</a></li><li class="n3"><a href="#a-pin-bump-justifies-itself">A pin bump justifies itself</a></li><li class="n2"><a href="#who-approves">Who approves</a></li><li class="n3"><a href="#solo-mode--what-applies-today">solo mode — what applies today</a></li><li class="n3"><a href="#community-mode--for-when-there-are-people">community mode — for when there are people</a></li><li class="n3"><a href="#rules-common-to-both-modes">Rules common to both modes</a></li><li class="n3"><a href="#migrating-to-community-mode">Migrating to community mode</a></li><li class="n2"><a href="#promotion">Promotion</a></li><li class="n3"><a href="#automatic-promotion-to-qa">Automatic promotion to qa (test phase)</a></li><li class="n3"><a href="#the-promotion-check">The promotion check</a></li><li class="n2"><a href="#versioning">Versioning</a></li><li class="n3"><a href="#what-the-final-tag-produces">What the final tag produces</a></li><li class="n3"><a href="#the-changelog-comes-back-via-pr-and-why-not-by-push">The CHANGELOG comes back via PR, and why not by push</a></li><li class="n3"><a href="#releaseimagesjson-rides-the-same-pr--and-adds-no-exception">.release/images.json rides the same PR — and adds no exception</a></li><li class="n3"><a href="#the-cycles-version">The cycle's version</a></li><li class="n3"><a href="#the-n">The N</a></li><li class="n3"><a href="#the-final-tags-anchor">The final tag's anchor</a></li><li class="n3"><a href="#mains-two-paths">main's two paths</a></li><li class="n3"><a href="#theres-no-deploy">There's no deploy</a></li><li class="n3"><a href="#squash-on-a-conveyor-merge-and-the-alarm-that-has-an-addressee">Squash on a conveyor merge, and the alarm that has an addressee</a></li><li class="n2"><a href="#the-back-merge-gate">The back-merge gate</a></li><li class="n3"><a href="#the-state">The state</a></li><li class="n3"><a href="#what-happens-when-a-hotfix-merges">What happens when a hotfix merges</a></li><li class="n3"><a href="#accumulation-comes-free">Accumulation comes free</a></li><li class="n3"><a href="#the-check-on-every-pr">The check, on every PR</a></li><li class="n3"><a href="#the-order-isnt-bureaucracy">The order isn't bureaucracy</a></li><li class="n3"><a href="#the-lock-is-checked-not-just-declared">The lock is checked, not just declared</a></li><li class="n2"><a href="#what-the-policy-doesnt-solve">What the policy doesn't solve</a></li><li class="n2"><a href="#roles">Roles</a></li></ul></aside>
+</div>
+<script src="../../assets/mermaid.min.js"></script>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-en.json" data-base="../"></script></body>
+</html>

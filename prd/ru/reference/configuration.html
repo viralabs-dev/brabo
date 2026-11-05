@@ -1,0 +1,2029 @@
+<!doctype html>
+<html lang="ru" data-locale="ru" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Конфигурация | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Меню">&#9776;</button>
+<a class="marca" href="../index.html">Brabo</a>
+<input type="search" data-busca placeholder="Поиск" aria-label="Поиск" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Язык"><option value="../../reference/configuration.html">pt-BR</option><option value="../../en/reference/configuration.html">en</option><option value="../../ru/reference/configuration.html" selected>ru</option><option value="../../zh-Hans/reference/configuration.html">zh-Hans</option></select>
+<select data-seletor aria-label="Среда"><option value="../../../dev/ru/reference/configuration.html">dev</option><option value="../../../prd/ru/reference/configuration.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Сменить тему">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><h2>🚀 Начните здесь</h2><ul><li><a href="../index.html">Введение</a></li><li><a href="../getting-started.html">Первые шаги</a></li><li><a href="../tutorials/from-zero-to-deliverable.html">С нуля до готового результата</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li></ul></section><section><h2>🏗️ Архитектура</h2><ul><li><a href="../architecture.html">Архитектура</a></li><li><a href="../adr.html">Решения (ADR)</a><ul><li><span>Git, repositório e política de branches</span><ul><li><a href="../adr/0001-git-provider-contract-shape.html">ADR 0001 — Формат нормализованного контракта GitProvider</a></li><li><a href="../adr/0002-git-error-normalization.html">ADR 0002 — Нормализация ошибок GitProvider</a></li><li><a href="../adr/0003-git-provider-retry-policy.html">ADR 0003 — Политика повторов для удалённых providers</a></li><li><a href="../adr/0004-git-credential-registration.html">ADR 0004 — Регистрация git-учётных данных пользователя</a></li><li><a href="../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005 — Идемпотентный и возобновляемый bootstrap Gitflow</a></li><li><a href="../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028 — Защита веток: расхождение между providers и матрица одобрения</a></li><li><a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030 — Механизированная политика веток</a></li><li><a href="../adr/0044-adocao-de-repositorio-existente.html">ADR 0044 — Усыновление существующего репозитория и план как шлюз</a></li><li><a href="../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056 — Engine работает в удалённом репозитории</a></li><li><a href="../adr/0139-o-alarme-de-esteira-ganha-destinatario.html">ADR 0139 — Сигнал тревоги о merge конвейера получает адресата и правило для `dev`</a></li><li><a href="../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165 — Репозиторий рождается при принятии handoff Arquiteto, и исполнение без него не начинается</a></li><li><a href="../adr/0217-promocao-automatica-para-qa-em-fase-de-teste.html">ADR 0217 — Автоматическое продвижение `dev` → `qa`, пока QA находится в тестовой фазе</a></li><li><a href="../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.html">ADR 0235 — A `qa` é aposentada por hora e a esteira do repositório fica `dev → main`</a></li><li><a href="../adr/0236-o-dependabot-dispensa-revisao-na-dev.html">ADR 0236 — O Dependabot dispensa revisão na `dev` e fica mergeável com os outros checks verdes</a></li></ul></li><li><span>Harness de agente, turnos e sessões</span><ul><li><a href="../adr/0006-prompt-assembler-context-harness.html">ADR 0006 — Harness агентов: детерминированная сборка контекста</a></li><li><a href="../adr/0007-toolloop-tools-context-manager.html">ADR 0007 — ToolLoop, инструменты, ContextManager (harness с LLM)</a></li><li><a href="../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061 — Тип сессии — это данные создания, а выполнение остаётся событием</a></li><li><a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098 — Согласованные пределы транспорта и эффективное окно сжатия</a></li><li><a href="../adr/0163-o-clique-responde-ao-aceitar.html">ADR 0163 — Клик отвечает при ПРИНЯТИИ команды, а ход продолжается через канал</a></li><li><a href="../adr/0175-infra-lead-conversa-pelo-composer.html">ADR 0175 — Infra Lead разговаривает через composer, а прежде его ход проходит через `TurnoAssincrono`</a></li><li><a href="../adr/0177-idioma-das-respostas-por-conta-sessao-e-projeto.html">ADR 0177 — Язык ответов живёт в трёх местах — учётная запись, сессия и проект, — в открытом списке BCP-47 и никогда в `users.locale`</a></li><li><a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179 — Цикл спрашивает Jev, какой инструмент, а модель пользователя видит только оставшееся меню</a></li><li><a href="../adr/0183-reabrir-sessao-encerrada.html">ADR 0183 — Закрытую сессию можно открыть снова: собственный выход из терминальных состояний, в `active`, с новым событием</a></li><li><a href="../adr/0184-reabrir-sessao-decisoes-do-dono.html">ADR 0184 — Повторное открытие сессии: три решения владельца, и `developer` открывает снова</a></li><li><a href="../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191 — Сообщение, пришедшее во время идущего хода, попадает в сохраняемую очередь и читается в конце хода</a></li><li><a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226 — Diário vivo e retomada dos agentes: o turno interrompido volta uma vez, do plano</a></li><li><a href="../adr/0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.html">ADR 0246 — Anexos do chat: bytes no Postgres, referência no evento, visão por capability</a></li><li><a href="../adr/0247-uma-mensagem-varios-destinatarios.html">ADR 0247 — Uma mensagem, vários destinatários</a></li><li><a href="../adr/0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.html">ADR 0249 — O raciocínio do agente é gravado e mostrado só a developer ou mais</a></li></ul></li><li><span>O time de agentes — papéis, áreas e handoffs</span><ul><li><a href="../adr/0008-agente-criativo-conversacional-handoffs.html">ADR 0008 — Разговорный агент Criativo в harness + фундамент handoffs</a></li><li><a href="../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009 — Агент PO, backlog (epics/stories/tasks) и прослеживаемость</a></li><li><a href="../adr/0010-agente-arquiteto-adr-pr-module-map.html">ADR 0010 — Агент Arquiteto: ADR через настоящую PR, module_map и перекрёстная валидация</a></li><li><a href="../adr/0014-infra-agent-painel-phoenix.html">ADR 0014 — InfraAgent и живая панель команды (закрытие Фазы 4a)</a></li><li><a href="../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015 — Настоящий Psicólogo: ToolLoop, гипотезы с доказательствами и сортировка по стоимости</a></li><li><a href="../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016 — Anamnese: профиль владения навыками, патчи инструкций и замкнутый цикл</a></li><li><a href="../adr/0022-fechamento-4b-psicologo.html">ADR 0022 — Закрытие Фазы 4b (сессия 1): доказательство, которое доходит, стоимость, которая видна, анализ, который переживает kill</a></li><li><a href="../adr/0023-fechamento-4b-anamnese.html">ADR 0023 — Закрытие Фазы 4b (сессия 2): работающий каталог, дедупликация, различающая, кто отказал, и очередь, переживающая раунд</a></li><li><a href="../adr/0038-hierarquia-de-agentes.html">ADR 0038 — Иерархия агентов: области, leads и делегирование</a></li><li><a href="../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046 — Продвижение истории с полномочиями пользователя</a></li><li><a href="../adr/0053-dev-lead-e-paralelismo-autorizado.html">ADR 0053 — Dev Lead как область и параллелизм, разрешённый пользователем</a></li><li><a href="../adr/0068-diagrama-c4-do-arquiteto.html">ADR 0068 — Диаграмма C4 Arquiteto</a></li><li><a href="../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069 — Условное слияние принятия handoff с включением выполнения</a></li><li><a href="../adr/0085-fluxo-como-registro-declarativo.html">ADR 0085 — Поток ролей как декларативный реестр (fluxo.yml)</a></li><li><a href="../adr/0086-dev-lead-plano-suspende-para-aprovacao.html">ADR 0086 — План Dev Lead приостанавливает ход до одобрения</a></li><li><a href="../adr/0087-ux-designer-agente.html">ADR 0087 — UX Designer входит как разговорный агент</a></li><li><a href="../adr/0088-staff-agente-dormente-para-disparo-automatico.html">ADR 0088 — Staff: код готов, спящий для автоматического запуска</a></li><li><a href="../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">ADR 0089 — `analytics` и `delivery-metricas` становятся скриптом отчёта</a></li><li><a href="../adr/0092-platform-relatorio-de-telemetria-sob-demanda.html">ADR 0092 — `platform` рождается как скрипт отчёта по требованию, а не агент</a></li><li><a href="../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">ADR 0093 — Роль `dbre` становится двумя скриптами: линтер миграций и отчёт о резервном копировании</a></li><li><a href="../adr/0094-delegacao-dev-lead-vira-dado.html">ADR 0094 — Делегирование Dev Lead → dev становится данными, с переопределённым `parecerArtifactId`</a></li><li><a href="../adr/0109-handoff-manual-a-agente-a-escolha.html">ADR 0109 — Ручной handoff агенту по выбору переиспользует предложение+принятие, а не третье состояние handoff</a></li><li><a href="../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182 — Предложение handoff получает жизненный цикл: одно ожидающее на получателя и `superseded`</a></li><li><a href="../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185 — «Estou pronto — a necessidade está validada»: один клик закрывает готовность, gate `necessidade-validada` и принятие PO</a></li><li><a href="../adr/0186-aceite-automatico-do-handoff-ao-arquiteto.html">ADR 0186 — Handoff от PO к Arquiteto принимается без клика, когда backlog покрыт и репозиторий локальный</a></li><li><a href="../adr/0194-aprovar-o-plano-ativa-a-execucao.html">ADR 0194 — Одобрение плана Dev Lead активирует выполнение, а задача получает модуль, который он назначает</a></li><li><a href="../adr/0212-historia-arquivada.html">ADR 0212 — Архивированная история: колонка, а не состояние машины</a></li><li><a href="../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213 — Результат работает на машине пользователя через compose от Infra</a></li></ul></li><li><span>Gates, QA e revisão de segurança</span><ul><li><a href="../adr/0013-gates-qa-secops-pr.html">ADR 0013 — Gates PR: QAAgent и SecOpsAgent</a></li><li><a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020 — Разблокировать gates QA и SecOps: gitleaks по рабочему дереву, валидируемые заключения и tool call в тексте</a></li><li><a href="../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021 — Закрытие Фазы 4a: gate infra, который проверяет, и панель, которая говорит правду</a></li><li><a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054 — Gates как декларативный реестр</a></li><li><a href="../adr/0057-o-gate-espera-a-aprovacao.html">ADR 0057 — Агент gate ждёт одобрения, как ждёт dev</a></li><li><a href="../adr/0067-o-gate-sobrevive-ao-restart.html">ADR 0067 — Gate переживает перезапуск</a></li><li><a href="../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090 — QA-стратегия и AppSec как второй МОМЕНТ, а не новый агент</a></li><li><a href="../adr/0091-secops-runtime-relatorio-de-abuso.html">ADR 0091 — `secops-runtime` как скрипт отчёта по `rate_limit_hits`</a></li><li><a href="../adr/0095-gate-necessidade-validada.html">ADR 0095 — Gate `necessidade-validada` закрывается отдельным подтверждением человека, а не самопроверкой Criativo</a></li><li><a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123 — Golden-set регрессионных случаев для семантического суждения агента QA Automação</a></li><li><a href="../adr/0168-golden-set-do-qa-em-ci-semanal.html">ADR 0168 — Golden-set QA начинает работать в CI, по расписанию и еженедельно</a></li><li><a href="../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192 — План тестирования рождается после сдачи dev, а gate `implementavel` начинает судить по истории и `module_map`</a></li><li><a href="../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207 — Цикл gate, простаивающий более 2 ч, паркуется, и возобновить его может лишь жест человека</a></li><li><a href="../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214 — Открытый вопрос становится ожидающим решения пунктом</a></li><li><a href="../adr/0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.html">ADR 0215 — Решение проекта доходит до dev и QA</a></li></ul></li><li><span>Execução, política de terminal e aprovações</span><ul><li><a href="../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011 — Инфраструктура dev agents: worktrees, git-исполнители и замок merge</a></li><li><a href="../adr/0012-dev-agent-real-toolloop-orcamento-bloqueio.html">ADR 0012 — Настоящий DevAgent: ToolLoop, бюджет на task и дисциплина блокировки</a></li><li><a href="../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017 — Блокировка инициализации workspace, Monitor dev agents и наследование пределов</a></li><li><a href="../adr/0018-noop-dev-agent-modo-de-execucao.html">ADR 0018 — NoopDevAgent как постоянный режим выполнения</a></li><li><a href="../adr/0019-destravar-dev-agent-adr-por-modulo-orcamento-projeto.html">ADR 0019 — Разблокировать реальный DevAgent: запись, терминал, ADR по модулю и бюджет по проекту</a></li><li><a href="../adr/0045-reagendamento-por-evento-do-dev-agent.html">ADR 0045 — Перепланирование dev agent по событию и circuit breaker</a></li><li><a href="../adr/0047-operabilidade-pos-dogfooding.html">ADR 0047 — Эксплуатируемость после dogfooding: закрытие Фазы 12</a></li><li><a href="../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048 — Решение в event log и порядок gate</a></li><li><a href="../adr/0052-dev-agent-espera-aprovacao-no-meio-do-laco.html">ADR 0052 — Dev agent ждёт одобрения посреди цикла</a></li><li><a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055 — Область пути в политике терминала</a></li><li><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102 — Пересмотр ADR 0065: граница внешнего эффекта перестаёт быть `deny` и становится абсолютным пределом</a></li><li><a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167 — Автоматический режим снимает область путей, и только он</a></li><li><a href="../adr/0189-o-piloto-automatico.html">ADR 0189 — Автопилот: автоматический режим одобряет всё, кроме потолков, область сравнивается с реальной папкой исполнения, а «Всегда разрешать» записывает глагол + подкоманду</a></li><li><a href="../adr/0204-modo-automatico-libera-push-e-pr.html">ADR 0204 — Автоматический режим разрешает push и PR</a></li></ul></li><li><span>Onde o código mora — modos de execução</span><ul><li><a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066 — Читаемое имя папки workspace</a></li><li><a href="../adr/0072-projeto-local-ou-container.html">ADR 0072 — Проект выбирает, где живёт код: папка пользователя или управляемая папка</a></li><li><a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104 — `execution_mode` с тремя значениями, и workspace рождается `unverified`, когда проверяет его runner</a></li><li><a href="../adr/0107-navegacao-de-pasta-local-via-o-runner.html">ADR 0107 — Навигация по локальной папке через Runner</a></li><li><a href="../adr/0108-projeto-runner-nasce-ao-navegar-pasta-no-wizard.html">ADR 0108 — В режиме `runner` проект рождается при клике на &quot;Navegar pasta...&quot;, а не только при подтверждении</a></li><li><a href="../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">ADR 0111 — Конвертация `execution_mode` существующего проекта: отказ при активном dev agent, перемещение `permissions.json`, вывод из эксплуатации строки контейнера</a></li><li><a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141 — Единая база монтируемых проектов, смонтированная по тождеству</a></li><li><a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142 — Проверка смонтированного workspace откладывается до материализации</a></li><li><a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146 — База, согласованная в bootstrap, и `mounted` как локальный режим по умолчанию</a></li></ul></li><li><span>Container do projeto e broker</span><ul><li><a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065 — Контейнер на проект: граница перестаёт быть политикой</a></li><li><a href="../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">ADR 0081 — Жизненный цикл контейнера: таблица состояния, без оркестратора</a></li><li><a href="../adr/0083-terminal-mostra-estado-real-do-container.html">ADR 0083 — Вкладка Terminal получает реального потребителя жизненного цикла, а не терминал</a></li><li><a href="../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128 — Порт Docker и доказательство упаковки, которое выбрало реализацию</a></li><li><a href="../adr/0130-broker-de-container.html">ADR 0130 — Broker контейнеров: кто говорит с Docker сервера и почему он не принимает спецификацию</a></li><li><a href="../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131 — Arquiteto направляет модули в инфраструктуру: он ВЫДВИГАЕТ кандидатов, Infra ВЫБИРАЕТ</a></li><li><a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133 — Infra выбирает среди кандидатов маршрутизации, и выбор становится новой версией `artifact.project_image`</a></li><li><a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134 — Dev agents выполняются ВНУТРИ реального контейнера проекта, а terminal получает там нижнюю границу автоодобрения</a></li><li><a href="../adr/0135-portao-de-imagem-nos-tres-modos.html">ADR 0135 — Шлюз образа от Arquiteto (RN-105) начинает действовать во всех трёх режимах выполнения</a></li><li><a href="../adr/0136-pagina-global-de-containers.html">ADR 0136 — Глобальная страница контейнеров: потолок на загрузку в broker и `container_remove` в абсолютном потолке</a></li><li><a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137 — `brabo-runner` поднимает контейнер проекта на машине пользователя</a></li><li><a href="../adr/0143-agentes-de-dev-so-depois-do-container.html">ADR 0143 — Агенты dev только после контейнера</a></li><li><a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144 — Второй корень broker и дискриминированный локатор, который его выбирает</a></li><li><a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180 — Контейнер проекта работает от владельца папки, измеренного api</a></li><li><a href="../adr/0190-a-infra-sobe-o-container-no-aceite.html">ADR 0190 — Infra поднимает контейнер при принятии handoff, шагом сервера и с засеянной автономией, и именно она передаёт работу Dev Lead</a></li><li><a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199 — Минимальный ресурс контейнера выводится из `module_map`: каждый модуль объявляет свой, а Infra поднимает с суммой</a></li><li><a href="../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208 — Infra наследует сеть, объявленную Arquiteto</a></li><li><a href="../adr/0228-comando-do-app-e-rede-do-container.html">ADR 0228 — O container do projeto sobe o app pelo comando declarado e publica porta só no loopback</a></li><li><a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229 — O QA testa numa instância efêmera, com os serviços que a Infra declarou</a></li></ul></li><li><span>O runner local</span><ul><li><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — Локальный runner: выполнение на машине пользователя через канал Phoenix с одноразовым тикетом</a></li><li><a href="../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105 — Personal Access Token (`brb_…`) для runner, ограниченный по построению одним маршрутом</a></li><li><a href="../adr/0106-distribuicao-do-runner-via-tsup-e-npm-publish.html">ADR 0106 — Распространение `@brabo/runner` через `tsup` и `npm publish`, версия внедряется только в CI</a></li><li><a href="../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112 — Автономный бинарник `@brabo/runner` через `bun build --compile`, со встроенным нативным аддоном `.node` через реальное извлечение во временный каталог</a></li><li><a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118 — Настройка runner через браузер: ключ устройства Ed25519 как вторая учётная запись `runner-ticket`, прокси GitHub Releases для бинарника и File System Access API для папки, настраиваемой одним кликом</a></li><li><a href="../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145 — Docker становится реальным предусловием режима `runner`</a></li><li><a href="../adr/0147-agente-local-com-capacidades.html">ADR 0147 — Один локальный агент, возможности, объявляемые при подключении</a></li><li><a href="../adr/0151-base-consentida-no-runner.html">ADR 0151 — Согласованная база в runner и создание папки через канал</a></li><li><a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154 — Ключ устройства машины</a></li><li><a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174 — Автономный бинарник runner перестаёт обещать Mac Intel</a></li><li><a href="../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187 — Автономный бинарник runner перестаёт обещать Windows</a></li><li><a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193 — Git с учётными данными выполняется на ХОСТЕ runner; код выполняется в контейнере</a></li><li><a href="../adr/0201-revogacao-por-chave.html">ADR 0201 — Отзыв нацелен на КЛЮЧ, а не на пару `{проект, пользователь}`</a></li><li><a href="../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.html">ADR 0203 — Поток runner через браузер выводится из употребления, путь — установщик</a></li><li><a href="../adr/0230-importar-chave-de-llm-pelo-runner.html">ADR 0230 — O runner importa a chave de API de LLM que o usuário já tem na máquina</a></li></ul></li><li><span>Autenticação, acesso e segredos</span><ul><li><a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031 — Собственная аутентификация: argon2id, EdDSA и ротация refresh</a></li><li><a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032 — Отказ от Keycloak: собственный эмитент, service token и сессия в cookie</a></li><li><a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037 — CORS, которого не было у engine, и порт как часть контракта</a></li><li><a href="../adr/0050-credencial-sempre-cifrada-verificacao-explicita.html">ADR 0050 — Учётные данные всегда зашифрованы; проверка становится явным действием</a></li><li><a href="../adr/0058-csp-fechado-na-api-e-escopo-de-projeto-contido.html">ADR 0058 — Закрытый CSP в api и область проекта, удержанная в корне</a></li><li><a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059 — У ключа, подписывающего `state` git OAuth, нет значения по умолчанию</a></li><li><a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084 — Социальный вход (GitHub/GitLab), пересматривающий backlog ADR 0031/0032</a></li><li><a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096 — Настоящий SMTP в `MailSender`, за явным переключателем</a></li><li><a href="../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127 — Два потолка понижения в `project_members`, а перекрытие остаётся</a></li><li><a href="../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156 — Потолок самопонижения также при удалении участника проекта</a></li><li><a href="../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157 — Потолок самоперемещения в upsert workspace и самоповышение, которое было брешью</a></li><li><a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158 — Id мастер-ключа, записанный в конверте, как наблюдаемость и никогда как полномочие</a></li><li><a href="../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173 — Удаление участника workspace рождается, защищённое тем же условием</a></li><li><a href="../adr/0245-acesso-rapido-por-papel-so-no-ambiente-local.html">ADR 0245 — Acesso rápido por papel só no ambiente local</a></li></ul></li><li><span>Providers de LLM, modelos e gasto</span><ul><li><a href="../adr/0040-moeda-do-dashboard.html">ADR 0040 — Валюта дашборда: пока USD, ручной курс по workspace отложен</a></li><li><a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041 — Одна OpenAI-совместимая база, один контракт LLM providers и capabilities, отклоняющие binding</a></li><li><a href="../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042 — Живой каталог, жизненный цикл модели и проверяемая цена</a></li><li><a href="../adr/0043-seis-providers-de-llm-e-o-fechamento-da-fase-9b.html">ADR 0043 — Шесть providers LLM поверх базы, и Фаза 9b наконец закрыта</a></li><li><a href="../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049 — Курирование моделей по workspace</a></li><li><a href="../adr/0051-facetas-de-capability-e-curadoria-por-uso.html">ADR 0051 — Доказанные грани capability; &quot;для чего годится&quot; — это курирование</a></li><li><a href="../adr/0063-duas-audiencias-para-o-mesmo-gasto.html">ADR 0063 — Две аудитории для одного и того же расхода: счёт owner и потребление участника</a></li><li><a href="../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064 — Область как уровень каскада модели и глобальный binding агента</a></li><li><a href="../adr/0075-embeddings-no-contrato-de-llm-provider.html">ADR 0075 — Embeddings в контракте LLMProvider</a></li><li><a href="../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076 — `provider` снова становится измерением расходов, а сдерживание переходит к типу</a></li><li><a href="../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">ADR 0077 — Рейтинг моделей по возможностям, без выдуманной оценки</a></li><li><a href="../adr/0110-budget-por-area-aditivo-nao-cascata.html">ADR 0110 — Бюджет по области АДДИТИВЕН, рядом с проектом/сессией — не каскад и не новая таблица</a></li><li><a href="../adr/0114-deteccao-de-ollama-nativo-no-bootstrap-dev.html">ADR 0114 — Обнаружение нативного Ollama в dev bootstrap: спросить один раз, сохранить в `.env`, поставить сервисы compose за profile</a></li><li><a href="../adr/0115-pedido-de-pull-de-modelo-huggingface-tabela-propria.html">ADR 0115 — Pull модели из Hugging Face: собственная таблица, подтверждение в два шага и allowlist официальных издателей — никогда `proposed_actions`</a></li><li><a href="../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166 — Предпочтение маршрутизации живёт в binding модели, путешествует вместе с ним и замораживается в metering</a></li><li><a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188 — Реальная стоимость, которую возвращает provider, становится числом metering</a></li><li><a href="../adr/0198-duplicata-semantica-por-embedding-com-limiar-que-so-avisa.html">ADR 0198 — О семантическом дубликате истории и правила предупреждает embedding с порогом, а расход попадает в metering</a></li><li><a href="../adr/0221-upstream-preso-por-sessao.html">ADR 0221 — O hub prende a conversa de cada agente ao upstream que a atendeu, por `session_id`</a></li><li><a href="../adr/0222-provider-9router-de-llm.html">ADR 0222 — O 9Router entra como o 10º provider de LLM, com URL por instalação</a></li><li><a href="../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223 — O orçamento de raciocínio é capability POR MODELO, curada à mão</a></li><li><a href="../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224 — O raciocínio é contado no stream e abortado no limite, e o custo é estimado e reconciliado</a></li><li><a href="../adr/0225-teto-de-preco-do-upstream-no-openrouter.html">ADR 0225 — O OpenRouter recebe um teto de preço por chamada (`provider.max_price` = catálogo × 1,5)</a></li><li><a href="../adr/0227-provider-opencode-zen-de-llm.html">ADR 0227 — O OpenCode Zen entra como o 11º provider de LLM, só no dialeto OpenAI</a></li><li><a href="../adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233 — O membro vê o gasto do projeto por agente e por área, nunca por provider</a></li><li><a href="../adr/0251-preco-de-lista-datado-para-provider-sem-preco.html">ADR 0251 — Preço de lista datado no código para provider que não informa preço</a></li></ul></li><li><span>RAG, grafo de conhecimento e artefatos</span><ul><li><a href="../adr/0079-tabela-de-chunks-vetor-e-tsvector-juntos.html">ADR 0079 — Таблица chunks: вектор и `tsvector` в одной строке</a></li><li><a href="../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">ADR 0080 — Гибридный поиск: веса, порог и что такое цитата</a></li><li><a href="../adr/0082-chat-rag-aba-de-busca-hibrida.html">ADR 0082 — Chat RAG: собственная вкладка гибридного поиска, без переименования &quot;Chat&quot;</a></li><li><a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099 — Neo4j как граф знаний и шаблоны prompt, драйвер в api</a></li><li><a href="../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100 — `rag_search` для агентов и модели Ollama, гарантированные при загрузке</a></li><li><a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101 — Реляционная память как проекция event log; шаблоны потребляются без трогания GenServers</a></li><li><a href="../adr/0113-pasta-local-anexada-via-navegador-vira-chunks-scope-local.html">ADR 0113 — Локальная папка, приложенная через браузер, становится `chunks.scope = 'local'`, читаемым БРАУЗЕРОМ, никогда путём хоста</a></li><li><a href="../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">ADR 0129 — Телеметрия поиска RAG — это ТАБЛИЦА, с весами, замороженными в строке</a></li><li><a href="../adr/0132-golden-set-de-acerto-do-rag.html">ADR 0132 — Golden-set попаданий RAG и gate `rag-acertivo`</a></li><li><a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138 — Golden-set RAG начинает работать в CI, по расписанию — и остаётся `warn`</a></li><li><a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148 — Артефакты агентов, спроецированные в файлы, в папку `docs/`</a></li><li><a href="../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196 — Anamnese снова включена: не работает без субъекта, а принятая гипотеза становится фактом профиля</a></li><li><a href="../adr/0200-contrato-entre-modulos-artefato-do-arquiteto.html">ADR 0200 — Контракт между модулями становится версионируемым артефактом Arquiteto, и dev agent читает его вместо чужого worktree</a></li><li><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205 — Отклонение агента, которое наблюдает Anamnese, становится сигналом продукта, без персональных данных</a></li></ul></li><li><span>Interface web e design system</span><ul><li><a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036 — Экраны аутентификации, верные дизайну, и три шрифта, которые не загружались</a></li><li><a href="../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060 — Поверхность чтения кода, ограниченная и с бюджетом</a></li><li><a href="../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">ADR 0074 — Достижимая тема и загрузка под CSP</a></li><li><a href="../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">ADR 0078 — Рамка экрана, и реестр вкладок намеренно расходится с handoff</a></li><li><a href="../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097 — Прямое чтение схемы engine для &quot;N агентов онлайн&quot; на дашборде</a></li><li><a href="../adr/0116-tipos-do-web-gerados-do-openapi.html">ADR 0116 — `ActionType` (и будущие типы) генерируются из контракта OpenAPI, а не копируются вручную</a></li><li><a href="../adr/0122-sessionpage-dividido-em-cinco-prs.html">ADR 0122 — `SessionPage.tsx`, разделённый на пять механических PR, объявленных заранее</a></li><li><a href="../adr/0124-hook-do-canal-de-turno-do-sessionpage.html">ADR 0124 — Группировка состояния канала хода, извлечённая в `useTurnoDoAgente`</a></li><li><a href="../adr/0125-projectsettingstab-dividido-por-secao.html">ADR 0125 — `ProjectSettingsTab.tsx` разделён на файл на раздел, за barrel</a></li><li><a href="../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126 — Страница проекта навигируется вертикальной рейкой, а вкладка Código перестаёт сама сворачивать sidebar</a></li><li><a href="../adr/0176-sessionpage-abaixo-de-mil-linhas.html">ADR 0176 — `SessionPage.tsx` меньше 1 000 строк, за десять механических PR, а замок — только после</a></li><li><a href="../adr/0181-tema-preto-neutro.html">ADR 0181 — Тёмная тема становится нейтрально-чёрной, и долг контраста заканчивается</a></li><li><a href="../adr/0210-animacao-de-texto-com-motion.html">ADR 0210 — Анимация текста с `motion`</a></li><li><a href="../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211 — Одна навигация: боковая панель поглощает рельс проекта</a></li><li><a href="../adr/0232-shadcn-com-base-ui-no-apps-web.html">ADR 0232 — shadcn/ui com Base UI e Tailwind 4 no `apps/web`</a></li><li><a href="../adr/0234-shiki-e-recharts-por-carga-dinamica.html">ADR 0234 — `shiki` no Code Block e `recharts` no Chart, sempre por carga dinâmica</a></li><li><a href="../adr/0237-o-visual-v3-liga-o-preflight-e-sobe-os-raios.html">ADR 0237 — O visual v3 liga o preflight e sobe os raios</a></li><li><a href="../adr/0238-o-grafo-de-modulos-vira-canvas-xyflow.html">ADR 0238 — O grafo de módulos da Arquitetura vira Canvas (`@xyflow/react`)</a></li><li><a href="../adr/0239-csp-frame-src-local-para-o-web-preview.html">ADR 0239 — CSP `frame-src` local para o Web preview do entregável</a></li><li><a href="../adr/0240-o-motivo-de-controle-inerte-mora-num-ponto-de-interrogacao-nos-containers.html">ADR 0240 — O motivo de controle inerte pode morar num &quot;?&quot; ativo na página de Containers</a></li><li><a href="../adr/0241-a-sidebar-adota-o-block-sidebar-07-do-shadcn.html">ADR 0241 — A sidebar adota o block `sidebar-07` do shadcn</a></li><li><a href="../adr/0242-containers-em-tabela-linear-com-tanstack-react-table.html">ADR 0242 — Containers em tabela linear com `@tanstack/react-table`</a></li><li><a href="../adr/0243-consequencia-irreversivel-pode-morar-num-botao-de-perigo.html">ADR 0243 — Consequência irreversível pode morar num botão de perigo</a></li><li><a href="../adr/0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.html">ADR 0244 — Coluna das abas do projeto alinhada à esquerda</a></li><li><a href="../adr/0248-conteudo-das-paginas-ocupa-a-largura-inteira.html">ADR 0248 — O conteúdo das páginas ocupa a largura inteira</a></li><li><a href="../adr/0250-chat-da-sessao-ocupa-a-largura-inteira.html">ADR 0250 — O chat da Sessão ocupa a largura inteira</a></li></ul></li><li><span>Operação, deploy e instalação</span><ul><li><a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024 — Фаза 5 (сессия 1): production-образы, compose.prod, CI и smoke-тест</a></li><li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025 — Фаза 5 (сессия 2): деплой в Kubernetes с Kustomize, метрика очереди и локальный overlay</a></li><li><a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026 — Фаза 5 (сессия 3): graceful shutdown, OpenTelemetry, метрики, логи и дашборды</a></li><li><a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027 — Backup/restore, усиление api, открытая поверхность и релиз</a></li><li><a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035 — Trace без коллектора и путь между слоями в логе</a></li><li><a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070 — Наблюдаемость в локальном Compose: метрики и журналы, без трассировки</a></li><li><a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150 — Установщик одной строкой, с выбранным источником и маркером</a></li><li><a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152 — Резервное копирование и восстановление томов для compose</a></li><li><a href="../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153 — `DEPLOY_ENABLED`: триггер, который упоминают десять документов и не создаёт ни один</a></li><li><a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155 — Первая учётная запись рождается в терминале, а локальный агент поднимается сопряжённым</a></li><li><a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160 — Compose установщика едет вместе с ним, как подписанный asset</a></li><li><a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161 — Экран предлагает только тот режим, который выполняет установка, а у установки через Release нет broker</a></li><li><a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162 — Broker становится пятым опубликованным образом, а установщик СПРАШИВАЕТ, включать ли его</a></li><li><a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169 — Назначением S3 локального overlay перестаёт быть MinIO и становится SeaweedFS</a></li><li><a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170 — Dev-compose становится `brabo-dev`, и dev отказывается подниматься рядом с установкой</a></li><li><a href="../adr/0209-engine-em-otp-29.html">ADR 0209 — Engine переходит на Elixir 1.20.4 / OTP 29.1.1</a></li></ul></li><li><span>CI, release e cadeia de suprimentos</span><ul><li><a href="../adr/0039-actionlint-e-validacao-do-pipeline-de-ci-gerado.html">ADR 0039 — actionlint и валидация генерируемого конвейера CI</a></li><li><a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119 — Образы, публикуемые в GHCR с каждым финальным тегом, и production overlay, закреплённый по digest</a></li><li><a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120 — Браузерный E2E против продакшен-compose, в пакете вне workspace</a></li><li><a href="../adr/0121-schema-dividido-por-agregado-de-dominio.html">ADR 0121 — Схема, разделённая по доменным агрегатам, за barrel</a></li><li><a href="../adr/0140-timeout-do-audit-como-risco-assumido.html">ADR 0140 — Повторяющийся timeout `pnpm audit` — принятый риск; находка по-прежнему отклоняет</a></li><li><a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149 — Подпись опубликованных артефактов</a></li><li><a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159 — Сторонний образ входит по digest, и lint проваливает того, кто забудет</a></li><li><a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172 — Релиз сканирует Trivy то, что публикует, по digest, до подписи</a></li><li><a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178 — Тег стороннего образа живёт ВНУТРИ ссылки, перед digest</a></li><li><a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197 — Образ workflows берётся из compose, и Dependabot для образов включается</a></li><li><a href="../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252 — O Brabo vira um conjunto de repositórios em `viralabs-dev`</a></li></ul></li><li><span>Documentação</span><ul><li><a href="../adr/0029-sincronizacao-continua-da-documentacao.html">ADR 0029 — Непрерывная синхронизация документации</a></li><li><a href="../adr/0033-referencia-de-api-gerada-do-openapi.html">ADR 0033 — Справочник API выводится из кода, а табличный тест требует метаданных</a></li><li><a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034 — Документация, публикуемая по ступеням, в подкаталоге Pages</a></li><li><a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071 — Симметричная публикация по ступеням и корень, который предлагает выбор</a></li><li><a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073 — Публикуемый путь называет окружение, а не ветку</a></li><li><a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117 — `website/` получает собственный lockfile, вне `pnpm audit` продукта</a></li><li><a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202 — Индекс ADR по темам, с темой вне ADR</a></li><li><a href="../adr/0206-referencia-da-api-numa-pagina-redoc.html">ADR 0206 — Справочник API становится страницей Redoc</a></li><li><a href="../adr/0216-quatro-idiomas-com-pt-br-como-fonte.html">ADR 0216 — Четыре языка, с pt-BR как ИСТОЧНИКОМ и языком по умолчанию: документация и интерфейс на португальском, английском, русском и упрощённом китайском</a></li><li><a href="../adr/0218-titulo-de-adr-com-prefixo.html">ADR 0218 — Каждый ADR называется «ADR NNNN — заголовок»</a></li><li><a href="../adr/0219-referencia-entra-na-traducao.html">ADR 0219 — Справочник входит в перевод</a></li><li><a href="../adr/0220-api-traduzida-por-catalogo.html">ADR 0220 — Страница API переводится по каталогу</a></li><li><a href="../adr/0253-o-site-de-docs-deixa-o-docusaurus.html">ADR 0253 — O site de docs deixa o Docusaurus</a></li><li><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html">ADR 0254 — A doc de cada área mora na raiz dela</a></li></ul></li></ul></li></ul></section><section><h2>📐 Правила</h2><ul><li><a href="../business-rules.html">Бизнес-правила</a></li><li><a href="../business-rules/custo.html">Стоимость и metering</a></li><li><a href="../business-rules/autenticacao.html">Аутентификация</a></li><li><a href="../business-rules/api.html">API</a></li><li><a href="../business-rules/broker.html">Broker</a></li><li><a href="../business-rules/ci.html">CI</a></li><li><a href="../business-rules/contracts.html">Contratos</a></li><li><a href="../business-rules/engine.html">Engine</a></li><li><a href="../business-rules/infra.html">Infra</a></li><li><a href="../business-rules/produto.html">Produto</a></li><li><a href="../business-rules/runner.html">Runner</a></li><li><a href="../business-rules/web.html">Web</a></li></ul></section><section><h2>📖 Справочник</h2><ul><li><a href="../reference/configuration.html" aria-current="page">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Открытая поверхность api</a></li><li><span>Справочник API</span></li></ul></section><section><h2>💡 Пояснения</h2><ul><li><span>Процесс и конвейер</span><ul><li><a href="../explanation/documentation-workflow.html">Синхронизация документации</a></li><li><a href="../explanation/branching-policy.html">Политика веток</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Цепочка поставок CI</a></li><li><a href="../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../explanation/gates.html">Gates и то, как они измеряются</a></li><li><a href="../explanation/observability.html">Наблюдаемость</a></li><li><a href="../explanation/modelo-de-time.html">Модель команды и поток результатов</a></li></ul></li><li><span>Проверки и измерения</span><ul><li><a href="../explanation/primeiro-dogfooding.html">Первый dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Реальное выполнение (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Находки реального прогона конвейера</a></li><li><a href="../explanation/validacao-fase-12.html">Проверка Фазы 12</a></li><li><a href="../explanation/validacao-real.html">Реальная валидация (13b)</a></li><li><a href="../explanation/aceite-providers.html">Приёмка providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Измерение эвристики языка</a></li><li><a href="../explanation/medicao-do-jev.html">Измерение маршрутизатора инструментов Jev</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Аудит: fluxo.yml × код (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Визуальный аудит до и после Rodada 29</a></li></ul></li><li><span>История фаз</span><ul><li><a href="../explanation/historico-de-fases.html">История фаз</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">ФАЗА 28 — папка пользователя</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — установка одной строкой</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — локальный агент машины</a></li><li><a href="../explanation/backlog.html">Backlog после триажа</a></li></ul></li><li><span>Локализация</span><ul><li><a href="../explanation/localizacao.html">Локализация</a></li><li><a href="../explanation/localizacao-en.html">Локализация — английский (en)</a></li><li><a href="../explanation/localizacao-ru.html">Локализация — русский (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Локализация — упрощённый китайский (zh-Hans)</a></li></ul></li><li><span>Технические заметки</span><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — не принят</a></li></ul></li></ul></section><section><h2>🛠️ Эксплуатация</h2><ul><li><a href="../runbook.html">Руководство по эксплуатации</a></li></ul></section><section><h2>📚 Словарь</h2><ul><li><a href="../glossary.html">Глоссарий</a></li></ul></section><section><h2>🤝 Участие</h2><ul><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Как внести вклад</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Где попросить помощи</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Сообщить об уязвимости</a></li></ul></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="конфигурация">Конфигурация</h1>
+<p>Вся конфигурация задаётся <strong>переменными окружения</strong>. Файла конфигурации
+приложения нет — есть <code>permissions.json</code>, но это политика проекта, а не
+конфигурация процесса.</p>
+<p>Два версионируемых файла читаются во время выполнения и конфигурацией не
+являются, хотя их легко с ней спутать: <code>permissions.json</code> выше и
+<code>docs/gates.yml</code> (<a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054</a>),
+декларативный реестр gates. Ни у одного из них нет переменной окружения,
+указывающей путь, — реестр находится поднятием от <code>__dirname</code>, — и ни один не
+меняет поведение при редактировании в production: реестр ОПИСЫВАЕТ gates, а не
+применяет их. Он едет внутри образа api; см.
+<a href="../runbook.html#registro-de-gates">runbook</a>.</p>
+<p>Едет реестр и <strong>ничего из того, на что он указывает</strong>. <code>evidencia</code> gate
+<code>teste</code>/<code>ci</code> называет файлы под <code>apps/api/test/</code>, <code>scripts/ci/</code> и <code>.github/</code>, и
+ни одного из них в образе нет. Проверка существования этих целей поэтому —
+утверждение о репозитории, проверяемое в CI, а не процессом, обслуживающим
+<code>GET /gates</code>, — поэтому api читает реестр, не разыскивая их. Раньше она
+разыскивала и отвечала <code>500</code> в каждой установке
+(<a href="../business-rules/api.html#rn-070">RN-070</a>).</p>
+<blockquote>
+<p><strong><code>up --wait</code> доказывает только то, у чего есть healthcheck.</strong> В compose для
+разработки у <code>api</code>, <code>engine</code> и <code>web</code> их не было, поэтому
+<code>docker compose up --wait</code> считал их готовыми в момент старта контейнера — до
+того, как процесс начинал слушать. Так контейнер мог умереть через секунды,
+а команда всё ещё сообщала об успехе. Теперь все три несут ту же проверку,
+которую образы production уже объявляют в Dockerfile (<code>/health</code> в api и
+engine, затрагивающий базу; <code>/</code> на сервере Vite). Брокер контейнеров получил
+свою в отдельном изменении; у <code>postgres</code> и <code>neo4j</code> они были всегда. Ничего
+здесь не является переменной окружения — это написано потому, что на
+<code>--wait</code> полагаются скрипты, а сервис без healthcheck заставляет его лгать.</p>
+</blockquote>
+<p>Значения по умолчанию ниже извлечены из кода, а не из прежней документации.
+Колонка <strong>когда ломается</strong> — та часть, что экономит время: почти у каждой
+переменной есть умолчание, работающее в разработке, и особый режим отказа в
+production.</p>
+<blockquote>
+<p><strong>Переменная доходит до процесса, только если compose её отображает.</strong>
+<code>docker compose</code> не передаёт окружение хоста внутрь контейнера: переменная
+доходит, если — и только если — она записана в <code>environment:</code> этого сервиса
+(или в <code>env_file</code>). Это не мелочь: именно так <code>ANAMNESE_ENABLED</code> и
+<code>PSYCHOLOGIST_ENABLED</code> молча стали недостижимы, пока три места в коде
+обещали, что пауза от 2026-08-10 отменяется через <code>X=true</code> и перезапуск.
+Измеренные внутри работающего контейнера engine, они вернулись пустыми, и
+<code>runtime.exs</code> упал в <code>&quot;false&quot;</code> — без ошибки где-либо. Каждый булев флаг,
+который читает engine, теперь отображён в трёх файлах compose (dev,
+production и установка — установочный только с AT-202), с умолчанием самого
+кода, кроме двух ключей загрузки фоновых агентов, которые production и
+установка намеренно выключают, и <code>scripts/ci/flags-do-engine-no-compose.spec.ts</code>
+проваливает сборку для следующего, которого не окажется
+(<a href="../business-rules/engine.html#rn-540">RN-540</a>).
+Kubernetes исключён из этого правила намеренно: Deployment/ConfigMap ничего
+не перехватывает, так что там нет сломанного ключа, который нужно чинить.</p>
+</blockquote>
+<blockquote>
+<p><strong>Умолчания разработки намеренно небезопасны.</strong> Значения вроде
+<code>dev-master-key-change-me</code> существуют, чтобы <code>pnpm dev</code> поднимался без
+церемоний. В production их нужно заменить — и для шести из них процесс
+<strong>отказывается</strong> стартовать без замены (api или engine, помечены 🔒). Пять
+следуют образцу
+<a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059</a>/<a href="../business-rules/api.html#rn-093">RN-093</a>:
+отсутствующее, равное публичному литералу-примеру или слишком короткое
+значение роняет загрузку. См. <a href="../business-rules/api.html#rn-114">RN-114</a> о
+четырёх, присоединившихся к исходному <code>GIT_OAUTH_STATE_SECRET</code>.</p>
+</blockquote>
+<h2 id="compose-установки-docker-composeinstallyml">Compose установки (<code>docker-compose.install.yml</code>)</h2>
+<p>Compose, работающий на <strong>установленной</strong> машине, берёт пять образов продукта из
+<strong>обязательных переменных</strong>, без умолчания — <code>install.sh</code> записывает их в
+<code>.env</code>:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>что</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BRABO_API_IMAGE</code></td>
+<td>полная ссылка на образ api; <code>ghcr.io/…@sha256:…</code>, когда источник GHCR, <code>brabo-api:prod</code>, когда собран локально</td>
+</tr>
+<tr>
+<td><code>BRABO_ENGINE_IMAGE</code></td>
+<td>то же для engine</td>
+</tr>
+<tr>
+<td><code>BRABO_WEB_IMAGE</code></td>
+<td>то же для web</td>
+</tr>
+<tr>
+<td><code>BRABO_BACKUP_IMAGE</code></td>
+<td>то же для job резервного копирования (под profile <code>backup</code>)</td>
+</tr>
+<tr>
+<td><code>BRABO_BROKER_IMAGE</code></td>
+<td>то же для брокера контейнеров (<a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a>). Записывается <strong>независимо от того</strong>, включён ли брокер: Compose интерполирует весь файл до фильтрации по profile, так что <code>${VAR:?…}</code> в выключенном сервисе всё равно отклоняет файл (измерено)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Они намеренно <code>${VAR:?…}</code>. С умолчанием отсутствующая переменная подняла бы
+половину стека на образе, который никто не выбирал, и ошибка проявилась бы как
+странное поведение, а не как отказ.</p>
+<p>Их <strong>нет</strong> в сгенерированном инвентаре ниже: генератор обходит <code>apps/</code>, а эти
+читает Compose, а не код продукта
+(<a href="../business-rules/infra.html#rn-527">RN-527</a>).</p>
+<p><strong>Брокер</strong> есть в этом compose с <a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a>,
+<strong>выключенный</strong>, под profile <code>container-broker</code>, и <code>install.sh</code> включает его,
+только когда спрашивает и ответ «s» (<a href="../business-rules/produto.html#rn-575">RN-575</a>).
+Тогда он записывает четыре строки — все вместе или ни одной:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>что записывает <code>install.sh</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COMPOSE_PROFILES</code></td>
+<td><code>container-broker</code> — читается Compose из <code>--env-file</code>, так что <code>up -d --wait</code> поднимает брокер без флага</td>
+</tr>
+<tr>
+<td><code>BROKER_URL</code></td>
+<td><code>http://broker:8090</code> — сторона api; без неё api никогда не вызывает брокер</td>
+</tr>
+<tr>
+<td><code>DOCKER_GID</code></td>
+<td>gid сокета, <strong>видимый изнутри контейнера</strong>, измеренный самим образом брокера; сбой измерения — именованный отказ, никогда умолчание <code>999</code></td>
+</tr>
+<tr>
+<td><code>PROJECT_WORKSPACES_HOST_ROOT</code></td>
+<td><code>&lt;DockerRootDir&gt;/volumes/brabo_project_workspaces/_data</code>, вычисляется до подъёма и сверяется с реальным <code>Mountpoint</code> тома после него</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>BRABO_PROJECTS_HOST_BASE</code> не записывается: compose выводит её из
+<code>BRABO_PROJECTS_BASE</code>, как в compose валидации. Включение или выключение позже
+описано в <a href="../runbook.html#broker-na-instalacao">runbook</a>.</p>
+<p>О <strong>локальных моделях</strong> (Ollama, profile <code>llm</code>) спрашивают сразу после брокера
+(<a href="../business-rules/produto.html#rn-691">RN-691</a>). Ответ «s» сначала измеряет свободный
+порт хоста и записывает:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>что записывает <code>install.sh</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OLLAMA_PORT</code></td>
+<td><code>11434</code> или первый свободный порт до <code>11443</code>, когда что-то (нативный Ollama) уже слушает там; весь занятый диапазон — именованный отказ, без записи чего-либо</td>
+</tr>
+<tr>
+<td><code>COMPOSE_PROFILES</code></td>
+<td><code>llm</code>, вместе с <code>container-broker</code> в ОДНОЙ строке, только когда приняты оба (<code>container-broker,llm</code>) — две строки не складываются, побеждает последняя</td>
+</tr>
+</tbody>
+</table></div>
+<p>Без них проверка семантического дубликата пропускается. Включение позже — в
+<a href="../runbook.html#modelos-locais-na-instalacao">runbook</a>.</p>
+<h2 id="api">api</h2>
+<h3 id="основные">Основные</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>когда ломается</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DATABASE_URL</code></td>
+<td><code>postgres://brabo:brabo@localhost:5432/brabo</code></td>
+<td>без неё ничего не поднимается</td>
+</tr>
+<tr>
+<td><code>PORT</code></td>
+<td><code>3000</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>API_JSON_BODY_LIMIT</code></td>
+<td><code>10mb</code></td>
+<td>потолок тела JSON, которое принимает api, применяемый к парсеру, зарегистрированному в <code>main.ts</code>, до любого маршрута. Существует, чтобы изменение транспортного потолка engine (<code>TRANSPORT_MAX_BODY_BYTES</code>, 8 MiB) не требовало нового deploy — умолчание оставляет запас над ним. Слишком маленький — и ход с большим контекстом возвращается как <strong>413</strong></td>
+</tr>
+<tr>
+<td><code>NODE_ENV</code></td>
+<td>—</td>
+<td><code>production</code> включает строгий CORS и проверку ключей</td>
+</tr>
+<tr>
+<td><code>API_PUBLIC_URL</code></td>
+<td><code>http://localhost:3000</code></td>
+<td>используется в callbacks OAuth git; неверная = сломанный callback</td>
+</tr>
+<tr>
+<td><code>ENGINE_URL</code></td>
+<td><code>http://localhost:4000</code> в коде, <code>http://engine:4000</code> в Compose</td>
+<td>синхронные команды api→engine падают. <strong>Оставьте её пустой в <code>.env</code></strong>: заданная там, она побеждает умолчание Compose, и api пытается говорить с <code>localhost:4000</code> изнутри собственного контейнера — каждая активация сессии умирает с <code>ECONNREFUSED</code>, и frontend не двигается с места. У каждого окружения уже есть правильное умолчание без этой строки</td>
+</tr>
+<tr>
+<td><code>ENGINE_PUBLIC_URL</code></td>
+<td>то же, что <code>ENGINE_URL</code></td>
+<td>используется только для сборки <code>engineWsUrl</code> (WebSocket), возвращаемого в <code>POST .../runner-ticket</code>/<code>.../terminal-ticket</code> — runner и web могут быть ВНЕ кластера, поэтому внутренний адрес (<code>http://engine:4000</code>) не подходит; <code>ENGINE_URL</code> по-прежнему используется в обычных синхронных вызовах api→engine (RN-419)</td>
+</tr>
+<tr>
+<td><code>BRABO_VERSION</code></td>
+<td><code>dev</code></td>
+<td>становится <code>service.version</code> в resource OpenTelemetry — так узнают, какая сборка породила трассу. Образ релиза внедряет тег через <code>ARG</code> из <code>docker-bake.hcl</code>; вне релиза остаётся <code>dev</code>. <strong>Не</strong> появляется в <code>/health</code>, который намеренно не возвращает версию (см. <code>description</code> маршрута)</td>
+</tr>
+<tr>
+<td><code>MIGRATIONS_FOLDER</code></td>
+<td><code>./src/db/migrations</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="безопасность-">Безопасность 🔒</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>когда ломается</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CREDENTIALS_MASTER_KEY</code> 🔒</td>
+<td><code>dev-master-key-change-me</code> <strong>только вне production</strong></td>
+<td>оборачивает DEKs. <strong>В production api отказывается стартовать</strong>, если её нет, если это умолчание выше (публичное — оно в <code>.env.example</code>) или если в ней меньше 16 символов (RN-114). Это лишь проверка ЗАГРУЗКИ: замена на <strong>действительный, но другой</strong> ключ без перезаворачивания всё равно делает все учётные данные нечитаемыми без какой-либо ошибки — сбой проявляется при первом использовании. См. <a href="../runbook.html#rotacao-da-chave-mestra">ротацию</a></td>
+</tr>
+<tr>
+<td><code>CREDENTIALS_MASTER_KEY_PREVIOUS</code></td>
+<td>—</td>
+<td>только во время ротации. Присутствует = api пробует предыдущий ключ, когда текущий не подходит</td>
+</tr>
+<tr>
+<td><code>GIT_OAUTH_STATE_SECRET</code> 🔒</td>
+<td><code>dev-oauth-state-secret-change-me</code> <strong>только вне production</strong></td>
+<td>подписывает <code>state</code> OAuth; слабый = CSRF в потоке подключения git. <strong>В production api отказывается стартовать</strong> без него, с умолчанием выше (публичным — оно в <code>.env.example</code>) или с менее чем 16 символами. Генерируйте <code>openssl rand -base64 32</code>. См. <a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059</a> и <a href="../business-rules/api.html#rn-093">RN-093</a></td>
+</tr>
+<tr>
+<td><code>WEB_ORIGIN</code> 🔒</td>
+<td><code>http://localhost:${WEB_PORT}</code></td>
+<td><strong>в production api отказывается стартовать</strong>, если её нет или она равна <code>*</code>. CORS строгий для каждого окружения. <strong>Порт — часть значения</strong>: web на <code>:5174</code> — другой origin и блокируется — см. <a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037</a>. В composes умолчание <strong>выводится из <code>WEB_PORT</code></strong>, так что смена порта тянет за собой CORS; ручное задание <code>WEB_ORIGIN</code> перекрывает вывод, и поддерживать согласованность становится вашей ответственностью</td>
+</tr>
+<tr>
+<td><code>WEB_PORT</code></td>
+<td><code>5173</code> (dev) · <code>8088</code> (prod)</td>
+<td>опубликованный порт web на хосте. Ни один сервис её не читает — она <strong>питает умолчание <code>WEB_ORIGIN</code></strong> в composes, и именно это не даёт порту и CORS разойтись</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="auth-first-party">Auth first-party</h3>
+<p>Auth живёт в домене api, а после перехода является и единственным эмитентом.
+Решения в
+<a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031</a> и
+<a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032</a>.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>что делает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AUTH_JWT_SECRET</code> 🔒</td>
+<td><code>dev-auth-jwt-secret-change-me</code> <strong>только вне production</strong></td>
+<td>фраза, из которой пара Ed25519 access token <strong>выводится</strong> через scrypt — ни один приватный ключ не коммитится. <strong>В production api отказывается стартовать</strong>, если её нет, если это умолчание выше (публичное — оно в <code>.env.example</code>) или если в ней меньше 16 символов (RN-114)</td>
+</tr>
+<tr>
+<td><code>AUTH_JWT_SECRET_PREVIOUS</code></td>
+<td>—</td>
+<td>принимается <strong>только для проверки</strong> во время ротации; входит в JWKS и никогда не подписывает</td>
+</tr>
+<tr>
+<td><code>AUTH_TOKEN_PEPPER</code> 🔒</td>
+<td><code>dev-auth-token-pepper-change-me</code> <strong>только вне production</strong></td>
+<td>ключ HMAC хэша непрозрачных токенов (refresh, привязки аккаунтов, PATs) и ключа корзины блокировки. <strong>Собственный секрет — больше не падает в <code>AUTH_JWT_SECRET</code></strong> (<a href="../business-rules/api.html#rn-613">RN-613</a>). <strong>В production api отказывается стартовать</strong>, если его нет, если это любое из значений-примеров этого репозитория или если в нём меньше 16 символов. Установка, работавшая без него, должна задать его <strong>текущим</strong> <code>AUTH_JWT_SECRET</code>, иначе всех разлогинит — см. <a href="../runbook.html#rotacao-do-auth-jwt-secret">runbook</a></td>
+</tr>
+<tr>
+<td><code>AUTH_ACCESS_TOKEN_TTL_MS</code></td>
+<td><code>900000</code></td>
+<td>15 мин</td>
+</tr>
+<tr>
+<td><code>AUTH_REFRESH_TOKEN_TTL_MS</code></td>
+<td><code>1209600000</code></td>
+<td>14 дней</td>
+</tr>
+<tr>
+<td><code>AUTH_REFRESH_ABSOLUTE_TTL_MS</code></td>
+<td><code>2592000000</code></td>
+<td>абсолютный потолок семейства, считая от входа — без него ротация даёт вечную сессию</td>
+</tr>
+<tr>
+<td><code>AUTH_REGISTRATION_ENABLED</code></td>
+<td><code>true</code></td>
+<td>любое значение, отличное от <code>&quot;false&quot;</code>, оставляет регистрацию открытой</td>
+</tr>
+<tr>
+<td><code>AUTH_LOCKOUT_ENABLED</code></td>
+<td><code>true</code></td>
+<td>то же соглашение</td>
+</tr>
+<tr>
+<td><code>AUTH_LOCKOUT_WINDOW_MS</code></td>
+<td><code>900000</code></td>
+<td>скользящее окно подсчёта</td>
+</tr>
+<tr>
+<td><code>AUTH_LOCKOUT_THRESHOLDS</code></td>
+<td><code>5:30,8:300,12:900</code></td>
+<td>лестница корзины по email, <code>сбои:секунды</code></td>
+</tr>
+<tr>
+<td><code>AUTH_LOCKOUT_IP_THRESHOLDS</code></td>
+<td><code>20:30,30:120</code></td>
+<td>лестница корзины по IP, мягче и с коротким потолком</td>
+</tr>
+<tr>
+<td><code>AUTH_EMAIL_TOKEN_TTL_MS</code></td>
+<td><code>172800000</code></td>
+<td>подтверждение email, 48 ч</td>
+</tr>
+<tr>
+<td><code>AUTH_RESET_TOKEN_TTL_MS</code></td>
+<td><code>3600000</code></td>
+<td>сброс пароля, 1 ч</td>
+</tr>
+<tr>
+<td><code>AUTH_SET_PASSWORD_TTL_MS</code></td>
+<td><code>604800000</code></td>
+<td>установка первого пароля (мигрированный пользователь), 7 дней — дольше сброса, потому что получатель его не запрашивал</td>
+</tr>
+<tr>
+<td><code>AUTH_IP_ATTEMPT_THRESHOLD</code></td>
+<td><code>60</code></td>
+<td>потолок попыток по IP на маршрутах auth</td>
+</tr>
+<tr>
+<td><code>AUTH_MAIL_LOG_TOKENS</code></td>
+<td><code>false</code></td>
+<td><strong>только dev</strong>: печатает в лог токен подтверждения/сброса</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>Потолок лестницы по email намеренно равен окну.</strong> При скользящем окне
+настойчивый сдвигает окно и остаётся заблокированным, пока настаивает;
+переставший возвращается с чистым окном. Потолок <strong>больше</strong> окна создал бы
+блокировку, которую окно не может представить, и потребовал бы постоянной
+колонки <code>locked_until</code> с очередью разблокировки. Не трогайте одно без другого.</p>
+</blockquote>
+<blockquote>
+<p><strong>Ротация <code>AUTH_TOKEN_PEPPER</code> разлогинивает всех</strong> и аннулирует ожидающие
+токены подтверждения и сброса. В отличие от ключей, у pepper <strong>нет</strong>
+<code>_PREVIOUS</code>. См. <a href="../runbook.html">runbook</a>.</p>
+</blockquote>
+<blockquote>
+<p><strong>Докуда доходят переменные <code>_PREVIOUS</code>.</strong> <code>AUTH_JWT_SECRET_PREVIOUS</code>,
+<code>CREDENTIALS_MASTER_KEY_PREVIOUS</code> и <code>BRABO_SERVICE_TOKEN_PREVIOUS</code> отображены
+в <code>environment:</code> трёх composes (dev, production и установка) как <code>${X:-}</code> —
+api получает все три, engine и брокер получают
+<code>BRABO_SERVICE_TOKEN_PREVIOUS</code> (<a href="../business-rules/api.html#rn-595">RN-595</a>).
+Пустое значение равносильно отсутствию для каждого читателя, так что вне
+ротации ничего не меняется; во время неё достаточно задать их в <code>.env</code> и
+пересоздать сервис. До RN-595 они не были отображены нигде, а <code>docker compose</code>
+не передаёт окружение хоста, так что ротация молча превращалась в жёсткую
+замену. <strong>В Kubernetes они доходят до Pods через хранилище секретов</strong>
+(AT-220): <code>ExternalSecret</code> вытягивает весь объект <code>brabo</code> через
+<code>dataFrom.extract</code>, так что присутствующий там <code>_PREVIOUS</code> попадает в
+<code>brabo-secrets</code>, а отсутствующий просто там отсутствует. Цена в том, что
+каждый ключ этого объекта становится переменной окружения api, engine,
+migrations и backup — объект хранилища не может хранить ничего другого.
+Процедура в <a href="../runbook.html#rotacao-no-kubernetes">runbook</a>.</p>
+</blockquote>
+<h3 id="настоящий-smtp-mailsender">Настоящий SMTP (MailSender)</h3>
+<p><code>MailSender</code> отправляет настоящий email только с <code>MAIL_TRANSPORT=smtp</code> —
+умолчание <code>log</code> (ссылка/токен идут в лог api, <code>AUTH_MAIL_LOG_TOKENS</code> выше), в
+том числе в production: отправка email — выбор оператора. Решение в
+<a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096</a>.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>что делает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MAIL_TRANSPORT</code></td>
+<td><code>log</code></td>
+<td><code>log</code> (умолчание) или <code>smtp</code>. Любое другое значение падает в <code>log</code></td>
+</tr>
+<tr>
+<td><code>SMTP_HOST</code> 🔒</td>
+<td>—</td>
+<td>хост SMTP-провайдера. <strong>Только с <code>MAIL_TRANSPORT=smtp</code></strong>: в production api отказывается стартовать, если его нет, если он из одних пробелов или если это значение-пример, опубликованное в <code>.env.example</code> (RN-114)</td>
+</tr>
+<tr>
+<td><code>SMTP_PORT</code></td>
+<td><code>587</code></td>
+<td>порт провайдера — <code>587</code> это STARTTLS, <code>465</code> — неявный TLS (<code>SMTP_SECURE=true</code>)</td>
+</tr>
+<tr>
+<td><code>SMTP_SECURE</code></td>
+<td><code>false</code></td>
+<td><code>true</code> включает неявный TLS на соединении (обычно порт 465)</td>
+</tr>
+<tr>
+<td><code>SMTP_USER</code> 🔒</td>
+<td>—</td>
+<td>пользователь auth SMTP. То же требование, что и <code>SMTP_HOST</code>, в production</td>
+</tr>
+<tr>
+<td><code>SMTP_PASSWORD</code> 🔒</td>
+<td>—</td>
+<td>пароль/токен auth SMTP. То же требование, что и <code>SMTP_HOST</code>, в production — <strong>никогда не появляется в логе</strong></td>
+</tr>
+<tr>
+<td><code>SMTP_FROM</code></td>
+<td>—</td>
+<td>отправитель в формате <code>&quot;Имя &lt;email@домен&gt;&quot;</code> (или только email). То же требование, что и <code>SMTP_HOST</code>, в production, плюс проверка формата</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>Тело email — <strong>простой текст</strong>, без HTML: порт <code>MailSender</code> не несёт
+структуры для богатого тела, а шаблонизатор был бы поверхностью инъекции без
+выгоды. Ссылка использует <code>WEB_ORIGIN</code> (выше).</p>
+</blockquote>
+<h3 id="seed-для-разработки">Seed для разработки</h3>
+<p>Потребляются <code>pnpm --filter api seed</code>, а не работающей api. Без внешнего IdP
+отсюда берутся учётные данные для входа в локальный web и в smoke.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>что делает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BRABO_SEED_PASSWORD</code></td>
+<td><code>brabo12345678</code></td>
+<td>пароль засеянных пользователей (<code>owner@brabo.dev</code>, <code>maintainer@brabo.dev</code>, <code>developer@brabo.dev</code>, <code>viewer@brabo.dev</code>), создаваемых с <strong>уже подтверждённым</strong> email</td>
+</tr>
+<tr>
+<td><code>BRABO_FORCE_SEED</code></td>
+<td>—</td>
+<td>разблокирует seed при <code>NODE_ENV=production</code>, где по умолчанию он <strong>отказывается запускаться</strong>. Не задавайте её в реальном окружении: аккаунт рождается с известным и подтверждённым паролем</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>Seed идемпотентен и <strong>не трогает пароль</strong> уже существующих. Повторный запуск
+после того, как кто-то сменил свой пароль, его не откатывает.</p>
+</blockquote>
+<h3 id="rate-limit">Rate limit</h3>
+<p>Скользящее окно в Postgres — Redis нет
+(<a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027</a>).</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>что делает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RATE_LIMIT_ENABLED</code></td>
+<td><code>true</code></td>
+<td>любое значение, отличное от <code>&quot;false&quot;</code>, оставляет его включённым</td>
+</tr>
+<tr>
+<td><code>RATE_LIMIT_WINDOW_MS</code></td>
+<td><code>60000</code></td>
+<td>размер окна</td>
+</tr>
+<tr>
+<td><code>RATE_LIMIT_USER</code></td>
+<td><code>300</code></td>
+<td>запросов на пользователя за окно</td>
+</tr>
+<tr>
+<td><code>RATE_LIMIT_IP</code></td>
+<td><code>600</code></td>
+<td>запросов на IP за окно</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>Если таблица rate limit недоступна, запрос <strong>проходит</strong>. Guard защищает от
+злоупотреблений, а не от несанкционированного доступа — это работа guard
+аутентификации, который выполняется раньше.</p>
+</blockquote>
+<h3 id="внутренний-трафик-">Внутренний трафик 🔒</h3>
+<p>Общий секрет, аутентифицирующий api ↔ engine. <strong>Одна и та же переменная с
+обеих сторон</strong> — каждая отправляет текущее значение и принимает оба, и именно
+это делает ротацию возможной без простоя (<a href="../business-rules/api.html#rn-035">RN-035</a>).</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>что делает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BRABO_SERVICE_TOKEN</code> 🔒</td>
+<td><code>dev-service-token-change-me</code> <strong>только вне production</strong></td>
+<td>идёт в заголовке <code>X-Brabo-Service-Token</code> и сравнивается <code>EngineServiceGuard</code> за постоянное время. <strong>В production api отказывается стартовать</strong>, если его нет, если это умолчание выше (публичное — оно в <code>.env.example</code>) или если в нём меньше 16 символов (RN-114)</td>
+</tr>
+<tr>
+<td><code>BRABO_SERVICE_TOKEN_PREVIOUS</code></td>
+<td>—</td>
+<td>принимается <strong>только для проверки</strong> во время ротации. Когда задан, проходит <strong>то же</strong> правило, что и текущий токен: окружающие пробелы обрезаются, и в production api отказывается стартовать, если это публичное умолчание или в нём меньше 16 символов. В отличие от текущего, никогда не обязателен (<a href="../business-rules/api.html#rn-598">RN-598</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>Задание только НОВОГО значения с одной стороны (без танца с <code>_PREVIOUS</code>)
+никому не ломает загрузку: симптом — <code>403</code> на <code>/internal/*</code> и <code>401</code> в вызовах
+api к engine. Процедура в
+<a href="../runbook.html#rotacao-das-chaves-do-auth">runbook</a>. Проверка ЗАГРУЗКИ выше
+(RN-114) — другое: она падает только с публичным умолчанием или
+отсутствующей/короткой переменной, а не при расхождении сторон.</p>
+</blockquote>
+<h3 id="git">Git</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>примечание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GIT_LOCAL_REPOS_ROOT</code></td>
+<td><code>/tmp/brabo-git-repos</code></td>
+<td>локальный provider. В <code>/tmp</code> репозитории исчезают при перезагрузке</td>
+</tr>
+<tr>
+<td><code>PROJECT_WORKSPACES_ROOT</code></td>
+<td><code>/tmp/brabo-project-workspaces</code></td>
+<td>worktrees агентов проекта в режиме <strong>Container</strong>. <strong>Должен быть тем же путём в engine</strong> и тем же томом</td>
+</tr>
+<tr>
+<td><code>BRABO_PROJECTS_BASE</code></td>
+<td>пусто</td>
+<td>единая папка хоста, под которой живут проекты в режиме <strong>Mounted</strong>, монтируемая по идентичности в <code>api</code> и <code>engine</code>. Пусто — НОРМАЛЬНОЕ состояние: api сообщает <code>projectsBase: null</code>, и мастер проекта даже не предлагает режим Mounted</td>
+</tr>
+<tr>
+<td><code>GITHUB_OAUTH_CLIENT_ID</code> / <code>_SECRET</code></td>
+<td>пусто</td>
+<td>пусто = OAuth-подключение к GitHub недоступно (PAT продолжает работать)</td>
+</tr>
+<tr>
+<td><code>GITLAB_OAUTH_CLIENT_ID</code> / <code>_SECRET</code></td>
+<td>пусто</td>
+<td>то же</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="проект-в-режиме-mounted-одна-база-монтируемая-по-идентичности">Проект в режиме Mounted: одна база, монтируемая по идентичности</h4>
+<p>С <a href="../adr/0072-projeto-local-ou-container.html">ADR 0072</a> проект может родиться в
+режиме <strong>Mounted</strong> (прежний <code>local</code>, переименованный
+<a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104</a>)
+— код живёт в папке пользователя, и <code>PROJECT_WORKSPACES_ROOT</code> <strong>не участвует</strong> в
+его корне.</p>
+<p>Путь проекта — данные проекта (<code>projects.workspace_path</code>), выбираемые при
+создании и никогда не переменная окружения. ОКРУЖЕНИЕ предоставляет <strong>базу</strong>,
+под которой живут эти папки, — <code>BRABO_PROJECTS_BASE</code>, одну на установку
+(<a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141</a>,
+<a href="../business-rules/api.html#rn-500">RN-500</a>):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># .env — ABSOLUTO. `~` não é expandido pelo Compose.</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">BRABO_PROJECTS_BASE</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string)">/home/voce/projetos-brabo</span></span>
+<span class="line"></span></code></pre>
+<p>Писать эту строку вручную не нужно. С
+<a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146</a> <code>pnpm bootstrap</code> →
+<strong>Docker › Base de projetos</strong> запускает <code>scripts/dev/consentir-base.mjs</code>, который
+предлагает <code>$HOME/projetos-brabo</code>, отклоняет то, что пересекается с checkout
+Brabo или с <code>PROJECT_WORKSPACES_HOST_DIR</code> (два корня с противоположными
+владельцами — общая папка заставила бы проект Mounted с именем <code>loja</code> упасть
+поверх проекта Container, чей <code>workspace_dir_name</code> тоже <code>loja</code>), <strong>доказывает</strong> на
+macOS и Windows, что Docker действительно видит папку, монтируя её, и только
+затем записывает переменную.</p>
+<p>Доказательство — это монтирование, а не чтение <code>settings.json</code> Docker Desktop:
+этот файл не документирован, меняется между версиями и платформами и описывает
+то, что настроил пользователь, а не то, что сделает daemon, — то же правило,
+которое продукт уже применяет к providers LLM, где capability объявляется только
+тогда, когда доказана выполнением. У него <strong>три</strong> исхода, и они не
+схлопываются: доказано, отклонено (переменная не записывается) и <em>доказать не
+удалось</em> — нет локального образа для монтирования, — тогда переменная
+записывается, и вслух сообщается, что доказательство не выполнялось.</p>
+<p>Запущенный из меню, он только <strong>информирует</strong>: каждый пункт меню bootstrap
+намеренно запускается со stdin из <code>/dev/null</code>, так что спрашивать он не может.
+Чтобы выбрать, запустите <code>node scripts/dev/consentir-base.mjs</code> в собственном
+терминале.</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># docker/docker-compose.yml — em `api` E `engine`, já escrito</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">    volumes</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">      - </span><span style="color:var(--shiki-token-string-expression)">${BRABO_PROJECTS_BASE:-brabo_projects_base}:${BRABO_PROJECTS_BASE:-/data/brabo-projects-base}</span></span>
+<span class="line"></span></code></pre>
+<p>Оператор задаёт это <strong>один раз</strong> и перезапускает <code>api</code> + <code>engine</code>; ничего не
+редактируется по проекту, никогда. До этого каждый смонтированный проект
+требовал вручную написанной строки bind-mount в обоих сервисах и перезапуска —
+который убивает каждый ход агента, сокет терминала и вызов LLM в полёте в
+установке.</p>
+<p>Монтирование выполняется по <strong>идентичности</strong> (<code>$X:$X</code>): тот же абсолютный путь
+на хосте и внутри обоих контейнеров. Именно это сохраняет честной строку,
+которую вводит пользователь и которую экран показывает обратно, и именно поэтому
+<code>projectScopeRoot</code> (api) и <code>Engine.Actions.Workspace.workspace_dir/2</code> (engine) не
+нуждаются в слое трансляции.</p>
+<p><strong>Это не <code>PROJECT_WORKSPACES_HOST_DIR</code>, и они никогда не могут указывать на одну
+папку.</strong> Управляемый workspace именуется <code>workspace_dir_name</code> (UNIQUE), а
+смонтированный проект именуется пользователем, так что <code>&lt;base&gt;/loja</code> и
+container-проект, чья папка называется <code>loja</code>, столкнулись бы, и bootstrap
+репозитория запустил бы <code>git init</code> внутри чужого проекта. В ADR есть два других
+довода.</p>
+<p>Когда переменная <strong>не задана</strong>, режим Mounted не предлагается — никогда не
+предлагайте режим, который установка не может выполнить. А <code>pnpm dev</code>
+<strong>отказывается подниматься</strong>, когда база пересекается с checkout Brabo в любом
+направлении; эта проверка живёт в preflight, потому что он работает на хосте, а
+api может сравнивать только с <code>process.cwd()</code> (<code>/workspace</code> внутри собственного
+контейнера). См. <a href="../runbook.html#projeto-no-modo-local">runbook</a>.</p>
+<h3 id="llm">LLM</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>примечание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OLLAMA_HOST</code></td>
+<td><code>http://localhost:11434</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>OLLAMA_REQUEST_TIMEOUT_MS</code></td>
+<td><code>300000</code></td>
+<td>потолок <strong>бездействия</strong> сокета Ollama, а не общей длительности. У локальной модели задержка до первого токена другого порядка, отсюда собственная переменная; см. <a href="../runbook.html#ambiente-de-inferencia">окружение инференса</a></td>
+</tr>
+<tr>
+<td><code>LLM_REQUEST_TIMEOUT_MS</code></td>
+<td><code>300000</code></td>
+<td>тот же потолок бездействия для API-providers (OpenAI и совместимые, Anthropic). Действует для «даже не прислал заголовки» и для «перестал слать фрагменты посреди потока» — см. <a href="llm-providers.html#inactivity-ceiling">providers LLM</a></td>
+</tr>
+<tr>
+<td><code>HUGGINGFACE_API_TOKEN</code></td>
+<td><em>(не задана)</em></td>
+<td><strong>необязательный</strong> токен Hugging Face Hub для поиска моделей (<code>GET /workspaces/:workspaceId/huggingface/models</code>). Присутствует — идёт как <code>Authorization: Bearer …</code> и поднимает rate limit Hub; отсутствует — заголовок просто не отправляется: Hub принимает публичный поиск без учётных данных, и отсутствие токена никогда не ошибка</td>
+</tr>
+<tr>
+<td><code>HUGGINGFACE_HUB_URL</code></td>
+<td><code>https://huggingface.co</code></td>
+<td>базовый URL Hub, с которым говорит поиск. Переопределение для тестов (фальшивый HTTP-сервер на эфемерном порту); в production не задаётся</td>
+</tr>
+<tr>
+<td><code>HUGGINGFACE_REQUEST_TIMEOUT_MS</code></td>
+<td><code>15000</code></td>
+<td>потолок <strong>бездействия</strong> запроса поиска к Hub, та же семантика, что <code>LLM_REQUEST_TIMEOUT_MS</code> (имя собирается в константе, поэтому сгенерированный инвентарь ниже его не видит)</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>TODO(humano):</strong> ни один файл compose не отображает три переменные <code>HUGGINGFACE_*</code> в <code>environment:</code> сервиса <code>api</code>, а у сервиса нет <code>env_file</code>, так что их задание в <code>.env</code> не действует под Compose — нужно ли передавать <code>HUGGINGFACE_API_TOKEN</code> (хотя бы в production и установке)?</p>
+</blockquote>
+<h3 id="граф-знаний-adr-0099">Граф знаний (ADR 0099)</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>примечание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NEO4J_URI</code></td>
+<td>—</td>
+<td>напр. <code>bolt://neo4j:7687</code>. <strong>Это и есть ключ</strong>: пусто = граф ВЫКЛЮЧЕН, зависимые маршруты деградируют (<code>GraphUnavailableError</code>/503) — никому не нужен локальный Neo4j только ради набора тестов. В production отсутствие любой из трёх роняет загрузку. Включение графа в разработке — эта строка в <code>.env</code> и перезапуск api; до 2026-09-04 это ничего не делало, потому что compose для dev не передавал три переменные сервису <code>api</code>, а у сервиса нет <code>env_file</code> — <code>docker-compose.prod.yml</code> предоставлял их с первого дня, поэтому затронута была только разработка</td>
+</tr>
+<tr>
+<td><code>NEO4J_USER</code></td>
+<td><code>neo4j</code> (dev)</td>
+<td>доходит до контейнера с тем же умолчанием, что сервис <code>neo4j</code> использует для <code>NEO4J_AUTH</code>, так что задавайте её только чтобы СМЕНИТЬ пользователя — смена там меняет обе стороны разом. Два независимых умолчания оставили бы api аутентифицирующейся учётными данными, которых у сервера больше нет</td>
+</tr>
+<tr>
+<td><code>NEO4J_PASSWORD</code> 🔒</td>
+<td><code>dev-neo4j-password-change-me</code> (только dev)</td>
+<td>то же правило пары, что <code>NEO4J_USER</code>. <strong>Без публичного умолчания в production</strong> намеренно — правдоподобного «значения-примера» для пароля базы нет, и <code>docker-compose.prod.yml</code> оставляет <code>NEO4J_AUTH</code> пустым, чтобы сам entrypoint официального образа отказался стартовать, а не стартовал с угадываемым паролем</td>
+</tr>
+<tr>
+<td><code>GRAPH_PROJECTOR_INTERVAL_MS</code></td>
+<td><code>2000</code></td>
+<td>период poller, опустошающего очередь <code>graph_projection</code> в outbox и пишущего handoffs/гипотезы/профили/взаимодействия в граф (RN-416)</td>
+</tr>
+<tr>
+<td><code>ARTIFACT_PROJECTOR_INTERVAL_MS</code></td>
+<td><code>2000</code></td>
+<td>период poller, опустошающего очередь <code>artifact_projection</code> в outbox и пишущего артефакты каждого агента как Markdown в папку <code>docs/</code> проекта (<a href="../business-rules/engine.html#rn-523">RN-523</a>). ПРОИЗВОДНАЯ проекция: источник — event log, и папку можно удалить и восстановить</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="наблюдаемость">Наблюдаемость</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>примечание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OTEL_EXPORTER_OTLP_ENDPOINT</code></td>
+<td>—</td>
+<td><strong>отсутствие выключает ЭКСПОРТ, а не инструментирование</strong> (ADR 0035). Span по-прежнему создаётся, и <code>trace_id</code> по-прежнему появляется в логе — это даёт корреляцию в разработке без коллектора. Без неё span отбрасывается в конце, а не покидает процесс</td>
+</tr>
+<tr>
+<td><code>OTEL_SERVICE_NAME</code></td>
+<td><code>brabo-api</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>OTEL_DIAG_LOG</code></td>
+<td>—</td>
+<td><code>1</code> включает диагностический лог самого OTel</td>
+</tr>
+<tr>
+<td><code>LOG_LEVEL</code></td>
+<td><code>info</code> в production, <code>debug</code> вне</td>
+<td>вместе с <code>NODE_ENV</code> определяет и ФОРМАТ: вне production лог читаемый (pino-pretty в процессе, с деревом слоёв); в production — одна строка JSON на событие</td>
+</tr>
+<tr>
+<td><code>METRICS_GAUGE_INTERVAL_MS</code></td>
+<td><code>15000</code></td>
+<td>период сбора доменных gauges</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="engine">engine</h2>
+<h3 id="основные-1">Основные</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>когда ломается</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DATABASE_URL</code></td>
+<td><code>ecto://brabo:brabo@localhost:5432/brabo</code></td>
+<td>обратите внимание на схему <code>ecto://</code>, а не <code>postgres://</code></td>
+</tr>
+<tr>
+<td><code>POSTGRES_HOST</code> / <code>_USER</code> / <code>_PASSWORD</code></td>
+<td><code>localhost</code> / <code>brabo</code> / <code>brabo</code></td>
+<td>используются, когда <code>DATABASE_URL</code> не собран</td>
+</tr>
+<tr>
+<td><code>POOL_SIZE</code></td>
+<td>—</td>
+<td>исчерпанный pool блокирует Oban, и очередь перестаёт потребляться</td>
+</tr>
+<tr>
+<td><code>PORT</code></td>
+<td><code>4000</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>PHX_HOST</code> / <code>PHX_SERVER</code></td>
+<td>—</td>
+<td><code>PHX_SERVER=true</code> — то, что заставляет релиз обслуживать HTTP</td>
+</tr>
+<tr>
+<td><code>SECRET_KEY_BASE</code> 🔒</td>
+<td>—</td>
+<td>обязательна в релизе (<code>runtime.exs</code>, блок <code>:prod</code>, стандартный <code>raise</code> Phoenix). До RN-114 <code>docker-compose.prod.yml</code> предоставлял публичный литерал как fallback и маскировал этот <code>raise</code> — переменная всегда приходила ЗАДАННОЙ. Сам <code>raise</code> не изменился</td>
+</tr>
+<tr>
+<td><code>API_URL</code></td>
+<td><code>http://localhost:3000</code></td>
+<td>engine обращается к api обратно отсюда</td>
+</tr>
+<tr>
+<td><code>ECTO_IPV6</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>SKIP_MIGRATIONS</code></td>
+<td>—</td>
+<td>используется Job миграции</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="кластер-и-остановка">Кластер и остановка</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>примечание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DNS_CLUSTER_QUERY</code></td>
+<td>—</td>
+<td>headless Service, формирующий кластер Erlang. <strong>Без неё каждая реплика — остров</strong>, и каждый rollout дренирует всё</td>
+</tr>
+<tr>
+<td><code>SHUTDOWN_DRAIN_TIMEOUT_MS</code></td>
+<td><code>45000</code></td>
+<td>окно <code>preStop</code>. Повышается <strong>вместе</strong> с <code>terminationGracePeriodSeconds</code>, никогда в одиночку</td>
+</tr>
+<tr>
+<td><code>SESSION_HEARTBEAT_TIMEOUT_MS</code></td>
+<td><code>30000</code></td>
+<td>сколько сессия ждёт heartbeat вкладки, прежде чем спросить api, есть ли незавершённая работа</td>
+</tr>
+<tr>
+<td><code>SESSION_CONVERSATION_IDLE_TIMEOUT_MS</code></td>
+<td><code>28800000</code> (8ч)</td>
+<td>потолок <strong>простаивающего разговора</strong>: разговорный агент, ждущий пользователя, удерживает сессию сверх heartbeat на это время, считая от конца своего хода; после этого сессия закрывается как <code>closed</code> с причиной <code>conversation_idle_timeout</code> (<a href="../business-rules/api.html#rn-581">RN-581</a>). Отображена для engine в трёх composes (dev, production, установка) с тем же умолчанием; <strong>не</strong> записана в <code>deploy/k8s/</code> намеренно — там ничто не перехватывает окружение, так что отсутствие и есть умолчание, а её изменение — элемент <code>env:</code> в патче engine оверлея</td>
+</tr>
+<tr>
+<td><code>RELEASE_NAME</code> / <code>RELEASE_NODE</code></td>
+<td>—</td>
+<td>идентичность узла в распределении</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="harness">Harness</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>примечание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TOOL_LOOP_MAX_ITERATIONS</code></td>
+<td><code>8</code></td>
+<td>потолок итераций цикла <strong>разговорного</strong> агента. Исчерпан — агент завершает работу артефактом блокировки</td>
+</tr>
+<tr>
+<td><code>TOOL_LOOP_MAX_ITERATIONS_EXECUCAO</code></td>
+<td><code>60</code></td>
+<td>потолок <strong>dev agents</strong>. Больше, потому что они исследуют репозиторий перед записью — и потому что <code>task_budget_micros</code> сдерживает расход снизу</td>
+</tr>
+<tr>
+<td><code>TOOL_LOOP_MAX_ITERATIONS_GATE</code></td>
+<td><code>60</code></td>
+<td>потолок субагентов <strong>QA</strong>, по той же причине</td>
+</tr>
+<tr>
+<td><code>DEFAULT_CONTEXT_WINDOW</code></td>
+<td><code>128000</code></td>
+<td>используется, когда модель не объявляет окно (разговорные агенты никогда не объявляют); был <code>8192</code> до RN-702</td>
+</tr>
+<tr>
+<td><code>CONTEXT_COMPACTION_THRESHOLD</code></td>
+<td><code>0.7</code></td>
+<td>доля окна, запускающая компактизацию</td>
+</tr>
+<tr>
+<td><code>LLM_TURN_TIMEOUT_MS</code></td>
+<td><code>300000</code></td>
+<td>5 мин на ход</td>
+</tr>
+<tr>
+<td><code>TOOL_ROUTER_TIMEOUT_MS</code></td>
+<td><code>2000</code></td>
+<td>потолок в мс ОДНОГО вызова маршрутизатора инструментов Jev (<a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179</a>, <a href="../business-rules/engine.html#rn-625">RN-625</a>). Читается <strong>api</strong>, а не engine. После потолка шаг падает на весь каталог инструментов с <code>motivoDaQueda: timeout</code>; ход никогда не падает из-за Jev. 0 из 328 измеренных запросов превысили 2 000 мс. Ключ вкл/выкл задаётся на workspace (<code>PUT workspaces/:id/tool-router</code>), а не переменной окружения</td>
+</tr>
+<tr>
+<td><code>TERMINAL_ACTION_TIMEOUT_MS</code></td>
+<td><code>120000</code></td>
+<td>потолок команды терминала (2 мин с <a href="../business-rules/engine.html#rn-757">RN-757</a>: простой <code>npm install</code> не укладывался в прежние 15 с). Engine ждёт это значение + 90 с в <code>container-exec</code> и + 120 с в <code>propose_action</code> действия <code>terminal</code>; выше ~180 с внешнее ожидание превышает лимит 300 с на заголовки <code>fetch</code> Node, который api использует для вызова <code>/internal/actions/execute</code></td>
+</tr>
+<tr>
+<td><code>TERMINAL_OUTPUT_MAX_BYTES</code></td>
+<td><code>32768</code></td>
+<td>потолок в БАЙТАХ вывода команды (<a href="../business-rules/engine.html#rn-074">RN-074</a>). Вывод остаётся в истории цикла и едет в каждом следующем ходе; без потолка <code>find</code> по большому дереву обрушивает всё выполнение с <code>413</code> от provider</td>
+</tr>
+<tr>
+<td><code>READ_FILE_MAX_BYTES</code></td>
+<td><code>32768</code></td>
+<td>потолок в БАЙТАХ содержимого, прочитанного <code>read_file</code> (<a href="../business-rules/engine.html#rn-141">RN-141</a>) — тот же класс переполнения, что RN-074, через дверь <code>read_file</code> вместо терминала; независимая переменная, то же значение по совпадению контекста</td>
+</tr>
+<tr>
+<td><code>SEARCH_WORKSPACE_MAX_BYTES</code></td>
+<td><code>32768</code></td>
+<td>потолок в БАЙТАХ итогового текста <code>search_workspace</code> (<a href="../business-rules/engine.html#rn-150">RN-150</a>) — тот же класс переполнения, что RN-074/RN-141, через дверь поиска; независимая переменная</td>
+</tr>
+<tr>
+<td><code>SEARCH_WORKSPACE_MAX_HITS</code></td>
+<td><code>500</code></td>
+<td>потолок ЧИСЛА совпадений, которые <code>search_workspace</code> собирает до сборки ответа (<a href="../business-rules/engine.html#rn-150">RN-150</a>) — прекращает обход/чтение содержимого, как только достигнут потолок, чтобы не платить I/O на дереве со слишком многими совпадениями лишь ради последующей обрезки по байтам</td>
+</tr>
+<tr>
+<td><code>SECOPS_SCAN_TIMEOUT_MS</code></td>
+<td><code>180000</code></td>
+<td>3 мин на сканер SecOps</td>
+</tr>
+<tr>
+<td><code>TRANSPORT_MAX_BODY_BYTES</code></td>
+<td><code>8388608</code> (8 MiB)</td>
+<td>ТРАНСПОРТНЫЙ потолок, который компактизация контекста соблюдает поверх окна модели (<a href="../business-rules/api.html#rn-412">RN-412</a>) — эффективное окно <code>min(context_window, этот потолок в токенах)</code>, так что компактизация срабатывает ДО того, как тело превысит HTTP-лимит api, а не только когда модель «забыла бы»</td>
+</tr>
+<tr>
+<td><code>GRAPH_INSTRUCTION_TEMPLATES_ENABLED</code></td>
+<td><code>false</code></td>
+<td>включает источник <code>:graph</code> в <code>InstructionFiles</code> — сегодня только идентичность ux-designer разрешает шаблон графа до inline-текста (RN-413). СОБСТВЕННОЕ имя, не <code>GRAPH_TEMPLATES_ENABLED</code> ниже — они бы столкнулись с противоположными умолчаниями, если бы делили ключ</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="психолог">Психолог</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>примечание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PSYCHOLOGIST_ENABLED</code></td>
+<td><code>false</code></td>
+<td>ГЛОБАЛЬНАЯ пауза НОВЫХ раундов (автоматических и по запросу) — продуктовое решение пользователя от 2026-08-10, не баг, та же форма флага, что <code>ANAMNESE_ENABLED</code> ниже (который был включён обратно в <a href="../business-rules/engine.html#rn-680">RN-680</a>; этот — нет). Ничего существующего не удаляет. Включение требует перезапуска engine (<a href="../business-rules/engine.html#rn-117">RN-117</a>). Ни один ключ загрузки с ним не парен: автоматический триггер Психолога — закрытие сессии, а не тик</td>
+</tr>
+<tr>
+<td><code>PSYCHOLOGIST_TRIAGE_THRESHOLD</code></td>
+<td><code>20</code></td>
+<td>число событий в сессии, разделяющее <strong>лёгкий</strong> и <strong>тяжёлый</strong> анализ</td>
+</tr>
+<tr>
+<td><code>PSYCHOLOGIST_MAX_ITERATIONS_LEVE</code> / <code>_PESADA</code></td>
+<td><code>4</code> / <code>8</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>PSYCHOLOGIST_BUDGET_MICROS_LEVE</code> / <code>_PESADA</code></td>
+<td><code>50000</code> / <code>300000</code></td>
+<td>USD 0,05 и USD 0,30 за анализ</td>
+</tr>
+<tr>
+<td><code>PSYCHOLOGIST_MAX_PROMPT_EVENTS_LEVE</code> / <code>_PESADA</code></td>
+<td><code>50</code> / <code>400</code></td>
+<td>сколько событий входит в prompt</td>
+</tr>
+<tr>
+<td><code>PSYCHOLOGIST_MAX_PAYLOAD_CHARS</code></td>
+<td><code>600</code></td>
+<td>обрезка payload каждого события</td>
+</tr>
+<tr>
+<td><code>PSYCHOLOGIST_RAG_TOP_K</code></td>
+<td><code>3</code></td>
+<td>сколько релевантных фрагментов <code>rag_search</code> входит в контекст, вычитаемых из потолка недавних событий выше (<a href="../business-rules/engine.html#rn-417">RN-417</a>)</td>
+</tr>
+<tr>
+<td><code>GRAPH_TEMPLATES_ENABLED</code></td>
+<td><code>false</code></td>
+<td>включает разрешение <code>psychologist-kickoff</code>/<code>anamnese-kickoff</code>/<code>context-manager-summarize</code> как шаблона графа — ОБЩИЙ ключ для Психолога, Анамнеза и prompt резюмирования <code>ContextManager</code> (<a href="../business-rules/engine.html#rn-417">RN-417</a>), не путать с <code>GRAPH_INSTRUCTION_TEMPLATES_ENABLED</code> выше. Выключен (умолчание) — API графа даже не вызывается; включён — любой сбой падает на inline-текст без ошибки</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="анамнез">Анамнез</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>примечание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ANAMNESE_ENABLED</code></td>
+<td><code>true</code></td>
+<td>продуктовый флаг: может ли произойти НОВЫЙ раунд (периодический и по запросу). <code>false</code> — ГЛОБАЛЬНАЯ пауза, ничего не удаляющая (<a href="../business-rules/engine.html#rn-115">RN-115</a>); её изменение требует перезапуска engine. Был <code>false</code> с 2026-08-10 (пауза пользователя), пока владелец не включил Анамнез обратно с исправлениями 2026-10-01 (<a href="../business-rules/engine.html#rn-680">RN-680</a>): раунд без подходящего субъекта — эффективного участника проекта с собственным взаимодействием в окне — не делает вызова LLM. <strong>Одного его недостаточно для ПЕРИОДИЧЕСКОГО раунда</strong>: <code>START_ANAMNESE</code> (ключ загрузки, ниже) тоже должен быть <code>true</code>, и они отвечают на разные вопросы</td>
+</tr>
+<tr>
+<td><code>ANAMNESE_INTERVAL_SECONDS</code></td>
+<td><code>900</code></td>
+<td>15 мин между раундами</td>
+</tr>
+<tr>
+<td><code>ANAMNESE_MIN_EVENTS</code></td>
+<td><code>10</code></td>
+<td>ниже этого не запускается — избегает построения профиля по шуму</td>
+</tr>
+<tr>
+<td><code>ANAMNESE_INITIAL_WINDOW_DAYS</code></td>
+<td><code>30</code></td>
+<td>окно первого раунда</td>
+</tr>
+<tr>
+<td><code>ANAMNESE_MAX_ITERATIONS</code></td>
+<td><code>6</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ANAMNESE_BUDGET_MICROS</code></td>
+<td><code>200000</code></td>
+<td>USD 0,20 за раунд</td>
+</tr>
+<tr>
+<td><code>ANAMNESE_MAX_PROMPT_EVENTS</code></td>
+<td><code>500</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ANAMNESE_MAX_PAYLOAD_CHARS</code></td>
+<td><code>600</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ограничители-нагрузки">Ограничители нагрузки</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>примечание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>START_OUTBOX_DRAIN</code></td>
+<td><code>true</code></td>
+<td>ключ загрузки drain outbox (<code>Engine.Workers.OutboxDrainWorker</code>, каждые 2 с) — ЕДИНСТВЕННОГО потребителя событий <code>session</code>/<code>task</code>/<code>container</code>, которые api пишет в outbox, — плюс очистка осиротевших worktree и усыновление осиротевших сессий. Выключен — никто не доставляет эти события: сессия, закрытая api, продолжает работать с процессом и разговорными агентами (<a href="../business-rules/api.html#rn-581">RN-581</a>), а dev agent, ждущий решения о действии, gate, своего PR или перехода контейнера в <code>running</code>, никогда не просыпается. Он НЕ включает Психолога: drain ставит его в очередь только при <code>PSYCHOLOGIST_ENABLED=true</code>. <code>false</code> только в compose production (<code>docker-compose.prod.yml</code>), намеренно; compose установки использует <code>true</code> из кода с AT-219</td>
+</tr>
+<tr>
+<td><code>START_ANAMNESE</code></td>
+<td><code>true</code></td>
+<td>ограничитель НАГРУЗКИ для тестов/dev: не даёт <code>kickoff/0</code> даже быть вызванным при загрузке, но ничего продуктового не решает — не путать с <code>ANAMNESE_ENABLED</code> (продукт: ГЛОБАЛЬНАЯ пауза, переживает любое значение этой). Выключение предотвращает <strong>новые</strong> постановки в очередь, <strong>не очищает очередь</strong>. Накопленные jobs выполнятся при следующей загрузке — очередь нужно вычистить. См. <a href="../runbook.html#ambiente-de-inferencia">окружение инференса</a></td>
+</tr>
+<tr>
+<td><code>START_MODEL_SYNC</code></td>
+<td><code>true</code></td>
+<td>периодический тик синхронизации каталога моделей. Выключение ничего не замораживает: кнопка «Обновить каталог» на экране настроек вызывает тот же use case (<a href="../business-rules/api.html#rn-043">RN-043</a>)</td>
+</tr>
+<tr>
+<td><code>MODEL_SYNC_INTERVAL_SECONDS</code></td>
+<td><code>21600</code> (6ч)</td>
+<td>каталог provider меняется в масштабе дней, а каждый раунд тратит один вызов API на provider — отсюда щедрое умолчание</td>
+</tr>
+<tr>
+<td><code>START_GATE_RESCUE</code></td>
+<td><code>true</code></td>
+<td>периодический тик спасения цикла gate (<code>Engine.Gates.GateRescuer</code>, <a href="../business-rules/engine.html#rn-140">RN-140</a>). Выключение не меняет загрузку: спасение выполняется там один раз в любом случае</td>
+</tr>
+<tr>
+<td><code>GATE_RESCUE_INTERVAL_SECONDS</code></td>
+<td><code>300</code> (5 мин)</td>
+<td>застрявший gate блокирует весь PR пользователя — интервал намного короче, чем у Анамнеза/синхронизации моделей, а каждый тик стоит лишь одного почти всегда пустого запроса</td>
+</tr>
+<tr>
+<td><code>GATE_RESCUE_STALE_AFTER_SECONDS</code></td>
+<td><code>900</code> (15 мин)</td>
+<td>щедро намеренно: ToolLoop субагента QA может законно выполнять до <code>TOOL_LOOP_MAX_ITERATIONS_GATE</code> (60) итераций, и короткий порог спас бы — и продублировал бы — просто медленный цикл</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="внутренний-трафик-и-наблюдаемость">Внутренний трафик и наблюдаемость</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BRABO_SERVICE_TOKEN</code> 🔒</td>
+<td><code>dev-service-token-change-me</code> <strong>только вне production</strong> — <strong>то же значение, что у api</strong>. Окружающие пробелы обрезаются, а значение из одних пробелов считается отсутствующим. В релизе <code>:prod</code> engine отказывается стартовать, если его нет, если это публичное умолчание выше или если в нём меньше 16 символов, называя переменную, — то же правило, что у api (<a href="../business-rules/engine.html#rn-601">RN-601</a>)</td>
+</tr>
+<tr>
+<td><code>BRABO_SERVICE_TOKEN_PREVIOUS</code> 🔒</td>
+<td>— принимается только для проверки во время ротации. Обрезается; в релизе <code>:prod</code> engine отказывается стартовать, если это публичное умолчание или в нём меньше 16 символов. Никогда не обязателен, и равенство текущему означает, что ротации нет (<a href="../business-rules/engine.html#rn-601">RN-601</a>)</td>
+</tr>
+<tr>
+<td><code>OTEL_EXPORTER_OTLP_ENDPOINT</code></td>
+<td>— экспортёр Elixir говорит <strong>HTTP/protobuf на 4318</strong>, не gRPC на 4317. Отсутствие выключает только экспорт (<code>traces_exporter: :none</code>), а не инструментирование — см. ADR 0035</td>
+</tr>
+<tr>
+<td><code>WEB_ORIGIN</code></td>
+<td>— <strong>та же переменная, что у api</strong>, и здесь она питает ДВЕ вещи: <code>check_origin</code> сокета Phoenix (живая панель команды) и HTTP CORS маршрутов здоровья, который нужен браузеру, чтобы читать <code>/health</code> (<a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037</a>). Отсутствие в production закрывает CORS и оставляет <code>check_origin</code> на строгом умолчании Phoenix — engine <strong>всё равно стартует</strong>, в отличие от api</td>
+</tr>
+<tr>
+<td><code>PROJECT_WORKSPACES_ROOT</code></td>
+<td><code>/tmp/brabo-project-workspaces</code> — <strong>та же, что у api, на том же томе</strong></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><code>SOME_APP_SSL_CERT_PATH</code>, <code>SOME_APP_SSL_KEY_PATH</code> и <code>MIX_TEST_PARTITION</code> —
+остатки scaffold Phoenix и тестовой конфигурации. Не настраивайте их.</p>
+</blockquote>
+<hr>
+<h2 id="web">web</h2>
+<p>Web статический, обслуживается nginx. Он читает конфигурацию из <strong>двух</strong>
+источников, и различие важно:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>источник</th>
+<th>когда</th>
+<th>как</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>import.meta.env.VITE_*</code></td>
+<td><strong>build</strong></td>
+<td>встраивается в bundle. Изменение требует пересборки</td>
+</tr>
+<tr>
+<td><code>window.__BRABO_CONFIG__</code></td>
+<td><strong>runtime</strong></td>
+<td>отдаётся в <code>/config.js</code>, генерируемом entrypoint контейнера</td>
+</tr>
+</tbody>
+</table></div>
+<p>Поэтому один и тот же образ обслуживает все окружения: <code>/config.js</code>
+переписывается при загрузке. <code>VITE_*</code> — fallback для разработки.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>для чего</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VITE_API_URL</code></td>
+<td>адрес api</td>
+</tr>
+<tr>
+<td><code>VITE_ENGINE_URL</code></td>
+<td>адрес engine (канал Phoenix)</td>
+</tr>
+<tr>
+<td><code>VITE_LOG_LEVEL</code></td>
+<td>уровень JSON-логгера браузера (умолчание <code>info</code>). В кластере решает ключ <code>WEB_LOG_LEVEL</code> из <code>brabo-config</code>, который entrypoint пишет в <code>/config.js</code> — <code>VITE_*</code> важна только в локальной сборке</td>
+</tr>
+<tr>
+<td><code>VITE_BRABO_VERSION</code></td>
+<td>версия, показываемая в подвале экранов auth (умолчание <code>dev</code>). <strong>Единственная, задаваемая при сборке по выбору, а не из-за ограничения</strong> — см. ниже</td>
+</tr>
+</tbody>
+</table></div>
+<p>Пустая страница после deploy — почти всегда <code>/config.js</code>, указывающий на
+<code>localhost</code>, — smoke деплоя проверяет именно это.</p>
+<h3 id="почему-версия-не-идёт-через-configjs">Почему версия не идёт через <code>/config.js</code></h3>
+<p>URL принадлежат <strong>окружению</strong>: один образ должен говорить с api staging и с api
+production, и для этого <code>/config.js</code> и существует (ADR 0024). Версия
+принадлежит <strong>артефакту</strong> — образ <code>brabo-web:1.1.2</code> не должен быть способен
+сообщить что-то иное. Если бы она приходила из <code>/config.js</code>, подвал стал бы
+редактируемым полем вместо идентичности, а неверный ConfigMap заставил бы экран
+лгать о том, какая сборка работает.</p>
+<p>Весь путь, от commit до экрана: <code>release.yml</code> вычисляет
+<code>versao=${TAG#v}</code> → передаёт как <code>VERSION</code> в <code>docker buildx bake</code> → цель
+<code>web</code> в <code>docker-bake.hcl</code> превращает её в <code>VITE_BRABO_VERSION</code> →
+<code>ARG</code>/<code>ENV</code> в <code>docker/web/Dockerfile.prod</code> открывает её для <code>pnpm build</code> → Vite
+встраивает её в <code>import.meta.env</code> → <code>runtime-config.ts</code> её читает → <code>AuthLayout</code>
+её показывает. Тот же <code>VERSION</code> питает <code>BRABO_VERSION</code> образа api
+(ADR 0036).</p>
+<hr>
+<h2 id="резервное-копирование">Резервное копирование</h2>
+<p>Потребляются образом резервного копирования, а не приложениями — как CronJob в
+Kubernetes и как <code>docker compose run --rm backup …</code> в установке через compose.
+Подробности в <a href="../runbook.html#restore">Восстановлении</a>; обоснование — в
+<a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152</a>.</p>
+<p><strong>Назначение — одно из двух, и выбор делается <code>BACKUP_DIR</code>.</strong> Задайте её — и
+резервная копия идёт на диск; оставьте пустой — и она идёт в S3, что и делает
+CronJob Kubernetes. Пять переменных <code>BACKUP_S3_*</code> перестали быть безусловно
+обязательными: это конфигурация <em>одного</em> назначения, а требование bucket до
+возможности миграции требует инфраструктуры, которую установка на одной машине
+никогда не просила.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>примечание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BACKUP_DIR</code></td>
+<td>— (S3)</td>
+<td><strong>каталог</strong> назначения. Задана ⇒ диск; пуста ⇒ S3. В сервисе compose умолчание <code>/backups</code></td>
+</tr>
+<tr>
+<td><code>BRABO_BACKUP_HOST_DIR</code></td>
+<td><code>backup_local</code> (именованный том)</td>
+<td>путь хоста, монтируемый в <code>/backups</code>. Умолчание с именованным томом годится для проверки резервной копии; для миграции это <strong>неверное</strong> назначение, потому что <code>docker compose down -v</code> удаляет его вместе с тем, что он должен был сохранить</td>
+</tr>
+<tr>
+<td><code>BACKUP_S3_ENDPOINT</code> / <code>BACKUP_S3_BUCKET</code></td>
+<td>—</td>
+<td>S3-совместимое назначение; обязательны только когда <code>BACKUP_DIR</code> пуста</td>
+</tr>
+<tr>
+<td><code>AWS_ACCESS_KEY_ID</code> / <code>AWS_SECRET_ACCESS_KEY</code></td>
+<td>—</td>
+<td>учётные данные bucket</td>
+</tr>
+<tr>
+<td><code>BACKUP_KEEP_DAILY</code></td>
+<td><code>7</code></td>
+<td>хранение по <strong>количеству</strong>, а не по возрасту</td>
+</tr>
+<tr>
+<td><code>BACKUP_KEEP_WEEKLY</code></td>
+<td><code>4</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>GIT_REPOS_DIR</code></td>
+<td><code>/data/git-repos</code></td>
+<td>bare-репозитории проектов provider <code>local</code>. Отсутствует ⇒ шаг <strong>пропускается с сообщением</strong> (CronJob Kubernetes не монтирует этот том)</td>
+</tr>
+<tr>
+<td><code>RESTORE_DB</code></td>
+<td>—</td>
+<td>имя базы-назначения восстановления</td>
+</tr>
+<tr>
+<td><code>RESTORE_PREFIX</code></td>
+<td><code>daily/</code></td>
+<td><code>weekly/</code> для восстановления из еженедельной копии</td>
+</tr>
+<tr>
+<td><code>RESTORE_GIT_PREFIX</code></td>
+<td><code>git-daily/</code></td>
+<td><code>git-weekly/</code> для еженедельной копии bare-репозиториев</td>
+</tr>
+<tr>
+<td><code>RESTORE_GIT_FORCE</code></td>
+<td>—</td>
+<td><code>1</code> разрешает распаковку <strong>поверх</strong> существующих bare-репозиториев. Выключено по умолчанию: наложение двух состояний репозитория даёт смесь, на которую ни один <code>git</code> не пожалуется</td>
+</tr>
+<tr>
+<td><code>RESTORE_ADMIN_URL</code></td>
+<td>—</td>
+<td>соединение с правом <code>CREATEDB</code>; в production отдельно от <code>DATABASE_URL</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Четыре префикса, а не два: <code>daily/</code> и <code>weekly/</code> хранят дампы Postgres,
+<code>git-daily/</code> и <code>git-weekly/</code> — архивы bare-репозиториев. Они разделены, потому
+что хранение идёт по <strong>количеству</strong> — два вида архивов под одним префиксом
+заставили бы «хранить 7» означать три с половиной резервные копии.</p>
+<h2 id="локальный-инференс-контейнеры">Локальный инференс (контейнеры)</h2>
+<p>Эти не читаются нашим кодом — они принадлежат контейнеру <code>ollama</code> и находятся
+здесь, потому что являются самой частой причиной странного поведения агента.
+Таблица симптомов — в
+<a href="../runbook.html#ambiente-de-inferencia">окружении инференса</a>.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OLLAMA_CONTEXT_LENGTH</code></td>
+<td>умолчание 4096 <strong>молча</strong> обрезает prompt, собранный на 128k</td>
+</tr>
+<tr>
+<td><code>OLLAMA_MAX_LOADED_MODELS</code></td>
+<td>при высоком <code>OLLAMA_KEEP_ALIVE</code> модели накапливаются, пока не кончится память</td>
+</tr>
+<tr>
+<td><code>OLLAMA_KEEP_ALIVE</code></td>
+<td>как долго модель остаётся резидентной</td>
+</tr>
+<tr>
+<td><code>DEMO_QA_MODEL</code></td>
+<td>направляет gate QA на API-модель — binding по агенту побеждает binding проекта</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>Версия образа <code>ollama</code> — не переменная, а digest.</strong> Как и любой сторонний
+образ в <code>docker/</code>, он закреплён как
+<code>ollama/ollama:0.40.6@sha256:…</code>
+(<a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159</a>, inline-тег с
+<a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178</a>), и тот же
+digest используется <code>ci.yml</code>/<code>golden-set-rag.yml</code>, потому что нижняя граница
+golden-set RAG привязана к модели, а не к окружению
+(<a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138</a>). Поэтому
+поведение инференса, изменившееся между двумя <code>docker compose pull</code>, перестало
+быть возможной причиной: ничего не сдвинется, если кто-то не отредактирует
+digest. Повышение версии — <a href="../runbook.html#subindo-imagem-de-terceiro">процедура из runbook</a>,
+и <code>scripts/ci/imagens-pinadas.ts</code> отклоняет повышение, затрагивающее лишь
+часть мест, где встречается тег.</p>
+</blockquote>
+<hr>
+<h2 id="локальная-наблюдаемость-контейнеры">Локальная наблюдаемость (контейнеры)</h2>
+<p>Тоже не читаются нашим кодом: это порты оверлея
+<code>docker/docker-compose.observability.yml</code>, который поднимает Prometheus, Loki и
+Grafana рядом со стеком разработки (<code>pnpm dev:obs</code>). Механизм — в
+<a href="../runbook.html#observabilidade-local">локальной наблюдаемости</a>.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GRAFANA_PORT</code></td>
+<td><code>3001</code></td>
+<td>тот же порт, что использует Grafana кластера; они <strong>не сосуществуют</strong> по той же причине, по которой не сосуществуют <code>pnpm dev</code> и <code>make deploy-local</code></td>
+</tr>
+<tr>
+<td><code>PROMETHEUS_PORT</code></td>
+<td><code>9090</code></td>
+<td>порт, который runbook уже использует в <code>kubectl port-forward</code> кластера</td>
+</tr>
+<tr>
+<td><code>LOKI_PORT</code></td>
+<td><code>3100</code></td>
+<td>только для прямых запросов; обычный путь — через Grafana</td>
+</tr>
+</tbody>
+</table></div>
+<p>Оверлей <strong>не</strong> задаёт <code>OTEL_EXPORTER_OTLP_ENDPOINT</code>: без Collector посередине
+направить приложения на несуществующий адрес лишь порождает ошибку экспорта на
+каждом ходе
+(<a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035</a>
+разделил инструментирование и экспорт именно поэтому). Метрики и логи работают
+без неё; трассы по-прежнему требуют кластера.</p>
+<hr>
+<h2 id="брокер-контейнеров">Брокер контейнеров</h2>
+<p>Брокер (<a href="../adr/0130-broker-de-container.html">ADR 0130</a>) — единственный процесс
+продукта, говорящий с daemon Docker на сервере, и единственный сервис со
+смонтированным <code>/var/run/docker.sock</code>. <strong>Локально он поднимается с <code>pnpm dev</code>; в
+production он под <code>profiles: [&quot;container-broker&quot;]</code>.</strong> Два файла compose
+расходятся намеренно (<a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146</a>,
+пункт 3) — не унифицируйте их.</p>
+<p>Когда-то он был выключен по умолчанию в обоих под тем доводом, что его ещё
+ничто не вызывало. Эта предпосылка умерла: у него четыре реальных вызывающих, и
+<a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144</a> заставил режим <strong>Mounted</strong>
+поднимать контейнер через брокер — так что при выключенном profile стандартный
+локальный режим заканчивался <code>BrokerIndisponivelError</code>. Асимметрию поддерживает
+то, что сокет означает на каждой стороне: у запускающего <code>pnpm dev</code> он уже есть
+(он запускает <code>docker compose</code>), тогда как в production это реальная граница
+привилегий, и оператор — не разработчик.</p>
+<p>Это меняет <strong>когда</strong> брокер работает, но никогда <strong>что</strong> он принимает: пять слоёв
+сдерживания нетронуты, и он по-прежнему получает <code>projectId</code> плюс одну из пяти
+операций, без параметра где-либо, куда можно было бы записать <code>privileged</code> или
+свободный <code>-v</code>.</p>
+<p>Подъём по умолчанию обнажил дефект, который прежде никогда не имел значения:
+локальный образ устанавливал зависимости при START, а единственная сеть брокера
+— <code>internal: true</code>, так что registry недостижим — контейнер умирал с
+<code>getaddrinfo EAI_AGAIN registry.npmjs.org</code>, а без healthcheck <code>up --wait</code> всё
+равно печатал <code>Healthy</code>. Теперь зависимости ставятся при BUILD, и у сервиса есть
+healthcheck; сеть не тронута, и трогать её не следует. Эксплуатационные детали
+— в <a href="../runbook.html#broker-de-container">runbook</a>.</p>
+<p>В production поднимайте его явно:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.prod.yml</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --profile</span><span style="color:var(--shiki-token-string)"> container-broker</span><span style="color:var(--shiki-token-string)"> up</span><span style="color:var(--shiki-token-string)"> -d</span><span style="color:var(--shiki-token-string)"> broker</span></span>
+<span class="line"></span></code></pre>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>когда ломается</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BROKER_URL</code></td>
+<td><code>http://broker:8090</code> в compose <strong>dev</strong>; пусто в production и в установке (читается <strong>api</strong>)</td>
+<td>Пусто — НОРМАЛЬНОЕ состояние: читающий наблюдаемое состояние контейнера говорит тогда «не наблюдалось», а не наследует зарегистрированное (<a href="../business-rules/api.html#rn-486">RN-486</a>), и api отвечает <code>brokerConfigurado: false</code>, так что создание проекта предлагает только <code>runner</code> (<a href="../business-rules/api.html#rn-573">RN-573</a>). Локально брокер поднимается по умолчанию, так что compose dev по умолчанию направляет её на сервис, который он поднимает (<a href="../business-rules/infra.html#rn-599">RN-599</a>) — значение в <code>.env</code> всё равно побеждает. Composes production и установки намеренно без умолчания: там брокер под profile, и включающий его записывает URL</td>
+</tr>
+<tr>
+<td><code>BROKER_PORT</code></td>
+<td><code>8090</code></td>
+<td>Порт, на котором слушает брокер. Он НИЧЕГО не публикует на хосте — только api достигает его через сеть <code>internal: true</code> compose</td>
+</tr>
+<tr>
+<td><code>BRABO_SERVICE_TOKEN</code> 🔒</td>
+<td><code>dev-service-token-change-me</code> в разработке</td>
+<td>ТОТ ЖЕ секрет api ↔ engine, в том же заголовке. При <code>NODE_ENV=production</code> брокер отказывается стартовать, когда он пуст, когда это публичный литерал репозитория или в нём меньше 16 символов — правило RN-114, которое здесь охраняет процесс, говорящий с Docker хоста. <code>BRABO_SERVICE_TOKEN_PREVIOUS</code>, когда задан, проходит то же правило, кроме обязательности: обрезается, и в production брокер отказывается стартовать, если это публичный литерал или в нём меньше 16 символов (<a href="../business-rules/engine.html#rn-601">RN-601</a>)</td>
+</tr>
+<tr>
+<td><code>API_URL</code></td>
+<td><code>http://api:3000</code></td>
+<td>Откуда брокер ЧИТАЕТ решение Архитектора. Он не получает спецификацию контейнера; он сам приходит за ней (<a href="../business-rules/produto.html#rn-485">RN-485</a>)</td>
+</tr>
+<tr>
+<td><code>PROJECT_WORKSPACES_HOST_ROOT</code></td>
+<td>—</td>
+<td>Корень папок проектов <strong>на ХОСТЕ</strong>, а не внутри какого-либо контейнера. Без неё <code>start</code> отказывает, называя эту переменную, а остальные четыре операции продолжают работать. Не путайте с <code>PROJECT_WORKSPACES_ROOT</code>, это путь внутри контейнеров: <code>-v</code> разрешается DAEMON по файловой системе хоста, и путь изнутри api заставил бы его создать и смонтировать ПУСТУЮ папку</td>
+</tr>
+<tr>
+<td><code>DOCKER_GID</code></td>
+<td><code>999</code> (compose)</td>
+<td>gid группы <code>docker</code> хоста (<code>getent group docker | cut -d: -f3</code>). Сокет <code>root:docker</code>, а брокер работает без root, поэтому compose использует <code>group_add</code>. Умолчание самое распространённое и неверно во многих дистрибутивах. С <a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146</a> это важно на КАЖДОЙ машине разработки, а не только там, где кто-то включил profile — ошибка не ломает загрузку, она ломает использование: каждая операция умирает с «permission denied» на сокете, и это проявляется только когда кто-то предлагает <code>container_start</code>. <code>pnpm dev</code> сообщает состояние этой переменной при каждом запуске (<a href="../business-rules/infra.html#rn-512">RN-512</a>) и говорит «не применимо» на машине без группы <code>docker</code>, вместо того чтобы её обвинять</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>PROJECT_WORKSPACES_HOST_ROOT</code> не может выводиться из управляемого тома Docker.
+В compose <strong>dev</strong> она выводится из <code>PROJECT_WORKSPACES_HOST_DIR</code> (выше) —
+поэтому, оставив ту незаданной, как в только что скопированном <code>.env.example</code>,
+вы оставляете брокер без корня, а режим <code>container</code> без контейнера: стек
+поднимается здоровым, а <code>container_start</code> заканчивается отказом. <code>pnpm dev</code>
+сообщает об этом при каждом запуске, по образцу <code>DOCKER_GID</code>, и никогда не
+отказывается подниматься (<a href="../business-rules/infra.html#rn-599">RN-599</a>). Он также
+сообщает о случае с <code>~</code>: Compose раскрывает <code>~</code> в источнике bind-mount, который
+используют <code>api</code>/<code>engine</code>, но НЕ в переменной, которую получает брокер
+(измерено <code>docker compose config</code>), так что пишите путь УЖЕ РАСКРЫТЫМ. А явный
+<code>PROJECT_WORKSPACES_HOST_ROOT</code>, отличающийся от папки, которую монтируют
+<code>api</code>/<code>engine</code>, сообщается как расходящийся — контейнер получил бы папку, в
+которую агенты никогда не писали. Замена управляемого тома папкой хоста не
+переносит то, что уже лежит в томе <code>project_workspaces</code>: данные остаются там,
+просто перестают быть тем, что видят <code>api</code> и <code>engine</code>.</p>
+<p><code>BRABO_PROJECTS_HOST_BASE</code> — ВТОРОЙ корень брокера — база проектов
+<strong>Mounted</strong>, тоже на хосте
+(<a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141</a>,
+<a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144</a>). В отличие от верхнего, его
+не нужно заполнять: compose выводит его из <code>BRABO_PROJECTS_BASE</code>, который уже по
+определению путь хоста (это то, что <code>api</code> и <code>engine</code> монтируют по
+идентичности). Задавайте его явно, только если daemon Docker достигает этой
+папки по другому пути.</p>
+<p>Именно он позволяет проекту <strong>Mounted</strong> иметь контейнер
+(<a href="../business-rules/api.html#rn-503">RN-503</a>): api отправляет дискриминированный
+локатор (<code>localizacao.tipo</code> — <code>gerenciada</code> или <code>montada</code>) плюс относительный
+сегмент, и брокер разрешает его относительно соответствующего корня. Два корня
+никогда не заменяют друг друга. Отсутствие этого заставляет <code>start</code> проекта
+<code>mounted</code> отказать с <strong>503</strong>, НАЗЫВАЯ переменную, не трогая контейнер — падение
+в <code>PROJECT_WORKSPACES_HOST_ROOT</code> смонтировало бы папку другого проекта, потому
+что управляемый корень именуется <code>workspace_dir_name</code>, а база именуется
+пользователем.</p>
+<hr>
+<h2 id="dev-container-user-build-time">Пользователь контейнеров dev (сборка)</h2>
+<p>Тоже не читаются нашим кодом и даже не являются переменными окружения
+<em>runtime</em>: это <code>build.args</code> Docker для трёх образов dev
+(<code>docker/api/Dockerfile</code>, <code>docker/web/Dockerfile</code>, <code>docker/engine/Dockerfile</code>),
+считываемые один раз при <code>docker compose build</code> и встраиваемые в <code>USER</code>, от
+которого работает каждый контейнер. Они существуют, чтобы контейнеры работали с
+<strong>тем же UID/GID, что и ваш пользователь хоста</strong>, а не root — всё, что пишется в
+bind mount (<code>apps/api/dist</code>, workspace проекта в режиме выполнения <code>mounted</code>),
+уже ваше, без последующего <code>sudo chown</code>.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEV_UID</code></td>
+<td><code>1000</code></td>
+<td>ваш <code>id -u</code>. НЕ читается из <code>${UID}</code> оболочки — в bash он только для чтения и по умолчанию не экспортируется в окружение, так что файл compose всегда видел бы его пустым</td>
+</tr>
+<tr>
+<td><code>DEV_GID</code></td>
+<td><code>1000</code></td>
+<td>ваш <code>id -g</code>, то же рассуждение</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>1000</code>/<code>1000</code> совпадает с самой распространённой конфигурацией Linux одного
+разработчика и с пользователем <code>node</code>, который уже есть в <code>node:26-alpine</code>
+(базовый образ <code>api</code>/<code>web</code>) — когда ваша пара совпадает, Dockerfiles
+переиспользуют этого пользователя, а не создают нового. Окружению, в котором
+контейнеры уже работали от root до этого изменения, нужен разовый <code>chown</code>
+именованных томов <code>node_modules</code>/<code>_build</code>/<code>deps</code>/<code>.mix</code>/<code>.hex</code> (или
+<code>docker compose down -v</code>, чтобы дать им пересоздаться) — см. примечание в
+<a href="../getting-started.html">Первых шагах</a>.</p>
+<p>Composes production и установки отличаются: engine работает из образа
+production под фиксированным пользователем <code>engine</code> (uid/gid <code>1000</code>, без
+<code>DEV_UID</code>), с <code>read_only: true</code> и tmpfs в <code>/home/engine</code>. Этот tmpfs объявлен
+<code>uid=1000,gid=1000,mode=0700</code> — это не переменная — потому что semgrep (gate
+SecOps) пишет туда <code>~/.semgrep</code>; созданный от root, скан ничего не возвращает,
+и gate одобряет без статического анализа
+(<a href="../business-rules/engine.html#rn-707">RN-707</a>, runbook
+<a href="../runbook.html#semgrep-do-gate">Gate SecOps застрял на «SAST не запускался»</a>).</p>
+<p>Оба образа engine закрепляют semgrep аргументом сборки <code>SEMGREP_VERSION</code>
+(<code>1.183.0</code>, одинаковым в <code>docker/engine/Dockerfile</code> и <code>Dockerfile.prod</code>,
+поддерживаемым одинаковым <code>scripts/ci/semgrep-do-engine.spec.ts</code>). Это аргумент
+сборки, а не переменная runtime — ничего не идёт в <code>.env</code>. Без закрепления pip
+взял 1.179.0, которая не публикует wheel <code>musllinux</code>: в образе Alpine пакет
+приходил из sdist без <code>semgrep-core</code>, и каждый скан падал. Повышение версии —
+это выбор релиза с wheel <code>musllinux</code> на PyPI и изменение обоих Dockerfiles в
+одном PR.</p>
+<p>Образы engine работают на <strong>Elixir 1.20.4 / OTP 29.1.1</strong> поверх Alpine 3.24
+(builder <code>hexpm/elixir:1.20.4-erlang-29.1.1-alpine-3.24.2</code>, runtime
+<code>alpine:3.24.3</code>, оба по digest — <a href="../adr/0209-engine-em-otp-29.html">ADR 0209</a>).
+OTP ниже 29.1 аварийно завершается при загрузке под musl 1.2.6 из Alpine 3.24
+на хостах, чей CPU имеет AMX (<code>sys_sigaltstack(): Internal error</code>); не
+понижайте OTP, не понизив musl. Ничего не идёт в <code>.env</code>.</p>
+<p>Ни один из шести Dockerfiles не использует corepack (Node 25+ его больше не
+несёт, AT-360): сборка устанавливает pnpm из tarball registry, сверяемого с
+sha512, записанным в самом Dockerfile, — аргументы сборки <code>PNPM_VERSION</code>
+(<code>11.3.0</code>, тот же, что <code>packageManager</code> в <code>package.json</code>, чтобы pnpm никогда не
+пытался скачать другую версию в runtime) и <code>PNPM_SHA512</code>. Это аргументы сборки,
+а не переменные runtime, и в <code>.env</code> задавать нечего: повышение pnpm — это
+изменение <code>packageManager</code>, <code>PNPM_VERSION</code> в workflows и двух аргументов в шести
+Dockerfiles в одном PR — см. раздел runbook об образе брокера.</p>
+<hr>
+<h2 id="переменные-инструментов-не-продукта">Переменные инструментов (не продукта)</h2>
+<p>Всё выше — <strong>продукт</strong>: то, что эксплуатирующий установку задаёт в <code>.env</code>
+deploy. Далее — <strong>инструменты</strong>: читаются только CI и теми, кто разрабатывает
+Brabo. Ничто из этого не принадлежит <code>.env</code> оператора, и это различие — причина,
+по которой инвентарь ниже помечает каждый источник.</p>
+<h3 id="демонстрационные-скрипты-и-seed--appsapiscripts">Демонстрационные скрипты и seed — <code>apps/api/scripts/</code></h3>
+<p>Они ведут реальных агентов против локального Ollama, поэтому получают <strong>имя
+модели</strong> и <strong>срок</strong>. У всех есть умолчание, и ни один не обязателен.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>что меняет</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEMO_MODEL</code></td>
+<td><code>qwen2.5-coder:7b</code></td>
+<td>модель, которую использует каждый демонстрационный скрипт, если одна из нижеследующих не перекрывает её для конкретной роли</td>
+</tr>
+<tr>
+<td><code>DEMO_QA_MODEL</code></td>
+<td><code>DEMO_MODEL</code></td>
+<td>только агент QA, в демонстрациях gates PR — чтобы судить моделью, отличной от той, что написала код</td>
+</tr>
+<tr>
+<td><code>DEMO_WORKFLOWS_MODEL</code></td>
+<td><code>DEMO_MODEL</code></td>
+<td>только агент Infra в демонстрации workflows GitHub</td>
+</tr>
+<tr>
+<td><code>DEMO_MODEL_LEVE</code></td>
+<td><code>qwen2.5-coder:7b</code></td>
+<td><strong>лёгкая</strong> модель Психолога (та, что использует дешёвый проход)</td>
+</tr>
+<tr>
+<td><code>DEMO_MODEL_PESADO</code></td>
+<td><code>qwen-psicologo-pesado:latest</code></td>
+<td><strong>тяжёлая</strong> модель Психолога. Это вариант локального <code>Modelfile</code>, а не опубликованный тег — отсюда нижняя</td>
+</tr>
+<tr>
+<td><code>DEMO_OLLAMA_COPY_FROM</code></td>
+<td><code>qwen2.5-coder:7b</code></td>
+<td>база, из которой демонстрация копирует, когда нужно создать тяжёлую модель в локальном Ollama</td>
+</tr>
+<tr>
+<td><code>DEMO_TIMEOUT_MS</code></td>
+<td><code>1800000</code> (30 мин); <code>900000</code> в демонстрации dev agent</td>
+<td>сколько скрипт ждёт завершения выполнения, прежде чем сдаться</td>
+</tr>
+<tr>
+<td><code>DEMO_ANAMNESE_TIMEOUT_MS</code></td>
+<td><code>900000</code> (15 мин)</td>
+<td>тот же срок для демонстрации Анамнеза</td>
+</tr>
+<tr>
+<td><code>DEMO_PSICOLOGO_TIMEOUT_MS</code></td>
+<td><code>600000</code> (10 мин)</td>
+<td>тот же срок для демонстрации Психолога</td>
+</tr>
+<tr>
+<td><code>GOLDEN_SET_QA_MODEL</code></td>
+<td><code>qwen2.5-coder:latest</code></td>
+<td>модель, которую <code>seed-golden-set-qa.ts</code> регистрирует как судью golden-set QA (<a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>NOME</code>, которую инвентарь ниже перечисляет под этим источником, <strong>не
+переменная</strong>: это литерал <code>process.env.NOME</code> внутри строки prompt в
+<code>demo-pr-gates.ts</code>, обучающий агента заменять зашитый в код секрет. Инвентарь
+извлекает по шаблону и не может отличить упоминание от чтения — она указана
+здесь, а не отфильтрована в источнике, потому что поимённый список
+игнорируемых был бы вторым местом, которое нужно поддерживать.</p>
+<h3 id="браузерный-e2e--e2e">Браузерный E2E — <code>e2e/</code></h3>
+<p><code>e2e/</code> не входит в workspace (<a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120</a>) и запускается против
+<strong>compose production</strong>, поэтому его адреса — опубликованные порты, а не порты
+dev. Учётные данные — от аккаунта seed, те же, что создаёт <code>docker/smoke.sh</code>.
+Инвентарь обходит каждый <code>.ts</code> под <code>e2e/</code>, <strong>включая specs Playwright</strong> — там
+spec и есть код, читающий окружение, а не модульный тест рядом с ним (AT-124).</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>что меняет</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>E2E_API_URL</code></td>
+<td><code>http://localhost:3000</code></td>
+<td>куда HTTP-поддержка набора обращается к api</td>
+</tr>
+<tr>
+<td><code>E2E_WEB_URL</code></td>
+<td><code>http://localhost:8088</code></td>
+<td><code>baseURL</code>, который открывает Playwright, и origin, от которого зависит утверждение о CSRF</td>
+</tr>
+<tr>
+<td><code>E2E_USER</code></td>
+<td><code>owner@brabo.dev</code></td>
+<td>аккаунт, под которым входит набор</td>
+</tr>
+<tr>
+<td><code>E2E_PASSWORD</code></td>
+<td>пароль seed, зафиксированный в <code>e2e/suporte/api.ts</code></td>
+<td>пароль этого аккаунта. Это пароль <strong>локального seed</strong>, никогда не реальный — здесь он не повторяется, чтобы единственной копией оставалась копия в коде</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="локальный-кластер-и-плановые-проверки--deployk8s">Локальный кластер и плановые проверки — <code>deploy/k8s/</code></h3>
+<p>Bootstrap (<code>make deploy-local</code>) и проверки свойств, которые
+<code>.github/workflows/propriedades.yml</code> запускает каждую неделю, читают эти из
+окружения. У всех есть умолчание; ни одна не принадлежит <code>.env</code> установки.
+Инвентарь обходит каждый <code>deploy/k8s/*.sh</code> и сопоставляет только раскрытие с
+умолчанием (<code>${X:-…}</code>) — так shell-скрипт читает внешнюю переменную (AT-212).</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>переменная</th>
+<th>умолчание</th>
+<th>что меняет</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BRABO_CLUSTER_NAME</code></td>
+<td><code>brabo</code></td>
+<td>имя кластера k3d/kind, который bootstrap создаёт или переиспользует</td>
+</tr>
+<tr>
+<td><code>BRABO_CLUSTER_TOOL</code></td>
+<td><code>k3d</code></td>
+<td><code>kind</code> переключает bootstrap на kind — который молча игнорирует NetworkPolicy, отсюда k3d по умолчанию</td>
+</tr>
+<tr>
+<td><code>BRABO_KEEP_CLUSTER</code></td>
+<td>не задана</td>
+<td><code>1</code> переиспользует существующий кластер с тем же именем, вместо того чтобы удалить и пересоздать его</td>
+</tr>
+<tr>
+<td><code>BRABO_SKIP_BUILD</code></td>
+<td>не задана</td>
+<td><code>1</code> пропускает сборку образов production и использует уже имеющиеся в daemon Docker</td>
+</tr>
+<tr>
+<td><code>BRABO_SKIP_OBSERVABILITY</code></td>
+<td>не задана</td>
+<td><code>1</code> пропускает Tempo, Loki, Collector, Alloy и Grafana (Prometheus и adapter остаются: HPA engine их читает). Задаёт её только <code>propriedades.yml</code> (AT-177)</td>
+</tr>
+<tr>
+<td><code>TAG</code></td>
+<td>не задана</td>
+<td>тег релиза (<code>vX.Y.Z-qa.N</code>), чтобы bootstrap сделал checkout и deploy вместо рабочего дерева; требует чистого дерева</td>
+</tr>
+<tr>
+<td><code>BRABO_NAMESPACE</code></td>
+<td><code>brabo</code></td>
+<td>namespace, с которым говорит каждый проверочный скрипт</td>
+</tr>
+<tr>
+<td><code>API_URL</code> / <code>ENGINE_URL</code> / <code>WEB_URL</code></td>
+<td><code>http://localhost:3000</code> / <code>:4000</code> / <code>:8088</code></td>
+<td>где проверочные скрипты достигают сервисов кластера — порты, которые публикует load balancer k3d. Те же имена, что у продуктовых переменных выше, другой читатель: здесь это лишь цель скриптов</td>
+</tr>
+<tr>
+<td><code>SMOKE_USER</code></td>
+<td><code>owner@brabo.dev</code></td>
+<td>аккаунт, под которым входят smoke и проверки</td>
+</tr>
+<tr>
+<td><code>BRABO_SMOKE_PASSWORD</code></td>
+<td>локальный пароль seed, зафиксированный в скриптах</td>
+<td>пароль этого аккаунта — а также то, что bootstrap передаёт pod seed как <code>BRABO_SEED_PASSWORD</code></td>
+</tr>
+<tr>
+<td><code>HPA_JOBS</code></td>
+<td><code>60</code></td>
+<td>сколько зондирующих jobs <code>make hpa-test</code> ставит в очередь, чтобы engine масштабировался</td>
+</tr>
+<tr>
+<td><code>HPA_TIMEOUT</code></td>
+<td><code>240</code></td>
+<td>секунды, которые <code>make hpa-test</code> ждёт scale-up</td>
+</tr>
+<tr>
+<td><code>ROLLOUT_SESSIONS</code></td>
+<td><code>5</code></td>
+<td>сколько сессий <code>make rollout-test</code> открывает до rollout</td>
+</tr>
+<tr>
+<td><code>ROLLOUT_CONVERGENCE_SECONDS</code></td>
+<td><code>120</code></td>
+<td>потолок, за который каждая сессия должна быть усыновлена или дренирована после rollout. Не повышайте его, чтобы красный прогон стал зелёным (см. пробел осиротевшей сессии в <code>CLAUDE.md</code>)</td>
+</tr>
+<tr>
+<td><code>ROLLOUT_EVIDENCE_DIR</code></td>
+<td><code>mktemp -d</code></td>
+<td>куда <code>make rollout-test</code> пишет доказательства (логи pods, события, выборки реплик); <code>propriedades.yml</code> задаёт её и загружает папку</td>
+</tr>
+<tr>
+<td><code>EVIDENCIA_INTERVALO</code></td>
+<td><code>2</code></td>
+<td>секунды между выборками сборщиков доказательств; spec его сокращает (AT-174)</td>
+</tr>
+<tr>
+<td><code>RESTORE_MUTACAO</code></td>
+<td>не задана</td>
+<td><code>tabela-faltando</code> превращает <code>make test-restore</code> в <code>make test-restore-mutacao</code>, намеренную поломку, которую он должен поймать (AT-126)</td>
+</tr>
+<tr>
+<td><code>RESTORE_KEEP_JOB</code></td>
+<td>не задана</td>
+<td><code>1</code> сохраняет Jobs резервного копирования/восстановления после <code>make test-restore</code> для осмотра</td>
+</tr>
+<tr>
+<td><code>PROJECT_WORKSPACES_ROOT_NO_POD</code></td>
+<td><code>/data/project-workspaces</code></td>
+<td>где <code>make test-reprojecao-artefatos-k8s</code> ищет папку артефактов внутри pod api</td>
+</tr>
+<tr>
+<td><code>KUBE_VERSION</code></td>
+<td><code>1.31.0</code></td>
+<td>версия Kubernetes, против которой <code>make k8s-validate</code> проверяет отрендеренные оверлеи</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="полный-инвентарь">Полный инвентарь</h2>
+<p>Таблицы выше объясняют, <strong>что делает каждая переменная</strong>. Этот раздел —
+<strong>инвентарь</strong>: извлекаемый из кода при каждом <code>pnpm docs:generate</code>, он
+существует, чтобы новая переменная не осталась нигде не документированной
+незаметно для всех.</p>
+<!-- BEGIN:GENERATED:env-inventario -->
+<blockquote>
+<p>⚠️ Блок сгенерирован <code>pnpm docs:generate</code>. Не редактируйте вручную — следующая сборка его перезапишет.</p>
+</blockquote>
+<p>Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — <strong>186</strong>. У всех есть описание в таблицах выше.</p>
+<p>Каждый источник помечен как <strong>продукт</strong> — то, что оператор установки задаёт в <code>.env</code> развёртывания, — или <strong>инструменты</strong>: их читают только CI и разработчики продукта. Переменной инструментов не место в <code>.env</code> оператора.</p>
+<p><strong>api</strong> — переменных: 68 · продукт</p>
+<ul>
+<li><code>API_JSON_BODY_LIMIT</code> <sub>(apps/api/src/main.ts)</sub></li>
+<li><code>API_PUBLIC_URL</code> <sub>(apps/api/src/application/use-cases/auth/start-social-login.use-case.ts)</sub></li>
+<li><code>ARTIFACT_PROJECTOR_INTERVAL_MS</code> <sub>(apps/api/src/application/artifact-projection/artifact-projector.ts)</sub></li>
+<li><code>AUTH_ACCESS_TOKEN_TTL_MS</code> <sub>(apps/api/src/infrastructure/security/ed25519-access-token-issuer.ts)</sub></li>
+<li><code>AUTH_EMAIL_TOKEN_TTL_MS</code> <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub></li>
+<li><code>AUTH_IP_ATTEMPT_THRESHOLD</code> <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub></li>
+<li><code>AUTH_JWT_SECRET</code> <sub>(apps/api/src/infrastructure/security/auth-key-material.ts)</sub></li>
+<li><code>AUTH_JWT_SECRET_PREVIOUS</code> <sub>(apps/api/src/infrastructure/security/auth-key-material.ts)</sub></li>
+<li><code>AUTH_LOCKOUT_ENABLED</code> <sub>(apps/api/src/infrastructure/persistence/drizzle/drizzle-login-throttle.ts)</sub></li>
+<li><code>AUTH_LOCKOUT_IP_THRESHOLDS</code> <sub>(apps/api/src/infrastructure/persistence/drizzle/drizzle-login-throttle.ts)</sub></li>
+<li><code>AUTH_LOCKOUT_THRESHOLDS</code> <sub>(apps/api/src/infrastructure/persistence/drizzle/drizzle-login-throttle.ts)</sub></li>
+<li><code>AUTH_LOCKOUT_WINDOW_MS</code> <sub>(apps/api/src/infrastructure/persistence/drizzle/drizzle-login-throttle.ts)</sub></li>
+<li><code>AUTH_MAIL_LOG_TOKENS</code> <sub>(apps/api/src/infrastructure/mail/log-mail-sender.ts)</sub></li>
+<li><code>AUTH_REFRESH_ABSOLUTE_TTL_MS</code> <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub></li>
+<li><code>AUTH_REFRESH_TOKEN_TTL_MS</code> <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub></li>
+<li><code>AUTH_REGISTRATION_ENABLED</code> <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub></li>
+<li><code>AUTH_RESET_TOKEN_TTL_MS</code> <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub></li>
+<li><code>AUTH_SET_PASSWORD_TTL_MS</code> <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub></li>
+<li><code>AUTH_TOKEN_PEPPER</code> <sub>(apps/api/src/infrastructure/security/auth-key-material.ts)</sub></li>
+<li><code>BRABO_FORCE_SEED</code> <sub>(apps/api/src/scripts/provisionar-usuario.ts)</sub></li>
+<li><code>BRABO_PROJECTS_BASE</code> <sub>(apps/api/src/infrastructure/filesystem/project-workspaces-root.ts)</sub></li>
+<li><code>BRABO_RUNNER_RELEASES_REPO</code> <sub>(apps/api/src/interfaces/http/runner/runner-releases.controller.ts)</sub></li>
+<li><code>BRABO_SEED_PASSWORD</code> <sub>(apps/api/src/db/seed.ts)</sub></li>
+<li><code>BRABO_SERVICE_TOKEN</code> <sub>(apps/api/src/infrastructure/security/service-token.ts)</sub></li>
+<li><code>BRABO_SERVICE_TOKEN_PREVIOUS</code> <sub>(apps/api/src/infrastructure/security/service-token.ts)</sub></li>
+<li><code>BRABO_VERSION</code> <sub>(apps/api/src/tracing.ts)</sub></li>
+<li><code>BROKER_URL</code> <sub>(apps/api/src/infrastructure/http-clients/container-broker.client.ts)</sub></li>
+<li><code>CREDENTIALS_MASTER_KEY</code> <sub>(apps/api/src/infrastructure/security/envelope-encryption.service.ts)</sub></li>
+<li><code>CREDENTIALS_MASTER_KEY_PREVIOUS</code> <sub>(apps/api/src/infrastructure/security/envelope-encryption.service.ts)</sub></li>
+<li><code>CUSTO_RECONCILIACAO_INTERVAL_MS</code> <sub>(apps/api/src/application/use-cases/llm/reconciliar-custo-estimado.use-case.ts)</sub></li>
+<li><code>DATABASE_URL</code> <sub>(apps/api/src/db/migrate.ts)</sub></li>
+<li><code>ENGINE_PUBLIC_URL</code> <sub>(apps/api/src/application/use-cases/runner/request-runner-ticket.use-case.ts)</sub></li>
+<li><code>ENGINE_URL</code> <sub>(apps/api/src/application/use-cases/runner/request-runner-ticket.use-case.ts)</sub></li>
+<li><code>GIT_LOCAL_REPOS_ROOT</code> <sub>(apps/api/src/infrastructure/git/local-git-provider.ts)</sub></li>
+<li><code>GIT_OAUTH_STATE_SECRET</code> <sub>(apps/api/src/infrastructure/security/oauth-state-secret.ts)</sub></li>
+<li><code>GITHUB_OAUTH_CLIENT_ID</code> <sub>(apps/api/src/infrastructure/git/github-oauth-client.ts)</sub></li>
+<li><code>GITHUB_OAUTH_CLIENT_SECRET</code> <sub>(apps/api/src/infrastructure/git/github-oauth-client.ts)</sub></li>
+<li><code>GITLAB_OAUTH_CLIENT_ID</code> <sub>(apps/api/src/infrastructure/git/gitlab-oauth-client.ts)</sub></li>
+<li><code>GITLAB_OAUTH_CLIENT_SECRET</code> <sub>(apps/api/src/infrastructure/git/gitlab-oauth-client.ts)</sub></li>
+<li><code>GRAPH_PROJECTOR_INTERVAL_MS</code> <sub>(apps/api/src/application/graph-projection/graph-projector.ts)</sub></li>
+<li><code>HUGGINGFACE_API_TOKEN</code> <sub>(apps/api/src/infrastructure/huggingface/huggingface-client.ts)</sub></li>
+<li><code>HUGGINGFACE_HUB_URL</code> <sub>(apps/api/src/infrastructure/huggingface/huggingface-client.ts)</sub></li>
+<li><code>LOG_LEVEL</code> <sub>(apps/api/src/infrastructure/observability/logger.config.ts)</sub></li>
+<li><code>MAIL_TRANSPORT</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
+<li><code>METRICS_GAUGE_INTERVAL_MS</code> <sub>(apps/api/src/infrastructure/observability/domain-gauges.collector.ts)</sub></li>
+<li><code>MIGRATIONS_FOLDER</code> <sub>(apps/api/src/db/migrate.ts)</sub></li>
+<li><code>NEO4J_PASSWORD</code> <sub>(apps/api/src/infrastructure/graph/neo4j-config.ts)</sub></li>
+<li><code>NEO4J_URI</code> <sub>(apps/api/src/infrastructure/graph/neo4j-config.ts)</sub></li>
+<li><code>NEO4J_USER</code> <sub>(apps/api/src/infrastructure/graph/neo4j-config.ts)</sub></li>
+<li><code>NINE_ROUTER_BASE_URL</code> <sub>(apps/api/src/infrastructure/llm/nine-router-provider.ts)</sub></li>
+<li><code>NODE_ENV</code> <sub>(apps/api/src/infrastructure/graph/neo4j-config.ts)</sub></li>
+<li><code>OLLAMA_HOST</code> <sub>(apps/api/src/infrastructure/llm/ollama-provider.ts)</sub></li>
+<li><code>OTEL_DIAG_LOG</code> <sub>(apps/api/src/tracing.ts)</sub></li>
+<li><code>OTEL_EXPORTER_OTLP_ENDPOINT</code> <sub>(apps/api/src/tracing.ts)</sub></li>
+<li><code>OTEL_SERVICE_NAME</code> <sub>(apps/api/src/tracing.ts)</sub></li>
+<li><code>PORT</code> <sub>(apps/api/src/main.ts)</sub></li>
+<li><code>PROJECT_WORKSPACES_ROOT</code> <sub>(apps/api/src/infrastructure/filesystem/project-workspaces-root.ts)</sub></li>
+<li><code>RATE_LIMIT_ENABLED</code> <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub></li>
+<li><code>RATE_LIMIT_IP</code> <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub></li>
+<li><code>RATE_LIMIT_USER</code> <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub></li>
+<li><code>RATE_LIMIT_WINDOW_MS</code> <sub>(apps/api/src/infrastructure/observability/domain-gauges.collector.ts)</sub></li>
+<li><code>SMTP_FROM</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
+<li><code>SMTP_HOST</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
+<li><code>SMTP_PASSWORD</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
+<li><code>SMTP_PORT</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
+<li><code>SMTP_SECURE</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
+<li><code>SMTP_USER</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
+<li><code>WEB_ORIGIN</code> <sub>(apps/api/src/infrastructure/mail/smtp-mail-sender.ts)</sub></li>
+</ul>
+<p><strong>engine</strong> — переменных: 63 · продукт</p>
+<ul>
+<li><code>ANAMNESE_BUDGET_MICROS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>ANAMNESE_ENABLED</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>ANAMNESE_INITIAL_WINDOW_DAYS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>ANAMNESE_INTERVAL_SECONDS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>ANAMNESE_MAX_ITERATIONS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>ANAMNESE_MAX_PAYLOAD_CHARS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>ANAMNESE_MAX_PROMPT_EVENTS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>ANAMNESE_MIN_EVENTS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>API_URL</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>BRABO_SERVICE_TOKEN</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>BRABO_SERVICE_TOKEN_PREVIOUS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>CONTEXT_COMPACTION_THRESHOLD</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>DATABASE_URL</code> <sub>(apps/engine/config/dev.exs)</sub></li>
+<li><code>DEFAULT_CONTEXT_WINDOW</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>DNS_CLUSTER_QUERY</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>ECTO_IPV6</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>GATE_RESCUE_INTERVAL_SECONDS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>GATE_RESCUE_STALE_AFTER_SECONDS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>GRAPH_INSTRUCTION_TEMPLATES_ENABLED</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>GRAPH_TEMPLATES_ENABLED</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>LLM_TURN_TIMEOUT_MS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>MIX_TEST_PARTITION</code> <sub>(apps/engine/config/test.exs)</sub></li>
+<li><code>MODEL_SYNC_INTERVAL_SECONDS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>OTEL_EXPORTER_OTLP_ENDPOINT</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PHX_HOST</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PHX_SERVER</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>POOL_SIZE</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PORT</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>POSTGRES_HOST</code> <sub>(apps/engine/config/test.exs)</sub></li>
+<li><code>POSTGRES_PASSWORD</code> <sub>(apps/engine/config/test.exs)</sub></li>
+<li><code>POSTGRES_USER</code> <sub>(apps/engine/config/test.exs)</sub></li>
+<li><code>PROJECT_WORKSPACES_ROOT</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PSYCHOLOGIST_BUDGET_MICROS_LEVE</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PSYCHOLOGIST_BUDGET_MICROS_PESADA</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PSYCHOLOGIST_ENABLED</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PSYCHOLOGIST_MAX_ITERATIONS_LEVE</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PSYCHOLOGIST_MAX_ITERATIONS_PESADA</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PSYCHOLOGIST_MAX_PAYLOAD_CHARS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PSYCHOLOGIST_MAX_PROMPT_EVENTS_LEVE</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PSYCHOLOGIST_MAX_PROMPT_EVENTS_PESADA</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PSYCHOLOGIST_RAG_TOP_K</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>PSYCHOLOGIST_TRIAGE_THRESHOLD</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>READ_FILE_MAX_BYTES</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>SEARCH_WORKSPACE_MAX_BYTES</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>SEARCH_WORKSPACE_MAX_HITS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>SECOPS_SCAN_TIMEOUT_MS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>SECRET_KEY_BASE</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>SESSION_CONVERSATION_IDLE_TIMEOUT_MS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>SESSION_HEARTBEAT_TIMEOUT_MS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>SHUTDOWN_DRAIN_TIMEOUT_MS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>SOME_APP_SSL_CERT_PATH</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>SOME_APP_SSL_KEY_PATH</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>START_ANAMNESE</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>START_GATE_RESCUE</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>START_MODEL_SYNC</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>START_OUTBOX_DRAIN</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>TERMINAL_ACTION_TIMEOUT_MS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>TERMINAL_OUTPUT_MAX_BYTES</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>TOOL_LOOP_MAX_ITERATIONS</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>TOOL_LOOP_MAX_ITERATIONS_EXECUCAO</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>TOOL_LOOP_MAX_ITERATIONS_GATE</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>TRANSPORT_MAX_BODY_BYTES</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+<li><code>WEB_ORIGIN</code> <sub>(apps/engine/config/runtime.exs)</sub></li>
+</ul>
+<p><strong>web</strong> — переменных: 6 · продукт</p>
+<ul>
+<li><code>VITE_API_URL</code> <sub>(apps/web/src/lib/runtime-config.ts)</sub></li>
+<li><code>VITE_BRABO_AMBIENTE</code> <sub>(apps/web/src/routes/LoginPage.tsx)</sub></li>
+<li><code>VITE_BRABO_REPO</code> <sub>(apps/web/src/components/RunnerOnboardingPanel.tsx)</sub></li>
+<li><code>VITE_BRABO_VERSION</code> <sub>(apps/web/src/lib/runtime-config.ts)</sub></li>
+<li><code>VITE_ENGINE_URL</code> <sub>(apps/web/src/lib/runtime-config.ts)</sub></li>
+<li><code>VITE_LOG_LEVEL</code> <sub>(apps/web/src/lib/runtime-config.ts)</sub></li>
+</ul>
+<p><strong>broker</strong> — переменных: 7 · продукт</p>
+<ul>
+<li><code>API_URL</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><code>BRABO_PROJECTS_HOST_BASE</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><code>BRABO_SERVICE_TOKEN</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><code>BRABO_SERVICE_TOKEN_PREVIOUS</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><code>BROKER_PORT</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><code>NODE_ENV</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><code>PROJECT_WORKSPACES_HOST_ROOT</code> <sub>(apps/broker/src/config.ts)</sub></li>
+</ul>
+<p><strong>api/scripts</strong> — переменных: 15 · инструменты</p>
+<ul>
+<li><code>DATABASE_URL</code> <sub>(apps/api/scripts/demo-repo-bootstrap.ts)</sub></li>
+<li><code>DEMO_ANAMNESE_TIMEOUT_MS</code> <sub>(apps/api/scripts/demo-anamnese.ts)</sub></li>
+<li><code>DEMO_MODEL</code> <sub>(apps/api/scripts/demo-anamnese.ts)</sub></li>
+<li><code>DEMO_MODEL_LEVE</code> <sub>(apps/api/scripts/demo-psicologo.ts)</sub></li>
+<li><code>DEMO_MODEL_PESADO</code> <sub>(apps/api/scripts/demo-psicologo.ts)</sub></li>
+<li><code>DEMO_OLLAMA_COPY_FROM</code> <sub>(apps/api/scripts/demo-psicologo.ts)</sub></li>
+<li><code>DEMO_PSICOLOGO_TIMEOUT_MS</code> <sub>(apps/api/scripts/demo-psicologo.ts)</sub></li>
+<li><code>DEMO_QA_MODEL</code> <sub>(apps/api/scripts/demo-pr-gates-area-qa.ts)</sub></li>
+<li><code>DEMO_TIMEOUT_MS</code> <sub>(apps/api/scripts/demo-dev-agent-real.ts)</sub></li>
+<li><code>DEMO_WORKFLOWS_MODEL</code> <sub>(apps/api/scripts/demo-infra-workflows-github.ts)</sub></li>
+<li><code>GIT_LOCAL_REPOS_ROOT</code> <sub>(apps/api/scripts/demo-repo-bootstrap.ts)</sub></li>
+<li><code>GOLDEN_SET_QA_MODEL</code> <sub>(apps/api/scripts/seed-golden-set-qa.ts)</sub></li>
+<li><code>NOME</code> <sub>(apps/api/scripts/demo-pr-gates.ts)</sub></li>
+<li><code>OLLAMA_HOST</code> <sub>(apps/api/scripts/demo-psicologo.ts)</sub></li>
+<li><code>RATE_LIMIT_WINDOW_MS</code> <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub></li>
+</ul>
+<p><strong>e2e</strong> — переменных: 4 · инструменты</p>
+<ul>
+<li><code>E2E_API_URL</code> <sub>(e2e/suporte/api.ts)</sub></li>
+<li><code>E2E_PASSWORD</code> <sub>(e2e/suporte/api.ts)</sub></li>
+<li><code>E2E_USER</code> <sub>(e2e/suporte/api.ts)</sub></li>
+<li><code>E2E_WEB_URL</code> <sub>(e2e/playwright.config.ts)</sub></li>
+</ul>
+<p><strong>deploy/k8s</strong> — переменных: 23 · инструменты</p>
+<ul>
+<li><code>API_URL</code> <sub>(deploy/k8s/rollout-test.sh)</sub></li>
+<li><code>BRABO_CLUSTER_NAME</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
+<li><code>BRABO_CLUSTER_TOOL</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
+<li><code>BRABO_IRMAOS</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
+<li><code>BRABO_KEEP_CLUSTER</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
+<li><code>BRABO_NAMESPACE</code> <sub>(deploy/k8s/hpa-test.sh)</sub></li>
+<li><code>BRABO_SKIP_BUILD</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
+<li><code>BRABO_SKIP_OBSERVABILITY</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
+<li><code>BRABO_SMOKE_PASSWORD</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
+<li><code>ENGINE_URL</code> <sub>(deploy/k8s/smoke.sh)</sub></li>
+<li><code>EVIDENCIA_INTERVALO</code> <sub>(deploy/k8s/rollout-evidencia.sh)</sub></li>
+<li><code>HPA_JOBS</code> <sub>(deploy/k8s/hpa-test.sh)</sub></li>
+<li><code>HPA_TIMEOUT</code> <sub>(deploy/k8s/hpa-test.sh)</sub></li>
+<li><code>KUBE_VERSION</code> <sub>(deploy/k8s/validate.sh)</sub></li>
+<li><code>PROJECT_WORKSPACES_ROOT_NO_POD</code> <sub>(deploy/k8s/test-reprojecao-artefatos.sh)</sub></li>
+<li><code>RESTORE_KEEP_JOB</code> <sub>(deploy/k8s/test-restore.sh)</sub></li>
+<li><code>RESTORE_MUTACAO</code> <sub>(deploy/k8s/test-restore.sh)</sub></li>
+<li><code>ROLLOUT_CONVERGENCE_SECONDS</code> <sub>(deploy/k8s/rollout-test.sh)</sub></li>
+<li><code>ROLLOUT_EVIDENCE_DIR</code> <sub>(deploy/k8s/rollout-test.sh)</sub></li>
+<li><code>ROLLOUT_SESSIONS</code> <sub>(deploy/k8s/rollout-test.sh)</sub></li>
+<li><code>SMOKE_USER</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
+<li><code>TAG</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
+<li><code>WEB_URL</code> <sub>(deploy/k8s/smoke.sh)</sub></li>
+</ul>
+<!-- END:GENERATED:env-inventario -->
+<hr>
+<blockquote>
+<p><strong>TODO(humano):</strong> проверки схемы переменных при загрузке нет (что-то вроде
+<code>zod</code>/<code>envalid</code> в api или <code>NimbleOptions</code> в engine). Сегодня неверное
+числовое значение молча становится <code>NaN</code>, а опечатка в имени переменной
+падает в умолчание без предупреждения. Единственные исключения — помеченные
+🔒, которые явно падают в production.</p>
+</blockquote>
+<nav class="site-pager"><a href="../business-rules/web.html"></a><a href="../reference/events.html">Eventos</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Редактировать страницу</a><span>Обновлено 2026-11-05T01:50:47-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#compose-установки-docker-composeinstallyml">Compose установки (docker-compose.install.yml)</a></li><li class="n2"><a href="#api">api</a></li><li class="n3"><a href="#основные">Основные</a></li><li class="n3"><a href="#безопасность-">Безопасность 🔒</a></li><li class="n3"><a href="#auth-first-party">Auth first-party</a></li><li class="n3"><a href="#настоящий-smtp-mailsender">Настоящий SMTP (MailSender)</a></li><li class="n3"><a href="#seed-для-разработки">Seed для разработки</a></li><li class="n3"><a href="#rate-limit">Rate limit</a></li><li class="n3"><a href="#внутренний-трафик-">Внутренний трафик 🔒</a></li><li class="n3"><a href="#git">Git</a></li><li class="n3"><a href="#llm">LLM</a></li><li class="n3"><a href="#граф-знаний-adr-0099">Граф знаний (ADR 0099)</a></li><li class="n3"><a href="#наблюдаемость">Наблюдаемость</a></li><li class="n2"><a href="#engine">engine</a></li><li class="n3"><a href="#основные-1">Основные</a></li><li class="n3"><a href="#кластер-и-остановка">Кластер и остановка</a></li><li class="n3"><a href="#harness">Harness</a></li><li class="n3"><a href="#психолог">Психолог</a></li><li class="n3"><a href="#анамнез">Анамнез</a></li><li class="n3"><a href="#ограничители-нагрузки">Ограничители нагрузки</a></li><li class="n3"><a href="#внутренний-трафик-и-наблюдаемость">Внутренний трафик и наблюдаемость</a></li><li class="n2"><a href="#web">web</a></li><li class="n3"><a href="#почему-версия-не-идёт-через-configjs">Почему версия не идёт через /config.js</a></li><li class="n2"><a href="#резервное-копирование">Резервное копирование</a></li><li class="n2"><a href="#локальный-инференс-контейнеры">Локальный инференс (контейнеры)</a></li><li class="n2"><a href="#локальная-наблюдаемость-контейнеры">Локальная наблюдаемость (контейнеры)</a></li><li class="n2"><a href="#брокер-контейнеров">Брокер контейнеров</a></li><li class="n2"><a href="#dev-container-user-build-time">Пользователь контейнеров dev (сборка)</a></li><li class="n2"><a href="#переменные-инструментов-не-продукта">Переменные инструментов (не продукта)</a></li><li class="n3"><a href="#демонстрационные-скрипты-и-seed--appsapiscripts">Демонстрационные скрипты и seed — apps/api/scripts/</a></li><li class="n3"><a href="#браузерный-e2e--e2e">Браузерный E2E — e2e/</a></li><li class="n3"><a href="#локальный-кластер-и-плановые-проверки--deployk8s">Локальный кластер и плановые проверки — deploy/k8s/</a></li><li class="n2"><a href="#полный-инвентарь">Полный инвентарь</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-ru.json" data-base="../"></script></body>
+</html>

@@ -1,0 +1,1847 @@
+<!doctype html>
+<html lang="zh-Hans" data-locale="zh-Hans" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jev 工具路由器的测量 | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="菜单">&#9776;</button>
+<a class="marca" href="../index.html">Brabo</a>
+<input type="search" data-busca placeholder="搜索" aria-label="搜索" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="语言"><option value="../../explanation/medicao-do-jev.html">pt-BR</option><option value="../../en/explanation/medicao-do-jev.html">en</option><option value="../../ru/explanation/medicao-do-jev.html">ru</option><option value="../../zh-Hans/explanation/medicao-do-jev.html" selected>zh-Hans</option></select>
+<select data-seletor aria-label="环境"><option value="../../../dev/zh-Hans/explanation/medicao-do-jev.html">dev</option><option value="../../../prd/zh-Hans/explanation/medicao-do-jev.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="切换主题">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><h2>🚀 从这里开始</h2><ul><li><a href="../index.html">简介</a></li><li><a href="../getting-started.html">快速开始</a></li><li><a href="../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li></ul></section><section><h2>🏗️ 架构</h2><ul><li><a href="../architecture.html">架构</a></li><li><a href="../adr.html">决策（ADR）</a><ul><li><span>Git, repositório e política de branches</span><ul><li><a href="../adr/0001-git-provider-contract-shape.html">ADR 0001 — GitProvider 规范化契约的形态</a></li><li><a href="../adr/0002-git-error-normalization.html">ADR 0002 — GitProvider 错误的规范化</a></li><li><a href="../adr/0003-git-provider-retry-policy.html">ADR 0003 — 远程 provider 的重试策略</a></li><li><a href="../adr/0004-git-credential-registration.html">ADR 0004 — 用户 git 凭据的登记</a></li><li><a href="../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005 — 幂等且可恢复的 Gitflow bootstrap</a></li><li><a href="../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028 — 分支保护：provider 之间的分歧与审批矩阵</a></li><li><a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030 — 机制化的分支策略</a></li><li><a href="../adr/0044-adocao-de-repositorio-existente.html">ADR 0044 — 采纳现有仓库，以及作为关口的计划</a></li><li><a href="../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056 — engine 在远程仓库上工作</a></li><li><a href="../adr/0139-o-alarme-de-esteira-ganha-destinatario.html">ADR 0139 — 流水线合并的告警获得接收方，以及 `dev` 的规则</a></li><li><a href="../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165 — 仓库在接受给 Arquiteto 的 handoff 时诞生，没有它执行就不会开始</a></li><li><a href="../adr/0217-promocao-automatica-para-qa-em-fase-de-teste.html">ADR 0217 — QA 处于测试阶段时，`dev` → `qa` 自动晋升</a></li><li><a href="../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.html">ADR 0235 — A `qa` é aposentada por hora e a esteira do repositório fica `dev → main`</a></li><li><a href="../adr/0236-o-dependabot-dispensa-revisao-na-dev.html">ADR 0236 — O Dependabot dispensa revisão na `dev` e fica mergeável com os outros checks verdes</a></li></ul></li><li><span>Harness de agente, turnos e sessões</span><ul><li><a href="../adr/0006-prompt-assembler-context-harness.html">ADR 0006 — agent 的 harness：确定性的上下文组装</a></li><li><a href="../adr/0007-toolloop-tools-context-manager.html">ADR 0007 — ToolLoop、工具、ContextManager（带 LLM 的 harness）</a></li><li><a href="../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061 — 会话的类型是创建时的数据，而执行仍然是事件</a></li><li><a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098 — 一致的传输限制与有效的压缩窗口</a></li><li><a href="../adr/0163-o-clique-responde-ao-aceitar.html">ADR 0163 — 点击在**接受**命令时响应，轮次经由通道继续</a></li><li><a href="../adr/0175-infra-lead-conversa-pelo-composer.html">ADR 0175 — Infra Lead 通过 composer 对话，在此之前它的回合先经过 `TurnoAssincrono`</a></li><li><a href="../adr/0177-idioma-das-respostas-por-conta-sessao-e-projeto.html">ADR 0177 — 回答的语言存放在三个地方——账户、会话和项目——采用开放的 BCP-47 列表，绝不放在 `users.locale` 中</a></li><li><a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179 — 循环向 Jev 询问用哪个工具，用户的模型只看到剩下的菜单</a></li><li><a href="../adr/0183-reabrir-sessao-encerrada.html">ADR 0183 — 已结束的会话可以重新打开：终止状态的专属出口，通向 `active`，带新事件</a></li><li><a href="../adr/0184-reabrir-sessao-decisoes-do-dono.html">ADR 0184 — 重新打开会话：所有者的三个决定，`developer` 即可重新打开</a></li><li><a href="../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191 — 在轮次进行中到达的消息进入持久化队列，并在轮次结束时被读取</a></li><li><a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226 — Diário vivo e retomada dos agentes: o turno interrompido volta uma vez, do plano</a></li><li><a href="../adr/0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.html">ADR 0246 — Anexos do chat: bytes no Postgres, referência no evento, visão por capability</a></li><li><a href="../adr/0247-uma-mensagem-varios-destinatarios.html">ADR 0247 — Uma mensagem, vários destinatários</a></li><li><a href="../adr/0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.html">ADR 0249 — O raciocínio do agente é gravado e mostrado só a developer ou mais</a></li></ul></li><li><span>O time de agentes — papéis, áreas e handoffs</span><ul><li><a href="../adr/0008-agente-criativo-conversacional-handoffs.html">ADR 0008 — harness 中的对话式 Criativo agent + handoff 的基础</a></li><li><a href="../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009 — PO agent、backlog（epics/stories/tasks）与可追溯性</a></li><li><a href="../adr/0010-agente-arquiteto-adr-pr-module-map.html">ADR 0010 — Arquiteto agent：通过真实 PR 的 ADR、module_map 和交叉验证</a></li><li><a href="../adr/0014-infra-agent-painel-phoenix.html">ADR 0014 — InfraAgent 与实时团队面板（Fase 4a 收尾）</a></li><li><a href="../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015 — 真正的 Psicólogo：ToolLoop、带证据的假设与成本分诊</a></li><li><a href="../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016 — Anamnese：熟练度画像、指令补丁与闭环</a></li><li><a href="../adr/0022-fechamento-4b-psicologo.html">ADR 0022 — 阶段 4b 的收尾（第 1 次会话）：能送达的证据、能显示的成本、能在 kill 之后存活的分析</a></li><li><a href="../adr/0023-fechamento-4b-anamnese.html">ADR 0023 — 阶段 4b 的收尾（第 2 次会话）：能工作的目录、能区分谁拒绝的去重，以及能在一轮之后存活的队列</a></li><li><a href="../adr/0038-hierarquia-de-agentes.html">ADR 0038 — agent 的层级：领域、lead 与委派</a></li><li><a href="../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046 — 由用户拥有权限的故事晋升</a></li><li><a href="../adr/0053-dev-lead-e-paralelismo-autorizado.html">ADR 0053 — Dev Lead 作为区域，以及由用户授权的并行</a></li><li><a href="../adr/0068-diagrama-c4-do-arquiteto.html">ADR 0068 — Arquiteto 的 C4 图</a></li><li><a href="../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069 — 有条件地合并 handoff 的接受与执行的启用</a></li><li><a href="../adr/0085-fluxo-como-registro-declarativo.html">ADR 0085 — 角色流作为声明式登记（fluxo.yml）</a></li><li><a href="../adr/0086-dev-lead-plano-suspende-para-aprovacao.html">ADR 0086 — Dev Lead 的计划挂起轮次以等待审批</a></li><li><a href="../adr/0087-ux-designer-agente.html">ADR 0087 — UX Designer 作为对话式 agent 加入</a></li><li><a href="../adr/0088-staff-agente-dormente-para-disparo-automatico.html">ADR 0088 — Staff：代码就绪，自动触发处于休眠</a></li><li><a href="../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">ADR 0089 — `analytics` 和 `delivery-metricas` 成为报表脚本</a></li><li><a href="../adr/0092-platform-relatorio-de-telemetria-sob-demanda.html">ADR 0092 — `platform` 以按需报告脚本的形式诞生，而不是 agent</a></li><li><a href="../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">ADR 0093 — `dbre` 角色变成两个脚本：迁移 linter 和备份报告</a></li><li><a href="../adr/0094-delegacao-dev-lead-vira-dado.html">ADR 0094 — Dev Lead → dev 的委派成为数据，`parecerArtifactId` 被重新定义</a></li><li><a href="../adr/0109-handoff-manual-a-agente-a-escolha.html">ADR 0109 — 向任选 agent 的手动 handoff 复用&quot;提供 + 接受&quot;，绝不引入第三种 handoff 状态</a></li><li><a href="../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182 — handoff 提议获得生命周期：每个目标一个待处理，以及 `superseded`</a></li><li><a href="../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185 — &quot;Estou pronto — a necessidade está validada&quot;：一次点击同时关闭就绪确认、gate `necessidade-validada` 和 PO 的接受</a></li><li><a href="../adr/0186-aceite-automatico-do-handoff-ao-arquiteto.html">ADR 0186 — 当 backlog 已覆盖且仓库为本地时，PO 给 Arquiteto 的 handoff 无需点击即被接受</a></li><li><a href="../adr/0194-aprovar-o-plano-ativa-a-execucao.html">ADR 0194 — 批准 Dev Lead 的计划会激活执行，任务获得它所分配的模块</a></li><li><a href="../adr/0212-historia-arquivada.html">ADR 0212 — 已归档的故事：一列，而不是状态机中的一个状态</a></li><li><a href="../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213 — 交付物通过 Infra 的 compose 在用户的机器上运行</a></li></ul></li><li><span>Gates, QA e revisão de segurança</span><ul><li><a href="../adr/0013-gates-qa-secops-pr.html">ADR 0013 — PR 的 gate：QAAgent 和 SecOpsAgent</a></li><li><a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020 — 解锁 QA 与 SecOps 的 gate：在工作树上运行 gitleaks、经过校验的意见书，以及文本形式的 tool call</a></li><li><a href="../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021 — 阶段 4a 的收尾：真正做校验的 infra gate，以及说真话的面板</a></li><li><a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054 — gate 作为声明式登记</a></li><li><a href="../adr/0057-o-gate-espera-a-aprovacao.html">ADR 0057 — gate agent 等待审批，就像 dev 那样等待</a></li><li><a href="../adr/0067-o-gate-sobrevive-ao-restart.html">ADR 0067 — gate 在重启后存活</a></li><li><a href="../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090 — QA 策略和 AppSec 作为第二个**时刻**，而不是新 agent</a></li><li><a href="../adr/0091-secops-runtime-relatorio-de-abuso.html">ADR 0091 — `secops-runtime` 作为基于 `rate_limit_hits` 的报告脚本</a></li><li><a href="../adr/0095-gate-necessidade-validada.html">ADR 0095 — gate `necessidade-validada` 由单独的人工确认关闭，而不是由 Criativo 自我验证</a></li><li><a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123 — 为 QA Automação agent 的语义判断建立回归用例 golden-set</a></li><li><a href="../adr/0168-golden-set-do-qa-em-ci-semanal.html">ADR 0168 — QA 的 golden-set 开始在 CI 中按周定时运行</a></li><li><a href="../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192 — 测试计划在 dev 交付之后诞生，gate `implementavel` 改为基于故事和 `module_map` 进行判断</a></li><li><a href="../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207 — 停滞超过 2 小时的 gate 周期会被搁置，只有人工操作才能恢复</a></li><li><a href="../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214 — 悬而未决的问题成为待解决的待办</a></li><li><a href="../adr/0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.html">ADR 0215 — 项目的决定传达到 dev 和 QA</a></li></ul></li><li><span>Execução, política de terminal e aprovações</span><ul><li><a href="../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011 — dev agent 的基础设施：worktree、git 执行器和合并锁</a></li><li><a href="../adr/0012-dev-agent-real-toolloop-orcamento-bloqueio.html">ADR 0012 — 真正的 DevAgent：ToolLoop、按 task 的预算与阻塞纪律</a></li><li><a href="../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017 — 工作区初始化锁、dev agent 的 Monitor 以及上限继承</a></li><li><a href="../adr/0018-noop-dev-agent-modo-de-execucao.html">ADR 0018 — NoopDevAgent 作为永久的执行模式</a></li><li><a href="../adr/0019-destravar-dev-agent-adr-por-modulo-orcamento-projeto.html">ADR 0019 — 解锁真实的 DevAgent：写入、终端、按模块的 ADR 和按项目的预算</a></li><li><a href="../adr/0045-reagendamento-por-evento-do-dev-agent.html">ADR 0045 — dev agent 的按事件重新调度，以及熔断器</a></li><li><a href="../adr/0047-operabilidade-pos-dogfooding.html">ADR 0047 — dogfooding 之后的可运维性：Fase 12 的收尾</a></li><li><a href="../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048 — event log 中的决定，以及 gate 的顺序</a></li><li><a href="../adr/0052-dev-agent-espera-aprovacao-no-meio-do-laco.html">ADR 0052 — dev agent 在循环中途等待审批</a></li><li><a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055 — 终端策略中的路径范围</a></li><li><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102 — 修订 ADR 0065：外部效果的边界不再是 `deny`，而是绝对上限</a></li><li><a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167 — 自动模式放行路径范围，而且只有它放行</a></li><li><a href="../adr/0189-o-piloto-automatico.html">ADR 0189 — 自动驾驶：自动模式批准一切（上限除外），作用域与真实执行目录比较，&quot;始终允许&quot;记录动词 + 子命令</a></li><li><a href="../adr/0204-modo-automatico-libera-push-e-pr.html">ADR 0204 — 自动模式放行 push 和 PR</a></li></ul></li><li><span>Onde o código mora — modos de execução</span><ul><li><a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066 — 可读的 workspace 文件夹名称</a></li><li><a href="../adr/0072-projeto-local-ou-container.html">ADR 0072 — 项目选择代码存放在哪里：用户目录还是托管目录</a></li><li><a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104 — `execution_mode` 取三个值，由 runner 负责验证时 workspace 以 `unverified` 诞生</a></li><li><a href="../adr/0107-navegacao-de-pasta-local-via-o-runner.html">ADR 0107 — 通过 Runner 浏览本地文件夹</a></li><li><a href="../adr/0108-projeto-runner-nasce-ao-navegar-pasta-no-wizard.html">ADR 0108 — 在 `runner` 模式下，项目在点击“Navegar pasta...”时诞生，而不只是在确认时</a></li><li><a href="../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">ADR 0111 — 转换已有项目的 `execution_mode`：dev agent 活动时拒绝，迁移 `permissions.json`，退役容器行</a></li><li><a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141 — 挂载项目的唯一 base，按同一路径挂载</a></li><li><a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142 — 挂载 workspace 的验证推迟到实体化时进行</a></li><li><a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146 — 在 bootstrap 中经同意设定的 base，以及 `mounted` 作为本地默认值</a></li></ul></li><li><span>Container do projeto e broker</span><ul><li><a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065 — 每个项目一个容器：边界不再是策略</a></li><li><a href="../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">ADR 0081 — 容器生命周期：状态表，没有编排器</a></li><li><a href="../adr/0083-terminal-mostra-estado-real-do-container.html">ADR 0083 — 终端标签页获得生命周期的真实使用者，而不是终端</a></li><li><a href="../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128 — Docker 端口，以及选定实现的打包证明</a></li><li><a href="../adr/0130-broker-de-container.html">ADR 0130 — 容器 broker：谁与服务器的 Docker 对话，以及它为什么不接受规格</a></li><li><a href="../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131 — Arquiteto 把模块路由给 infra：它**提名**，Infra **选定**</a></li><li><a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133 — Infra 在路由的候选项中做出选择，选择结果成为 `artifact.project_image` 的新版本</a></li><li><a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134 — dev agent 在项目的真实容器**内部**执行，终端在其中获得一个自动批准的下限</a></li><li><a href="../adr/0135-portao-de-imagem-nos-tres-modos.html">ADR 0135 — Arquiteto 的镜像关口（RN-105）开始在三种执行模式下生效</a></li><li><a href="../adr/0136-pagina-global-de-containers.html">ADR 0136 — 全局容器页面：broker 按加载设上限，`container_remove` 纳入绝对上限</a></li><li><a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137 — `brabo-runner` 在用户的机器上启动项目容器</a></li><li><a href="../adr/0143-agentes-de-dev-so-depois-do-container.html">ADR 0143 — dev agent 只在容器之后</a></li><li><a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144 — broker 的第二个根，以及选择它的可辨识定位符</a></li><li><a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180 — 项目容器以文件夹所有者身份运行，由 api 测量</a></li><li><a href="../adr/0190-a-infra-sobe-o-container-no-aceite.html">ADR 0190 — Infra 在接受 handoff 时启动容器，由服务器执行这一步并预置自主度，并由它交接给 Dev Lead</a></li><li><a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199 — 容器的最低资源从 `module_map` 派生：每个模块声明自己的，Infra 按总和启动</a></li><li><a href="../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208 — Infra 继承 Arquiteto 声明的网络</a></li><li><a href="../adr/0228-comando-do-app-e-rede-do-container.html">ADR 0228 — O container do projeto sobe o app pelo comando declarado e publica porta só no loopback</a></li><li><a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229 — O QA testa numa instância efêmera, com os serviços que a Infra declarou</a></li></ul></li><li><span>O runner local</span><ul><li><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — 本地 runner：通过带一次性 ticket 的 Phoenix 通道在用户机器上执行</a></li><li><a href="../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105 — 给 runner 的 Personal Access Token（`brb_…`），按构造限定到一条路由</a></li><li><a href="../adr/0106-distribuicao-do-runner-via-tsup-e-npm-publish.html">ADR 0106 — 通过 `tsup` 和 `npm publish` 分发 `@brabo/runner`，版本只在 CI 中注入</a></li><li><a href="../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112 — 通过 `bun build --compile` 构建 `@brabo/runner` 的独立二进制，原生插件 `.node` 通过真实解压到临时目录的方式嵌入</a></li><li><a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118 — 通过浏览器配置 runner：Ed25519 设备密钥作为 `runner-ticket` 的第二种凭据、GitHub Releases 的二进制代理，以及用 File System Access API 一键配置文件夹</a></li><li><a href="../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145 — Docker 成为 `runner` 模式的真正前提</a></li><li><a href="../adr/0147-agente-local-com-capacidades.html">ADR 0147 — 一个本地 agent，在连接时声明能力</a></li><li><a href="../adr/0151-base-consentida-no-runner.html">ADR 0151 — runner 中经同意的基础目录，以及通过通道创建文件夹</a></li><li><a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154 — 机器级的设备密钥</a></li><li><a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174 — runner 的独立二进制不再承诺 Mac Intel</a></li><li><a href="../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187 — runner 的独立二进制不再承诺 Windows</a></li><li><a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193 — 带凭据的 git 在 runner 的**宿主机**上运行；代码在容器中运行</a></li><li><a href="../adr/0201-revogacao-por-chave.html">ADR 0201 — 吊销针对的是**密钥**，而不是 `{projeto, usuário}` 这一对</a></li><li><a href="../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.html">ADR 0203 — 通过浏览器配置 runner 的流程退役，路径改为安装程序</a></li><li><a href="../adr/0230-importar-chave-de-llm-pelo-runner.html">ADR 0230 — O runner importa a chave de API de LLM que o usuário já tem na máquina</a></li></ul></li><li><span>Autenticação, acesso e segredos</span><ul><li><a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031 — 自有认证：argon2id、EdDSA 与 refresh 轮换</a></li><li><a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032 — 切除 Keycloak：自有签发方、service token 与 cookie 中的会话</a></li><li><a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037 — engine 所缺的 CORS，以及端口作为契约的一部分</a></li><li><a href="../adr/0050-credencial-sempre-cifrada-verificacao-explicita.html">ADR 0050 — 凭据总是被加密；验证成为显式动作</a></li><li><a href="../adr/0058-csp-fechado-na-api-e-escopo-de-projeto-contido.html">ADR 0058 — api 中封闭的 CSP，以及约束在根内的项目范围</a></li><li><a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059 — 签署 git OAuth `state` 的密钥没有默认值</a></li><li><a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084 — 社交登录（GitHub/GitLab），修订 ADR 0031/0032 的 backlog</a></li><li><a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096 — `MailSender` 中的真实 SMTP，置于显式开关之后</a></li><li><a href="../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127 — `project_members` 中的两道降级上限，覆盖关系保留</a></li><li><a href="../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156 — 自我降级上限同样适用于移除项目成员</a></li><li><a href="../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157 — workspace upsert 中的自我变动上限，以及原本是漏洞的自我晋升</a></li><li><a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158 — 主密钥的 id 写入信封，作为可观测性，绝不作为权威</a></li><li><a href="../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173 — workspace 成员的移除诞生，由同一条款保护</a></li><li><a href="../adr/0245-acesso-rapido-por-papel-so-no-ambiente-local.html">ADR 0245 — Acesso rápido por papel só no ambiente local</a></li></ul></li><li><span>Providers de LLM, modelos e gasto</span><ul><li><a href="../adr/0040-moeda-do-dashboard.html">ADR 0040 — 仪表盘的货币：暂用 USD，按 workspace 的手动汇率推迟</a></li><li><a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041 — 一个 OpenAI 兼容基类、一份 LLM provider 合约，以及会拒绝 binding 的 capabilities</a></li><li><a href="../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042 — 活目录、模型生命周期与可审计的价格</a></li><li><a href="../adr/0043-seis-providers-de-llm-e-o-fechamento-da-fase-9b.html">ADR 0043 — 在基础之上的六个 LLM provider，Fase 9b 终于关闭</a></li><li><a href="../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049 — 按 workspace 的模型策展</a></li><li><a href="../adr/0051-facetas-de-capability-e-curadoria-por-uso.html">ADR 0051 — 已证明的能力维度；“用来做什么”是策展</a></li><li><a href="../adr/0063-duas-audiencias-para-o-mesmo-gasto.html">ADR 0063 — 同一笔花费的两种受众：owner 的账单与成员的消耗</a></li><li><a href="../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064 — 模型级联中的领域范围，以及全局的 agent 绑定</a></li><li><a href="../adr/0075-embeddings-no-contrato-de-llm-provider.html">ADR 0075 — LLMProvider 合约中的 embedding</a></li><li><a href="../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076 — `provider` 重新成为花费维度，约束改由类型承担</a></li><li><a href="../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">ADR 0077 — 按能力的模型排名，不编造评分</a></li><li><a href="../adr/0110-budget-por-area-aditivo-nao-cascata.html">ADR 0110 — 按区域的预算是叠加的，与项目/会话并列——不是级联，也不是新表</a></li><li><a href="../adr/0114-deteccao-de-ollama-nativo-no-bootstrap-dev.html">ADR 0114 — 在开发引导中检测原生 Ollama：只问一次，持久化到 `.env`，把 compose 的服务放到 profile 之后</a></li><li><a href="../adr/0115-pedido-de-pull-de-modelo-huggingface-tabela-propria.html">ADR 0115 — 从 Hugging Face 拉取模型：独立的表、两步确认以及官方发布者 allowlist——绝不使用 `proposed_actions`</a></li><li><a href="../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166 — 路由偏好住在模型 binding 中，随它一起传递，并在计量中冻结</a></li><li><a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188 — provider 返回的真实成本成为计量的数字</a></li><li><a href="../adr/0198-duplicata-semantica-por-embedding-com-limiar-que-so-avisa.html">ADR 0198 — 故事与规则的语义重复通过带阈值的 embedding 提醒，花费进入计量</a></li><li><a href="../adr/0221-upstream-preso-por-sessao.html">ADR 0221 — O hub prende a conversa de cada agente ao upstream que a atendeu, por `session_id`</a></li><li><a href="../adr/0222-provider-9router-de-llm.html">ADR 0222 — O 9Router entra como o 10º provider de LLM, com URL por instalação</a></li><li><a href="../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223 — O orçamento de raciocínio é capability POR MODELO, curada à mão</a></li><li><a href="../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224 — O raciocínio é contado no stream e abortado no limite, e o custo é estimado e reconciliado</a></li><li><a href="../adr/0225-teto-de-preco-do-upstream-no-openrouter.html">ADR 0225 — O OpenRouter recebe um teto de preço por chamada (`provider.max_price` = catálogo × 1,5)</a></li><li><a href="../adr/0227-provider-opencode-zen-de-llm.html">ADR 0227 — O OpenCode Zen entra como o 11º provider de LLM, só no dialeto OpenAI</a></li><li><a href="../adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233 — O membro vê o gasto do projeto por agente e por área, nunca por provider</a></li><li><a href="../adr/0251-preco-de-lista-datado-para-provider-sem-preco.html">ADR 0251 — Preço de lista datado no código para provider que não informa preço</a></li></ul></li><li><span>RAG, grafo de conhecimento e artefatos</span><ul><li><a href="../adr/0079-tabela-de-chunks-vetor-e-tsvector-juntos.html">ADR 0079 — chunk 表：向量与 `tsvector` 在同一行</a></li><li><a href="../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">ADR 0080 — 混合搜索：权重、阈值，以及什么算引用</a></li><li><a href="../adr/0082-chat-rag-aba-de-busca-hibrida.html">ADR 0082 — Chat RAG：混合搜索的独立标签页，不重命名“Chat”</a></li><li><a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099 — Neo4j 作为知识图谱和 prompt 模板，驱动放在 api 中</a></li><li><a href="../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100 — 面向 agent 的 `rag_search`，以及启动时确保存在的 Ollama 模型</a></li><li><a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101 — 关系记忆作为事件日志的投影；在不触碰 GenServer 的情况下使用模板</a></li><li><a href="../adr/0113-pasta-local-anexada-via-navegador-vira-chunks-scope-local.html">ADR 0113 — 附加的本地目录成为 `chunks.scope = 'local'`，由**浏览器**读取，绝不是主机路径</a></li><li><a href="../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">ADR 0129 — RAG 搜索的遥测是**表**，权重冻结在行中</a></li><li><a href="../adr/0132-golden-set-de-acerto-do-rag.html">ADR 0132 — RAG 命中率的 golden-set，以及 gate `rag-acertivo`</a></li><li><a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138 — RAG 的 golden-set 开始在 CI 中定时运行——并且仍然是 `warn`</a></li><li><a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148 — agent 的工件以文件形式投影到一个 `docs/` 目录</a></li><li><a href="../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196 — 重新启用的 Anamnese：没有主体就不运行，被接受的假设成为画像事实</a></li><li><a href="../adr/0200-contrato-entre-modulos-artefato-do-arquiteto.html">ADR 0200 — 模块间合约成为 Arquiteto 的版本化工件，dev agent 读取它而不是别人的 worktree</a></li><li><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205 — Anamnese 观察到的 agent 偏差成为产品信号，不含个人数据</a></li></ul></li><li><span>Interface web e design system</span><ul><li><a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036 — 忠实于设计的认证界面，以及三种无法加载的字体</a></li><li><a href="../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060 — 代码的读取面，受约束且有预算</a></li><li><a href="../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">ADR 0074 — 可切换的主题，以及 CSP 下的启动</a></li><li><a href="../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">ADR 0078 — 界面框架，以及标签页注册表刻意偏离 handoff</a></li><li><a href="../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097 — 为仪表盘的“N 个 agent 在线”直接读取 engine 的 schema</a></li><li><a href="../adr/0116-tipos-do-web-gerados-do-openapi.html">ADR 0116 — `ActionType`（以及将来的类型）由 OpenAPI 契约生成，而不是手工复制</a></li><li><a href="../adr/0122-sessionpage-dividido-em-cinco-prs.html">ADR 0122 — `SessionPage.tsx` 拆分为五个机械式 PR，并事先声明</a></li><li><a href="../adr/0124-hook-do-canal-de-turno-do-sessionpage.html">ADR 0124 — 轮次通道的状态分组抽取到 `useTurnoDoAgente`</a></li><li><a href="../adr/0125-projectsettingstab-dividido-por-secao.html">ADR 0125 — 把 `ProjectSettingsTab.tsx` 拆分为每个分区一个文件，置于一个 barrel 之后</a></li><li><a href="../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126 — 项目页面通过垂直轨道导航，代码标签页不再自行折叠侧边栏</a></li><li><a href="../adr/0176-sessionpage-abaixo-de-mil-linhas.html">ADR 0176 — `SessionPage.tsx` 降到 1 000 行以下，分十个机械式 PR，之后才加锁</a></li><li><a href="../adr/0181-tema-preto-neutro.html">ADR 0181 — 深色主题变为中性黑，对比度债务结束</a></li><li><a href="../adr/0210-animacao-de-texto-com-motion.html">ADR 0210 — 用 `motion` 做文本动画</a></li><li><a href="../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211 — 只有一种导航：侧边栏吸收项目轨道</a></li><li><a href="../adr/0232-shadcn-com-base-ui-no-apps-web.html">ADR 0232 — shadcn/ui com Base UI e Tailwind 4 no `apps/web`</a></li><li><a href="../adr/0234-shiki-e-recharts-por-carga-dinamica.html">ADR 0234 — `shiki` no Code Block e `recharts` no Chart, sempre por carga dinâmica</a></li><li><a href="../adr/0237-o-visual-v3-liga-o-preflight-e-sobe-os-raios.html">ADR 0237 — O visual v3 liga o preflight e sobe os raios</a></li><li><a href="../adr/0238-o-grafo-de-modulos-vira-canvas-xyflow.html">ADR 0238 — O grafo de módulos da Arquitetura vira Canvas (`@xyflow/react`)</a></li><li><a href="../adr/0239-csp-frame-src-local-para-o-web-preview.html">ADR 0239 — CSP `frame-src` local para o Web preview do entregável</a></li><li><a href="../adr/0240-o-motivo-de-controle-inerte-mora-num-ponto-de-interrogacao-nos-containers.html">ADR 0240 — O motivo de controle inerte pode morar num &quot;?&quot; ativo na página de Containers</a></li><li><a href="../adr/0241-a-sidebar-adota-o-block-sidebar-07-do-shadcn.html">ADR 0241 — A sidebar adota o block `sidebar-07` do shadcn</a></li><li><a href="../adr/0242-containers-em-tabela-linear-com-tanstack-react-table.html">ADR 0242 — Containers em tabela linear com `@tanstack/react-table`</a></li><li><a href="../adr/0243-consequencia-irreversivel-pode-morar-num-botao-de-perigo.html">ADR 0243 — Consequência irreversível pode morar num botão de perigo</a></li><li><a href="../adr/0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.html">ADR 0244 — Coluna das abas do projeto alinhada à esquerda</a></li><li><a href="../adr/0248-conteudo-das-paginas-ocupa-a-largura-inteira.html">ADR 0248 — O conteúdo das páginas ocupa a largura inteira</a></li><li><a href="../adr/0250-chat-da-sessao-ocupa-a-largura-inteira.html">ADR 0250 — O chat da Sessão ocupa a largura inteira</a></li></ul></li><li><span>Operação, deploy e instalação</span><ul><li><a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024 — 阶段 5（第 1 次会话）：生产镜像、compose.prod、CI 与冒烟测试</a></li><li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025 — 阶段 5（第 2 次会话）：使用 Kustomize 部署 Kubernetes、队列指标与本地 overlay</a></li><li><a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026 — 阶段 5（第 3 次会话）：优雅关闭、OpenTelemetry、指标、日志与仪表盘</a></li><li><a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027 — 备份/还原、api 加固、暴露面与发布</a></li><li><a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035 — 没有 collector 的 trace，以及日志中跨层的路径</a></li><li><a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070 — 本地 Compose 中的可观测性：指标和日志，没有 trace</a></li><li><a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150 — 一行安装程序，带可选来源和标记文件</a></li><li><a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152 — 针对 compose 的卷备份与恢复</a></li><li><a href="../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153 — `DEPLOY_ENABLED`：十份文档引用、却无人创建的触发器</a></li><li><a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155 — 第一个账户在终端中诞生，本地 agent 启动时即已配对</a></li><li><a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160 — 安装程序的 compose 随它一起传送，作为已签名的 asset</a></li><li><a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161 — 界面只提供安装能执行的模式，而通过 Release 的安装没有 broker</a></li><li><a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162 — broker 成为第五个发布的镜像，安装程序**询问**是否启用它</a></li><li><a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169 — 本地 overlay 的 S3 目标不再是 MinIO，改为 SeaweedFS</a></li><li><a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170 — 开发用 compose 改名为 `brabo-dev`，开发环境拒绝在安装旁边启动</a></li><li><a href="../adr/0209-engine-em-otp-29.html">ADR 0209 — engine 升级到 Elixir 1.20.4 / OTP 29.1.1</a></li></ul></li><li><span>CI, release e cadeia de suprimentos</span><ul><li><a href="../adr/0039-actionlint-e-validacao-do-pipeline-de-ci-gerado.html">ADR 0039 — actionlint 与生成的 CI 管道的验证</a></li><li><a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119 — 每个正式 tag 都把镜像发布到 GHCR，生产 overlay 按 digest 固定</a></li><li><a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120 — 针对生产 compose 的浏览器 E2E，放在 workspace 之外的包中</a></li><li><a href="../adr/0121-schema-dividido-por-agregado-de-dominio.html">ADR 0121 — schema 按领域聚合拆分，置于一个 barrel 之后</a></li><li><a href="../adr/0140-timeout-do-audit-como-risco-assumido.html">ADR 0140 — `pnpm audit` 反复超时是承担的风险；发现问题仍然失败</a></li><li><a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149 — 已发布工件的签名</a></li><li><a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159 — 第三方镜像按 digest 引入，lint 让忘记的人失败</a></li><li><a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172 — 发布在签名之前按 digest 用 Trivy 扫描它所发布的东西</a></li><li><a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178 — 第三方镜像的 tag 住在引用**之内**，位于 digest 之前</a></li><li><a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197 — workflow 的镜像来自 compose，并启用镜像的 Dependabot</a></li><li><a href="../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252 — O Brabo vira um conjunto de repositórios em `viralabs-dev`</a></li></ul></li><li><span>Documentação</span><ul><li><a href="../adr/0029-sincronizacao-continua-da-documentacao.html">ADR 0029 — 文档的持续同步</a></li><li><a href="../adr/0033-referencia-de-api-gerada-do-openapi.html">ADR 0033 — API 参考由代码产出，表格测试对元数据提出要求</a></li><li><a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034 — 按阶梯发布的文档，位于 Pages 的子目录中</a></li><li><a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071 — 按阶梯对称发布，以及一个供选择的根</a></li><li><a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073 — 发布路径命名的是环境，而不是分支</a></li><li><a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117 — `website/` 拥有自己的 lockfile，脱离产品的 `pnpm audit`</a></li><li><a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202 — 按主题组织的 ADR 索引，主题放在 ADR 之外</a></li><li><a href="../adr/0206-referencia-da-api-numa-pagina-redoc.html">ADR 0206 — API 参考变成一个 Redoc 页面</a></li><li><a href="../adr/0216-quatro-idiomas-com-pt-br-como-fonte.html">ADR 0216 — 四种语言，以 pt-BR 作为**来源**和默认：文档与界面提供葡萄牙语、英语、俄语和简体中文</a></li><li><a href="../adr/0218-titulo-de-adr-com-prefixo.html">ADR 0218 — 每个 ADR 都命名为“ADR NNNN — 标题”</a></li><li><a href="../adr/0219-referencia-entra-na-traducao.html">ADR 0219 — 参考文档纳入翻译</a></li><li><a href="../adr/0220-api-traduzida-por-catalogo.html">ADR 0220 — API 页面按目录翻译</a></li><li><a href="../adr/0253-o-site-de-docs-deixa-o-docusaurus.html">ADR 0253 — O site de docs deixa o Docusaurus</a></li><li><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html">ADR 0254 — A doc de cada área mora na raiz dela</a></li></ul></li></ul></li></ul></section><section><h2>📐 规则</h2><ul><li><a href="../business-rules.html">业务规则</a></li><li><a href="../business-rules/custo.html">成本与计量</a></li><li><a href="../business-rules/autenticacao.html">认证</a></li><li><a href="../business-rules/api.html">API</a></li><li><a href="../business-rules/broker.html">Broker</a></li><li><a href="../business-rules/ci.html">CI</a></li><li><a href="../business-rules/contracts.html">Contratos</a></li><li><a href="../business-rules/engine.html">Engine</a></li><li><a href="../business-rules/infra.html">Infra</a></li><li><a href="../business-rules/produto.html">Produto</a></li><li><a href="../business-rules/runner.html">Runner</a></li><li><a href="../business-rules/web.html">Web</a></li></ul></section><section><h2>📖 参考</h2><ul><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">api 的暴露面</a></li><li><span>API 参考</span></li></ul></section><section><h2>💡 解释</h2><ul><li><span>流程与流水线</span><ul><li><a href="../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../explanation/branching-policy.html">分支策略</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../explanation/observability.html">可观测性</a></li><li><a href="../explanation/modelo-de-time.html">团队模型与交付物流程</a></li></ul></li><li><span>验证与测量</span><ul><li><a href="../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../explanation/aceite-providers.html">provider 的验收</a></li><li><a href="../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../explanation/medicao-do-jev.html" aria-current="page">Jev 工具路由器的测量</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></li><li><span>阶段历史</span><ul><li><a href="../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../explanation/backlog.html">已分类的 backlog</a></li></ul></li><li><span>本地化</span><ul><li><a href="../explanation/localizacao.html">本地化</a></li><li><a href="../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></li><li><span>技术笔记</span><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI——未采用</a></li></ul></li></ul></section><section><h2>🛠️ 运维</h2><ul><li><a href="../runbook.html">运维手册</a></li></ul></section><section><h2>📚 词汇</h2><ul><li><a href="../glossary.html">术语表</a></li></ul></section><section><h2>🤝 贡献</h2><ul><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="measuring-the-jev-tool-router">Jev 工具路由器的测量</h1>
+<blockquote>
+<p>AT-237（EP-029，HS-063）。一次<strong>产品之外的测量</strong>：<code>apps/</code> 中没有任何代码
+导入这里的代码，数据库中不写入任何东西，这里也不声称任何产品收益——那属于
+AT-239，它比较有路由器和没有路由器的轮次。被测量的路由器是 AT-235 所规定的；
+它所依赖的决定来自 AT-236。</p>
+<p>于 2026-09-29 针对本地 dev 实例（compose 项目 <code>brabo-dev</code>）测量，仓库处于
+<code>d48f99f8ec</code>。<strong>第二轮</strong>——<code>state</code> 的变体、等价类、拟合/验证划分、top-2 以及
+按原因划分的差距——在<a href="#second-round-2026-09-29-where-the-gap-is">下文</a>。</p>
+</blockquote>
+<h2 id="what-exists">现有内容</h2>
+<p>全部位于 <code>scripts/jev/</code>，用仓库的 Node 运行（type stripping，无构建步骤，
+<strong>无新依赖</strong>）。</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>catalogo.exs</code></td>
+<td>从 engine 自身代码中导出每个智能体的工具目录（每个工具的 <code>spec/0</code>：名称和描述）以及身份（<code>Engine.Harness.Agents.identity/1</code>）</td>
+</tr>
+<tr>
+<td><code>catalogo.json</code></td>
+<td>导出结果，纳入版本控制——目录变化时重新生成（命令在 <code>.exs</code> 的文件头中）</td>
+</tr>
+<tr>
+<td><code>passos.ts</code></td>
+<td>纯函数：event log → <strong>步骤</strong>，以及每个步骤的 <code>state</code></td>
+</tr>
+<tr>
+<td><code>jev.ts</code></td>
+<td>纯函数：对 Decisions API 的请求和对响应的读取</td>
+</tr>
+<tr>
+<td><code>medicao.ts</code></td>
+<td>纯函数：一致率、Wilson 区间、置信度曲线、延迟、成本、Markdown 报告</td>
+</tr>
+<tr>
+<td><code>replay.ts</code></td>
+<td>第一轮的 CLI：三个 <code>SELECT</code>，每个步骤一次请求，一个位于检出目录之外的 JSONL</td>
+</tr>
+<tr>
+<td><code>dados.ts</code></td>
+<td>第二轮：原始数据（事件、用量行、任务、用户故事、模块映射、动作结果）以及快照缓存</td>
+</tr>
+<tr>
+<td><code>equivalencia.ts</code></td>
+<td>第二轮：等价类 E1–E3，在运行前固定，以及终端命令的分类器</td>
+</tr>
+<tr>
+<td><code>kickoff.ts</code></td>
+<td>第二轮：dev agents 和 gates 循环的第一条消息，从 engine 的 Elixir 移植而来（一个 spec 将固定文本与 <code>.ex</code> 文件核对）</td>
+</tr>
+<tr>
+<td><code>variantes.ts</code></td>
+<td>第二轮：<code>state</code> 的变体和执行边界；每个字段都注明它在 engine 中的来源</td>
+</tr>
+<tr>
+<td><code>divisao.ts</code></td>
+<td>第二轮：拟合/验证划分，按执行划分</td>
+</tr>
+<tr>
+<td><code>cliente.ts</code>、<code>medicao2.ts</code>、<code>analise.ts</code></td>
+<td>第二轮：调用（保存概率）、top-k / 级联 / 按原因的表格，以及 CLI <code>jev:analise</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="step-not-tool-call">步骤，而不是工具调用</h3>
+<p>路由器<strong>在每次调用聊天模型时咨询一次</strong>，在 <code>provider.chat</code> 之前（AT-235）。一个
+步骤可以携带多个工具调用——Criativo 的一次响应里有十个 <code>emit_artifact</code>，dev 的
+一次响应里有 <code>terminal</code> + <code>read_file</code>——因此对每个 <code>tool.call</code> 询问一次 Jev，会提出
+产品从不提出的问题，而且所用的 <code>state</code> 已经包含同一步骤中的兄弟调用。</p>
+<p>event log 没有步骤标记（AT-235，缺口 1），所以边界来自 <code>token_usage</code>：api 在
+engine 写入该响应的 <code>tool.call</code> <strong>之前</strong>为每次 LLM 调用写入一行。同一会话、同一
+执行者在两条连续行之间的所有 <code>tool.call</code> 属于同一个步骤。由此得出三种标签：</p>
+<ul>
+<li>只有<strong>一个</strong>工具的步骤（对它的一次或多次调用）：标签 = 该工具；</li>
+<li><strong>异构</strong>步骤（两个不同的工具）：命中 = Jev 的选择是其中之一——但把菜单限制为
+一个工具会砍掉其余的；</li>
+<li>在其行之后<strong>没有</strong> <code>tool.call</code> 的步骤：模型以文本作答（或失败）。这是
+<code>responder_sem_ferramenta</code> 用这种方法唯一能得到的标签——brief 预期一个都没有；
+步骤边界给出了七个。</li>
+</ul>
+<p>时刻作为固定宽度、带微秒的 UTC <strong>文本</strong>进行比较：用量行和一个步骤的第一个
+<code>tool.call</code> 有时落在同一毫秒。</p>
+<h3 id="the-state-sent">发送的 <code>state</code></h3>
+<p>AT-235 的格式，从步骤<strong>之前</strong>已存在的内容中截取：<code>agente</code>；<code>pedido</code>——对会话型
+智能体，是<strong>用户</strong>写的最后一条 <code>chat.message</code>；对 dev agents 和任务 gates，是
+<code>dev.working</code> 中任务的标题；<code>contexto</code>——智能体的身份加上项目的
+<code>agent_instructions</code> 行（如果存在）（系统提示词的两层，而不是组装后的完整提示词）；
+<code>passos_recentes</code>——该执行者在该会话中的最后 6 次调用，参数和结果截断为 500 个
+字符。问题是一个 <code>choice</code>，其 <code>criteria</code> 是目录的 <code>{name: description}</code> 加上保留的
+<code>responder_sem_ferramenta</code>。</p>
+<p>请求发往 <code>POST https://openrouter.ai/api/alpha/decisions</code>，模型为
+<code>typesafe/jev-1.13</code>。对 AT-235 的一处更正，经过测量：<strong><code>questions</code> 是一个按问题
+id 索引的对象</strong>，不是列表——列表形式会收到
+<code>400 expected record, received array</code>。响应是
+<code>answers.&lt;id&gt;.{choice, probabilities, confidence}</code>、<code>usage.{input_tokens, output_tokens, cost}</code>、一个 <code>id</code>（<code>gen-dec-…</code>），以及 <code>model</code> 中一个带日期的快照
+（本次执行的每个响应中都是 <code>typesafe/jev-1.13-20260917</code>）。</p>
+<h2 id="the-sample">样本</h2>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>实例</td>
+<td>本地 dev（<code>brabo-dev</code>），项目 <code>test</code>，4 个有步骤的会话（第五个会话 <code>core-api</code> 一个都没有）</td>
+</tr>
+<tr>
+<td>时段</td>
+<td>2026-09-29 06:19:11 → 07:57:22 UTC</td>
+</tr>
+<tr>
+<td>读取</td>
+<td>879 个事件（502 个 <code>tool.call</code>），307 行智能体的 <code>token_usage</code></td>
+</tr>
+<tr>
+<td>步骤</td>
+<td>目录中智能体的 305 个；<strong>询问了 302 个</strong>（Psicólogo 的 3 个只有单工具目录，永远不会被路由——AT-235，条件 c）</td>
+</tr>
+<tr>
+<td>标签</td>
+<td>295 个有工具的步骤（36 个异构），7 个没有</td>
+</tr>
+<tr>
+<td>可疑标签</td>
+<td>295 个步骤中有 157 个含有一次结果显示失败的调用（<code>ok: false</code>、以 <code>falhou</code>/<code>erro</code> 开头的文本、<code>exit</code> ≠ 0）或从未收到结果的调用——被调用的工具可能选错了</td>
+</tr>
+</tbody>
+</table></div>
+<p>做了两次完整执行（报告的是第二次；数据库在两次之间多了一个 Anamnese 的步骤）。
+在两次执行共有的 301 个步骤中，Jev <strong>在 283 个（94%）中给出了相同选择</strong>；平均
+|Δ 置信度| 为 0,029，最大 0,16。样本是一个小项目、一天、一个聊天模型
+（<code>~deepseek/deepseek-flash-latest</code>）；下面每个比率都带有其 95% Wilson 区间，
+而大多数按智能体的区间太宽，无法对智能体排序。</p>
+<h2 id="agreement-by-agent">按智能体的一致率</h2>
+<p>&quot;一致&quot; = Jev 的选择是模型在该步骤中调用的某个工具。
+&quot;重复上一个&quot;是免费的基线：提供同一执行者在上一步使用的最后一个工具。</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>智能体</th>
+<th>选项</th>
+<th>有工具的步骤</th>
+<th>异构</th>
+<th>一致率（95% CI）</th>
+<th>无可疑</th>
+<th>当 Jev 选择了工具时</th>
+<th>基线&quot;重复上一个&quot;</th>
+<th>无工具的步骤</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>anamnese</td>
+<td>5</td>
+<td>8</td>
+<td>0</td>
+<td>3/8 = 38% (14–69%)</td>
+<td>3/8</td>
+<td>3/3</td>
+<td>4/4</td>
+<td>—</td>
+</tr>
+<tr>
+<td>appsec</td>
+<td>6</td>
+<td>6</td>
+<td>2</td>
+<td>0/6 = 0% (0–39%)</td>
+<td>0/6</td>
+<td>0/1</td>
+<td>0/5</td>
+<td>—</td>
+</tr>
+<tr>
+<td>arquiteto</td>
+<td>9</td>
+<td>5</td>
+<td>2</td>
+<td>1/5 = 20% (4–62%)</td>
+<td>1/5</td>
+<td>1/2</td>
+<td>1/4</td>
+<td>3/3</td>
+</tr>
+<tr>
+<td>criativo</td>
+<td>3</td>
+<td>5</td>
+<td>0</td>
+<td>3/5 = 60% (23–88%)</td>
+<td>3/5</td>
+<td>3/4</td>
+<td>1/4</td>
+<td>2/2</td>
+</tr>
+<tr>
+<td>dev-board-engine</td>
+<td>9</td>
+<td>24</td>
+<td>3</td>
+<td>12/24 = 50% (31–69%)</td>
+<td>1/3</td>
+<td>12/24</td>
+<td>20/23</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-game-session</td>
+<td>9</td>
+<td>38</td>
+<td>2</td>
+<td>20/38 = 53% (37–68%)</td>
+<td>5/14</td>
+<td>20/38</td>
+<td>25/37</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-input-keyboard</td>
+<td>9</td>
+<td>25</td>
+<td>3</td>
+<td>12/25 = 48% (30–67%)</td>
+<td>5/10</td>
+<td>12/25</td>
+<td>18/24</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-lead</td>
+<td>4</td>
+<td>1</td>
+<td>1</td>
+<td>0/1</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-persistence</td>
+<td>9</td>
+<td>34</td>
+<td>3</td>
+<td>24/34 = 71% (54–83%)</td>
+<td>4/12</td>
+<td>24/34</td>
+<td>26/33</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-piece-catalog</td>
+<td>9</td>
+<td>37</td>
+<td>5</td>
+<td>21/37 = 57% (41–71%)</td>
+<td>4/11</td>
+<td>21/37</td>
+<td>31/36</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-retro-renderer</td>
+<td>9</td>
+<td>26</td>
+<td>0</td>
+<td>13/26 = 50% (32–68%)</td>
+<td>5/14</td>
+<td>13/26</td>
+<td>19/25</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-scoring</td>
+<td>9</td>
+<td>38</td>
+<td>1</td>
+<td>19/38 = 50% (35–65%)</td>
+<td>4/15</td>
+<td>19/38</td>
+<td>29/37</td>
+<td>—</td>
+</tr>
+<tr>
+<td>infra</td>
+<td>5</td>
+<td>2</td>
+<td>1</td>
+<td>0/2</td>
+<td>0/1</td>
+<td>—</td>
+<td>1/1</td>
+<td>0/1</td>
+</tr>
+<tr>
+<td>infra-workflows</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td>0/2</td>
+<td>0/2</td>
+<td>—</td>
+<td>0/1</td>
+<td>—</td>
+</tr>
+<tr>
+<td>po</td>
+<td>10</td>
+<td>8</td>
+<td>2</td>
+<td>6/8 = 75% (41–93%)</td>
+<td>6/8</td>
+<td>6/6</td>
+<td>0/7</td>
+<td>1/1</td>
+</tr>
+<tr>
+<td>qa-automacao</td>
+<td>7</td>
+<td>20</td>
+<td>5</td>
+<td>4/20 = 20% (8–42%)</td>
+<td>2/9</td>
+<td>4/20</td>
+<td>14/19</td>
+<td>—</td>
+</tr>
+<tr>
+<td>qa-estrategia</td>
+<td>6</td>
+<td>16</td>
+<td>6</td>
+<td>0/16 = 0% (0–19%)</td>
+<td>0/15</td>
+<td>—</td>
+<td>7/15</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>全部</strong></td>
+<td></td>
+<td><strong>295</strong></td>
+<td><strong>36</strong></td>
+<td><strong>138/295 = 47% (41–52%)</strong></td>
+<td>43/138 = 31% (24–39%)</td>
+<td>138/258 = 53% (47–59%)</td>
+<td><strong>196/275 = 71% (66–76%)</strong></td>
+<td>6/7 = 86% (49–97%)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-confidence-curve-under-the-decided-rule">在既定规则下的置信度曲线</h2>
+<p>AT-236 决定（答复 7 和 12）路由器<strong>只限制</strong>菜单，且 <code>responder_sem_ferramenta</code>
+——无论置信度多少——在 v1 中发送<strong>完整</strong>目录。因此一个步骤只有在置信度达到或
+超过阈值<strong>且</strong>选择是一个工具时才被<em>限制</em>；其余一切行为与今天相同。代价高的错误
+是限制到<strong>错误的</strong>工具。</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>阈值</th>
+<th>菜单限制为 1</th>
+<th>回落到完整目录</th>
+<th>被限制者中正确的（95% CI）</th>
+<th>被限制到错误工具</th>
+<th>被砍掉的异构步骤</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.00</td>
+<td>258</td>
+<td>37</td>
+<td>138/258 = 53% (47–59%)</td>
+<td>120</td>
+<td>18</td>
+</tr>
+<tr>
+<td>0.30</td>
+<td>191</td>
+<td>104</td>
+<td>110/191 = 58% (51–64%)</td>
+<td>81</td>
+<td>13</td>
+</tr>
+<tr>
+<td>0.40</td>
+<td>126</td>
+<td>169</td>
+<td>76/126 = 60% (52–68%)</td>
+<td>50</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0.50</td>
+<td>73</td>
+<td>222</td>
+<td>50/73 = 68% (57–78%)</td>
+<td>23</td>
+<td>5</td>
+</tr>
+<tr>
+<td>0.60</td>
+<td>43</td>
+<td>252</td>
+<td>29/43 = 67% (53–80%)</td>
+<td>14</td>
+<td>4</td>
+</tr>
+<tr>
+<td>0.70</td>
+<td>17</td>
+<td>278</td>
+<td>14/17 = 82% (59–94%)</td>
+<td>3</td>
+<td>2</td>
+</tr>
+<tr>
+<td>0.80</td>
+<td>7</td>
+<td>288</td>
+<td>7/7 = 100% (65–100%)</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0.90</td>
+<td>2</td>
+<td>293</td>
+<td>2/2 = 100% (34–100%)</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table></div>
+<p>报告按组打印同样的曲线（dev agents、会话型智能体、gates 以及 <code>ToolLoop</code> 的其他
+智能体）。dev agents 与上表一致（0.70：11/14；0.80：6/6）。会话型智能体在 Jev 以
+任意置信度选择了工具时，在 10/12 个步骤中命中；在它们有工具的 21 个步骤中，Jev
+有 9 个选择了 <code>responder_sem_ferramenta</code>，根据答复 12，这是无害的。</p>
+<p><strong>阈值。</strong> 网格中没有任何阈值的区间下限达到 90% 或以上，无论总体还是任何组。
+唯一没有错误限制的点是 <strong>0.80</strong>，而在那里路由器只作用于 295 个步骤中的 7 个
+（2%）——下限为 65%。这个样本不支撑一个阈值；如果要据此固定一个，0.80 是它指向
+的值，覆盖率就是这样。AT-236 的答复 4 要求每种错误的成本，而这个回放无法为其
+定价。</p>
+<h2 id="latency-and-cost">延迟与成本</h2>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>延迟（302 个请求，顺序执行，来自维护者的机器）</td>
+<td>p50 306 ms，p95 410 ms，最大 550 ms；<strong>0 个超过 2 000 ms</strong>（第一次执行：286 / 409 / 512）</td>
+</tr>
+<tr>
+<td>每个请求的输入 token</td>
+<td>538 到 3 220，中位数 1 710</td>
+</tr>
+<tr>
+<td>按 <code>usage.cost</code> 的成本</td>
+<td>302 个步骤 US$ 0,021964——<strong>每步 US$ 0,0000727</strong></td>
+</tr>
+<tr>
+<td>实际计费</td>
+<td>对 302 个 id 逐个 <code>GET /api/v1/generation</code>：<code>total_cost</code> 合计同样的 US$ 0,021964（比率 1,000）</td>
+</tr>
+</tbody>
+</table></div>
+<p>每次执行前后 <code>GET /api/v1/key</code> 的差值<strong>没有</strong>吻合：第一次执行 +US$ 0,0349 对比
+声明的 0,0219，第二次 +0,0185 对比 0,0220。这把密钥是共享的，其计数器有延迟：
+在 AT-237 的整个会话中，它的 <code>usage</code> 从 US$ 1,830 升到 US$ 2,052（+0,222），而本
+回放的生成计费为 US$ 0,044，因此同时有其他工作在同一把密钥上花钱。差值不是一次
+执行的度量；按生成的记录才是。AT-237 的总花费（两次执行加上格式探测）：约
+US$ 0,044，上限为 US$ 2,00。</p>
+<h2 id="what-the-replay-cannot-see">回放看不到的东西</h2>
+<ul>
+<li><strong>循环的第一条消息。</strong> <code>ToolLoop</code> 智能体（dev agents、gates、Anamnese、
+Infra-Workflows）从一条在代码中组装的用户消息开始——任务、用户故事、模块映射
+——它从不进入 event log。回放对 dev agents 和任务 gates 只有任务标题，对
+<code>qa-estrategia</code>、<code>appsec</code>、<code>anamnese</code> 和 <code>infra-workflows</code> 什么都没有。产品的
+<code>state</code> 会携带这条消息。<code>qa-estrategia</code> 的 0/16（Jev 每次都回答
+<code>responder_sem_ferramenta</code>）测量的既是 Jev 也是回放的盲区；这些行是下限，不应
+决定任何事。</li>
+<li><strong>系统提示词的其余部分。</strong> <code>contexto</code> 是身份和项目指令行，不是组装后的提示词
+（业务规则、任务状态、文件）。</li>
+<li><strong>标签是否正确。</strong> 选择工具的模型不是基准真相；157 个步骤被标为可疑并单独报告
+（&quot;无可疑&quot;）。干净步骤上的一致率（31%）低于总体（47%）：可疑步骤大多是 dev
+agents 失败的 <code>terminal</code> 调用，Jev 也倾向于选择它——因此标错的步骤不能解释
+分歧。</li>
+<li><strong>效果。</strong> 受限的菜单会改变模型接下来的行为；回放只是把一个选择与记录下来的
+选择比较。轮次是否变得更短、更快或更便宜，是 AT-239 的事。</li>
+</ul>
+<h2 id="two-findings-outside-the-numbers">数字之外的两个发现</h2>
+<ul>
+<li><strong>异构步骤很常见：</strong> 295 个中有 36 个（12%）。把菜单限制为一个工具会把每个这样
+的步骤变成至少两个步骤——AT-235 的缺口 1，现在有了计数。</li>
+<li><strong>AT-235 中目录同步的风险（缺口 3）是真实的，只是换了个名字：</strong>
+<code>GET /api/v1/models</code> 不列出 <code>typesafe/jev-1.13</code>，但列出了
+<code>typesafe/jev-router</code>——一个聊天路由器，价格为 <code>-1</code>。模型同步会把它当作聊天
+模型（非活动）导入。在此记录，未作修改。</li>
+</ul>
+<h2 id="second-round-2026-09-29-where-the-gap-is">第二轮（2026-09-29）：差距在哪里</h2>
+<blockquote>
+<p>在第一轮之后由负责人提出：重复测量，尝试达到<strong>至少 90%</strong>，并准确说出差距在
+哪里。<strong>未达到。</strong> 在验证步骤上，Jev 的 top-1 <strong>按等价为 73%（95% CI 66–79%，
+n = 160），严格为 66%（58–73%）</strong>；它的 top-2 达到 90%（84–94%）。本节其余部分
+是协议、数字，以及对剩余 43 个 top-1 错误的人工阅读。同一实例，与第一轮相同的
+保留：一个小项目、一天、一个聊天模型；不声称任何产品收益（那是 AT-239）。仓库
+处于 <code>bc7f4c0738</code>，分支 <code>test/replay-do-jev-v2</code>。</p>
+</blockquote>
+<h3 id="protocol-written-before-any-run">协议（在任何执行之前写下）</h3>
+<ul>
+<li><strong>只用产品在运行时、在步骤之前能产生的东西。</strong> 目标步骤的任何内容都不进入
+<code>state</code>：既不包括它调用的工具，也不包括参数、结果，也不包括模型在同一步骤中写的
+文本（<code>Passo.texto</code> 只从<em>之前的</em>步骤读取；<code>variantes.spec.ts</code> 对每个变体断言
+目标步骤的调用、参数、结果和文本都不存在）。每个新字段都有其在 engine 中的来源，
+引用在 <code>scripts/jev/variantes.ts</code> 的文件头中。</li>
+<li><strong>等价类在运行前固定于 <code>scripts/jev/equivalencia.ts</code></strong>，依据工具的语义，并与
+严格规则（第一轮的规则，使 47% 仍可比较）并列报告。三层累积：
+<strong>E1</strong> 命令只读取/列出/搜索的 <code>terminal</code>（<code>ls</code>、<code>find</code>、<code>cat</code>、<code>pwd</code>、<code>grep</code>、
+<code>head</code>、<code>git status/log/diff</code>……——复合命令按最强的片段计，执行 &gt; 写入 &gt; 读取）≡
+<code>read_file</code>/<code>search_workspace</code>；<strong>E2</strong> <code>read_file</code> ≡ <code>search_workspace</code>；
+<strong>E3</strong> 写文件的 <code>terminal</code>（重定向、heredoc、<code>tee</code>、<code>sed -i</code>、<code>cp</code>、<code>mv</code>、
+<code>touch</code>）≡ <code>write_file</code>。故意不对称：Jev 选择 <code>terminal</code> 只对 <code>terminal</code> 调用
+有效，而一个<em>执行</em>的命令（<code>npm</code>、<code>node</code>、<code>rm</code>、<code>mkdir</code>、<code>git commit</code>……）除了
+<code>terminal</code> 不等价于任何东西。<strong>标题数字是完整规则（E1+E2+E3），严格规则并列。</strong>
+看到结果后没有重新分类任何东西；这些类仍然判错的 3 个错误在下文照此计数。</li>
+<li><strong>拟合 × 验证按执行划分，而不是按步骤。</strong> 一组是一次 <code>ToolLoop</code> 执行（dev agent
+的一个任务、一轮 gate），对会话型智能体则是该智能体的整个会话。各组按名称的哈希
+排序，每组进入到目前为止步骤较少的那一半——确定性的，且对任何结果不可见。
+328 个合格步骤：<strong>167 个拟合，161 个验证</strong>（下面的 n 计的是有工具的步骤：161 和
+160）。变体只在拟合上迭代；验证在之后、每个变体问一次。<strong>一个已声明的事件：</strong>
+在最初几次拟合执行后，我发现 Anamnese 的 <code>skip_proficiency</code> /
+<code>emit_proficiency</code> 也会结束循环，于是把它们加入了用于<em>组装 state</em> 的执行边界
+列表。若用更正后的列表做划分，也会把 167 个拟合步骤中的 154 个移到验证，因此
+划分保留了第一次请求之前的列表（<code>FERRAMENTAS_DE_FIM_DA_DIVISAO</code>），只有 state
+使用更正后的列表。依赖边界的四个 state 变体在拟合上重新问了一遍（US$ 0,075，
+在花费记录中以 <code>.descartado</code> 保存）。</li>
+<li><strong>冻结的快照。</strong> dev 数据库在会话期间继续接收来自其他工作的步骤（结束时 335 行
+用量对比开始时 333 行）；分析运行在 333 行的快照上，事件截止到相同的序号
+（<code>--dados-cache</code>）。自第一轮以来新增的 26 个步骤（302 个已回答 → 328 个合格）
+全部是拟合那一半中 <strong>Anamnese</strong> 的步骤。</li>
+<li><strong>花费上限</strong> US$ 1,00，针对 <code>usage.cost</code> 之和，在每次请求前与输出目录的累计
+总额（<code>.jsonl</code> 和 <code>.descartado</code>）核对。花费：<strong>US$ 0,414</strong>，共 4 604 次请求
+（见&quot;延迟与成本&quot;）。</li>
+</ul>
+<h3 id="the-sample-1">样本</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th>拟合</th>
+<th>验证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>步骤（有工具 / 无）</td>
+<td>167 (161 / 6)</td>
+<td>161 (160 / 1)</td>
+</tr>
+<tr>
+<td>dev agents（<code>ToolLoop</code>）</td>
+<td><code>dev-piece-catalog</code> 37, <code>dev-retro-renderer</code> 26, <code>dev-input-keyboard</code> 25</td>
+<td><code>dev-game-session</code> 38, <code>dev-scoring</code> 38, <code>dev-persistence</code> 34, <code>dev-board-engine</code> 24</td>
+</tr>
+<tr>
+<td>gates 和其他 <code>ToolLoop</code></td>
+<td><code>anamnese</code> 32, <code>qa-automacao</code> 20, <code>appsec</code> 3</td>
+<td><code>qa-estrategia</code> 16, <code>appsec</code> 3, <code>infra-workflows</code> 2, <code>anamnese</code> 2</td>
+</tr>
+<tr>
+<td>会话型</td>
+<td><code>po</code> 8, <code>criativo</code> 5, <code>arquiteto</code> 5</td>
+<td><code>infra</code> 2, <code>dev-lead</code> 1</td>
+</tr>
+</tbody>
+</table></div>
+<p>验证由 dev agents（160 个有工具步骤中的 134 个）和一个 gate（<code>qa-estrategia</code>，16）
+主导。拟合那一半带有 32 个 Anamnese 步骤，当智能体使用 <code>skip_proficiency</code> 时
+（32 个中的 30 个），Jev 回答 <code>responder_sem_ferramenta</code>：去掉它们，拟合按等价为
+94/129 = 73%，与验证相同。</p>
+<h3 id="variants-tried-all-of-them">尝试过的变体（全部）</h3>
+<p><code>tokens</code> 是输入的中位大小；延迟单位为 ms（p50 / 最大），从维护者机器顺序请求。
+只计有工具的步骤。</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>变体</th>
+<th>相对上一个增加了什么</th>
+<th>拟合 严格 → 等价（top-2）</th>
+<th>验证 严格 → 等价（top-2）</th>
+<th>tokens</th>
+<th>延迟</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>original</code></td>
+<td>无——第一轮的 <code>state</code></td>
+<td>39% → 48% (83%)</td>
+<td>49% → 58% (82%)</td>
+<td>1 687</td>
+<td>322 / 780</td>
+</tr>
+<tr>
+<td><code>kickoff</code></td>
+<td><code>pedido</code> = 循环的第一条消息，从 engine 代码重建</td>
+<td>55% → 58% (89%)</td>
+<td>65% → 73% (91%)</td>
+<td>1 867</td>
+<td>318 / 612</td>
+</tr>
+<tr>
+<td><strong><code>escopo</code></strong></td>
+<td>只取当前执行的近期步骤（<code>ctx.messages</code> 在每次 <code>ToolLoop.run</code> 时重新开始）</td>
+<td><strong>57% → 59% (89%)</strong></td>
+<td><strong>66% → 73% (90%)</strong></td>
+<td>1 867</td>
+<td>312 / 814</td>
+</tr>
+<tr>
+<td><code>resultados</code></td>
+<td>结果/参数最多 2 000 个字符</td>
+<td>53% → 55% (91%)</td>
+<td>62% → 69% (88%)</td>
+<td>2 011</td>
+<td>314 / 699</td>
+</tr>
+<tr>
+<td><code>texto</code></td>
+<td>之前步骤中模型的文本</td>
+<td>53% → 55% (91%)</td>
+<td>64% → 73% (93%)</td>
+<td>2 090</td>
+<td>315 / 685</td>
+</tr>
+<tr>
+<td><code>progresso</code></td>
+<td>派生的计数（到目前为止的步骤、按工具的调用、最后一个工具、已运行的测试……）</td>
+<td>55% → 57% (91%)</td>
+<td>65% → 70% (93%)</td>
+<td>2 224</td>
+<td>309 / 817</td>
+</tr>
+<tr>
+<td><code>trilha</code></td>
+<td><code>escopo</code> + 本次执行的完整工具序列（仅名称）</td>
+<td>53% → 57% (91%)</td>
+<td>64% → 71% (89%)</td>
+<td>1 936</td>
+<td>310 / 614</td>
+</tr>
+<tr>
+<td><code>fluxo</code></td>
+<td><code>trilha</code> + 一个说明智能体以爆发方式工作的问题</td>
+<td>49% → 55% (92%)</td>
+<td>64% → 75% (93%)</td>
+<td>2 014</td>
+<td>309 / 586</td>
+</tr>
+<tr>
+<td><code>enxuto</code></td>
+<td><code>trilha</code>，只保留最后 2 次调用</td>
+<td>50% → 54% (89%)</td>
+<td>63% → 74% (91%)</td>
+<td>1 429</td>
+<td>307 / 920</td>
+</tr>
+<tr>
+<td><code>so_trilha</code></td>
+<td><code>trilha</code>，不含任何近期调用</td>
+<td>39% → 44% (80%)</td>
+<td>33% → 56% (83%)</td>
+<td>1 168</td>
+<td>307 / 480</td>
+</tr>
+<tr>
+<td><code>acoes</code></td>
+<td><code>escopo</code> + 等待过审批的命令的结果（从动作结果重建）</td>
+<td>50% → 53% (91%)</td>
+<td>53% → 61% (89%)</td>
+<td>2 333</td>
+<td>348 / 1 352</td>
+</tr>
+<tr>
+<td><code>acoes_completo</code></td>
+<td><code>acoes</code> + 2 000 个字符 + 文本 + 进度</td>
+<td>47% → 51% (92%)</td>
+<td>51% → 58% (92%)</td>
+<td>3 360</td>
+<td>326 / 845</td>
+</tr>
+</tbody>
+</table></div>
+<p>从 <code>original</code> 到 <code>progresso</code> 的六行（下面的级联）是在第一次请求之前写下的。另外
+六行是之后写的，作为对拟合结果的回应，是在拟合那一半上的普通搜索：<code>trilha</code>、
+<code>fluxo</code>、<code>enxuto</code> 和 <code>so_trilha</code> 尝试以更易读的形式给 Jev 执行的模式；<code>acoes</code> 和
+<code>acoes_completo</code> 来自看到许多近期步骤读到 <code>(sem resultado gravado)</code>（等待过审批
+的命令）。</p>
+<p><strong>胜出者是 <code>escopo</code></strong>，在拟合上选出（最好的 top-1，严格和按等价都是）；没有用验证
+来选择。表中有两点值得读：<code>kickoff</code> … <code>progresso</code> 之间的差异都在置信区间之内
+（±7 个百分点），因此在第一步之后无法表明&quot;更多输入&quot;有害或有益；<code>fluxo</code> 有最好的
+验证数字（75%），但在拟合上低于胜出者（55% 对 59%），这就是它没有胜出的原因
+——现在选它就等于按验证来选。</p>
+<p>每个新字段在 engine 中的来源（<code>apps/engine/lib/engine/…</code>）：</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pedido</code>（dev）</td>
+<td><code>initial_message/2</code>，<code>dev/dev_agent_server.ex:484</code>；任务和用户故事的标题来自 <code>tasks</code>/<code>stories</code></td>
+</tr>
+<tr>
+<td><code>pedido</code>（<code>qa-automacao</code>）</td>
+<td><code>initial_message/2</code>，<code>gates/qa_automacao_agent.ex:108</code>；最后一个 <code>dev.awaiting_gate</code> 的任务、用户故事的需求</td>
+</tr>
+<tr>
+<td><code>pedido</code>（<code>qa-estrategia</code>、<code>appsec</code>）</td>
+<td><code>gates/qa_estrategia_agent.ex:93</code>、<code>gates/appsec_agent.ex:79</code>；<strong>用户故事无法从日志恢复</strong>，所以消息说明这一点并携带模块映射</td>
+</tr>
+<tr>
+<td>按执行的近期步骤</td>
+<td><code>ToolLoop.Default.init/1</code> 和 <code>loop/1</code>（<code>harness/tool_loop.ex</code>）：<code>messages</code> 由 <code>run</code> 组装</td>
+</tr>
+<tr>
+<td>完整结果、<code>texto</code></td>
+<td><code>loop/1</code> 追加的 <code>tool</code> 和 <code>assistant</code> 消息（<code>concluir_despacho/5</code>、<code>append(ctx, message)</code>）；日志把结果截断在 2 000</td>
+</tr>
+<tr>
+<td>已批准命令的结果（<code>acoes</code>）</td>
+<td><code>texto_do_desfecho/1</code>，<code>dev/dev_agent_server.ex:460</code>；日志中没有它们的 <code>tool.result</code>，只有 <code>proposed_actions.execution_result</code></td>
+</tr>
+<tr>
+<td><code>progresso</code>、<code>trilha</code></td>
+<td>对同一 <code>messages</code> 中本次执行之前调用的计数</td>
+</tr>
+</tbody>
+</table></div>
+<p>未移植的，在 <code>kickoff.ts</code> 中说明：Anamnese（它的消息由日志的一个窗口和成员列表
+组装，而日志不保存这些）、<code>infra-workflows</code>（上下文映射），以及会话型智能体（它们
+的 <code>pedido</code> 仍是用户的最后一条消息）。</p>
+<h3 id="the-cascade-validation-steps-with-a-tool">级联（验证，有工具的步骤）</h3>
+<p>每一行都是上一行再加一块，在同样的 160 个步骤上。</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>n</th>
+<th>top-1（95% CI）</th>
+<th>top-2（95% CI）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一轮的输入，严格规则</td>
+<td>160</td>
+<td>78/160 = 49% (41–56%)</td>
+<td>118/160 = 74% (66–80%)</td>
+</tr>
+<tr>
+<td>+ E1 终端读取 ≡ 读取</td>
+<td>160</td>
+<td>92/160 = 57% (50–65%)</td>
+<td>125/160 = 78% (71–84%)</td>
+</tr>
+<tr>
+<td>+ E2 <code>read_file</code> ≡ <code>search_workspace</code></td>
+<td>160</td>
+<td>93/160 = 58% (50–65%)</td>
+<td>131/160 = 82% (75–87%)</td>
+</tr>
+<tr>
+<td>+ E3 写入的终端 ≡ <code>write_file</code></td>
+<td>160</td>
+<td>93/160 = 58% (50–65%)</td>
+<td>131/160 = 82% (75–87%)</td>
+</tr>
+<tr>
+<td>+ <code>pedido</code> = 循环的第一条消息</td>
+<td>160</td>
+<td>116/160 = 73% (65–79%)</td>
+<td>145/160 = 91% (85–94%)</td>
+</tr>
+<tr>
+<td>+ 只取当前执行的近期步骤</td>
+<td>160</td>
+<td>117/160 = 73% (66–79%)</td>
+<td>144/160 = 90% (84–94%)</td>
+</tr>
+<tr>
+<td>+ 结果最多 2 000 个字符</td>
+<td>160</td>
+<td>110/160 = 69% (61–75%)</td>
+<td>141/160 = 88% (82–92%)</td>
+</tr>
+<tr>
+<td>+ 之前步骤中模型的文本</td>
+<td>160</td>
+<td>116/160 = 73% (65–79%)</td>
+<td>149/160 = 93% (88–96%)</td>
+</tr>
+<tr>
+<td>+ 派生的计数</td>
+<td>160</td>
+<td>112/160 = 70% (62–77%)</td>
+<td>148/160 = 93% (87–96%)</td>
+</tr>
+</tbody>
+</table></div>
+<p>两行承载了全部变化：等价（+9 个百分点）和循环的第一条消息（+15）。<code>escopo</code> 之后
+没有任何东西让 top-1 移出区间，而为已批准命令重建的结果（<code>acoes</code>）反而让它下降。
+第一轮的 47%，在同一输入上，在声明的等价下是 58%。</p>
+<h3 id="the-headline">标题数字</h3>
+<p>变体 <code>escopo</code>，验证，160 个有工具的步骤（另有 1 个无工具的，Jev 判错）：</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>top-1，等价规则</strong></td>
+<td><strong>117/160 = 73% (66–79%)</strong></td>
+</tr>
+<tr>
+<td>top-1，严格规则（可与 47% 比较）</td>
+<td>105/160 = 66% (58–73%)</td>
+</tr>
+<tr>
+<td>top-2（菜单限制为 2），等价 / 严格</td>
+<td>144/160 = 90% (84–94%) / 134/160 = 84% (77–89%)</td>
+</tr>
+<tr>
+<td>top-3，等价</td>
+<td>148/160 = 93% (87–96%)</td>
+</tr>
+<tr>
+<td>基线&quot;重复上一个工具&quot;（免费），等价 / 严格</td>
+<td>122/149 = 82% (75–87%) / 108/149 = 72% (65–79%)</td>
+</tr>
+<tr>
+<td>无第二次调用的 2 项菜单，{Jev 的选择, 上一个工具}，等价 / 严格</td>
+<td>140/160 = 88% (81–92%) / 125/160 = 78% (71–84%)</td>
+</tr>
+<tr>
+<td>不含 Anamnese（kickoff 未重建；在产品中已暂停）</td>
+<td>115/158 = 73% (65–79%)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Jev 没有胜过免费基线。</strong> 在相同的验证步骤上，&quot;重复上一个工具&quot;达到 82%（严格
+72%），高于 Jev 的 73%（66%）。它唯一的优势出现在并集中：同时提供 Jev 的选择<em>和</em>
+上一个工具达到 88%（严格 78%），比单独的 Jev 高 15 个百分点，且无额外调用。没有
+任何配置在 top-1 上达到 90%，也没有任何配置的下限达到 90%。</p>
+<p>按智能体（验证，等价）：<code>dev-board-engine</code> 23/24 = 96% (80–99%)，
+<code>dev-persistence</code> 28/34 = 82% (66–92%)，<code>dev-scoring</code> 31/38 = 82% (67–91%)，
+<code>dev-game-session</code> 28/38 = 74% (58–85%)，<strong><code>qa-estrategia</code> 4/16 = 25% (10–49%)</strong>，
+<code>appsec</code> 1/3，<code>infra</code> 0/2，<code>infra-workflows</code> 0/2，<code>dev-lead</code> 0/1（<code>qa-estrategia</code>
+和 <code>appsec</code> 的第一条消息已重建但不含用户故事；另外三个完全没有重建）。</p>
+<p>置信度仍然无法区分对错：</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>阈值</th>
+<th>菜单限制为 1</th>
+<th>被限制者中正确的（95% CI）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.00</td>
+<td>155/160</td>
+<td>117/155 = 75% (68–82%)</td>
+</tr>
+<tr>
+<td>0.40</td>
+<td>123/160</td>
+<td>95/123 = 77% (69–84%)</td>
+</tr>
+<tr>
+<td>0.60</td>
+<td>55/160</td>
+<td>44/55 = 80% (68–88%)</td>
+</tr>
+<tr>
+<td>0.70</td>
+<td>32/160</td>
+<td>23/32 = 72% (55–84%)</td>
+</tr>
+<tr>
+<td>0.80</td>
+<td>16/160</td>
+<td>8/16 = 50% (28–72%)</td>
+</tr>
+<tr>
+<td>0.90</td>
+<td>10/160</td>
+<td>4/10 = 40% (17–69%)</td>
+</tr>
+</tbody>
+</table></div>
+<p>高于 0,7 时准确率<em>下降</em>：高置信度的错误就是下面描述的那些（Jev 确信写完测试之后
+就是运行它们）。</p>
+<h3 id="the-gap-by-cause">按原因的差距</h3>
+<p>按第一轮规则的 82 个验证错误，以及级联中每一块对它们做了什么（有工具的步骤，
+n = 160）：</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>原因</th>
+<th>步骤</th>
+<th>百分点</th>
+<th>占差距的份额</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>标尺</strong>——Jev 的选择是等价的（E1–E3，事先声明）</td>
+<td>15</td>
+<td>9.4</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>标尺</strong>——剩余：这些类仍漏掉一种情况（3 个步骤，见下）</td>
+<td>3</td>
+<td>1.9</td>
+<td>22%（18 个步骤）</td>
+</tr>
+<tr>
+<td><strong>输入</strong>——循环的第一条消息（<code>kickoff</code>）</td>
+<td>23</td>
+<td>14.4</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>输入</strong>——<code>escopo</code></td>
+<td>1</td>
+<td>0.6</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>输入</strong>——剩余：未重建的第一条消息，或日志之外的结果（7）</td>
+<td>7</td>
+<td>4.4</td>
+<td>38%（31 个步骤）</td>
+</tr>
+<tr>
+<td><strong>智能体的节奏</strong>，而不是 state 的某个字段（见下）</td>
+<td>29</td>
+<td>18.1</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Jev 在 state 不能解释的情况下产生分歧</strong>（4）</td>
+<td>4</td>
+<td>2.5</td>
+<td>40%（33 个步骤）</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>82</td>
+<td>51.3</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>在最后一块恢复之后剩下的 43 个错误被逐一阅读（不是抽样）：发送的 state、调用的
+工具、模型自己在该步骤中的文本（Jev 从未看到），以及 Jev 的选择和置信度。结果：</p>
+<ul>
+<li><strong>标尺，3 个。</strong> <code>dev-board-engine</code> <code>terminal</code>→<code>search_workspace</code>：智能体的
+命令是 <code>find … | sort; ls; for f in docs/*; do …cat</code>——只读，但 <code>for</code> 循环不在
+只读列表中，因此按执行计分。另外两个 <code>read_file</code>→<code>terminal</code>，其中智能体一直通过
+<code>terminal</code> 读取：在任何解读下都等价，但这些类故意不对称，并且没有重新计分。</li>
+<li><strong>输入，7 个。</strong> <code>infra</code>（2 个步骤）、<code>infra-workflows</code>（2）和 <code>dev-lead</code>（1）
+的全部错误——移植没有重建其第一条消息的五个步骤——再加上两个
+<code>report_done</code>→<code>terminal</code>，其中最后一个命令的结果（&quot;exit 0, a suíte passou&quot;）
+不在日志中。变体 <code>acoes</code> 重建了这些结果，而总体上让 Jev <em>更差</em>（61%）：面对一个
+失败的沙箱，它说 <code>report_blocked</code>，而智能体继续尝试。</li>
+<li><strong>智能体的节奏，29 个。</strong> Jev 说出流程的<em>下一阶段</em>，而智能体在当前阶段多停留
+一步：14 × <code>write_file</code>→<code>terminal</code>（Jev：&quot;测试已写好，运行它们&quot;，其中 8 个置信度
+≥ 0,6，最高 0,98；智能体之前又写了两三个文件），12 × <code>qa-estrategia</code>
+<code>read/search</code>→<code>emit_plano_de_teste</code>（Jev 以 0,25–0,56 的置信度跳到 kickoff 的
+最终工具；智能体在发出之前探索了约 15 步），2 × <code>appsec</code> 同样，1 ×
+<code>terminal</code>→<code>report_blocked</code>（在一个被拒绝的动作之后）。在所有这些中，Jev 的
+选择都是日志读者会称之为自然下一步的东西。决定&quot;再多几个文件、再多几次读取&quot;的是
+模型的计划，而它不在产品能交给路由器的任何字段中——它只存在一次，就在正在被预测
+的那一步本身的文本里。</li>
+<li><strong>Jev 产生分歧，4 个。</strong> <code>write_file</code>→<code>search_workspace</code> 两次，置信度
+0,25–0,26；<code>rag_search</code>→<code>terminal</code> 两次（0,24、0,59）。这是 state 无法解释
+选择的唯一步骤：2,5% 的步骤。</li>
+</ul>
+<p>所以：在第一轮的 49% 与 100% 之间 51 个百分点的差距中，大约<strong>五分之一是标尺，
+大约五分之二是回放缺少的输入</strong>（其中可恢复的部分已经恢复），<strong>五分之二是智能体的
+节奏</strong>，而 <strong>5% 的步骤是 Jev 的纯粹错误</strong>。输入剩下的最多 4 个百分点，并不是把
+73% 与 90% 分开的东西。</p>
+<h3 id="what-would-be-needed-for-90-and-what-each-piece-is-worth">达到 90% 需要什么，以及每一块值多少</h3>
+<p>验证步骤，43 个错误；90% 是 144/160，即还需要 27 个命中。</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>一块</th>
+<th>最多步骤</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完成输入的移植（Anamnese、<code>infra-workflows</code>、会话型智能体的第一条消息；<code>qa-estrategia</code> 的用户故事）</td>
+<td>最多 +7 → 79%</td>
+<td>一个上限：输入完整时 Jev 在这里并没有更好，而重建结果反而让它变差</td>
+</tr>
+<tr>
+<td>收紧这些类（<code>for</code> 循环，反方向的终端即读取）</td>
+<td>+3 → 75%</td>
+<td>这是标尺，不是准确率；在看到错误之后再决定这一点正是协议所禁止的，因此不在标题数字中</td>
+</tr>
+<tr>
+<td>智能体的节奏</td>
+<td>最多 +29</td>
+<td>不是 state 的字段；唯一的入口是<strong>包含上一个工具的 2 项菜单</strong>（实测：88%，81–92%）或 top-2（90%，84–94%）</td>
+</tr>
+</tbody>
+</table></div>
+<p>作为产品决策来读（这属于 AT-239）：一个必须<em>选出一个</em>工具的路由器停留在约四分之三，
+并低于免费基线；一个<em>把菜单限制为两个</em>的路由器达到十分之九，而上一个工具作为第二
+个名字，与 Jev 自己的第二选择一样好。本节不声称这两种收益中的任何一种。</p>
+<h3 id="latency-and-cost-variant-escopo">延迟与成本（变体 <code>escopo</code>）</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每个请求的输入 token</td>
+<td>p50 1 866，p95 2 557，最大 3 220（第一轮：中位数 1 710，最大 3 220）</td>
+</tr>
+<tr>
+<td>延迟（328 个请求，顺序）</td>
+<td>p50 317 ms，p95 449 ms，最大 814 ms；<strong>0 个超过 2 000 ms</strong></td>
+</tr>
+<tr>
+<td>成本</td>
+<td>每步 US$ 0,0000769（328 步 US$ 0,025233），对 328 个 id 逐个 <code>GET /api/v1/generation</code> 合计同样的 US$ 0,025233（比率 1,000）</td>
+</tr>
+<tr>
+<td>本轮全部</td>
+<td>按 <code>usage.cost</code> 为 US$ 0,414——12 个变体，其中 3 个在拟合那一半的部分上跑了两次——上限为 US$ 1,00</td>
+</tr>
+</tbody>
+</table></div>
+<p>更丰富的变体消耗更多输入（<code>acoes_completo</code>：中位数 3 360 token，每步约
+US$ 0,00014 对比 0,00008），却什么也换不来；胜出的 state 也是便宜的那个。
+AT-236 的 2 000 ms 上限有两倍的余量。</p>
+<h3 id="what-this-round-still-cannot-see">本轮仍然看不到的东西</h3>
+<ul>
+<li>在任何代码之前运行的两个 gates（<code>qa-estrategia</code>、<code>appsec</code>）的<strong>用户故事</strong>：启动
+它们的请求是内部的，不进入日志。</li>
+<li><strong>Anamnese</strong>、<code>infra-workflows</code> 和会话型智能体的第一条消息；以及 <code>contexto</code>
+背后的系统提示词。</li>
+<li><strong>基准真相。</strong> 标签仍然是聊天模型调用的工具，而 29 个节奏错误中的大多数是人类
+读者会认为合理的选择，这就是为什么 top-2 和并集比 top-1 说明更多。</li>
+<li><strong>效果。</strong> 受限的菜单会改变模型接下来的行为；AT-239。</li>
+</ul>
+<h2 id="menu-of-2-options-2026-09-29-restrict-instead-of-pick">2 项菜单（2026-09-29）：限制而不是挑选</h2>
+<blockquote>
+<p>在第二轮之后由负责人提出，那一轮中 Jev 的 top-1（73%）低于 90%，但两项菜单
+（{Jev 的选择, 上一个工具}）和 Jev 的 top-2 看起来不错：<strong>测试 2 项菜单</strong>。只有
+<strong>95% 区间下限至少为 90%</strong> 的结果才是明确的&quot;是&quot;。<strong>不是：没有任何策略达到。</strong>
+最好的 2 项策略 P3 覆盖了验证步骤的 <strong>91%（85–94%）</strong>，即正确的工具在菜单之内；
+下限为 85%，比界线低五个百分点。而这是<em>覆盖率</em>，是端到端准确率的上限（见
+&quot;上限&quot;），不是准确率本身。同一实例，与前几轮相同的保留；这里的任何东西都不改变
+产品（那是 AT-239）。用 <code>pnpm --filter @brabo/scripts jev:menu</code> 复现。</p>
+</blockquote>
+<h3 id="policies-written-before-running-in-scriptsjevmenuts">策略（运行前写在 <code>scripts/jev/menu.ts</code> 中）</h3>
+<p>一个策略把 Jev 的回答变成受限菜单。负责人的决定处处适用：Jev 只<strong>限制</strong>菜单，当它
+回答 <code>responder_sem_ferramenta</code> 时保留<strong>完整</strong>目录（AT-236）；上限 2 000 ms（第二轮
+328 个请求中 0 个超过）。看到结果后没有重新分类任何东西；<code>menu.spec.ts</code> 固定了每个
+策略返回什么。</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>菜单</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0</td>
+<td>完整目录（锚点：100% 覆盖，不限制任何东西）</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Jev 最可能的两个工具</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>{Jev 的选择, 同一执行中的上一个工具}</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>P2，但如果 Jev 说 <code>responder_sem_ferramenta</code>（或没有上一个工具），菜单为完整目录</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>{选择, 上一个工具, Jev 的第二选择}（最多 3 个；仅作参考）</td>
+</tr>
+</tbody>
+</table></div>
+<p>所有策略共同的规则：失败的回答（超时、错误、选项之外的选择）保留完整目录；不在
+智能体目录中的上一个工具被忽略；本会为空的菜单就是完整目录。</p>
+<p><strong>覆盖率</strong> = 在有工具的步骤中，智能体实际调用的工具位于菜单<em>之内</em>的比例——严格
+（同名）和按等价（第二轮的 E1–E3 类，因此含 <code>read_file</code> 的菜单覆盖一个只读的
+<code>terminal</code>）。<strong>限制率</strong> = 菜单小于智能体目录的步骤比例：几乎从不限制的策略会平凡
+地&quot;100%&quot;且毫无用处，因此也给出<em>被限制步骤中</em>的覆盖率。变体 <code>escopo</code>（第二轮的
+胜出者），验证那一半，160 个有工具的步骤（另有 1 个无工具）。</p>
+<h3 id="the-numbers-validation">数字（验证）</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>覆盖率，等价（95% CI）</th>
+<th>严格</th>
+<th>限制</th>
+<th>被限制者中的覆盖率</th>
+<th>暴露的工具，之前 → 之后</th>
+<th>每次调用的定义 token，之前 → 之后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0</td>
+<td>160/160 = 100% (98–100%)</td>
+<td>100%</td>
+<td>0/160 = 0%</td>
+<td>—</td>
+<td>7.4 → 7.4</td>
+<td>746 → 746</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>144/160 = 90% (84–94%)</td>
+<td>134/160 = 84% (77–89%)</td>
+<td>158/160 = 99%</td>
+<td>142/158 = 90% (84–94%)</td>
+<td>7.4 → 2.0</td>
+<td>746 → 150</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>143/160 = 89% (84–93%)</td>
+<td>128/160 = 80% (73–85%)</td>
+<td>157/160 = 98%</td>
+<td>140/157 = 89% (83–93%)</td>
+<td>7.4 → 1.3</td>
+<td>746 → 102</td>
+</tr>
+<tr>
+<td><strong>P3</strong></td>
+<td><strong>145/160 = 91% (85–94%)</strong></td>
+<td>132/160 = 83% (76–88%)</td>
+<td>147/160 = 92% (87–95%)</td>
+<td>132/147 = 90% (84–94%)</td>
+<td>7.4 → 1.6</td>
+<td>746 → 138</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>149/160 = 93% (88–96%)</td>
+<td>142/160 = 89% (83–93%)</td>
+<td>158/160 = 99%</td>
+<td>147/158 = 93% (88–96%)</td>
+<td>7.4 → 2.2</td>
+<td>746 → 166</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>哪个最好。</strong> 重要的是 P3：它是 2 项策略中覆盖率最高的，遵守负责人的规则，并限制
+了 92% 的步骤。<strong>它的下限是 85,1%；P1 是 84,4%，P2 83,6%，P4 88,1%。</strong> P4 最接近
+界线，但最多 3 项的菜单不是所提出的问题。所有策略都没有得到&quot;明确的是&quot;；P1 和 P3 的
+点估计正<em>落在</em> 90%，与第二轮 top-2 已有的&quot;90% (84–94%)&quot;相同——上一个工具相对 Jev
+自己的第二猜测没有为覆盖率增加任何东西，它只是让菜单更小（1,6 个工具对 2,0）。</p>
+<p><strong>表格隐藏的两件事。</strong></p>
+<ul>
+<li><strong>P3 在 160 个步骤中有 98 个只提供一个工具。</strong> 当 Jev 的选择<em>就是</em>上一个工具时，
+菜单只有一个名字（P2：160 中的 108）。这些菜单覆盖 98 中的 89（91%）。其余 49 个
+被限制的步骤菜单有两项，覆盖 43（88%）。&quot;2 项菜单&quot;在大多数时候是一个不给智能体
+留任何选择的 1 项菜单：它是被强制的。</li>
+<li><strong>区间是乐观的。</strong> Wilson 把 160 个步骤当作独立的，而它们并不独立：验证是
+<strong>10 次执行</strong>（四个 dev agents 的任务，gates <code>qa-estrategia</code>、<code>appsec</code> 和
+<code>infra-workflows</code>，以及 Anamnese、Infra 和 Dev Lead），一次执行中的连续步骤共享
+请求、文件和结果。簇这么少，诚实的区间比打印出来的更宽。这不改变答案（&quot;否&quot;不会
+变好），但&quot;是&quot;也不会靠 160 个步骤赢得。</li>
+</ul>
+<h3 id="tuning-and-the-new-steps">拟合与新步骤</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>拟合（161 步）覆盖率，等价</th>
+<th>限制</th>
+<th>新步骤（36）覆盖率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>144/161 = 89% (84–93%)</td>
+<td>156/161 = 97%</td>
+<td>36/36</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>143/161 = 89% (83–93%)</td>
+<td>127/161 = 79%</td>
+<td>36/36 (restringe 0)</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>147/161 = 91% (86–95%)</td>
+<td>115/161 = 71%</td>
+<td>36/36 (restringe 0)</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>148/161 = 92% (87–95%)</td>
+<td>156/161 = 97%</td>
+<td>36/36</td>
+</tr>
+</tbody>
+</table></div>
+<p>拟合与验证说的一样（P3 91%，下限 86%），正如预期，因为没有任何策略被调整过。它
+带有 32 个 Anamnese 步骤，对这些步骤 Jev 说 <code>responder_sem_ferramenta</code>，因此 P3
+保留完整目录：限制率 71% 而不是 92%。<strong>36 个新步骤</strong>（快照之后 dev 数据库从 333
+行用量增加到 369 行）<strong>全部来自 Anamnese</strong>，一个在产品中已暂停的智能体：Jev 回答
+&quot;无工具&quot;，P2/P3 打开完整目录，所以&quot;36/36&quot;是平凡的真，对菜单什么也没说。全部步骤
+合在一起且不含 Anamnese（287 个有工具；拟合那一半已经选择了变体，所以这<em>不是</em>干净
+的验证）：P1 89% (84–92%)，P2 88% (84–91%)，<strong>P3 90% (86–93%)</strong>，P4 92%
+(88–94%)。更多步骤会收窄区间，但下限停在 86%；真实覆盖率接近 91% 时，大约需要
+三千个步骤下限才会超过 90%，而有帮助的是更好的路由器，不是更大的样本。</p>
+<p>敏感性，而非选择：用十二个 <code>state</code> 变体中的任何一个，P2 覆盖验证步骤的 88–91%，P3
+覆盖 89–92%，因此结果不依赖于 <code>escopo</code>（P1 依赖：原始输入时 82%，<code>texto</code> 或
+<code>fluxo</code> 时 93%）。也没有任何变体的下限达到 90%——最高的是 P1 配 <code>texto</code>（88%）和
+P3 配 <code>enxuto</code>（87%）——而在看到这些之后再选一个，正是协议所禁止的。</p>
+<h3 id="where-coverage-fails">覆盖在哪里失败</h3>
+<p>P3，验证，菜单之外的 15 个步骤：菜单为 <code>terminal</code> 时使用了 <code>write_file</code>（4），
+<code>terminal</code> 时使用 <code>read_file</code>（2），<code>terminal</code> 时使用 <code>report_done</code>（2），
+{<code>search_workspace</code>, <code>terminal</code>} 时使用 <code>write_file</code>（2），以及 gates 和会话型智能体
+之间的五个零散情况（提供了 <code>emit_plano_de_teste</code> 而不是 <code>rag_search</code> 或
+<code>search_workspace</code>，以及相反）。这是从另一面看到的第二轮的节奏差距：Jev 说出下一
+阶段，智能体在当前阶段多走一步——而菜单为 <code>terminal</code> 的智能体无法用专门的工具写
+文件。按智能体（P3，等价）：<code>dev-board-engine</code> 23/24 = 96% (80–99%)，
+<code>dev-scoring</code> 35/38 = 92% (79–97%)，<code>dev-persistence</code> 31/34 = 91% (77–97%)，
+<code>qa-estrategia</code> 14/16 = 88% (64–97%)，<code>dev-game-session</code> 32/38 = 84% (70–93%)；
+其余的少于四个步骤。</p>
+<h3 id="the-ceiling-what-coverage-does-not-say">上限：覆盖率没有说的</h3>
+<p><strong>覆盖率是端到端准确率的上限，不是准确率。</strong> 菜单包含正确的工具；智能体的模型仍需
+在选项中选中它。标签（&quot;聊天模型调用的工具&quot;）是智能体<em>从完整目录中</em>做出的选择，因此
+完整菜单按构造就是 100%，而受限菜单只会损失。不借助产品可以说的，对验证上的 P3，
+把 160 个步骤分开：</p>
+<ul>
+<li><strong>99（62%，54–69%）</strong>：菜单中的每个工具都正确，因此智能体的任何选择都正确——
+下限。</li>
+<li><strong>46 个是&quot;有争议的&quot;</strong>：恰好一个选项正确，由智能体自己决定——28 个只有上一个工具
+正确，18 个只有 Jev 的选择正确。总是选上一个工具的智能体结果为 127/160 = 79%；
+总是选 Jev 选择的，117/160 = 73%（又是第二轮的基线）；抛硬币的，76%。一个比两者
+选得都好的智能体——这正是全部赌注——落在 79% 与上限 91% 之间。</li>
+<li>其余 15 个在菜单之外：无论智能体做什么都丢失。</li>
+</ul>
+<p>所以端到端的范围是 62% 到 91%，落在哪里取决于智能体的模型对<em>情境</em>的理解程度，而
+回放看不到这一点。<strong>只有实时测试（AT-239）能回答。</strong></p>
+<h3 id="savings-in-tool-definitions">工具定义上的节省</h3>
+<p>目录原本有每个工具的<em>描述</em>（<code>catalogo.json</code>），现在还有 <code>definicoes</code>：每个工具完整
+<code>spec/0</code>（名称、描述和参数 schema）的字节大小，由 engine 序列化（<code>catalogo.exs</code>，
+重新运行；文件其余部分没有变化）。token 是字节除以 4，这是整个回放使用的近似值。
+在验证上，P3 从<strong>每次调用 746 个定义 token 降到 138——少 608 个 token，减少
+81%</strong>：一个 dev agent 的八个工具重 3 068 字节，一个两项菜单约重 500。P1 节省 596，
+P2 节省 644（对该一半步骤的平均值；拟合那一半节省较少，因为 Anamnese 保留完整
+目录）。</p>
+<p>这值多少是另一个问题。对 Jev 的调用本身读取约 1 870 个 token（US$ 0,0000769），
+所用模型比智能体的模型便宜得多；定义上的节省是每次调用智能体模型的 608 个 token。
+平衡点是每百万 token US$ 0,126 的输入价格（0,0000769 / 608）：高于它，节省就能支付
+对 Jev 的调用，不考虑缓存。<strong>缓存是陷阱</strong>：provider 会缓存请求的前缀，工具定义在
+最前面，而一个逐步变化的菜单会改变前缀——节省可能在缓存未命中中被吐回去。这需要
+实时测量，也是下面的测试记录缓存 token 比率的原因。</p>
+<h3 id="the-live-test-not-run-design">实时测试（未执行）：设计</h3>
+<ul>
+<li><strong>问题。</strong> 在智能体面前放上 P3，智能体的工作是否变差，又便宜了多少？不是&quot;工具在
+菜单里&quot;（那是本节）。</li>
+<li><strong>阶段 1，影子（便宜，在任何用户看到菜单之前）。</strong> 对保留样本中的每个步骤，就同一
+个 state 两次询问<em>智能体自己的模型</em>，一次用完整目录，一次用 P3 的菜单，并按等价
+规则比较它选择的工具。指标：两者之间的一致率，以及 95% 区间的下限。要显示真实
+一致率 94% 且下限在 90%（检验力 80%）：约 <strong>390 个步骤</strong>，取自<strong>至少 40 次不同的
+执行</strong>和<strong>不止一个项目</strong>（本样本是一个项目中的 21 次执行），按簇（执行）而不是按
+步骤计算区间。</li>
+<li><strong>阶段 2，实时 A/B，仅当阶段 1 通过。</strong> 两组：对照（完整目录）和 P3，<strong>按执行</strong>
+抽签，绝不按步骤（一个步骤的菜单塑造下一个步骤）。主要指标：执行在无返工的情况下
+到达 gate，非劣效界值 5 个百分点；完成率 80%、单侧 5%、检验力 80% 时，约<strong>每组
+790 次执行</strong>（10 个百分点的界值需要约 200）。以本项目的量（整个样本中 7 次 dev
+执行），这需要很多项目或数周。次要指标：每次执行的步骤、输入 token <em>包括缓存
+token 比率</em>、每次执行的成本、Jev 增加的延迟（p50/p95，上限 2 000 ms），以及 Jev
+保留完整目录的步骤份额。</li>
+<li><strong>防护。</strong> 每个项目一个关闭开关；在 Jev 任何失败或超过延迟上限时回落到完整目录
+（所有策略已如此）；当菜单没有智能体需要的东西时，让智能体能请求完整目录（单项
+菜单会强制工具，这里是 61% 的步骤）；每 100 次执行做一次中期查看，若主要指标下降
+超过界值则停止；Anamnese 不进入样本（已暂停）；每个步骤都记录菜单和选择，使分析
+成为一次查询而不是一段回忆。</li>
+</ul>
+<h3 id="what-this-section-still-cannot-see">本节仍然看不到的东西</h3>
+<ul>
+<li><strong>智能体在菜单内的选择</strong>：这就是它是上限的原因。</li>
+<li><strong>步骤之间的依赖</strong>：验证中有 10 个簇；区间是按步骤的。</li>
+<li><strong>提示词缓存</strong>和<strong>智能体循环中的延迟</strong>：未测量（对 Jev 的调用测了，p50 317 ms；
+它在循环中的影响没有）。</li>
+<li><strong>标签</strong>：仍然是聊天模型调用的工具，而受限菜单会改变它接下来的行为。</li>
+</ul>
+<h3 id="cost-of-this-test">本测试的成本</h3>
+<p>一次调用，针对 36 个新步骤：按 <code>usage.cost</code> 为 <strong>US$ 0,001275</strong>（任务上限
+US$ 0,30）。策略在已在磁盘上的回答之上离线运行。输出目录的累计花费从 US$ 0,4136
+变为 US$ 0,4149。</p>
+<h2 id="live-comparison-at-239-2026-10-01-restrict-on-for-haiku-and-off-for-deepseek">实时对比（AT-239，2026-10-01）：限制，Haiku 开启，DeepSeek 关闭</h2>
+<blockquote>
+<p>AT-239（EP-029，HS-063）提出了之前每一节都悬而未决的问题：<strong>开启路由器时，轮次
+是否更短、更快或更便宜，而工作仍然完成？</strong> 同样的任务，在同一个 OpenRouter 模型
+上，<a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179</a> 的路由开启
+和关闭，在两个速度不同的聊天模型上。</p>
+<p><strong>2026-10-01 的状态：在第三次尝试中测得</strong>（见下）。<strong>第一次尝试：未测得。</strong>
+构建该工具的会话（分支 <code>test/jev-com-e-sem</code>，基于 <code>dev</code> 的 <code>d070b000d7</code>）有一把
+付费密钥和 US$ 5,00 的上限，但它的出站代理按组织策略拒绝了对 <code>openrouter.ai:443</code>
+的 <code>CONNECT</code>，对 <code>repo.hex.pm</code> 和 <code>builds.hex.pm</code> 也是，因此连 engine 都无法编译。
+没有任何聊天调用、也没有任何 Jev 调用离开机器：<strong>花费 US$ 0,00</strong>。下面是在任何
+执行<strong>之前</strong>写下的工具、协议和决策规则，无需网络就能测得的数字，然后是第三次
+尝试的实时表格。</p>
+<p><strong>第二次尝试，同一天：仍未测得，原因不同。</strong> 负责人在会话的出站中放行了
+<code>openrouter.ai</code>（一个 <code>GET</code> 返回 200），协议的两个模型都被列为支持工具
+（<code>deepseek/deepseek-v4.1-flash</code> 每百万输入/输出 US$ 0,03/0,50，
+<code>anthropic/claude-haiku-4.5</code> US$ 1,00/5,00）。第一个聊天调用返回
+<code>HTTP 403 Key limit exceeded (total limit)</code>：测试密钥的限额为 US$ 10,00，已用
+US$ 10,05 且没有重置（<code>GET /api/v1/key</code>）。一个单任务的 smoke，在协议之外、在
+单独的目录中，花费 <strong>US$ 0,00</strong>；没有记录任何协议执行。运行它需要负责人提高密钥
+限额（或提供另一把密钥）——按下面的估算约 US$ 1,28，按 DeepSeek 的现价更少。
+smoke 还发现了两件假网络永远不会发现的事，都已在工具中修正或记录：</p>
+<ul>
+<li><strong>账户或网络故障被记录为已测量的执行。</strong> smoke 的两次执行都在步骤 0 以
+<code>HTTP 403</code> 结束为 <code>erro</code>，在输出中被记录为&quot;任务未完成&quot;，而恢复永远不会重做它们：
+用一把失效的密钥，全部 40 次执行都会进入表格。<code>falhaDeInfra</code>（<code>resumo.ts</code>）现在把
+HTTP 401/402/403/407/429 的聊天错误或传输错误归类为测量没有发生；<code>vivo.ts</code> 不记录
+该执行，带着原因停止执行，恢复时重做它。200 响应体中的 provider 错误、5xx 和
+Jev 的回落仍是该组的结果，与 engine 中一样。</li>
+<li><strong>Node 的 <code>fetch</code> 忽略 <code>HTTPS_PROXY</code>。</strong> 在代理之后，用
+<code>NODE_USE_ENV_PROXY=1</code> 运行（Node ≥ 22.21）；没有它，调用会直连，出站返回 403，
+且响应体不是 JSON。</li>
+</ul>
+<p><strong>第三次尝试，同一天：已测得。</strong> 负责人把密钥限额提高到 US$ 20,00（执行前剩余
+US$ 9,95）并放行了 US$ 4,50 的上限。下面的协议完全按写的那样运行——两个模型、五个
+任务、两轮、40 次执行、<code>jev:vivo</code> 的默认值——在提交 <code>0eab0cb0e9</code> 上，没有任何账户
+或网络故障，也没有被中断的执行。<strong>花费：US$ 0,5195</strong>，按输出中 <code>usage.cost</code> 之和
+（DeepSeek US$ 0,0424，Haiku US$ 0,4771）；密钥的 <code>usage</code> 走了同样的 US$ 0,5195
+（US$ 10,0545 → US$ 10,5739，在执行后约十分钟读取——执行刚结束时的读数仍显示
+US$ 0,4597，计费相对响应有延迟）。表格和结论在下面的&quot;实时表格&quot;和&quot;建议&quot;中；数字
+到来之后，协议、规则和估算都没有改动。</p>
+</blockquote>
+<h3 id="what-the-instrument-runs-and-what-is-a-port">工具运行什么，什么是移植</h3>
+<p><code>pnpm --filter @brabo/scripts jev:vivo</code>（文件在 <code>scripts/jev/vivo/</code>）在五个小任务上
+运行一个 dev agent 的循环，一次开启路由器、一次关闭，并直接调用 OpenRouter——不涉及
+api、engine 和数据库，与 AT-167 的付费语言验证一样。</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+<th>产品还是移植</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>roteador.ts</code></td>
+<td><code>recortarEstado</code>、<code>montarPedidoAoJev</code>、<code>lerRespostaDoJev</code>、<code>menuP3</code>、<code>state</code> 的上限</td>
+<td><strong>产品代码</strong>，从 <code>apps/api/src/domain/llm/tool-router.ts</code> 重新导出</td>
+</tr>
+<tr>
+<td><code>laco.ts</code></td>
+<td>循环：迭代上限、恢复以文本写出的工具调用、在被接受的 <code>report_done</code>/<code>report_blocked</code> 处停止、当受限菜单收到无工具回答时用完整目录的唯一一次重试</td>
+<td><code>ToolLoop</code>、<code>EngineApiClient.llm_turn/5</code> 和 <code>DecidirFerramentaDoPassoUseCase</code> 的移植</td>
+</tr>
+<tr>
+<td><code>recuperacao.ts</code></td>
+<td>哪些步骤经过了 <code>tool_call_recovery.ex</code></td>
+<td>移植；它的 spec 运行 <code>tool_call_recovery_test.exs</code> 的用例并固定 <code>.ex</code> 的锚定行</td>
+</tr>
+<tr>
+<td><code>rede.ts</code></td>
+<td>聊天调用（线上的消息与 api 写的一样）和 Jev 调用（上限 2 000 ms，同样命名的回落）</td>
+<td><code>toWireMessage</code>/<code>toWireTool</code> 和 <code>JevToolRouter</code> 的移植；锚定行已固定</td>
+</tr>
+<tr>
+<td><code>ferramentas-dev.exs</code> → <code>ferramentas-dev.json</code></td>
+<td><code>Engine.Dev.Tools.registry/0</code> 九个工具的<strong>完整</strong> <code>spec/0</code>（名称、描述、参数 schema）</td>
+<td>用纯 <code>elixir</code> 从 engine 源码读取，无需编译 engine；注册表或描述漂移时一个 spec 失败</td>
+</tr>
+<tr>
+<td><code>tarefas.ts</code></td>
+<td>一个无依赖 Node 项目上的五个任务，每个都在循环<strong>之后</strong>运行一次检查（恢复原始测试，追加隐藏测试）：&quot;任务完成&quot;</td>
+<td>工具自身的</td>
+</tr>
+<tr>
+<td><code>executor.ts</code></td>
+<td>临时沙箱中的工具，在 engine 文本于代码中固定的地方返回这些文本</td>
+<td>工具自身的</td>
+</tr>
+<tr>
+<td><code>resumo.ts</code>、<code>vivo.ts</code></td>
+<td>表格、决策规则、成本估算、CLI</td>
+<td>工具自身的</td>
+</tr>
+</tbody>
+</table></div>
+<p>工具之外、两组相同且已声明的：审批管道（<code>terminal</code> 和 <code>write_file</code> 直接运行，与
+自动模式一样）、上下文压缩、在每次调用末尾追加的语言引导和作者画像、RAG（空索引）、
+模块契约（未声明任何）、以及真实系统提示词的其余部分（指令文件、业务规则、任务状态）。
+系统提示词是 engine 的 dev 身份加两行项目上下文；第一条用户消息是 engine 自己的
+kickoff（<code>scripts/jev/kickoff.ts</code>）。每次调用的成本是响应的 <code>usage.cost</code>，即 RN-665
+（<a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188</a>）放进
+metering 的数字；不涉及产品的 <code>token_usage</code>。</p>
+<h3 id="protocol-written-before-any-run-1">协议（在任何执行之前写下）</h3>
+<ul>
+<li><strong>模型</strong>：<code>deepseek/deepseek-v4.1-flash</code>（较慢，推理型）和
+<code>anthropic/claude-haiku-4.5</code>（较快），AT-167 的验证已在这把密钥上带着工具定义
+调用过的两个模型。</li>
+<li><strong>任务</strong>：<code>T1-media</code>（实现一个函数）、<code>T2-moeda</code>（修复一个格式化 bug）、
+<code>T3-limite</code>（原因在另一个文件：<code>config/</code>）、<code>T4-slug</code>（创建一个模块及其测试；
+隐藏测试对其核对）、<code>T5-renomear</code>（在两个文件中重命名；<code>src/</code> 中不得留下旧名称
+的任何残余）。每个任务的初始状态在检查中失败，而参考解通过（spec）。</li>
+<li><strong>样本</strong>：2 轮 → 每个模型每组 10 次执行，共 40 次。两组的顺序按任务和轮次交替，
+使没有哪一组总是赶上 provider 最慢的那一分钟。迭代上限 30（产品的 dev 上限是 60；
+这里它限制花费）。</li>
+<li><strong>每次执行</strong>：步骤；调用以<strong>文本</strong>形式到来并经过恢复的步骤；咨询了路由器的步骤、
+应用了更小菜单的步骤、无回落地保留完整目录的步骤（没有上一个工具，或 Jev 说
+<code>responder_sem_ferramenta</code>），或<strong>回落</strong>的步骤（带原因和 RN-059 来源）；用完整目录
+的重试；步骤菜单之外的调用；整个执行（Jev + 聊天 + 工具）和 LLM 部分的挂钟延迟；
+聊天和 Jev 的成本；如何结束；任务是否完成。</li>
+<li><strong>决策规则</strong>（<code>resumo.ts</code> 中的 <code>comparar</code>），按模型，开启对关闭：质量——<em>开启</em>的
+&quot;任务完成&quot;率不比<em>关闭</em>低超过 <strong>10 个百分点</strong>；成本——<em>开启</em>每个完成任务的平均成本
+（聊天 + Jev）不高于<em>关闭</em>；延迟——<em>开启</em>的中位执行不高于<em>关闭</em>的 <strong>1,2×</strong>。三条在
+每个模型上都成立则<strong>默认保持开启</strong>；质量在每个模型上都失败或没有模型三条全过则
+<strong>关闭</strong>；否则<strong>限制</strong>到通过的模型。每组少于 10 次执行是 <code>amostra_insuficiente</code>，
+绝不是结论。</li>
+</ul>
+<h3 id="cost-estimate-no-network">成本估算（无网络）</h3>
+<p><code>--estimar</code> 使用可从以前记录测得的价格：DeepSeek 输入每百万 US$ 0,30，Haiku
+US$ 1,00（两者都由<a href="medicao-do-idioma.html#incremental-cost-of-the-orientation">语言启发式的测量</a>
+中报告的成对输入成本推导）；DeepSeek 的输出 US$ 1,20 是一个<strong>假设</strong>（任何地方都
+没有记录），Haiku 的 US$ 5,00 是标价。假设每次执行 12 个步骤，每步追加 400 个
+历史 token，150 个输出 token，无缓存：</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>模型</th>
+<th>每次执行</th>
+<th>两组，2 轮</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>~US$ 0,015</td>
+<td>~US$ 0,29</td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>~US$ 0,049</td>
+<td>~US$ 0,99</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td></td>
+<td><strong>~US$ 1,28</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>一旦输出目录的累计 <code>usage.cost</code> 达到 <code>--teto-usd</code>（默认 4.50），执行就在任何调用
+之前停止，并且在剩余少于 <code>--reserva-usd</code>（0.10）时不开始新的执行。</p>
+<h3 id="what-could-be-measured-offline-2026-10-01">离线能测得的（2026-10-01）</h3>
+<p>自回放以来 dev 目录已经增长：<code>listar_contratos_de_modulos</code>（RN-684）是第九个工具，
+而 <code>catalogo.json</code>（八个）对它来说已经过时——回放的 746 → 138 个 token 已不再描述
+当前目录。在线上（<code>toWireTool</code> 的形式，<code>ferramentas-dev.json</code>）：</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th>字符</th>
+<th>≈ token（÷ 4）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完整 dev 目录，9 个工具</td>
+<td>3 816</td>
+<td>954</td>
+</tr>
+<tr>
+<td>2 个工具的菜单，所有组合的中位数（最小 501，最大 1 464）</td>
+<td>850</td>
+<td>213</td>
+</tr>
+<tr>
+<td>P3 限制菜单时每次调用的节省</td>
+<td></td>
+<td><strong>≈ 741</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Jev 每步花费 US$ 0,0000727（AT-237），因此在输入价格超过<strong>每百万 token US$ 0,098</strong>
+（0,0000727 ÷ 741）的聊天模型上，定义上的节省就能付清它——按标价，协议的两个模型都
+是如此。陷阱与&quot;工具定义上的节省&quot;中写的一样：工具定义是缓存前缀的开头，逐步变化的
+菜单会打破缓存，而在 AT-167 中 DeepSeek 大部分输入都来自缓存。节省能否在此之后
+幸存，以及循环中额外的串行调用在延迟上花多少（每步 p50 306 ms，在循环外测得），
+正是实时表格要回答的。</p>
+<h3 id="the-live-table-2026-10-01-commit-0eab0cb0e9">实时表格（2026-10-01，提交 <code>0eab0cb0e9</code>）</h3>
+<p>由 <code>jev:vivo --relatorio</code> 在协议执行的 40 次执行上生成（全部日期为 2026-10-01，全部
+在 <code>0eab0cb0e9</code>）。方括号是&quot;任务完成&quot;率的 95% 区间。</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>模型</th>
+<th>Jev</th>
+<th>执行</th>
+<th>任务完成</th>
+<th>步骤（中位数 · 平均）</th>
+<th>经 <code>tool_call_recovery</code> 的步骤</th>
+<th>执行 p50 · p95</th>
+<th>LLM（聊天 + Jev）p50</th>
+<th>成本/执行（聊天 + Jev）</th>
+<th>其中 Jev</th>
+<th>每个完成任务的成本</th>
+<th>Jev：应用 · 无限制 · 回落</th>
+<th>用完整目录的重试</th>
+<th>菜单之外</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>开启</td>
+<td>10</td>
+<td>10/10 = 100% (72%–100%)</td>
+<td>5 · 6.5</td>
+<td>0/65</td>
+<td>4.8 s · 16.3 s</td>
+<td>4.4 s</td>
+<td>US$ 0.0029</td>
+<td>US$ 0.0004</td>
+<td>US$ 0.0029</td>
+<td>55/65 · 10 · 0</td>
+<td>0</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>关闭</td>
+<td>10</td>
+<td>10/10 = 100% (72%–100%)</td>
+<td>6 · 6.1</td>
+<td>0/61</td>
+<td>3.3 s · 25.4 s</td>
+<td>2.9 s</td>
+<td>US$ 0.0013</td>
+<td>—</td>
+<td>US$ 0.0013</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>开启</td>
+<td>10</td>
+<td>10/10 = 100% (72%–100%)</td>
+<td>6 · 6.4</td>
+<td>0/64</td>
+<td>12.7 s · 20.2 s</td>
+<td>12.2 s</td>
+<td>US$ 0.0194</td>
+<td>US$ 0.0004</td>
+<td>US$ 0.0194</td>
+<td>54/64 · 10 · 0</td>
+<td>0</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>关闭</td>
+<td>10</td>
+<td>9/10 = 90% (60%–98%)</td>
+<td>7 · 7.1</td>
+<td>0/71</td>
+<td>13.3 s · 21.6 s</td>
+<td>12.9 s</td>
+<td>US$ 0.0283</td>
+<td>—</td>
+<td>US$ 0.0314</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p>每次执行都以一个被接受的 <code>report_done</code> 结束；唯一未完成的任务（Haiku，关闭，
+<code>T4-slug</code> 第 0 轮）在 12 步后报告完成，而隐藏测试失败。任何一组的任何步骤都不需要
+<code>tool_call_recovery</code>，Jev 从未回落（129 次调用中没有超时、没有 HTTP 错误、没有无效
+响应），也没有受限菜单收到无工具回答。每组 10 个&quot;无限制&quot;步骤是每次执行的第一步，
+那时还没有上一个工具。</p>
+<p>规则（<code>comparar</code>），按模型，开启对关闭：</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>模型</th>
+<th>质量：Δ &quot;完成&quot;</th>
+<th>每个完成任务的成本，开启 ÷ 关闭</th>
+<th>中位执行，开启 ÷ 关闭</th>
+<th>通过</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>0 个百分点（在 10 之内）</td>
+<td><strong>×2.21</strong>（高于 1）</td>
+<td><strong>×1.45</strong>（高于 1.2）</td>
+<td>否</td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>有利于开启 10 个百分点（在 10 之内）</td>
+<td>×0.62</td>
+<td>×0.95</td>
+<td>是</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>规则的结论：限制</strong>——Haiku 三个条件全过，DeepSeek 在成本和延迟上失败。质量在
+两个模型上都没有失败。</p>
+<p>两个模型为何分开，依据同一输出中按步骤的记录（提示词 token 以及 provider 报告的缓存
+token）：</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>模型</th>
+<th>Jev</th>
+<th>提示词 token（所有步骤）</th>
+<th>其中来自缓存</th>
+<th>聊天成本</th>
+<th>Jev 成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>关闭</td>
+<td>131 983</td>
+<td>111 104 (84%)</td>
+<td>US$ 0.0132</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>开启</td>
+<td>97 070</td>
+<td>43 520 (45%)</td>
+<td>US$ 0.0248</td>
+<td>US$ 0.0044</td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>关闭</td>
+<td>228 886</td>
+<td>0</td>
+<td>US$ 0.2827</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>开启</td>
+<td>137 059</td>
+<td>0</td>
+<td>US$ 0.1901</td>
+<td>US$ 0.0043</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>执行前写下的缓存保留，正是在 DeepSeek 上发生的事。</strong> 菜单削减了提示词（token
+−26%），但逐步变化，于是缓存前缀被打破：来自缓存的份额从 84% 降到 45%，而聊天账单
+在发送更少 token 的情况下<em>上升</em>了 ×1,9。在此之上，Jev（每次执行 US$ 0,0004）是
+一整次关闭执行成本的三分之一。</li>
+<li><strong>在 Haiku 上任何一组都没有缓存</strong>（工具不发送 <code>cache_control</code>，它所移植的产品线上
+形式也不发送），因此提示词 token 的 −40% 直接进入账单：每次执行 −31%，Jev 占其 2%。</li>
+<li><strong>延迟跟随聊天的速度，正如 AT-239 所预期。</strong> 对 Jev 的调用是串行的（DeepSeek 执行
+中每次调用 p50 232 ms / p95 358 ms，Haiku 中 217 / 319 ms）：在 13 s 的 Haiku 执行
+中它被少一个步骤所吸收；在 3 s 的 DeepSeek 执行中它给中位数增加 1,5 s。</li>
+<li><strong>质量</strong>：Haiku 上相差一次执行，区间重叠（60%–98% 对 72%–100%）——在这五个小任务
+上，既没有证据表明路由器有助于质量，也没有证据表明它有害。</li>
+</ul>
+<h3 id="recommendation-measured--the-owner-decides">建议（已测量——由负责人决定）</h3>
+<p><strong>限制</strong>，按执行前写下的规则：在聊天模型没有生效的提示词缓存、且慢到额外一次串行调用
+微不足道的地方保持路由器开启（Haiku 类，每百万 US$ 1,00/5,00），在 provider 的大部分
+输入来自缓存且聊天很快的地方关闭（DeepSeek 类）。支持这一点的数字就是上面规则中的
+行：Haiku 成本 ×0,62、延迟 ×0,95，无质量损失；DeepSeek 成本 ×2,21、延迟 ×1,45，无
+质量收益。</p>
+<p>这<strong>不</strong>涵盖什么，以及限制需要什么：</p>
+<ul>
+<li><strong>只测量了 dev agents（<code>ToolLoop</code>）。</strong> 之前的解读——对七个会话型智能体没有证据
+——仍然成立；这里的任何东西都不延伸到它们。</li>
+<li><strong>区分是按模型的，而产品的开关是按 workspace 的</strong>
+（<code>PUT workspaces/:workspaceId/tool-router</code>）。按模型（或按&quot;缓存生效&quot;）的限制并不
+存在；创建它是一个新决定和一项新改动，这里没有做。在那之前，按 workspace 测得的选择
+是：如果它的智能体运行在没有缓存的 Haiku 类模型上就开启，如果运行在有缓存的
+DeepSeek 类模型上就关闭。</li>
+<li><strong>样本和任务都很小</strong>（每组 10 次执行，五个 4 到 16 步的任务）。成本和延迟的比率
+宽到足以读出；一次执行的质量差异则不然。</li>
+<li><strong>缓存的效果取决于 provider 的缓存</strong>，不只是速度：开启了提示词缓存的 Haiku
+workspace 很可能会向 DeepSeek 那一行移动。未测量。</li>
+</ul>
+<p>执行之前这里的临时建议（限制：dev agents 开启，会话型智能体关闭）被上面规则的结论
+取代，正如那一段所说的那样。</p>
+<h2 id="reproducing">复现</h2>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># the catalog, when a tool or an identity changed (inside the dev engine container)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> cp</span><span style="color:var(--shiki-token-string)"> scripts/jev/catalogo.exs</span><span style="color:var(--shiki-token-string)"> brabo-dev-engine-1:/tmp/catalogo.exs</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> brabo-dev-engine-1</span><span style="color:var(--shiki-token-string)"> mix</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --no-start</span><span style="color:var(--shiki-token-string)"> --no-compile</span><span style="color:var(--shiki-token-string)"> --no-deps-check</span><span style="color:var(--shiki-token-string)"> /tmp/catalogo.exs</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  ></span><span style="color:var(--shiki-token-string)"> scripts/jev/catalogo.json</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># count the steps and estimate the cost, without calling the network</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:replay</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --container</span><span style="color:var(--shiki-token-string)"> brabo-dev-postgres-1</span><span style="color:var(--shiki-token-string)"> --estimar</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># the run (resumes: a step already answered in the output is not asked again)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:replay</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --container</span><span style="color:var(--shiki-token-string)"> brabo-dev-postgres-1</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span><span style="color:var(--shiki-token-string)"> --teto-usd</span><span style="color:var(--shiki-token-constant)"> 2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># the report again, and the billed cost per generation</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:replay</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --so-relatorio</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:replay</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --conferir-custo</span><span style="color:var(--shiki-token-string)"> --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span></span>
+<span class="line"></span></code></pre>
+<p>输出（<code>$XDG_CACHE_HOME/brabo/replay-jev/respostas.jsonl</code>，否则为 <code>~/.cache/…</code>，
+模式 600）带有会话 id，位于检出目录之外——脚本拒绝其中的目标。打印的报告只有计数和
+智能体 id。密钥从环境（<code>OPENROUTER_TEST_KEY</code>）或给定的文件读取，从不打印也不写入。</p>
+<p>第二轮有自己的命令，读取数据库的冻结快照（<code>--dados-cache</code>，在检出目录之外），并为
+每个变体写一个文件：</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># the snapshot, once (the dev database keeps moving; every later run reads this file)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:analise</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --container</span><span style="color:var(--shiki-token-string)"> brabo-dev-postgres-1</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados.json</span><span style="color:var(--shiki-token-string)"> --variante</span><span style="color:var(--shiki-token-string)"> original</span><span style="color:var(--shiki-token-string)"> --estimar</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># one variant, tuning half first; validation only when the choice is made</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:analise</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados.json</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --variante</span><span style="color:var(--shiki-token-string)"> escopo</span><span style="color:var(--shiki-token-string)"> --metade</span><span style="color:var(--shiki-token-string)"> tuning</span><span style="color:var(--shiki-token-string)"> --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:analise</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados.json</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --variante</span><span style="color:var(--shiki-token-string)"> escopo</span><span style="color:var(--shiki-token-string)"> --metade</span><span style="color:var(--shiki-token-string)"> validacao</span><span style="color:var(--shiki-token-string)"> --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># the tables of this section, and the wrong steps for reading by hand</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:analise</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados.json</span><span style="color:var(--shiki-token-string)"> --relatorio</span><span style="color:var(--shiki-token-string)"> --final</span><span style="color:var(--shiki-token-string)"> escopo</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:analise</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados.json</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --variante</span><span style="color:var(--shiki-token-string)"> escopo</span><span style="color:var(--shiki-token-string)"> --metade</span><span style="color:var(--shiki-token-string)"> validacao</span><span style="color:var(--shiki-token-string)"> --dump-erros</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/v2/erros.txt</span></span>
+<span class="line"></span></code></pre>
+<p>本轮的快照取自 2026-09-29 14:27 UTC 时的数据库，加上同一会话的
+<code>proposed_action.created</code> 事件和 <code>proposed_actions</code> 的结果；新快照会有更多步骤和不同
+的划分。上限针对输出目录的<strong>累计</strong>花费（<code>--teto-usd</code>，默认 US$ 1,00），而不是一次
+调用。</p>
+<p>菜单测试在这些回答上离线运行；只有快照之后产生的 36 个步骤会调用网络：</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:analise</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados-d.json</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --variante</span><span style="color:var(--shiki-token-string)"> escopo</span><span style="color:var(--shiki-token-string)"> --metade</span><span style="color:var(--shiki-token-string)"> ambas</span><span style="color:var(--shiki-token-string)"> --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># --dados-base is the snapshot that fixed the split; what it did not know is "new"</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:menu</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados-d.json</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --dados-base</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados-c.json</span><span style="color:var(--shiki-token-string)"> --sensibilidade</span></span>
+<span class="line"></span></code></pre>
+<p>AT-239 的实时对比（需要能访问 <code>openrouter.ai</code>；输出目录默认为
+<code>$XDG_CACHE_HOME/brabo/jev-vivo/</code>，位于检出目录之外，脚本拒绝其中的目录）：</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># the dev tool definitions, when a dev tool changed (plain elixir, no compiled engine)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">elixir</span><span style="color:var(--shiki-token-string)"> scripts/jev/vivo/ferramentas-dev.exs</span><span style="color:var(--shiki-token-keyword)"> ></span><span style="color:var(--shiki-token-string)"> scripts/jev/vivo/ferramentas-dev.json</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># the estimate, without the network</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:vivo</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --estimar</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --preco</span><span style="color:var(--shiki-token-string)"> deepseek/deepseek-v4.1-flash=0.3/1.2</span><span style="color:var(--shiki-token-string)"> --preco</span><span style="color:var(--shiki-token-string)"> anthropic/claude-haiku-4.5=1/5</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># the run (resumes; stops before any call at the ceiling, and on an account or</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># network failure without recording it), then the table and the verdict;</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># behind a proxy, prefix NODE_USE_ENV_PROXY=1 (Node's fetch ignores HTTPS_PROXY)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:vivo</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --rodadas</span><span style="color:var(--shiki-token-constant)"> 2</span><span style="color:var(--shiki-token-string)"> --teto-usd</span><span style="color:var(--shiki-token-constant)"> 4.5</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:vivo</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --relatorio</span></span>
+<span class="line"></span></code></pre>
+<nav class="site-pager"><a href="../explanation/medicao-do-idioma.html"></a><a href="../explanation/auditoria-fluxo-vs-codigo.html"></a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/medicao-do-jev.md">编辑此页</a><span>更新于 2026-10-15T05:02:38-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#what-exists">现有内容</a></li><li class="n3"><a href="#step-not-tool-call">步骤，而不是工具调用</a></li><li class="n3"><a href="#the-state-sent">发送的 state</a></li><li class="n2"><a href="#the-sample">样本</a></li><li class="n2"><a href="#agreement-by-agent">按智能体的一致率</a></li><li class="n2"><a href="#the-confidence-curve-under-the-decided-rule">在既定规则下的置信度曲线</a></li><li class="n2"><a href="#latency-and-cost">延迟与成本</a></li><li class="n2"><a href="#what-the-replay-cannot-see">回放看不到的东西</a></li><li class="n2"><a href="#two-findings-outside-the-numbers">数字之外的两个发现</a></li><li class="n2"><a href="#second-round-2026-09-29-where-the-gap-is">第二轮（2026-09-29）：差距在哪里</a></li><li class="n3"><a href="#protocol-written-before-any-run">协议（在任何执行之前写下）</a></li><li class="n3"><a href="#the-sample-1">样本</a></li><li class="n3"><a href="#variants-tried-all-of-them">尝试过的变体（全部）</a></li><li class="n3"><a href="#the-cascade-validation-steps-with-a-tool">级联（验证，有工具的步骤）</a></li><li class="n3"><a href="#the-headline">标题数字</a></li><li class="n3"><a href="#the-gap-by-cause">按原因的差距</a></li><li class="n3"><a href="#what-would-be-needed-for-90-and-what-each-piece-is-worth">达到 90% 需要什么，以及每一块值多少</a></li><li class="n3"><a href="#latency-and-cost-variant-escopo">延迟与成本（变体 escopo）</a></li><li class="n3"><a href="#what-this-round-still-cannot-see">本轮仍然看不到的东西</a></li><li class="n2"><a href="#menu-of-2-options-2026-09-29-restrict-instead-of-pick">2 项菜单（2026-09-29）：限制而不是挑选</a></li><li class="n3"><a href="#policies-written-before-running-in-scriptsjevmenuts">策略（运行前写在 scripts/jev/menu.ts 中）</a></li><li class="n3"><a href="#the-numbers-validation">数字（验证）</a></li><li class="n3"><a href="#tuning-and-the-new-steps">拟合与新步骤</a></li><li class="n3"><a href="#where-coverage-fails">覆盖在哪里失败</a></li><li class="n3"><a href="#the-ceiling-what-coverage-does-not-say">上限：覆盖率没有说的</a></li><li class="n3"><a href="#savings-in-tool-definitions">工具定义上的节省</a></li><li class="n3"><a href="#the-live-test-not-run-design">实时测试（未执行）：设计</a></li><li class="n3"><a href="#what-this-section-still-cannot-see">本节仍然看不到的东西</a></li><li class="n3"><a href="#cost-of-this-test">本测试的成本</a></li><li class="n2"><a href="#live-comparison-at-239-2026-10-01-restrict-on-for-haiku-and-off-for-deepseek">实时对比（AT-239，2026-10-01）：限制，Haiku 开启，DeepSeek 关闭</a></li><li class="n3"><a href="#what-the-instrument-runs-and-what-is-a-port">工具运行什么，什么是移植</a></li><li class="n3"><a href="#protocol-written-before-any-run-1">协议（在任何执行之前写下）</a></li><li class="n3"><a href="#cost-estimate-no-network">成本估算（无网络）</a></li><li class="n3"><a href="#what-could-be-measured-offline-2026-10-01">离线能测得的（2026-10-01）</a></li><li class="n3"><a href="#the-live-table-2026-10-01-commit-0eab0cb0e9">实时表格（2026-10-01，提交 0eab0cb0e9）</a></li><li class="n3"><a href="#recommendation-measured--the-owner-decides">建议（已测量——由负责人决定）</a></li><li class="n2"><a href="#reproducing">复现</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-zh-Hans.json" data-base="../"></script></body>
+</html>

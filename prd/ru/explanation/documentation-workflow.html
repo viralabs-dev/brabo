@@ -1,0 +1,1018 @@
+<!doctype html>
+<html lang="ru" data-locale="ru" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Как документация остаётся живой | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Меню">&#9776;</button>
+<a class="marca" href="../index.html">Brabo</a>
+<input type="search" data-busca placeholder="Поиск" aria-label="Поиск" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Язык"><option value="../../explanation/documentation-workflow.html">pt-BR</option><option value="../../en/explanation/documentation-workflow.html">en</option><option value="../../ru/explanation/documentation-workflow.html" selected>ru</option><option value="../../zh-Hans/explanation/documentation-workflow.html">zh-Hans</option></select>
+<select data-seletor aria-label="Среда"><option value="../../../dev/ru/explanation/documentation-workflow.html">dev</option><option value="../../../prd/ru/explanation/documentation-workflow.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Сменить тему">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><h2>🚀 Начните здесь</h2><ul><li><a href="../index.html">Введение</a></li><li><a href="../getting-started.html">Первые шаги</a></li><li><a href="../tutorials/from-zero-to-deliverable.html">С нуля до готового результата</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li></ul></section><section><h2>🏗️ Архитектура</h2><ul><li><a href="../architecture.html">Архитектура</a></li><li><a href="../adr.html">Решения (ADR)</a><ul><li><span>Git, repositório e política de branches</span><ul><li><a href="../adr/0001-git-provider-contract-shape.html">ADR 0001 — Формат нормализованного контракта GitProvider</a></li><li><a href="../adr/0002-git-error-normalization.html">ADR 0002 — Нормализация ошибок GitProvider</a></li><li><a href="../adr/0003-git-provider-retry-policy.html">ADR 0003 — Политика повторов для удалённых providers</a></li><li><a href="../adr/0004-git-credential-registration.html">ADR 0004 — Регистрация git-учётных данных пользователя</a></li><li><a href="../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005 — Идемпотентный и возобновляемый bootstrap Gitflow</a></li><li><a href="../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028 — Защита веток: расхождение между providers и матрица одобрения</a></li><li><a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030 — Механизированная политика веток</a></li><li><a href="../adr/0044-adocao-de-repositorio-existente.html">ADR 0044 — Усыновление существующего репозитория и план как шлюз</a></li><li><a href="../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056 — Engine работает в удалённом репозитории</a></li><li><a href="../adr/0139-o-alarme-de-esteira-ganha-destinatario.html">ADR 0139 — Сигнал тревоги о merge конвейера получает адресата и правило для `dev`</a></li><li><a href="../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165 — Репозиторий рождается при принятии handoff Arquiteto, и исполнение без него не начинается</a></li><li><a href="../adr/0217-promocao-automatica-para-qa-em-fase-de-teste.html">ADR 0217 — Автоматическое продвижение `dev` → `qa`, пока QA находится в тестовой фазе</a></li><li><a href="../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.html">ADR 0235 — A `qa` é aposentada por hora e a esteira do repositório fica `dev → main`</a></li><li><a href="../adr/0236-o-dependabot-dispensa-revisao-na-dev.html">ADR 0236 — O Dependabot dispensa revisão na `dev` e fica mergeável com os outros checks verdes</a></li></ul></li><li><span>Harness de agente, turnos e sessões</span><ul><li><a href="../adr/0006-prompt-assembler-context-harness.html">ADR 0006 — Harness агентов: детерминированная сборка контекста</a></li><li><a href="../adr/0007-toolloop-tools-context-manager.html">ADR 0007 — ToolLoop, инструменты, ContextManager (harness с LLM)</a></li><li><a href="../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061 — Тип сессии — это данные создания, а выполнение остаётся событием</a></li><li><a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098 — Согласованные пределы транспорта и эффективное окно сжатия</a></li><li><a href="../adr/0163-o-clique-responde-ao-aceitar.html">ADR 0163 — Клик отвечает при ПРИНЯТИИ команды, а ход продолжается через канал</a></li><li><a href="../adr/0175-infra-lead-conversa-pelo-composer.html">ADR 0175 — Infra Lead разговаривает через composer, а прежде его ход проходит через `TurnoAssincrono`</a></li><li><a href="../adr/0177-idioma-das-respostas-por-conta-sessao-e-projeto.html">ADR 0177 — Язык ответов живёт в трёх местах — учётная запись, сессия и проект, — в открытом списке BCP-47 и никогда в `users.locale`</a></li><li><a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179 — Цикл спрашивает Jev, какой инструмент, а модель пользователя видит только оставшееся меню</a></li><li><a href="../adr/0183-reabrir-sessao-encerrada.html">ADR 0183 — Закрытую сессию можно открыть снова: собственный выход из терминальных состояний, в `active`, с новым событием</a></li><li><a href="../adr/0184-reabrir-sessao-decisoes-do-dono.html">ADR 0184 — Повторное открытие сессии: три решения владельца, и `developer` открывает снова</a></li><li><a href="../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191 — Сообщение, пришедшее во время идущего хода, попадает в сохраняемую очередь и читается в конце хода</a></li><li><a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226 — Diário vivo e retomada dos agentes: o turno interrompido volta uma vez, do plano</a></li><li><a href="../adr/0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.html">ADR 0246 — Anexos do chat: bytes no Postgres, referência no evento, visão por capability</a></li><li><a href="../adr/0247-uma-mensagem-varios-destinatarios.html">ADR 0247 — Uma mensagem, vários destinatários</a></li><li><a href="../adr/0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.html">ADR 0249 — O raciocínio do agente é gravado e mostrado só a developer ou mais</a></li></ul></li><li><span>O time de agentes — papéis, áreas e handoffs</span><ul><li><a href="../adr/0008-agente-criativo-conversacional-handoffs.html">ADR 0008 — Разговорный агент Criativo в harness + фундамент handoffs</a></li><li><a href="../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009 — Агент PO, backlog (epics/stories/tasks) и прослеживаемость</a></li><li><a href="../adr/0010-agente-arquiteto-adr-pr-module-map.html">ADR 0010 — Агент Arquiteto: ADR через настоящую PR, module_map и перекрёстная валидация</a></li><li><a href="../adr/0014-infra-agent-painel-phoenix.html">ADR 0014 — InfraAgent и живая панель команды (закрытие Фазы 4a)</a></li><li><a href="../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015 — Настоящий Psicólogo: ToolLoop, гипотезы с доказательствами и сортировка по стоимости</a></li><li><a href="../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016 — Anamnese: профиль владения навыками, патчи инструкций и замкнутый цикл</a></li><li><a href="../adr/0022-fechamento-4b-psicologo.html">ADR 0022 — Закрытие Фазы 4b (сессия 1): доказательство, которое доходит, стоимость, которая видна, анализ, который переживает kill</a></li><li><a href="../adr/0023-fechamento-4b-anamnese.html">ADR 0023 — Закрытие Фазы 4b (сессия 2): работающий каталог, дедупликация, различающая, кто отказал, и очередь, переживающая раунд</a></li><li><a href="../adr/0038-hierarquia-de-agentes.html">ADR 0038 — Иерархия агентов: области, leads и делегирование</a></li><li><a href="../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046 — Продвижение истории с полномочиями пользователя</a></li><li><a href="../adr/0053-dev-lead-e-paralelismo-autorizado.html">ADR 0053 — Dev Lead как область и параллелизм, разрешённый пользователем</a></li><li><a href="../adr/0068-diagrama-c4-do-arquiteto.html">ADR 0068 — Диаграмма C4 Arquiteto</a></li><li><a href="../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069 — Условное слияние принятия handoff с включением выполнения</a></li><li><a href="../adr/0085-fluxo-como-registro-declarativo.html">ADR 0085 — Поток ролей как декларативный реестр (fluxo.yml)</a></li><li><a href="../adr/0086-dev-lead-plano-suspende-para-aprovacao.html">ADR 0086 — План Dev Lead приостанавливает ход до одобрения</a></li><li><a href="../adr/0087-ux-designer-agente.html">ADR 0087 — UX Designer входит как разговорный агент</a></li><li><a href="../adr/0088-staff-agente-dormente-para-disparo-automatico.html">ADR 0088 — Staff: код готов, спящий для автоматического запуска</a></li><li><a href="../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">ADR 0089 — `analytics` и `delivery-metricas` становятся скриптом отчёта</a></li><li><a href="../adr/0092-platform-relatorio-de-telemetria-sob-demanda.html">ADR 0092 — `platform` рождается как скрипт отчёта по требованию, а не агент</a></li><li><a href="../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">ADR 0093 — Роль `dbre` становится двумя скриптами: линтер миграций и отчёт о резервном копировании</a></li><li><a href="../adr/0094-delegacao-dev-lead-vira-dado.html">ADR 0094 — Делегирование Dev Lead → dev становится данными, с переопределённым `parecerArtifactId`</a></li><li><a href="../adr/0109-handoff-manual-a-agente-a-escolha.html">ADR 0109 — Ручной handoff агенту по выбору переиспользует предложение+принятие, а не третье состояние handoff</a></li><li><a href="../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182 — Предложение handoff получает жизненный цикл: одно ожидающее на получателя и `superseded`</a></li><li><a href="../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185 — «Estou pronto — a necessidade está validada»: один клик закрывает готовность, gate `necessidade-validada` и принятие PO</a></li><li><a href="../adr/0186-aceite-automatico-do-handoff-ao-arquiteto.html">ADR 0186 — Handoff от PO к Arquiteto принимается без клика, когда backlog покрыт и репозиторий локальный</a></li><li><a href="../adr/0194-aprovar-o-plano-ativa-a-execucao.html">ADR 0194 — Одобрение плана Dev Lead активирует выполнение, а задача получает модуль, который он назначает</a></li><li><a href="../adr/0212-historia-arquivada.html">ADR 0212 — Архивированная история: колонка, а не состояние машины</a></li><li><a href="../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213 — Результат работает на машине пользователя через compose от Infra</a></li></ul></li><li><span>Gates, QA e revisão de segurança</span><ul><li><a href="../adr/0013-gates-qa-secops-pr.html">ADR 0013 — Gates PR: QAAgent и SecOpsAgent</a></li><li><a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020 — Разблокировать gates QA и SecOps: gitleaks по рабочему дереву, валидируемые заключения и tool call в тексте</a></li><li><a href="../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021 — Закрытие Фазы 4a: gate infra, который проверяет, и панель, которая говорит правду</a></li><li><a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054 — Gates как декларативный реестр</a></li><li><a href="../adr/0057-o-gate-espera-a-aprovacao.html">ADR 0057 — Агент gate ждёт одобрения, как ждёт dev</a></li><li><a href="../adr/0067-o-gate-sobrevive-ao-restart.html">ADR 0067 — Gate переживает перезапуск</a></li><li><a href="../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090 — QA-стратегия и AppSec как второй МОМЕНТ, а не новый агент</a></li><li><a href="../adr/0091-secops-runtime-relatorio-de-abuso.html">ADR 0091 — `secops-runtime` как скрипт отчёта по `rate_limit_hits`</a></li><li><a href="../adr/0095-gate-necessidade-validada.html">ADR 0095 — Gate `necessidade-validada` закрывается отдельным подтверждением человека, а не самопроверкой Criativo</a></li><li><a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123 — Golden-set регрессионных случаев для семантического суждения агента QA Automação</a></li><li><a href="../adr/0168-golden-set-do-qa-em-ci-semanal.html">ADR 0168 — Golden-set QA начинает работать в CI, по расписанию и еженедельно</a></li><li><a href="../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192 — План тестирования рождается после сдачи dev, а gate `implementavel` начинает судить по истории и `module_map`</a></li><li><a href="../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207 — Цикл gate, простаивающий более 2 ч, паркуется, и возобновить его может лишь жест человека</a></li><li><a href="../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214 — Открытый вопрос становится ожидающим решения пунктом</a></li><li><a href="../adr/0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.html">ADR 0215 — Решение проекта доходит до dev и QA</a></li></ul></li><li><span>Execução, política de terminal e aprovações</span><ul><li><a href="../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011 — Инфраструктура dev agents: worktrees, git-исполнители и замок merge</a></li><li><a href="../adr/0012-dev-agent-real-toolloop-orcamento-bloqueio.html">ADR 0012 — Настоящий DevAgent: ToolLoop, бюджет на task и дисциплина блокировки</a></li><li><a href="../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017 — Блокировка инициализации workspace, Monitor dev agents и наследование пределов</a></li><li><a href="../adr/0018-noop-dev-agent-modo-de-execucao.html">ADR 0018 — NoopDevAgent как постоянный режим выполнения</a></li><li><a href="../adr/0019-destravar-dev-agent-adr-por-modulo-orcamento-projeto.html">ADR 0019 — Разблокировать реальный DevAgent: запись, терминал, ADR по модулю и бюджет по проекту</a></li><li><a href="../adr/0045-reagendamento-por-evento-do-dev-agent.html">ADR 0045 — Перепланирование dev agent по событию и circuit breaker</a></li><li><a href="../adr/0047-operabilidade-pos-dogfooding.html">ADR 0047 — Эксплуатируемость после dogfooding: закрытие Фазы 12</a></li><li><a href="../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048 — Решение в event log и порядок gate</a></li><li><a href="../adr/0052-dev-agent-espera-aprovacao-no-meio-do-laco.html">ADR 0052 — Dev agent ждёт одобрения посреди цикла</a></li><li><a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055 — Область пути в политике терминала</a></li><li><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102 — Пересмотр ADR 0065: граница внешнего эффекта перестаёт быть `deny` и становится абсолютным пределом</a></li><li><a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167 — Автоматический режим снимает область путей, и только он</a></li><li><a href="../adr/0189-o-piloto-automatico.html">ADR 0189 — Автопилот: автоматический режим одобряет всё, кроме потолков, область сравнивается с реальной папкой исполнения, а «Всегда разрешать» записывает глагол + подкоманду</a></li><li><a href="../adr/0204-modo-automatico-libera-push-e-pr.html">ADR 0204 — Автоматический режим разрешает push и PR</a></li></ul></li><li><span>Onde o código mora — modos de execução</span><ul><li><a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066 — Читаемое имя папки workspace</a></li><li><a href="../adr/0072-projeto-local-ou-container.html">ADR 0072 — Проект выбирает, где живёт код: папка пользователя или управляемая папка</a></li><li><a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104 — `execution_mode` с тремя значениями, и workspace рождается `unverified`, когда проверяет его runner</a></li><li><a href="../adr/0107-navegacao-de-pasta-local-via-o-runner.html">ADR 0107 — Навигация по локальной папке через Runner</a></li><li><a href="../adr/0108-projeto-runner-nasce-ao-navegar-pasta-no-wizard.html">ADR 0108 — В режиме `runner` проект рождается при клике на &quot;Navegar pasta...&quot;, а не только при подтверждении</a></li><li><a href="../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">ADR 0111 — Конвертация `execution_mode` существующего проекта: отказ при активном dev agent, перемещение `permissions.json`, вывод из эксплуатации строки контейнера</a></li><li><a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141 — Единая база монтируемых проектов, смонтированная по тождеству</a></li><li><a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142 — Проверка смонтированного workspace откладывается до материализации</a></li><li><a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146 — База, согласованная в bootstrap, и `mounted` как локальный режим по умолчанию</a></li></ul></li><li><span>Container do projeto e broker</span><ul><li><a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065 — Контейнер на проект: граница перестаёт быть политикой</a></li><li><a href="../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">ADR 0081 — Жизненный цикл контейнера: таблица состояния, без оркестратора</a></li><li><a href="../adr/0083-terminal-mostra-estado-real-do-container.html">ADR 0083 — Вкладка Terminal получает реального потребителя жизненного цикла, а не терминал</a></li><li><a href="../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128 — Порт Docker и доказательство упаковки, которое выбрало реализацию</a></li><li><a href="../adr/0130-broker-de-container.html">ADR 0130 — Broker контейнеров: кто говорит с Docker сервера и почему он не принимает спецификацию</a></li><li><a href="../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131 — Arquiteto направляет модули в инфраструктуру: он ВЫДВИГАЕТ кандидатов, Infra ВЫБИРАЕТ</a></li><li><a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133 — Infra выбирает среди кандидатов маршрутизации, и выбор становится новой версией `artifact.project_image`</a></li><li><a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134 — Dev agents выполняются ВНУТРИ реального контейнера проекта, а terminal получает там нижнюю границу автоодобрения</a></li><li><a href="../adr/0135-portao-de-imagem-nos-tres-modos.html">ADR 0135 — Шлюз образа от Arquiteto (RN-105) начинает действовать во всех трёх режимах выполнения</a></li><li><a href="../adr/0136-pagina-global-de-containers.html">ADR 0136 — Глобальная страница контейнеров: потолок на загрузку в broker и `container_remove` в абсолютном потолке</a></li><li><a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137 — `brabo-runner` поднимает контейнер проекта на машине пользователя</a></li><li><a href="../adr/0143-agentes-de-dev-so-depois-do-container.html">ADR 0143 — Агенты dev только после контейнера</a></li><li><a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144 — Второй корень broker и дискриминированный локатор, который его выбирает</a></li><li><a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180 — Контейнер проекта работает от владельца папки, измеренного api</a></li><li><a href="../adr/0190-a-infra-sobe-o-container-no-aceite.html">ADR 0190 — Infra поднимает контейнер при принятии handoff, шагом сервера и с засеянной автономией, и именно она передаёт работу Dev Lead</a></li><li><a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199 — Минимальный ресурс контейнера выводится из `module_map`: каждый модуль объявляет свой, а Infra поднимает с суммой</a></li><li><a href="../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208 — Infra наследует сеть, объявленную Arquiteto</a></li><li><a href="../adr/0228-comando-do-app-e-rede-do-container.html">ADR 0228 — O container do projeto sobe o app pelo comando declarado e publica porta só no loopback</a></li><li><a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229 — O QA testa numa instância efêmera, com os serviços que a Infra declarou</a></li></ul></li><li><span>O runner local</span><ul><li><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — Локальный runner: выполнение на машине пользователя через канал Phoenix с одноразовым тикетом</a></li><li><a href="../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105 — Personal Access Token (`brb_…`) для runner, ограниченный по построению одним маршрутом</a></li><li><a href="../adr/0106-distribuicao-do-runner-via-tsup-e-npm-publish.html">ADR 0106 — Распространение `@brabo/runner` через `tsup` и `npm publish`, версия внедряется только в CI</a></li><li><a href="../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112 — Автономный бинарник `@brabo/runner` через `bun build --compile`, со встроенным нативным аддоном `.node` через реальное извлечение во временный каталог</a></li><li><a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118 — Настройка runner через браузер: ключ устройства Ed25519 как вторая учётная запись `runner-ticket`, прокси GitHub Releases для бинарника и File System Access API для папки, настраиваемой одним кликом</a></li><li><a href="../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145 — Docker становится реальным предусловием режима `runner`</a></li><li><a href="../adr/0147-agente-local-com-capacidades.html">ADR 0147 — Один локальный агент, возможности, объявляемые при подключении</a></li><li><a href="../adr/0151-base-consentida-no-runner.html">ADR 0151 — Согласованная база в runner и создание папки через канал</a></li><li><a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154 — Ключ устройства машины</a></li><li><a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174 — Автономный бинарник runner перестаёт обещать Mac Intel</a></li><li><a href="../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187 — Автономный бинарник runner перестаёт обещать Windows</a></li><li><a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193 — Git с учётными данными выполняется на ХОСТЕ runner; код выполняется в контейнере</a></li><li><a href="../adr/0201-revogacao-por-chave.html">ADR 0201 — Отзыв нацелен на КЛЮЧ, а не на пару `{проект, пользователь}`</a></li><li><a href="../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.html">ADR 0203 — Поток runner через браузер выводится из употребления, путь — установщик</a></li><li><a href="../adr/0230-importar-chave-de-llm-pelo-runner.html">ADR 0230 — O runner importa a chave de API de LLM que o usuário já tem na máquina</a></li></ul></li><li><span>Autenticação, acesso e segredos</span><ul><li><a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031 — Собственная аутентификация: argon2id, EdDSA и ротация refresh</a></li><li><a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032 — Отказ от Keycloak: собственный эмитент, service token и сессия в cookie</a></li><li><a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037 — CORS, которого не было у engine, и порт как часть контракта</a></li><li><a href="../adr/0050-credencial-sempre-cifrada-verificacao-explicita.html">ADR 0050 — Учётные данные всегда зашифрованы; проверка становится явным действием</a></li><li><a href="../adr/0058-csp-fechado-na-api-e-escopo-de-projeto-contido.html">ADR 0058 — Закрытый CSP в api и область проекта, удержанная в корне</a></li><li><a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059 — У ключа, подписывающего `state` git OAuth, нет значения по умолчанию</a></li><li><a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084 — Социальный вход (GitHub/GitLab), пересматривающий backlog ADR 0031/0032</a></li><li><a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096 — Настоящий SMTP в `MailSender`, за явным переключателем</a></li><li><a href="../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127 — Два потолка понижения в `project_members`, а перекрытие остаётся</a></li><li><a href="../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156 — Потолок самопонижения также при удалении участника проекта</a></li><li><a href="../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157 — Потолок самоперемещения в upsert workspace и самоповышение, которое было брешью</a></li><li><a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158 — Id мастер-ключа, записанный в конверте, как наблюдаемость и никогда как полномочие</a></li><li><a href="../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173 — Удаление участника workspace рождается, защищённое тем же условием</a></li><li><a href="../adr/0245-acesso-rapido-por-papel-so-no-ambiente-local.html">ADR 0245 — Acesso rápido por papel só no ambiente local</a></li></ul></li><li><span>Providers de LLM, modelos e gasto</span><ul><li><a href="../adr/0040-moeda-do-dashboard.html">ADR 0040 — Валюта дашборда: пока USD, ручной курс по workspace отложен</a></li><li><a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041 — Одна OpenAI-совместимая база, один контракт LLM providers и capabilities, отклоняющие binding</a></li><li><a href="../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042 — Живой каталог, жизненный цикл модели и проверяемая цена</a></li><li><a href="../adr/0043-seis-providers-de-llm-e-o-fechamento-da-fase-9b.html">ADR 0043 — Шесть providers LLM поверх базы, и Фаза 9b наконец закрыта</a></li><li><a href="../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049 — Курирование моделей по workspace</a></li><li><a href="../adr/0051-facetas-de-capability-e-curadoria-por-uso.html">ADR 0051 — Доказанные грани capability; &quot;для чего годится&quot; — это курирование</a></li><li><a href="../adr/0063-duas-audiencias-para-o-mesmo-gasto.html">ADR 0063 — Две аудитории для одного и того же расхода: счёт owner и потребление участника</a></li><li><a href="../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064 — Область как уровень каскада модели и глобальный binding агента</a></li><li><a href="../adr/0075-embeddings-no-contrato-de-llm-provider.html">ADR 0075 — Embeddings в контракте LLMProvider</a></li><li><a href="../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076 — `provider` снова становится измерением расходов, а сдерживание переходит к типу</a></li><li><a href="../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">ADR 0077 — Рейтинг моделей по возможностям, без выдуманной оценки</a></li><li><a href="../adr/0110-budget-por-area-aditivo-nao-cascata.html">ADR 0110 — Бюджет по области АДДИТИВЕН, рядом с проектом/сессией — не каскад и не новая таблица</a></li><li><a href="../adr/0114-deteccao-de-ollama-nativo-no-bootstrap-dev.html">ADR 0114 — Обнаружение нативного Ollama в dev bootstrap: спросить один раз, сохранить в `.env`, поставить сервисы compose за profile</a></li><li><a href="../adr/0115-pedido-de-pull-de-modelo-huggingface-tabela-propria.html">ADR 0115 — Pull модели из Hugging Face: собственная таблица, подтверждение в два шага и allowlist официальных издателей — никогда `proposed_actions`</a></li><li><a href="../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166 — Предпочтение маршрутизации живёт в binding модели, путешествует вместе с ним и замораживается в metering</a></li><li><a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188 — Реальная стоимость, которую возвращает provider, становится числом metering</a></li><li><a href="../adr/0198-duplicata-semantica-por-embedding-com-limiar-que-so-avisa.html">ADR 0198 — О семантическом дубликате истории и правила предупреждает embedding с порогом, а расход попадает в metering</a></li><li><a href="../adr/0221-upstream-preso-por-sessao.html">ADR 0221 — O hub prende a conversa de cada agente ao upstream que a atendeu, por `session_id`</a></li><li><a href="../adr/0222-provider-9router-de-llm.html">ADR 0222 — O 9Router entra como o 10º provider de LLM, com URL por instalação</a></li><li><a href="../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223 — O orçamento de raciocínio é capability POR MODELO, curada à mão</a></li><li><a href="../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224 — O raciocínio é contado no stream e abortado no limite, e o custo é estimado e reconciliado</a></li><li><a href="../adr/0225-teto-de-preco-do-upstream-no-openrouter.html">ADR 0225 — O OpenRouter recebe um teto de preço por chamada (`provider.max_price` = catálogo × 1,5)</a></li><li><a href="../adr/0227-provider-opencode-zen-de-llm.html">ADR 0227 — O OpenCode Zen entra como o 11º provider de LLM, só no dialeto OpenAI</a></li><li><a href="../adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233 — O membro vê o gasto do projeto por agente e por área, nunca por provider</a></li><li><a href="../adr/0251-preco-de-lista-datado-para-provider-sem-preco.html">ADR 0251 — Preço de lista datado no código para provider que não informa preço</a></li></ul></li><li><span>RAG, grafo de conhecimento e artefatos</span><ul><li><a href="../adr/0079-tabela-de-chunks-vetor-e-tsvector-juntos.html">ADR 0079 — Таблица chunks: вектор и `tsvector` в одной строке</a></li><li><a href="../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">ADR 0080 — Гибридный поиск: веса, порог и что такое цитата</a></li><li><a href="../adr/0082-chat-rag-aba-de-busca-hibrida.html">ADR 0082 — Chat RAG: собственная вкладка гибридного поиска, без переименования &quot;Chat&quot;</a></li><li><a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099 — Neo4j как граф знаний и шаблоны prompt, драйвер в api</a></li><li><a href="../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100 — `rag_search` для агентов и модели Ollama, гарантированные при загрузке</a></li><li><a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101 — Реляционная память как проекция event log; шаблоны потребляются без трогания GenServers</a></li><li><a href="../adr/0113-pasta-local-anexada-via-navegador-vira-chunks-scope-local.html">ADR 0113 — Локальная папка, приложенная через браузер, становится `chunks.scope = 'local'`, читаемым БРАУЗЕРОМ, никогда путём хоста</a></li><li><a href="../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">ADR 0129 — Телеметрия поиска RAG — это ТАБЛИЦА, с весами, замороженными в строке</a></li><li><a href="../adr/0132-golden-set-de-acerto-do-rag.html">ADR 0132 — Golden-set попаданий RAG и gate `rag-acertivo`</a></li><li><a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138 — Golden-set RAG начинает работать в CI, по расписанию — и остаётся `warn`</a></li><li><a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148 — Артефакты агентов, спроецированные в файлы, в папку `docs/`</a></li><li><a href="../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196 — Anamnese снова включена: не работает без субъекта, а принятая гипотеза становится фактом профиля</a></li><li><a href="../adr/0200-contrato-entre-modulos-artefato-do-arquiteto.html">ADR 0200 — Контракт между модулями становится версионируемым артефактом Arquiteto, и dev agent читает его вместо чужого worktree</a></li><li><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205 — Отклонение агента, которое наблюдает Anamnese, становится сигналом продукта, без персональных данных</a></li></ul></li><li><span>Interface web e design system</span><ul><li><a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036 — Экраны аутентификации, верные дизайну, и три шрифта, которые не загружались</a></li><li><a href="../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060 — Поверхность чтения кода, ограниченная и с бюджетом</a></li><li><a href="../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">ADR 0074 — Достижимая тема и загрузка под CSP</a></li><li><a href="../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">ADR 0078 — Рамка экрана, и реестр вкладок намеренно расходится с handoff</a></li><li><a href="../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097 — Прямое чтение схемы engine для &quot;N агентов онлайн&quot; на дашборде</a></li><li><a href="../adr/0116-tipos-do-web-gerados-do-openapi.html">ADR 0116 — `ActionType` (и будущие типы) генерируются из контракта OpenAPI, а не копируются вручную</a></li><li><a href="../adr/0122-sessionpage-dividido-em-cinco-prs.html">ADR 0122 — `SessionPage.tsx`, разделённый на пять механических PR, объявленных заранее</a></li><li><a href="../adr/0124-hook-do-canal-de-turno-do-sessionpage.html">ADR 0124 — Группировка состояния канала хода, извлечённая в `useTurnoDoAgente`</a></li><li><a href="../adr/0125-projectsettingstab-dividido-por-secao.html">ADR 0125 — `ProjectSettingsTab.tsx` разделён на файл на раздел, за barrel</a></li><li><a href="../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126 — Страница проекта навигируется вертикальной рейкой, а вкладка Código перестаёт сама сворачивать sidebar</a></li><li><a href="../adr/0176-sessionpage-abaixo-de-mil-linhas.html">ADR 0176 — `SessionPage.tsx` меньше 1 000 строк, за десять механических PR, а замок — только после</a></li><li><a href="../adr/0181-tema-preto-neutro.html">ADR 0181 — Тёмная тема становится нейтрально-чёрной, и долг контраста заканчивается</a></li><li><a href="../adr/0210-animacao-de-texto-com-motion.html">ADR 0210 — Анимация текста с `motion`</a></li><li><a href="../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211 — Одна навигация: боковая панель поглощает рельс проекта</a></li><li><a href="../adr/0232-shadcn-com-base-ui-no-apps-web.html">ADR 0232 — shadcn/ui com Base UI e Tailwind 4 no `apps/web`</a></li><li><a href="../adr/0234-shiki-e-recharts-por-carga-dinamica.html">ADR 0234 — `shiki` no Code Block e `recharts` no Chart, sempre por carga dinâmica</a></li><li><a href="../adr/0237-o-visual-v3-liga-o-preflight-e-sobe-os-raios.html">ADR 0237 — O visual v3 liga o preflight e sobe os raios</a></li><li><a href="../adr/0238-o-grafo-de-modulos-vira-canvas-xyflow.html">ADR 0238 — O grafo de módulos da Arquitetura vira Canvas (`@xyflow/react`)</a></li><li><a href="../adr/0239-csp-frame-src-local-para-o-web-preview.html">ADR 0239 — CSP `frame-src` local para o Web preview do entregável</a></li><li><a href="../adr/0240-o-motivo-de-controle-inerte-mora-num-ponto-de-interrogacao-nos-containers.html">ADR 0240 — O motivo de controle inerte pode morar num &quot;?&quot; ativo na página de Containers</a></li><li><a href="../adr/0241-a-sidebar-adota-o-block-sidebar-07-do-shadcn.html">ADR 0241 — A sidebar adota o block `sidebar-07` do shadcn</a></li><li><a href="../adr/0242-containers-em-tabela-linear-com-tanstack-react-table.html">ADR 0242 — Containers em tabela linear com `@tanstack/react-table`</a></li><li><a href="../adr/0243-consequencia-irreversivel-pode-morar-num-botao-de-perigo.html">ADR 0243 — Consequência irreversível pode morar num botão de perigo</a></li><li><a href="../adr/0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.html">ADR 0244 — Coluna das abas do projeto alinhada à esquerda</a></li><li><a href="../adr/0248-conteudo-das-paginas-ocupa-a-largura-inteira.html">ADR 0248 — O conteúdo das páginas ocupa a largura inteira</a></li><li><a href="../adr/0250-chat-da-sessao-ocupa-a-largura-inteira.html">ADR 0250 — O chat da Sessão ocupa a largura inteira</a></li></ul></li><li><span>Operação, deploy e instalação</span><ul><li><a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024 — Фаза 5 (сессия 1): production-образы, compose.prod, CI и smoke-тест</a></li><li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025 — Фаза 5 (сессия 2): деплой в Kubernetes с Kustomize, метрика очереди и локальный overlay</a></li><li><a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026 — Фаза 5 (сессия 3): graceful shutdown, OpenTelemetry, метрики, логи и дашборды</a></li><li><a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027 — Backup/restore, усиление api, открытая поверхность и релиз</a></li><li><a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035 — Trace без коллектора и путь между слоями в логе</a></li><li><a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070 — Наблюдаемость в локальном Compose: метрики и журналы, без трассировки</a></li><li><a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150 — Установщик одной строкой, с выбранным источником и маркером</a></li><li><a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152 — Резервное копирование и восстановление томов для compose</a></li><li><a href="../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153 — `DEPLOY_ENABLED`: триггер, который упоминают десять документов и не создаёт ни один</a></li><li><a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155 — Первая учётная запись рождается в терминале, а локальный агент поднимается сопряжённым</a></li><li><a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160 — Compose установщика едет вместе с ним, как подписанный asset</a></li><li><a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161 — Экран предлагает только тот режим, который выполняет установка, а у установки через Release нет broker</a></li><li><a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162 — Broker становится пятым опубликованным образом, а установщик СПРАШИВАЕТ, включать ли его</a></li><li><a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169 — Назначением S3 локального overlay перестаёт быть MinIO и становится SeaweedFS</a></li><li><a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170 — Dev-compose становится `brabo-dev`, и dev отказывается подниматься рядом с установкой</a></li><li><a href="../adr/0209-engine-em-otp-29.html">ADR 0209 — Engine переходит на Elixir 1.20.4 / OTP 29.1.1</a></li></ul></li><li><span>CI, release e cadeia de suprimentos</span><ul><li><a href="../adr/0039-actionlint-e-validacao-do-pipeline-de-ci-gerado.html">ADR 0039 — actionlint и валидация генерируемого конвейера CI</a></li><li><a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119 — Образы, публикуемые в GHCR с каждым финальным тегом, и production overlay, закреплённый по digest</a></li><li><a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120 — Браузерный E2E против продакшен-compose, в пакете вне workspace</a></li><li><a href="../adr/0121-schema-dividido-por-agregado-de-dominio.html">ADR 0121 — Схема, разделённая по доменным агрегатам, за barrel</a></li><li><a href="../adr/0140-timeout-do-audit-como-risco-assumido.html">ADR 0140 — Повторяющийся timeout `pnpm audit` — принятый риск; находка по-прежнему отклоняет</a></li><li><a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149 — Подпись опубликованных артефактов</a></li><li><a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159 — Сторонний образ входит по digest, и lint проваливает того, кто забудет</a></li><li><a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172 — Релиз сканирует Trivy то, что публикует, по digest, до подписи</a></li><li><a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178 — Тег стороннего образа живёт ВНУТРИ ссылки, перед digest</a></li><li><a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197 — Образ workflows берётся из compose, и Dependabot для образов включается</a></li><li><a href="../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252 — O Brabo vira um conjunto de repositórios em `viralabs-dev`</a></li></ul></li><li><span>Documentação</span><ul><li><a href="../adr/0029-sincronizacao-continua-da-documentacao.html">ADR 0029 — Непрерывная синхронизация документации</a></li><li><a href="../adr/0033-referencia-de-api-gerada-do-openapi.html">ADR 0033 — Справочник API выводится из кода, а табличный тест требует метаданных</a></li><li><a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034 — Документация, публикуемая по ступеням, в подкаталоге Pages</a></li><li><a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071 — Симметричная публикация по ступеням и корень, который предлагает выбор</a></li><li><a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073 — Публикуемый путь называет окружение, а не ветку</a></li><li><a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117 — `website/` получает собственный lockfile, вне `pnpm audit` продукта</a></li><li><a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202 — Индекс ADR по темам, с темой вне ADR</a></li><li><a href="../adr/0206-referencia-da-api-numa-pagina-redoc.html">ADR 0206 — Справочник API становится страницей Redoc</a></li><li><a href="../adr/0216-quatro-idiomas-com-pt-br-como-fonte.html">ADR 0216 — Четыре языка, с pt-BR как ИСТОЧНИКОМ и языком по умолчанию: документация и интерфейс на португальском, английском, русском и упрощённом китайском</a></li><li><a href="../adr/0218-titulo-de-adr-com-prefixo.html">ADR 0218 — Каждый ADR называется «ADR NNNN — заголовок»</a></li><li><a href="../adr/0219-referencia-entra-na-traducao.html">ADR 0219 — Справочник входит в перевод</a></li><li><a href="../adr/0220-api-traduzida-por-catalogo.html">ADR 0220 — Страница API переводится по каталогу</a></li><li><a href="../adr/0253-o-site-de-docs-deixa-o-docusaurus.html">ADR 0253 — O site de docs deixa o Docusaurus</a></li><li><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html">ADR 0254 — A doc de cada área mora na raiz dela</a></li></ul></li></ul></li></ul></section><section><h2>📐 Правила</h2><ul><li><a href="../business-rules.html">Бизнес-правила</a></li><li><a href="../business-rules/custo.html">Стоимость и metering</a></li><li><a href="../business-rules/autenticacao.html">Аутентификация</a></li><li><a href="../business-rules/api.html">API</a></li><li><a href="../business-rules/broker.html">Broker</a></li><li><a href="../business-rules/ci.html">CI</a></li><li><a href="../business-rules/contracts.html">Contratos</a></li><li><a href="../business-rules/engine.html">Engine</a></li><li><a href="../business-rules/infra.html">Infra</a></li><li><a href="../business-rules/produto.html">Produto</a></li><li><a href="../business-rules/runner.html">Runner</a></li><li><a href="../business-rules/web.html">Web</a></li></ul></section><section><h2>📖 Справочник</h2><ul><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Открытая поверхность api</a></li><li><span>Справочник API</span></li></ul></section><section><h2>💡 Пояснения</h2><ul><li><span>Процесс и конвейер</span><ul><li><a href="../explanation/documentation-workflow.html" aria-current="page">Синхронизация документации</a></li><li><a href="../explanation/branching-policy.html">Политика веток</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Цепочка поставок CI</a></li><li><a href="../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../explanation/gates.html">Gates и то, как они измеряются</a></li><li><a href="../explanation/observability.html">Наблюдаемость</a></li><li><a href="../explanation/modelo-de-time.html">Модель команды и поток результатов</a></li></ul></li><li><span>Проверки и измерения</span><ul><li><a href="../explanation/primeiro-dogfooding.html">Первый dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Реальное выполнение (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Находки реального прогона конвейера</a></li><li><a href="../explanation/validacao-fase-12.html">Проверка Фазы 12</a></li><li><a href="../explanation/validacao-real.html">Реальная валидация (13b)</a></li><li><a href="../explanation/aceite-providers.html">Приёмка providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Измерение эвристики языка</a></li><li><a href="../explanation/medicao-do-jev.html">Измерение маршрутизатора инструментов Jev</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Аудит: fluxo.yml × код (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Визуальный аудит до и после Rodada 29</a></li></ul></li><li><span>История фаз</span><ul><li><a href="../explanation/historico-de-fases.html">История фаз</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">ФАЗА 28 — папка пользователя</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — установка одной строкой</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — локальный агент машины</a></li><li><a href="../explanation/backlog.html">Backlog после триажа</a></li></ul></li><li><span>Локализация</span><ul><li><a href="../explanation/localizacao.html">Локализация</a></li><li><a href="../explanation/localizacao-en.html">Локализация — английский (en)</a></li><li><a href="../explanation/localizacao-ru.html">Локализация — русский (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Локализация — упрощённый китайский (zh-Hans)</a></li></ul></li><li><span>Технические заметки</span><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — не принят</a></li></ul></li></ul></section><section><h2>🛠️ Эксплуатация</h2><ul><li><a href="../runbook.html">Руководство по эксплуатации</a></li></ul></section><section><h2>📚 Словарь</h2><ul><li><a href="../glossary.html">Глоссарий</a></li></ul></section><section><h2>🤝 Участие</h2><ul><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Как внести вклад</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Где попросить помощи</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Сообщить об уязвимости</a></li></ul></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="how-documentation-stays-alive">Как документация остаётся живой</h1>
+<p>Документация умирает не от нехватки первоначального написания. Она умирает
+от <strong>дрейфа</strong>: код меняется, документ остаётся, и однажды кто-то замечает,
+что он описывает систему, которой больше нет. С этого момента никто не
+доверяет ни одной странице, включая правильные.</p>
+<p>Эта страница объясняет механизм, существующий, чтобы этого избежать.
+Прочитайте её, если CI пожаловался на вас, — и прочитайте, прежде чем
+отключать любую его часть.</p>
+<h2 id="the-principle-generate--verify--remember">Принцип: генерировать &gt; проверять &gt; напоминать</h2>
+<p>Три уровня, в порядке убывания надёжности:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>уровень</th>
+<th>как работает</th>
+<th>когда использовать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Генерировать</strong></td>
+<td>документ выходит из кода; дрейф невозможен</td>
+<td>список И ЕСТЬ содержимое</td>
+</tr>
+<tr>
+<td><strong>Проверять</strong></td>
+<td>документ пишется вручную, CI проверяет, что он полон</td>
+<td>проза важнее списка</td>
+</tr>
+<tr>
+<td><strong>Напоминать</strong></td>
+<td>CI предупреждает того, кто открыл PR</td>
+<td>когда нужно человеческое суждение</td>
+</tr>
+</tbody>
+</table></div>
+<p>Последний уровень самый слабый, поэтому он — последнее средство.
+Предупреждение, которое никто не читает, ничего не защищает.</p>
+<h3 id="a-number-in-prose-is-a-verify-case">Число в прозе — случай <em>проверки</em></h3>
+<p>Число посреди фразы — «30 ADR», «следующий — <code>0031</code>» — не генерируется: оно
+живёт внутри текста, и замена его маркером сделала бы прозу источника
+нечитаемой. Но оно <strong>проверяемо</strong>, и именно там ему место.</p>
+<p>Без этого оно молча стареет. Так и случилось: опубликованный сайт говорил
+«28 из них» и «29 решений», когда их было уже 30, и «следующий — 0030», когда
+0030 уже был сделан. Ничего не сломалось, ни одна проверка не пожаловалась —
+просто стало неверно.</p>
+<p><strong>Список проверяемых чисел вырос после того, как третий случай доказал то же
+самое.</strong> Внешнее ревью обнаружило, что README объявляет «158 RN», когда их
+было написано 331, — ошибка более чем вдвое, в таблице, представляющей
+репозиторий. Это было исправлено вручную (PR #412), что лишь обнуляет часы:
+следующая RN снова сделала бы его устаревшим. Поэтому проверка перестала
+покрывать только подсчёты ADR и стала покрывать <strong>три</strong> семейства, каждое из
+которых читается из АРТЕФАКТА и никогда из другой прозы:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>число в прозе</th>
+<th>источник истины</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>число ADR, номер следующего ADR</td>
+<td>файлы в <code>docs/adr/</code></td>
+</tr>
+<tr>
+<td>число RN</td>
+<td>заголовки <code>### RN-NNN</code> в <code>business-rules.md</code></td>
+</tr>
+<tr>
+<td>число LLM-провайдеров</td>
+<td>литералы <code>capabilities</code>, которые находит <code>descobrirProviders()</code>, — тот же источник, что у генерируемой таблицы в <code>llm-providers.md</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Число провайдеров пишется <strong>словами</strong> («nove providers»), и проверка
+сравнивает со словом, а не заставляет прозу превращаться в цифры: проверка
+существует, чтобы защищать текст, а не переделывать его.</p>
+<p><strong>Начиная с AT-399 (2026-10-03) эти числа также переписываются.</strong>
+Параллельные PR, каждый из которых добавлял RN или ADR, писали общие числа
+вручную, и каждый merge делал остальные устаревшими: страж документации
+провалил 8 из 30 запусков за три часа только из-за этого. Поэтому
+<code>pnpm docs:generate</code> (режим записи) теперь исправляет на месте то, что
+определяет источник, — подсчёты ADR и RN выше, номер следующего ADR
+(отбрасывая дублирующуюся строку «следующий —», оставленную merge), отступ
+записей <code>docs/adr/temas.yml</code>, написанных в колонке 0, и строку ссылки с
+символом (ниже). Чистые функции живут в <code>scripts/docs/reescrita.mjs</code>,
+<code>refs-com-simbolo.mjs</code> (<code>novaLinha</code>, <code>reancorar</code>) и <code>temas-de-adr.mjs</code>
+(<code>corrigirRecuo</code>). <code>--check</code> сохраняет ту же строгость: закоммиченный
+устаревший файл по-прежнему проваливает CI, а исправление — это
+<code>pnpm docs:generate</code> плюс коммит, как и у генерируемых файлов. Что всё ещё
+требует человека: фраза, шаблон которой перестал совпадать (<code>CEGO</code>), ADR без
+темы, переменная без описания и ссылка, символ которой ушёл из файла,
+сдвинулся более чем на 40 строк или делит ничью между двумя ближайшими
+вхождениями.</p>
+<p>Самым дорогим случаем была <strong>версия, объявленная в прозе</strong>: README объявлял
+<code>v0.1.0</code> от Фазы 5 вплоть до v2.1.0 — на семь релизов позади реальности, в
+первом, что читает новичок. Проверка сравнивает прозу с первым
+<code>## vX.Y.Z</code> в CHANGELOG, который пишет workflow релиза и который
+возвращается через PR; тег, прочитанный из git, не сработал бы, потому что в
+поверхностном checkout CI может не оказаться ни одного тега. <strong>Значок</strong>, с
+другой стороны, вышел из проверки и стал генерацией: он читает релиз GitHub
+напрямую (<code>shields.io/github/v/release</code>) и обновляется сам — проверяется
+только то, что нельзя сгенерировать.</p>
+<p>И это случилось <strong>по разу на каждую входную дверь</strong>. <code>docs/intro.md</code> — первая
+страница опубликованного сайта, до которой не все доходят через README, —
+продолжала говорить «Fases 1 a 5 concluídas, v0.1.0», пока продукт был на
+Фазе 26. Проверка только README никогда не защищала вторую дверь, поэтому
+<code>verificarVersaoAnunciada</code> стала получать оба файла списком, а
+<code>scripts/ci/readme-version.ts</code> стал писать в оба в том же коммите, что и
+CHANGELOG. Обе половины идут вместе намеренно: проверка, требующая того,
+чего не пишет генератор, заставляла бы каждый релиз рождаться красным в PR,
+который открывает бот и который никто не может исправить.</p>
+<p>Шаблон <code>intro.md</code> требует <strong>целую</strong> фразу — «Phases 1 through NN complete,
+version vX.Y.Z», — а не только версию: обе половины стареют вместе, и
+совпадение лишь половины оставило бы число фаз лгать рядом с правильной
+версией. Число фаз отсюда не генерируется: релиз знает версию, но не фазу.</p>
+<p><code>generate.mjs</code> теперь сверяет эти утверждения с реальностью каталога. И
+<strong>шаблон, переставший совпадать, тоже проваливает</strong>: проверка, чья regex
+перестала находить фразу, хуже отсутствия проверки, потому что она навсегда
+остаётся зелёной, утверждая, что проверила то, на что никогда не смотрела.
+Когда фраза меняется, CI говорит <code>CEGO</code> и просит поправить шаблон.</p>
+<p>Добавление нового утверждения в проверку — это запись в одном из списков
+<code>afericoes</code> — <code>verificarContagensDeAdr</code> (файл, шаблон, ожидаемое значение),
+когда источник истины — каталог ADR, <code>verificarVersaoAnunciada</code>, когда это
+последний релиз в CHANGELOG, — или собственная функция рядом с ними, когда
+это ни то, ни другое.</p>
+<p><strong>Подсчёты, выводимые из кода (AT-123).</strong> Проход 2026-09-25 по <code>docs/</code>,
+<code>README.md</code>, <code>CONTRIBUTING.md</code>, <code>THIRD_PARTY_NOTICES.md</code> и <code>CLAUDE.md</code> нашёл
+пять уже неверных чисел — «nove schemas» (одиннадцать), «doze operações»
+контракта git (пятнадцать), «dez abas» (двенадцать), «três imagens»,
+собираемых CI (пять), «Thirteen types» у <code>proposed_action</code> (двадцать один), —
+ни одного с проверкой за ним. Подсчёты, источник которых — место в коде,
+теперь живут в <code>scripts/docs/contagens-do-codigo.mjs</code>, вызываемом
+<code>verificarContagensDerivadasDoCodigo</code>: одна строка таблицы на ФРАЗУ (один и
+тот же подсчёт, произнесённый в двух файлах, — это две фразы, стареющие
+по отдельности), каждая указывает на экстрактор, считающий артефакт, —
+блоки <code>overrides</code> двух <code>pnpm-workspace.yaml</code>, <code>CASOS</code> и <code>ARQUIVOS_CURADOS</code>
+golden-set и его <code>floor.json</code>, итог, который печатает
+<code>scripts/ci/imagens-pinadas.ts</code>, <code>ALVOS</code>, цикл non-root в smoke, методы
+<code>GitProviderContract</code> и <code>DockerPort</code>, <code>REGISTRO</code> вкладок, сервисы compose dev
+без <code>profiles:</code> (у ВСЕХ должен быть healthcheck, иначе ожидаемое значение
+становится фразой, которой нет в прозе), <code>ACTION_TYPES</code>, enum <code>action_status</code>
+и вызовы <code>pgTable(</code>. Сравнение игнорирует регистр и следует форме фразы
+(португальские слова в мужском/женском роде, английские слова или цифры).
+Поскольку экстракторов много, каждый доказан МУТАЦИЕЙ в
+<code>contagens-do-codigo.spec.ts</code>: измените артефакт, но не прозу, — и он должен
+провалиться с <code>DESATUAL</code>; удалите фразу или источник — и он должен
+провалиться с <code>CEGO</code>.</p>
+<p>Что было <strong>датировано, а не выведено</strong>, и почему: подсчёты файлов по
+приложениям в <code>architecture.md</code> и «seis rotas» broker меняются почти с каждым
+PR или читаются из <code>switch</code>, поэтому проверка лишь добавила бы шума — у них
+стоит «medido em 2026-09-25». Числа, описывающие инвариант замысла («две
+слоя», «три состояния»), или прошлое измерение, уже датированное на месте
+(<code>THIRD_PARTY_NOTICES.md</code>, протоколы восстановления в runbook), остались как
+были.</p>
+<h3 id="line-references-with-a-symbol">Ссылки на строки с символом</h3>
+<p>RN цитирует код по <code>путь:строка</code>, и номер строки стареет каждый раз, когда
+кто-то правит файл. RN-547 цитировала <code>fechar_a_instalacao</code> в
+<code>install.sh:966</code> и <code>post_interno</code> в <code>:682</code>. 2026-09-17 они были в <code>:1107</code> и
+<code>:809</code>, а 2026-09-18 — в <code>:1463</code> и <code>:1165</code>. Номер строки нельзя
+сгенерировать и, как правило, нельзя и проверить, потому что
+<code>apps/api/src/foo.ts:40</code> сам по себе не говорит, что там должно быть. Однако
+когда RN также <strong>называет символ</strong> рядом со строкой, строку <em>можно</em>
+проверить. Это единственный случай, который проверяет <code>generate.mjs</code>
+(<code>verificarRefsComSimbolo</code>, с логикой в <code>scripts/docs/refs-com-simbolo.mjs</code>,
+протестированной).</p>
+<p><strong>Шаблон намеренно узок.</strong> Шумную проверку отключают в первый же месяц. Она
+читает три файла RN (<code>business-rules.md</code>, <code>business-rules/custo.md</code>,
+<code>business-rules/autenticacao.md</code>) и ловит только эти две формы:</p>
+<pre class="codigo"><code>`&lt;path&gt;:&lt;N&gt;` (`&lt;symbol&gt;`     explicit reference
+`:&lt;N&gt;` (`&lt;symbol&gt;`           continuation — inherits the path
+</code></pre>
+<ul>
+<li>Символ должен идти <strong>сразу после</strong> ссылки, открывая скобку и в обратных
+кавычках. Между ними допустимы только пробельные символы, включая перевод
+строки.</li>
+<li>Символ должен быть <strong>идентификатором</strong>: <code>fechar_a_instalacao</code>, <code>join/3</code>,
+<code>git_dir?</code>, <code>Engine.Runners.RunnerReadiness</code>, <code>decide()</code>.
+<code>MARCADOR_SCHEMA=3</code>, фраза или путь — не символ, и пропускаются.</li>
+<li><strong>Неоднозначные пары пропускаются</strong>: <code>:640</code>/<code>:647</code> (<code>a</code>/<code>b</code>) или две ссылки
+перед одним символом. Проверка не может знать, какой символ относится к
+какой строке.</li>
+<li>Продолжение наследует последний явный путь <strong>в том же пункте списка</strong>.
+Пустая строка или новый <code>- </code> завершает пункт.</li>
+<li>Путь разрешается от корня репозитория. Если его там нет, проверка
+использует <strong>единственный</strong> отслеживаемый файл, путь которого им
+заканчивается. Если не совпал ни один файл или совпало больше одного,
+ссылка учитывается отдельно как неразрешённая.</li>
+</ul>
+<p>Ссылка <strong>совпадает</strong>, когда символ или его последний сегмент после <code>.</code>
+встречается целым словом в пределах <strong>±3 строк</strong> от <code>N</code>. Окно допускает
+цитату, указывающую на docblock вместо сигнатуры. Оно мало, потому что
+дрейф уходит на десятки и сотни строк. Когда ссылка не совпадает, вывод
+называет ближайшую строку, где встречается символ. Начиная с AT-399
+<code>pnpm docs:generate</code> переписывает <code>N</code> на эту строку, когда ближайшее
+вхождение <strong>единственное</strong> (без ничьей на том же расстоянии) и находится не
+дальше <strong>40 строк</strong> (<code>DISTANCIA_MAXIMA_DE_REANCORA</code>); когда символ исчез из
+файла, ушёл дальше или два вхождения делят ничью, ссылка остаётся как есть и
+должна быть перечитана по символу вручную. Ближайшее вхождение может быть
+вызовом, а не определением, — это принятая цена за то, чтобы не править
+числа вручную в параллельных PR, а diff перегенерированного файла показывает
+каждое перемещение для ревью.</p>
+<p><strong>Измерено 2026-09-18</strong> по всем <code>путь:N</code> трёх файлов:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th>количество</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ссылок <code>…:N</code> всего</td>
+<td>592</td>
+</tr>
+<tr>
+<td>совпадают с шаблоном</td>
+<td>187</td>
+</tr>
+<tr>
+<td>верных (в пределах ±3)</td>
+<td>116</td>
+</tr>
+<tr>
+<td>неверных</td>
+<td>71</td>
+</tr>
+<tr>
+<td>неразрешённый путь</td>
+<td>0</td>
+</tr>
+</tbody>
+</table></div>
+<p>Выборочная проверка 71 не нашла ложных срабатываний: каждая
+охваченная ссылка была реальным дрейфом, переименованием или символом,
+сменившим файл. Расширение окна до ±5 очистило бы лишь три из них. Девять
+отстоят на 4–10 строк, а остальные 62 — дальше. Пункт кода RN-547 был
+перечитан по символу и исправлен в том же PR, что оставляет <strong>63</strong>. Их
+слишком много, чтобы исправлять по одной в рамках этого изменения, а
+ближайшее вхождение не всегда является определением. Список — то, что
+печатает <code>pnpm docs:check</code>.</p>
+<p><strong>Строгость при рождении: <code>warn</code>.</strong> Она сообщала и не проваливала, потому что
+<code>block</code> остановил бы любой PR, касающийся файла RN, из-за долга, оставленного
+кем-то другим. Было исключение, правило дома: если проверка извлекает
+<strong>ноль</strong> ссылок, это <code>CEGO</code> и <strong>провал</strong>. Ноль означает, что синтаксис RN
+изменился или экстрактор сломан, а слепая проверка остаётся зелёной
+навсегда.</p>
+<p><strong>Исходный критерий для <code>block</code></strong> (PR #593): когда список будет <strong>пуст</strong>, и
+после <strong>четырёх недель подряд</strong> <code>docs:check</code> в <code>dev</code> без новых неверных
+ссылок в RN, затронутых за эти недели. С этого момента каждая новая неверная
+ссылка — вина текущего PR, и PR может её исправить. Повышение раньше
+взыскивало бы с каждого PR чужой долг. Если шаблон до этого покажет
+реальное ложное срабатывание, сузьте шаблон. Не расширяйте окно.</p>
+<p><strong>Список обнулился 2026-09-26</strong> (AT-122). За восемь дней после введения
+проверки 63 заведомо неверные ссылки выросли до <strong>75</strong>. Этот рост — дрейф,
+который проверка и существует показывать. Все 75 были перечитаны по символу
+против кода того дня, и ни одна не была ложным срабатыванием шаблона.
+Большинство сдвинулись на десятки строк. Одна была переименованием:
+<code>modo_de_execucao/1</code> стал <code>exigencias_do_projeto/1</code> в RN-516. Одна сменила
+файл: <code>escreverEnv</code> переехал из <code>preflight.mjs</code> в <code>env-file.mjs</code>. Две
+указывали на правильный тест, но на строку <code>it(</code>, тогда как символ (<code>types</code>)
+встречается лишь несколькими строками ниже, в теле. Эти две теперь
+указывают на строку тела. Окно осталось ±3. У пунктов с худшим дрейфом
+(RN-566, RN-567, RN-570 и RN-514) соседние непроверяемые ссылки были
+перечитаны в том же проходе. После этого <strong>273 ссылки совпадают с шаблоном,
+273 верны и 0 неверны</strong>. Четыре недели начали бы отсчитываться, когда это
+изменение дойдёт до <code>dev</code>.</p>
+<p><strong>Повышена до <code>block</code> 2026-10-01</strong> (AT-122) решением сопровождающего, не
+дожидаясь четырёх недель. Через пять дней после обнуления списка в <code>dev</code>
+снова было <strong>140</strong> неверных ссылок из 896, совпадающих с шаблоном: <code>warn</code> не
+удержал дрейф, потому что предупреждение, по которому никто не обязан
+действовать, — предупреждение, которое никто не читает. Все 140 были
+перечитаны по символу в том же изменении, которое повысило проверку, никогда
+не прибавляя дельту, и окно осталось ±3. Ни одна не была ложным
+срабатыванием шаблона, и ни одного символа не было в его файле
+недостающим. Что проход нашёл помимо дрейфа строк:</p>
+<ul>
+<li><strong>Остатки merge.</strong> Три пункта были продублированы при разрешении
+конфликта: копия со старыми числами рядом с копией с новыми (<code>Where</code>
+RN-120, <code>Código</code> RN-547 и строка <code>SessionPage.tsx</code> RN-626). Устаревшая
+копия удалена, и поэтому итог ушёл с 896 до <strong>883</strong>.</li>
+<li><strong>Ссылка, чей предмет изменился (дрейф состояния, а не строки).</strong> RN-587
+цитировала тест сообщения от <code>infra</code>; начиная с RN-617 Infra Lead
+разговаривает, и тест теперь использует <code>qa</code> как агента состава без
+разговора. Ссылка теперь говорит это. Правило RN не изменилось.</li>
+<li>Соседние непроверяемые ссылки в пунктах с худшим дрейфом (RN-547,
+RN-567, RN-587, RN-609, RN-663, RN-566) были перечитаны в том же проходе
+там, где удалось определить тест или условие, которые они называют.</li>
+</ul>
+<p>После этого <strong>883 ссылки совпадают с шаблоном, 883 верны и 0 неверны</strong>.</p>
+<p><strong>Строгость сейчас: <code>block</code>.</strong> Ссылка, которая не совпадает, <strong>или</strong> чей путь
+больше не разрешается в единственный отслеживаемый файл, проваливает
+<code>docs:check</code>. Это один и тот же дрейф: RN указывает туда, где кода нет. Ноль
+ссылок по-прежнему <code>CEGO</code> и по-прежнему проваливает. Вердикт — <code>veredito</code> в
+<code>refs-com-simbolo.mjs</code>, доказанный мутацией в spec рядом: ссылка, сдвинутая
+за пределы окна, проваливает, символ, ушедший из файла, проваливает, путь,
+больше не разрешающийся, проваливает, а текст, переписанный до нуля
+извлечений, — <code>CEGO</code>, никогда не <code>ok</code>. Когда проваливает, исправьте ссылку
+<strong>по символу</strong> (вывод называет ближайшую строку, где он встречается, — это
+подсказка, а не исправление). Не расширяйте окно и не сужайте шаблон, чтобы
+реальная ссылка исчезла; сужайте его только из-за реального ложного
+срабатывания, с этим случаем в spec.</p>
+<p>Переводы pt-BR трёх файлов RN в <code>website/i18n/</code> <strong>не</strong> проверяются. В них
+мало ссылок (23 совпадают с шаблоном, 15 из них неверны на 2026-10-01), а
+перевод в любом случае отстаёт от английского источника; проверка копии,
+которую никто не поддерживает в актуальном состоянии, проваливала бы каждый
+PR из-за отставания перевода.</p>
+<h3 id="every-rn-heading-carries-its-anchor">Каждый заголовок RN несёт свой якорь</h3>
+<p>Якорь <code>{#rn-NNN}</code> в заголовке RN — контракт для внешних ссылок: он переживает
+новый заголовок RN и перенос RN в другой файл. 2026-09-26 (AT-230) в <code>dev</code>
+было <strong>451</strong> заголовок <code>### RN-</code> и <strong>449</strong> якорей. RN-305 и RN-306 были
+написаны без якоря, в <code>business-rules.md</code> и в его переводе pt-BR, и ничего не
+провалилось. Сборка сайта этого не ловит: без явного якоря Docusaurus
+выводит id из текста заголовка, и страница компилируется. Ломается ссылка
+<code>#rn-305</code>, которую кто-то напишет позже. Подсчёт RN тоже этого не ловит,
+потому что считает заголовки, а не якоря.</p>
+<p><code>generate.mjs</code> теперь это проверяет (<code>verificarAncorasDeRn</code>, с логикой в
+<code>scripts/docs/ancoras-de-rn.mjs</code>, доказанной мутацией в
+<code>ancoras-de-rn.spec.ts</code>). Каждый заголовок любого уровня, который
+<strong>начинается</strong> с <code>RN-&lt;цифры&gt;</code>, должен <strong>заканчиваться</strong> на <code>{#rn-&lt;mesmos dígitos&gt;}</code>, включая ведущие нули (<code>RN-001</code> → <code>rn-001</code>). Отсутствующий якорь и
+якорь с другим номером или именем проваливают оба, по строке на заголовок, с
+файлом и строкой. Ноль найденных заголовков — <code>CEGO</code>, и тоже проваливает.</p>
+<p><strong>Строгость: <code>block</code></strong>, в отличие от ссылок на строки выше: унаследованного
+долга нет (два недостающих якоря добавлены в том же изменении), и каждый
+новый заголовок пишет PR, который его добавляет.</p>
+<p><strong>Переводы тоже покрыты.</strong> Файлы находятся по glob: <code>docs/business-rules.md</code>,
+<code>docs/business-rules/*.md</code> (источник pt-BR, ADR 0216) и те же два пути в
+<code>website/i18n/&lt;locale&gt;/docusaurus-plugin-content-docs/current/</code> для каждого
+переведённого locale в <code>LOCALES_TRADUZIDOS</code> (<code>en</code>, <code>ru</code>, <code>zh-Hans</code>). Сайт
+locale отдаёт <code>business-rules#rn-305</code> из переведённого файла, а один из
+прежних переводов скопировал заголовок без якоря. Правило действует по
+заголовку, поэтому частичный перевод не проблема: непереведённая RN
+падает на источник pt-BR, который проверяется в любом случае.</p>
+<h3 id="the-runbook-procedures-table">Таблица процедур runbook</h3>
+<p>Runbook заканчивается таблицей своих процедур <strong>эксплуатации</strong> —
+<code>procedure | anchor | verification | schedule</code>, — говорящей, что доказывает
+каждую и что запускает это доказательство
+(<a href="../runbook.html#procedimentos-e-verificacao">Procedures and how each is verified</a>).
+Она существует из-за критерия закрытия EP-015: ни одной строки с пустой
+проверкой или со словами «см. ниже», а существующие доказательства
+запускаются по расписанию, а не по памяти. Измерено 2026-09-25 (AT-129):
+таблицы, о которой говорил критерий, в репозитории не существовало — копия
+из семи строк жила в заметках сопровождающего, против 28 процедур
+эксплуатации здесь, а одна строка указывала на другую заметку. Таблица имён
+файлов, написанная вручную, стареет так же, как числа в прозе, — spec
+переименовывают, workflow теряет <code>schedule:</code>, а ячейка продолжает
+утверждать.</p>
+<p><code>generate.mjs</code> её проверяет (<code>verificarProcedimentosDoRunbook</code>, логика в
+<code>scripts/docs/procedimentos-do-runbook.mjs</code>, доказанная мутацией в
+<code>procedimentos-do-runbook.spec.ts</code>). Для каждой строки она проваливает,
+когда:</p>
+<ul>
+<li>в ячейке <strong>anchor</strong> нет ссылки <code>(#id)</code>, или id не является явным <code>{#id}</code> в
+заголовке runbook, — тот же контракт, что у якорей RN: раздел с новым
+заголовком не может сломать ссылку;</li>
+<li>ячейка <strong>verification</strong> пуста, гласит «see below/above», называет файл, не
+отслеживаемый git, или цель <code>make</code>, которой нет в <code>Makefile</code>, или не
+называет ничего проверяемого и не начинается с <code>**None**</code> — явного
+заявления, что доказательства нет;</li>
+<li>сегмент <strong>schedule</strong> (они разделены <code>;</code>) не начинается со своего класса
+триггера — <code>weekly</code>/<code>daily</code>/<code>monthly</code>, <code>every PR</code>, <code>every tag</code> или
+<code>manual</code>, — или упомянутый в нём workflow не существует или не имеет этого
+триггера в прочитанном <code>on:</code> (<code>schedule:</code>, <code>pull_request</code>, <code>push: tags</code>).
+Сегмент <code>manual</code> не может упоминать workflow.</li>
+</ul>
+<p>Колонка называется <code>schedule</code> и намеренно принимает <code>every PR</code> и <code>every tag</code>.
+Вопрос критерия — «запускается ли без того, чтобы кто-то вспомнил?», и spec,
+который <code>ci.yml</code> запускает в каждом pull request, отвечает «да»; назвать его
+<code>manual</code> значило бы ошибиться в обратную сторону. Проверка гарантирует, что
+записанный класс — тот, который у workflow <strong>есть</strong>: <code>weekly</code>, указывающий на
+workflow без <code>schedule:</code>, проваливает, — это тот случай, который назвала
+AT-193.</p>
+<p>Отсутствующий раздел, отсутствующая таблица, изменённые заголовки колонок
+или ноль строк — <code>CEGO</code> и провал.</p>
+<p><strong>Строгость: <code>block</code></strong>, по той же причине, что и у якорей RN: таблица
+родилась с проверенной каждой строкой, поэтому унаследованного долга нет, а
+то, что сломает её потом (переименованный spec, workflow, потерявший
+расписание), — вина PR, который её сломал, и он же может её исправить.</p>
+<p><strong>Таблица есть только в runbook источника (<code>docs/runbook.md</code>).</strong> Его старая
+копия pt-BR отставала (AT-209) и ушла с ADR 0216; будущий перевод в
+<code>website/i18n/&lt;locale&gt;/</code> попадает под правило <code>traducao</code> docmap (<code>warn</code>) и не
+имел бы десяти явных id, которые добавила эта таблица. Вторая копия таблицы
+там, без проверки, была бы ровно той копией, которую таблица существует
+заменить.</p>
+<h3 id="the-adr-index-is-grouped-by-theme">Индекс ADR сгруппирован по темам</h3>
+<p>Индекс ADR группировался по фазам. Когда фазы закончились, последний раздел
+стал индексом: измерено 2026-10-01, 148 из 191 строки жили под
+<code>## Phase 12</code>. <a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202</a> группирует
+его по <strong>теме</strong> и выносит тему <strong>за пределы</strong> ADR — принятый ADR никогда не
+редактируется, даже чтобы получить ключ <code>tema:</code> во frontmatter.</p>
+<p>Тема живёт в <code>docs/adr/temas.yml</code>, рядом с индексом: <code>temas:</code> — закрытый
+упорядоченный список (<code>id</code>, <code>titulo</code>, <code>descricao</code>), а <code>adrs:</code> сопоставляет
+каждый номер ADR ОДНОЙ теме. Индекс <strong>проверяется, а не генерируется</strong> —
+однострочные описания курируются, и ни один скрипт их не пишет, по той же
+причине, что приводит <code>verificarIndiceAdr</code>, — и каждая тема — это раздел
+<code>## &lt;titulo&gt; {#tema-&lt;id&gt;}</code>, в порядке списка, со строками в числовом
+порядке.</p>
+<p><code>generate.mjs</code> его проверяет (<code>verificarTemasDeAdr</code>, сразу после
+<code>verificarIndiceAdr</code>; логика в <code>scripts/docs/temas-de-adr.mjs</code>, доказанная
+мутацией в <code>temas-de-adr.spec.ts</code>). Он проваливает файл ADR без темы, тему в
+карте, которой нет в списке, запись карты для несуществующего ADR, тему из
+списка без ADR, повторяющийся или неправильно оформленный id или заголовок
+темы, а в индексе — отсутствующий, повторяющийся, неверно названный, не по
+порядку стоящий или неизвестный раздел темы, или строку ADR под разделом
+другой темы, вне какого-либо раздела темы, повторяющуюся или нарушающую
+числовой порядок. Нечитаемый YAML, пустой список или карта, или индекс вообще
+без разделов тем (старый индекс по фазам) — <code>CEGO</code> и провал.</p>
+<p><strong>Строгость: <code>block</code></strong>, как у таблицы runbook: родилась с
+классифицированным каждым ADR, поэтому то, что сломает её потом, — новый ADR,
+чей PR забыл его строку в <code>temas.yml</code>, — PR, который может это исправить.
+Переводы индекса живут в <code>website/i18n/&lt;locale&gt;/</code> и не проверяются; правило
+<code>traducao</code> предупреждает, как всегда.</p>
+<h2 id="the-pieces">Части</h2>
+<pre class="mermaid" data-mermaid>flowchart TD
+  A[docs/.docmap.yml&lt;br/&gt;mapa código → doc] --&gt; B[docmap.mjs&lt;br/&gt;valida o mapa]
+  A --&gt; C[drift.mjs&lt;br/&gt;cobra no PR]
+  D[código] --&gt; E[generate.mjs&lt;br/&gt;gera e verifica]
+  E --&gt; F[docs/]
+  C --&gt; G[docs-check.yml&lt;br/&gt;guardião do PR]
+  B --&gt; G
+  E --&gt; G
+  F --&gt; H[docs-build&lt;br/&gt;link quebrado reprova]
+  H --&gt; G
+  A --&gt; I[audit.mjs&lt;br/&gt;mensal: docs velhas]
+</pre>
+<h3 id="docsdocmapyml--the-map"><code>docs/.docmap.yml</code> — карта</h3>
+<p>Связывает пути кода с документами, которые от них зависят. Это единственный
+источник, говорящий «кто трогает это, должен пересмотреть то».</p>
+<p>Две строгости: <code>block</code> проваливает PR, <code>warn</code> только комментирует. И атрибут
+<code>generated: true</code>, отмечающий документы, которые выходят из генератора.</p>
+<p>Правило, требующее бессмысленного, приучает людей рефлекторно хвататься за
+аварийный выход. Поэтому <code>politica-de-branches</code> следит за <strong>списком
+разрешённых</strong> в <code>scripts/ci/</code> — скриптами, которые <em>являются</em> политикой веток,
+и их spec, — а не за <code>scripts/ci/**</code> минус вручную поддерживаемый список
+исключений, в который должен был попадать каждый новый spec масштаба всего
+репозитория в этой папке (одиннадцать до AT-206). Список разрешённых не
+отказывается от закрытости при сбое:
+<code>scripts/docs/politica-de-branches.spec.ts</code> выводит множество из
+репозитория — каждый файл <code>scripts/ci/</code>, чей открывающий docblock цитирует
+<code>branching-policy.md</code>, плюс его spec, — и проваливается, если правило
+расходится. Новый скрипт политики объявляет свой источник в заголовке, как и
+остальные, а spec делает остальное.</p>
+<h3 id="docmapmjs--validates-the-map"><code>docmap.mjs</code> — проверяет карту</h3>
+<p>Запускается раньше всего остального, потому что сломанная карта заставляет
+остальное лгать. Проваливает, если:</p>
+<ul>
+<li><strong>glob не совпадает ни с одним файлом</strong> — мёртвое правило. Оно никогда не
+срабатывает и создаёт впечатление покрытия, которого нет. Это самый тихий
+дефект, какой может быть у docmap, и он был обнаружен в 8 glob, когда
+появился валидатор.</li>
+<li>документ, на который указывает карта, не существует</li>
+<li>есть дублирующийся id или недопустимая <code>severity</code></li>
+</ul>
+<h3 id="generatemjs--generates-and-verifies"><code>generate.mjs</code> — генерирует и проверяет</h3>
+<p>Два режима вывода:</p>
+<p><strong>Целый файл</strong> — <code>docs/reference/scripts.md</code>. Прозы для сохранения нет:
+список команд и есть содержимое. Он берётся из <code>package.json</code> каждого
+пакета и из аннотированных целей <code>Makefile</code>. Список пакетов объявлен в
+<code>gerarScripts</code>, включая два пакета вне workspace (<code>website/</code>, <code>e2e/</code>,
+запускаемые с <code>--dir</code>), а отсутствующий или не разбираемый <code>package.json</code>
+проваливает генерацию, называя его, — раньше пакет молча отбрасывался
+(AT-224).</p>
+<p><strong>Помеченный блок</strong> — фрагмент между <code>&lt;!-- BEGIN:GENERATED:&lt;id&gt; --&gt;</code> и
+<code>&lt;!-- END:GENERATED:&lt;id&gt; --&gt;</code> внутри файла, написанного вручную. Это случай
+<code>configuration.md</code> и <code>events.md</code>: там проза («что ломается, когда эта
+переменная неверна») стоит гораздо больше списка, но <strong>список</strong> должен быть
+полным. Блок — инвентарь; текст вокруг — объяснение.</p>
+<p>Инвентарь помечает ⚠️ то, что встречается в коде и <strong>не</strong> имеет описания в
+прозе. Так <code>tool.result</code> и <code>agent.response</code> — два настоящих типа событий —
+появились после того, как не попали в первый черновик.</p>
+<p><strong>Что ловит инвентарь окружения, измерено (AT-124, 2026-09-25).</strong> Источники
+и их glob живут в <code>scripts/docs/fontes-de-env.mjs</code>, доказанные против
+реального дерева <code>fontes-de-env.spec.ts</code>. По одной мутации на источник —
+новый <code>process.env.X</code> в файле прямо в <code>e2e/</code>, вложенном в <code>e2e/suporte/</code>,
+прямо в <code>apps/api/scripts/</code> и на уровень ниже, каждый с <code>git add</code>, —
+заставили <code>--check</code> провалиться с <code>DESATUAL</code> в <code>configuration.md</code> во всех
+четырёх. Найдена и закрыта одна дыра: фильтр <code>.spec.</code>, правильный для
+источников, где spec — модульный тест рядом с кодом, отбрасывал также
+<code>e2e/testes/*.spec.ts</code> — сами тесты Playwright, где новая переменная <code>e2e/</code>
+скорее всего и родится, — и эта мутация проходила зелёной. Одно
+ограничение заявлено: инвентарь читает только <strong>версионируемые</strong> файлы
+(<code>git ls-files</code>), поэтому неотслеживаемый файл невидим до <code>git add</code>.</p>
+<p><strong><code>deploy/k8s/*.sh</code> стал источником (AT-212, 2026-09-28).</strong> Bootstrap и
+доказательства свойств читают двадцать с лишним переменных окружения — имя
+кластера, namespace, учётную запись smoke, потолки каждого доказательства, —
+и ни одной не было в инвентаре. Это источник <code>ferramenta</code>, сопоставляемый по
+<strong>раскрытию со значением по умолчанию</strong> shell (<code>${X:-…}</code>, <code>${X:=…}</code>,
+<code>${X:?…}</code>) и только по нему: чистый <code>${X}</code> почти всегда — переменная самого
+скрипта. Мутация: новый <code>${X:-x}</code> в <code>deploy/k8s/validate.sh</code>, в stage,
+заставил <code>--check</code> провалиться с <code>DESATUAL</code> и строкой <code>SEM DESC.</code>, называющей
+переменную и файл.</p>
+<p><strong>⚠️ окружения — это ворота (AT-211, 2026-09-27).</strong> До этого проваливал лишь
+<strong>устаревший блок</strong>: как только <code>docs:generate</code> его переписывал, переменная
+оставалась там с ⚠️, и <code>--check</code> проходил — <code>HUGGINGFACE_API_TOKEN</code> и
+<code>HUGGINGFACE_HUB_URL</code> оставались так месяцами. Решением сопровождающего
+<code>--check</code> теперь проваливает <strong>любой</strong> ⚠️ в инвентаре окружения, для <strong>обоих</strong>
+видов источника (<code>produto</code> и <code>ferramenta</code>), даже с актуальным блоком. Сбой
+называет переменную, файл, который её читает, и раздел <code>configuration.md</code>,
+куда идёт описание (строки <code>SEM DESC.</code>). Правило живёт в
+<code>scripts/docs/inventario-de-env.mjs</code> и доказано мутацией в
+<code>inventario-de-env.spec.ts</code>: новая переменная без описания проваливает, та же
+с описанием проходит.</p>
+<p><code>**TODO(humano):**</code> в строке, упоминающей переменную, <strong>считается описанием</strong>
+и не проваливает: правило документации — «никогда не выдумывать; без
+информации — TODO(humano)», а ворота, проваливающие TODO, подталкивали бы
+того, кто не знает, что делает переменная, выдумать фразу ради зелёного.
+TODO — <strong>объявленный</strong> пробел, с вопросом, записанным там, где будет ответ;
+⚠️ — <strong>молчаливый</strong> пробел. <code>--check</code> всё равно перечисляет переменные,
+описанные только TODO, в строке <code>TODO</code>, без провала. Инвентарь событий в
+<code>events.md</code> сохраняет свой ⚠️ как видимый пробел — решение касалось только
+инвентаря окружения.</p>
+<p><code>--check</code> ничего не пишет и проваливается, если что-либо стало бы иным. Это
+режим CI.</p>
+<h3 id="driftmjs--enforces-it-in-the-pr"><code>drift.mjs</code> — требует в PR</h3>
+<p>Сопоставляет <code>git diff --name-only &lt;base&gt;...HEAD</code> с картой. Для каждого
+сработавшего правила, документ которого не тронут: <code>block</code> проваливает,
+<code>warn</code> комментирует.</p>
+<p>В PR Dependabot, чей diff — только замена закрепления action, шаг сразу
+перед drift (<code>scripts/ci/dependabot-justifica-pin.ts</code>) пишет строку
+<code>docs-not-needed:</code> в тело, в том же job, чтобы записать и прочитать за один
+запуск. Workflow слушает <code>edited</code>, а <code>@dependabot rebase</code> порождает
+<code>synchronize</code> и <code>edited</code> вместе; <code>concurrency</code> отменяет один, поэтому
+выживший запуск может быть запуском <code>edited</code>. Поэтому шаг также срабатывает
+на <code>edited</code>, <strong>когда редактировал бот</strong> (AT-100), и никогда — когда человек
+(удаление им строки побеждает). Зациклиться невозможно: правки тела,
+сделанные токеном workflow, не порождают <code>edited</code>. Сбой остаётся закрытым:
+если запись не удалась, drift читает тело события, и PR остаётся
+заблокированным.</p>
+<h3 id="auditmjs--the-monthly-audit"><code>audit.mjs</code> — ежемесячный аудит</h3>
+<p>Проверка дрейфа ловит документ, ставший <strong>неверным</strong> в PR. Аудит ловит
+документ, ставший <strong>старым</strong>, хотя его никто не трогал, — это сложнее
+заметить. Он сообщает:</p>
+<ul>
+<li>страницы без изменений месяцами, у которых соответствующий код с тех пор
+изменился</li>
+<li>незакрытые пункты <code>TODO(human)</code></li>
+<li>ссылки <code>файл:строка</code>, которые больше не разрешаются</li>
+<li>ADR в статусе <code>proposed</code> дольше 60 дней</li>
+</ul>
+<p>Всегда в <strong>одном и том же</strong> issue, обновляемом на месте. Новый issue каждый
+месяц становится спамом, а спам отключают.</p>
+<h3 id="the-site-build">Сборка сайта</h3>
+<p><code>onBrokenLinks</code>, <code>onBrokenAnchors</code> и <code>onBrokenMarkdownLinks</code> установлены в
+<code>throw</code>. Перемещение файла без исправления тех, кто на него ссылается, ломает
+CI, а не превращается в 404 в production. Это самый дешёвый механизм из всего
+набора.</p>
+<h3 id="a-new-page-needs-to-be-added-to-sidebarsts-by-hand">Новую страницу нужно вручную добавить в <code>sidebars.ts</code></h3>
+<p>Markdown-содержимое живёт в <code>docs/</code>, а <strong>маршрутизация</strong> — в
+<code>website/sidebars.ts</code>, — и его разделы перечисляют элементы поштучно, а не
+обходят каталог. Создание файла в <code>docs/</code> без добавления его туда даёт
+страницу, которая существует, отдаётся по прямому URL и <strong>не появляется в
+навигации</strong>.</p>
+<p>Сборка <strong>не</strong> проваливается из-за этого: страница-сирота — не битая ссылка.
+Это визуальная проверка, и это единственный шаг механизма без страховки —
+после <code>pnpm docs:build</code> откройте боковую панель и убедитесь, что страница
+там.</p>
+<p>Исключение — ADR: группа «Decisões (ADR)» <strong>выводится</strong> при каждой
+сборке из <code>docs/adr/temas.yml</code> и файлов в <code>docs/adr/</code> — по одной
+подкатегории на тему, в порядке списка, с ADR в числовом порядке
+(AT-560). Новый ADR попадает в группу своей темы без правки
+<code>sidebars.ts</code>. Если парсер не находит ни одной темы, ни одного
+сопоставленного ADR или находит ADR без темы (что <code>docs:check</code> уже
+отклоняет), сборка падает с именованной ошибкой, а не рисует неверную
+боковую панель. Раздел «Объяснение» перечисляется вручную в пяти группах
+по предмету, и новая страница там по-прежнему добавляется описанным выше
+способом.</p>
+<h3 id="api-render-checkmjs--a-green-build-isnt-a-page-that-renders"><code>api-render-check.mjs</code> — зелёная сборка — не страница, которая отрисовывается</h3>
+<p>Эта часть существует из-за дорогого урока: <strong>117 страниц операций
+справочника API вышли в эфир мёртвыми в релизах <code>v1.0.0</code> и <code>v1.0.1</code></strong>, и ни
+одна проверка этого не поймала.</p>
+<p>Конфигурация Docusaurus не объявляла <code>docItemComponent: '@theme/ApiItem'</code>, поэтому Docusaurus использовал стандартный
+<code>@theme/DocItem</code>. <code>ApiItem</code> — единственное место в
+<code>docusaurus-theme-openapi-docs</code>, которое монтирует <code>&lt;Provider&gt;</code> redux, а
+<code>@theme/ApiExplorer/MethodEndpoint</code>, импортируемый каждым <code>.api.mdx</code>, читает
+этот store через <code>useSelector</code>. Без обёртки контекст пуст — и error boundary
+заменял всю страницу на <em>&quot;This page crashed.&quot;</em></p>
+<p>Здесь важен режим сбоя, потому что он побеждает все остальные части этого
+механизма:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>этап</th>
+<th>результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MDX компилируется</td>
+<td>✅ компоненты темы существуют и разрешаются</td>
+</tr>
+<tr>
+<td>SSR отрисовывает</td>
+<td>✅ отдаваемый HTML содержит содержимое маршрута</td>
+</tr>
+<tr>
+<td><code>pnpm docs:build</code></td>
+<td>✅ <strong>зелёный</strong></td>
+</tr>
+<tr>
+<td>гидратация в браузере</td>
+<td>❌ страница стирается</td>
+</tr>
+</tbody>
+</table></div>
+<p>Другими словами: <strong>«сборка прошла» никогда не было доказательством того, что
+страница работает.</strong></p>
+<p>Начиная с ADR 0206 этот плагин ушёл: справочник — <strong>одна страница Redoc</strong>
+(redocusaurus, отрисовываемая на сервере) в <code>/reference/api/</code>, и нет
+<code>ApiItem</code>, который можно забыть. Урок остаётся, поэтому остаётся и страж:
+<code>api-render-check.mjs</code> запускается после <code>docs:build</code> и утверждает, в обоих
+locale, что <code>reference/api.html</code> существует, несёт <code>info.title</code> из spec и
+содержит отрисованный на сервере раздел для каждой операции
+<code>docs/reference/openapi.json</code> (<code>data-section-id=tag/&lt;tag&gt;/operation/&lt;id&gt;</code>
+Redoc).</p>
+<p>Он ловит исчезновение страницы, пустую отрисовку или потерю операций — но не
+сбой гидратации, для которого нужен headless-браузер.</p>
+<p>Тот же эпизод породил правило <code>site-e-publicacao</code> в карте: <code>website/**</code> не
+покрывалось ни одним правилом, и изменение конфигурации сайта не требовало
+документации.</p>
+<h3 id="four-locales-with-pt-br-as-the-source-adr-0216">Четыре locale, с pt-BR как источником (ADR 0216)</h3>
+<p><code>docs/</code> — дерево <strong>pt-BR</strong>, источник и locale по умолчанию
+(<code>defaultLocale: 'pt-BR'</code>, отдаётся в корне каждого окружения). Переведённые
+locale — <code>en</code>, <code>ru</code> и <code>zh-Hans</code>, в
+<code>website/i18n/&lt;locale&gt;/docusaurus-plugin-content-docs/current/</code>, с подписями
+темы в <code>website/i18n/&lt;locale&gt;/docusaurus-theme-classic/</code> и подписями боковой
+панели в <code>.../docusaurus-plugin-content-docs/current.json</code>. Страница без
+перевода в locale отдаётся из источника pt-BR по тому же slug. Локальный
+поиск индексирует <code>pt</code>, <code>en</code>, <code>ru</code> и <code>zh</code>. Страницы, чья старая копия pt-BR
+устарела, остаются в <code>docs/</code> на том языке, на котором они есть, до своей
+партии.</p>
+<p>Английский сайт ушёл из корня в <code>/brabo/&lt;environment&gt;/en/…</code>, а старые ссылки
+на <code>/brabo/&lt;environment&gt;/pt-BR/…</code> переписываются корневым <code>404.html</code>
+(<code>scripts/docs/landing.mjs</code>) в <code>/brabo/&lt;environment&gt;/…</code>, по образцу
+<code>/main/</code> → <code>/prd/</code> (ADR 0073).</p>
+<p>Правило <code>traducao</code> в docmap (было <code>traducao-pt-br</code>) следит за источником и
+указывает на <code>website/i18n/</code>. Оно <code>warn</code> и никогда не <code>block</code>: требование
+перевода в каждом PR документации стоило бы трёх переводов на изменение.</p>
+<h3 id="translation-parity-is-generated-and-the-page-says-when-it-is-behind-at-550">Паритет перевода генерируется, и страница говорит, когда отстаёт (AT-550)</h3>
+<p>Отставание сдерживает измерение, а не docmap.
+<code>scripts/docs/paridade-de-traducao.mjs</code> (доказан мутацией в spec рядом)
+запускается внутри <code>pnpm docs:generate</code> и пишет два файла:
+<code>docs/reference/paridade-de-traducao.md</code> (<code>generated: true</code>) и
+<code>website/src/data/traducao.json</code>. По каждому locale он считает
+переведённые страницы и символы относительно источника (весь <code>docs/</code>, с ADR 0219 включая
+<code>reference/</code>, кроме самого отчёта и <code>openapi.json</code>) и делит переведённые страницы на <strong>актуальные</strong>,
+<strong>устаревшие</strong> и <strong>без происхождения</strong>. Происхождение — это
+<code>traducao_de: &lt;SHA&gt;</code> во frontmatter переведённой страницы, последний коммит
+источника, который она переводит. Страница устарела, когда у источника есть
+коммит с COMMIT DATE позже этого SHA, когда в источнике есть незакоммиченные
+изменения или когда SHA не существует. Он никогда не использует часы,
+поэтому <code>--check</code> даёт один и тот же ответ до и после коммита, касающегося
+источника. Для UI он сравнивает ключи каждого namespace в
+<code>apps/web/src/locales/&lt;l&gt;/</code> с pt-BR и требует каждую форму множественного
+числа, которую <code>Intl.PluralRules</code> даёт этому locale. <code>--check</code> проваливается,
+когда любой из двух файлов устарел.</p>
+<p>Полоса — это swizzle-обёртка <code>@theme/DocItem/Content</code>
+(<code>website/src/theme/DocItem/Content/index.tsx</code>). Вне pt-BR страница, чей
+<code>metadata.source</code> находится в <code>@site/docs/</code>, является запасным вариантом
+pt-BR и говорит об этом; переведённая страница, которую <code>traducao.json</code>
+помечает как устаревшую, показывает дату перевода и говорит, что оригинал
+изменился. Тексты живут в <code>code.json</code> каждого locale.
+<code>scripts/docs/faixa-de-traducao-check.mjs</code> запускается после
+<code>pnpm docs:build</code> и проверяет статический HTML: у страницы запасного варианта
+есть полоса (образец берётся из первого locale — <code>en</code>, <code>ru</code> или <code>zh-Hans</code>, —
+у которого ещё есть непереведённая страница; когда все полны, проверять
+запасной вариант нечего), тогда как та же страница в корне и переведённая на
+<code>en</code> неустаревшая страница её не имеют. Правила для переводчиков — в
+<a href="localizacao.html">Localização</a>.</p>
+<h3 id="the-api-page-is-translated-by-catalog-adr-0220">Страница API переводится по каталогу (ADR 0220)</h3>
+<p>Источником описаний страницы Redoc остаётся текст декораторов api, почти
+весь на английском. У каждой локали есть каталог
+<code>website/i18n/&lt;locale&gt;/openapi-textos.json</code> с ключом sha1 (12 hex) исходного
+текста и полями <code>fonte</code> и <code>traducao</code>. <code>docusaurus.config.ts</code> читает
+<code>DOCUSAURUS_CURRENT_LOCALE</code>, применяет каталог через
+<code>scripts/docs/openapi-por-locale.mjs</code> (чистая функция, доказанная мутацией в
+spec рядом) и пишет spec локали в <code>website/.openapi/</code>, вне git. Непереведённый
+текст остаётся исходным; <code>en</code> переводит только тексты на pt-BR. 18 подписей,
+которые Redoc принимает в <code>labels</code>, переводятся; остальные его фиксированные
+тексты остаются на английском. <code>docs:check</code> отклоняет осиротевший ключ (текст
+ушёл из api) и неверную запись (источник не совпадает с хешем или другое
+число фрагментов <code>`…`</code>); отсутствующие только предупреждают, а паритет
+считает их в отдельном разделе. <code>pnpm docs:openapi-textos &lt;locale&gt;</code> добавляет
+в каталог недостающие ключи с <code>traducao: &quot;&quot;</code>.</p>
+<h3 id="links-do-localemjs--a-rewritten-link-skips-the-broken-link-check"><code>links-do-locale.mjs</code> — переписанная ссылка ускользает от проверки битых ссылок</h3>
+<p>Хук <code>markdown.hooks.onBrokenMarkdownLinks</code> в <code>website/docusaurus.config.ts</code>
+переписывает ссылки, ломающиеся только из-за известного пробела перевода
+(<code>reference/</code>, <code>adr/</code>, <code>explanation/</code>), в <code>pathname://</code>. Это официальный
+аварийный выход Docusaurus, и ускользнуть — именно цель: <strong>ссылка
+<code>pathname://</code> больше никогда не проверяется</strong>, поэтому неверная переписка не
+может провалить сборку.</p>
+<p>Одна провалила — для всего сайта pt-BR (AT-221). Переписывание возвращало
+<code>pathname:///pt-BR/&lt;slug&gt;</code>, но <code>pathname://</code> — не абсолютный путь в домене:
+<code>&lt;Link&gt;</code> пропускает его через <code>useBaseUrl</code>, а baseUrl сборки pt-BR уже
+<code>/brabo/prd/pt-BR/</code>. Каждая переписанная ссылка выходила как
+<code>/brabo/prd/pt-BR/pt-BR/...</code>: 441 href на 56 страницах, все 404, при зелёном
+<code>docs:build</code>.</p>
+<p>Переписывание теперь живёт в <code>scripts/docs/links-do-locale.mjs</code> как чистая
+функция со spec и возвращает чистый slug — locale берётся из baseUrl любого
+компилируемого locale, а целевая страница там существует (переведённая или
+отдаваемая как запасной вариант по тому же slug). Тот же модуль, запущенный
+после <code>docs:build</code> в <code>docs-check.yml</code>, обходит сгенерированный HTML и
+проваливает любой <code>href</code> с удвоенным префиксом locale. Новый locale также
+входит в <code>LOCALES_COM_PREFIXO</code>, иначе его удвоение пройдёт молча. Начиная с
+ADR 0216 этот список — <code>en</code>, <code>ru</code> и <code>zh-Hans</code>: pt-BR — по умолчанию и не
+имеет префикса.</p>
+<p>При частичных переводах компиляция <code>en</code> ломает ссылку с непереведённой
+страницы (отдаваемой из источника pt-BR) на переведённую в любой папке, а не
+только в трёх зонах. Поэтому ссылка также считается пробелом, когда цель
+<strong>существует в источнике <code>docs/</code></strong> (<code>paginaExisteNaFonte</code>) — это страница,
+которую отдаёт locale, переведённая или как запасной вариант. Цель, которой
+нет нигде, по-прежнему проваливает сборку.</p>
+<p>Исключение для <code>adr/</code> также поглощало опечатку в имени файла ADR: оно
+смотрело только на <em>форму</em> имени (<code>NNNN-*.md</code>), поэтому
+<code>0055-politica-de-terminal.md</code> — ADR, никогда не существовавший с таким
+именем, — переписывался в slug, которого нет ни в одном locale. Двадцать три
+такие ссылки были в документации, 404 (AT-227). С тех пор цель, похожая на
+ADR, должна существовать в <code>docs/adr/</code> <strong>до</strong> того, как применится любое
+исключение пробела, включая источник внутри <code>adr/</code>, <code>reference/</code> или
+<code>explanation/</code>; неверный slug проваливает <code>docs:build</code> в каждом locale.</p>
+<p>Чего страж <strong>ещё не</strong> ловит: не-ADR ссылку изнутри одной из зон пробела, цель
+которой не существует в репозитории.</p>
+<h3 id="publishing-one-site-per-rung">Публикация, по сайту на ступень</h3>
+<p>Каждая постоянная ветка публикуется в своё собственное место того же GitHub
+Pages:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>ветка</th>
+<th>URL</th>
+<th>индексируется поисковиками</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>— (индекс)</td>
+<td><code>https://daneiel.github.io/brabo/</code></td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>main</code></td>
+<td><code>https://daneiel.github.io/brabo/prd/</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>qa</code></td>
+<td><code>https://daneiel.github.io/brabo/qa/</code></td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>dev</code></td>
+<td><code>https://daneiel.github.io/brabo/dev/</code></td>
+<td>❌</td>
+</tr>
+</tbody>
+</table></div>
+<p>Все три <strong>симметричны</strong> начиная с
+<a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071</a>; корень —
+сгенерированная страница, перечисляющая все три со штампованной версией
+каждого, и у каждого сайта есть переключатель вверху для смены ступени. До
+этого <code>main</code> публиковалась в корень, и этот особый случай заставлял workflow
+сохранять <code>/dev/</code> и <code>/qa/</code> на пути, выполнявшемся лишь в трети случаев.</p>
+<p><strong>Путь — не имя ветки.</strong>
+<a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073</a> разделил
+их: адрес называет <strong>окружение</strong> для читающего, а <code>main</code> — словарь того, кто
+коммитит. Поэтому <code>main</code> публикуется в <code>/prd/</code>; <code>qa</code> и <code>dev</code> совпадают
+случайно, а не по правилу. Карта ветка→путь существует в одной точке на
+процесс — шаг «какая ступень и куда публикуется» в workflow, таблица
+<code>DEGRAUS</code> в <code>docusaurus.config.ts</code> и та, что в <code>landing.mjs</code>, — и всё
+остальное выводится из неё.</p>
+<p>Два последствия, о которых стоит помнить, прежде чем это трогать:</p>
+<ul>
+<li><strong><code>/brabo/main/</code> публиковался и больше не публикуется.</strong> Поскольку дерево
+собирается и пушится с <code>keep_files: false</code>, каталог исчезает.
+Сохранённые ссылки сохраняет корневой <code>404.html</code>, который <strong>переписывает</strong>
+префикс (<code>/brabo/main/&lt;что-то&gt;</code> → <code>/brabo/prd/&lt;что-то&gt;</code>) как отдельный
+случай, отдельно от общего перенаправления, — которое дало бы
+<code>/brabo/prd/main/&lt;что-то&gt;</code>. Защита от зацикливания покрывает только
+существующие пути (<code>prd|qa|dev</code>).</li>
+<li><strong><code>/prd/</code> был засеян из <code>gh-pages:main</code></strong> при переходе, по той же
+причине, по которой ADR 0071 засеял <code>/main/</code> из старого корня: без этого
+<code>/brabo/prd/</code> отвечал бы 404 между первым push в <code>dev</code> и следующим
+продвижением в <code>main</code>. Засев <strong>переписан</strong> с <code>/brabo/main/</code> на
+<code>/brabo/prd/</code>, потому что <code>404.html</code> не спасает подресурсы — CSS и JS,
+запрошенные по старому адресу, получили бы обратно HTML со статусом 404, и
+сайт отдавал бы сырой текст.</li>
+</ul>
+<p>Это закрывает пробел конвейера: между merge в <code>dev</code> и финальным
+продвижением чтение документации этого состояния требовало клонировать
+репозиторий. <code>docs-check</code> собирает сайт в каждом PR, но <strong>отбрасывает
+сборку</strong> — его вердикт «собирается без битых ссылок», а не «живёт где-то,
+где я могу открыть». И именно этот разрыв между написанием и просмотром
+позволил справочнику API выйти в эфир сломанным на два релиза.</p>
+<p>Три неочевидные детали, каждая из которых уже стоила по багу:</p>
+<ul>
+<li><strong><code>baseUrl</code> берётся из <code>DOCS_BASE_URL</code></strong>, со значением production по
+умолчанию. Он входит в каждый URL ассета: сайт в <code>/brabo/dev/</code> с
+<code>baseUrl: '/brabo/'</code> загружает HTML и больше ничего, и страница оказывается
+<em>сломанной без ошибки</em>.</li>
+<li><strong>Ступень объявляется в <code>DOCS_BRANCH</code>, а не выводится из <code>baseUrl</code>.</strong>
+Раньше было <code>BASE_URL === '/brabo/'</code>, и это работало, пока <code>main</code> была
+единственной в корне. Когда все три оказались в подкаталоге, это сравнение
+стало ложным и для <code>main</code>, и эффектом был бы <code>noIndex</code> на НАСТОЯЩЕЙ
+документации — вне Google, молча, при зелёном CI, потому что ничто в
+сборке не проваливается из-за недоиндексации. ADR 0073 — ровно тот
+сценарий, для которого было построено это разделение: путь сменился на
+<code>/prd/</code>, и <code>E_PRODUCAO</code> не понадобилось об этом знать.</li>
+<li><strong><code>noIndex</code> вне <code>main</code> требует <code>forceIgnoreNoIndex</code> в поиске.</strong>
+<code>@easyops-cn/docusaurus-search-local</code> отбрасывает каждую страницу с
+<code>&lt;meta name=&quot;robots&quot; content=&quot;noindex&quot;&gt;</code>, поэтому обе защиты взаимно
+уничтожились бы: ступени публиковались бы с мёртвым поиском, индексом в
+666 байт, <em>&quot;No results&quot;</em> на всё. <code>noIndex</code> говорит с <strong>внешними</strong>
+поисковиками; <code>forceIgnoreNoIndex</code> — с <strong>локальным</strong> индексом.</li>
+<li><strong><code>main</code> собирает дерево перед публикацией</strong>, возвращая <code>/dev/</code> и <code>/qa/</code>.
+<code>keep_files: true</code> было бы проще и неправильно: оно никогда ничего не
+удаляло бы, и страница, удалённая из репозитория, оставалась бы
+опубликованной навсегда.</li>
+</ul>
+<h3 id="publishing-is-two-workflows-and-only-one-is-ours">Публикация — это ДВА workflow, и только один наш</h3>
+<p>Это сбивает с толку того, кто ищет deploy во вкладке Actions:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>порядок</th>
+<th>workflow</th>
+<th>где живёт</th>
+<th>что делает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong><code>Documentação</code></strong> (<code>docs-deploy.yml</code>)</td>
+<td><code>.github/workflows/</code></td>
+<td>собирает сайт и <strong>коммитит в <code>gh-pages</code></strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong><code>pages build and deployment</code></strong></td>
+<td><code>dynamic/pages/</code> — <strong>генерируется GitHub</strong></td>
+<td>читает <code>gh-pages</code> и <strong>отдаёт его</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Второго нет в репозитории, и он не появляется в списке версионируемых
+workflow; GitHub создаёт его сам, когда источник Pages — ветка. Наш workflow
+заканчивается коммитом — он <strong>не</strong> публикует в Pages, хотя его job всё ещё
+называется &quot;Publish to GitHub Pages&quot;.</p>
+<blockquote>
+<p><strong>Практическое последствие:</strong> сайт может быть старым даже при зелёной
+<code>Documentação</code>. Если <code>build_type</code> у Pages не <code>legacy</code>/<code>gh-pages</code>, коммит
+происходит, и никто его не отдаёт, — и ничто в CI не краснеет. Проверка —
+<code>gh api repos/daneiel/brabo/pages</code>, записанная в
+<a href="../reference/rulesets.html">Rulesets</a>.</p>
+</blockquote>
+<p>Весь замысел, с отвергнутыми альтернативами, — в
+<a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034</a>.</p>
+<h2 id="site-colors-come-from-the-product">Цвета сайта берутся из продукта</h2>
+<p><code>website/src/css/custom.css</code> ИМПОРТИРУЕТ <code>design/tokens.css</code> — тот же источник
+цвета, что и у <code>apps/web</code> (ADR 0181), — и лишь направляет <code>--ifm-*</code> Infima на
+токены: тёмная тема чёрная, светлая белая, primary терракотовый (<code>--accent</code>),
+подсветка кода через <code>--syntax-*</code>. Ни один hex не скопирован. Шрифты намеренно
+остаются системными: сайт не загружает семейства, которые называют <code>--font-*</code>.
+<code>scripts/docs/contraste-do-site.spec.ts</code> разрешает текстовые <code>--ifm-*</code> до hex
+в обеих темах и проваливает контраст ниже 4,5:1 относительно фона (и
+проваливается как СЛЕПОЙ, если ничего не разрешилось).</p>
+<p>Исключение — корневой индекс (<code>/brabo/</code>, его пишет <code>scripts/docs/landing.mjs</code>):
+это отдельный HTML на Pages, он не достаёт до <code>tokens.css</code> и поэтому КОПИРУЕТ
+значения, в обеих темах по системной настройке. Копию связывает
+<code>scripts/docs/landing.spec.ts</code>, который разрешает токены и проваливает
+расходящееся значение — однажды после ADR 0181 она уже стала цвета петроль.</p>
+<h2 id="running-it-on-your-machine">Запуск на вашей машине</h2>
+<p>У <code>website/</code> собственный <code>pnpm-lock.yaml</code> начиная с <a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117</a> —
+<code>pnpm install</code> в корне его больше не достаёт, поэтому в первый раз (или
+после изменения его lockfile) нужен лишний шаг:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">cd</span><span style="color:var(--shiki-token-string)"> website</span><span style="color:var(--shiki-token-punctuation)"> &#x26;&#x26;</span><span style="color:var(--shiki-token-function)"> pnpm</span><span style="color:var(--shiki-token-string)"> install</span><span style="color:var(--shiki-token-punctuation)"> &#x26;&#x26;</span><span style="color:var(--shiki-token-function)"> cd</span><span style="color:var(--shiki-token-string)"> ..</span><span style="color:var(--shiki-token-comment)">  # only the first time, or when website/pnpm-lock.yaml changes</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> docs:check</span><span style="color:var(--shiki-token-comment)">      # validates the map + checks generated content is up to date</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> docs:generate</span><span style="color:var(--shiki-token-comment)">   # regenerates</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> docs:drift</span><span style="color:var(--shiki-token-comment)">      # simulates the PR check (origin/dev...HEAD)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> docs:build</span><span style="color:var(--shiki-token-comment)">      # the build CI runs — pnpm --dir website build under the hood</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> docs:start</span><span style="color:var(--shiki-token-comment)">      # local server, with hot reload</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># does the API reference render? needs the build above, and isn't part</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># of docs:check because that one doesn't build the site</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">node</span><span style="color:var(--shiki-token-string)"> scripts/docs/api-render-check.mjs</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">node</span><span style="color:var(--shiki-token-string)"> scripts/docs/links-do-locale.mjs</span><span style="color:var(--shiki-token-comment)">   # no href with a doubled locale prefix (AT-221)</span></span>
+<span class="line"></span></code></pre>
+<p>Или, если вы в Claude Code, <code>/sync-docs</code> прогоняет весь цикл и выдаёт отчёт
+о том, что изменилось, что стало <code>TODO(human)</code> и что было намеренно
+<strong>оставлено</strong> без изменений.</p>
+<h3 id="conjunction-by-default-disjunction-when-the-doc-was-split">Конъюнкция по умолчанию, дизъюнкция, когда документ разделён</h3>
+<p>Список <code>docs:</code> правила — <strong>конъюнкция</strong>: каждый перечисленный документ должен
+измениться, иначе правило срабатывает. Это правильное значение по умолчанию
+— именно оно делает требуемым «изменил gate — обнови документ gate И
+правила».</p>
+<p>Оно оказалось неверным ровно один раз, и исправление — <code>docs_alternativos:</code>,
+<strong>дизъюнкция</strong>: любой из перечисленных документов удовлетворяет правилу. Она
+существует, потому что <code>business-rules.md</code> был разделён по размеру (одни
+Custo и Autenticação составляли половину страницы в 640 КБ), поэтому
+бизнес-правило теперь живёт в одном из трёх файлов. При конъюнкции изменение
+правила auth требовало бы также индекса — файла, который больше не содержит
+это правило, — и выходом того, с кого требуют, был бы аварийный выход
+<code>docs-not-needed</code>. <strong>Правило, приучающее людей пользоваться аварийным
+выходом, хуже отсутствия правила</strong>: оно тренирует их игнорировать проверку.</p>
+<p><code>docmap.mjs</code> проверяет оба списка одинаково: несуществующий путь — та же
+тихая ошибка, что и мёртвый glob: альтернатива с опечаткой никогда не могла
+бы удовлетворить правило, и никто бы этого не увидел.</p>
+<h2 id="when-the-check-complains-unfairly">Когда проверка жалуется несправедливо</h2>
+<p>Иногда она будет жаловаться несправедливо. Рефакторинг, переименовывающий
+внутренние переменные, запускает <code>dominio-e-regras</code>, не меняя ни одного
+бизнес-правила. Это ожидаемо: карта работает по пути файла, а не по
+семантике.</p>
+<p>Есть <strong>два</strong> выхода, и оба требуют, чтобы кто-то объяснил почему:</p>
+<pre class="codigo"><code>PR label:      docs-not-needed
+or in the body: docs-not-needed: internal refactor, no RN changed
+</code></pre>
+<p>Пользуйтесь без чувства вины, когда это уместно. Аварийный выход существует
+<strong>намеренно</strong>: без законного выхода формируется привычка жульничать —
+косметический коммит в документ только для прохождения проверки. Тогда
+механизм начинает лгать, что хуже, чем его отсутствие.</p>
+<p><strong>Один класс PR получает строку в теле от бота</strong>, и только один: PR
+Dependabot, чей diff — ничего, кроме замены закреплений action (SHA <code>uses:</code> и
+его комментарий с версией). Шаг сразу перед drift пишет строку, помеченную
+как от бота, а drift по-прежнему читает только строку — см.
+<a href="branching-policy.html#a-pin-bump-justifies-itself">A pin bump justifies itself</a>.
+Поскольку правка тела с <code>GITHUB_TOKEN</code> не порождает событие <code>edited</code>, а
+повторный запуск переиспользует исходный payload, drift читает тело из
+<code>PR_BODY_FILE</code>, когда этот шаг его переписал, и из события — в противном
+случае.</p>
+<p>Что <strong>не</strong> правильно — пользоваться аварийным выходом из спешки. Если вы
+воспользовались им трижды за одну неделю для одного и того же правила,
+проблема в правиле: поправьте glob в <code>docs/.docmap.yml</code> или понизьте
+строгость с <code>block</code> до <code>warn</code>.</p>
+<h2 id="when-the-mechanism-itself-is-wrong">Когда неправ сам механизм</h2>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>симптом</th>
+<th>исправление</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>правило срабатывает на нерелевантное изменение</td>
+<td>слишком широкий glob — сузьте <code>watch</code></td>
+</tr>
+<tr>
+<td>правило никогда не срабатывает</td>
+<td>мёртвый glob — <code>pnpm docs:check</code> его укажет</td>
+</tr>
+<tr>
+<td>генерируемое содержимое в CI всегда устаревшее</td>
+<td>кто-то правил его вручную; исправьте генератор или источник</td>
+</tr>
+<tr>
+<td>сборка ломается на <code>{</code> или на голом HTML</td>
+<td><code>.md</code> — это CommonMark; если нужен компонент React, переименуйте в <code>.mdx</code></td>
+</tr>
+<tr>
+<td>аудит сообщает сам о себе</td>
+<td>добавьте файл в список <code>META</code> в <code>audit.mjs</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="what-this-mechanism-doesnt-do">Чего этот механизм не делает</h2>
+<p><strong>Он не проверяет, верен ли текст.</strong> Он проверяет, был ли текст
+<em>пересмотрен</em>, когда изменился код, и полны ли списки. Фактически неверная
+фраза, которую никто не трогал, проходит любую проверку — для этого и
+существуют человеческое чтение и <code>/sync-docs</code>.</p>
+<p><strong>Он не пишет документацию.</strong> Он генерирует инвентарь и требует ревью. Что
+делает переменная, когда она неверна, зачем существует потолок, что
+расследовать во время инцидента, — это по-прежнему работа, которую нужно
+написать.</p>
+<p><strong>Он не требует <code>README.md</code>, как и ничего, за чем не следит ни одно
+правило.</strong> Docmap — пол, а не потолок: 2026-07-29 ни одно правило не следило
+за сердцем наблюдаемости (<code>tracing.ts</code>, <code>infrastructure/observability/**</code>,
+<code>telemetry/**</code>, <code>lib/logger.ts</code>), а <code>README.md</code> едва требуется каким-либо
+правилом. Поставлять лишь то, что требует CI, — именно так две фразы об
+<code>OTEL_EXPORTER_OTLP_ENDPOINT</code> оставались неверными месяцами. Когда меняете
+код, просмотрите <code>docs/</code> в поисках того, что изменение сделало ложным, —
+включая то, на что никто не просил вас смотреть.</p>
+<nav class="site-pager"><a href="../explanation/branching-policy.html"></a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/documentation-workflow.md">Редактировать страницу</a><span>Обновлено 2026-11-04T22:09:58-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#the-principle-generate--verify--remember">Принцип: генерировать &gt; проверять &gt; напоминать</a></li><li class="n3"><a href="#a-number-in-prose-is-a-verify-case">Число в прозе — случай проверки</a></li><li class="n3"><a href="#line-references-with-a-symbol">Ссылки на строки с символом</a></li><li class="n3"><a href="#every-rn-heading-carries-its-anchor">Каждый заголовок RN несёт свой якорь</a></li><li class="n3"><a href="#the-runbook-procedures-table">Таблица процедур runbook</a></li><li class="n3"><a href="#the-adr-index-is-grouped-by-theme">Индекс ADR сгруппирован по темам</a></li><li class="n2"><a href="#the-pieces">Части</a></li><li class="n3"><a href="#docsdocmapyml--the-map">docs/.docmap.yml — карта</a></li><li class="n3"><a href="#docmapmjs--validates-the-map">docmap.mjs — проверяет карту</a></li><li class="n3"><a href="#generatemjs--generates-and-verifies">generate.mjs — генерирует и проверяет</a></li><li class="n3"><a href="#driftmjs--enforces-it-in-the-pr">drift.mjs — требует в PR</a></li><li class="n3"><a href="#auditmjs--the-monthly-audit">audit.mjs — ежемесячный аудит</a></li><li class="n3"><a href="#the-site-build">Сборка сайта</a></li><li class="n3"><a href="#a-new-page-needs-to-be-added-to-sidebarsts-by-hand">Новую страницу нужно вручную добавить в sidebars.ts</a></li><li class="n3"><a href="#api-render-checkmjs--a-green-build-isnt-a-page-that-renders">api-render-check.mjs — зелёная сборка — не страница, которая отрисовывается</a></li><li class="n3"><a href="#four-locales-with-pt-br-as-the-source-adr-0216">Четыре locale, с pt-BR как источником (ADR 0216)</a></li><li class="n3"><a href="#translation-parity-is-generated-and-the-page-says-when-it-is-behind-at-550">Паритет перевода генерируется, и страница говорит, когда отстаёт (AT-550)</a></li><li class="n3"><a href="#the-api-page-is-translated-by-catalog-adr-0220">Страница API переводится по каталогу (ADR 0220)</a></li><li class="n3"><a href="#links-do-localemjs--a-rewritten-link-skips-the-broken-link-check">links-do-locale.mjs — переписанная ссылка ускользает от проверки битых ссылок</a></li><li class="n3"><a href="#publishing-one-site-per-rung">Публикация, по сайту на ступень</a></li><li class="n3"><a href="#publishing-is-two-workflows-and-only-one-is-ours">Публикация — это ДВА workflow, и только один наш</a></li><li class="n2"><a href="#site-colors-come-from-the-product">Цвета сайта берутся из продукта</a></li><li class="n2"><a href="#running-it-on-your-machine">Запуск на вашей машине</a></li><li class="n3"><a href="#conjunction-by-default-disjunction-when-the-doc-was-split">Конъюнкция по умолчанию, дизъюнкция, когда документ разделён</a></li><li class="n2"><a href="#when-the-check-complains-unfairly">Когда проверка жалуется несправедливо</a></li><li class="n2"><a href="#when-the-mechanism-itself-is-wrong">Когда неправ сам механизм</a></li><li class="n2"><a href="#what-this-mechanism-doesnt-do">Чего этот механизм не делает</a></li></ul></aside>
+</div>
+<script src="../../assets/mermaid.min.js"></script>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-ru.json" data-base="../"></script></body>
+</html>

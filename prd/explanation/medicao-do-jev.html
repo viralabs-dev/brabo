@@ -1,0 +1,1990 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Medição do roteador de ferramentas Jev | Brabo</title>
+<script src="../assets/tema.js"></script>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/fonts.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../index.html">Brabo</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../explanation/medicao-do-jev.html" selected>pt-BR</option><option value="../en/explanation/medicao-do-jev.html">en</option><option value="../ru/explanation/medicao-do-jev.html">ru</option><option value="../zh-Hans/explanation/medicao-do-jev.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../dev/explanation/medicao-do-jev.html">dev</option><option value="../../prd/explanation/medicao-do-jev.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><h2>🚀 Comece aqui</h2><ul><li><a href="../index.html">Introdução</a></li><li><a href="../getting-started.html">Primeiros passos</a></li><li><a href="../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li></ul></section><section><h2>🏗️ Arquitetura</h2><ul><li><a href="../architecture.html">Arquitetura</a></li><li><a href="../adr.html">Decisões (ADR)</a><ul><li><span>Git, repositório e política de branches</span><ul><li><a href="../adr/0001-git-provider-contract-shape.html">ADR 0001 — Formato do contrato normalizado do GitProvider</a></li><li><a href="../adr/0002-git-error-normalization.html">ADR 0002 — Normalização de erros do GitProvider</a></li><li><a href="../adr/0003-git-provider-retry-policy.html">ADR 0003 — Política de retry para providers remotos</a></li><li><a href="../adr/0004-git-credential-registration.html">ADR 0004 — Cadastro de credenciais de git do usuário</a></li><li><a href="../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005 — Bootstrap de Gitflow idempotente e retomável</a></li><li><a href="../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028 — Proteção de branch: divergência entre providers e a matriz de aprovação</a></li><li><a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030 — Política de branches mecanizada</a></li><li><a href="../adr/0044-adocao-de-repositorio-existente.html">ADR 0044 — Adoção de repositório existente, e o plano como portão</a></li><li><a href="../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056 — O engine trabalha em repositório remoto</a></li><li><a href="../adr/0139-o-alarme-de-esteira-ganha-destinatario.html">ADR 0139 — O alarme de merge de esteira ganha destinatário, e a regra de `dev`</a></li><li><a href="../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165 — O repositório nasce no aceite do handoff ao Arquiteto, e a execução não começa sem ele</a></li><li><a href="../adr/0217-promocao-automatica-para-qa-em-fase-de-teste.html">ADR 0217 — Promoção automática `dev` → `qa` enquanto a QA está em fase de teste</a></li><li><a href="../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.html">ADR 0235 — A `qa` é aposentada por hora e a esteira do repositório fica `dev → main`</a></li><li><a href="../adr/0236-o-dependabot-dispensa-revisao-na-dev.html">ADR 0236 — O Dependabot dispensa revisão na `dev` e fica mergeável com os outros checks verdes</a></li></ul></li><li><span>Harness de agente, turnos e sessões</span><ul><li><a href="../adr/0006-prompt-assembler-context-harness.html">ADR 0006 — Harness de agentes: montagem determinística de contexto</a></li><li><a href="../adr/0007-toolloop-tools-context-manager.html">ADR 0007 — ToolLoop, ferramentas, ContextManager (harness com LLM)</a></li><li><a href="../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061 — O tipo da sessão é dado da criação, e a execução continua sendo evento</a></li><li><a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098 — Limites de transporte e janela efetiva de compactação coerentes</a></li><li><a href="../adr/0163-o-clique-responde-ao-aceitar.html">ADR 0163 — O clique responde ao ACEITAR o comando, e o turno segue pelo canal</a></li><li><a href="../adr/0175-infra-lead-conversa-pelo-composer.html">ADR 0175 — O Infra Lead conversa pelo composer, e antes o turno dele passa pelo `TurnoAssincrono`</a></li><li><a href="../adr/0177-idioma-das-respostas-por-conta-sessao-e-projeto.html">ADR 0177 — O idioma das respostas mora em três lugares — conta, sessão e projeto —, em lista aberta de BCP-47 e nunca no `users.locale`</a></li><li><a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179 — O laço pergunta ao Jev qual ferramenta, e o modelo do usuário vê só o menu que sobra</a></li><li><a href="../adr/0183-reabrir-sessao-encerrada.html">ADR 0183 — A sessão encerrada pode ser reaberta: uma saída própria dos terminais, para `active`, com evento novo</a></li><li><a href="../adr/0184-reabrir-sessao-decisoes-do-dono.html">ADR 0184 — Reabrir sessão: as três decisões do dono, e `developer` reabre</a></li><li><a href="../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191 — A mensagem que chega com turno em curso entra numa fila persistida e é lida no fim do turno</a></li><li><a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226 — Diário vivo e retomada dos agentes: o turno interrompido volta uma vez, do plano</a></li><li><a href="../adr/0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.html">ADR 0246 — Anexos do chat: bytes no Postgres, referência no evento, visão por capability</a></li><li><a href="../adr/0247-uma-mensagem-varios-destinatarios.html">ADR 0247 — Uma mensagem, vários destinatários</a></li><li><a href="../adr/0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.html">ADR 0249 — O raciocínio do agente é gravado e mostrado só a developer ou mais</a></li></ul></li><li><span>O time de agentes — papéis, áreas e handoffs</span><ul><li><a href="../adr/0008-agente-criativo-conversacional-handoffs.html">ADR 0008 — Agente Criativo conversacional no harness + fundação de handoffs</a></li><li><a href="../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009 — Agente PO, backlog (epics/stories/tasks) e rastreabilidade</a></li><li><a href="../adr/0010-agente-arquiteto-adr-pr-module-map.html">ADR 0010 — Agente Arquiteto: ADRs via PR real, module_map e validação cruzada</a></li><li><a href="../adr/0014-infra-agent-painel-phoenix.html">ADR 0014 — InfraAgent e painel do time ao vivo (fechamento da Fase 4a)</a></li><li><a href="../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015 — Psicólogo real: ToolLoop, hipóteses com evidência e triagem de custo</a></li><li><a href="../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016 — Anamnese: perfil de proficiência, patches de instrução e loop fechado</a></li><li><a href="../adr/0022-fechamento-4b-psicologo.html">ADR 0022 — Fechamento da Fase 4b (sessão 1): evidência que chega, custo que aparece, análise que sobrevive ao kill</a></li><li><a href="../adr/0023-fechamento-4b-anamnese.html">ADR 0023 — Fechamento da Fase 4b (sessão 2): catálogo que funciona, dedup que distingue quem negou, e fila que sobrevive à rodada</a></li><li><a href="../adr/0038-hierarquia-de-agentes.html">ADR 0038 — Hierarquia de agentes: áreas, leads e delegação</a></li><li><a href="../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046 — Promoção de história com autoridade do usuário</a></li><li><a href="../adr/0053-dev-lead-e-paralelismo-autorizado.html">ADR 0053 — Dev Lead como área, e paralelismo autorizado pelo usuário</a></li><li><a href="../adr/0068-diagrama-c4-do-arquiteto.html">ADR 0068 — Diagrama C4 do Arquiteto</a></li><li><a href="../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069 — Fusão condicional do aceite do handoff com a ativação de execução</a></li><li><a href="../adr/0085-fluxo-como-registro-declarativo.html">ADR 0085 — Fluxo de papéis como registro declarativo (fluxo.yml)</a></li><li><a href="../adr/0086-dev-lead-plano-suspende-para-aprovacao.html">ADR 0086 — O plano do Dev Lead suspende o turno para aprovação</a></li><li><a href="../adr/0087-ux-designer-agente.html">ADR 0087 — O UX Designer entra como agente conversacional</a></li><li><a href="../adr/0088-staff-agente-dormente-para-disparo-automatico.html">ADR 0088 — Staff: código pronto, dormente para disparo automático</a></li><li><a href="../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">ADR 0089 — `analytics` e `delivery-metricas` viram script de relatório</a></li><li><a href="../adr/0092-platform-relatorio-de-telemetria-sob-demanda.html">ADR 0092 — `platform` nasce como script de relatório sob demanda, não agente</a></li><li><a href="../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">ADR 0093 — O papel `dbre` vira dois scripts: linter de migration e relatório de backup</a></li><li><a href="../adr/0094-delegacao-dev-lead-vira-dado.html">ADR 0094 — A delegação Dev Lead → dev vira dado, com `parecerArtifactId` redefinido</a></li><li><a href="../adr/0109-handoff-manual-a-agente-a-escolha.html">ADR 0109 — Handoff manual a um agente à escolha reusa oferta+aceite, nunca um terceiro estado de handoff</a></li><li><a href="../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182 — A oferta de handoff ganha ciclo de vida: uma pendente por destino, e `superseded`</a></li><li><a href="../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185 — &quot;Estou pronto — a necessidade está validada&quot;: um clique fecha a prontidão, o gate `necessidade-validada` e o aceite do PO</a></li><li><a href="../adr/0186-aceite-automatico-do-handoff-ao-arquiteto.html">ADR 0186 — O handoff do PO ao Arquiteto é aceito sem clique quando o backlog está coberto e o repositório é local</a></li><li><a href="../adr/0194-aprovar-o-plano-ativa-a-execucao.html">ADR 0194 — Aprovar o plano do Dev Lead ativa a execução, e a tarefa ganha o módulo que ele atribui</a></li><li><a href="../adr/0212-historia-arquivada.html">ADR 0212 — A história arquivada: uma coluna, não um estado da máquina</a></li><li><a href="../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213 — O entregável roda na máquina do usuário pelo compose da Infra</a></li></ul></li><li><span>Gates, QA e revisão de segurança</span><ul><li><a href="../adr/0013-gates-qa-secops-pr.html">ADR 0013 — Gates de PR: QAAgent e SecOpsAgent</a></li><li><a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020 — Destravar os gates de QA e SecOps: gitleaks na árvore, pareceres validados e tool call em texto</a></li><li><a href="../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021 — Fechamento da Fase 4a: gate de infra que valida, e painel que diz a verdade</a></li><li><a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054 — Gates como registro declarativo</a></li><li><a href="../adr/0057-o-gate-espera-a-aprovacao.html">ADR 0057 — O agente de gate espera a aprovação, como o dev espera</a></li><li><a href="../adr/0067-o-gate-sobrevive-ao-restart.html">ADR 0067 — O gate sobrevive ao restart</a></li><li><a href="../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090 — QA-estratégia e AppSec como segundo MOMENTO, não agente novo</a></li><li><a href="../adr/0091-secops-runtime-relatorio-de-abuso.html">ADR 0091 — `secops-runtime` como script de relatório sobre `rate_limit_hits`</a></li><li><a href="../adr/0095-gate-necessidade-validada.html">ADR 0095 — O gate `necessidade-validada` se fecha com confirmação humana separada, não com o Criativo se autovalidando</a></li><li><a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123 — Golden-set de casos de regressão para o julgamento semântico do agente de QA Automação</a></li><li><a href="../adr/0168-golden-set-do-qa-em-ci-semanal.html">ADR 0168 — O golden-set do QA passa a rodar em CI, agendado e semanal</a></li><li><a href="../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192 — O plano de teste nasce depois da entrega do dev, e o gate `implementavel` passa a se julgar sobre a história e o `module_map`</a></li><li><a href="../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207 — Ciclo de gate parado há mais de 2 h estaciona, e só gesto humano o retoma</a></li><li><a href="../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214 — Pergunta em aberto vira pendência a resolver</a></li><li><a href="../adr/0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.html">ADR 0215 — A decisão do projeto chega ao dev e ao QA</a></li></ul></li><li><span>Execução, política de terminal e aprovações</span><ul><li><a href="../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011 — Infraestrutura dos dev agents: worktrees, executores git e trava de merge</a></li><li><a href="../adr/0012-dev-agent-real-toolloop-orcamento-bloqueio.html">ADR 0012 — DevAgent real: ToolLoop, orçamento por task e disciplina de bloqueio</a></li><li><a href="../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017 — Lock de inicialização do workspace, Monitor de dev agents e herança de teto</a></li><li><a href="../adr/0018-noop-dev-agent-modo-de-execucao.html">ADR 0018 — NoopDevAgent como modo de execução permanente</a></li><li><a href="../adr/0019-destravar-dev-agent-adr-por-modulo-orcamento-projeto.html">ADR 0019 — Destravar o DevAgent real: escrita, terminal, ADR por módulo e orçamento por projeto</a></li><li><a href="../adr/0045-reagendamento-por-evento-do-dev-agent.html">ADR 0045 — Reagendamento por evento do dev agent, e o circuit breaker</a></li><li><a href="../adr/0047-operabilidade-pos-dogfooding.html">ADR 0047 — Operabilidade pós-dogfooding: o fechamento da Fase 12</a></li><li><a href="../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048 — A decisão no event log, e a ordem do gate</a></li><li><a href="../adr/0052-dev-agent-espera-aprovacao-no-meio-do-laco.html">ADR 0052 — O dev agent espera a aprovação no meio do laço</a></li><li><a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055 — Escopo de caminho na política de terminal</a></li><li><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102 — Revisão do ADR 0065: a fronteira de efeito externo deixa de ser `deny` e vira teto absoluto</a></li><li><a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167 — O modo automático libera o escopo de caminho, e só ele</a></li><li><a href="../adr/0189-o-piloto-automatico.html">ADR 0189 — O piloto automático: o modo automático aprova tudo, menos os tetos, o escopo compara com a pasta real de execução, e &quot;Sempre permitir&quot; grava verbo + subcomando</a></li><li><a href="../adr/0204-modo-automatico-libera-push-e-pr.html">ADR 0204 — O modo automático libera push e PR</a></li></ul></li><li><span>Onde o código mora — modos de execução</span><ul><li><a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066 — Nome de pasta legível do workspace</a></li><li><a href="../adr/0072-projeto-local-ou-container.html">ADR 0072 — O projeto escolhe onde o código mora: pasta do usuário ou pasta gerenciada</a></li><li><a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104 — `execution_mode` em três valores, e o workspace nasce `unverified` quando o runner é quem verifica</a></li><li><a href="../adr/0107-navegacao-de-pasta-local-via-o-runner.html">ADR 0107 — Navegação de pasta local via o Runner</a></li><li><a href="../adr/0108-projeto-runner-nasce-ao-navegar-pasta-no-wizard.html">ADR 0108 — No modo `runner`, o projeto nasce ao clicar em &quot;Navegar pasta...&quot;, não só na confirmação</a></li><li><a href="../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">ADR 0111 — Converter o `execution_mode` de um projeto existente: recusar com dev agent ativo, realocar o `permissions.json`, aposentar a linha do container</a></li><li><a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141 — A base única dos projetos montados, montada por identidade</a></li><li><a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142 — A validação do workspace montado é adiada até a materialização</a></li><li><a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146 — A base consentida no bootstrap, e `mounted` como padrão local</a></li></ul></li><li><span>Container do projeto e broker</span><ul><li><a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065 — Container por projeto: a fronteira deixa de ser política</a></li><li><a href="../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">ADR 0081 — Ciclo de vida do container: tabela de estado, sem orquestrador</a></li><li><a href="../adr/0083-terminal-mostra-estado-real-do-container.html">ADR 0083 — A aba Terminal ganha o consumidor real do ciclo de vida, não o terminal</a></li><li><a href="../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128 — A porta de Docker, e a prova de empacotamento que escolheu a implementação</a></li><li><a href="../adr/0130-broker-de-container.html">ADR 0130 — O broker de container: quem fala com o Docker do servidor, e por que ele não aceita especificação</a></li><li><a href="../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131 — O Arquiteto roteia módulos para infra: ele CANDIDATA, a Infra ELEGE</a></li><li><a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133 — A Infra elege entre as candidatas do roteamento, e a eleição vira nova versão de `artifact.project_image`</a></li><li><a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134 — Dev agents executam DENTRO do container real do projeto, e o terminal ganha um piso de auto-aprovação lá dentro</a></li><li><a href="../adr/0135-portao-de-imagem-nos-tres-modos.html">ADR 0135 — O portão da imagem do Arquiteto (RN-105) passa a valer nos três modos de execução</a></li><li><a href="../adr/0136-pagina-global-de-containers.html">ADR 0136 — Página global de containers: teto por carga no broker, e `container_remove` no teto absoluto</a></li><li><a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137 — O `brabo-runner` sobe o container do projeto na máquina do usuário</a></li><li><a href="../adr/0143-agentes-de-dev-so-depois-do-container.html">ADR 0143 — Agentes de dev só depois do container</a></li><li><a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144 — A segunda raiz do broker, e o localizador discriminado que a escolhe</a></li><li><a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180 — O container do projeto roda com o dono da pasta, medido pela api</a></li><li><a href="../adr/0190-a-infra-sobe-o-container-no-aceite.html">ADR 0190 — A Infra sobe o container no aceite do handoff, por passo do servidor e com a autonomia semeada, e é ela quem entrega ao Dev Lead</a></li><li><a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199 — O recurso mínimo do container é derivado do `module_map`: cada módulo declara o seu, e a Infra sobe com a soma</a></li><li><a href="../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208 — A Infra herda a rede que o Arquiteto declarou</a></li><li><a href="../adr/0228-comando-do-app-e-rede-do-container.html">ADR 0228 — O container do projeto sobe o app pelo comando declarado e publica porta só no loopback</a></li><li><a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229 — O QA testa numa instância efêmera, com os serviços que a Infra declarou</a></li></ul></li><li><span>O runner local</span><ul><li><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — Runner local: execução na máquina do usuário por canal Phoenix com ticket de uso único</a></li><li><a href="../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105 — Personal Access Token (`brb_…`) pro runner, escopado por construção a uma rota</a></li><li><a href="../adr/0106-distribuicao-do-runner-via-tsup-e-npm-publish.html">ADR 0106 — Distribuição do `@brabo/runner` via `tsup` e `npm publish`, versão injetada só em CI</a></li><li><a href="../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112 — Binário standalone do `@brabo/runner` via `bun build --compile`, com o addon nativo `.node` embutido por extração real para um diretório temporário</a></li><li><a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118 — Configuração do runner pelo navegador: uma chave de dispositivo Ed25519 como segunda credencial do `runner-ticket`, um proxy do GitHub Releases para o binário e a File System Access API para uma pasta configurada com um clique</a></li><li><a href="../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145 — Docker vira pré-requisito real do modo `runner`</a></li><li><a href="../adr/0147-agente-local-com-capacidades.html">ADR 0147 — Um agente local, capacidades declaradas na conexão</a></li><li><a href="../adr/0151-base-consentida-no-runner.html">ADR 0151 — A base consentida no runner, e a criação de pasta pelo canal</a></li><li><a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154 — A chave de dispositivo de máquina</a></li><li><a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174 — O binário standalone do runner deixa de prometer o Mac Intel</a></li><li><a href="../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187 — O binário standalone do runner deixa de prometer o Windows</a></li><li><a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193 — O git credenciado roda no HOST do runner; o código roda no container</a></li><li><a href="../adr/0201-revogacao-por-chave.html">ADR 0201 — A revogação mira a CHAVE, e não o par `{projeto, usuário}`</a></li><li><a href="../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.html">ADR 0203 — O fluxo do runner pelo navegador é aposentado, e o caminho é o instalador</a></li><li><a href="../adr/0230-importar-chave-de-llm-pelo-runner.html">ADR 0230 — O runner importa a chave de API de LLM que o usuário já tem na máquina</a></li></ul></li><li><span>Autenticação, acesso e segredos</span><ul><li><a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031 — Auth first-party: argon2id, EdDSA e rotação de refresh</a></li><li><a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032 — O corte do Keycloak: emissor próprio, service token e sessão em cookie</a></li><li><a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037 — O CORS que o engine não tinha, e a porta como parte do contrato</a></li><li><a href="../adr/0050-credencial-sempre-cifrada-verificacao-explicita.html">ADR 0050 — Credencial sempre cifrada; verificação vira ação explícita</a></li><li><a href="../adr/0058-csp-fechado-na-api-e-escopo-de-projeto-contido.html">ADR 0058 — CSP fechado na api, e o escopo de projeto contido na raiz</a></li><li><a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059 — A chave que assina o `state` do OAuth de git não tem default</a></li><li><a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084 — Login social (GitHub/GitLab), revisando o backlog dos ADRs 0031/0032</a></li><li><a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096 — SMTP real no `MailSender`, atrás de um toggle explícito</a></li><li><a href="../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127 — Dois tetos de rebaixamento em `project_members`, e a sobreposição fica</a></li><li><a href="../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156 — O teto de auto-rebaixamento também na remoção de membro de projeto</a></li><li><a href="../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157 — O teto de auto-movimento no upsert de workspace, e a auto-promoção que era brecha</a></li><li><a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158 — O id da chave mestra gravado no envelope, como observabilidade e nunca como autoridade</a></li><li><a href="../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173 — A remoção de membro de workspace nasce, protegida pela mesma cláusula</a></li><li><a href="../adr/0245-acesso-rapido-por-papel-so-no-ambiente-local.html">ADR 0245 — Acesso rápido por papel só no ambiente local</a></li></ul></li><li><span>Providers de LLM, modelos e gasto</span><ul><li><a href="../adr/0040-moeda-do-dashboard.html">ADR 0040 — Moeda do dashboard: USD por ora, câmbio manual por workspace adiado</a></li><li><a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041 — Uma base OpenAI-compatível, um contrato de LLM providers e capabilities que recusam binding</a></li><li><a href="../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042 — Catálogo vivo, ciclo de vida do modelo e preço auditável</a></li><li><a href="../adr/0043-seis-providers-de-llm-e-o-fechamento-da-fase-9b.html">ADR 0043 — Seis providers de LLM sobre a base, e a Fase 9b finalmente fechada</a></li><li><a href="../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049 — Curadoria de modelo por workspace</a></li><li><a href="../adr/0051-facetas-de-capability-e-curadoria-por-uso.html">ADR 0051 — Facetas de capability provadas; &quot;para que serve&quot; é curadoria</a></li><li><a href="../adr/0063-duas-audiencias-para-o-mesmo-gasto.html">ADR 0063 — Duas audiências para o mesmo gasto: a fatura do owner e o consumo do membro</a></li><li><a href="../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064 — Escopo de área na cascata de modelo, e o binding de agente global</a></li><li><a href="../adr/0075-embeddings-no-contrato-de-llm-provider.html">ADR 0075 — Embeddings no contrato de LLMProvider</a></li><li><a href="../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076 — `provider` volta a ser dimensão de gasto, e a contenção passa a ser do tipo</a></li><li><a href="../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">ADR 0077 — Ranking de modelos por capacidade, sem nota inventada</a></li><li><a href="../adr/0110-budget-por-area-aditivo-nao-cascata.html">ADR 0110 — Orçamento por área é ADITIVO, ao lado de projeto/sessão — não uma cascata, e não uma tabela nova</a></li><li><a href="../adr/0114-deteccao-de-ollama-nativo-no-bootstrap-dev.html">ADR 0114 — Detecção de Ollama nativo no bootstrap de dev: perguntar uma vez, persistir no `.env`, pôr os serviços do compose atrás de um profile</a></li><li><a href="../adr/0115-pedido-de-pull-de-modelo-huggingface-tabela-propria.html">ADR 0115 — Pull de modelo do Hugging Face: tabela própria, confirmação em dois passos e allowlist de publicadores oficiais — nunca `proposed_actions`</a></li><li><a href="../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166 — A preferência de roteamento mora no binding de modelo, viaja com ele, e congela no metering</a></li><li><a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188 — O custo real que o provider devolve vira o número do metering</a></li><li><a href="../adr/0198-duplicata-semantica-por-embedding-com-limiar-que-so-avisa.html">ADR 0198 — A duplicata semântica de história e regra é avisada por embedding com limiar, e o gasto entra no metering</a></li><li><a href="../adr/0221-upstream-preso-por-sessao.html">ADR 0221 — O hub prende a conversa de cada agente ao upstream que a atendeu, por `session_id`</a></li><li><a href="../adr/0222-provider-9router-de-llm.html">ADR 0222 — O 9Router entra como o 10º provider de LLM, com URL por instalação</a></li><li><a href="../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223 — O orçamento de raciocínio é capability POR MODELO, curada à mão</a></li><li><a href="../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224 — O raciocínio é contado no stream e abortado no limite, e o custo é estimado e reconciliado</a></li><li><a href="../adr/0225-teto-de-preco-do-upstream-no-openrouter.html">ADR 0225 — O OpenRouter recebe um teto de preço por chamada (`provider.max_price` = catálogo × 1,5)</a></li><li><a href="../adr/0227-provider-opencode-zen-de-llm.html">ADR 0227 — O OpenCode Zen entra como o 11º provider de LLM, só no dialeto OpenAI</a></li><li><a href="../adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233 — O membro vê o gasto do projeto por agente e por área, nunca por provider</a></li><li><a href="../adr/0251-preco-de-lista-datado-para-provider-sem-preco.html">ADR 0251 — Preço de lista datado no código para provider que não informa preço</a></li></ul></li><li><span>RAG, grafo de conhecimento e artefatos</span><ul><li><a href="../adr/0079-tabela-de-chunks-vetor-e-tsvector-juntos.html">ADR 0079 — Tabela de chunks: vetor e `tsvector` na mesma linha</a></li><li><a href="../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">ADR 0080 — Busca híbrida: pesos, limiar e o que é citação</a></li><li><a href="../adr/0082-chat-rag-aba-de-busca-hibrida.html">ADR 0082 — Chat RAG: aba própria de busca híbrida, sem renomear &quot;Chat&quot;</a></li><li><a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099 — Neo4j como grafo de conhecimento e templates de prompt, driver na api</a></li><li><a href="../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100 — `rag_search` para agentes e modelos Ollama garantidos no boot</a></li><li><a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101 — Memória relacional como projeção do event log; templates consumidos sem tocar GenServers</a></li><li><a href="../adr/0113-pasta-local-anexada-via-navegador-vira-chunks-scope-local.html">ADR 0113 — Pasta local anexada vira `chunks.scope = 'local'`, lida pelo NAVEGADOR, nunca um caminho do host</a></li><li><a href="../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">ADR 0129 — A telemetria de busca do RAG é TABELA, com os pesos congelados na linha</a></li><li><a href="../adr/0132-golden-set-de-acerto-do-rag.html">ADR 0132 — Golden-set de acerto do RAG, e o gate `rag-acertivo`</a></li><li><a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138 — O golden-set do RAG passa a rodar em CI, agendado — e continua `warn`</a></li><li><a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148 — Os artefatos dos agentes projetados em arquivo, numa pasta `docs/`</a></li><li><a href="../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196 — A Anamnese religada: não roda sem sujeito, e a hipótese aceita vira fato do perfil</a></li><li><a href="../adr/0200-contrato-entre-modulos-artefato-do-arquiteto.html">ADR 0200 — O contrato entre módulos vira artefato versionado do Arquiteto, e o dev agent o lê em vez do worktree alheio</a></li><li><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205 — O desvio do agente que a Anamnese observa vira sinal do produto, sem dado pessoal</a></li></ul></li><li><span>Interface web e design system</span><ul><li><a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036 — Telas de auth fiéis ao design, e as três fontes que não carregavam</a></li><li><a href="../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060 — A superfície de leitura de código, contida e com orçamento</a></li><li><a href="../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">ADR 0074 — Tema alcançável, e o boot sob CSP</a></li><li><a href="../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">ADR 0078 — Moldura de tela, e o registro de abas diverge do handoff de propósito</a></li><li><a href="../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097 — Leitura direta do schema do engine para o &quot;N agentes online&quot; do dashboard</a></li><li><a href="../adr/0116-tipos-do-web-gerados-do-openapi.html">ADR 0116 — `ActionType` (e tipos futuros) gerados do contrato OpenAPI, não copiados à mão</a></li><li><a href="../adr/0122-sessionpage-dividido-em-cinco-prs.html">ADR 0122 — `SessionPage.tsx` dividido em cinco PRs mecânicos, declarados de antemão</a></li><li><a href="../adr/0124-hook-do-canal-de-turno-do-sessionpage.html">ADR 0124 — Agrupamento de estado do canal de turno extraído para `useTurnoDoAgente`</a></li><li><a href="../adr/0125-projectsettingstab-dividido-por-secao.html">ADR 0125 — `ProjectSettingsTab.tsx` dividido em um arquivo por seção, atrás de um barrel</a></li><li><a href="../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126 — A página do projeto navega por um trilho vertical, e a aba Código para de recolher a sidebar sozinha</a></li><li><a href="../adr/0176-sessionpage-abaixo-de-mil-linhas.html">ADR 0176 — `SessionPage.tsx` abaixo de 1 000 linhas, em dez PRs mecânicos, e a trava só depois</a></li><li><a href="../adr/0181-tema-preto-neutro.html">ADR 0181 — O tema escuro vira preto neutro, e a dívida de contraste acaba</a></li><li><a href="../adr/0210-animacao-de-texto-com-motion.html">ADR 0210 — Animação de texto com `motion`</a></li><li><a href="../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211 — Uma navegação só: a sidebar absorve o trilho do projeto</a></li><li><a href="../adr/0232-shadcn-com-base-ui-no-apps-web.html">ADR 0232 — shadcn/ui com Base UI e Tailwind 4 no `apps/web`</a></li><li><a href="../adr/0234-shiki-e-recharts-por-carga-dinamica.html">ADR 0234 — `shiki` no Code Block e `recharts` no Chart, sempre por carga dinâmica</a></li><li><a href="../adr/0237-o-visual-v3-liga-o-preflight-e-sobe-os-raios.html">ADR 0237 — O visual v3 liga o preflight e sobe os raios</a></li><li><a href="../adr/0238-o-grafo-de-modulos-vira-canvas-xyflow.html">ADR 0238 — O grafo de módulos da Arquitetura vira Canvas (`@xyflow/react`)</a></li><li><a href="../adr/0239-csp-frame-src-local-para-o-web-preview.html">ADR 0239 — CSP `frame-src` local para o Web preview do entregável</a></li><li><a href="../adr/0240-o-motivo-de-controle-inerte-mora-num-ponto-de-interrogacao-nos-containers.html">ADR 0240 — O motivo de controle inerte pode morar num &quot;?&quot; ativo na página de Containers</a></li><li><a href="../adr/0241-a-sidebar-adota-o-block-sidebar-07-do-shadcn.html">ADR 0241 — A sidebar adota o block `sidebar-07` do shadcn</a></li><li><a href="../adr/0242-containers-em-tabela-linear-com-tanstack-react-table.html">ADR 0242 — Containers em tabela linear com `@tanstack/react-table`</a></li><li><a href="../adr/0243-consequencia-irreversivel-pode-morar-num-botao-de-perigo.html">ADR 0243 — Consequência irreversível pode morar num botão de perigo</a></li><li><a href="../adr/0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.html">ADR 0244 — Coluna das abas do projeto alinhada à esquerda</a></li><li><a href="../adr/0248-conteudo-das-paginas-ocupa-a-largura-inteira.html">ADR 0248 — O conteúdo das páginas ocupa a largura inteira</a></li><li><a href="../adr/0250-chat-da-sessao-ocupa-a-largura-inteira.html">ADR 0250 — O chat da Sessão ocupa a largura inteira</a></li></ul></li><li><span>Operação, deploy e instalação</span><ul><li><a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024 — Fase 5 (sessão 1): imagens de produção, compose.prod, CI e teste de fumaça</a></li><li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025 — Fase 5 (sessão 2): deploy Kubernetes com Kustomize, métrica de fila e overlay local</a></li><li><a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026 — Fase 5 (sessão 3): graceful shutdown, OpenTelemetry, métricas, logs e dashboards</a></li><li><a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027 — Backup/restore, hardening da api, superfície exposta e release</a></li><li><a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035 — Trace sem coletor, e o caminho entre camadas no log</a></li><li><a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070 — Observabilidade no Compose local: métrica e log, sem trace</a></li><li><a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150 — O instalador de uma linha, com fonte escolhida e marcador</a></li><li><a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152 — Backup e restore de volumes, contra compose</a></li><li><a href="../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153 — `DEPLOY_ENABLED`: o gatilho que dez documentos citam e nenhum cria</a></li><li><a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155 — A primeira conta nasce no terminal, e o agente local sobe pareado</a></li><li><a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160 — O compose do instalador viaja com ele, como asset assinado</a></li><li><a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161 — A tela só oferece o modo que a instalação executa, e a instalação por Release não tem broker</a></li><li><a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162 — O broker vira a quinta imagem publicada, e o instalador PERGUNTA se o liga</a></li><li><a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169 — O destino S3 do overlay local deixa de ser o MinIO e passa a ser o SeaweedFS</a></li><li><a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170 — O compose de dev vira `brabo-dev`, e o dev recusa subir ao lado de uma instalação</a></li><li><a href="../adr/0209-engine-em-otp-29.html">ADR 0209 — O engine sobe para Elixir 1.20.4 / OTP 29.1.1</a></li></ul></li><li><span>CI, release e cadeia de suprimentos</span><ul><li><a href="../adr/0039-actionlint-e-validacao-do-pipeline-de-ci-gerado.html">ADR 0039 — actionlint e a validação do pipeline de CI gerado</a></li><li><a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119 — Imagens publicadas no GHCR a cada tag final, e o overlay de produção preso por digest</a></li><li><a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120 — E2E de navegador contra o compose de produção, num pacote fora do workspace</a></li><li><a href="../adr/0121-schema-dividido-por-agregado-de-dominio.html">ADR 0121 — O schema dividido por agregado de domínio, atrás de um barrel</a></li><li><a href="../adr/0140-timeout-do-audit-como-risco-assumido.html">ADR 0140 — Timeout repetido do `pnpm audit` é risco assumido; achado continua reprovando</a></li><li><a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149 — Assinatura dos artefatos publicados</a></li><li><a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159 — Imagem de terceiro entra por digest, e o lint reprova quem esquecer</a></li><li><a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172 — O release escaneia com Trivy o que publica, por digest, antes de assinar</a></li><li><a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178 — A tag da imagem de terceiro mora DENTRO da referência, antes do digest</a></li><li><a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197 — A imagem dos workflows vem do compose, e o Dependabot de imagem é ligado</a></li><li><a href="../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252 — O Brabo vira um conjunto de repositórios em `viralabs-dev`</a></li></ul></li><li><span>Documentação</span><ul><li><a href="../adr/0029-sincronizacao-continua-da-documentacao.html">ADR 0029 — Sincronização contínua da documentação</a></li><li><a href="../adr/0033-referencia-de-api-gerada-do-openapi.html">ADR 0033 — A referência de API sai do código, e o teste de tabela cobra os metadados</a></li><li><a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034 — Documentação publicada por degrau, em subdiretório do Pages</a></li><li><a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071 — Publicação simétrica por degrau, e uma raiz que escolhe</a></li><li><a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073 — O caminho publicado nomeia o ambiente, não a branch</a></li><li><a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117 — `website/` ganha lockfile próprio, fora do `pnpm audit` do produto</a></li><li><a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202 — O índice de ADR por tema, com o tema fora do ADR</a></li><li><a href="../adr/0206-referencia-da-api-numa-pagina-redoc.html">ADR 0206 — A referência da API vira uma página Redoc</a></li><li><a href="../adr/0216-quatro-idiomas-com-pt-br-como-fonte.html">ADR 0216 — Quatro idiomas, com pt-BR como FONTE e padrão: a documentação e a interface em português, inglês, russo e chinês simplificado</a></li><li><a href="../adr/0218-titulo-de-adr-com-prefixo.html">ADR 0218 — Todo ADR se chama &quot;ADR NNNN — título&quot;</a></li><li><a href="../adr/0219-referencia-entra-na-traducao.html">ADR 0219 — A referência entra na tradução</a></li><li><a href="../adr/0220-api-traduzida-por-catalogo.html">ADR 0220 — A página da API sai traduzida por catálogo</a></li><li><a href="../adr/0253-o-site-de-docs-deixa-o-docusaurus.html">ADR 0253 — O site de docs deixa o Docusaurus</a></li><li><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html">ADR 0254 — A doc de cada área mora na raiz dela</a></li></ul></li></ul></li></ul></section><section><h2>📐 Regras</h2><ul><li><a href="../business-rules.html">Regras de negócio</a></li><li><a href="../business-rules/custo.html">Custo e metering</a></li><li><a href="../business-rules/autenticacao.html">Autenticação</a></li><li><a href="../business-rules/api.html">API</a></li><li><a href="../business-rules/broker.html">Broker</a></li><li><a href="../business-rules/ci.html">CI</a></li><li><a href="../business-rules/contracts.html">Contratos</a></li><li><a href="../business-rules/engine.html">Engine</a></li><li><a href="../business-rules/infra.html">Infra</a></li><li><a href="../business-rules/produto.html">Produto</a></li><li><a href="../business-rules/runner.html">Runner</a></li><li><a href="../business-rules/web.html">Web</a></li></ul></section><section><h2>📖 Referência</h2><ul><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><span>Referência da API</span></li></ul></section><section><h2>💡 Explicação</h2><ul><li><span>Processo e esteira</span><ul><li><a href="../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../explanation/branching-policy.html">Política de branches</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><a href="../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li></ul></li><li><span>Validações e medições</span><ul><li><a href="../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../explanation/medicao-do-jev.html" aria-current="page">Medição do roteador de ferramentas Jev</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></li><li><span>História das fases</span><ul><li><a href="../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../explanation/backlog.html">Backlog triado</a></li></ul></li><li><span>Localização</span><ul><li><a href="../explanation/localizacao.html">Localização</a></li><li><a href="../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></li><li><span>Notas técnicas</span><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></li></ul></section><section><h2>🛠️ Operação</h2><ul><li><a href="../runbook.html">Manual de operação</a></li></ul></section><section><h2>📚 Vocabulário</h2><ul><li><a href="../glossary.html">Glossário</a></li></ul></section><section><h2>🤝 Contribuir</h2><ul><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="measuring-the-jev-tool-router">Medição do roteador de ferramentas Jev</h1>
+<blockquote>
+<p>AT-237 (EP-029, HS-063). Uma <strong>medição fora do produto</strong>: nada em
+<code>apps/</code> importa este código, nada é gravado no banco, e nenhum ganho de
+produto é afirmado aqui — isso é da AT-239, que compara turnos com e sem o
+roteador. O roteador medido é o que a AT-235 especifica; as decisões de que
+ele depende são da AT-236.</p>
+<p>Medido em 2026-09-29 contra a instância local de dev (projeto compose
+<code>brabo-dev</code>), repositório em <code>d48f99f8ec</code>. A <strong>segunda rodada</strong> — variantes do
+<code>state</code>, classes de equivalência, divisão ajuste/validação, top-2 e a
+distância por causa — está <a href="#second-round-2026-09-29-where-the-gap-is">mais abaixo</a>.</p>
+</blockquote>
+<h2 id="what-exists">O que existe</h2>
+<p>Tudo mora em <code>scripts/jev/</code> e roda com o Node do repositório (type
+stripping, sem passo de build, <strong>sem dependência nova</strong>).</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>arquivo</th>
+<th>papel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>catalogo.exs</code></td>
+<td>despeja, a partir do próprio código do engine, o catálogo de ferramentas de cada agente (<code>spec/0</code> de toda ferramenta: nome e descrição) e a identidade (<code>Engine.Harness.Agents.identity/1</code>)</td>
+</tr>
+<tr>
+<td><code>catalogo.json</code></td>
+<td>o despejo, versionado — regenere quando um catálogo mudar (comando no cabeçalho do <code>.exs</code>)</td>
+</tr>
+<tr>
+<td><code>passos.ts</code></td>
+<td>puro: event log → <strong>passos</strong>, e o <code>state</code> de cada passo</td>
+</tr>
+<tr>
+<td><code>jev.ts</code></td>
+<td>puro: o pedido à Decisions API e a leitura da resposta</td>
+</tr>
+<tr>
+<td><code>medicao.ts</code></td>
+<td>puro: concordância, intervalos de Wilson, a curva de confiança, latência, custo, o relatório em Markdown</td>
+</tr>
+<tr>
+<td><code>replay.ts</code></td>
+<td>a CLI da primeira rodada: três <code>SELECT</code>s, um pedido por passo, um JSONL fora do checkout</td>
+</tr>
+<tr>
+<td><code>dados.ts</code></td>
+<td>segunda rodada: os dados brutos (eventos, linhas de uso, tarefas, histórias, mapas de módulos, desfechos de ações) e o cache do retrato</td>
+</tr>
+<tr>
+<td><code>equivalencia.ts</code></td>
+<td>segunda rodada: as classes de equivalência E1–E3, fixadas antes de rodar, e o classificador de comandos de terminal</td>
+</tr>
+<tr>
+<td><code>kickoff.ts</code></td>
+<td>segunda rodada: a primeira mensagem do laço dos dev agents e dos gates, portada do Elixir do engine (um spec confere o texto fixo contra os arquivos <code>.ex</code>)</td>
+</tr>
+<tr>
+<td><code>variantes.ts</code></td>
+<td>segunda rodada: as variantes do <code>state</code> e a fronteira de execução; cada campo nomeia sua fonte no engine</td>
+</tr>
+<tr>
+<td><code>divisao.ts</code></td>
+<td>segunda rodada: a divisão ajuste/validação, por execução</td>
+</tr>
+<tr>
+<td><code>cliente.ts</code>, <code>medicao2.ts</code>, <code>analise.ts</code></td>
+<td>segunda rodada: a chamada (guarda as probabilidades), as tabelas de top-k / cascata / por causa, e a CLI <code>jev:analise</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="step-not-tool-call">Passo, não chamada de ferramenta</h3>
+<p>O roteador é consultado <strong>uma vez por chamada ao modelo de chat</strong>, antes de
+<code>provider.chat</code> (AT-235). Um passo pode carregar várias chamadas de ferramenta —
+dez <code>emit_artifact</code> numa resposta do Criativo, <code>terminal</code> + <code>read_file</code> numa
+resposta de dev — então perguntar ao Jev uma vez por <code>tool.call</code> faria perguntas
+que o produto nunca faz, com um <code>state</code> que já contém as chamadas irmãs do mesmo
+passo.</p>
+<p>O event log não tem marcador de passo (AT-235, lacuna 1), então a fronteira vem de
+<code>token_usage</code>: a api grava uma linha por chamada de LLM <strong>antes</strong> de o engine gravar
+os <code>tool.call</code>s daquela resposta. Todo <code>tool.call</code> da mesma sessão e do mesmo ator
+entre duas linhas consecutivas é o mesmo passo. Daí saem três rótulos:</p>
+<ul>
+<li>um passo com <strong>uma</strong> ferramenta (uma ou mais chamadas dela): rótulo = essa ferramenta;</li>
+<li>um passo <strong>heterogêneo</strong> (duas ferramentas diferentes): acerto = a escolha do Jev é
+uma delas — mas restringir o menu a uma ferramenta cortaria o resto;</li>
+<li>um passo <strong>sem</strong> <code>tool.call</code> depois da sua linha: o modelo respondeu em texto (ou
+falhou). É o único rótulo que <code>responder_sem_ferramenta</code> pode receber por este
+método — o brief não esperava nenhum; a fronteira de passo dá sete.</li>
+</ul>
+<p>Os instantes são comparados como <strong>texto</strong> UTC de largura fixa com microssegundos: a
+linha de uso e o primeiro <code>tool.call</code> de um passo às vezes caem no mesmo milissegundo.</p>
+<h3 id="the-state-sent">O <code>state</code> enviado</h3>
+<p>O formato da AT-235, recortado do que existia <strong>antes</strong> do passo: <code>agente</code>;
+<code>pedido</code> — para agentes conversacionais, a última <code>chat.message</code> escrita pelo
+<strong>usuário</strong>; para dev agents e gates de tarefa, o título da tarefa de
+<code>dev.working</code>; <code>contexto</code> — a identidade do agente mais a linha de
+<code>agent_instructions</code> do projeto, quando existe (duas camadas do prompt de sistema,
+não o prompt montado inteiro); <code>passos_recentes</code> — as últimas 6 chamadas daquele
+ator naquela sessão, argumentos e resultado cortados em 500 caracteres. A
+pergunta é um <code>choice</code> cujos <code>criteria</code> são o <code>{name: description}</code> do catálogo
+mais o reservado <code>responder_sem_ferramenta</code>.</p>
+<p>O pedido vai para <code>POST https://openrouter.ai/api/alpha/decisions</code> com o modelo
+<code>typesafe/jev-1.13</code>. Uma correção à AT-235, medida: <strong><code>questions</code> é um
+objeto indexado pelo id da pergunta</strong>, não uma lista — a forma de lista recebe
+<code>400 expected record, received array</code>. A resposta é
+<code>answers.&lt;id&gt;.{choice, probabilities, confidence}</code>, <code>usage.{input_tokens, output_tokens, cost}</code>, um <code>id</code> (<code>gen-dec-…</code>) e um retrato datado em <code>model</code>
+(<code>typesafe/jev-1.13-20260917</code> em toda resposta desta execução).</p>
+<h2 id="the-sample">A amostra</h2>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>instância</td>
+<td>dev local (<code>brabo-dev</code>), projeto <code>test</code>, 4 sessões com passos (uma quinta sessão, <code>core-api</code>, não tem nenhum)</td>
+</tr>
+<tr>
+<td>período</td>
+<td>2026-09-29 06:19:11 → 07:57:22 UTC</td>
+</tr>
+<tr>
+<td>lido</td>
+<td>879 eventos (502 <code>tool.call</code>), 307 linhas de <code>token_usage</code> de agentes</td>
+</tr>
+<tr>
+<td>passos</td>
+<td>305 de agentes do catálogo; <strong>302 perguntados</strong> (os 3 do Psicólogo têm catálogo de uma ferramenta só e nunca seriam roteados — AT-235, condição c)</td>
+</tr>
+<tr>
+<td>rótulos</td>
+<td>295 passos com ferramenta (36 heterogêneos), 7 sem</td>
+</tr>
+<tr>
+<td>rótulos suspeitos</td>
+<td>157 dos 295 passos têm uma chamada cujo resultado mostra falha (<code>ok: false</code>, texto começando com <code>falhou</code>/<code>erro</code>, <code>exit</code> ≠ 0) ou que nunca recebeu resultado — a ferramenta chamada pode ter sido a errada</td>
+</tr>
+</tbody>
+</table></div>
+<p>Foram feitas duas execuções completas (a segunda é a relatada; o banco ganhou um
+passo da Anamnese entre elas). Entre as execuções, nos 301 passos comuns às
+duas, o Jev deu <strong>a mesma escolha em 283 (94%)</strong>; |Δ confiança| médio de 0,029,
+o maior 0,16. A amostra é um projeto pequeno, um dia, um modelo de chat
+(<code>~deepseek/deepseek-flash-latest</code>); toda taxa abaixo carrega seu intervalo de
+Wilson de 95%, e a maioria dos intervalos por agente é larga demais para ordenar agentes.</p>
+<h2 id="agreement-by-agent">Concordância por agente</h2>
+<p>&quot;Concordância&quot; = a escolha do Jev é uma ferramenta que o modelo chamou naquele passo.
+&quot;Repetir a anterior&quot; é uma linha de base gratuita: oferecer a última ferramenta que o
+mesmo ator usou no passo anterior.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>agente</th>
+<th>opções</th>
+<th>passos com ferramenta</th>
+<th>heterogêneos</th>
+<th>concordância (IC 95%)</th>
+<th>sem suspeita</th>
+<th>quando o Jev escolheu ferramenta</th>
+<th>linha de base &quot;repetir a anterior&quot;</th>
+<th>passos sem ferramenta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>anamnese</td>
+<td>5</td>
+<td>8</td>
+<td>0</td>
+<td>3/8 = 38% (14–69%)</td>
+<td>3/8</td>
+<td>3/3</td>
+<td>4/4</td>
+<td>—</td>
+</tr>
+<tr>
+<td>appsec</td>
+<td>6</td>
+<td>6</td>
+<td>2</td>
+<td>0/6 = 0% (0–39%)</td>
+<td>0/6</td>
+<td>0/1</td>
+<td>0/5</td>
+<td>—</td>
+</tr>
+<tr>
+<td>arquiteto</td>
+<td>9</td>
+<td>5</td>
+<td>2</td>
+<td>1/5 = 20% (4–62%)</td>
+<td>1/5</td>
+<td>1/2</td>
+<td>1/4</td>
+<td>3/3</td>
+</tr>
+<tr>
+<td>criativo</td>
+<td>3</td>
+<td>5</td>
+<td>0</td>
+<td>3/5 = 60% (23–88%)</td>
+<td>3/5</td>
+<td>3/4</td>
+<td>1/4</td>
+<td>2/2</td>
+</tr>
+<tr>
+<td>dev-board-engine</td>
+<td>9</td>
+<td>24</td>
+<td>3</td>
+<td>12/24 = 50% (31–69%)</td>
+<td>1/3</td>
+<td>12/24</td>
+<td>20/23</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-game-session</td>
+<td>9</td>
+<td>38</td>
+<td>2</td>
+<td>20/38 = 53% (37–68%)</td>
+<td>5/14</td>
+<td>20/38</td>
+<td>25/37</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-input-keyboard</td>
+<td>9</td>
+<td>25</td>
+<td>3</td>
+<td>12/25 = 48% (30–67%)</td>
+<td>5/10</td>
+<td>12/25</td>
+<td>18/24</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-lead</td>
+<td>4</td>
+<td>1</td>
+<td>1</td>
+<td>0/1</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-persistence</td>
+<td>9</td>
+<td>34</td>
+<td>3</td>
+<td>24/34 = 71% (54–83%)</td>
+<td>4/12</td>
+<td>24/34</td>
+<td>26/33</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-piece-catalog</td>
+<td>9</td>
+<td>37</td>
+<td>5</td>
+<td>21/37 = 57% (41–71%)</td>
+<td>4/11</td>
+<td>21/37</td>
+<td>31/36</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-retro-renderer</td>
+<td>9</td>
+<td>26</td>
+<td>0</td>
+<td>13/26 = 50% (32–68%)</td>
+<td>5/14</td>
+<td>13/26</td>
+<td>19/25</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dev-scoring</td>
+<td>9</td>
+<td>38</td>
+<td>1</td>
+<td>19/38 = 50% (35–65%)</td>
+<td>4/15</td>
+<td>19/38</td>
+<td>29/37</td>
+<td>—</td>
+</tr>
+<tr>
+<td>infra</td>
+<td>5</td>
+<td>2</td>
+<td>1</td>
+<td>0/2</td>
+<td>0/1</td>
+<td>—</td>
+<td>1/1</td>
+<td>0/1</td>
+</tr>
+<tr>
+<td>infra-workflows</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td>0/2</td>
+<td>0/2</td>
+<td>—</td>
+<td>0/1</td>
+<td>—</td>
+</tr>
+<tr>
+<td>po</td>
+<td>10</td>
+<td>8</td>
+<td>2</td>
+<td>6/8 = 75% (41–93%)</td>
+<td>6/8</td>
+<td>6/6</td>
+<td>0/7</td>
+<td>1/1</td>
+</tr>
+<tr>
+<td>qa-automacao</td>
+<td>7</td>
+<td>20</td>
+<td>5</td>
+<td>4/20 = 20% (8–42%)</td>
+<td>2/9</td>
+<td>4/20</td>
+<td>14/19</td>
+<td>—</td>
+</tr>
+<tr>
+<td>qa-estrategia</td>
+<td>6</td>
+<td>16</td>
+<td>6</td>
+<td>0/16 = 0% (0–19%)</td>
+<td>0/15</td>
+<td>—</td>
+<td>7/15</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>todos</strong></td>
+<td></td>
+<td><strong>295</strong></td>
+<td><strong>36</strong></td>
+<td><strong>138/295 = 47% (41–52%)</strong></td>
+<td>43/138 = 31% (24–39%)</td>
+<td>138/258 = 53% (47–59%)</td>
+<td><strong>196/275 = 71% (66–76%)</strong></td>
+<td>6/7 = 86% (49–97%)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-confidence-curve-under-the-decided-rule">A curva de confiança, sob a regra decidida</h2>
+<p>A AT-236 decidiu (respostas 7 e 12) que o roteador <strong>só restringe</strong> o menu,
+e que <code>responder_sem_ferramenta</code> — com qualquer confiança — manda o catálogo
+<strong>inteiro</strong> na v1. Então um passo só é <em>restringido</em> quando a confiança está no
+limiar ou acima <strong>e</strong> a escolha é uma ferramenta; todo o resto se comporta como hoje.
+O erro que custa é a restrição à ferramenta <strong>errada</strong>.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>limiar</th>
+<th>menu restrito a 1</th>
+<th>cai no catálogo inteiro</th>
+<th>certos entre os restringidos (IC 95%)</th>
+<th>restringido à ferramenta errada</th>
+<th>passos heterogêneos cortados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.00</td>
+<td>258</td>
+<td>37</td>
+<td>138/258 = 53% (47–59%)</td>
+<td>120</td>
+<td>18</td>
+</tr>
+<tr>
+<td>0.30</td>
+<td>191</td>
+<td>104</td>
+<td>110/191 = 58% (51–64%)</td>
+<td>81</td>
+<td>13</td>
+</tr>
+<tr>
+<td>0.40</td>
+<td>126</td>
+<td>169</td>
+<td>76/126 = 60% (52–68%)</td>
+<td>50</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0.50</td>
+<td>73</td>
+<td>222</td>
+<td>50/73 = 68% (57–78%)</td>
+<td>23</td>
+<td>5</td>
+</tr>
+<tr>
+<td>0.60</td>
+<td>43</td>
+<td>252</td>
+<td>29/43 = 67% (53–80%)</td>
+<td>14</td>
+<td>4</td>
+</tr>
+<tr>
+<td>0.70</td>
+<td>17</td>
+<td>278</td>
+<td>14/17 = 82% (59–94%)</td>
+<td>3</td>
+<td>2</td>
+</tr>
+<tr>
+<td>0.80</td>
+<td>7</td>
+<td>288</td>
+<td>7/7 = 100% (65–100%)</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0.90</td>
+<td>2</td>
+<td>293</td>
+<td>2/2 = 100% (34–100%)</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table></div>
+<p>O relatório imprime a mesma curva por grupo (dev agents, agentes conversacionais,
+gates e os outros agentes de <code>ToolLoop</code>). Os dev agents seguem a tabela acima
+(0.70: 11/14; 0.80: 6/6). Os agentes conversacionais, quando o Jev escolheu uma
+ferramenta com qualquer confiança, acertaram em 10/12 passos; ele escolheu
+<code>responder_sem_ferramenta</code> em 9 dos 21 passos deles com ferramenta, o que pela
+resposta 12 é inofensivo.</p>
+<p><strong>Limiar.</strong> Nenhum limiar da grade tem o limite inferior do intervalo em 90% ou
+acima, no geral ou em qualquer grupo. O único ponto sem restrição errada é
+<strong>0.80</strong>, e ali o roteador age em 7 de 295 passos (2%) — com limite inferior de
+65%. Esta amostra não sustenta um limiar; se um for fixado a partir dela, 0.80 é o
+valor para o qual ela aponta, com essa cobertura. A resposta 4 da AT-236 pede o
+custo de cada tipo de erro, que este replay não consegue precificar.</p>
+<h2 id="latency-and-cost">Latência e custo</h2>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>latência (302 pedidos, sequenciais, da máquina do mantenedor)</td>
+<td>p50 306 ms, p95 410 ms, máx 550 ms; <strong>0 acima de 2 000 ms</strong> (primeira execução: 286 / 409 / 512)</td>
+</tr>
+<tr>
+<td>tokens de entrada por pedido</td>
+<td>538 a 3 220, mediana 1 710</td>
+</tr>
+<tr>
+<td>custo por <code>usage.cost</code></td>
+<td>US$ 0,021964 para 302 passos — <strong>US$ 0,0000727 por passo</strong></td>
+</tr>
+<tr>
+<td>custo cobrado</td>
+<td><code>GET /api/v1/generation</code> para cada um dos 302 ids: <code>total_cost</code> soma os mesmos US$ 0,021964 (razão 1,000)</td>
+</tr>
+</tbody>
+</table></div>
+<p>O delta de <code>GET /api/v1/key</code> em torno de cada execução <strong>não</strong> bateu: +US$ 0,0349
+contra 0,0219 declarados na primeira execução, +0,0185 contra 0,0220 na segunda.
+A chave é compartilhada e o contador dela atrasa: ao longo de toda a sessão da AT-237 o
+<code>usage</code> dela subiu de US$ 1,830 para US$ 2,052 (+0,222) enquanto as gerações deste
+replay foram cobradas em US$ 0,044, então outro trabalho gastava na mesma chave ao
+mesmo tempo. O delta não é medida de uma execução; o registro por geração é. Total gasto pela AT-237, as duas execuções e as
+sondagens de formato: cerca de US$ 0,044, contra um teto de US$ 2,00.</p>
+<h2 id="what-the-replay-cannot-see">O que o replay não enxerga</h2>
+<ul>
+<li><strong>A primeira mensagem do laço.</strong> Um agente de <code>ToolLoop</code> (dev agents, gates,
+Anamnese, Infra-Workflows) começa por uma mensagem de usuário montada em código — a
+tarefa, a história, o mapa de módulos — que nunca chega ao event log. O
+replay tem só o título da tarefa para dev agents e gates de tarefa, e nada
+para <code>qa-estrategia</code>, <code>appsec</code>, <code>anamnese</code> e <code>infra-workflows</code>. O <code>state</code> do
+produto levaria essa mensagem. O 0/16 de <code>qa-estrategia</code> (o Jev respondeu
+<code>responder_sem_ferramenta</code> todas as vezes) mede a cegueira do replay tanto
+quanto o Jev; essas linhas são limite inferior e não devem decidir nada.</li>
+<li><strong>O resto do prompt de sistema.</strong> <code>contexto</code> é a identidade e a linha de
+instrução do projeto, não o prompt montado (regras de negócio, estado da
+tarefa, arquivos).</li>
+<li><strong>Se o rótulo está certo.</strong> O modelo que escolheu a ferramenta não é verdade
+de referência; 157 passos estão marcados como suspeitos e relatados à parte (&quot;sem
+suspeita&quot;). A concordância é menor nos passos limpos (31%) do que no geral
+(47%): os passos suspeitos são, na maioria, chamadas <code>terminal</code> falhando de dev
+agents, que o Jev também tende a escolher — então passos mal rotulados não explicam
+a discordância.</li>
+<li><strong>O efeito.</strong> Um menu restrito muda o que o modelo faz a seguir; o
+replay só compara uma escolha com uma gravada. Se os turnos ficam mais curtos,
+mais rápidos ou mais baratos é a AT-239.</li>
+</ul>
+<h2 id="two-findings-outside-the-numbers">Dois achados fora dos números</h2>
+<ul>
+<li><strong>Passos heterogêneos são comuns:</strong> 36 de 295 (12%). Restringir o menu a
+uma ferramenta transforma cada um deles em pelo menos dois passos — a lacuna 1 da AT-235,
+agora contada.</li>
+<li><strong>O risco de sincronização do catálogo da AT-235 (lacuna 3) é real, com outro nome:</strong>
+<code>GET /api/v1/models</code> não lista <code>typesafe/jev-1.13</code>, mas lista
+<code>typesafe/jev-router</code> — um roteador de chat, com preço <code>-1</code>. A sincronização de modelos
+o importaria como modelo de chat (inativo). Registrado aqui, não alterado.</li>
+</ul>
+<h2 id="second-round-2026-09-29-where-the-gap-is">Segunda rodada (2026-09-29): onde está a distância</h2>
+<blockquote>
+<p>Pedida pelo dono depois da primeira rodada: repetir a medição, tentar chegar a
+<strong>pelo menos 90%</strong>, e dizer exatamente onde está a distância. <strong>Não alcançado.</strong> Nos
+passos de validação, o top-1 do Jev é <strong>73% por equivalência (IC 95% 66–79%,
+n = 160) e 66% estrito (58–73%)</strong>; o top-2 dele chega a 90% (84–94%). O resto
+desta seção é o protocolo, os números e uma leitura à mão dos 43 erros de top-1
+que sobram. Mesma instância, mesma ressalva da primeira rodada: um projeto
+pequeno, um dia, um modelo de chat; nenhum ganho de produto é afirmado (isso é a
+AT-239). Repositório em <code>bc7f4c0738</code>, branch <code>test/replay-do-jev-v2</code>.</p>
+</blockquote>
+<h3 id="protocol-written-before-any-run">Protocolo (escrito antes de qualquer execução)</h3>
+<ul>
+<li><strong>Só o que o produto consegue produzir em runtime, antes do passo.</strong> Nada
+do passo-alvo entra no <code>state</code>: nem a ferramenta que ele chamou, nem os argumentos,
+nem o resultado, nem o texto que o modelo escreveu naquele mesmo passo (<code>Passo.texto</code> é
+lido só de passos <em>anteriores</em>; <code>variantes.spec.ts</code> afirma, para toda
+variante, que a chamada, o argumento, o resultado e o texto do passo-alvo estão ausentes).
+Cada campo novo tem a fonte no engine, citada no cabeçalho de
+<code>scripts/jev/variantes.ts</code>.</li>
+<li><strong>Classes de equivalência fixadas em <code>scripts/jev/equivalencia.ts</code> antes de rodar</strong>,
+a partir da semântica das ferramentas, e relatadas ao lado da regra estrita (a
+da primeira rodada, para que os 47% continuem comparáveis). Três camadas cumulativas:
+<strong>E1</strong> <code>terminal</code> cujo comando só lê/lista/busca (<code>ls</code>, <code>find</code>,
+<code>cat</code>, <code>pwd</code>, <code>grep</code>, <code>head</code>, <code>git status/log/diff</code>… — um comando composto
+conta pelo segmento mais forte, execução &gt; escrita &gt; leitura) ≡
+<code>read_file</code>/<code>search_workspace</code>; <strong>E2</strong> <code>read_file</code> ≡ <code>search_workspace</code>;
+<strong>E3</strong> <code>terminal</code> que escreve arquivo (redirecionamento, heredoc, <code>tee</code>, <code>sed -i</code>,
+<code>cp</code>, <code>mv</code>, <code>touch</code>) ≡ <code>write_file</code>. Assimétricas de propósito: o Jev escolher
+<code>terminal</code> só serve a uma chamada <code>terminal</code>, e um comando que <em>executa</em>
+(<code>npm</code>, <code>node</code>, <code>rm</code>, <code>mkdir</code>, <code>git commit</code>…) não equivale a nada além de
+<code>terminal</code>. <strong>A manchete é a regra completa (E1+E2+E3), com a regra estrita
+ao lado.</strong> Nada foi reclassificado depois de ver um resultado; os 3 erros que as
+classes ainda erram são contados como tais abaixo.</li>
+<li><strong>Ajuste × validação por execução, não por passo.</strong> Um grupo é uma execução de
+<code>ToolLoop</code> (a tarefa de um dev agent, uma rodada de gate) ou, para agentes
+conversacionais, a sessão inteira do agente. Os grupos são ordenados por um hash do nome e cada
+um vai para a metade que tem menos passos até ali — determinístico e cego a qualquer
+resultado. 328 passos elegíveis: <strong>167 de ajuste, 161 de validação</strong> (o n abaixo conta
+passos com ferramenta: 161 e 160). As variantes foram iteradas só no ajuste;
+a validação foi perguntada depois, uma vez por variante. <strong>Um incidente, declarado:</strong>
+depois das primeiras execuções de ajuste descobri que <code>skip_proficiency</code> /
+<code>emit_proficiency</code> da Anamnese também encerram o laço, e os acrescentei à lista de
+fronteiras de execução usada para <em>montar o state</em>. Usar a lista corrigida para a divisão
+também teria movido 154 dos 167 passos de ajuste para a validação, então a divisão
+mantém a lista que tinha antes do primeiro pedido (<code>FERRAMENTAS_DE_FIM_DA_DIVISAO</code>)
+e só o state usa a corrigida. As quatro variantes de state que dependem
+da fronteira foram perguntadas de novo no ajuste (US$ 0,075, guardados como <code>.descartado</code>
+no registro de gastos).</li>
+<li><strong>Retrato congelado.</strong> O banco de dev continuou recebendo passos de outro trabalho
+durante a sessão (335 linhas de uso no fim contra 333 no começo); a
+análise roda sobre o retrato de 333 linhas e os eventos até os mesmos
+números de sequência (<code>--dados-cache</code>). Os 26 passos novos desde a primeira rodada
+(302 respondidos → 328 elegíveis) são todos passos da <strong>Anamnese</strong> da metade de ajuste.</li>
+<li><strong>Teto de gasto</strong> de US$ 1,00 sobre a soma de <code>usage.cost</code>, conferido antes de todo
+pedido contra o total acumulado do diretório de saída (<code>.jsonl</code> e
+<code>.descartado</code>). Gasto: <strong>US$ 0,414</strong> em 4 604 pedidos (ver &quot;Latência e custo&quot;).</li>
+</ul>
+<h3 id="the-sample-1">A amostra</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th>ajuste</th>
+<th>validação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>passos (com ferramenta / sem)</td>
+<td>167 (161 / 6)</td>
+<td>161 (160 / 1)</td>
+</tr>
+<tr>
+<td>dev agents (<code>ToolLoop</code>)</td>
+<td><code>dev-piece-catalog</code> 37, <code>dev-retro-renderer</code> 26, <code>dev-input-keyboard</code> 25</td>
+<td><code>dev-game-session</code> 38, <code>dev-scoring</code> 38, <code>dev-persistence</code> 34, <code>dev-board-engine</code> 24</td>
+</tr>
+<tr>
+<td>gates e outros <code>ToolLoop</code></td>
+<td><code>anamnese</code> 32, <code>qa-automacao</code> 20, <code>appsec</code> 3</td>
+<td><code>qa-estrategia</code> 16, <code>appsec</code> 3, <code>infra-workflows</code> 2, <code>anamnese</code> 2</td>
+</tr>
+<tr>
+<td>conversacionais</td>
+<td><code>po</code> 8, <code>criativo</code> 5, <code>arquiteto</code> 5</td>
+<td><code>infra</code> 2, <code>dev-lead</code> 1</td>
+</tr>
+</tbody>
+</table></div>
+<p>A validação é dominada pelos dev agents (134 de 160 passos com ferramenta) e por um
+gate (<code>qa-estrategia</code>, 16). A metade de ajuste carrega 32 passos da Anamnese, que o
+Jev responde com <code>responder_sem_ferramenta</code> quando o agente usou
+<code>skip_proficiency</code> (30 de 32): sem eles o ajuste fica em 94/129 = 73% por
+equivalência, o mesmo da validação.</p>
+<h3 id="variants-tried-all-of-them">Variantes tentadas (todas)</h3>
+<p><code>tokens</code> é o tamanho mediano da entrada; latência em ms (p50 / máx), pedidos
+sequenciais da máquina do mantenedor. Só passos com ferramenta.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>variante</th>
+<th>o que acrescenta à anterior</th>
+<th>ajuste estrito → equivalência (top-2)</th>
+<th>validação estrito → equivalência (top-2)</th>
+<th>tokens</th>
+<th>latência</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>original</code></td>
+<td>nada — o <code>state</code> da primeira rodada</td>
+<td>39% → 48% (83%)</td>
+<td>49% → 58% (82%)</td>
+<td>1 687</td>
+<td>322 / 780</td>
+</tr>
+<tr>
+<td><code>kickoff</code></td>
+<td><code>pedido</code> = a primeira mensagem do laço, reconstruída do código do engine</td>
+<td>55% → 58% (89%)</td>
+<td>65% → 73% (91%)</td>
+<td>1 867</td>
+<td>318 / 612</td>
+</tr>
+<tr>
+<td><strong><code>escopo</code></strong></td>
+<td>passos recentes só da execução corrente (<code>ctx.messages</code> recomeça a cada <code>ToolLoop.run</code>)</td>
+<td><strong>57% → 59% (89%)</strong></td>
+<td><strong>66% → 73% (90%)</strong></td>
+<td>1 867</td>
+<td>312 / 814</td>
+</tr>
+<tr>
+<td><code>resultados</code></td>
+<td>resultados/argumentos até 2 000 caracteres</td>
+<td>53% → 55% (91%)</td>
+<td>62% → 69% (88%)</td>
+<td>2 011</td>
+<td>314 / 699</td>
+</tr>
+<tr>
+<td><code>texto</code></td>
+<td>o texto do modelo de passos anteriores</td>
+<td>53% → 55% (91%)</td>
+<td>64% → 73% (93%)</td>
+<td>2 090</td>
+<td>315 / 685</td>
+</tr>
+<tr>
+<td><code>progresso</code></td>
+<td>contagens derivadas (passos até ali, chamadas por ferramenta, última ferramenta, testes rodados…)</td>
+<td>55% → 57% (91%)</td>
+<td>65% → 70% (93%)</td>
+<td>2 224</td>
+<td>309 / 817</td>
+</tr>
+<tr>
+<td><code>trilha</code></td>
+<td><code>escopo</code> + a sequência inteira de ferramentas da execução (só nomes)</td>
+<td>53% → 57% (91%)</td>
+<td>64% → 71% (89%)</td>
+<td>1 936</td>
+<td>310 / 614</td>
+</tr>
+<tr>
+<td><code>fluxo</code></td>
+<td><code>trilha</code> + uma pergunta que diz que os agentes trabalham em rajadas</td>
+<td>49% → 55% (92%)</td>
+<td>64% → 75% (93%)</td>
+<td>2 014</td>
+<td>309 / 586</td>
+</tr>
+<tr>
+<td><code>enxuto</code></td>
+<td><code>trilha</code> com só as 2 últimas chamadas</td>
+<td>50% → 54% (89%)</td>
+<td>63% → 74% (91%)</td>
+<td>1 429</td>
+<td>307 / 920</td>
+</tr>
+<tr>
+<td><code>so_trilha</code></td>
+<td><code>trilha</code> sem chamada recente nenhuma</td>
+<td>39% → 44% (80%)</td>
+<td>33% → 56% (83%)</td>
+<td>1 168</td>
+<td>307 / 480</td>
+</tr>
+<tr>
+<td><code>acoes</code></td>
+<td><code>escopo</code> + o resultado dos comandos que esperaram aprovação (reconstruído do desfecho da ação)</td>
+<td>50% → 53% (91%)</td>
+<td>53% → 61% (89%)</td>
+<td>2 333</td>
+<td>348 / 1 352</td>
+</tr>
+<tr>
+<td><code>acoes_completo</code></td>
+<td><code>acoes</code> + 2 000 caracteres + texto + progresso</td>
+<td>47% → 51% (92%)</td>
+<td>51% → 58% (92%)</td>
+<td>3 360</td>
+<td>326 / 845</td>
+</tr>
+</tbody>
+</table></div>
+<p>As seis linhas de <code>original</code> a <code>progresso</code> (a cascata abaixo) foram escritas
+antes do primeiro pedido. As outras seis foram escritas depois, em resposta ao
+que o ajuste mostrou, e são uma busca comum na metade de ajuste: <code>trilha</code>,
+<code>fluxo</code>, <code>enxuto</code> e <code>so_trilha</code> tentam dar ao Jev o padrão da execução numa
+forma mais fácil de ler; <code>acoes</code> e <code>acoes_completo</code> vieram de ver que muitos
+passos recentes liam <code>(sem resultado gravado)</code> (comandos que esperaram aprovação).</p>
+<p>A <strong>vencedora é <code>escopo</code></strong>, escolhida no ajuste (melhor top-1, estrito e por
+equivalência); a validação não foi usada para escolher. Duas coisas a
+ler na tabela: as diferenças entre <code>kickoff</code> … <code>progresso</code> estão dentro dos
+intervalos de confiança (±7 pontos), então não se mostra que &quot;mais entrada&quot; atrapalhe ou ajude
+além do primeiro passo; e <code>fluxo</code> tem o melhor número de validação (75%) mas fica
+abaixo da vencedora no ajuste (55% contra 59%), e é por isso que não foi a vencedora
+— escolhê-la agora seria escolher pela validação.</p>
+<p>De onde vem cada campo novo no engine (<code>apps/engine/lib/engine/…</code>):</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>campo</th>
+<th>fonte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pedido</code> (dev)</td>
+<td><code>initial_message/2</code>, <code>dev/dev_agent_server.ex:484</code>; títulos de tarefa e história de <code>tasks</code>/<code>stories</code></td>
+</tr>
+<tr>
+<td><code>pedido</code> (<code>qa-automacao</code>)</td>
+<td><code>initial_message/2</code>, <code>gates/qa_automacao_agent.ex:108</code>; tarefa do último <code>dev.awaiting_gate</code>, requisitos da história</td>
+</tr>
+<tr>
+<td><code>pedido</code> (<code>qa-estrategia</code>, <code>appsec</code>)</td>
+<td><code>gates/qa_estrategia_agent.ex:93</code>, <code>gates/appsec_agent.ex:79</code>; <strong>a história não é recuperável do log</strong>, então a mensagem diz isso e carrega o mapa de módulos</td>
+</tr>
+<tr>
+<td>passos recentes por execução</td>
+<td><code>ToolLoop.Default.init/1</code> e <code>loop/1</code> (<code>harness/tool_loop.ex</code>): <code>messages</code> é montado por <code>run</code></td>
+</tr>
+<tr>
+<td>resultados completos, <code>texto</code></td>
+<td>as mensagens <code>tool</code> e <code>assistant</code> que <code>loop/1</code> acrescenta (<code>concluir_despacho/5</code>, <code>append(ctx, message)</code>); o log corta resultados em 2 000</td>
+</tr>
+<tr>
+<td>resultados de comandos aprovados (<code>acoes</code>)</td>
+<td><code>texto_do_desfecho/1</code>, <code>dev/dev_agent_server.ex:460</code>; o log não tem <code>tool.result</code> para eles, só <code>proposed_actions.execution_result</code></td>
+</tr>
+<tr>
+<td><code>progresso</code>, <code>trilha</code></td>
+<td>contagens sobre as chamadas anteriores da execução nas mesmas <code>messages</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Não portados, e dito em <code>kickoff.ts</code>: a Anamnese (a mensagem dela é montada
+a partir de uma janela do log e da lista de membros, que o log não guarda),
+<code>infra-workflows</code> (mapa de contexto), e os agentes conversacionais (o <code>pedido</code> deles
+continua sendo a última mensagem do usuário).</p>
+<h3 id="the-cascade-validation-steps-with-a-tool">A cascata (validação, passos com ferramenta)</h3>
+<p>Cada linha é a anterior mais uma peça, nos mesmos 160 passos.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>passo</th>
+<th>n</th>
+<th>top-1 (IC 95%)</th>
+<th>top-2 (IC 95%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>entrada da primeira rodada, regra estrita</td>
+<td>160</td>
+<td>78/160 = 49% (41–56%)</td>
+<td>118/160 = 74% (66–80%)</td>
+</tr>
+<tr>
+<td>+ E1 terminal-leitura ≡ leitura</td>
+<td>160</td>
+<td>92/160 = 57% (50–65%)</td>
+<td>125/160 = 78% (71–84%)</td>
+</tr>
+<tr>
+<td>+ E2 <code>read_file</code> ≡ <code>search_workspace</code></td>
+<td>160</td>
+<td>93/160 = 58% (50–65%)</td>
+<td>131/160 = 82% (75–87%)</td>
+</tr>
+<tr>
+<td>+ E3 terminal que escreve ≡ <code>write_file</code></td>
+<td>160</td>
+<td>93/160 = 58% (50–65%)</td>
+<td>131/160 = 82% (75–87%)</td>
+</tr>
+<tr>
+<td>+ <code>pedido</code> = a primeira mensagem do laço</td>
+<td>160</td>
+<td>116/160 = 73% (65–79%)</td>
+<td>145/160 = 91% (85–94%)</td>
+</tr>
+<tr>
+<td>+ passos recentes só da execução corrente</td>
+<td>160</td>
+<td>117/160 = 73% (66–79%)</td>
+<td>144/160 = 90% (84–94%)</td>
+</tr>
+<tr>
+<td>+ resultados até 2 000 caracteres</td>
+<td>160</td>
+<td>110/160 = 69% (61–75%)</td>
+<td>141/160 = 88% (82–92%)</td>
+</tr>
+<tr>
+<td>+ o texto do modelo de passos anteriores</td>
+<td>160</td>
+<td>116/160 = 73% (65–79%)</td>
+<td>149/160 = 93% (88–96%)</td>
+</tr>
+<tr>
+<td>+ contagens derivadas</td>
+<td>160</td>
+<td>112/160 = 70% (62–77%)</td>
+<td>148/160 = 93% (87–96%)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Duas linhas carregam todo o movimento: as equivalências (+9 pontos) e a primeira
+mensagem do laço (+15). Depois de <code>escopo</code> nada move o top-1 para fora do intervalo,
+e os resultados reconstruídos para comandos aprovados (<code>acoes</code>) o baixam. Os 47% da
+primeira rodada, na mesma entrada, são 58% sob as equivalências declaradas.</p>
+<h3 id="the-headline">A manchete</h3>
+<p>Variante <code>escopo</code>, validação, 160 passos com ferramenta (mais 1 sem, que o
+Jev errou):</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>top-1, regra de equivalência</strong></td>
+<td><strong>117/160 = 73% (66–79%)</strong></td>
+</tr>
+<tr>
+<td>top-1, regra estrita (comparável aos 47%)</td>
+<td>105/160 = 66% (58–73%)</td>
+</tr>
+<tr>
+<td>top-2 (menu restrito a 2), equivalência / estrita</td>
+<td>144/160 = 90% (84–94%) / 134/160 = 84% (77–89%)</td>
+</tr>
+<tr>
+<td>top-3, equivalência</td>
+<td>148/160 = 93% (87–96%)</td>
+</tr>
+<tr>
+<td>linha de base &quot;repetir a ferramenta anterior&quot; (gratuita), equivalência / estrita</td>
+<td>122/149 = 82% (75–87%) / 108/149 = 72% (65–79%)</td>
+</tr>
+<tr>
+<td>menu de 2 sem segunda chamada, {escolha do Jev, ferramenta anterior}, equivalência / estrita</td>
+<td>140/160 = 88% (81–92%) / 125/160 = 78% (71–84%)</td>
+</tr>
+<tr>
+<td>sem a Anamnese (kickoff não reconstruído; pausada no produto)</td>
+<td>115/158 = 73% (65–79%)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>O Jev não bate a linha de base gratuita.</strong> Nos mesmos passos de validação,
+&quot;repetir a ferramenta anterior&quot; faz 82% (72% estrito), acima dos 73% (66%) do Jev. A
+única vantagem dele aparece na união: oferecer a escolha do Jev <em>e</em> a ferramenta anterior
+chega a 88% (78% estrito), 15 pontos acima do Jev sozinho, sem chamada extra. Nenhuma
+configuração chega a 90% no top-1, e nenhuma tem limite inferior em 90%.</p>
+<p>Por agente (validação, equivalência): <code>dev-board-engine</code> 23/24 = 96% (80–99%),
+<code>dev-persistence</code> 28/34 = 82% (66–92%), <code>dev-scoring</code> 31/38 = 82% (67–91%),
+<code>dev-game-session</code> 28/38 = 74% (58–85%), <strong><code>qa-estrategia</code> 4/16 = 25% (10–49%)</strong>,
+<code>appsec</code> 1/3, <code>infra</code> 0/2, <code>infra-workflows</code> 0/2, <code>dev-lead</code> 0/1 (<code>qa-estrategia</code>
+e <code>appsec</code> têm a primeira mensagem reconstruída mas sem a história; os outros
+três não a têm reconstruída de jeito nenhum).</p>
+<p>A confiança ainda não separa certo de errado:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>limiar</th>
+<th>menu restrito a 1</th>
+<th>certos entre os restringidos (IC 95%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.00</td>
+<td>155/160</td>
+<td>117/155 = 75% (68–82%)</td>
+</tr>
+<tr>
+<td>0.40</td>
+<td>123/160</td>
+<td>95/123 = 77% (69–84%)</td>
+</tr>
+<tr>
+<td>0.60</td>
+<td>55/160</td>
+<td>44/55 = 80% (68–88%)</td>
+</tr>
+<tr>
+<td>0.70</td>
+<td>32/160</td>
+<td>23/32 = 72% (55–84%)</td>
+</tr>
+<tr>
+<td>0.80</td>
+<td>16/160</td>
+<td>8/16 = 50% (28–72%)</td>
+</tr>
+<tr>
+<td>0.90</td>
+<td>10/160</td>
+<td>4/10 = 40% (17–69%)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Acima de 0,7 a acurácia <em>cai</em>: os erros confiantes são os descritos abaixo
+(o Jev tem certeza de que depois de escrever os testes vem rodá-los).</p>
+<h3 id="the-gap-by-cause">A distância, por causa</h3>
+<p>Os 82 erros de validação da regra da primeira rodada, e o que cada peça da
+cascata fez com eles (passos com ferramenta, n = 160):</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>causa</th>
+<th>passos</th>
+<th>pontos</th>
+<th>parcela da distância</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>régua</strong> — a escolha do Jev era equivalente (E1–E3, declaradas de antemão)</td>
+<td>15</td>
+<td>9.4</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>régua</strong> — sobra: as classes ainda perdem um caso (3 passos, abaixo)</td>
+<td>3</td>
+<td>1.9</td>
+<td>22% (18 passos)</td>
+</tr>
+<tr>
+<td><strong>entrada</strong> — a primeira mensagem do laço (<code>kickoff</code>)</td>
+<td>23</td>
+<td>14.4</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>entrada</strong> — <code>escopo</code></td>
+<td>1</td>
+<td>0.6</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>entrada</strong> — sobra: primeiras mensagens não reconstruídas, ou um resultado fora do log (7)</td>
+<td>7</td>
+<td>4.4</td>
+<td>38% (31 passos)</td>
+</tr>
+<tr>
+<td><strong>o ritmo do agente</strong>, não um campo do state (abaixo)</td>
+<td>29</td>
+<td>18.1</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>o Jev diverge sem que o state o justifique</strong> (4)</td>
+<td>4</td>
+<td>2.5</td>
+<td>40% (33 passos)</td>
+</tr>
+<tr>
+<td>total</td>
+<td>82</td>
+<td>51.3</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Os 43 erros que sobraram depois da última peça recuperada foram lidos um a um (não uma
+amostra): o state enviado, as ferramentas chamadas, o texto do próprio modelo naquele passo
+(que o Jev nunca vê) e a escolha e a confiança do Jev. Resultado:</p>
+<ul>
+<li><strong>Régua, 3.</strong> <code>dev-board-engine</code> <code>terminal</code>→<code>search_workspace</code>: o comando do
+agente era um <code>find … | sort; ls; for f in docs/*; do …cat</code> — só leitura, mas
+um laço <code>for</code> não está na lista de só leitura, então é pontuado como execução. Mais
+dois <code>read_file</code>→<code>terminal</code> em que o agente vinha lendo por
+<code>terminal</code> o tempo todo: equivalentes em qualquer leitura, mas as classes são
+assimétricas de propósito e isso não foi repontuado.</li>
+<li><strong>Entrada, 7.</strong> Todos os erros de <code>infra</code> (2 passos), <code>infra-workflows</code> (2) e
+<code>dev-lead</code> (1) — cinco passos cuja primeira mensagem o porte não reconstrói —
+mais os dois <code>report_done</code>→<code>terminal</code> em que o resultado do último comando
+(&quot;exit 0, a suíte passou&quot;) não está no log. A variante <code>acoes</code> reconstrói
+esses resultados e, no geral, deixou o Jev <em>pior</em> (61%): diante de um sandbox
+falhando, ele diz <code>report_blocked</code> onde o agente continuou tentando.</li>
+<li><strong>O ritmo do agente, 29.</strong> O Jev nomeia a <em>próxima etapa</em> do fluxo e o
+agente fica mais um passo na atual:
+14 × <code>write_file</code>→<code>terminal</code> (o Jev: &quot;os testes estão escritos, rode-os&quot;, 8
+deles com confiança ≥ 0,6, até 0,98; o agente escreveu mais dois ou três arquivos
+antes), 12 × <code>qa-estrategia</code> <code>read/search</code>→<code>emit_plano_de_teste</code> (o Jev
+salta para a ferramenta final do kickoff com confiança 0,25–0,56; o agente
+explorou ~15 passos antes de emitir), 2 × <code>appsec</code> o mesmo, 1 ×
+<code>terminal</code>→<code>report_blocked</code> depois de uma ação negada. Em todos eles a
+escolha do Jev é o que um leitor do log chamaria de próximo passo natural.
+O que decide &quot;quantos arquivos a mais, quantas leituras a mais&quot; é o plano do modelo,
+que não está em nenhum campo que o produto pudesse entregar ao roteador — ele existe, uma vez, no
+próprio texto do passo que se está prevendo.</li>
+<li><strong>O Jev diverge, 4.</strong> <code>write_file</code>→<code>search_workspace</code> duas vezes com confiança
+0,25–0,26, <code>rag_search</code>→<code>terminal</code> duas vezes (0,24, 0,59). São os únicos passos
+em que o state não explica a escolha: 2,5% dos passos.</li>
+</ul>
+<p>Então: de uma distância de 51 pontos entre os 49% da primeira rodada e 100%, cerca de <strong>um quinto
+era a régua, cerca de dois quintos era entrada que faltava ao replay</strong> (e a
+parte recuperável dela está recuperada), <strong>e dois quintos é o ritmo do agente</strong>,
+com <strong>5% dos passos um erro puro do Jev</strong>. O que resta da entrada são no
+máximo 4 pontos, e não é o que separa 73% de 90%.</p>
+<h3 id="what-would-be-needed-for-90-and-what-each-piece-is-worth">O que seria preciso para 90%, e quanto vale cada peça</h3>
+<p>Passos de validação, 43 erros; 90% é 144/160, isto é, 27 acertos a mais.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>peça</th>
+<th>passos no máximo</th>
+<th>nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>terminar o porte da entrada (Anamnese, <code>infra-workflows</code>, primeiras mensagens dos conversacionais; a história de <code>qa-estrategia</code>)</td>
+<td>até +7 → 79%</td>
+<td>um limite superior: com a entrada completa o Jev não foi melhor aqui, e reconstruir resultados o piorou</td>
+</tr>
+<tr>
+<td>apertar as classes (laços <code>for</code>, terminal-como-leitura no outro sentido)</td>
+<td>+3 → 75%</td>
+<td>é régua, não acurácia; decidir isso depois de ver os erros é o que o protocolo proíbe, então não está na manchete</td>
+</tr>
+<tr>
+<td>o ritmo do agente</td>
+<td>até +29</td>
+<td>não é campo do state; as únicas portas de entrada são um <strong>menu de 2 que inclua a ferramenta anterior</strong> (medido: 88%, 81–92%) ou o top-2 (90%, 84–94%)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Lendo como decisão de produto, que é da AT-239: um roteador que precisa <em>escolher
+uma</em> ferramenta fica em cerca de três quartos e abaixo da linha de base gratuita; um roteador
+que <em>restringe o menu a duas</em> chega a nove em dez, e a ferramenta anterior é um
+segundo nome tão bom quanto o segundo do próprio Jev. Esta seção não afirma nenhum dos
+dois ganhos.</p>
+<h3 id="latency-and-cost-variant-escopo">Latência e custo (variante <code>escopo</code>)</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tokens de entrada por pedido</td>
+<td>p50 1 866, p95 2 557, máx 3 220 (a primeira rodada: mediana 1 710, máx 3 220)</td>
+</tr>
+<tr>
+<td>latência (328 pedidos, sequenciais)</td>
+<td>p50 317 ms, p95 449 ms, máx 814 ms; <strong>0 acima de 2 000 ms</strong></td>
+</tr>
+<tr>
+<td>custo</td>
+<td>US$ 0,0000769 por passo (US$ 0,025233 para 328), e <code>GET /api/v1/generation</code> para cada um dos 328 ids soma os mesmos US$ 0,025233 (razão 1,000)</td>
+</tr>
+<tr>
+<td>esta rodada inteira</td>
+<td>US$ 0,414 por <code>usage.cost</code> — 12 variantes, 3 delas duas vezes em parte da metade de ajuste — contra um teto de US$ 1,00</td>
+</tr>
+</tbody>
+</table></div>
+<p>As variantes mais ricas custam mais entrada (<code>acoes_completo</code>: mediana de 3 360 tokens, cerca de
+US$ 0,00014 por passo contra 0,00008) e não compram nada; o state que vence é também o
+barato. O teto de 2 000 ms da AT-236 tem folga de um fator de dois.</p>
+<h3 id="what-this-round-still-cannot-see">O que esta rodada ainda não enxerga</h3>
+<ul>
+<li>A <strong>história</strong> dos dois gates que rodam antes de qualquer código (<code>qa-estrategia</code>,
+<code>appsec</code>): o pedido que os inicia é interno e não vai para o log.</li>
+<li>A primeira mensagem da <strong>Anamnese</strong>, de <code>infra-workflows</code> e dos
+agentes conversacionais; e o prompt de sistema por trás de <code>contexto</code>.</li>
+<li><strong>Verdade de referência.</strong> O rótulo continua sendo a ferramenta que o modelo de chat chamou, e a maioria
+dos 29 erros de ritmo são escolhas que um leitor humano chamaria de razoáveis, e
+é por isso que o top-2 e a união dizem mais do que o top-1.</li>
+<li><strong>Efeito.</strong> Um menu restrito muda o que o modelo faz a seguir; AT-239.</li>
+</ul>
+<h2 id="menu-of-2-options-2026-09-29-restrict-instead-of-pick">Menu de 2 opções (2026-09-29): restringir em vez de escolher</h2>
+<blockquote>
+<p>Pedido pelo dono depois da segunda rodada, em que o top-1 do Jev (73%) ficou abaixo de
+90% mas um menu de dois ({a escolha do Jev, a ferramenta anterior}) e o top-2 do Jev
+pareciam bons: <strong>testar o menu de 2 opções</strong>. Só um resultado cujo <strong>limite inferior
+do intervalo de 95% seja pelo menos 90%</strong> é um &quot;sim&quot; claro. <strong>Não é: nenhuma política
+chega lá.</strong> A melhor política de 2 opções, a P3, cobre <strong>91% (85–94%)</strong> dos
+passos de validação, isto é, a ferramenta certa está dentro do menu; o limite inferior
+é 85%, cinco pontos abaixo da linha. E isto é <em>cobertura</em>, um teto para a
+acurácia ponta a ponta (ver &quot;O teto&quot;), não a acurácia em si. Mesma
+instância, mesmas ressalvas das rodadas anteriores; nada aqui muda o produto
+(isso é a AT-239). Reproduza com <code>pnpm --filter @brabo/scripts jev:menu</code>.</p>
+</blockquote>
+<h3 id="policies-written-before-running-in-scriptsjevmenuts">Políticas (escritas antes de rodar, em <code>scripts/jev/menu.ts</code>)</h3>
+<p>Uma política transforma a resposta do Jev num menu restrito. As decisões do dono
+valem em toda parte: o Jev só <strong>restringe</strong> o menu, e quando ele responde
+<code>responder_sem_ferramenta</code> o catálogo <strong>inteiro</strong> fica (AT-236); teto de
+2 000 ms (0 de 328 pedidos o ultrapassaram na segunda rodada). Nada foi
+reclassificado depois de ver um resultado; <code>menu.spec.ts</code> fixa o que cada política devolve.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>política</th>
+<th>menu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0</td>
+<td>o catálogo inteiro (âncora: 100% de cobertura, não restringe nada)</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>as duas ferramentas mais prováveis do Jev</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>{a escolha do Jev, a ferramenta anterior da mesma execução}</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>P2, mas se o Jev diz <code>responder_sem_ferramenta</code> (ou não há ferramenta anterior) o menu é o catálogo inteiro</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>{a escolha, a ferramenta anterior, a segunda do Jev} (até 3; só referência)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Regras comuns a todas: uma resposta que falhou (timeout, erro, escolha fora das
+opções) deixa o catálogo inteiro; uma ferramenta anterior que não está no
+catálogo do agente é ignorada; um menu que sairia vazio é o catálogo inteiro.</p>
+<p><strong>Cobertura</strong> = a fração dos passos com ferramenta em que a ferramenta que o agente
+de fato chamou está <em>dentro</em> do menu — estrita (mesmo nome) e por equivalência (as
+classes E1–E3 da segunda rodada, então um menu com <code>read_file</code> cobre um <code>terminal</code>
+que só lê). <strong>Taxa de restrição</strong> = a fração dos passos em que o menu
+é menor que o catálogo do agente: uma política que quase nunca restringe é
+trivialmente &quot;100%&quot; e inútil, então a cobertura também é dada <em>entre os passos
+restringidos</em>. Variante <code>escopo</code> (a vencedora da rodada dois), metade de validação, 160 passos
+com ferramenta (mais 1 sem).</p>
+<h3 id="the-numbers-validation">Os números (validação)</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>política</th>
+<th>cobertura, equivalência (IC 95%)</th>
+<th>estrita</th>
+<th>restringe</th>
+<th>cobertura entre os restringidos</th>
+<th>ferramentas expostas, antes → depois</th>
+<th>tokens de definição por chamada, antes → depois</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0</td>
+<td>160/160 = 100% (98–100%)</td>
+<td>100%</td>
+<td>0/160 = 0%</td>
+<td>—</td>
+<td>7.4 → 7.4</td>
+<td>746 → 746</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>144/160 = 90% (84–94%)</td>
+<td>134/160 = 84% (77–89%)</td>
+<td>158/160 = 99%</td>
+<td>142/158 = 90% (84–94%)</td>
+<td>7.4 → 2.0</td>
+<td>746 → 150</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>143/160 = 89% (84–93%)</td>
+<td>128/160 = 80% (73–85%)</td>
+<td>157/160 = 98%</td>
+<td>140/157 = 89% (83–93%)</td>
+<td>7.4 → 1.3</td>
+<td>746 → 102</td>
+</tr>
+<tr>
+<td><strong>P3</strong></td>
+<td><strong>145/160 = 91% (85–94%)</strong></td>
+<td>132/160 = 83% (76–88%)</td>
+<td>147/160 = 92% (87–95%)</td>
+<td>132/147 = 90% (84–94%)</td>
+<td>7.4 → 1.6</td>
+<td>746 → 138</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>149/160 = 93% (88–96%)</td>
+<td>142/160 = 89% (83–93%)</td>
+<td>158/160 = 99%</td>
+<td>147/158 = 93% (88–96%)</td>
+<td>7.4 → 2.2</td>
+<td>746 → 166</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Qual é a melhor.</strong> A P3 é a que importa: a maior cobertura das
+políticas de 2 opções, ela honra a regra do dono e restringe 92% dos
+passos. <strong>O limite inferior dela é 85,1%; o da P1 é 84,4%, o da P2 83,6%, o da P4 88,1%.</strong>
+A P4 é a mais próxima da linha, mas um menu de até 3 não é a pergunta que foi
+feita. Toda política fica sem o &quot;sim claro&quot;; P1 e P3 caem <em>em</em> 90% na
+estimativa pontual, os mesmos &quot;90% (84–94%)&quot; que a segunda rodada já tinha para o top-2 —
+a ferramenta anterior não acrescenta nada à cobertura sobre o segundo palpite do próprio Jev, ela
+só deixa o menu menor (1,6 ferramenta contra 2,0).</p>
+<p><strong>Duas coisas que a tabela esconde.</strong></p>
+<ul>
+<li><strong>A P3 oferece uma ferramenta só em 98 dos 160 passos.</strong> Quando a escolha do Jev <em>é</em>
+a ferramenta anterior, o menu tem um nome (P2: 108 de 160). Esses menus cobrem
+89 de 98 (91%). Os outros 49 passos restringidos têm menu de dois e cobrem 43
+(88%). Um &quot;menu de 2&quot; é, na maior parte do tempo, um menu de 1 sem escolha deixada ao
+agente: ele é forçado.</li>
+<li><strong>O intervalo é otimista.</strong> Wilson trata os 160 passos como independentes,
+e eles não são: a validação é <strong>10 execuções</strong> (as tarefas de quatro dev agents, os
+gates <code>qa-estrategia</code>, <code>appsec</code> e <code>infra-workflows</code>, e a Anamnese, o Infra
+e o Dev Lead), e passos consecutivos de uma execução compartilham pedido, arquivos e resultados.
+Com tão poucos clusters o intervalo honesto é mais largo do que os impressos. Isso não
+muda a resposta (um &quot;não&quot; não melhora), mas um &quot;sim&quot; também não teria sido
+conquistado por 160 passos.</li>
+</ul>
+<h3 id="tuning-and-the-new-steps">Ajuste e os passos novos</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>política</th>
+<th>ajuste (161 passos) cobertura, equivalência</th>
+<th>restringe</th>
+<th>passos novos (36) cobertura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>144/161 = 89% (84–93%)</td>
+<td>156/161 = 97%</td>
+<td>36/36</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>143/161 = 89% (83–93%)</td>
+<td>127/161 = 79%</td>
+<td>36/36 (restringe 0)</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>147/161 = 91% (86–95%)</td>
+<td>115/161 = 71%</td>
+<td>36/36 (restringe 0)</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>148/161 = 92% (87–95%)</td>
+<td>156/161 = 97%</td>
+<td>36/36</td>
+</tr>
+</tbody>
+</table></div>
+<p>O ajuste diz o mesmo que a validação (P3 91%, limite inferior 86%), como esperado, já que
+nenhuma das políticas foi ajustada. Ele carrega os 32 passos da Anamnese, para os quais o
+Jev diz <code>responder_sem_ferramenta</code> e a P3 portanto deixa o catálogo inteiro:
+71% de restrição em vez de 92%. <strong>Os 36 passos novos</strong> (o banco de dev foi de
+333 para 369 linhas de uso depois do retrato) são <strong>todos da Anamnese</strong>, um agente que está
+pausado no produto: o Jev responde &quot;nenhuma ferramenta&quot; e P2/P3 abrem o catálogo
+inteiro, então &quot;36/36&quot; é trivialmente verdade e não diz nada sobre o menu. Todos os passos
+juntos e sem a Anamnese (287 com ferramenta; a metade de ajuste já escolheu
+a variante, então isto <em>não</em> é uma validação limpa): P1 89% (84–92%), P2 88%
+(84–91%), <strong>P3 90% (86–93%)</strong>, P4 92% (88–94%). Mais passos estreitam o intervalo, mas
+o limite inferior fica em 86%; com uma cobertura verdadeira perto de 91% são precisos cerca de três
+mil passos para o limite inferior passar de 90%, e o que ajudaria é um roteador
+melhor, não uma amostra maior.</p>
+<p>Sensibilidade, não escolha: com qualquer uma das doze variantes de <code>state</code> a P2 cobre
+88–91% e a P3 89–92% dos passos de validação, então o resultado não depende de
+<code>escopo</code> (a P1 depende: 82% com a entrada original, 93% com <code>texto</code> ou <code>fluxo</code>).
+Nenhuma variante tem limite inferior em 90% também — os mais altos são a P1 com <code>texto</code>
+(88%) e a P3 com <code>enxuto</code> (87%) — e escolher uma depois de ver isto é exatamente
+o que o protocolo proíbe.</p>
+<h3 id="where-coverage-fails">Onde a cobertura falha</h3>
+<p>P3, validação, os 15 passos fora do menu: <code>write_file</code> usado enquanto o menu
+era <code>terminal</code> (4), <code>read_file</code> enquanto <code>terminal</code> (2), <code>report_done</code> enquanto
+<code>terminal</code> (2), <code>write_file</code> enquanto {<code>search_workspace</code>, <code>terminal</code>} (2), e cinco
+casos avulsos entre os gates e os agentes conversacionais (<code>emit_plano_de_teste</code>
+oferecida em vez de <code>rag_search</code> ou <code>search_workspace</code>, e o inverso). É a
+distância de ritmo da rodada dois vista do outro lado: o Jev nomeia a próxima etapa,
+o agente dá mais um passo na atual — e um agente cujo menu é
+<code>terminal</code> não consegue escrever o arquivo com a ferramenta feita para isso. Por agente (P3,
+equivalência): <code>dev-board-engine</code> 23/24 = 96% (80–99%), <code>dev-scoring</code> 35/38 = 92%
+(79–97%), <code>dev-persistence</code> 31/34 = 91% (77–97%), <code>qa-estrategia</code> 14/16 = 88%
+(64–97%), <code>dev-game-session</code> 32/38 = 84% (70–93%); os demais têm menos de quatro
+passos.</p>
+<h3 id="the-ceiling-what-coverage-does-not-say">O teto: o que a cobertura não diz</h3>
+<p><strong>Cobertura é um teto para a acurácia ponta a ponta, não a acurácia.</strong> O menu
+contém a ferramenta certa; o modelo do agente ainda precisa escolhê-la entre as
+opções. O rótulo (&quot;a ferramenta que o modelo de chat chamou&quot;) é a escolha que o agente
+fez <em>a partir do catálogo inteiro</em>, então um menu cheio é 100% por construção e um
+restrito só pode perder. O que se pode dizer sem o produto, para a P3 na
+validação, dividindo os 160 passos:</p>
+<ul>
+<li><strong>99 (62%, 54–69%)</strong>: toda ferramenta do menu é certa, então qualquer escolha do agente
+é certa — o piso.</li>
+<li><strong>46 são &quot;disputados&quot;</strong>: exatamente uma das opções é certa e o agente decide
+sozinho — 28 só a ferramenta anterior, 18 só a escolha do Jev. Um agente que sempre
+pega a ferramenta anterior termina em 127/160 = 79%; um que sempre pega a escolha do
+Jev, 117/160 = 73% (as linhas de base da rodada dois de novo); um que tira cara ou coroa, 76%.
+Um agente que escolhe melhor que os dois, que é toda a aposta, cai entre 79%
+e o teto de 91%.</li>
+<li>Os outros 15 estão fora do menu: perdidos, faça o agente o que fizer.</li>
+</ul>
+<p>Então a faixa ponta a ponta vai de 62% a 91%, e onde ela cai depende de quão bem o
+modelo do agente lê a <em>situação</em>, que o replay não enxerga. <strong>Só o teste
+ao vivo (AT-239) responde isso.</strong></p>
+<h3 id="savings-in-tool-definitions">Economia nas definições de ferramentas</h3>
+<p>O catálogo tinha a <em>descrição</em> de cada ferramenta (<code>catalogo.json</code>) e agora também
+<code>definicoes</code>: o tamanho em bytes do <code>spec/0</code> completo de cada ferramenta (nome,
+descrição e schema de parâmetros), serializado pelo engine (<code>catalogo.exs</code>,
+rodado de novo; o resto do arquivo não mudou). Tokens são bytes divididos por 4, a
+aproximação que o replay inteiro usa. Na validação a P3 vai de <strong>746 para 138
+tokens de definição por chamada — 608 tokens, 81% a menos</strong>: as oito ferramentas de um dev agent
+pesam 3 068 bytes e um menu de dois pesa cerca de 500. A P1 economiza 596, a P2 644
+(médias sobre os passos da metade; a metade de ajuste economiza menos porque a
+Anamnese mantém o catálogo inteiro).</p>
+<p>Quanto isso vale é outra pergunta. A chamada ao Jev em si lê ~1 870 tokens
+(US$ 0,0000769) num modelo muito mais barato que o do agente; a economia de definição
+é de 608 tokens do modelo do agente por chamada. O ponto de equilíbrio é um preço de entrada de
+US$ 0,126 por milhão de tokens (0,0000769 / 608): acima dele a economia paga a
+chamada ao Jev, ignorando cache. <strong>O cache é a pegadinha</strong>: os providers fazem cache do prefixo
+do pedido, as definições de ferramentas vêm primeiro, e um menu que muda de passo a passo
+muda o prefixo — a economia pode ser devolvida em faltas de cache. Isso é uma
+medição ao vivo, e o motivo de o teste abaixo registrar a razão de tokens em cache.</p>
+<h3 id="the-live-test-not-run-design">O teste ao vivo (não executado): desenho</h3>
+<ul>
+<li><strong>Pergunta.</strong> Com a P3 na frente do agente, o trabalho do agente piora,
+e quanto ele fica mais barato? Não &quot;a ferramenta está no menu&quot; (isso é esta
+seção).</li>
+<li><strong>Etapa 1, sombra (barata, antes de qualquer usuário ver um menu).</strong> Para cada passo de uma
+amostra reservada, perguntar ao <em>próprio modelo do agente</em> duas vezes sobre o mesmo state, com o
+catálogo inteiro e com o menu da P3, e comparar a ferramenta que ele escolhe pela
+regra de equivalência. Métrica: concordância entre as duas, com o limite inferior do
+intervalo de 95%. Para mostrar uma concordância verdadeira de 94% com o limite inferior em 90% (poder de
+80%): cerca de <strong>390 passos</strong>, tirados de <strong>pelo menos 40 execuções diferentes</strong> e
+<strong>mais de um projeto</strong> (esta amostra tem 21 execuções num projeto),
+intervalo por cluster (execução), não por passo.</li>
+<li><strong>Etapa 2, A/B ao vivo, só se a etapa 1 passar.</strong> Braços: controle (catálogo inteiro) e
+P3, sorteados <strong>por execução</strong>, nunca por passo (o menu de um passo molda o
+seguinte). Métrica primária: a execução chega ao gate sem retrabalho,
+margem de não inferioridade de 5 pontos; com 80% de conclusão, 5% unilateral e poder de 80%,
+cerca de <strong>790 execuções por braço</strong> (uma margem de 10 pontos precisa de cerca de 200).
+No volume deste projeto (7 execuções de dev na amostra inteira) isso exige muitos
+projetos ou semanas. Secundárias: passos por execução, tokens de entrada <em>incluindo a
+razão de tokens em cache</em>, custo por execução, latência acrescentada pelo Jev (p50/p95,
+teto de 2 000 ms), e a parcela dos passos em que o Jev deixa o catálogo
+inteiro.</li>
+<li><strong>Guardas.</strong> Uma flag de desligamento por projeto; cair para o catálogo inteiro em qualquer
+falha do Jev ou acima do teto de latência (já em toda política); um jeito de o
+agente pedir o catálogo completo quando o menu não tem o que ele precisa
+(um menu de um força a ferramenta, 61% dos passos aqui); uma olhada intermediária a cada
+100 execuções, parando se a métrica primária cair mais do que a margem;
+a Anamnese fora da amostra (pausada); o menu e a escolha registrados em todo
+passo, para que a análise seja uma consulta, não uma lembrança.</li>
+</ul>
+<h3 id="what-this-section-still-cannot-see">O que esta seção ainda não enxerga</h3>
+<ul>
+<li>A <strong>escolha do agente dentro do menu</strong>: o motivo de isto ser um teto.</li>
+<li><strong>Dependência entre passos</strong>: 10 clusters na validação; os intervalos são
+por passo.</li>
+<li><strong>Cache de prompt</strong> e <strong>latência no laço do agente</strong>: não medidos (a chamada ao Jev
+é, p50 317 ms; o efeito dela no laço não é).</li>
+<li>O <strong>rótulo</strong>: continua sendo a ferramenta que o modelo de chat chamou, e um menu restrito
+muda o que ele faz a seguir.</li>
+</ul>
+<h3 id="cost-of-this-test">Custo deste teste</h3>
+<p>Uma chamada, para os 36 passos novos: <strong>US$ 0,001275</strong> por <code>usage.cost</code> (teto da tarefa
+US$ 0,30). As políticas rodam offline sobre as respostas já em disco. O
+gasto acumulado do diretório de saída foi de US$ 0,4136 para US$ 0,4149.</p>
+<h2 id="live-comparison-at-239-2026-10-01-restrict-on-for-haiku-and-off-for-deepseek">Comparação ao vivo (AT-239, 2026-10-01): restringir, ligado para o Haiku e desligado para o DeepSeek</h2>
+<blockquote>
+<p>A AT-239 (EP-029, HS-063) faz a pergunta que toda seção anterior deixou aberta:
+<strong>com o roteador ligado, os turnos ficam mais curtos, mais rápidos ou mais baratos, e o
+trabalho ainda sai?</strong> As mesmas tarefas, no mesmo modelo do OpenRouter, com o
+roteamento do <a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179</a>
+ligado e desligado, em dois modelos de chat de velocidades diferentes.</p>
+<p><strong>Situação em 2026-10-01: medido na terceira tentativa</strong> (abaixo). <strong>Primeira
+tentativa: não medido.</strong> A sessão que construiu o instrumento
+(branch <code>test/jev-com-e-sem</code>, de <code>dev</code> em <code>d070b000d7</code>) tinha uma chave paga e um
+teto de US$ 5,00, mas o proxy de saída dela negou o <code>CONNECT</code> para
+<code>openrouter.ai:443</code> por política da organização, e também para <code>repo.hex.pm</code> e
+<code>builds.hex.pm</code>, então nem o engine pôde ser compilado. Nenhuma chamada de chat e
+nenhuma chamada ao Jev saiu da máquina: <strong>gasto US$ 0,00</strong>. O que segue é o
+instrumento, o protocolo e a regra de decisão, todos escritos <strong>antes</strong> de qualquer
+execução, os números que puderam ser medidos sem rede, e depois a
+tabela ao vivo da terceira tentativa.</p>
+<p><strong>Segunda tentativa, mesmo dia: ainda não medido, por outro motivo.</strong> O
+dono liberou <code>openrouter.ai</code> na saída da sessão (um <code>GET</code> respondeu 200),
+e os dois modelos do protocolo estavam listados com suporte a ferramentas
+(<code>deepseek/deepseek-v4.1-flash</code> a US$ 0,03/0,50 por milhão de entrada/saída,
+<code>anthropic/claude-haiku-4.5</code> a US$ 1,00/5,00). A primeira chamada de chat voltou
+<code>HTTP 403 Key limit exceeded (total limit)</code>: a chave de teste tem limite de US$ 10,00,
+US$ 10,05 já usados e nenhum reset (<code>GET /api/v1/key</code>). Um smoke de uma
+tarefa, fora do protocolo e em pasta própria, gastou <strong>US$ 0,00</strong>; nenhuma
+execução do protocolo foi gravada. Rodá-lo exige que o dono suba o
+limite da chave (ou entregue outra chave) — cerca de US$ 1,28 pela estimativa abaixo,
+menos ao preço atual do DeepSeek. O smoke também achou duas coisas que a rede
+falsa nunca acharia, ambas corrigidas ou documentadas no instrumento:</p>
+<ul>
+<li><strong>Uma falha de conta ou de rede era gravada como execução medida.</strong>
+As duas execuções do smoke terminaram <code>erro</code> no passo 0 com <code>HTTP 403</code>, foram gravadas
+na saída como &quot;a tarefa não saiu&quot;, e a retomada nunca as teria
+repetido: com uma chave morta, todas as 40 execuções teriam entrado na
+tabela. <code>falhaDeInfra</code> (<code>resumo.ts</code>) agora classifica um erro de chat de HTTP
+401/402/403/407/429 ou de transporte como a medição não tendo acontecido; <code>vivo.ts</code>
+não grava essa execução, para a execução com o motivo, e a
+retomada a repete. Um erro de provider num corpo 200, um 5xx e uma
+queda do Jev continuam desfechos do braço, como no engine.</li>
+<li><strong>O <code>fetch</code> do Node ignora <code>HTTPS_PROXY</code>.</strong> Atrás de proxy, rode com
+<code>NODE_USE_ENV_PROXY=1</code> (Node ≥ 22.21); sem isso as chamadas iam diretas e
+a saída respondia 403 com um corpo que não era JSON.</li>
+</ul>
+<p><strong>Terceira tentativa, mesmo dia: medido.</strong> O dono subiu o limite da chave para
+US$ 20,00 (US$ 9,95 restantes antes da execução) e liberou um teto de US$ 4,50. O
+protocolo abaixo rodou exatamente como escrito — os dois modelos, cinco tarefas, duas rodadas,
+40 execuções, os padrões de <code>jev:vivo</code> — no commit <code>0eab0cb0e9</code>, sem nenhuma
+falha de conta ou de rede e nenhuma execução interrompida. <strong>Gasto: US$ 0,5195</strong>
+pela soma de <code>usage.cost</code> na saída (US$ 0,0424 DeepSeek, US$ 0,4771
+Haiku); o <code>usage</code> da chave andou os mesmos US$ 0,5195 (US$ 10,0545 →
+US$ 10,5739, lido cerca de dez minutos depois da execução — uma leitura logo depois dela
+ainda mostrava US$ 0,4597, a cobrança atrasa em relação às respostas). A tabela e
+o veredito estão em &quot;A tabela ao vivo&quot; e &quot;Recomendação&quot; abaixo; o protocolo,
+a regra e a estimativa não foram tocados depois que os números chegaram.</p>
+</blockquote>
+<h3 id="what-the-instrument-runs-and-what-is-a-port">O que o instrumento roda, e o que é porte</h3>
+<p><code>pnpm --filter @brabo/scripts jev:vivo</code> (arquivos em <code>scripts/jev/vivo/</code>) roda o
+laço de um dev agent em cinco tarefas pequenas, uma vez com o roteador ligado e outra desligado, e
+chama o OpenRouter direto — a api, o engine e o banco não estão
+envolvidos, como na validação paga de idioma da AT-167.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>arquivo</th>
+<th>papel</th>
+<th>produto ou porte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>roteador.ts</code></td>
+<td><code>recortarEstado</code>, <code>montarPedidoAoJev</code>, <code>lerRespostaDoJev</code>, <code>menuP3</code>, o teto do <code>state</code></td>
+<td><strong>o código do produto</strong>, reexportado de <code>apps/api/src/domain/llm/tool-router.ts</code></td>
+</tr>
+<tr>
+<td><code>laco.ts</code></td>
+<td>o laço: teto de iterações, recuperação de chamadas de ferramenta escritas como texto, parada num <code>report_done</code>/<code>report_blocked</code> aceito, a única nova tentativa com o catálogo inteiro quando um menu restrito recebeu resposta sem ferramenta</td>
+<td>porte de <code>ToolLoop</code>, <code>EngineApiClient.llm_turn/5</code> e <code>DecidirFerramentaDoPassoUseCase</code></td>
+</tr>
+<tr>
+<td><code>recuperacao.ts</code></td>
+<td>quais passos passaram por <code>tool_call_recovery.ex</code></td>
+<td>porte; o spec dele roda os casos de <code>tool_call_recovery_test.exs</code> e fixa linhas-âncora do <code>.ex</code></td>
+</tr>
+<tr>
+<td><code>rede.ts</code></td>
+<td>a chamada de chat (mensagens no fio como a api as escreve) e a chamada ao Jev (teto de 2 000 ms, as mesmas quedas nomeadas)</td>
+<td>porte de <code>toWireMessage</code>/<code>toWireTool</code> e de <code>JevToolRouter</code>; linhas-âncora fixadas</td>
+</tr>
+<tr>
+<td><code>ferramentas-dev.exs</code> → <code>ferramentas-dev.json</code></td>
+<td>o <code>spec/0</code> <strong>completo</strong> das nove ferramentas de <code>Engine.Dev.Tools.registry/0</code> (nome, descrição, schema de parâmetros)</td>
+<td>lido do fonte do engine com <code>elixir</code> puro, sem engine compilado; um spec falha quando o registro ou uma descrição deriva</td>
+</tr>
+<tr>
+<td><code>tarefas.ts</code></td>
+<td>cinco tarefas sobre um projeto Node sem dependências, cada uma com uma verificação rodada <strong>depois</strong> do laço (testes originais restaurados, testes ocultos acrescentados): &quot;a tarefa saiu&quot;</td>
+<td>do próprio instrumento</td>
+</tr>
+<tr>
+<td><code>executor.ts</code></td>
+<td>as ferramentas num sandbox temporário, devolvendo os textos do engine onde eles são fixos em código</td>
+<td>do próprio instrumento</td>
+</tr>
+<tr>
+<td><code>resumo.ts</code>, <code>vivo.ts</code></td>
+<td>a tabela, a regra de decisão, a estimativa de custo, a CLI</td>
+<td>do próprio instrumento</td>
+</tr>
+</tbody>
+</table></div>
+<p>Fora do instrumento, igual nos dois braços e declarado: o pipeline de
+aprovação (<code>terminal</code> e <code>write_file</code> rodam direto, como no modo automático), a compactação
+de contexto, a orientação de idioma e o perfil do autor acrescentados no
+fim de cada chamada, o RAG (índice vazio), os contratos de módulos (nenhum declarado),
+e o resto do prompt de sistema real (arquivos de instrução, regras de negócio, estado
+da tarefa). O prompt de sistema é a identidade de dev do engine mais duas linhas de contexto do
+projeto; a primeira mensagem de usuário é o próprio kickoff do engine
+(<code>scripts/jev/kickoff.ts</code>). O custo de cada chamada é o <code>usage.cost</code> da
+resposta, o número que a RN-665 (<a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188</a>)
+põe no metering; o <code>token_usage</code> do produto não está envolvido.</p>
+<h3 id="protocol-written-before-any-run-1">Protocolo (escrito antes de qualquer execução)</h3>
+<ul>
+<li><strong>Modelos</strong>: <code>deepseek/deepseek-v4.1-flash</code> (mais lento, raciocínio) e
+<code>anthropic/claude-haiku-4.5</code> (mais rápido), os dois que a validação da AT-167 já
+alcançou com definições de ferramentas nesta chave.</li>
+<li><strong>Tarefas</strong>: <code>T1-media</code> (implementar uma função), <code>T2-moeda</code> (corrigir um bug de
+formatação), <code>T3-limite</code> (a causa está em outro arquivo: <code>config/</code>), <code>T4-slug</code>
+(criar um módulo e seus testes; testes ocultos o conferem), <code>T5-renomear</code> (renomear
+em dois arquivos; nenhum resto do nome antigo pode ficar em <code>src/</code>). O estado
+inicial de cada tarefa reprova na verificação e uma solução de referência passa (spec).</li>
+<li><strong>Amostra</strong>: 2 rodadas → 10 execuções por braço por modelo, 40 ao todo. A ordem dos braços
+alterna por tarefa e rodada, para que nenhum braço pegue sempre o minuto mais
+lento do provider. Teto de iterações 30 (o teto de dev do produto é 60; aqui ele
+limita o gasto).</li>
+<li><strong>Por execução</strong>: passos; passos cujas chamadas vieram como <strong>texto</strong> e passaram pela
+recuperação; passos em que o roteador foi consultado, aplicou um menu menor,
+deixou o catálogo inteiro sem queda (sem ferramenta anterior, ou o Jev disse
+<code>responder_sem_ferramenta</code>), ou <strong>caiu</strong> (com o motivo e a origem
+RN-059); novas tentativas com o catálogo inteiro; chamadas fora do menu do passo;
+latência de relógio da execução inteira (Jev + chat + ferramentas) e da parte de
+LLM; custo do chat e do Jev; como terminou; se a tarefa saiu.</li>
+<li><strong>Regra de decisão</strong> (<code>comparar</code> em <code>resumo.ts</code>), por modelo, ligado contra desligado:
+qualidade — a taxa de &quot;a tarefa saiu&quot; do <em>ligado</em> não mais que <strong>10 pontos</strong> abaixo
+do <em>desligado</em>; custo — o custo médio por tarefa que saiu (chat + Jev) do <em>ligado</em> não
+acima do <em>desligado</em>; latência — a execução mediana do <em>ligado</em> não acima de <strong>1,2×</strong> a do <em>desligado</em>.
+<strong>Manter ligado por padrão</strong> se as três valerem em todo modelo; <strong>desligar</strong> se a
+qualidade falhar em todo modelo ou nenhum modelo passar nas três; <strong>restringir</strong> aos
+modelos que passam, caso contrário. Menos de 10 execuções por braço é
+<code>amostra_insuficiente</code>, nunca um veredito.</li>
+</ul>
+<h3 id="cost-estimate-no-network">Estimativa de custo (sem rede)</h3>
+<p><code>--estimar</code> com os preços que eram mensuráveis a partir de registros anteriores: entrada do DeepSeek
+a US$ 0,30 por milhão e do Haiku a US$ 1,00 (os dois derivados do custo de entrada
+pareado relatado em
+<a href="medicao-do-idioma.html#incremental-cost-of-the-orientation">Medição da heurística de idioma</a>);
+a saída de US$ 1,20 para o DeepSeek é uma <strong>suposição</strong> (não registrada em lugar nenhum) e
+US$ 5,00 para o Haiku o preço de tabela. Supostos 12 passos por execução, 400 tokens de
+histórico acrescentados por passo, 150 tokens de saída, sem cache:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>modelo</th>
+<th>por execução</th>
+<th>os dois braços, 2 rodadas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>~US$ 0,015</td>
+<td>~US$ 0,29</td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>~US$ 0,049</td>
+<td>~US$ 0,99</td>
+</tr>
+<tr>
+<td><strong>total</strong></td>
+<td></td>
+<td><strong>~US$ 1,28</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>A execução para antes de qualquer chamada assim que o <code>usage.cost</code> acumulado da pasta
+de saída alcança <code>--teto-usd</code> (padrão 4.50) e não começa uma execução com
+menos de <code>--reserva-usd</code> (0.10) restante.</p>
+<h3 id="what-could-be-measured-offline-2026-10-01">O que pôde ser medido offline (2026-10-01)</h3>
+<p>O catálogo de dev cresceu desde o replay: <code>listar_contratos_de_modulos</code>
+(RN-684) é a nona ferramenta, e <code>catalogo.json</code> (oito) está velho para ela — os
+746 → 138 tokens do replay já não descrevem o catálogo atual. No fio
+(forma de <code>toWireTool</code>, <code>ferramentas-dev.json</code>):</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th>caracteres</th>
+<th>≈ tokens (÷ 4)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>catálogo de dev inteiro, 9 ferramentas</td>
+<td>3 816</td>
+<td>954</td>
+</tr>
+<tr>
+<td>um menu de 2 ferramentas, mediana sobre todos os pares (mín 501, máx 1 464)</td>
+<td>850</td>
+<td>213</td>
+</tr>
+<tr>
+<td>economia por chamada onde a P3 restringe o menu</td>
+<td></td>
+<td><strong>≈ 741</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>O Jev custa US$ 0,0000727 por passo (AT-237), então a economia de definição o paga
+num modelo de chat cuja entrada custe mais de <strong>US$ 0,098 por milhão de tokens</strong>
+(0,0000727 ÷ 741) — os dois modelos do protocolo, a preço de tabela. A pegadinha é
+a mesma escrita em &quot;Economia nas definições de ferramentas&quot;: as definições de ferramentas são o
+começo do prefixo em cache, um menu que muda de passo a passo quebra o
+cache, e o DeepSeek serviu a maior parte da entrada do cache na AT-167. Se a
+economia sobrevive a isso, e quanto a chamada extra em série custa em latência dentro
+do laço (p50 306 ms por passo, medido fora dele), é exatamente o que a tabela
+ao vivo responderia.</p>
+<h3 id="the-live-table-2026-10-01-commit-0eab0cb0e9">A tabela ao vivo (2026-10-01, commit <code>0eab0cb0e9</code>)</h3>
+<p>Gerada por <code>jev:vivo --relatorio</code> sobre as 40 execuções da execução do protocolo
+(todas datadas de 2026-10-01, todas em <code>0eab0cb0e9</code>). Os colchetes são o intervalo de 95% da
+taxa de &quot;a tarefa saiu&quot;.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>modelo</th>
+<th>Jev</th>
+<th>execuções</th>
+<th>a tarefa saiu</th>
+<th>passos (mediana · média)</th>
+<th>passos via <code>tool_call_recovery</code></th>
+<th>execução p50 · p95</th>
+<th>LLM (chat + Jev) p50</th>
+<th>custo/execução (chat + Jev)</th>
+<th>dos quais Jev</th>
+<th>custo por tarefa saída</th>
+<th>Jev: aplicado · sem restrição · queda</th>
+<th>novas tentativas com catálogo inteiro</th>
+<th>fora do menu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>ligado</td>
+<td>10</td>
+<td>10/10 = 100% (72%–100%)</td>
+<td>5 · 6.5</td>
+<td>0/65</td>
+<td>4.8 s · 16.3 s</td>
+<td>4.4 s</td>
+<td>US$ 0.0029</td>
+<td>US$ 0.0004</td>
+<td>US$ 0.0029</td>
+<td>55/65 · 10 · 0</td>
+<td>0</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>desligado</td>
+<td>10</td>
+<td>10/10 = 100% (72%–100%)</td>
+<td>6 · 6.1</td>
+<td>0/61</td>
+<td>3.3 s · 25.4 s</td>
+<td>2.9 s</td>
+<td>US$ 0.0013</td>
+<td>—</td>
+<td>US$ 0.0013</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>ligado</td>
+<td>10</td>
+<td>10/10 = 100% (72%–100%)</td>
+<td>6 · 6.4</td>
+<td>0/64</td>
+<td>12.7 s · 20.2 s</td>
+<td>12.2 s</td>
+<td>US$ 0.0194</td>
+<td>US$ 0.0004</td>
+<td>US$ 0.0194</td>
+<td>54/64 · 10 · 0</td>
+<td>0</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>desligado</td>
+<td>10</td>
+<td>9/10 = 90% (60%–98%)</td>
+<td>7 · 7.1</td>
+<td>0/71</td>
+<td>13.3 s · 21.6 s</td>
+<td>12.9 s</td>
+<td>US$ 0.0283</td>
+<td>—</td>
+<td>US$ 0.0314</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p>Toda execução terminou com um <code>report_done</code> aceito; a única tarefa que não
+saiu (Haiku, desligado, <code>T4-slug</code> rodada 0) relatou concluída depois de 12 passos com os
+testes ocultos falhando. Nenhum passo de nenhum braço precisou de <code>tool_call_recovery</code>, o Jev
+nunca caiu (nenhum timeout, nenhum erro HTTP, nenhuma resposta inválida em 129 chamadas), e
+nenhum menu restrito recebeu resposta sem ferramenta. Os 10 passos &quot;sem restrição&quot; por
+braço são o primeiro passo de cada execução, em que não há ferramenta anterior.</p>
+<p>A regra (<code>comparar</code>), por modelo, ligado contra desligado:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>modelo</th>
+<th>qualidade: Δ &quot;saiu&quot;</th>
+<th>custo por tarefa saída, ligado ÷ desligado</th>
+<th>execução mediana, ligado ÷ desligado</th>
+<th>passa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>0 pontos (dentro de 10)</td>
+<td><strong>×2.21</strong> (acima de 1)</td>
+<td><strong>×1.45</strong> (acima de 1.2)</td>
+<td>não</td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>10 pontos a favor do ligado (dentro de 10)</td>
+<td>×0.62</td>
+<td>×0.95</td>
+<td>sim</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Veredito da regra: restringir</strong> — o Haiku passa nas três condições, o DeepSeek
+falha em custo e latência. A qualidade não falhou em nenhum dos modelos.</p>
+<p>Por que os dois modelos se separam, a partir dos registros por passo da mesma saída (tokens
+de prompt e os tokens em cache que o provider relatou):</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>modelo</th>
+<th>Jev</th>
+<th>tokens de prompt (todos os passos)</th>
+<th>dos quais servidos do cache</th>
+<th>custo do chat</th>
+<th>custo do Jev</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>desligado</td>
+<td>131 983</td>
+<td>111 104 (84%)</td>
+<td>US$ 0.0132</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>ligado</td>
+<td>97 070</td>
+<td>43 520 (45%)</td>
+<td>US$ 0.0248</td>
+<td>US$ 0.0044</td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>desligado</td>
+<td>228 886</td>
+<td>0</td>
+<td>US$ 0.2827</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>ligado</td>
+<td>137 059</td>
+<td>0</td>
+<td>US$ 0.1901</td>
+<td>US$ 0.0043</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>A ressalva do cache escrita antes da execução é o que aconteceu no DeepSeek.</strong> O
+menu corta o prompt (−26% de tokens) mas muda de passo a passo, então o
+prefixo em cache quebra: a parcela servida do cache caiu de 84% para 45%, e
+a conta do chat <em>subiu</em> ×1,9 com menos tokens enviados. Por cima disso o Jev
+(US$ 0,0004 por execução) é um terço do que custa uma execução inteira desligada.</li>
+<li><strong>No Haiku não houve cache em nenhum braço</strong> (o instrumento não envia
+<code>cache_control</code>, e a forma de fio do produto que ele porta também não), então os
+−40% de tokens de prompt foram direto para a conta: −31% por execução, e o
+Jev é 2% dela.</li>
+<li><strong>A latência segue a velocidade do chat, como a AT-239 esperava.</strong> A chamada ao Jev é em
+série (p50 232 ms / p95 358 ms por chamada nas execuções do DeepSeek, 217 / 319 ms
+nas do Haiku): numa execução de 13 s do Haiku ela é absorvida por um passo
+a menos; numa execução de 3 s do DeepSeek ela acrescenta 1,5 s à mediana.</li>
+<li><strong>Qualidade</strong>: uma execução de diferença no Haiku, intervalos se sobrepondo
+(60%–98% contra 72%–100%) — nenhuma evidência de que o roteador ajude a qualidade, e nenhuma
+de que a prejudique, nestas cinco tarefas pequenas.</li>
+</ul>
+<h3 id="recommendation-measured--the-owner-decides">Recomendação (medida — o dono decide)</h3>
+<p><strong>Restringir</strong>, pela regra escrita antes da execução: manter o roteador ligado onde o
+modelo de chat não tem cache de prompt em efeito e é lento o bastante para que uma chamada extra
+em série seja pequena (classe Haiku, US$ 1,00/5,00 por milhão), e desligado onde o
+provider serve a maior parte da entrada do cache e o chat é rápido
+(classe DeepSeek). Os números que o justificam são as linhas da regra acima: Haiku
+×0,62 de custo e ×0,95 de latência sem perda de qualidade; DeepSeek ×2,21 de custo e
+×1,45 de latência sem ganho de qualidade.</p>
+<p>O que isto <strong>não</strong> cobre, e o que restringir exigiria:</p>
+<ul>
+<li><strong>Só os dev agents (o <code>ToolLoop</code>) foram medidos.</strong> A leitura anterior — nenhuma
+evidência para os sete agentes conversacionais — continua valendo; nada aqui
+se estende a eles.</li>
+<li><strong>A separação é por modelo, e o interruptor do produto é por workspace</strong>
+(<code>PUT workspaces/:workspaceId/tool-router</code>). Uma restrição por modelo (ou por &quot;cache em
+efeito&quot;) não existe; criá-la é uma decisão nova e uma mudança nova, não feita aqui.
+Até lá a escolha medida por workspace é: ligado
+se os agentes dele rodam num modelo classe Haiku sem cache, desligado se num
+modelo classe DeepSeek com cache.</li>
+<li><strong>Amostra e tarefas são pequenas</strong> (10 execuções por braço, cinco tarefas de 4 a 16
+passos). As razões de custo e latência são largas o bastante para ler; uma diferença de
+qualidade de uma execução não é.</li>
+<li><strong>O efeito do cache depende do cache do provider</strong>, não só da velocidade:
+um workspace Haiku com cache de prompt ligado provavelmente se moveria em direção à
+linha do DeepSeek. Não medido.</li>
+</ul>
+<p>A recomendação provisória que estava aqui antes da execução (restringir: ligado
+para dev agents, desligado para agentes conversacionais) é substituída pelo veredito
+da regra acima, como aquele parágrafo dizia que seria.</p>
+<h2 id="reproducing">Reproduzindo</h2>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># the catalog, when a tool or an identity changed (inside the dev engine container)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> cp</span><span style="color:var(--shiki-token-string)"> scripts/jev/catalogo.exs</span><span style="color:var(--shiki-token-string)"> brabo-dev-engine-1:/tmp/catalogo.exs</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> brabo-dev-engine-1</span><span style="color:var(--shiki-token-string)"> mix</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --no-start</span><span style="color:var(--shiki-token-string)"> --no-compile</span><span style="color:var(--shiki-token-string)"> --no-deps-check</span><span style="color:var(--shiki-token-string)"> /tmp/catalogo.exs</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  ></span><span style="color:var(--shiki-token-string)"> scripts/jev/catalogo.json</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># count the steps and estimate the cost, without calling the network</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:replay</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --container</span><span style="color:var(--shiki-token-string)"> brabo-dev-postgres-1</span><span style="color:var(--shiki-token-string)"> --estimar</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># the run (resumes: a step already answered in the output is not asked again)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:replay</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --container</span><span style="color:var(--shiki-token-string)"> brabo-dev-postgres-1</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span><span style="color:var(--shiki-token-string)"> --teto-usd</span><span style="color:var(--shiki-token-constant)"> 2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># the report again, and the billed cost per generation</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:replay</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --so-relatorio</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:replay</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --conferir-custo</span><span style="color:var(--shiki-token-string)"> --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span></span>
+<span class="line"></span></code></pre>
+<p>A saída (<code>$XDG_CACHE_HOME/brabo/replay-jev/respostas.jsonl</code>, senão
+<code>~/.cache/…</code>, modo 600) carrega ids de sessão e fica fora do checkout — o
+script recusa um destino dentro dele. O relatório impresso tem só contagens e
+ids de agentes. A chave é lida do ambiente (<code>OPENROUTER_TEST_KEY</code>) ou do
+arquivo informado, e nunca é impressa nem gravada.</p>
+<p>A segunda rodada tem comando próprio, que lê um retrato congelado do banco
+(<code>--dados-cache</code>, fora do checkout) e grava um arquivo por variante:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># the snapshot, once (the dev database keeps moving; every later run reads this file)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:analise</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --container</span><span style="color:var(--shiki-token-string)"> brabo-dev-postgres-1</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados.json</span><span style="color:var(--shiki-token-string)"> --variante</span><span style="color:var(--shiki-token-string)"> original</span><span style="color:var(--shiki-token-string)"> --estimar</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># one variant, tuning half first; validation only when the choice is made</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:analise</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados.json</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --variante</span><span style="color:var(--shiki-token-string)"> escopo</span><span style="color:var(--shiki-token-string)"> --metade</span><span style="color:var(--shiki-token-string)"> tuning</span><span style="color:var(--shiki-token-string)"> --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:analise</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados.json</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --variante</span><span style="color:var(--shiki-token-string)"> escopo</span><span style="color:var(--shiki-token-string)"> --metade</span><span style="color:var(--shiki-token-string)"> validacao</span><span style="color:var(--shiki-token-string)"> --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># the tables of this section, and the wrong steps for reading by hand</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:analise</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados.json</span><span style="color:var(--shiki-token-string)"> --relatorio</span><span style="color:var(--shiki-token-string)"> --final</span><span style="color:var(--shiki-token-string)"> escopo</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:analise</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados.json</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --variante</span><span style="color:var(--shiki-token-string)"> escopo</span><span style="color:var(--shiki-token-string)"> --metade</span><span style="color:var(--shiki-token-string)"> validacao</span><span style="color:var(--shiki-token-string)"> --dump-erros</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/v2/erros.txt</span></span>
+<span class="line"></span></code></pre>
+<p>O retrato desta rodada foi tirado do banco como ele estava em
+2026-09-29 14:27 UTC, mais os eventos <code>proposed_action.created</code> e os
+desfechos de <code>proposed_actions</code> das mesmas sessões; um retrato novo tem mais
+passos e uma divisão diferente. O teto é sobre o gasto <strong>acumulado</strong> do
+diretório de saída (<code>--teto-usd</code>, padrão US$ 1,00), não de uma chamada.</p>
+<p>O teste do menu roda offline sobre essas respostas; só os 36 passos nascidos depois do
+retrato chamam a rede:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:analise</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados-d.json</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --variante</span><span style="color:var(--shiki-token-string)"> escopo</span><span style="color:var(--shiki-token-string)"> --metade</span><span style="color:var(--shiki-token-string)"> ambas</span><span style="color:var(--shiki-token-string)"> --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># --dados-base is the snapshot that fixed the split; what it did not know is "new"</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:menu</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --dados-cache</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados-d.json</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --dados-base</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/replay-jev/dados-c.json</span><span style="color:var(--shiki-token-string)"> --sensibilidade</span></span>
+<span class="line"></span></code></pre>
+<p>A comparação ao vivo da AT-239 (precisa de <code>openrouter.ai</code> alcançável; a pasta de
+saída, <code>$XDG_CACHE_HOME/brabo/jev-vivo/</code> por padrão, fica fora do checkout
+e o script recusa uma dentro dele):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># the dev tool definitions, when a dev tool changed (plain elixir, no compiled engine)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">elixir</span><span style="color:var(--shiki-token-string)"> scripts/jev/vivo/ferramentas-dev.exs</span><span style="color:var(--shiki-token-keyword)"> ></span><span style="color:var(--shiki-token-string)"> scripts/jev/vivo/ferramentas-dev.json</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># the estimate, without the network</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:vivo</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --estimar</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --preco</span><span style="color:var(--shiki-token-string)"> deepseek/deepseek-v4.1-flash=0.3/1.2</span><span style="color:var(--shiki-token-string)"> --preco</span><span style="color:var(--shiki-token-string)"> anthropic/claude-haiku-4.5=1/5</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># the run (resumes; stops before any call at the ceiling, and on an account or</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># network failure without recording it), then the table and the verdict;</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># behind a proxy, prefix NODE_USE_ENV_PROXY=1 (Node's fetch ignores HTTPS_PROXY)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:vivo</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --rodadas</span><span style="color:var(--shiki-token-constant)"> 2</span><span style="color:var(--shiki-token-string)"> --teto-usd</span><span style="color:var(--shiki-token-constant)"> 4.5</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> jev:vivo</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --relatorio</span></span>
+<span class="line"></span></code></pre>
+<nav class="site-pager"><a href="../explanation/medicao-do-idioma.html"></a><a href="../explanation/auditoria-fluxo-vs-codigo.html"></a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/medicao-do-jev.md">Editar esta página</a><span>Atualizado em 2026-10-15T05:02:38-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#what-exists">O que existe</a></li><li class="n3"><a href="#step-not-tool-call">Passo, não chamada de ferramenta</a></li><li class="n3"><a href="#the-state-sent">O state enviado</a></li><li class="n2"><a href="#the-sample">A amostra</a></li><li class="n2"><a href="#agreement-by-agent">Concordância por agente</a></li><li class="n2"><a href="#the-confidence-curve-under-the-decided-rule">A curva de confiança, sob a regra decidida</a></li><li class="n2"><a href="#latency-and-cost">Latência e custo</a></li><li class="n2"><a href="#what-the-replay-cannot-see">O que o replay não enxerga</a></li><li class="n2"><a href="#two-findings-outside-the-numbers">Dois achados fora dos números</a></li><li class="n2"><a href="#second-round-2026-09-29-where-the-gap-is">Segunda rodada (2026-09-29): onde está a distância</a></li><li class="n3"><a href="#protocol-written-before-any-run">Protocolo (escrito antes de qualquer execução)</a></li><li class="n3"><a href="#the-sample-1">A amostra</a></li><li class="n3"><a href="#variants-tried-all-of-them">Variantes tentadas (todas)</a></li><li class="n3"><a href="#the-cascade-validation-steps-with-a-tool">A cascata (validação, passos com ferramenta)</a></li><li class="n3"><a href="#the-headline">A manchete</a></li><li class="n3"><a href="#the-gap-by-cause">A distância, por causa</a></li><li class="n3"><a href="#what-would-be-needed-for-90-and-what-each-piece-is-worth">O que seria preciso para 90%, e quanto vale cada peça</a></li><li class="n3"><a href="#latency-and-cost-variant-escopo">Latência e custo (variante escopo)</a></li><li class="n3"><a href="#what-this-round-still-cannot-see">O que esta rodada ainda não enxerga</a></li><li class="n2"><a href="#menu-of-2-options-2026-09-29-restrict-instead-of-pick">Menu de 2 opções (2026-09-29): restringir em vez de escolher</a></li><li class="n3"><a href="#policies-written-before-running-in-scriptsjevmenuts">Políticas (escritas antes de rodar, em scripts/jev/menu.ts)</a></li><li class="n3"><a href="#the-numbers-validation">Os números (validação)</a></li><li class="n3"><a href="#tuning-and-the-new-steps">Ajuste e os passos novos</a></li><li class="n3"><a href="#where-coverage-fails">Onde a cobertura falha</a></li><li class="n3"><a href="#the-ceiling-what-coverage-does-not-say">O teto: o que a cobertura não diz</a></li><li class="n3"><a href="#savings-in-tool-definitions">Economia nas definições de ferramentas</a></li><li class="n3"><a href="#the-live-test-not-run-design">O teste ao vivo (não executado): desenho</a></li><li class="n3"><a href="#what-this-section-still-cannot-see">O que esta seção ainda não enxerga</a></li><li class="n3"><a href="#cost-of-this-test">Custo deste teste</a></li><li class="n2"><a href="#live-comparison-at-239-2026-10-01-restrict-on-for-haiku-and-off-for-deepseek">Comparação ao vivo (AT-239, 2026-10-01): restringir, ligado para o Haiku e desligado para o DeepSeek</a></li><li class="n3"><a href="#what-the-instrument-runs-and-what-is-a-port">O que o instrumento roda, e o que é porte</a></li><li class="n3"><a href="#protocol-written-before-any-run-1">Protocolo (escrito antes de qualquer execução)</a></li><li class="n3"><a href="#cost-estimate-no-network">Estimativa de custo (sem rede)</a></li><li class="n3"><a href="#what-could-be-measured-offline-2026-10-01">O que pôde ser medido offline (2026-10-01)</a></li><li class="n3"><a href="#the-live-table-2026-10-01-commit-0eab0cb0e9">A tabela ao vivo (2026-10-01, commit 0eab0cb0e9)</a></li><li class="n3"><a href="#recommendation-measured--the-owner-decides">Recomendação (medida — o dono decide)</a></li><li class="n2"><a href="#reproducing">Reproduzindo</a></li></ul></aside>
+</div>
+<script src="../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-pt-BR.json" data-base="../"></script></body>
+</html>

@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="ru" data-locale="ru" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Измерение эвристики языка | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Меню">&#9776;</button>
+<a class="marca" href="../index.html">Brabo</a>
+<input type="search" data-busca placeholder="Поиск" aria-label="Поиск" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Язык"><option value="../../explanation/medicao-do-idioma.html">pt-BR</option><option value="../../en/explanation/medicao-do-idioma.html">en</option><option value="../../ru/explanation/medicao-do-idioma.html" selected>ru</option><option value="../../zh-Hans/explanation/medicao-do-idioma.html">zh-Hans</option></select>
+<select data-seletor aria-label="Среда"><option value="../../../dev/ru/explanation/medicao-do-idioma.html">dev</option><option value="../../../prd/ru/explanation/medicao-do-idioma.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Сменить тему">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><h2>🚀 Начните здесь</h2><ul><li><a href="../index.html">Введение</a></li><li><a href="../getting-started.html">Первые шаги</a></li><li><a href="../tutorials/from-zero-to-deliverable.html">С нуля до готового результата</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li></ul></section><section><h2>🏗️ Архитектура</h2><ul><li><a href="../architecture.html">Архитектура</a></li><li><a href="../adr.html">Решения (ADR)</a><ul><li><span>Git, repositório e política de branches</span><ul><li><a href="../adr/0001-git-provider-contract-shape.html">ADR 0001 — Формат нормализованного контракта GitProvider</a></li><li><a href="../adr/0002-git-error-normalization.html">ADR 0002 — Нормализация ошибок GitProvider</a></li><li><a href="../adr/0003-git-provider-retry-policy.html">ADR 0003 — Политика повторов для удалённых providers</a></li><li><a href="../adr/0004-git-credential-registration.html">ADR 0004 — Регистрация git-учётных данных пользователя</a></li><li><a href="../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005 — Идемпотентный и возобновляемый bootstrap Gitflow</a></li><li><a href="../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028 — Защита веток: расхождение между providers и матрица одобрения</a></li><li><a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030 — Механизированная политика веток</a></li><li><a href="../adr/0044-adocao-de-repositorio-existente.html">ADR 0044 — Усыновление существующего репозитория и план как шлюз</a></li><li><a href="../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056 — Engine работает в удалённом репозитории</a></li><li><a href="../adr/0139-o-alarme-de-esteira-ganha-destinatario.html">ADR 0139 — Сигнал тревоги о merge конвейера получает адресата и правило для `dev`</a></li><li><a href="../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165 — Репозиторий рождается при принятии handoff Arquiteto, и исполнение без него не начинается</a></li><li><a href="../adr/0217-promocao-automatica-para-qa-em-fase-de-teste.html">ADR 0217 — Автоматическое продвижение `dev` → `qa`, пока QA находится в тестовой фазе</a></li><li><a href="../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.html">ADR 0235 — A `qa` é aposentada por hora e a esteira do repositório fica `dev → main`</a></li><li><a href="../adr/0236-o-dependabot-dispensa-revisao-na-dev.html">ADR 0236 — O Dependabot dispensa revisão na `dev` e fica mergeável com os outros checks verdes</a></li></ul></li><li><span>Harness de agente, turnos e sessões</span><ul><li><a href="../adr/0006-prompt-assembler-context-harness.html">ADR 0006 — Harness агентов: детерминированная сборка контекста</a></li><li><a href="../adr/0007-toolloop-tools-context-manager.html">ADR 0007 — ToolLoop, инструменты, ContextManager (harness с LLM)</a></li><li><a href="../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061 — Тип сессии — это данные создания, а выполнение остаётся событием</a></li><li><a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098 — Согласованные пределы транспорта и эффективное окно сжатия</a></li><li><a href="../adr/0163-o-clique-responde-ao-aceitar.html">ADR 0163 — Клик отвечает при ПРИНЯТИИ команды, а ход продолжается через канал</a></li><li><a href="../adr/0175-infra-lead-conversa-pelo-composer.html">ADR 0175 — Infra Lead разговаривает через composer, а прежде его ход проходит через `TurnoAssincrono`</a></li><li><a href="../adr/0177-idioma-das-respostas-por-conta-sessao-e-projeto.html">ADR 0177 — Язык ответов живёт в трёх местах — учётная запись, сессия и проект, — в открытом списке BCP-47 и никогда в `users.locale`</a></li><li><a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179 — Цикл спрашивает Jev, какой инструмент, а модель пользователя видит только оставшееся меню</a></li><li><a href="../adr/0183-reabrir-sessao-encerrada.html">ADR 0183 — Закрытую сессию можно открыть снова: собственный выход из терминальных состояний, в `active`, с новым событием</a></li><li><a href="../adr/0184-reabrir-sessao-decisoes-do-dono.html">ADR 0184 — Повторное открытие сессии: три решения владельца, и `developer` открывает снова</a></li><li><a href="../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191 — Сообщение, пришедшее во время идущего хода, попадает в сохраняемую очередь и читается в конце хода</a></li><li><a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226 — Diário vivo e retomada dos agentes: o turno interrompido volta uma vez, do plano</a></li><li><a href="../adr/0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.html">ADR 0246 — Anexos do chat: bytes no Postgres, referência no evento, visão por capability</a></li><li><a href="../adr/0247-uma-mensagem-varios-destinatarios.html">ADR 0247 — Uma mensagem, vários destinatários</a></li><li><a href="../adr/0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.html">ADR 0249 — O raciocínio do agente é gravado e mostrado só a developer ou mais</a></li></ul></li><li><span>O time de agentes — papéis, áreas e handoffs</span><ul><li><a href="../adr/0008-agente-criativo-conversacional-handoffs.html">ADR 0008 — Разговорный агент Criativo в harness + фундамент handoffs</a></li><li><a href="../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009 — Агент PO, backlog (epics/stories/tasks) и прослеживаемость</a></li><li><a href="../adr/0010-agente-arquiteto-adr-pr-module-map.html">ADR 0010 — Агент Arquiteto: ADR через настоящую PR, module_map и перекрёстная валидация</a></li><li><a href="../adr/0014-infra-agent-painel-phoenix.html">ADR 0014 — InfraAgent и живая панель команды (закрытие Фазы 4a)</a></li><li><a href="../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015 — Настоящий Psicólogo: ToolLoop, гипотезы с доказательствами и сортировка по стоимости</a></li><li><a href="../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016 — Anamnese: профиль владения навыками, патчи инструкций и замкнутый цикл</a></li><li><a href="../adr/0022-fechamento-4b-psicologo.html">ADR 0022 — Закрытие Фазы 4b (сессия 1): доказательство, которое доходит, стоимость, которая видна, анализ, который переживает kill</a></li><li><a href="../adr/0023-fechamento-4b-anamnese.html">ADR 0023 — Закрытие Фазы 4b (сессия 2): работающий каталог, дедупликация, различающая, кто отказал, и очередь, переживающая раунд</a></li><li><a href="../adr/0038-hierarquia-de-agentes.html">ADR 0038 — Иерархия агентов: области, leads и делегирование</a></li><li><a href="../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046 — Продвижение истории с полномочиями пользователя</a></li><li><a href="../adr/0053-dev-lead-e-paralelismo-autorizado.html">ADR 0053 — Dev Lead как область и параллелизм, разрешённый пользователем</a></li><li><a href="../adr/0068-diagrama-c4-do-arquiteto.html">ADR 0068 — Диаграмма C4 Arquiteto</a></li><li><a href="../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069 — Условное слияние принятия handoff с включением выполнения</a></li><li><a href="../adr/0085-fluxo-como-registro-declarativo.html">ADR 0085 — Поток ролей как декларативный реестр (fluxo.yml)</a></li><li><a href="../adr/0086-dev-lead-plano-suspende-para-aprovacao.html">ADR 0086 — План Dev Lead приостанавливает ход до одобрения</a></li><li><a href="../adr/0087-ux-designer-agente.html">ADR 0087 — UX Designer входит как разговорный агент</a></li><li><a href="../adr/0088-staff-agente-dormente-para-disparo-automatico.html">ADR 0088 — Staff: код готов, спящий для автоматического запуска</a></li><li><a href="../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">ADR 0089 — `analytics` и `delivery-metricas` становятся скриптом отчёта</a></li><li><a href="../adr/0092-platform-relatorio-de-telemetria-sob-demanda.html">ADR 0092 — `platform` рождается как скрипт отчёта по требованию, а не агент</a></li><li><a href="../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">ADR 0093 — Роль `dbre` становится двумя скриптами: линтер миграций и отчёт о резервном копировании</a></li><li><a href="../adr/0094-delegacao-dev-lead-vira-dado.html">ADR 0094 — Делегирование Dev Lead → dev становится данными, с переопределённым `parecerArtifactId`</a></li><li><a href="../adr/0109-handoff-manual-a-agente-a-escolha.html">ADR 0109 — Ручной handoff агенту по выбору переиспользует предложение+принятие, а не третье состояние handoff</a></li><li><a href="../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182 — Предложение handoff получает жизненный цикл: одно ожидающее на получателя и `superseded`</a></li><li><a href="../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185 — «Estou pronto — a necessidade está validada»: один клик закрывает готовность, gate `necessidade-validada` и принятие PO</a></li><li><a href="../adr/0186-aceite-automatico-do-handoff-ao-arquiteto.html">ADR 0186 — Handoff от PO к Arquiteto принимается без клика, когда backlog покрыт и репозиторий локальный</a></li><li><a href="../adr/0194-aprovar-o-plano-ativa-a-execucao.html">ADR 0194 — Одобрение плана Dev Lead активирует выполнение, а задача получает модуль, который он назначает</a></li><li><a href="../adr/0212-historia-arquivada.html">ADR 0212 — Архивированная история: колонка, а не состояние машины</a></li><li><a href="../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213 — Результат работает на машине пользователя через compose от Infra</a></li></ul></li><li><span>Gates, QA e revisão de segurança</span><ul><li><a href="../adr/0013-gates-qa-secops-pr.html">ADR 0013 — Gates PR: QAAgent и SecOpsAgent</a></li><li><a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020 — Разблокировать gates QA и SecOps: gitleaks по рабочему дереву, валидируемые заключения и tool call в тексте</a></li><li><a href="../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021 — Закрытие Фазы 4a: gate infra, который проверяет, и панель, которая говорит правду</a></li><li><a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054 — Gates как декларативный реестр</a></li><li><a href="../adr/0057-o-gate-espera-a-aprovacao.html">ADR 0057 — Агент gate ждёт одобрения, как ждёт dev</a></li><li><a href="../adr/0067-o-gate-sobrevive-ao-restart.html">ADR 0067 — Gate переживает перезапуск</a></li><li><a href="../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090 — QA-стратегия и AppSec как второй МОМЕНТ, а не новый агент</a></li><li><a href="../adr/0091-secops-runtime-relatorio-de-abuso.html">ADR 0091 — `secops-runtime` как скрипт отчёта по `rate_limit_hits`</a></li><li><a href="../adr/0095-gate-necessidade-validada.html">ADR 0095 — Gate `necessidade-validada` закрывается отдельным подтверждением человека, а не самопроверкой Criativo</a></li><li><a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123 — Golden-set регрессионных случаев для семантического суждения агента QA Automação</a></li><li><a href="../adr/0168-golden-set-do-qa-em-ci-semanal.html">ADR 0168 — Golden-set QA начинает работать в CI, по расписанию и еженедельно</a></li><li><a href="../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192 — План тестирования рождается после сдачи dev, а gate `implementavel` начинает судить по истории и `module_map`</a></li><li><a href="../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207 — Цикл gate, простаивающий более 2 ч, паркуется, и возобновить его может лишь жест человека</a></li><li><a href="../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214 — Открытый вопрос становится ожидающим решения пунктом</a></li><li><a href="../adr/0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.html">ADR 0215 — Решение проекта доходит до dev и QA</a></li></ul></li><li><span>Execução, política de terminal e aprovações</span><ul><li><a href="../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011 — Инфраструктура dev agents: worktrees, git-исполнители и замок merge</a></li><li><a href="../adr/0012-dev-agent-real-toolloop-orcamento-bloqueio.html">ADR 0012 — Настоящий DevAgent: ToolLoop, бюджет на task и дисциплина блокировки</a></li><li><a href="../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017 — Блокировка инициализации workspace, Monitor dev agents и наследование пределов</a></li><li><a href="../adr/0018-noop-dev-agent-modo-de-execucao.html">ADR 0018 — NoopDevAgent как постоянный режим выполнения</a></li><li><a href="../adr/0019-destravar-dev-agent-adr-por-modulo-orcamento-projeto.html">ADR 0019 — Разблокировать реальный DevAgent: запись, терминал, ADR по модулю и бюджет по проекту</a></li><li><a href="../adr/0045-reagendamento-por-evento-do-dev-agent.html">ADR 0045 — Перепланирование dev agent по событию и circuit breaker</a></li><li><a href="../adr/0047-operabilidade-pos-dogfooding.html">ADR 0047 — Эксплуатируемость после dogfooding: закрытие Фазы 12</a></li><li><a href="../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048 — Решение в event log и порядок gate</a></li><li><a href="../adr/0052-dev-agent-espera-aprovacao-no-meio-do-laco.html">ADR 0052 — Dev agent ждёт одобрения посреди цикла</a></li><li><a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055 — Область пути в политике терминала</a></li><li><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102 — Пересмотр ADR 0065: граница внешнего эффекта перестаёт быть `deny` и становится абсолютным пределом</a></li><li><a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167 — Автоматический режим снимает область путей, и только он</a></li><li><a href="../adr/0189-o-piloto-automatico.html">ADR 0189 — Автопилот: автоматический режим одобряет всё, кроме потолков, область сравнивается с реальной папкой исполнения, а «Всегда разрешать» записывает глагол + подкоманду</a></li><li><a href="../adr/0204-modo-automatico-libera-push-e-pr.html">ADR 0204 — Автоматический режим разрешает push и PR</a></li></ul></li><li><span>Onde o código mora — modos de execução</span><ul><li><a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066 — Читаемое имя папки workspace</a></li><li><a href="../adr/0072-projeto-local-ou-container.html">ADR 0072 — Проект выбирает, где живёт код: папка пользователя или управляемая папка</a></li><li><a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104 — `execution_mode` с тремя значениями, и workspace рождается `unverified`, когда проверяет его runner</a></li><li><a href="../adr/0107-navegacao-de-pasta-local-via-o-runner.html">ADR 0107 — Навигация по локальной папке через Runner</a></li><li><a href="../adr/0108-projeto-runner-nasce-ao-navegar-pasta-no-wizard.html">ADR 0108 — В режиме `runner` проект рождается при клике на &quot;Navegar pasta...&quot;, а не только при подтверждении</a></li><li><a href="../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">ADR 0111 — Конвертация `execution_mode` существующего проекта: отказ при активном dev agent, перемещение `permissions.json`, вывод из эксплуатации строки контейнера</a></li><li><a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141 — Единая база монтируемых проектов, смонтированная по тождеству</a></li><li><a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142 — Проверка смонтированного workspace откладывается до материализации</a></li><li><a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146 — База, согласованная в bootstrap, и `mounted` как локальный режим по умолчанию</a></li></ul></li><li><span>Container do projeto e broker</span><ul><li><a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065 — Контейнер на проект: граница перестаёт быть политикой</a></li><li><a href="../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">ADR 0081 — Жизненный цикл контейнера: таблица состояния, без оркестратора</a></li><li><a href="../adr/0083-terminal-mostra-estado-real-do-container.html">ADR 0083 — Вкладка Terminal получает реального потребителя жизненного цикла, а не терминал</a></li><li><a href="../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128 — Порт Docker и доказательство упаковки, которое выбрало реализацию</a></li><li><a href="../adr/0130-broker-de-container.html">ADR 0130 — Broker контейнеров: кто говорит с Docker сервера и почему он не принимает спецификацию</a></li><li><a href="../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131 — Arquiteto направляет модули в инфраструктуру: он ВЫДВИГАЕТ кандидатов, Infra ВЫБИРАЕТ</a></li><li><a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133 — Infra выбирает среди кандидатов маршрутизации, и выбор становится новой версией `artifact.project_image`</a></li><li><a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134 — Dev agents выполняются ВНУТРИ реального контейнера проекта, а terminal получает там нижнюю границу автоодобрения</a></li><li><a href="../adr/0135-portao-de-imagem-nos-tres-modos.html">ADR 0135 — Шлюз образа от Arquiteto (RN-105) начинает действовать во всех трёх режимах выполнения</a></li><li><a href="../adr/0136-pagina-global-de-containers.html">ADR 0136 — Глобальная страница контейнеров: потолок на загрузку в broker и `container_remove` в абсолютном потолке</a></li><li><a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137 — `brabo-runner` поднимает контейнер проекта на машине пользователя</a></li><li><a href="../adr/0143-agentes-de-dev-so-depois-do-container.html">ADR 0143 — Агенты dev только после контейнера</a></li><li><a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144 — Второй корень broker и дискриминированный локатор, который его выбирает</a></li><li><a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180 — Контейнер проекта работает от владельца папки, измеренного api</a></li><li><a href="../adr/0190-a-infra-sobe-o-container-no-aceite.html">ADR 0190 — Infra поднимает контейнер при принятии handoff, шагом сервера и с засеянной автономией, и именно она передаёт работу Dev Lead</a></li><li><a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199 — Минимальный ресурс контейнера выводится из `module_map`: каждый модуль объявляет свой, а Infra поднимает с суммой</a></li><li><a href="../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208 — Infra наследует сеть, объявленную Arquiteto</a></li><li><a href="../adr/0228-comando-do-app-e-rede-do-container.html">ADR 0228 — O container do projeto sobe o app pelo comando declarado e publica porta só no loopback</a></li><li><a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229 — O QA testa numa instância efêmera, com os serviços que a Infra declarou</a></li></ul></li><li><span>O runner local</span><ul><li><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — Локальный runner: выполнение на машине пользователя через канал Phoenix с одноразовым тикетом</a></li><li><a href="../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105 — Personal Access Token (`brb_…`) для runner, ограниченный по построению одним маршрутом</a></li><li><a href="../adr/0106-distribuicao-do-runner-via-tsup-e-npm-publish.html">ADR 0106 — Распространение `@brabo/runner` через `tsup` и `npm publish`, версия внедряется только в CI</a></li><li><a href="../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112 — Автономный бинарник `@brabo/runner` через `bun build --compile`, со встроенным нативным аддоном `.node` через реальное извлечение во временный каталог</a></li><li><a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118 — Настройка runner через браузер: ключ устройства Ed25519 как вторая учётная запись `runner-ticket`, прокси GitHub Releases для бинарника и File System Access API для папки, настраиваемой одним кликом</a></li><li><a href="../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145 — Docker становится реальным предусловием режима `runner`</a></li><li><a href="../adr/0147-agente-local-com-capacidades.html">ADR 0147 — Один локальный агент, возможности, объявляемые при подключении</a></li><li><a href="../adr/0151-base-consentida-no-runner.html">ADR 0151 — Согласованная база в runner и создание папки через канал</a></li><li><a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154 — Ключ устройства машины</a></li><li><a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174 — Автономный бинарник runner перестаёт обещать Mac Intel</a></li><li><a href="../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187 — Автономный бинарник runner перестаёт обещать Windows</a></li><li><a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193 — Git с учётными данными выполняется на ХОСТЕ runner; код выполняется в контейнере</a></li><li><a href="../adr/0201-revogacao-por-chave.html">ADR 0201 — Отзыв нацелен на КЛЮЧ, а не на пару `{проект, пользователь}`</a></li><li><a href="../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.html">ADR 0203 — Поток runner через браузер выводится из употребления, путь — установщик</a></li><li><a href="../adr/0230-importar-chave-de-llm-pelo-runner.html">ADR 0230 — O runner importa a chave de API de LLM que o usuário já tem na máquina</a></li></ul></li><li><span>Autenticação, acesso e segredos</span><ul><li><a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031 — Собственная аутентификация: argon2id, EdDSA и ротация refresh</a></li><li><a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032 — Отказ от Keycloak: собственный эмитент, service token и сессия в cookie</a></li><li><a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037 — CORS, которого не было у engine, и порт как часть контракта</a></li><li><a href="../adr/0050-credencial-sempre-cifrada-verificacao-explicita.html">ADR 0050 — Учётные данные всегда зашифрованы; проверка становится явным действием</a></li><li><a href="../adr/0058-csp-fechado-na-api-e-escopo-de-projeto-contido.html">ADR 0058 — Закрытый CSP в api и область проекта, удержанная в корне</a></li><li><a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059 — У ключа, подписывающего `state` git OAuth, нет значения по умолчанию</a></li><li><a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084 — Социальный вход (GitHub/GitLab), пересматривающий backlog ADR 0031/0032</a></li><li><a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096 — Настоящий SMTP в `MailSender`, за явным переключателем</a></li><li><a href="../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127 — Два потолка понижения в `project_members`, а перекрытие остаётся</a></li><li><a href="../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156 — Потолок самопонижения также при удалении участника проекта</a></li><li><a href="../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157 — Потолок самоперемещения в upsert workspace и самоповышение, которое было брешью</a></li><li><a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158 — Id мастер-ключа, записанный в конверте, как наблюдаемость и никогда как полномочие</a></li><li><a href="../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173 — Удаление участника workspace рождается, защищённое тем же условием</a></li><li><a href="../adr/0245-acesso-rapido-por-papel-so-no-ambiente-local.html">ADR 0245 — Acesso rápido por papel só no ambiente local</a></li></ul></li><li><span>Providers de LLM, modelos e gasto</span><ul><li><a href="../adr/0040-moeda-do-dashboard.html">ADR 0040 — Валюта дашборда: пока USD, ручной курс по workspace отложен</a></li><li><a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041 — Одна OpenAI-совместимая база, один контракт LLM providers и capabilities, отклоняющие binding</a></li><li><a href="../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042 — Живой каталог, жизненный цикл модели и проверяемая цена</a></li><li><a href="../adr/0043-seis-providers-de-llm-e-o-fechamento-da-fase-9b.html">ADR 0043 — Шесть providers LLM поверх базы, и Фаза 9b наконец закрыта</a></li><li><a href="../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049 — Курирование моделей по workspace</a></li><li><a href="../adr/0051-facetas-de-capability-e-curadoria-por-uso.html">ADR 0051 — Доказанные грани capability; &quot;для чего годится&quot; — это курирование</a></li><li><a href="../adr/0063-duas-audiencias-para-o-mesmo-gasto.html">ADR 0063 — Две аудитории для одного и того же расхода: счёт owner и потребление участника</a></li><li><a href="../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064 — Область как уровень каскада модели и глобальный binding агента</a></li><li><a href="../adr/0075-embeddings-no-contrato-de-llm-provider.html">ADR 0075 — Embeddings в контракте LLMProvider</a></li><li><a href="../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076 — `provider` снова становится измерением расходов, а сдерживание переходит к типу</a></li><li><a href="../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">ADR 0077 — Рейтинг моделей по возможностям, без выдуманной оценки</a></li><li><a href="../adr/0110-budget-por-area-aditivo-nao-cascata.html">ADR 0110 — Бюджет по области АДДИТИВЕН, рядом с проектом/сессией — не каскад и не новая таблица</a></li><li><a href="../adr/0114-deteccao-de-ollama-nativo-no-bootstrap-dev.html">ADR 0114 — Обнаружение нативного Ollama в dev bootstrap: спросить один раз, сохранить в `.env`, поставить сервисы compose за profile</a></li><li><a href="../adr/0115-pedido-de-pull-de-modelo-huggingface-tabela-propria.html">ADR 0115 — Pull модели из Hugging Face: собственная таблица, подтверждение в два шага и allowlist официальных издателей — никогда `proposed_actions`</a></li><li><a href="../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166 — Предпочтение маршрутизации живёт в binding модели, путешествует вместе с ним и замораживается в metering</a></li><li><a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188 — Реальная стоимость, которую возвращает provider, становится числом metering</a></li><li><a href="../adr/0198-duplicata-semantica-por-embedding-com-limiar-que-so-avisa.html">ADR 0198 — О семантическом дубликате истории и правила предупреждает embedding с порогом, а расход попадает в metering</a></li><li><a href="../adr/0221-upstream-preso-por-sessao.html">ADR 0221 — O hub prende a conversa de cada agente ao upstream que a atendeu, por `session_id`</a></li><li><a href="../adr/0222-provider-9router-de-llm.html">ADR 0222 — O 9Router entra como o 10º provider de LLM, com URL por instalação</a></li><li><a href="../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223 — O orçamento de raciocínio é capability POR MODELO, curada à mão</a></li><li><a href="../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224 — O raciocínio é contado no stream e abortado no limite, e o custo é estimado e reconciliado</a></li><li><a href="../adr/0225-teto-de-preco-do-upstream-no-openrouter.html">ADR 0225 — O OpenRouter recebe um teto de preço por chamada (`provider.max_price` = catálogo × 1,5)</a></li><li><a href="../adr/0227-provider-opencode-zen-de-llm.html">ADR 0227 — O OpenCode Zen entra como o 11º provider de LLM, só no dialeto OpenAI</a></li><li><a href="../adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233 — O membro vê o gasto do projeto por agente e por área, nunca por provider</a></li><li><a href="../adr/0251-preco-de-lista-datado-para-provider-sem-preco.html">ADR 0251 — Preço de lista datado no código para provider que não informa preço</a></li></ul></li><li><span>RAG, grafo de conhecimento e artefatos</span><ul><li><a href="../adr/0079-tabela-de-chunks-vetor-e-tsvector-juntos.html">ADR 0079 — Таблица chunks: вектор и `tsvector` в одной строке</a></li><li><a href="../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">ADR 0080 — Гибридный поиск: веса, порог и что такое цитата</a></li><li><a href="../adr/0082-chat-rag-aba-de-busca-hibrida.html">ADR 0082 — Chat RAG: собственная вкладка гибридного поиска, без переименования &quot;Chat&quot;</a></li><li><a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099 — Neo4j как граф знаний и шаблоны prompt, драйвер в api</a></li><li><a href="../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100 — `rag_search` для агентов и модели Ollama, гарантированные при загрузке</a></li><li><a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101 — Реляционная память как проекция event log; шаблоны потребляются без трогания GenServers</a></li><li><a href="../adr/0113-pasta-local-anexada-via-navegador-vira-chunks-scope-local.html">ADR 0113 — Локальная папка, приложенная через браузер, становится `chunks.scope = 'local'`, читаемым БРАУЗЕРОМ, никогда путём хоста</a></li><li><a href="../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">ADR 0129 — Телеметрия поиска RAG — это ТАБЛИЦА, с весами, замороженными в строке</a></li><li><a href="../adr/0132-golden-set-de-acerto-do-rag.html">ADR 0132 — Golden-set попаданий RAG и gate `rag-acertivo`</a></li><li><a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138 — Golden-set RAG начинает работать в CI, по расписанию — и остаётся `warn`</a></li><li><a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148 — Артефакты агентов, спроецированные в файлы, в папку `docs/`</a></li><li><a href="../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196 — Anamnese снова включена: не работает без субъекта, а принятая гипотеза становится фактом профиля</a></li><li><a href="../adr/0200-contrato-entre-modulos-artefato-do-arquiteto.html">ADR 0200 — Контракт между модулями становится версионируемым артефактом Arquiteto, и dev agent читает его вместо чужого worktree</a></li><li><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205 — Отклонение агента, которое наблюдает Anamnese, становится сигналом продукта, без персональных данных</a></li></ul></li><li><span>Interface web e design system</span><ul><li><a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036 — Экраны аутентификации, верные дизайну, и три шрифта, которые не загружались</a></li><li><a href="../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060 — Поверхность чтения кода, ограниченная и с бюджетом</a></li><li><a href="../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">ADR 0074 — Достижимая тема и загрузка под CSP</a></li><li><a href="../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">ADR 0078 — Рамка экрана, и реестр вкладок намеренно расходится с handoff</a></li><li><a href="../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097 — Прямое чтение схемы engine для &quot;N агентов онлайн&quot; на дашборде</a></li><li><a href="../adr/0116-tipos-do-web-gerados-do-openapi.html">ADR 0116 — `ActionType` (и будущие типы) генерируются из контракта OpenAPI, а не копируются вручную</a></li><li><a href="../adr/0122-sessionpage-dividido-em-cinco-prs.html">ADR 0122 — `SessionPage.tsx`, разделённый на пять механических PR, объявленных заранее</a></li><li><a href="../adr/0124-hook-do-canal-de-turno-do-sessionpage.html">ADR 0124 — Группировка состояния канала хода, извлечённая в `useTurnoDoAgente`</a></li><li><a href="../adr/0125-projectsettingstab-dividido-por-secao.html">ADR 0125 — `ProjectSettingsTab.tsx` разделён на файл на раздел, за barrel</a></li><li><a href="../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126 — Страница проекта навигируется вертикальной рейкой, а вкладка Código перестаёт сама сворачивать sidebar</a></li><li><a href="../adr/0176-sessionpage-abaixo-de-mil-linhas.html">ADR 0176 — `SessionPage.tsx` меньше 1 000 строк, за десять механических PR, а замок — только после</a></li><li><a href="../adr/0181-tema-preto-neutro.html">ADR 0181 — Тёмная тема становится нейтрально-чёрной, и долг контраста заканчивается</a></li><li><a href="../adr/0210-animacao-de-texto-com-motion.html">ADR 0210 — Анимация текста с `motion`</a></li><li><a href="../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211 — Одна навигация: боковая панель поглощает рельс проекта</a></li><li><a href="../adr/0232-shadcn-com-base-ui-no-apps-web.html">ADR 0232 — shadcn/ui com Base UI e Tailwind 4 no `apps/web`</a></li><li><a href="../adr/0234-shiki-e-recharts-por-carga-dinamica.html">ADR 0234 — `shiki` no Code Block e `recharts` no Chart, sempre por carga dinâmica</a></li><li><a href="../adr/0237-o-visual-v3-liga-o-preflight-e-sobe-os-raios.html">ADR 0237 — O visual v3 liga o preflight e sobe os raios</a></li><li><a href="../adr/0238-o-grafo-de-modulos-vira-canvas-xyflow.html">ADR 0238 — O grafo de módulos da Arquitetura vira Canvas (`@xyflow/react`)</a></li><li><a href="../adr/0239-csp-frame-src-local-para-o-web-preview.html">ADR 0239 — CSP `frame-src` local para o Web preview do entregável</a></li><li><a href="../adr/0240-o-motivo-de-controle-inerte-mora-num-ponto-de-interrogacao-nos-containers.html">ADR 0240 — O motivo de controle inerte pode morar num &quot;?&quot; ativo na página de Containers</a></li><li><a href="../adr/0241-a-sidebar-adota-o-block-sidebar-07-do-shadcn.html">ADR 0241 — A sidebar adota o block `sidebar-07` do shadcn</a></li><li><a href="../adr/0242-containers-em-tabela-linear-com-tanstack-react-table.html">ADR 0242 — Containers em tabela linear com `@tanstack/react-table`</a></li><li><a href="../adr/0243-consequencia-irreversivel-pode-morar-num-botao-de-perigo.html">ADR 0243 — Consequência irreversível pode morar num botão de perigo</a></li><li><a href="../adr/0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.html">ADR 0244 — Coluna das abas do projeto alinhada à esquerda</a></li><li><a href="../adr/0248-conteudo-das-paginas-ocupa-a-largura-inteira.html">ADR 0248 — O conteúdo das páginas ocupa a largura inteira</a></li><li><a href="../adr/0250-chat-da-sessao-ocupa-a-largura-inteira.html">ADR 0250 — O chat da Sessão ocupa a largura inteira</a></li></ul></li><li><span>Operação, deploy e instalação</span><ul><li><a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024 — Фаза 5 (сессия 1): production-образы, compose.prod, CI и smoke-тест</a></li><li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025 — Фаза 5 (сессия 2): деплой в Kubernetes с Kustomize, метрика очереди и локальный overlay</a></li><li><a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026 — Фаза 5 (сессия 3): graceful shutdown, OpenTelemetry, метрики, логи и дашборды</a></li><li><a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027 — Backup/restore, усиление api, открытая поверхность и релиз</a></li><li><a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035 — Trace без коллектора и путь между слоями в логе</a></li><li><a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070 — Наблюдаемость в локальном Compose: метрики и журналы, без трассировки</a></li><li><a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150 — Установщик одной строкой, с выбранным источником и маркером</a></li><li><a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152 — Резервное копирование и восстановление томов для compose</a></li><li><a href="../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153 — `DEPLOY_ENABLED`: триггер, который упоминают десять документов и не создаёт ни один</a></li><li><a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155 — Первая учётная запись рождается в терминале, а локальный агент поднимается сопряжённым</a></li><li><a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160 — Compose установщика едет вместе с ним, как подписанный asset</a></li><li><a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161 — Экран предлагает только тот режим, который выполняет установка, а у установки через Release нет broker</a></li><li><a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162 — Broker становится пятым опубликованным образом, а установщик СПРАШИВАЕТ, включать ли его</a></li><li><a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169 — Назначением S3 локального overlay перестаёт быть MinIO и становится SeaweedFS</a></li><li><a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170 — Dev-compose становится `brabo-dev`, и dev отказывается подниматься рядом с установкой</a></li><li><a href="../adr/0209-engine-em-otp-29.html">ADR 0209 — Engine переходит на Elixir 1.20.4 / OTP 29.1.1</a></li></ul></li><li><span>CI, release e cadeia de suprimentos</span><ul><li><a href="../adr/0039-actionlint-e-validacao-do-pipeline-de-ci-gerado.html">ADR 0039 — actionlint и валидация генерируемого конвейера CI</a></li><li><a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119 — Образы, публикуемые в GHCR с каждым финальным тегом, и production overlay, закреплённый по digest</a></li><li><a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120 — Браузерный E2E против продакшен-compose, в пакете вне workspace</a></li><li><a href="../adr/0121-schema-dividido-por-agregado-de-dominio.html">ADR 0121 — Схема, разделённая по доменным агрегатам, за barrel</a></li><li><a href="../adr/0140-timeout-do-audit-como-risco-assumido.html">ADR 0140 — Повторяющийся timeout `pnpm audit` — принятый риск; находка по-прежнему отклоняет</a></li><li><a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149 — Подпись опубликованных артефактов</a></li><li><a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159 — Сторонний образ входит по digest, и lint проваливает того, кто забудет</a></li><li><a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172 — Релиз сканирует Trivy то, что публикует, по digest, до подписи</a></li><li><a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178 — Тег стороннего образа живёт ВНУТРИ ссылки, перед digest</a></li><li><a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197 — Образ workflows берётся из compose, и Dependabot для образов включается</a></li><li><a href="../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252 — O Brabo vira um conjunto de repositórios em `viralabs-dev`</a></li></ul></li><li><span>Documentação</span><ul><li><a href="../adr/0029-sincronizacao-continua-da-documentacao.html">ADR 0029 — Непрерывная синхронизация документации</a></li><li><a href="../adr/0033-referencia-de-api-gerada-do-openapi.html">ADR 0033 — Справочник API выводится из кода, а табличный тест требует метаданных</a></li><li><a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034 — Документация, публикуемая по ступеням, в подкаталоге Pages</a></li><li><a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071 — Симметричная публикация по ступеням и корень, который предлагает выбор</a></li><li><a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073 — Публикуемый путь называет окружение, а не ветку</a></li><li><a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117 — `website/` получает собственный lockfile, вне `pnpm audit` продукта</a></li><li><a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202 — Индекс ADR по темам, с темой вне ADR</a></li><li><a href="../adr/0206-referencia-da-api-numa-pagina-redoc.html">ADR 0206 — Справочник API становится страницей Redoc</a></li><li><a href="../adr/0216-quatro-idiomas-com-pt-br-como-fonte.html">ADR 0216 — Четыре языка, с pt-BR как ИСТОЧНИКОМ и языком по умолчанию: документация и интерфейс на португальском, английском, русском и упрощённом китайском</a></li><li><a href="../adr/0218-titulo-de-adr-com-prefixo.html">ADR 0218 — Каждый ADR называется «ADR NNNN — заголовок»</a></li><li><a href="../adr/0219-referencia-entra-na-traducao.html">ADR 0219 — Справочник входит в перевод</a></li><li><a href="../adr/0220-api-traduzida-por-catalogo.html">ADR 0220 — Страница API переводится по каталогу</a></li><li><a href="../adr/0253-o-site-de-docs-deixa-o-docusaurus.html">ADR 0253 — O site de docs deixa o Docusaurus</a></li><li><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html">ADR 0254 — A doc de cada área mora na raiz dela</a></li></ul></li></ul></li></ul></section><section><h2>📐 Правила</h2><ul><li><a href="../business-rules.html">Бизнес-правила</a></li><li><a href="../business-rules/custo.html">Стоимость и metering</a></li><li><a href="../business-rules/autenticacao.html">Аутентификация</a></li><li><a href="../business-rules/api.html">API</a></li><li><a href="../business-rules/broker.html">Broker</a></li><li><a href="../business-rules/ci.html">CI</a></li><li><a href="../business-rules/contracts.html">Contratos</a></li><li><a href="../business-rules/engine.html">Engine</a></li><li><a href="../business-rules/infra.html">Infra</a></li><li><a href="../business-rules/produto.html">Produto</a></li><li><a href="../business-rules/runner.html">Runner</a></li><li><a href="../business-rules/web.html">Web</a></li></ul></section><section><h2>📖 Справочник</h2><ul><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Открытая поверхность api</a></li><li><span>Справочник API</span></li></ul></section><section><h2>💡 Пояснения</h2><ul><li><span>Процесс и конвейер</span><ul><li><a href="../explanation/documentation-workflow.html">Синхронизация документации</a></li><li><a href="../explanation/branching-policy.html">Политика веток</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Цепочка поставок CI</a></li><li><a href="../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../explanation/gates.html">Gates и то, как они измеряются</a></li><li><a href="../explanation/observability.html">Наблюдаемость</a></li><li><a href="../explanation/modelo-de-time.html">Модель команды и поток результатов</a></li></ul></li><li><span>Проверки и измерения</span><ul><li><a href="../explanation/primeiro-dogfooding.html">Первый dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Реальное выполнение (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Находки реального прогона конвейера</a></li><li><a href="../explanation/validacao-fase-12.html">Проверка Фазы 12</a></li><li><a href="../explanation/validacao-real.html">Реальная валидация (13b)</a></li><li><a href="../explanation/aceite-providers.html">Приёмка providers</a></li><li><a href="../explanation/medicao-do-idioma.html" aria-current="page">Измерение эвристики языка</a></li><li><a href="../explanation/medicao-do-jev.html">Измерение маршрутизатора инструментов Jev</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Аудит: fluxo.yml × код (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Визуальный аудит до и после Rodada 29</a></li></ul></li><li><span>История фаз</span><ul><li><a href="../explanation/historico-de-fases.html">История фаз</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">ФАЗА 28 — папка пользователя</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — установка одной строкой</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — локальный агент машины</a></li><li><a href="../explanation/backlog.html">Backlog после триажа</a></li></ul></li><li><span>Локализация</span><ul><li><a href="../explanation/localizacao.html">Локализация</a></li><li><a href="../explanation/localizacao-en.html">Локализация — английский (en)</a></li><li><a href="../explanation/localizacao-ru.html">Локализация — русский (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Локализация — упрощённый китайский (zh-Hans)</a></li></ul></li><li><span>Технические заметки</span><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — не принят</a></li></ul></li></ul></section><section><h2>🛠️ Эксплуатация</h2><ul><li><a href="../runbook.html">Руководство по эксплуатации</a></li></ul></section><section><h2>📚 Словарь</h2><ul><li><a href="../glossary.html">Глоссарий</a></li></ul></section><section><h2>🤝 Участие</h2><ul><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Как внести вклад</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Где попросить помощи</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Сообщить об уязвимости</a></li></ul></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="measuring-the-language-heuristic">Измерение эвристики языка</h1>
+<blockquote>
+<p>AT-160 (EP-028, HS-053). Измеряемая эвристика — та, что предложила
+спецификация AT-080 («A — собственная эвристика, без зависимостей»).
+Начиная с AT-163 (<a href="../business-rules/api.html#rn-624">RN-624</a>) продукт её
+выполняет: api определяет с её помощью язык автора и СПРАШИВАЕТ, прежде
+чем что-либо изменится. Пороги продукта <strong>предварительные</strong> — см.
+<a href="#the-products-provisional-thresholds">Предварительные пороги продукта</a>.</p>
+</blockquote>
+<h2 id="what-exists">Что существует</h2>
+<p>Инструмент живёт в <code>scripts/idioma/</code> и запускается Node репозитория (type
+stripping, без шага сборки). <strong>Никаких новых зависимостей</strong>: эвристика — это
+список маркеров и регулярные выражения, а извлечение общается с Postgres
+через <code>psql</code> внутри контейнера базы.</p>
+<p>Сама эвристика живёт в <strong>api</strong> —
+<code>apps/api/src/domain/iam/heuristica-de-idioma.ts</code>, — а <code>scripts/idioma/heuristica.ts</code>
+лишь реэкспортирует её, поэтому инструмент измеряет ровно тот код, который
+выполняет продукт. Это направление вынужденное: api не достаёт ни до
+<code>scripts/</code>, ни до какого-либо runtime-пакета без шага сборки, а
+<code>packages/shared</code> содержит только типы. В файле нет импортов, поэтому Node
+запускает его из <code>scripts/</code> через type stripping (команды <code>idioma:*</code> глушат
+сопутствующее предупреждение о &quot;typeless package&quot;), а у <code>scripts/idioma/</code> есть
+собственный <code>tsconfig.json</code> — единственное отличие в отключении
+<code>verbatimModuleSyntax</code>, который отвергает любой <code>export</code> модуля CommonJS,
+как в api. Сначала пробовали файл <code>.mts</code>: он прошёл обе проверки типов и
+сборку, но сломал все скрипты <code>ts-node</code> в api. Правило о том, <em>что
+является доказательством</em> (<code>evidenciasDoAutor</code>), переехало вместе с
+эвристикой, и извлечение реального корпуса использует то же правило.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>файл</th>
+<th>роль</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>heuristica.ts</code></td>
+<td>реэкспортирует эвристику api: очистка, контрастная оценка, кандидат и предварительные параметры, выборка из 10 сообщений, гистерезис и правило доказательства</td>
+</tr>
+<tr>
+<td><code>corpus-sintetico.jsonl</code></td>
+<td><strong>версионируемый</strong> синтетический корпус — каждая строка написана вручную для инструмента, <code>origem: &quot;sintetico&quot;</code></td>
+</tr>
+<tr>
+<td><code>sequencias-sinteticas.json</code></td>
+<td>синтетические диалоги для пути выборки и гистерезиса</td>
+</tr>
+<tr>
+<td><code>medicao.ts</code> / <code>medir.ts</code></td>
+<td>инструмент и его CLI</td>
+</tr>
+<tr>
+<td><code>extrair.ts</code></td>
+<td>извлекает <strong>реальный</strong> корпус из локального event log в файл вне git</td>
+</tr>
+<tr>
+<td><code>rotular.ts</code></td>
+<td>разметка реального корпуса с подсказками, в терминале</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-two-corpora-and-where-each-one-lives">Два корпуса и где живёт каждый</h2>
+<p>Решение сопровождающего (AT-168, ответ 5) — <strong>реальный + синтетический</strong>. У
+них противоположные правила хранения:</p>
+<ul>
+<li><strong>Синтетический</strong> — версионируется, ревьюится как код. Покрывает девять
+обязательных случаев AT-080 (опечатки, настоящий испанский, английский,
+смешанный текст, &quot;ok&quot;, код, логи, цитаты на другом языке) плюс
+португальский, насыщенный английским жаргоном, встроенные идентификаторы
+и языки вне трёх (французский, итальянский, немецкий, галисийский,
+каталанский, нидерландский) — список языков открыт (AT-168, ответ 2).</li>
+<li><strong>Реальный</strong> — сообщения самого пользователя в <strong>локальном</strong> event log.
+Никогда не попадает в git, в fixture, в лог CI или в тело PR.
+<code>extrair.ts</code> и <code>corpus.ts</code> отвергают любое место назначения внутри
+checkout, а файл записывается с правами 600 в
+<code>$XDG_CACHE_HOME/brabo/corpus-idioma/</code> (иначе <code>~/.cache/…</code>). Отчёт никогда
+не печатает текст элемента — только id, метки и счётчики, — поэтому его
+вывод можно вставить в PR.</li>
+</ul>
+<p>То, что извлечение считает доказательством, следует очистке AT-080: только
+события, актор которых — <strong>пользователь</strong> (ответ агента никогда не является
+доказательством, поэтому испанский ответ модели не может подпитывать
+определение), и в структурированной форме — только <strong>ответы</strong>:
+склеенный <code>chat.message</code>, который api записывает сразу после, и чьи метки
+— текст агента, пропускается.</p>
+<p>Помощник разметки <strong>не</strong> подставляет заранее догадку эвристики: её
+принятие нажатием ENTER привязало бы метку именно к тому, что метка
+призвана измерять. ENTER принимает язык, который владелец объявляет через
+<code>--padrao</code>.</p>
+<p>Метки: код BCP-47 (<code>pt-BR</code>, <code>es</code>, <code>fr</code>…), <code>und</code> (решать нечего: &quot;ok&quot;, только
+код, только лог) или <code>mul</code> (смешанный, без доминирующего языка). Оценка:
+<code>pt</code>/<code>es</code>/<code>en</code> должны получить свой язык; <code>und</code>, <code>mul</code> и любой другой язык
+должны получить <code>indeterminado</code> — единственный правильный ответ, который
+может дать им эвристика трёх языков. <code>indeterminado</code> на решаемом элементе —
+это <strong>упущенное покрытие</strong> (известное предпочтение сохраняется); неверный
+язык — это <strong>ошибка</strong>, а <code>falso es</code> считается отдельно, потому что это тот
+дефект, ради устранения которого существует эпик.</p>
+<h2 id="running-it">Как запускать</h2>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># synthetic corpus (the default)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> idioma:medir</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># the owner's real corpus, on the owner's machine</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> idioma:extrair</span><span style="color:var(--shiki-token-string)"> --container</span><span style="color:var(--shiki-token-string)"> brabo-dev-postgres-1</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> idioma:rotular</span><span style="color:var(--shiki-token-string)"> --padrao</span><span style="color:var(--shiki-token-string)"> pt-BR</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> idioma:medir</span><span style="color:var(--shiki-token-string)"> --real</span></span>
+<span class="line"></span></code></pre>
+<p><code>--container</code> запускает <code>psql</code> внутри этого контейнера с единственным
+<code>SELECT</code> только на чтение в <code>session_events</code> (<code>--usuario</code>/<code>--banco</code> по
+умолчанию <code>brabo</code>/<code>brabo</code> из compose); <code>--database-url &lt;url&gt;</code> использует
+вместо этого <code>psql</code> хоста. Повторный запуск извлечения сохраняет
+существующие метки и добавляет новые сообщения без метки.</p>
+<h2 id="numbers-on-the-synthetic-corpus-2026-09-28">Числа на синтетическом корпусе (2026-09-28)</h2>
+<p>123 размеченных элемента, 7 последовательностей, параметры-кандидаты AT-080
+(минимум 20 слов, порог 0,8, отрыв 0,3, 10 сообщений / 2 000 символов,
+гистерезис 2). Два списка маркеров: <code>at080</code> — список из спецификации,
+дословно; <code>ampliada</code> — больший список, написанный этим инструментом <strong>до</strong>
+запуска на корпусе (частые служебные слова, отсутствующие в двух других
+языках). Корпус тот же, поэтому <code>ampliada</code> этими числами не подтверждается —
+сказать может реальный корпус.</p>
+<p>По сообщениям, параметры-кандидаты:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>метка</th>
+<th>n</th>
+<th><code>at080</code> верно</th>
+<th><code>at080</code> не определено</th>
+<th><code>ampliada</code> верно</th>
+<th><code>ampliada</code> не определено</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pt</td>
+<td>56</td>
+<td>26 (46,4%)</td>
+<td>30</td>
+<td>30 (53,6%)</td>
+<td>26</td>
+</tr>
+<tr>
+<td>es</td>
+<td>20</td>
+<td>6 (30,0%)</td>
+<td>14</td>
+<td>7 (35,0%)</td>
+<td>13</td>
+</tr>
+<tr>
+<td>en</td>
+<td>14</td>
+<td>6 (42,9%)</td>
+<td>8</td>
+<td>6 (42,9%)</td>
+<td>8</td>
+</tr>
+<tr>
+<td>und</td>
+<td>15</td>
+<td>15 (100%)</td>
+<td>0</td>
+<td>15 (100%)</td>
+<td>0</td>
+</tr>
+<tr>
+<td>mul</td>
+<td>5</td>
+<td>5 (100%)</td>
+<td>0</td>
+<td>5 (100%)</td>
+<td>0</td>
+</tr>
+<tr>
+<td>другие языки</td>
+<td>13</td>
+<td>10</td>
+<td>0</td>
+<td>9</td>
+<td>0</td>
+</tr>
+</tbody>
+</table></div>
+<p>Вердикты с неверным языком: <strong>ни одного на элементе <code>pt</code>/<code>es</code>/<code>en</code></strong> ни в
+одном из списков. Все они на языках вне трёх — <code>at080</code>: французский → pt
+(<code>ê</code> в <em>arrêté</em>), <strong>галисийский → es</strong> (единственный <code>falso es</code>),
+нидерландский → en; <code>ampliada</code>: французский → es, немецкий → pt и → en,
+нидерландский → en.</p>
+<p>Очистка удалила больше половины слов у <strong>нуля</strong> решаемых элементов.</p>
+<p>Семь синтетических последовательностей заканчиваются там, где ожидается, с
+не более чем допустимым числом переключений, в обоих списках — включая
+португальский с длинной цитатой на испанском, целое сообщение на испанском
+посреди португальского и португальский, плотно насыщенный английским
+жаргоном.</p>
+<p>CPU на этой машине: <code>at080</code> 11,7 мкс на сообщение и 49 мкс на оценку выборки
+из 10 сообщений; <code>ampliada</code> 16,8 мкс и 60 мкс. Зависит от машины; важен
+порядок величины.</p>
+<h2 id="what-the-numbers-say">Что говорят числа</h2>
+<ul>
+<li><strong>Со списком <code>at080</code> порог и отрыв никогда не срабатывают.</strong> 66 из 67
+элементов, которые хоть что-то набирают, набирают для одного языка
+(уверенность = 1,0), поэтому перебор порога от 0,5 до 1,0 ничего не
+меняет. Минимум слов — единственная действующая ручка: по сообщениям
+решаемые элементы приходят к своему языку в 42,2% случаев при 20 словах,
+58,9% при 10 и 66,7% без минимума — при 20 он выбрасывает каждое короткое
+сообщение с опечатками и большую часть технических.</li>
+<li><strong>Снятие минимума позволяет решать смешанному тексту.</strong> Без минимума
+<code>at080</code> превращает три из пяти смешанных сообщений в <code>en</code> или <code>pt</code>, а
+<code>ampliada</code> также решает два элемента <code>und</code> как <code>en</code> — код без ограждения
+(<code>const total = itens.reduce(…)</code>) и вывод pnpm
+(<code>ELIFECYCLE  Test failed. See above for more details.</code>) проходят через
+очистку, которая знает только огороженный код и форматы логов,
+перечисленные в AT-080.</li>
+<li><strong>Отрыв 0,3 избыточен при пороге 0,8</strong> в любом списке: при трёх языках
+победитель с ≥ 0,8 оказывается минимум на 0,6 выше второго.</li>
+<li><strong>Значимая единица — выборка, а не сообщение</strong>: в последовательностях окно
+из 10 сообщений приходит к языку с сообщениями, которые по отдельности
+были бы <code>indeterminado</code>. Единственное испанское сообщение в португальском
+окне делает выборку <code>indeterminado</code>, пока оно находится в окне
+(последовательность <code>q03</code>): ни переключения, но и ни подтверждения.</li>
+<li><strong>Ошибки — в открытом списке языков.</strong> При трёх языках пользователь,
+пишущий по-галисийски или по-французски, может услышать, что пишет
+по-испански или по-португальски. По правилу AT-168 определение лишь
+<em>спрашивает</em>, а пользователь подтверждает, поэтому цена — неверный
+вопрос, но это всё равно единственный режим отказа эвристики здесь.</li>
+</ul>
+<p>Это синтетические числа: корпус написан той же рукой, что и эвристика.
+Пороги AT-163 должны были бы прийти из реального корпуса.</p>
+<h2 id="the-products-provisional-thresholds">Предварительные пороги продукта</h2>
+<p>AT-163 должна была выйти с <em>каким-то</em> числом до появления реального
+корпуса, поэтому api читает <code>PARAMETROS_PROVISORIOS</code> — <strong>предварительные, не
+откалиброванные</strong> и так и объявленные в <a href="../business-rules/api.html#rn-624">RN-624</a>:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>параметр</th>
+<th>предварительный</th>
+<th>кандидат AT-080</th>
+<th>почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>список маркеров</td>
+<td><code>at080</code></td>
+<td>—</td>
+<td><code>ampliada</code> выигрывает 4 пункта в pt и дважды ошибается на немецком; ни один из двух не подтверждён реальными данными</td>
+</tr>
+<tr>
+<td>минимум слов (по выборке)</td>
+<td><strong>10</strong></td>
+<td>20</td>
+<td>покрытие решаемых элементов 42,2% → 58,9% при <strong>тех же</strong> трёх неверных вердиктах (французский, галисийский, нидерландский — языки вне трёх); ниже 10 начинает решать смешанный текст</td>
+</tr>
+<tr>
+<td>порог / отрыв</td>
+<td>0,8 / 0,3</td>
+<td>0,8 / 0,3</td>
+<td>на синтетическом корпусе никогда не срабатывают, поэтому выбрать лучшее число пока не из чего</td>
+</tr>
+<tr>
+<td>выборка</td>
+<td>10 сообщений / 2 000 символов</td>
+<td>то же</td>
+<td>—</td>
+</tr>
+<tr>
+<td>гистерезис</td>
+<td>2</td>
+<td>2</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p>Гистерезис <strong>пересчитывается, но никогда не хранится</strong>: api читает последние
+11 доказательств и проверяет, согласны ли две последние оценки выборки. CPU
+на этой машине, синтетический корпус: 11,6 мкс на очистку и
+классификацию сообщения, 110 мкс на определение (11 сообщений, две
+оценки). Чтение обслуживается частичным индексом в <code>session_events</code>:
+0,056 мс против 13,5 мс последовательного сканирования, измерено на 200 000
+событий.</p>
+<p>Для перекалибровки: запустите реальный корпус (<code>idioma:medir --real</code>), а
+затем измените <code>PARAMETROS_PROVISORIOS</code> в api — это единственное место,
+откуда продукт их читает, и инструмент импортирует тот же файл (его отчёт
+продолжает перебирать кандидатов AT-080).</p>
+<h2 id="paid-validation-of-the-language-orientation-at-167-2026-09-29">Платная проверка языковой ориентации (AT-167, 2026-09-29)</h2>
+<blockquote>
+<p>Протокол — из AT-082, с решениями AT-169: бюджет US$ 5, 5 прогонов на
+случай и ветвь, порог приёмки «в обработанной ветви <strong>ноль</strong> испанских
+ответов там, где ожидается pt-BR, и правильный язык <strong>≥ 95%</strong> в C01–C04 и
+C06–C15», тестируемая модель <code>deepseek/deepseek-v4.1-flash</code>, модель
+сравнения <code>anthropic/claude-haiku-4.5</code>, потолок дополнительной стоимости
+50 входных токенов на вызов. Код в <code>d48f99f8e</code> (<code>dev</code> от 2026-09-29).</p>
+</blockquote>
+<h3 id="where-it-runs-and-what-is-and-is-not-the-product">Где запускается и что является (и что не является) продуктом</h3>
+<p>Скрипт вне продукта, <code>scripts/idioma/validar.ts</code> (чистая часть — матрица,
+оценка, отчёт — в <code>validacao.ts</code>, протестированная <code>validacao.spec.ts</code>). Он
+вызывает OpenRouter <strong>напрямую</strong> и ничего не пишет в базу. То, что продукт
+отправляет модели, <strong>читается из файлов продукта при каждом запуске</strong>,
+никогда не копируется — чтение выбрасывает исключение, называя то, чего не
+нашло, если файл изменит форму:</p>
+<ul>
+<li>ориентация (RN-622/623): <code>@textos</code>, общая фраза, оговорка об артефакте,
+<code>@forma_curta</code> и <code>@ferramentas_de_artefato</code> из
+<code>apps/engine/lib/engine/harness/idioma_da_resposta.ex</code>, отправляемая как
+ПОСЛЕДНЕЕ сообщение, <code>role: &quot;system&quot;</code>, в каждом вызове обработанного хода
+(включая итерации инструментов) и никогда не сохраняемая в истории;</li>
+<li>промпт резюме и его фраза о языке (RN-621) из
+<code>apps/engine/lib/engine/harness/context_manager.ex</code>;</li>
+<li>персона Criativo (<code>CRIATIVO_INSTRUCTIONS</code>), два его инструмента с
+настоящими описаниями и результаты инструментов, которые возвращает
+продукт.</li>
+</ul>
+<p>Заявленные отличия от продукта: system prompt — только персона (без слоёв
+<code>ContextBuilder</code>); сжатие <strong>принудительное</strong> перед пятым ходом C04 (с
+сохранением двух последних сообщений, <code>keep_recent</code> продукта), с
+тестируемой моделью в роли резюмирующей; возобновление (C15) — история,
+восстановленная как текст, в форме <code>Engine.Agents.Reidratacao</code>; не более 4
+вызовов модели за ход (Criativo допускает 12); и <code>max_tokens</code> ограничен 4000
+(продукт его не передаёт). Upstream-провайдер <strong>не</strong> был зафиксирован —
+записан по каждому вызову как смешивающий фактор. Baseline = код до
+RN-621/622: без ориентации <strong>и</strong> со старым промптом резюме (AT-169, ответ
+4: проверка измеряет совокупность, отдельного baseline для старого
+резюме нет).</p>
+<p>Разрешённый язык автора каждого сообщения — часть случая: <code>pt-BR</code> для Ana
+(C01–C05, C07–C11, C13–C15), <code>en</code> для Bob (C06 как определённый и
+подтверждённый <code>en</code>, C12 как явное предпочтение <code>en</code> при письме
+по-португальски); язык проекта <code>pt-BR</code>. C05 ожидает <strong>pt-BR</strong>: по ответу 4
+AT-168 определение лишь <em>спрашивает</em>, поэтому разрешённый язык автора
+остаётся pt-BR до подтверждения.</p>
+<p>Первый запуск нулевого шага с <code>max_tokens</code> 1000 был <strong>отброшен</strong>:
+рассуждения DeepSeek израсходовали весь потолок в 7 вызовах, и ответ
+вернулся пустым (два резюме превратились в запасной текст продукта). Его
+записи лежат отдельно в папке вывода; пустой ответ теперь считается
+<code>falha</code>, а не <code>indeterminado</code>.</p>
+<h3 id="step-zero-not-reproduced">Нулевой шаг: не воспроизведено</h3>
+<p>Только baseline, <code>deepseek/deepseek-v4.1-flash</code>, C01–C04, 5 прогонов: <strong>0
+испанских ответов из 35 оценённых</strong> (35 pt, 0 неопределённых). Сообщение от
+13.09 (испанский в ответ на португальский ввод) <strong>не воспроизведено</strong>,
+поэтому никакое улучшение <em>именно этого</em> дефекта нельзя приписать
+обработке. Запуск продолжился, потому что порог AT-169 абсолютен в
+обработанной ветви, а остальные случаи (C05, C06, C12, C16, C17)
+действительно показывают, что baseline отвечает на неверном языке.</p>
+<h3 id="results-by-case--arm--model">Результаты по случаю × ветви × модели</h3>
+<p>Первый судья — локальный классификатор (список <code>ampliada</code>,
+параметры-кандидаты) по прозе. &quot;ok&quot; = ожидаемый язык; &quot;errado (es)&quot; = другой
+язык (из них испанский); &quot;ind.&quot; = не определено. n — число оценённых
+ответов (5 прогонов × оценённые ходы).</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>случай</th>
+<th>DeepSeek baseline</th>
+<th>DeepSeek обработка</th>
+<th>Haiku baseline</th>
+<th>Haiku обработка</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C01 (n=5)</td>
+<td>5 ok</td>
+<td>5 ok</td>
+<td>5 ok</td>
+<td>5 ok</td>
+</tr>
+<tr>
+<td>C02 (n=5)</td>
+<td>5 ok</td>
+<td>5 ok</td>
+<td>5 ok</td>
+<td>5 ok</td>
+</tr>
+<tr>
+<td>C03 (n=15)</td>
+<td>15 ok</td>
+<td>15 ok</td>
+<td>15 ok</td>
+<td>15 ok</td>
+</tr>
+<tr>
+<td>C04 (n=10)</td>
+<td>10 ok</td>
+<td>10 ok</td>
+<td>10 ok</td>
+<td>10 ok</td>
+</tr>
+<tr>
+<td>C05 (n=5, вне списка 95%)</td>
+<td>1 ok, 4 errados (4 es)</td>
+<td>5 ok</td>
+<td>0 ok, 5 errados (5 es)</td>
+<td>2 ok, 3 errados (3 es)</td>
+</tr>
+<tr>
+<td>C06 (n=5)</td>
+<td>2 ok, 2 errados, 1 ind.</td>
+<td>3 ok, 2 ind.</td>
+<td>4 ok, 1 errado</td>
+<td>5 ok</td>
+</tr>
+<tr>
+<td>C07–C10 (n=5 каждый)</td>
+<td>все ok</td>
+<td>все ok</td>
+<td>все ok</td>
+<td>все ok</td>
+</tr>
+<tr>
+<td>C11 (n=10)</td>
+<td>6 ok, 4 errados</td>
+<td>5 ok, 5 errados</td>
+<td>5 ok, 1 errado, 4 ind.</td>
+<td>6 ok, 4 errados</td>
+</tr>
+<tr>
+<td>C12 (n=10)</td>
+<td>0 ok, 10 errados</td>
+<td>4 ok, 6 ind.</td>
+<td>0 ok, 10 errados</td>
+<td><strong>0 ok, 10 errados</strong></td>
+</tr>
+<tr>
+<td>C13 (n=5)</td>
+<td>5 ok</td>
+<td>5 ok</td>
+<td>5 ok</td>
+<td>5 ok</td>
+</tr>
+<tr>
+<td>C14, C15 (n=5 каждый)</td>
+<td>все ok</td>
+<td>все ok</td>
+<td>все ok</td>
+<td>все ok</td>
+</tr>
+<tr>
+<td>C16 (n=20, вне списка)</td>
+<td>10 ok, 10 errados</td>
+<td>19 ok, 1 ind.</td>
+<td>10 ok, 10 errados</td>
+<td>18 ok, 2 errados</td>
+</tr>
+<tr>
+<td>C17 (n=20, вне списка)</td>
+<td>12 ok, 8 errados</td>
+<td>20 ok</td>
+<td>16 ok, 4 errados</td>
+<td>20 ok</td>
+</tr>
+</tbody>
+</table></div>
+<p>C13 вызвал <code>emit_artifact</code> в 20 из 20 диалогов. Ни один вызов не упал.</p>
+<h3 id="against-the-threshold">Против порога</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>модель</th>
+<th>испанский там, где ожидается pt-BR (обработка)</th>
+<th>верно в C01–C04, C06–C15 (строго, классификатор)</th>
+<th>вердикт по классификатору</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deepseek/deepseek-v4.1-flash</code></td>
+<td>0</td>
+<td>82/95 (86,3%), 8 неопределённых</td>
+<td><strong>не проходит</strong></td>
+</tr>
+<tr>
+<td><code>anthropic/claude-haiku-4.5</code></td>
+<td>3 (все в C05)</td>
+<td>81/95 (85,3%), 0 неопределённых</td>
+<td><strong>не проходит</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>13 отказов DeepSeek образуют две группы. Прочтение ниже — прочтение агента,
+сделанное ДО ревью; ревью (<a href="#human-review-and-the-haiku-diagnosis-at-167-follow-up">следующий раздел</a>)
+его исправило — 8 неопределённых не все являются прозой на английском:</p>
+<ul>
+<li>8 неопределённых (C06 ×2, C12 ×6) выглядят как проза на английском —
+список <code>ampliada</code> плохо оценивает английский (&quot;Great starting point — …&quot;);</li>
+<li>5 отказов C11 отвечают на просьбу о переводе <strong>переводом на английский
+внутри португальской рамки</strong>, что ориентация допускает («если только
+пользователь явно не попросит … в этом сообщении» покрывает перевод, но
+не рамку). «Перевод на en» в протоколе не говорит, какой из двух
+вариантов правильный.</li>
+</ul>
+<p>Если ревью примет обе группы, DeepSeek доходит до 95/95 и <strong>проходит</strong>;
+если отвергнет C11 — 90/95 (94,7%) и не проходит на один ответ. Haiku <strong>не
+проходит в любом случае</strong>: при явном предпочтении <code>en</code> и сообщениях
+по-португальски (C12) он ответил по-португальски в 10 из 10 обработанных
+ответов и ответил на 3 из 5 испанских сообщений по-испански (C05). Гипотеза,
+не измеренная: для моделей Anthropic OpenRouter поднимает сообщение
+<code>system</code> из конца в верхний system prompt, где оно теряет новизну, которую
+имеет в конце списка. (Измерено позже и <strong>не подтверждено</strong>: см. диагноз
+ниже.)</p>
+<p>Ответы для ревью (все неопределённые или расходящиеся, все переводы C11 и
+детерминированная выборка 1 из 10 согласующихся) — 146 из 560, перечислены в
+<code>revisao.md</code> в папке вывода.</p>
+<h3 id="incremental-cost-of-the-orientation">Дополнительная стоимость ориентации</h3>
+<p>Парные <code>prompt_tokens</code> <strong>первого</strong> вызова каждого диалога (вход идентичен в
+обеих ветвях, кроме ориентации), взятые из <code>usage</code> OpenRouter, никогда не
+оценённые:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>модель</th>
+<th>ориентация</th>
+<th>пар</th>
+<th>Δ входных токенов</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DeepSeek</td>
+<td>pt-BR (108 символов)</td>
+<td>75</td>
+<td>32 (каждая пара)</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>en + оговорка об артефакте (128 символов)</td>
+<td>15</td>
+<td>27</td>
+</tr>
+<tr>
+<td>Haiku</td>
+<td>pt-BR</td>
+<td>75</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Haiku</td>
+<td>en + оговорка об артефакте</td>
+<td>15</td>
+<td>27</td>
+</tr>
+</tbody>
+</table></div>
+<p>Всё ниже потолка в 50 токенов. По входной цене каталога это около
+US$ 0,0000096 за вызов у DeepSeek и US$ 0,00003 у Haiku — верхняя граница,
+поскольку DeepSeek обслужил большую часть входа из кеша (кешированные
+токены возвращаются; стоимость вызова с кешем находится внутри
+<code>usage.cost</code>, не разделённая по сообщениям). Ориентация идёт в каждом
+вызове хода, поэтому ход с итерациями инструментов оплачивает её по разу
+на итерацию.</p>
+<h3 id="spend">Расходы</h3>
+<p>Стоимость проверки — сумма <code>usage.cost</code> каждого ответа, сохранённая по
+вызовам в <code>chamadas.jsonl</code>: <strong>US$ 2,3071</strong> всего — US$ 2,2629 на учтённых
+запусках (DeepSeek 0,1526 baseline + 0,2133 обработка; Haiku 0,9526 +
+0,9443; 865 вызовов), US$ 0,0281 на отброшенном нулевом шаге и US$ 0,0162 на
+smoke одного случая. Счётчик <code>GET /api/v1/key</code> вырос с 1,8301 до 4,1578
+(Δ 2,3277) за тот же период, но ключ общий с другими платными lanes,
+работавшими одновременно, и счётчик запаздывает, поэтому эта дельта —
+контекст, а не расход этой проверки. Id генераций не записывались, поэтому
+стоимость каждого вызова не сверялась с <code>GET /api/v1/generation</code>.
+Собственный metering продукта (<code>token_usage</code>) не участвовал: скрипт идёт в
+обход api.</p>
+<h3 id="reproducing">Как воспроизвести</h3>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># the key file holds OPENROUTER_TEST_KEY=…; the key is never printed</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> idioma:validar</span><span style="color:var(--shiki-token-string)"> --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --modelos</span><span style="color:var(--shiki-token-string)"> deepseek/deepseek-v4.1-flash</span><span style="color:var(--shiki-token-string)"> --bracos</span><span style="color:var(--shiki-token-string)"> baseline</span><span style="color:var(--shiki-token-string)"> --casos</span><span style="color:var(--shiki-token-string)"> C01,C02,C03,C04</span><span style="color:var(--shiki-token-comment)">   # step zero</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> idioma:validar</span><span style="color:var(--shiki-token-string)"> --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --pular-existentes</span><span style="color:var(--shiki-token-string)"> --teto-usd</span><span style="color:var(--shiki-token-constant)"> 2.5</span><span style="color:var(--shiki-token-comment)">                                                 # everything else</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> idioma:validar</span><span style="color:var(--shiki-token-string)"> --relatorio</span><span style="color:var(--shiki-token-comment)">                             # report only</span></span>
+<span class="line"></span></code></pre>
+<p>Вывод идёт в <code>$XDG_CACHE_HOME/brabo/validacao-idioma/&lt;date&gt;/</code> (иначе
+<code>~/.cache/…</code>), права 600, и скрипт отвергает папку внутри checkout.
+<code>--teto-usd</code> останавливает перед вызовом, который превысил бы его, по
+текущей сумме <code>usage.cost</code>.</p>
+<p>Не измерено: сама экономия от кеша, полный system prompt продукта, реальное
+сжатие (запускаемое порогом), перезапуск настоящего engine, подсчёт
+токенизатора для оговорки об артефакте на португальском и любой
+фиксированный upstream.</p>
+<p>146 ответов были проверены вручную; результат и единственное решение,
+которое по-прежнему за владельцем, — в следующем разделе.</p>
+<h2 id="human-review-and-the-haiku-diagnosis-at-167-follow-up">Ревью человеком и диагноз Haiku (продолжение AT-167)</h2>
+<p>Два офлайн- или дешёвых продолжения платной проверки, оба по одному и тому
+же запуску (<code>respostas.jsonl</code>, 560 оценённых ответов): ревью человеком 146
+ответов, отмеченных классификатором (Часть A, без расходов), и проверка
+гипотезы «OpenRouter поднимает сообщение <code>system</code> из конца» для Haiku
+(Часть B, US$ 0,1485). Ни то, ни другое не меняет продукт.</p>
+<h3 id="part-a--the-review-of-the-146">Часть A — ревью 146</h3>
+<p>Каждый из 146 ответов в <code>revisao.md</code> прочитан, один за другим, агентом,
+написавшим этот раздел (а не вторым человеком; файл меток сохранён для
+тех, кто захочет ему возразить). Для каждого: <strong>реальный</strong> язык текста,
+который читает пользователь, верен ли он для случая, и причина в одну
+строку. Файлы живут вне git, рядом с ответами —
+<code>~/.cache/brabo/validacao-idioma/2026-09-29/revisao-feita.md</code> (146) и
+<code>amostra-lida.md</code> (выборка ниже). <code>pnpm --filter @brabo/scripts idioma:revisar</code> читает их и печатает все таблицы этого раздела; метки —
+данные, арифметика — код (<code>scripts/idioma/revisao.ts</code>, протестирован).</p>
+<p>Меток четыре, потому что чтение обнаружило факт, которого классификатор не
+видит:</p>
+<ul>
+<li><code>sim</code> / <code>nao</code>: ответ на ожидаемом / не на ожидаемом языке;</li>
+<li><code>formulario</code>: <strong>проза</strong> на ожидаемом языке, но вопросы структурированной
+формы (<code>ask_structured_questions</code>, суть первого ответа) вышли
+по-португальски для автора, чей язык — <code>en</code>;</li>
+<li><code>c11</code>: перевод на английский внутри португальской рамки — решение
+владельца, см. ниже.</li>
+</ul>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>из 146</th>
+<th>верные</th>
+<th>неверные</th>
+<th>проза верна, форма на португальском</th>
+<th>C11 (решение владельца)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>все</td>
+<td>42</td>
+<td>81</td>
+<td>8</td>
+<td>15</td>
+</tr>
+<tr>
+<td>ветвь baseline (89)</td>
+<td>18</td>
+<td>64</td>
+<td>1</td>
+<td>6</td>
+</tr>
+<tr>
+<td>обработанная ветвь (57)</td>
+<td>24</td>
+<td>17</td>
+<td>7</td>
+<td>9</td>
+</tr>
+</tbody>
+</table></div>
+<p>14 ответов, которые классификатор назвал <strong>неопределёнными</strong>, после
+прочтения оказались: 3 ответа на английском (простые переводы C11 от
+Haiku), 2 неверных (DeepSeek C12, португальские и английские фразы
+вперемешку в прозе), 8 — проза на английском с формой на португальском, и
+1 C11. Значит, прежняя фраза агента — «8 неопределённых выглядят как проза
+на английском» — была наполовину верна: проза была английской, а форма
+<strong>не</strong> была в 6 из 8.</p>
+<p><strong>Ошибка классификатора, измеренная.</strong> В 118 окончательных вердиктах
+(<code>pt</code>/<code>es</code>/<code>en</code>) среди 146 прочитанных ответов чтение противоречило <strong>0</strong>.
+Классификатор ни разу не назвал верным неверный ответ и неверным — верный;
+его единственные сбои — 3 «неопределённых», оказавшихся простым
+английским. Для 414 ответов, которые <strong>не</strong> были отмечены (все согласны с
+ожиданием), была прочитана выборка: 60 отобранных через
+<code>random.Random(20260929).sample(range(414), 60)</code> по ответам в порядке
+<code>respostas.jsonl</code>, плюс 14 неотмеченных ответов C06/C12 с ожидаемым <code>en</code>,
+которые не попали в отбор (они решают порог, поэтому прочитаны целиком), —
+74 прочитано, <strong>0 расхождений</strong> (верхняя граница Уилсона при 95%: 4,9%).
+Вместе с 39 согласующимися ответами, которые уже отметил хеш 1 из 10 и
+которые тоже были прочитаны, случайная часть даёт 0 из 99 (верхняя граница
+3,7%): из 414 неверными могли бы быть не более ~15, а выборка указывает на
+ноль. Две оплошности, замеченные в выборке, — вставки одного слова
+(<code>&quot;What falta for us…&quot;</code>, <code>&quot;reminders automáticos&quot;</code>), не меняющие языка
+ответа.</p>
+<p>Чего классификатор <strong>не</strong> может увидеть — это форму: <code>clf=en</code> на ответе на
+английском не говорил, что его вопросы были на португальском (он отмечал
+такие ответы как неопределённые, только когда смесь была сильной). Поэтому
+выборка прочитала ответы C06/C12 целиком, и поэтому существуют два
+прочтения ниже.</p>
+<h3 id="the-threshold-recomputed-with-the-reviewed-labels">Порог, пересчитанный по проверенным меткам</h3>
+<p>Обработанная ветвь, C01–C04 и C06–C15 (n = 95), испанский считается по
+<strong>реальному</strong> языку каждого обработанного ответа там, где ожидается pt-BR
+(включая C05). Интервал Уилсона при 95%. Два независимых прочтения: <strong>C11</strong>
+(за владельцем, открыто) и <strong>форма</strong> (проза верна, форма на португальском
+— агент разрешил её как факт о том, что читает пользователь, и показывает
+другую сторону, чтобы ей можно было возразить).</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>модель</th>
+<th>C11 засчитывается</th>
+<th>форма засчитывается</th>
+<th>попаданий</th>
+<th>доля</th>
+<th>95% интервал</th>
+<th>испанский (ожидается pt)</th>
+<th>вердикт</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DeepSeek</td>
+<td>да</td>
+<td>да</td>
+<td>93/95</td>
+<td>97,9%</td>
+<td>92,6–99,4%</td>
+<td>0</td>
+<td>проходит</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td><strong>да</strong></td>
+<td><strong>нет</strong></td>
+<td>87/95</td>
+<td>91,6%</td>
+<td>84,3–95,7%</td>
+<td>0</td>
+<td>не проходит</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>нет</td>
+<td>да</td>
+<td>88/95</td>
+<td>92,6%</td>
+<td>85,6–96,4%</td>
+<td>0</td>
+<td>не проходит</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>нет</td>
+<td>нет</td>
+<td>82/95</td>
+<td>86,3%</td>
+<td>78,0–91,8%</td>
+<td>0</td>
+<td>не проходит</td>
+</tr>
+<tr>
+<td>Haiku</td>
+<td>да</td>
+<td>(любое)</td>
+<td>85/95</td>
+<td>89,5%</td>
+<td>81,7–94,2%</td>
+<td>3 (C05)</td>
+<td>не проходит</td>
+</tr>
+<tr>
+<td>Haiku</td>
+<td>нет</td>
+<td>(любое)</td>
+<td>81/95</td>
+<td>85,3%</td>
+<td>76,8–91,0%</td>
+<td>3 (C05)</td>
+<td>не проходит</td>
+</tr>
+</tbody>
+</table></div>
+<p>Порог прохождения — 91 попадание из 95 (94,7% не проходит). Читая таблицу:</p>
+<ul>
+<li><strong>Haiku не проходит ни при каком прочтении</strong>: 3 испанских ответа в C05
+(одного условия нуля испанского уже достаточно) и, при принятии всего,
+85/95.</li>
+<li><strong>DeepSeek проходит ровно в одной ячейке</strong>: C11 принят <strong>и</strong> проза на
+английском с формой на португальском принята. Отвергните любое из двух —
+и он не проходит: на 4 ответа, если отвергнута форма (87 из нужных 91), на
+3, если C11 (88). Отвергните оба — и получится число классификатора, 82.</li>
+<li>Поэтому решение по C11 важно только при принятой форме. Если форма
+засчитана как сбой, DeepSeek не проходит при любом C11, и находка, на
+которую нужно реагировать, — не C11, а форма: в обработанной ветви 8 из
+15 ответов C06+C12 у DeepSeek несут португальский текст внутри
+английского ответа (6 только в форме, 2 вперемешку), а 7 — чистый
+английский, включая формы. Модель способна написать форму
+по-английски — делает это примерно в половине случаев.
+<strong>Откуда это взялось (AT-282, <a href="../business-rules/engine.html#rn-667">RN-667</a>):</strong>
+само описание инструмента говорило модели, что <code>label</code> — это «текст
+вопроса, <strong>em pt-BR</strong>», — вторая языковая инструкция, фиксированная, вне
+фасада, конкурирующая с ориентацией в конце в каждом вызове. Теперь оно
+гласит «no idioma da sua resposta» и не называет язык; сама ориентация не
+изменилась. Измерение «после» <strong>не запускалось</strong> (не было ключа
+OpenRouter на машине, где делалось изменение) и ожидает владельца — C06 и
+C12, обработанная ветвь, 5 прогонов, с потолком бюджета из RN.</li>
+</ul>
+<p>Что такое C11 в данных. 5 обработанных отказов DeepSeek: у 3 перевод на
+английский процитирован в португальской рамке (&quot;Registrei a regra… A
+tradução que você pediu: &gt; …&quot;), а у 2 <strong>нет перевода в записанном тексте</strong>
+— запуск хранит только последнее сообщение хода, а эти ходы сначала
+вызвали <code>emit_artifact</code>, так что перевод был в предыдущем сообщении того же
+хода (10 вызовов на 5 диалогов, по два на диалог), то есть перевод,
+предположительно, был в предыдущем сообщении того же хода и не сохранился.
+Оба считаются только рамкой, то есть попаданиями в «C11 засчитывается». 4
+обработанных отказа Haiku — перевод на английский с примечанием на
+португальском или португальскими альтернативами вокруг.</p>
+<blockquote>
+<p><strong>TODO(humano):</strong> Засчитывается ли в C11 как верный перевод на английский
+внутри португальской рамки? Это решает ось C11 таблицы выше:
+<strong>принят</strong> → DeepSeek 93/95 и проходит (если проза на английском с формой на
+португальском тоже принята; 87/95, если нет); <strong>отвергнут</strong> → DeepSeek 88/95
+(или 82/95) и не проходит. Haiku не проходит в любом случае. Рекомендация,
+одной фразой: принять — исключение ориентации покрывает только запрошенный
+перевод, а рамка остаётся на языке автора, поэтому отказ наказал бы именно
+то поведение, ради которого ориентация существует. (Второй вопрос, форма на
+португальском, относится к рамкам продукта и сформулирован как находка
+выше; владельцу он не передавался, потому что агент разрешил его как факт —
+то, что читает пользователь.)</p>
+</blockquote>
+<h3 id="part-b--is-it-the-position-of-the-orientation-at-279">Часть B — дело в позиции ориентации? (AT-279)</h3>
+<p>Гипотеза: для моделей Anthropic OpenRouter поднимает сообщение <code>system</code> из
+конца в верхний system prompt, теряя его новизну. Проверка: C12
+(предпочтение автора <code>en</code>, сообщения на pt-BR), <code>anthropic/claude-haiku-4.5</code>,
+первый ход, 5 прогонов на позицию, текст ориентации <strong>прочитан из
+продукта</strong> (он был <code>Respond in English (en), unless the user explicitly asks for another language in this message. Write project artifacts in pt-BR.</code>), меняется только
+позиция:</p>
+<ol>
+<li><code>ultima-system</code> — как сегодня (<code>idioma_da_resposta.ex:231</code>, <code>role: &quot;system&quot;</code>
+в конце);</li>
+<li><code>system-fundido</code> — дописана к первому <code>system</code> (персона + ориентация);</li>
+<li><code>sufixo-user</code> — суффикс последнего сообщения <code>user</code>, <strong>без</strong> добавленного
+<code>system</code>;</li>
+<li><code>ultima-system-e-sufixo-user</code> — <code>system</code> в конце <strong>плюс</strong> та же фраза как
+суффикс.</li>
+</ol>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>позиция</th>
+<th>попаданий классификатора</th>
+<th>прочтение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 <code>ultima-system</code> (как сегодня)</td>
+<td>0/5</td>
+<td>5 на португальском, включая формы</td>
+</tr>
+<tr>
+<td>2 <code>system-fundido</code></td>
+<td>0/5</td>
+<td>5 на португальском</td>
+</tr>
+<tr>
+<td>3 <code>sufixo-user</code></td>
+<td>0/5</td>
+<td>5 на португальском</td>
+</tr>
+<tr>
+<td>4 <code>ultima-system-e-sufixo-user</code></td>
+<td>0/5</td>
+<td>5 на португальском</td>
+</tr>
+<tr>
+<td>контроль: 1, без оговорки об артефакте</td>
+<td>0/5</td>
+<td>5 на португальском</td>
+</tr>
+<tr>
+<td>контроль: 3, без оговорки об артефакте</td>
+<td>0/5</td>
+<td>5 на португальском</td>
+</tr>
+</tbody>
+</table></div>
+<p>Четыре позиции прочитаны целиком, два контроля — частично, и все 30
+ответов также проверены на служебные слова английского (ни одного ни в
+одном): все 30 — на португальском, проза и форма. Дефект позиции 1
+<strong>воспроизведён</strong> (0/5, как 0/10 платного запуска), и <strong>ни одна позиция его
+не исправляет</strong> — даже та, где ориентация находится внутри самого
+последнего сообщения пользователя и <code>system</code> в конце нет. Гипотеза <strong>не
+подтверждается</strong>. Подсчёты токенов промпта показывают, что текст дошёл до
+модели в каждой позиции (2 426, 2 427, 2 427 и 2 454 входных токена: +1 для
+двух простых размещений и +28 для двойного), так что сообщение не
+отбрасывается. Контроль исключает и вторую подозрительную фразу: оговорка
+об артефакте (&quot;Write project artifacts in pt-BR.&quot;, RN-623) тоже не причина
+(0/10 без неё).</p>
+<p>Чего это не исключает и что не измерялось: второй ход (запускался только
+первый, из-за бюджета — в платном запуске второй ход тоже был неверен 5/5);
+более сильная формулировка (фраза гласит &quot;unless the user explicitly asks&quot;,
+и португальский ввод можно так прочитать); язык самой персоны
+(<code>CRIATIVO_INSTRUCTIONS</code> — на португальском); и upstream (все 30 вызовов
+обслужил Amazon Bedrock, поэтому эффект upstream отделить нельзя). DeepSeek
+следует той же ориентации в том же случае — его обработанные ответы C12
+были прозой на английском в 8 из 10, — что указывает на модель, а не на
+размещение.</p>
+<p><strong>Предлагаемое изменение: никакого по позиции.</strong> Единственное место, где
+позиция была бы изменена, если бы это помогло, —
+<code>Engine.Harness.IdiomaDaResposta.anexar/4</code>
+(<code>apps/engine/lib/engine/harness/idioma_da_resposta.ex:231</code>, <code>messages ++ [%{&quot;role&quot; =&gt; &quot;system&quot;, …}]</code>), вызываемое обоими путями <code>llm_turn</code> в
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex:609</code> и <code>:661</code>. Оно
+остаётся как есть. Следующая работа, если владелец хочет, чтобы Haiku
+подчинялся <code>en</code> при португальском вводе, — проверить формулировку и язык
+персоны (список выше) этим же скриптом.</p>
+<p><strong>Расходы</strong> (сумма <code>usage.cost</code> каждого ответа, никогда не счётчик <code>/key</code>):
+US$ 0,0980 на четыре позиции (20 вызовов) и US$ 0,0505 на два контроля (10
+вызовов) — <strong>US$ 0,1485</strong> из потолка US$ 0,20, 30 вызовов, ни один не упал.</p>
+<p>Чтобы воспроизвести Часть B (файл ключа хранит <code>OPENROUTER_TEST_KEY=…</code>; он
+никогда не печатается; вывод идёт за пределы checkout):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> idioma:diagnosticar</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --turnos</span><span style="color:var(--shiki-token-constant)"> 1</span><span style="color:var(--shiki-token-string)"> --rodadas</span><span style="color:var(--shiki-token-constant)"> 5</span><span style="color:var(--shiki-token-string)"> --teto-usd</span><span style="color:var(--shiki-token-constant)"> 0.13</span><span style="color:var(--shiki-token-string)"> --concorrencia</span><span style="color:var(--shiki-token-constant)"> 4</span><span style="color:var(--shiki-token-comment)">          # the four positions</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> idioma:diagnosticar</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --arquivo-de-chave</span><span style="color:var(--shiki-token-string)"> ~/.config/brabo/openrouter-test.env</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --turnos</span><span style="color:var(--shiki-token-constant)"> 1</span><span style="color:var(--shiki-token-string)"> --rodadas</span><span style="color:var(--shiki-token-constant)"> 5</span><span style="color:var(--shiki-token-string)"> --posicoes</span><span style="color:var(--shiki-token-string)"> ultima-system,sufixo-user</span><span style="color:var(--shiki-token-string)"> --sem-clausula</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --saida</span><span style="color:var(--shiki-token-string)"> ~/.cache/brabo/validacao-idioma/</span><span style="color:var(--shiki-token-keyword)">&#x3C;</span><span style="color:var(--shiki-token-string)">dat</span><span style="color:var(--shiki-foreground)">e</span><span style="color:var(--shiki-token-keyword)">></span><span style="color:var(--shiki-token-string)">-diagnostico-haiku-sem-clausula</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --teto-usd</span><span style="color:var(--shiki-token-constant)"> 0.06</span><span style="color:var(--shiki-token-string)"> --concorrencia</span><span style="color:var(--shiki-token-constant)"> 4</span><span style="color:var(--shiki-token-comment)">                                  # the controls</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> @brabo/scripts</span><span style="color:var(--shiki-token-string)"> idioma:revisar</span><span style="color:var(--shiki-token-comment)">                          # Part A tables</span></span>
+<span class="line"></span></code></pre>
+<p><code>--turnos N</code> и <code>--sem-clausula</code> существуют только для этой диагностики;
+продукт никогда не помещает ориентацию никуда, кроме конца, и <code>posicionar</code>
+в <code>validacao.ts</code> им не используется.</p>
+<nav class="site-pager"><a href="../explanation/aceite-providers.html"></a><a href="../explanation/medicao-do-jev.html"></a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/medicao-do-idioma.md">Редактировать страницу</a><span>Обновлено 2026-11-04T23:32:20-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#what-exists">Что существует</a></li><li class="n2"><a href="#the-two-corpora-and-where-each-one-lives">Два корпуса и где живёт каждый</a></li><li class="n2"><a href="#running-it">Как запускать</a></li><li class="n2"><a href="#numbers-on-the-synthetic-corpus-2026-09-28">Числа на синтетическом корпусе (2026-09-28)</a></li><li class="n2"><a href="#what-the-numbers-say">Что говорят числа</a></li><li class="n2"><a href="#the-products-provisional-thresholds">Предварительные пороги продукта</a></li><li class="n2"><a href="#paid-validation-of-the-language-orientation-at-167-2026-09-29">Платная проверка языковой ориентации (AT-167, 2026-09-29)</a></li><li class="n3"><a href="#where-it-runs-and-what-is-and-is-not-the-product">Где запускается и что является (и что не является) продуктом</a></li><li class="n3"><a href="#step-zero-not-reproduced">Нулевой шаг: не воспроизведено</a></li><li class="n3"><a href="#results-by-case--arm--model">Результаты по случаю × ветви × модели</a></li><li class="n3"><a href="#against-the-threshold">Против порога</a></li><li class="n3"><a href="#incremental-cost-of-the-orientation">Дополнительная стоимость ориентации</a></li><li class="n3"><a href="#spend">Расходы</a></li><li class="n3"><a href="#reproducing">Как воспроизвести</a></li><li class="n2"><a href="#human-review-and-the-haiku-diagnosis-at-167-follow-up">Ревью человеком и диагноз Haiku (продолжение AT-167)</a></li><li class="n3"><a href="#part-a--the-review-of-the-146">Часть A — ревью 146</a></li><li class="n3"><a href="#the-threshold-recomputed-with-the-reviewed-labels">Порог, пересчитанный по проверенным меткам</a></li><li class="n3"><a href="#part-b--is-it-the-position-of-the-orientation-at-279">Часть B — дело в позиции ориентации? (AT-279)</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-ru.json" data-base="../"></script></body>
+</html>

@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="zh-Hans" data-locale="zh-Hans" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADR 0036 — 忠实于设计的认证界面，以及三种无法加载的字体 | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="菜单">&#9776;</button>
+<a class="marca" href="../index.html">Brabo</a>
+<input type="search" data-busca placeholder="搜索" aria-label="搜索" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="语言"><option value="../../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">pt-BR</option><option value="../../en/adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">en</option><option value="../../ru/adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ru</option><option value="../../zh-Hans/adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html" selected>zh-Hans</option></select>
+<select data-seletor aria-label="环境"><option value="../../../dev/zh-Hans/adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">dev</option><option value="../../../prd/zh-Hans/adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="切换主题">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><h2>🚀 从这里开始</h2><ul><li><a href="../index.html">简介</a></li><li><a href="../getting-started.html">快速开始</a></li><li><a href="../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li></ul></section><section><h2>🏗️ 架构</h2><ul><li><a href="../architecture.html">架构</a></li><li><a href="../adr.html">决策（ADR）</a><ul><li><span>Git, repositório e política de branches</span><ul><li><a href="../adr/0001-git-provider-contract-shape.html">ADR 0001 — GitProvider 规范化契约的形态</a></li><li><a href="../adr/0002-git-error-normalization.html">ADR 0002 — GitProvider 错误的规范化</a></li><li><a href="../adr/0003-git-provider-retry-policy.html">ADR 0003 — 远程 provider 的重试策略</a></li><li><a href="../adr/0004-git-credential-registration.html">ADR 0004 — 用户 git 凭据的登记</a></li><li><a href="../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005 — 幂等且可恢复的 Gitflow bootstrap</a></li><li><a href="../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028 — 分支保护：provider 之间的分歧与审批矩阵</a></li><li><a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030 — 机制化的分支策略</a></li><li><a href="../adr/0044-adocao-de-repositorio-existente.html">ADR 0044 — 采纳现有仓库，以及作为关口的计划</a></li><li><a href="../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056 — engine 在远程仓库上工作</a></li><li><a href="../adr/0139-o-alarme-de-esteira-ganha-destinatario.html">ADR 0139 — 流水线合并的告警获得接收方，以及 `dev` 的规则</a></li><li><a href="../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165 — 仓库在接受给 Arquiteto 的 handoff 时诞生，没有它执行就不会开始</a></li><li><a href="../adr/0217-promocao-automatica-para-qa-em-fase-de-teste.html">ADR 0217 — QA 处于测试阶段时，`dev` → `qa` 自动晋升</a></li><li><a href="../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.html">ADR 0235 — A `qa` é aposentada por hora e a esteira do repositório fica `dev → main`</a></li><li><a href="../adr/0236-o-dependabot-dispensa-revisao-na-dev.html">ADR 0236 — O Dependabot dispensa revisão na `dev` e fica mergeável com os outros checks verdes</a></li></ul></li><li><span>Harness de agente, turnos e sessões</span><ul><li><a href="../adr/0006-prompt-assembler-context-harness.html">ADR 0006 — agent 的 harness：确定性的上下文组装</a></li><li><a href="../adr/0007-toolloop-tools-context-manager.html">ADR 0007 — ToolLoop、工具、ContextManager（带 LLM 的 harness）</a></li><li><a href="../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061 — 会话的类型是创建时的数据，而执行仍然是事件</a></li><li><a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098 — 一致的传输限制与有效的压缩窗口</a></li><li><a href="../adr/0163-o-clique-responde-ao-aceitar.html">ADR 0163 — 点击在**接受**命令时响应，轮次经由通道继续</a></li><li><a href="../adr/0175-infra-lead-conversa-pelo-composer.html">ADR 0175 — Infra Lead 通过 composer 对话，在此之前它的回合先经过 `TurnoAssincrono`</a></li><li><a href="../adr/0177-idioma-das-respostas-por-conta-sessao-e-projeto.html">ADR 0177 — 回答的语言存放在三个地方——账户、会话和项目——采用开放的 BCP-47 列表，绝不放在 `users.locale` 中</a></li><li><a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179 — 循环向 Jev 询问用哪个工具，用户的模型只看到剩下的菜单</a></li><li><a href="../adr/0183-reabrir-sessao-encerrada.html">ADR 0183 — 已结束的会话可以重新打开：终止状态的专属出口，通向 `active`，带新事件</a></li><li><a href="../adr/0184-reabrir-sessao-decisoes-do-dono.html">ADR 0184 — 重新打开会话：所有者的三个决定，`developer` 即可重新打开</a></li><li><a href="../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191 — 在轮次进行中到达的消息进入持久化队列，并在轮次结束时被读取</a></li><li><a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226 — Diário vivo e retomada dos agentes: o turno interrompido volta uma vez, do plano</a></li><li><a href="../adr/0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.html">ADR 0246 — Anexos do chat: bytes no Postgres, referência no evento, visão por capability</a></li><li><a href="../adr/0247-uma-mensagem-varios-destinatarios.html">ADR 0247 — Uma mensagem, vários destinatários</a></li><li><a href="../adr/0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.html">ADR 0249 — O raciocínio do agente é gravado e mostrado só a developer ou mais</a></li></ul></li><li><span>O time de agentes — papéis, áreas e handoffs</span><ul><li><a href="../adr/0008-agente-criativo-conversacional-handoffs.html">ADR 0008 — harness 中的对话式 Criativo agent + handoff 的基础</a></li><li><a href="../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009 — PO agent、backlog（epics/stories/tasks）与可追溯性</a></li><li><a href="../adr/0010-agente-arquiteto-adr-pr-module-map.html">ADR 0010 — Arquiteto agent：通过真实 PR 的 ADR、module_map 和交叉验证</a></li><li><a href="../adr/0014-infra-agent-painel-phoenix.html">ADR 0014 — InfraAgent 与实时团队面板（Fase 4a 收尾）</a></li><li><a href="../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015 — 真正的 Psicólogo：ToolLoop、带证据的假设与成本分诊</a></li><li><a href="../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016 — Anamnese：熟练度画像、指令补丁与闭环</a></li><li><a href="../adr/0022-fechamento-4b-psicologo.html">ADR 0022 — 阶段 4b 的收尾（第 1 次会话）：能送达的证据、能显示的成本、能在 kill 之后存活的分析</a></li><li><a href="../adr/0023-fechamento-4b-anamnese.html">ADR 0023 — 阶段 4b 的收尾（第 2 次会话）：能工作的目录、能区分谁拒绝的去重，以及能在一轮之后存活的队列</a></li><li><a href="../adr/0038-hierarquia-de-agentes.html">ADR 0038 — agent 的层级：领域、lead 与委派</a></li><li><a href="../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046 — 由用户拥有权限的故事晋升</a></li><li><a href="../adr/0053-dev-lead-e-paralelismo-autorizado.html">ADR 0053 — Dev Lead 作为区域，以及由用户授权的并行</a></li><li><a href="../adr/0068-diagrama-c4-do-arquiteto.html">ADR 0068 — Arquiteto 的 C4 图</a></li><li><a href="../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069 — 有条件地合并 handoff 的接受与执行的启用</a></li><li><a href="../adr/0085-fluxo-como-registro-declarativo.html">ADR 0085 — 角色流作为声明式登记（fluxo.yml）</a></li><li><a href="../adr/0086-dev-lead-plano-suspende-para-aprovacao.html">ADR 0086 — Dev Lead 的计划挂起轮次以等待审批</a></li><li><a href="../adr/0087-ux-designer-agente.html">ADR 0087 — UX Designer 作为对话式 agent 加入</a></li><li><a href="../adr/0088-staff-agente-dormente-para-disparo-automatico.html">ADR 0088 — Staff：代码就绪，自动触发处于休眠</a></li><li><a href="../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">ADR 0089 — `analytics` 和 `delivery-metricas` 成为报表脚本</a></li><li><a href="../adr/0092-platform-relatorio-de-telemetria-sob-demanda.html">ADR 0092 — `platform` 以按需报告脚本的形式诞生，而不是 agent</a></li><li><a href="../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">ADR 0093 — `dbre` 角色变成两个脚本：迁移 linter 和备份报告</a></li><li><a href="../adr/0094-delegacao-dev-lead-vira-dado.html">ADR 0094 — Dev Lead → dev 的委派成为数据，`parecerArtifactId` 被重新定义</a></li><li><a href="../adr/0109-handoff-manual-a-agente-a-escolha.html">ADR 0109 — 向任选 agent 的手动 handoff 复用&quot;提供 + 接受&quot;，绝不引入第三种 handoff 状态</a></li><li><a href="../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182 — handoff 提议获得生命周期：每个目标一个待处理，以及 `superseded`</a></li><li><a href="../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185 — &quot;Estou pronto — a necessidade está validada&quot;：一次点击同时关闭就绪确认、gate `necessidade-validada` 和 PO 的接受</a></li><li><a href="../adr/0186-aceite-automatico-do-handoff-ao-arquiteto.html">ADR 0186 — 当 backlog 已覆盖且仓库为本地时，PO 给 Arquiteto 的 handoff 无需点击即被接受</a></li><li><a href="../adr/0194-aprovar-o-plano-ativa-a-execucao.html">ADR 0194 — 批准 Dev Lead 的计划会激活执行，任务获得它所分配的模块</a></li><li><a href="../adr/0212-historia-arquivada.html">ADR 0212 — 已归档的故事：一列，而不是状态机中的一个状态</a></li><li><a href="../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213 — 交付物通过 Infra 的 compose 在用户的机器上运行</a></li></ul></li><li><span>Gates, QA e revisão de segurança</span><ul><li><a href="../adr/0013-gates-qa-secops-pr.html">ADR 0013 — PR 的 gate：QAAgent 和 SecOpsAgent</a></li><li><a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020 — 解锁 QA 与 SecOps 的 gate：在工作树上运行 gitleaks、经过校验的意见书，以及文本形式的 tool call</a></li><li><a href="../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021 — 阶段 4a 的收尾：真正做校验的 infra gate，以及说真话的面板</a></li><li><a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054 — gate 作为声明式登记</a></li><li><a href="../adr/0057-o-gate-espera-a-aprovacao.html">ADR 0057 — gate agent 等待审批，就像 dev 那样等待</a></li><li><a href="../adr/0067-o-gate-sobrevive-ao-restart.html">ADR 0067 — gate 在重启后存活</a></li><li><a href="../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090 — QA 策略和 AppSec 作为第二个**时刻**，而不是新 agent</a></li><li><a href="../adr/0091-secops-runtime-relatorio-de-abuso.html">ADR 0091 — `secops-runtime` 作为基于 `rate_limit_hits` 的报告脚本</a></li><li><a href="../adr/0095-gate-necessidade-validada.html">ADR 0095 — gate `necessidade-validada` 由单独的人工确认关闭，而不是由 Criativo 自我验证</a></li><li><a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123 — 为 QA Automação agent 的语义判断建立回归用例 golden-set</a></li><li><a href="../adr/0168-golden-set-do-qa-em-ci-semanal.html">ADR 0168 — QA 的 golden-set 开始在 CI 中按周定时运行</a></li><li><a href="../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192 — 测试计划在 dev 交付之后诞生，gate `implementavel` 改为基于故事和 `module_map` 进行判断</a></li><li><a href="../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207 — 停滞超过 2 小时的 gate 周期会被搁置，只有人工操作才能恢复</a></li><li><a href="../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214 — 悬而未决的问题成为待解决的待办</a></li><li><a href="../adr/0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.html">ADR 0215 — 项目的决定传达到 dev 和 QA</a></li></ul></li><li><span>Execução, política de terminal e aprovações</span><ul><li><a href="../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011 — dev agent 的基础设施：worktree、git 执行器和合并锁</a></li><li><a href="../adr/0012-dev-agent-real-toolloop-orcamento-bloqueio.html">ADR 0012 — 真正的 DevAgent：ToolLoop、按 task 的预算与阻塞纪律</a></li><li><a href="../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017 — 工作区初始化锁、dev agent 的 Monitor 以及上限继承</a></li><li><a href="../adr/0018-noop-dev-agent-modo-de-execucao.html">ADR 0018 — NoopDevAgent 作为永久的执行模式</a></li><li><a href="../adr/0019-destravar-dev-agent-adr-por-modulo-orcamento-projeto.html">ADR 0019 — 解锁真实的 DevAgent：写入、终端、按模块的 ADR 和按项目的预算</a></li><li><a href="../adr/0045-reagendamento-por-evento-do-dev-agent.html">ADR 0045 — dev agent 的按事件重新调度，以及熔断器</a></li><li><a href="../adr/0047-operabilidade-pos-dogfooding.html">ADR 0047 — dogfooding 之后的可运维性：Fase 12 的收尾</a></li><li><a href="../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048 — event log 中的决定，以及 gate 的顺序</a></li><li><a href="../adr/0052-dev-agent-espera-aprovacao-no-meio-do-laco.html">ADR 0052 — dev agent 在循环中途等待审批</a></li><li><a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055 — 终端策略中的路径范围</a></li><li><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102 — 修订 ADR 0065：外部效果的边界不再是 `deny`，而是绝对上限</a></li><li><a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167 — 自动模式放行路径范围，而且只有它放行</a></li><li><a href="../adr/0189-o-piloto-automatico.html">ADR 0189 — 自动驾驶：自动模式批准一切（上限除外），作用域与真实执行目录比较，&quot;始终允许&quot;记录动词 + 子命令</a></li><li><a href="../adr/0204-modo-automatico-libera-push-e-pr.html">ADR 0204 — 自动模式放行 push 和 PR</a></li></ul></li><li><span>Onde o código mora — modos de execução</span><ul><li><a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066 — 可读的 workspace 文件夹名称</a></li><li><a href="../adr/0072-projeto-local-ou-container.html">ADR 0072 — 项目选择代码存放在哪里：用户目录还是托管目录</a></li><li><a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104 — `execution_mode` 取三个值，由 runner 负责验证时 workspace 以 `unverified` 诞生</a></li><li><a href="../adr/0107-navegacao-de-pasta-local-via-o-runner.html">ADR 0107 — 通过 Runner 浏览本地文件夹</a></li><li><a href="../adr/0108-projeto-runner-nasce-ao-navegar-pasta-no-wizard.html">ADR 0108 — 在 `runner` 模式下，项目在点击“Navegar pasta...”时诞生，而不只是在确认时</a></li><li><a href="../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">ADR 0111 — 转换已有项目的 `execution_mode`：dev agent 活动时拒绝，迁移 `permissions.json`，退役容器行</a></li><li><a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141 — 挂载项目的唯一 base，按同一路径挂载</a></li><li><a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142 — 挂载 workspace 的验证推迟到实体化时进行</a></li><li><a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146 — 在 bootstrap 中经同意设定的 base，以及 `mounted` 作为本地默认值</a></li></ul></li><li><span>Container do projeto e broker</span><ul><li><a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065 — 每个项目一个容器：边界不再是策略</a></li><li><a href="../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">ADR 0081 — 容器生命周期：状态表，没有编排器</a></li><li><a href="../adr/0083-terminal-mostra-estado-real-do-container.html">ADR 0083 — 终端标签页获得生命周期的真实使用者，而不是终端</a></li><li><a href="../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128 — Docker 端口，以及选定实现的打包证明</a></li><li><a href="../adr/0130-broker-de-container.html">ADR 0130 — 容器 broker：谁与服务器的 Docker 对话，以及它为什么不接受规格</a></li><li><a href="../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131 — Arquiteto 把模块路由给 infra：它**提名**，Infra **选定**</a></li><li><a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133 — Infra 在路由的候选项中做出选择，选择结果成为 `artifact.project_image` 的新版本</a></li><li><a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134 — dev agent 在项目的真实容器**内部**执行，终端在其中获得一个自动批准的下限</a></li><li><a href="../adr/0135-portao-de-imagem-nos-tres-modos.html">ADR 0135 — Arquiteto 的镜像关口（RN-105）开始在三种执行模式下生效</a></li><li><a href="../adr/0136-pagina-global-de-containers.html">ADR 0136 — 全局容器页面：broker 按加载设上限，`container_remove` 纳入绝对上限</a></li><li><a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137 — `brabo-runner` 在用户的机器上启动项目容器</a></li><li><a href="../adr/0143-agentes-de-dev-so-depois-do-container.html">ADR 0143 — dev agent 只在容器之后</a></li><li><a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144 — broker 的第二个根，以及选择它的可辨识定位符</a></li><li><a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180 — 项目容器以文件夹所有者身份运行，由 api 测量</a></li><li><a href="../adr/0190-a-infra-sobe-o-container-no-aceite.html">ADR 0190 — Infra 在接受 handoff 时启动容器，由服务器执行这一步并预置自主度，并由它交接给 Dev Lead</a></li><li><a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199 — 容器的最低资源从 `module_map` 派生：每个模块声明自己的，Infra 按总和启动</a></li><li><a href="../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208 — Infra 继承 Arquiteto 声明的网络</a></li><li><a href="../adr/0228-comando-do-app-e-rede-do-container.html">ADR 0228 — O container do projeto sobe o app pelo comando declarado e publica porta só no loopback</a></li><li><a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229 — O QA testa numa instância efêmera, com os serviços que a Infra declarou</a></li></ul></li><li><span>O runner local</span><ul><li><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — 本地 runner：通过带一次性 ticket 的 Phoenix 通道在用户机器上执行</a></li><li><a href="../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105 — 给 runner 的 Personal Access Token（`brb_…`），按构造限定到一条路由</a></li><li><a href="../adr/0106-distribuicao-do-runner-via-tsup-e-npm-publish.html">ADR 0106 — 通过 `tsup` 和 `npm publish` 分发 `@brabo/runner`，版本只在 CI 中注入</a></li><li><a href="../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112 — 通过 `bun build --compile` 构建 `@brabo/runner` 的独立二进制，原生插件 `.node` 通过真实解压到临时目录的方式嵌入</a></li><li><a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118 — 通过浏览器配置 runner：Ed25519 设备密钥作为 `runner-ticket` 的第二种凭据、GitHub Releases 的二进制代理，以及用 File System Access API 一键配置文件夹</a></li><li><a href="../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145 — Docker 成为 `runner` 模式的真正前提</a></li><li><a href="../adr/0147-agente-local-com-capacidades.html">ADR 0147 — 一个本地 agent，在连接时声明能力</a></li><li><a href="../adr/0151-base-consentida-no-runner.html">ADR 0151 — runner 中经同意的基础目录，以及通过通道创建文件夹</a></li><li><a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154 — 机器级的设备密钥</a></li><li><a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174 — runner 的独立二进制不再承诺 Mac Intel</a></li><li><a href="../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187 — runner 的独立二进制不再承诺 Windows</a></li><li><a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193 — 带凭据的 git 在 runner 的**宿主机**上运行；代码在容器中运行</a></li><li><a href="../adr/0201-revogacao-por-chave.html">ADR 0201 — 吊销针对的是**密钥**，而不是 `{projeto, usuário}` 这一对</a></li><li><a href="../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.html">ADR 0203 — 通过浏览器配置 runner 的流程退役，路径改为安装程序</a></li><li><a href="../adr/0230-importar-chave-de-llm-pelo-runner.html">ADR 0230 — O runner importa a chave de API de LLM que o usuário já tem na máquina</a></li></ul></li><li><span>Autenticação, acesso e segredos</span><ul><li><a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031 — 自有认证：argon2id、EdDSA 与 refresh 轮换</a></li><li><a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032 — 切除 Keycloak：自有签发方、service token 与 cookie 中的会话</a></li><li><a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037 — engine 所缺的 CORS，以及端口作为契约的一部分</a></li><li><a href="../adr/0050-credencial-sempre-cifrada-verificacao-explicita.html">ADR 0050 — 凭据总是被加密；验证成为显式动作</a></li><li><a href="../adr/0058-csp-fechado-na-api-e-escopo-de-projeto-contido.html">ADR 0058 — api 中封闭的 CSP，以及约束在根内的项目范围</a></li><li><a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059 — 签署 git OAuth `state` 的密钥没有默认值</a></li><li><a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084 — 社交登录（GitHub/GitLab），修订 ADR 0031/0032 的 backlog</a></li><li><a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096 — `MailSender` 中的真实 SMTP，置于显式开关之后</a></li><li><a href="../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127 — `project_members` 中的两道降级上限，覆盖关系保留</a></li><li><a href="../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156 — 自我降级上限同样适用于移除项目成员</a></li><li><a href="../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157 — workspace upsert 中的自我变动上限，以及原本是漏洞的自我晋升</a></li><li><a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158 — 主密钥的 id 写入信封，作为可观测性，绝不作为权威</a></li><li><a href="../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173 — workspace 成员的移除诞生，由同一条款保护</a></li><li><a href="../adr/0245-acesso-rapido-por-papel-so-no-ambiente-local.html">ADR 0245 — Acesso rápido por papel só no ambiente local</a></li></ul></li><li><span>Providers de LLM, modelos e gasto</span><ul><li><a href="../adr/0040-moeda-do-dashboard.html">ADR 0040 — 仪表盘的货币：暂用 USD，按 workspace 的手动汇率推迟</a></li><li><a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041 — 一个 OpenAI 兼容基类、一份 LLM provider 合约，以及会拒绝 binding 的 capabilities</a></li><li><a href="../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042 — 活目录、模型生命周期与可审计的价格</a></li><li><a href="../adr/0043-seis-providers-de-llm-e-o-fechamento-da-fase-9b.html">ADR 0043 — 在基础之上的六个 LLM provider，Fase 9b 终于关闭</a></li><li><a href="../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049 — 按 workspace 的模型策展</a></li><li><a href="../adr/0051-facetas-de-capability-e-curadoria-por-uso.html">ADR 0051 — 已证明的能力维度；“用来做什么”是策展</a></li><li><a href="../adr/0063-duas-audiencias-para-o-mesmo-gasto.html">ADR 0063 — 同一笔花费的两种受众：owner 的账单与成员的消耗</a></li><li><a href="../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064 — 模型级联中的领域范围，以及全局的 agent 绑定</a></li><li><a href="../adr/0075-embeddings-no-contrato-de-llm-provider.html">ADR 0075 — LLMProvider 合约中的 embedding</a></li><li><a href="../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076 — `provider` 重新成为花费维度，约束改由类型承担</a></li><li><a href="../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">ADR 0077 — 按能力的模型排名，不编造评分</a></li><li><a href="../adr/0110-budget-por-area-aditivo-nao-cascata.html">ADR 0110 — 按区域的预算是叠加的，与项目/会话并列——不是级联，也不是新表</a></li><li><a href="../adr/0114-deteccao-de-ollama-nativo-no-bootstrap-dev.html">ADR 0114 — 在开发引导中检测原生 Ollama：只问一次，持久化到 `.env`，把 compose 的服务放到 profile 之后</a></li><li><a href="../adr/0115-pedido-de-pull-de-modelo-huggingface-tabela-propria.html">ADR 0115 — 从 Hugging Face 拉取模型：独立的表、两步确认以及官方发布者 allowlist——绝不使用 `proposed_actions`</a></li><li><a href="../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166 — 路由偏好住在模型 binding 中，随它一起传递，并在计量中冻结</a></li><li><a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188 — provider 返回的真实成本成为计量的数字</a></li><li><a href="../adr/0198-duplicata-semantica-por-embedding-com-limiar-que-so-avisa.html">ADR 0198 — 故事与规则的语义重复通过带阈值的 embedding 提醒，花费进入计量</a></li><li><a href="../adr/0221-upstream-preso-por-sessao.html">ADR 0221 — O hub prende a conversa de cada agente ao upstream que a atendeu, por `session_id`</a></li><li><a href="../adr/0222-provider-9router-de-llm.html">ADR 0222 — O 9Router entra como o 10º provider de LLM, com URL por instalação</a></li><li><a href="../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223 — O orçamento de raciocínio é capability POR MODELO, curada à mão</a></li><li><a href="../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224 — O raciocínio é contado no stream e abortado no limite, e o custo é estimado e reconciliado</a></li><li><a href="../adr/0225-teto-de-preco-do-upstream-no-openrouter.html">ADR 0225 — O OpenRouter recebe um teto de preço por chamada (`provider.max_price` = catálogo × 1,5)</a></li><li><a href="../adr/0227-provider-opencode-zen-de-llm.html">ADR 0227 — O OpenCode Zen entra como o 11º provider de LLM, só no dialeto OpenAI</a></li><li><a href="../adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233 — O membro vê o gasto do projeto por agente e por área, nunca por provider</a></li><li><a href="../adr/0251-preco-de-lista-datado-para-provider-sem-preco.html">ADR 0251 — Preço de lista datado no código para provider que não informa preço</a></li></ul></li><li><span>RAG, grafo de conhecimento e artefatos</span><ul><li><a href="../adr/0079-tabela-de-chunks-vetor-e-tsvector-juntos.html">ADR 0079 — chunk 表：向量与 `tsvector` 在同一行</a></li><li><a href="../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">ADR 0080 — 混合搜索：权重、阈值，以及什么算引用</a></li><li><a href="../adr/0082-chat-rag-aba-de-busca-hibrida.html">ADR 0082 — Chat RAG：混合搜索的独立标签页，不重命名“Chat”</a></li><li><a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099 — Neo4j 作为知识图谱和 prompt 模板，驱动放在 api 中</a></li><li><a href="../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100 — 面向 agent 的 `rag_search`，以及启动时确保存在的 Ollama 模型</a></li><li><a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101 — 关系记忆作为事件日志的投影；在不触碰 GenServer 的情况下使用模板</a></li><li><a href="../adr/0113-pasta-local-anexada-via-navegador-vira-chunks-scope-local.html">ADR 0113 — 附加的本地目录成为 `chunks.scope = 'local'`，由**浏览器**读取，绝不是主机路径</a></li><li><a href="../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">ADR 0129 — RAG 搜索的遥测是**表**，权重冻结在行中</a></li><li><a href="../adr/0132-golden-set-de-acerto-do-rag.html">ADR 0132 — RAG 命中率的 golden-set，以及 gate `rag-acertivo`</a></li><li><a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138 — RAG 的 golden-set 开始在 CI 中定时运行——并且仍然是 `warn`</a></li><li><a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148 — agent 的工件以文件形式投影到一个 `docs/` 目录</a></li><li><a href="../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196 — 重新启用的 Anamnese：没有主体就不运行，被接受的假设成为画像事实</a></li><li><a href="../adr/0200-contrato-entre-modulos-artefato-do-arquiteto.html">ADR 0200 — 模块间合约成为 Arquiteto 的版本化工件，dev agent 读取它而不是别人的 worktree</a></li><li><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205 — Anamnese 观察到的 agent 偏差成为产品信号，不含个人数据</a></li></ul></li><li><span>Interface web e design system</span><ul><li><a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html" aria-current="page">ADR 0036 — 忠实于设计的认证界面，以及三种无法加载的字体</a></li><li><a href="../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060 — 代码的读取面，受约束且有预算</a></li><li><a href="../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">ADR 0074 — 可切换的主题，以及 CSP 下的启动</a></li><li><a href="../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">ADR 0078 — 界面框架，以及标签页注册表刻意偏离 handoff</a></li><li><a href="../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097 — 为仪表盘的“N 个 agent 在线”直接读取 engine 的 schema</a></li><li><a href="../adr/0116-tipos-do-web-gerados-do-openapi.html">ADR 0116 — `ActionType`（以及将来的类型）由 OpenAPI 契约生成，而不是手工复制</a></li><li><a href="../adr/0122-sessionpage-dividido-em-cinco-prs.html">ADR 0122 — `SessionPage.tsx` 拆分为五个机械式 PR，并事先声明</a></li><li><a href="../adr/0124-hook-do-canal-de-turno-do-sessionpage.html">ADR 0124 — 轮次通道的状态分组抽取到 `useTurnoDoAgente`</a></li><li><a href="../adr/0125-projectsettingstab-dividido-por-secao.html">ADR 0125 — 把 `ProjectSettingsTab.tsx` 拆分为每个分区一个文件，置于一个 barrel 之后</a></li><li><a href="../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126 — 项目页面通过垂直轨道导航，代码标签页不再自行折叠侧边栏</a></li><li><a href="../adr/0176-sessionpage-abaixo-de-mil-linhas.html">ADR 0176 — `SessionPage.tsx` 降到 1 000 行以下，分十个机械式 PR，之后才加锁</a></li><li><a href="../adr/0181-tema-preto-neutro.html">ADR 0181 — 深色主题变为中性黑，对比度债务结束</a></li><li><a href="../adr/0210-animacao-de-texto-com-motion.html">ADR 0210 — 用 `motion` 做文本动画</a></li><li><a href="../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211 — 只有一种导航：侧边栏吸收项目轨道</a></li><li><a href="../adr/0232-shadcn-com-base-ui-no-apps-web.html">ADR 0232 — shadcn/ui com Base UI e Tailwind 4 no `apps/web`</a></li><li><a href="../adr/0234-shiki-e-recharts-por-carga-dinamica.html">ADR 0234 — `shiki` no Code Block e `recharts` no Chart, sempre por carga dinâmica</a></li><li><a href="../adr/0237-o-visual-v3-liga-o-preflight-e-sobe-os-raios.html">ADR 0237 — O visual v3 liga o preflight e sobe os raios</a></li><li><a href="../adr/0238-o-grafo-de-modulos-vira-canvas-xyflow.html">ADR 0238 — O grafo de módulos da Arquitetura vira Canvas (`@xyflow/react`)</a></li><li><a href="../adr/0239-csp-frame-src-local-para-o-web-preview.html">ADR 0239 — CSP `frame-src` local para o Web preview do entregável</a></li><li><a href="../adr/0240-o-motivo-de-controle-inerte-mora-num-ponto-de-interrogacao-nos-containers.html">ADR 0240 — O motivo de controle inerte pode morar num &quot;?&quot; ativo na página de Containers</a></li><li><a href="../adr/0241-a-sidebar-adota-o-block-sidebar-07-do-shadcn.html">ADR 0241 — A sidebar adota o block `sidebar-07` do shadcn</a></li><li><a href="../adr/0242-containers-em-tabela-linear-com-tanstack-react-table.html">ADR 0242 — Containers em tabela linear com `@tanstack/react-table`</a></li><li><a href="../adr/0243-consequencia-irreversivel-pode-morar-num-botao-de-perigo.html">ADR 0243 — Consequência irreversível pode morar num botão de perigo</a></li><li><a href="../adr/0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.html">ADR 0244 — Coluna das abas do projeto alinhada à esquerda</a></li><li><a href="../adr/0248-conteudo-das-paginas-ocupa-a-largura-inteira.html">ADR 0248 — O conteúdo das páginas ocupa a largura inteira</a></li><li><a href="../adr/0250-chat-da-sessao-ocupa-a-largura-inteira.html">ADR 0250 — O chat da Sessão ocupa a largura inteira</a></li></ul></li><li><span>Operação, deploy e instalação</span><ul><li><a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024 — 阶段 5（第 1 次会话）：生产镜像、compose.prod、CI 与冒烟测试</a></li><li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025 — 阶段 5（第 2 次会话）：使用 Kustomize 部署 Kubernetes、队列指标与本地 overlay</a></li><li><a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026 — 阶段 5（第 3 次会话）：优雅关闭、OpenTelemetry、指标、日志与仪表盘</a></li><li><a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027 — 备份/还原、api 加固、暴露面与发布</a></li><li><a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035 — 没有 collector 的 trace，以及日志中跨层的路径</a></li><li><a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070 — 本地 Compose 中的可观测性：指标和日志，没有 trace</a></li><li><a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150 — 一行安装程序，带可选来源和标记文件</a></li><li><a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152 — 针对 compose 的卷备份与恢复</a></li><li><a href="../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153 — `DEPLOY_ENABLED`：十份文档引用、却无人创建的触发器</a></li><li><a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155 — 第一个账户在终端中诞生，本地 agent 启动时即已配对</a></li><li><a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160 — 安装程序的 compose 随它一起传送，作为已签名的 asset</a></li><li><a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161 — 界面只提供安装能执行的模式，而通过 Release 的安装没有 broker</a></li><li><a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162 — broker 成为第五个发布的镜像，安装程序**询问**是否启用它</a></li><li><a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169 — 本地 overlay 的 S3 目标不再是 MinIO，改为 SeaweedFS</a></li><li><a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170 — 开发用 compose 改名为 `brabo-dev`，开发环境拒绝在安装旁边启动</a></li><li><a href="../adr/0209-engine-em-otp-29.html">ADR 0209 — engine 升级到 Elixir 1.20.4 / OTP 29.1.1</a></li></ul></li><li><span>CI, release e cadeia de suprimentos</span><ul><li><a href="../adr/0039-actionlint-e-validacao-do-pipeline-de-ci-gerado.html">ADR 0039 — actionlint 与生成的 CI 管道的验证</a></li><li><a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119 — 每个正式 tag 都把镜像发布到 GHCR，生产 overlay 按 digest 固定</a></li><li><a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120 — 针对生产 compose 的浏览器 E2E，放在 workspace 之外的包中</a></li><li><a href="../adr/0121-schema-dividido-por-agregado-de-dominio.html">ADR 0121 — schema 按领域聚合拆分，置于一个 barrel 之后</a></li><li><a href="../adr/0140-timeout-do-audit-como-risco-assumido.html">ADR 0140 — `pnpm audit` 反复超时是承担的风险；发现问题仍然失败</a></li><li><a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149 — 已发布工件的签名</a></li><li><a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159 — 第三方镜像按 digest 引入，lint 让忘记的人失败</a></li><li><a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172 — 发布在签名之前按 digest 用 Trivy 扫描它所发布的东西</a></li><li><a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178 — 第三方镜像的 tag 住在引用**之内**，位于 digest 之前</a></li><li><a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197 — workflow 的镜像来自 compose，并启用镜像的 Dependabot</a></li><li><a href="../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252 — O Brabo vira um conjunto de repositórios em `viralabs-dev`</a></li></ul></li><li><span>Documentação</span><ul><li><a href="../adr/0029-sincronizacao-continua-da-documentacao.html">ADR 0029 — 文档的持续同步</a></li><li><a href="../adr/0033-referencia-de-api-gerada-do-openapi.html">ADR 0033 — API 参考由代码产出，表格测试对元数据提出要求</a></li><li><a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034 — 按阶梯发布的文档，位于 Pages 的子目录中</a></li><li><a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071 — 按阶梯对称发布，以及一个供选择的根</a></li><li><a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073 — 发布路径命名的是环境，而不是分支</a></li><li><a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117 — `website/` 拥有自己的 lockfile，脱离产品的 `pnpm audit`</a></li><li><a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202 — 按主题组织的 ADR 索引，主题放在 ADR 之外</a></li><li><a href="../adr/0206-referencia-da-api-numa-pagina-redoc.html">ADR 0206 — API 参考变成一个 Redoc 页面</a></li><li><a href="../adr/0216-quatro-idiomas-com-pt-br-como-fonte.html">ADR 0216 — 四种语言，以 pt-BR 作为**来源**和默认：文档与界面提供葡萄牙语、英语、俄语和简体中文</a></li><li><a href="../adr/0218-titulo-de-adr-com-prefixo.html">ADR 0218 — 每个 ADR 都命名为“ADR NNNN — 标题”</a></li><li><a href="../adr/0219-referencia-entra-na-traducao.html">ADR 0219 — 参考文档纳入翻译</a></li><li><a href="../adr/0220-api-traduzida-por-catalogo.html">ADR 0220 — API 页面按目录翻译</a></li><li><a href="../adr/0253-o-site-de-docs-deixa-o-docusaurus.html">ADR 0253 — O site de docs deixa o Docusaurus</a></li><li><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html">ADR 0254 — A doc de cada área mora na raiz dela</a></li></ul></li></ul></li></ul></section><section><h2>📐 规则</h2><ul><li><a href="../business-rules.html">业务规则</a></li><li><a href="../business-rules/custo.html">成本与计量</a></li><li><a href="../business-rules/autenticacao.html">认证</a></li><li><a href="../business-rules/api.html">API</a></li><li><a href="../business-rules/broker.html">Broker</a></li><li><a href="../business-rules/ci.html">CI</a></li><li><a href="../business-rules/contracts.html">Contratos</a></li><li><a href="../business-rules/engine.html">Engine</a></li><li><a href="../business-rules/infra.html">Infra</a></li><li><a href="../business-rules/produto.html">Produto</a></li><li><a href="../business-rules/runner.html">Runner</a></li><li><a href="../business-rules/web.html">Web</a></li></ul></section><section><h2>📖 参考</h2><ul><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">api 的暴露面</a></li><li><span>API 参考</span></li></ul></section><section><h2>💡 解释</h2><ul><li><span>流程与流水线</span><ul><li><a href="../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../explanation/branching-policy.html">分支策略</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../explanation/observability.html">可观测性</a></li><li><a href="../explanation/modelo-de-time.html">团队模型与交付物流程</a></li></ul></li><li><span>验证与测量</span><ul><li><a href="../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../explanation/aceite-providers.html">provider 的验收</a></li><li><a href="../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../explanation/medicao-do-jev.html">Jev 工具路由器的测量</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></li><li><span>阶段历史</span><ul><li><a href="../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../explanation/backlog.html">已分类的 backlog</a></li></ul></li><li><span>本地化</span><ul><li><a href="../explanation/localizacao.html">本地化</a></li><li><a href="../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></li><li><span>技术笔记</span><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI——未采用</a></li></ul></li></ul></section><section><h2>🛠️ 运维</h2><ul><li><a href="../runbook.html">运维手册</a></li></ul></section><section><h2>📚 词汇</h2><ul><li><a href="../glossary.html">术语表</a></li></ul></section><section><h2>🤝 贡献</h2><ul><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="adr-0036--忠实于设计的认证界面以及三种无法加载的字体">ADR 0036 — 忠实于设计的认证界面，以及三种无法加载的字体</h1>
+<h2 id="contexto">背景</h2>
+<p>四个认证界面——<code>/login</code>、<code>/registrar</code>、<code>/esqueci-senha</code>、<code>/definir-senha</code>——诞生于
+<a href="0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032</a>，与切掉 Keycloak 同时。它们诞生时是
+<strong>可用的</strong>：能认证、能处理错误、能导航，<a href="0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031</a>
+的防枚举属性也全都在。从未存在过的是设计。</p>
+<p>原因写在它们所取代的代码本身之中：这一表面原本由 Keycloak 提供，因此从未被设计过。
+<code>design/SCREENS.md</code>，即设计系统的界面策展，<strong>没有登录一节</strong>——这个缺口早于这些界面。它们是根据
+<code>design/COMPONENTS.md</code> 的基础规格和语义 token 组合出来的，这是没有 mock 时能做到的最好，结果是一张
+没有品牌的灰色卡片，迁移提示作为松散的文字放在底部，也没有页脚。</p>
+<p>两个发现改变了本次会话的框架。</p>
+<h3 id="1-o-mock-existe-mas-não-no-repositório">1. mock 存在，但不在仓库中</h3>
+<p>一个登录 mock 是在生成 <code>design/tokens.css</code> 和 <code>design/COMPONENTS.md</code> 的 2026-07-23 策展<strong>之后</strong>，
+在外部设计项目中创建的：</p>
+<ul>
+<li>项目 <code>1c960ca8-5e00-4558-8ced-80dfbdf01027</code>，文件 <code>Brabo Login.dc.html</code>。</li>
+</ul>
+<p>它是这项工作的权威规格，而它存在于版本控制之外。之后审查这项工作的人，如果没有该设计项目的访问权限，
+就无法重新核对——因此有了决策 9 中记录的义务：该界面要进入 <code>design/SCREENS.md</code>。</p>
+<h3 id="2-as-três-fontes-do-design-system-não-carregavam-em-produção">2. 设计系统的三种字体在生产中无法加载</h3>
+<p><code>apps/web/index.html</code> 通过 <code>&lt;link&gt;</code> 从 Google Fonts 拉取 Space Grotesk、Archivo 和 IBM Plex
+Mono。生产镜像的 CSP，在 <code>docker/web/nginx.conf</code> 中，是：</p>
+<pre class="codigo"><code>style-src 'self' 'unsafe-inline'; font-src 'self' data:
+</code></pre>
+<p>它<strong>阻止了样式表和字体文件</strong>。没有任何 <code>.woff2</code> 被纳入版本管理。因此，在 nginx 容器中，这三个
+字体家族都落到了系统字体——而由于 <code>--font-heading</code> 和 <code>--font-body</code> 共享回退 <code>sans-serif</code>，<strong>标题
+与正文之间的排版区分直接消失了</strong>。<code>index.css</code> 设有 <code>font-synthesis: none</code>，所以浏览器连 700 字重
+都不会合成。</p>
+<p>在 <code>pnpm dev</code> 中这是看不见的，那里没有 nginx，也没有 CSP。而 <code>design/tokens.css</code> 顶部的注释声称
+加载是“via <code>&lt;link&gt;</code> no <code>&lt;head&gt;</code> do HTML que consome este arquivo”——准确地描述了一个生产镜像自己
+所禁止的机制。</p>
+<p>这不是假设，也不是未来的债务：这是生产中的缺陷，出在排版上，而排版是设计系统规定的第一件事。</p>
+<h2 id="decisão">决策</h2>
+<h3 id="1-auto-hospedar-as-três-famílias">1. 自托管这三个字体家族</h3>
+<p><code>apps/web/public/fonts/</code> 中的八个 <code>.woff2</code> 文件，在 <code>apps/web/src/index.css</code> 中用 <code>@font-face</code>
+声明，<code>font-display: swap</code>。Google 的 <code>&lt;link&gt;</code> 被移除。这<strong>无需放松</strong>当前的 CSP 即可满足它——替代
+方案是把 <code>fonts.googleapis.com</code> 和 <code>fonts.gstatic.com</code> 加到 <code>style-src</code> 和 <code>font-src</code> 中，那会用一个
+缺陷换来渲染关键路径上的两个第三方依赖。</p>
+<p><code>@font-face</code> 放在 <code>index.css</code> 中，<strong>不</strong>放在 <code>design/tokens.css</code> 中：加载是使用 token 的一方的责任，
+那个文件的注释改为说明这一点，而不是它原来所说的。</p>
+<p>Space Grotesk 和 Archivo 是<strong>可变</strong>字体，以字重区间引入（<code>font-weight: 500 700</code> 和 <code>400 600</code>）；
+IBM Plex Mono 是静态的，每个字重一个 <code>@font-face</code>。这一区分是通过解码每个 <code>.woff2</code> 的表目录并查找
+<code>fvar</code> 表来验证的——在静态字体上声明区间会让浏览器合成缺失的字重，而这正是
+<code>font-synthesis: none</code> 存在要阻止的。</p>
+<p><strong>许可证义务。</strong> 三者都是 OFL 1.1，它要求随二进制一起分发版权声明。
+<code>apps/web/public/fonts/LICENSE.txt</code> 带有许可证和三份声明，<code>THIRD_PARTY_NOTICES.md</code> 不再写“carregadas
+por CDN, não embutidas”——因为现在它们是嵌入的，义务也随之产生。</p>
+<h3 id="2-verificação-em-duas-camadas-porque-uma-não-alcança">2. 两层验证，因为一层够不着</h3>
+<ul>
+<li><strong>测试</strong>（<code>apps/web/test/fontes.test.ts</code>）：<code>index.css</code> 中每个 <code>@font-face</code> 的 <code>url()</code> 都解析到
+存在的文件，签名为 <code>wOF2</code>；每个块都有 <code>font-display: swap</code> 和 <code>unicode-range</code>；字重区间与可变或
+静态相符；并且 <code>index.html</code> <strong>不</strong>提及 <code>fonts.googleapis.com</code>。</li>
+<li><strong><code>docker/web/Dockerfile.prod</code> 中的 gate</strong>：目录存在，有八个文件，并且发布的 <code>index.html</code> 不引用
+CDN。</li>
+</ul>
+<p>两者都不能证明字体被<strong>渲染</strong>。jsdom 不应用 CSS Module，也不解析 <code>@import</code> 中的 <code>var()</code>，而
+<code>getComputedStyle</code> 返回的是写下的东西，而不是解析后的东西。渲染的证明是在容器中手工核对，并且被如此
+记录。</p>
+<h3 id="3-authlayout-passa-a-ser-a-moldura-inteira">3. <code>AuthLayout</code> 成为整个外框</h3>
+<p>它原本只是卡片，别无其他。mock 加入了两个对四个界面同样适用的部件——卡片上方的品牌页头和下方的
+页脚——它们放在外框中，而不是界面中。每个界面填充四个位置：<code>titulo</code>、<code>subtitulo</code>、<code>rodapeDoCartao</code>
+和 <code>abaixoDoCartao</code>。</p>
+<p>卡片标题是唯一的 <code>&lt;h1&gt;</code>；“Brabo” 是一个 <code>&lt;span&gt;</code>。把品牌提升为标题会产生两个 <code>&lt;h1&gt;</code>，并让读屏器
+的标题列表在每个界面都从品牌开始，而不是说明在这里做什么。</p>
+<h3 id="4-quatro-componentes-do-design-system-e-o-critério-de-onde-cada-coisa-mora">4. 四个设计系统组件，以及每样东西放在哪里的标准</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>部件</th>
+<th>放在哪里</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Alert</code></td>
+<td><code>components/ui/</code> 中的新组件</td>
+<td>需要四种色调，并用于四个界面；以前每个界面都有自己的 <code>.aviso</code>/<code>.banner</code> 类，复制时间距略有不同</td>
+</tr>
+<tr>
+<td><code>Button</code> 中的 <code>loading</code></td>
+<td>DS 中的 prop</td>
+<td>每个界面都手动更换标签；对使用读屏器的人来说，按钮只是被禁用，却没说正在进行工作</td>
+</tr>
+<tr>
+<td>填充式字段</td>
+<td><code>Input</code> 中的 prop <code>preenchido</code>，选择性启用</td>
+<td><code>Input</code> 被认证之外的五个界面使用；更改默认值会悄悄地给这五个界面换样式</td>
+</tr>
+<tr>
+<td>显示密码</td>
+<td><code>Input</code> 中的 prop <code>revelavel</code></td>
+<td>这是字段的解剖结构，而不是界面的：按钮定位在框内并切换 <code>type</code>。两个带密码的界面会继承它</td>
+</tr>
+<tr>
+<td>品牌页头</td>
+<td>本地，在 <code>AuthLayout</code> 中</td>
+<td>是界面的外框，不是库组件</td>
+</tr>
+<tr>
+<td><code>LogoMark</code></td>
+<td>新图标</td>
+<td>现有的 <code>BrandIcon</code> 是另一种图案（等轴测立方体）；mock 中的是一根竖条 + 两个尖角</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong><code>Alert</code> 的 <code>role</code> 是 prop，不由色调推导。</strong> <code>role=&quot;alert&quot;</code> 是 assertive 的 live region：读屏器会
+打断正在朗读的内容。这对用户刚刚触发的操作的结果是对的，对界面打开时就已经在那里的文字是错的。如果
+由色调决定角色，迁移提示（色调 <code>warning</code>）会进入与凭据错误相同的 live region——“e-mail ou senha
+incorretos” 的播报会开始包含 “a senha antiga não foi migrada”，这正是 ADR 0031 统一的 401 所要避免
+的、关于账户的暗示。</p>
+<p><strong><code>Button</code> 的 <code>fullWidth</code> 是坏的。</strong> 规则是 <code>flex: 1</code>，只有在父元素是 flex 或 grid 时才生效——而
+使用这个 prop 的容器没有一个是。它在七个地方被传入，全都在认证界面中，却什么也没拉伸：“全宽按钮”
+作为设计要求出现，而按钮的宽度只等于文字。它变成了 <code>width: 100%</code>。</p>
+<h3 id="5-onde-cada-erro-aparece">5. 每种错误出现在哪里</h3>
+<p>凭据错误离开“密码”字段，变成卡片顶部的提示。表单错误和字段错误在四个界面中成为不同的东西：</p>
+<ul>
+<li><strong>字段的</strong>（密码太短、确认不一致）：在字段下方，带 <code>aria-invalid</code>，因为要在那里修正；</li>
+<li><strong>表单的</strong>（凭据被拒、链接无效、网络故障）：在顶部的提示中，因为它不指向任何字段。</li>
+</ul>
+<p>被拒的凭据不会在任何字段上得到 <code>aria-invalid</code>：邮箱和密码都不是单独格式错误的，而 api 不说是两者中
+的哪一个错了。两个都标记会断言超出所知的东西。</p>
+<p>文案从 <code>E-mail ou senha inválidos.</code> 改为 <code>E-mail ou senha incorretos.</code>。403 的情况
+（<code>Confirme seu e-mail…</code>）仍然有区别，正如 ADR 0032 和
+<a href="../business-rules/api.html#rn-032">RN-032</a> 所要求的：统一性存在于“不存在”、“密码错误”和
+“账户被锁定”之间——而不包括“邮箱未验证”，后者只有在密码被证明<strong>之后</strong>才可达。</p>
+<h3 id="6-a-versão-real-no-rodapé-e-a-cadeia-que-não-existia">6. 页脚中的真实版本，以及原本不存在的链路</h3>
+<p>页脚显示产物的版本。在把它接上时发现，<code>BRABO_VERSION</code> <strong>在仓库中任何地方都从未被定义</strong>：api 为
+OpenTelemetry 资源的 <code>service.version</code> 读取它，却总是得到回退值 <code>dev</code>，因此每个环境的每个 span 都
+写着 <code>dev</code>，这个属性恰恰在它的用途上毫无用处。而 <code>docs/reference/configuration.md</code> 声称“a imagem de
+release injeta a tag”，并且它“aparece no <code>/health</code>”——两者都是假的。</p>
+<p>现在这条链路存在了，而且两个服务共用一条：<code>release.yml</code> 计算 <code>versao=${TAG#v}</code> → 把 <code>VERSION</code> 传给
+<code>docker buildx bake</code> → bakefile 把它转换为 <code>BRABO_VERSION</code>（目标 <code>api</code>）和 <code>VITE_BRABO_VERSION</code>
+（目标 <code>web</code>）→ 每个 <code>Dockerfile.prod</code> 把它声明为默认值为 <code>dev</code> 的 <code>ARG</code> → Vite 内联 →
+<code>runtime-config.ts</code> 读取 → <code>AuthLayout</code> 显示。</p>
+<p><strong>构建期的，尽管 <a href="0024-fase5-imagens-producao-ci.html">ADR 0024</a> 为 URL 选择了运行时。</strong> 那里的理由是
+在环境之间晋升<strong>同一个</strong>镜像，而 URL 是环境的属性。版本是<strong>产物</strong>的属性：<code>brabo-web:1.1.2</code> 不应该能
+报告别的东西，否则页脚就成了一个可编辑的字段，而不是一种身份。</p>
+<p><code>VERSION</code> 在 bakefile 中与 <code>TAG</code> 分开，因为 <code>ci.yml</code> 使用 <code>TAG=prod</code>，而 “prod” 不是任何东西的版本。</p>
+<h3 id="7-status-deixa-de-exigir-sessão">7. <code>/status</code> 不再需要会话</h3>
+<p>页脚指向 <code>/status</code>，而它原本在会话守卫之后：在登录界面点击 “Status” 会被重定向回登录界面——这是它
+唯一不能有的目的地。它被移到一个新的 <code>publicLayout</code>，与认证的那个是兄弟。这是安全的：该页面只查询
+api 和 engine 的 <code>/health</code>，它们本来就是公开的，因为调用它们的是 kubelet，在任何 token 存在之前。</p>
+<h3 id="8-contraste-calculado-dos-tokens-não-medido-pelo-axe">8. 对比度由 token 计算，而不是由 axe 测量</h3>
+<p>axe 在四个界面上运行，覆盖空状态、错误状态和成功状态——但 <code>color-contrast</code> 规则被<strong>明确关闭</strong>。它
+需要布局和解析后的颜色，而 jsdom 两者都没有：在那里运行它会在什么都没看的情况下产出“通过”，这比
+没有测试更糟，因为它看起来像覆盖。</p>
+<p>对比度通过直接在 <code>design/tokens.css</code> 上计算来验证，使用 WCAG 2.1 的亮度公式，针对界面实际使用的颜色
+对。有四个未达到 4.5:1。其中三个用已存在的 token 修正：</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>颜色对</th>
+<th>原来</th>
+<th>改为</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Input</code> 的 <code>.hint</code></td>
+<td><code>--text-muted</code>（3.89）</td>
+<td><code>--text-secondary</code>（8.00）</td>
+<td>对认证之外的五个界面同样适用</td>
+</tr>
+<tr>
+<td>认证的 <code>.link</code></td>
+<td><code>--accent</code>（3.88）</td>
+<td><code>--accent-hover</code>（4.90）</td>
+<td>同一色相，亮一级</td>
+</tr>
+<tr>
+<td>填充式字段的占位符</td>
+<td><code>--text-muted</code>（3.10）</td>
+<td><code>--text-secondary</code>（6.37）</td>
+<td>占位符是文字</td>
+</tr>
+</tbody>
+</table></div>
+<p>第四个<strong>没有</strong>被修正，而它是最显眼的：主按钮上 <code>--on-accent</code> 对 <code>--accent</code> 只有 <strong>3.20:1</strong>，而它
+要求 4.5（14px/600 的文字）。这是设计系统的赤陶色配对，用于应用中的每一个主按钮；修正它需要把
+<code>--accent</code> 加深到 <code>--terracota-500</code>（5.27:1），那会改变整个 UI 的品牌色。这是设计决策，而不是实现
+决策，它被记录为待办事项，数字被锁定在测试中，让它不能在无人察觉的情况下变得更糟。</p>
+<h3 id="9-a-tela-entra-no-design">9. 这个界面进入 <code>design/</code></h3>
+<p><code>design/</code> 是 UI 的事实来源，却没有提示、按钮加载状态和填充式字段的规格——正是这项工作创建的三样东西。
+这三种解剖结构进入 <code>design/COMPONENTS.md</code>，<code>design/SCREENS.md</code> 获得从未存在过的登录一节。这关闭了
+引发问题的那个缺口，也是让没有 mock 的人能够重新核对保真度的唯一方式。</p>
+<h2 id="consequências">后果</h2>
+<h3 id="as-divergências-deliberadas-em-relação-ao-mock">相对于 mock 的有意偏离</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>偏离</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>没有 “Continuar com GitHub”</td>
+<td>社交登录是阶段 7 有意识的 backlog，已记录在 ADR 0031 中并在 0032 中重申。这里没有新东西——只是确认 mock 画了一个本阶段决定不要的东西</td>
+</tr>
+<tr>
+<td>2</td>
+<td>没有 “N agentes online”</td>
+<td>认证前的动态数据会不必要地扩大攻击面：它需要一个统计 agent 的公开路由。它是内部面板的候选，而不是登录界面的</td>
+</tr>
+<tr>
+<td>3</td>
+<td>字段用 <code>--surface-2</code>，而不是 <code>--code-bg</code></td>
+<td>明确的选择：凸起的字段而不是凹陷的。在 <code>--surface-1</code> 的卡片上，字段的默认背景与卡片<strong>相同</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>.link</code> 用 <code>--accent-hover</code></td>
+<td>对比度——见决策 8</td>
+</tr>
+<tr>
+<td>5</td>
+<td>使用 token 的 <code>--shadow</code>，而不是 mock 的重定义</td>
+<td>mock 是一个独立的文件，在自己的 <code>:root</code> 中覆盖了 token。token 的事实来源是设计系统</td>
+</tr>
+<tr>
+<td>6</td>
+<td>“Esqueci minha senha” 是 <code>&lt;label&gt;</code> 的兄弟，而不是子元素</td>
+<td>点击 <code>&lt;label&gt;</code> 的任何地方都会激活关联的字段；在标签内部，点击链接也会聚焦密码字段</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>由第 1 条派生的后果</strong>：mock 中的 “ou” 分隔符<strong>只是</strong>为了分开两个按钮而存在。没有第二个按钮，它也
+随之移除——保留一个指向虚无的 “ou” 会比不对称更糟。</p>
+<p><strong>第 2 条的后果</strong>：卡片页脚只剩一项，因此 mock 的 <code>justify-content: space-between</code> 变为明确的左对齐。</p>
+<h3 id="o-que-fica-pendente-e-por-quê">仍待处理的，以及原因</h3>
+<ul>
+<li><strong>主按钮的对比度</strong>（3.20:1）。需要关于品牌色的决策。这是这些界面上剩下的唯一一处 AA 不合格。</li>
+<li><strong>其他五个界面上同样的字段问题</strong>：<code>Input</code> 默认是 <code>--surface-1</code>，放在 <code>--surface-1</code> 的卡片上，
+只靠 1px 边框分隔。这个变体是选择性启用的，所以那里什么都没变——也什么都没修。</li>
+<li><strong><code>data-theme=&quot;light&quot;</code> 仍未被执行。</strong> 它存在于 token 中，却没有东西设置它。这些界面只使用语义
+token，所以如果有人开启浅色主题它们会继承，但它有三个颜色对未达到 AA——在对比度测试中作为记录
+被断言，而不是作为保证。</li>
+<li><strong>保真度是针对一个未纳入版本管理的文件。</strong> 由决策 9 缓解，而不是消除。</li>
+<li><strong>没有测试能证明字体被渲染。</strong> 见决策 2。</li>
+</ul>
+<h3 id="duas-dependências-novas-as-duas-de-desenvolvimento">两个新依赖，都是开发依赖</h3>
+<p><code>@testing-library/user-event</code>（焦点顺序）和 <code>axe-core</code>（结构性 a11y）。没有一个是运行时的——bundle
+不变。</p>
+<p>直接使用 <code>axe-core</code>，而不是本来最显然的包装器 <code>vitest-axe</code>：包装器为了节省六行代码，增加了一个
+matcher 和一个依赖；而直接调用时，被关闭的规则列表在测试文件中可见，下一个关闭规则的人必须写下原因。</p>
+<p>在信任绿色之前，harness 已针对真实的违规进行过核对——没有 <code>&lt;label&gt;</code> 的 input 和没有可访问名称的
+按钮。因为没在看而通过的 a11y 测试，是这个工具在 jsdom 中的默认失败模式。</p>
+<nav class="site-pager"><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html"></a><a href="../adr/0060-superficie-de-leitura-de-codigo.html"></a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.md">编辑此页</a><span>更新于 2026-11-04T23:32:20-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#contexto">背景</a></li><li class="n3"><a href="#1-o-mock-existe-mas-não-no-repositório">1. mock 存在，但不在仓库中</a></li><li class="n3"><a href="#2-as-três-fontes-do-design-system-não-carregavam-em-produção">2. 设计系统的三种字体在生产中无法加载</a></li><li class="n2"><a href="#decisão">决策</a></li><li class="n3"><a href="#1-auto-hospedar-as-três-famílias">1. 自托管这三个字体家族</a></li><li class="n3"><a href="#2-verificação-em-duas-camadas-porque-uma-não-alcança">2. 两层验证，因为一层够不着</a></li><li class="n3"><a href="#3-authlayout-passa-a-ser-a-moldura-inteira">3. AuthLayout 成为整个外框</a></li><li class="n3"><a href="#4-quatro-componentes-do-design-system-e-o-critério-de-onde-cada-coisa-mora">4. 四个设计系统组件，以及每样东西放在哪里的标准</a></li><li class="n3"><a href="#5-onde-cada-erro-aparece">5. 每种错误出现在哪里</a></li><li class="n3"><a href="#6-a-versão-real-no-rodapé-e-a-cadeia-que-não-existia">6. 页脚中的真实版本，以及原本不存在的链路</a></li><li class="n3"><a href="#7-status-deixa-de-exigir-sessão">7. /status 不再需要会话</a></li><li class="n3"><a href="#8-contraste-calculado-dos-tokens-não-medido-pelo-axe">8. 对比度由 token 计算，而不是由 axe 测量</a></li><li class="n3"><a href="#9-a-tela-entra-no-design">9. 这个界面进入 design/</a></li><li class="n2"><a href="#consequências">后果</a></li><li class="n3"><a href="#as-divergências-deliberadas-em-relação-ao-mock">相对于 mock 的有意偏离</a></li><li class="n3"><a href="#o-que-fica-pendente-e-por-quê">仍待处理的，以及原因</a></li><li class="n3"><a href="#duas-dependências-novas-as-duas-de-desenvolvimento">两个新依赖，都是开发依赖</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-zh-Hans.json" data-base="../"></script></body>
+</html>
