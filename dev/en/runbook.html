@@ -1238,7 +1238,7 @@ and smoke as <a href="#deploy-local">Local deploy</a>, which are proven.</p>
 <h3 id="imagens-de-uma-release">Deploying a release's images</h3>
 <p>Since <a href="adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119</a> every
 final tag publishes the production images to GHCR
-(<code>ghcr.io/daneiel/brabo-{api,engine,web,backup,broker}</code>, public — no
+(<code>ghcr.io/viralabs-dev/brabo-{api,engine,web,backup,broker}</code>, public — no
 <code>imagePullSecret</code> anywhere) and records what it published, <strong>by digest</strong>,
 in <code>.release/images.json</code>. The fifth, the container broker
 (<a href="adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a>), is
@@ -4075,7 +4075,7 @@ branch, a ceiling on corrections, verdicts as an artifact, and a terminal
 (<a href="business-rules/api.html#rn-014">RN-014</a>, <a href="business-rules/api.html#rn-015">RN-015</a>).</p>
 <hr>
 <h2 id="instalando">Installing</h2>
-<pre class="codigo"><code class="language-sh">curl -fsSLO https://github.com/daneiel/brabo/releases/latest/download/install.sh &amp;&amp; bash install.sh
+<pre class="codigo"><code class="language-sh">curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh &amp;&amp; bash install.sh
 </code></pre>
 <p><strong>Download a file, then run it with <code>bash</code>.</strong> The two shorter forms that look
 equivalent are not, and the script refuses both <strong>by name</strong>, before
@@ -4283,7 +4283,7 @@ ever executes: <code>container_start</code> ends <code>failed</code> with <code>
 and the dev agents stay in <code>dev.blocked_by_container</code>. <strong>Runner</strong> mode does not
 depend on it — there the local agent uses the Docker on your machine.</p>
 <p>Since <a href="adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a> the
-broker is the <strong>fifth published image</strong> (<code>ghcr.io/daneiel/brabo-broker</code>, by
+broker is the <strong>fifth published image</strong> (<code>ghcr.io/viralabs-dev/brabo-broker</code>, by
 digest, signed like the other four) and the installation compose has the
 service — <strong>off by default</strong>, under the same <code>container-broker</code> profile as the
 validation compose. The installer <strong>asks</strong> (<em>&quot;Ligar o broker de container?
@@ -4427,20 +4427,20 @@ anyone</strong>, which is the failure this whole mechanism exists to prevent.</p
 <span class="line"><span style="color:var(--shiki-token-keyword)">  |</span><span style="color:var(--shiki-token-function)"> jq</span><span style="color:var(--shiki-token-string)"> -r</span><span style="color:var(--shiki-token-string-expression)"> '.imagens[] | select(.alvo == "api") | .digest'</span><span style="color:var(--shiki-foreground)">)</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:var(--shiki-token-function)">cosign</span><span style="color:var(--shiki-token-string)"> verify</span><span style="color:var(--shiki-foreground)"> \</span></span>
-<span class="line"><span style="color:var(--shiki-token-string)">  --certificate-identity-regexp</span><span style="color:var(--shiki-token-string-expression)"> '^https://github.com/daneiel/brabo/\.github/workflows/release\.yml@'</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --certificate-identity-regexp</span><span style="color:var(--shiki-token-string-expression)"> '^https://github.com/viralabs-dev/brabo/\.github/workflows/release\.yml@'</span><span style="color:var(--shiki-foreground)"> \</span></span>
 <span class="line"><span style="color:var(--shiki-token-string)">  --certificate-oidc-issuer</span><span style="color:var(--shiki-token-string-expression)"> 'https://token.actions.githubusercontent.com'</span><span style="color:var(--shiki-foreground)"> \</span></span>
-<span class="line"><span style="color:var(--shiki-token-string-expression)">  "ghcr.io/daneiel/brabo-api@${DIGEST}"</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">  "ghcr.io/viralabs-dev/brabo-api@${DIGEST}"</span></span>
 <span class="line"></span></code></pre>
 <h3 id="the-runner-binaries">The runner binaries</h3>
 <p>One signed <code>checksums.txt</code> covers all four targets (Intel Mac has no binary
 since <a href="adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174</a> — it uses
 <code>npm install -g @brabo/runner</code>), so verification is two
 steps: the manifest's signature, then the binary against the manifest.</p>
-<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> release</span><span style="color:var(--shiki-token-string)"> download</span><span style="color:var(--shiki-token-string)"> vX.Y.Z</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string-expression)"> 'checksums.txt*'</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string-expression)"> 'brabo-runner-*'</span></span>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> release</span><span style="color:var(--shiki-token-string)"> download</span><span style="color:var(--shiki-token-string)"> vX.Y.Z</span><span style="color:var(--shiki-token-string)"> --repo</span><span style="color:var(--shiki-token-string)"> viralabs-dev/brabo-runner</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string-expression)"> 'checksums.txt*'</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string-expression)"> 'brabo-runner-*'</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:var(--shiki-token-function)">cosign</span><span style="color:var(--shiki-token-string)"> verify-blob</span><span style="color:var(--shiki-foreground)"> \</span></span>
 <span class="line"><span style="color:var(--shiki-token-string)">  --bundle</span><span style="color:var(--shiki-token-string)"> checksums.txt.bundle</span><span style="color:var(--shiki-foreground)"> \</span></span>
-<span class="line"><span style="color:var(--shiki-token-string)">  --certificate-identity-regexp</span><span style="color:var(--shiki-token-string-expression)"> '^https://github.com/daneiel/brabo/\.github/workflows/build-runner-binaries\.yml@'</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --certificate-identity-regexp</span><span style="color:var(--shiki-token-string-expression)"> '^https://github.com/viralabs-dev/brabo-runner/\.github/workflows/build-runner-binaries\.yml@'</span><span style="color:var(--shiki-foreground)"> \</span></span>
 <span class="line"><span style="color:var(--shiki-token-string)">  --certificate-oidc-issuer</span><span style="color:var(--shiki-token-string-expression)"> 'https://token.actions.githubusercontent.com'</span><span style="color:var(--shiki-foreground)"> \</span></span>
 <span class="line"><span style="color:var(--shiki-token-string)">  checksums.txt</span></span>
 <span class="line"></span>
@@ -4472,7 +4472,7 @@ the corresponding source. Since <a href="adr/0119-imagens-publicadas-no-ghcr-por
 that distribution happens on every final tag.</p>
 <p>The written offer is <code>THIRD_PARTY_NOTICES.md</code>, and it ships <strong>inside</strong> the
 image, because whoever runs <code>docker pull</code> does not have the repository:</p>
-<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> --entrypoint</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> ghcr.io/daneiel/brabo-engine:vX.Y.Z</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> --entrypoint</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> ghcr.io/viralabs-dev/brabo-engine:vX.Y.Z</span><span style="color:var(--shiki-foreground)"> \</span></span>
 <span class="line"><span style="color:var(--shiki-token-string)">  -c</span><span style="color:var(--shiki-token-string-expression)"> 'cat /usr/share/doc/brabo/THIRD_PARTY_NOTICES.md'</span></span>
 <span class="line"></span></code></pre>
 <p>It names every component, its exact version and its licence, which is what
@@ -4489,7 +4489,7 @@ of the other four in the command above. Before AT-120 that command failed with
 to the directory the <code>COPY</code> creates too, so <code>/usr/share/doc/brabo</code> had no
 execute bit and the image's non-root user could not traverse it. Each
 Dockerfile now creates the directory <code>0755</code> first. For the runner:</p>
-<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> release</span><span style="color:var(--shiki-token-string)"> download</span><span style="color:var(--shiki-token-string)"> vX.Y.Z</span><span style="color:var(--shiki-token-string)"> --repo</span><span style="color:var(--shiki-token-string)"> daneiel/brabo</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> release</span><span style="color:var(--shiki-token-string)"> download</span><span style="color:var(--shiki-token-string)"> vX.Y.Z</span><span style="color:var(--shiki-token-string)"> --repo</span><span style="color:var(--shiki-token-string)"> viralabs-dev/brabo</span><span style="color:var(--shiki-foreground)"> \</span></span>
 <span class="line"><span style="color:var(--shiki-token-string)">  --pattern</span><span style="color:var(--shiki-token-string)"> THIRD_PARTY_NOTICES.md</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string)"> checksums.txt</span></span>
 <span class="line"><span style="color:var(--shiki-token-function)">sha256sum</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string)"> --ignore-missing</span><span style="color:var(--shiki-token-string)"> checksums.txt</span></span>
 <span class="line"></span></code></pre>

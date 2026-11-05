@@ -817,7 +817,7 @@ AT-177）。最后一个是为定时证明显式提供的关闭项，默认值�
 <code>deploy/k8s/bootstrap.sh</code> 中的分离检出（以及它对脏工作树的拒绝）只在有人手动输入时才运行。它之后启动的是与<a href="#deploy-local">本地部署</a>相同的 bootstrap 和冒烟测试，而那些是经过证明的。</p>
 <h3 id="imagens-de-uma-release">部署某个 release 的镜像</h3>
 <p>自 <a href="adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119</a> 起，每个最终 tag 都会把生产镜像发布到 GHCR
-（<code>ghcr.io/daneiel/brabo-{api,engine,web,backup,broker}</code>，公开——任何地方都没有
+（<code>ghcr.io/viralabs-dev/brabo-{api,engine,web,backup,broker}</code>，公开——任何地方都没有
 <code>imagePullSecret</code>），并<strong>按 digest</strong> 把发布内容记录在
 <code>.release/images.json</code> 中。第五个镜像，即容器 broker
 （<a href="adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a>），是给安装用的——overlay 中没有 broker 的 Deployment，
@@ -2640,7 +2640,7 @@ Collector 就没有 Tempo，这是决定，而不是疏忽（<a href="adr/0026-f
 （<a href="business-rules/api.html#rn-014">RN-014</a>，<a href="business-rules/api.html#rn-015">RN-015</a>）。</p>
 <hr>
 <h2 id="instalando">安装</h2>
-<pre class="codigo"><code class="language-sh">curl -fsSLO https://github.com/daneiel/brabo/releases/latest/download/install.sh &amp;&amp; bash install.sh
+<pre class="codigo"><code class="language-sh">curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh &amp;&amp; bash install.sh
 </code></pre>
 <p><strong>先下载文件，再用 <code>bash</code> 运行它。</strong> 两种看起来等价的更短写法并不等价，脚本会在下载任何东西之前<strong>按名称</strong>拒绝两者，并打印上面那一行：</p>
 <ul>
@@ -2760,7 +2760,7 @@ install.sh --source=local   # buildx bake; exige árvore limpa numa tag
 <h3 id="broker-na-instalacao">安装中的容器 broker</h3>
 <p><strong>容器</strong>和<strong>挂载目录</strong>模式的项目在容器内运行，而启动这个容器的是 <strong>broker</strong>
 （<a href="adr/0144-a-segunda-raiz-do-broker.html">ADR 0144</a>）。没有它，这两种模式都永远无法执行：<code>container_start</code> 以 <code>failed</code> 和 <code>BrokerIndisponivelError</code> 结束，dev agent 停留在 <code>dev.blocked_by_container</code>。<strong>Runner</strong> 模式不依赖它——在那里，本地 agent 使用你机器上的 Docker。</p>
-<p>自 <a href="adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a> 起，broker 是<strong>第五个发布的镜像</strong>（<code>ghcr.io/daneiel/brabo-broker</code>，按 digest，与其他四个一样签名），安装用的 compose 中有这个服务——<strong>默认关闭</strong>，位于与验证用 compose 相同的 <code>container-broker</code> profile 之下。安装程序会<strong>询问</strong>（<em>&quot;Ligar o broker de container?
+<p>自 <a href="adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a> 起，broker 是<strong>第五个发布的镜像</strong>（<code>ghcr.io/viralabs-dev/brabo-broker</code>，按 digest，与其他四个一样签名），安装用的 compose 中有这个服务——<strong>默认关闭</strong>，位于与验证用 compose 相同的 <code>container-broker</code> profile 之下。安装程序会<strong>询问</strong>（<em>&quot;Ligar o broker de container?
 [s/N]&quot;</em>），紧接在项目 base 之后，并用文字说明启用它会授予什么：broker 会拿到<strong>这台机器的 Docker socket</strong>，谁控制 broker 就控制你的 Docker。约束它的是
 <a href="adr/0130-broker-de-container.html">ADR 0130</a> 的五层：没有发布端口、只有 api 能访问的网络（<code>internal: true</code>，没有互联网）、service token、针对<strong>一个</strong>项目容器的五个操作，以及 broker 根据 Arquiteto 的决定自行组装的 spec——没有任何请求能开启
 <code>privileged</code>、主机网络或任意的 <code>-v</code>。</p>
@@ -2857,18 +2857,18 @@ install.sh --source=local   # buildx bake; exige árvore limpa numa tag
 <span class="line"><span style="color:var(--shiki-token-keyword)">  |</span><span style="color:var(--shiki-token-function)"> jq</span><span style="color:var(--shiki-token-string)"> -r</span><span style="color:var(--shiki-token-string-expression)"> '.imagens[] | select(.alvo == "api") | .digest'</span><span style="color:var(--shiki-foreground)">)</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:var(--shiki-token-function)">cosign</span><span style="color:var(--shiki-token-string)"> verify</span><span style="color:var(--shiki-foreground)"> \</span></span>
-<span class="line"><span style="color:var(--shiki-token-string)">  --certificate-identity-regexp</span><span style="color:var(--shiki-token-string-expression)"> '^https://github.com/daneiel/brabo/\.github/workflows/release\.yml@'</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --certificate-identity-regexp</span><span style="color:var(--shiki-token-string-expression)"> '^https://github.com/viralabs-dev/brabo/\.github/workflows/release\.yml@'</span><span style="color:var(--shiki-foreground)"> \</span></span>
 <span class="line"><span style="color:var(--shiki-token-string)">  --certificate-oidc-issuer</span><span style="color:var(--shiki-token-string-expression)"> 'https://token.actions.githubusercontent.com'</span><span style="color:var(--shiki-foreground)"> \</span></span>
-<span class="line"><span style="color:var(--shiki-token-string-expression)">  "ghcr.io/daneiel/brabo-api@${DIGEST}"</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">  "ghcr.io/viralabs-dev/brabo-api@${DIGEST}"</span></span>
 <span class="line"></span></code></pre>
 <h3 id="the-runner-binaries">runner 的二进制文件</h3>
 <p>一个已签名的 <code>checksums.txt</code> 覆盖四个目标（自 <a href="adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174</a> 起 Intel Mac 没有二进制文件——它使用
 <code>npm install -g @brabo/runner</code>），所以验证分两步：先验证清单的签名，再对照清单验证二进制文件。</p>
-<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> release</span><span style="color:var(--shiki-token-string)"> download</span><span style="color:var(--shiki-token-string)"> vX.Y.Z</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string-expression)"> 'checksums.txt*'</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string-expression)"> 'brabo-runner-*'</span></span>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> release</span><span style="color:var(--shiki-token-string)"> download</span><span style="color:var(--shiki-token-string)"> vX.Y.Z</span><span style="color:var(--shiki-token-string)"> --repo</span><span style="color:var(--shiki-token-string)"> viralabs-dev/brabo-runner</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string-expression)"> 'checksums.txt*'</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string-expression)"> 'brabo-runner-*'</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:var(--shiki-token-function)">cosign</span><span style="color:var(--shiki-token-string)"> verify-blob</span><span style="color:var(--shiki-foreground)"> \</span></span>
 <span class="line"><span style="color:var(--shiki-token-string)">  --bundle</span><span style="color:var(--shiki-token-string)"> checksums.txt.bundle</span><span style="color:var(--shiki-foreground)"> \</span></span>
-<span class="line"><span style="color:var(--shiki-token-string)">  --certificate-identity-regexp</span><span style="color:var(--shiki-token-string-expression)"> '^https://github.com/daneiel/brabo/\.github/workflows/build-runner-binaries\.yml@'</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --certificate-identity-regexp</span><span style="color:var(--shiki-token-string-expression)"> '^https://github.com/viralabs-dev/brabo-runner/\.github/workflows/build-runner-binaries\.yml@'</span><span style="color:var(--shiki-foreground)"> \</span></span>
 <span class="line"><span style="color:var(--shiki-token-string)">  --certificate-oidc-issuer</span><span style="color:var(--shiki-token-string-expression)"> 'https://token.actions.githubusercontent.com'</span><span style="color:var(--shiki-foreground)"> \</span></span>
 <span class="line"><span style="color:var(--shiki-token-string)">  checksums.txt</span></span>
 <span class="line"></span>
@@ -2885,7 +2885,7 @@ install.sh --source=local   # buildx bake; exige árvore limpa numa tag
 <p>engine 镜像内嵌了 <code>git</code>、<code>busybox</code>、<code>libgcc</code>/<code>libstdc++</code> 以及另外 18 个 GPL 许可的 apk 包，外加 engine 通过 <code>exec</code> 调用的四个扫描器。把它们作为独立进程运行不会污染仍为 MIT 的 Brabo——但<em>分发</em>镜像要求接收者能够获取相应的源代码。自 <a href="adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119</a>
 起，这种分发在每个最终 tag 上都会发生。</p>
 <p>书面提供就是 <code>THIRD_PARTY_NOTICES.md</code>，它放在镜像<strong>之内</strong>，因为运行 <code>docker pull</code> 的人没有仓库：</p>
-<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> --entrypoint</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> ghcr.io/daneiel/brabo-engine:vX.Y.Z</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> --entrypoint</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> ghcr.io/viralabs-dev/brabo-engine:vX.Y.Z</span><span style="color:var(--shiki-foreground)"> \</span></span>
 <span class="line"><span style="color:var(--shiki-token-string)">  -c</span><span style="color:var(--shiki-token-string-expression)"> 'cat /usr/share/doc/brabo/THIRD_PARTY_NOTICES.md'</span></span>
 <span class="line"></span></code></pre>
 <p>它点名每个组件、确切版本和许可证，这让任何人都能找到每个组件的上游 release。</p>
@@ -2894,7 +2894,7 @@ install.sh --source=local   # buildx bake; exige árvore limpa numa tag
 <code>brabo-engine</code> 外还有 <code>brabo-api</code>、<code>brabo-web</code>、<code>brabo-broker</code> 和 <code>brabo-backup</code>——并作为 Release 的
 <code>THIRD_PARTY_NOTICES.md</code> 资产放在 runner 二进制文件旁边，由同一个已签名的
 <code>checksums.txt</code> 覆盖（RN-524）。这是维护者的决定，也是保守的决定：没有任何产物被声明为豁免。在上面的命令中把 <code>brabo-engine</code> 换成其他四个中的任何一个即可。在 AT-120 之前，这条命令在 engine 镜像上以 &quot;Permission denied&quot; 失败：BuildKit 把 <code>COPY --chmod=0644</code> 也应用到了 <code>COPY</code> 创建的目录上，所以 <code>/usr/share/doc/brabo</code> 没有执行位，镜像的非 root 用户无法进入它。现在每个 Dockerfile 都会先以 <code>0755</code> 创建该目录。对于 runner：</p>
-<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> release</span><span style="color:var(--shiki-token-string)"> download</span><span style="color:var(--shiki-token-string)"> vX.Y.Z</span><span style="color:var(--shiki-token-string)"> --repo</span><span style="color:var(--shiki-token-string)"> daneiel/brabo</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> release</span><span style="color:var(--shiki-token-string)"> download</span><span style="color:var(--shiki-token-string)"> vX.Y.Z</span><span style="color:var(--shiki-token-string)"> --repo</span><span style="color:var(--shiki-token-string)"> viralabs-dev/brabo</span><span style="color:var(--shiki-foreground)"> \</span></span>
 <span class="line"><span style="color:var(--shiki-token-string)">  --pattern</span><span style="color:var(--shiki-token-string)"> THIRD_PARTY_NOTICES.md</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string)"> checksums.txt</span></span>
 <span class="line"><span style="color:var(--shiki-token-function)">sha256sum</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string)"> --ignore-missing</span><span style="color:var(--shiki-token-string)"> checksums.txt</span></span>
 <span class="line"></span></code></pre>
