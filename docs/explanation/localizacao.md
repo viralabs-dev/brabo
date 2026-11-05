@@ -10,6 +10,12 @@ O Brabo fala quatro idiomas na documentação e na interface, e o **português d
 Brasil é a fonte e o padrão** dos dois produtos ([ADR 0216](../adr/0216-quatro-idiomas-com-pt-br-como-fonte.md)).
 Todo texto novo nasce em pt-BR; os outros idiomas são traduções dele.
 
+**Exceção (ADR [0260](../adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md)):** essa
+regra vale só para o `brabo`, a porta de entrada do cliente. A documentação dos
+dez repositórios de código é **só em inglês**: página de irmão em inglês leva
+`idioma_original: en` no frontmatter e não tem `docs/i18n/`. O `CLAUDE.md` e o
+`.claude/` deles continuam em pt-BR.
+
 ## Idiomas e códigos
 
 | idioma | código | formas de plural (`Intl.PluralRules`) | nota |
@@ -47,6 +53,10 @@ O idioma das RESPOSTAS dos agentes é outra preferência, com mecanismo próprio
   mesmo endereço, e uma faixa no topo DIZ isso no idioma de quem lê. A página
   traduzida cuja fonte mudou depois da tradução diz a data da tradução e que o
   original mudou.
+- **No site, a página de irmão com `idioma_original: en`** é a própria fonte no
+  `/en/`, sem faixa; em pt-BR, `ru` e `zh-Hans` o site serve a MESMA fonte
+  inglesa com a faixa "esta página só existe em inglês". Se o irmão ainda tem a
+  tradução do locale, ela vale nele (estado misto, página a página).
 - **Na interface**, o texto não falta: a paridade de chaves e de plurais é
   medida, e o `fallbackLng` é o pt-BR.
 

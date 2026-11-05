@@ -134,10 +134,10 @@ export function copiarAssets(destino) {
 }
 
 const TEXTOS = {
-  'pt-BR': { buscar: 'Buscar', menu: 'Menu', tema: 'Alternar tema', idioma: 'Idioma', degrau: 'Ambiente', nestaPagina: 'Nesta página', editar: 'Editar esta página', atualizado: 'Atualizado em', faixa: 'Esta página ainda não foi traduzida; mostrando o original em português.' },
-  en: { buscar: 'Search', menu: 'Menu', tema: 'Toggle theme', idioma: 'Language', degrau: 'Environment', nestaPagina: 'On this page', editar: 'Edit this page', atualizado: 'Updated', faixa: 'This page is not translated yet; showing the original in Portuguese.' },
-  ru: { buscar: 'Поиск', menu: 'Меню', tema: 'Сменить тему', idioma: 'Язык', degrau: 'Среда', nestaPagina: 'На этой странице', editar: 'Редактировать страницу', atualizado: 'Обновлено', faixa: 'Эта страница ещё не переведена; показан оригинал на португальском.' },
-  'zh-Hans': { buscar: '搜索', menu: '菜单', tema: '切换主题', idioma: '语言', degrau: '环境', nestaPagina: '本页内容', editar: '编辑此页', atualizado: '更新于', faixa: '此页尚未翻译；显示葡萄牙语原文。' },
+  'pt-BR': { buscar: 'Buscar', menu: 'Menu', tema: 'Alternar tema', idioma: 'Idioma', degrau: 'Ambiente', nestaPagina: 'Nesta página', editar: 'Editar esta página', atualizado: 'Atualizado em', faixa: 'Esta página ainda não foi traduzida; mostrando o original em português.', faixaSoIngles: 'Esta página só existe em inglês; mostrando o original em inglês.' },
+  en: { buscar: 'Search', menu: 'Menu', tema: 'Toggle theme', idioma: 'Language', degrau: 'Environment', nestaPagina: 'On this page', editar: 'Edit this page', atualizado: 'Updated', faixa: 'This page is not translated yet; showing the original in Portuguese.', faixaSoIngles: 'This page only exists in English.' },
+  ru: { buscar: 'Поиск', menu: 'Меню', tema: 'Сменить тему', idioma: 'Язык', degrau: 'Среда', nestaPagina: 'На этой странице', editar: 'Редактировать страницу', atualizado: 'Обновлено', faixa: 'Эта страница ещё не переведена; показан оригинал на португальском.', faixaSoIngles: 'Эта страница существует только на английском языке; показан оригинал.' },
+  'zh-Hans': { buscar: '搜索', menu: '菜单', tema: '切换主题', idioma: '语言', degrau: '环境', nestaPagina: '本页内容', editar: '编辑此页', atualizado: '更新于', faixa: '此页尚未翻译；显示葡萄牙语原文。', faixaSoIngles: '此页仅有英文版本；显示英文原文。' },
 };
 
 // Traduz o ctx do núcleo (build.mjs) para o layout(p) acima. `extraScripts` leva a busca.
@@ -158,7 +158,7 @@ export function renderizarPagina(ctx) {
     `<nav class="site-pager">${[ctx.anterior, ctx.proximo].map((v) => (v ? `<a href="${'../'.repeat(slug.split('/').length - 1)}${esc(hrefDe(v.slug))}">${esc(v.rotulo)}</a>` : '')).join('')}</nav>`;
   return layout({
     locale, slug, titulo: pagina.titulo, conteudo, toc: corpo.toc, nav: grupos, textos: t,
-    faixaTraducao: pagina.traduzida ? null : t.faixa,
+    faixaTraducao: pagina.traduzida ? null : pagina.somenteIngles ? t.faixaSoIngles : t.faixa,
     editarUrl: edicao.url, atualizadoEm: edicao.atualizadoEm ? `${edicao.atualizadoEm}${edicao.autor ? ` · ${edicao.autor}` : ''}` : null,
     degrau, degraus: ['dev', 'prd'], temMermaid: corpo.temMermaid, extraScripts: ctx.extraScripts, extraHead: ctx.extraHead,
   });

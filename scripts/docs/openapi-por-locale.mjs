@@ -2,7 +2,7 @@
 /**
  * A página da API (Redoc) por locale (ADR 0220, AT-565). A fonte das
  * descrições continua sendo o texto dos decorators da api; cada locale tem um
- * CATÁLOGO em `docs/i18n/<locale>/openapi-textos.json`, chaveado pelo sha256
+ * CATÁLOGO em `docs/i18n/<locale>/openapi-textos.json` (do `brabo`), chaveado pelo sha256
  * (12 hex) do texto da fonte: `{ "<hash>": { "fonte": "...", "traducao": "..." } }`.
  *
  * Funções PURAS (o config do site e o `generate.mjs` as chamam). O comando que
@@ -193,10 +193,11 @@ export const rotulosFaltando = (rotulos) => {
   ]);
 };
 
-/** Spec e catálogos moram na raiz de doc da api (AT-693). */
+/** O spec mora na raiz de doc da api (AT-693). */
 export const caminhoDaApi = (raiz, rel) => join(raiz, 'apps/api/docs', rel);
 
-export const caminhoDoCatalogo = (raiz, locale) => caminhoDaApi(raiz, join('i18n', locale, 'openapi-textos.json'));
+/** Os catálogos moram no `brabo` (AT-745, ADR 0260): a doc da api é só em inglês, a referência do site segue traduzida. */
+export const caminhoDoCatalogo = (raiz, locale) => join(raiz, 'docs/i18n', locale, 'openapi-textos.json');
 
 export const lerCatalogo = (raiz, locale) => {
   const p = caminhoDoCatalogo(raiz, locale);

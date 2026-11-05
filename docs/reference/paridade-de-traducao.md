@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 316 de 1268 (24.9%) | 28.0% de 22.168.373 | 276 | 39 | 1 | 952 | 0 |
-| `ru` | 316 de 1268 (24.9%) | 28.0% de 22.168.373 | 276 | 39 | 1 | 952 | 0 |
-| `zh-Hans` | 316 de 1268 (24.9%) | 28.0% de 22.168.373 | 276 | 39 | 1 | 952 | 0 |
+| `en` | 317 de 1272 (24.9%) | 28.0% de 22.194.172 | 279 | 37 | 1 | 955 | 0 |
+| `ru` | 317 de 1272 (24.9%) | 28.0% de 22.194.172 | 279 | 37 | 1 | 955 | 0 |
+| `zh-Hans` | 317 de 1272 (24.9%) | 28.0% de 22.194.172 | 279 | 37 | 1 | 955 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -39,9 +39,7 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 - `explanation/auditoria-fluxo-vs-codigo.md` (tradução de 2026-10-15)
 - `explanation/branching-policy.md` (tradução de commit inexistente)
 - `explanation/cadeia-de-suprimentos-do-ci.md` (tradução de commit inexistente)
-- `explanation/documentation-workflow.md` (tradução de 2026-10-16)
 - `explanation/gates.md` (tradução de 2026-10-15)
-- `explanation/localizacao.md` (tradução de 2026-10-15)
 - `explanation/modelo-de-time.md` (tradução de 2026-10-15)
 - `explanation/observability.md` (tradução de commit inexistente)
 - `explanation/release-do-produto.md` (tradução de 2026-11-05)
@@ -81,9 +79,7 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 - `explanation/auditoria-fluxo-vs-codigo.md` (tradução de 2026-10-15)
 - `explanation/branching-policy.md` (tradução de commit inexistente)
 - `explanation/cadeia-de-suprimentos-do-ci.md` (tradução de commit inexistente)
-- `explanation/documentation-workflow.md` (tradução de 2026-10-16)
 - `explanation/gates.md` (tradução de 2026-10-15)
-- `explanation/localizacao.md` (tradução de 2026-10-15)
 - `explanation/modelo-de-time.md` (tradução de 2026-10-15)
 - `explanation/observability.md` (tradução de commit inexistente)
 - `explanation/release-do-produto.md` (tradução de 2026-11-05)
@@ -123,9 +119,7 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 - `explanation/auditoria-fluxo-vs-codigo.md` (tradução de 2026-10-15)
 - `explanation/branching-policy.md` (tradução de commit inexistente)
 - `explanation/cadeia-de-suprimentos-do-ci.md` (tradução de commit inexistente)
-- `explanation/documentation-workflow.md` (tradução de 2026-10-16)
 - `explanation/gates.md` (tradução de 2026-10-15)
-- `explanation/localizacao.md` (tradução de 2026-10-15)
 - `explanation/modelo-de-time.md` (tradução de 2026-10-15)
 - `explanation/observability.md` (tradução de commit inexistente)
 - `explanation/release-do-produto.md` (tradução de 2026-11-05)
@@ -161,8 +155,8 @@ Textos distintos da referência da API (`/reference/api/`) contra o catálogo `d
 
 | locale | textos traduzidos |
 |---|---|
-| `pt-BR` | 1324 de 1439 (92.0%) |
+| `pt-BR` | 1324 de 1440 (91.9%) |
 | `en` | 1 de 1 (100.0%) |
-| `ru` | 1324 de 1439 (92.0%) |
-| `zh-Hans` | 1324 de 1439 (92.0%) |
+| `ru` | 1324 de 1440 (91.9%) |
+| `zh-Hans` | 1324 de 1440 (91.9%) |
 

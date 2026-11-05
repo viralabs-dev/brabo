@@ -4,6 +4,7 @@
  * Arquivo sem cabeçalho `### RN-` (índice, stubs) está na lista mas não conta.
  */
 import { lerRaizesDeDoc } from './raizes-de-doc.mjs';
+import { copiaDoLocale } from './textos-gerados.mjs';
 
 /** Os locales traduzidos (ADR 0216): pt-BR é a fonte, em `<raiz>/`. */
 export const LOCALES_TRADUZIDOS = ['en', 'ru', 'zh-Hans'];
@@ -47,6 +48,21 @@ export function numerosDuplicados(arquivos, ler) {
   const onde = new Map();
   for (const r of rnsDaFonte(arquivos, ler)) onde.set(r.numero, [...(onde.get(r.numero) ?? []), r.arquivo]);
   return [...onde].filter(([, a]) => a.length > 1).map(([numero, a]) => ({ numero, arquivos: a }));
+}
+
+/**
+ * As RNs de um locale (`null` = fonte): a tradução quando o arquivo dela existe,
+ * a fonte quando não (AT-745: irmão ainda sem `i18n/` ou com fonte em inglês).
+ * `pagina` é o caminho de `business-rules/…`, igual com ou sem tradução.
+ */
+export function rnsDoLocale(todos, locale, ler) {
+  return todos
+    .filter((a) => !a.includes('/i18n/'))
+    .flatMap((fonte) => {
+      const copia = locale ? copiaDoLocale(locale, fonte) : fonte;
+      const a = todos.includes(copia) ? copia : fonte;
+      return rnsDoTexto(ler(a)).map((r) => ({ ...r, pagina: fonte.slice(fonte.indexOf('business-rules')) }));
+    });
 }
 
 /** Coordenadas da união: tira o `<raiz>/` (`apps/api/docs/business-rules/api.md` → `business-rules/api.md`). */

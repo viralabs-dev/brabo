@@ -22,6 +22,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { idiomaOriginal } from './faixa-de-traducao.mjs';
 import { caminhoDaApi, LOCALES_DA_API, lerCatalogo, medirApi } from './openapi-por-locale.mjs';
 import { lerRaizesDeDoc } from './raizes-de-doc.mjs';
 
@@ -243,8 +244,12 @@ function listar(dir, base = dir) {
   });
 }
 
-/** ADR 0219: `reference/` entra; o relatório (D4) e o spec OpenAPI não. */
-export const ehFonteTraduzivel = (rel) => !/^reference\/(paridade-de-traducao\.mdx?|openapi\.json)$/.test(rel);
+/**
+ * ADR 0219: `reference/` entra; o relatório (D4) e o spec OpenAPI não. ADR 0260:
+ * página com `idioma_original: en` (doc dos repos de código) não tem o que traduzir.
+ */
+export const ehFonteTraduzivel = (rel, conteudo = '') =>
+  !/^reference\/(paridade-de-traducao\.mdx?|openapi\.json)$/.test(rel) && idiomaOriginal(conteudo) !== 'en';
 
 /**
  * `raizesDeDoc`: as pastas `docs/` a unir (AT-693), relativas a `raiz`. Padrão:
@@ -267,9 +272,10 @@ export function medirDoRepositorio(raiz, raizesDeDoc = lerRaizesDeDoc().map((r) 
         .map((l) => relative(base, l.slice(3))),
     );
     for (const rel of listar(join(raiz, base))) {
-      if (!ehFonteTraduzivel(rel)) continue;
+      const texto = readFileSync(join(raiz, base, rel), 'utf8');
+      if (!ehFonteTraduzivel(rel, texto)) continue;
       const data = git('log', '-1', '--format=%cI', '--', `${base}/${rel}`) || null;
-      unir(fontes, rel, { chars: readFileSync(join(raiz, base, rel), 'utf8').length, data, suja: sujas.has(rel) });
+      unir(fontes, rel, { chars: texto.length, data, suja: sujas.has(rel) });
     }
     for (const loc of LOCALES) {
       const dir = join(raiz, base, 'i18n', loc);

@@ -30,7 +30,7 @@ import {
 } from './refs-com-simbolo.mjs';
 import { deduplicarProximoAdr, PROXIMO_ADR, substituirGrupo } from './reescrita.mjs';
 import { aferirAncoras } from './ancoras-de-rn.mjs';
-import { arquivosDeRn, contarRegras, gerarIndiceDeRn, numerosDuplicados, rnsDoTexto } from './regras-de-negocio.mjs';
+import { arquivosDeRn, contarRegras, gerarIndiceDeRn, numerosDuplicados, rnsDoLocale } from './regras-de-negocio.mjs';
 import { aferirContagens } from './contagens-do-codigo.mjs';
 import { conferirTabela, repositorio, RUNBOOK } from './procedimentos-do-runbook.mjs';
 import { conferirTemas, corrigirRecuo, INDICE as INDICE_DE_ADR, TEMAS as TEMAS_DE_ADR } from './temas-de-adr.mjs';
@@ -42,7 +42,7 @@ import {
   mensagemDaLacuna,
 } from './inventario-de-env.mjs';
 import { aplicar as aplicarCatalogo, LOCALES_DA_API, lerCatalogo } from './openapi-por-locale.mjs';
-import { chavesFaltando, copiaDoLocale, LOCALES_GERADOS, TEXTOS } from './textos-gerados.mjs';
+import { chavesFaltando, copiaDoLocale, LOCALES_GERADOS, TEXTOS, textosDaFonte } from './textos-gerados.mjs';
 import {
   arquivos,
   eventosEmitidosPor,
@@ -144,7 +144,7 @@ function escreverBloco(rel, id, corpo) {
  * os textos do próprio locale (ADR 0219, D1). Cópia ausente não é criada.
  */
 function escreverBlocoPorLocale(rel, id, montar) {
-  escreverBloco(rel, id, montar(PT));
+  escreverBloco(rel, id, montar(textosDaFonte(ler(rel), TEXTOS)));
   for (const locale of LOCALES_GERADOS) {
     const copia = copiaDoLocale(locale, rel);
     if (existsSync(join(RAIZ, copia))) escreverBloco(copia, id, montar(TEXTOS[locale]));
@@ -876,6 +876,9 @@ function verificarFrasesAncoradasNoCodigo() {
     {
       arquivo: 'deploy/docs/runbook.md',
       padrao: /as (\S+) imagens que o produto publica já estão resolvidas/,
+      // AT-745: a prosa do infra passa a ser inglesa; a frase equivalente fica registrada em docs/adr/0260
+      padraoEn: /the (\S+) images the product publishes are already resolved/,
+      esperadoEn: imagensEn,
       esperado: imagensPt,
       oque: 'quantas imagens o produto publica no GHCR',
     },
@@ -900,8 +903,11 @@ function verificarFrasesAncoradasNoCodigo() {
   ];
 
   let problemas = 0;
-  for (const { arquivo, padrao, esperado, oque } of afericoes) {
-    const achado = padrao.exec(ler(arquivo));
+  for (const { arquivo, padrao, padraoEn, esperadoEn, esperado: esperadoPt, oque } of afericoes) {
+    const texto = ler(arquivo);
+    let achado = padrao.exec(texto);
+    let esperado = esperadoPt;
+    if (achado === null && padraoEn) [achado, esperado] = [padraoEn.exec(texto), esperadoEn];
 
     if (achado === null) {
       problemas++;
@@ -1213,12 +1219,12 @@ function verificarCatalogosDaApi() {
   for (const loc of LOCALES_DA_API) {
     const { orfas, invalidas, faltando } = aplicarCatalogo(spec, lerCatalogo(RAIZ, loc));
     if (orfas.length + invalidas.length > 0) {
-      // AT-702: o catálogo é do `brabo-api` (que gera o `openapi.json` e os textos); aqui só
-      // avisa. Reprovar o docs por texto órfão da api seria cobrar o repo errado.
-      console.log(`::warning::catálogo da API (${loc}) fora de dia no brabo-api`);
-      console.log(`  AVISO     apps/api/docs/i18n/${loc}/openapi-textos.json — órfãs: ${orfas.join(', ') || '0'}; inválidas: ${invalidas.join(', ') || '0'}`);
+      // AT-702: o `openapi.json` é do `brabo-api`; o catálogo é daqui (AT-745), mas o texto órfão
+      // nasce de uma mudança da api, então só avisa: reprovar cobraria o repo errado.
+      console.log(`::warning::catálogo da API (${loc}) fora de dia no brabo`);
+      console.log(`  AVISO     docs/i18n/${loc}/openapi-textos.json — órfãs: ${orfas.join(', ') || '0'}; inválidas: ${invalidas.join(', ') || '0'}`);
     } else {
-      console.log(`  ok        apps/api/docs/i18n/${loc}/openapi-textos.json (${faltando.length} textos ainda na fonte)`);
+      console.log(`  ok        docs/i18n/${loc}/openapi-textos.json (${faltando.length} textos ainda na fonte)`);
     }
   }
 }
@@ -1236,10 +1242,7 @@ function gerarIndiceDeRnNoBloco() {
   for (const locale of [null, ...LOCALES_GERADOS]) {
     const rel = locale ? copiaDoLocale(locale, 'docs/business-rules.md') : 'docs/business-rules.md';
     if (!existsSync(join(RAIZ, rel)) || !ler(rel).includes('<!-- BEGIN:GENERATED:indice-de-rn -->')) continue;
-    const meus = todos.filter((a) => (locale ? a.includes(`/i18n/${locale}/`) : !a.includes('/i18n/')));
-    const rns = meus.flatMap((a) =>
-      rnsDoTexto(ler(a)).map((r) => ({ ...r, pagina: a.slice(a.indexOf('business-rules/')) })),
-    );
+    const rns = rnsDoLocale(todos, locale, ler);
     const bloco = gerarIndiceDeRn(rns).split('\n').slice(1, -1).join('\n');
     escreverBloco(rel, 'indice-de-rn', bloco);
   }

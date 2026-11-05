@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { chavesFaltando, LOCALES_GERADOS, TEXTOS } from './textos-gerados.mjs';
+import { chavesFaltando, LOCALES_GERADOS, TEXTOS, textosDaFonte } from './textos-gerados.mjs';
 
 describe('textos-gerados', () => {
   it('todo locale tem toda chave da fonte pt-BR', () => {
@@ -17,5 +17,15 @@ describe('textos-gerados', () => {
 
   it('a nota de llm tem o mesmo número de linhas em todo locale', () => {
     for (const l of LOCALES_GERADOS) expect(TEXTOS[l].llmNota).toHaveLength(TEXTOS['pt-BR'].llmNota.length);
+  });
+});
+
+describe('textosDaFonte (AT-745)', () => {
+  it('fonte com idioma_original: en recebe os textos em inglês; sem o campo, pt-BR', () => {
+    expect(textosDaFonte('---\nidioma_original: en\n---\n# X', TEXTOS)).toBe(TEXTOS.en);
+    expect(textosDaFonte('---\ntitle: x\n---\n# X', TEXTOS)).toBe(TEXTOS['pt-BR']);
+  });
+  it('mutação: o campo no corpo (fora do frontmatter) não conta', () => {
+    expect(textosDaFonte('# X\nidioma_original: en\n', TEXTOS)).toBe(TEXTOS['pt-BR']);
   });
 });

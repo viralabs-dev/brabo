@@ -723,6 +723,17 @@ enquanto a mesma página na raiz e uma página traduzida para `en` que não est�
 desatualizada não têm. As regras para quem
 traduz estão em [Localização](localizacao.md).
 
+**A doc dos repos de código é só em inglês (AT-745, ADR 0260).** Página com
+`idioma_original: en` não entra na paridade (`ehFonteTraduzivel`), é servida
+sem faixa no `/en/` e com a faixa "esta página só existe em inglês" nos outros
+locales (`paginas.mjs` marca `somenteIngles`; `faixa-de-traducao-check.mjs`
+confere o HTML). O índice de RN de cada locale usa a tradução quando existe e
+a fonte quando não existe (`rnsDoLocale`), o bloco gerado numa fonte em inglês
+sai com os textos em inglês (`textosDaFonte`), e as frases ancoradas na prosa de
+irmão (`contagens-do-codigo.mjs`, o runbook) aceitam pt-BR ou inglês
+(`padraoEn`). Os catálogos `openapi-textos.json` moram no `brabo`, em
+`docs/i18n/<locale>/`.
+
 ### A página da API sai traduzida por catálogo (ADR 0220) {#the-api-page-is-translated-by-catalog-adr-0220}
 
 A fonte das descrições da página Redoc continua sendo o texto dos decorators
