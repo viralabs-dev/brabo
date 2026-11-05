@@ -86,6 +86,19 @@ jobs:
             xargs -d '\n' -a "$RUNNER_TEMP/meus.lst" git add --
             git -c user.name='viralabs-dev-brabo[bot]' -c user.email='noreply@github.com' \
               commit -q -m 'docs: regenera os gerados que dependem dos irmãos' -m 'Gerado por regenera-gerados.yml (AT-726).'
+            # Ponto fixo: o próprio commit muda a data dos gerados (scripts.md e as cópias de
+            # locale), e a paridade é medida por data — gerar de novo até não mudar (máx. 3).
+            for volta in 1 2 3; do
+              bash scripts/docs/montar-layout.sh >/dev/null
+              node scripts/docs/generate.mjs >/dev/null
+              mudou=$(git diff --name-only | while IFS= read -r f; do git cat-file -e "HEAD:$f" 2>/dev/null && echo "$f"; done)
+              [ -z "$mudou" ] && break
+              git reset -q
+              printf '%s\n' "$mudou" | xargs -d '\n' git add --
+              git -c user.name='viralabs-dev-brabo[bot]' -c user.email='noreply@github.com' \
+                commit -q -m "docs: regenera os gerados (ponto fixo, volta ${volta})"
+            done
+            git reset -q
             # mesma árvore que a PR aberta já tem: não reempurra (re-rodaria o CI e derrubaria a aprovação)
             if git fetch -q origin "$BRANCH" 2>/dev/null && [ "$(git rev-parse 'HEAD^{tree}')" = "$(git rev-parse 'FETCH_HEAD^{tree}')" ]; then
               echo "A PR já tem estes gerados; nada a empurrar."
