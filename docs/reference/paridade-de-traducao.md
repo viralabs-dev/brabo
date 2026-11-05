@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 314 de 1261 (24.9%) | 28.0% de 22.137.976 | 274 | 39 | 1 | 947 | 0 |
-| `ru` | 314 de 1261 (24.9%) | 28.0% de 22.137.976 | 274 | 39 | 1 | 947 | 0 |
-| `zh-Hans` | 314 de 1261 (24.9%) | 28.0% de 22.137.976 | 274 | 39 | 1 | 947 | 0 |
+| `en` | 316 de 1267 (24.9%) | 28.0% de 22.156.297 | 276 | 39 | 1 | 951 | 0 |
+| `ru` | 316 de 1267 (24.9%) | 28.0% de 22.156.297 | 276 | 39 | 1 | 951 | 0 |
+| `zh-Hans` | 316 de 1267 (24.9%) | 28.0% de 22.156.297 | 276 | 39 | 1 | 951 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
