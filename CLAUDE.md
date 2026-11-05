@@ -184,3 +184,5 @@ O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mj
 - O mecanismo inteiro está explicado em
   docs/explanation/documentation-workflow.md — leia antes de desligar
   qualquer peça dele.
+
+Pages: o site só responde depois que o dono liga o GitHub Pages (fonte: branch `gh-pages`).
