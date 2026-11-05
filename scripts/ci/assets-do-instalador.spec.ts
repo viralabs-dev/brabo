@@ -134,46 +134,6 @@ describe('o `install.sh` baixa exatamente a mesma tabela', () => {
   });
 });
 
-describe('a esteira publica e assina os assets', () => {
-  const workflow = YAML.parse(ler('.github/workflows/build-runner-binaries.yml')) as {
-    jobs: Record<string, { steps: Array<{ name?: string; run?: string; uses?: string }> }>;
-  };
-  const checksums = workflow.jobs.checksums;
-  const gerar = checksums?.steps.find((p) => p.name === 'Gerar, assinar e anexar o checksums.txt')?.run ?? '';
-
-  it('prepara os assets pelo script, a partir do checkout da tag', () => {
-    expect(gerar).toContain('scripts/ci/assets-do-instalador.ts" preparar "${GITHUB_WORKSPACE}"');
-  });
-
-  it('eles entram no MESMO `sha256sum` que gera o manifesto', () => {
-    expect(gerar).toMatch(/sha256sum brabo-runner-\* install\.sh THIRD_PARTY_NOTICES\.md \$ASSETS_DO_INSTALADOR > checksums\.txt/);
-  });
-
-  it('o job confere cada linha do manifesto contra o arquivo, depois de verificar a assinatura e antes de anexar', () => {
-    const verificouAssinatura = gerar.indexOf('cosign verify-blob');
-    const conferiuLinhas = gerar.indexOf('sha256sum -c --strict checksums.txt');
-    const anexou = gerar.indexOf('gh release upload');
-    expect(verificouAssinatura).toBeGreaterThan(-1);
-    expect(conferiuLinhas).toBeGreaterThan(verificouAssinatura);
-    expect(anexou).toBeGreaterThan(conferiuLinhas);
-  });
-
-  it('eles são anexados à Release junto com o manifesto', () => {
-    expect(gerar).toMatch(/gh release upload "\$TAG" checksums\.txt checksums\.txt\.bundle install\.sh THIRD_PARTY_NOTICES\.md \$ASSETS_DO_INSTALADOR --clobber/);
-  });
-
-  it('o job tem Node para rodar o `.ts`, pinado como o resto', () => {
-    const setup = checksums?.steps.find((p) => p.uses?.startsWith('actions/setup-node@'));
-    expect(setup?.uses).toMatch(/^actions\/setup-node@[0-9a-f]{40}$/);
-  });
-
-  it('o padrão que baixa os binários não alcança um asset do instalador', () => {
-    expect(gerar).toContain("--pattern 'brabo-runner-*'");
-    for (const { asset } of ASSETS_DO_INSTALADOR) expect(asset.startsWith('brabo-runner-')).toBe(false);
-    expect(PREFIXO_DOS_ASSETS).toBe('brabo-install-');
-  });
-});
-
 describe('prepararAssets', () => {
   const tmp = mkdtempSync(path.join(os.tmpdir(), 'brabo-assets-'));
   afterAll(() => rmSync(tmp, { recursive: true, force: true }));

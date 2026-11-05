@@ -30,6 +30,7 @@ keywords: [scripts, pnpm, make, commands]
 | `pnpm docs:drift` | `node scripts/docs/drift.mjs` |
 | `pnpm docs:audit` | `node scripts/docs/audit.mjs` |
 | `pnpm docs:fontes` | `bash scripts/docs/montar-layout.sh` |
+| `pnpm test:scripts` | `vitest run scripts/docs scripts/dev/install- scripts/ci/assets-do-instalador --exclude scripts/docs/openapi-por-locale.spec.ts` |
 
 ## api — `apps/api/package.json`
 
@@ -172,4 +173,4 @@ keywords: [scripts, pnpm, make, commands]
 
 ---
 
-Всего команд: 112. Цель Makefile без аннотации `## описание` здесь не появляется — добавьте её в исходнике.
+Всего команд: 113. Цель Makefile без аннотации `## описание` здесь не появляется — добавьте её в исходнике.

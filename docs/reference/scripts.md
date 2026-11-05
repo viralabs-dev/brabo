@@ -30,6 +30,7 @@ Fonte: o `package.json` de cada pacote e o `Makefile` da raiz.
 | `pnpm docs:drift` | `node scripts/docs/drift.mjs` |
 | `pnpm docs:audit` | `node scripts/docs/audit.mjs` |
 | `pnpm docs:fontes` | `bash scripts/docs/montar-layout.sh` |
+| `pnpm test:scripts` | `vitest run scripts/docs scripts/dev/install- scripts/ci/assets-do-instalador --exclude scripts/docs/openapi-por-locale.spec.ts` |
 
 ## api — `apps/api/package.json`
 
@@ -172,4 +173,4 @@ Fonte: o `package.json` de cada pacote e o `Makefile` da raiz.
 
 ---
 
-112 comandos no total. Alvo do Makefile sem a anotação `## descrição` não aparece aqui — anote-o na fonte.
+113 comandos no total. Alvo do Makefile sem a anotação `## descrição` não aparece aqui — anote-o na fonte.

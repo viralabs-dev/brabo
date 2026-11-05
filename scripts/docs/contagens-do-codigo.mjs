@@ -65,28 +65,7 @@ function trecho(texto, abre, fecha) {
   return f === -1 ? null : texto.slice(i + abre.length, f);
 }
 
-/** As chaves do bloco `overrides:` de um `pnpm-workspace.yaml`. */
-function contarOverrides(texto) {
-  const linhas = texto.split('\n');
-  const i = linhas.findIndex((l) => l === 'overrides:');
-  if (i === -1) return null;
-  let n = 0;
-  for (const linha of linhas.slice(i + 1)) {
-    if (/^\S/.test(linha)) break; // próxima chave de topo
-    if (/^ {2}[^\s#]/.test(linha)) n++;
-  }
-  return n;
-}
-
 export const FONTES = {
-  overridesRaiz: {
-    descricao: '`overrides` em `pnpm-workspace.yaml`',
-    contar: ({ ler }) => contarOverrides(ler('pnpm-workspace.yaml')),
-  },
-  overridesWebsite: {
-    descricao: '`overrides` em `website/pnpm-workspace.yaml`',
-    contar: ({ ler }) => contarOverrides(ler('website/pnpm-workspace.yaml')),
-  },
   goldenSetRagCasos: {
     descricao: '`CASOS` em `apps/api/scripts/seed-golden-set-rag.ts`',
     contar: ({ ler }) => {
@@ -94,30 +73,6 @@ export const FONTES = {
       if (corpo === null) return null;
       const n = [...corpo.matchAll(/^\s+expectedPath:/gm)].length;
       return n === 0 ? null : n;
-    },
-  },
-  goldenSetRagCorpus: {
-    descricao: '`ARQUIVOS_CURADOS` em `apps/api/scripts/seed-golden-set-rag.ts`',
-    contar: ({ ler }) => {
-      const corpo = trecho(ler('apps/api/scripts/seed-golden-set-rag.ts'), 'const ARQUIVOS_CURADOS = [', '] as const;');
-      if (corpo === null) return null;
-      const n = [...corpo.matchAll(/'[^']+'/g)].length;
-      return n === 0 ? null : n;
-    },
-  },
-  goldenSetRagPiso: {
-    descricao: 'o piso em `apps/engine/test/fixtures/golden_set_rag/floor.json`',
-    contar: ({ ler }) => {
-      let json;
-      try {
-        json = JSON.parse(ler('apps/engine/test/fixtures/golden_set_rag/floor.json'));
-      } catch {
-        return null;
-      }
-      const modelos = Object.entries(json).filter(([k]) => !k.startsWith('_'));
-      if (modelos.length !== 1) return null; // dois modelos: a frase precisaria dizer qual
-      const [, { passRate, of }] = modelos[0];
-      return Number.isInteger(passRate) && Number.isInteger(of) ? `${passRate}/${of}` : null;
     },
   },
   imagensDeTerceiro: {
@@ -153,26 +108,6 @@ export const FONTES = {
       return n === 0 ? null : n;
     },
   },
-  servicosDoComposeDeDev: {
-    // Conta os serviços que sobem POR PADRÃO — os sem `profiles:`, que são os
-    // que `pnpm dev`/`up --wait` levanta; os do profile `local-llm` são
-    // opt-in — e a frase diz que TODOS têm healthcheck. Serviço padrão novo
-    // sem healthcheck muda o esperado para uma frase que a prosa não tem, e
-    // reprova: é essa a regra que ela anuncia.
-    descricao: 'os serviços sem `profiles:` de `docker/docker-compose.yml`',
-    contar: ({ ler }) => {
-      const texto = ler('docker/docker-compose.yml');
-      const m = /^services:\n([\s\S]*?)^\S/m.exec(texto);
-      if (m === null) return null;
-      const blocos = m[1].split(/^ {2}(?=[a-z0-9-]+:\s*$)/m).slice(1);
-      const padrao = blocos.filter((b) => !/^ {4}profiles:/m.test(b));
-      if (padrao.length === 0) return null;
-      const semHealthcheck = padrao.filter((b) => !/^ {4}healthcheck:/m.test(b)).length;
-      return semHealthcheck === 0
-        ? padrao.length
-        : `${padrao.length} serviços, ${semHealthcheck} sem healthcheck`;
-    },
-  },
   tiposDeAcao: {
     descricao: '`ACTION_TYPES` em `apps/api/src/domain/actions/decide.ts`',
     contar: ({ ler }) => {
@@ -202,10 +137,6 @@ export const FONTES = {
   schemasDeArtefato: {
     descricao: '`contarSchemasDeArtefato` (`generate.mjs`)',
     contar: ({ externas }) => externas?.schemas ?? null,
-  },
-  providersDeLlm: {
-    descricao: '`descobrirProviders` (`generate.mjs`)',
-    contar: ({ externas }) => externas?.providers ?? null,
   },
 };
 

@@ -30,6 +30,7 @@ Source: each package's `package.json` and the root `Makefile`.
 | `pnpm docs:drift` | `node scripts/docs/drift.mjs` |
 | `pnpm docs:audit` | `node scripts/docs/audit.mjs` |
 | `pnpm docs:fontes` | `bash scripts/docs/montar-layout.sh` |
+| `pnpm test:scripts` | `vitest run scripts/docs scripts/dev/install- scripts/ci/assets-do-instalador --exclude scripts/docs/openapi-por-locale.spec.ts` |
 
 ## api — `apps/api/package.json`
 
@@ -172,4 +173,4 @@ Source: each package's `package.json` and the root `Makefile`.
 
 ---
 
-112 commands total. A Makefile target without a `## description` annotation doesn't appear here — annotate it at the source.
+113 commands total. A Makefile target without a `## description` annotation doesn't appear here — annotate it at the source.
