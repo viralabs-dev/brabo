@@ -1,10 +1,11 @@
 name: E2E do instalador
 
-# DORMENTE (AT-702, Rodada 180): movido do monorepo sem os gatilhos automáticos.
-# A release 1.0.0 do PRODUTO nasce aqui na AT-704, que religa o gatilho depois de
-# trazer/ajustar os scripts de que este workflow depende (`scripts/ci/*` de
-# release, do `brabo-infra`). Enquanto isso só o disparo manual existe, para
-# nenhum push criar tag nem publicar nada por engano.
+# DORMENTE ATÉ A AT-704 (Rodada 180, AT-702): o workflow veio do monorepo com os
+# gatilhos originais (o `docs:check` do runbook confere `push: tags` no `on:`), mas
+# CADA job só roda com a variável de repositório `PRODUTO_RELEASE_LIGADA=true`.
+# Sem ela, nenhum push cria tag nem publica nada. A release do PRODUTO (1.0.0)
+# nasce aqui e depende dos `scripts/ci/*` de release do `brabo-infra`.
+
 
 # PROVA o `install.sh` numa máquina limpa — e o runner efêmero do Actions é
 # exatamente isso: um host recém-criado, sem Brabo, sem `.env`, sem marcador.
@@ -20,6 +21,9 @@ name: E2E do instalador
 # (`golden-set-rag.yml`, ADR 0138): o que não é exercitável em PR roda em
 # cadência própria, e o workflow diz por quê em vez de fingir cobertura.
 on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
   workflow_dispatch:
     inputs:
       tag:
@@ -36,6 +40,7 @@ concurrency:
 
 jobs:
   instalar:
+    if: vars.PRODUTO_RELEASE_LIGADA == 'true'
     name: install.sh (${{ matrix.os }})
     strategy:
       fail-fast: false

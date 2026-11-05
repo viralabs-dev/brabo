@@ -550,7 +550,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从代码中提取的清单：运行时读取 **185 个变量**。全部都在上方表格中有描述。
+从代码中提取的清单：运行时读取 **186 个变量**。全部都在上方表格中有描述。
 
 每个来源都标记为 **产品**——运维安装的人在部署 `.env` 中设置的内容——或 **工具**，仅由 CI 和开发产品的人读取。工具变量绝不应出现在运维人员的 `.env` 中。
 
@@ -735,11 +735,12 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 - `E2E_USER` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_WEB_URL` <sub>(e2e/playwright.config.ts)</sub>
 
-**deploy/k8s** — 22 个变量 · 工具
+**deploy/k8s** — 23 个变量 · 工具
 
 - `API_URL` <sub>(deploy/k8s/rollout-test.sh)</sub>
 - `BRABO_CLUSTER_NAME` <sub>(deploy/k8s/bootstrap.sh)</sub>
 - `BRABO_CLUSTER_TOOL` <sub>(deploy/k8s/bootstrap.sh)</sub>
+- `BRABO_IRMAOS` <sub>(deploy/k8s/bootstrap.sh)</sub>
 - `BRABO_KEEP_CLUSTER` <sub>(deploy/k8s/bootstrap.sh)</sub>
 - `BRABO_NAMESPACE` <sub>(deploy/k8s/hpa-test.sh)</sub>
 - `BRABO_SKIP_BUILD` <sub>(deploy/k8s/bootstrap.sh)</sub>

@@ -1,10 +1,11 @@
 name: tag-release
 
-# DORMENTE (AT-702, Rodada 180): movido do monorepo sem os gatilhos automáticos.
-# A release 1.0.0 do PRODUTO nasce aqui na AT-704, que religa o gatilho depois de
-# trazer/ajustar os scripts de que este workflow depende (`scripts/ci/*` de
-# release, do `brabo-infra`). Enquanto isso só o disparo manual existe, para
-# nenhum push criar tag nem publicar nada por engano.
+# DORMENTE ATÉ A AT-704 (Rodada 180, AT-702): o workflow veio do monorepo com os
+# gatilhos originais (o `docs:check` do runbook confere `push: tags` no `on:`), mas
+# CADA job só roda com a variável de repositório `PRODUTO_RELEASE_LIGADA=true`.
+# Sem ela, nenhum push cria tag nem publica nada. A release do PRODUTO (1.0.0)
+# nasce aqui e depende dos `scripts/ci/*` de release do `brabo-infra`.
+
 
 # Carimba a tag do estágio a cada merge numa permanente, e — quando o merge é
 # um hotfix — trava o gate de retropropagação e abre os PRs que o resolvem.
@@ -24,7 +25,10 @@ name: tag-release
 # depois do merge. É o único workflow do repositório que reage a push, e é por
 # isso que ele existe separado do `ci.yml`.
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - dev
+      - main
 
 permissions:
   contents: write # criar tag e escrever o gate
@@ -38,6 +42,7 @@ concurrency:
 
 jobs:
   carimbar:
+    if: vars.PRODUTO_RELEASE_LIGADA == 'true'
     name: Tag do estágio
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -106,7 +111,7 @@ jobs:
   travar:
     name: Travar o gate e abrir as retropropagações
     needs: carimbar
-    if: github.ref_name == 'main' && needs.carimbar.outputs.hotfix == 'sim'
+    if: ${{ vars.PRODUTO_RELEASE_LIGADA == 'true' && (github.ref_name == 'main' && needs.carimbar.outputs.hotfix == 'sim') }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
@@ -171,7 +176,7 @@ jobs:
   destravar:
     name: Destravar o gate
     needs: carimbar
-    if: needs.carimbar.outputs.retropropagacao == 'sim'
+    if: ${{ vars.PRODUTO_RELEASE_LIGADA == 'true' && (needs.carimbar.outputs.retropropagacao == 'sim') }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
@@ -244,7 +249,7 @@ jobs:
     name: Avisar que o carimbo falhou
     needs: carimbar
     # `!cancelled()`: o verde também passa por aqui, para FECHAR a issue (AT-664).
-    if: ${{ !cancelled() }}
+    if: ${{ vars.PRODUTO_RELEASE_LIGADA == 'true' && (!cancelled()) }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:

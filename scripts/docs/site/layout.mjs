@@ -119,10 +119,10 @@ export function copiarAssets(destino) {
   const out = join(destino, 'assets');
   const fontes = join(out, 'fonts');
   mkdirSync(fontes, { recursive: true });
-  copyFileSync(join(RAIZ, 'apps/web/node_modules/mermaid/dist/mermaid.min.js'), join(out, 'mermaid.min.js'));
+  copyFileSync(join(RAIZ, 'node_modules/mermaid/dist/mermaid.min.js'), join(out, 'mermaid.min.js'));
   for (const f of ['site.css', 'tema.js', 'site.js'])
     copyFileSync(join(AQUI, 'assets', f), join(out, f));
-  copyFileSync(join(RAIZ, 'design/tokens.css'), join(out, 'tokens.css'));
+  copyFileSync(join(RAIZ, 'apps/web/design/tokens.css'), join(out, 'tokens.css'));
   const web = join(RAIZ, 'apps/web/public/fonts');
   for (const f of readdirSync(web).filter((n) => n.endsWith('.woff2') || n === 'LICENSE.txt'))
     copyFileSync(join(web, f), join(fontes, f));
