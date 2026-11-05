@@ -33,7 +33,18 @@ export function lerDocmap({ base = RAIZ, arquivos = arquivosVersionados(base), r
   for (const m of mapas) {
     const bruto = parse(readFileSync(join(base, m), 'utf8'));
     if (!Array.isArray(bruto?.rules)) throw new Error(`${m}: campo \`rules\` ausente ou não é lista`);
-    rules.push(...bruto.rules);
+    // O docmap de um app (`apps/<x>/docs/.docmap.yml`) pode vir RELATIVO ao repo
+    // dele (`src/...`, `docs/...`), porque depois da separação cada repo o escreve
+    // a partir da própria raiz; no layout reconstruído o app mora em `apps/<x>/`.
+    const app = /^(apps\/[^/]+)\/docs\/\.docmap\.yml$/.exec(m)?.[1];
+    const sob = (c) => (app && !c.startsWith(`${app}/`) ? `${app}/${c}` : c);
+    for (const r of bruto.rules) {
+      rules.push(
+        app
+          ? { ...r, watch: r.watch?.map(sob), docs: r.docs?.map(sob), docs_alternativos: r.docs_alternativos?.map(sob) }
+          : r,
+      );
+    }
   }
   return { rules };
 }

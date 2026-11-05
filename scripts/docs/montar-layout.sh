@@ -30,6 +30,7 @@ DESTINOS=(
   "brabo-contracts:."
   "brabo-infra:."
   "brabo-ci:."
+  "brabo-qa:."
 )
 
 for par in "${DESTINOS[@]}"; do
