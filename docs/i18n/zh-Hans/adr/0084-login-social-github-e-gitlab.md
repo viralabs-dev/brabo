@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0084 — 社交登录（GitHub/GitLab），修订 ADR 0031/0032 的 backlog

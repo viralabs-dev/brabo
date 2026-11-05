@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0102 — 修订 ADR 0065：外部效果的边界不再是 `deny`，而是绝对上限

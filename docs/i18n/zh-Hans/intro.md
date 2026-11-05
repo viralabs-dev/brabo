@@ -6,7 +6,7 @@ sidebar_position: 1
 slug: /
 description: 编排 AI 智能体以推进应用完整生命周期的平台，最终决定权始终在人手中。
 keywords: [brabo, agentes de IA, engenharia, orquestração, aprovação]
-traducao_de: cca4f282a22c9a427ae98001465238933cce3f47
+traducao_de: 17899a38601ea4c2ea6f421cfc715152d1419d53
 ---
 
 # Brabo 是什么 {#o-que-é-o-brabo}

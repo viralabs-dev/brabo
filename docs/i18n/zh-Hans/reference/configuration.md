@@ -4,7 +4,7 @@ title: 配置
 sidebar_position: 1
 description: api、engine 和 web 的全部环境变量，附默认值以及取值错误时会坏掉什么。
 keywords: [配置, 环境变量, env, 部署]
-traducao_de: e34fb776731c09e64de832912893157dace42817
+traducao_de: e018c045407daa7a92211fac958c4bc2ff981545
 ---
 
 # 配置

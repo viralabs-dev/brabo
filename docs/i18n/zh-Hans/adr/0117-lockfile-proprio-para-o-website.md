@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0117 — `website/` 拥有自己的 lockfile，脱离产品的 `pnpm audit`

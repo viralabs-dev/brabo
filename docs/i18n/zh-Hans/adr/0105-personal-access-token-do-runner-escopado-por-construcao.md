@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0105 — 给 runner 的 Personal Access Token（`brb_…`），按构造限定到一条路由

@@ -5,7 +5,7 @@ sidebar_label: 术语表
 sidebar_position: 9
 description: Brabo 的通用语言——出现在代码、界面和 ADR 中的术语，以及它们在这里承载的含义。
 keywords: [glossary, ubiquitous language, harness, gate, handoff, DEK, outbox]
-traducao_de: 093f918421b29e274e4f77c0a40f80a4a3ea1545
+traducao_de: 4990612012ed4b363b8a96f95efb89c0d0c9d26c
 ---
 
 # 术语表 {#glossary}

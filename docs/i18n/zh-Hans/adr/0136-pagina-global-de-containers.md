@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0136 — 全局容器页面：broker 按加载设上限，`container_remove` 纳入绝对上限

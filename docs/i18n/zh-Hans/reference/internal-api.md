@@ -1,5 +1,5 @@
 ---
-traducao_de: 1298c53b46d1828fcd8068dd77614879d3606fd9
+traducao_de: 42533ef5cd2b8e519264de7fda1350171be59485
 id: internal-api
 title: 内部 API（api ↔ engine）
 sidebar_position: 6

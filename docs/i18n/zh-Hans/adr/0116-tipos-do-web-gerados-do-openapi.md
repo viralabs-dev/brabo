@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0116 — `ActionType`（以及将来的类型）由 OpenAPI 契约生成，而不是手工复制

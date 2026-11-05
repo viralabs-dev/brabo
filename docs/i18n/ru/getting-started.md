@@ -5,7 +5,7 @@ sidebar_label: Первые шаги
 sidebar_position: 5
 description: От клонирования до первого хода агента, с тем, что проверить, когда какой-то этап не работает.
 keywords: [instalação, setup, onboarding, primeiro projeto, ollama]
-traducao_de: 504041e6506e0dc6341e30836aaa2a38efa393e4
+traducao_de: c8911f3416983ed754a0274de9bf168cc5a25a49
 ---
 
 # Первые шаги {#primeiros-passos}

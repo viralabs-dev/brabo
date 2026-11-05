@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0103 — 本地 runner：通过带一次性 ticket 的 Phoenix 通道在用户机器上执行

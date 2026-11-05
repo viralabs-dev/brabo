@@ -4,7 +4,7 @@ title: BRB 登记表
 sidebar_position: 10
 description: 33 项 BRB 发现——id、标题、优先级、维护者 vault 记录的状态以及在此测得的状态，并附上证明它的 文件:行。
 keywords: [brb, 安全, 发现, backlog, 供应链]
-traducao_de: 67d5067daf28ece21602f1fa6bd0cd4c6677f5aa
+traducao_de: a4b2340131a6912b860a89172da66f34d1f31133
 ---
 
 # BRB 登记表

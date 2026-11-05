@@ -1,5 +1,5 @@
 ---
-traducao_de: 67d5067daf28ece21602f1fa6bd0cd4c6677f5aa
+traducao_de: a4b2340131a6912b860a89172da66f34d1f31133
 id: brb
 title: BRB register
 sidebar_label: BRB register

@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0185 — "Estou pronto — a necessidade está validada"：一次点击同时关闭就绪确认、gate `necessidade-validada` 和 PO 的接受

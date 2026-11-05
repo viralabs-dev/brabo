@@ -1,5 +1,5 @@
 ---
-traducao_de: 715e7330f7f738c55bc7cd3a0d770a0fc9304e11
+traducao_de: de061f649879891150d8c35e4aef5f9d65a09242
 id: custo
 title: 'Regras de negócio — Custo'
 sidebar_label: Custo e metering

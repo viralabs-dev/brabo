@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # ADR 0019 — 解锁真实的 DevAgent：写入、终端、按模块的 ADR 和按项目的预算

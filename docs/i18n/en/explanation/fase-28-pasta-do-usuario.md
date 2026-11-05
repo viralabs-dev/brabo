@@ -5,7 +5,7 @@ sidebar_label: FASE 28 — user's folder
 sidebar_position: 15
 description: The scope of FASE 28 — a base consented to in the bootstrap, mounted as the local default, and a local agent that declares capabilities. The decisions are in ADRs 0146 and 0147.
 keywords: [fase 28, user folder, projects base, runner, mirror, capabilities]
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # FASE 28 — the user's folder

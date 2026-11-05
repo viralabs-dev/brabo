@@ -2,7 +2,7 @@
 id: localizacao
 title: 本地化
 description: Brabo 的四种语言（pt-BR 作为来源，以及 en、ru 和 zh-Hans）、语言代码、复数形式、语言如何解析、缺失文本如何处理，以及永不翻译的内容。
-traducao_de: 74ac4990672a22f97b68fac9cece5c509a34fe89
+traducao_de: 8e484d595305b002e81cb1e86be2739b3b963123
 ---
 
 # 本地化

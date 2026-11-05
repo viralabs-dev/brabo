@@ -5,7 +5,7 @@ sidebar_label: Архитектура
 sidebar_position: 2
 description: Карта Brabo — контейнеры, карта кода, поток хода агента, инварианты слоёв и известный долг.
 keywords: [архитектура, карта кода, инварианты, harness, event log]
-traducao_de: b9d61abd7060c5a35f8eba1155204e01a065ab40
+traducao_de: 4cc1b596659af65abb89f0dc4ed3ec7525de5906
 ---
 
 # Архитектура

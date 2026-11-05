@@ -5,7 +5,7 @@ sidebar_label: Синхронизация документации
 sidebar_position: 1
 description: Механизм, который не даёт документации загнить, — что делает каждая часть, зачем она существует и что делать, когда проверка жалуется несправедливо.
 keywords: [documentation, drift, docmap, CI, generation]
-traducao_de: b9d61abd7060c5a35f8eba1155204e01a065ab40
+traducao_de: 4cc1b596659af65abb89f0dc4ed3ec7525de5906
 ---
 
 # Как документация остаётся живой {#how-documentation-stays-alive}

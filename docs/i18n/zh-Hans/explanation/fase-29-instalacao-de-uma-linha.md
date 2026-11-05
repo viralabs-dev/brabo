@@ -1,5 +1,5 @@
 ---
-traducao_de: 9ecc443e59
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 id: fase-29-instalacao-de-uma-linha
 title: FASE 29 — 一行命令安装
 sidebar_label: FASE 29 — 一行命令安装

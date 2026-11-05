@@ -2,7 +2,7 @@
 id: localizacao
 title: Localization
 description: Brabo's four languages (pt-BR as the source, en, ru and zh-Hans), the codes, the plural forms, how the language is resolved, what happens to missing text and what is never translated.
-traducao_de: 74ac4990672a22f97b68fac9cece5c509a34fe89
+traducao_de: 8e484d595305b002e81cb1e86be2739b3b963123
 ---
 
 # Localization
