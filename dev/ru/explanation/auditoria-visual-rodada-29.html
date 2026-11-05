@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="ru" data-locale="ru" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Визуальный аудит до и после Rodada 29 | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Меню">&#9776;</button>
+<a class="marca" href="../index.html">Brabo</a>
+<input type="search" data-busca placeholder="Поиск" aria-label="Поиск" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Язык"><option value="../../explanation/auditoria-visual-rodada-29.html">pt-BR</option><option value="../../en/explanation/auditoria-visual-rodada-29.html">en</option><option value="../../ru/explanation/auditoria-visual-rodada-29.html" selected>ru</option><option value="../../zh-Hans/explanation/auditoria-visual-rodada-29.html">zh-Hans</option></select>
+<select data-seletor aria-label="Среда"><option value="../../../dev/ru/explanation/auditoria-visual-rodada-29.html" selected>dev</option><option value="../../../prd/ru/explanation/auditoria-visual-rodada-29.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="Сменить тему">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><h2>🚀 Начните здесь</h2><ul><li><a href="../index.html">Введение</a></li><li><a href="../getting-started.html">Первые шаги</a></li><li><a href="../tutorials/from-zero-to-deliverable.html">С нуля до готового результата</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li></ul></section><section><h2>🏗️ Архитектура</h2><ul><li><a href="../architecture.html">Архитектура</a></li><li><a href="../adr.html">Решения (ADR)</a><ul><li><span>Git, repositório e política de branches</span><ul><li><a href="../adr/0001-git-provider-contract-shape.html">ADR 0001 — Формат нормализованного контракта GitProvider</a></li><li><a href="../adr/0002-git-error-normalization.html">ADR 0002 — Нормализация ошибок GitProvider</a></li><li><a href="../adr/0003-git-provider-retry-policy.html">ADR 0003 — Политика повторов для удалённых providers</a></li><li><a href="../adr/0004-git-credential-registration.html">ADR 0004 — Регистрация git-учётных данных пользователя</a></li><li><a href="../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005 — Идемпотентный и возобновляемый bootstrap Gitflow</a></li><li><a href="../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028 — Защита веток: расхождение между providers и матрица одобрения</a></li><li><a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030 — Механизированная политика веток</a></li><li><a href="../adr/0044-adocao-de-repositorio-existente.html">ADR 0044 — Усыновление существующего репозитория и план как шлюз</a></li><li><a href="../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056 — Engine работает в удалённом репозитории</a></li><li><a href="../adr/0139-o-alarme-de-esteira-ganha-destinatario.html">ADR 0139 — Сигнал тревоги о merge конвейера получает адресата и правило для `dev`</a></li><li><a href="../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165 — Репозиторий рождается при принятии handoff Arquiteto, и исполнение без него не начинается</a></li><li><a href="../adr/0217-promocao-automatica-para-qa-em-fase-de-teste.html">ADR 0217 — Автоматическое продвижение `dev` → `qa`, пока QA находится в тестовой фазе</a></li><li><a href="../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.html">ADR 0235 — A `qa` é aposentada por hora e a esteira do repositório fica `dev → main`</a></li><li><a href="../adr/0236-o-dependabot-dispensa-revisao-na-dev.html">ADR 0236 — O Dependabot dispensa revisão na `dev` e fica mergeável com os outros checks verdes</a></li></ul></li><li><span>Harness de agente, turnos e sessões</span><ul><li><a href="../adr/0006-prompt-assembler-context-harness.html">ADR 0006 — Harness агентов: детерминированная сборка контекста</a></li><li><a href="../adr/0007-toolloop-tools-context-manager.html">ADR 0007 — ToolLoop, инструменты, ContextManager (harness с LLM)</a></li><li><a href="../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061 — Тип сессии — это данные создания, а выполнение остаётся событием</a></li><li><a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098 — Согласованные пределы транспорта и эффективное окно сжатия</a></li><li><a href="../adr/0163-o-clique-responde-ao-aceitar.html">ADR 0163 — Клик отвечает при ПРИНЯТИИ команды, а ход продолжается через канал</a></li><li><a href="../adr/0175-infra-lead-conversa-pelo-composer.html">ADR 0175 — Infra Lead разговаривает через composer, а прежде его ход проходит через `TurnoAssincrono`</a></li><li><a href="../adr/0177-idioma-das-respostas-por-conta-sessao-e-projeto.html">ADR 0177 — Язык ответов живёт в трёх местах — учётная запись, сессия и проект, — в открытом списке BCP-47 и никогда в `users.locale`</a></li><li><a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179 — Цикл спрашивает Jev, какой инструмент, а модель пользователя видит только оставшееся меню</a></li><li><a href="../adr/0183-reabrir-sessao-encerrada.html">ADR 0183 — Закрытую сессию можно открыть снова: собственный выход из терминальных состояний, в `active`, с новым событием</a></li><li><a href="../adr/0184-reabrir-sessao-decisoes-do-dono.html">ADR 0184 — Повторное открытие сессии: три решения владельца, и `developer` открывает снова</a></li><li><a href="../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191 — Сообщение, пришедшее во время идущего хода, попадает в сохраняемую очередь и читается в конце хода</a></li><li><a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226 — Diário vivo e retomada dos agentes: o turno interrompido volta uma vez, do plano</a></li><li><a href="../adr/0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.html">ADR 0246 — Anexos do chat: bytes no Postgres, referência no evento, visão por capability</a></li><li><a href="../adr/0247-uma-mensagem-varios-destinatarios.html">ADR 0247 — Uma mensagem, vários destinatários</a></li><li><a href="../adr/0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.html">ADR 0249 — O raciocínio do agente é gravado e mostrado só a developer ou mais</a></li></ul></li><li><span>O time de agentes — papéis, áreas e handoffs</span><ul><li><a href="../adr/0008-agente-criativo-conversacional-handoffs.html">ADR 0008 — Разговорный агент Criativo в harness + фундамент handoffs</a></li><li><a href="../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009 — Агент PO, backlog (epics/stories/tasks) и прослеживаемость</a></li><li><a href="../adr/0010-agente-arquiteto-adr-pr-module-map.html">ADR 0010 — Агент Arquiteto: ADR через настоящую PR, module_map и перекрёстная валидация</a></li><li><a href="../adr/0014-infra-agent-painel-phoenix.html">ADR 0014 — InfraAgent и живая панель команды (закрытие Фазы 4a)</a></li><li><a href="../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015 — Настоящий Psicólogo: ToolLoop, гипотезы с доказательствами и сортировка по стоимости</a></li><li><a href="../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016 — Anamnese: профиль владения навыками, патчи инструкций и замкнутый цикл</a></li><li><a href="../adr/0022-fechamento-4b-psicologo.html">ADR 0022 — Закрытие Фазы 4b (сессия 1): доказательство, которое доходит, стоимость, которая видна, анализ, который переживает kill</a></li><li><a href="../adr/0023-fechamento-4b-anamnese.html">ADR 0023 — Закрытие Фазы 4b (сессия 2): работающий каталог, дедупликация, различающая, кто отказал, и очередь, переживающая раунд</a></li><li><a href="../adr/0038-hierarquia-de-agentes.html">ADR 0038 — Иерархия агентов: области, leads и делегирование</a></li><li><a href="../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046 — Продвижение истории с полномочиями пользователя</a></li><li><a href="../adr/0053-dev-lead-e-paralelismo-autorizado.html">ADR 0053 — Dev Lead как область и параллелизм, разрешённый пользователем</a></li><li><a href="../adr/0068-diagrama-c4-do-arquiteto.html">ADR 0068 — Диаграмма C4 Arquiteto</a></li><li><a href="../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069 — Условное слияние принятия handoff с включением выполнения</a></li><li><a href="../adr/0085-fluxo-como-registro-declarativo.html">ADR 0085 — Поток ролей как декларативный реестр (fluxo.yml)</a></li><li><a href="../adr/0086-dev-lead-plano-suspende-para-aprovacao.html">ADR 0086 — План Dev Lead приостанавливает ход до одобрения</a></li><li><a href="../adr/0087-ux-designer-agente.html">ADR 0087 — UX Designer входит как разговорный агент</a></li><li><a href="../adr/0088-staff-agente-dormente-para-disparo-automatico.html">ADR 0088 — Staff: код готов, спящий для автоматического запуска</a></li><li><a href="../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">ADR 0089 — `analytics` и `delivery-metricas` становятся скриптом отчёта</a></li><li><a href="../adr/0092-platform-relatorio-de-telemetria-sob-demanda.html">ADR 0092 — `platform` рождается как скрипт отчёта по требованию, а не агент</a></li><li><a href="../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">ADR 0093 — Роль `dbre` становится двумя скриптами: линтер миграций и отчёт о резервном копировании</a></li><li><a href="../adr/0094-delegacao-dev-lead-vira-dado.html">ADR 0094 — Делегирование Dev Lead → dev становится данными, с переопределённым `parecerArtifactId`</a></li><li><a href="../adr/0109-handoff-manual-a-agente-a-escolha.html">ADR 0109 — Ручной handoff агенту по выбору переиспользует предложение+принятие, а не третье состояние handoff</a></li><li><a href="../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182 — Предложение handoff получает жизненный цикл: одно ожидающее на получателя и `superseded`</a></li><li><a href="../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185 — «Estou pronto — a necessidade está validada»: один клик закрывает готовность, gate `necessidade-validada` и принятие PO</a></li><li><a href="../adr/0186-aceite-automatico-do-handoff-ao-arquiteto.html">ADR 0186 — Handoff от PO к Arquiteto принимается без клика, когда backlog покрыт и репозиторий локальный</a></li><li><a href="../adr/0194-aprovar-o-plano-ativa-a-execucao.html">ADR 0194 — Одобрение плана Dev Lead активирует выполнение, а задача получает модуль, который он назначает</a></li><li><a href="../adr/0212-historia-arquivada.html">ADR 0212 — Архивированная история: колонка, а не состояние машины</a></li><li><a href="../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213 — Результат работает на машине пользователя через compose от Infra</a></li></ul></li><li><span>Gates, QA e revisão de segurança</span><ul><li><a href="../adr/0013-gates-qa-secops-pr.html">ADR 0013 — Gates PR: QAAgent и SecOpsAgent</a></li><li><a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020 — Разблокировать gates QA и SecOps: gitleaks по рабочему дереву, валидируемые заключения и tool call в тексте</a></li><li><a href="../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021 — Закрытие Фазы 4a: gate infra, который проверяет, и панель, которая говорит правду</a></li><li><a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054 — Gates как декларативный реестр</a></li><li><a href="../adr/0057-o-gate-espera-a-aprovacao.html">ADR 0057 — Агент gate ждёт одобрения, как ждёт dev</a></li><li><a href="../adr/0067-o-gate-sobrevive-ao-restart.html">ADR 0067 — Gate переживает перезапуск</a></li><li><a href="../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090 — QA-стратегия и AppSec как второй МОМЕНТ, а не новый агент</a></li><li><a href="../adr/0091-secops-runtime-relatorio-de-abuso.html">ADR 0091 — `secops-runtime` как скрипт отчёта по `rate_limit_hits`</a></li><li><a href="../adr/0095-gate-necessidade-validada.html">ADR 0095 — Gate `necessidade-validada` закрывается отдельным подтверждением человека, а не самопроверкой Criativo</a></li><li><a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123 — Golden-set регрессионных случаев для семантического суждения агента QA Automação</a></li><li><a href="../adr/0168-golden-set-do-qa-em-ci-semanal.html">ADR 0168 — Golden-set QA начинает работать в CI, по расписанию и еженедельно</a></li><li><a href="../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192 — План тестирования рождается после сдачи dev, а gate `implementavel` начинает судить по истории и `module_map`</a></li><li><a href="../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207 — Цикл gate, простаивающий более 2 ч, паркуется, и возобновить его может лишь жест человека</a></li><li><a href="../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214 — Открытый вопрос становится ожидающим решения пунктом</a></li><li><a href="../adr/0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.html">ADR 0215 — Решение проекта доходит до dev и QA</a></li></ul></li><li><span>Execução, política de terminal e aprovações</span><ul><li><a href="../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011 — Инфраструктура dev agents: worktrees, git-исполнители и замок merge</a></li><li><a href="../adr/0012-dev-agent-real-toolloop-orcamento-bloqueio.html">ADR 0012 — Настоящий DevAgent: ToolLoop, бюджет на task и дисциплина блокировки</a></li><li><a href="../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017 — Блокировка инициализации workspace, Monitor dev agents и наследование пределов</a></li><li><a href="../adr/0018-noop-dev-agent-modo-de-execucao.html">ADR 0018 — NoopDevAgent как постоянный режим выполнения</a></li><li><a href="../adr/0019-destravar-dev-agent-adr-por-modulo-orcamento-projeto.html">ADR 0019 — Разблокировать реальный DevAgent: запись, терминал, ADR по модулю и бюджет по проекту</a></li><li><a href="../adr/0045-reagendamento-por-evento-do-dev-agent.html">ADR 0045 — Перепланирование dev agent по событию и circuit breaker</a></li><li><a href="../adr/0047-operabilidade-pos-dogfooding.html">ADR 0047 — Эксплуатируемость после dogfooding: закрытие Фазы 12</a></li><li><a href="../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048 — Решение в event log и порядок gate</a></li><li><a href="../adr/0052-dev-agent-espera-aprovacao-no-meio-do-laco.html">ADR 0052 — Dev agent ждёт одобрения посреди цикла</a></li><li><a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055 — Область пути в политике терминала</a></li><li><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102 — Пересмотр ADR 0065: граница внешнего эффекта перестаёт быть `deny` и становится абсолютным пределом</a></li><li><a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167 — Автоматический режим снимает область путей, и только он</a></li><li><a href="../adr/0189-o-piloto-automatico.html">ADR 0189 — Автопилот: автоматический режим одобряет всё, кроме потолков, область сравнивается с реальной папкой исполнения, а «Всегда разрешать» записывает глагол + подкоманду</a></li><li><a href="../adr/0204-modo-automatico-libera-push-e-pr.html">ADR 0204 — Автоматический режим разрешает push и PR</a></li></ul></li><li><span>Onde o código mora — modos de execução</span><ul><li><a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066 — Читаемое имя папки workspace</a></li><li><a href="../adr/0072-projeto-local-ou-container.html">ADR 0072 — Проект выбирает, где живёт код: папка пользователя или управляемая папка</a></li><li><a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104 — `execution_mode` с тремя значениями, и workspace рождается `unverified`, когда проверяет его runner</a></li><li><a href="../adr/0107-navegacao-de-pasta-local-via-o-runner.html">ADR 0107 — Навигация по локальной папке через Runner</a></li><li><a href="../adr/0108-projeto-runner-nasce-ao-navegar-pasta-no-wizard.html">ADR 0108 — В режиме `runner` проект рождается при клике на &quot;Navegar pasta...&quot;, а не только при подтверждении</a></li><li><a href="../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">ADR 0111 — Конвертация `execution_mode` существующего проекта: отказ при активном dev agent, перемещение `permissions.json`, вывод из эксплуатации строки контейнера</a></li><li><a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141 — Единая база монтируемых проектов, смонтированная по тождеству</a></li><li><a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142 — Проверка смонтированного workspace откладывается до материализации</a></li><li><a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146 — База, согласованная в bootstrap, и `mounted` как локальный режим по умолчанию</a></li></ul></li><li><span>Container do projeto e broker</span><ul><li><a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065 — Контейнер на проект: граница перестаёт быть политикой</a></li><li><a href="../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">ADR 0081 — Жизненный цикл контейнера: таблица состояния, без оркестратора</a></li><li><a href="../adr/0083-terminal-mostra-estado-real-do-container.html">ADR 0083 — Вкладка Terminal получает реального потребителя жизненного цикла, а не терминал</a></li><li><a href="../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128 — Порт Docker и доказательство упаковки, которое выбрало реализацию</a></li><li><a href="../adr/0130-broker-de-container.html">ADR 0130 — Broker контейнеров: кто говорит с Docker сервера и почему он не принимает спецификацию</a></li><li><a href="../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131 — Arquiteto направляет модули в инфраструктуру: он ВЫДВИГАЕТ кандидатов, Infra ВЫБИРАЕТ</a></li><li><a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133 — Infra выбирает среди кандидатов маршрутизации, и выбор становится новой версией `artifact.project_image`</a></li><li><a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134 — Dev agents выполняются ВНУТРИ реального контейнера проекта, а terminal получает там нижнюю границу автоодобрения</a></li><li><a href="../adr/0135-portao-de-imagem-nos-tres-modos.html">ADR 0135 — Шлюз образа от Arquiteto (RN-105) начинает действовать во всех трёх режимах выполнения</a></li><li><a href="../adr/0136-pagina-global-de-containers.html">ADR 0136 — Глобальная страница контейнеров: потолок на загрузку в broker и `container_remove` в абсолютном потолке</a></li><li><a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137 — `brabo-runner` поднимает контейнер проекта на машине пользователя</a></li><li><a href="../adr/0143-agentes-de-dev-so-depois-do-container.html">ADR 0143 — Агенты dev только после контейнера</a></li><li><a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144 — Второй корень broker и дискриминированный локатор, который его выбирает</a></li><li><a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180 — Контейнер проекта работает от владельца папки, измеренного api</a></li><li><a href="../adr/0190-a-infra-sobe-o-container-no-aceite.html">ADR 0190 — Infra поднимает контейнер при принятии handoff, шагом сервера и с засеянной автономией, и именно она передаёт работу Dev Lead</a></li><li><a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199 — Минимальный ресурс контейнера выводится из `module_map`: каждый модуль объявляет свой, а Infra поднимает с суммой</a></li><li><a href="../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208 — Infra наследует сеть, объявленную Arquiteto</a></li><li><a href="../adr/0228-comando-do-app-e-rede-do-container.html">ADR 0228 — O container do projeto sobe o app pelo comando declarado e publica porta só no loopback</a></li><li><a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229 — O QA testa numa instância efêmera, com os serviços que a Infra declarou</a></li></ul></li><li><span>O runner local</span><ul><li><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — Локальный runner: выполнение на машине пользователя через канал Phoenix с одноразовым тикетом</a></li><li><a href="../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105 — Personal Access Token (`brb_…`) для runner, ограниченный по построению одним маршрутом</a></li><li><a href="../adr/0106-distribuicao-do-runner-via-tsup-e-npm-publish.html">ADR 0106 — Распространение `@brabo/runner` через `tsup` и `npm publish`, версия внедряется только в CI</a></li><li><a href="../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112 — Автономный бинарник `@brabo/runner` через `bun build --compile`, со встроенным нативным аддоном `.node` через реальное извлечение во временный каталог</a></li><li><a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118 — Настройка runner через браузер: ключ устройства Ed25519 как вторая учётная запись `runner-ticket`, прокси GitHub Releases для бинарника и File System Access API для папки, настраиваемой одним кликом</a></li><li><a href="../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145 — Docker становится реальным предусловием режима `runner`</a></li><li><a href="../adr/0147-agente-local-com-capacidades.html">ADR 0147 — Один локальный агент, возможности, объявляемые при подключении</a></li><li><a href="../adr/0151-base-consentida-no-runner.html">ADR 0151 — Согласованная база в runner и создание папки через канал</a></li><li><a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154 — Ключ устройства машины</a></li><li><a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174 — Автономный бинарник runner перестаёт обещать Mac Intel</a></li><li><a href="../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187 — Автономный бинарник runner перестаёт обещать Windows</a></li><li><a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193 — Git с учётными данными выполняется на ХОСТЕ runner; код выполняется в контейнере</a></li><li><a href="../adr/0201-revogacao-por-chave.html">ADR 0201 — Отзыв нацелен на КЛЮЧ, а не на пару `{проект, пользователь}`</a></li><li><a href="../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.html">ADR 0203 — Поток runner через браузер выводится из употребления, путь — установщик</a></li><li><a href="../adr/0230-importar-chave-de-llm-pelo-runner.html">ADR 0230 — O runner importa a chave de API de LLM que o usuário já tem na máquina</a></li></ul></li><li><span>Autenticação, acesso e segredos</span><ul><li><a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031 — Собственная аутентификация: argon2id, EdDSA и ротация refresh</a></li><li><a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032 — Отказ от Keycloak: собственный эмитент, service token и сессия в cookie</a></li><li><a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037 — CORS, которого не было у engine, и порт как часть контракта</a></li><li><a href="../adr/0050-credencial-sempre-cifrada-verificacao-explicita.html">ADR 0050 — Учётные данные всегда зашифрованы; проверка становится явным действием</a></li><li><a href="../adr/0058-csp-fechado-na-api-e-escopo-de-projeto-contido.html">ADR 0058 — Закрытый CSP в api и область проекта, удержанная в корне</a></li><li><a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059 — У ключа, подписывающего `state` git OAuth, нет значения по умолчанию</a></li><li><a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084 — Социальный вход (GitHub/GitLab), пересматривающий backlog ADR 0031/0032</a></li><li><a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096 — Настоящий SMTP в `MailSender`, за явным переключателем</a></li><li><a href="../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127 — Два потолка понижения в `project_members`, а перекрытие остаётся</a></li><li><a href="../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156 — Потолок самопонижения также при удалении участника проекта</a></li><li><a href="../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157 — Потолок самоперемещения в upsert workspace и самоповышение, которое было брешью</a></li><li><a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158 — Id мастер-ключа, записанный в конверте, как наблюдаемость и никогда как полномочие</a></li><li><a href="../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173 — Удаление участника workspace рождается, защищённое тем же условием</a></li><li><a href="../adr/0245-acesso-rapido-por-papel-so-no-ambiente-local.html">ADR 0245 — Acesso rápido por papel só no ambiente local</a></li></ul></li><li><span>Providers de LLM, modelos e gasto</span><ul><li><a href="../adr/0040-moeda-do-dashboard.html">ADR 0040 — Валюта дашборда: пока USD, ручной курс по workspace отложен</a></li><li><a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041 — Одна OpenAI-совместимая база, один контракт LLM providers и capabilities, отклоняющие binding</a></li><li><a href="../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042 — Живой каталог, жизненный цикл модели и проверяемая цена</a></li><li><a href="../adr/0043-seis-providers-de-llm-e-o-fechamento-da-fase-9b.html">ADR 0043 — Шесть providers LLM поверх базы, и Фаза 9b наконец закрыта</a></li><li><a href="../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049 — Курирование моделей по workspace</a></li><li><a href="../adr/0051-facetas-de-capability-e-curadoria-por-uso.html">ADR 0051 — Доказанные грани capability; &quot;для чего годится&quot; — это курирование</a></li><li><a href="../adr/0063-duas-audiencias-para-o-mesmo-gasto.html">ADR 0063 — Две аудитории для одного и того же расхода: счёт owner и потребление участника</a></li><li><a href="../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064 — Область как уровень каскада модели и глобальный binding агента</a></li><li><a href="../adr/0075-embeddings-no-contrato-de-llm-provider.html">ADR 0075 — Embeddings в контракте LLMProvider</a></li><li><a href="../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076 — `provider` снова становится измерением расходов, а сдерживание переходит к типу</a></li><li><a href="../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">ADR 0077 — Рейтинг моделей по возможностям, без выдуманной оценки</a></li><li><a href="../adr/0110-budget-por-area-aditivo-nao-cascata.html">ADR 0110 — Бюджет по области АДДИТИВЕН, рядом с проектом/сессией — не каскад и не новая таблица</a></li><li><a href="../adr/0114-deteccao-de-ollama-nativo-no-bootstrap-dev.html">ADR 0114 — Обнаружение нативного Ollama в dev bootstrap: спросить один раз, сохранить в `.env`, поставить сервисы compose за profile</a></li><li><a href="../adr/0115-pedido-de-pull-de-modelo-huggingface-tabela-propria.html">ADR 0115 — Pull модели из Hugging Face: собственная таблица, подтверждение в два шага и allowlist официальных издателей — никогда `proposed_actions`</a></li><li><a href="../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166 — Предпочтение маршрутизации живёт в binding модели, путешествует вместе с ним и замораживается в metering</a></li><li><a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188 — Реальная стоимость, которую возвращает provider, становится числом metering</a></li><li><a href="../adr/0198-duplicata-semantica-por-embedding-com-limiar-que-so-avisa.html">ADR 0198 — О семантическом дубликате истории и правила предупреждает embedding с порогом, а расход попадает в metering</a></li><li><a href="../adr/0221-upstream-preso-por-sessao.html">ADR 0221 — O hub prende a conversa de cada agente ao upstream que a atendeu, por `session_id`</a></li><li><a href="../adr/0222-provider-9router-de-llm.html">ADR 0222 — O 9Router entra como o 10º provider de LLM, com URL por instalação</a></li><li><a href="../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223 — O orçamento de raciocínio é capability POR MODELO, curada à mão</a></li><li><a href="../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224 — O raciocínio é contado no stream e abortado no limite, e o custo é estimado e reconciliado</a></li><li><a href="../adr/0225-teto-de-preco-do-upstream-no-openrouter.html">ADR 0225 — O OpenRouter recebe um teto de preço por chamada (`provider.max_price` = catálogo × 1,5)</a></li><li><a href="../adr/0227-provider-opencode-zen-de-llm.html">ADR 0227 — O OpenCode Zen entra como o 11º provider de LLM, só no dialeto OpenAI</a></li><li><a href="../adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233 — O membro vê o gasto do projeto por agente e por área, nunca por provider</a></li><li><a href="../adr/0251-preco-de-lista-datado-para-provider-sem-preco.html">ADR 0251 — Preço de lista datado no código para provider que não informa preço</a></li></ul></li><li><span>RAG, grafo de conhecimento e artefatos</span><ul><li><a href="../adr/0079-tabela-de-chunks-vetor-e-tsvector-juntos.html">ADR 0079 — Таблица chunks: вектор и `tsvector` в одной строке</a></li><li><a href="../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">ADR 0080 — Гибридный поиск: веса, порог и что такое цитата</a></li><li><a href="../adr/0082-chat-rag-aba-de-busca-hibrida.html">ADR 0082 — Chat RAG: собственная вкладка гибридного поиска, без переименования &quot;Chat&quot;</a></li><li><a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099 — Neo4j как граф знаний и шаблоны prompt, драйвер в api</a></li><li><a href="../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100 — `rag_search` для агентов и модели Ollama, гарантированные при загрузке</a></li><li><a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101 — Реляционная память как проекция event log; шаблоны потребляются без трогания GenServers</a></li><li><a href="../adr/0113-pasta-local-anexada-via-navegador-vira-chunks-scope-local.html">ADR 0113 — Локальная папка, приложенная через браузер, становится `chunks.scope = 'local'`, читаемым БРАУЗЕРОМ, никогда путём хоста</a></li><li><a href="../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">ADR 0129 — Телеметрия поиска RAG — это ТАБЛИЦА, с весами, замороженными в строке</a></li><li><a href="../adr/0132-golden-set-de-acerto-do-rag.html">ADR 0132 — Golden-set попаданий RAG и gate `rag-acertivo`</a></li><li><a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138 — Golden-set RAG начинает работать в CI, по расписанию — и остаётся `warn`</a></li><li><a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148 — Артефакты агентов, спроецированные в файлы, в папку `docs/`</a></li><li><a href="../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196 — Anamnese снова включена: не работает без субъекта, а принятая гипотеза становится фактом профиля</a></li><li><a href="../adr/0200-contrato-entre-modulos-artefato-do-arquiteto.html">ADR 0200 — Контракт между модулями становится версионируемым артефактом Arquiteto, и dev agent читает его вместо чужого worktree</a></li><li><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205 — Отклонение агента, которое наблюдает Anamnese, становится сигналом продукта, без персональных данных</a></li></ul></li><li><span>Interface web e design system</span><ul><li><a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036 — Экраны аутентификации, верные дизайну, и три шрифта, которые не загружались</a></li><li><a href="../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060 — Поверхность чтения кода, ограниченная и с бюджетом</a></li><li><a href="../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">ADR 0074 — Достижимая тема и загрузка под CSP</a></li><li><a href="../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">ADR 0078 — Рамка экрана, и реестр вкладок намеренно расходится с handoff</a></li><li><a href="../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097 — Прямое чтение схемы engine для &quot;N агентов онлайн&quot; на дашборде</a></li><li><a href="../adr/0116-tipos-do-web-gerados-do-openapi.html">ADR 0116 — `ActionType` (и будущие типы) генерируются из контракта OpenAPI, а не копируются вручную</a></li><li><a href="../adr/0122-sessionpage-dividido-em-cinco-prs.html">ADR 0122 — `SessionPage.tsx`, разделённый на пять механических PR, объявленных заранее</a></li><li><a href="../adr/0124-hook-do-canal-de-turno-do-sessionpage.html">ADR 0124 — Группировка состояния канала хода, извлечённая в `useTurnoDoAgente`</a></li><li><a href="../adr/0125-projectsettingstab-dividido-por-secao.html">ADR 0125 — `ProjectSettingsTab.tsx` разделён на файл на раздел, за barrel</a></li><li><a href="../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126 — Страница проекта навигируется вертикальной рейкой, а вкладка Código перестаёт сама сворачивать sidebar</a></li><li><a href="../adr/0176-sessionpage-abaixo-de-mil-linhas.html">ADR 0176 — `SessionPage.tsx` меньше 1 000 строк, за десять механических PR, а замок — только после</a></li><li><a href="../adr/0181-tema-preto-neutro.html">ADR 0181 — Тёмная тема становится нейтрально-чёрной, и долг контраста заканчивается</a></li><li><a href="../adr/0210-animacao-de-texto-com-motion.html">ADR 0210 — Анимация текста с `motion`</a></li><li><a href="../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211 — Одна навигация: боковая панель поглощает рельс проекта</a></li><li><a href="../adr/0232-shadcn-com-base-ui-no-apps-web.html">ADR 0232 — shadcn/ui com Base UI e Tailwind 4 no `apps/web`</a></li><li><a href="../adr/0234-shiki-e-recharts-por-carga-dinamica.html">ADR 0234 — `shiki` no Code Block e `recharts` no Chart, sempre por carga dinâmica</a></li><li><a href="../adr/0237-o-visual-v3-liga-o-preflight-e-sobe-os-raios.html">ADR 0237 — O visual v3 liga o preflight e sobe os raios</a></li><li><a href="../adr/0238-o-grafo-de-modulos-vira-canvas-xyflow.html">ADR 0238 — O grafo de módulos da Arquitetura vira Canvas (`@xyflow/react`)</a></li><li><a href="../adr/0239-csp-frame-src-local-para-o-web-preview.html">ADR 0239 — CSP `frame-src` local para o Web preview do entregável</a></li><li><a href="../adr/0240-o-motivo-de-controle-inerte-mora-num-ponto-de-interrogacao-nos-containers.html">ADR 0240 — O motivo de controle inerte pode morar num &quot;?&quot; ativo na página de Containers</a></li><li><a href="../adr/0241-a-sidebar-adota-o-block-sidebar-07-do-shadcn.html">ADR 0241 — A sidebar adota o block `sidebar-07` do shadcn</a></li><li><a href="../adr/0242-containers-em-tabela-linear-com-tanstack-react-table.html">ADR 0242 — Containers em tabela linear com `@tanstack/react-table`</a></li><li><a href="../adr/0243-consequencia-irreversivel-pode-morar-num-botao-de-perigo.html">ADR 0243 — Consequência irreversível pode morar num botão de perigo</a></li><li><a href="../adr/0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.html">ADR 0244 — Coluna das abas do projeto alinhada à esquerda</a></li><li><a href="../adr/0248-conteudo-das-paginas-ocupa-a-largura-inteira.html">ADR 0248 — O conteúdo das páginas ocupa a largura inteira</a></li><li><a href="../adr/0250-chat-da-sessao-ocupa-a-largura-inteira.html">ADR 0250 — O chat da Sessão ocupa a largura inteira</a></li></ul></li><li><span>Operação, deploy e instalação</span><ul><li><a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024 — Фаза 5 (сессия 1): production-образы, compose.prod, CI и smoke-тест</a></li><li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025 — Фаза 5 (сессия 2): деплой в Kubernetes с Kustomize, метрика очереди и локальный overlay</a></li><li><a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026 — Фаза 5 (сессия 3): graceful shutdown, OpenTelemetry, метрики, логи и дашборды</a></li><li><a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027 — Backup/restore, усиление api, открытая поверхность и релиз</a></li><li><a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035 — Trace без коллектора и путь между слоями в логе</a></li><li><a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070 — Наблюдаемость в локальном Compose: метрики и журналы, без трассировки</a></li><li><a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150 — Установщик одной строкой, с выбранным источником и маркером</a></li><li><a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152 — Резервное копирование и восстановление томов для compose</a></li><li><a href="../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153 — `DEPLOY_ENABLED`: триггер, который упоминают десять документов и не создаёт ни один</a></li><li><a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155 — Первая учётная запись рождается в терминале, а локальный агент поднимается сопряжённым</a></li><li><a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160 — Compose установщика едет вместе с ним, как подписанный asset</a></li><li><a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161 — Экран предлагает только тот режим, который выполняет установка, а у установки через Release нет broker</a></li><li><a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162 — Broker становится пятым опубликованным образом, а установщик СПРАШИВАЕТ, включать ли его</a></li><li><a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169 — Назначением S3 локального overlay перестаёт быть MinIO и становится SeaweedFS</a></li><li><a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170 — Dev-compose становится `brabo-dev`, и dev отказывается подниматься рядом с установкой</a></li><li><a href="../adr/0209-engine-em-otp-29.html">ADR 0209 — Engine переходит на Elixir 1.20.4 / OTP 29.1.1</a></li></ul></li><li><span>CI, release e cadeia de suprimentos</span><ul><li><a href="../adr/0039-actionlint-e-validacao-do-pipeline-de-ci-gerado.html">ADR 0039 — actionlint и валидация генерируемого конвейера CI</a></li><li><a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119 — Образы, публикуемые в GHCR с каждым финальным тегом, и production overlay, закреплённый по digest</a></li><li><a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120 — Браузерный E2E против продакшен-compose, в пакете вне workspace</a></li><li><a href="../adr/0121-schema-dividido-por-agregado-de-dominio.html">ADR 0121 — Схема, разделённая по доменным агрегатам, за barrel</a></li><li><a href="../adr/0140-timeout-do-audit-como-risco-assumido.html">ADR 0140 — Повторяющийся timeout `pnpm audit` — принятый риск; находка по-прежнему отклоняет</a></li><li><a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149 — Подпись опубликованных артефактов</a></li><li><a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159 — Сторонний образ входит по digest, и lint проваливает того, кто забудет</a></li><li><a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172 — Релиз сканирует Trivy то, что публикует, по digest, до подписи</a></li><li><a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178 — Тег стороннего образа живёт ВНУТРИ ссылки, перед digest</a></li><li><a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197 — Образ workflows берётся из compose, и Dependabot для образов включается</a></li><li><a href="../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252 — O Brabo vira um conjunto de repositórios em `viralabs-dev`</a></li></ul></li><li><span>Documentação</span><ul><li><a href="../adr/0029-sincronizacao-continua-da-documentacao.html">ADR 0029 — Непрерывная синхронизация документации</a></li><li><a href="../adr/0033-referencia-de-api-gerada-do-openapi.html">ADR 0033 — Справочник API выводится из кода, а табличный тест требует метаданных</a></li><li><a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034 — Документация, публикуемая по ступеням, в подкаталоге Pages</a></li><li><a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071 — Симметричная публикация по ступеням и корень, который предлагает выбор</a></li><li><a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073 — Публикуемый путь называет окружение, а не ветку</a></li><li><a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117 — `website/` получает собственный lockfile, вне `pnpm audit` продукта</a></li><li><a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202 — Индекс ADR по темам, с темой вне ADR</a></li><li><a href="../adr/0206-referencia-da-api-numa-pagina-redoc.html">ADR 0206 — Справочник API становится страницей Redoc</a></li><li><a href="../adr/0216-quatro-idiomas-com-pt-br-como-fonte.html">ADR 0216 — Четыре языка, с pt-BR как ИСТОЧНИКОМ и языком по умолчанию: документация и интерфейс на португальском, английском, русском и упрощённом китайском</a></li><li><a href="../adr/0218-titulo-de-adr-com-prefixo.html">ADR 0218 — Каждый ADR называется «ADR NNNN — заголовок»</a></li><li><a href="../adr/0219-referencia-entra-na-traducao.html">ADR 0219 — Справочник входит в перевод</a></li><li><a href="../adr/0220-api-traduzida-por-catalogo.html">ADR 0220 — Страница API переводится по каталогу</a></li><li><a href="../adr/0253-o-site-de-docs-deixa-o-docusaurus.html">ADR 0253 — O site de docs deixa o Docusaurus</a></li><li><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html">ADR 0254 — A doc de cada área mora na raiz dela</a></li></ul></li></ul></li></ul></section><section><h2>📐 Правила</h2><ul><li><a href="../business-rules.html">Бизнес-правила</a></li><li><a href="../business-rules/custo.html">Стоимость и metering</a></li><li><a href="../business-rules/autenticacao.html">Аутентификация</a></li><li><a href="../business-rules/api.html">API</a></li><li><a href="../business-rules/broker.html">Broker</a></li><li><a href="../business-rules/ci.html">CI</a></li><li><a href="../business-rules/contracts.html">Contratos</a></li><li><a href="../business-rules/engine.html">Engine</a></li><li><a href="../business-rules/infra.html">Infra</a></li><li><a href="../business-rules/produto.html">Produto</a></li><li><a href="../business-rules/runner.html">Runner</a></li><li><a href="../business-rules/web.html">Web</a></li></ul></section><section><h2>📖 Справочник</h2><ul><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Открытая поверхность api</a></li><li><span>Справочник API</span></li></ul></section><section><h2>💡 Пояснения</h2><ul><li><span>Процесс и конвейер</span><ul><li><a href="../explanation/documentation-workflow.html">Синхронизация документации</a></li><li><a href="../explanation/branching-policy.html">Политика веток</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Цепочка поставок CI</a></li><li><a href="../explanation/gates.html">Gates и то, как они измеряются</a></li><li><a href="../explanation/observability.html">Наблюдаемость</a></li><li><a href="../explanation/modelo-de-time.html">Модель команды и поток результатов</a></li></ul></li><li><span>Проверки и измерения</span><ul><li><a href="../explanation/primeiro-dogfooding.html">Первый dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Реальное выполнение (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Находки реального прогона конвейера</a></li><li><a href="../explanation/validacao-fase-12.html">Проверка Фазы 12</a></li><li><a href="../explanation/validacao-real.html">Реальная валидация (13b)</a></li><li><a href="../explanation/aceite-providers.html">Приёмка providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Измерение эвристики языка</a></li><li><a href="../explanation/medicao-do-jev.html">Измерение маршрутизатора инструментов Jev</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Аудит: fluxo.yml × код (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html" aria-current="page">Визуальный аудит до и после Rodada 29</a></li></ul></li><li><span>История фаз</span><ul><li><a href="../explanation/historico-de-fases.html">История фаз</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">ФАЗА 28 — папка пользователя</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — установка одной строкой</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — локальный агент машины</a></li><li><a href="../explanation/backlog.html">Backlog после триажа</a></li></ul></li><li><span>Локализация</span><ul><li><a href="../explanation/localizacao.html">Локализация</a></li><li><a href="../explanation/localizacao-en.html">Локализация — английский (en)</a></li><li><a href="../explanation/localizacao-ru.html">Локализация — русский (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Локализация — упрощённый китайский (zh-Hans)</a></li></ul></li><li><span>Технические заметки</span><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — не принят</a></li></ul></li></ul></section><section><h2>🛠️ Эксплуатация</h2><ul><li><a href="../runbook.html">Руководство по эксплуатации</a></li></ul></section><section><h2>📚 Словарь</h2><ul><li><a href="../glossary.html">Глоссарий</a></li></ul></section><section><h2>🤝 Участие</h2><ul><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Как внести вклад</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Где попросить помощи</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Сообщить об уязвимости</a></li></ul></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="visual-audit-before-and-after-rodada-29">Визуальный аудит до и после Rodada 29</h1>
+<blockquote>
+<p>AT-290 (EP-031, HS-074). Это <strong>замер, а не изменение</strong>: ничего в <code>apps/</code>
+не трогалось ради этой страницы. Съёмка «до» выполнялась 2026-09-30
+на <code>dev</code> в <code>de18e6a6e2</code>; съёмка «после» — в тот же день на
+<code>dev</code> в <code>79e6b1209f</code>, где уже есть вся Rodada 29 — нейтральная чёрная тема
+с мягким терракотовым акцентом (AT-283/284), <code>Card</code>/<code>Chip</code>/<code>Badge</code>/<code>Button</code>
+(AT-286..288), мобильная рамка (AT-316), панель сессии (AT-317), обрезка
+ленты (AT-319), исправления одобрений (AT-296..299, AT-310, AT-318,
+AT-320), бюджет Настроек (AT-321), тексты PR и Containers
+(AT-323, AT-324) и проход i18n (AT-289, AT-326).</p>
+<p>Скриншотов в репозитории <strong>нет</strong>. Каждая находка называет имя
+файла снимка, чтобы обладатель папки со снимками мог его открыть; каждая
+находка, измеренная проверкой, называет также число.</p>
+</blockquote>
+<h2 id="how-the-product-was-brought-up-and-what-that-does-not-cover">Как был поднят продукт (и чего это не покрывает)</h2>
+<p>Задача требует production compose через <code>docker/smoke.sh</code> с
+<code>SMOKE_KEEP_UP=1</code>. Это пробовали в одноразовом проекте compose
+(<code>COMPOSE_PROJECT_NAME=r30visual</code>), и в этой среде это <strong>не работает</strong> по той же
+причине, что зафиксирована в «до»: исходящий прокси блокирует
+<code>dl-cdn.alpinelinux.org</code> (и <code>repo.hex.pm</code>/<code>builds.hex.pm</code>), поэтому первый
+<code>apk add --no-cache build-base git</code> в <code>docker/engine/Dockerfile.prod</code> завершается с 2,
+и ни один production-образ не собирается. Одноразовый проект удалён
+через <code>down -v</code>.</p>
+<p>Поэтому «после» выполнялось на <strong>той же замене, что и «до»</strong>, намеренно —
+другой стек заставил бы сравнение измерять стек:</p>
+<ul>
+<li><strong>Postgres</strong>: <code>pgvector/pgvector:pg16</code> в контейнере, миграции api и
+<code>pnpm seed</code> (seed прошёл чисто на новой базе).</li>
+<li><strong>api</strong>: <code>node dist/main</code>, собранный из этого checkout, порт 3000.</li>
+<li><strong>engine</strong>: HTTP-заглушка на порту 4000, отвечающая 200 на всё. Без канала
+Phoenix, без схемы <code>engine.*</code>.</li>
+<li><strong>web</strong>: dev-сервер <code>vite</code> на порту 5173.</li>
+<li><strong>данные</strong>: seed плюс то же сценарное наполнение, что и в «до» — одна
+творческая сессия с разговором, brief, бизнес-правилом, handoff
+Criativo→PO, эпиком/историей/задачей и <code>module_map</code>; вторая творческая
+сессия с реалистичной лентой и <code>agent.error</code>; и <strong>4 ожидающих
+<code>proposed_actions</code> в 3 сессиях</strong> (3 <code>terminal</code>, 1 <code>git_push</code>), в том же формате, что
+и раньше.</li>
+</ul>
+<p>Следствия для чтения этой страницы:</p>
+<ul>
+<li>Сокет сессии всегда падает, поэтому полоса активности хода и
+терминал Кода никогда не появляются, а сессии опрашиваются с резервным
+интервалом.</li>
+<li><code>GET /workspaces/:id/projects-summary</code> отвечает 500, потому что
+<code>engine.dev_agent_states</code> не существует — артефакт заглушки, как и в «до».
+«0 агентов» на Dashboard — не находка.</li>
+<li>Данные <strong>не идентичны</strong> данным «до»: seed теперь сам активирует
+сессию, предложение Criativo→PO было вытеснено, когда пришли события
+backlog от PO (AT-291/292), а самая свежая сессия — консультативная. Там, где
+находка «до» зависит от данных, которых больше нет, она помечена
+<strong>не перепроверено</strong>, а не «исправлено».</li>
+<li>Снимки сделаны как <code>fullPage</code>, но большинство экранов прокручиваются внутри
+внутреннего контейнера, поэтому они показывают viewport. Прицельные фрагменты
+(<code>detalhe-*</code>) покрывают то, до чего не достают полные снимки.</li>
+</ul>
+<p>Съёмка была <strong>ритмизирована</strong> — 6 с между экранами и 65 с между проходами
+темы/viewport — и зафиксировала ноль ответов 429. «До» не было ритмизировано,
+поэтому его снимки Настроек частично сделаны под rate limit;
+rate limit измеряется отдельно, ниже (G1).</p>
+<h2 id="files">Файлы</h2>
+<p>Хранятся вне репозитория, в scratchpad сессии (<code>shots-depois/</code>):</p>
+<ul>
+<li><code>&lt;screen&gt;--&lt;dark|light&gt;--&lt;desktop|mobile&gt;.png</code>: 19 экранов (login, dashboard,
+12 вкладок проекта, две сессии, <code>/containers</code>, <code>/account</code>, <code>/status</code>) × 2
+темы × 2 viewport (1440×900 и 390×844) = 76 снимков.</li>
+<li><code>detalhe-*</code>: сессия при 1280 и 1024, верх ленты, свёрнутая панель боковых
+сессий, конец сессии, «Precisa de você», мобильный выдвижной ящик
+в обеих темах, 11 разделов Настроек и последний раздел, достигнутый под
+rate limit.</li>
+<li><code>validacao-visual.json</code>: вывод <code>scripts/dev/validacao-visual.js</code>,
+внедрённого в каждый снимок, плюс фактически применённая тема (<code>data-theme</code>),
+ширина горизонтальной прокрутки страницы, запросы к api во время загрузки
+и ответы 429.</li>
+<li><code>console-erros.json</code>, <code>sondas-dark.json</code>, <code>g1.json</code>, <code>g1-cliques.json</code>: ошибки
+консоли и DOM-зонды, упомянутые ниже.</li>
+</ul>
+<p>Скрипты съёмки (<code>capturar-depois.mjs</code>, <code>detalhes-depois.mjs</code>, <code>g1.mjs</code>,
+<code>g1-cliques.mjs</code>, <code>gaveta.mjs</code>) — это скрипты «до» с добавленными ритмом и
+зондами.</p>
+<h2 id="the-checker-screen-by-screen">Проверка, экран за экраном</h2>
+<p><code>validacao-visual.js</code> считает четыре типа дефектов разметки
+(<code>texto-cortado</code>, <code>fora-da-viewport</code>, <code>recortado-por-ancestral</code>, <code>alvo-pequeno</code>
+меньше 24 px). Числа одинаковы в обеих темах на каждом экране, до и
+после, поэтому достаточно одного столбца на viewport. Мобильные числа «до» <strong>напрямую
+не сравнимы</strong>: до AT-316 большая часть содержимого была
+вытолкнута за экран, а то, чего проверка не видит, она не считает.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>экран</th>
+<th>desktop до → после</th>
+<th>mobile до → после</th>
+<th>запросов к api на загрузку (после)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>login</td>
+<td>6 → 6</td>
+<td>8 → 8</td>
+<td>—</td>
+</tr>
+<tr>
+<td>dashboard</td>
+<td>0 → 0</td>
+<td>1 → 0</td>
+<td>6</td>
+</tr>
+<tr>
+<td>overview</td>
+<td>3 → 1</td>
+<td>12 → 2</td>
+<td>32</td>
+</tr>
+<tr>
+<td>executors</td>
+<td>0 → 0</td>
+<td>4 → 0</td>
+<td>22</td>
+</tr>
+<tr>
+<td>creative</td>
+<td>0 → 0</td>
+<td>7 → 3</td>
+<td>20</td>
+</tr>
+<tr>
+<td>chat</td>
+<td>0 → 0</td>
+<td>5 → 1</td>
+<td>16</td>
+</tr>
+<tr>
+<td>insights</td>
+<td>0 → 0</td>
+<td>4 → 0</td>
+<td>17</td>
+</tr>
+<tr>
+<td>code</td>
+<td>0 → 0</td>
+<td>2 → 0</td>
+<td>16</td>
+</tr>
+<tr>
+<td>PRs</td>
+<td>0 → 0</td>
+<td>5 → 1</td>
+<td>18</td>
+</tr>
+<tr>
+<td>approvals</td>
+<td>1 → 1</td>
+<td>13 → 1</td>
+<td>23</td>
+</tr>
+<tr>
+<td>backlog</td>
+<td>0 → 0</td>
+<td>5 → 2</td>
+<td>16</td>
+</tr>
+<tr>
+<td>architecture</td>
+<td>0 → 0</td>
+<td>11 → 0</td>
+<td>15</td>
+</tr>
+<tr>
+<td>spend</td>
+<td>0 → 0</td>
+<td>9 → 0</td>
+<td>18</td>
+</tr>
+<tr>
+<td>settings</td>
+<td>12 → 6</td>
+<td>120 → 35</td>
+<td>52</td>
+</tr>
+<tr>
+<td>session</td>
+<td>5 → 2</td>
+<td>14 → 21</td>
+<td>21</td>
+</tr>
+<tr>
+<td>session 2</td>
+<td>4 → 1</td>
+<td>21 → 19</td>
+<td>21</td>
+</tr>
+<tr>
+<td>containers</td>
+<td>1 → 1</td>
+<td>9 → 8</td>
+<td>7</td>
+</tr>
+<tr>
+<td>account</td>
+<td>0 → 0</td>
+<td>6 → 2</td>
+<td>7</td>
+</tr>
+<tr>
+<td>status</td>
+<td>1 → 1</td>
+<td>1 → 1</td>
+<td>2</td>
+</tr>
+</tbody>
+</table></div>
+<p>Только один экран прокручивает всю страницу вбок при 390 px: <code>/status</code>
+(<code>scrollWidth</code> 413 против 390, в обеих темах).</p>
+<h2 id="the-before-findings-one-by-one">Находки «до», по одной</h2>
+<p>Серьёзность, как в «до»: <strong>A</strong> высокая (ломает использование или вводит в заблуждение), <strong>M</strong> средняя,
+<strong>B</strong> низкая (отделка). Состояние: <strong>исправлено</strong>, <strong>частично</strong>, <strong>сохраняется</strong> или
+<strong>не перепроверено</strong> (данных, которые это показывали, больше нет).</p>
+<h3 id="shell-and-navigation">Рамка и навигация</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Сер.</th>
+<th>Состояние</th>
+<th>Что показывает «после»</th>
+<th>Доказательство</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S1</td>
+<td>A</td>
+<td>частично</td>
+<td>Рамка перестраивается при 390 px: sidebar становится выдвижным ящиком, рейка проекта — горизонтальной полосой, и ни один аутентифицированный экран, кроме <code>/status</code>, не прокручивается вбок. Маршрут <strong>сессии</strong> не последовал за ними — см. N1.</td>
+<td><code>*--mobile.png</code>, <code>detalhe-gaveta-mobile--*.png</code></td>
+</tr>
+<tr>
+<td>S2</td>
+<td>M</td>
+<td>сохраняется</td>
+<td>Sidebar «ATIVIDADES — Nenhum agente entrou em ação ainda.» рядом с Visão geral, где Criativo «aguardando» и 4 ожидающих одобрения.</td>
+<td><code>projeto-overview--dark--desktop.png</code></td>
+</tr>
+<tr>
+<td>S3</td>
+<td>M</td>
+<td>сохраняется</td>
+<td>Список вкладок в sidebar не имеет счётчиков и не отмечает текущую вкладку; рейка показывает «Aprovações 4» и «Arquitetura 1» и выделяет вкладку.</td>
+<td>то же</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>M</td>
+<td>исправлено</td>
+<td>Одна трактовка активного: терракотовая заливка с терракотовым текстом в рейке; строка проекта в sidebar нейтральна.</td>
+<td>то же</td>
+</tr>
+<tr>
+<td>S5</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Переключатель темы по-прежнему читает состояние («Tema escuro»/«Tema claro»); «sair» по-прежнему строчными.</td>
+<td>любой аутентифицированный экран</td>
+</tr>
+<tr>
+<td>S6</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Имя проекта моноширинным в sidebar и дисплейным шрифтом в заголовке.</td>
+<td>то же</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="login-dashboard">Login, Dashboard</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Сер.</th>
+<th>Состояние</th>
+<th>Что показывает «после»</th>
+<th>Доказательство</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Те же 4 цели меньше 24 px.</td>
+<td><code>validacao-visual.json</code>, <code>login--*</code></td>
+</tr>
+<tr>
+<td>L2</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Тот же текст, обрезанный собственным блоком.</td>
+<td>то же</td>
+</tr>
+<tr>
+<td>D1</td>
+<td>M</td>
+<td>сохраняется</td>
+<td>«0 / 0 USD» и «0%» зелёным в проекте без бюджета.</td>
+<td><code>dashboard--dark--desktop.png</code></td>
+</tr>
+<tr>
+<td>D2</td>
+<td>M</td>
+<td>сохраняется</td>
+<td>«Sem atividade ainda» в проекте с 4 сессиями и десятками событий (частично из-за 500 заглушки, см. начало).</td>
+<td>то же</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>«+ Novo projeto» с иконкой; «+ Nova ideação» и «+ Nova conversa» с буквальным «+».</td>
+<td>dashboard × creative × chat</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="overview">Visão geral</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Сер.</th>
+<th>Состояние</th>
+<th>Что показывает «после»</th>
+<th>Доказательство</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O1</td>
+<td>M</td>
+<td>не перепроверено</td>
+<td>Лента показывает только самую свежую сессию (консультативную), в которой нет событий PO/Arquiteto.</td>
+<td><code>projeto-overview--*</code></td>
+</tr>
+<tr>
+<td>O2</td>
+<td>M</td>
+<td>сохраняется</td>
+<td>Теперь длиннее: «dev-web: ação aguardando decisão — A política decidiu por: default (sem regra aplicável) · raiz do escopo: pasta gerenciada “core-api-665191a6”».</td>
+<td>то же</td>
+</tr>
+<tr>
+<td>O3</td>
+<td>B</td>
+<td>не перепроверено</td>
+<td>Временная шкала команды пуста с этими данными.</td>
+<td>то же</td>
+</tr>
+<tr>
+<td>O4</td>
+<td>B</td>
+<td>частично</td>
+<td>Подвалы по источнику исчезли («1 de 1 carregados»), но заголовок говорит «1 eventos» — см. N9.</td>
+<td>то же</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="creative-chat-insights-executors">Criativo, Chat, Percepções, Executores</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Сер.</th>
+<th>Состояние</th>
+<th>Что показывает «после»</th>
+<th>Доказательство</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>M</td>
+<td>сохраняется</td>
+<td>Моноширинные пилюли в Criativo и Chat, прямоугольные вкладки без засечек в PRs.</td>
+<td><code>projeto-criativo--*</code>, <code>projeto-chat--*</code>, <code>projeto-prs--*</code></td>
+</tr>
+<tr>
+<td>C2</td>
+<td>B</td>
+<td>частично</td>
+<td>«1 história» теперь склоняется; «3 ação(ões) proposta(s) … 0 decidida(s) … auto-aprovada(s)» и «0 chamada(s)» остались (<code>sessions.json:164,172,173</code>, <code>spend.json:20,37</code>).</td>
+<td>creative, chat, spend</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>B</td>
+<td>не перепроверено</td>
+<td>Сессия seed теперь <code>active</code>, поэтому двойное «aguardando» не появляется.</td>
+<td>creative</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Четыре формата пустого состояния (простой текст в Percepções, карточка с замком в Código, никакого в Chat, красная карточка в трассируемости Backlog).</td>
+<td>вкладки</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Percepções и Arquitetura начинают заголовок на y≈145, остальные вкладки на y≈116; у Histórias только надзаголовок.</td>
+<td><code>projeto-insights--*</code>, <code>projeto-arquitetura--*</code>, <code>projeto-backlog--*</code></td>
+</tr>
+<tr>
+<td>C6</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>«Conversar/Buscar» над заголовком «Chat».</td>
+<td><code>projeto-chat--*</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="code-and-prs">Код и PR</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Сер.</th>
+<th>Состояние</th>
+<th>Что показывает «после»</th>
+<th>Доказательство</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>M</td>
+<td>исправлено</td>
+<td>PRs говорит «A lista de PRs ainda não está liberada» и объясняет общий барьер; Código говорит «A aba Código ainda não está liberada».</td>
+<td><code>projeto-prs--*</code>, <code>projeto-code--*</code></td>
+</tr>
+<tr>
+<td>P2</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Строка «Já sabe o id?» по-прежнему прижата к низу карточки барьера.</td>
+<td><code>projeto-prs--dark--desktop.png</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="approvals">Одобрения</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Сер.</th>
+<th>Состояние</th>
+<th>Что показывает «после»</th>
+<th>Доказательство</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td>A</td>
+<td>исправлено</td>
+<td>Рейка, вкладка Aprovações и «Precisa de você» показывают <strong>4</strong> — число из базы, включая <code>git_push</code> другой сессии; панель боковых сессий в сессии показывает 3, принадлежащие другим.</td>
+<td><code>projeto-approvals--*</code>, <code>detalhe-precisa-de-voce--dark.png</code>, <code>detalhe-sessao2-topo--dark.png</code></td>
+</tr>
+<tr>
+<td>A2</td>
+<td>A</td>
+<td>исправлено</td>
+<td>Карточка <code>git_push</code> предлагает Aprovar/Negar/Modo automático, без «Sempre permitir».</td>
+<td><code>projeto-approvals--*</code></td>
+</tr>
+<tr>
+<td>A3</td>
+<td>M</td>
+<td>сохраняется</td>
+<td>Всё ещё несколько вариантов: 4 кнопки плюс длинная моноширинная заметка во вкладке, 3 кнопки и никакой заметки в «Precisa de você», 3 растянутые кнопки в панели боковых сессий. Заметка «Sempre permitir» по-прежнему говорит две разные вещи: «grava a regra em .brabo/permissions.json» в ленте и «libera este tipo de ação só para dev-api» в панели.</td>
+<td><code>detalhe-sessao2-topo--dark.png</code>, <code>detalhe-precisa-de-voce--dark.png</code></td>
+</tr>
+<tr>
+<td>A4</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Глиф ⚠ по-прежнему ~8 px, а моноширинный абзац весит больше, чем решение.</td>
+<td><code>projeto-approvals--*</code></td>
+</tr>
+<tr>
+<td>A5</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Команда по-прежнему показывается в прямых кавычках пропорциональным шрифтом.</td>
+<td>то же</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="session">Сессия</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Сер.</th>
+<th>Состояние</th>
+<th>Что показывает «после»</th>
+<th>Доказательство</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X1</td>
+<td>A</td>
+<td>исправлено</td>
+<td>При 1440, 1280 и 1024 панель помещается: модель и язык ответа стали одним чипом, заголовок и метаданные видны целиком, «Encerrar» становится иконкой при 1024. Единственная оставшаяся обрезка — многоточие самого чипа («… · pt…», 230 px в 217).</td>
+<td><code>sessao*--*--desktop.png</code>, <code>detalhe-sessao-1280--dark.png</code>, <code>detalhe-sessao-1024--dark.png</code>, <code>sondas-dark.json</code></td>
+</tr>
+<tr>
+<td>X2</td>
+<td>A</td>
+<td>частично</td>
+<td>Панель теперь шириной с ленту (x 302–1082), группирует предложения по сессии («2 propostas na sessão #cde43f7c») и больше не повторяет метку. Это всё ещё фиксированный блок <strong>345 из 900 px</strong> над composer, а элемент за ним виден по верхнему краю (y≈387).</td>
+<td><code>detalhe-sessao2-topo--dark.png</code>, <code>detalhe-sessao-fim--dark.png</code>, <code>sondas-dark.json</code></td>
+</tr>
+<tr>
+<td>X3</td>
+<td>A</td>
+<td>исправлено</td>
+<td>Без групп по источнику; лента читается вопрос → ответ, по порядку.</td>
+<td><code>detalhe-sessao2-topo--dark.png</code> (<code>grupos: []</code> в <code>sondas-dark.json</code>)</td>
+</tr>
+<tr>
+<td>X4</td>
+<td>M</td>
+<td>частично</td>
+<td>Карточки handoff в этих данных нет (предложение вытеснено), но composer всё ещё говорит «Endereçar handoff».</td>
+<td><code>sessao*--*</code></td>
+</tr>
+<tr>
+<td>X5</td>
+<td>M</td>
+<td>не перепроверено</td>
+<td>Нет карточки handoff, с которой можно сравнить ширины.</td>
+<td>—</td>
+</tr>
+<tr>
+<td>X6</td>
+<td>M</td>
+<td>сохраняется</td>
+<td>«ARTEFATOS GERADOS 3» перечисляет одну группу («PO 1»); во второй сессии brief существует, а панель говорит «0 · Nada ainda».</td>
+<td><code>sessao--*</code>, <code>sessao2--*</code></td>
+</tr>
+<tr>
+<td>X7</td>
+<td>B</td>
+<td>частично</td>
+<td>«ORIGEM: 0 REF(S)» стало «ORIGEM: 0 REFERÊNCIA» — без жаргона, но с неверным числом; см. N9.</td>
+<td><code>sessao2--*</code></td>
+</tr>
+<tr>
+<td>X8</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Одна и та же сессия открылась в разных позициях прокрутки в двух темах.</td>
+<td><code>sessao2--dark--desktop.png</code> × <code>sessao2--light--desktop.png</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="containers-account-status">/containers, /account, /status</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Сер.</th>
+<th>Состояние</th>
+<th>Что показывает «после»</th>
+<th>Доказательство</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K1</td>
+<td>M</td>
+<td>исправлено</td>
+<td>«Parar» и «Remover» <code>disabled</code> (прозрачность 0.5), а строка говорит «Nunca provisionado: não há container para parar nem remover».</td>
+<td><code>containers--*--desktop.png</code>, <code>sondas-dark.json</code></td>
+</tr>
+<tr>
+<td>K2</td>
+<td>M</td>
+<td>исправлено</td>
+<td>Причина broker — одна строка с раскрывающимся «Por quê?»; никакого <code>BROKER_URL</code> в интерфейсе.</td>
+<td>то же</td>
+</tr>
+<tr>
+<td>K3</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Ссылка проекта 53×14 px.</td>
+<td><code>validacao-visual.json</code></td>
+</tr>
+<tr>
+<td>U1</td>
+<td>M</td>
+<td>исправлено</td>
+<td>Фраза «só esta página está traduzida» исчезла.</td>
+<td><code>account--*</code></td>
+</tr>
+<tr>
+<td>U2</td>
+<td>B</td>
+<td>исправлено</td>
+<td>Никаких номеров RN в подзаголовках («Agente local»); длинный абзац перед таблицей остаётся.</td>
+<td>то же</td>
+</tr>
+<tr>
+<td>T1</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Сырая ISO-метка времени, «Último check», «—» для engine и «Voltar» как маленькая ссылка. При 390 px страница также переполняется — см. N5.</td>
+<td><code>status--*</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="settings">Настройки</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Сер.</th>
+<th>Состояние</th>
+<th>Что показывает «после»</th>
+<th>Доказательство</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G1</td>
+<td>A</td>
+<td>частично</td>
+<td>Путь самого экрана исправлен: одна загрузка (52 запроса) плюс клики по 11 пунктам «Nesta página» стоят <strong>18</strong> дополнительных запросов за 28 с, без 429. Перезагрузка по прямой ссылке (<code>?section=</code>) по-прежнему стоит <strong>52 на загрузку</strong> (55 раньше): шестая перезагрузка за 16 с превысила лимит, и страница показала «Limite de requisições excedido» (<code>g1.json</code>: 362 запроса, 51 × 429 за 30 с).</td>
+<td><code>g1-cliques.json</code>, <code>g1.json</code>, <code>detalhe-g1-ultima-secao--dark.png</code></td>
+</tr>
+<tr>
+<td>G2</td>
+<td>M</td>
+<td>частично</td>
+<td>Четыре колонки исчезли: «Nesta página» стоит над разделами. «Modelos por agente» по-прежнему обрезает имя агента («QA de Performance e Segurança», 201 px в 119) и модель (173 в 143). На мобильном таблица схлопывается — см. N4.</td>
+<td><code>projeto-settings--*--desktop.png</code>, <code>validacao-visual.json</code></td>
+</tr>
+<tr>
+<td>G3</td>
+<td>M</td>
+<td>частично</td>
+<td>«Tarefas bloqueadas seguidas até parar» заменило «Tasks blocked»; «dev agent(s)», «bind-mount», «permissions.json» и «runner» остались в разделах Execução и «Onde o código mora».</td>
+<td><code>projeto-settings--*--desktop.png</code></td>
+</tr>
+<tr>
+<td>G4</td>
+<td>M</td>
+<td>сохраняется</td>
+<td>«Salvar» в Execução активна (терракотовая) без ожидающих изменений и без счётчика; «Converter» неактивна.</td>
+<td>то же</td>
+</tr>
+<tr>
+<td>G5–G7</td>
+<td>B</td>
+<td>не перепроверено</td>
+<td>Оглавление якорных разделов, чипы возможностей и placeholder PAT не были пересняты в тех же условиях.</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="architecture-backlog-spend-light-theme">Архитектура, Backlog, Расходы, светлая тема</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Сер.</th>
+<th>Состояние</th>
+<th>Что показывает «после»</th>
+<th>Доказательство</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R1</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>«a partir do module_map (create_c4_diagram)».</td>
+<td><code>projeto-arquitetura--*</code></td>
+</tr>
+<tr>
+<td>R2</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Осиротевший абзац вверху, «Gastos do workspace» внутри вкладки проекта, график только с осями.</td>
+<td><code>projeto-spend--*</code></td>
+</tr>
+<tr>
+<td>R3</td>
+<td>B</td>
+<td>сохраняется</td>
+<td>Иконка истории — по-прежнему лампочка Criativo.</td>
+<td><code>projeto-backlog--*</code></td>
+</tr>
+<tr>
+<td>CL1</td>
+<td>M</td>
+<td>сохраняется</td>
+<td>Неактивная «Converter» по-прежнему плохо видна на светлом фоне.</td>
+<td><code>projeto-settings--light--desktop.png</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="new-findings">Новые находки</h2>
+<p>То, чего «до» не перечисляло, — либо новое, либо скрытое, пока исправление
+не сделало экран достижимым. Ничего здесь не исправлено; каждая находка — кандидат в AT.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Сер.</th>
+<th>Экран / тема</th>
+<th>Находка</th>
+<th>Доказательство</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N1</td>
+<td>A</td>
+<td>Сессия, обе темы, 390 px</td>
+<td>Страница сессии не получила мобильную разметку. «Contexto da sessão» сохраняет ~320 px, лента получает ~70 px и переносит по слову на строку, панель боковых сессий становится нечитаемой, а «Iniciar ideação»/«Encerrar» вываливаются за правый край.</td>
+<td><code>sessao--*--mobile.png</code>, <code>sessao2--*--mobile.png</code>, <code>detalhe-sessao2-mobile--*.png</code>; проверка 19–21 <code>texto-cortado</code></td>
+</tr>
+<tr>
+<td>N2</td>
+<td>M</td>
+<td>Сессия, обе темы</td>
+<td>Каждый <code>chat.message</code> рисуется как <strong>смотрящий</strong> — аватар и имя берутся у вошедшего пользователя, никогда из <code>actorKind</code>/<code>actorId</code> (<code>apps/web/src/routes/session-timeline-montagem.tsx:379-395</code>). <code>chat.message</code> агента показывается как «owner@brabo.dev»; в общей сессии сообщение другого человека показалось бы с именем смотрящего. Это было скрыто, пока лента сворачивала историю в группы по источнику (X3).</td>
+<td><code>detalhe-sessao2-topo--dark.png</code>; <code>sondas-dark.json</code> (<code>autoriaChatMessage</code>: трижды «owner@brabo.dev» для пользователя, агента, пользователя)</td>
+</tr>
+<tr>
+<td>N3</td>
+<td>M</td>
+<td>/containers, обе темы, 390 px</td>
+<td>Таблица втискивает семь колонок в ширину: заголовки «REGISTRADO/OBSERVADO/RECURSOS/DESDE» перекрываются, ячейки переносят по слову на строку, а кнопки действий обрезаются справа.</td>
+<td><code>containers--*--mobile.png</code>; проверка 8 <code>texto-cortado</code></td>
+</tr>
+<tr>
+<td>N4</td>
+<td>M</td>
+<td>Настройки, обе темы, 390 px</td>
+<td>«Modelos por agente» становится непригодной на мобильном: имя агента получает блок в 6 px, триггер модели — 0 px.</td>
+<td><code>projeto-settings--*--mobile.png</code>; проверка 33–35 <code>texto-cortado</code></td>
+</tr>
+<tr>
+<td>N5</td>
+<td>B</td>
+<td>/status, обе темы, 390 px</td>
+<td>Единственная страница, прокручивающаяся вбок: <code>scrollWidth</code> 413 против 390; правый край таблицы обрезан.</td>
+<td><code>status--*--mobile.png</code>, <code>validacao-visual.json</code></td>
+</tr>
+<tr>
+<td>N6</td>
+<td>B</td>
+<td>Dashboard, обе темы, 390 px</td>
+<td>Поиск сжимается до «Bus», а «Novo projeto» переносится на две строки.</td>
+<td><code>dashboard--*--mobile.png</code></td>
+</tr>
+<tr>
+<td>N7</td>
+<td>B</td>
+<td>Criativo, обе темы, 390 px</td>
+<td>Id сессии в каждой строке получает блок в 0 px («#ae1e5746», «#cde43f7c»), поэтому строки теряют то, что их идентифицирует.</td>
+<td><code>projeto-criativo--*--mobile.png</code>, <code>validacao-visual.json</code></td>
+</tr>
+<tr>
+<td>N8</td>
+<td>B</td>
+<td>Рейка проекта, обе темы, 390 px</td>
+<td>Активная вкладка не прокручивается в зону видимости целиком («Config…» обрезано, «4» у Aprovações обрезано), и ничто не сигнализирует, что полоса прокручивается.</td>
+<td><code>projeto-settings--*--mobile.png</code>, <code>projeto-approvals--*--mobile.png</code></td>
+</tr>
+<tr>
+<td>N9</td>
+<td>B</td>
+<td>Visão geral и сессия, обе темы</td>
+<td>Ошибки множественного числа после прохода i18next: «1 eventos» (<code>overview.json:70</code> имеет одну форму) и «0 referência» (правило pt относит 0 к <code>one</code>, поэтому <code>origemRefs_one</code> используется для нуля).</td>
+<td><code>projeto-overview--*--desktop.png</code>, <code>sessao2--*</code></td>
+</tr>
+<tr>
+<td>N10</td>
+<td>B</td>
+<td>Login, обе темы</td>
+<td>Фоновое свечение — <code>--success-soft</code> (<code>apps/web/src/routes/AuthLayout.module.css:80-84</code>): со старым сине-зелёным оно читалось как бренд; в нейтральной теме это зелёная дымка за терракотовой страницей.</td>
+<td><code>login--dark--desktop.png</code>, <code>login--light--desktop.png</code></td>
+</tr>
+<tr>
+<td>N11</td>
+<td>B</td>
+<td>Вкладка Aprovações, обе темы</td>
+<td>Каждая карточка несёт «Motivo da política fora dos eventos carregados nesta tela» — правда (причина живёт в логе другой сессии), но это инструмент, объясняющий сам себя, повторённый на каждой карточке.</td>
+<td><code>projeto-approvals--*</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="what-this-page-does-not-measure">Чего эта страница не измеряет</h2>
+<ul>
+<li>Контраст. Это арифметика над токенами, и она живёт в наборе тестов web
+(<code>apps/web/src/lib/contraste.ts</code>); проверка здесь видит только разметку.</li>
+<li>Ничего, что находится за engine: полосу живого хода, терминал,
+присутствие dev agents. Заглушка не может их произвести.</li>
+<li>Production-сборку. Dev-сервер <code>vite</code> отдаёт те же компоненты и
+CSS, но не production CSP и не nginx перед образом web.</li>
+</ul>
+<nav class="site-pager"><a href="../explanation/auditoria-fluxo-vs-codigo.html"></a><a href="../explanation/historico-de-fases.html"></a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/auditoria-visual-rodada-29.md">Редактировать страницу</a><span>Обновлено 2026-10-15T04:50:47-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#how-the-product-was-brought-up-and-what-that-does-not-cover">Как был поднят продукт (и чего это не покрывает)</a></li><li class="n2"><a href="#files">Файлы</a></li><li class="n2"><a href="#the-checker-screen-by-screen">Проверка, экран за экраном</a></li><li class="n2"><a href="#the-before-findings-one-by-one">Находки «до», по одной</a></li><li class="n3"><a href="#shell-and-navigation">Рамка и навигация</a></li><li class="n3"><a href="#login-dashboard">Login, Dashboard</a></li><li class="n3"><a href="#overview">Visão geral</a></li><li class="n3"><a href="#creative-chat-insights-executors">Criativo, Chat, Percepções, Executores</a></li><li class="n3"><a href="#code-and-prs">Код и PR</a></li><li class="n3"><a href="#approvals">Одобрения</a></li><li class="n3"><a href="#session">Сессия</a></li><li class="n3"><a href="#containers-account-status">/containers, /account, /status</a></li><li class="n3"><a href="#settings">Настройки</a></li><li class="n3"><a href="#architecture-backlog-spend-light-theme">Архитектура, Backlog, Расходы, светлая тема</a></li><li class="n2"><a href="#new-findings">Новые находки</a></li><li class="n2"><a href="#what-this-page-does-not-measure">Чего эта страница не измеряет</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-ru.json" data-base="../"></script></body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brabo — documentação</title>
+<meta name="description" content="Documentação do Brabo, publicada por degrau da esteira: prd e dev.">
+<!-- A raiz não é conteúdo: é um índice. Quem indexa é /prd/. -->
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://viralabs-dev.github.io/brabo/prd/">
+<style>
+  /* Valores de design/tokens.css (o índice é um HTML avulso na raiz do Pages e
+     não alcança o arquivo): surface-0/1, border, text-primary/secondary/muted e
+     accent, escuro e claro. Mudou a paleta lá, mude aqui. */
+  :root {
+    color-scheme: dark light;
+    --fundo: #0d0d0f;
+    --superficie: #141417;
+    --borda: #2a2a30;
+    --texto: #ececef;
+    --suave: #a1a1aa;
+    --tenue: #86868f;
+    --destaque: #c8744f;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --fundo: #ffffff;
+      --superficie: #fafafa;
+      --borda: #e4e4e7;
+      --texto: #18181b;
+      --suave: #52525b;
+      --tenue: #696972;
+      --destaque: #a4502c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 48px 24px;
+    background: var(--fundo);
+    color: var(--texto);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+    display: flex;
+    justify-content: center;
+  }
+  main { width: 100%; max-width: 720px; }
+  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
+  .tagline { color: var(--tenue); margin: 0 0 32px; font-size: 14px;
+             text-transform: uppercase; letter-spacing: .12em; }
+  .degrau {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas: "nome selo versao" "descricao descricao descricao";
+    gap: 4px 12px;
+    align-items: baseline;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .degrau:hover { border-color: var(--destaque); }
+  .nome { grid-area: nome; font-size: 18px; font-weight: 600; }
+  .selo { grid-area: selo; color: var(--destaque); font-size: 12px;
+          text-transform: uppercase; letter-spacing: .08em; }
+  .versao { grid-area: versao; color: var(--tenue); font-size: 13px;
+            text-align: right; font-family: ui-monospace, monospace; }
+  .descricao { grid-area: descricao; color: var(--suave); font-size: 14px; }
+  .vazio { color: var(--suave); }
+  footer { margin-top: 32px; color: var(--tenue); font-size: 13px; }
+  footer a { color: var(--suave); }
+  @media (max-width: 520px) {
+    .degrau { grid-template-columns: 1fr auto;
+              grid-template-areas: "nome selo" "versao versao" "descricao descricao"; }
+    .versao { text-align: left; }
+  }
+</style>
+</head>
+<body>
+  <main>
+    <h1>Brabo</h1>
+    <p class="tagline">Documentação por degrau da esteira</p>
+      <a class="degrau" href="./dev/">
+        <span class="nome">dev</span>
+        <span class="selo">em desenvolvimento</span>
+        <span class="versao">sem versão carimbada</span>
+        <span class="descricao">O estado mais recente. Pode descrever o que ainda não saiu.</span>
+      </a>
+    <footer>
+      Cada degrau publica a própria documentação a cada merge.
+      <a href="https://github.com/viralabs-dev/brabo">Repositório</a>.
+    </footer>
+  </main>
+</body>
+</html>

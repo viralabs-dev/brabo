@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Redirecionando…</title>
+<meta name="robots" content="noindex, nofollow">
+<script>
+  (function () {
+    var raiz = '/brabo/';
+    var caminho = window.location.pathname;
+    if (caminho.indexOf(raiz) !== 0) return;
+    var resto = caminho.slice(raiz.length);
+    var cauda = window.location.search + window.location.hash;
+    // O caminho aposentado: /brabo/main/<algo> -> /brabo/prd/<algo>.
+    var aposentado = /^main(?:\/(.*))?$/.exec(resto);
+    if (aposentado) {
+      window.location.replace(raiz + 'prd/' + (aposentado[1] || '') + cauda);
+      return;
+    }
+    // O locale aposentado (ADR 0216): pt-BR virou o padrão e saiu do prefixo,
+    // então /brabo/<degrau>/pt-BR/<algo> -> /brabo/<degrau>/<algo>.
+    var localeAntigo = /^(prd|dev)\/pt-BR(?:\/(.*))?$/.exec(resto);
+    if (localeAntigo) {
+      window.location.replace(raiz + localeAntigo[1] + '/' + (localeAntigo[2] || '') + cauda);
+      return;
+    }
+    // Já está dentro de um degrau publicado: a página realmente não existe.
+    if (/^(prd|dev)(\/|$)/.test(resto)) return;
+    window.location.replace(raiz + 'prd/' + resto + cauda);
+  })();
+</script>
+</head>
+<body>
+  <p>Esta página mudou de endereço. Indo para
+     <a href="/brabo/prd/">a documentação estável</a>…</p>
+</body>
+</html>
