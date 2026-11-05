@@ -52,7 +52,8 @@ const docs = (dir, base = '') =>
 // A fonte é a UNIÃO das raízes de doc (AT-693): o `rel` é o mesmo em todas.
 const bases = lerRaizesDeDoc().map((r) => r.dir);
 const arquivoDaFonte = (rel) => join(bases.find((b) => existsSync(join(b, rel))) ?? bases[0], rel);
-const listaDaFonte = () => [...new Set(bases.flatMap((b) => docs(b)))];
+// `i18n/` mora dentro da raiz e são as cópias, não fontes: sem o filtro, com o en completo a amostra vira uma tradução.
+const listaDaFonte = () => [...new Set(bases.flatMap((b) => docs(b)))].filter((rel) => !rel.startsWith('i18n/'));
 const LOCALES = ['en', 'ru', 'zh-Hans'];
 const temTraducao = (loc, rel) => bases.some((b) => existsSync(join(b, 'i18n', loc, rel)));
 const arquivoTraduzido = (loc, rel) => join(bases.find((b) => existsSync(join(b, 'i18n', loc, rel))) ?? bases[0], 'i18n', loc, rel);
