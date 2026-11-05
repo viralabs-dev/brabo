@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 316 de 1267 (24.9%) | 28.0% de 22.156.297 | 276 | 39 | 1 | 951 | 0 |
-| `ru` | 316 de 1267 (24.9%) | 28.0% de 22.156.297 | 276 | 39 | 1 | 951 | 0 |
-| `zh-Hans` | 316 de 1267 (24.9%) | 28.0% de 22.156.297 | 276 | 39 | 1 | 951 | 0 |
+| `en` | 316 de 1267 (24.9%) | 28.0% de 22.160.448 | 276 | 39 | 1 | 951 | 0 |
+| `ru` | 316 de 1267 (24.9%) | 28.0% de 22.160.448 | 276 | 39 | 1 | 951 | 0 |
+| `zh-Hans` | 316 de 1267 (24.9%) | 28.0% de 22.160.448 | 276 | 39 | 1 | 951 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -161,8 +161,8 @@ Textos distintos da referência da API (`/reference/api/`) contra o catálogo `d
 
 | locale | textos traduzidos |
 |---|---|
-| `pt-BR` | 1324 de 1431 (92.5%) |
+| `pt-BR` | 1324 de 1439 (92.0%) |
 | `en` | 1 de 1 (100.0%) |
-| `ru` | 1324 de 1431 (92.5%) |
-| `zh-Hans` | 1324 de 1431 (92.5%) |
+| `ru` | 1324 de 1439 (92.0%) |
+| `zh-Hans` | 1324 de 1439 (92.0%) |
 
