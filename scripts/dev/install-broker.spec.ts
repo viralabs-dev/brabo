@@ -74,7 +74,7 @@ const DEPOIS = `consentir_broker
 printf 'ESTADO ligado=%s gid=%s raiz=%s\\n' "$BROKER_LIGADO" "$DOCKER_GID_MEDIDO" "$RAIZ_GERENCIADA_NO_HOST"
 printf 'PENDENCIAS=[%s]\\n' "$PENDENCIAS"`;
 
-const IMAGEM = 'ghcr.io/daneiel/brabo-broker@sha256:' + 'e'.repeat(64);
+const IMAGEM = 'ghcr.io/viralabs-dev/brabo-broker@sha256:' + 'e'.repeat(64);
 
 /** Sem terminal: stdin é um pipe. */
 function semTerminal(bin: string): { saida: string; codigo: number } {

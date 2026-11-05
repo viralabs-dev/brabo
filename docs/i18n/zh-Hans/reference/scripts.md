@@ -17,26 +17,6 @@ keywords: [scripts, pnpm, make, commands]
 
 | 命令 | 执行 |
 |---|---|
-| `pnpm bootstrap` | `bash scripts/dev/bootstrap.sh` |
-| `pnpm dev` | `node scripts/dev/preflight.mjs && docker compose -f docker/docker-compose.yml --env-file .env up` |
-| `pnpm dev:build` | `node scripts/dev/preflight.mjs && docker compose -f docker/docker-compose.yml --env-file .env up --build` |
-| `pnpm dev:down` | `docker compose -f docker/docker-compose.yml --env-file .env down` |
-| `pnpm dev:gpu` | `node scripts/dev/preflight.mjs && docker compose -f docker/docker-compose.yml -f docker/docker-compose.gpu.yml --env-file .env up` |
-| `pnpm dev:obs` | `node scripts/dev/preflight.mjs && docker compose -f docker/docker-compose.yml -f docker/docker-compose.observability.yml --env-file .env up -d && node scripts/dev/observabilidade-pronta.mjs` |
-| `pnpm obs:down` | `docker compose -f docker/docker-compose.yml -f docker/docker-compose.observability.yml --env-file .env stop grafana prometheus loki alloy` |
-| `pnpm dev:preflight` | `node scripts/dev/preflight.mjs` |
-| `pnpm dev:api` | `pnpm --filter api start:dev` |
-| `pnpm dev:web` | `pnpm --filter web dev` |
-| `pnpm build` | `pnpm --filter api build && pnpm --filter web build` |
-| `pnpm test` | `pnpm --filter api test && pnpm --filter web test` |
-| `pnpm db:generate` | `pnpm --filter api db:generate` |
-| `pnpm db:migrate` | `pnpm --filter api db:migrate` |
-| `pnpm engine:setup` | `cd apps/engine && mix deps.get && mix ecto.create && mix ecto.migrate` |
-| `pnpm engine:dev` | `cd apps/engine && mix phx.server` |
-| `pnpm engine:test` | `cd apps/engine && mix test` |
-| `pnpm engine:migrate` | `cd apps/engine && mix ecto.migrate` |
-| `pnpm e2e` | `pnpm --dir e2e test` |
-| `pnpm e2e:navegadores` | `pnpm --dir e2e navegadores` |
 | `pnpm docs:start` | `pnpm docs:site && pnpm docs:serve` |
 | `pnpm docs:build` | `pnpm docs:site && pnpm docs:site:check` |
 | `pnpm docs:serve` | `python3 -m http.server 3000 -d build/docs-site` |
@@ -49,6 +29,8 @@ keywords: [scripts, pnpm, make, commands]
 | `pnpm docs:check` | `node scripts/docs/docmap.mjs && node scripts/docs/generate.mjs --check` |
 | `pnpm docs:drift` | `node scripts/docs/drift.mjs` |
 | `pnpm docs:audit` | `node scripts/docs/audit.mjs` |
+| `pnpm docs:fontes` | `bash scripts/docs/montar-layout.sh` |
+| `pnpm test:scripts` | `vitest run scripts/docs scripts/dev/install- scripts/ci/assets-do-instalador scripts/ci/montar-images --exclude scripts/docs/openapi-por-locale.spec.ts` |
 
 ## api — `apps/api/package.json`
 
@@ -60,7 +42,7 @@ keywords: [scripts, pnpm, make, commands]
 | `pnpm --filter api start:dev` | `nest start --watch` |
 | `pnpm --filter api start:debug` | `nest start --debug --watch` |
 | `pnpm --filter api start:prod` | `node dist/main` |
-| `pnpm --filter api lint` | `eslint "{src,apps,libs,test}/**/*.ts" --fix` |
+| `pnpm --filter api lint` | `eslint "src/**/*.ts" "test/**/*.ts" --max-warnings 0` |
 | `pnpm --filter api test` | `vitest run` |
 | `pnpm --filter api typecheck` | `tsc -p tsconfig.build.json --noEmit` |
 | `pnpm --filter api test:watch` | `vitest` |
@@ -93,6 +75,7 @@ keywords: [scripts, pnpm, make, commands]
 | `pnpm --filter api artefatos:reprojetar` | `ts-node src/scripts/reprojetar-artefatos.ts` |
 | `pnpm --filter api db:generate` | `drizzle-kit generate` |
 | `pnpm --filter api db:migrate` | `drizzle-kit migrate` |
+| `pnpm --filter api lint:fix` | `eslint "{src,apps,libs,test}/**/*.ts" --fix` |
 
 ## web — `apps/web/package.json`
 
@@ -104,14 +87,15 @@ keywords: [scripts, pnpm, make, commands]
 | `pnpm --filter web lint` | `oxlint` |
 | `pnpm --filter web preview` | `vite preview` |
 | `pnpm --filter web test` | `vitest run` |
-| `pnpm --filter web openapi:types` | `openapi-typescript ../api/docs/reference/openapi.json -o src/lib/api-types.generated.ts` |
-| `pnpm --filter web openapi:types:check` | `openapi-typescript ../api/docs/reference/openapi.json -o src/lib/api-types.generated.ts --check` |
+| `pnpm --filter web openapi:types` | `openapi-typescript fixados/openapi.json -o src/lib/api-types.generated.ts` |
+| `pnpm --filter web openapi:types:check` | `openapi-typescript fixados/openapi.json -o src/lib/api-types.generated.ts --check` |
+| `pnpm --filter web areas:baixar` | `node scripts/baixar-areas.mjs` |
 
 ## runner — `apps/runner/package.json`
 
 | 命令 | 执行 |
 |---|---|
-| `pnpm --filter @brabo/runner start` | `node src/index.ts` |
+| `pnpm --filter @brabo/runner start` | `node --import ./scripts/strip-node-modules.mjs src/index.ts` |
 | `pnpm --filter @brabo/runner build` | `tsup` |
 | `pnpm --filter @brabo/runner build:bin` | `node scripts/build-bin.mjs` |
 | `pnpm --filter @brabo/runner smoke` | `node scripts/smoke-dist.mjs` |
@@ -169,6 +153,7 @@ keywords: [scripts, pnpm, make, commands]
 
 | 目标 | 作用 |
 |---|---|
+| `make dev` | Brings up the dev environment (preflight + docker compose up) from the sibling clones |
 | `make help` | Lists the available targets |
 | `make deploy-local` | Brings up the local cluster, installs everything and runs the smoke test (TAG=vX.Y.Z-qa.N optional) |
 | `make deploy-local-clean` | Same as deploy-local, but without rebuilding the images |
@@ -189,4 +174,4 @@ keywords: [scripts, pnpm, make, commands]
 
 ---
 
-共 129 条命令。没有 `## 描述` 注释的 Makefile 目标不会出现在这里——请在源码中添加注释。
+共 114 条命令。没有 `## 描述` 注释的 Makefile 目标不会出现在这里——请在源码中添加注释。

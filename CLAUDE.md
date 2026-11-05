@@ -12,7 +12,8 @@ orquestrada por agentes). Quem instala ou lê só precisa conhecer este repo
   arquivos de comunidade;
 - `install.sh` (+ `scripts/dev/install-*.spec.ts`, `scripts/ci/assets-do-instalador.ts`);
 - os workflows `docs-check`, `docs-deploy`, `docs-audit` e, DORMENTES até a
-  AT-704 (só `workflow_dispatch`), `release`, `tag-release`, `install-e2e`.
+  AT-704 (todo job exige a variável de repositório `PRODUTO_RELEASE_LIGADA=true`),
+  `release`, `tag-release`, `install-e2e`.
 
 O código mora nos repositórios irmãos `brabo-api`, `-engine`, `-web`, `-runner`,
 `-broker`, `-contracts`, `-infra`, `-ci`, `-qa` (todos em `viralabs-dev`); o
@@ -184,3 +185,5 @@ O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mj
 - O mecanismo inteiro está explicado em
   docs/explanation/documentation-workflow.md — leia antes de desligar
   qualquer peça dele.
+
+Pages: o site só responde depois que o dono liga o GitHub Pages (fonte: branch `gh-pages`).

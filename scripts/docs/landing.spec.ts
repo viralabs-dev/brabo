@@ -144,10 +144,10 @@ describe('landing — a página que escolhe o degrau', () => {
     expect(indice).toContain('rel="canonical" href="https://viralabs-dev.github.io/brabo/prd/"');
   });
 
-  it('as cores são as de design/tokens.css, nos dois temas', () => {
+  it('as cores são as de apps/web/design/tokens.css, nos dois temas', () => {
     // O índice COPIA os valores (é HTML avulso na raiz do Pages), e a cópia já
     // envelheceu uma vez: ficou petróleo depois do ADR 0181. Isto amarra a cópia.
-    const tokens = readFileSync(path.join(RAIZ, 'design/tokens.css'), 'utf8');
+    const tokens = readFileSync(path.join(RAIZ, 'apps/web/design/tokens.css'), 'utf8');
     const bloco = (seletor: string) => {
       const i = tokens.indexOf(`${seletor} {`);
       return tokens.slice(i, tokens.indexOf('}', i));

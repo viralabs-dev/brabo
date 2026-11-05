@@ -587,6 +587,17 @@ rules:
   # `Makefile`, `package.json`, `GOVERNANCE.md`). Um instalador que roda na
   # máquina de quem instala é precisamente o que não pode mudar sem a doc
   # acompanhar — o que ele verifica, e o que ele NUNCA apaga, são contrato.
+  - id: release-do-produto
+    watch:
+      - ".github/workflows/release.yml"
+      - ".github/workflows/tag-release.yml"
+      - "componentes.json"
+      - "scripts/ci/montar-images.ts"
+    docs:
+      - "docs/explanation/release-do-produto.md"
+    severity: warn
+    note: "Quem carimba, quem publica e o que o produto assina são o contrato da release."
+
   - id: instalador
     watch:
       - "install.sh"
@@ -617,19 +628,6 @@ rules:
   # e a única cujo COMO RODAR não cabe num `pnpm test`. Quem chega no
   # repositório procura isso no getting-started, não num README de pasta.
   #
-  # Os dois golden-sets agendados (ADR 0138, ADR 0168). A cadência, o teto de
-  # tempo e o que faz o job ficar vermelho são decisões escritas em
-  # `gates.md`; um workflow que muda qualquer uma delas sem a página faz a
-  # explicação descrever outro job. `warn`: trocar um SHA de action não muda
-  # nada do que está escrito lá.
-  - id: golden-sets-agendados
-    watch:
-      - ".github/workflows/golden-set-rag.yml"
-      - ".github/workflows/golden-set-qa.yml"
-    docs: ["docs/explanation/gates.md"]
-    severity: warn
-    note: "Mudou a cadência, o teto ou o critério de vermelho de um golden-set agendado? gates.md explica o porquê."
-
   # `warn`, não `block`: spec novo dentro da mesma mecânica (mesmo jeito de
   # subir, mesmo jeito de rodar) não muda nada do que está escrito lá, e
   # cobrar a doc a cada spec ensinaria a usar o escape hatch. O que MUDA a
@@ -724,15 +722,7 @@ rules:
     # regra vale para o conjunto, então tocar QUALQUER uma das partes satisfaz.
     docs_alternativos:
       - "CLAUDE.md"
-      - ".claude/contexto/historico.md"
-      - ".claude/contexto/estado-atual.md"
-      - ".claude/contexto/stack.md"
-      - ".claude/contexto/convencoes-repositorio-e-dominio.md"
-      - ".claude/contexto/convencoes-agentes-e-telas.md"
-      - ".claude/rules/runner.md"
       - ".claude/rules/broker-e-containers.md"
       - ".claude/rules/ci-e-cadeia-de-suprimentos.md"
-      - ".claude/rules/web-socket-e-orcamento.md"
-      - ".claude/rules/chaves-de-dispositivo-e-instalador.md"
     severity: warn
     note: "Stack, Convenções, 'O que NÃO fazer' e o estado das fases envelhecem em silêncio."

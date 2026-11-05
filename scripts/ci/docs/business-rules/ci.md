@@ -669,7 +669,7 @@ pode depender dela — é justamente por depender dela que ele não saía.
 
 - **Código:** `.github/workflows/build-runner-binaries.yml:283` (o job, agora
   sem `needs:`), `:318` (`timeout-minutes: 40`, que cabe as duas esperas),
-  `:335` (`ALVOS_ESPERADOS` no JOB, para os dois passos lerem a mesma lista),
+  `:358` (`ALVOS_ESPERADOS` no JOB, para os dois passos lerem a mesma lista),
   `:397` (o passo que espera), `:401`/`:402` (os dois tetos), `:410` (a Release
   ausente, que é erro), `:433` (o teto dos binários, que é `notice`), `:499` (o
   manifesto nomeando o que não cobre)

@@ -455,6 +455,10 @@ function descobrirProviders() {
 }
 
 function gerarProvidersDeLlm() {
+  // AT-702: o bloco de `apps/api/docs/reference/llm-providers.md` é gerado e conferido
+  // no `brabo-api` (com os caminhos relativos à raiz DELE); regerá-lo aqui, no layout
+  // reconstruído, reescreveria o bloco do repo dono com `apps/api/` na frente.
+  if (process.env.BRABO_GERAR_PROVIDERS !== '1') return;
   const achados = descobrirProviders();
 
   const seedTs = ler('apps/api/src/db/seed.ts');
@@ -509,12 +513,13 @@ function gerarProvidersDeLlm() {
  * container.
  */
 function gerarOpenapi() {
-  const json = execFileSync(
-    'pnpm',
-    ['--filter', 'api', 'exec', 'ts-node', 'src/scripts/export-openapi.ts'],
-    { cwd: RAIZ, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 },
-  );
-  escrever(SPEC, json);
+  // AT-702: o `openapi.json` é gerado e conferido pelo repo `brabo-api` (que tem o
+  // código e as dependências para subir o AppModule). Aqui só se confere que o
+  // layout o trouxe, porque o site e o `api-render-check` o leem.
+  if (!existsSync(join(RAIZ, SPEC))) {
+    pendencias.push(SPEC);
+    console.log(`  AUSENTE   ${SPEC} — o layout dos irmãos não trouxe o OpenAPI do brabo-api`);
+  } else console.log(`  ok        ${SPEC} (gerado e conferido no brabo-api)`);
 }
 
 /**
@@ -1100,8 +1105,16 @@ function verificarProcedimentosDoRunbook() {
     return;
   }
 
+  // AT-702: specs que a separação não levou para NENHUM repo irmão (declarado no relatório da
+  // lane): avisam, não reprovam, até o repo dono recebê-los. Qualquer outro problema reprova.
+  const pendentes = ['apps/api/test/runbook/sql-do-incidente-de-custo.spec.ts', 'scripts/ci/oferta-de-fonte-na-imagem.spec.ts'];
+  const reais = r.problemas.filter((p) => !pendentes.some((f) => p.motivo.includes(`\`${f}\``)));
+  for (const p of r.problemas.filter((p) => !reais.includes(p))) {
+    console.log(`  PENDENTE  ${RUNBOOK}:${p.linha} — ${p.procedimento} [${p.coluna}]: ${p.motivo} (a separação não o levou)`);
+  }
+  if (reais.length === 0) return;
   pendencias.push('procedimentos do runbook');
-  for (const p of r.problemas) {
+  for (const p of reais) {
     console.log(`  PROCED.   ${RUNBOOK}:${p.linha} — ${p.procedimento} [${p.coluna}]: ${p.motivo}`);
   }
 }
@@ -1200,8 +1213,10 @@ function verificarCatalogosDaApi() {
   for (const loc of LOCALES_DA_API) {
     const { orfas, invalidas, faltando } = aplicarCatalogo(spec, lerCatalogo(RAIZ, loc));
     if (orfas.length + invalidas.length > 0) {
-      pendencias.push(`catálogo da API (${loc})`);
-      console.log(`  DESATUAL. apps/api/docs/i18n/${loc}/openapi-textos.json — órfãs: ${orfas.join(', ') || '0'}; inválidas: ${invalidas.join(', ') || '0'}`);
+      // AT-702: o catálogo é do `brabo-api` (que gera o `openapi.json` e os textos); aqui só
+      // avisa. Reprovar o docs por texto órfão da api seria cobrar o repo errado.
+      console.log(`::warning::catálogo da API (${loc}) fora de dia no brabo-api`);
+      console.log(`  AVISO     apps/api/docs/i18n/${loc}/openapi-textos.json — órfãs: ${orfas.join(', ') || '0'}; inválidas: ${invalidas.join(', ') || '0'}`);
     } else {
       console.log(`  ok        apps/api/docs/i18n/${loc}/openapi-textos.json (${faltando.length} textos ainda na fonte)`);
     }

@@ -834,6 +834,7 @@ varre todo `deploy/k8s/*.sh` e casa só a expansão com default (`${X:-…}`), q
 | `BRABO_CLUSTER_NAME` | `brabo` | o nome do cluster k3d/kind que o bootstrap cria ou reaproveita |
 | `BRABO_CLUSTER_TOOL` | `k3d` | `kind` troca o bootstrap para o kind — que ignora NetworkPolicy em silêncio, daí o k3d como default |
 | `BRABO_KEEP_CLUSTER` | não definida | `1` reaproveita um cluster existente com o mesmo nome em vez de apagá-lo e recriá-lo |
+| `BRABO_IRMAOS` | a pasta-mãe do checkout (`<raiz>/..`) | onde estão os clones irmãos `brabo-api`, `brabo-engine` e os demais, de que o bootstrap do cluster local constrói as imagens de produção (os Dockerfiles moram nos repositórios dos apps, AT-696..700) |
 | `BRABO_SKIP_BUILD` | não definida | `1` pula o build das imagens de produção e usa as que já estão no daemon Docker |
 | `BRABO_SKIP_OBSERVABILITY` | não definida | `1` pula Tempo, Loki, Collector, Alloy e Grafana (Prometheus e o adapter ficam: o HPA do engine os lê). Só o `propriedades.yml` a define (AT-177) |
 | `TAG` | não definida | uma tag de release (`vX.Y.Z-qa.N`) para o bootstrap fazer checkout e deploy em vez da árvore de trabalho; exige árvore limpa |
@@ -865,7 +866,7 @@ ninguém perceba.
 
 > ⚠️ Bloco gerado por `pnpm docs:generate`. Não edite à mão — o próximo build o sobrescreve.
 
-Inventário extraído do código: **185 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
+Inventário extraído do código: **186 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
 
 Cada fonte é marcada **produto** — o que quem opera a instalação configura no `.env` do deploy — ou **ferramenta**, lida só pelo CI e por quem desenvolve o produto. Variável de ferramenta nunca pertence ao `.env` de um operador.
 
@@ -1050,11 +1051,12 @@ Cada fonte é marcada **produto** — o que quem opera a instalação configura 
 - `E2E_USER` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_WEB_URL` <sub>(e2e/playwright.config.ts)</sub>
 
-**deploy/k8s** — 22 variáveis · ferramenta
+**deploy/k8s** — 23 variáveis · ferramenta
 
 - `API_URL` <sub>(deploy/k8s/rollout-test.sh)</sub>
 - `BRABO_CLUSTER_NAME` <sub>(deploy/k8s/bootstrap.sh)</sub>
 - `BRABO_CLUSTER_TOOL` <sub>(deploy/k8s/bootstrap.sh)</sub>
+- `BRABO_IRMAOS` <sub>(deploy/k8s/bootstrap.sh)</sub>
 - `BRABO_KEEP_CLUSTER` <sub>(deploy/k8s/bootstrap.sh)</sub>
 - `BRABO_NAMESPACE` <sub>(deploy/k8s/hpa-test.sh)</sub>
 - `BRABO_SKIP_BUILD` <sub>(deploy/k8s/bootstrap.sh)</sub>
