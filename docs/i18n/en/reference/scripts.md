@@ -108,7 +108,7 @@ Source: each package's `package.json` and the root `Makefile`.
 
 | command | runs |
 |---|---|
-| `pnpm --filter @brabo/broker start` | `node src/index.ts` |
+| `pnpm --filter @brabo/broker start` | `tsup && node dist/index.cjs` |
 | `pnpm --filter @brabo/broker build` | `tsup` |
 | `pnpm --filter @brabo/broker test` | `vitest run` |
 | `pnpm --filter @brabo/broker typecheck` | `tsc --noEmit` |
