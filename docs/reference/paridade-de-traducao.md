@@ -13,14 +13,15 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 314 de 1256 (25.0%) | 27.9% de 22.103.653 | 276 | 37 | 1 | 942 | 0 |
-| `ru` | 314 de 1256 (25.0%) | 27.9% de 22.103.653 | 276 | 37 | 1 | 942 | 0 |
-| `zh-Hans` | 314 de 1256 (25.0%) | 27.9% de 22.103.653 | 275 | 38 | 1 | 942 | 0 |
+| `en` | 314 de 1257 (25.0%) | 27.9% de 22.106.169 | 274 | 39 | 1 | 943 | 0 |
+| `ru` | 314 de 1257 (25.0%) | 27.9% de 22.106.169 | 274 | 39 | 1 | 943 | 0 |
+| `zh-Hans` | 314 de 1257 (25.0%) | 27.9% de 22.106.169 | 274 | 39 | 1 | 943 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
 ### Defasadas em `en`
 
+- `adr/index.md` (tradução de 2026-11-04)
 - `architecture.md` (tradução de 2026-10-16)
 - `business-rules.md` (tradução de 2026-10-15)
 - `business-rules/api.md` (tradução de commit inexistente)
@@ -43,6 +44,7 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 - `explanation/localizacao.md` (tradução de 2026-10-15)
 - `explanation/modelo-de-time.md` (tradução de 2026-10-15)
 - `explanation/observability.md` (tradução de commit inexistente)
+- `explanation/release-do-produto.md` (tradução de 2026-11-05)
 - `explanation/tanstack-ai.md` (tradução de commit inexistente)
 - `getting-started.md` (tradução de 2026-10-15)
 - `glossary.md` (tradução de 2026-10-15)
@@ -61,6 +63,7 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 ### Defasadas em `ru`
 
+- `adr/index.md` (tradução de 2026-11-04)
 - `architecture.md` (tradução de 2026-10-16)
 - `business-rules.md` (tradução de 2026-10-15)
 - `business-rules/api.md` (tradução de commit inexistente)
@@ -83,6 +86,7 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 - `explanation/localizacao.md` (tradução de 2026-10-15)
 - `explanation/modelo-de-time.md` (tradução de 2026-10-15)
 - `explanation/observability.md` (tradução de commit inexistente)
+- `explanation/release-do-produto.md` (tradução de 2026-11-05)
 - `explanation/tanstack-ai.md` (tradução de commit inexistente)
 - `getting-started.md` (tradução de 2026-10-15)
 - `glossary.md` (tradução de 2026-10-15)
@@ -124,6 +128,7 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 - `explanation/localizacao.md` (tradução de 2026-10-15)
 - `explanation/modelo-de-time.md` (tradução de 2026-10-15)
 - `explanation/observability.md` (tradução de commit inexistente)
+- `explanation/release-do-produto.md` (tradução de 2026-11-05)
 - `explanation/tanstack-ai.md` (tradução de commit inexistente)
 - `getting-started.md` (tradução de 2026-10-15)
 - `glossary.md` (tradução de 2026-10-15)

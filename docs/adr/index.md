@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 249 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 250 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -44,6 +44,7 @@ O contrato do provider de git, o nascimento e a adoção do repositório, a prot
 | [0217](0217-promocao-automatica-para-qa-em-fase-de-teste.md) | Enquanto o QA está em fase de teste (`QA_FASE_DE_TESTE=true`), todo merge na `dev` abre e mergeia sozinho a promoção `dev` → `qa`, depois que todos os checks terminam verdes; a escada de aprovação dispensa só esse par aberto pelo bot, e `qa` → `main` continua manual |
 | [0235](0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.md) | A `qa` é aposentada por hora no repositório do Brabo (AT-660): esteira `dev → main`, âncora de versão `-dev.N`, `qa` arquivada em `refs/archive/qa` e receita da volta; o Gitflow do produto não muda. Revisa o 0030, revoga o mecanismo do 0217. |
 | [0236](0236-o-dependabot-dispensa-revisao-na-dev.md) | PR do Dependabot para a `dev` passa na escada de aprovação sem revisão, nos dois modos, reconhecido por autor E branch (a régua do `pr-police`); fica mergeável quando os outros checks passam, e a `main` segue com a escada inteira (AT-668). |
+| [0255](0255-politica-de-pr-obrigatoria-em-todos-os-repos.md) | A política de PR é obrigatória em todos os repositórios (checks `Política de branches` e `Escada de aprovação` required, ruleset sem force push em `brabo`, `brabo-qa` e `brabo-infra`) e a PR do bot `chore/regenera-gerados` dispensa a escada na `dev`. |
 
 ## Harness de agente, turnos e sessões {#tema-agentes}
 
@@ -390,7 +391,7 @@ Como a documentação é gerada, verificada e publicada.
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0255**.
+  é substituído — o próximo é **0256**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml` e a linha do índice sob a seção desse
   tema, em ordem numérica. Quem revisa confirma. Um tema novo é uma
