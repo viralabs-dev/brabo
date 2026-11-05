@@ -1181,14 +1181,14 @@ de LLM; senha gravada em qualquer lugar; e qualquer caminho que crie conta sem
 TTY — sem terminal interativo o script relata e **sai 0**, no passo que já
 existia, antes de qualquer escrita.
 
-- **Código:** `install.sh:1664` (`fechar_a_instalacao`, o encadeamento e o
-  "sempre 0"), `:1463` (`perguntar_e_criar_a_conta`, o consentimento, o laço e
-  o teto), `:1563` (`parear_esta_maquina`, o `id` virando `--id`), `:1640`
-  (`subir_o_agente_como_servico`, a recusa repassada inteira), `:1366`
+- **Código:** `install.sh:1684` (`fechar_a_instalacao`, o encadeamento e o
+  "sempre 0"), `:1483` (`perguntar_e_criar_a_conta`, o consentimento, o laço e
+  o teto), `:1583` (`parear_esta_maquina`, o `id` virando `--id`), `:1660`
+  (`subir_o_agente_como_servico`, a recusa repassada inteira), `:1386`
   (`post_interno`, o corpo pelo stdin e o cabeçalho pelo `--config` 600),
-  `:1385` (`criar_primeira_conta`) e `:1426` (`registrar_chave_de_maquina`) —
-  os vereditos das duas rotas —, `:1441` (`ler_sem_eco`), `:1345`
-  (`nome_da_maquina`), `:1586` (`avisar_chave_parcial`), `:1208`/`:1215`
+  `:1405` (`criar_primeira_conta`) e `:1446` (`registrar_chave_de_maquina`) —
+  os vereditos das duas rotas —, `:1461` (`ler_sem_eco`), `:1365`
+  (`nome_da_maquina`), `:1606` (`avisar_chave_parcial`), `:1208`/`:1215`
   (`escapar_json`/`sem_controle`), `:108` (`MARCADOR_SCHEMA=3`), `:1871` (a
   chamada, depois do runner e antes do marcador), `:1882` (o `ownerEmail`).
   Números relidos pelo símbolo em 18/09 (AT-096), em 27/09 (AT-065, que
@@ -1557,7 +1557,7 @@ continua não apagando nada.
 Junto, o fechamento deixa de dizer que parear uma pasta pela tela do projeto
 "continua existindo (ADR 0118)": esse fluxo saiu no ADR 0203 ([RN-687](web.md#rn-687)).
 
-- **Onde:** `install.sh:370` (`detectar_por_sinais`), `:1694`
+- **Onde:** `install.sh:370` (`detectar_por_sinais`), `:1714`
   (`migrar_instalacao_anterior`)
 - **Teste:** `scripts/dev/install-llm.spec.ts` (`brabo-dev` não conta e `brabo`
   conta; `z` apaga depois da prova e deixa `MIGRAR_DE` vazio; Enter não apaga —

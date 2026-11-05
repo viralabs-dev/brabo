@@ -83,7 +83,7 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
       { tipo: 'rota', slug: 'reference/api', rotulo: t('Referência da API') },
     ]),
     cat('💡 Explicação', [
-      cat('Processo e esteira', pgs('explanation/documentation-workflow', 'explanation/branching-policy', 'explanation/cadeia-de-suprimentos-do-ci', 'explanation/gates', 'explanation/observability', 'explanation/modelo-de-time')),
+      cat('Processo e esteira', pgs('explanation/documentation-workflow', 'explanation/branching-policy', 'explanation/cadeia-de-suprimentos-do-ci', 'explanation/release-do-produto', 'explanation/gates', 'explanation/observability', 'explanation/modelo-de-time')),
       cat('Validações e medições', pgs('explanation/primeiro-dogfooding', 'explanation/execucao-real-hello-world', 'explanation/achados-execucao-real', 'explanation/validacao-fase-12', 'explanation/validacao-real', 'explanation/aceite-providers', 'explanation/medicao-do-idioma', 'explanation/medicao-do-jev', 'explanation/auditoria-fluxo-vs-codigo', 'explanation/auditoria-visual-rodada-29'), { colapsada: true }),
       cat('História das fases', pgs('explanation/historico-de-fases', 'explanation/fase-28-pasta-do-usuario', 'explanation/fase-29-instalacao-de-uma-linha', 'explanation/fase-30-runner-por-maquina', 'explanation/backlog'), { colapsada: true }),
       cat('Localização', pgs('explanation/localizacao', 'explanation/localizacao-en', 'explanation/localizacao-ru', 'explanation/localizacao-zh-hans'), { colapsada: true }),

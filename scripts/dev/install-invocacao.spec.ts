@@ -182,13 +182,9 @@ describe('a forma certa é UMA só, nos lugares que a ensinam', () => {
 
   it('o runbook e o bootstrap ensinam a forma certa, e nenhum dos dois a antiga', () => {
     const runbook = fs.readFileSync(path.join(RAIZ, 'deploy/docs/runbook.md'), 'utf8');
-    // O runbook mora no brabo-infra e ainda cita o dono antigo (daneiel/brabo): o dono do
-    // repositório não é o que esta prova guarda, e sim a FORMA (curl -fsSLO + bash).
-    expect(runbook.replaceAll('daneiel/brabo', 'viralabs-dev/brabo')).toContain(FORMA_CERTA);
+    expect(runbook).toContain(FORMA_CERTA);
     const bootstrap = fs.readFileSync(path.join(RAIZ, 'scripts/dev/bootstrap.sh'), 'utf8');
-    expect(
-      bootstrap.replaceAll('${BRABO_REPO:-viralabs-dev/brabo}', 'viralabs-dev/brabo').replaceAll('${BRABO_REPO:-daneiel/brabo}', 'viralabs-dev/brabo'),
-    ).toContain(FORMA_CERTA);
+    expect(bootstrap.replaceAll('${BRABO_REPO:-viralabs-dev/brabo}', 'viralabs-dev/brabo')).toContain(FORMA_CERTA);
 
     // A forma antiga só pode sobreviver como HISTÓRIA — explicada, nunca
     // ensinada. Nos três arquivos que alguém copia para o terminal, nenhuma
