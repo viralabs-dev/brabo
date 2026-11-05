@@ -842,6 +842,4 @@ test.
 - <a id="rn-996"></a>[RN-996](business-rules/engine.md#rn-996) — O parecer de QA leva o resultado por teste lido do relatório JUnit pelo engine; sem relatório, diz por quê
 - <a id="rn-997"></a>[RN-997](business-rules/api.md#rn-997) — O catálogo da Anthropic nasce com preço de lista datado e `supportsReasoning` do SDK; preço manual nunca é sobrescrito
 - <a id="rn-998"></a>[RN-998](business-rules/produto.md#rn-998) — A migração restaura o banco num banco vazio, mantém a chave mestra, é retomável e entende a linha de versões
-- <a id="rn-999"></a>[RN-999](business-rules/engine.md#rn-999) — A chamada irmã da pendente recebe recusa, para todo `tool_use` ter o seu `tool_result`
-- <a id="rn-1000"></a>[RN-1000](business-rules/api.md#rn-1000) — Na Anthropic direta o raciocínio desligado é POR MODELO, o adaptativo ganha a folga e o `thinking_tokens` chega ao metering
 <!-- END:GENERATED:indice-de-rn -->
