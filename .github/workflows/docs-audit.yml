@@ -32,6 +32,9 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - name: Reconstruir o layout dos irmãos (dev)
+        run: bash scripts/docs/montar-layout.sh
+
       - name: Gerar relatório
         id: relatorio
         run: |

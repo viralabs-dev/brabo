@@ -141,7 +141,7 @@ describe('árvore de união das raízes (AT-693)', () => {
     expect(regras.itens.map((i: any) => i.slug)).toEqual(['business-rules', 'business-rules/api']);
     const saida = path.join(raiz, 'out');
     await construir({ raiz, saida, git: false, repo: 'x/y', raizesDeDoc });
-    expect(readFileSync(path.join(saida, 'reference/permissions.html'), 'utf8')).toContain('blob/dev/apps/api/docs/reference/permissions.md');
-    expect(readFileSync(path.join(saida, 'index.html'), 'utf8')).toContain('blob/dev/docs/intro.md');
+    expect(readFileSync(path.join(saida, 'reference/permissions.html'), 'utf8')).toContain('/brabo-api/blob/dev/docs/reference/permissions.md');
+    expect(readFileSync(path.join(saida, 'index.html'), 'utf8')).toContain('/brabo/blob/dev/docs/intro.md');
   }, 120_000);
 });

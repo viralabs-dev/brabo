@@ -2,8 +2,8 @@ name: Documentação
 
 # Publica a documentação de CADA branch permanente no seu próprio lugar:
 #
-#   main → https://daneiel.github.io/brabo/prd/   (a documentação real)
-#   dev  → https://daneiel.github.io/brabo/dev/
+#   main → https://viralabs-dev.github.io/brabo/prd/   (a documentação real)
+#   dev  → https://viralabs-dev.github.io/brabo/dev/
 #
 # O caminho nomeia o AMBIENTE, não a branch (ADR 0073): `main` é o nome do
 # branch de código, `prd` é o nome de quem lê. Os dois deixaram de ser a mesma
@@ -21,7 +21,10 @@ name: Documentação
 on:
   push:
     branches: [dev, main]
-    paths: ['docs/**', 'apps/*/docs/**', 'packages/docs/**', 'deploy/docs/**', 'scripts/ci/docs/**', 'scripts/docs/**', 'design/**', 'website/**', '.github/workflows/docs-deploy.yml']
+    paths: ['docs/**', 'scripts/ci/docs/**', 'scripts/docs/**', 'website/**', '.github/workflows/docs-deploy.yml']
+  # republicar à mão quando um repositório irmão mudou (o disparo automático por
+  # repository_dispatch só roda na branch default, e publicaria `prd` por engano)
+  workflow_dispatch:
 
 # `contents: write` porque a publicação agora é um COMMIT na `gh-pages`, não um
 # artefato. Ver o comentário do passo de publicação para o porquê da troca.
@@ -104,6 +107,11 @@ jobs:
       # `DOCS_BRANCH` declara o degrau (noindex fora de `main`, aviso da fase de
       # teste, seletor de ambiente). Os assets são RELATIVOS, então o gerador
       # não precisa do `baseUrl` do degrau.
+      - name: Reconstruir o layout dos irmãos (mesma branch)
+        env:
+          BRABO_REF: ${{ steps.degrau.outputs.branch }}
+        run: bash scripts/docs/montar-layout.sh
+
       - name: Build do site
         env:
           DOCS_BRANCH: ${{ steps.degrau.outputs.branch }}

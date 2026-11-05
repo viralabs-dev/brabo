@@ -1,5 +1,11 @@
 name: Release
 
+# DORMENTE (AT-702, Rodada 180): movido do monorepo sem os gatilhos automáticos.
+# A release 1.0.0 do PRODUTO nasce aqui na AT-704, que religa o gatilho depois de
+# trazer/ajustar os scripts de que este workflow depende (`scripts/ci/*` de
+# release, do `brabo-infra`). Enquanto isso só o disparo manual existe, para
+# nenhum push criar tag nem publicar nada por engano.
+
 # Fase 5, item 6. Disparado pela TAG, não por push em branch: a decisão de
 # publicar uma versão é do usuário, e uma tag é o registro explícito dessa
 # decisão. O CLAUDE.md já trata merge em branch protegida como ato manual; a
@@ -27,9 +33,6 @@ name: Release
 # aquelas é justamente o que o `workflow_dispatch` abaixo existe para permitir.
 # São dois problemas, e o segundo continuaria aberto mesmo com o PAT no lugar.
 on:
-  push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
   workflow_dispatch:
     inputs:
       tag:

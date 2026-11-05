@@ -73,7 +73,7 @@ function redirecionoDe(erro: string, url: string): string | null {
   const script = /<script>([\s\S]*?)<\/script>/i.exec(erro);
   if (script === null) throw new Error('404.html sem <script>');
 
-  const alvo = new URL(`https://daneiel.github.io${url}`);
+  const alvo = new URL(`https://viralabs-dev.github.io${url}`);
   let destino: string | null = null;
   const janela = {
     location: {
@@ -141,7 +141,7 @@ describe('landing — a página que escolhe o degrau', () => {
     // documentação real nos resultados.
     const { indice } = gerar(['prd']);
     expect(indice).toContain('name="robots" content="noindex, follow"');
-    expect(indice).toContain('rel="canonical" href="https://daneiel.github.io/brabo/prd/"');
+    expect(indice).toContain('rel="canonical" href="https://viralabs-dev.github.io/brabo/prd/"');
   });
 
   it('as cores são as de design/tokens.css, nos dois temas', () => {

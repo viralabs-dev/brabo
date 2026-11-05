@@ -19,7 +19,7 @@
  * que devolve `{ saida, locales: { <locale>: { paginas, navegacao } } }`.
  *
  * Variáveis: `DOCS_BRANCH` (degrau; `main` indexa, o resto sai `noindex`),
- * `GITHUB_REPOSITORY` (padrão `daneiel/brabo`).
+ * `GITHUB_REPOSITORY` (padrão `viralabs-dev/brabo`).
  */
 import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -30,12 +30,13 @@ import { copiarAssets, renderizarPagina } from './layout.mjs';
 import { gravarIndice, tagDeBusca } from './busca.mjs';
 import { construirReferenciaDaApi } from './openapi.mjs';
 import { criarRenderizador } from './render.mjs';
+import { urlDeEdicao } from './repo-dono.mjs';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
 const GRAU = { main: 'prd', dev: 'dev' }; // DOCS_BRANCH -> degrau; o resto é local (qa foi aposentada, ADR 0235)
 
-export async function construir({ raiz = RAIZ, saida = path.join(raiz, 'build/docs-site'), degrau = process.env.DOCS_BRANCH ?? 'dev', repo = process.env.GITHUB_REPOSITORY ?? 'daneiel/brabo', git = true, raizesDeDoc } = {}) {
+export async function construir({ raiz = RAIZ, saida = path.join(raiz, 'build/docs-site'), degrau = process.env.DOCS_BRANCH ?? 'dev', repo = process.env.GITHUB_REPOSITORY ?? 'viralabs-dev/brabo', git = true, raizesDeDoc } = {}) {
   const layout = renderizarPagina;
   const grau = GRAU[degrau] ?? 'local';
   const historico = git ? historicoDoGit(raiz, raizesDeDoc) : new Map();
@@ -59,7 +60,7 @@ export async function construir({ raiz = RAIZ, saida = path.join(raiz, 'build/do
         extraScripts: tagDeBusca({ locale, base: '../'.repeat(sem(pagina.url).split('/').length - 1) }),
         anterior: i > 0 ? vizinho(ordem[i - 1]) : null, proximo: i >= 0 ? vizinho(ordem[i + 1]) : null,
         degrau: grau, noindex: degrau !== 'main', repo,
-        edicao: { url: `https://github.com/${repo}/blob/dev/${pagina.raiz}/${pagina.relativo}`, atualizadoEm: h?.data ?? null, autor: h?.autor ?? null },
+        edicao: { url: urlDeEdicao(repo, pagina.raiz, pagina.relativo), atualizadoEm: h?.data ?? null, autor: h?.autor ?? null },
       });
       const destino = path.join(saida, pagina.url);
       mkdirSync(path.dirname(destino), { recursive: true });

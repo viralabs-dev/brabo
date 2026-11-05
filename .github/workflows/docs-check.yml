@@ -85,6 +85,9 @@ jobs:
 
       # Glob que não casa com nada é regra morta: nunca dispara e finge
       # cobertura. Falha rápido, antes de qualquer coisa cara.
+      - name: Reconstruir o layout dos irmãos (dev)
+        run: bash scripts/docs/montar-layout.sh
+
       - name: Integridade do .docmap.yml
         run: node scripts/docs/docmap.mjs
 
@@ -104,98 +107,6 @@ jobs:
       # partir dele. `--check` é o mecanismo nativo do openapi-typescript
       # (mesma ideia do `escrever()`/CHECAR de generate.mjs): recalcula e
       # compara, nunca escreve. Ver docs/adr/0116-tipos-do-web-gerados-do-openapi.md.
-      - name: Tipos do web gerados do OpenAPI estão em dia
-        run: |
-          pnpm --filter web run openapi:types:check || {
-            echo '::error::apps/web/src/lib/api-types.generated.ts fora de dia. Rode `pnpm --filter web run openapi:types` e commite.'
-            exit 1
-          }
-
-      # O drift NÃO se aplica a PR entre permanentes — promoção (dev→main)
-      # e retropropagação (main→dev). Não é conveniência: um PR
-      # desses não tem AUTORIA. Ele carrega commits que já passaram por um PR
-      # para `dev`, onde este mesmo drift já rodou sobre exatamente aqueles
-      # arquivos. Cobrar de novo é cobrar a mesma dívida em cada degrau.
-      #
-      # E não é só redundante, é INSATISFAZÍVEL, o que é pior:
-      #
-      #   - o escape hatch não atravessa o degrau. O #70 dispensou a regra
-      #     `config-e-inferencia` com `docs-not-needed:` no corpo DELE; o corpo
-      #     do PR de promoção é gerado pelo `promote`, então a justificativa não
-      #     vem junto e a regra torna a bloquear. Foi exatamente isso que
-      #     reprovou o #72 (`v1.0.1`), por `docker/**` do #70;
-      #   - e não há como satisfazer: o `promotion-check` exige range limpo — o
-      #     head tem que ser o tip da origem —, então commitar doc no PR de
-      #     promoção reprova o OUTRO check required. Sobraria pôr a label em
-      #     toda promoção, que é ensinar a usar o escape hatch por reflexo até
-      #     ele não significar mais nada.
-      #
-      # O filtro fica DENTRO do passo, e o passo se pronuncia: pular o JOB
-      # deixaria `Drift, gerados e build` — que é required — sem veredito para o
-      # sha, e PR de promoção travado para sempre. Os outros passos continuam
-      # rodando: docmap, gerados e build do site dependem só do HEAD, e valem em
-      # qualquer degrau.
-      # AT-094: o BOT escreve `docs-not-needed:` no corpo de PR do Dependabot
-      # cujo diff é SÓ troca de pin de action (SHA + comentário de versão).
-      # A decisão mora em `scripts/ci/dependabot-justifica-pin.ts` (testado):
-      # autor que não é o Dependabot, ou qualquer linha que não seja pin, e
-      # nada é escrito — o drift abaixo julga como sempre.
-      #
-      # Mora AQUI, e não num workflow irmão do `dependabot-para-dev.yml`, por
-      # três medições:
-      #   - editar o corpo com o `GITHUB_TOKEN` não dispara `edited`, então um
-      #     workflow separado escreveria a linha e ESTE check ficaria vermelho;
-      #   - re-executar este job não resolve: a re-execução reusa o PAYLOAD
-      #     original, com o corpo antigo (run 34898913072, tentativa 2, 17/09);
-      #   - `pull_request_target`, onde o token escreve sem pedir, só roda o
-      #     workflow da branch DEFAULT (`main`) — a mesma armadilha do
-      #     `pr-police.yml` —, então a regra nova só valeria depois da promoção.
-      # No mesmo job, o passo seguinte lê o corpo novo por `PR_BODY_FILE`, na
-      # ordem, sem corrida e sem redisparo.
-      #
-      # Em `edited`, só avalia quando QUEM editou é o próprio bot (AT-100): o
-      # `@dependabot rebase` emite `synchronize` e `edited` no mesmo segundo, o
-      # `concurrency` cancela um e o sobrevivente pode ser o `edited` — que, com
-      # o passo pulado, deixava o drift ler um corpo sem a linha (#578, runs
-      # 35412983999/35412984299). Se um HUMANO apagou a linha do bot, a vontade
-      # dele manda: a decisão (`editorPodeAvaliar`, testada) recusa em `edited`
-      # com sender que não é o bot. Sem laço: a escrita do passo usa o
-      # `GITHUB_TOKEN`, que não dispara `edited` (AT-094). O token de PR do Dependabot escreve porque este workflow declara
-      # `pull-requests: write` (evento do Dependabot respeita `permissions:`);
-      # se a escrita falhar, nenhum arquivo é gravado e o drift usa o corpo do
-      # evento — falha FECHADO, o PR fica bloqueado como antes.
-      - name: Justificativa do bot para troca de pin (Dependabot)
-        if: github.event.pull_request.user.login == 'dependabot[bot]'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          PR_NUMERO: ${{ github.event.pull_request.number }}
-          PR_BODY: ${{ github.event.pull_request.body }}
-          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
-          PR_AUTOR: ${{ github.event.pull_request.user.login }}
-          PR_TIPO_DO_AUTOR: ${{ github.event.pull_request.user.type }}
-          EVENT_ACTION: ${{ github.event.action }}
-          EVENT_SENDER: ${{ github.event.sender.login }}
-          BASE_REF: ${{ github.base_ref }}
-          CORPO_NOVO: ${{ runner.temp }}/corpo-do-pr.md
-        run: |
-          set -euo pipefail
-          TMP="$(mktemp -d)"
-          # O MESMO range que o drift avalia logo abaixo.
-          git diff --no-color --no-ext-diff "origin/$BASE_REF...HEAD" > "$TMP/diff"
-          printf '%s' "$PR_BODY" > "$TMP/corpo.md"
-
-          RESULTADO="$(node scripts/ci/dependabot-justifica-pin.ts "$TMP/diff" "$TMP/corpo.md" "$TMP/novo.md")"
-          ACAO="$(jq -r .acao <<<"$RESULTADO")"
-          echo "dependabot-justifica-pin → $ACAO: $(jq -r .motivo <<<"$RESULTADO")"
-
-          if [ "$ACAO" = "manter" ]; then exit 0; fi
-          if gh pr edit "$PR_NUMERO" --repo "$REPO" --body-file "$TMP/novo.md"; then
-            cp "$TMP/novo.md" "$CORPO_NOVO"
-          else
-            echo "::warning::não consegui editar o corpo do PR — o drift julga pelo corpo do evento"
-          fi
-
       - name: Drift check
         env:
           PR_BODY: ${{ github.event.pull_request.body }}

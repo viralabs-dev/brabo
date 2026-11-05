@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Gera a raiz de https://daneiel.github.io/brabo/ — a página que escolhe entre
+// Gera a raiz de https://viralabs-dev.github.io/brabo/ — a página que escolhe entre
 // os três degraus — e o `404.html` que segura os links antigos.
 //
 // POR QUE EXISTE: até o ADR 0071, `main` publicava na RAIZ e só `qa` e `dev`
@@ -32,7 +32,7 @@ import { join } from 'node:path';
 // onde vem a TAG que carimba a versão daquele degrau. Para `qa` e `dev` os dois
 // coincidem; para o estável, não — `/prd/` é construído da `main`.
 // O dono vem do ambiente (AT-691); o CI exporta GITHUB_REPOSITORY.
-const REPO = process.env.GITHUB_REPOSITORY ?? 'daneiel/brabo';
+const REPO = process.env.GITHUB_REPOSITORY ?? 'viralabs-dev/brabo';
 const OWNER = REPO.split('/')[0];
 
 const DEGRAUS = [
