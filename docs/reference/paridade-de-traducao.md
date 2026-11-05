@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 279 de 1151 (24.2%) | 27.9% de 21.809.595 | 0 | 278 | 1 | 872 | 0 |
-| `ru` | 279 de 1151 (24.2%) | 27.9% de 21.809.595 | 0 | 278 | 1 | 872 | 0 |
-| `zh-Hans` | 279 de 1151 (24.2%) | 27.9% de 21.809.595 | 0 | 278 | 1 | 872 | 0 |
+| `en` | 314 de 1256 (25.0%) | 27.9% de 22.082.053 | 36 | 277 | 1 | 942 | 0 |
+| `ru` | 314 de 1256 (25.0%) | 27.9% de 22.082.053 | 36 | 277 | 1 | 942 | 0 |
+| `zh-Hans` | 314 de 1256 (25.0%) | 27.9% de 22.082.053 | 35 | 278 | 1 | 942 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -237,7 +237,6 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 - `adr/0218-titulo-de-adr-com-prefixo.md` (tradução de commit inexistente)
 - `adr/0219-referencia-entra-na-traducao.md` (tradução de commit inexistente)
 - `adr/0220-api-traduzida-por-catalogo.md` (tradução de commit inexistente)
-- `adr/index.md` (tradução de commit inexistente)
 - `architecture.md` (tradução de commit inexistente)
 - `business-rules.md` (tradução de commit inexistente)
 - `business-rules/api.md` (tradução de commit inexistente)
@@ -518,7 +517,6 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 - `adr/0218-titulo-de-adr-com-prefixo.md` (tradução de commit inexistente)
 - `adr/0219-referencia-entra-na-traducao.md` (tradução de commit inexistente)
 - `adr/0220-api-traduzida-por-catalogo.md` (tradução de commit inexistente)
-- `adr/index.md` (tradução de commit inexistente)
 - `architecture.md` (tradução de commit inexistente)
 - `business-rules.md` (tradução de commit inexistente)
 - `business-rules/api.md` (tradução de commit inexistente)

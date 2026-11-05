@@ -83,16 +83,19 @@ oferta que só existe no GitHub não acompanha a cópia que a pessoa recebeu.
 Confira com:
 
 ```bash
-docker run --rm --entrypoint sh ghcr.io/daneiel/brabo-engine:<tag> \
+docker run --rm --entrypoint sh ghcr.io/viralabs-dev/brabo-engine:<tag> \
   -c 'cat /usr/share/doc/brabo/THIRD_PARTY_NOTICES.md'
 ```
 
 **Desde a AT-120, o mesmo arquivo viaja em TODO artefato publicado**, por
 decisão do mantenedor: dentro das imagens `brabo-api`, `brabo-web`,
 `brabo-broker` e `brabo-backup`, no mesmo caminho e na mesma forma da do engine
-(troque o nome da imagem no comando acima), e junto dos binários do runner como
-o asset `THIRD_PARTY_NOTICES.md` da Release, coberto pelo mesmo `checksums.txt`
-assinado (RN-524). A decisão é conservadora: este repositório não afirma que
+(troque o nome da imagem no comando acima). O runner tem aviso PRÓPRIO desde a
+AT-727: o `THIRD_PARTY_NOTICES.md` do
+[`brabo-runner`](https://github.com/viralabs-dev/brabo-runner/blob/main/THIRD_PARTY_NOTICES.md)
+cobre o que o binário embute (o runtime Bun e as bibliotecas LGPL que ele liga,
+com a oferta escrita) e viaja como asset da Release dele, coberto pelo
+`checksums.txt` assinado de lá (RN-524), e no pacote npm. A decisão é conservadora: este repositório não afirma que
 algum desses artefatos dispensa a oferta. Até a AT-120 o comando acima dava
 "Permission denied" na imagem do engine: a pasta nascia sem permissão de
 travessia para o usuário não-root da imagem, e agora nasce `0755` antes da
