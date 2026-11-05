@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- Regenerated docs after the sibling repos went English-only (AT-745) and removed `RNS_SEM_TRADUCAO` from `links.mjs` (ADR 0260: no sibling keeps `i18n/`).
+
 ### Funcionalidades
 
 - **docs**: a doc dos 10 repos de código passa a ser só em inglês (AT-745, ADR 0260): `paginas.mjs` honra `idioma_original: en` (sem faixa no `/en/`, faixa "só existe em inglês" nos outros locales), o índice de RN usa a tradução ou, sem ela, a fonte, o bloco gerado em fonte inglesa sai em inglês, a paridade ignora essas páginas, as frases ancoradas na prosa de irmão aceitam pt-BR ou inglês, e os catálogos `openapi-textos.json` passam a morar em `docs/i18n/<locale>/` do `brabo`.
