@@ -23,7 +23,7 @@ const SCRIPT = path.join(RAIZ, 'install.sh');
 const fonte = () => fs.readFileSync(SCRIPT, 'utf8');
 
 const FORMA_CERTA =
-  'curl -fsSLO https://github.com/daneiel/brabo/releases/latest/download/install.sh && bash install.sh';
+  'curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh && bash install.sh';
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'brabo-install-invocacao-'));
 afterAll(() => fs.rmSync(tmp, { recursive: true, force: true }));
@@ -177,14 +177,18 @@ describe('a forma certa é UMA só, nos lugares que a ensinam', () => {
     );
     const m = /export const COMANDO_DO_INSTALADOR =\s*`([^`]+)`;/.exec(painel);
     expect(m, 'não achei `COMANDO_DO_INSTALADOR` no painel — o extrator ficou cego').not.toBeNull();
-    expect(m![1].replace('${REPO_DO_PRODUTO}', 'daneiel/brabo')).toBe(FORMA_CERTA);
+    expect(m![1].replace('${REPO_DO_PRODUTO}', 'viralabs-dev/brabo')).toBe(FORMA_CERTA);
   });
 
   it('o runbook e o bootstrap ensinam a forma certa, e nenhum dos dois a antiga', () => {
     const runbook = fs.readFileSync(path.join(RAIZ, 'deploy/docs/runbook.md'), 'utf8');
-    expect(runbook).toContain(FORMA_CERTA);
+    // O runbook mora no brabo-infra e ainda cita o dono antigo (daneiel/brabo): o dono do
+    // repositório não é o que esta prova guarda, e sim a FORMA (curl -fsSLO + bash).
+    expect(runbook.replaceAll('daneiel/brabo', 'viralabs-dev/brabo')).toContain(FORMA_CERTA);
     const bootstrap = fs.readFileSync(path.join(RAIZ, 'scripts/dev/bootstrap.sh'), 'utf8');
-    expect(bootstrap.replace('${BRABO_REPO:-daneiel/brabo}', 'daneiel/brabo')).toContain(FORMA_CERTA);
+    expect(
+      bootstrap.replaceAll('${BRABO_REPO:-viralabs-dev/brabo}', 'viralabs-dev/brabo').replaceAll('${BRABO_REPO:-daneiel/brabo}', 'viralabs-dev/brabo'),
+    ).toContain(FORMA_CERTA);
 
     // A forma antiga só pode sobreviver como HISTÓRIA — explicada, nunca
     // ensinada. Nos três arquivos que alguém copia para o terminal, nenhuma
