@@ -80,6 +80,15 @@ describe('medirInterface', () => {
   });
 });
 
+describe('ehFonteTraduzivel (ADR 0260)', () => {
+  it('página com idioma_original: en não tem o que traduzir', () => {
+    expect(ehFonteTraduzivel('reference/x.md', '---\nidioma_original: en\n---\n# X\n')).toBe(false);
+    // mutação: sem o campo (ou fora do frontmatter) continua traduzível
+    expect(ehFonteTraduzivel('reference/x.md', '---\ntitle: x\n---\n# X\n')).toBe(true);
+    expect(ehFonteTraduzivel('reference/x.md', '# X\nidioma_original: en\n')).toBe(true);
+  });
+});
+
 describe('ehFonteTraduzivel (ADR 0219)', () => {
   it('reference/ entra na paridade', () => {
     expect(ehFonteTraduzivel('reference/configuration.md')).toBe(true);

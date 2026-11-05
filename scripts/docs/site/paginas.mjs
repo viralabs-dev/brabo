@@ -12,7 +12,8 @@
  *     raiz,        // raiz de doc que hospeda o arquivo ('docs', 'apps/api/docs'...), AT-693
  *     relativo,    // caminho relativo à raiz de doc da FONTE ('adr/index.md'), p/ "editar esta página"
  *     locale,
- *     traduzida,   // true = veio da tradução; false = fallback na fonte pt-BR (ou o próprio pt-BR)
+ *     traduzida,   // true = veio da tradução; false = fallback na fonte (pt-BR ou, se `idioma_original: en`, a inglesa)
+ *     somenteIngles, // true = a fonte tem `idioma_original: en` e este locale não é o `en` (AT-745, ADR 0260): a faixa é "só em inglês"
  *     titulo, descricao, rotulo (sidebar_label ?? título), dados (frontmatter inteiro), corpo
  *   }
  *
@@ -29,6 +30,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import YAML from 'yaml';
+import { idiomaOriginal } from '../faixa-de-traducao.mjs';
 import { RAIZES_DE_DOC as RAIZES_CANONICAS } from '../raizes-de-doc.mjs';
 
 export const LOCALE_FONTE = 'pt-BR';
@@ -99,11 +101,13 @@ export function descobrirPaginas({ raiz, locale = LOCALE_FONTE, raizesDeDoc = RA
     return [...new Set([...fonte, ...traduzidas])].map((relativo) => ({
       relativo, raiz: rd, veioDaTraducao: traduzidas.has(relativo),
       arquivo: traduzidas.has(relativo) ? path.join(traducoes, relativo) : path.join(docs, relativo),
+      // a fonte pode estar em inglês (AT-745): ela, e não a tradução, diz o idioma original
+      fonteEmIngles: fonte.includes(relativo) && idiomaOriginal(readFileSync(path.join(docs, relativo), 'utf8')) === 'en',
     }));
   });
   entradas.sort((a, b) => (a.relativo < b.relativo ? -1 : a.relativo > b.relativo ? 1 : 0));
   const vistos = new Map();
-  const paginas = entradas.map(({ relativo, raiz: rd, veioDaTraducao, arquivo }) => {
+  const paginas = entradas.map(({ relativo, raiz: rd, veioDaTraducao, arquivo, fonteEmIngles }) => {
     const { dados, corpo } = lerFrontmatter(readFileSync(arquivo, 'utf8'));
     const slug = slugDe(relativo, dados);
     if (vistos.has(slug)) throw new Error(`URL duplicada "${slug}": ${vistos.get(slug)} e ${rd}/${relativo}`);
@@ -112,7 +116,10 @@ export function descobrirPaginas({ raiz, locale = LOCALE_FONTE, raizesDeDoc = RA
     const titulo = dados.title ?? h1 ?? slug;
     return {
       slug, url: urlDe(slug, locale), arquivo, relativo, raiz: rd, locale,
-      traduzida: locale === LOCALE_FONTE || veioDaTraducao, titulo, descricao: dados.description ?? '',
+      // fonte inglesa: no `en` ela é a própria página (sem faixa); nos demais, só há tradução se existir
+      traduzida: veioDaTraducao || (fonteEmIngles ? locale === 'en' : locale === LOCALE_FONTE),
+      somenteIngles: fonteEmIngles && !veioDaTraducao && locale !== 'en',
+      titulo, descricao: dados.description ?? '',
       rotulo: dados.sidebar_label ?? titulo, dados, corpo,
     };
   });

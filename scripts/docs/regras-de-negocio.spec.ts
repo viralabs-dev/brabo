@@ -12,6 +12,7 @@ import {
   maiorRn,
   numerosDuplicados,
   paginaNaUniao,
+  rnsDoLocale,
 } from './regras-de-negocio.mjs';
 
 const raizes = [{ raiz: 'docs' }, { raiz: 'apps/api/docs' }];
@@ -59,6 +60,30 @@ describe('arquivos de RN de todas as raízes', () => {
     expect(arquivosDeRnDaAncora).toBe(arquivosDeRn);
     expect(contarRegras(lista, ler)).toBe(832);
     expect(numerosDuplicados(lista, ler)).toEqual([]);
+  });
+});
+
+describe('índice de RN por locale (AT-745, ADR 0260)', () => {
+  const t: Record<string, string> = {
+    'apps/api/docs/business-rules/api.md': '### RN-001 — fonte {#rn-001}\n',
+    'apps/api/docs/i18n/en/business-rules/api.md': '### RN-001 — traduzida {#rn-001}\n',
+    'apps/web/docs/business-rules/web.md': '### RN-005 — só fonte {#rn-005}\n',
+  };
+  const todos = Object.keys(t);
+  const l = (f: string) => t[f];
+
+  it('usa a tradução quando existe e a fonte quando não existe, sem perder RN de irmão', () => {
+    const en = rnsDoLocale(todos, 'en', l);
+    expect(en.map((r: any) => [r.numero, r.titulo])).toEqual([[1, 'traduzida'], [5, 'só fonte']]);
+    expect(en.every((r: any) => r.pagina.startsWith('business-rules/'))).toBe(true);
+  });
+  it('mutação: sem o fallback, o irmão sem tradução some do índice do locale', () => {
+    const semFallback = todos.filter((a) => a.includes('/i18n/en/'));
+    expect(rnsDoLocale(semFallback, 'en', l)).toHaveLength(0);
+    expect(rnsDoLocale(todos, 'en', l)).toHaveLength(2);
+  });
+  it('a fonte (locale nulo) ignora a tradução', () => {
+    expect(rnsDoLocale(todos, null, l).map((r: any) => r.titulo)).toEqual(['fonte', 'só fonte']);
   });
 });
 
