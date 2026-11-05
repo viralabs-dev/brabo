@@ -1,3 +1,7 @@
-# Raiz do repositório `brabo` (porta de entrada): só o gerador de docs (scripts/docs),
-# que depende de `yaml` e `picomatch`. O `website/` tem lockfile PRÓPRIO (ADR 0117).
+# Raiz do repositório `brabo` (porta de entrada): só o gerador de docs (scripts/docs).
+# O `website/` tem lockfile PRÓPRIO (ADR 0117). Override: a faixa vulnerável do advisory
+# do linkify-it (dependência transitiva do markdown-it), como no monorepo.
 packages: []
+
+overrides:
+  linkify-it@<5.0.2: 5.0.2
