@@ -872,4 +872,5 @@ test.
 - <a id="rn-1026"></a>[RN-1026](business-rules/api.md#rn-1026) — The api restarts only the app process in the project container, with a typed answer
 - <a id="rn-1027"></a>[RN-1027](business-rules/engine.md#rn-1027) — In `runner` mode the project folder fast-forwards through the runner channel, and the advance is re-applied when the runner joins
 - <a id="rn-1028"></a>[RN-1028](business-rules/engine.md#rn-1028) — After the project folder advances, the app process is restarted in place, once per burst of merges
+- <a id="rn-1029"></a>[RN-1029](business-rules/api.md#rn-1029) — After the infra PR that declares `run.app` is merged, the api proposes `container_recreate` with the app port, once
 <!-- END:GENERATED:indice-de-rn -->
