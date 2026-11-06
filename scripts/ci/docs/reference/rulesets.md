@@ -598,6 +598,28 @@ gh api -X POST repos/daneiel/brabo/rulesets --input ruleset-permanentes.json
 gh api repos/daneiel/brabo/rulesets --jq '.[] | "\(.name): \(.enforcement)"'
 ```
 
+O Ruleset 3, em cada um dos seis repositórios (`<repo>`), com o id do App
+`viralabs-dev-brabo` em `<id do App>`:
+
+```bash
+gh api -X POST repos/viralabs-dev/<repo>/rulesets --input - <<'JSON'
+{
+  "name": "main exige E2E",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": { "ref_name": { "include": ["refs/heads/main"], "exclude": [] } },
+  "bypass_actors": [],
+  "rules": [{
+    "type": "required_status_checks",
+    "parameters": {
+      "strict_required_status_checks_policy": false,
+      "required_status_checks": [{ "context": "E2E do brabo-qa", "integration_id": <id do App> }]
+    }
+  }]
+}
+JSON
+```
+
 > **TODO(humano):** os dois arquivos `.json` de payload não são versionados
 > aqui porque a API de rulesets exige `repository_id` e ids de app que variam
 > por instalação — um arquivo fixo seria copiado errado. Se quiser
