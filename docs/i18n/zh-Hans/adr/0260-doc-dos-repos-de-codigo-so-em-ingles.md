@@ -1,5 +1,5 @@
 ---
-traducao_de: 2d508b95c379df9edb51cc94523fd3f05edd83b2
+traducao_de: 12ad1a2f3a2d9318e9a9ea0443fa78af6a98079d
 ---
 
 # ADR 0260 — 代码仓库的文档只用英文；站点以横幅提供英文原文
