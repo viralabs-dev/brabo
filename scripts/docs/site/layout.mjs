@@ -160,7 +160,6 @@ export function renderizarPagina(ctx) {
     rotulo: i.rotulo ?? ctx.rotuloDe(i.slug) ?? i.slug,
     colapsada: i.colapsada,
     href: i.tipo === 'link' ? i.href : i.slug != null ? hrefDe(i.slug) : null,
-
     itens: i.itens?.map(item),
   });
   const grupos = ctx.navegacao.map((i) => (i.tipo === 'categoria' ? item(i) : { rotulo: '', itens: [item(i)] }));

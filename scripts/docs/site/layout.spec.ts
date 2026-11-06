@@ -60,6 +60,12 @@ describe('layout do site', () => {
     expect(h).not.toMatch(/<script>/);
   });
 
+  it('categoria com href próprio sai aberta quando a página atual é o href dela', () => {
+    const nav = [{ rotulo: 'G', itens: [{ rotulo: 'ADR', href: 'adr.html', colapsada: true, itens: [{ rotulo: 'T', href: 't.html' }] }] }];
+    const h: string = layout({ ...base, slug: 'adr.html', nav });
+    expect((h.match(/<details[^>]*>/g) ?? []).map((d) => d.includes(' open'))).toEqual([true, true]);
+  });
+
   it('renderizarPagina repassa colapsada da navegação ao menu', () => {
     const cat = (rotulo: string, slug: string, colapsada: boolean) => ({ tipo: 'categoria', rotulo, colapsada, itens: [{ tipo: 'pagina', slug }] });
     const h: string = renderizarPagina({
