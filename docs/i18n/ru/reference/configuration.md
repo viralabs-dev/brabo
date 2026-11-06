@@ -4,7 +4,7 @@ title: Конфигурация
 sidebar_position: 1
 description: Все переменные окружения api, engine и web, с умолчаниями и тем, что ломается, когда они заданы неверно.
 keywords: [конфигурация, переменные окружения, env, deploy]
-traducao_de: e018c045407daa7a92211fac958c4bc2ff981545
+traducao_de: 3016564b5bb5b0752711c07b9babefd252829a8d
 ---
 
 # Конфигурация
@@ -15,7 +15,7 @@ traducao_de: e018c045407daa7a92211fac958c4bc2ff981545
 
 Два версионируемых файла читаются во время выполнения и конфигурацией не
 являются, хотя их легко с ней спутать: `permissions.json` выше и
-`docs/gates.yml` ([ADR 0054](../adr/0054-gates-como-registro-declarativo.md)),
+`apps/api/config/gates.yml` ([ADR 0054](../adr/0054-gates-como-registro-declarativo.md)),
 декларативный реестр gates. Ни у одного из них нет переменной окружения,
 указывающей путь, — реестр находится поднятием от `__dirname`, — и ни один не
 меняет поведение при редактировании в production: реестр ОПИСЫВАЕТ gates, а не
@@ -168,7 +168,7 @@ Auth живёт в домене api, а после перехода являет
 | `AUTH_REGISTRATION_ENABLED` | `true` | любое значение, отличное от `"false"`, оставляет регистрацию открытой |
 | `AUTH_LOCKOUT_ENABLED` | `true` | то же соглашение |
 | `AUTH_LOCKOUT_WINDOW_MS` | `900000` | скользящее окно подсчёта |
-| `AUTH_LOCKOUT_THRESHOLDS` | `5:30,8:300,12:900` | лестница корзины по email, `сбои:секунды` |
+| `AUTH_LOCKOUT_THRESHOLDS` | `5:30,8:300,12:900` | лестница корзины по email, `falhas:segundos` |
 | `AUTH_LOCKOUT_IP_THRESHOLDS` | `20:30,30:120` | лестница корзины по IP, мягче и с коротким потолком |
 | `AUTH_EMAIL_TOKEN_TTL_MS` | `172800000` | подтверждение email, 48 ч |
 | `AUTH_RESET_TOKEN_TTL_MS` | `3600000` | сброс пароля, 1 ч |
@@ -218,7 +218,7 @@ Auth живёт в домене api, а после перехода являет
 | `SMTP_SECURE` | `false` | `true` включает неявный TLS на соединении (обычно порт 465) |
 | `SMTP_USER` 🔒 | — | пользователь auth SMTP. То же требование, что и `SMTP_HOST`, в production |
 | `SMTP_PASSWORD` 🔒 | — | пароль/токен auth SMTP. То же требование, что и `SMTP_HOST`, в production — **никогда не появляется в логе** |
-| `SMTP_FROM` | — | отправитель в формате `"Имя <email@домен>"` (или только email). То же требование, что и `SMTP_HOST`, в production, плюс проверка формата |
+| `SMTP_FROM` | — | отправитель в формате `"Nome <email@dominio>"` (или только email). То же требование, что и `SMTP_HOST`, в production, плюс проверка формата |
 
 > Тело email — **простой текст**, без HTML: порт `MailSender` не несёт
 > структуры для богатого тела, а шаблонизатор был бы поверхностью инъекции без
@@ -232,6 +232,8 @@ Auth живёт в домене api, а после перехода являет
 | переменная | умолчание | что делает |
 |---|---|---|
 | `BRABO_SEED_PASSWORD` | `brabo12345678` | пароль засеянных пользователей (`owner@brabo.dev`, `maintainer@brabo.dev`, `developer@brabo.dev`, `viewer@brabo.dev`), создаваемых с **уже подтверждённым** email |
+| `BRABO_AMBIENTE` | — | `dev`, `prd` или `local` (ADR 0245, RN-984). Только `local` регистрирует `GET`/`POST /auth/dev-login`, быстрый доступ по роли; при отсутствии, пустом или ином значении маршрута не существует. Образ Actions помечается `dev`/`prd` при сборке (`AMBIENTE` файла `docker-bake.hcl`, файл `/app/AMBIENTE_DA_IMAGEM`) и имеет приоритет над переменной. Compose для DEV ставит `local`; compose установки оставляет пустой |
+| `BRABO_BIND` | `0.0.0.0` | адрес, на котором compose установки публикует порты api и web. С `BRABO_AMBIENTE=local` задайте `127.0.0.1`: иначе любой в сети войдёт под любой ролью |
 | `BRABO_FORCE_SEED` | — | разблокирует seed при `NODE_ENV=production`, где по умолчанию он **отказывается запускаться**. Не задавайте её в реальном окружении: аккаунт рождается с известным и подтверждённым паролем |
 
 > Seed идемпотентен и **не трогает пароль** уже существующих. Повторный запуск
@@ -278,6 +280,8 @@ Auth живёт в домене api, а после перехода являет
 | `GIT_LOCAL_REPOS_ROOT` | `/tmp/brabo-git-repos` | локальный provider. В `/tmp` репозитории исчезают при перезагрузке |
 | `PROJECT_WORKSPACES_ROOT` | `/tmp/brabo-project-workspaces` | worktrees агентов проекта в режиме **Container**. **Должен быть тем же путём в engine** и тем же томом |
 | `BRABO_PROJECTS_BASE` | пусто | единая папка хоста, под которой живут проекты в режиме **Mounted**, монтируемая по идентичности в `api` и `engine`. Пусто — НОРМАЛЬНОЕ состояние: api сообщает `projectsBase: null`, и мастер проекта даже не предлагает режим Mounted |
+| `BRABO_RUNNER_RELEASES_REPO` | `daneiel/brabo` | репозиторий (`dono/nome`), чей последний Release запрашивает в GitHub `GET /runner-releases/binary`. Владелец не зашит в код (AT-691, EP-033) |
+| `BRABO_REPO` | `daneiel/brabo` | `dono/nome` репозитория продукта: `install.sh` скачивает из него Release и проверяет идентичность cosign, а unit runner указывает на него документацию |
 | `GITHUB_OAUTH_CLIENT_ID` / `_SECRET` | пусто | пусто = OAuth-подключение к GitHub недоступно (PAT продолжает работать) |
 | `GITLAB_OAUTH_CLIENT_ID` / `_SECRET` | пусто | то же |
 
@@ -361,6 +365,7 @@ api может сравнивать только с `process.cwd()` (`/workspace
 | переменная | умолчание | примечание |
 |---|---|---|
 | `OLLAMA_HOST` | `http://localhost:11434` | — |
+| `NINE_ROUTER_BASE_URL` | `http://host.docker.internal:20128/v1` | базовый URL 9Router (provider `9router`, ADR 0222), работающего на машине владельца, вне compose. Относится к УСТАНОВКЕ, а не к workspace: значение по умолчанию достигает хоста только потому, что compose установки и production сопоставляют `host.docker.internal:host-gateway` в api. Действует для вызовов чата, каталога и проверки подключения учётных данных |
 | `OLLAMA_REQUEST_TIMEOUT_MS` | `300000` | потолок **бездействия** сокета Ollama, а не общей длительности. У локальной модели задержка до первого токена другого порядка, отсюда собственная переменная; см. [окружение инференса](../runbook.md#ambiente-de-inferencia) |
 | `LLM_REQUEST_TIMEOUT_MS` | `300000` | тот же потолок бездействия для API-providers (OpenAI и совместимые, Anthropic). Действует для «даже не прислал заголовки» и для «перестал слать фрагменты посреди потока» — см. [providers LLM](llm-providers.md#inactivity-ceiling) |
 | `HUGGINGFACE_API_TOKEN` | *(не задана)* | **необязательный** токен Hugging Face Hub для поиска моделей (`GET /workspaces/:workspaceId/huggingface/models`). Присутствует — идёт как `Authorization: Bearer …` и поднимает rate limit Hub; отсутствует — заголовок просто не отправляется: Hub принимает публичный поиск без учётных данных, и отсутствие токена никогда не ошибка |
@@ -377,6 +382,7 @@ api может сравнивать только с `process.cwd()` (`/workspace
 | `NEO4J_USER` | `neo4j` (dev) | доходит до контейнера с тем же умолчанием, что сервис `neo4j` использует для `NEO4J_AUTH`, так что задавайте её только чтобы СМЕНИТЬ пользователя — смена там меняет обе стороны разом. Два независимых умолчания оставили бы api аутентифицирующейся учётными данными, которых у сервера больше нет |
 | `NEO4J_PASSWORD` 🔒 | `dev-neo4j-password-change-me` (только dev) | то же правило пары, что `NEO4J_USER`. **Без публичного умолчания в production** намеренно — правдоподобного «значения-примера» для пароля базы нет, и `docker-compose.prod.yml` оставляет `NEO4J_AUTH` пустым, чтобы сам entrypoint официального образа отказался стартовать, а не стартовал с угадываемым паролем |
 | `GRAPH_PROJECTOR_INTERVAL_MS` | `2000` | период poller, опустошающего очередь `graph_projection` в outbox и пишущего handoffs/гипотезы/профили/взаимодействия в граф (RN-416) |
+| `CUSTO_RECONCILIACAO_INTERVAL_MS` | `300000` | период job api, который заменяет ОЦЕНКУ стоимости вызова, прерванного бюджетом рассуждения, реальной стоимостью из `GET /generation` OpenRouter ([RN-915](../business-rules/api.md#rn-915)); `0` выключает |
 | `ARTIFACT_PROJECTOR_INTERVAL_MS` | `2000` | период poller, опустошающего очередь `artifact_projection` в outbox и пишущего артефакты каждого агента как Markdown в папку `docs/` проекта ([RN-523](../business-rules/engine.md#rn-523)). ПРОИЗВОДНАЯ проекция: источник — event log, и папку можно удалить и восстановить |
 
 ### Наблюдаемость
@@ -434,7 +440,7 @@ api может сравнивать только с `process.cwd()` (`/workspace
 | `SEARCH_WORKSPACE_MAX_BYTES` | `32768` | потолок в БАЙТАХ итогового текста `search_workspace` ([RN-150](../business-rules/engine.md#rn-150)) — тот же класс переполнения, что RN-074/RN-141, через дверь поиска; независимая переменная |
 | `SEARCH_WORKSPACE_MAX_HITS` | `500` | потолок ЧИСЛА совпадений, которые `search_workspace` собирает до сборки ответа ([RN-150](../business-rules/engine.md#rn-150)) — прекращает обход/чтение содержимого, как только достигнут потолок, чтобы не платить I/O на дереве со слишком многими совпадениями лишь ради последующей обрезки по байтам |
 | `SECOPS_SCAN_TIMEOUT_MS` | `180000` | 3 мин на сканер SecOps |
-| `TRANSPORT_MAX_BODY_BYTES` | `8388608` (8 MiB) | ТРАНСПОРТНЫЙ потолок, который компактизация контекста соблюдает поверх окна модели ([RN-412](../business-rules/api.md#rn-412)) — эффективное окно `min(context_window, этот потолок в токенах)`, так что компактизация срабатывает ДО того, как тело превысит HTTP-лимит api, а не только когда модель «забыла бы» |
+| `TRANSPORT_MAX_BODY_BYTES` | `8388608` (8 MiB) | ТРАНСПОРТНЫЙ потолок, который компактизация контекста соблюдает поверх окна модели ([RN-412](../business-rules/api.md#rn-412)) — эффективное окно `min(context_window, este teto convertido em tokens)`, так что компактизация срабатывает ДО того, как тело превысит HTTP-лимит api, а не только когда модель «забыла бы» |
 | `GRAPH_INSTRUCTION_TEMPLATES_ENABLED` | `false` | включает источник `:graph` в `InstructionFiles` — сегодня только идентичность ux-designer разрешает шаблон графа до inline-текста (RN-413). СОБСТВЕННОЕ имя, не `GRAPH_TEMPLATES_ENABLED` ниже — они бы столкнулись с противоположными умолчаниями, если бы делили ключ |
 
 ### Психолог
@@ -469,7 +475,7 @@ api может сравнивать только с `process.cwd()` (`/workspace
 |---|---|---|
 | `START_OUTBOX_DRAIN` | `true` | ключ загрузки drain outbox (`Engine.Workers.OutboxDrainWorker`, каждые 2 с) — ЕДИНСТВЕННОГО потребителя событий `session`/`task`/`container`, которые api пишет в outbox, — плюс очистка осиротевших worktree и усыновление осиротевших сессий. Выключен — никто не доставляет эти события: сессия, закрытая api, продолжает работать с процессом и разговорными агентами ([RN-581](../business-rules/api.md#rn-581)), а dev agent, ждущий решения о действии, gate, своего PR или перехода контейнера в `running`, никогда не просыпается. Он НЕ включает Психолога: drain ставит его в очередь только при `PSYCHOLOGIST_ENABLED=true`. `false` только в compose production (`docker-compose.prod.yml`), намеренно; compose установки использует `true` из кода с AT-219 |
 | `START_ANAMNESE` | `true` | ограничитель НАГРУЗКИ для тестов/dev: не даёт `kickoff/0` даже быть вызванным при загрузке, но ничего продуктового не решает — не путать с `ANAMNESE_ENABLED` (продукт: ГЛОБАЛЬНАЯ пауза, переживает любое значение этой). Выключение предотвращает **новые** постановки в очередь, **не очищает очередь**. Накопленные jobs выполнятся при следующей загрузке — очередь нужно вычистить. См. [окружение инференса](../runbook.md#ambiente-de-inferencia) |
-| `START_MODEL_SYNC` | `true` | периодический тик синхронизации каталога моделей. Выключение ничего не замораживает: кнопка «Обновить каталог» на экране настроек вызывает тот же use case ([RN-043](../business-rules/api.md#rn-043)) |
+| `START_MODEL_SYNC` | `true` | периодический тик синхронизации каталога моделей. Выключение ничего не замораживает: кнопка «Обновить каталог» на странице Providers вызывает тот же use case ([RN-043](../business-rules/api.md#rn-043)) |
 | `MODEL_SYNC_INTERVAL_SECONDS` | `21600` (6ч) | каталог provider меняется в масштабе дней, а каждый раунд тратит один вызов API на provider — отсюда щедрое умолчание |
 | `START_GATE_RESCUE` | `true` | периодический тик спасения цикла gate (`Engine.Gates.GateRescuer`, [RN-140](../business-rules/engine.md#rn-140)). Выключение не меняет загрузку: спасение выполняется там один раз в любом случае |
 | `GATE_RESCUE_INTERVAL_SECONDS` | `300` (5 мин) | застрявший gate блокирует весь PR пользователя — интервал намного короче, чем у Анамнеза/синхронизации моделей, а каждый тик стоит лишь одного почти всегда пустого запроса |
@@ -509,6 +515,8 @@ Web статический, обслуживается nginx. Он читает 
 | `VITE_ENGINE_URL` | адрес engine (канал Phoenix) |
 | `VITE_LOG_LEVEL` | уровень JSON-логгера браузера (умолчание `info`). В кластере решает ключ `WEB_LOG_LEVEL` из `brabo-config`, который entrypoint пишет в `/config.js` — `VITE_*` важна только в локальной сборке |
 | `VITE_BRABO_VERSION` | версия, показываемая в подвале экранов auth (умолчание `dev`). **Единственная, задаваемая при сборке по выбору, а не из-за ограничения** — см. ниже |
+| `VITE_BRABO_REPO` | `dono/nome` репозитория продукта (по умолчанию `daneiel/brabo`); при сборке. Из него берутся команда установщика на панели runner и адрес сайта документации (AT-691) |
+| `VITE_BRABO_AMBIENTE` | `dev`, `prd` или `local`; при сборке, из `AMBIENTE` файла `docker-bake.hcl` (по умолчанию пусто). Только `local` монтирует быстрый доступ по роли на экране входа (ADR 0245); Actions передают `dev` или `prd` |
 
 Пустая страница после deploy — почти всегда `/config.js`, указывающий на
 `localhost`, — smoke деплоя проверяет именно это.
@@ -825,6 +833,7 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 | `BRABO_CLUSTER_NAME` | `brabo` | имя кластера k3d/kind, который bootstrap создаёт или переиспользует |
 | `BRABO_CLUSTER_TOOL` | `k3d` | `kind` переключает bootstrap на kind — который молча игнорирует NetworkPolicy, отсюда k3d по умолчанию |
 | `BRABO_KEEP_CLUSTER` | не задана | `1` переиспользует существующий кластер с тем же именем, вместо того чтобы удалить и пересоздать его |
+| `BRABO_IRMAOS` | родительская папка checkout (`<raiz>/..`) | где лежат клоны-сёстры `brabo-api`, `brabo-engine` и остальные, из которых bootstrap локального кластера собирает образы production (Dockerfile живут в репозиториях приложений, AT-696..700) |
 | `BRABO_SKIP_BUILD` | не задана | `1` пропускает сборку образов production и использует уже имеющиеся в daemon Docker |
 | `BRABO_SKIP_OBSERVABILITY` | не задана | `1` пропускает Tempo, Loki, Collector, Alloy и Grafana (Prometheus и adapter остаются: HPA engine их читает). Задаёт её только `propriedades.yml` (AT-177) |
 | `TAG` | не задана | тег релиза (`vX.Y.Z-qa.N`), чтобы bootstrap сделал checkout и deploy вместо рабочего дерева; требует чистого дерева |
