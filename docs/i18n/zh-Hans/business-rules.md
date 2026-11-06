@@ -870,4 +870,5 @@ traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 - <a id="rn-1027"></a>[RN-1027](business-rules/engine.md#rn-1027) — In `runner` mode the project folder fast-forwards through the runner channel, and the advance is re-applied when the runner joins
 - <a id="rn-1028"></a>[RN-1028](business-rules/engine.md#rn-1028) — After the project folder advances, the app process is restarted in place, once per burst of merges
 - <a id="rn-1029"></a>[RN-1029](business-rules/api.md#rn-1029) — After the infra PR that declares `run.app` is merged, the api proposes `container_recreate` with the app port, once
+- <a id="rn-1030"></a>[RN-1030](business-rules/api.md#rn-1030) — Every graph node written by `MERGE` on a natural key has a uniqueness constraint, and the boot merges pre-existing duplicates before creating it
 <!-- END:GENERATED:indice-de-rn -->
