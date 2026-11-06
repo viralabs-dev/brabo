@@ -32,7 +32,7 @@ ADR 0216 让 pt-BR 成为全部文档的原文，`en`、`ru` 和 `zh-Hans` 是 `
 - 每个同级仓库在自己的通道中把文档转换为英文，逐条 RN 把 `i18n/en` 升为原文并删除 `docs/i18n/`；同级仓库的 `ru` 和 `zh-Hans` 被删除（git 保留）。
 - 同级仓库转换之前，站点显示带常规横幅的 pt-BR 原文。转换之后，俄语或中文读者看到带新横幅的英文。
 - `links.mjs` 中的 `RNS_SEM_TRADUCAO` 保留：索引按文件而不是按 RN 回退到原文，所以部分译文中缺失的 RN 仍会让该语言的锚点失效，直到同级仓库的通道删除 `i18n/`。
-- 第 D 轮留下 `docs:check` 中的守卫：没有 `idioma_original: en` 的同级页面，或同级仓库中仍存在的 `i18n/`，将不通过。
+- **守卫已实现（第 201 轮）：** `docs:check` 调用的 `scripts/docs/idioma-dos-irmaos.mjs` 会拒绝同级文档根中没有 `idioma_original: en` 的 `.md` 页面，以及同级文档根中的任何 `i18n/`，并指出文件和本 ADR。`brabo` 自身的根（`docs/`、`scripts/ci/docs/`）仍为多语言。pt-BR 计数器（代码、引文、URL 和链接之外的功能词与 `ção`/`ções`）在已声明 `en` 的页面仍有葡萄牙语正文时只警告、不拒绝；对当前文档，它报告零行。
 
 ### 翻译通道要复制的英文句子
 

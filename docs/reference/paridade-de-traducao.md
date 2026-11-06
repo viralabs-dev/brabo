@@ -13,14 +13,15 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 301 de 1207 (24.9%) | 27.4% de 13.655.375 | 279 | 21 | 1 | 906 | 0 |
-| `ru` | 301 de 1207 (24.9%) | 27.4% de 13.655.375 | 279 | 21 | 1 | 906 | 0 |
-| `zh-Hans` | 301 de 1207 (24.9%) | 27.4% de 13.655.375 | 279 | 21 | 1 | 906 | 0 |
+| `en` | 301 de 1207 (24.9%) | 27.4% de 13.656.778 | 278 | 22 | 1 | 906 | 0 |
+| `ru` | 301 de 1207 (24.9%) | 27.4% de 13.656.778 | 278 | 22 | 1 | 906 | 0 |
+| `zh-Hans` | 301 de 1207 (24.9%) | 27.4% de 13.656.778 | 278 | 22 | 1 | 906 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
 ### Defasadas em `en`
 
+- `adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md` (tradução de 2026-11-05)
 - `adr/index.md` (tradução de 2026-11-04)
 - `architecture.md` (tradução de 2026-10-16)
 - `business-rules.md` (tradução de 2026-10-15)
@@ -45,6 +46,7 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 ### Defasadas em `ru`
 
+- `adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md` (tradução de 2026-11-05)
 - `adr/index.md` (tradução de 2026-11-04)
 - `architecture.md` (tradução de 2026-10-16)
 - `business-rules.md` (tradução de 2026-10-15)
@@ -69,6 +71,7 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 ### Defasadas em `zh-Hans`
 
+- `adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md` (tradução de 2026-11-05)
 - `adr/index.md` (tradução de 2026-10-16)
 - `architecture.md` (tradução de 2026-10-16)
 - `business-rules.md` (tradução de 2026-10-15)

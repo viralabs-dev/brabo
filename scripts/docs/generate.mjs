@@ -30,6 +30,7 @@ import {
 } from './refs-com-simbolo.mjs';
 import { deduplicarProximoAdr, PROXIMO_ADR, substituirGrupo } from './reescrita.mjs';
 import { aferirAncoras } from './ancoras-de-rn.mjs';
+import { aferirPortugues, conferirIdiomaDosIrmaos } from './idioma-dos-irmaos.mjs';
 import { arquivosDeRn, contarRegras, gerarIndiceDeRn, numerosDuplicados, rnsDoLocale } from './regras-de-negocio.mjs';
 import { aferirContagens } from './contagens-do-codigo.mjs';
 import { conferirTabela, repositorio, RUNBOOK } from './procedimentos-do-runbook.mjs';
@@ -1083,6 +1084,23 @@ function verificarAncorasDeRn() {
 }
 
 /**
+ * A doc dos irmãos é só em inglês (AT-745, ADR 0260). Em `block`: página sem
+ * `idioma_original: en` e `i18n/` num irmão. Em AVISO (não reprova): prosa
+ * pt-BR dentro de uma página que já declara `en`; a regra está em
+ * `idioma-dos-irmaos.mjs`.
+ */
+function verificarIdiomaDosIrmaos() {
+  const todos = versionadosDasFontes();
+  const problemas = conferirIdiomaDosIrmaos(todos, ler);
+  if (problemas.length === 0) console.log('  ok        idioma dos irmãos (só inglês)');
+  else pendencias.push('idioma dos irmãos');
+  for (const p of problemas) console.log(`  IDIOMA    ${p.arquivo} — ${p.motivo}`);
+  for (const r of aferirPortugues(todos, ler)) {
+    console.log(`  AVISO     ${r.arquivo}: ${r.linhas.length} linha(s) com prosa pt-BR (ADR 0260), ex.: :${r.linhas.slice(0, 5).join(', :')}`);
+  }
+}
+
+/**
  * A tabela de procedimentos do runbook (AT-193, EP-015): cada procedimento de
  * operação nomeia o arquivo que o prova e o gatilho que roda a prova. A regra
  * inteira está em `procedimentos-do-runbook.mjs`.
@@ -1263,6 +1281,7 @@ verificarFrasesAncoradasNoCodigo();
 verificarContagensDerivadasDoCodigo();
 verificarRefsComSimbolo();
 verificarAncorasDeRn();
+verificarIdiomaDosIrmaos();
 verificarProcedimentosDoRunbook();
 verificarVersaoAnunciada();
 

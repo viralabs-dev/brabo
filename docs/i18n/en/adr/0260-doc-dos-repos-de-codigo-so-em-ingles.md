@@ -32,7 +32,7 @@ The contract that makes this possible already existed: `idioma_original: en` in 
 - Each sibling converts its documentation to English in its own lane, promoting `i18n/en` to source RN by RN and deleting `docs/i18n/`; the siblings' `ru` and `zh-Hans` are deleted (git keeps them).
 - Until a sibling converts, the site shows the pt-BR source with the usual banner. After it converts, a Russian or Chinese reader sees the English with the new banner.
 - `RNS_SEM_TRADUCAO` in `links.mjs` stays: the index falls back to the source per FILE, not per RN, so an RN missing from a partial translation still breaks the anchor in that locale until the sibling's lane deletes `i18n/`.
-- A guard in `docs:check` is left for Round D: a sibling page without `idioma_original: en`, or an existing `i18n/` in a sibling, fails.
+- **Guard implemented (Round 201):** `scripts/docs/idioma-dos-irmaos.mjs`, called by `docs:check`, fails a `.md` page in a sibling doc root without `idioma_original: en`, and any `i18n/` in a sibling doc root, naming the file and this ADR. The `brabo` roots (`docs/`, `scripts/ci/docs/`) stay multilingual. A pt-BR counter (function words and `ção`/`ções` outside code, quotes, URLs and links) warns, without failing, when a page that already declares `en` still has Portuguese prose; on the current docs it reports zero lines.
 
 ### English sentences the translation lanes copy
 

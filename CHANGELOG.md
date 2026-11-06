@@ -4,6 +4,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: o `docs:check` ganha a guarda do idioma dos irmãos (AT-745, ADR 0260): reprova página sem `idioma_original: en` e `i18n/` numa raiz de irmão, e avisa prosa pt-BR por um contador que entende citação multilinha, aspas escapadas, URL e e-mail (`scripts/docs/idioma-dos-irmaos.mjs`).
 - Regenerated docs after the sibling repos went English-only (AT-745) and removed `RNS_SEM_TRADUCAO` from `links.mjs` (ADR 0260: no sibling keeps `i18n/`).
 
 ### Funcionalidades
