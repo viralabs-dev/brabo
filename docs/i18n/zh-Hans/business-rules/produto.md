@@ -1,5 +1,5 @@
 ---
-traducao_de: de061f649879891150d8c35e4aef5f9d65a09242
+traducao_de: ef850f307d04a45ee51b6a0918652f46941addd2
 id: rn-produto
 title: 'Regras de negócio — Produto'
 sidebar_label: Produto
@@ -387,8 +387,9 @@ do E2E é um TTY para o INSTALADOR"* 块）在 PR 中演练 PTY 驱动。
 | 相同 | `Já é a 5.0.0. Reinstalar do zero mesmo assim?` | 否——没有可提供的收益 |
 | 更低 | 点名**降级**，警告数据库迁移不会倒退 | 否——可能无法回头 |
 | 未知 | schema 1 的标记没有版本：说明这一点，**不猜测** | 否 |
+| 新线 | `Atualizar 7.0.0 (linha anterior) → 1.0.0 (linha nova)?`——[RN-998](#rn-998) | **是**——版本从 1.0.0 重新开始并不是降级 |
 
-`maior` 分支是**唯一**默认为是的，也是唯一可以这样的：这一步可以通过刚刚证明过的备份撤销。其他三个要求键入 `s`。
+`maior` 分支**曾是唯一**默认为是的，也是唯一可以这样的：这一步可以通过刚刚证明过的备份撤销。自 [RN-998](#rn-998) 起，`nova-linha` 关系出于同样的原因共享这个默认值（这是更新，只是编号不同）。其他三个要求键入 `s`。
 
 **在任何分支中，安装都会被删除并从零重建**，绝不在上面覆盖启动——产品负责人的决定，与 RN-530 的理由相同：在另一版本的卷上执行 `up` 是不会提前告警的破坏，半次迁移比没有更糟。备份 → **证明** → 询问 → 删除 → 安装 → 恢复的链条在任何分支中都不变。
 
@@ -533,12 +534,12 @@ INSTALA NADA"*。已更正，静默截断它的固定行区间改为「直到第
 
 **「未」纳入的：** 任何种类的新路由（这次会话是编排——如果另一边缺了什么，该做的是停下并报告）；SMTP；LLM 凭据；在任何地方写入密码；以及任何没有 TTY 就创建账户的路径——没有交互终端时，脚本在已有的那一步、在任何写入之前报告并**以 0 退出**。
 
-- **代码：** `install.sh:1664`（`fechar_a_instalacao`，串联以及「总是 0」）、`:1463`（`perguntar_e_criar_a_conta`，同意、循环和上限）、`:1563`（`parear_esta_maquina`，`id` 变成 `--id`）、`:1640`
-  （`subir_o_agente_como_servico`，完整转发的拒绝）、`:1366`
+- **代码：** `install.sh:1835`（`fechar_a_instalacao`，串联以及「总是 0」）、`:1634`（`perguntar_e_criar_a_conta`，同意、循环和上限）、`:1734`（`parear_esta_maquina`，`id` 变成 `--id`）、`:1811`
+  （`subir_o_agente_como_servico`，完整转发的拒绝）、`:1537`
   （`post_interno`，通过 stdin 的请求体和通过 600 `--config` 的请求头）、
-  `:1385`（`criar_primeira_conta`）和 `:1426`（`registrar_chave_de_maquina`）——两个路由的裁决——、`:1441`（`ler_sem_eco`）、`:1345`
-  （`nome_da_maquina`）、`:1586`（`avisar_chave_parcial`）、`:1208`/`:1215`
-  （`escapar_json`/`sem_controle`）、`:108`（`MARCADOR_SCHEMA=3`）、`:1871`（调用，位于 runner 之后、标记之前）、`:1882`（`ownerEmail`）。行号在 9月18日（AT-096）、9月27日（AT-065，在 `instalar_o_runner` 中加入了 Mac Intel 分支）和 10月1日（AT-122）按符号重新读取；`:966`/`:682` 在 9月17日就已对不上
+  `:1578`（`criar_primeira_conta`）和 `:1597`（`registrar_chave_de_maquina`）——两个路由的裁决——、`:1612`（`ler_sem_eco`）、`:1516`
+  （`nome_da_maquina`）、`:1798`（`avisar_chave_parcial`）、`:1208`/`:1215`
+  （`escapar_json`/`sem_controle`）、`:109`（`MARCADOR_SCHEMA=4`，AT-738）、`:1871`（调用，位于 runner 之后、标记之前）、`:1882`（`ownerEmail`）。行号在 9月18日（AT-096）、9月27日（AT-065，在 `instalar_o_runner` 中加入了 Mac Intel 分支）和 10月1日（AT-122）按符号重新读取；`:966`/`:682` 在 9月17日就已对不上
 - **测试：** `scripts/dev/install-fechamento.spec.ts`——「真正」运行的 shell 函数（整个脚本以 `source` 加载，只去掉 `main` 的调用），针对真实的 `node:http` 服务器和一个替身 `brabo-runner`：账户的正常路径（请求体、service token 和密码到达）、`409`/`400`/
   `500`/无回应各有「不同」裁决、密码循环和 3 次上限、`create → registrar → finish → service install` 的顺序且 `--id` 是 api 的 `id`、`service install` 的拒绝带着原话被转发、登记失败时留下的 `.parcial`、拒绝且什么都没登记的 `create`，以及没有代理二进制时的收尾；`scripts/dev/install.spec.ts`
   （可打印的计划，以及不再撒谎的 `--help`）
@@ -624,7 +625,7 @@ cláusula, não tem número para envelhecer"*。计数会增加一次可能与�
 
 **本规则「不」关闭的：** 端到端的证明只在合并后的第一个正式 tag 中发生——`install-e2e.yml` 不在 PR 中运行（ADR 0150）——，已发布的 Release 也不会获得这些资产：它们继续使用旧安装程序，以及在 tag 的检出中运行它的变通办法。ADR 0160 声明的相邻问题——`test-restore-compose.sh` 调用 Compose 时不带 `--env-file`，而 Compose 在 compose 的文件夹中查找 `.env`——在 AT-102 中关闭：安装程序传入 `BRABO_ENV_FILE`（`--env-file`，而不是 `--project-directory`，后者还会改变项目名和相对路径的基准），安装 compose 声明了 `backup` 服务引用的 `backup_local` 卷，它的缺失会在开启 profile 时拒绝整个文件。由 `scripts/dev/prova-de-restauracao-env.spec.ts` 覆盖。
 
-- **代码：** `install.sh:128`（实体化之前为空的 `COMPOSE_DE_INSTALACAO`）、
+- **代码：** `install.sh:129`（实体化之前为空的 `COMPOSE_DE_INSTALACAO`）、
   `:587`（`ASSETS_DO_INSTALADOR`）、`:589`（`destino_do_asset_do_instalador`，下载方的表）、`:614`（`baixar_e_verificar_os_arquivos_da_instalacao`）、
   `:607`/`:615`/`:617`（三种拒绝）、`:648`
   （`materializar_os_arquivos_da_instalacao`）、`:1573`（迁移在备份之前实体化）、`:1677`（紧随自身来源之后的校验）、
@@ -655,8 +656,8 @@ cláusula, não tem número para envelhecer"*。计数会增加一次可能与�
 
 **本规则「不」关闭的：** `DOCKER_GID` 和计算出的根没有在 macOS 的 Docker Desktop 上测量过，tag 的 E2E 只在 Linux 上运行交互式那一半。Rootless 或远程 Docker 的 socket 不在 `/var/run/docker.sock`，而那是 compose 挂载的路径，会落入第 2 项的拒绝——在那里开启 broker 不通过其他路径提供。
 
-- **代码：** `install.sh:1050`（`consentir_broker`）、`:1002`
-  （`medir_gid_do_socket`）、`:1037`（`calcular_raiz_gerenciada`）、`:1034`
+- **代码：** `install.sh:1196`（`consentir_broker`）、`:1148`
+  （`medir_gid_do_socket`）、`:1183`（`calcular_raiz_gerenciada`）、`:1320`
   （`conferir_o_broker`）、`:792`（`escrever_env_do_broker`）、`:855`（清单中的 broker）、`:1812`（顺序：基目录之后、`.env` 之前）；
   `docker/docker-compose.install.yml`（`broker` 服务和 `broker` 网络）
 - **测试：** `scripts/dev/install-broker.spec.ts:158`（没有终端：关闭、说明、Docker 未被触碰——失败用例）、`:169`（回车）、`:179`（`n`）、`:187`
@@ -679,8 +680,8 @@ cláusula, não tem número para envelhecer"*。计数会增加一次可能与�
 
 已声明排除在外的：会话「一次」说明语义检查被跳过（api 那一侧，另一条战线）；tag 的 E2E 回答「否」（开启会下载数 GB 的模型），因此带 profile `llm` 的启动没有端到端证明。
 
-- **位置：** `install.sh:1128`（`consentir_llm`），`:1113`
-  （`escolher_porta_do_ollama`），`:1103`（`porta_em_uso`），`:800`
+- **位置：** `install.sh:1274`（`consentir_llm`），`:1259`
+  （`escolher_porta_do_ollama`），`:1249`（`porta_em_uso`），`:800`
   （`escrever_env_do_llm`），`:821`（`escrever_env_dos_profiles`）
 - **测试：** `scripts/dev/install-llm.spec.ts`（没有终端时保持关闭并说明成本；11434 被占用时选择下一个；整个范围被占用时失败——失败情形；一个正在监听的服务器被测为已占用；broker 和模型在同一行）；`scripts/dev/install-e2e.spec.ts`（新问题的回答在 TTY 驱动的列表中，顺序正确）
 - **来源：** AT-351
@@ -689,11 +690,56 @@ cláusula, não tem número para envelhecer"*。计数会增加一次可能与�
 
 `detectar_por_sinais` 匹配 `"Name":"brabo[^"]*"`，于是 DEV 的 compose（`brabo-dev`，ADR 0170）被算作之前的安装——安装程序会提议迁移开发环境。现在只匹配「精确」名称 `brabo`。
 
-迁移的确认增加了第三种回答：`z` 「从零」重新安装。ADR 0150 的顺序不变——备份、「证明」、询问、删除、安装——但旧数据「不」恢复：经证明的备份留在文件夹中，之后恢复它是 runbook 的 `#restore`。`s` 仍是恢复，Enter 仍不删除任何东西。
+迁移的确认增加了第三种回答：`z` 「从零」重新安装。ADR 0150 的顺序不变——备份、「证明」、询问、删除、安装——但旧数据「不」恢复：经证明的备份留在文件夹中，之后恢复它是 runbook 的 `#restore`。`s` 是恢复——并且自 [RN-998](#rn-998) 起，恢复**全部**：Postgres 恢复到一个新创建的空库中，再恢复 git 仓库，并重新投影图谱和制品；在此之前回来的只有 git 仓库。Enter 仍不删除任何东西。
 
 同时，收尾不再说通过项目界面配对文件夹「continua existindo (ADR 0118)」：该流程已在 ADR 0203 中移除（[RN-687](web.md#rn-687)）。
 
-- **位置：** `install.sh:370`（`detectar_por_sinais`），`:1694`
+- **位置：** `install.sh:440`（`detectar_por_sinais`），`:1918`
   （`migrar_instalacao_anterior`）
 - **测试：** `scripts/dev/install-llm.spec.ts`（`brabo-dev` 不算而 `brabo` 算；`z` 在证明之后删除并让 `MIGRAR_DE` 为空；Enter 不删除——失败情形；ADR 0118 的句子不再回来）
 - **来源：** AT-358
+
+## 安装程序的迁移把之前的整个安装带回来（RN-998）
+
+### RN-998 — 迁移把数据库恢复到空库中，保留主密钥，可恢复，并理解版本线 {#rn-998}
+
+第一次真实的迁移，从 7.0.0 到产品 1.0.0（AT-710），启动了一个空的安装，且凭据不可读。
+[ADR 0256](../adr/0256-a-migracao-restaura-o-banco-num-banco-vazio.md)
+关闭了 AT-738 的发现，规则如下：
+
+1. **Postgres 自行恢复。** 在 `down -v` 之后，安装程序只启动 `postgres`，运行
+   `brabo-restore --banco-vazio`（拒绝含有任何表的库），然后才启动其余部分，migrations 叠加在 dump 之上。
+   接着是 git 仓库以及图谱和制品的重新投影；失败的重新投影是带命令的待办，绝不是拒绝。
+2. **git 以卷所有者的身份恢复**，通过在 api 容器中读取（`stat`）得到，绝不假定：
+   备份镜像的 uid 70 无法写入其他所有者的卷，`--user 0:0` 也不行，因为有 `cap_drop`。
+3. **加密已恢复数据的密钥来自之前的 `.env`**，至少是 `CREDENTIALS_MASTER_KEY`
+   （环境 → 之前的 `.env` → 生成），新 `.env` 未声明的每个键都带着最后的值回来
+   （`CREDENTIALS_MASTER_KEY_PREVIOUS`、`ANAMNESE_ENABLED`、`BRABO_BIND`……）。
+   安装程序当场决定的键（`COMPOSE_PROFILES`、`BROKER_URL`、`DOCKER_GID`、
+   `PROJECT_WORKSPACES_HOST_ROOT`、`OLLAMA_PORT`）以及临时密钥的 `_PREVIOUS` 除外，它们是新生成的。
+4. **备份、证明和删除使用迁移的环境运行：** 此版本的五个 `BRABO_*_IMAGE`
+   （之前的 `.env` 可能引用已不存在的本地镜像），`BRABO_BACKUP_USER` = 运行者的 uid:gid（文件夹属于他），
+   以及 `BRABO_BACKUP_HOST_DIR` = 目的地，让证明恢复的是留在文件夹中的**同一个**备份。
+   文件夹以 `0755` 创建，已声明。
+5. **迁移可恢复。** 标记（schema 4）在 `down -v` 之后立即写入，带有 `restauracaoPendente`
+   （`destino` 和 `etapas`：`banco git grafo artefatos`），并在每个步骤以及新版本启动时再次写入。
+   下一次发现待办的执行会**恢复**这次恢复，不再次迁移，也不删除任何东西；备份文件夹缺失是被点名的拒绝。
+6. **版本线。** 标记记录 `linha`。没有它，该安装属于上一条线，除非镜像位于
+   `ghcr.io/viralabs-dev/`（这条线的 1.0.0 记录的是 schema 3）。线与线之间的关系是 `nova-linha`，
+   有自己的措辞且默认为是（[RN-542](#rn-542)）。
+7. **下载带重试。** 每次下载都经过 `baixar`（`curl
+   --retry 6 --retry-delay 10 --retry-connrefused`）；404 是“Release 不发布”，其余是
+   “服务器没有交付，请再运行”——是不同的措辞。
+
+它修订 [RN-530](infra.md#rn-530)（dump 不再只留在文件夹中）以及 [RN-692](#rn-692) 的 `s` 措辞。
+
+- **位置：** `install.sh:1918`（`migrar_instalacao_anterior`），`:1903`
+  （`com_ambiente_do_backup`），`:1993`（`restaurar_o_banco`），`:2009`
+  （`restaurar_os_repositorios_git`），`:2025`（`reprojetar`），`:2062`
+  （`gravar_marcador`），`:930`（`relacao_com_o_instalado`），`:949`
+  （`restauracao_pendente`），`:736`（`gerar_segredos`），`:971`
+  （`preservar_do_env_anterior`），`:194`（`baixar`）
+- **测试：** `scripts/dev/install-migracao.spec.ts`（每项一个用例，PATH 中带有 `docker`、`curl`
+  和假的证明；每项的失败用例——失败的备份不删除，被拒绝的 restore 保持待办，
+  无法读取所有者则拒绝，404 ≠ 504）；`scripts/dev/install-fechamento.spec.ts`（schema 4）
+- **来源：** AT-738（EP-033），所有者 2026-11-05 的决定
