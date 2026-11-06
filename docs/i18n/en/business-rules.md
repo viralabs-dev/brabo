@@ -589,7 +589,7 @@ test.
 - <a id="rn-726"></a>[RN-726](business-rules/engine.md#rn-726) — The provider's exhausted credit pauses the dev agent, with origin `infra`, without burning the following tasks
 - <a id="rn-727"></a>[RN-727](business-rules/api.md#rn-727) — A draft story is corrected and archived, by the PO and by the user, without erasing anything
 - <a id="rn-728"></a>[RN-728](business-rules/web.md#rn-728) — The user's message has a single bubble, and the Dev Lead card has a single primary
-- <a id="rn-729"></a>[RN-729](business-rules/api.md#rn-729) — The infra PR targets `dev` and says where to merge; the sidebar opens only the open project
+- <a id="rn-729"></a>[RN-729](business-rules/api.md#rn-729) — The infra PR targets `main` and says where to merge; the sidebar opens only the open project
 - <a id="rn-730"></a>[RN-730](business-rules/api.md#rn-730) — The provider's 402 has its own `code`, and it is that which decides exhausted credit
 - <a id="rn-731"></a>[RN-731](business-rules/engine.md#rn-731) — The turn's closing states what was recorded with the server's number
 - <a id="rn-732"></a>[RN-732](business-rules/engine.md#rn-732) — The turn text goes through the same escape ruler as the arguments
@@ -865,4 +865,12 @@ test.
 - <a id="rn-1018"></a>[RN-1018](business-rules/api.md#rn-1018) — The agent retires an obsolete business rule, citing its replacement or the user's answer; every reader ignores it
 - <a id="rn-1019"></a>[RN-1019](business-rules/api.md#rn-1019) — In automatic mode a terminal `git merge` inside the task scope is auto-approved
 - <a id="rn-1020"></a>[RN-1020](business-rules/engine.md#rn-1020) — The Criativo and the PO retire an obsolete business rule themselves, citing the replacement or the user's answer
+- <a id="rn-1021"></a>[RN-1021](business-rules/engine.md#rn-1021) — After a merge into the project's `main`, the project folder fast-forwards to it
+- <a id="rn-1022"></a>[RN-1022](business-rules/api.md#rn-1022) — The project repository is trunk: the bootstrap creates and protects only `main`, merges into it warn the engine, and old projects migrate by script
+- <a id="rn-1023"></a>[RN-1023](business-rules/engine.md#rn-1023) — A project whose `dev` is ahead of its `main` refuses the claim, naming the migration
+- <a id="rn-1024"></a>[RN-1024](business-rules/contracts.md#rn-1024) — The app is restarted in place: only its process, never the container or the other `exec`s
+- <a id="rn-1025"></a>[RN-1025](business-rules/broker.md#rn-1025) — `POST /containers/:projectId/app/restart` restarts the app process in place
+- <a id="rn-1026"></a>[RN-1026](business-rules/api.md#rn-1026) — The api restarts only the app process in the project container, with a typed answer
+- <a id="rn-1027"></a>[RN-1027](business-rules/engine.md#rn-1027) — In `runner` mode the project folder fast-forwards through the runner channel, and the advance is re-applied when the runner joins
+- <a id="rn-1028"></a>[RN-1028](business-rules/engine.md#rn-1028) — After the project folder advances, the app process is restarted in place, once per burst of merges
 <!-- END:GENERATED:indice-de-rn -->

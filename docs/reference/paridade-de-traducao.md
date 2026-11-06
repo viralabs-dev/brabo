@@ -13,11 +13,26 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 306 de 1224 (25.0%) | 27.3% de 13.763.877 | 305 | 0 | 1 | 918 | 0 |
-| `ru` | 306 de 1224 (25.0%) | 27.3% de 13.763.877 | 305 | 0 | 1 | 918 | 0 |
-| `zh-Hans` | 306 de 1224 (25.0%) | 27.3% de 13.763.877 | 305 | 0 | 1 | 918 | 0 |
+| `en` | 306 de 1226 (25.0%) | 27.3% de 13.776.965 | 303 | 2 | 1 | 920 | 0 |
+| `ru` | 306 de 1226 (25.0%) | 27.3% de 13.776.965 | 303 | 2 | 1 | 920 | 0 |
+| `zh-Hans` | 306 de 1226 (25.0%) | 27.3% de 13.776.965 | 303 | 2 | 1 | 920 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
+
+### Defasadas em `en`
+
+- `adr/index.md` (tradução de 2026-11-06)
+- `reference/events.md` (tradução de 2026-11-06)
+
+### Defasadas em `ru`
+
+- `adr/index.md` (tradução de 2026-11-06)
+- `reference/events.md` (tradução de 2026-11-06)
+
+### Defasadas em `zh-Hans`
+
+- `adr/index.md` (tradução de 2026-11-06)
+- `reference/events.md` (tradução de 2026-11-06)
 
 ## Interface
 
@@ -35,8 +50,8 @@ Textos distintos da referência da API (`/reference/api/`) contra o catálogo `d
 
 | locale | textos traduzidos |
 |---|---|
-| `pt-BR` | 1324 de 1451 (91.2%) |
+| `pt-BR` | 1324 de 1455 (91.0%) |
 | `en` | 1 de 1 (100.0%) |
-| `ru` | 1324 de 1451 (91.2%) |
-| `zh-Hans` | 1324 de 1451 (91.2%) |
+| `ru` | 1324 de 1455 (91.0%) |
+| `zh-Hans` | 1324 de 1455 (91.0%) |
 
