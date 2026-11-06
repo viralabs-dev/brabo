@@ -13,25 +13,31 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 306 de 1226 (25.0%) | 27.3% de 13.776.965 | 303 | 2 | 1 | 920 | 0 |
-| `ru` | 306 de 1226 (25.0%) | 27.3% de 13.776.965 | 303 | 2 | 1 | 920 | 0 |
-| `zh-Hans` | 306 de 1226 (25.0%) | 27.3% de 13.776.965 | 303 | 2 | 1 | 920 | 0 |
+| `en` | 306 de 1226 (25.0%) | 27.3% de 13.776.965 | 301 | 4 | 1 | 920 | 0 |
+| `ru` | 306 de 1226 (25.0%) | 27.3% de 13.776.965 | 301 | 4 | 1 | 920 | 0 |
+| `zh-Hans` | 306 de 1226 (25.0%) | 27.3% de 13.776.965 | 301 | 4 | 1 | 920 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
 ### Defasadas em `en`
 
 - `adr/index.md` (tradução de 2026-11-06)
+- `architecture.md` (tradução de 2026-11-06)
+- `business-rules.md` (tradução de 2026-11-06)
 - `reference/events.md` (tradução de 2026-11-06)
 
 ### Defasadas em `ru`
 
 - `adr/index.md` (tradução de 2026-11-06)
+- `architecture.md` (tradução de 2026-11-06)
+- `business-rules.md` (tradução de 2026-11-06)
 - `reference/events.md` (tradução de 2026-11-06)
 
 ### Defasadas em `zh-Hans`
 
 - `adr/index.md` (tradução de 2026-11-06)
+- `architecture.md` (tradução de 2026-11-06)
+- `business-rules.md` (tradução de 2026-11-06)
 - `reference/events.md` (tradução de 2026-11-06)
 
 ## Interface
