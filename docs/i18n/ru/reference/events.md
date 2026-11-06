@@ -4,13 +4,13 @@ title: События
 sidebar_position: 2
 description: Типы событий неизменяемого журнала, broadcasts канала и spans трассировки — три разные вещи с похожими именами.
 keywords: [события, event log, session_events, broadcast, span, outbox]
-traducao_de: 5c8b2358773a5a9c46596ec50d9e5b8c29afaaf8
+traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 ---
 
 # События
 
 В Brabo сосуществуют три семейства имён, и их легко спутать, потому что все
-используют `предмет.глагол`:
+используют `assunto.verbo`:
 
 | семейство | где хранится | долговечность |
 |---|---|---|
@@ -178,6 +178,10 @@ traducao_de: 5c8b2358773a5a9c46596ec50d9e5b8c29afaaf8
 | `infra.gate_changed` | gate Infra |
 | `gate.rescue_parked` | `GateRescuer` ПРИПАРКОВАЛ цикл QA/SecOps, простаивающий более 2 ч, вместо того чтобы перезапустить его ([RN-722](../business-rules/engine.md#rn-722), ADR 0207); лента показывает кнопку «Возобновить gate» ([RN-724](../business-rules/engine.md#rn-724)). Payload: `taskId`, `gate`, `idadeSegundos`, `motivo`. Актор `system`/`gate-rescuer` |
 | `gate.interrupted` | при ЗАГРУЗКЕ engine у недавнего цикла gate `in_progress` не было живого процесса ни на одном узле кластера: перезапуск его убил, и спасатель перезапускает его сразу, не дожидаясь порога в 15 минут ([RN-823](../business-rules/engine.md#rn-823)). Payload: `taskId`, `gate`, `ultimaAtividadeEm`, `retomadoEm`. Актор `system`/`gate-rescuer`; лента показывает его как предупреждение. В граф не проецируется |
+| `agent.plan` | агент зафиксировал план хода или задачи через `registrar_plano` ([RN-918](../business-rules/engine.md#rn-918)): `objetivo` и `passos` (`texto`, `estado` `pendente`/`em_curso`/`feito`/`descartado`). Каждое событие заменяет предыдущее; последнее действует и питает дневник и карточку ленты |
+| `agent.turn_resumed` | ход, прерванный перезапуском, возобновлён ([RN-920](../business-rules/engine.md#rn-920), [RN-921](../business-rules/api.md#rn-921)). Payload: `retomaDe`, `ultimaAtividadeEm`, `automatica` (`true` при boot, `false` по кнопке «Возобновить»). Это веха потолка в 1 автоматическое возобновление; субагент gate записывает его при возобновлении |
+| `infra.correction_queued` | исправление gate дошло до Infra Lead и осталось ожидающим, надёжно ([RN-924](../business-rules/engine.md#rn-924)). Payload: `id`, `gate`, `reason`, `diagnosis` |
+| `infra.correction_delivered` | исправление `id` доставлено Infra Lead; то, у которого есть `queued` без `delivered`, доставляется повторно при boot |
 | `infra.artifact_blocked` | артефакт Infra отклонён |
 
 ### Делегирование (Фаза 8b, ADR 0038)
