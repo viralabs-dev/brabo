@@ -1,6 +1,6 @@
 ---
 sidebar_position: 7
-traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # gates，以及如何测量它们
@@ -9,7 +9,7 @@ traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
 FASE 15a，它们都不以列表的形式存在：散落在纯规则、用例、测试和 CI workflow 中。回答"有哪些 gate"需要阅读六个
 文件。
 
-`docs/gates.yml` 就是这个列表。本文档解释它是什么——更重要的是——它**不是**什么。
+`apps/api/config/gates.yml` 就是这个列表。本文档解释它是什么——更重要的是——它**不是**什么。
 
 ## 登记描述；它不执行 {#the-registry-describes-it-doesnt-execute}
 
@@ -65,12 +65,12 @@ FASE 15a，它们都不以列表的形式存在：散落在纯规则、用例、
 
 两者曾经是一个函数，而 api 的加载器调用它。后果在安装的 v6.1.0 上测得：`GET /gates` 以 `500` 回应，
 `RegistroDeGatesInvalido` 把十一个目标都列为 "não existe"——大约 55 分钟内十二个 5xx 响应。登记本身没有任何问题。
-生产镜像只带 `/app/docs/gates.yml`，`docs/` 中别无其他；`apps/api/test/`、`scripts/ci/` 和 `.github/` 从不进入其中，
+生产镜像只带 `/app/apps/api/config/gates.yml`，`docs/` 中别无其他；`apps/api/test/`、`scripts/ci/` 和 `.github/` 从不进入其中，
 因此对这棵树评估一个关于仓库的断言，会在每个安装中让每个 gate 失败。
 
 什么都没有被放宽。规则仍然存在，仍然覆盖同样的目标，消失的目标仍然会失败——它只是在问题有意义的地方运行。两个
 守卫维持这一点：一个上溯到仓库根目录并核对每个定位器的测试，以及一个在磁盘上重建镜像树（一个只有
-`docs/gates.yml` 而别无其他的根）并断言登记能加载的加载器测试。把检查交还给加载器，会让第二个测试变红，并带着
+`apps/api/config/gates.yml` 而别无其他的根）并断言登记能加载的加载器测试。把检查交还给加载器，会让第二个测试变红，并带着
 安装产生的确切消息。
 
 而 api 提供登记现在会针对生产镜像演练：`docker/smoke.sh` 调用 `GET /gates` 和 `GET /internal/gates`（服务
@@ -130,7 +130,7 @@ pnpm --filter api validacao:gates -- --projeto <uuid>
 
 ## 激活一个 `planned` gate 与其他任何工作一样 {#activating-a-planned-gate-is-the-same-work-as-any-other}
 
-`implementavel`（所有者 `dev-lead`）在 FASE 14d 以 `planned` 诞生，与 `docs/gates.yml`/`docs/fluxo.yml` 已经描述却
+`implementavel`（所有者 `dev-lead`）在 FASE 14d 以 `planned` 诞生，与 `apps/api/config/gates.yml`/`packages/contracts/fluxo.yml` 已经描述却
 背后没有代码的目标组织架构的其余部分一起。[ADR 0090](../adr/0090-qa-estrategia-e-appsec-segundo-momento.md) 激活了
 它——而这个练习可作为示例，因为**登记的形式什么都没变**：`status: planned → active` 加上 `evidencia` 块（指向按
 `actionType:
@@ -139,7 +139,7 @@ assess_implementability` 过滤的 `proposed_action.created`）是一个 `warn` 
 决定（那需要先测量真实的通过，与 FASE 15a 相同的纪律）。
 
 真正的工作在文件之外：Dev Lead 需要一个新工具（`assess_implementability`），它把评估作为 `proposed_action` 提出；而
-QA 策略——直到那时还是 `docs/fluxo.yml` 中一个 `proposto` 的角色，分离标准已经写在那里（"pode ser o próprio qa-lead
+QA 策略——直到那时还是 `packages/contracts/fluxo.yml` 中一个 `proposto` 的角色，分离标准已经写在那里（"pode ser o próprio qa-lead
 num segundo momento"）——需要存在，以便用一个真实的测试计划为评估提供输入。登记只是开始描述代码现在做的事。
 
 这个入口没有在真实使用中幸存。[ADR 0192](../adr/0192-plano-de-teste-depois-da-entrega.md)
@@ -152,7 +152,7 @@ num segundo momento"）——需要存在，以便用一个真实的测试计划
 
 `implementavel` 是需要新代码才能离开 `planned` 的 gate 的例子。`paralelismo-autorizado` 正好相反：机制
 （`RequestParallelizationUseCase`，[RN-083](../business-rules/api.md#rn-083)）自 FASE 14d 起就在生产中——落后的是
-登记，对在兄弟文件 `docs/fluxo.yml` 和代码中已经是 `active` 的东西声明 `planned`。fluxo.yml × 代码审计（发现 A1/B5，
+登记，对在兄弟文件 `packages/contracts/fluxo.yml` 和代码中已经是 `active` 的东西声明 `planned`。fluxo.yml × 代码审计（发现 A1/B5，
 [auditoria-fluxo-vs-codigo.md](auditoria-fluxo-vs-codigo.md)）发现了这个分歧；修正就是 `implementavel` 也获得的同样两行
 ——`status: active` 加上指向按 `actionType:
 parallelize` 过滤的 `proposed_action.created` 的 `evidencia`。
@@ -315,8 +315,8 @@ event log 中 RN-502 的拒绝为零，六个容器在第一个用例之前都�
 
 ## gate 可能在登记中缺失，而 `fluxo.yml` 已经指派了它 {#a-gate-can-be-missing-from-the-registry-while-fluxoyml-already-assigns-it}
 
-`deployavel` 是第四种模式，也是最不讨好的一种：它在 `docs/fluxo.yml` 中被声明为 `area-infra` 的 `gate_saida`，而
-**完全不在 `docs/gates.yml` 中**——不是 `planned`，不是过时，就是不在那里。团队模型有三个部件（目录、流程、登记），而还
+`deployavel` 是第四种模式，也是最不讨好的一种：它在 `packages/contracts/fluxo.yml` 中被声明为 `area-infra` 的 `gate_saida`，而
+**完全不在 `apps/api/config/gates.yml` 中**——不是 `planned`，不是过时，就是不在那里。团队模型有三个部件（目录、流程、登记），而还
 没有任何东西对它们做交叉核对，因此一个 gate 可以在一处是交付物而在另一处不存在。这是这种形式的**第二个**发现；第一个是
 朝相反方向变老的 `paralelismo-autorizado`。
 

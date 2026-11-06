@@ -1,11 +1,11 @@
 ---
-traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
+traducao_de: 30ccc6978b8dbd50cc8a2f195d60a9bb3c0a71a6
 sidebar_position: 13
 ---
 
 # 审计：fluxo.yml × 代码（v3，ADR 0085） {#audit-fluxoyml--code-v3-adr-0085}
 
-一次隔离的审计会话——**只读**。它把 `docs/fluxo.yml`（ADR 0085 声明的目标模型）与真实代码
+一次隔离的审计会话——**只读**。它把 `packages/contracts/fluxo.yml`（ADR 0085 声明的目标模型）与真实代码
 交叉比对，以回答两个问题：代码要兑现流程中声明为 `active` 的一切还缺什么，以及在
 `modelo-de-time.md` 的[激活表](modelo-de-time.md#activation-trigger-table)中，每个触发条件
 背后真正分级排队的是什么。本次会话中没有修改任何一行生产代码；三个模型文档（`fluxo.yml`、
@@ -32,14 +32,14 @@ sidebar_position: 13
 
 | # | 严重度 | 条目 | 证据 |
 |---|---|---|---|
-| A1 | **严重** | `dev-lead` 的 `gate_saida: paralelismo-autorizado`——`docs/fluxo.yml`（角色 `dev-lead`）声明 `status: ativo`；`docs/gates.yml:239-248` 声明 `status: planned`，注释为 “FASE 14d — entra active quando ela fechar”。FASE 14d 于 2026-08-07 关闭（与创建了 `gates.yml` 的 FASE 15 同一天），此后该机制一直处于激活、经过测试、在生产中运行的状态——`gates.yml` 之后从未更新。 | 真实机制：`apps/api/src/application/use-cases/execution/request-parallelization.use-case.ts:35-78`（超过上限时创建类型为 `parallelize` 的 `proposed_action`）；在 `apps/api/src/domain/actions/decide.ts:266-276` 中防止自动批准（`parallelize`/`raise_max_parallel` 永远不会离开 `require_approval`）；测试：`apps/api/test/application/use-cases/execution/request-parallelization.use-case.spec.ts:97`、`apps/api/test/domain/actions/decide.spec.ts:273-303`。`docs/fluxo.yml` 本身已把这个 gate 记为 `ativo`——分歧是 `gates.yml` ×（fluxo.yml + 代码），而不是 fluxo.yml × 代码。 |
+| A1 | **严重** | `dev-lead` 的 `gate_saida: paralelismo-autorizado`——`packages/contracts/fluxo.yml`（角色 `dev-lead`）声明 `status: ativo`；`apps/api/config/gates.yml:239-248` 声明 `status: planned`，注释为 “FASE 14d — entra active quando ela fechar”。FASE 14d 于 2026-08-07 关闭（与创建了 `gates.yml` 的 FASE 15 同一天），此后该机制一直处于激活、经过测试、在生产中运行的状态——`gates.yml` 之后从未更新。 | 真实机制：`apps/api/src/application/use-cases/execution/request-parallelization.use-case.ts:35-78`（超过上限时创建类型为 `parallelize` 的 `proposed_action`）；在 `apps/api/src/domain/actions/decide.ts:266-276` 中防止自动批准（`parallelize`/`raise_max_parallel` 永远不会离开 `require_approval`）；测试：`apps/api/test/application/use-cases/execution/request-parallelization.use-case.spec.ts:97`、`apps/api/test/domain/actions/decide.spec.ts:273-303`。`packages/contracts/fluxo.yml` 本身已把这个 gate 记为 `ativo`——分歧是 `gates.yml` ×（fluxo.yml + 代码），而不是 fluxo.yml × 代码。 |
 | A2 | 高 | `dev-lead` 的输出 `plano-de-paralelismo`，声明为 `via: proposed_action`（RN-083/154）。代码产生的是简单事件 `execution.plan_proposed`（`apps/engine/lib/engine/agents/dev_lead_tools.ex:14-18,60-77`），**没有**审批流水线——这是有意的决策，记录在代码自身的注释中（“transformar a proposta em ação a decidir faria o usuário decidir duas vezes”）。真正存在的类型为 `parallelize` 的 `proposed_action`（与 A1 是同一部件）是由**用户在 UI 中的操作**触发的，即请求超过上限的增援（`apps/web/src/routes/ProjectOverviewTab.tsx:361` → `POST /sessions/:sessionId/execution/parallelize`），而不是由 dev-lead 计划的初始输出触发。`fluxo.yml` 把两个不同的机制合并成了一个输出。 | `apps/engine/lib/engine/agents/dev_lead_tools.ex:14-18,60-77`；`apps/web/src/routes/ProjectOverviewTab.tsx:361`；`apps/engine/lib/engine_web/router.ex:57`。 |
 | A3 | 中 | `dev` 的状态机——`fluxo.yml:134` 声明了 4 个状态（`working\|awaiting_gate\|idle\|idle_tripped`）；真实代码有 **5** 个：增加了 `:awaiting_approval`（阶段 12e，ADR 0052），一个有自身转换的持久化状态，而不是瞬时的。 | `apps/engine/lib/engine/dev/dev_agent_server.ex:17-18,300-333,622-654`。 |
-| A4 | 低 | RN-160 的引用被附在 Arquiteto 的输入 `backlog-promovido`（来源 `po`）上。真实的 RN-160 处理的是**输出**侧（Arquiteto → Dev Lead）的 “Confirmar arquitetura pronta” gate，而不是 PO → Arquiteto 的输入。 | `docs/business-rules.md:5606-5622` 对比 `docs/fluxo.yml`（角色 `arquiteto`，输入）。 |
-| A5 | 低 | RN-161 的引用被附在 Arquiteto 的输出 `handoff-duplo` 上。真实的 RN-161（ADR 0069）处理的是**下一**步——接受交给 Dev Lead 的 handoff 会串联执行的激活——而不是双重 handoff 本身。 | `docs/business-rules.md:5624-5644` 对比 `docs/fluxo.yml`（角色 `arquiteto`，输出）。 |
+| A4 | 低 | RN-160 的引用被附在 Arquiteto 的输入 `backlog-promovido`（来源 `po`）上。真实的 RN-160 处理的是**输出**侧（Arquiteto → Dev Lead）的 “Confirmar arquitetura pronta” gate，而不是 PO → Arquiteto 的输入。 | `docs/business-rules.md:5606-5622` 对比 `packages/contracts/fluxo.yml`（角色 `arquiteto`，输入）。 |
+| A5 | 低 | RN-161 的引用被附在 Arquiteto 的输出 `handoff-duplo` 上。真实的 RN-161（ADR 0069）处理的是**下一**步——接受交给 Dev Lead 的 handoff 会串联执行的激活——而不是双重 handoff 本身。 | `docs/business-rules.md:5624-5644` 对比 `packages/contracts/fluxo.yml`（角色 `arquiteto`，输出）。 |
 | A6 | 低 | “Confirmar arquitetura pronta” gate（RN-160，≥1 个已晋升的故事）只在**客户端**得到保证（`SessionPage.tsx`，`hasPromotedStory`）；后端（`OfferInfraHandoffUseCase`）不重新校验。不经过 UI、直接调用内部路由会忽略这条规则。这不是 `fluxo.yml` 中声明的分歧——而是审计的额外发现。 | `apps/api/src/application/use-cases/agents/offer-infra-handoff.use-case.ts:19-38`。 |
 | A7 | 信息性 | Criativo 的输出 artifact 在代码中是 `artifact.product_brief`，而不是字面上的 `necessidade-de-negocio`——是同一概念、不同的事件名；术语上的不精确，而非结构上的。 | `apps/engine/lib/engine/agents/criativo_server.ex:396-420`。 |
-| A8 | 低 | `dev` 的输入 `worktree-por-agente` 标注为 “origem: harness”；`WorktreeManager` 位于 `Engine.Dev` 中，不是为 `harness` 角色列出的 4 个组件之一（`PromptAssembler`、`ToolLoop`、`ContextManager`、`Hooks`，`fluxo.yml:244`）。 | `apps/engine/lib/engine/dev/worktree_manager.ex:19-49` 对比 `docs/fluxo.yml`（角色 `harness`，组件）。 |
+| A8 | 低 | `dev` 的输入 `worktree-por-agente` 标注为 “origem: harness”；`WorktreeManager` 位于 `Engine.Dev` 中，不是为 `harness` 角色列出的 4 个组件之一（`PromptAssembler`、`ToolLoop`、`ContextManager`、`Hooks`，`fluxo.yml:244`）。 | `apps/engine/lib/engine/dev/worktree_manager.ex:19-49` 对比 `packages/contracts/fluxo.yml`（角色 `harness`，组件）。 |
 | A9 | 细节（非分歧） | `dev` 的输出 `pr-remota` 声明同时的目的地 `[area-qa, secops]`；真实机制是按状态机排序的顺序执行——QA 总在 SecOps 之前，从不并行。这并不与 fluxo.yml 矛盾（两者确实都是最终目的地），但可能诱导出同时扇出的解读。 | `apps/api/src/domain/execution/pr-gate-state-machine.ts:21-30`。 |
 
 **经验证后丢弃的 sub-agent 发现。** 一次初步探索把标签 `achado_aberto: AE`（`fluxo.yml:158`，
@@ -58,9 +58,9 @@ tenta consertar o código que julga (P2)`）以及 `docs/explanation/backlog.md:
 |---|---|---|---|
 | B1 | **Dev Lead → dev 的委派**（ADR 0053 第 5 项） | `fluxo.yml`，`dev-lead` 的输出 `delegacao`，`status: lacuna` | 已确认缺失：`dev_lead_server.ex` 只注册了 `DevLeadTools.spec()`（`apps/engine/lib/engine/agents/dev_lead_server.ex:75`）；`delegations` 表已经接受通用的 `area: text`（`apps/api/src/db/schema.ts:1051-1091`），但 `RecordDelegationUseCase` 唯一的调用者是 `qa_lead_server.ex` 和 `infra_lead_server.ex`——没有一个使用 `area = 'dev'`。可照抄的模式已经存在两次（QA 和 Infra）；缺的是在 Dev Lead 中复现它。 |
 | B2 | **`necessidade-validada` gate**（Criativo → PO） | `modelo-de-time.md`，“Estado da malha”——“gate novo = ADR” | 在 `gates.yml` 中不存在，在代码中也不存在。`modelo-de-time.md` 已经列出一个悬而未决的提议（“Anti-padrão do Criativo como validação real do gate”）——缺的是对客观标准的决策、ADR 以及在 `gates.yml` 中的登记（可以以 `warn` 诞生，像 `implementavel`/`operavel` 那样）。 |
-| B3 | **`implementavel` gate**（dev-lead 的 gate_futuro） | `docs/gates.yml:250-259`，`status: planned`，负责人 `dev-lead` | dev-lead 已经是活跃角色；这个 gate 不依赖 `qa-estrategia`/`appsec` 存在——恰恰相反：是**创建**这个 gate 激活了它们（见 C1）。缺的是“可实现”的标准（例如：故事有最低限度的验收标准，没有阻塞性依赖）以及在 `gates.yml` 中的登记。 |
+| B3 | **`implementavel` gate**（dev-lead 的 gate_futuro） | `apps/api/config/gates.yml:250-259`，`status: planned`，负责人 `dev-lead` | dev-lead 已经是活跃角色；这个 gate 不依赖 `qa-estrategia`/`appsec` 存在——恰恰相反：是**创建**这个 gate 激活了它们（见 C1）。缺的是“可实现”的标准（例如：故事有最低限度的验收标准，没有阻塞性依赖）以及在 `gates.yml` 中的登记。 |
 | B4 | **产品指标 → PO** | `fluxo.yml`，`po` 的输入 `metricas-de-produto`，`status: lacuna`；`analytics`（proposto）的 saída_alvo | `po_server.ex` 没有任何产品指标工具（`apps/engine/lib/engine/agents/po_server.ex:86-99`）。`modelo-de-time.md:21-25` 已经记录了原则：“analytics nasce como saída nova do `medicao` antes de ser papel”——也就是说，这**不**需要等 `analytics` 角色拆分出来；它是 `medicao`（已活跃，`sumGroupedBy` 已在生产中）的扩展，一旦存在，本身就是跨越“产品指标成为 PO 的输入”这一触发条件的行为（见 C2）。 |
-| B5 | **`docs/gates.yml` 过时**（同 A1 发现） | — | 把 `paralelismo-autorizado` 的 `status: planned` 改为 `active`，证据为按 `actionType: parallelize` 过滤的 `event_log`/`proposed_action.created`，`onde: request-parallelization.use-case.ts`。这是元数据修正，可由 `pnpm --filter api validacao:gates` 即时验证——脚本已经会有真实证据可引用。 |
+| B5 | **`apps/api/config/gates.yml` 过时**（同 A1 发现） | — | 把 `paralelismo-autorizado` 的 `status: planned` 改为 `active`，证据为按 `actionType: parallelize` 过滤的 `event_log`/`proposed_action.created`，`onde: request-parallelization.use-case.ts`。这是元数据修正，可由 `pnpm --filter api validacao:gates` 即时验证——脚本已经会有真实证据可引用。 |
 | B6 | **RN-160 在后端没有重新校验**（发现 A6） | — | 可选的加固：`OfferInfraHandoffUseCase` 在发出双重 handoff 之前要求 ≥1 个已晋升的故事，如今只有 UI 拦住按钮。 |
 | B7 | **经由 `medicao` 的 DORA 报告** | `fluxo.yml`，角色 `delivery-metricas`（proposto，在触发表中 `status: — (nunca)`——“vira RELATÓRIO do medicao, nunca agente”） | 由于这个角色永远不会成为 agent，这一项不在任何触发条件之后——它是今天就可在已活跃的 `medicao` 上进行的工作：从 event log + `gates.yml` 提取 lead time、deployment frequency、MTTR 和 change failure rate，与 `medir:execucao`/`sumGroupedBy` 同样的模式。 |
 

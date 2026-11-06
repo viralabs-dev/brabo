@@ -5,7 +5,7 @@ sidebar_label: 快速开始
 sidebar_position: 5
 description: 从克隆到智能体的第一个回合，以及每一步不工作时该检查什么。
 keywords: [instalação, setup, onboarding, primeiro projeto, ollama]
-traducao_de: c8911f3416983ed754a0274de9bf168cc5a25a49
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # 快速开始 {#primeiros-passos}
@@ -95,7 +95,7 @@ GIT_LOCAL_REPOS_HOST_DIR=~/brabo-projetos-bare
 所选文件夹会成为此实例**所有**项目的根目录——不要指向整个 `$HOME`，也不要指向存放你其他秘密的文件夹。
 
 在其中，每个项目都有自己的子文件夹，以 `workspace_dir_name` 命名（RN-109）：从这次变更起
-创建的项目会得到一个**可读**的名称 `<pasta>/<slug>-<id 的 8 个字符>`（例如：`<pasta>/checkout-
+创建的项目会得到一个**可读**的名称 `<pasta>/<slug>-<8 chars do id>`（例如：`<pasta>/checkout-
 3f2b1c8e`），而不是纯 UUID——在 Finder/资源管理器中打开文件夹时更容易辨认。在这次变更**之前**
 创建的项目仍使用以纯 UUID 命名的文件夹（`<pasta>/<project_id>`）：名称只在创建时决定一次，
 从不重新计算——即使之后在设置中修改了项目的 slug 也不会。
@@ -156,7 +156,7 @@ pnpm --filter api seed
 docker compose -f docker/docker-compose.yml exec ollama ollama pull qwen2.5:7b
 ```
 
-**provider 的 API**——在 UI 中，**项目 → 设置 → 凭据**。密钥在接触数据库之前会通过
+**provider 的 API**——在 UI 中，**Providers**（菜单底部）。密钥在接触数据库之前会通过
 envelope encryption 加密。
 
 模型按级联解析——**会话 > 智能体 > 项目 > 工作区**，取第一个存在的
@@ -255,7 +255,7 @@ scripts/
   ci/       automação de release e política de branch (testada com vitest)
   dev/      ferramentas locais — o menu do `pnpm bootstrap` e o preflight
   docs/     geração e verificação da documentação
-website/    Docusaurus, que lê de docs/ — nunca de website/docs/
+website/    só a árvore do Redoc; o site é gerado por scripts/docs/site/ a partir de docs/
 ```
 
 `apps/engine` 位于 pnpm workspace 之外（它是一个 Mix 项目），根目录的脚本委托给 `mix`（`pnpm engine:setup`、`pnpm engine:dev`、`pnpm engine:test`）。如果主机上的 Elixir 不是项目的版本，请通过容器格式化：
