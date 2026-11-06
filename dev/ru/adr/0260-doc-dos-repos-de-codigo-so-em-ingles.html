@@ -55,7 +55,7 @@
 <li>Каждый соседний репозиторий конвертирует документацию на английский в своей полосе, повышая <code>i18n/en</code> до источника RN за RN и удаляя <code>docs/i18n/</code>; <code>ru</code> и <code>zh-Hans</code> соседних репозиториев удаляются (git их хранит).</li>
 <li>Пока соседний репозиторий не сконвертирован, сайт показывает источник pt-BR с обычной полосой. После конвертации русский или китайский читатель видит английский с новой полосой.</li>
 <li><code>RNS_SEM_TRADUCAO</code> в <code>links.mjs</code> остаётся: индекс возвращается к источнику по ФАЙЛУ, а не по RN, поэтому RN, отсутствующая в частичном переводе, всё ещё ломает якорь в локали, пока полоса соседнего репозитория не удалит <code>i18n/</code>.</li>
-<li>Для Раунда D остаётся защита в <code>docs:check</code>: страница соседнего репозитория без <code>idioma_original: en</code> или существующий <code>i18n/</code> в нём не проходят.</li>
+<li><strong>Защита реализована (Раунд 201):</strong> <code>scripts/docs/idioma-dos-irmaos.mjs</code>, вызываемый <code>docs:check</code>, не пропускает страницу <code>.md</code> в корне документации соседнего репозитория без <code>idioma_original: en</code>, а также любой <code>i18n/</code> в таком корне, называя файл и этот ADR. Корни самого <code>brabo</code> (<code>docs/</code>, <code>scripts/ci/docs/</code>) остаются многоязычными. Счётчик pt-BR (служебные слова и <code>ção</code>/<code>ções</code> вне кода, цитат, URL и ссылок) предупреждает, не отклоняя, если на странице с <code>en</code> остаётся португальский текст; на текущей документации он показывает ноль строк.</li>
 </ul>
 <h3 id="английские-фразы-которые-копируют-полосы-перевода">Английские фразы, которые копируют полосы перевода</h3>
 <p>Ниже фразы, которые распознают новые шаблоны. Число пишется словом, строчными (сравнение не учитывает регистр).</p>
@@ -113,7 +113,7 @@
 </ul>
 <nav class="site-pager"><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html"></a><a href="../business-rules.html"></a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md">Редактировать страницу</a><span>Обновлено 2026-11-05T19:31:00-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md">Редактировать страницу</a><span>Обновлено 2026-11-05T20:58:04-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#контекст">Контекст</a></li><li class="n2"><a href="#решение">Решение</a></li><li class="n2"><a href="#последствия">Последствия</a></li><li class="n3"><a href="#английские-фразы-которые-копируют-полосы-перевода">Английские фразы, которые копируют полосы перевода</a></li><li class="n2"><a href="#рассмотренные-альтернативы">Рассмотренные альтернативы</a></li><li class="n2"><a href="#ссылки">Ссылки</a></li></ul></aside>
 </div>

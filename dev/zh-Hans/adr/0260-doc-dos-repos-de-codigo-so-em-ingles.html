@@ -55,7 +55,7 @@
 <li>每个同级仓库在自己的通道中把文档转换为英文，逐条 RN 把 <code>i18n/en</code> 升为原文并删除 <code>docs/i18n/</code>；同级仓库的 <code>ru</code> 和 <code>zh-Hans</code> 被删除（git 保留）。</li>
 <li>同级仓库转换之前，站点显示带常规横幅的 pt-BR 原文。转换之后，俄语或中文读者看到带新横幅的英文。</li>
 <li><code>links.mjs</code> 中的 <code>RNS_SEM_TRADUCAO</code> 保留：索引按文件而不是按 RN 回退到原文，所以部分译文中缺失的 RN 仍会让该语言的锚点失效，直到同级仓库的通道删除 <code>i18n/</code>。</li>
-<li>第 D 轮留下 <code>docs:check</code> 中的守卫：没有 <code>idioma_original: en</code> 的同级页面，或同级仓库中仍存在的 <code>i18n/</code>，将不通过。</li>
+<li><strong>守卫已实现（第 201 轮）：</strong> <code>docs:check</code> 调用的 <code>scripts/docs/idioma-dos-irmaos.mjs</code> 会拒绝同级文档根中没有 <code>idioma_original: en</code> 的 <code>.md</code> 页面，以及同级文档根中的任何 <code>i18n/</code>，并指出文件和本 ADR。<code>brabo</code> 自身的根（<code>docs/</code>、<code>scripts/ci/docs/</code>）仍为多语言。pt-BR 计数器（代码、引文、URL 和链接之外的功能词与 <code>ção</code>/<code>ções</code>）在已声明 <code>en</code> 的页面仍有葡萄牙语正文时只警告、不拒绝；对当前文档，它报告零行。</li>
 </ul>
 <h3 id="翻译通道要复制的英文句子">翻译通道要复制的英文句子</h3>
 <p>下表是新模式识别的句子。数字用小写拼写（比较忽略大小写）。</p>
@@ -113,7 +113,7 @@
 </ul>
 <nav class="site-pager"><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html"></a><a href="../business-rules.html"></a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md">编辑此页</a><span>更新于 2026-11-05T19:31:00-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md">编辑此页</a><span>更新于 2026-11-05T20:58:04-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#背景">背景</a></li><li class="n2"><a href="#决定">决定</a></li><li class="n2"><a href="#后果">后果</a></li><li class="n3"><a href="#翻译通道要复制的英文句子">翻译通道要复制的英文句子</a></li><li class="n2"><a href="#考虑过的替代方案">考虑过的替代方案</a></li><li class="n2"><a href="#参考">参考</a></li></ul></aside>
 </div>

@@ -55,7 +55,7 @@
 <li>Cada irmão converte a doc dele para inglês em lane própria, promovendo o <code>i18n/en</code> a fonte RN por RN e apagando <code>docs/i18n/</code>; os <code>ru</code> e <code>zh-Hans</code> dos irmãos são apagados (o git guarda).</li>
 <li>Enquanto um irmão não converte, o site mostra a fonte pt-BR com a faixa de sempre. Depois que converte, o leitor russo ou chinês vê o inglês com a faixa nova.</li>
 <li><code>RNS_SEM_TRADUCAO</code> em <code>links.mjs</code> continua: o índice cai na fonte por ARQUIVO, não por RN, então a RN que falta numa tradução parcial ainda quebra a âncora no locale até a lane do irmão apagar o <code>i18n/</code>.</li>
-<li>Fica para a Rodada D uma guarda no <code>docs:check</code>: página de irmão sem <code>idioma_original: en</code>, ou <code>i18n/</code> existente num irmão, reprova.</li>
+<li><strong>Guarda implementada (Rodada 201):</strong> <code>scripts/docs/idioma-dos-irmaos.mjs</code>, chamada pelo <code>docs:check</code>, reprova página <code>.md</code> de raiz de irmão sem <code>idioma_original: en</code> e qualquer <code>i18n/</code> numa raiz de irmão, nomeando o arquivo e este ADR. As raízes do próprio <code>brabo</code> (<code>docs/</code>, <code>scripts/ci/docs/</code>) seguem multilíngues. Um contador de pt-BR (palavras funcionais e <code>ção</code>/<code>ções</code> fora de código, citação, URL e link) avisa, sem reprovar, quando uma página que já declara <code>en</code> ainda tem prosa em português; o resultado sobre a doc atual é zero linhas.</li>
 </ul>
 <h3 id="frases-em-inglês-que-as-lanes-de-tradução-copiam">Frases em inglês que as lanes de tradução copiam</h3>
 <p>As frases abaixo são as que os padrões novos reconhecem. O número vai por extenso, em minúsculas (a comparação ignora a caixa).</p>
@@ -113,7 +113,7 @@
 </ul>
 <nav class="site-pager"><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html"></a><a href="../business-rules.html"></a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md">Editar esta página</a><span>Atualizado em 2026-11-05T19:31:00-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md">Editar esta página</a><span>Atualizado em 2026-11-05T20:58:04-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#contexto">Contexto</a></li><li class="n2"><a href="#decisão">Decisão</a></li><li class="n2"><a href="#consequências">Consequências</a></li><li class="n3"><a href="#frases-em-inglês-que-as-lanes-de-tradução-copiam">Frases em inglês que as lanes de tradução copiam</a></li><li class="n2"><a href="#alternativas-consideradas">Alternativas consideradas</a></li><li class="n2"><a href="#referências">Referências</a></li></ul></aside>
 </div>

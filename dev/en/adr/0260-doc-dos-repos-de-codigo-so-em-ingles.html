@@ -55,7 +55,7 @@
 <li>Each sibling converts its documentation to English in its own lane, promoting <code>i18n/en</code> to source RN by RN and deleting <code>docs/i18n/</code>; the siblings' <code>ru</code> and <code>zh-Hans</code> are deleted (git keeps them).</li>
 <li>Until a sibling converts, the site shows the pt-BR source with the usual banner. After it converts, a Russian or Chinese reader sees the English with the new banner.</li>
 <li><code>RNS_SEM_TRADUCAO</code> in <code>links.mjs</code> stays: the index falls back to the source per FILE, not per RN, so an RN missing from a partial translation still breaks the anchor in that locale until the sibling's lane deletes <code>i18n/</code>.</li>
-<li>A guard in <code>docs:check</code> is left for Round D: a sibling page without <code>idioma_original: en</code>, or an existing <code>i18n/</code> in a sibling, fails.</li>
+<li><strong>Guard implemented (Round 201):</strong> <code>scripts/docs/idioma-dos-irmaos.mjs</code>, called by <code>docs:check</code>, fails a <code>.md</code> page in a sibling doc root without <code>idioma_original: en</code>, and any <code>i18n/</code> in a sibling doc root, naming the file and this ADR. The <code>brabo</code> roots (<code>docs/</code>, <code>scripts/ci/docs/</code>) stay multilingual. A pt-BR counter (function words and <code>ção</code>/<code>ções</code> outside code, quotes, URLs and links) warns, without failing, when a page that already declares <code>en</code> still has Portuguese prose; on the current docs it reports zero lines.</li>
 </ul>
 <h3 id="english-sentences-the-translation-lanes-copy">English sentences the translation lanes copy</h3>
 <p>The sentences below are the ones the new patterns recognize. The number is spelled out, in lowercase (the comparison ignores case).</p>
@@ -113,7 +113,7 @@
 </ul>
 <nav class="site-pager"><a href="../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.html"></a><a href="../business-rules.html"></a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md">Edit this page</a><span>Updated 2026-11-05T19:31:00-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md">Edit this page</a><span>Updated 2026-11-05T20:58:04-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#context">Context</a></li><li class="n2"><a href="#decision">Decision</a></li><li class="n2"><a href="#consequences">Consequences</a></li><li class="n3"><a href="#english-sentences-the-translation-lanes-copy">English sentences the translation lanes copy</a></li><li class="n2"><a href="#alternatives-considered">Alternatives considered</a></li><li class="n2"><a href="#references">References</a></li></ul></aside>
 </div>
