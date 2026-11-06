@@ -4,6 +4,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: ADR 0261 (o Dev Lead é avisado de bloqueios e pede ao Arquiteto pela ferramenta `pedir_ao_arquiteto`, AT-748) com traduções, e gerados regenerados com as RN-1009 a RN-1012 (836 RNs).
 - **docs**: o `docs:check` ganha a guarda do idioma dos irmãos (AT-745, ADR 0260): reprova página sem `idioma_original: en` e `i18n/` numa raiz de irmão, e avisa prosa pt-BR por um contador que entende citação multilinha, aspas escapadas, URL e e-mail (`scripts/docs/idioma-dos-irmaos.mjs`).
 - Regenerated docs after the sibling repos went English-only (AT-745) and removed `RNS_SEM_TRADUCAO` from `links.mjs` (ADR 0260: no sibling keeps `i18n/`).
 
