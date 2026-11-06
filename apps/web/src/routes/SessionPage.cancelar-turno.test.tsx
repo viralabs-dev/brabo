@@ -1,0 +1,319 @@
+import { describe, expect, it, vi, beforeEach, afterAll } from 'vitest';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import type { ReactNode } from 'react';
+import type { Session } from '../lib/api-types';
+import type { SessionChannelHandlers } from '../lib/session-channel';
+import { historicoFalso } from '../test/historico-de-eventos';
+// Instância REAL do app (mesmo padrão de SessionPage.arquiteto-modelo-icone.test.tsx):
+// as asserções abaixo esperam texto em pt-BR, e `en` é o idioma DEFAULT.
+import i18n from '../lib/i18n';
+
+/**
+ * RN-122: o botão "Parar" do composer chama a nova rota de cancelamento
+ * (`cancelAgentTurn`) pro agente ativo — só existe enquanto `streaming` é
+ * `true`. O cancelamento DE VERDADE acontece no engine (mata a Task que
+ * segura o LLM); este teste cobre só o contrato do CLIENTE: o botão aparece
+ * na hora certa, chama a rota certa com o agente certo, e reconcilia o
+ * estado (`streaming` volta a `false`) depois.
+ */
+
+const getSession = vi.fn();
+const sendAgentMessage = vi.fn();
+const cancelAgentTurn = vi.fn();
+let canalHandlers: SessionChannelHandlers | undefined;
+
+const eventosIniciais = [
+  {
+    id: 'e0',
+    seq: 1,
+    type: 'agent.activated',
+    actor: { kind: 'agent', id: 'criativo' },
+    payload: { agent: 'criativo' },
+    createdAt: '2026-08-10T12:00:00.000Z',
+  },
+];
+
+const eventos = vi.fn<() => { items: unknown[] }>(() => ({
+  items: eventosIniciais,
+}));
+
+vi.mock('@tanstack/react-router', () => ({
+  Link: ({ to, children, ...rest }: { to: string; children: ReactNode }) => (
+    <a href={to} {...rest}>
+      {children}
+    </a>
+  ),
+}));
+
+vi.mock('../lib/hooks', () => ({
+  useSessionEvents: () => ({ data: eventos() }),
+  useSessionEventHistory: () => historicoFalso(eventos().items),
+  useSessionEvent: () => ({ data: undefined, isError: false }),
+  usePendingActions: () => ({ data: { items: [] } }),
+  useHandoffs: () => ({ data: [] }),
+  useCurrentWorkspaceWithRole: () => ({ data: undefined }),
+  useBacklog: () => ({ data: [] }),
+}));
+
+vi.mock('../lib/chat-stream', () => ({ streamChatMessage: vi.fn() }));
+
+vi.mock('../lib/session-channel', () => ({
+  connectSessionHeartbeat: (
+    _projectId: string,
+    _sessionId: string,
+    handlers: SessionChannelHandlers,
+  ) => {
+    canalHandlers = handlers;
+    return () => {
+      canalHandlers = undefined;
+    };
+  },
+}));
+
+vi.mock('../lib/auth', () => ({
+  emailDaSessao: () => 'eu@brabo.dev',
+  userIdDaSessao: () => 'eu',
+}));
+
+vi.mock('../lib/api-client', () => ({
+  getProject: vi.fn().mockResolvedValue({ id: 'proj-1', name: 'core' }),
+  getSession: (...args: unknown[]) => getSession(...args),
+  getSessionBudget: vi.fn().mockResolvedValue(null),
+  getSessionModelBinding: vi.fn().mockResolvedValue(null),
+  listModels: vi.fn().mockResolvedValue(null),
+  renameSession: vi.fn(),
+  acceptHandoff: vi.fn(),
+  approveAction: vi.fn(),
+  approveAlwaysAction: vi.fn(),
+  confirmReadiness: vi.fn(),
+  denyAction: vi.fn(),
+  sendAgentMessage: (...args: unknown[]) => sendAgentMessage(...args),
+  cancelAgentTurn: (...args: unknown[]) => cancelAgentTurn(...args),
+  setSessionModelBinding: vi.fn(),
+  startAgent: vi.fn(),
+  transitionSession: vi.fn(),
+}));
+
+const { SessionPage } = await import('./SessionPage');
+const { ToastProvider } = await import('../components/ui/ToastProvider');
+
+const ID = 'a1b2c3d4-e5f6-4789-a0b1-c2d3e4f5a6b7';
+
+function sessao(over: Partial<Session> = {}): Session {
+  return {
+    id: ID,
+    projectId: 'proj-1',
+    createdBy: 'user-1',
+    status: 'active',
+    kind: 'criativa',
+    name: null,
+    nextSeq: 1,
+    createdAt: '2026-08-10T12:00:00.000Z',
+    updatedAt: '2026-08-10T12:00:00.000Z',
+    closedAt: null,
+    ...over,
+  } as Session;
+}
+
+function montar() {
+  const client = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return render(
+    <QueryClientProvider client={client}>
+      <ToastProvider>
+        <SessionPage projectId="proj-1" sessionId={ID} />
+      </ToastProvider>
+    </QueryClientProvider>,
+  );
+}
+
+async function enviarMensagem(texto: string) {
+  const campo = await screen.findByPlaceholderText(
+    'Escreva uma mensagem… (Enter envia, Shift+Enter quebra linha)',
+  );
+  fireEvent.change(campo, { target: { value: texto } });
+  fireEvent.keyDown(campo, { key: 'Enter' });
+  return campo;
+}
+
+beforeEach(async () => {
+  vi.clearAllMocks();
+  window.localStorage.clear();
+  await i18n.changeLanguage('pt-BR');
+  canalHandlers = undefined;
+  eventos.mockReturnValue({ items: eventosIniciais });
+  getSession.mockResolvedValue(sessao());
+});
+
+afterAll(() => {
+  void i18n.changeLanguage('en');
+});
+
+describe('SessionPage — botão "Parar" (RN-122)', () => {
+  it('não existe enquanto não há turno em curso', async () => {
+    sendAgentMessage.mockResolvedValue(undefined);
+    montar();
+
+    await screen.findByPlaceholderText(
+      'Escreva uma mensagem… (Enter envia, Shift+Enter quebra linha)',
+    );
+    expect(screen.queryByRole('button', { name: 'Parar' })).toBeNull();
+  });
+
+  it('aparece durante o turno, cancela o AGENTE certo, e some quando reconcilia', async () => {
+    let resolverEnvio: () => void = () => {};
+    sendAgentMessage.mockImplementation(
+      () =>
+        new Promise<void>((resolve) => {
+          resolverEnvio = () => resolve();
+        }),
+    );
+    cancelAgentTurn.mockResolvedValue({ ok: true });
+
+    montar();
+    await enviarMensagem('gerando algo caro');
+
+    const botaoParar = await screen.findByRole('button', { name: 'Parar' });
+    expect(botaoParar).not.toBeDisabled();
+
+    fireEvent.click(botaoParar);
+
+    // A rota de cancelamento é chamada com o agente ATIVO da sessão — o
+    // mesmo que recebeu a mensagem, nunca um valor fixo.
+    await waitFor(() =>
+      expect(cancelAgentTurn).toHaveBeenCalledWith('proj-1', ID, 'criativo'),
+    );
+
+    // Depois que `cancelAgentTurn` resolve, a tela reconcilia sem esperar o
+    // round-trip do `sendAgentMessage` original (que ainda está pendente
+    // neste teste — nunca chamamos `resolverEnvio`, simulando o pior caso).
+    await waitFor(() =>
+      expect(screen.queryByRole('button', { name: 'Parar' })).toBeNull(),
+    );
+
+    screen.getByPlaceholderText(
+      'Escreva uma mensagem… (Enter envia, Shift+Enter quebra linha)',
+    );
+    // RN-673 (ADR 0191): o campo NÃO trava mais com turno em curso — a mensagem
+    // a um agente entra na fila dele. O sinal de turno em curso que este teste
+    // lê passou a ser o botão "Parar", que só existe enquanto há turno.
+    expect(screen.queryByRole('button', { name: 'Parar' })).toBeNull();
+
+    // A promessa original também pode resolver depois (o engine responde
+    // 202 ao `sendAgentMessage` assim que o `GenServer.call` desbloqueia) —
+    // `finalizarTurnoDoAgente` é idempotente, então isso não pode quebrar.
+    resolverEnvio();
+  });
+
+  it('erro ao cancelar avisa o usuário e MANTÉM o turno em curso', async () => {
+    sendAgentMessage.mockImplementation(() => new Promise<void>(() => {}));
+    cancelAgentTurn.mockRejectedValue(new Error('engine fora do ar'));
+
+    montar();
+    await enviarMensagem('outra mensagem');
+
+    const botaoParar = await screen.findByRole('button', { name: 'Parar' });
+    fireEvent.click(botaoParar);
+
+    await waitFor(() => expect(cancelAgentTurn).toHaveBeenCalled());
+
+    // Continua streaming: o botão "Parar" segue disponível — cancelar
+    // falhou, o turno real no engine não foi interrompido.
+    expect(await screen.findByRole('button', { name: 'Parar' })).toBeInTheDocument();
+    // RN-673: com o turno em curso o composer segue em modo "Pôr na fila".
+    expect(screen.getByRole('button', { name: 'Pôr na fila' })).toBeInTheDocument();
+  });
+
+  it('canal entrega onAgentDone primeiro: some mesmo sem a rota de cancelar', async () => {
+    sendAgentMessage.mockImplementation(() => new Promise<void>(() => {}));
+
+    montar();
+    await enviarMensagem('mensagem qualquer');
+
+    await screen.findByRole('button', { name: 'Parar' });
+
+    canalHandlers?.onAgentDone?.();
+
+    await waitFor(() =>
+      expect(screen.queryByRole('button', { name: 'Parar' })).toBeNull(),
+    );
+  });
+});
+
+describe('SessionPage — o composer oferece o Infra Lead (RN-617)', () => {
+  // Criativo e Infra na sessão: o Infra Lead é uma das OPÇÕES do seletor de
+  // destinatário, e é a pessoa quem o escolhe (RN-631 — desde ela o
+  // destinatário não é mais "o ativado mais recente"). Até a RN-617 `infra`
+  // não estava em `AGENTES_DE_CHAT` e a mensagem seguia para o Criativo.
+  const comInfraAtiva = [
+    ...eventosIniciais,
+    {
+      id: 'e1',
+      seq: 2,
+      type: 'agent.activated',
+      actor: { kind: 'agent', id: 'infra' },
+      payload: { agent: 'infra' },
+      createdAt: '2026-08-10T12:00:01.000Z',
+    },
+  ];
+
+  it('envia ao Infra Lead e o "Parar" para o turno DELE', async () => {
+    eventos.mockReturnValue({ items: comInfraAtiva });
+    sendAgentMessage.mockImplementation(() => new Promise<void>(() => {}));
+    cancelAgentTurn.mockResolvedValue({ ok: true });
+
+    montar();
+    fireEvent.change(await screen.findByLabelText('Para'), {
+      target: { value: 'infra' },
+    });
+    await enviarMensagem('por que essa imagem?');
+
+    await waitFor(() =>
+      expect(sendAgentMessage).toHaveBeenCalledWith(
+        'proj-1',
+        ID,
+        'infra',
+        'por que essa imagem?',
+      ),
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Parar' }));
+
+    await waitFor(() =>
+      expect(cancelAgentTurn).toHaveBeenCalledWith('proj-1', ID, 'infra'),
+    );
+  });
+});
+
+describe('SessionPage — uma bolha só por mensagem (RN-728, AT-409)', () => {
+  it('com o turno em curso, a otimista sai quando o chat.message do aceite chega ao log', async () => {
+    sendAgentMessage.mockResolvedValue({ ok: true, mensagemId: 'm-9', entrega: 'lida' });
+    montar();
+    const campo = await enviarMensagem('olá, PO');
+
+    expect(await screen.findAllByText('olá, PO')).toHaveLength(1);
+    await waitFor(() => expect(sendAgentMessage).toHaveBeenCalled());
+
+    eventos.mockReturnValue({
+      items: [
+        ...eventosIniciais,
+        {
+          id: 'm-9',
+          seq: 2,
+          type: 'chat.message',
+          actor: { kind: 'user', id: 'eu' },
+          payload: { text: 'olá, PO' },
+          createdAt: '2026-08-10T12:00:01.000Z',
+        },
+      ],
+    });
+    // Qualquer re-render lê o log novo (o mock do hook não tem cache).
+    fireEvent.change(campo, { target: { value: 'x' } });
+
+    // O turno segue (o "Parar" continua lá), e a mensagem aparece UMA vez.
+    await waitFor(() => expect(screen.getAllByText('olá, PO')).toHaveLength(1));
+    expect(screen.getByRole('button', { name: 'Parar' })).toBeInTheDocument();
+  });
+});

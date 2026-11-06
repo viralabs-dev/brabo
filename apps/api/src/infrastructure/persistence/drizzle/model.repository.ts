@@ -1,0 +1,107 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { eq, inArray } from 'drizzle-orm';
+import type { LLMProviderName } from '@brabo/shared';
+import {
+  ModelRepository,
+  type ModelInput,
+} from '../../../application/ports/model-repository.port';
+import type {
+  Model,
+  ModelAvailability,
+  ModelBilling,
+} from '../../../domain/llm/model.entity';
+import { models } from '../../../db/schema';
+import { DRIZZLE, type DrizzleDb } from './drizzle-client';
+import { currentDb } from './drizzle-context';
+
+@Injectable()
+export class DrizzleModelRepository implements ModelRepository {
+  constructor(@Inject(DRIZZLE) private readonly rootDb: DrizzleDb) {}
+
+  async listAll(): Promise<Model[]> {
+    const db = currentDb(this.rootDb);
+    return db.select().from(models);
+  }
+
+  async findById(id: string): Promise<Model | null> {
+    const db = currentDb(this.rootDb);
+    const [row] = await db.select().from(models).where(eq(models.id, id));
+    return row ?? null;
+  }
+
+  async listByProvider(provider: LLMProviderName): Promise<Model[]> {
+    const db = currentDb(this.rootDb);
+    return db.select().from(models).where(eq(models.provider, provider));
+  }
+
+  async upsertByProviderAndName(input: ModelInput): Promise<Model> {
+    const db = currentDb(this.rootDb);
+    const [row] = await db
+      .insert(models)
+      .values(input)
+      .onConflictDoUpdate({
+        target: [models.provider, models.name],
+        set: {
+          displayName: input.displayName,
+          inputPricePerMillionMicros: input.inputPricePerMillionMicros,
+          outputPricePerMillionMicros: input.outputPricePerMillionMicros,
+          contextWindow: input.contextWindow ?? null,
+          supportsToolCalling: input.supportsToolCalling ?? false,
+          supportsStreaming: input.supportsStreaming ?? true,
+          supportsVision: input.supportsVision ?? false,
+          supportsReasoning: input.supportsReasoning ?? false,
+          generatesImage: input.generatesImage ?? false,
+          manualPricing: input.manualPricing ?? true,
+          // Curadoria não passa por aqui — ela é por workspace, noutra tabela
+          // (ADR 0049). O sync reencontrando um modelo não tem como religar o
+          // que alguém desligou, porque não alcança essa decisão.
+          availability: input.availability ?? 'available',
+          lastSeenAt: input.lastSeenAt ?? null,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return row;
+  }
+
+  async setAvailability(
+    ids: string[],
+    availability: ModelAvailability,
+  ): Promise<number> {
+    if (ids.length === 0) return 0;
+    const db = currentDb(this.rootDb);
+    const rows = await db
+      .update(models)
+      .set({ availability, updatedAt: new Date() })
+      .where(inArray(models.id, ids))
+      .returning({ id: models.id });
+    return rows.length;
+  }
+
+  async updatePricing(
+    id: string,
+    input: {
+      inputPricePerMillionMicros: number;
+      outputPricePerMillionMicros: number;
+      manualPricing?: boolean;
+    },
+  ): Promise<Model> {
+    const db = currentDb(this.rootDb);
+    const [row] = await db
+      .update(models)
+      .set({ ...input, updatedAt: new Date() })
+      .where(eq(models.id, id))
+      .returning();
+    return row;
+  }
+
+  async setBilling(id: string, billing: ModelBilling): Promise<Model> {
+    const db = currentDb(this.rootDb);
+    const [row] = await db
+      .update(models)
+      .set({ billing, updatedAt: new Date() })
+      .where(eq(models.id, id))
+      .returning();
+    return row;
+  }
+}

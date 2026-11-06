@@ -1,0 +1,621 @@
+import { useState, type Dispatch, type KeyboardEvent, type SetStateAction } from 'react';
+import { ThumbsUp, SendHorizontal, ListPlus, Square, Play, RotateCcw, Info, Forward } from 'lucide-react';
+import { SEM_AUTOFILL } from '../lib/conversa-comecou';
+import { useTranslation } from 'react-i18next';
+import { getSession } from '../lib/api-client';
+import { addressableAgents, nomeDoAgente } from '../lib/agents';
+import type { Handoff } from '../lib/api-types';
+import { Button } from '../components/ui/Button';
+import { Ajuda } from '../components/ui/Ajuda';
+import { Select } from '../components/ui/Select';
+import { sessaoEhTerminal } from '../lib/sessao-encerrada';
+import { pontoDaSessao } from '../lib/session-timeline';
+import { agentesParaChamar } from '../lib/session-destinatario';
+import { usePerguntasEmAberto, rolarAteAsPerguntas } from '../lib/perguntas-em-aberto';
+import { SugestoesDeAcao, type AcaoSugerida } from '../components/ai-elements/suggestion';
+import { InputGroup } from '../components/shadcn/input-group';
+import { PromptInputToolbar } from '../components/ai-elements/prompt-input';
+import { CampoDoComposer } from '../components/CampoDoComposer';
+import { AnexosPendentes, BotaoDeAnexar } from '../components/ai-elements/anexos';
+import { adicionarAnexos } from '../lib/anexos';
+import { useMenuDoComposer } from '../lib/use-menu-do-composer';
+import { MenuDoComposer, idDoItemDoMenu } from '../components/ai-elements/menu-do-composer';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from '../components/shadcn/dialog';
+import { fraseDaAcao, SEM_FRASE } from '../lib/aprovacoes';
+import { X } from 'lucide-react';
+import styles from './SessionPage.module.css';
+
+/**
+ * A faixa de baixo da coluna de chat da Sessão, que não rola: o card do
+ * handoff da Infra (RN-499), o handoff manual a agente à escolha (ADR
+ * 0109/RN-440) e o composer com os botões de prontidão (RN-160/RN-161,
+ * RN-406) — ou, com a sessão fora de `active`, o convite a ativá-la.
+ *
+ * Moveu de `SessionPage.tsx` no PR 5 do programa do ADR 0176, sem mudar uma
+ * linha do JSX: o rascunho, os handlers e as derivações continuam donos do
+ * `SessionPage`, e chegam aqui com os MESMOS nomes que o bloco lia do escopo
+ * dele.
+ */
+export interface SessionComposerProps {
+  isActive: boolean;
+  handoffDaInfraOferecido: Handoff | undefined;
+  /** RN-631: ofertas pendentes cujo `handoff.offered` saiu da janela do fio. */
+  ofertasForaDaJanela?: Handoff[];
+  handleAcceptHandoff: (handoffId: string, toAgent: string) => Promise<void>;
+  /** RN-631: a quem a mensagem pode ir, e a quem vai. */
+  opcoesDeDestinatario: string[];
+  destinatario: string | null;
+  precisaEscolherDestinatario: boolean;
+  escolherDestinatario: (agente: string, manual?: boolean) => void;
+  manualHandoffTarget: string;
+  setManualHandoffTarget: Dispatch<SetStateAction<string>>;
+  enviandoHandoffManual: boolean;
+  activeFor: (agent: string) => boolean;
+  handleRequestManualHandoff: () => Promise<void>;
+  session: Awaited<ReturnType<typeof getSession>> | undefined;
+  draft: string;
+  setDraft: Dispatch<SetStateAction<string>>;
+  handleComposerKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
+  streaming: boolean;
+  /**
+   * RN-673: com turno em curso, a mensagem a um agente entra na FILA dele — o
+   * campo e o botão seguem abertos (o botão vira "Pôr na fila"). Falso no chat
+   * sem agente, onde não há fila: lá o turno em curso continua travando.
+   */
+  podeEnfileirar: boolean;
+  handleSend: () => Promise<void>;
+  handleCancel: () => Promise<void>;
+  criativoActive: boolean;
+  prontidaoJaDeclarada: boolean;
+  handleReadiness: () => Promise<void>;
+  hasBusinessRule: boolean;
+  arquitetoActive: boolean;
+  arquiteturaJaDeclarada: boolean;
+  handleArchitectureReadiness: () => Promise<void>;
+  hasPromotedStory: boolean;
+  /** RN-824: a sessão gravou `artifact.module_map` — há arquitetura a confirmar. */
+  hasModuleMap?: boolean;
+  handleActivate: () => Promise<void>;
+  /**
+   * ADR 0183 (RN-650): reabrir sessão encerrada. `podeReabrir` é o papel
+   * (`maintainer`, por `roleAtLeast`); sem ele o botão fica inerte e o motivo
+   * é dito em TEXTO.
+   */
+  podeReabrir?: boolean;
+  reabrindo?: boolean;
+  handleReopen?: () => Promise<void>;
+  /** RN-102: o mínimo das ações de passo é o do ENDPOINT (`developer`). */
+  podeDecidir?: boolean;
+}
+
+/**
+ * RN-830 (AT-503): Enter no meio da composição de acento (IME, tecla morta)
+ * confirma o caractere, nunca envia — o handler da página só vê a tecla
+ * quando não há composição em curso. Mora aqui, e não no `SessionPage.tsx`,
+ * porque a página está no teto de linhas.
+ */
+export function ignorarComposicaoIme(
+  handler: (e: KeyboardEvent<HTMLTextAreaElement>) => void,
+): (e: KeyboardEvent<HTMLTextAreaElement>) => void {
+  return (e) => {
+    if (e.nativeEvent.isComposing) return;
+    handler(e);
+  };
+}
+
+export function SessionComposer({
+  isActive,
+  handoffDaInfraOferecido,
+  ofertasForaDaJanela = [],
+  handleAcceptHandoff,
+  opcoesDeDestinatario,
+  destinatario,
+  precisaEscolherDestinatario,
+  escolherDestinatario,
+  manualHandoffTarget,
+  setManualHandoffTarget,
+  enviandoHandoffManual,
+  activeFor,
+  handleRequestManualHandoff,
+  session,
+  draft,
+  setDraft,
+  handleComposerKeyDown,
+  streaming,
+  podeEnfileirar,
+  handleSend,
+  handleCancel,
+  criativoActive,
+  prontidaoJaDeclarada,
+  handleReadiness,
+  hasBusinessRule,
+  arquitetoActive,
+  arquiteturaJaDeclarada,
+  handleArchitectureReadiness,
+  hasPromotedStory,
+  hasModuleMap = false,
+  handleActivate,
+  podeReabrir = false,
+  reabrindo = false,
+  handleReopen,
+  podeDecidir = true,
+}: SessionComposerProps) {
+  const { t } = useTranslation('sessionPage');
+  const [handoffManualAberto, setHandoffManualAberto] = useState(false);
+  const [ancora, setAncora] = useState<HTMLDivElement | null>(null);
+  const perguntas = usePerguntasEmAberto(session?.projectId).data?.total ?? 0;
+  const motivoDePapel = t('composer.sugestaoExigeDeveloper');
+  const proximoPasso = arquitetoActive && !arquiteturaJaDeclarada && !streaming && hasModuleMap;
+  // RN-976: as ações de passo são sugestões acima do "Para", com o predicado e o handler de antes.
+  const acoes: AcaoSugerida[] = [];
+  if (criativoActive && !prontidaoJaDeclarada)
+    acoes.push({
+      chave: 'pronto',
+      icone: <ThumbsUp aria-hidden="true" />,
+      rotulo: t('composer.prontoParaProduzir'),
+      aoClicar: handleReadiness,
+      desabilitada: streaming || !hasBusinessRule || !podeDecidir,
+      motivo: !podeDecidir
+        ? motivoDePapel
+        : !hasBusinessRule
+          ? t('composer.prontoParaProduzirDesabilitado')
+          : undefined,
+      explica: t('composer.prontoParaProduzirExplica'),
+    });
+  if (arquitetoActive && !arquiteturaJaDeclarada)
+    acoes.push({
+      chave: 'arquitetura',
+      rotulo: t('composer.confirmarArquitetura'),
+      aoClicar: handleArchitectureReadiness,
+      desabilitada: streaming || !hasPromotedStory || !podeDecidir,
+      motivo: !podeDecidir
+        ? motivoDePapel
+        : !hasPromotedStory && !proximoPasso
+          ? t('composer.confirmarArquiteturaDesabilitado')
+          : undefined,
+      explica: t('composer.confirmarArquiteturaExplica'),
+    });
+  if (
+    perguntas > 0 &&
+    ((criativoActive && !prontidaoJaDeclarada) || (arquitetoActive && !arquiteturaJaDeclarada))
+  )
+    acoes.push({
+      chave: 'perguntas',
+      rotulo: `${t('composer.perguntasEmAberto', { count: perguntas })} · ${t('composer.responderPerguntas')}`,
+      aoClicar: rolarAteAsPerguntas,
+      testId: 'aviso-perguntas-em-aberto',
+    });
+  if (isActive && opcoesDeDestinatario.length > 0 && !handoffManualAberto)
+    acoes.push({
+      chave: 'handoff',
+      rotulo: t('handoff.manualAbrir'),
+      aoClicar: () => setHandoffManualAberto(true),
+      desabilitada: !podeDecidir,
+      motivo: !podeDecidir ? motivoDePapel : undefined,
+    });
+  const menu = useMenuDoComposer({
+    projectId: session?.projectId,
+    sessionId: session?.id,
+    agentesDaSessao: opcoesDeDestinatario,
+    destinatario,
+    acoes,
+    streaming,
+    draft,
+    setDraft,
+    escolherDestinatario,
+    handleCancel,
+    handleSend,
+    teclado: ignorarComposicaoIme(handleComposerKeyDown),
+  });
+  return (
+    <>
+      {/*
+        O card ACIONÁVEL do handoff da Infra (RN-499). Ele mora AQUI, na
+        faixa entre o fio e o composer, e não dentro da timeline, por
+        três razões:
+
+        1. Esta faixa já é o lugar declarado das ações de handoff que
+           NÃO são conversa — o seletor logo abaixo (ADR 0109/RN-440)
+           fica "FORA do `.composer` de propósito — não é uma ação de
+           conversa, é redirecionamento". Aceitar a Infra é exatamente
+           isso: não abre fio nenhum, ativa um agente propositivo.
+        2. O card do fio pertence a um EVENTO (`handoff.offered`), e o
+           evento da Infra continua sendo NARRADO lá como divisor mudo,
+           sem mudança — o filtro `AGENTES_DE_CHAT` da RN-136 fica
+           intacto, e nenhum handoff conversacional muda de forma.
+        3. A faixa não rola. A oferta da Infra sai da janela de 200
+           eventos numa sessão longa, e um botão que só existe enquanto
+           o evento estiver visível é um botão que some sozinho.
+
+        O que o texto tem de dizer é a CONSEQUÊNCIA do clique, porque
+        ela não é óbvia. Desde a RN-671 (ADR 0190) o aceite SEMEIA
+        `container_start: auto_approve` e o servidor do Infra Lead propõe
+        a subida no kickoff (projeto `container`/`mounted` com roteamento
+        do Arquiteto) — ela executa sem passar por Aprovações. Seguem com
+        o humano: `container_start_via_runner` (modo `runner`) e o merge
+        da PR de infra (branch protegida). O texto antigo prometia que a
+        subida "ainda passa por você em Aprovações" (AT-348) — não volte
+        a ele.
+      */}
+      {isActive && handoffDaInfraOferecido && (
+        <div className={styles.infraHandoffRow}>
+          <div className={styles.infraHandoffTexto}>
+            <span className={styles.infraHandoffTitulo}>
+              {t('handoff.infraTitulo', {
+                de: nomeDoAgente(handoffDaInfraOferecido.fromAgent),
+              })}
+            </span>
+            <span className={styles.infraHandoffDetalhe}>
+              {t('handoff.infraDetalheCurto')}
+            </span>
+            <Ajuda assunto={t('handoff.infraTitulo', { de: nomeDoAgente(handoffDaInfraOferecido.fromAgent) })}>
+              {t('handoff.infraDetalhe')}
+            </Ajuda>
+          </div>
+          <Button
+            variant="success"
+            legenda={t('handoff.infraBotao')}
+            onClick={() =>
+              handleAcceptHandoff(
+                handoffDaInfraOferecido.id,
+                handoffDaInfraOferecido.toAgent,
+              )
+            }
+          >
+            <ThumbsUp aria-hidden="true" />
+          </Button>
+        </div>
+      )}
+
+      {/*
+        A oferta cujo EVENTO saiu da janela de 200 (RN-631): o card
+        acionável do fio pertence ao `handoff.offered`, e sem o evento a
+        oferta ficava pendente e sem botão em lugar nenhum. Mora nesta
+        faixa pelo mesmo motivo 3 do card da Infra acima: ela não rola.
+        Só o aceite — o atalho "Ativar execução" do card do Dev Lead segue
+        no fio, onde o evento dele estiver.
+      */}
+      {isActive &&
+        ofertasForaDaJanela.map((oferta) => (
+          <div
+            key={oferta.id}
+            className={styles.infraHandoffRow}
+            data-oferta-fora-da-janela={oferta.id}
+          >
+            <div className={styles.infraHandoffTexto}>
+              <span className={styles.infraHandoffTitulo}>
+                {t('handoff.foraDaJanelaTitulo', {
+                  de: nomeDoAgente(oferta.fromAgent),
+                  para: nomeDoAgente(oferta.toAgent),
+                })}
+              </span>
+              <span className={styles.infraHandoffDetalhe}>
+                {t('handoff.foraDaJanelaDetalhe')}
+              </span>
+            </div>
+            <Button
+              variant="success"
+              onClick={() => handleAcceptHandoff(oferta.id, oferta.toAgent)}
+            >
+              <ThumbsUp aria-hidden="true" />
+              {t('handoff.aceitarEPassar', { agente: nomeDoAgente(oferta.toAgent) })}
+            </Button>
+          </div>
+        ))}
+
+      {/*
+        Handoff manual a agente à escolha (ADR 0109/RN-440): a cadeia
+        fixa (Criativo→PO→Arquiteto→Dev Lead…) continua sendo o caminho
+        normal — este seletor existe para o caso que ela não cobre, o
+        Staff (ADR 0088) e agora também `ux-designer` sendo o exemplo
+        real: agentes com código pronto no engine, sem NENHUM jeito de
+        um humano chegar até eles pela tela. Fica FORA do `.composer`
+        de propósito — não é uma ação de conversa, é redirecionamento.
+        `activeFor` (não `AGENTES_DE_CHAT`) filtra quem já entrou nesta
+        sessão alguma vez, pro mesmo agente não ser oferecido duas
+        vezes.
+
+        Sem agente nenhum a quem a mensagem possa ir (a consultiva que
+        ainda não chamou ninguém, RN-682) este seletor MUDA de lugar: vai
+        para dentro da linha do destinatário, logo abaixo, porque ali ele
+        deixa de ser redirecionamento e passa a ser a ÚNICA forma de a
+        mensagem ter destinatário. Dois seletores iguais na mesma tela
+        seria a mesma escolha em dois lugares.
+      */}
+      {/* RN-712: o seletor nasce RECOLHIDO — ele é o caso que a cadeia não
+          cobre, e aberto desde o primeiro minuto oferecia Dev Lead, QA e
+          Infra no meio da ideação. Um clique o abre. */}
+      {isActive && opcoesDeDestinatario.length > 0 && handoffManualAberto && (
+        <div className={styles.manualHandoffRow}>
+          <Select
+            aria-label={t('handoff.manualLabel')}
+            value={manualHandoffTarget}
+            disabled={enviandoHandoffManual}
+            onChange={(e) => setManualHandoffTarget(e.target.value)}
+          >
+            <option value="">{t('handoff.manualPlaceholder')}</option>
+            {addressableAgents()
+              .filter((agente) => !activeFor(agente))
+              .map((agente) => (
+                <option key={agente} value={agente}>
+                  {nomeDoAgente(agente)}
+                </option>
+              ))}
+          </Select>
+          <Button
+            variant="secondary"
+            loading={enviandoHandoffManual}
+            disabled={!manualHandoffTarget}
+            onClick={handleRequestManualHandoff}
+          >
+            <Forward aria-hidden="true" />
+            {t('handoff.manualBotao')}
+          </Button>
+        </div>
+      )}
+
+      {session?.status === 'active' ? (
+        <>
+        {(acoes.length > 0 || proximoPasso) && (
+          <div className={styles.sugestoesRow}>
+            <SugestoesDeAcao acoes={acoes} />
+            {/* RN-824: o próximo passo é um clique HUMANO, dito em texto. */}
+            {proximoPasso && (
+              <span className={styles.destinatarioAviso} data-testid="proximo-passo-arquitetura">
+                {hasPromotedStory
+                  ? t('composer.confirmarArquiteturaProximoPasso')
+                  : t('composer.confirmarArquiteturaDesabilitado')}
+              </span>
+            )}
+          </div>
+        )}
+        {/*
+          O destinatário da mensagem, VISÍVEL e escolhido (RN-631, AT-251).
+          Antes ele não aparecia em lugar nenhum: era "o último agente
+          ativado na janela de 200 eventos", e um handoff aceito por outro
+          caminho trocava a quem a próxima mensagem ia sem a pessoa ver.
+          Agora a linha nomeia quem recebe ANTES do envio; com duas ou mais
+          opções e nenhuma escolha, o envio trava e o motivo é dito em TEXTO
+          (tooltip em botão desabilitado não abre).
+        */}
+        <div className={styles.destinatarioRow} data-testid="destinatario-do-chat">
+          {opcoesDeDestinatario.length === 0 ? (
+            /*
+              RN-682 (AT-254): sem agente, a mensagem NÃO vai a lugar
+              nenhum. Até aqui ela ia ao modelo cru (o SSE de
+              `POST .../chat`), sem histórico nem prompt de sistema, e a
+              resposta saía assinada pelo nome do modelo. Agora a linha
+              PEDE um agente e mostra quem pode ser chamado — os agentes
+              que conversam (`AGENTES_DE_CHAT`) e ainda não estão na
+              sessão —, e o envio fica travado. Chamar é o MESMO handoff
+              manual de sempre (ADR 0109/RN-440): a oferta aparece no fio,
+              e aceitá-la faz do agente o destinatário (RN-631).
+            */
+            <>
+              <label className={styles.destinatarioLabel} htmlFor="destinatario-do-chat">
+                {t('composer.destinatarioLabel')}
+              </label>
+              <Select
+                id="destinatario-do-chat"
+                value={manualHandoffTarget}
+                disabled={enviandoHandoffManual || !isActive}
+                onChange={(e) => setManualHandoffTarget(e.target.value)}
+              >
+                <option value="">{t('composer.destinatarioPlaceholder')}</option>
+                {agentesParaChamar(activeFor).map((agente) => (
+                  <option key={agente} value={agente}>
+                    {nomeDoAgente(agente)}
+                  </option>
+                ))}
+              </Select>
+              <Button
+                variant="secondary"
+                loading={enviandoHandoffManual}
+                disabled={!manualHandoffTarget}
+                onClick={handleRequestManualHandoff}
+              >
+                {t('composer.chamarAgente')}
+              </Button>
+              <span className={styles.destinatarioAviso}>{t('composer.semAgente')}</span>
+            </>
+          ) : (
+            <>
+              <label className={styles.destinatarioLabel} htmlFor="destinatario-do-chat">
+                {t('composer.destinatarioLabel')}
+              </label>
+              <Select
+                id="destinatario-do-chat"
+                value={destinatario ?? ''}
+                disabled={streaming}
+                onChange={(e) => {
+                  menu.limparChips();
+                  if (e.target.value) escolherDestinatario(e.target.value, true);
+                }}
+              >
+                {destinatario === null && (
+                  <option value="" disabled>
+                    {t('composer.destinatarioPlaceholder')}
+                  </option>
+                )}
+                {opcoesDeDestinatario.map((agente) => (
+                  <option key={agente} value={agente}>
+                    {nomeDoAgente(agente)}
+                  </option>
+                ))}
+              </Select>
+              {precisaEscolherDestinatario && (
+                <span className={styles.destinatarioAviso}>
+                  {t('composer.destinatarioPrecisaEscolher')}
+                </span>
+              )}
+            </>
+          )}
+        </div>
+        <div className={`${styles.composer} ${styles.composerComDestinatario}`}>
+        <InputGroup className={styles.composerEntrada}>
+          {session?.id && <AnexosPendentes sessionId={session.id} />}
+          {menu.destinatarios.length > 0 && (
+            <div className={styles.destinatarios} data-testid="destinatarios-do-chat">
+              {menu.destinatarios.map((a) => (
+                <span key={a} className={styles.destinatarioChip}>
+                  @{nomeDoAgente(a)}
+                  <button
+                    type="button"
+                    aria-label={t('composer.menu.removerDestinatario', { agente: nomeDoAgente(a) })}
+                    onClick={() => menu.removerChip(a)}
+                  >
+                    <X aria-hidden="true" size={12} />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+          {menu.ajuda && (
+            <div className={styles.menuTexto} data-testid="ajuda-dos-comandos">
+              <ul>
+                {menu.ajuda.map((c) => (
+                  <li key={c.id}>
+                    <strong>/{c.rotulo}</strong> — {c.inerte ?? c.descricao}
+                  </li>
+                ))}
+              </ul>
+              <button type="button" onClick={menu.fecharAjuda}>
+                {t('composer.menu.fecharAjuda')}
+              </button>
+            </div>
+          )}
+          {menu.resultado && (
+            <div className={styles.menuTexto} data-testid="resultado-do-comando">
+              <strong>{menu.resultado.titulo}</strong>
+              <ul>
+                {menu.resultado.linhas.map((l, i) => (
+                  <li key={`${l.rotulo}-${i}`}>
+                    <strong>{l.rotulo}</strong> — {l.texto}
+                  </li>
+                ))}
+              </ul>
+              <button type="button" onClick={menu.fecharResultado}>
+                {t('composer.menu.fecharAjuda')}
+              </button>
+            </div>
+          )}
+          {menu.aviso && (
+            <p className={styles.menuTexto} role="status" data-testid="aviso-do-menu">
+              {menu.aviso}
+            </p>
+          )}
+          {/* RN-882: o campo é dono do valor durante a digitação. O menu só LÊ o nó. */}
+          <div
+            ref={setAncora}
+            className={styles.ancoraDoCampo}
+            onInput={(e) => menu.ler(e.target as HTMLTextAreaElement)}
+            onClick={(e) => e.target instanceof HTMLTextAreaElement && menu.ler(e.target)}
+            onKeyUp={(e) => e.target instanceof HTMLTextAreaElement && menu.ler(e.target)}
+          >
+          <CampoDoComposer
+            aria-controls={menu.aberto ? menu.idDaLista : undefined}
+            aria-activedescendant={menu.aberto && menu.itens.length ? idDoItemDoMenu(menu.idDaLista, menu.ativo) : undefined}
+            onPaste={(e) => {
+              const imgs = Array.from(e.clipboardData.files).filter((f) => f.type.startsWith('image/'));
+              if (session?.id && imgs.length) void adicionarAnexos(session.id, imgs);
+            }}
+            valor={draft}
+            aoMudar={setDraft}
+            onKeyDown={menu.onKeyDown}
+            {...SEM_AUTOFILL}
+            aria-autocomplete="list"
+            placeholder={t('composer.placeholder')}
+            disabled={streaming && !podeEnfileirar}
+          />
+          </div>
+          <MenuDoComposer
+            aberto={menu.aberto}
+            ancora={ancora}
+            idDaLista={menu.idDaLista}
+            titulo={menu.titulo}
+            vazio={t('composer.menu.vazio')}
+            itens={menu.itens}
+            ativo={menu.ativo}
+            aoEscolher={menu.escolher}
+          />
+          <PromptInputToolbar>
+          <Button
+            onClick={menu.enviar}
+            legenda={streaming ? t('composer.enfileirar') : t('composer.enviar')}
+            disabled={
+              (streaming && !podeEnfileirar) || !draft.trim() || destinatario === null ||
+              (streaming && menu.destinatarios.length > 1)
+            }
+          >
+            {streaming ? <ListPlus aria-hidden="true" /> : <SendHorizontal aria-hidden="true" />}
+          </Button>
+          {/* O clipe vem DEPOIS do Enviar: o Enviar é o primeiro botão (contrato do E2E). */}
+          {session?.id && <BotaoDeAnexar sessionId={session.id} desabilitado={streaming && !podeEnfileirar} />}
+          {/* RN-122: só existe (habilitado) enquanto há turno em curso —
+              fora disso não há o que parar. */}
+          {streaming && (
+            <Button variant="danger" legenda={t('composer.parar')} onClick={handleCancel}>
+              <Square aria-hidden="true" />
+            </Button>
+          )}
+          </PromptInputToolbar>
+        </InputGroup>
+        </div>
+        <Dialog open={menu.aprovando !== null} onOpenChange={(o) => !o && menu.cancelarAprovacao()}>
+          <DialogContent>
+            <DialogTitle>
+              {t('composer.comandos.aprovar.confirmar', {
+                acao: menu.aprovando ? (fraseDaAcao(menu.aprovando.actionType, menu.aprovando.payload) ?? SEM_FRASE) : '',
+              })}
+            </DialogTitle>
+            <DialogDescription>{t('composer.comandos.aprovar.descricao')}</DialogDescription>
+            <DialogFooter>
+              <Button variant="secondary" onClick={menu.cancelarAprovacao}>
+                {t('composer.comandos.aprovar.cancelar')}
+              </Button>
+              <Button onClick={menu.confirmarAprovacao}>{t('composer.comandos.aprovar.aprovar')}</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        </>
+      ) : (
+        <div className={styles.activatePrompt}>
+          {sessaoEhTerminal(session?.status) && draft.trim() !== '' && (
+            <textarea
+              className={styles.textarea}
+              value={draft}
+              readOnly
+              aria-label={t('ativacao.mensagemNaoEnviada')}
+            />
+          )}
+          {session?.status === 'created' ? (
+            <>
+              {t('ativacao.naoAtivada')}
+              <Button legenda={t('ativacao.ativarSessao')} onClick={handleActivate}>
+                <Play aria-hidden="true" />
+              </Button>
+            </>
+          ) : sessaoEhTerminal(session?.status) && handleReopen ? (
+            <div className={styles.faixaEncerrada}>
+              <Info aria-hidden="true" size={16} />
+              <span className={styles.faixaEncerradaTitulo}>{t('ativacao.encerradaTitulo')}</span>
+              <Ajuda assunto={t('ativacao.reabrir')}>{t('ativacao.reabrirExplicacao')}</Ajuda>
+              <Button
+                className={styles.reabrir}
+                onClick={handleReopen}
+                disabled={!podeReabrir}
+                loading={reabrindo}
+              >
+                <RotateCcw aria-hidden="true" />
+                {t('ativacao.reabrir')}
+              </Button>
+              {!podeReabrir && <span className={styles.faixaEncerradaMotivo}>{t('ativacao.reabrirExigeDeveloper')}</span>}
+            </div>
+          ) : (
+            <span>{t('ativacao.statusGenerico', { status: t(pontoDaSessao(session?.status).rotuloKey) })}</span>
+          )}
+        </div>
+      )}
+    </>
+  );
+}

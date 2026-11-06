@@ -1,0 +1,870 @@
+defmodule Engine.Agents.DevLeadServerTest do
+  # DataCase — o DevLeadServer monta o system prompt via o harness (lê o
+  # banco). async: false (Application env global). Callbacks exercitados
+  # DIRETO no processo de teste, como no ArquitetoServerTest.
+  use Engine.DataCase, async: false
+
+  alias Engine.Agents.DevLeadServer
+  alias Engine.Sessions.FakeEngineApiClient
+  import Engine.Agents.TurnoAssincronoCase, only: [sync_cast: 3, sync_call: 3]
+
+  setup do
+    root =
+      Path.join(
+        System.tmp_dir!(),
+        "brabo-devlead-#{System.os_time(:microsecond)}-#{System.unique_integer([:positive])}"
+      )
+
+    Application.put_env(:engine, :project_workspaces_root, root)
+    Application.put_env(:engine, :engine_api_client, FakeEngineApiClient)
+    Application.put_env(:engine, :test_pid, self())
+
+    on_exit(fn ->
+      File.rm_rf!(root)
+      Application.delete_env(:engine, :project_workspaces_root)
+      Application.delete_env(:engine, :engine_api_client)
+      Application.delete_env(:engine, :test_pid)
+    end)
+
+    project_id = Ecto.UUID.generate()
+    session_id = Ecto.UUID.generate()
+    {:ok, state} = DevLeadServer.init({session_id, project_id})
+    %{state: state}
+  end
+
+  defp plano_turn(resumo) do
+    %{
+      "message" => %{
+        "role" => "assistant",
+        "content" => "",
+        "toolCalls" => [
+          %{
+            "id" => "call-#{System.unique_integer([:positive])}",
+            "name" => "propose_execution_plan",
+            "arguments" => %{
+              "modulos" => [
+                %{"modulo" => "api", "agentes" => 1, "porque" => "uma história"}
+              ],
+              "resumo" => resumo
+            }
+          }
+        ]
+      },
+      "usage" => %{"estimated" => true},
+      "error" => nil
+    }
+  end
+
+  # As mensagens da ÚLTIMA chamada ao modelo no turno.
+  defp ultimas_mensagens_enviadas(ultima \\ nil) do
+    receive do
+      {:llm_turn_stream, "dev-lead", messages, _tools} -> ultimas_mensagens_enviadas(messages)
+    after
+      0 -> ultima || []
+    end
+  end
+
+  defp propostas_de_plano do
+    receber_propostas([])
+  end
+
+  defp receber_propostas(acc) do
+    receive do
+      {:propose_action, "propose_execution_plan", _actor, payload} ->
+        receber_propostas([payload | acc])
+
+      {:propose_action, _outro_tipo, _actor, _payload} ->
+        receber_propostas(acc)
+    after
+      0 -> Enum.reverse(acc)
+    end
+  end
+
+  # --- ADR 0090: assess_implementability -------------------------------
+
+  defp assessment_turn(story_id) do
+    %{
+      "message" => %{
+        "role" => "assistant",
+        "content" => "",
+        "toolCalls" => [
+          %{
+            "id" => "call-#{System.unique_integer([:positive])}",
+            "name" => "assess_implementability",
+            "arguments" => %{
+              "storyId" => story_id,
+              "parecer" => "implementavel",
+              "justificativa" => "critérios claros"
+            }
+          }
+        ]
+      },
+      "usage" => %{"estimated" => true},
+      "error" => nil
+    }
+  end
+
+  test "o plano ENCERRA o turno: uma só proposed_action (status auto_approved do fake)", %{
+    state: state
+  } do
+    # Achado da primeira execução real do Dev Lead. O modelo, deixado no laço,
+    # propôs de novo: ficaram DUAS propostas na mesma sessão, com textos
+    # diferentes e o mesmo total.
+    #
+    # `fake_llm_always` devolve SEMPRE a mesma chamada de ferramenta: se o
+    # laço não parar sozinho, ele só para no teto de iterações, e o teste vê
+    # várias propostas. O fake de `propose_action` default `status:
+    # "auto_approved"` — o caminho de sucesso IMEDIATO, sem suspensão.
+    Process.put(:fake_llm_always, plano_turn("um agente na api"))
+
+    assert {:noreply, _} = sync_cast(DevLeadServer, :kickoff, state)
+
+    assert length(propostas_de_plano()) == 1,
+           "o laço voltou ao modelo depois do plano e ele propôs de novo"
+  end
+
+  # AT-274 (RN-678): o kickoff lista as tarefas PENDENTES do backlog do
+  # projeto com o `task_id`, para o plano atribuir o módulo de cada uma.
+  test "o kickoff lista as tarefas pendentes com task_id (as `done` ficam de fora)", %{
+    state: state
+  } do
+    Process.put(:fake_backlog, [
+      %{
+        "id" => "ep-1",
+        "title" => "Jogo",
+        "stories" => [
+          %{
+            "id" => "st-1",
+            "title" => "Peça cai",
+            "moduleIds" => ["board-engine", "input-keyboard"],
+            "tasks" => [
+              %{"id" => "t-pendente", "title" => "Loop de queda", "status" => "todo"},
+              %{"id" => "t-feita", "title" => "Já feita", "status" => "done"}
+            ]
+          }
+        ]
+      }
+    ])
+
+    Process.put(:fake_llm_always, plano_turn("um agente na api"))
+    sync_cast(DevLeadServer, :kickoff, state)
+
+    assert_received {:llm_turn_stream, "dev-lead", messages, _tools}
+    kickoff = messages |> Enum.map(&Map.get(&1, "content", "")) |> Enum.join("\n")
+    assert kickoff =~ "TAREFAS PENDENTES"
+    assert kickoff =~ "task_id=t-pendente | Loop de queda"
+    assert kickoff =~ "board-engine, input-keyboard"
+    refute kickoff =~ "t-feita"
+  end
+
+  # RN-699 (AT-362): o kickoff procurava `architecture.module_map_created`,
+  # tipo que NENHUM código emite — o Arquiteto grava o mapa pela api
+  # (`create_module_map` -> `findCurrent`), e o Dev Lead dizia "(sem
+  # module_map)". O mapa vem da leitura de PROJETO, a mesma do AppSec.
+  test "o kickoff lê o module_map vigente do projeto, não um evento da sessão", %{
+    state: state
+  } do
+    Process.put(:fake_infra_context, %{
+      "moduleMap" => %{
+        "modules" => [
+          %{"name" => "catalog-api", "stack" => "node", "responsibility" => "catálogo"}
+        ]
+      },
+      "adrs" => []
+    })
+
+    Process.put(:fake_llm_turns, [FakeEngineApiClient.final_response("ok")])
+    sync_cast(DevLeadServer, :kickoff, state)
+
+    assert_received {:infra_context_fetched}
+    assert_received {:llm_turn_stream, "dev-lead", messages, _tools}
+    kickoff = messages |> Enum.map(&Map.get(&1, "content", "")) |> Enum.join("\n")
+    assert kickoff =~ "- catalog-api (node): catálogo"
+    refute kickoff =~ "(sem module_map)"
+
+    # O tipo que ninguém emite não volta a ser lido.
+    for opts <- Process.get(:fake_list_events_calls, []) do
+      refute "architecture.module_map_created" in List.wrap(opts[:types])
+    end
+  end
+
+  # RN-1006 (AT-742): o Dev Lead precisa VER quem depende de quem e saber que
+  # a fundação sem dono é dele.
+  test "o kickoff mostra o dependsOn de cada módulo e a regra da fundação", %{state: state} do
+    Process.put(:fake_infra_context, %{
+      "moduleMap" => %{
+        "modules" => [
+          %{
+            "name" => "api-http",
+            "stack" => "node",
+            "responsibility" => "rotas",
+            "dependsOn" => ["persistencia"]
+          },
+          %{"name" => "persistencia", "stack" => "node", "responsibility" => "banco"}
+        ]
+      },
+      "adrs" => []
+    })
+
+    Process.put(:fake_llm_turns, [FakeEngineApiClient.final_response("ok")])
+    sync_cast(DevLeadServer, :kickoff, state)
+
+    assert_received {:llm_turn_stream, "dev-lead", messages, _tools}
+    kickoff = messages |> Enum.map(&Map.get(&1, "content", "")) |> Enum.join("\n")
+    assert kickoff =~ "- api-http (node): rotas | dependsOn: persistencia"
+    assert kickoff =~ "persistencia (node): banco | dependsOn: (nenhum)"
+    assert kickoff =~ "tarefa de FUNDAÇÃO"
+  end
+
+  # RN-1016 (AT-750): o JUnit não vira tarefa paralela.
+  test "o kickoff proíbe tarefa só para o relatório JUnit", %{state: state} do
+    Process.put(:fake_infra_context, %{"moduleMap" => %{"modules" => []}, "adrs" => []})
+    Process.put(:fake_llm_turns, [FakeEngineApiClient.final_response("ok")])
+    sync_cast(DevLeadServer, :kickoff, state)
+
+    assert_received {:llm_turn_stream, "dev-lead", messages, _tools}
+    kickoff = messages |> Enum.map(&Map.get(&1, "content", "")) |> Enum.join("\n")
+    assert kickoff =~ "Não crie tarefa só para relatório JUnit"
+    refute kickoff =~ "Inclua nas tarefas de cada módulo a de ter RELATÓRIO JUnit"
+  end
+
+  test "create_task está nos tool_specs do Dev Lead, com `module` obrigatório", %{state: state} do
+    spec = Enum.find(state.tool_specs, &(&1.name == "create_task"))
+    assert spec
+    assert "module" in spec.parameters["required"]
+  end
+
+  test "sem module_map vigente, o kickoff DIZ que não há — nunca inventa", %{state: state} do
+    Process.put(:fake_llm_turns, [FakeEngineApiClient.final_response("ok")])
+    sync_cast(DevLeadServer, :kickoff, state)
+
+    assert_received {:llm_turn_stream, "dev-lead", messages, _tools}
+    kickoff = messages |> Enum.map(&Map.get(&1, "content", "")) |> Enum.join("\n")
+    assert kickoff =~ "sem module_map vigente"
+  end
+
+  # RN-699 (AT-363): o plano recusado por task_id inventado volta ao laço, e
+  # o Dev Lead tem `read_backlog` para reler as tarefas reais e corrigir.
+  test "plano recusado pela api -> read_backlog no mesmo turno, com as tarefas reais", %{
+    state: state
+  } do
+    Process.put(:fake_backlog, [
+      %{
+        "id" => "ep-1",
+        "stories" => [
+          %{
+            "id" => "st-1",
+            "title" => "Catálogo",
+            "moduleIds" => ["api"],
+            "tasks" => [%{"id" => "t-real", "title" => "Listar", "status" => "todo"}]
+          }
+        ]
+      }
+    ])
+
+    Process.put(
+      :fake_propose_action_erro,
+      {400,
+       %{
+         "code" => "plano_de_execucao_invalido",
+         "message" => "A tarefa task-catalog-01 não existe neste projeto."
+       }}
+    )
+
+    Process.put(:fake_llm_turns, [
+      plano_turn("inventado"),
+      FakeEngineApiClient.tool_call_response("read_backlog", %{}),
+      FakeEngineApiClient.final_response("reli o backlog")
+    ])
+
+    assert {:noreply, _} = sync_cast(DevLeadServer, :kickoff, state)
+
+    mensagens = ultimas_mensagens_enviadas()
+    texto = Enum.map_join(mensagens, "\n", &to_string(Map.get(&1, "content", "")))
+    assert texto =~ "plano recusado: A tarefa task-catalog-01 não existe"
+    assert texto =~ "Chame `read_backlog`"
+    assert texto =~ "task_id=t-real | Listar"
+  end
+
+  test "o menu do Dev Lead tem read_backlog, sem parâmetro livre" do
+    spec = Engine.Agents.DevLeadTools.spec_read_backlog()
+    assert spec.name == "read_backlog"
+    assert spec.parameters["properties"] == %{}
+    {:ok, state} = DevLeadServer.init({Ecto.UUID.generate(), Ecto.UUID.generate()})
+    assert "read_backlog" in Enum.map(state.tool_specs, & &1.name)
+  end
+
+  test "o plano recusado NÃO encerra o turno — o modelo pode corrigir", %{
+    state: state
+  } do
+    # A contrapartida do teste acima, e o que impede a correção de virar
+    # "parou no primeiro erro": plano inválido devolve tool-result de erro
+    # (validação ANTES de qualquer I/O — nem chega a propor a ação), o laço
+    # continua, e o turno seguinte pode chegar num plano válido.
+    invalido =
+      put_in(
+        plano_turn("vazio")["message"]["toolCalls"],
+        [
+          %{
+            "id" => "call-ruim",
+            "name" => "propose_execution_plan",
+            "arguments" => %{"modulos" => [], "resumo" => "sem módulo"}
+          }
+        ]
+      )
+
+    Process.put(:fake_llm_turns, [
+      invalido,
+      plano_turn("agora vai"),
+      FakeEngineApiClient.final_response("plano registrado")
+    ])
+
+    assert {:noreply, _} = sync_cast(DevLeadServer, :kickoff, state)
+
+    # UMA proposta: o inválido não propôs nada, o válido propôs e parou.
+    assert length(propostas_de_plano()) == 1
+  end
+
+  # A faixa de atividade da tela de Sessão narra o que o agente está fazendo
+  # AO VIVO — o `tool.call` durável já existia, mas só chega no próximo poll
+  # do event log. O broadcast é o mesmo evento, efêmero, sem `args` (payload
+  # cru nunca viaja por aqui — RN-096/RN-412).
+  test "tool.call é rebroadcastado no canal Phoenix, sem os args crus", %{state: state} do
+    session_id = state.session_id
+    Phoenix.PubSub.subscribe(Engine.PubSub, "session:" <> session_id)
+    Process.put(:fake_llm_turns, [plano_turn("um agente na api")])
+
+    assert {:noreply, _} = sync_cast(DevLeadServer, :kickoff, state)
+
+    assert_received %Phoenix.Socket.Broadcast{
+      event: "tool.call",
+      payload: %{tool: "propose_execution_plan", agent: "dev-lead"} = payload
+    }
+
+    refute Map.has_key?(payload, :args)
+  end
+
+  # RN-166 (aplicada ao PO) estendida ao Dev Lead: o teto de iterações era
+  # SILENCIOSO aqui — `run_turn(state, remaining) when remaining <= 0, do:
+  # state` — e um Dev Lead que esgotasse as 14 idas ao modelo terminava sem
+  # rastro nenhum. Uma ferramenta desconhecida (`{:error, _}`) nunca encerra o
+  # laço sozinha (só um plano BEM-SUCEDIDO faz isso), então ela mantém o
+  # laço vivo até o teto.
+  test "teto de iterações emite toolloop.limit_reached", %{state: state} do
+    session_id = state.session_id
+
+    Process.put(
+      :fake_llm_always,
+      %{
+        "message" => %{
+          "role" => "assistant",
+          "content" => "",
+          "toolCalls" => [
+            %{"id" => "tc-x", "name" => "ferramenta_desconhecida", "arguments" => %{}}
+          ]
+        },
+        "usage" => %{"estimated" => true},
+        "error" => nil
+      }
+    )
+
+    assert {:reply, :ok, _} = sync_call(DevLeadServer, {:user_message, "vai"}, state)
+
+    assert_received {:event_appended, _, ^session_id,
+                     %{type: "toolloop.limit_reached", payload: %{max_iterations: 14}}}
+  end
+
+  # Achado do problema 2 (RN-146): o `agent.response` carrega o nome do
+  # modelo que gerou a resposta, extraído do frame `final` da api.
+  test "agent.response carrega o nome do modelo", %{state: state} do
+    Process.put(:fake_llm_turns, [
+      FakeEngineApiClient.final_response("Plano registrado.", "claude-haiku")
+    ])
+
+    assert {:reply, :ok, _} = sync_call(DevLeadServer, {:user_message, "e aí?"}, state)
+
+    session_id = state.session_id
+
+    assert_received {:event_appended, _, ^session_id,
+                     %{
+                       type: "agent.response",
+                       payload: %{content: "Plano registrado.", modelName: "claude-haiku"}
+                     }}
+  end
+
+  # A api narra budget/credencial/binding no PRÓPRIO frame final, e esse ramo
+  # devolvia `{state, ""}` — uma TUPLA onde todos os outros ramos devolvem o
+  # mapa do state. `TurnoAssincrono.tratar_resultado/2` faz `Map.put/3` no que a
+  # task devolveu: numa tupla isso é `BadMapError` dentro do `handle_info`, e o
+  # agente (`restart: :temporary`) morria sem voltar. Aqui o ciclo COMPLETO
+  # roda — `sync_call/3` passa pelo `handle_info` —, então a falha derrubaria o
+  # teste. A prova a nível de PROCESSO está em `po_server_test.exs`.
+  test "erro narrado no frame final vira agent.error e o turno fecha inteiro", %{state: state} do
+    Process.put(:fake_llm_turns, [%{"error" => "Nenhuma credencial cadastrada para openrouter"}])
+
+    assert {:reply, :ok, final_state} = sync_call(DevLeadServer, {:user_message, "e aí?"}, state)
+
+    session_id = state.session_id
+
+    assert_received {:event_appended, _, ^session_id, %{type: "agent.error", payload: payload}}
+    assert payload.origem == "politica"
+    assert payload.mensagem =~ "credencial"
+
+    # O ramo devolveu o formato certo, e não foi a segunda barreira do
+    # `TurnoAssincrono` que salvou o agente — ela narraria com origem `codigo`.
+    refute_received {:event_appended, _, _, %{type: "agent.error", payload: %{origem: "codigo"}}}
+
+    assert final_state.turno_assincrono == nil
+  end
+
+  # AT-421 (RN-733): o 402 com `errorCode` gravava `reason` com a tupla
+  # `{:final, …}` inspecionada e despejava o JSON do provider na bolha.
+  describe "crédito esgotado no frame final (RN-733)" do
+    @json_402 "crédito insuficiente em openrouter (402): {\"error\":{\"message\":\"This request would exceed\",\"code\":402}}"
+
+    test "pt-BR: frase curta, reason sem tupla, JSON só no diagnóstico", %{state: state} do
+      Process.put(:fake_llm_turns, [%{"error" => @json_402, "errorCode" => "insufficient_credit"}])
+
+      Engine.Harness.IdiomaDaResposta.com_idioma_do_autor("pt-BR", fn ->
+        sync_call(DevLeadServer, {:user_message, "e aí?"}, state)
+      end)
+
+      assert_received {:event_appended, _, _, %{type: "agent.error", payload: payload}}
+      assert payload.origem == "infra"
+
+      assert payload.mensagem ==
+               "Crédito do provedor do modelo esgotado — recarregue a chave e tente de novo."
+
+      refute payload.reason =~ "{:final"
+      assert payload.reason == @json_402
+    end
+
+    test "en: a mesma frase no idioma do turno", %{state: state} do
+      Process.put(:fake_llm_turns, [%{"error" => @json_402, "errorCode" => "insufficient_credit"}])
+
+      Engine.Harness.IdiomaDaResposta.com_idioma_do_autor("en", fn ->
+        sync_call(DevLeadServer, {:user_message, "hi", "en", "m-421"}, state)
+      end)
+
+      assert_received {:event_appended, _, _, %{type: "agent.error", payload: payload}}
+
+      assert payload.mensagem ==
+               "The model provider's credit is exhausted — top up the key and try again."
+
+      refute payload.reason =~ "{:final"
+    end
+
+    test "erro que não é de crédito mantém a mensagem de sempre", %{state: state} do
+      Process.put(:fake_llm_turns, [%{"error" => "upstream caiu", "errorCode" => "upstream"}])
+      sync_call(DevLeadServer, {:user_message, "e aí?"}, state)
+
+      assert_received {:event_appended, _, _, %{type: "agent.error", payload: payload}}
+      assert payload.mensagem =~ "Não consegui completar este turno: upstream caiu"
+      assert payload.reason == "upstream caiu"
+    end
+  end
+
+  describe "suspensão em aprovação (ADR 0086, RN-284)" do
+    # As três de sempre não bastam aqui: `sync_cast`/`sync_call` escondem a
+    # volta pelo `handle_info`, mas o CENTRO desta feature é exatamente o que
+    # acontece DEPOIS que o turno para — por isso os testes chamam
+    # `handle_call`/`handle_info` direto, sem o helper, no meio do caminho.
+
+    test "tool call que a api segura como pending vira suspensão, sem agent.done", %{
+      state: state
+    } do
+      Process.put(:fake_propose_action, %{"id" => "pa-1", "status" => "pending"})
+      Process.put(:fake_llm_turns, [plano_turn("um agente na api")])
+
+      Phoenix.PubSub.subscribe(Engine.PubSub, "session:" <> state.session_id)
+
+      assert {:noreply, final_state} = sync_cast(DevLeadServer, :kickoff, state)
+
+      assert %{
+               action_id: "pa-1",
+               tool_call_id: _,
+               tool_name: "propose_execution_plan",
+               remaining: _
+             } = final_state.aguardando_aprovacao
+
+      assert length(propostas_de_plano()) == 1
+
+      # NUNCA agent.done: o turno não terminou.
+      refute_received %Phoenix.Socket.Broadcast{event: "agent.done"}
+      refute_received %Phoenix.Socket.Broadcast{event: "agent.status", payload: %{status: "idle"}}
+
+      # RN-593: a suspensão NÃO grava `tool.result` — não há desfecho ainda, e
+      # "pending" no log seria a mesma mentira que ele seria para o modelo.
+      assert_received {:event_appended, _, _,
+                       %{type: "tool.call", payload: %{tool: "propose_execution_plan"}}}
+
+      refute_received {:event_appended, _, _, %{type: "tool.result"}}
+
+      assert_received %Phoenix.Socket.Broadcast{
+        event: "agent.status",
+        payload: %{status: "awaiting_approval"}
+      }
+    end
+
+    test "segunda user_message durante a suspensão é recusada com agent.error, sem novo turno", %{
+      state: state
+    } do
+      Process.put(:fake_propose_action, %{"id" => "pa-2", "status" => "pending"})
+      Process.put(:fake_llm_turns, [plano_turn("um agente na api")])
+
+      {:noreply, suspenso} = sync_cast(DevLeadServer, :kickoff, state)
+      assert suspenso.aguardando_aprovacao != nil
+
+      # Drena a chamada do turno INICIAL (o que produziu o plano) — o que se
+      # quer provar é que a segunda `user_message` não gera uma chamada NOVA.
+      assert_received {:llm_turn_stream, "dev-lead", _messages, _tools}
+
+      from = {self(), make_ref()}
+
+      # ADR 0163 (RN-578): a recusa é a resposta — `:ok` diria "aceito"
+      # sobre uma mensagem que não foi lida, e o controller vira isto em 409.
+      assert {:reply, {:error, :aguardando_aprovacao}, ainda_suspenso} =
+               DevLeadServer.handle_call({:user_message, "e aí?"}, from, suspenso)
+
+      # Nada mudou: nem a suspensão, nem subiu turno novo.
+      assert ainda_suspenso.aguardando_aprovacao == suspenso.aguardando_aprovacao
+      assert ainda_suspenso.turno_assincrono == nil
+      assert ainda_suspenso.messages == suspenso.messages
+
+      session_id = state.session_id
+
+      assert_received {:event_appended, _, ^session_id, %{type: "agent.error", payload: payload}}
+      assert payload.origem == "politica"
+      assert payload.mensagem =~ "plano de execução"
+      assert payload.mensagem =~ "Aprova"
+
+      # Nenhuma chamada nova ao modelo aconteceu.
+      refute_received {:llm_turn_stream, _agent, _messages, _tools}
+    end
+
+    # AT-748 (RN-1012): o aviso do sistema abre turno com o Dev Lead parado e
+    # espera na fila com turno em curso ou suspenso.
+    test "tarefa_bloqueada com o Dev Lead parado abre turno com o aviso", %{state: state} do
+      info = %{task_id: "t-9", modulo: "scheduling", reason: "falta verifyToken", diagnosis: "d"}
+
+      assert {:noreply, novo} = DevLeadServer.handle_info({:tarefa_bloqueada, info}, state)
+      assert %{task: %Task{}} = novo.turno_assincrono
+      assert novo.fila_de_mensagens == []
+
+      ref = novo.turno_assincrono.task.ref
+      assert_receive {^ref, _}, 5_000
+      assert_received {:llm_turn_stream, "dev-lead", mensagens, _tools}
+      texto = inspect(mensagens)
+      assert texto =~ "t-9"
+      assert texto =~ "pedir_ao_arquiteto"
+    end
+
+    test "tarefa_bloqueada com a aprovação suspensa vai para a fila, sem turno", %{state: state} do
+      suspenso = %{state | aguardando_aprovacao: %{action_id: "pa-x"}}
+      info = %{task_id: "t-9", modulo: "scheduling", reason: "r", diagnosis: "d"}
+
+      assert {:noreply, novo} = DevLeadServer.handle_info({:tarefa_bloqueada, info}, suspenso)
+      assert novo.turno_assincrono == nil
+      assert [%{texto: texto}] = novo.fila_de_mensagens
+      assert texto =~ "t-9"
+    end
+
+    test "contrato_publicado abre turno que manda criar a tarefa", %{state: state} do
+      assert {:noreply, novo} = DevLeadServer.handle_info({:contrato_publicado, 4}, state)
+      assert %{task: %Task{}} = novo.turno_assincrono
+      ref = novo.turno_assincrono.task.ref
+      assert_receive {^ref, _}, 5_000
+      assert inspect(ultimas_mensagens_enviadas()) =~ "contrato v4"
+    end
+
+    test "action_settled retoma o laço com o resultado real (nunca a palavra pending)", %{
+      state: state
+    } do
+      Process.put(:fake_propose_action, %{"id" => "pa-3", "status" => "pending"})
+      Process.put(:fake_llm_turns, [plano_turn("um agente na api")])
+
+      {:noreply, suspenso} = sync_cast(DevLeadServer, :kickoff, state)
+      pendente = suspenso.aguardando_aprovacao
+      assert pendente.action_id == "pa-3"
+
+      # A retomada sobe uma TASK NOVA (`TurnoAssincrono.iniciar/3`), que copia
+      # o dicionário de processo do chamador NO MOMENTO em que sobe — não do
+      # que a primeira task consumiu (aquilo morreu com ela). Sem isto, a
+      # segunda task repetiria a MESMA chamada de ferramenta com a lista já
+      # "gasta" pelo ponto de vista de quem lê, porque a mutação de
+      # `Process.put/2` dentro da primeira task nunca voltou para o processo
+      # de teste.
+      Process.put(:fake_llm_turns, [
+        FakeEngineApiClient.final_response("plano aprovado, seguindo")
+      ])
+
+      desfecho = %{
+        action_id: "pa-3",
+        status: "auto_approved",
+        execution_result: nil,
+        rejection_reason: nil
+      }
+
+      assert {:noreply, retomando} =
+               DevLeadServer.handle_info({:action_settled, desfecho}, suspenso)
+
+      %{turno_assincrono: %{task: %Task{ref: ref}}} = retomando
+      assert_receive {^ref, resultado}, 5_000
+
+      assert {:noreply, final_state} = DevLeadServer.handle_info({ref, resultado}, retomando)
+
+      assert final_state.aguardando_aprovacao == nil
+      assert final_state.turno_assincrono == nil
+
+      # A mensagem "tool" com o resultado REAL entrou no histórico — nunca a
+      # palavra "pending", que mentiria pro modelo que o comando ainda está
+      # em aberto.
+      tool_msg = Enum.find(final_state.messages, &(&1["toolCallId"] == pendente.tool_call_id))
+      refute is_nil(tool_msg)
+      assert tool_msg["content"] =~ "aprovado"
+      refute tool_msg["content"] =~ "pending"
+
+      # RN-593: o desfecho REAL entra no event log na retomada, pelo módulo
+      # comum (RN-589), com o MESMO texto que o modelo leu.
+      assert_received {:event_appended, _, _,
+                       %{type: "tool.result", payload: %{tool: "propose_execution_plan"} = r}}
+
+      assert r.ok == true
+      assert r.resultado == tool_msg["content"]
+
+      # O turno RETOMOU de verdade: uma segunda chamada ao modelo aconteceu
+      # (a que produziu a resposta final, depois do resultado real).
+      assert_received {:llm_turn_stream, "dev-lead", _messages, _tools}
+    end
+
+    # RN-1001 (AT-739): chamada IRMÃ depois da pendente não roda, mas a retomada
+    # precisa de um `tool_result` por `tool_use` (a Anthropic recusa com 400).
+    test "irmã da pendente recebe recusa: a retomada manda um tool para CADA id", %{state: state} do
+      Process.put(:fake_propose_action, %{"id" => "pa-irma", "status" => "pending"})
+
+      plano = plano_turn("um agente na api")
+      [plano_call] = plano["message"]["toolCalls"]
+      irma = %{"id" => "call-irma", "name" => "declare_open_question", "arguments" => %{}}
+      duas = put_in(plano, ["message", "toolCalls"], [plano_call, irma])
+      Process.put(:fake_llm_turns, [duas])
+
+      {:noreply, suspenso} = sync_cast(DevLeadServer, :kickoff, state)
+      assert suspenso.aguardando_aprovacao.action_id == "pa-irma"
+
+      assert_received {:event_appended, _, _,
+                       %{
+                         type: "tool.result",
+                         payload: %{tool: "declare_open_question", ok: false, erro: erro}
+                       }}
+
+      assert erro =~ "não executada"
+      assert erro =~ "propose_execution_plan"
+
+      Process.put(:fake_llm_turns, [FakeEngineApiClient.final_response("seguindo")])
+
+      desfecho = %{
+        action_id: "pa-irma",
+        status: "auto_approved",
+        execution_result: nil,
+        rejection_reason: nil
+      }
+
+      {:noreply, retomando} = DevLeadServer.handle_info({:action_settled, desfecho}, suspenso)
+      %{turno_assincrono: %{task: %Task{ref: ref}}} = retomando
+      assert_receive {^ref, _}, 5_000
+
+      enviadas = ultimas_mensagens_enviadas()
+      ids = for %{"role" => "tool", "toolCallId" => id} <- enviadas, do: id
+      assert plano_call["id"] in ids
+      assert "call-irma" in ids
+    end
+
+    # AT-263 (RN-677): aprovar o plano ATIVA a execução — o desfecho que o
+    # Dev Lead lê é o do executor da api, não mais "plano registrado".
+    test "action_settled EXECUTADO diz em qual sessão a execução foi ativada", %{state: state} do
+      Process.put(:fake_propose_action, %{"id" => "pa-ativa", "status" => "pending"})
+      Process.put(:fake_llm_turns, [plano_turn("um agente na api")])
+      {:noreply, suspenso} = sync_cast(DevLeadServer, :kickoff, state)
+
+      Process.put(:fake_llm_turns, [FakeEngineApiClient.final_response("execução no ar")])
+
+      desfecho = %{
+        action_id: "pa-ativa",
+        status: "executed",
+        execution_result: %{
+          "sessaoDeExecucao" => "sess-exec",
+          "modulos" => ["api"],
+          "tarefasAtribuidas" => 2
+        },
+        rejection_reason: nil
+      }
+
+      {:noreply, retomando} = DevLeadServer.handle_info({:action_settled, desfecho}, suspenso)
+      %{turno_assincrono: %{task: %Task{ref: ref}}} = retomando
+      assert_receive {^ref, resultado}, 5_000
+      DevLeadServer.handle_info({ref, resultado}, retomando)
+
+      assert_received {:event_appended, _, _,
+                       %{type: "tool.result", payload: %{tool: "propose_execution_plan"} = r}}
+
+      assert r.ok == true
+      assert r.resultado =~ "execução ATIVADA na sessão sess-exec"
+      assert r.resultado =~ "2 tarefa(s) com módulo atribuído"
+    end
+
+    test "action_settled FALHOU (ativação recusada) grava ok: false com o motivo", %{state: state} do
+      Process.put(:fake_propose_action, %{"id" => "pa-falha", "status" => "pending"})
+      Process.put(:fake_llm_turns, [plano_turn("um agente na api")])
+      {:noreply, suspenso} = sync_cast(DevLeadServer, :kickoff, state)
+
+      Process.put(:fake_llm_turns, [FakeEngineApiClient.final_response("falta o repositório")])
+
+      desfecho = %{
+        action_id: "pa-falha",
+        status: "failed",
+        execution_result: %{
+          "sessaoDeExecucao" => nil,
+          "modulos" => [],
+          "tarefasAtribuidas" => 0,
+          "motivo" => "Projeto sem repositório"
+        },
+        rejection_reason: nil
+      }
+
+      {:noreply, retomando} = DevLeadServer.handle_info({:action_settled, desfecho}, suspenso)
+      %{turno_assincrono: %{task: %Task{ref: ref}}} = retomando
+      assert_receive {^ref, resultado}, 5_000
+      DevLeadServer.handle_info({ref, resultado}, retomando)
+
+      assert_received {:event_appended, _, _,
+                       %{type: "tool.result", payload: %{tool: "propose_execution_plan"} = r}}
+
+      assert r.ok == false
+      assert r.erro =~ "a ativação da execução falhou: Projeto sem repositório"
+    end
+
+    test "action_settled RECUSADO grava tool.result com ok: false e o motivo (RN-593)", %{
+      state: state
+    } do
+      Process.put(:fake_propose_action, %{"id" => "pa-3b", "status" => "pending"})
+      Process.put(:fake_llm_turns, [plano_turn("um agente na api")])
+
+      {:noreply, suspenso} = sync_cast(DevLeadServer, :kickoff, state)
+
+      Process.put(:fake_llm_turns, [FakeEngineApiClient.final_response("vou propor outro")])
+
+      desfecho = %{
+        action_id: "pa-3b",
+        status: "denied",
+        execution_result: nil,
+        rejection_reason: "dois agentes na api, não um"
+      }
+
+      assert {:noreply, retomando} =
+               DevLeadServer.handle_info({:action_settled, desfecho}, suspenso)
+
+      %{turno_assincrono: %{task: %Task{ref: ref}}} = retomando
+      assert_receive {^ref, resultado}, 5_000
+      DevLeadServer.handle_info({ref, resultado}, retomando)
+
+      assert_received {:event_appended, _, _,
+                       %{type: "tool.result", payload: %{tool: "propose_execution_plan"} = r}}
+
+      assert r.ok == false
+      assert r.erro == "recusado pelo usuário: dois agentes na api, não um"
+      refute Map.has_key?(r, :resultado)
+    end
+
+    test "action_settled de OUTRA ação (id que não bate) é ignorado, sem derrubar o processo", %{
+      state: state
+    } do
+      Process.put(:fake_propose_action, %{"id" => "pa-4", "status" => "pending"})
+      Process.put(:fake_llm_turns, [plano_turn("um agente na api")])
+
+      {:noreply, suspenso} = sync_cast(DevLeadServer, :kickoff, state)
+
+      desfecho_de_outra_acao = %{
+        action_id: "pa-nao-e-esta",
+        status: "auto_approved",
+        execution_result: nil,
+        rejection_reason: nil
+      }
+
+      assert {:noreply, ainda_suspenso} =
+               DevLeadServer.handle_info({:action_settled, desfecho_de_outra_acao}, suspenso)
+
+      assert ainda_suspenso == suspenso
+
+      # Nenhum `tool.result` para a ação que este Dev Lead não esperava.
+      refute_received {:event_appended, _, _, %{type: "tool.result"}}
+    end
+
+    test "cancel durante a suspensão é NO-OP (turno_assincrono já é nil nesse momento)", %{
+      state: state
+    } do
+      Process.put(:fake_propose_action, %{"id" => "pa-5", "status" => "pending"})
+      Process.put(:fake_llm_turns, [plano_turn("um agente na api")])
+
+      {:noreply, suspenso} = sync_cast(DevLeadServer, :kickoff, state)
+
+      assert {:noreply, depois_do_cancel} = DevLeadServer.handle_cast(:cancel, suspenso)
+      assert depois_do_cancel == suspenso
+    end
+
+    # ADR 0090 — a MESMA suspensão genérica, agora pela SEGUNDA ferramenta do
+    # Dev Lead. Não repete a dança inteira de retomada (já provada acima,
+    # agnóstica de tool_name/tool_call_id): só prova que `assess_implementability`
+    # também suspende quando a api segura a ação como pending.
+    # ADR 0192: sem plano de teste nenhum na sessão — o parecer não espera
+    # mais por ele, e a suspensão acontece na PRIMEIRA chamada.
+    test "assess_implementability pending TAMBÉM suspende, sem agent.done", %{state: state} do
+      Process.put(:fake_events, [])
+      Process.put(:fake_propose_action, %{"id" => "pa-imp-1", "status" => "pending"})
+      Process.put(:fake_llm_turns, [assessment_turn("st-1")])
+
+      Phoenix.PubSub.subscribe(Engine.PubSub, "session:" <> state.session_id)
+
+      assert {:reply, :ok, final_state} =
+               sync_call(DevLeadServer, {:user_message, "avalie a st-1"}, state)
+
+      assert %{
+               action_id: "pa-imp-1",
+               tool_name: "assess_implementability"
+             } = final_state.aguardando_aprovacao
+
+      assert_received {:propose_action, "assess_implementability", _actor, _payload}
+      refute_received %Phoenix.Socket.Broadcast{event: "agent.done"}
+
+      assert_received %Phoenix.Socket.Broadcast{
+        event: "agent.status",
+        payload: %{status: "awaiting_approval"}
+      }
+    end
+
+    # RN-163: erro de ferramenta é ENTRADA do laço, não fim de linha. Desde o
+    # ADR 0192 o único erro que sobra antes da proposta é a leitura do
+    # histórico (a guarda do appsec) — e ele também não suspende.
+    test "assess_implementability com o histórico ilegível NÃO suspende — o laço continua", %{
+      state: state
+    } do
+      # Só a leitura da CAUDA sem filtro (a de `run_assessment/2`) falha — o
+      # kickoff lê por TIPO e segue de pé.
+      Process.put(:fake_events_error_quando, fn opts ->
+        if Keyword.get(opts, :latest) && is_nil(Keyword.get(opts, :types)), do: :timeout
+      end)
+
+      Application.put_env(:engine, :gate_dispatcher, Engine.Gates.FakeGateDispatcher)
+      on_exit(fn -> Application.delete_env(:engine, :gate_dispatcher) end)
+
+      Process.put(:fake_llm_turns, [
+        assessment_turn("st-1"),
+        FakeEngineApiClient.final_response("não consegui, tento depois")
+      ])
+
+      assert {:noreply, final_state} = sync_cast(DevLeadServer, :kickoff, state)
+
+      assert final_state.aguardando_aprovacao == nil
+      refute_received {:propose_action, "assess_implementability", _actor, _payload}
+    end
+  end
+end

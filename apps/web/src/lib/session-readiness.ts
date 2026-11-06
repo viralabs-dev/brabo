@@ -1,0 +1,152 @@
+import { useMemo } from 'react';
+import type { Epic, SessionEvent } from './api-types';
+import { regrasAtivas } from './regras-ativas';
+
+/**
+ * Agentes que participam do fluxo de CHAT do composer (achado 9-fix) —
+ * quem tem rota de `message` wireada no engine, não só `start`.
+ *
+ * Conferido em `agent_command_controller.ex`: há cláusula própria pra cada
+ * um dos sete. Até a RN-584 a última cláusula não olhava o agente e entregava
+ * ao Criativo qualquer outro valor; desde ela, todo nome sem cláusula é 422
+ * NOMEADO (`agente_sem_conversa`), e a frase chega ao toast por
+ * `mensagemDaRecusaDoAgente`. `scripts/ci/destinos-do-composer.spec.ts` lê
+ * ESTA lista e reprova o nome que não tiver cláusula do outro lado.
+ *
+ * `ux-designer` e `staff` entraram aqui pelo handoff manual (ADR 0109/
+ * RN-440): as duas cláusulas já existiam no engine (ADR 0087/0088) sem
+ * NENHUM jeito de um humano chegar até elas pela tela — só pela rota
+ * interna.
+ *
+ * `infra` entrou na RN-617 (ADR 0175), o sétimo: o turno do Infra Lead migrou
+ * para o `TurnoAssincrono` do engine (aceite imediato, "Parar", turno órfão
+ * fechado) e só DEPOIS ganhou cláusula de `message`. Ele é destinatário
+ * pela mesma regra dos outros (`session-destinatario.ts`, RN-631) — sem
+ * destinatário padrão. O aceite do handoff dele continua no card PRÓPRIO
+ * (RN-499), fora do fio: `ofertasAcionaveis` o exclui por nome. `qa` segue de
+ * fora — lead de ÁREA sem cláusula de `message`.
+ *
+ * NÃO é gerada: `SOLO_CONVERSATIONAL_AGENTS` (gerada por `gerar:areas`) é a
+ * lista de agentes SEM área que um handoff manual endereça, e o Infra Lead é
+ * lead de área — não entra lá.
+ *
+ * Movida para cá na extração do hook `useSessionReadiness` (PR 5/5, ADR
+ * 0122). Desde a RN-631 quem a usa é `session-destinatario.ts` (as opções do
+ * seletor do composer) e `session-handoffs.ts` (as ofertas acionáveis): uma
+ * fonte só, nunca cópia.
+ */
+export const AGENTES_DE_CHAT = [
+  'criativo',
+  'po',
+  'arquiteto',
+  'dev-lead',
+  'ux-designer',
+  'staff',
+  'infra',
+] as const;
+
+export interface SessionReadiness {
+  criativoActive: boolean;
+  arquitetoActive: boolean;
+  hasBusinessRule: boolean;
+  hasPromotedStory: boolean;
+  /** RN-824: a sessão já gravou um `artifact.module_map` (o Arquiteto mapeou os módulos). */
+  hasModuleMap: boolean;
+}
+
+/**
+ * As derivações de "prontidão" da sessão (RN-160/RN-161) — os gates que
+ * habilitam "Estou pronto — a necessidade está validada" e "Confirmar
+ * arquitetura pronta". "Validar necessidade" saiu no ADR 0185: o primeiro
+ * botão a fecha (RN-657). O agente que recebe a mensagem do composer
+ * (`activeAgent`, "o último ativado") saiu daqui na RN-631: deixou de ser
+ * derivado do log e passou a ser escolhido (`session-destinatario.ts`).
+ * Extraídas de `SessionPage.tsx` (PR 5/5, ADR 0122) — a única fatia do plano
+ * que não é um move mecânico de arquivo: os seis `useMemo` liam direto do
+ * closure do componente, então aqui viram um contrato explícito de
+ * parâmetros.
+ *
+ * **Contrato de parâmetros, e por quê:**
+ * - `events`: mesmo tipo que `SessionPage.tsx` já usa
+ *   (`eventsQuery.data?.items ?? []`, isto é, `SessionEvent[]`) — nenhum
+ *   tipo novo, só o que `api-types.ts` já declara.
+ * - `backlogData`: o hook recebe o valor JÁ DESEMBRULHADO
+ *   (`backlogQuery.data`, `Epic[] | undefined`), não a query inteira nem
+ *   `projectId` — `SessionPage.tsx` continua sendo o único dono da chamada
+ *   `useBacklog(projectId)` (mesma `queryKey` que a aba Backlog e o restante
+ *   da tela usam); o hook fica uma função pura dos dois valores, sem acoplar
+ *   a nenhum client de query.
+ *
+ * `activeFor`, o helper que `criativoActive`/`arquitetoActive` chamam, é
+ * redefinido aqui como uma cópia LOCAL de uma linha — não exportado. A
+ * versão original em `SessionPage.tsx` também alimentava `offeredHandoff`
+ * (fora desta extração, RN-136), então ela continua lá, inalterada, só para
+ * esse outro consumidor; duplicar esta única linha evita acoplar
+ * `offeredHandoff` a este módulo por um parâmetro que ele não precisaria do
+ * resto do contrato.
+ */
+export function useSessionReadiness(
+  events: SessionEvent[],
+  backlogData: Epic[] | undefined,
+): SessionReadiness {
+  // Um agente está ativo se houve um agent.activated pra ele nesta sessão.
+  // Isto é EXISTÊNCIA histórica ("já entrou alguma vez"), não "é ele quem
+  // fala AGORA" — os dois viram perguntas diferentes logo abaixo.
+  const activeFor = (agent: string) =>
+    events.some(
+      (e) =>
+        e.type === 'agent.activated' &&
+        (e.payload as { agent?: string })?.agent === agent,
+    );
+  const criativoActive = useMemo(() => activeFor('criativo'), [events]);
+  // Mesmo padrão do Criativo, para o botão de prontidão da arquitetura
+  // (achado do problema 1) — o Arquiteto não tinha NENHUM jeito de o usuário
+  // disparar `OfferInfraHandoffUseCase`: o endpoint já existia
+  // (`POST .../agents/arquiteto/handoff-infra`), mas nenhum lugar do
+  // frontend o chamava.
+  const arquitetoActive = useMemo(() => activeFor('arquiteto'), [events]);
+
+  // A garantia de VERDADE é o guardrail no engine — `CriativoServer` recusa
+  // `confirm_readiness` (e narra a recusa como `agent.error` no fio) quando
+  // a sessão não tem nenhuma `artifact.business_rule` (ver
+  // criativo_server.ex). Isto é só a UX complementar: desabilita o botão
+  // ANTES do clique, com a MESMA fonte que já alimenta o painel "Regras de
+  // negócio" em `ContextAside` — sem buscar de novo.
+  const hasBusinessRule = useMemo(
+    () => regrasAtivas(events).length > 0,
+    [events],
+  );
+
+  // RN-160: mirror do gate acima, para "Confirmar arquitetura pronta" — não
+  // basta ter regra de negócio capturada, precisa existir pelo menos 1
+  // história já PROMOVIDA (RN-048: `PromoteStoriesUseCase` move `draft` para
+  // `ready` via `TransitionStoryUseCase`; `in_progress`/`done` também contam,
+  // porque só se chega lá tendo passado por `ready`). A fonte é a MESMA que a
+  // aba Backlog já usa (`useBacklog`, `ProjectBacklogTab.tsx`, mesma
+  // queryKey `['backlog', projectId]`) — sem round-trip novo.
+  const hasPromotedStory = useMemo(
+    () =>
+      (backlogData ?? []).some((epic) =>
+        epic.stories.some((s) => s.status !== 'draft'),
+      ),
+    [backlogData],
+  );
+
+  // RN-824: o mapa de módulos gravado é o sinal de que a arquitetura tem o
+  // que confirmar — é ele que faz o composer AVISAR que o próximo passo é o
+  // clique "Confirmar arquitetura pronta". Mesma fonte (`events`), sem query.
+  const hasModuleMap = useMemo(() => temMapaDeModulos(events), [events]);
+
+  return {
+    criativoActive,
+    arquitetoActive,
+    hasBusinessRule,
+    hasPromotedStory,
+    hasModuleMap,
+  };
+}
+
+/** RN-824: derivação pura — a sessão tem ao menos um `artifact.module_map`. */
+export function temMapaDeModulos(events: SessionEvent[]): boolean {
+  return events.some((e) => e.type === 'artifact.module_map');
+}

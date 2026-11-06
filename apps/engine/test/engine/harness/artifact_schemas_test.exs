@@ -1,0 +1,263 @@
+defmodule Engine.Harness.ArtifactSchemasTest do
+  use ExUnit.Case, async: true
+
+  alias Engine.Harness.ArtifactSchemas
+
+  describe "note" do
+    test "válido com title + body" do
+      assert :ok = ArtifactSchemas.validate("note", %{"title" => "t", "body" => "b"})
+    end
+
+    test "faltando chave" do
+      assert {:error, {:missing_keys, ["body"]}} =
+               ArtifactSchemas.validate("note", %{"title" => "t"})
+    end
+  end
+
+  describe "business_rule (origem obrigatória e não-vazia)" do
+    test "válido com origin não-vazia" do
+      assert :ok =
+               ArtifactSchemas.validate("business_rule", %{
+                 "title" => "Só maiores de 18",
+                 "description" => "Cadastro exige idade >= 18",
+                 "origin" => [3, 5]
+               })
+    end
+
+    test "origin vazia é rejeitada" do
+      assert {:error, :origem_invalida} =
+               ArtifactSchemas.validate("business_rule", %{
+                 "title" => "t",
+                 "description" => "d",
+                 "origin" => []
+               })
+    end
+
+    test "origin ausente é rejeitada (chave obrigatória)" do
+      assert {:error, {:missing_keys, ["origin"]}} =
+               ArtifactSchemas.validate("business_rule", %{
+                 "title" => "t",
+                 "description" => "d"
+               })
+    end
+
+    test "origin de tipo errado é rejeitada" do
+      assert {:error, :origem_invalida} =
+               ArtifactSchemas.validate("business_rule", %{
+                 "title" => "t",
+                 "description" => "d",
+                 "origin" => "conversa"
+               })
+    end
+  end
+
+  describe "product_brief" do
+    test "valida chaves, mas NÃO é tool-emittable" do
+      assert :ok =
+               ArtifactSchemas.validate("product_brief", %{
+                 "title" => "t",
+                 "summary" => "s",
+                 "rules" => [1, 2]
+               })
+
+      refute "product_brief" in ArtifactSchemas.known()
+    end
+  end
+
+  describe "pareceres de gate (qa_verdict/secops_verdict)" do
+    test "válido sobre uma task de dev, e NÃO é tool-emittable" do
+      for tipo <- ["qa_verdict", "secops_verdict"] do
+        assert :ok =
+                 ArtifactSchemas.validate(tipo, %{
+                   "taskId" => "t-1",
+                   "veredito" => "changes_requested",
+                   "resumo" => "1 regra sem teste",
+                   "itens" => ["RF2 não tem teste"]
+                 })
+
+        refute tipo in ArtifactSchemas.known()
+      end
+    end
+
+    test "válido sobre uma PR de infra (prActionId no lugar de taskId)" do
+      assert :ok =
+               ArtifactSchemas.validate("secops_verdict", %{
+                 "prActionId" => "a-1",
+                 "veredito" => "approved",
+                 "resumo" => "Nenhum achado.",
+                 "itens" => []
+               })
+    end
+
+    test "coverageMatrix é opcional" do
+      assert :ok =
+               ArtifactSchemas.validate("qa_verdict", %{
+                 "taskId" => "t-1",
+                 "veredito" => "approved",
+                 "resumo" => "suite verde",
+                 "itens" => [],
+                 "coverageMatrix" => [
+                   %{"rule" => "RF1", "tests" => ["a.test.js"], "covered" => true}
+                 ]
+               })
+    end
+
+    test "sem sujeito, ou com os dois, é rejeitado" do
+      base = %{"veredito" => "approved", "resumo" => "r", "itens" => []}
+
+      assert {:error, {:sujeito_invalido, []}} = ArtifactSchemas.validate("qa_verdict", base)
+
+      assert {:error, {:sujeito_invalido, _}} =
+               ArtifactSchemas.validate(
+                 "qa_verdict",
+                 Map.merge(base, %{"taskId" => "t-1", "prActionId" => "a-1"})
+               )
+    end
+
+    test "veredito fora da máquina de estados da api é rejeitado" do
+      assert {:error, {:veredito_invalido, "talvez"}} =
+               ArtifactSchemas.validate("qa_verdict", %{
+                 "taskId" => "t-1",
+                 "veredito" => "talvez",
+                 "resumo" => "r",
+                 "itens" => []
+               })
+    end
+
+    test "faltando chave obrigatória" do
+      assert {:error, {:missing_keys, ["resumo"]}} =
+               ArtifactSchemas.validate("secops_verdict", %{
+                 "taskId" => "t-1",
+                 "veredito" => "approved",
+                 "itens" => []
+               })
+    end
+  end
+
+  describe "plano_de_teste (ADR 0090 — QA-estratégia)" do
+    test "válido, e NÃO é tool-emittable (server-emitted)" do
+      assert :ok =
+               ArtifactSchemas.validate("plano_de_teste", %{
+                 "storyId" => "st-1",
+                 "taskId" => "task-1",
+                 "planoDeTeste" => "cobrir o cadastro",
+                 "criteriosExecutaveis" => ["dado X, quando Y, então Z"],
+                 "estrategiaDeAutomacao" => "integração"
+               })
+
+      refute "plano_de_teste" in ArtifactSchemas.known()
+    end
+
+    test "criteriosExecutaveis vazio é rejeitado — plano sem critério não é plano" do
+      assert {:error, :criterios_vazios} =
+               ArtifactSchemas.validate("plano_de_teste", %{
+                 "storyId" => "st-1",
+                 "taskId" => "task-1",
+                 "planoDeTeste" => "cobrir o cadastro",
+                 "criteriosExecutaveis" => [],
+                 "estrategiaDeAutomacao" => "integração"
+               })
+    end
+
+    # ADR 0192 (RN-674): o plano é da ENTREGA de uma task — sem `taskId` o
+    # `QaLeadServer` não o reencontraria na rodada de correção.
+    test "sem taskId é rejeitado — o plano é da entrega, não da story solta" do
+      assert {:error, {:missing_keys, ["taskId"]}} =
+               ArtifactSchemas.validate("plano_de_teste", %{
+                 "storyId" => "st-1",
+                 "planoDeTeste" => "cobrir o cadastro",
+                 "criteriosExecutaveis" => ["a"],
+                 "estrategiaDeAutomacao" => "integração"
+               })
+    end
+
+    test "faltando chave obrigatória" do
+      assert {:error, {:missing_keys, ["estrategiaDeAutomacao"]}} =
+               ArtifactSchemas.validate("plano_de_teste", %{
+                 "storyId" => "st-1",
+                 "taskId" => "task-1",
+                 "planoDeTeste" => "cobrir o cadastro",
+                 "criteriosExecutaveis" => ["a"]
+               })
+    end
+  end
+
+  describe "decision_record (Frente 3 — ADR resumido dos conversacionais)" do
+    test "válido com as quatro chaves" do
+      assert :ok =
+               ArtifactSchemas.validate("decision_record", %{
+                 "context" => "Precisávamos escolher o formato de resposta da API pública",
+                 "options" => ["JSON", "XML", "texto puro"],
+                 "choice" => "JSON",
+                 "consequences" => "Clientes precisam de um parser JSON; ganhamos tooling padrão"
+               })
+
+      assert "decision_record" in ArtifactSchemas.known()
+    end
+
+    test "sem validação cruzada — choice não precisa bater com um item de options" do
+      assert :ok =
+               ArtifactSchemas.validate("decision_record", %{
+                 "context" => "c",
+                 "options" => ["a", "b"],
+                 "choice" => "nenhuma das duas, decidimos por uma terceira via",
+                 "consequences" => "consequências"
+               })
+    end
+
+    test "faltando options" do
+      assert {:error, {:missing_keys, ["options"]}} =
+               ArtifactSchemas.validate("decision_record", %{
+                 "context" => "c",
+                 "choice" => "escolha",
+                 "consequences" => "consequências"
+               })
+    end
+
+    test "options que não é lista não é validado por tipo (schema genérico só valida presença)" do
+      assert :ok =
+               ArtifactSchemas.validate("decision_record", %{
+                 "context" => "c",
+                 "options" => "não é uma lista",
+                 "choice" => "escolha",
+                 "consequences" => "consequências"
+               })
+    end
+
+    test "faltando context" do
+      assert {:error, {:missing_keys, ["context"]}} =
+               ArtifactSchemas.validate("decision_record", %{
+                 "options" => ["a", "b"],
+                 "choice" => "a",
+                 "consequences" => "consequências"
+               })
+    end
+
+    test "faltando choice" do
+      assert {:error, {:missing_keys, ["choice"]}} =
+               ArtifactSchemas.validate("decision_record", %{
+                 "context" => "c",
+                 "options" => ["a", "b"],
+                 "consequences" => "consequências"
+               })
+    end
+
+    test "faltando consequences" do
+      assert {:error, {:missing_keys, ["consequences"]}} =
+               ArtifactSchemas.validate("decision_record", %{
+                 "context" => "c",
+                 "options" => ["a", "b"],
+                 "choice" => "a"
+               })
+    end
+  end
+
+  test "known/0 lista só os model-emittable" do
+    assert Enum.sort(ArtifactSchemas.known()) == ["business_rule", "decision_record", "note"]
+  end
+
+  test "tipo desconhecido" do
+    assert {:error, {:unknown_type, "xpto"}} =
+             ArtifactSchemas.validate("xpto", %{})
+  end
+end

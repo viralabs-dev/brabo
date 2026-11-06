@@ -1,0 +1,393 @@
+// Identidade e IAM — usuários, workspaces, projetos e os papéis que ligam um
+// ao outro (espelha `domain/iam`).
+//
+// `project_execution_mode` e `story_promotion` moram AQUI, e não em `git.ts` /
+// `backlog.ts`, porque `projects` é o único consumidor dos dois: enum fica com
+// a tabela que o chama, senão o grafo de módulos ganha um ciclo em que o enum
+// é avaliado antes de existir (ADR 0121).
+
+import {
+  pgTable,
+  pgEnum,
+  uuid,
+  text,
+  integer,
+  bigint,
+  boolean,
+  timestamp,
+  primaryKey,
+  unique,
+  uniqueIndex,
+  check,
+} from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
+
+// Vocabulário de papel único, compartilhado entre workspace_members e
+// project_members — o papel de projeto sobrepõe o de workspace (ver
+// RolesService), então os dois precisam falar a mesma linguagem.
+export const roleEnum = pgEnum('role', [
+  'owner',
+  'maintainer',
+  'developer',
+  'viewer',
+]);
+
+// QUEM promove uma story de draft para ready (Fase 12c, RN-048).
+// `manual` (default de projeto NOVO): o PO propõe e o USUÁRIO decide.
+// `auto`: o comportamento anterior à 12c, agora opt-in — a story completa
+// já nasce ready. Projetos que existiam antes da migração 0033 ficaram em
+// `auto` de propósito: mudar o comportamento debaixo de quem já opera não
+// é uma escolha que o produto pode fazer sozinho.
+export const storyPromotionModeEnum = pgEnum('story_promotion_mode', [
+  'manual',
+  'auto',
+]);
+
+// ONDE o comando de um projeto EXECUTA (RN-169/RN-421, ADR 0072/0104).
+// `container` (default): a pasta gerenciada em PROJECT_WORKSPACES_ROOT — o
+// comportamento que sempre existiu, e por isso o default; projeto criado
+// antes desta coluna não muda de lugar.
+// `mounted` (antigo `local`, renomeado pelo ADR 0104): uma pasta do
+// USUÁRIO, caminho absoluto livre, que só funciona montada nos containers
+// da api e do engine (RN-170/RN-422).
+// `runner`: uma pasta do usuário que NÃO precisa de bind-mount — o CLI
+// `brabo-runner` roda na máquina do usuário e confirma o caminho quando
+// conecta (RN-423). O projeto nasce com `workspace_verified_at` nulo e é
+// promovido quando a confirmação chega.
+// CUIDADO com o homônimo: nenhum destes três valores tem relação com o
+// `GitProviderName` `'local'` (git-provider.ts) — são eixos diferentes,
+// um decide ONDE O COMANDO EXECUTA, o outro decide QUEM HOSPEDA O GIT.
+export const projectExecutionModeEnum = pgEnum('project_execution_mode', [
+  'container',
+  'mounted',
+  'runner',
+]);
+
+// Idioma da interface (fundação de i18n, Onda 6a; quatro desde o ADR 0216, RN-891). Fechado de
+// propósito — abrir para qualquer BCP-47 exigiria arquivo de recurso e
+// validação de fallback que a extração de strings (etapa separada) ainda não
+// tem. `pt-BR` é o default: nunca flipar silenciosamente quem já tem conta.
+export const userLocaleEnum = pgEnum('user_locale', [
+  'pt-BR',
+  'en',
+  'ru',
+  'zh-Hans',
+]);
+
+export const users = pgTable(
+  'users',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    // NULLABLE desde a Fase 7a: usuário criado pelo auth first-party não tem
+    // sub do Keycloak. Postgres permite vários NULL numa coluna unique, então
+    // o `onConflictDoUpdate` do upsert do Keycloak continua funcionando sem
+    // mudança — e a coluna some de vez na 7.2, quando o emissor for trocado.
+    keycloakSub: text('keycloak_sub').unique(),
+    email: text('email').notNull(),
+    name: text('name'),
+    // Preferência de idioma (fundação de i18n, Onda 6a) — default 'pt-BR'
+    // para NUNCA flipar silenciosamente quem já tem conta; usuário sem conta
+    // ainda usa `navigator.language` só como sugestão de EXIBIÇÃO, nunca
+    // persistida (ver `apps/web/src/lib/idioma.ts`).
+    locale: userLocaleEnum('locale').notNull().default('pt-BR'),
+    // O idioma em que os AGENTES respondem a esta pessoa (RN-618, ADR 0177) —
+    // eixo DIFERENTE de `locale` logo acima, que é o da INTERFACE e nunca é
+    // alterado por esta preferência nem pela detecção. Lista ABERTA: qualquer
+    // código BCP-47 que `normalizarIdiomaBcp47` aceite, gravado CANÔNICO
+    // (`pt-br` vira `pt-BR`) — nunca um enum, porque abrir o idioma da
+    // resposta não depende de arquivo de recurso nenhum, ao contrário do da
+    // interface.
+    //
+    // NULL é "automático", e é assim que toda conta nasce (decisão do
+    // mantenedor, AT-168 resposta 3): a ausência de escolha É o automático, e
+    // um valor-sentinela aqui dividiria a coluna entre idioma e não-idioma.
+    responseLanguage: text('response_language'),
+    // O idioma DETECTADO pelas mensagens da pessoa e CONFIRMADO por ela
+    // (AT-168 respostas 4 e 6): por usuário, global, e só entra aqui depois
+    // da confirmação — a detecção sozinha não troca nada. Quem escreve é a
+    // AT-163; esta coluna existe desde a RN-618 porque é um degrau da
+    // precedência. O par é UMA coisa só (CHECK abaixo): idioma sem instante
+    // de confirmação seria detecção não confirmada fingindo ser confirmada.
+    detectedLanguage: text('detected_language'),
+    detectedLanguageConfirmedAt: timestamp('detected_language_confirmed_at', {
+      withTimezone: true,
+    }),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    // Unicidade por e-mail NORMALIZADO. Sem `lower()`, "Ana@brabo.dev" e
+    // "ana@brabo.dev" seriam contas distintas — e como o login busca pelo
+    // e-mail em minúsculas, a segunda conta ficaria inacessível para sempre.
+    uniqueIndex('users_email_lower_idx').on(sql`lower(${table.email})`),
+    check(
+      'users_idioma_detectado_so_confirmado',
+      sql`(${table.detectedLanguage} IS NULL) = (${table.detectedLanguageConfirmedAt} IS NULL)`,
+    ),
+  ],
+);
+
+// Os idiomas DETECTADOS que a pessoa RECUSOU na pergunta de confirmação
+// (AT-163, RN-624): "Detectamos que você escreve em X — usar X nas
+// respostas?" → "Não". Uma linha por (pessoa, idioma), e a presença dela é o
+// que impede a MESMA pergunta de voltar — a detecção roda a cada leitura, e
+// sem isto quem escreve em espanhol de propósito mas quer respostas em
+// português seria perguntado para sempre. Confirmar o idioma mais tarde apaga
+// a linha dele (a pessoa mudou de ideia, e a recusa antiga não vale mais).
+//
+// Tabela e não coluna em `users`: é um CONJUNTO por pessoa, com o instante de
+// cada recusa, e `users` segue sem nada que a detecção não confirmou.
+export const detectedLanguageDeclines = pgTable(
+  'detected_language_declines',
+  {
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    // Código BCP-47 canônico (`normalizarIdiomaBcp47`), como toda coluna de
+    // idioma da RN-618.
+    language: text('language').notNull(),
+    declinedAt: timestamp('declined_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.userId, table.language] })],
+);
+
+export const workspaces = pgTable('workspaces', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: text('name').notNull(),
+  slug: text('slug').notNull().unique(),
+  createdBy: uuid('created_by')
+    .notNull()
+    .references(() => users.id),
+  // O desligador do roteamento de ferramenta pelo Jev (ADR 0179, AT-236
+  // resposta 3): ligado por padrão, e só age com provider OpenRouter.
+  toolRouterEnabled: boolean('tool_router_enabled').notNull().default(true),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export const workspaceMembers = pgTable(
+  'workspace_members',
+  {
+    workspaceId: uuid('workspace_id')
+      .notNull()
+      .references(() => workspaces.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    role: roleEnum('role').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.workspaceId, table.userId] })],
+);
+
+export const projects = pgTable(
+  'projects',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    workspaceId: uuid('workspace_id')
+      .notNull()
+      .references(() => workspaces.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    slug: text('slug').notNull(),
+    // O nome da pasta física em PROJECT_WORKSPACES_ROOT — CONGELADO na
+    // criação do projeto e nunca recalculado (RN-109, ver
+    // project-workspaces-root.ts). Projeto novo nasce com
+    // `<slug>-<8 chars do id>` (legível); projeto que já existia antes desta
+    // coluna foi retroativado com o UUID puro, que é o que já era verdade no
+    // disco — o backfill da migração NÃO renomeia diretório nenhum.
+    workspaceDirName: text('workspace_dir_name').notNull().unique(),
+    // ONDE o comando deste projeto EXECUTA (RN-169/RN-421, ADR 0072/0104).
+    // NOT NULL com default `container` — o comportamento de sempre —, pelo
+    // mesmo motivo de `story_promotion` logo abaixo: o valor É a decisão, e
+    // decisão de onde o agente escreve não fica implícita.
+    executionMode: projectExecutionModeEnum('execution_mode')
+      .notNull()
+      .default('container'),
+    // O caminho absoluto da pasta do usuário, para `mounted` OU `runner`.
+    // Em `mounted`, validado NA CRIAÇÃO (RN-422) — existe, é gravável de
+    // dentro do container, não é raiz de sistema nem contém o repositório
+    // do Brabo. Em `runner`, só a parte LÉXICA é validada na criação; o
+    // runner é quem confirma o resto quando conecta (RN-423) — e pode
+    // SOBRESCREVER este valor com o caminho real do host.
+    workspacePath: text('workspace_path'),
+    // NULL = não verificado. Só ganha sentido em `execution_mode: runner`
+    // — `container`/`mounted` nunca preenchem esta coluna (RN-423). Vira
+    // timestamp quando o primeiro runner conecta e confirma o caminho.
+    workspaceVerifiedAt: timestamp('workspace_verified_at', {
+      withTimezone: true,
+    }),
+    // O DESTINO do espelho na máquina do usuário — a pasta fora da base
+    // montada para onde o agente local copia o trabalho (RN-515, ADR 0147
+    // ponto 4). NULL é o estado NORMAL, e não uma pendência: projeto sem
+    // espelho é a maioria, e o produto nunca escolhe um destino sozinho.
+    //
+    // Por PROJETO e nunca global (nem no runner, nem por variável de
+    // ambiente): um destino global faria o artefato do projeto B aterrissar
+    // na pasta do projeto A, e o usuário descobriria isso pelo CONTEÚDO, não
+    // por um erro.
+    //
+    // Sem CHECK de pareamento com `execution_mode`, ao contrário de
+    // `workspace_path` logo acima. A recusa de `container` (a origem é um
+    // volume do SERVIDOR, e quem copiaria é um processo na máquina do
+    // USUÁRIO) vive no caso de uso, e não aqui, porque `execution_mode` é
+    // CONVERSÍVEL (RN-447, ADR 0111): um CHECK faria a conversão para
+    // `container` explodir no Postgres em vez de recusar com motivo — e a
+    // ordem certa ali é decisão de produto que esta coluna não deve
+    // antecipar.
+    mirrorPath: text('mirror_path'),
+    // O idioma do PROJETO (RN-619, ADR 0177; AT-168 resposta 8 e AT-169
+    // resposta 1): o de tudo que não tem um autor humano — artefato
+    // compartilhado (brief, regras, ADRs) e turno sem autor (kickoff, dev
+    // agents, gates, commit, corpo de PR). Código BCP-47 CANÔNICO pela mesma
+    // régua do idioma das respostas (`normalizarIdiomaBcp47`), lista aberta.
+    //
+    // NOT NULL: projeto sem idioma seria turno sem autor sem orientação, que é
+    // o comportamento que a decisão trocou. Quem CRIA pelo caso de uso grava o
+    // idioma efetivo de quem cria; o default `pt-BR` da coluna é só a rede de
+    // quem insere por fora dele (seed, script, fixture), pelo mesmo motivo do
+    // default de `users.locale`. Os projetos que já existiam foram gravados
+    // pela migração com o idioma do TITULAR do workspace.
+    language: text('language').notNull().default('pt-BR'),
+    createdBy: uuid('created_by')
+      .notNull()
+      .references(() => users.id),
+    // Permissões não vivem mais no banco — permissions.json físico na raiz
+    // do workspace do projeto (ver infrastructure/filesystem/fs-permissions-file-store.ts).
+    //
+    // Teto de tokens POR TASK dos dev agents (Fase 4a), em micro-USD. Nulo usa
+    // o default do domínio. Distinto de `budgets`, que é o teto GLOBAL de gasto
+    // do projeto/sessão: este é por execução de task do ToolLoop. Fica aqui
+    // porque "configurável por projeto" precisa sobreviver — antes o valor só
+    // existia como parâmetro da ativação e se perdia na reativação.
+    taskBudgetMicros: bigint('task_budget_micros', { mode: 'number' }),
+    // Circuit breaker por dev agent (Fase 12b, RN-047): quantas tasks
+    // TERMINAM blocked em sequência até o agente parar em idle_tripped.
+    // Nulo usa o default do domínio. Mesmo motivo do campo acima: precisa
+    // sobreviver à reativação, não só existir como parâmetro dela.
+    maxConsecutiveBlocked: integer('max_consecutive_blocked'),
+    // Quem promove story a `ready` (Fase 12c, RN-048). NOT NULL com default
+    // — diferente dos dois tetos acima, que são nullable porque "nulo =
+    // default do domínio". Aqui o valor É a decisão, e uma decisão de
+    // autoridade não pode ficar implícita. O default de projeto NOVO é
+    // `auto` desde a RN-659 (AT-313, migration 0065): só muda o DEFAULT da
+    // coluna, nenhuma linha existente é reescrita — projeto que nasceu
+    // `manual` continua `manual` até alguém trocar em Configurações.
+    storyPromotion: storyPromotionModeEnum('story_promotion')
+      .notNull()
+      .default('auto'),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    unique().on(table.workspaceId, table.slug),
+    // Modo e caminho são UMA decisão, não duas: `mounted`/`runner` sem
+    // caminho é escopo de terminal apontando para lugar nenhum, e
+    // `container` COM caminho é uma segunda fonte de verdade esperando
+    // divergir da primeira. A trava fica no banco, e não só no caso de uso,
+    // porque a coluna é lida por DOIS processos (api e engine) e escrita
+    // por scripts de seed/backfill que não passam pelo caso de uso.
+    check(
+      'projects_workspace_path_casa_com_modo',
+      sql`(${table.executionMode} <> 'container') = (${table.workspacePath} IS NOT NULL)`,
+    ),
+  ],
+);
+
+/**
+ * A TELEMETRIA da última rodada do espelho por projeto (RN-517, ADR 0147
+ * ponto 7) — uma linha por projeto, `project_id` único, mesmo desenho de
+ * `project_containers`.
+ *
+ * ## Por que TABELA e não event log
+ *
+ * O mesmo raciocínio que fez `rag_searches` virar tabela (RN-479): o que se
+ * quer medir não tem sessão, e `session_events.session_id` é `NOT NULL`. Isto
+ * é telemetria de CONEXÃO — o agente local contando o que aconteceu na
+ * máquina do usuário —, não evento de domínio de sessão. Nunca vira
+ * `proposed_action` também: a escrita do espelho é configuração que o usuário
+ * declarou, não um agente pedindo para agir.
+ *
+ * ## Por que no agregado `iam`, ao lado de `projects`
+ *
+ * O DESTINO do espelho é `projects.mirror_path`, nesta mesma tabela e neste
+ * mesmo arquivo (RN-515), e quem o grava é `use-cases/iam/
+ * set-project-mirror-path.use-case.ts`. Esta linha é o desfecho de copiar
+ * para aquela coluna, então mora no mesmo agregado que ela — não há
+ * `domain/runners`, e criar um arquivo de schema para um agregado que não
+ * existe em `domain/*` quebraria o espelhamento que o ADR 0121 fixou.
+ *
+ * ## Três estados, e eles NUNCA colapsam (RN-088)
+ *
+ * "Nunca sincronizou" é a **linha ausente**. "Sincronizou e não copiou nada"
+ * é `last_synced_at` preenchido com `files_copied = 0`. "Falhou" é
+ * `last_error_at` mais recente que `last_synced_at`. As três são respostas
+ * diferentes, e uma coluna só não conseguiria dizer qual é.
+ *
+ * Sucesso e erro CONVIVEM: uma falha nunca limpa a última sincronização boa
+ * (que é a informação mais útil que a tela tem), e um sucesso nunca apaga o
+ * último erro — quem decide qual dos dois está VIGENTE é a comparação dos
+ * dois carimbos, em `domain/iam/mirror-state.ts`. Escrita destrutiva de um
+ * lado sobre o outro perderia informação que ninguém pode reconstruir: isto
+ * não é log, é estado.
+ *
+ * `destination` é o destino REAL daquela rodada, resolvido por `realpath` na
+ * máquina do usuário — CONGELADO na linha, como `image_version` em
+ * `project_containers` e os pesos em `rag_searches`. Ler `projects.mirror_path`
+ * na hora de mostrar diria o destino de AGORA sobre uma cópia de ontem.
+ */
+export const projectMirrorStates = pgTable('project_mirror_states', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  projectId: uuid('project_id')
+    .notNull()
+    .unique()
+    .references(() => projects.id, { onDelete: 'cascade' }),
+  // Última sincronização BEM-SUCEDIDA — nunca tocada por uma falha.
+  lastSyncedAt: timestamp('last_synced_at', { withTimezone: true }),
+  // As três contagens daquela rodada bem-sucedida (`ResultadoDoEspelho` do
+  // runner): copiados, pulados (diretório/symlink/sumiu) e recusados pela
+  // guarda por arquivo. `0` é um número, não um vazio.
+  filesCopied: integer('files_copied'),
+  filesSkipped: integer('files_skipped'),
+  filesRefused: integer('files_refused'),
+  // O destino resolvido naquela rodada, congelado.
+  destination: text('destination'),
+  // Último ERRO — nunca toca as colunas de sucesso acima.
+  lastErrorAt: timestamp('last_error_at', { withTimezone: true }),
+  lastError: text('last_error'),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export const projectMembers = pgTable(
+  'project_members',
+  {
+    projectId: uuid('project_id')
+      .notNull()
+      .references(() => projects.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    role: roleEnum('role').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.projectId, table.userId] })],
+);

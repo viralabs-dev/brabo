@@ -1,0 +1,891 @@
+export type ServiceName = "api" | "engine";
+
+export interface HealthStatus {
+  service: ServiceName;
+  status: "ok" | "error";
+  timestamp: string;
+  details?: Record<string, unknown>;
+}
+
+// --- LLM ---
+
+/**
+ * `packages/shared` é 100% TIPO — nada aqui pode sobreviver ao `tsc`.
+ *
+ * O `main` do pacote aponta pro `.ts` cru, e a imagem de produção da api roda
+ * o compilado com `node main.js`: um `export const` daqui vira um `require`
+ * de verdade em runtime, e o Node morre com
+ * `ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING` ao achar um `.ts` dentro de
+ * `node_modules` — o container não sobe. O `Dockerfile.prod` da api conta com
+ * este invariante ("por isso ele NÃO aparece no estágio final"), e
+ * `packages-shared-so-tipos.spec.ts` na api o mantém honesto.
+ *
+ * Precisa da LISTA em runtime? Ela mora no consumidor —
+ * `apps/api/src/domain/llm/llm-provider-names.ts` guarda a da api, amarrada a
+ * este tipo por checagem de exaustividade nos dois sentidos.
+ */
+export type LLMProviderName =
+  | "ollama"
+  | "anthropic"
+  | "openai"
+  | "openrouter"
+  | "nvidia-nim"
+  | "together"
+  | "deepinfra"
+  | "bitdeer"
+  | "vultr"
+  | "9router"
+  | "opencode-zen";
+
+/**
+ * Taxonomia normalizada de falha de provider (Fase 9a — ADR 0041). Espelha o
+ * que o lado git fez no ADR 0002: quem consome um erro de LLM decide pelo
+ * `code`, nunca por substring da mensagem do vendor — que muda sem aviso e é
+ * diferente em cada um dos providers.
+ */
+export type LLMErrorCode =
+  /** Chave ausente, inválida ou sem permissão pro modelo (401/403). */
+  | "auth"
+  /** Cota ou throughput estourado (429). */
+  | "rate_limit"
+  /**
+   * A conta no provider está sem crédito (402). Separado de `upstream` porque
+   * o remédio é recarregar a conta, não tentar de novo (RN-730).
+   */
+  | "insufficient_credit"
+  /** O modelo pedido não existe nesse provider (404). */
+  | "model_not_found"
+  /**
+   * O hub não achou upstream que caiba no TETO DE PREÇO enviado (404 com
+   * `priceCeiling`, ADR 0225). Distinto de `model_not_found`: o modelo existe.
+   */
+  | "price_ceiling"
+  /** O prompt não cabe na janela do modelo (413, ou 400 com o marcador). */
+  | "context_length"
+  /** O provider ficou MUDO além do teto de inatividade. */
+  | "timeout"
+  /** Nem chegou a falar com o provider (DNS, recusa de conexão, TLS). */
+  | "connection"
+  /** Falhou do lado de lá por motivo que não se encaixa nos anteriores. */
+  | "upstream"
+  /**
+   * O modelo escreveu a chamada de ferramenta COMO TEXTO (`<invoke ...>`), duas
+   * vezes seguidas (AT-633, RN-949). Erro do MODELO, não do provider.
+   */
+  | "tool_call_as_text";
+
+/**
+ * O que o provider sabe fazer, independente do modelo escolhido — o TETO.
+ * Um modelo pode ser mais pobre que o provider (ver as colunas
+ * `supports_*` de `models`), nunca mais rico.
+ */
+export interface LLMProviderCapabilities {
+  readonly streaming: boolean;
+  readonly toolCalling: boolean;
+  /**
+   * O provider sabe LISTAR o próprio catálogo (Fase 9c). Quem não sabe não
+   * expõe `listModels` — o sync pula em vez de chamar e tratar o 404, do mesmo
+   * jeito que o contrato de git provider degrada por capability desde a Fase 2.
+   */
+  readonly listModels: boolean;
+  /**
+   * O provider sabe transformar texto em VETOR (ADR 0075). Camada de PROVIDER
+   * — a de modelo é `ModeloDoCatalogo.supportsEmbeddings`, e as duas precisam
+   * ser verdade para uma chamada existir: um provider que embeda continua sem
+   * embedar com um modelo de chat.
+   *
+   * Obrigatório (não opcional) pela mesma razão que `code` em
+   * `ChatErrorChunk`: com campo opcional, um provider novo esquece de declarar
+   * e ninguém percebe. Quem declara `false` não expõe `embed` — quem consome
+   * degrada olhando a capability, nunca descobrindo na falha.
+   */
+  readonly embeddings: boolean;
+  /**
+   * O provider devolve o TEXTO do raciocínio do modelo, como chunk `reasoning`
+   * (AT-676, ADR 0248). `true` só com smoke contra a API real; sem prova,
+   * `false` (ADR 0041). O código de leitura existe nos providers, a flag só
+   * diz o que foi PROVADO.
+   */
+  readonly reasoningText: boolean;
+  /**
+   * O provider sabe receber um CRITÉRIO DE ROTEAMENTO entre os upstreams que
+   * servem o mesmo modelo (ADR 0166) — hoje, só um HUB tem o que rotear.
+   * Camada de PROVIDER apenas: o critério é do hub, e o catálogo não o publica
+   * por modelo.
+   *
+   * Obrigatório pelo mesmo motivo de `embeddings`, e `true` só quando um smoke
+   * contra a API real provou que o hub aceita o campo e o upstream devolvido
+   * responde a ele — nunca por leitura de documentação (ADR 0041).
+   */
+  readonly routingPreference: boolean;
+  /**
+   * O hub prende a conversa ao upstream que a atendeu quando recebe uma CHAVE
+   * DE SESSÃO (`ChatOptions.sessionKey`, ADR 0221). Obrigatório e `true` só
+   * depois de um smoke contra a API real mostrar o mesmo upstream em todas as
+   * chamadas com a chave e mais de um sem ela — nunca por leitura de doc.
+   */
+  readonly stickySession: boolean;
+  /**
+   * O hub aceita um TETO DE PREÇO por chamada (`ChatOptions.priceCeiling`,
+   * ADR 0225): só serve a chamada um upstream cujo preço cabe nele. Obrigatório
+   * e `true` só depois de um smoke contra a API real mostrar o upstream servido
+   * dentro do teto — nunca por leitura de documentação.
+   */
+  readonly priceCeiling: boolean;
+  /**
+   * O provider sabe receber PONTOS DE CACHE DE PROMPT explícitos
+   * (`cache_control: { type: "ephemeral" }` em blocos de conteúdo, RN-892) —
+   * o prefixo estável da chamada (ferramentas, instruções, histórico) é lido
+   * do cache do upstream em vez de cobrado inteiro a cada chamada. Camada de
+   * PROVIDER; a de modelo é decidida pela config do provider (no OpenRouter,
+   * só modelo `anthropic/*` precisa do ponto explícito).
+   *
+   * Obrigatório pelo mesmo motivo de `embeddings`, e `true` só depois de um
+   * smoke contra a API real mostrar `cached_tokens` > 0 na segunda chamada —
+   * nunca por leitura de documentação (ADR 0041).
+   */
+  readonly promptCaching: boolean;
+  /** O provider aceita imagem em `ChatMessage.content` (AT-715, ADR 0246). `true` só com smoke real. */
+  readonly vision: boolean;
+}
+
+/**
+ * O critério com que um HUB escolhe o upstream (ADR 0166, RN-583). É o
+ * vocabulário do `provider.sort` do OpenRouter, que é o único consumidor hoje;
+ * a lista em runtime mora em `apps/api/src/domain/llm/routing-preference.ts`
+ * (este pacote é 100% tipo).
+ */
+export type RoutingPreference = "price" | "throughput" | "latency";
+
+/**
+ * O que se pede a um provider ao gerar embedding (ADR 0075).
+ *
+ * Não estende `ChatOptions` de propósito: `maxTokens` e `tools` não têm
+ * sentido aqui, e herdar campos inaplicáveis convida a mandá-los no fio.
+ */
+export interface EmbeddingOptions {
+  /** O modelo DE EMBEDDING — nunca o de chat (ver `supportsEmbeddings`). */
+  model: string;
+  /** Credencial decriptada — nunca persistida/logada por quem consome isto. */
+  apiKey?: string;
+  /** Override do host do Ollama (senão usa OLLAMA_HOST/default do provider). */
+  host?: string;
+  /**
+   * Reduz a dimensão do vetor, quando o provider aceita (`dimensions` da
+   * OpenAI). Ausente = a dimensão nativa do modelo. Provider que não aceita
+   * IGNORA em vez de falhar — o índice de destino é que decide se aceita o
+   * vetor, e o retorno sempre diz a dimensão REAL do que veio.
+   */
+  dimensions?: number;
+}
+
+/**
+ * O resultado de uma chamada de embedding (ADR 0075).
+ *
+ * Um vetor por entrada, na MESMA ordem — embedding é operação de lote por
+ * natureza (um índice recebe N trechos de uma vez), e a ordem é o único
+ * vínculo entre entrada e vetor.
+ */
+export interface EmbeddingResult {
+  readonly vectors: readonly (readonly number[])[];
+  /**
+   * O tamanho de cada vetor, conferido contra o que veio — e não copiado do
+   * catálogo. Um índice vetorial tem dimensão FIXA: gravar um vetor de tamanho
+   * diferente do declarado falha lá na frente, longe da causa.
+   */
+  readonly dimensions: number;
+  /**
+   * O modelo que o provider DIZ ter usado, que nem sempre é o pedido (um alias
+   * resolve para uma versão datada). É este que vai para o metering, pelo mesmo
+   * motivo que o preço é congelado em `token_usage` (RN-044).
+   */
+  readonly model: string;
+  /** Tokens de ENTRADA consumidos. Embedding não tem saída em tokens. */
+  readonly inputTokens: number;
+  /**
+   * `true` quando o provider não informou a contagem e ela foi estimada (ou
+   * ficou em zero). Mesma distinção do `usage` do chat: "o provider disse
+   * zero" não é "o provider não disse nada" (RN-041).
+   */
+  readonly estimated: boolean;
+}
+
+/**
+ * Uma linha do catálogo REMOTO do provider (Fase 9c).
+ *
+ * Só `name` é obrigatório: cada catálogo informa um subconjunto diferente — o
+ * `/v1/models` da OpenAI devolve praticamente só o id, enquanto um hub devolve
+ * preço e janela junto. Campo ausente significa "o provider não disse", nunca
+ * "o valor é zero", e por isso o sync não sobrescreve o que já está gravado.
+ */
+/**
+ * Para que um workspace usa um modelo — a curadoria por uso (ADR 0051).
+ *
+ * Vocabulário FECHADO: texto livre daria `code`, `coding` e `código` no mesmo
+ * filtro em uma semana. Vive aqui, e não só na api, porque a tela de curadoria
+ * precisa do mesmo vocabulário — as listas em runtime ficam de cada lado
+ * (`domain/llm/model-uses.ts` e `web/src/lib/models.ts`), pela mesma razão de
+ * `LLMProviderName`: este pacote é 100% tipo.
+ *
+ * NÃO é capability: nenhum catálogo de provider publica "bom para código", e
+ * declarar isso como capability seria palpite vestido de dado (ADR 0041).
+ */
+export type UsoDeModelo =
+  | "codigo"
+  | "documentacao"
+  | "analise"
+  | "imagem"
+  | "conversa";
+
+export interface ModeloDoCatalogo {
+  readonly name: string;
+  readonly displayName?: string;
+  readonly contextLength?: number;
+  readonly supportsToolCalling?: boolean;
+  /**
+   * Aceita IMAGEM na entrada. Campo opcional porque quase nenhum provider
+   * publica isso: quem não declara não vira `false` no catálogo — vira
+   * "não sabemos", e o sync preserva o que já estava lá (ADR 0041).
+   */
+  readonly supportsVision?: boolean;
+  /** Aceita raciocínio explícito (`reasoning`/thinking) como parâmetro. */
+  readonly supportsReasoning?: boolean;
+  /** PRODUZ imagem — eixo diferente de aceitar imagem na entrada. */
+  readonly generatesImage?: boolean;
+  /**
+   * Este modelo é DE EMBEDDING (ADR 0075) — a camada de MODELO da capability,
+   * abaixo de `LLMProviderCapabilities.embeddings`.
+   *
+   * Não é gradiente e sim EXCLUSÃO: um modelo de embedding não conversa e um
+   * modelo de chat não vetoriza. O Ollama publica isso por modelo
+   * (`capabilities: ["embedding"]` no `/api/tags`), e é de lá que o valor sai.
+   * Ausente continua sendo "o provider não disse" — nunca `false` inventado, e
+   * nunca deduzido do NOME do modelo, que seria palpite vestido de dado.
+   */
+  readonly supportsEmbeddings?: boolean;
+  /**
+   * A dimensão nativa do vetor, quando o catálogo publica. Serve para escolher
+   * o índice ANTES da primeira chamada; a dimensão que vale é sempre a que
+   * `EmbeddingResult` devolve.
+   */
+  readonly embeddingDimensions?: number;
+  readonly inputPricePerMillionMicros?: number;
+  readonly outputPricePerMillionMicros?: number;
+  /** Só um hub preenche: quem de fato serve o modelo por baixo. */
+  readonly upstreamProvider?: string;
+}
+
+export type ModelCategory = "local" | "cloud";
+
+export type ChatRole = "user" | "assistant" | "system" | "tool";
+
+// Tool call que o modelo pediu (Fase 3a — ToolLoop). `arguments` já
+// desserializado; o engine despacha para a ferramenta registrada por `name`.
+export interface ToolCall {
+  id: string;
+  name: string;
+  arguments: Record<string, unknown>;
+}
+
+/**
+ * Bloco de pensamento da Anthropic (AT-676). A API EXIGE devolvê-lo, intacto e
+ * na ordem, no turno `assistant` que pediu ferramentas. Opaco para o resto:
+ * o engine só o guarda entre as voltas do laço, nunca o lê nem o grava no log.
+ */
+export type ThinkingBlock =
+  | { type: "thinking"; thinking: string; signature: string }
+  | { type: "redacted_thinking"; data: string };
+
+// Definição de uma ferramenta oferecida ao modelo. `parameters` é um JSON
+// Schema (o Ollama repassa isso no campo `tools`).
+export interface ToolDef {
+  name: string;
+  description: string;
+  parameters: Record<string, unknown>;
+}
+
+/** Parte de conteúdo multimodal; texto puro continua `string` (AT-715). */
+export type ParteDeConteudo =
+  | { type: 'text'; text: string }
+  | { type: 'image'; mime: string; base64: string };
+
+export interface ChatMessage {
+  role: ChatRole;
+  content: string | ParteDeConteudo[];
+  /** Só em mensagens `assistant` que pediram ferramentas. */
+  toolCalls?: ToolCall[];
+  /** Só em `assistant` com `toolCalls`: os blocos que o provider devolveu (Anthropic, AT-676). */
+  thinkingBlocks?: ThinkingBlock[];
+  /** Só em mensagens `tool` (resultado): a qual tool call responde. */
+  toolCallId?: string;
+  /** Nome da ferramenta em mensagens `tool`. */
+  name?: string;
+}
+
+export interface ChatOptions {
+  model: string;
+  maxTokens?: number;
+  /** Credencial decriptada — nunca persistida/logada por quem consome isto. */
+  apiKey?: string;
+  /** Override do host do Ollama (senão usa OLLAMA_HOST/default do provider). */
+  host?: string;
+  /** Ferramentas oferecidas ao modelo (tool calling). */
+  tools?: ToolDef[];
+  /**
+   * Critério de roteamento do binding vencedor (ADR 0166). Provider que não
+   * declara `capabilities.routingPreference` IGNORA — nunca falha por ele.
+   */
+  routingPreference?: RoutingPreference;
+  /**
+   * Chave de sessão do agente (`brabo:<sessionId>:<agentId>`, ADR 0221).
+   * Provider que não declara `capabilities.stickySession` IGNORA.
+   */
+  sessionKey?: string;
+  /**
+   * Teto de preço por chamada, em micro-USD por milhão de tokens (ADR 0225).
+   * Provider que não declara `capabilities.priceCeiling` IGNORA.
+   */
+  priceCeiling?: { inputPerMillionMicros: number; outputPerMillionMicros: number };
+  /**
+   * O modelo RACIOCINA (`models.supports_reasoning`, do catálogo). Provider que
+   * sabe controlar o raciocínio soma uma FOLGA ao teto de saída, para o
+   * raciocínio nunca comer a saída visível (RN-741) — mas NÃO manda campo de
+   * raciocínio por isso (RN-782): aceitar o parâmetro não é pedir raciocínio.
+   * Provider sem a configuração ignora.
+   */
+  reasoning?: boolean;
+  /**
+   * Desliga o raciocínio EXPLICITAMENTE (RN-783) — hoje só para os dev agents
+   * (`dev-*`), por decisão do dono. Só vale com `reasoning: true` e provider que
+   * sabe dizer "desligado"; os outros ignoram.
+   */
+  reasoningOff?: boolean;
+  /**
+   * Orçamento de raciocínio PROVADO do modelo (`models.reasoning_budget`, ADR
+   * 0223): vira `reasoning: {max_tokens: N}` e o teto de saída passa a ser a
+   * saída visível + N. Só vale com `reasoning: true`, sem `reasoningOff`.
+   */
+  reasoningBudget?: number;
+}
+
+/** Pedaço do TEXTO do raciocínio do modelo (AT-676). Nunca vai ao `content`. */
+export interface ChatReasoningChunk {
+  type: "reasoning";
+  text: string;
+}
+
+export interface ChatTextDeltaChunk {
+  type: "text_delta";
+  text: string;
+}
+
+export interface ChatUsageChunk {
+  type: "usage";
+  inputTokens: number;
+  outputTokens: number;
+  estimated: boolean;
+  /**
+   * `true` quando o stream foi ABORTADO pelo orçamento de raciocínio: a
+   * resposta abortada não traz `usage`, então os tokens são caracteres/4 e o
+   * custo real só sai depois, em `GET /generation` (ADR 0224, RN-915).
+   */
+  abortadoPeloRaciocinio?: true;
+  /**
+   * Quem REALMENTE serviu a chamada, quando o provider é um hub e informa isso
+   * (Fase 9b). Num hub, "openrouter" é a porta de entrada, não o custo real —
+   * sem este campo o metering não distingue qual provedor subjacente atendeu.
+   * `undefined` quando o provider não é hub ou não informou.
+   */
+  upstreamProvider?: string;
+  /**
+   * O CUSTO REAL que o provider disse ter cobrado por esta chamada, em
+   * micro-USD (ADR 0188, RN-665) — no OpenRouter, `usage.cost`. Quando vem,
+   * ele É o custo gravado e mostrado; o preço do catálogo (ADR 0042) fica só
+   * para quando não vem. `undefined` = o provider não disse (ou disse algo que
+   * não é o custo inteiro — ver o hook `extrairCustoReal`).
+   */
+  costMicros?: number;
+  /**
+   * O modelo que a RESPOSTA diz ter servido (`model` do frame) — num hub, o
+   * alias pedido (`~deepseek/deepseek-flash-latest`) resolve para uma versão
+   * datada, e é ela que o custo real cobra (RN-665).
+   */
+  resolvedModel?: string;
+  /** O `id` que o provider deu à resposta (`gen-…` no OpenRouter), para conferir depois. */
+  generationId?: string;
+  /**
+   * Quantos dos `inputTokens` o provider serviu de CACHE (cache read) —
+   * `usage.prompt_tokens_details.cached_tokens` no dialeto OpenAI (RN-666).
+   * PARTE da entrada, nunca somada a ela. `undefined` = o provider não disse,
+   * que é diferente de 0 (disse que não houve cache).
+   */
+  cachedInputTokens?: number;
+  /**
+   * Quantos dos `outputTokens` foram de RACIOCÍNIO —
+   * `usage.completion_tokens_details.reasoning_tokens` (RN-666). Parte da
+   * saída, nunca somada a ela; `undefined` = não disse.
+   */
+  reasoningTokens?: number;
+}
+
+export interface ChatErrorChunk {
+  type: "error";
+  message: string;
+  /**
+   * Obrigatório de propósito: com campo opcional, um provider novo esquece de
+   * classificar e o erro dele volta a ser string opaca sem ninguém perceber.
+   */
+  code: LLMErrorCode;
+}
+
+// Ferramentas pedidas pelo modelo — no Ollama vêm na mensagem final (não
+// streamado), então é um chunk único, não incremental.
+export interface ChatToolCallsChunk {
+  type: "tool_calls";
+  toolCalls: ToolCall[];
+  /** Anthropic: os blocos de pensamento do turno, para devolver no laço. */
+  thinkingBlocks?: ThinkingBlock[];
+}
+
+// A resposta foi CORTADA pelo teto de saída (`max_tokens`, RN-734): o
+// `finish_reason: "length"` do dialeto OpenAI-compatível ou o
+// `stop_reason: "max_tokens"` do Anthropic (RN-737). Aditivo — quem não o lê
+// segue como antes; o texto e as `tool_calls` que chegaram vêm truncados.
+export interface ChatTruncatedChunk {
+  type: "truncated";
+  /**
+   * Por que cortou (ADR 0224, RN-915). Ausente = o teto de saída
+   * (`max_tokens`); `"raciocinio"` = o provider ABORTOU o stream porque o
+   * raciocínio passou do `reasoningBudget` do modelo.
+   */
+  motivo?: "raciocinio";
+}
+
+export type ChatStreamChunk =
+  | ChatTruncatedChunk
+  | ChatTextDeltaChunk
+  | ChatReasoningChunk
+  | ChatUsageChunk
+  | ChatErrorChunk
+  | ChatToolCallsChunk;
+
+// --- Git ---
+
+export type GitProviderName = "local" | "github" | "gitlab";
+
+// --- Git Provider Contract (Fase 2) ---
+//
+// Contrato normalizado, independente de provider — nenhum tipo aqui pode
+// vazar o shape de Octokit/Gitbeaker. Os 3 providers (Local/Github/Gitlab)
+// implementam o contrato por completo — ver docs/adr/0001 (histórico da
+// decisão de shape) e docs/adr/0005 (a 9ª operação, `getFileContent`,
+// acrescentada na sessão do bootstrap de Gitflow). A 10ª (`commentOnPull
+// Request`) veio com os gates da Fase 4a; a 11ª e a 12ª (`listTree` e
+// `getPullRequestDiff`) com a aba Code da FASE 26. A 13ª, 14ª e 15ª
+// (`blame`, `listPullRequests` e `listBranchesDetailed`) vieram da FASE 26b —
+// a FUNDAÇÃO das três pendências declaradas da aba Code (blame, dropdown de
+// branch rico e lista de PRs), entregue só nesta camada: a UI é onda
+// seguinte, em três agentes separados.
+
+export interface GitProviderCapabilities {
+  readonly protectBranch: boolean;
+  readonly pullRequests: boolean;
+  /** `listTree` — a 11ª operação (aba Code, FASE 26). */
+  readonly listTree: boolean;
+  /** `getPullRequestDiff` — a 12ª operação (aba Code, FASE 26). */
+  readonly pullRequestDiff: boolean;
+  /** `blame` — a 13ª operação (aba Code, FASE 26b). */
+  readonly blame: boolean;
+  /** `listPullRequests` — a 14ª operação (aba Code, FASE 26b). */
+  readonly pullRequestsList: boolean;
+  /** `listBranchesDetailed` — a 15ª operação (aba Code, FASE 26b). */
+  readonly branchesDetailed: boolean;
+}
+
+// Os TETOS das duas operações de leitura (FASE 26 item 34: "buscar em
+// repositório grande GASTA") não moram aqui: `packages/shared` é 100% tipo,
+// e um `export const` sobrevive ao `tsc` e quebra o boot da api em produção
+// (ver apps/api/test/packages-shared-so-tipos.spec.ts). Eles ficam no
+// consumidor, em apps/api/src/domain/git/git-read-limits.ts — o mesmo
+// caminho que `llm-provider-names.ts` já seguia. Quem cortou avisa por
+// `truncated`, que É parte do contrato.
+
+export interface GitRepo {
+  externalId: string;
+  name: string;
+  url: string;
+  defaultBranch: string;
+  visibility: "public" | "private";
+}
+
+export interface GitBranch {
+  name: string;
+  commitSha: string;
+  protected: boolean;
+}
+
+/**
+ * PR/MR aberta associada a uma branch, como a 15ª operação a enxerga — sem
+ * título nem autor, que já vêm inteiros de `listPullRequests` quando quem
+ * navega precisa deles. Aqui é só o suficiente pra um badge na branch.
+ */
+export interface GitBranchPullRequestRef {
+  number: number;
+  state: "open" | "merged" | "closed";
+}
+
+/**
+ * Uma branch com o que o dropdown rico da aba Code precisa além do que
+ * `GitBranch` já tem (FASE 26b, item 2 — `listBranchesDetailed`, a 15ª
+ * operação).
+ *
+ * NÃO estende `GitBranch` por acidente de shape: é decisão. `ahead`/`behind`
+ * e `pullRequest` custam uma chamada extra ao provider POR BRANCH (duas no
+ * GitLab, que não tem um endpoint que devolva os dois lados de uma vez como
+ * o GitHub) — encostar esse custo em `listBranches`, que o bootstrap chama
+ * sem precisar de nada disso, transformaria toda adoção/criação de branch
+ * numa varredura cara. As duas operações convivem no contrato: `listBranches`
+ * pro bootstrap, `listBranchesDetailed` pra aba Code.
+ */
+export interface GitBranchDetail extends GitBranch {
+  /**
+   * Commits à frente da branch DEFAULT do repositório. `null` só quando o
+   * provider não consegue computar (nunca para as branches que o contrato
+   * promete — é degradação honesta, não o caso comum).
+   */
+  ahead: number | null;
+  /** Commits atrás da branch default. */
+  behind: number | null;
+  /** PR aberta com esta branch como ORIGEM, se houver. `null` sem uma. */
+  pullRequest: GitBranchPullRequestRef | null;
+}
+
+export interface GitCommitResult {
+  sha: string;
+  branch: string;
+}
+
+export interface GitFileChange {
+  path: string;
+  content: string;
+}
+
+export interface GitPullRequest {
+  id: string;
+  number: number;
+  url: string;
+  sourceBranch: string;
+  targetBranch: string;
+  state: "open" | "merged" | "closed";
+}
+
+/**
+ * Resumo de UMA PR/MR, o suficiente para popular uma lista clicável que leva
+ * ao diff já existente por id (`getPullRequestDiff`) — 14ª operação
+ * (`listPullRequests`, FASE 26b, item 3: a lista navegável que faltava).
+ *
+ * Não é `GitPullRequest` com campos a mais: título e autor não existem lá
+ * porque abrir/mesclar PR nunca precisou deles. Um tipo próprio evita que a
+ * escrita ganhe campos que só a leitura usa.
+ */
+export interface GitPullRequestSummary {
+  id: string;
+  number: number;
+  title: string;
+  url: string;
+  /** Login/username de quem abriu. `null` quando o provider não informa. */
+  author: string | null;
+  state: "open" | "merged" | "closed";
+  sourceBranch: string;
+  targetBranch: string;
+  /** ISO 8601. `null` quando o provider não informa. */
+  updatedAt: string | null;
+}
+
+export interface GitPullRequestList {
+  items: GitPullRequestSummary[];
+  /** `true` quando a lista foi cortada no teto de PRs por chamada. */
+  truncated: boolean;
+}
+
+export interface CreateRepoInput {
+  name: string;
+  visibility: "public" | "private";
+  namespace?: string;
+  accessToken?: string;
+}
+
+export interface GetRepoInput {
+  externalId: string;
+  accessToken?: string;
+}
+
+export interface CreateBranchInput {
+  externalId: string;
+  branchName: string;
+  fromRef: string;
+  accessToken?: string;
+}
+
+export interface ProtectBranchInput {
+  externalId: string;
+  branchName: string;
+  accessToken?: string;
+}
+
+export interface CommitFilesInput {
+  externalId: string;
+  branch: string;
+  message: string;
+  files: GitFileChange[];
+  accessToken?: string;
+}
+
+export interface ListBranchesInput {
+  externalId: string;
+  accessToken?: string;
+}
+
+export interface OpenPullRequestInput {
+  externalId: string;
+  sourceBranch: string;
+  targetBranch: string;
+  title: string;
+  body?: string;
+  accessToken?: string;
+  /**
+   * Quem abre a PR (RN-705) — `<agente>[bot]` para dev agent. Só o provider
+   * local o GRAVA (não há usuário autenticado por trás de um repositório em
+   * disco); os remotos o ignoram, o autor ali é o dono do token.
+   */
+  author?: string;
+}
+
+export interface MergePullRequestInput {
+  externalId: string;
+  pullRequestId: string;
+  accessToken?: string;
+}
+
+export interface CommentOnPullRequestInput {
+  externalId: string;
+  pullRequestId: string;
+  body: string;
+  accessToken?: string;
+}
+
+export interface GetFileContentInput {
+  externalId: string;
+  branch: string;
+  path: string;
+  accessToken?: string;
+}
+
+// --- Árvore e diff (FASE 26 — aba Code, só leitura) ---
+
+/**
+ * Uma entrada de UM nível da árvore. `listTree` é deliberadamente NÃO
+ * recursivo: a aba Code navega sob demanda, e pedir a árvore inteira de um
+ * repositório grande é exatamente o amplificador de tráfego que a fase
+ * proíbe. Quem quiser o conteúdo de um arquivo chama `getFileContent`.
+ */
+export interface GitTreeEntry {
+  /** Caminho completo a partir da raiz do repositório. */
+  path: string;
+  /** Último segmento de `path` — o que a árvore mostra. */
+  name: string;
+  type: "file" | "dir";
+  /** Bytes; `null` para diretório e quando o provider não informa. */
+  size: number | null;
+}
+
+export interface GitTree {
+  ref: string;
+  /** Diretório listado; `""` é a raiz. */
+  path: string;
+  entries: GitTreeEntry[];
+  /** `true` quando a listagem foi cortada em `GIT_TREE_ENTRY_LIMIT`. */
+  truncated: boolean;
+}
+
+export interface ListTreeInput {
+  externalId: string;
+  /** Branch, tag ou sha. */
+  ref: string;
+  /** Diretório a listar; ausente ou `""` é a raiz. */
+  path?: string;
+  accessToken?: string;
+}
+
+export type GitDiffFileStatus = "added" | "modified" | "removed" | "renamed";
+
+export interface GitPullRequestDiffFile {
+  /** Caminho DEPOIS da mudança (para `removed`, o caminho que sumiu). */
+  path: string;
+  /** Caminho anterior; só preenchido quando `status` é `renamed`. */
+  previousPath: string | null;
+  status: GitDiffFileStatus;
+  additions: number;
+  deletions: number;
+  /**
+   * Diff unificado do arquivo. `null` quando o provider não o entrega —
+   * arquivo binário, ou patch grande demais para a resposta. Distinguir
+   * `null` (não veio) de `""` (veio vazio) é o que impede a tela de dizer
+   * "sem mudanças" para um binário alterado.
+   */
+  patch: string | null;
+}
+
+export interface GitPullRequestDiff {
+  pullRequestId: string;
+  files: GitPullRequestDiffFile[];
+  /** `true` quando a lista foi cortada em `GIT_DIFF_FILE_LIMIT`. */
+  truncated: boolean;
+}
+
+export interface GetPullRequestDiffInput {
+  externalId: string;
+  pullRequestId: string;
+  accessToken?: string;
+}
+
+// --- Blame, PRs navegáveis e branch rica (FASE 26b — aba Code, fundação) ---
+//
+// A UI das três pendências declaradas da FASE 26 é a onda SEGUINTE, em três
+// agentes separados sem risco de colisão — esta sessão entrega só o que eles
+// vão consumir: os tipos, os providers, o caso de uso e a rota HTTP.
+
+/** UMA linha anotada de um arquivo, na ordem em que aparece nele. */
+export interface GitBlameLine {
+  /** 1-based, como toda linha de editor. */
+  line: number;
+  commitSha: string;
+  /** Nome de quem autorou o commit — não login/username, que nem todo provider dá por linha. */
+  author: string;
+  /** ISO 8601. */
+  authorDate: string;
+  /** Primeira linha da mensagem do commit — contexto pro hover, sem o corpo inteiro. */
+  summary: string;
+}
+
+export interface GitBlame {
+  ref: string;
+  path: string;
+  lines: GitBlameLine[];
+  /** `true` quando o arquivo passou do teto de linhas anotadas. */
+  truncated: boolean;
+}
+
+export interface BlameInput {
+  externalId: string;
+  /** Branch, tag ou sha. */
+  ref: string;
+  path: string;
+  accessToken?: string;
+}
+
+export interface ListPullRequestsInput {
+  externalId: string;
+  /** Ausente lista todos os estados. */
+  state?: "open" | "merged" | "closed";
+  accessToken?: string;
+}
+
+export interface ListBranchesDetailedInput {
+  externalId: string;
+  /**
+   * Branch DEFAULT do repositório — referência para `ahead`/`behind` de cada
+   * entrada. Quem chama já sabe (é o mesmo `GitRepo.defaultBranch`), e pedir
+   * de novo ao provider seria uma chamada a mais só pra redescobrir o que o
+   * chamador já tinha.
+   */
+  defaultBranch: string;
+  accessToken?: string;
+}
+
+export interface GitBranchDetailList {
+  items: GitBranchDetail[];
+  /** `true` quando a lista foi cortada no teto de branches enriquecidas. */
+  truncated: boolean;
+}
+
+export interface GitProviderContract {
+  readonly name: GitProviderName;
+  readonly capabilities: GitProviderCapabilities;
+  createRepo(input: CreateRepoInput): Promise<GitRepo>;
+  getRepo(input: GetRepoInput): Promise<GitRepo>;
+  createBranch(input: CreateBranchInput): Promise<GitBranch>;
+  protectBranch(input: ProtectBranchInput): Promise<void>;
+  commitFiles(input: CommitFilesInput): Promise<GitCommitResult>;
+  listBranches(input: ListBranchesInput): Promise<GitBranch[]>;
+  openPullRequest(input: OpenPullRequestInput): Promise<GitPullRequest>;
+  mergePullRequest(input: MergePullRequestInput): Promise<GitPullRequest>;
+  /** `null` se o arquivo não existe naquela branch (ou a branch não existe). */
+  getFileContent(input: GetFileContentInput): Promise<string | null>;
+  // 10ª operação (Fase 4a — gates de PR): comenta o parecer de QA/SecOps na
+  // PR. Respeita `capabilities.pullRequests` como as demais operações de PR.
+  commentOnPullRequest(input: CommentOnPullRequestInput): Promise<void>;
+  /**
+   * 11ª operação (FASE 26 — aba Code): UM nível da árvore em `ref`.
+   *
+   * `null` quando não há árvore ali — ref inexistente, caminho inexistente,
+   * ou caminho que resolve para um ARQUIVO. É o mesmo contrato de ausência
+   * de `getFileContent`, deliberadamente: as duas são leituras da aba Code e
+   * dois vocabulários de "não existe" fariam a tela tratar o mesmo caso de
+   * duas formas.
+   *
+   * Rejeita com `GitNotSupportedError` quando `capabilities.listTree` é
+   * `false`.
+   */
+  listTree(input: ListTreeInput): Promise<GitTree | null>;
+  /**
+   * 12ª operação (FASE 26 — aba Code): o diff de uma PR, normalizado.
+   *
+   * `null` quando a PR não existe. Rejeita com `GitNotSupportedError`
+   * quando `capabilities.pullRequestDiff` é `false`.
+   */
+  getPullRequestDiff(
+    input: GetPullRequestDiffInput,
+  ): Promise<GitPullRequestDiff | null>;
+  /**
+   * 13ª operação (FASE 26b — aba Code): anota cada linha de um arquivo com o
+   * commit que a tocou por último.
+   *
+   * `null` quando o arquivo não existe naquela ref (mesmo vocabulário de
+   * `getFileContent`/`listTree`). Rejeita com `GitNotSupportedError` quando
+   * `capabilities.blame` é `false`.
+   */
+  blame(input: BlameInput): Promise<GitBlame | null>;
+  /**
+   * 14ª operação (FASE 26b — aba Code): lista de PRs/MRs do repositório, o
+   * suficiente pra popular uma lista clicável — o diff de cada uma continua
+   * vindo de `getPullRequestDiff`, por id.
+   *
+   * Rejeita com `GitNotSupportedError` quando `capabilities.pullRequestsList`
+   * é `false`.
+   */
+  listPullRequests(input: ListPullRequestsInput): Promise<GitPullRequestList>;
+  /**
+   * 15ª operação (FASE 26b — aba Code): branches com `ahead`/`behind` contra
+   * a default e a PR aberta associada, quando houver — o dropdown rico que
+   * `listBranches` (bootstrap) nunca precisou ser.
+   *
+   * Rejeita com `GitNotSupportedError` quando `capabilities.branchesDetailed`
+   * é `false`.
+   */
+  listBranchesDetailed(
+    input: ListBranchesDetailedInput,
+  ): Promise<GitBranchDetailList>;
+}
+
+// --- Credenciais de git do usuário (Fase 2, sessão 2) ---
+//
+// Só github/gitlab têm token de usuário (PAT) — 'local' não precisa de
+// credencial nenhuma. Ver docs/adr/0004-git-credential-registration.md.
+
+export type GitCredentialProviderName = Extract<GitProviderName, "github" | "gitlab">;
+
+// user_credentials guarda tanto chaves de LLM quanto tokens de git do
+// usuário, sob o mesmo mecanismo de envelope encryption — ver
+// docs/adr/0004-git-credential-registration.md.
+export type CredentialProviderName = LLMProviderName | GitCredentialProviderName;

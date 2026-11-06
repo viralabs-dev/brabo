@@ -1,0 +1,407 @@
+import { useEffect, useState } from 'react';
+import { Ajuda } from '@/components/ui/Ajuda';
+import { useTranslation } from 'react-i18next';
+import { Link } from '@tanstack/react-router';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useBindingsDosAgentes } from '../lib/bindings-resolvidos';
+import {
+  useActiveExecutionSession,
+  useArchitecture,
+  useBacklog,
+  useCurrentWorkspace,
+  useCurrentWorkspaceWithRole,
+  useHandoffs,
+  useProjectPendingActions,
+  useProjectsSummary,
+  useSessionEvents,
+  useSessionTokenUsage,
+} from '../lib/hooks';
+import {
+  listAgentAutonomy,
+  listModels,
+  rearmDevAgent,
+  setAgentAutonomy,
+} from '../lib/api-client';
+import { deriveAgentRoster, groupRosterByArea, isExecutorAgentId, isExecutorGroup } from '../lib/agent-status';
+import { contarTarefasPendentes, deriveExecutionProgress } from '../lib/execution';
+import { ReligarExecucao } from '../components/ReligarExecucao';
+import { connectSessionHeartbeat } from '../lib/session-channel';
+import { INTERVALO_DO_PROJETO_MS, criarInvalidadorDoCanal } from '../lib/canal-vivo';
+import { rotuloDaSessao } from '../lib/session-label';
+import { roleAtLeast } from '../lib/roles';
+import { PendenciasDeOutrasSessoes } from '../components/PendenciasDeOutrasSessoes';
+import {
+  ModoAutomaticoDoTime,
+  agentesDaOfertaEmLote,
+} from '../components/ModoAutomaticoDoTime';
+import { PararExecucao } from '../components/PararExecucao';
+import type { AutonomyMode } from '../components/AgentCard';
+import { AgentTeamGrid } from '../components/AgentTeamGrid';
+import { AgentTimelineTree } from '../components/AgentTimelineTree';
+import { Alert } from '../components/ui/Alert';
+import { Badge } from '../components/ui/Badge';
+import { Users } from 'lucide-react';
+import { EmptyState } from '../components/ui/EmptyState';
+import { Skeleton } from '../components/ui/Skeleton';
+import { ErroDeCarregamento } from '../components/ErroDeCarregamento';
+import { useToast } from '../components/ui/ToastProvider';
+import type { AgentAutonomyActionType } from '../lib/api-types';
+import { nomeDoAgente } from '../lib/agents';
+import styles from './ProjectOverviewTab.module.css';
+
+/**
+ * A aba Executores (FASE 27, RN-121) — dev agent e QA num lugar próprio, fora
+ * do "Time de agentes" da Visão geral.
+ *
+ * O que forçou a separação: dev-<módulo> e QA (lead + subespecialidades) são
+ * quem IMPLEMENTA e VERIFICA — a pergunta que quem acompanha execução faz é
+ * diferente de "como está o time inteiro", e no grid misturado com
+ * Criativo/PO/Arquiteto/Infra a resposta ficava perdida no meio de agentes
+ * que não mudam de estado a cada poll.
+ *
+ * A tela reusa a MESMA renderização da Visão geral (`AgentTeamGrid`,
+ * `AgentTimelineTree`) — nada foi reinventado aqui, só filtrado: quem decide
+ * "é executor?" é `isExecutorGroup`/`isExecutorAgentId`
+ * (`lib/agent-status.ts`), a mesma função que a Visão geral usa para EXCLUIR
+ * os mesmos agentes. Uma decisão errada nos dois lugares apareceria como
+ * duplicação ou sumiço, nunca como divergência silenciosa.
+ *
+ * A busca de dados é INDEPENDENTE da Visão geral — são duas rotas de aba
+ * montadas uma de cada vez, e cada componente de rota resolve os próprios
+ * hooks; o react-query dedup pela `queryKey` evita a requisição em dobro
+ * quando as duas já rodaram na mesma sessão.
+ *
+ * A SESSÃO que a aba lê é a de execução VIGENTE (RN-139,
+ * `useActiveExecutionSession`) — `active` com `execution.activated` gravado —
+ * e NUNCA a mais recente do projeto. Era `useLatestSession` antes: funcionava
+ * só por coincidência (a sessão de execução costuma ser a mais nova) e
+ * silenciosamente passava a olhar qualquer sessão nova criada depois (uma
+ * ideação, um chat), vazia de eventos de dev/QA, sem pista nenhuma na tela. O
+ * indicador logo abaixo do título mostra sempre QUAL sessão está sendo
+ * exibida, nos três estados da RN-088.
+ */
+export function ProjectExecutorsTab({ projectId }: { projectId: string }) {
+  const { t } = useTranslation('executors');
+  const queryClient = useQueryClient();
+  const { showToast } = useToast();
+  // AT-298: decidir pede `developer` no ENDPOINT (RN-102) — o mesmo papel de
+  // WORKSPACE que a tela de Sessão lê, com a mesma lacuna declarada (RN-471).
+  const { data: workspaceComPapel } = useCurrentWorkspaceWithRole();
+  const podeDecidir = roleAtLeast(workspaceComPapel?.role, 'developer');
+  // RN-661 (AT-315): ligar o modo automático pede `maintainer` no endpoint
+  // (`PUT .../agent-autonomy`, RN-153) — o mesmo papel de WORKSPACE, com a
+  // mesma lacuna declarada, e a tela diz isso em texto.
+  const podeLigarModoAutomatico = roleAtLeast(workspaceComPapel?.role, 'maintainer');
+  const executionSessionQuery = useActiveExecutionSession(projectId);
+  const executionSession = executionSessionQuery.session;
+  const sessionId = executionSession?.id;
+  // RN-794 (AT-469): o backlog só é lido quando a leitura CONFIRMOU que não há
+  // execução vigente — é ele que diz quantas tarefas ficaram pendentes. Com a
+  // execução de pé a query fica desligada (nenhuma requisição a mais, RN-632),
+  // e no ritmo de projeto quando ligada.
+  const semExecucaoVigente = executionSessionQuery.isSuccess && !executionSession;
+  const backlogQuery = useBacklog(semExecucaoVigente ? projectId : undefined, INTERVALO_DO_PROJETO_MS);
+  const tarefasPendentes = contarTarefasPendentes(backlogQuery.data);
+  const eventsQuery = useSessionEvents(projectId, sessionId);
+  const events = eventsQuery.data?.items ?? [];
+  // Quem espera decisão sai da fila do PROJETO (AT-297, RN-638): a mesma
+  // chave do contador do trilho, no ritmo de projeto, avisada pelo canal
+  // abaixo no `proposed_action.*` (AT-299) — nenhuma requisição a mais.
+  const pendentesQuery = useProjectPendingActions(projectId, undefined, INTERVALO_DO_PROJETO_MS);
+  const pendentes = pendentesQuery.data ?? [];
+  // Periferia de PROJETO (AT-278): o `module_map` só muda quando o Arquiteto
+  // escreve, e nenhum canal desta aba avisa disso — ritmo de projeto.
+  const { data: architecture } = useArchitecture(projectId, INTERVALO_DO_PROJETO_MS);
+  const handoffsQuery = useHandoffs(projectId, sessionId);
+  const handoffs = handoffsQuery.data ?? [];
+
+  // `execution.activated` é dos PRIMEIROS eventos de uma sessão de execução —
+  // `useSessionEvents` só traz os ÚLTIMOS 200 (`latest: true`), então numa
+  // sessão real ele sai da janela e `events.some(...)` volta a mentir
+  // "nunca ativou". O resumo do workspace (RN-090) agrega TODOS os eventos
+  // no backend (`projects-summary.repository.ts`), então é ele — não a
+  // janela — quem decide se o roster de dev agents aparece.
+  const { data: workspace } = useCurrentWorkspace();
+  const summaryQuery = useProjectsSummary(workspace?.id);
+  const projectSummary = summaryQuery.data?.find((s) => s.projectId === projectId);
+  const pendingActionAgentIds = new Set(
+    pendentes.filter((a) => a.status === 'pending').map((a) => a.actor.id),
+  );
+  // RN-568 — a presença de QA/SecOps (`gatesEverOpened`) e dos membros de
+  // área (`delegatedSubagents`) sofria da MESMA classe de defeito acima
+  // (`pr.gate_changed`/`infra.gate_changed` e delegações saindo da janela
+  // numa sessão longa). O resumo já agrega os dois sobre a sessão inteira, e
+  // vai como `agregado` — que SOMA à janela, nunca a substitui; a regra de
+  // presença continua uma só (`rosterFromFacts`).
+  //
+  // A guarda de sessão NÃO é enfeite aqui: o resumo agrega a sessão mais
+  // RECENTE do projeto, e esta aba lê a sessão de EXECUÇÃO vigente (RN-139).
+  // Uma ideação aberta depois faz as duas divergirem, e aí o agregado é de
+  // OUTRA sessão — a janela volta a decidir sozinha, como antes.
+  // AT-130: `executionActivated` passa pela MESMA guarda — antes era lido do
+  // resumo sem ela, e o resumo de outra sessão apagava (ou forjava) os dev agents.
+  const agregado =
+    projectSummary && projectSummary.latestSessionId === sessionId
+      ? {
+          executionActivated: projectSummary.roster.executionActivated,
+          gatesEverOpened: projectSummary.roster.gatesEverOpened,
+          delegatedSubagents: projectSummary.roster.delegatedSubagents,
+        }
+      : undefined;
+  const roster = deriveAgentRoster(
+    events,
+    architecture?.moduleMap,
+    false,
+    handoffs,
+    pendingActionAgentIds,
+    agregado,
+  );
+  const progressByAgent = deriveExecutionProgress(events);
+  const { data: tokenUsage } = useSessionTokenUsage(projectId, sessionId);
+
+  const { data: modelsByCategory } = useQuery({
+    queryKey: ['models', projectId],
+    queryFn: () => listModels(projectId),
+  });
+  const allModels = modelsByCategory
+    ? [...Object.values(modelsByCategory.local).flat(), ...Object.values(modelsByCategory.cloud).flat()]
+    : [];
+  // RN-654 (AT-339): os bindings do roster saem do LOTE, não de uma rota por
+  // agente — os do catálogo pela mesma chave da aba Configurações.
+  const bindingDoAgente = useBindingsDosAgentes(
+    projectId,
+    roster.map((r) => r.id),
+  );
+  const { data: autonomyRules } = useQuery({
+    queryKey: ['agent-autonomy', projectId],
+    queryFn: () => listAgentAutonomy(projectId),
+  });
+
+  const [collapsedAreas, setCollapsedAreas] = useState<Set<string>>(new Set());
+  function toggleArea(areaKey: string) {
+    setCollapsedAreas((current) => {
+      const next = new Set(current);
+      if (next.has(areaKey)) next.delete(areaKey);
+      else next.add(areaKey);
+      return next;
+    });
+  }
+
+  const rosterGroups = groupRosterByArea(roster);
+  const executorGroups = rosterGroups.filter(isExecutorGroup);
+  const executorRosterIds = new Set(
+    executorGroups.flatMap((group) =>
+      group.kind === 'solo' ? [group.entry.id] : [group.lead.id, ...group.members.map((m) => m.id)],
+    ),
+  );
+  const executorRoster = roster.filter((r) => executorRosterIds.has(r.id));
+  const executorEvents = events.filter(
+    (e) => e.actor.kind === 'agent' && isExecutorAgentId(e.actor.id),
+  );
+  const workingCount = executorRoster.filter((r) => r.status === 'trabalhando').length;
+  const waitingCount = executorRoster.filter((r) => r.status === 'aguardando').length;
+
+  useEffect(() => {
+    if (!sessionId || executionSession?.status !== 'active') return;
+    // AT-278 (RN-632): o aviso passa pelo MESMO invalidador da tela de
+    // Sessão (RN-579). Antes cada `event.appended` invalidava os eventos NA
+    // HORA, sem janela — uma rajada de `tool.call`/`tool.result` de dev agent
+    // (10/s) virava 630 GET de eventos por minuto só nesta aba, o dobro do
+    // teto do usuário. E as ações/handoffs, que o canal vivo deixa no
+    // fallback de 15s, nunca eram invalidadas por aqui: a proposta de um dev
+    // agent levava até 15s para aparecer.
+    const invalidador = criarInvalidadorDoCanal(queryClient, projectId, sessionId);
+    const disconnect = connectSessionHeartbeat(projectId, sessionId, {
+      onEvent: ({ type }) => invalidador.aoEvento(type, false),
+      onAgentStatus: () => invalidador.aoEvento('agent.status', false),
+    });
+    return () => {
+      disconnect();
+      invalidador.encerrar();
+    };
+  }, [sessionId, executionSession?.status, projectId, queryClient]);
+
+  async function handleAutonomyChange(agentId: string, actionType: string, mode: AutonomyMode) {
+    try {
+      await setAgentAutonomy(projectId, {
+        agentId,
+        actionType: actionType as AgentAutonomyActionType,
+        mode: mode === 'auto' ? 'auto_approve' : 'require_approval',
+      });
+      await queryClient.invalidateQueries({ queryKey: ['agent-autonomy', projectId] });
+    } catch {
+      showToast({
+        title: t('tab.toast.autonomyError'),
+        message: `${nomeDoAgente(agentId)} · ${actionType}`,
+        tone: 'danger',
+      });
+    }
+  }
+
+  async function handleRearm(agentId: string) {
+    if (!sessionId) return;
+    try {
+      await rearmDevAgent(projectId, sessionId, agentId);
+      await queryClient.invalidateQueries({
+        queryKey: ['session-events', projectId, sessionId],
+      });
+      showToast({ title: t('tab.toast.rearmed'), tone: 'success' });
+    } catch {
+      showToast({ title: t('tab.toast.rearmError'), message: agentId, tone: 'danger' });
+    }
+  }
+
+  // Sem `semRespiro` no registro: a moldura do `ProjectPage` já dá os 24px de
+  // respiro e a rolagem própria (`.body`, `ProjectPage.module.css`) — reusar
+  // `styles.main` aqui (que tem os MESMOS dois ajustes, pensados para dentro
+  // do `.layout` de duas colunas da Visão geral) duplicaria padding e criaria
+  // uma segunda área de scroll aninhada.
+  return (
+    <div>
+      <div className={styles.sectionRow}>
+        <h2 className={styles.sectionHeader}>{t('tab.title')}</h2>
+        <Ajuda assunto={t('tab.title')}>{t('tab.subtitle')}</Ajuda>
+        {sessionId && (
+          <span className={styles.sectionCount}>
+            {t('tab.summary', {
+              count: executorRoster.length,
+              working: workingCount,
+              waiting: waitingCount,
+            })}
+          </span>
+        )}
+      </div>
+
+      {/* Indicador de QUAL sessão a aba está olhando (RN-139) — os três
+          estados da RN-088, erro antes de vazio: sem isto a troca silenciosa
+          de sessão (achado desta investigação) volta a acontecer, só que
+          desta vez escondida atrás de um indicador que mentiria "tudo bem". */}
+      {executionSessionQuery.isError ? (
+        <ErroDeCarregamento
+          titulo={t('tab.sessionError.title')}
+          erro={executionSessionQuery.error}
+          onTentarDeNovo={() => void executionSessionQuery.refetch()}
+        />
+      ) : executionSessionQuery.isPending ? (
+        <div className={styles.sectionSub} aria-busy="true">
+          <Skeleton width={220} height={18} />
+        </div>
+      ) : !executionSession ? (
+        <>
+          <div className={styles.sectionSub}>{t('tab.noActiveExecution')}</div>
+          {tarefasPendentes > 0 && (
+            <ReligarExecucao projectId={projectId} tarefasPendentes={tarefasPendentes} />
+          )}
+        </>
+      ) : (
+        <div className={styles.sectionSub}>
+          {t('tab.showingSession')}{' '}
+          <Link
+            to="/projects/$projectId/sessions/$sessionId"
+            params={{ projectId, sessionId: executionSession.id }}
+          >
+            {rotuloDaSessao(executionSession.id, executionSession.name)}
+          </Link>{' '}
+          <Badge tone="success" dot>
+            {t(`sessionsTab.status.${executionSession.status}`, {
+              ns: 'sessions',
+              defaultValue: executionSession.status,
+            })}
+          </Badge>
+        </div>
+      )}
+
+      {sessionId && (
+        <>
+
+          {/* RN-763 (AT-456): parar a execução é FECHAR a sessão dela; o
+              engine para os dev agents e os gates. */}
+          {executionSession?.status === 'active' && (
+            <PararExecucao
+              projectId={projectId}
+              sessionId={sessionId}
+              podeParar={podeDecidir}
+            />
+          )}
+
+          {/* RN-661 (AT-315): no início da execução, a oferta de ligar o
+              modo automático para o time de uma vez. Some quando todos já
+              estão em automático; desligar segue no card de cada um. */}
+          {executionSession?.status === 'active' &&
+            summaryQuery.isSuccess &&
+            workingCount === 0 && (
+              <Alert tone="warning" role="status">
+                {t('tab.idleWarning')}
+              </Alert>
+            )}
+
+          {executorRoster.length > 0 && (
+            <ModoAutomaticoDoTime
+              projectId={projectId}
+              agentes={agentesDaOfertaEmLote(executorRoster.map((r) => r.id))}
+              autonomyRules={autonomyRules}
+              podeLigar={podeLigarModoAutomatico}
+            />
+          )}
+
+          {/* AT-298: o que os agentes propuseram FORA da execução e a destrava
+              — o `container_start` do Infra Lead nasce na sessão de chat,
+              enquanto o `dev.blocked_by_container` aparece aqui. Mesmo atalho
+              do chat (RN-626/RN-467): mesmo card, mesmos endpoints, filas
+              separadas. As da PRÓPRIA execução não entram: o roster já as
+              marca como `aguardando`, e a aba Aprovações as decide. RN-816
+              (AT-480): vem DEPOIS de "Parar execução" e da oferta em lote —
+              chega depois do primeiro paint, e acima deles empurrava o botão
+              para baixo do cursor. */}
+          <PendenciasDeOutrasSessoes
+            projectId={projectId}
+            sessionId={sessionId}
+            podeDecidir={podeDecidir}
+            // RN-825/826: as filas de PR pronta e tarefa bloqueada são do chat;
+            // aqui o backlog só é lido sem execução vigente (RN-794).
+            filasDoChat={false}
+          />
+
+          {/* `executionActivated` vem do resumo agregado — os três estados
+              da RN-088 aqui: sem eles, um "nenhum dev agent" de CARREGANDO
+              (o resumo ainda não chegou) fica indistinguível do vazio real. */}
+          {summaryQuery.isError ? (
+            <ErroDeCarregamento
+              titulo={t('tab.rosterError.title')}
+              erro={summaryQuery.error}
+              onTentarDeNovo={() => void summaryQuery.refetch()}
+            />
+          ) : summaryQuery.isPending ? (
+            <div className={styles.sectionSub} aria-busy="true">
+              <Skeleton width={220} height={18} />
+            </div>
+          ) : executorGroups.length === 0 ? (
+            <EmptyState titulo={t('tab.noExecutorsTitle')} icone={<Users size={18} />}>{t('tab.noExecutors')}</EmptyState>
+          ) : (
+            <AgentTeamGrid
+          projectId={projectId}
+              roster={roster}
+              groups={executorGroups}
+              events={events}
+              bindingDoAgente={bindingDoAgente}
+              allModels={allModels}
+              tokenUsage={tokenUsage}
+              autonomyRules={autonomyRules}
+              progressByAgent={progressByAgent}
+              collapsedAreas={collapsedAreas}
+              onToggleArea={toggleArea}
+              onAutonomyChange={handleAutonomyChange}
+              onRearm={handleRearm}
+            />
+          )}
+
+          <div className={styles.arch}>
+            <h2 className={styles.sectionHeader}>{t('tab.timeline.title')}</h2>
+          </div>
+          <div className={styles.sectionSub}>{t('tab.timeline.subtitle')}</div>
+          <AgentTimelineTree events={executorEvents} projectId={projectId} />
+        </>
+      )}
+    </div>
+  );
+}

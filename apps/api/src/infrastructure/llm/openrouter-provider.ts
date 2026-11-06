@@ -1,0 +1,445 @@
+import { Injectable, Optional } from '@nestjs/common';
+import type { ModeloDoCatalogo, RoutingPreference } from '@brabo/shared';
+import { TokenEstimator } from '../../application/ports/token-estimator.port';
+import {
+  OpenAICompatibleProvider,
+  type OpenAICompatibleConfig,
+  type WireMessage,
+} from './openai-compatible-provider';
+import {
+  LLMAuthError,
+  LLMConnectionError,
+  LLMContextLengthExceededError,
+  LLMModelNotFoundError,
+  LLMProviderError,
+  LLMRateLimitError,
+  LLMTimeoutError,
+  LLMUpstreamError,
+  normalizeHttpStatus,
+} from '../../domain/llm/llm-provider-errors';
+
+export const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
+
+/**
+ * A doc oficial verificada nesta sessão (WebFetch/WebSearch, não memória) diz
+ * que os dois são OPCIONAIS — atribuição/ranking no site do OpenRouter, não
+ * exigência da API. Mandamos os dois de qualquer forma: não custa nada e evita
+ * ficar de fora do ranking por omissão.
+ *
+ * `HTTP-Referer` reusa `API_PUBLIC_URL` (já existe para o callback de OAuth de
+ * git, `start-git-oauth.use-case.ts`) em vez de criar uma variável nova para a
+ * mesma pergunta — "qual é a URL pública deste deployment".
+ */
+function referer(): string {
+  return process.env.API_PUBLIC_URL ?? 'http://localhost:3000';
+}
+
+const X_TITLE = 'Brabo';
+
+/**
+ * `pricing.prompt`/`pricing.completion` do catálogo do OpenRouter vêm como
+ * STRING decimal em USD **por token** (ex.: `"0.0000025"`). O schema guarda
+ * preço em micro-USD **por milhão** de tokens (`*PricePerMillionMicros`).
+ *
+ * USD/token → micro-USD/milhão: multiplica por 1e6 (tokens no milhão) e por
+ * 1e6 de novo (USD → micro-USD) = 1e12. `Math.round` porque a coluna é
+ * `bigint` inteiro, e o preço de fio tem mais casas decimais do que cabem sem
+ * arredondar.
+ */
+function precoParaMicrosPorMilhao(precoPorToken: unknown): number | undefined {
+  if (typeof precoPorToken !== 'string' && typeof precoPorToken !== 'number') {
+    return undefined;
+  }
+  const numero = Number(precoPorToken);
+  if (!Number.isFinite(numero) || numero < 0) return undefined;
+  return Math.round(numero * 1e12);
+}
+
+interface LinhaDoCatalogoOpenRouter {
+  id?: unknown;
+  name?: unknown;
+  context_length?: unknown;
+  pricing?: { prompt?: unknown; completion?: unknown };
+  supported_parameters?: unknown;
+  /**
+   * `{modality, input_modalities, output_modalities, tokenizer, …}`. É daqui
+   * que saem "aceita imagem" e "gera imagem" — o catálogo do OpenRouter publica
+   * os dois e o parser os descartava, o que deixava `supports_vision` em
+   * `false` para os 338 modelos.
+   */
+  architecture?: {
+    input_modalities?: unknown;
+    output_modalities?: unknown;
+  };
+}
+
+/** `["text","image","file"]` → tem `image`? Lista ausente é "não declarou". */
+function temModalidade(
+  lista: unknown,
+  modalidade: string,
+): boolean | undefined {
+  if (!Array.isArray(lista)) return undefined;
+  return lista.includes(modalidade);
+}
+
+/**
+ * O catálogo do OpenRouter, diferente do padrão `{ data: [{ id }] }` da
+ * OpenAI, informa pricing/janela/capability na própria linha — exatamente o
+ * caso que `ParseCatalogo` existe para cobrir sem `if` na base (Fase 9c).
+ */
+export function parseCatalogoOpenRouter(corpo: unknown): ModeloDoCatalogo[] {
+  const data = (corpo as { data?: unknown })?.data;
+  if (!Array.isArray(data)) return [];
+
+  return data
+    .map((linha) => linha as LinhaDoCatalogoOpenRouter)
+    .filter((linha): linha is LinhaDoCatalogoOpenRouter & { id: string } => {
+      return typeof linha.id === 'string' && linha.id.length > 0;
+    })
+    .map((linha) => {
+      const parametros = Array.isArray(linha.supported_parameters)
+        ? linha.supported_parameters
+        : [];
+      const precoEntrada = precoParaMicrosPorMilhao(linha.pricing?.prompt);
+      const precoSaida = precoParaMicrosPorMilhao(linha.pricing?.completion);
+
+      const entrada = temModalidade(
+        linha.architecture?.input_modalities,
+        'image',
+      );
+      const saida = temModalidade(
+        linha.architecture?.output_modalities,
+        'image',
+      );
+
+      return {
+        name: linha.id,
+        ...(typeof linha.name === 'string' && linha.name
+          ? { displayName: linha.name }
+          : {}),
+        ...(typeof linha.context_length === 'number'
+          ? { contextLength: linha.context_length }
+          : {}),
+        supportsToolCalling: parametros.includes('tools'),
+        // `reasoning` no `supported_parameters` é como o OpenRouter declara
+        // thinking — 213 dos 338 no catálogo de hoje.
+        supportsReasoning: parametros.includes('reasoning'),
+        // Omitidos quando o provider não declarou a modalidade: `undefined`
+        // deixa o sync preservar o valor local em vez de zerá-lo.
+        ...(entrada !== undefined ? { supportsVision: entrada } : {}),
+        ...(saida !== undefined ? { generatesImage: saida } : {}),
+        ...(precoEntrada !== undefined
+          ? { inputPricePerMillionMicros: precoEntrada }
+          : {}),
+        ...(precoSaida !== undefined
+          ? { outputPricePerMillionMicros: precoSaida }
+          : {}),
+      };
+    });
+}
+
+/**
+ * Mapa de string → `LLMErrorCode` para o erro NO MEIO do stream (ver
+ * `ParseErrorFrame` na base). A doc oficial cita `error_type`/`error.code`
+ * como string neste caso (diferente do erro pré-stream, cujo `code` é
+ * numérico e já cai no `normalizeHttpStatus` comum via status HTTP) — a
+ * enumeração completa não está 100% fechada na doc pública, então o mapeamento
+ * é por SUBSTRING best-effort, com `upstream` como default seguro. O que
+ * importa é que o erro NUNCA seja engolido: mesmo um código desconhecido vira
+ * `upstream`, nunca silêncio.
+ */
+function mapearCodigoDeFrame(
+  codigo: string,
+  mensagem: string,
+): LLMProviderError {
+  const c = codigo.toLowerCase();
+  if (c.includes('auth')) return new LLMAuthError('openrouter', mensagem);
+  if (c.includes('rate_limit')) {
+    return new LLMRateLimitError('openrouter', mensagem);
+  }
+  if (c.includes('context_length') || c.includes('token_limit')) {
+    return new LLMContextLengthExceededError('openrouter', mensagem);
+  }
+  if (c.includes('not_found')) {
+    return new LLMModelNotFoundError('openrouter', mensagem);
+  }
+  if (c.includes('timeout')) return new LLMTimeoutError('openrouter', mensagem);
+  if (c.includes('disconnect') || c.includes('connection')) {
+    return new LLMConnectionError('openrouter', mensagem);
+  }
+  return new LLMUpstreamError('openrouter', mensagem);
+}
+
+/**
+ * Erro NO MEIO do stream (ver `ParseErrorFrame` na base): o OpenRouter aceita
+ * a conexão, começa a mandar texto, e o provedor real por trás cai — a OpenAI
+ * não tem esse modo de falha porque não roteia pra infraestrutura de
+ * terceiros. O frame vem como
+ * `{"error":{"code":"server_error","message":"..."},"choices":[{"delta":{},
+ * "finish_reason":"error"}]}` — presença de `error` truthy é o sinal, não
+ * `finish_reason` sozinho (que também aparece em fechamento normal).
+ */
+export function parseErrorFrameOpenRouter(
+  frame: Record<string, unknown>,
+): LLMProviderError | undefined {
+  const erro = (frame as { error?: unknown }).error;
+  if (!erro || typeof erro !== 'object') return undefined;
+
+  const { code, message } = erro as { code?: unknown; message?: unknown };
+  const mensagem =
+    typeof message === 'string' && message
+      ? message
+      : 'openrouter reportou erro no meio do stream';
+
+  if (typeof code === 'number') {
+    return normalizeHttpStatus('openrouter', code, mensagem);
+  }
+  if (typeof code === 'string') {
+    return mapearCodigoDeFrame(code, mensagem);
+  }
+  return new LLMUpstreamError('openrouter', mensagem);
+}
+
+/**
+ * O critério de roteamento no formato do OpenRouter: `provider: { sort }`,
+ * com o MESMO vocabulário de `RoutingPreference` (`price`, `throughput`,
+ * `latency`). Só o `sort` — os outros campos do objeto `provider` (`order`,
+ * `only`, `ignore`, `allow_fallbacks`, `max_price`) não foram pedidos e cada
+ * um é decisão de produto própria (ADR 0166).
+ */
+export function campoDeRoteamentoOpenRouter(
+  preferencia: RoutingPreference,
+): Record<string, unknown> {
+  return { provider: { sort: preferencia } };
+}
+
+/**
+ * O teto de preço no formato do OpenRouter: `provider.max_price` em US$ por
+ * MILHÃO de tokens (`{ prompt, completion }`), a unidade da doc. Entra no mesmo
+ * objeto `provider` do `sort` — a mescla é do provider base (ADR 0225).
+ */
+export function campoDeTetoDePrecoOpenRouter(teto: {
+  inputPerMillionMicros: number;
+  outputPerMillionMicros: number;
+}): Record<string, unknown> {
+  return {
+    provider: {
+      max_price: {
+        prompt: teto.inputPerMillionMicros / 1e6,
+        completion: teto.outputPerMillionMicros / 1e6,
+      },
+    },
+  };
+}
+
+/** A chave de sessão no formato do OpenRouter: `session_id` (ADR 0221). */
+export function campoDeSessaoOpenRouter(
+  chave: string,
+): Record<string, unknown> {
+  return { session_id: chave };
+}
+
+/**
+ * O raciocínio DESLIGADO no formato do OpenRouter: `reasoning: { enabled:
+ * false }` (RN-783). Medido em 10/10 (AT-467): `reasoning: { max_tokens }` é
+ * IGNORADO pelo `anthropic/claude-haiku-5.5` (pedido 1024, gastou 8192 só de
+ * raciocínio) e LIGA raciocínio no `anthropic/claude-haiku-4.5`, que sem o campo
+ * não raciocina (74% das chamadas, 2,8× o custo). Só `enabled: false` segurou:
+ * 0 de 8 respostas cortadas e −42% de custo no Haiku 5.5. Por isso o teto não
+ * é mandado nunca (RN-782) e o "desligado" só vai para os dev agents.
+ */
+export function campoDeRaciocinioDesligadoOpenRouter(): Record<
+  string,
+  unknown
+> {
+  return { reasoning: { enabled: false } };
+}
+
+/**
+ * O custo REAL da chamada, que o OpenRouter devolve em `usage.cost` (USD, número
+ * decimal) no frame final do stream (ADR 0188, RN-665). Vira micro-USD inteiro
+ * pelo mesmo arredondamento do resto do metering.
+ *
+ * Com `is_byok: true` o custo NÃO é lido: numa chamada com a chave do próprio
+ * provedor configurada no OpenRouter, `cost` é a taxa do hub, e a inferência é
+ * cobrada pelo provedor por fora. Gravar só a taxa como "custo real" seria gravar
+ * menos do que foi cobrado — o defeito que o ADR fecha — então a linha cai no
+ * preço do catálogo, como antes. É LEITURA da doc, não medição: nenhuma chamada
+ * BYOK foi feita (declarado no ADR 0188).
+ *
+ * Número negativo, não finito ou em string é "não disse", nunca zero.
+ */
+export function extrairCustoRealOpenRouter(
+  usage: Record<string, unknown>,
+): number | undefined {
+  if (usage.is_byok === true) return undefined;
+  const custo = usage.cost;
+  if (typeof custo !== 'number' || !Number.isFinite(custo) || custo < 0) {
+    return undefined;
+  }
+  return Math.round(custo * 1_000_000);
+}
+
+/**
+ * Os PONTOS DE CACHE de prompt no formato do OpenRouter (RN-892): o conteúdo
+ * da mensagem vira `[{ type: 'text', text, cache_control: { type: 'ephemeral' } }]`.
+ * Fonte pública: https://openrouter.ai/docs/features/prompt-caching (seção
+ * Anthropic Claude: `cache_control` em blocos de conteúdo de texto, no máximo
+ * QUATRO pontos por chamada, TTL de 5 min; OpenAI, DeepSeek e Gemini 2.5
+ * cacheiam sozinhos, sem ponto).
+ *
+ * Camada de MODELO: só `anthropic/*` recebe ponto; os demais voltam intactos.
+ *
+ * DOIS pontos, sobre o que é ESTÁVEL entre chamadas do mesmo agente:
+ *  1. a última mensagem `system` do PREFIXO (as instruções — e, por ordem de
+ *     prefixo da Anthropic, as ferramentas antes delas);
+ *  2. a última mensagem `user`/`tool` ANTES da cauda de `system` do fim — o
+ *     histórico inteiro até ali.
+ * A cauda de `system` do FIM (idioma RN-622, ambiente RN-706, fluxo RN-711,
+ * perfil RN-680) fica DEPOIS do último ponto, de propósito: muda por chamada e
+ * não pode invalidar o prefixo. A ordem das mensagens NUNCA muda.
+ */
+export function marcarCacheDePromptOpenRouter(
+  mensagens: WireMessage[],
+  modelo: string,
+): WireMessage[] {
+  if (!modelo.startsWith('anthropic/')) return mensagens;
+
+  let inicioDaCauda = mensagens.length;
+  while (inicioDaCauda > 0 && mensagens[inicioDaCauda - 1].role === 'system') {
+    inicioDaCauda -= 1;
+  }
+
+  const pontos = new Set<number>();
+  let fimDoPrefixo = -1;
+  while (
+    fimDoPrefixo + 1 < inicioDaCauda &&
+    mensagens[fimDoPrefixo + 1].role === 'system'
+  ) {
+    fimDoPrefixo += 1;
+  }
+  if (fimDoPrefixo >= 0) pontos.add(fimDoPrefixo);
+
+  for (let i = inicioDaCauda - 1; i > fimDoPrefixo; i -= 1) {
+    const { role } = mensagens[i];
+    if (role === 'user' || role === 'tool') {
+      pontos.add(i);
+      break;
+    }
+  }
+
+  return mensagens.map((m, i) => {
+    if (!pontos.has(i) || typeof m.content !== 'string' || !m.content) {
+      return m;
+    }
+    return {
+      ...m,
+      content: [
+        {
+          type: 'text',
+          text: m.content,
+          cache_control: { type: 'ephemeral' },
+        },
+      ],
+    };
+  });
+}
+
+/**
+ * A extração é exportada à parte, como as demais funções de config deste
+ * arquivo, para a suite de contrato exercitar ESTA config apontando pro
+ * servidor falso — não uma cópia escrita no teste.
+ */
+export function openrouterConfig(
+  baseUrl: string = OPENROUTER_BASE_URL,
+): OpenAICompatibleConfig {
+  return {
+    name: 'openrouter',
+    baseUrl,
+    // `GET /v1/models` devolve pricing/janela/capability por linha — a base
+    // já degradaria honestamente pra `false` se algum dia isso divergir.
+    capabilities: {
+      streaming: true,
+      toolCalling: true,
+      listModels: true,
+      // É o único dos oito de nuvem com credencial já provada no ambiente
+      // (Fase 13a), e mesmo assim `false`: o smoke que rodou foi de CHAT. O
+      // hub roteia embedding para provedores diferentes dos de chat, e a prova
+      // de um endpoint não é prova do outro (ADR 0075).
+      embeddings: false,
+      // PROVADO em 2026-11-03 (AT-676, RN-993): `openrouter-provider.raciocinio.smoke.spec.ts`
+      // com `deepseek/deepseek-r1-0528` devolveu o raciocínio em chunk `reasoning`.
+      reasoningText: true,
+      // PROVADO em 2026-09-29 (ADR 0166, RN-583, AT-158):
+      // `openrouter-provider.roteamento.smoke.spec.ts` rodou contra a API real
+      // e o critério mudou o upstream que serviu (`price` → DeepInfra,
+      // `throughput` → Groq, em `meta-llama/llama-3.3-70b-instruct`).
+      // A prova vale para o fio `provider.sort` e o `provider` do frame;
+      // qual upstream cada critério escolhe é decisão do hub e muda com o tempo.
+      routingPreference: true,
+      // PROVADO em 2026-10-21 (ADR 0221, RN-907, AT-580):
+      // `openrouter-provider.sessao.smoke.spec.ts` rodou contra a API real em
+      // `deepseek/deepseek-v4.1-flash`: com `session_id`, 6 de 6 chamadas no
+      // MESMO upstream (Together); sem ele, 4 upstreams em 6.
+      stickySession: true,
+      // PROVADO em 2026-10-28 (ADR 0225, RN-917, AT-606):
+      // `openrouter-provider.teto.smoke.spec.ts` rodou contra a API real em
+      // `deepseek/deepseek-v4.1-flash`: com `max_price`, o upstream servido
+      // respeitou o teto; sem upstream no teto, o 404 virou o erro nomeado.
+      priceCeiling: true,
+      // PROVADO em 2026-10-15 (RN-892, AT-543):
+      // `openrouter-provider.cache.smoke.spec.ts` rodou contra a API real e a
+      // segunda chamada a `anthropic/claude-haiku-5.5` voltou com
+      // `cached_input_tokens=8011`. O hook segue limitando o ponto a `anthropic/*`.
+      promptCaching: true,
+      // PROVADO em 2026-11-03 (AT-715, RN-989, ADR 0246):
+      // `openrouter-provider.visao.smoke.spec.ts` rodou contra a API real com
+      // `google/gemini-2.5-flash` e um PNG 8x8 vermelho; o modelo respondeu "red".
+      vision: true,
+    },
+    authHeaders: (apiKey) => ({
+      Authorization: `Bearer ${apiKey ?? ''}`,
+      'HTTP-Referer': referer(),
+      'X-Title': X_TITLE,
+    }),
+    flags: {
+      streamOptionsIncludeUsage: true,
+      maxTokensField: 'max_tokens',
+    },
+    // Quem RESPONDEU de verdade, não quem foi pedido: o OpenRouter manda
+    // `"provider":"openai"` direto no frame — mais correto que derivar do
+    // prefixo do id do modelo, que é só o vendor PEDIDO.
+    extrairUpstreamProvider: (frame) =>
+      typeof frame.provider === 'string' ? frame.provider : undefined,
+    parseErrorFrame: parseErrorFrameOpenRouter,
+    parseCatalogo: parseCatalogoOpenRouter,
+    campoDeRoteamento: campoDeRoteamentoOpenRouter,
+    campoDeSessao: campoDeSessaoOpenRouter,
+    campoDeTetoDePreco: campoDeTetoDePrecoOpenRouter,
+    // Raciocínio desligado para os dev agents (RN-783) e folga no teto para
+    // modelo com `supports_reasoning` (RN-741/782). Provado com credencial na
+    // medição paga de 10/10 (AT-467).
+    campoDeRaciocinioDesligado: campoDeRaciocinioDesligadoOpenRouter,
+    // O custo que o hub cobrou vira o número do metering (ADR 0188, RN-665).
+    // Provado pela resposta GRAVADA na suíte de contrato (a forma de
+    // `usage.cost` medida nas chamadas reais da medição de idioma, AT-163);
+    // a prova com credencial, em stream, é o smoke `openrouter-provider.smoke`.
+    extrairCustoReal: extrairCustoRealOpenRouter,
+    // Pontos de cache de prompt (RN-892) — inerte enquanto a capability for
+    // `false`.
+    marcarCacheDePrompt: marcarCacheDePromptOpenRouter,
+  };
+}
+
+/**
+ * O primeiro hub sobre a base OpenAI-compatível (Fase 11a — CLAUDE.md,
+ * ADR 0041/0042). `capabilities.listModels: true` tem efeito real aqui: o
+ * `SyncModelCatalogUseCase` passa a descobrir o catálogo do OpenRouter sozinho
+ * (RN-043 — modelo novo entra desativado, sumido é marcado, nunca apagado).
+ */
+@Injectable()
+export class OpenRouterProvider extends OpenAICompatibleProvider {
+  constructor(@Optional() tokenEstimator?: TokenEstimator) {
+    super(openrouterConfig(), tokenEstimator);
+  }
+}

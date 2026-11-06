@@ -1,0 +1,490 @@
+defmodule Engine.Harness.ToolLoop do
+  @moduledoc """
+  Contrato do loop de tool use do harness (Fase 3a/4a). Cada turno: chama o
+  endpoint de LLM da api (nunca provider direto), parseia tool calls, despacha
+  pras ferramentas registradas, injeta os resultados como mensagens `tool` e
+  repete — com limite de iterações, teto de tokens OPCIONAL e término
+  GRACIOSO em qualquer um dos dois (`toolloop.limit_reached`/
+  `toolloop.budget_exceeded`, nunca loop infinito nem gasto sem teto). Um hook
+  `:post_tool_use` pode sinalizar `{:halt, reason}` (ex.: o DevAgent concluindo
+  ou se bloqueando) — o loop para ali com `{:halted, reason, ctx}`. Impl de
+  referência em `.Default`. Trocável via `Application.get_env(:engine,
+  :tool_loop, ...)`.
+  """
+
+  @callback run(ctx :: map()) ::
+              {:ok, map()}
+              | {:limit_reached, map()}
+              | {:budget_exceeded, map()}
+              | {:halted, term(), map()}
+
+  def run(ctx), do: impl().run(ctx)
+
+  defp impl,
+    do: Application.get_env(:engine, :tool_loop, Engine.Harness.ToolLoop.Default)
+end
+
+defmodule Engine.Harness.ToolLoop.Default do
+  @moduledoc """
+  Loop determinístico turno-a-turno. Monta o system prompt via o harness
+  (ContextBuilder + PromptAssembler), compacta o contexto quando necessário
+  (ContextManager), chama `EngineApiClient.llm_turn/5`, e despacha as tool
+  calls: ferramentas de pipeline (terminal, write_file fora da whitelist) têm
+  o resultado produzido pelo hook `:pre_tool_use`; as diretas rodam sua
+  `run/2`. `:post_tool_use` grava o resultado no event log e pode `{:halt,
+  reason}` pra terminar o loop AGORA (ex.: DevAgent sinalizando conclusão).
+
+  Mensagens internas são maps com chaves string (formato de fio) + a chave
+  atom `:pinned` (removida antes de enviar). O ToolLoop narra o event log
+  (`agent.response` — com `iteration`/`tokensSpentMicros` acumulados —,
+  `tool.call`, e via hooks `tool.result`).
+
+  `ctx` aceita, opcionalmente: `:tools` (registry de ferramentas — default
+  `Engine.Harness.Tools.registry/0`), `:hooks` (default `default_hooks/0`),
+  `:workspace_root` (raiz de arquivos/AGENTS.md — default o workspace
+  compartilhado do projeto), `:token_budget_micros` (teto de custo por
+  execução — default `nil`, sem teto), `:business_rules_units`/
+  `:task_state_units` (unidades pras camadas de mesmo nome do
+  `ContextBuilder` — default `[]`, usado pelo DevAgent).
+  """
+
+  @behaviour Engine.Harness.ToolLoop
+
+  alias Engine.Agents.FalhaDeTurno
+
+  alias Engine.Harness.{
+    ContextBuilder,
+    PromptAssembler,
+    ContextManager,
+    Tools,
+    Hooks,
+    ToolCallRecovery
+  }
+
+  alias Engine.Harness.Hooks.{ActionPipeline, EventLog}
+  alias Engine.Harness.AmbienteDoAgente
+  alias Engine.Harness.Iteracoes
+  alias Engine.Harness.RetomadaDoTurno
+  alias Engine.Harness.RoteamentoDeFerramenta
+  alias Engine.Sessions.EngineApiClient
+  alias Engine.Telemetry.Span
+
+  @impl true
+  def run(ctx) do
+    # Span raiz do turno do agente, pendurada na TRACE DA SESSÃO (Fase 5): o
+    # `traceparent` vem de `sessions.trace_parent`, então este turno aparece na
+    # mesma árvore do `session.create`, junto com tudo o que o agente fizer
+    # daqui para baixo — tool call, chamada de LLM, gate.
+    Span.with_session(
+      session_traceparent(ctx),
+      "agent.turn",
+      %{
+        "brabo.agent" => Map.get(ctx, :agent),
+        "brabo.session_id" => Map.get(ctx, :session_id),
+        "brabo.project_id" => Map.get(ctx, :project_id)
+      },
+      # RN-706: o ambiente (pasta, imagem, rede, módulo) chega ao modelo pela
+      # fachada como mensagem efêmera — ver `Engine.Harness.AmbienteDoAgente`.
+      fn ->
+        AmbienteDoAgente.com_ambiente(ctx, fn ->
+          # AT-582: `ctx[:retomada]` (montado pelo diário) vira a mensagem de
+          # retomada deste laço — ver `Engine.Harness.RetomadaDoTurno`.
+          RetomadaDoTurno.com_retomada(ctx, fn ->
+            Engine.Harness.FalhaRepetida.zerar()
+            ctx |> init() |> loop()
+          end)
+        end)
+      end
+    )
+  end
+
+  defp init(ctx) do
+    ctx =
+      ctx
+      |> Map.put_new(:iteration, 0)
+      |> Map.put_new(:max_iterations, Iteracoes.teto(Map.get(ctx, :agent)))
+      |> Map.put_new(:tokens_spent_micros, 0)
+      |> Map.put_new(:token_budget_micros, nil)
+      |> Map.put_new(:hooks, default_hooks())
+      |> Map.put_new(:tools, Tools.registry())
+
+    system_msg = %{
+      "role" => "system",
+      "content" => system_prompt(ctx),
+      :pinned => true
+    }
+
+    ctx
+    |> Map.put(:messages, [system_msg | Map.get(ctx, :messages, [])])
+    |> Map.put(:tool_specs, Tools.specs(ctx.tools))
+  end
+
+  # RN-913: a 3ª falha igual para o laço pelo desfecho de erro que ele já tem.
+  defp parou_ou_loop(ctx) do
+    if Engine.Harness.FalhaRepetida.parou?() do
+      Engine.Harness.FalhaRepetida.narrar(ctx.project_id, ctx.session_id, ctx.agent)
+      {:ok, Map.put(ctx, :last_error, "falha repetida de ferramenta")}
+    else
+      loop(%{ctx | iteration: ctx.iteration + 1})
+    end
+  end
+
+  defp loop(%{iteration: iteration, max_iterations: max} = ctx) when iteration >= max do
+    emit(ctx, "toolloop.limit_reached", %{iteration: iteration, max_iterations: max})
+    {:limit_reached, ctx}
+  end
+
+  defp loop(%{token_budget_micros: budget, tokens_spent_micros: spent} = ctx)
+       when is_integer(budget) and spent >= budget do
+    emit(ctx, "toolloop.budget_exceeded", %{
+      tokens_spent_micros: spent,
+      token_budget_micros: budget
+    })
+
+    {:budget_exceeded, ctx}
+  end
+
+  defp loop(ctx) do
+    {:ok, ctx} = ContextManager.maybe_compact(ctx)
+    wire = Enum.map(ctx.messages, &to_wire/1)
+
+    case llm_turn_com_retentativa(ctx, wire) do
+      {:ok, %{"message" => message} = resp} ->
+        # O custo do chat MAIS o do Jev (ADR 0179): o orçamento local do laço
+        # gasta o que a api também registrou em `token_usage`.
+        cost =
+          (get_in(resp, ["usage", "costMicros"]) || 0) + RoteamentoDeFerramenta.custo_micros(resp)
+
+        ctx = append(ctx, Map.put(message, :pinned, false))
+        ctx = Map.update!(ctx, :tokens_spent_micros, &(&1 + cost))
+        # A api devolve 200 com `error` no CORPO quando o provider falha — só
+        # o transporte quebrado vira `{:error, _}` lá embaixo. Sem guardar
+        # este caso, `last_error` fica nil e quem consome o `{:ok, ctx}`
+        # diagnostica "o modelo parou sem sinalizar" para uma falha de
+        # infraestrutura. Mesma armadilha do ADR 0019, outro caminho.
+        ctx = registra_erro(ctx, Map.get(resp, "error"))
+        # RN-730: o `code` do provider viaja ao lado do texto, para quem decide
+        # crédito esgotado não depender da frase.
+        ctx = Map.put(ctx, :last_error_code, Map.get(resp, "errorCode"))
+        content = Map.get(message, "content", "")
+
+        # Mesmo guard-rail da RN-059 (Fase 14a), aplicado aqui — o ToolLoop é
+        # o ponto ESTRUTURAL comum de todo consumidor (dev agents, QA,
+        # SecOps, Infra-Workflows, Anamnese, Psicólogo): iteração sem texto
+        # (só tool call, ou o modelo que simplesmente não produziu nada) NÃO
+        # grava `agent.response` vazio no event log. A tela trata conteúdo
+        # vazio como evento PRÉ-RN-059 (balão de compatibilidade) — gravar um
+        # vazio HOJE reabre exatamente o defeito que a RN-059 fechou, só que
+        # num caminho diferente. Nada se perde: quem chamou tool já narra por
+        # `tool.call`/`tool.result`, e quem terminou sem tool call nem texto
+        # decide o desfecho (e o evento durável correspondente) a partir de
+        # `ctx.last_error`/`{:ok, ctx}` — ver `DevAgentServer.handle_outcome/4`.
+        # RN-695 (AT-355): quem não conversa com ninguém (a Anamnese) grava o
+        # texto com outro tipo, que o fio da sessão não desenha.
+        if content != "" do
+          emit(
+            ctx,
+            Map.get(ctx, :response_event, "agent.response"),
+            Map.merge(
+              %{
+                content: content,
+                error: Map.get(resp, "error"),
+                iteration: ctx.iteration,
+                tokensSpentMicros: ctx.tokens_spent_micros,
+                # RN-175: o modelo que gerou a resposta, do MESMO frame de onde já
+                # saem `usage` e `error`. Os quatro conversacionais gravam isto
+                # desde a RN-146; o `ToolLoop` — que é o caminho de TODO agente de
+                # execução e de gate (dev-*, QA, SecOps, Infra-Workflows,
+                # Psicólogo, Anamnese) — nunca gravou, e por isso a tela mostrava
+                # o rótulo genérico para todos eles. `RunLlmTurnUseCase` já
+                # devolve `modelName` no corpo (nulo só quando falha ANTES de
+                # resolver o binding), então não há chamada nova.
+                modelName: Map.get(resp, "modelName")
+              },
+              Map.merge(
+                Engine.Agents.FontesDoTurno.descarregar(),
+                Engine.Agents.RaciocinioDoTurno.descarregar()
+              )
+            )
+            |> Engine.Harness.CitacaoDasFontes.marcar()
+          )
+        end
+
+        # `toolCalls` vazio não significa necessariamente "o modelo parou":
+        # modelo local pequeno costuma descrever a chamada em TEXTO em vez de
+        # usar o protocolo nativo. Recupera antes de desistir (ADR 0020).
+        case tool_calls(message, ctx) do
+          [] ->
+            parada_sem_chamada(ctx, resp, content)
+
+          tool_calls ->
+            ctx = Map.delete(ctx, :corte_retentado)
+
+            case Enum.reduce_while(tool_calls, {:cont, ctx}, &dispatch_or_halt/2) do
+              {:halted, {:awaiting_approval, _, id, name} = reason, ctx} ->
+                {:halted, reason, recusar_irmas(ctx, tool_calls, id, name)}
+
+              {:halted, reason, ctx} ->
+                {:halted, reason, ctx}
+
+              {:cont, ctx} ->
+                parou_ou_loop(ctx)
+            end
+        end
+
+      {:error, reason} ->
+        # NUNCA `agent.response` vazio aqui: sem `content`, a tela mostrava o
+        # balão de compatibilidade da RN-059 como se este fosse um evento
+        # ANTIGO — quando é uma falha acontecendo AGORA. Vira `agent.error`
+        # durável, com a ORIGEM (mesmo vocabulário do ADR 0020, mesmo helper
+        # que os quatro agentes conversacionais usam — `FalhaDeTurno`).
+        emit_falha(ctx, reason)
+        # Guarda o erro no ctx: sem isso o chamador só vê `{:ok, ctx}` e não
+        # distingue "o modelo parou sem sinalizar" de "o provider falhou" —
+        # a task era bloqueada com diagnóstico VAZIO, sem nada pro operador
+        # agir em cima.
+        {:ok, Map.put(ctx, :last_error, inspect(reason))}
+    end
+  end
+
+  # RN-780 (AT-459): resposta sem texto e sem chamada, cortada pelo teto de
+  # saída (`truncated`, o `finish_reason: length` que a api devolve — RN-737),
+  # é o raciocínio que comeu o teto, não o modelo desistindo. A volta é
+  # retentada UMA vez, sem a resposta vazia no histórico e contando iteração
+  # (o teto de iterações e o orçamento da tarefa continuam valendo); repetida,
+  # o laço para marcando `corte_pelo_teto`, que o consumidor narra.
+  defp parada_sem_chamada(ctx, %{"truncated" => true}, content) do
+    cond do
+      # RN-946 (AT-620): cortada NO MEIO do texto não se retenta (muda laço e
+      # custo); marca chave própria, pois `corte_pelo_teto` é da RN-780.
+      String.trim(to_string(content)) != "" ->
+        {:ok, Map.put(ctx, :corte_com_texto, true)}
+
+      Map.get(ctx, :corte_retentado) ->
+        {:ok, Map.put(ctx, :corte_pelo_teto, true)}
+
+      true ->
+        ctx
+        |> Map.update!(:messages, &Enum.drop(&1, -1))
+        |> Map.put(:corte_retentado, true)
+        |> Map.update!(:iteration, &(&1 + 1))
+        |> loop()
+    end
+  end
+
+  defp parada_sem_chamada(ctx, _resp, _content), do: {:ok, ctx}
+
+  # RN-810 (AT-484): falha de REDE passageira do provider (DNS `EAI_AGAIN`,
+  # conexão recusada/derrubada, timeout) é retentada com espera curta e teto
+  # pequeno ANTES de virar desfecho. A api normaliza o erro por `code`
+  # (`connection`/`timeout`, ADR 0041) e o devolve no corpo 200; o texto fica
+  # como rede para o erro que chegou sem código. Vale para todo consumidor do
+  # `ToolLoop` (dev agents e subagentes de gate), porque o caminho é este.
+  @esperas_de_rede_ms [1_000, 3_000]
+
+  defp llm_turn_com_retentativa(ctx, wire, esperas \\ nil) do
+    esperas = esperas || Application.get_env(:engine, :esperas_de_rede_ms, @esperas_de_rede_ms)
+
+    resultado =
+      EngineApiClient.llm_turn(ctx.project_id, ctx.session_id, ctx.agent, wire, ctx.tool_specs)
+
+    case {resultado, esperas} do
+      {{:ok, resp}, [espera | resto]} when is_map(resp) ->
+        if FalhaDeTurno.falha_de_rede?(resp) do
+          emit(ctx, "toolloop.network_retry", %{
+            erro: Map.get(resp, "error"),
+            errorCode: Map.get(resp, "errorCode"),
+            esperaMs: espera,
+            tentativasRestantes: length(resto)
+          })
+
+          Process.sleep(espera)
+          llm_turn_com_retentativa(ctx, wire, resto)
+        else
+          resultado
+        end
+
+      _ ->
+        resultado
+    end
+  end
+
+  defp emit_falha(ctx, reason) do
+    emit(ctx, "agent.error", %{
+      origem: FalhaDeTurno.origem(reason),
+      mensagem: FalhaDeTurno.mensagem(reason, ctx[:project_id]),
+      reason: FalhaDeTurno.diagnostico(reason)
+    })
+  end
+
+  defp registra_erro(ctx, nil), do: ctx
+  defp registra_erro(ctx, ""), do: ctx
+  defp registra_erro(ctx, error), do: Map.put(ctx, :last_error, to_string(error))
+
+  defp tool_calls(message, ctx) do
+    case Map.get(message, "toolCalls") || [] do
+      [] -> ToolCallRecovery.from_content(Map.get(message, "content", ""), tool_names(ctx))
+      nativas -> nativas
+    end
+  end
+
+  # O traceparent vem do estado da sessão, não do ctx: threadá-lo por todos os
+  # agent servers que constroem ctx seria mudança em seis módulos para carregar
+  # um valor que já está gravado e é imutável.
+  defp session_traceparent(ctx) do
+    case Map.get(ctx, :session_id) do
+      nil -> nil
+      session_id -> Engine.Sessions.SessionState.traceparent(session_id)
+    end
+  rescue
+    _ -> nil
+  end
+
+  defp tool_names(ctx), do: Enum.map(ctx.tool_specs, & &1.name)
+
+  # RN-1001 (AT-739): chamada irmã depois da pendente não roda; ganha `tool` de
+  # recusa e `tool.result` `ok: false`, para todo `tool_use` ter o seu resultado.
+  defp recusar_irmas(ctx, calls, pendente_id, pendente_nome) do
+    texto = Engine.Agents.ResultadoDeFerramenta.recusa_de_irma(pendente_nome)
+
+    calls
+    |> Enum.drop_while(&(Map.get(&1, "id") != pendente_id))
+    |> Enum.drop(1)
+    |> Enum.reduce(ctx, fn call, c ->
+      name = Map.get(call, "name")
+      emit(c, "tool.result", Engine.Agents.ResultadoDeFerramenta.payload(name, {:error, texto}))
+
+      append(c, %{
+        "role" => "tool",
+        "content" => texto,
+        "toolCallId" => Map.get(call, "id"),
+        "name" => name,
+        :pinned => false
+      })
+    end)
+  end
+
+  defp dispatch_or_halt(tool_call, {:cont, ctx}) do
+    {ctx, halt} = dispatch(tool_call, ctx)
+
+    case halt do
+      {:halt, reason} -> {:halt, {:halted, reason, ctx}}
+      :cont -> {:cont, {:cont, ctx}}
+    end
+  end
+
+  defp dispatch(tool_call, ctx) do
+    name = Map.get(tool_call, "name")
+    args = Map.get(tool_call, "arguments", %{})
+    id = Map.get(tool_call, "id")
+
+    Span.with_span("tool.call", %{"brabo.tool" => name}, fn ->
+      do_dispatch(tool_call, ctx, name, args, id)
+    end)
+  end
+
+  defp do_dispatch(_tool_call, ctx, name, args, id) do
+    emit(ctx, "tool.call", %{tool: name, args: args})
+
+    hook_ctx = ctx |> Map.put(:tool, name) |> Map.put(:args, args)
+
+    case Hooks.run(ctx.hooks, :pre_tool_use, hook_ctx) do
+      # A ferramenta ficou pendente de aprovação (ADR 0052). O laço para SEM
+      # gravar mensagem de ferramenta: o lugar dela fica vago, e quem retoma
+      # preenche com o resultado de verdade. Gravar "pending" aqui seria dizer
+      # ao modelo que o comando respondeu isso.
+      {:ok, %{aguardando_aprovacao: action_id}} when is_binary(action_id) ->
+        {ctx, {:halt, {:awaiting_approval, action_id, id, name}}}
+
+      hook ->
+        concluir_despacho(ctx, hook, name, args, id)
+    end
+  end
+
+  defp concluir_despacho(ctx, hook, name, args, id) do
+    {result, ok?} =
+      case hook do
+        {:halt, reason} -> {"bloqueado: #{inspect(reason)}", false}
+        {:ok, %{result: precomputed}} -> {precomputed, true}
+        {:ok, _cont} -> run_direct(name, args, ctx)
+      end
+
+    post_ctx =
+      ctx
+      |> Map.put(:tool, name)
+      |> Map.put(:args, args)
+      |> Map.put(:result, result)
+      |> Map.put(:result_ok?, ok?)
+
+    Engine.Agents.FontesDoTurno.anotar(
+      name,
+      args,
+      if(ok?, do: {:ok, result}, else: {:error, result})
+    )
+
+    halt =
+      case Hooks.run(ctx.hooks, :post_tool_use, post_ctx) do
+        {:halt, reason} -> {:halt, reason}
+        {:ok, _cont} -> :cont
+      end
+
+    tool_msg = %{
+      "role" => "tool",
+      "content" => result,
+      "toolCallId" => id,
+      "name" => name,
+      :pinned => false
+    }
+
+    {append(ctx, tool_msg), halt}
+  end
+
+  defp run_direct(name, args, ctx) do
+    case Tools.find(name, ctx.tools) do
+      nil ->
+        {"ferramenta desconhecida: #{name}", false}
+
+      mod ->
+        # RN-719: normaliza argumentos e transforma exceção em erro do laço.
+        case Engine.Harness.ArgumentosDeFerramenta.executar(name, args, mod.spec(), fn a ->
+               mod.run(a, ctx)
+             end) do
+          {:ok, result} -> {result, true}
+          {:error, reason} -> {stringify(reason), false}
+        end
+    end
+  end
+
+  defp system_prompt(ctx) do
+    ctx.project_id
+    |> ContextBuilder.build_layers(ctx.agent,
+      workspace_root: ctx[:workspace_root],
+      business_rules_units: Map.get(ctx, :business_rules_units, []),
+      task_state_units: Map.get(ctx, :task_state_units, [])
+    )
+    |> PromptAssembler.assemble()
+    |> PromptAssembler.Default.render()
+  end
+
+  defp default_hooks do
+    Hooks.new()
+    |> Hooks.register(:pre_tool_use, ActionPipeline)
+    |> Hooks.register(:post_tool_use, EventLog)
+  end
+
+  defp emit(ctx, type, payload) do
+    EngineApiClient.append_event(ctx.project_id, ctx.session_id, %{
+      type: type,
+      actorKind: "agent",
+      actorId: ctx.agent,
+      payload: payload
+    })
+  end
+
+  defp append(ctx, message), do: %{ctx | messages: ctx.messages ++ [message]}
+
+  defp to_wire(message), do: Map.delete(message, :pinned)
+
+  defp stringify(reason) when is_binary(reason), do: reason
+  defp stringify(reason), do: inspect(reason)
+end

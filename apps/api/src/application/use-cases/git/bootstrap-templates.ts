@@ -1,0 +1,76 @@
+// Conteúdo gerado pelo bootstrap de Gitflow — funções puras de
+// template-string, sem engine nenhuma. Caminho de template de PR
+// padronizado pros 3 providers (mesmo pro GitLab, cuja convenção real
+// seria `.gitlab/merge_request_templates/Default.md`) — simplificação
+// deliberada, ver docs/adr/0005.
+
+export const PR_TEMPLATE_PATH = '.github/pull_request_template.md';
+export const BRANCHING_POLICY_PATH = 'docs/branching-policy.md';
+export const GITIGNORE_PATH = '.gitignore';
+
+/**
+ * RN-761 (AT-446): os diretórios de dependência instalada e de build que o
+ * repositório nunca deve versionar. É a MESMA lista que o engine exclui do
+ * commit do dev agent (`Engine.Actions.DiretoriosDeDependencia`) e que os
+ * gates acusam — as três cópias são conferidas por teste.
+ */
+export const DIRETORIOS_DE_DEPENDENCIA = [
+  'node_modules',
+  'deps',
+  '_build',
+  '.venv',
+  'venv',
+  '__pycache__',
+  'vendor',
+  'target',
+] as const;
+
+/** RN-948 (AT-623): arquivos de dados em tempo de execução; mesma lista do engine. */
+export const ARQUIVOS_DE_DADOS = [
+  '*.db',
+  '*.db-*',
+  '*.sqlite',
+  '*.sqlite-*',
+  '*.sqlite3',
+  '*.sqlite3-*',
+] as const;
+
+export function gitignoreContent(): string {
+  return `# Gerado pelo bootstrap do Brabo: dependências instaladas e build não
+# entram no repositório. Edite à vontade.
+${DIRETORIOS_DE_DEPENDENCIA.map((d) => `${d}/`).join('\n')}
+${ARQUIVOS_DE_DADOS.join('\n')}
+.env
+`;
+}
+
+export function prTemplateContent(): string {
+  return `## O que muda
+
+Descreva o que essa mudança faz e por quê.
+
+## Checklist
+
+- [ ] Testado localmente
+- [ ] Sem segredos/credenciais no diff
+- [ ] Testes cobrindo o caminho feliz + 1 caso de falha (quando aplicável)
+`;
+}
+
+// A escada tem TRÊS degraus, não quatro. Havia um `rc` (release candidate)
+// entre `qa` e `main`, e o ADR 0030 o removeu: sem ambiente e sem gente para
+// exercê-lo, era degrau cerimonial. O `pr-police` do CI já operava com três
+// desde então — este texto, que o bootstrap COMMITA no repositório do
+// usuário, era o último lugar que ainda ensinava a política antiga (achado #3
+// do primeiro dogfooding).
+export function branchingPolicyContent(): string {
+  return `# Política de branching
+
+Gerado automaticamente pelo bootstrap — o repositório é trunk:
+
+- \`main\` — a única branch permanente. Só recebe merge por PR.
+
+Todo trabalho nasce de \`main\` em \`feature/*\` (ou \`bugfix/*\`, etc.),
+vira PR para \`main\` e volta para ela. Nunca direto na \`main\`.
+`;
+}

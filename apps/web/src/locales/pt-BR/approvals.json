@@ -1,0 +1,357 @@
+{
+  "semFrase": "ver detalhes",
+  "actions": {
+    "unknownVerb": "propõe uma ação",
+    "terminal": {
+      "verb": "quer executar comando",
+      "phraseWithCommand": "Executa o comando \"{{command}}\" no terminal do projeto.",
+      "phraseFallback": "Executa um comando no terminal do projeto."
+    },
+    "gitCommit": {
+      "verb": "propõe alteração",
+      "base": "Registra um commit",
+      "filesSuffix_zero": " de {{count}} arquivos",
+      "filesSuffix_one": " de {{count}} arquivo",
+      "filesSuffix_other": " de {{count}} arquivos",
+      "pathSuffix": " do arquivo {{path}}",
+      "branchSuffix": " na branch {{branch}}",
+      "repoSuffix": " no repositório do projeto",
+      "messageSuffix": ": \"{{message}}\""
+    },
+    "gitPush": {
+      "verb": "quer enviar alterações",
+      "withBranch": "Envia a branch {{branch}} para o repositório remoto do projeto.",
+      "fallback": "Envia a branch de trabalho para o repositório remoto do projeto."
+    },
+    "prOpen": {
+      "verb": "abriu pull request",
+      "base": "Abre uma pull request",
+      "routeBoth": " de {{source}} para {{target}}",
+      "routeSourceOnly": " a partir de {{source}}",
+      "titleSuffix": ": \"{{title}}\""
+    },
+    "spend": {
+      "verb": "solicita gasto extra",
+      "base": "Autoriza gasto de tokens acima do orçamento já definido",
+      "reasonSuffix": " — {{reason}}"
+    },
+    "gitRepoCreate": {
+      "verb": "quer criar o repositório",
+      "base": "Cria o repositório",
+      "named": " {{name}}",
+      "unnamed": " do projeto",
+      "atProvider": " no {{provider}}",
+      "atDefaultProvider": " no provider de git configurado",
+      "withVisibility": ", com visibilidade {{visibility}}"
+    },
+    "gitBranchCreate": {
+      "verb": "quer criar uma branch",
+      "base": "Cria a branch",
+      "named": " {{branch}}",
+      "fromRef": " a partir de {{from}}",
+      "suffix": " no repositório do projeto."
+    },
+    "gitBranchProtect": {
+      "verb": "quer proteger uma branch",
+      "base": "Liga a proteção da branch",
+      "named": " {{branch}}",
+      "suffix": " — depois disso, nada entra nela sem pull request."
+    },
+    "writeFile": {
+      "verb": "propõe escrever um arquivo",
+      "base": "Escreve o arquivo",
+      "pathSuffix": " {{path}}",
+      "fixedSuffix": " no workspace — fora da área que este agente altera sozinho."
+    },
+    "openAdrPr": {
+      "verb": "abriu pull request de ADR",
+      "base": "Abre uma pull request com a ADR",
+      "titled": " \"{{title}}\"",
+      "atFile": " em docs/adr/{{slug}}.md"
+    },
+    "openInfraPr": {
+      "verb": "abriu pull request de infra",
+      "base": "Abre uma pull request de infraestrutura",
+      "titled": " \"{{title}}\"",
+      "filesSuffix_zero": " com {{count}} arquivos",
+      "filesSuffix_one": " com {{count}} arquivo",
+      "filesSuffix_other": " com {{count}} arquivos"
+    },
+    "gitMerge": {
+      "verb": "quer fazer merge",
+      "base": "Faz o merge da pull request",
+      "prId": " #{{pr}}",
+      "target": " em {{target}}",
+      "suffix": " no repositório do projeto."
+    },
+    "instructionPatch": {
+      "verb": "propõe ajustar a instrução de um agente",
+      "base": "Altera o arquivo de instrução de {{agent}}",
+      "transition": ", da v{{from}} para a v{{to}}",
+      "suffix": " — vale para os próximos turnos dele."
+    },
+    "parallelize": {
+      "verb": "quer mais um agente em paralelo",
+      "base": "Põe mais um agente para trabalhar em paralelo",
+      "module": " no módulo {{module}}",
+      "activeCount_zero": " — a sessão já tem {{count}} agentes ativos para um teto de {{max}}",
+      "activeCount_one": " — a sessão já tem {{count}} agente ativo para um teto de {{max}}",
+      "activeCount_other": " — a sessão já tem {{count}} agentes ativos para um teto de {{max}}"
+    },
+    "raiseMaxParallel": {
+      "verb": "propõe subir o teto de paralelismo",
+      "base": "Sobe o teto de agentes em paralelo",
+      "area": " da área {{area}}",
+      "jump": " de {{from}} para {{to}}",
+      "suffix": " — muda quanto o produto gasta sem perguntar."
+    },
+    "proposeExecutionPlan": {
+      "verb": "propõe o plano de execução",
+      "base": "Aprova o plano de execução do Dev Lead",
+      "summaryCount_zero": " — {{count}} agentes em {{modules}}",
+      "summaryCount_one": " — {{count}} agente em {{modules}}",
+      "summaryCount_other": " — {{count}} agentes em {{modules}}",
+      "modulesCount_zero": "{{count}} módulos",
+      "modulesCount_one": "{{count}} módulo",
+      "modulesCount_other": "{{count}} módulos",
+      "reasonSuffix": ": \"{{summary}}\"",
+      "note": " e ATIVA a execução: os dev agents sobem e começam a gastar."
+    },
+    "assessImplementability": {
+      "verb": "avalia a implementabilidade de uma story",
+      "base": "Registra a story como {{label}}",
+      "viableLabel": "implementável",
+      "unfeasibleLabel": "INVIÁVEL",
+      "justificationSuffix": ": \"{{justification}}\""
+    }
+  },
+  "approvalCard": {
+    "batchSelectAriaLabel": "Selecionar para aprovação em lote",
+    "details": {
+      "title": "Detalhes",
+      "rawPayloadTitle": "Payload cru",
+      "fieldCount_zero": "{{count}} campos",
+      "fieldCount_one": "{{count}} campo",
+      "fieldCount_other": "{{count}} campos"
+    },
+    "actions": {
+      "approve": "Aprovar",
+      "approvePlan": "Aprovar plano",
+      "deny": "Negar",
+      "alwaysAllow": "Sempre permitir",
+      "autoMode": "Modo automático"
+    },
+    "notes": {
+      "alwaysAllow": "Sempre permitir: grava em .brabo/permissions.json do projeto uma regra por segmento do comando, por verbo + subcomando (ex.: \"npm test\", \"git status\") — o próximo comando com o mesmo verbo e subcomando roda sem perguntar.",
+      "alwaysAllowTyped": "Sempre permitir: grava em .brabo/permissions.json do projeto uma regra para este tipo de ação — a próxima do mesmo tipo roda sem perguntar.",
+      "alwaysAllowScoped": "Sempre permitir: libera este tipo de ação só para {{agent}}, não para os outros agentes do projeto.",
+      "autoMode": "Modo automático: {{actor}} roda qualquer comando sem perguntar, inclusive fora da pasta do projeto, e isso inclui git push e abertura de PR. Continuam pedindo sua decisão deploy, sudo/doas, merge em branch protegida, patch de instrução, paralelismo e remover container; o que estiver em deny segue negado. Desliga no card do agente.",
+      "autoModeTyped": "Modo automático: {{actor}} passa a ter as próximas ações aprovadas sem perguntar, inclusive git push e abertura de PR. Continuam pedindo sua decisão deploy, merge em branch protegida, patch de instrução, paralelismo e remover container; o que estiver em deny segue negado. Desliga no card do agente.",
+      "autoModeNotThis": "Ligar o modo automático não aprova esta ação: ela continua esperando o seu Aprovar.",
+      "obsolete": "A ação já foi decidida por outro caminho; este card se atualiza sozinho.",
+      "alwaysAllowCurta": "Sempre permitir grava uma regra em permissions.json para este tipo de ação.",
+      "autoModeCurta": "Modo automático: {{actor}} passa a ter as próximas ações aprovadas sem pedir."
+    },
+    "decided": {
+      "denied": "Negado",
+      "alwaysAllowed": "Sempre permitido · gravado em permissions.json",
+      "failed": "Falhou",
+      "approvedTerminal": "Aprovado · comando em execução",
+      "approved": "Aprovado",
+      "failedConflict": "Conflito em {{files}} — o agente refaz a PR sozinho"
+    },
+    "body": {
+      "commit": {
+        "files_zero": "{{count}} arquivos",
+        "files_one": "{{count}} arquivo",
+        "files_other": "{{count}} arquivos"
+      },
+      "terminal": {
+        "invalidCommand": "O modelo não produziu um comando válido para esta ação.",
+        "outputHeader": "terminal · output",
+        "compression": "rtk −{{percent}}%",
+        "emptyOutput": "(sem saída)"
+      },
+      "writeFile": {
+        "invalidBoth": "O modelo não produziu um caminho e um conteúdo válidos para esta ação.",
+        "invalidPath": "O modelo não produziu um caminho válido para esta ação.",
+        "invalidContent": "O modelo não produziu um conteúdo válido para esta ação.",
+        "previewHeader": "preview do conteúdo",
+        "linesTruncated_zero": "{{shown}} de {{count}} linhas",
+        "linesTruncated_one": "{{shown}} de {{count}} linha",
+        "linesTruncated_other": "{{shown}} de {{count}} linhas"
+      },
+      "prOpen": {
+        "defaultTitle": "Pull request"
+      },
+      "gitMerge": {
+        "defaultTitle": "Pull request",
+        "prTitle": "Pull request #{{pr}}"
+      },
+      "instructionPatch": {
+        "hypothesisOrigin": "origem: hipótese {{id}}"
+      },
+      "gitCommitPush": {
+        "noDetails": "Sem detalhes adicionais."
+      },
+      "empty": "Esta ação não carrega payload."
+    },
+    "actorYou": "Você",
+    "actorOtherMember": "Outro membro",
+    "plan": {
+      "agents_zero": "Começa a execução com {{count}} dev agents, um por módulo.",
+      "agents_one": "Começa a execução com {{count}} dev agent, um por módulo.",
+      "agents_other": "Começa a execução com {{count}} dev agents, um por módulo.",
+      "tasks_zero": "São {{count}} tarefas.",
+      "tasks_one": "É {{count}} tarefa.",
+      "tasks_other": "São {{count}} tarefas.",
+      "cost": "Custo esperado: até {{total}} ({{perTask}} de teto por tarefa).",
+      "autoPilot_zero": "Ligar o piloto automático para o time ({{count}} agentes; o merge continua com você)",
+      "autoPilot_one": "Ligar o piloto automático para o time ({{count}} agente; o merge continua com você)",
+      "autoPilot_other": "Ligar o piloto automático para o time ({{count}} agentes; o merge continua com você)"
+    }
+  },
+  "prGateTimeline": {
+    "steps": {
+      "dev": "Dev",
+      "qa": "QA",
+      "secops": "SecOps",
+      "user": "Você"
+    },
+    "viewPr": "ver PR",
+    "blocked": "bloqueada",
+    "verdict": {
+      "approved": "aprovado",
+      "changesRequested": "mudanças solicitadas",
+      "dispensed": "dispensada"
+    },
+    "coverage": {
+      "rule": "Regra",
+      "tests": "Testes",
+      "covered": "Cobertura",
+      "coveredYes": "coberta",
+      "coveredNo": "sem teste"
+    },
+    "tests": {
+      "title": "Testes executados",
+      "sem_relatorio": "O gate não gerou relatório de testes.",
+      "relatorio_invalido": "O relatório de testes não pôde ser lido.",
+      "modo_runner": "Projeto em modo runner: o relatório de testes não é lido pelo servidor.",
+      "passed_zero": "{{count}} passaram",
+      "passed_one": "{{count}} passou",
+      "passed_other": "{{count}} passaram",
+      "failed_zero": "{{count}} falharam",
+      "failed_one": "{{count}} falhou",
+      "failed_other": "{{count}} falharam",
+      "skipped_zero": "{{count}} pulados",
+      "skipped_one": "{{count}} pulado",
+      "skipped_other": "{{count}} pulados",
+      "omitted_zero": "Mostrando {{shown}} de {{total}} casos; {{count}} ficaram de fora.",
+      "omitted_one": "Mostrando {{shown}} de {{total}} casos; {{count}} ficou de fora.",
+      "omitted_other": "Mostrando {{shown}} de {{total}} casos; {{count}} ficaram de fora.",
+      "statusPassou": "passou",
+      "statusFalhou": "falhou",
+      "statusPulado": "pulado",
+      "statusDesconhecido": "status desconhecido"
+    }
+  },
+  "approvalsTab": {
+    "genericLoading": "Carregando…",
+    "pending": {
+      "title": "Pendentes",
+      "eyebrow": "ordenadas por urgência",
+      "selectedCount_zero": "{{count}} selecionadas",
+      "selectedCount_one": "{{count}} selecionada",
+      "selectedCount_other": "{{count}} selecionadas",
+      "approveSelected": "Aprovar selecionados",
+      "clear": "Limpar",
+      "findingSession": "Procurando a sessão do projeto…",
+      "sessionsError": "Não foi possível abrir as sessões do projeto.",
+      "noSession": "Nenhuma sessão ainda — as aprovações nascem do que os agentes propõem numa sessão.",
+      "loadingQueue": "Carregando a fila…",
+      "queueError": "Não foi possível carregar a fila de aprovações.",
+      "empty": "Nenhuma aprovação pendente. O time está fluindo.",
+      "motivoNaoLido": {
+        "todas_zero": "Não foi possível ler o motivo da política destas {{count}} ações: a leitura do log da sessão que as propôs falhou.",
+        "todas_one": "Não foi possível ler o motivo da política desta ação: a leitura do log da sessão que a propôs falhou.",
+        "todas_other": "Não foi possível ler o motivo da política destas {{count}} ações: a leitura do log da sessão que as propôs falhou.",
+        "algumas_zero": "Não foi possível ler o motivo da política de {{count}} das {{total}} ações abaixo: a leitura do log da sessão que as propôs falhou.",
+        "algumas_one": "Não foi possível ler o motivo da política de {{count}} das {{total}} ações abaixo: a leitura do log da sessão que a propôs falhou.",
+        "algumas_other": "Não foi possível ler o motivo da política de {{count}} das {{total}} ações abaixo: a leitura do log da sessão que as propôs falhou."
+      }
+    },
+    "devPrs": {
+      "title": "PRs em revisão",
+      "eyebrow": "{{count}} de dev agents nos gates de QA/SecOps",
+      "loading": "Carregando as PRs em revisão…",
+      "backlogError": "Não foi possível carregar o backlog.",
+      "empty": "Nenhuma PR de dev agent em revisão ainda."
+    },
+    "infraPrs": {
+      "title": "PRs de infra em revisão",
+      "eyebrow": "{{count}} de infra nos gates de QA/SecOps",
+      "loading": "Carregando as PRs de infra…",
+      "error": "Não foi possível carregar as PRs de infra.",
+      "empty": "Nenhuma PR de infra em revisão ainda.",
+      "mergeLink": "Mergear na aba PRs"
+    },
+    "permissions": {
+      "title": "Permissões do projeto",
+      "subtitle": "Regras aplicadas antes de cada ação dos agentes. Revogue por linha.",
+      "bannerPrefix": "Ordem de avaliação:",
+      "bannerMiddle": "sempre vence",
+      "bannerSuffix": ", independente da ordem no arquivo.",
+      "searchPlaceholder": "Buscar regra ou padrão…",
+      "columnPattern": "Padrão",
+      "columnType": "Tipo",
+      "columnAction": "Ação",
+      "revoke": "Revogar",
+      "revokeAriaLabel": "Revogar {{pattern}}",
+      "loading": "Lendo o permissions.json…",
+      "error": "Não foi possível carregar as permissões do projeto.",
+      "emptyNoRules": "Nenhuma regra configurada ainda.",
+      "emptyNoMatch": "Nenhuma regra corresponde à busca."
+    },
+    "toast": {
+      "autoModeOnTitle": "Modo automático ligado",
+      "autoModeOnErrorTitle": "Não foi possível ligar o modo automático"
+    }
+  },
+  "prsTab": {
+    "title": "Pull requests do projeto",
+    "subtitle": "Direto do provider de git — de TODAS as sessões, não só a mais recente.",
+    "gateStatusError": "Não consegui carregar o status de gate do backlog.",
+    "mergeErrorTitle": "Não consegui propor o merge",
+    "mergeButton": "Merge",
+    "mergeBlockedFallback": "Gate bloqueado — corrija antes de propor o merge.",
+    "mergeNoSession": "Sem sessão no projeto para propor a ação.",
+    "gatePendenteBloqueada": "O gate {{gate}} ainda está pendente para esta PR, e a tarefa dela está bloqueada: o merge fica indisponível até ela ser desbloqueada.",
+    "mergeIndisponivelBloqueada": "Merge indisponível: a tarefa desta PR está bloqueada — {{reason}}",
+    "mergeIndisponivelSemSessao": "Merge indisponível: sem sessão no projeto para propor a ação.",
+    "gatePendente": "O gate {{gate}} ainda está pendente para esta PR. O merge segue disponível — a decisão é sua.",
+    "mergeRecusado": "A última tentativa de merge foi recusada: {{reason}}",
+    "mergeRecusadoArquivos_one": "Arquivo em conflito: {{files}}",
+    "mergeRecusadoArquivos_other": "Arquivos em conflito: {{files}}",
+    "mergeRecusadoArquivos_zero": "Nenhum arquivo em conflito identificado",
+    "mergeResolverAntes": "Resolva o conflito antes (rebase da branch da PR sobre a dev) e tente o merge de novo."
+  },
+  "politica": {
+    "motivo": "A política decidiu por: {{motivo}}",
+    "motivoNaoRegistrado": "Motivo da política não registrado (proposta antes de o motivo ir para o log)",
+    "foraDoRecorte": "Motivo da política fora dos eventos carregados nesta tela",
+    "raiz": {
+      "raizGerenciada": "raiz do escopo: pasta gerenciada “{{segmento}}”",
+      "baseDeProjetos": "raiz do escopo: “{{segmento}}” dentro da base de projetos",
+      "nomeDaPasta": "raiz do escopo: pasta “{{segmento}}” na máquina do runner",
+      "indisponivel": "raiz do escopo: sem forma relativa (pasta montada fora da base de projetos, ou sem base configurada)",
+      "formaDesconhecida": "raiz do escopo: gravada numa forma que esta tela não conhece",
+      "naoRegistrada": "raiz do escopo não registrada (proposta antes de a raiz ir para o log)"
+    },
+    "linha": {
+      "autoAprovada": "{{ator}}: ação aprovada automaticamente pela política",
+      "negada": "{{ator}}: ação negada pela política",
+      "pendente": "{{ator}}: ação aguardando decisão",
+      "proposta": "{{ator}} propôs uma ação"
+    }
+  }
+}
