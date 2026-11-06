@@ -581,11 +581,11 @@ Vale em `brabo-api`, `brabo-engine`, `brabo-web`, `brabo-broker`, `brabo-infra` 
 | alvo | só `refs/heads/main` |
 | regra | `required_status_checks` com o contexto `E2E do brabo-qa` |
 | `integration_id` | o do App `viralabs-dev-brabo`: um check de mesmo nome vindo de outro token não conta |
-| bypass | nenhum |
+| bypass | só o App `viralabs-dev-brabo`, modo `Always`, como no bypass acima; pessoas não têm bypass |
 
-O ruleset `main e dev sem force push` não muda. O check nasce "em andamento" no head da PR e o `brabo-qa` o fecha depois de rodar as imagens por digest.
+O bypass do App existe porque, no hotfix, o `tag-release` do `brabo-ci` faz push direto de `.release/gate.json` na `main` para travar e destravar o gate; sem ele o push seria recusado. O ruleset `main e dev sem force push` não muda. O check nasce "em andamento" no head da PR e o `brabo-qa` o fecha depois de rodar as imagens por digest.
 
-**A exceção ao "não se burla".** O dono pode aceitar um vermelho com o comentário `/qa-aceitar <justificativa>` (mínimo de 20 caracteres, só do `OWNER_HANDLE`, só com o check do head atual vermelho por `spec` ou `ambiente`). O check vira `success` com o título `Aceito com justificativa` e entra a label `qa-aceito-com-justificativa`. Vermelho de `digest` ou de `assinatura` nunca é aceito. Um commit novo gera check novo, sem herdar o aceite. Um check em andamento há mais de 90 min é fechado como vermelho pela varredura horária.
+**A exceção ao "não se burla".** O dono pode aceitar um vermelho com o comentário `/qa-aceitar <justificativa>` (mínimo de 20 caracteres, só do `OWNER_HANDLE`, só com o check do head atual vermelho por `spec`, `ambiente` ou `sem-resposta`, que é falha de ambiente do próprio portão). O check vira `success` com o título `Aceito com justificativa` e entra a label `qa-aceito-com-justificativa`. Vermelho de `digest` ou de `assinatura` nunca é aceito. Um commit novo gera check novo, sem herdar o aceite. Um check em andamento há mais de 90 min é fechado como vermelho pela varredura horária.
 
 ## Como aplicar
 
@@ -608,7 +608,7 @@ gh api -X POST repos/viralabs-dev/<repo>/rulesets --input - <<'JSON'
   "target": "branch",
   "enforcement": "active",
   "conditions": { "ref_name": { "include": ["refs/heads/main"], "exclude": [] } },
-  "bypass_actors": [],
+  "bypass_actors": [{ "actor_id": <id do App>, "actor_type": "Integration", "bypass_mode": "always" }],
   "rules": [{
     "type": "required_status_checks",
     "parameters": {

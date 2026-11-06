@@ -641,8 +641,9 @@ Nos seis repositórios com gatilho (`brabo-api`, `brabo-engine`, `brabo-web`, `b
 - **Promoção no `brabo-infra`:** o compose vem do head da PR e as imagens são a `-dev` mais nova de cada serviço.
 - **Promoção no `brabo-qa`:** tudo vem da `-dev` mais nova (imagens e compose do `brabo-infra`), e as specs são as do head da PR.
 - **Hotfix `hotfix/*` em api, engine, web e broker:** o `ci.yml` publica `sha-<12 caracteres do head>` e o E2E a usa, com a última tag final dos demais e do `brabo-infra`.
+- **Hotfix `hotfix/*` no `brabo-qa`:** as imagens e o compose são sempre as `-dev` mais novas de todos, e as specs são as do head da PR.
 - **Hotfix `hotfix/*` no `brabo-infra`:** as imagens são a última tag final de cada serviço e o compose vem do head.
-- **Aceite:** o dono pode aceitar um vermelho de `spec` ou `ambiente` com `/qa-aceitar <justificativa>`; digest divergente e assinatura inválida nunca são aceitos.
+- **Aceite:** o dono pode aceitar um vermelho de `spec`, `ambiente` ou `sem-resposta` (falha de ambiente do próprio portão) com `/qa-aceitar <justificativa>`; digest divergente e assinatura inválida nunca são aceitos.
 
 ## Versionamento {#versioning}
 
