@@ -321,7 +321,7 @@ sequenceDiagram
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从发出点提取：**116 个标识符**，其中 **4** 个未在上文描述。
+从发出点提取：**117 个标识符**，其中 **5** 个未在上文描述。
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
@@ -342,6 +342,7 @@ sequenceDiagram
 - `anamnese.run_skipped` <sub>(apps/engine/lib/engine/session_events/event.ex)</sub>
 - `architecture.readiness_confirmed` <sub>(apps/api/src/application/use-cases/agents/offer-infra-handoff.use-case.ts)</sub>
 - `artifact.business_rule` <sub>(apps/engine/lib/engine/agents/arquiteto_server.ex)</sub>
+- `artifact.business_rule_retired` — ⚠️ **上文未描述** <sub>(apps/engine/lib/engine/agents/arquiteto_server.ex)</sub>
 - `artifact.decision_record` <sub>(apps/api/src/application/use-cases/backlog/perguntas-em-aberto.use-case.ts)</sub>
 - `artifact.insight` <sub>(apps/engine/lib/engine/harness/tools/emit_insight.ex)</sub>
 - `artifact.module_map` <sub>(apps/api/src/application/use-cases/architecture/create-module-map.use-case.ts)</sub>

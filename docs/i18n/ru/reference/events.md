@@ -413,7 +413,7 @@ sequenceDiagram
 
 > ⚠️ Блок сгенерирован `pnpm docs:generate`. Не редактируйте вручную — следующая сборка его перезапишет.
 
-Извлечено из точек генерации идентификаторов: **116**, из них не описаны выше: **4**.
+Извлечено из точек генерации идентификаторов: **117**, из них не описаны выше: **5**.
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
@@ -434,6 +434,7 @@ sequenceDiagram
 - `anamnese.run_skipped` <sub>(apps/engine/lib/engine/session_events/event.ex)</sub>
 - `architecture.readiness_confirmed` <sub>(apps/api/src/application/use-cases/agents/offer-infra-handoff.use-case.ts)</sub>
 - `artifact.business_rule` <sub>(apps/engine/lib/engine/agents/arquiteto_server.ex)</sub>
+- `artifact.business_rule_retired` — ⚠️ **не описан выше** <sub>(apps/engine/lib/engine/agents/arquiteto_server.ex)</sub>
 - `artifact.decision_record` <sub>(apps/api/src/application/use-cases/backlog/perguntas-em-aberto.use-case.ts)</sub>
 - `artifact.insight` <sub>(apps/engine/lib/engine/harness/tools/emit_insight.ex)</sub>
 - `artifact.module_map` <sub>(apps/api/src/application/use-cases/architecture/create-module-map.use-case.ts)</sub>

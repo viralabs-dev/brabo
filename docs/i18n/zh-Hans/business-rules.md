@@ -858,4 +858,6 @@ traducao_de: 222baae244342a1d7b5d879bcee93229b036ed86
 - <a id="rn-1016"></a>[RN-1016](business-rules/engine.md#rn-1016) — The JUnit reporter is set up inside the module's first code task, never as a task of its own
 - <a id="rn-1017"></a>[RN-1017](business-rules/api.md#rn-1017) — A terminal `git push` to a protected branch, with force, `--all` or `--mirror` is a human decision, even in automatic mode
 - <a id="rn-1018"></a>[RN-1018](business-rules/api.md#rn-1018) — The agent retires an obsolete business rule, citing its replacement or the user's answer; every reader ignores it
+- <a id="rn-1019"></a>[RN-1019](business-rules/api.md#rn-1019) — In automatic mode a terminal `git merge` inside the task scope is auto-approved
+- <a id="rn-1020"></a>[RN-1020](business-rules/engine.md#rn-1020) — The Criativo and the PO retire an obsolete business rule themselves, citing the replacement or the user's answer
 <!-- END:GENERATED:indice-de-rn -->
