@@ -852,4 +852,8 @@ traducao_de: 222baae244342a1d7b5d879bcee93229b036ed86
 - <a id="rn-1006"></a>[RN-1006](business-rules/engine.md#rn-1006) — The Dev Lead creates the foundation task of a module that others depend on
 - <a id="rn-1007"></a>[RN-1007](business-rules/api.md#rn-1007) — Claude Haiku 5.5 on Anthropic direct has a curated reasoning allowance of 12288 tokens
 - <a id="rn-1008"></a>[RN-1008](business-rules/api.md#rn-1008) — The direct Anthropic provider uses prompt caching, sums the cache parcels into the input and prices the call from the vendor table
+- <a id="rn-1009"></a>[RN-1009](business-rules/api.md#rn-1009) — The merge that closes a task wakes the modules that depend on it
+- <a id="rn-1010"></a>[RN-1010](business-rules/engine.md#rn-1010) — A conflict integrating `dev` at claim goes to the agent; only what it does not resolve blocks
+- <a id="rn-1011"></a>[RN-1011](business-rules/engine.md#rn-1011) — The Dev Lead's plan is refused when a task cites a route the contract declares in another module
+- <a id="rn-1012"></a>[RN-1012](business-rules/engine.md#rn-1012) — A task blocked by the model wakes the Dev Lead, who asks the Architect for the missing contract
 <!-- END:GENERATED:indice-de-rn -->

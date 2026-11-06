@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 255 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 256 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -103,6 +103,7 @@ Quais agentes existem, o que cada um entrega a quem, a delegação dentro de uma
 | [0212](0212-historia-arquivada.md) | Uma história pode ser ARQUIVADA, e isso é coluna — `stories.archived_at`/`archived_reason` (migration `0069`) — e não um valor novo de `story_status`, porque o status é o portão do claim e arquivar não é passo de progresso (AT-406, decisão do dono de 03/10 "PO e usuário"). Toda leitura que DECIDE (backlog, cobertura, fila de promoção, o plano do Dev Lead, claim) filtra `archived_at IS NULL`, e as tarefas saem junto com a história; nada é apagado, e os eventos imutáveis novos `backlog.story_archived`/`backlog.story_updated` registram isso. Uma régua para a ferramenta do PO e a aba Backlog: só `draft` sem tarefa em execução, 409 nomeado no resto |
 | [0213](0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.md) | O entregável roda na máquina do usuário pelo compose da Infra, nunca por uma porta publicada pelo broker (AT-517, decisão do dono de 11/10; ADR 0130 intocado). O compose constrói o APP a partir do Dockerfile do módulo com `FROM` = a imagem decidida, na porta do host `${APP_PORT:-8080}`, com um `.env.example` commitado; `propose_infra_pr` ganha um payload `run` obrigatório (`command`, 1–5 `urls` de localhost, `envExample`) que a api transforma no `artifact.run_instructions` versionado. Os devs servem `/openapi.json` e `/docs` (Swagger de um CDN sob rede `none`), o QA os prova DENTRO do container, e o card da Visão geral diz "declarado pela Infra, não verificado na sua máquina" — o `docker compose up` real fica como lacuna declarada |
 | [0259](0259-o-modulo-de-que-outros-dependem-tem-dono.md) | O módulo de que outros dependem tem dono no plano: o Dev Lead ganha `create_task` para a tarefa de fundação, a api recusa com 400 o plano que deixa sem tarefa uma dependência de outro módulo, e o claim espera o `dependsOn` direto. Preço: menos paralelismo. Revisa a RN-678 do [0194](0194-aprovar-o-plano-ativa-a-execucao.md) só para a fundação. |
+| [0261](0261-o-dev-lead-e-avisado-de-bloqueios-e-pede-ao-arquiteto.md) | O Dev Lead é avisado de bloqueios e pede ao Arquiteto por um canal próprio: o `Wake` o acorda em `:tarefa_bloqueada` e `:contrato_publicado`, e a ferramenta `pedir_ao_arquiteto` grava um `chat.message` do ator `dev-lead` entregue ao Arquiteto. Desbloquear a tarefa continua humano. Complementa o [0259](0259-o-modulo-de-que-outros-dependem-tem-dono.md) e estende o [0038](0038-hierarquia-de-agentes.md). |
 
 ## Gates, QA e revisão de segurança {#tema-gates}
 
@@ -396,7 +397,7 @@ Como a documentação é gerada, verificada e publicada.
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0261**.
+  é substituído — o próximo é **0262**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml` e a linha do índice sob a seção desse
   tema, em ordem numérica. Quem revisa confirma. Um tema novo é uma
