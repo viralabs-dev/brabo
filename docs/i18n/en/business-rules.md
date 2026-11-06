@@ -5,7 +5,7 @@ sidebar_label: Business rules
 sidebar_position: 3
 description: Brabo's domain rules, numbered, with where they live in the code and the test that covers each one.
 keywords: [business rules, domain, state machine, approval, RBAC]
-traducao_de: 222baae244342a1d7b5d879bcee93229b036ed86
+traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 ---
 
 # Business rules

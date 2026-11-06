@@ -4,7 +4,7 @@ title: Configuration
 sidebar_position: 1
 description: All environment variables for the api, engine and web, with defaults and what breaks when they're wrong.
 keywords: [configuration, environment variables, env, deploy]
-traducao_de: e018c045407daa7a92211fac958c4bc2ff981545
+traducao_de: 3016564b5bb5b0752711c07b9babefd252829a8d
 ---
 
 # Configuration
@@ -15,7 +15,7 @@ process configuration.
 
 Two versioned files are read at runtime and are not configuration, although
 they're easy to confuse with it: `permissions.json` above, and
-`docs/gates.yml` ([ADR 0054](../adr/0054-gates-como-registro-declarativo.md)),
+`apps/api/config/gates.yml` ([ADR 0054](../adr/0054-gates-como-registro-declarativo.md)),
 the declarative gate registry. Neither has an environment variable to point to
 a path — the registry is found by walking up from `__dirname` — and neither
 changes behavior by being edited in production: the registry DESCRIBES the
@@ -235,6 +235,8 @@ smoke test comes from.
 | variable | default | what it does |
 |---|---|---|
 | `BRABO_SEED_PASSWORD` | `brabo12345678` | password of the seeded users (`owner@brabo.dev`, `maintainer@brabo.dev`, `developer@brabo.dev`, `viewer@brabo.dev`), created with email **already verified** |
+| `BRABO_AMBIENTE` | — | `dev`, `prd` or `local` (ADR 0245, RN-984). Only `local` registers `GET`/`POST /auth/dev-login`, the quick access by role; absent, empty or any other value, the route does not exist. The Actions image is marked `dev`/`prd` at build (`AMBIENTE` in `docker-bake.hcl`, file `/app/AMBIENTE_DA_IMAGEM`) and wins over the variable. The DEV compose sets it to `local`; the install one leaves it empty |
+| `BRABO_BIND` | `0.0.0.0` | address on which the install compose publishes the api and web ports. With `BRABO_AMBIENTE=local`, set `127.0.0.1`: otherwise anyone on the network gets in as any role |
 | `BRABO_FORCE_SEED` | — | unlocks the seed with `NODE_ENV=production`, where it **refuses to run** by default. Do not set it in a real environment: the account is born with a known, verified password |
 
 > The seed is idempotent and **doesn't touch the password** of anyone who
@@ -282,6 +284,8 @@ makes rotation possible without downtime ([RN-035](../business-rules/api.md#rn-0
 | `GIT_LOCAL_REPOS_ROOT` | `/tmp/brabo-git-repos` | Local provider. In `/tmp`, repos disappear on reboot |
 | `PROJECT_WORKSPACES_ROOT` | `/tmp/brabo-project-workspaces` | project agent worktrees in **Container** mode. **Needs to be the same path on the engine**, and the same volume |
 | `BRABO_PROJECTS_BASE` | empty | the single host folder under which **Mounted**-mode projects live, mounted by identity into `api` and `engine`. Empty is a NORMAL state: the api reports `projectsBase: null` and the project wizard doesn't offer Mounted mode at all |
+| `BRABO_RUNNER_RELEASES_REPO` | `daneiel/brabo` | repository (`owner/name`) whose latest Release `GET /runner-releases/binary` queries on GitHub. The owner is not fixed in the code (AT-691, EP-033) |
+| `BRABO_REPO` | `daneiel/brabo` | `owner/name` of the product repository: `install.sh` downloads the Release from it and checks the cosign identity, and the runner's unit points the documentation at it |
 | `GITHUB_OAUTH_CLIENT_ID` / `_SECRET` | empty | empty = GitHub OAuth connection unavailable (PAT still works) |
 | `GITLAB_OAUTH_CLIENT_ID` / `_SECRET` | empty | same |
 
@@ -362,6 +366,7 @@ preflight because it runs on the host, and the api can only compare against
 | variable | default | note |
 |---|---|---|
 | `OLLAMA_HOST` | `http://localhost:11434` | — |
+| `NINE_ROUTER_BASE_URL` | `http://host.docker.internal:20128/v1` | base URL of 9Router (provider `9router`, ADR 0222), which runs on the owner's machine, outside the compose. It belongs to the INSTALLATION, not the workspace: the default only reaches the host because the install and production composes map `host.docker.internal:host-gateway` on the api. It applies to chat calls, the catalog and the credential's connection test |
 | `OLLAMA_REQUEST_TIMEOUT_MS` | `300000` | **inactivity** ceiling of the Ollama socket, not total duration. A local model has a different order of magnitude of latency to the first token, hence its own env var; see [inference environment](../runbook.md#ambiente-de-inferencia) |
 | `LLM_REQUEST_TIMEOUT_MS` | `300000` | the same inactivity ceiling for the API providers (OpenAI and compatible, Anthropic). Applies to "didn't even send the headers" and to "stopped sending chunks mid-stream" — see [LLM providers](llm-providers.md#inactivity-ceiling) |
 | `HUGGINGFACE_API_TOKEN` | *(unset)* | **optional** Hugging Face Hub token for the model search (`GET /workspaces/:workspaceId/huggingface/models`). Present, it goes as `Authorization: Bearer …` and raises the Hub's rate limit; absent, the header is simply not sent — the Hub accepts public search without a credential, and a missing token is never an error |
@@ -378,6 +383,7 @@ preflight because it runs on the host, and the api can only compare against
 | `NEO4J_USER` | `neo4j` (dev) | reaches the container with the same default the `neo4j` service uses for `NEO4J_AUTH`, so set it only to CHANGE the user — changing it there changes both sides at once. Two independent defaults would leave the api authenticating with credentials the server no longer has |
 | `NEO4J_PASSWORD` 🔒 | `dev-neo4j-password-change-me` (dev only) | same pairing rule as `NEO4J_USER`. **No public default in production** on purpose — there's no plausible "example value" for a database password, and `docker-compose.prod.yml` keeps `NEO4J_AUTH` empty so the official image's own entrypoint refuses to start rather than booting with a guessable one |
 | `GRAPH_PROJECTOR_INTERVAL_MS` | `2000` | period of the poller that drains the outbox's `graph_projection` queue and writes handoffs/hypotheses/profiles/interactions to the graph (RN-416) |
+| `CUSTO_RECONCILIACAO_INTERVAL_MS` | `300000` | period of the api job that swaps the cost ESTIMATE of a call aborted by the reasoning budget for the real cost from OpenRouter's `GET /generation` ([RN-915](../business-rules/api.md#rn-915)); `0` turns it off |
 | `ARTIFACT_PROJECTOR_INTERVAL_MS` | `2000` | period of the poller that drains the outbox's `artifact_projection` queue and writes each agent's artifacts as Markdown under the project's `docs/` folder ([RN-523](../business-rules/engine.md#rn-523)). A DERIVED projection: the event log stays the source, and the folder can be deleted and rebuilt |
 
 ### Observability
@@ -470,7 +476,7 @@ preflight because it runs on the host, and the api can only compare against
 |---|---|---|
 | `START_OUTBOX_DRAIN` | `true` | boot key of the outbox drain (`Engine.Workers.OutboxDrainWorker`, every 2s) — the ONLY consumer of the `session`/`task`/`container` events the api writes to the outbox — plus orphan-worktree pruning and orphan-session adoption. Off, nobody delivers those events: a session the api closed keeps its process and conversational agents running ([RN-581](../business-rules/api.md#rn-581)), and a dev agent waiting for an action decision, a gate, its PR or the container reaching `running` is never woken. It does NOT turn the Psychologist on: the drain only enqueues it with `PSYCHOLOGIST_ENABLED=true`. `false` only in the production compose (`docker-compose.prod.yml`), on purpose; the install compose uses the code's `true` since AT-219 |
 | `START_ANAMNESE` | `true` | test/dev LOAD guard: prevents `kickoff/0` from even being called on boot, but doesn't decide anything about product — not to be confused with `ANAMNESE_ENABLED` (product: GLOBAL pause, survives any value of this one). Turning it off prevents **new** enqueues, **it doesn't clear the queue**. Accumulated jobs run on the next boot — the queue needs to be purged. See [inference environment](../runbook.md#ambiente-de-inferencia) |
-| `START_MODEL_SYNC` | `true` | periodic tick of the model catalog sync. Turning it off doesn't freeze anything: the "Update catalog" button on the settings screen calls the same use case ([RN-043](../business-rules/api.md#rn-043)) |
+| `START_MODEL_SYNC` | `true` | periodic tick of the model catalog sync. Turning it off doesn't freeze anything: the "Update catalog" button on the Providers page calls the same use case ([RN-043](../business-rules/api.md#rn-043)) |
 | `MODEL_SYNC_INTERVAL_SECONDS` | `21600` (6h) | a provider's catalog changes on a scale of days, and each round spends one API call per provider — hence the generous default |
 | `START_GATE_RESCUE` | `true` | periodic tick of the gate-cycle rescue (`Engine.Gates.GateRescuer`, [RN-140](../business-rules/engine.md#rn-140)). Turning it off doesn't change the boot: the rescue runs once there regardless |
 | `GATE_RESCUE_INTERVAL_SECONDS` | `300` (5 min) | a stuck gate blocks the user's entire PR — a much shorter interval than Anamnese/model sync, and each tick costs only a query that's almost always empty |
@@ -511,6 +517,8 @@ at boot. The `VITE_*` vars are the development fallback.
 | `VITE_ENGINE_URL` | engine address (Phoenix channel) |
 | `VITE_LOG_LEVEL` | level of the browser's JSON logger (default `info`). In a cluster the `WEB_LOG_LEVEL` key of `brabo-config` is in charge, which the entrypoint writes to `/config.js` — `VITE_*` only counts in a local build |
 | `VITE_BRABO_VERSION` | version shown in the footer of the auth screens (default `dev`). **The only one that's build-time by choice, not by limitation** — see below |
+| `VITE_BRABO_REPO` | `owner/name` of the product repository (default `daneiel/brabo`); build-time. It supplies the installer command in the runner panel and the address of the documentation site (AT-691) |
+| `VITE_BRABO_AMBIENTE` | `dev`, `prd` or `local`; build-time, coming from `AMBIENTE` in `docker-bake.hcl` (default empty). Only `local` mounts the quick access by role on the login screen (ADR 0245); the Actions pass `dev` or `prd` |
 
 A blank page after deploy is almost always `/config.js` pointing to
 `localhost` — the deploy smoke test checks exactly that.
@@ -831,6 +839,7 @@ default (`${X:-…}`), which is how a shell script reads a variable from outside
 | `BRABO_CLUSTER_NAME` | `brabo` | the name of the k3d/kind cluster the bootstrap creates or reuses |
 | `BRABO_CLUSTER_TOOL` | `k3d` | `kind` switches the bootstrap to kind — which ignores NetworkPolicy in silence, hence k3d as the default |
 | `BRABO_KEEP_CLUSTER` | unset | `1` reuses an existing cluster with the same name instead of deleting and recreating it |
+| `BRABO_IRMAOS` | the checkout's parent folder (`<raiz>/..`) | where the sibling clones `brabo-api`, `brabo-engine` and the rest are, from which the local cluster bootstrap builds the production images (the Dockerfiles live in the apps' repositories, AT-696..700) |
 | `BRABO_SKIP_BUILD` | unset | `1` skips building the production images and uses the ones already in the Docker daemon |
 | `BRABO_SKIP_OBSERVABILITY` | unset | `1` skips Tempo, Loki, Collector, Alloy and Grafana (Prometheus and the adapter stay: the engine's HPA reads them). Only `propriedades.yml` sets it (AT-177) |
 | `TAG` | unset | a release tag (`vX.Y.Z-qa.N`) for the bootstrap to check out and deploy instead of the working tree; requires a clean tree |

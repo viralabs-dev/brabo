@@ -6,7 +6,7 @@ sidebar_position: 1
 slug: /
 description: A platform that orchestrates AI agents to run the full lifecycle of an application, keeping final authority with the human.
 keywords: [brabo, AI agents, engineering, orchestration, approval]
-traducao_de: 17899a38601ea4c2ea6f421cfc715152d1419d53
+traducao_de: 99089c043ec7e78c34587e3c0ea7fa6c87a2792e
 ---
 
 # What Brabo Is
@@ -86,7 +86,7 @@ sequenceDiagram
 
 ## Status
 
-**Phases 1 through 26 complete**, version **v7.0.0**. What exists:
+**Phases 1 through 26 complete**, version **v7.2.0**. What exists:
 
 - IAM/RBAC, sessions with an immutable event log, LLM router, metering and
   budget, an approval pipeline with `permissions.json`

@@ -3,7 +3,7 @@ id: cadeia-de-suprimentos-do-ci
 title: The CI supply chain
 sidebar_label: CI supply chain
 description: What runs inside our CI runners that we didn't write, how it's pinned, and what's still trusted on faith.
-traducao_de: 929963d24eb727bd64875486f2f1889172f3084a
+traducao_de: 3016564b5bb5b0752711c07b9babefd252829a8d
 ---
 
 # The CI supply chain
@@ -20,7 +20,7 @@ mechanism lived only in workflow comments — a place where a rule can be
 read but not audited, and where the two halves drifted for exactly that
 reason.
 
-## The threat, stated plainly
+## The threat, stated plainly {#the-threat-stated-plainly}
 
 A tag is a pointer. `actions/checkout@v4` is not a version, it's a name
 that the action's owner can delete and recreate pointing at a different
@@ -37,9 +37,9 @@ Neither is a hypothesis about our repository specifically. They're the
 two documented ways CI gets compromised in the wild, and the defense for
 both is the same idea: **refer to content, not to a name**.
 
-## The two mechanisms
+## The two mechanisms {#the-two-mechanisms}
 
-### Binaries: checksum after every download
+### Binaries: checksum after every download {#binaries-checksum-after-every-download}
 
 Every `curl` of a release asset in `ci.yml` and in both engine
 Dockerfiles is followed by `sha256sum -c` against a hash written in the
@@ -74,7 +74,7 @@ comment promising that was there since Phase 5; the step that *enforces*
 it (`Versões dos scanners batem com o Dockerfile.prod do engine`, in the
 `lint` job) arrived only with [#408](https://github.com/daneiel/brabo/pull/408).
 
-### Actions: commit SHA, with the version alongside
+### Actions: commit SHA, with the version alongside {#actions-commit-sha-with-the-version-alongside}
 
 Every `uses:` is pinned to a 40-character commit SHA, with the tag it
 came from preserved in a trailing comment:
@@ -94,7 +94,7 @@ To resolve a tag into the SHA to write down:
 gh api repos/actions/checkout/commits/v4 --jq .sha
 ```
 
-## Why there's a check and not just a rule
+## Why there's a check and not just a rule {#why-theres-a-check-and-not-just-a-rule}
 
 #408 pinned the actions in `ci.yml` and only there. The other fifteen
 workflows stayed on mutable tags for months — including `release.yml`
@@ -117,7 +117,7 @@ A reference to an action **inside this repository** (`./.github/...`)
 passes: it's our own code, reviewed by the PR that changes it, with no
 third party able to move anything.
 
-## The Playwright browser
+## The Playwright browser {#the-playwright-browser}
 
 The browser E2E ([ADR 0120](../adr/0120-e2e-de-navegador-contra-o-compose-de-producao.md))
 downloads chromium at CI time from Playwright's CDN — a third download
@@ -316,7 +316,7 @@ The symptom, if it happens again to any pinned image, is `ImagePullBackOff`
 on a digest that has not changed — the fix is a new image from a publisher
 that still serves one, never unpinning.
 
-## The build cache cannot hide a stale package
+## The build cache cannot hide a stale package {#the-build-cache-cannot-hide-a-stale-package}
 
 The final stage (`runtime`) of every `Dockerfile.prod` runs `apk upgrade`.
 BuildKit keys a layer by instruction plus parent layer, never by time, so with
@@ -332,7 +332,7 @@ That fixed what the **PR** scans. It could not fix what the **tag** publishes:
 a tag builds cold, from a different run, and until
 [ADR 0172](../adr/0172-trivy-no-release-antes-de-assinar.md) nothing scanned it.
 
-## The release scans what it publishes, before signing it
+## The release scans what it publishes, before signing it {#the-release-scans-what-it-publishes-before-signing-it}
 
 `release.yml` runs Trivy on each image **by digest**, straight from the
 registry (`--image-src remote`), after the bake pushes and records
@@ -388,7 +388,7 @@ Dockerfiles already install `git` in the build stage.
 The way back: return to `{:bandit, "~> 1.12"}` from hex as soon as a release
 containing that commit is published, and drop this section with it.
 
-## What is still trusted on faith
+## What is still trusted on faith {#what-is-still-trusted-on-faith}
 
 Declared, not fixed:
 
