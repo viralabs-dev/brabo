@@ -609,6 +609,12 @@ named error instead of drawing a wrong sidebar. The Explanation section is
 listed by hand in five groups by subject, and a new page there still goes in
 by the path above.
 
+Sidebar categories are collapsible (AT-767): each one is a native
+`<details>`/`<summary>`, with no JavaScript and no persistence. It starts open
+when `colapsada` is false or when it contains the current page; otherwise it
+starts closed (the ADR themes and four of the five Explanation groups). The
+"Decisões (ADR)" link sits outside the `<summary>`, as the first list item.
+
 ### `api-render-check.mjs` — a green build isn't a page that renders
 
 This piece exists because of an expensive lesson: **the API

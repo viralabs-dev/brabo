@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error módulo .mjs sem tipos
-import { copiarAssets, layout } from './layout.mjs';
+import { copiarAssets, layout, renderizarPagina } from './layout.mjs';
 
 const base = {
   locale: 'en',
@@ -30,6 +30,44 @@ describe('layout do site', () => {
   it('falha: seletor de idioma leva ao mesmo slug nos outros locales', () => {
     const h: string = layout({ ...base, locale: 'pt-BR', slug: 'a.html' });
     expect(h).toContain('value="en/a.html"');
+  });
+
+  it('categoria recolhível: aberta se não recolhida ou se contém a página atual; link da própria categoria vira item', () => {
+    const nav = [
+      {
+        rotulo: 'Arq',
+        colapsada: false,
+        itens: [
+          {
+            rotulo: 'ADR',
+            href: 'adr.html',
+            colapsada: false,
+            itens: [
+              { rotulo: 'Git', colapsada: true, itens: [{ rotulo: 'A1', href: 'adr/a1.html' }] },
+              { rotulo: 'Web', colapsada: true, itens: [{ rotulo: 'A2', href: 'adr/a2.html' }] },
+            ],
+          },
+        ],
+      },
+      { rotulo: 'Fim', colapsada: true, itens: [{ rotulo: 'Z', href: 'z.html' }] },
+    ];
+    const h: string = layout({ ...base, slug: 'adr/a1.html', nav });
+    const abertos = (h.match(/<details[^>]*>/g) ?? []).map((d) => d.includes(' open'));
+    // Arq (aberta), ADR (aberta), Git (tem a atual), Web (fechada), Fim (fechada)
+    expect(abertos).toEqual([true, true, true, false, false]);
+    expect(h).toContain('<summary><span>ADR</span></summary><ul><li><a href="../adr.html">ADR</a></li>');
+    expect(h).not.toMatch(/<summary>[^<]*<a /);
+    expect(h).not.toMatch(/<script>/);
+  });
+
+  it('renderizarPagina repassa colapsada da navegação ao menu', () => {
+    const cat = (rotulo: string, slug: string, colapsada: boolean) => ({ tipo: 'categoria', rotulo, colapsada, itens: [{ tipo: 'pagina', slug }] });
+    const h: string = renderizarPagina({
+      locale: 'pt-BR', pagina: { url: 'a.html', titulo: 'A', traduzida: true }, corpo: { html: '', toc: [] },
+      degrau: 'dev', edicao: {}, urlDe: (s: string) => `${s}.html`, rotuloDe: (s: string) => s,
+      navegacao: [cat('Aberta', 'x', false), cat('Fechada', 'y', true), cat('Atual', 'a', true)],
+    });
+    expect((h.match(/<details[^>]*>/g) ?? []).map((d) => d.includes(' open'))).toEqual([true, false, true]);
   });
 
   it('copiarAssets grava tokens, fontes relativas e scripts', () => {

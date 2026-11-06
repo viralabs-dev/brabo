@@ -53,6 +53,15 @@ img, svg { max-width: 100%; height: auto; }
 .site-side h2 { font: 600 var(--fs-label) var(--font-heading); letter-spacing: 0.08em; text-transform: uppercase; color: var(--site-texto-2); border: 0; margin: var(--space-3) 0 var(--space-1); padding: 0; }
 .site-side ul { list-style: none; margin: 0; padding-left: var(--space-3); }
 .site-side > section > ul { padding-left: 0; }
+.site-side summary { cursor: pointer; list-style: none; padding: 3px 8px; border-radius: var(--r-sm); color: var(--site-texto); }
+.site-side summary::-webkit-details-marker { display: none; }
+.site-side summary::before { content: '\25B8'; display: inline-block; width: var(--space-3); color: var(--site-texto-2); }
+.site-side details[open] > summary::before { content: '\25BE'; }
+.site-side summary:hover { background: var(--surface-2); }
+.site-side summary:focus-visible { outline: 2px solid var(--site-link); outline-offset: -2px; }
+.site-side summary h2 { display: inline; margin: 0; }
+.site-side summary span { display: inline; padding: 0; }
+.site-side > section > details > summary { margin-top: var(--space-3); }
 .site-side a, .site-side span { display: block; padding: 3px 8px; border-radius: var(--r-sm); text-decoration: none; color: var(--site-texto); }
 .site-side a:hover { background: var(--surface-2); }
 .site-side a[aria-current='page'] { background: var(--accent-soft); color: var(--site-link); font-weight: 600; }
