@@ -13,86 +13,11 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 302 de 1212 (24.9%) | 27.4% de 13.680.204 | 279 | 22 | 1 | 910 | 0 |
-| `ru` | 302 de 1212 (24.9%) | 27.4% de 13.680.204 | 279 | 22 | 1 | 910 | 0 |
-| `zh-Hans` | 302 de 1212 (24.9%) | 27.4% de 13.680.204 | 279 | 22 | 1 | 910 | 0 |
+| `en` | 306 de 1224 (25.0%) | 27.3% de 13.763.539 | 305 | 0 | 1 | 918 | 0 |
+| `ru` | 306 de 1224 (25.0%) | 27.3% de 13.763.539 | 305 | 0 | 1 | 918 | 0 |
+| `zh-Hans` | 306 de 1224 (25.0%) | 27.3% de 13.763.539 | 305 | 0 | 1 | 918 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
-
-### Defasadas em `en`
-
-- `adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md` (tradução de 2026-11-05)
-- `adr/index.md` (tradução de 2026-11-04)
-- `architecture.md` (tradução de 2026-10-16)
-- `business-rules.md` (tradução de 2026-10-15)
-- `business-rules/autenticacao.md` (tradução de 2026-10-11)
-- `business-rules/ci.md` (tradução de commit inexistente)
-- `business-rules/custo.md` (tradução de 2026-10-15)
-- `business-rules/produto.md` (tradução de 2026-10-15)
-- `explanation/auditoria-fluxo-vs-codigo.md` (tradução de 2026-10-15)
-- `explanation/branching-policy.md` (tradução de commit inexistente)
-- `explanation/cadeia-de-suprimentos-do-ci.md` (tradução de commit inexistente)
-- `explanation/gates.md` (tradução de 2026-10-15)
-- `explanation/modelo-de-time.md` (tradução de 2026-10-15)
-- `explanation/release-do-produto.md` (tradução de 2026-11-05)
-- `getting-started.md` (tradução de 2026-10-15)
-- `glossary.md` (tradução de 2026-10-15)
-- `intro.md` (tradução de 2026-10-15)
-- `reference/brb.md` (tradução de 2026-10-15)
-- `reference/configuration.md` (tradução de 2026-10-16)
-- `reference/events.md` (tradução de 2026-10-16)
-- `reference/internal-api.md` (tradução de 2026-10-15)
-- `reference/rulesets.md` (tradução de commit inexistente)
-
-### Defasadas em `ru`
-
-- `adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md` (tradução de 2026-11-05)
-- `adr/index.md` (tradução de 2026-11-04)
-- `architecture.md` (tradução de 2026-10-16)
-- `business-rules.md` (tradução de 2026-10-15)
-- `business-rules/autenticacao.md` (tradução de 2026-10-11)
-- `business-rules/ci.md` (tradução de commit inexistente)
-- `business-rules/custo.md` (tradução de 2026-10-15)
-- `business-rules/produto.md` (tradução de 2026-10-15)
-- `explanation/auditoria-fluxo-vs-codigo.md` (tradução de 2026-10-15)
-- `explanation/branching-policy.md` (tradução de commit inexistente)
-- `explanation/cadeia-de-suprimentos-do-ci.md` (tradução de commit inexistente)
-- `explanation/gates.md` (tradução de 2026-10-15)
-- `explanation/modelo-de-time.md` (tradução de 2026-10-15)
-- `explanation/release-do-produto.md` (tradução de 2026-11-05)
-- `getting-started.md` (tradução de 2026-10-15)
-- `glossary.md` (tradução de 2026-10-15)
-- `intro.md` (tradução de 2026-10-15)
-- `reference/brb.md` (tradução de 2026-10-15)
-- `reference/configuration.md` (tradução de 2026-10-16)
-- `reference/events.md` (tradução de 2026-10-16)
-- `reference/internal-api.md` (tradução de 2026-10-15)
-- `reference/rulesets.md` (tradução de commit inexistente)
-
-### Defasadas em `zh-Hans`
-
-- `adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md` (tradução de 2026-11-05)
-- `adr/index.md` (tradução de 2026-10-16)
-- `architecture.md` (tradução de 2026-10-16)
-- `business-rules.md` (tradução de 2026-10-15)
-- `business-rules/autenticacao.md` (tradução de 2026-10-11)
-- `business-rules/ci.md` (tradução de commit inexistente)
-- `business-rules/custo.md` (tradução de 2026-10-15)
-- `business-rules/produto.md` (tradução de 2026-10-15)
-- `explanation/auditoria-fluxo-vs-codigo.md` (tradução de 2026-10-15)
-- `explanation/branching-policy.md` (tradução de commit inexistente)
-- `explanation/cadeia-de-suprimentos-do-ci.md` (tradução de commit inexistente)
-- `explanation/gates.md` (tradução de 2026-10-15)
-- `explanation/modelo-de-time.md` (tradução de 2026-10-15)
-- `explanation/release-do-produto.md` (tradução de 2026-11-05)
-- `getting-started.md` (tradução de 2026-10-15)
-- `glossary.md` (tradução de 2026-10-15)
-- `intro.md` (tradução de 2026-10-15)
-- `reference/brb.md` (tradução de 2026-10-15)
-- `reference/configuration.md` (tradução de 2026-10-16)
-- `reference/events.md` (tradução de 2026-10-16)
-- `reference/internal-api.md` (tradução de 2026-10-15)
-- `reference/rulesets.md` (tradução de commit inexistente)
 
 ## Interface
 
