@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 306 de 1227 (24.9%) | 27.3% de 13.781.418 | 301 | 4 | 1 | 921 | 0 |
-| `ru` | 306 de 1227 (24.9%) | 27.3% de 13.781.418 | 301 | 4 | 1 | 921 | 0 |
-| `zh-Hans` | 306 de 1227 (24.9%) | 27.3% de 13.781.418 | 301 | 4 | 1 | 921 | 0 |
+| `en` | 306 de 1228 (24.9%) | 27.3% de 13.786.047 | 298 | 7 | 1 | 922 | 0 |
+| `ru` | 306 de 1228 (24.9%) | 27.3% de 13.786.047 | 298 | 7 | 1 | 922 | 0 |
+| `zh-Hans` | 306 de 1228 (24.9%) | 27.3% de 13.786.047 | 298 | 7 | 1 | 922 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -24,6 +24,9 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
+- `explanation/documentation-workflow.md` (tradução de 2026-11-05)
+- `explanation/localizacao.md` (tradução de 2026-11-05)
+- `intro.md` (tradução de 2026-11-04)
 - `reference/events.md` (tradução de 2026-11-06)
 
 ### Defasadas em `ru`
@@ -31,6 +34,9 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
+- `explanation/documentation-workflow.md` (tradução de 2026-11-05)
+- `explanation/localizacao.md` (tradução de 2026-11-05)
+- `intro.md` (tradução de 2026-11-04)
 - `reference/events.md` (tradução de 2026-11-06)
 
 ### Defasadas em `zh-Hans`
@@ -38,6 +44,9 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
+- `explanation/documentation-workflow.md` (tradução de 2026-11-05)
+- `explanation/localizacao.md` (tradução de 2026-11-05)
+- `intro.md` (tradução de 2026-11-04)
 - `reference/events.md` (tradução de 2026-11-06)
 
 ## Interface

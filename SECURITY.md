@@ -31,8 +31,11 @@ honesto é confirmar o recebimento; não há SLA de correção.
 
 ## Escopo
 
-O que **é** deste projeto: o código em `apps/`, `packages/`, `docker/` e
-`deploy/`, e as imagens construídas a partir dele.
+O que **é** deste projeto: o código dos repositórios `viralabs-dev/brabo*`
+(este, que guarda a documentação, o `install.sh` e a release, e os irmãos
+`brabo-api`, `-engine`, `-web`, `-runner`, `-broker`, `-contracts`, `-infra`,
+`-ci` e `-qa`), e as imagens construídas a partir dele. Reporte aqui mesmo
+quando o defeito mora num irmão.
 
 O que **não** é: PostgreSQL, Ollama, MinIO e os demais componentes de terceiros
 que o Brabo orquestra — reporte a eles diretamente. As imagens de
@@ -46,13 +49,13 @@ Para calibrar o relato, o que existe hoje:
 
 - **Segredos do usuário** (chaves de LLM, tokens de git) sob envelope
   encryption; nunca em texto plano no banco ou em log. Rotação da chave mestra
-  documentada no [runbook](deploy/docs/runbook.md).
+  documentada no [runbook](https://viralabs-dev.github.io/brabo/prd/runbook).
 - **Superfície HTTP auditada**: as 118 rotas da api estão classificadas em
-  [`apps/api/docs/security-surface.md`](apps/api/docs/security-surface.md), e um teste de tabela
+  [superfície de segurança](https://viralabs-dev.github.io/brabo/prd/security-surface), e um teste de tabela
   reprova rota nova sem classificação.
 - **Toda ação com efeito externo** passa por aprovação
   (`proposed_action` + `permissions.json`, `deny` vence `allow`).
 - **CI** roda gitleaks na árvore, Trivy nas imagens (`HIGH`/`CRITICAL`
   corrigíveis reprovam) e auditoria de dependências com gate em crítica.
 
-[pvr]: https://github.com/daneiel/brabo/security/advisories/new
+[pvr]: https://github.com/viralabs-dev/brabo/security/advisories/new

@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 260 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 261 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -394,14 +394,15 @@ Como a documentação é gerada, verificada e publicada.
 | [0220](0220-api-traduzida-por-catalogo.md) | A página da API sai traduzida por catálogo: a fonte segue sendo o texto dos decorators da api (exceção à fonte pt-BR), um catálogo por locale chaveado pelo hash do texto, spec derivada no build e fora do git, órfã reprova e faltando avisa, rótulos fixos do Redoc em inglês (AT-565, decisões do dono de 16/10) |
 | [0253](0253-o-site-de-docs-deixa-o-docusaurus.md) | O site de docs deixa o Docusaurus por um gerador próprio com as mesmas URLs e âncoras; a API fica no Redoc 3 (rótulos da interface em inglês, telemetria desligada), as traduções vão para `docs/i18n/` e a busca é por substring. Referencia o [0117](0117-lockfile-proprio-para-o-website.md), o [0206](0206-referencia-da-api-numa-pagina-redoc.md), o [0216](0216-quatro-idiomas-com-pt-br-como-fonte.md) e o [0220](0220-api-traduzida-por-catalogo.md) |
 | [0254](0254-a-doc-de-cada-area-mora-na-raiz-dela.md) | A doc de cada área mora em `<raiz>/docs/`: o site é a árvore de união com as mesmas URLs, RN no `business-rules/<raiz>.md` do hospedeiro da 1ª ref `caminho:N` (numeração global, âncora inalterada), `docs/business-rules.md` vira índice gerado, checks com `--raiz` e traduções em `<raiz>/docs/i18n/` |
-| [0260](0260-doc-dos-repos-de-codigo-so-em-ingles.md) | A doc dos repos de código é SÓ em inglês e o site serve a fonte inglesa com faixa nos outros locales; o `brabo` segue multilíngue e os catálogos da API moram nele (AT-745) |
+| [0260](0260-doc-dos-repos-de-codigo-so-em-ingles.md) | A doc dos repos de código é SÓ em inglês e o site serve a fonte inglesa com faixa nos outros locales; o `brabo` segue multilíngue e os catálogos da API moram nele (AT-745). **Substituído pelo [0266](0266-doc-dos-repositorios-em-portugues-por-padrao.md)** |
+| [0266](0266-doc-dos-repositorios-em-portugues-por-padrao.md) | A doc de todos os repositórios é em pt-BR por padrão, substituindo o [0260](0260-doc-dos-repos-de-codigo-so-em-ingles.md): traduções em `<raiz>/docs/i18n/` são permitidas nos irmãos, o `Unreleased` dos CHANGELOGs é traduzido e a guarda `idioma-dos-irmaos.mjs` sai; a página `idioma_original: en` segue aceita até o irmão retraduzir (AT-766) |
 
 ## A convenção
 
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0266**.
+  é substituído — o próximo é **0267**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml` e a linha do índice sob a seção desse
   tema, em ordem numérica. Quem revisa confirma. Um tema novo é uma

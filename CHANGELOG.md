@@ -6,7 +6,9 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 - **docs**: ADR 0261 (o Dev Lead é avisado de bloqueios e pede ao Arquiteto pela ferramenta `pedir_ao_arquiteto`, AT-748) com traduções, e gerados regenerados com as RN-1009 a RN-1012 (836 RNs).
 - **docs**: o `docs:check` ganha a guarda do idioma dos irmãos (AT-745, ADR 0260): reprova página sem `idioma_original: en` e `i18n/` numa raiz de irmão, e avisa prosa pt-BR por um contador que entende citação multilinha, aspas escapadas, URL e e-mail (`scripts/docs/idioma-dos-irmaos.mjs`).
-- Regenerated docs after the sibling repos went English-only (AT-745) and removed `RNS_SEM_TRADUCAO` from `links.mjs` (ADR 0260: no sibling keeps `i18n/`).
+- **docs**: ADR 0266 (AT-766): a doc de todos os repositórios é em pt-BR por padrão, substituindo o ADR 0260; traduções em `<raiz>/docs/i18n/` são permitidas nos irmãos e o `Unreleased` dos CHANGELOGs é traduzido. Sai a guarda `scripts/docs/idioma-dos-irmaos.mjs`; a página `idioma_original: en` segue aceita até o irmão retraduzir.
+- **docs**: o README é reescrito para os repositórios separados: links e badges em `viralabs-dev/brabo`, site em `viralabs-dev.github.io/brabo/prd/`, instalação pelo `install.sh` da Release, dev pelo `brabo-workspace` e `make dev` do `brabo-infra`, a seção "Repositórios do Brabo" e como a release é montada; os arquivos de comunidade passam a apontar para `viralabs-dev/brabo`.
+- Gerados regenerados depois de os repositórios irmãos passarem a só inglês (AT-745), e `RNS_SEM_TRADUCAO` saiu de `links.mjs` (ADR 0260: nenhum irmão guardava `i18n/`).
 
 ### Funcionalidades
 
@@ -128,6 +130,14 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 - O visual v3 (meio-termo aprovado pelo dono): liga o preflight do Tailwind e sobe os raios para a escala do shadcn (`--radius` 0,625rem), mantendo o terracota, a tipografia e as superfícies do Brabo (ADR 0237, revisa o 0232 no preflight).
 - O chat da Sessão ganha o botão Copiar sob cada resposta do agente (o markdown cru, com o estado "Copiado" e rótulo acessível; sem clipboard disponível, não faz nada) e o épico ou a história criada no turno passa a aparecer num cartão `Artifact` com o link para a aba Histórias (AT-674, lane L1).
 - O convite do fio vazio da Sessão (consultiva e criativa) passa a usar o estado vazio de conversa dos componentes de IA (`ConversationEmptyState`), com o mesmo texto e as mesmas ações; o fio com mensagens não o mostra e a rolagem segue acompanhando a última mensagem (AT-674, L2).
+
+## v2.0.0 — 2026-11-05
+
+Primeira release do produto depois da separação do monorepo em repositórios por camada (ADR 0252).
+
+- **produto**: o Brabo passa a ser um conjunto de onze repositórios em `viralabs-dev`; o `brabo` é a porta de entrada, com a documentação, o `install.sh` e a release do produto, e o código mora nos irmãos (`brabo-api`, `-engine`, `-web`, `-runner`, `-broker`, `-contracts`, `-infra`, `-ci`, `-qa`).
+- **release**: a release nasce no `brabo` pelo `release.yml`: monta o `images.json` com o digest que o `imagem.json` de cada repo de app publicou, escaneia cada imagem com Trivy pelo digest e assina um `checksums.txt` com cosign keyless; o `install.sh` confere essa assinatura antes de usar qualquer arquivo.
+- **componentes**: o `componentes.json` fixa a versão de cada componente: `brabo-infra` v1.1.0, `brabo-runner` v1.0.0, `brabo-api` v1.0.1, `brabo-engine` v1.0.1, `brabo-web` v1.0.0, `brabo-broker` v1.0.0 e a imagem de backup do `brabo-infra` v1.1.0.
 
 ## v7.2.0 — 2026-11-02
 

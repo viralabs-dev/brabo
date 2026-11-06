@@ -44,9 +44,10 @@ O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mj
   pt-BR; toda mudança entra por PR; merge em branch protegida é do dono.
 - A release do PRODUTO (1.0.0, AT-704) nasce daqui; nunca versionar à mão.
 - Responder e escrever docs em pt-BR (a FONTE); `en`, `ru`, `zh-Hans` são
-  traduções com paridade medida. Só vale para o `brabo`: a doc dos 10 repos de
-  código é SÓ em inglês (`idioma_original: en`, sem `i18n/`; ADR 0260), e o
-  site a serve com a faixa "só em inglês" nos outros locales.
+  traduções com paridade medida. Vale para TODOS os repos (ADR 0266, que
+  substitui o 0260): os irmãos também podem ter `docs/i18n/`, e o `Unreleased`
+  dos CHANGELOGs é em pt-BR. Página com `idioma_original: en` ainda é aceita
+  (o site a serve com a faixa "só em inglês") até o irmão retraduzi-la.
 - `install.sh` é bash 3.2 (sem Node); mudar o `case` dos assets exige mudar
   `scripts/ci/assets-do-instalador.ts` junto (o spec reprova a divergência).
 
