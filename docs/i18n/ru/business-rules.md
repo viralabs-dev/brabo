@@ -856,4 +856,12 @@ traducao_de: 222baae244342a1d7b5d879bcee93229b036ed86
 - <a id="rn-1010"></a>[RN-1010](business-rules/engine.md#rn-1010) — A conflict integrating `dev` at claim goes to the agent; only what it does not resolve blocks
 - <a id="rn-1011"></a>[RN-1011](business-rules/engine.md#rn-1011) — The Dev Lead's plan is refused when a task cites a route the contract declares in another module
 - <a id="rn-1012"></a>[RN-1012](business-rules/engine.md#rn-1012) — A task blocked by the model wakes the Dev Lead, who asks the Architect for the missing contract
+- <a id="rn-1013"></a>[RN-1013](business-rules/engine.md#rn-1013) — Every assistant message of the turn keeps its own thinking blocks, so the sent prefix only grows
+- <a id="rn-1014"></a>[RN-1014](business-rules/api.md#rn-1014) — The direct Anthropic provider also puts a cache point on the second-to-last `user` turn
+- <a id="rn-1015"></a>[RN-1015](business-rules/api.md#rn-1015) — On direct Anthropic, the late `system` messages go to the end of the last `user` turn, after the cache point, never to the top `system`
+- <a id="rn-1016"></a>[RN-1016](business-rules/engine.md#rn-1016) — The JUnit reporter is set up inside the module's first code task, never as a task of its own
+- <a id="rn-1017"></a>[RN-1017](business-rules/api.md#rn-1017) — A terminal `git push` to a protected branch, with force, `--all` or `--mirror` is a human decision, even in automatic mode
+- <a id="rn-1018"></a>[RN-1018](business-rules/api.md#rn-1018) — The agent retires an obsolete business rule, citing its replacement or the user's answer; every reader ignores it
+- <a id="rn-1019"></a>[RN-1019](business-rules/api.md#rn-1019) — In automatic mode a terminal `git merge` inside the task scope is auto-approved
+- <a id="rn-1020"></a>[RN-1020](business-rules/engine.md#rn-1020) — The Criativo and the PO retire an obsolete business rule themselves, citing the replacement or the user's answer
 <!-- END:GENERATED:indice-de-rn -->

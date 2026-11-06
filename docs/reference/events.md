@@ -416,7 +416,7 @@ ele.
 
 > ⚠️ Bloco gerado por `pnpm docs:generate`. Não edite à mão — o próximo build o sobrescreve.
 
-Extraídos dos pontos de emissão: **116 identificadores**, dos quais **4** não estão descritos acima.
+Extraídos dos pontos de emissão: **117 identificadores**, dos quais **5** não estão descritos acima.
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
@@ -437,6 +437,7 @@ Extraídos dos pontos de emissão: **116 identificadores**, dos quais **4** não
 - `anamnese.run_skipped` <sub>(apps/engine/lib/engine/session_events/event.ex)</sub>
 - `architecture.readiness_confirmed` <sub>(apps/api/src/application/use-cases/agents/offer-infra-handoff.use-case.ts)</sub>
 - `artifact.business_rule` <sub>(apps/engine/lib/engine/agents/arquiteto_server.ex)</sub>
+- `artifact.business_rule_retired` — ⚠️ **não descrito acima** <sub>(apps/engine/lib/engine/agents/arquiteto_server.ex)</sub>
 - `artifact.decision_record` <sub>(apps/api/src/application/use-cases/backlog/perguntas-em-aberto.use-case.ts)</sub>
 - `artifact.insight` <sub>(apps/engine/lib/engine/harness/tools/emit_insight.ex)</sub>
 - `artifact.module_map` <sub>(apps/api/src/application/use-cases/architecture/create-module-map.use-case.ts)</sub>
