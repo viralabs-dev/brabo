@@ -723,8 +723,11 @@ enquanto a mesma página na raiz e uma página traduzida para `en` que não est�
 desatualizada não têm. As regras para quem
 traduz estão em [Localização](localizacao.md).
 
-**A doc dos repos de código é só em inglês (AT-745, ADR 0260).** Página com
-`idioma_original: en` não entra na paridade (`ehFonteTraduzivel`), é servida
+**A doc de todos os repos é em pt-BR por padrão (AT-766, ADR 0266, que
+substitui o 0260).** Os irmãos podem ter `<raiz>/docs/i18n/`, medido na mesma
+paridade. A página de irmão que ainda está em inglês (estado misto, até a
+retradução) continua aceita: com
+`idioma_original: en` ela não entra na paridade (`ehFonteTraduzivel`), é servida
 sem faixa no `/en/` e com a faixa "esta página só existe em inglês" nos outros
 locales (`paginas.mjs` marca `somenteIngles`; `faixa-de-traducao-check.mjs`
 confere o HTML). O índice de RN de cada locale usa a tradução quando existe e

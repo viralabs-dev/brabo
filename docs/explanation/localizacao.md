@@ -10,11 +10,11 @@ O Brabo fala quatro idiomas na documentação e na interface, e o **português d
 Brasil é a fonte e o padrão** dos dois produtos ([ADR 0216](../adr/0216-quatro-idiomas-com-pt-br-como-fonte.md)).
 Todo texto novo nasce em pt-BR; os outros idiomas são traduções dele.
 
-**Exceção (ADR [0260](../adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md)):** essa
-regra vale só para o `brabo`, a porta de entrada do cliente. A documentação dos
-dez repositórios de código é **só em inglês**: página de irmão em inglês leva
-`idioma_original: en` no frontmatter e não tem `docs/i18n/`. O `CLAUDE.md` e o
-`.claude/` deles continuam em pt-BR.
+A regra vale para **todos os repositórios** ([ADR 0266](../adr/0266-doc-dos-repositorios-em-portugues-por-padrao.md),
+que substitui o [0260](../adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md)): a
+doc dos irmãos também nasce em pt-BR e pode ter traduções em `<raiz>/docs/i18n/`.
+A página de irmão que ainda está em inglês leva `idioma_original: en` no
+frontmatter e segue aceita até ser retraduzida.
 
 ## Idiomas e códigos
 
