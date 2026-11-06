@@ -76,8 +76,9 @@ valor `create_rc_branch` continua no enum `bootstrap_step` do banco
 **merge protegido** — veja a nota em
 [permissions.md](../reference/permissions.md).
 
-**Nenhum degrau pode ser pulado.** `dev → main` não existe, nem em
-emergência — emergência tem caminho próprio (`hotfix`, abaixo), e ele também
+**Nenhum degrau pode ser pulado.** Desde que a `qa` saiu (ADR 0235), a
+única promoção é `dev → main`; merge direto na `main`, fora dela, não existe,
+nem em emergência — emergência tem caminho próprio (`hotfix`, abaixo), e ele também
 respeita a escada, só que começando do topo.
 
 ## Taxonomia {#taxonomy}
