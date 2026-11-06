@@ -10819,7 +10819,7 @@ that step, so it holds whenever there is a cut. The dev agents are left without
 a floor, on purpose (their obligation changes at each step; for them only
 <a href="#rn-759">RN-759</a> holds) — except <code>report_done</code>/<code>report_blocked</code>, which enter
 their floor since <a href="#rn-839">RN-839</a>.</li>
-<li><strong>Where:</strong> <code>src/domain/llm/tool-router.ts:397</code> (<code>menuComPiso</code>) and
+<li><strong>Where:</strong> <code>src/domain/llm/tool-router.ts:401</code> (<code>menuComPiso</code>) and
 <code>src/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.ts:248</code>
 (<code>menuComPiso</code>)</li>
 <li><strong>Test:</strong> <code>test/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.spec.ts</code>
@@ -10841,7 +10841,7 @@ It is assembled in the api, and not in the engine's facade like <a href="engine.
 because only the api knows the menu after the Jev. Not applying the cut on the round
 that closes the turn was evaluated and not done: the api does not know before the
 answer that the round will be the last.</li>
-<li><strong>Where:</strong> <code>src/domain/llm/tool-router.ts:416</code> (<code>avisoDeRecorte</code>) and
+<li><strong>Where:</strong> <code>src/domain/llm/tool-router.ts:420</code> (<code>avisoDeRecorte</code>) and
 <code>src/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.ts:263</code>
 (<code>avisoDeRecorte</code>)</li>
 <li><strong>Test:</strong> <code>test/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.spec.ts</code>
@@ -11121,12 +11121,12 @@ not consulted at proposal. Changing one requires changing the other.</p>
 </ul>
 <h3 id="rn-809">RN-809 — The Arquiteto's module and image obligations enter the Jev's floor</h3>
 <ul>
-<li><strong>Rule:</strong> extends <a href="#rn-758">RN-758</a> and <a href="#rn-784">RN-784</a>. The Arquiteto's floor gains <code>assign_story_modules</code> and <code>choose_project_image</code>, steps 2 and 3 of its kickoff (<code>arquiteto_server.ex</code>): the Jev's cut never removes them, and the Arquiteto does not end saying the tool &quot;não está disponível nesta etapa&quot; with stories without a module and an undecided image. <code>emit_insight</code> (step 8, tension record) and <code>emit_artifact</code> stay out of the floor: they are not obligations of the stage. It still holds that the floor only gives back what is in the step's catalog.</li>
+<li><strong>Rule:</strong> extends <a href="#rn-758">RN-758</a> and <a href="#rn-784">RN-784</a>. The Arquiteto's floor gains <code>assign_story_modules</code> and <code>choose_project_image</code>, steps 2 and 3 of its kickoff (<code>arquiteto_server.ex</code>): the Jev's cut never removes them, and the Arquiteto does not end saying the tool &quot;não está disponível nesta etapa&quot; with stories without a module and an undecided image. Revised by AT-614, the floor also keeps <code>emit_insight</code> (step 8, tension record) and <code>declare_open_question</code>, which the cut used to remove. Only <code>emit_artifact</code> stays out of the floor: it is not an obligation of the stage. It still holds that the floor only gives back what is in the step's catalog.</li>
 <li><strong>Where:</strong> <code>src/domain/llm/tool-router.ts:315</code> (<code>PISO_DO_MENU</code>)</li>
 <li><strong>Test:</strong> <code>test/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.spec.ts</code>
 (<code>Arquiteto recortado pelo Jev sem assign_story_modules/choose_project_image: as duas continuam no menu (RN-809)</code>)</li>
 <li><strong>Origin:</strong> AT-481 (TP-01: the cut left 7 of 11 tools and the
-Arquiteto did not distribute the stories by module)</li>
+Arquiteto did not distribute the stories by module); AT-614 (the cut also removed <code>emit_insight</code> and <code>declare_open_question</code>)</li>
 </ul>
 <h3 id="rn-812">RN-812 — An open PR from the same branch is reused, never duplicated</h3>
 <ul>
@@ -11209,7 +11209,7 @@ stop being without a floor ONLY for the two task outcome tools:
 the Jev's cut never removes <code>report_done</code> nor <code>report_blocked</code>. The rest of
 their step stays cuttable, with RN-759's cut notice. Like every
 floor, it only gives back what is in the step's catalog.</li>
-<li><strong>Where:</strong> <code>src/domain/llm/tool-router.ts:356</code> (<code>pisoDoMenu</code>)</li>
+<li><strong>Where:</strong> <code>src/domain/llm/tool-router.ts:360</code> (<code>pisoDoMenu</code>)</li>
 <li><strong>Test:</strong> <code>test/domain/llm/piso-dos-dev-agents.spec.ts</code>
 (<code>recorte que deixa só \</code>terminal` para dev-api: report_done e report_blocked continuam<code>; </code>falha: dev-lead e outro agente não ganham as ferramentas de desfecho`)</li>
 <li><strong>Origin:</strong> AT-499 (follow-up, owner decision of 10/10)</li>
@@ -11374,7 +11374,7 @@ correction (&quot;pediu correção nesta PR&quot;) or a merge refused due to con
 (RN-839). The criterion is the text the api already receives, without a new field; the
 fixed floor of every step does not widen (RN-759), another agent does not gain it, and the floor only
 adds what is in the step's catalog (P3).</li>
-<li><strong>Where:</strong> <code>src/domain/llm/tool-router.ts:373</code> (<code>PISO_DA_CORRECAO_DO_DEV</code>),
+<li><strong>Where:</strong> <code>src/domain/llm/tool-router.ts:377</code> (<code>PISO_DA_CORRECAO_DO_DEV</code>),
 <code>:384</code> (<code>ehPassoDeCorrecao</code>), <code>:397</code> (<code>menuComPiso</code>),
 <code>src/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.ts:248</code> (<code>menuComPiso</code>)</li>
 <li><strong>Test:</strong> <code>test/domain/llm/tool-router-correcao-do-dev.spec.ts</code> (&quot;dev agent em correção recebe write_file e terminal&quot;; &quot;passo comum de leitura do dev não alarga&quot;; &quot;outro agente com a mesma mensagem não ganha&quot;; &quot;as marcas existem no texto que o engine monta&quot;)</li>
@@ -11759,8 +11759,8 @@ The budget/area <code>spentMicros</code> is not corrected.</li>
 <ul>
 <li><strong>Code:</strong> <code>src/domain/llm/raciocinio-do-agente.ts:66</code> (<code>devoRetentarSemRaciocinio</code>);
 <code>src/application/use-cases/llm/run-llm-turn.use-case.ts:359</code> (<code>devoRetentarSemRaciocinio</code>)</li>
-<li><strong>Test:</strong> <code>test/domain/llm/raciocinio-do-agente.spec.ts</code> (headroom, abort and the refusals); <code>test/application/use-cases/llm/run-llm-turn.use-case.spec.ts</code> (retries and records two rows; a second truncated has no third; truncated with text does not retry); <code>test/application/use-cases/llm/stream-llm-turn.use-case.spec.ts</code> (same in the stream)</li>
-<li><strong>Origin:</strong> AT-587</li>
+<li><strong>Test:</strong> <code>test/domain/llm/raciocinio-do-agente.spec.ts</code> (headroom, abort and the refusals); <code>test/application/use-cases/llm/run-llm-turn.use-case.spec.ts</code> (with the capability read from the real <code>AnthropicProvider</code>, AT-757: retries and records two rows; a second truncated has no third; truncated with text does not retry); <code>test/application/use-cases/llm/stream-llm-turn.use-case.spec.ts</code> (same in the stream)</li>
+<li><strong>Origin:</strong> AT-587, AT-757 (the Anthropic provider declares the capability, which is covered by a use-case spec)</li>
 </ul>
 <h3 id="rn-917">RN-917 — OpenRouter receives a price ceiling per call, and with no upstream within the ceiling the call is repeated ONCE without it</h3>
 <p>Revises <a href="#rn-583">RN-583</a> (<code>sort</code> stops being the only <code>provider</code> field that goes on the wire) and coexists with <a href="#rn-907">RN-907</a> (the <code>session_id</code>) and <a href="#rn-916">RN-916</a> (the same retry loop).</p>
@@ -11955,7 +11955,7 @@ appeared as a reply in the thread)</li>
 <h3 id="rn-961">RN-961 — The cut warning says that the tools outside it can be requested in this step</h3>
 <ul>
 <li><strong>Rule:</strong> revises <a href="#rn-759">RN-759</a> (owner's decision of 31/10, AT-643). The ephemeral <code>system</code> warning of the cut step no longer says that the tools outside the cut &quot;come back in the next rounds&quot; nor that it &quot;comes back in the next one&quot;: the cut belongs to the STEP, and RN-759 told the agent to wait for a step that, for the model, may not come. The new text states the truth of ADR 0179: the others remain available and can be requested in this very step, and the agent must not conclude that it does not have the tool nor end the turn waiting for it; if it needs one of them and answers without a tool, the step is redone with the full catalog (the repetition of rule 10 of ADR 0179, through the mechanism the facade already has). It does not change the floor, Jev's policy nor the menu assembly: only the warning's text.</li>
-<li><strong>Where:</strong> <code>src/domain/llm/tool-router.ts:416</code> (<code>avisoDeRecorte</code>).</li>
+<li><strong>Where:</strong> <code>src/domain/llm/tool-router.ts:420</code> (<code>avisoDeRecorte</code>).</li>
 <li><strong>Test:</strong> <code>test/domain/llm/aviso-de-recorte.spec.ts</code> (fixes the new text and fails the old one, &quot;voltam nas próximas voltas&quot; and &quot;volta no seguinte&quot;).</li>
 <li><strong>Origin:</strong> AT-643 (EP-030): <code>write_file</code> and <code>terminal</code> left the dev's menu in Jev, and the warning said to wait for a round the model had no way to request.</li>
 </ul>
