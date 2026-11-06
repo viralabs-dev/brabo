@@ -1,6 +1,6 @@
 ---
 sidebar_position: 7
-traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # Gates и то, как они измеряются
