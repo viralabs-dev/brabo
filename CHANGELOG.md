@@ -4,6 +4,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: ADR 0267 (AT-765): o E2E do `brabo-qa` vira portão da `main` nos seis repositórios com gatilho, pelo check `E2E do brabo-qa` e o ruleset "main exige E2E"; o `/qa-aceitar <justificativa>` do dono é a exceção registrada, nunca para digest nem assinatura. `rulesets.md` e `branching-policy.md` atualizados.
 - **docs**: ADR 0261 (o Dev Lead é avisado de bloqueios e pede ao Arquiteto pela ferramenta `pedir_ao_arquiteto`, AT-748) com traduções, e gerados regenerados com as RN-1009 a RN-1012 (836 RNs).
 - **docs**: o `docs:check` ganha a guarda do idioma dos irmãos (AT-745, ADR 0260): reprova página sem `idioma_original: en` e `i18n/` numa raiz de irmão, e avisa prosa pt-BR por um contador que entende citação multilinha, aspas escapadas, URL e e-mail (`scripts/docs/idioma-dos-irmaos.mjs`).
 - **docs**: ADR 0266 (AT-766): a doc de todos os repositórios é em pt-BR por padrão, substituindo o ADR 0260; traduções em `<raiz>/docs/i18n/` são permitidas nos irmãos e o `Unreleased` dos CHANGELOGs é traduzido. Sai a guarda `scripts/docs/idioma-dos-irmaos.mjs`; a página `idioma_original: en` segue aceita até o irmão retraduzir.

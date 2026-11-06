@@ -633,6 +633,14 @@ depois do merge, ele confirma que o commit tem **dois pais**. Isso não
 depende de permissão nenhuma, e olha para o fato consumado em vez da
 intenção declarada.
 
+### O E2E do brabo-qa na promoção e no hotfix
+
+Nos seis repositórios com gatilho (`brabo-api`, `brabo-engine`, `brabo-web`, `brabo-broker`, `brabo-infra` e `brabo-qa`), toda PR com destino `main` cria o check `E2E do brabo-qa` (ADR 0267), exigido pelo ruleset "main exige E2E".
+
+- **Promoção `dev → main`:** o E2E usa a imagem `vX.Y.Z-dev.N` que aponta para o head da PR. Se nenhuma tag `-dev` aponta para ele (por exemplo, um merge commit ainda sem carimbo), o check fica vermelho por `ambiente`, com mensagem clara, e não usa a `-dev` de outro commit. Tag ainda sendo publicada é esperada por até 30 min (consulta a cada 30 s).
+- **Hotfix `hotfix/*`:** o `ci.yml` publica `sha-<12 caracteres do head>` e o E2E usa essa imagem, com as últimas tags finais dos demais.
+- **Aceite:** o dono pode aceitar um vermelho de `spec` ou `ambiente` com `/qa-aceitar <justificativa>`; digest divergente e assinatura inválida nunca são aceitos.
+
 ## Versionamento {#versioning}
 
 > **Leitura depois do ADR 0235 (02/11/2026):** as seções de versionamento, âncora, retropropagação e portão abaixo ainda contam a esteira de três degraus. Onde citam `qa` como degrau intermediário, vale hoje: a promoção é `dev → main`, a âncora da tag final é a `-dev.N` do pai do merge, e a retropropagação de um hotfix é só `main → dev`. Os exemplos com `-qa.N` são históricos.
