@@ -71,6 +71,7 @@ Fonte: o `package.json` de cada pacote e o `Makefile` da raiz.
 | `pnpm --filter api gerar:areas` | `ts-node scripts/gerar-areas.ts` |
 | `pnpm --filter api lint:migracao` | `ts-node scripts/lint-migracao.ts` |
 | `pnpm --filter api relatorio:backup` | `ts-node scripts/relatorio-backup.ts` |
+| `pnpm --filter api migrar-projeto-para-trunk` | `ts-node src/scripts/migrar-projeto-para-trunk.ts` |
 | `pnpm --filter api grafo:reprojetar` | `ts-node src/scripts/reprojetar-grafo.ts` |
 | `pnpm --filter api artefatos:reprojetar` | `ts-node src/scripts/reprojetar-artefatos.ts` |
 | `pnpm --filter api db:generate` | `drizzle-kit generate` |
@@ -174,4 +175,4 @@ Fonte: o `package.json` de cada pacote e o `Makefile` da raiz.
 
 ---
 
-114 comandos no total. Alvo do Makefile sem a anotação `## descrição` não aparece aqui — anote-o na fonte.
+115 comandos no total. Alvo do Makefile sem a anotação `## descrição` não aparece aqui — anote-o na fonte.

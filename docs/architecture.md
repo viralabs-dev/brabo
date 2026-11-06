@@ -13,7 +13,7 @@ Este documento é o mapa para quem vai **trabalhar** no código. Ele diz por
 onde começar a ler, o que cada fronteira promete e o que já se sabe que está
 torto.
 
-As decisões e suas justificativas moram nos [ADRs](adr/index.md) — 257
+As decisões e suas justificativas moram nos [ADRs](adr/index.md) — 259
 deles, vários registrando um defeito real encontrado em execução. Aqui não
 repetimos o argumento: apontamos para ele.
 
@@ -57,7 +57,7 @@ graph TB
   B -->|"WebSocket (canais)"| E
   A -->|"SQL"| P
   A -->|"HTTP interno<br/>comando síncrono"| E
-  A -->|"HTTP interno<br/>cinco operações"| K
+  A -->|"HTTP interno<br/>seis operações"| K
   K -->|"lê a decisão do Arquiteto"| A
   K -->|"docker CLI pelo socket"| D
   A -->|"turno de LLM"| L
@@ -451,7 +451,7 @@ pasta confirmada.
 | diretório | o que é |
 |---|---|
 | `packages/shared/` | o `GitProviderContract` — quinze operações, **tipos e nada mais**: um valor que sobrevive ao `tsc` quebra o boot da api (travado por um teste), então a constante mora no consumidor |
-| `packages/docker-port/` | a PORTA do Docker (cinco operações) e seu adaptador de CLI, compartilhados por `apps/runner` e `apps/broker` — [ADR 0130](adr/0130-broker-de-container.md). É código de runtime, e é exatamente por isso que NÃO está em `packages/shared`; não tem passo de build e os dois consumidores o EMPACOTAM, então nenhuma imagem jamais o resolve a partir de `node_modules` |
+| `packages/docker-port/` | a PORTA do Docker (seis operações) e seu adaptador de CLI, compartilhados por `apps/runner` e `apps/broker` — [ADR 0130](adr/0130-broker-de-container.md). É código de runtime, e é exatamente por isso que NÃO está em `packages/shared`; não tem passo de build e os dois consumidores o EMPACOTAM, então nenhuma imagem jamais o resolve a partir de `node_modules` |
 | `docker/` | imagens de dev e de produção; `smoke.sh` |
 | `deploy/k8s/` | base do Kustomize + overlays (local, staging, prod) |
 | `design/` | design system: tokens, tipografia, componentes |

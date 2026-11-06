@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 257 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 259 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -45,6 +45,7 @@ O contrato do provider de git, o nascimento e a adoção do repositório, a prot
 | [0235](0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.md) | A `qa` é aposentada por hora no repositório do Brabo (AT-660): esteira `dev → main`, âncora de versão `-dev.N`, `qa` arquivada em `refs/archive/qa` e receita da volta; o Gitflow do produto não muda. Revisa o 0030, revoga o mecanismo do 0217. |
 | [0236](0236-o-dependabot-dispensa-revisao-na-dev.md) | PR do Dependabot para a `dev` passa na escada de aprovação sem revisão, nos dois modos, reconhecido por autor E branch (a régua do `pr-police`); fica mergeável quando os outros checks passam, e a `main` segue com a escada inteira (AT-668). |
 | [0255](0255-politica-de-pr-obrigatoria-em-todos-os-repos.md) | A política de PR é obrigatória em todos os repositórios (checks `Política de branches` e `Escada de aprovação` required, ruleset sem force push em `brabo`, `brabo-qa` e `brabo-infra`) e a PR do bot `chore/regenera-gerados` dispensa a escada na `dev`. |
+| [0263](0263-o-projeto-do-usuario-trabalha-em-trunk.md) | O repositório do PROJETO do usuário trabalha em trunk: a tarefa nasce da `main` e volta para a `main`, e o bootstrap cria e protege só a `main`. Depois de cada merge, `project.trunk_merged` leva a pasta (container, mounted e runner) até a `main` nova por fast-forward, que recusa com motivo quando há branch outra, árvore suja, divergência ou não rastreado sobrescrito. Projeto antigo tem o claim recusado até o script de migração; o Brabo segue `dev → main` (AT-617, decisão do dono de 06/11). |
 
 ## Harness de agente, turnos e sessões {#tema-agentes}
 
@@ -198,6 +199,7 @@ O ciclo de vida do container do projeto, a decisão de imagem, a porta de Docker
 | [0208](0208-a-infra-herda-a-rede-do-arquiteto.md) | A Infra HERDA a rede que o Arquiteto declarou em `artifact.project_image` (AT-392, decisão do dono de 02/10): a subida pelo servidor no aceite do handoff e a ferramenta `propose_container_start` sem `network` usam o `egress`/`none` do Arquiteto em vez de um `none` literal, e continuam subindo sem clique; revisa o ponto 3 do ADR 0190, se afasta do §4 do ADR 0065 e declara o preço (o egress alcança as portas publicadas do host, ADR 0189). |
 | [0228](0228-comando-do-app-e-rede-do-container.md) | O container do projeto sobe o app pelo comando declarado pela Infra (supervisor constante, comando como argumento) e publica porta SÓ no loopback, com DNS e `extra_hosts` validados; revisa o 0130 e o 0213 sem editá-los |
 | [0229](0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.md) | O QA testa numa instância efêmera (`brabo-qa-<workspace>-<chave>`, sem `--restart`, rótulo `brabo.papel=qa`) com os serviços que a Infra declarou, por digest, no mesmo namespace de rede; compartilhado vive em rede privada do projeto |
+| [0264](0264-o-app-reinicia-so-o-processo.md) | Depois do avanço da pasta, o app reinicia SÓ o processo, pela operação `REINICIAR_APP` da porta Docker (o supervisor grava o `.pid`), sem recriar o container nem derrubar as lanes. O engine só pede quando a pasta andou, os eventos `app.*` não levam log e a falha só avisa, sem voltar a pasta. Revisa as decisões 1 e 5 do ADR 0228 (AT-617, decisão do dono de 06/11; primeiro app na AT-758). |
 
 ## O runner local {#tema-runner}
 
@@ -398,7 +400,7 @@ Como a documentação é gerada, verificada e publicada.
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0263**.
+  é substituído — o próximo é **0265**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml` e a linha do índice sob a seção desse
   tema, em ordem numérica. Quem revisa confirma. Um tema novo é uma

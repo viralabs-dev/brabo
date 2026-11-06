@@ -55,10 +55,11 @@ describe('arquivos de RN de todas as raízes', () => {
     expect(bloco).toContain('(business-rules/api.md#rn-123)');
   });
 
-  it('a árvore real: 844 RNs, sem duplicata, e a ancoras-de-rn reexporta a mesma função', () => {
+  it('a árvore real: todas as raízes de RN, sem duplicata, e a ancoras-de-rn reexporta a mesma função', () => {
     const lista = arquivosDeRn(arquivos) as string[];
     expect(arquivosDeRnDaAncora).toBe(arquivosDeRn);
-    expect(contarRegras(lista, ler)).toBe(844);
+    // o total exato é conferido pela contagem em prosa do docs:check; aqui só o piso pega layout parcial (deu 29 em 06/11)
+    expect(contarRegras(lista, ler)).toBeGreaterThan(800);
     expect(numerosDuplicados(lista, ler)).toEqual([]);
   });
 });

@@ -5,7 +5,7 @@ sidebar_label: Архитектура
 sidebar_position: 2
 description: Карта Brabo — контейнеры, карта кода, поток хода агента, инварианты слоёв и известный долг.
 keywords: [архитектура, карта кода, инварианты, harness, event log]
-traducao_de: 9dbb82539548937b3d2f8bc0c7ecc2d1503061d6
+traducao_de: 72b7ce386be372596e8fa6caf64502089c39fa05
 ---
 
 # Архитектура
@@ -466,7 +466,7 @@ WORKSPACE**, а не проекта, — `getContainersOverview` в `lib/api-cli
 | каталог | что это |
 |---|---|
 | `packages/shared/` | `GitProviderContract` — пятнадцать операций, **типы и ничего больше**: значение, переживающее `tsc`, ломает загрузку api (зафиксировано тестом), поэтому константа живёт у потребителя |
-| `packages/docker-port/` | ПОРТ Docker (пять операций) и его CLI-адаптер, общие для `apps/runner` и `apps/broker` — [ADR 0130](adr/0130-broker-de-container.md). Это runtime-код, и именно поэтому он НЕ в `packages/shared`; у него нет шага сборки, и оба потребителя его УПАКОВЫВАЮТ, поэтому ни один образ никогда не разрешает его из `node_modules` |
+| `packages/docker-port/` | ПОРТ Docker (шесть операций) и его CLI-адаптер, общие для `apps/runner` и `apps/broker` — [ADR 0130](adr/0130-broker-de-container.md). Это runtime-код, и именно поэтому он НЕ в `packages/shared`; у него нет шага сборки, и оба потребителя его УПАКОВЫВАЮТ, поэтому ни один образ никогда не разрешает его из `node_modules` |
 | `docker/` | образы dev и production; `smoke.sh` |
 | `deploy/k8s/` | база Kustomize + overlays (local, staging, prod) |
 | `design/` | дизайн-система: токены, типографика, компоненты |
