@@ -1,5 +1,5 @@
 ---
-traducao_de: f6d9c3688e413d451640bbae2d5606da150cc14e
+traducao_de: a766a77602f64b8f373dcf2fcd64c6af12aebc25
 id: rulesets
 title: Repository rulesets
 sidebar_label: Rulesets
@@ -18,9 +18,13 @@ a person, with a record.
 The policy that these rules apply is in
 [Branch policy](../explanation/branching-policy.md).
 
-> **Current state:** `gh api repos/daneiel/brabo/rulesets` returns **0**.
-> Nothing applied yet. Until then, everything here is declared intent, not
-> real protection.
+> **Decided state (ADR 0255, 5 November 2026):** `Política de branches` and
+> `Escada de aprovação` are **required** checks in the ruleset of `dev` and `main`
+> of the 11 repositories `viralabs-dev/brabo*`; `brabo`, `brabo-qa` and `brabo-infra`
+> get the ruleset "main and dev without force push"; and the PR of the GitHub App
+> `viralabs-dev-brabo` on the branch `chore/regenera-gerados` → `dev` skips the
+> ladder (author AND branch; `main` keeps the whole ladder). Applying it on
+> GitHub remains manual.
 
 ## Prerequisite: the three branches must exist
 
@@ -146,7 +150,7 @@ and the numbers above are the BEFORE. What changed underneath:
   the diff doesn't touch an image** (AT-303). The first step classifies the
   PR's diff with `scripts/ci/diff-toca-imagem.ts` (an allow-list of what
   never enters an image, the smoke or the E2E: `docs/` except
-  `docs/gates.yml`, `website/`, `scripts/docs/`, `deploy/k8s/`, `.github/`
+  `apps/api/config/gates.yml`, `website/`, `scripts/docs/`, `deploy/k8s/`, `.github/`
   except `ci.yml`, root `*.md` except `THIRD_PARTY_NOTICES.md`, `design/*.md`;
   the spec proves the list against the real Dockerfiles, by mutation). Bake,
   Trivy, broker, smoke and E2E carry `if:` **per step**, and the job always
@@ -201,7 +205,7 @@ heads (whose diff always touches something) and retargets usually shrink the
 diff. The next push re-classifies.
 
 **`ci.yml` is parallel except for the two aggregators** — `test-api` and
-`test-web` `need` their shards, nothing else has `needs:`.
+`test-web` have `needs` on their shards, nothing else has `needs:`.
 The full PR verdict costs the SLOWEST chain, not the sum (which is ~12min of
 CPU). Before AT-303..305, anyone wanting to shorten the PR had two targets,
 and only two:
@@ -630,7 +634,6 @@ this opens are in
 |---|---|---|
 | — (index of all three) | `https://daneiel.github.io/brabo/` | ❌ `noindex, follow` |
 | `main` | `https://daneiel.github.io/brabo/prd/` | ✅ |
-| `qa` | `https://daneiel.github.io/brabo/qa/` | ❌ `noIndex` |
 | `dev` | `https://daneiel.github.io/brabo/dev/` | ❌ `noIndex` |
 
 The three became symmetric in

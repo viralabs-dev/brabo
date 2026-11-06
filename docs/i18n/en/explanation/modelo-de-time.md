@@ -1,8 +1,8 @@
 ---
-traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
+traducao_de: 30ccc6978b8dbd50cc8a2f195d60a9bb3c0a71a6
 ---
 
-# Team model and deliverable flow
+# Team model and deliverable flow {#team-model-and-deliverable-flow}
 
 > Context consolidated from the team-model design session
 > (Aug/2026), audited against the product's real state. The formal
@@ -11,7 +11,7 @@ traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
 > pieces: `apps/api/config/gates.yml` (ADR 0054) and `agent-areas.ts` (catalog,
 > PHASE 18).
 
-## Origin
+## Origin {#origin}
 
 The model translates the profession map of a high-performance delivery
 team (Architect, Tech Lead, PO/PM, Staff, SRE/Platform, DevOps/Infra,
@@ -35,7 +35,7 @@ done for `analytics`/`delivery-metricas` (ADR 0089): both became
 `status: active` as a report SCRIPT (`analise:funil`), never an agent —
 the shape the separation criterion already prescribed.
 
-## Product owner's decisions
+## Product owner's decisions {#product-owners-decisions}
 
 - **Engineering Manager: removed.** There's no people management
   between agents.
@@ -52,7 +52,7 @@ the shape the separation criterion already prescribed.
   `status: lacuna`, dependent on a real incident signal — ADR 0089);
   **DBA absorbed** by Dev Lead (migration) and Platform (tuning).
 
-## Flow invariants
+## Flow invariants {#flow-invariants}
 
 1. No artifact without a declared recipient.
 2. No role starts without complete inputs — a gap produces a return
@@ -64,7 +64,7 @@ the shape the separation criterion already prescribed.
    revertible PR belongs to the Dev Lead; an irreversible decision
    belongs to the Architect.
 
-## Activation trigger table
+## Activation trigger table {#activation-trigger-table}
 
 | Trigger in the product | Roles it activates/separates |
 |---|---|
@@ -77,7 +77,7 @@ the shape the separation criterion already prescribed.
 | Real data volume | `dbre` splits off from Dev Lead/Platform |
 | — (never) | `delivery-metricas` becomes a report, not an agent (ADR 0089, already delivered) |
 
-## Mesh state (audited)
+## Mesh state (audited) {#mesh-state-audited}
 
 **The downstream flow is nearly complete; what's missing is the
 upstream one.** Gaps:
@@ -91,7 +91,7 @@ The "product metrics → PO" loop closed: `listar_metricas_de_produto`
 within its turn — it was the last line of this table (item B4 of the
 fluxo.yml × code audit).
 
-## Proposals pending decision
+## Proposals pending decision {#proposals-pending-decision}
 
 - [ ] Who inherits the Staff's trigger and the cap-raise proposal while
       the Anamnese is under refinement — or both wait, declared as such.

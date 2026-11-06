@@ -4,7 +4,7 @@ title: Events
 sidebar_position: 2
 description: The event types in the immutable log, the channel broadcasts, and the trace spans — three different things with similar names.
 keywords: [events, event log, session_events, broadcast, span, outbox]
-traducao_de: 5c8b2358773a5a9c46596ec50d9e5b8c29afaaf8
+traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 ---
 
 # Events
@@ -177,6 +177,10 @@ compaction summary, and the opening messages.
 | `infra.gate_changed` | Infra's gate |
 | `gate.rescue_parked` | the `GateRescuer` PARKED a QA/SecOps cycle stalled for more than 2 h instead of restarting it ([RN-722](../business-rules/engine.md#rn-722), ADR 0207); the thread shows a "Resume gate" button ([RN-724](../business-rules/engine.md#rn-724)). Payload: `taskId`, `gate`, `idadeSegundos`, `motivo`. Actor `system`/`gate-rescuer` |
 | `gate.interrupted` | on engine BOOT, a recent `in_progress` gate cycle had no live process on any node of the cluster: the restart killed it, and the rescuer restarts it at once instead of waiting for the 15-minute threshold ([RN-823](../business-rules/engine.md#rn-823)). Payload: `taskId`, `gate`, `ultimaAtividadeEm`, `retomadoEm`. Actor `system`/`gate-rescuer`; the thread shows it as a notice. Not projected to the graph |
+| `agent.plan` | the agent registered the plan for the turn or the task with `registrar_plano` ([RN-918](../business-rules/engine.md#rn-918)): `objetivo` and `passos` (`texto`, `estado` `pendente`/`em_curso`/`feito`/`descartado`). Each event replaces the previous one; the last is the current one and feeds the journal and the thread card |
+| `agent.turn_resumed` | the turn interrupted by the restart was resumed ([RN-920](../business-rules/engine.md#rn-920), [RN-921](../business-rules/api.md#rn-921)). Payload: `retomaDe`, `ultimaAtividadeEm`, `automatica` (`true` at boot, `false` on the "Resume" button). It is the marker for the ceiling of 1 automatic resume; the gate subagent writes it when resumed |
+| `infra.correction_queued` | a gate correction reached the Infra Lead and stayed pending, durably ([RN-924](../business-rules/engine.md#rn-924)). Payload: `id`, `gate`, `reason`, `diagnosis` |
+| `infra.correction_delivered` | the correction `id` was delivered to the Infra Lead; one with `queued` but no `delivered` is delivered again at boot |
 | `infra.artifact_blocked` | Infra's artifact was rejected |
 
 ### Delegation (Phase 8b, ADR 0038)

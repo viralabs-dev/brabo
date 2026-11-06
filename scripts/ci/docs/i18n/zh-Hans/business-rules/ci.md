@@ -1,5 +1,5 @@
 ---
-traducao_de: 715e7330f7f738c55bc7cd3a0d770a0fc9304e11
+traducao_de: b3289c8b759dd5571d375e7a14c64ec9f9124c11
 id: rn-ci
 title: 'Regras de negócio — CI'
 sidebar_label: CI
@@ -121,7 +121,7 @@ golden_set.rag` 诞生、“从不在 CI 中”，原因与 QA 的 golden-set（
 
 **让这对 RAG 可行而对 QA 不可行的区别：** RAG 的 golden-set 只调用 **embedding** 模型——CPU、确定性、没有采样——从不调用做判断的**聊天**模型，而那正是 QA 的 golden-set 所需要的（昂贵，本质上测量的是非确定性的东西，正如 ADR 0123 本身记录的真实轮次在 6 次中命中 1 到 5 次不等）。`ubuntu-latest`，没有任何 GPU，在这里足够——对 QA 则不够。QA 的 golden-set 因这条 RN **没有任何改变**：仍然完全手动，在 CLAUDE.md 中是 `TODO(humano)`。
 
-**`severidade: warn`（`docs/gates.yml`）**仍然**是 `warn`，而原因变了。** 不再是“没有带 LLM 的 CI”——而是节奏：工作流是**定时**的（每晚 + 手动触发），从不按 `pull_request` 运行。`block` 会承诺一个并不存在的合并锁——与第 2 步时已经成立的推理相同，现在应用于正确的原因。检索命中率的回退会在 24 小时内（或立即，通过 `workflow_dispatch`）变成可见的趋势信号，从不是阻断 PR 的 gate——这一权衡被产品负责人明确接受，考虑到每个窗口都要拉取模型并运行 17 次检索（几分钟）的成本。
+**`severidade: warn`（`apps/api/config/gates.yml`）**仍然**是 `warn`，而原因变了。** 不再是“没有带 LLM 的 CI”——而是节奏：工作流是**定时**的（每晚 + 手动触发），从不按 `pull_request` 运行。`block` 会承诺一个并不存在的合并锁——与第 2 步时已经成立的推理相同，现在应用于正确的原因。检索命中率的回退会在 24 小时内（或立即，通过 `workflow_dispatch`）变成可见的趋势信号，从不是阻断 PR 的 gate——这一权衡被产品负责人明确接受，考虑到每个窗口都要拉取模型并运行 17 次检索（几分钟）的成本。
 
 **工作流中不需要生成任何密钥。** `seed-golden-set-rag.ts`
 从不定义 `NODE_ENV`，而 api 在生产中会以示例字面值拒绝的四个密钥（RN-114）只在
@@ -141,7 +141,7 @@ golden_set.rag` 诞生、“从不在 CI 中”，原因与 QA 的 golden-set（
 
 三项修正之后，在这台机器上沿作业将要走的路径测量：**top-5 中 17/17**，与记录下限的两轮手动运行相同。
 
-- **位置：** `.github/workflows/golden-set-rag.yml`、`docs/gates.yml`
+- **位置：** `.github/workflows/golden-set-rag.yml`、`apps/api/config/gates.yml`
   （`rag-acertivo`）、`apps/engine/mix.exs`、
   `apps/api/scripts/seed-golden-set-rag.ts`
 - **ADR：** [0138](../adr/0138-golden-set-do-rag-em-ci-agendado.md)
@@ -316,7 +316,7 @@ as imagens publicadas」，`permissions` 块中带 `id-token: write`）；
 > **于 2026-09-27 决定（[ADR 0174](../adr/0174-runner-sem-binario-darwin-x64.md)，AT-065）：
 > 该平台已移除。** 矩阵变为「四个」目标，`ALVOS_ESPERADOS` 随之调整——缺失正是对照它来声明的，把 `darwin-x64` 留在那里会让每个清单永远宣布一个本是决定的缺失。Mac Intel 使用 `npm install -g @brabo/runner`（在 Node 下，同样的证明能通过）：`install.sh` 说明这一点而不尝试下载，代理 `GET /runner-releases/binary` 以指向 npm 的自己的 400 拒绝 `darwin-x64`，浏览器面板甚至不请求下载。本 RN 的规则不变：它仍适用于任何失去 runner 的目标，而当矩阵、api 的列表、安装程序的 `case` 和浏览器的列表出现分歧时，`scripts/ci/alvos-do-runner.spec.ts` 会失败。
 
-- **代码：** `.github/workflows/build-runner-binaries.yml:283`（作业，现在没有 `needs:`）、`:318`（`timeout-minutes: 40`，容得下两次等待）、`:335`（作业级的 `ALVOS_ESPERADOS`，让两个步骤读取同一个列表）、`:397`（等待的步骤）、`:401`/`:402`（两个上限）、`:410`（缺失的 Release，这是错误）、`:433`（二进制的上限，这是 `notice`）、`:499`（点名未覆盖内容的清单）
+- **代码：** `.github/workflows/build-runner-binaries.yml:283`（作业，现在没有 `needs:`）、`:318`（`timeout-minutes: 40`，容得下两次等待）、`:358`（作业级的 `ALVOS_ESPERADOS`，让两个步骤读取同一个列表）、`:397`（等待的步骤）、`:401`/`:402`（两个上限）、`:410`（缺失的 Release，这是错误）、`:433`（二进制的上限，这是 `notice`）、`:499`（点名未覆盖内容的清单）
 - **测试：** `scripts/ci/checksums-nao-espera-a-matriz.spec.ts`——作业没有 `needs:`、两个上限都存在、二进制的上限由 `build` 的 `timeout-minutes` 推导（而不是复制）、它容得进作业自身的 `timeout-minutes`、目标缺失是 `notice` 而 Release 缺失是 `error`、`ALVOS_ESPERADOS` 与矩阵一致，以及本次改动不触及的 ADR 0149 的四项保证（一个签名、附加之前校验、`id-token: write`、清单中的 `install.sh`）。它是「静态」的，其局限在文件顶部声明：该作业只能在正式 tag 中证明，而它从未在任何 tag 中运行过
 - **已「声明」的缺口：** 自 [ADR 0187](../adr/0187-runner-sem-binario-win32-x64.md) 起矩阵有「三个」目标（`win32-x64` 按 ADR 0174 的同一模式移除，`ALVOS_ESPERADOS` 随之调整），而 Release 仍然收到**两个**——`darwin-arm64` 已在演练中证明（[RN-688](runner.md#rn-688)），只差一个正式 tag 来演练它。清单诞生时将覆盖两个，并会**说明**这一点，这就是部分与沉默之间的区别。而当整个矩阵都失败时，作业会在拒绝之前耗尽两次等待
 - **ADR：** [0149](../adr/0149-assinatura-dos-artefatos-publicados.md)

@@ -5,7 +5,7 @@ sidebar_label: 业务规则
 sidebar_position: 3
 description: Brabo 的领域规则，带编号，注明它们在代码中的位置以及覆盖每一条的测试。
 keywords: [业务规则, 领域, 状态机, 审批, RBAC]
-traducao_de: 222baae244342a1d7b5d879bcee93229b036ed86
+traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 ---
 
 # 业务规则
@@ -838,6 +838,7 @@ traducao_de: 222baae244342a1d7b5d879bcee93229b036ed86
 - <a id="rn-995"></a>[RN-995](business-rules/api.md#rn-995) — The agent catalog comes from the engine and is read-only: identity and tools from the engine, current instruction from the database, no composed prompt and no schema, and engine down is "I do not know", never "no tools"
 - <a id="rn-996"></a>[RN-996](business-rules/engine.md#rn-996) — The QA verdict carries the per-test result read from the JUnit report by the engine; without a report, it says why
 - <a id="rn-997"></a>[RN-997](business-rules/api.md#rn-997) — The Anthropic catalog is born with a dated list price and the SDK's `supportsReasoning`; a manual price is never overwritten
+- <a id="rn-998"></a>[RN-998](business-rules/produto.md#rn-998) — 迁移把数据库恢复到空库中，保留主密钥，可恢复，并理解版本线
 - <a id="rn-999"></a>[RN-999](business-rules/engine.md#rn-999) — The pending call's sibling call receives a refusal, so every `tool_use` has its `tool_result`
 - <a id="rn-1000"></a>[RN-1000](business-rules/api.md#rn-1000) — On direct Anthropic, reasoning off is PER MODEL, the adaptive one gains the headroom and `thinking_tokens` reaches the metering
 - <a id="rn-1001"></a>[RN-1001](business-rules/api.md#rn-1001) — The tracing decorator forwards `aceitaRaciocinioDesligado`, so the retry without reasoning really runs

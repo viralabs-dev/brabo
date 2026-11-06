@@ -4,7 +4,7 @@ title: 'Бизнес-правила — Аутентификация'
 sidebar_label: Аутентификация
 description: 'RN first-party auth: refresh с ротацией, сессия в cookie, PAT, OAuth и ключ устройства.'
 keywords: [бизнес-правила, аутентификация, refresh, cookie, PAT, OAuth]
-traducao_de: b21e556fb001c975b4d848dfbf48d663c631b3ca
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # Аутентификация
@@ -20,7 +20,7 @@ traducao_de: b21e556fb001c975b4d848dfbf48d663c631b3ca
 Решения — в [ADR 0031](../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.md)
 и [ADR 0032](../adr/0032-corte-do-keycloak-e-sessao-em-cookie.md).
 
-Estas RNs agora moram por área, na página da raiz que as hospeda (`business-rules/<raiz>.md`). Esta página está congelada: só preserva as âncoras antigas.
+Эти RN теперь живут по областям, на странице корня, который их содержит (`business-rules/<raiz>.md`). Эта страница заморожена: она лишь сохраняет старые якоря.
 
 - <a id="rn-030"></a>[RN-030](./api.md#rn-030)
 - <a id="rn-031"></a>[RN-031](./api.md#rn-031)
@@ -119,3 +119,4 @@ Estas RNs agora moram por área, na página da raiz que as hospeda (`business-ru
 - <a id="rn-601"></a>[RN-601](./engine.md#rn-601)
 - <a id="rn-603"></a>[RN-603](./api.md#rn-603)
 - <a id="rn-613"></a>[RN-613](./api.md#rn-613)
+- <a id="rn-984"></a>[RN-984](./api.md#rn-984)

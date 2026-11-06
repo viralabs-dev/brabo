@@ -4,7 +4,7 @@ title: '业务规则——成本'
 sidebar_label: 成本与计量
 description: '关于预算、计量（metering）、支出报告和成本上限的 RN——因篇幅原因从 business-rules.md 中拆出。'
 keywords: [业务规则, 成本, 预算, metering, token]
-traducao_de: de061f649879891150d8c35e4aef5f9d65a09242
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # 成本
@@ -12,7 +12,7 @@ traducao_de: de061f649879891150d8c35e4aef5f9d65a09242
 > 这些 RN 从 [`business-rules.md`](../business-rules.md) 中拆出，内容一字未改：单页已超过 640 KB，
 > 仅这两个部分就占了一半。锚点 `#rn-NNN` 保持不变——只是承载它们的文件变了。
 
-Estas RNs agora moram por área, na página da raiz que as hospeda (`business-rules/<raiz>.md`). Esta página está congelada: só preserva as âncoras antigas.
+这些 RN 现在按领域存放在承载它们的根页面中（`business-rules/<raiz>.md`）。本页已冻结：只保留旧的锚点。
 
 - <a id="rn-017"></a>[RN-017](./api.md#rn-017)
 - <a id="rn-018"></a>[RN-018](./api.md#rn-018)
@@ -93,4 +93,18 @@ Estas RNs agora moram por área, na página da raiz que as hospeda (`business-ru
 - <a id="rn-774"></a>[RN-774](./engine.md#rn-774)
 - <a id="rn-802"></a>[RN-802](./api.md#rn-802)
 - <a id="rn-892"></a>[RN-892](./api.md#rn-892)
+- <a id="rn-907"></a>[RN-907](./api.md#rn-907)
 - <a id="rn-910"></a>[RN-910](./api.md#rn-910)
+- <a id="rn-915"></a>[RN-915](./api.md#rn-915)
+- <a id="rn-916"></a>[RN-916](./api.md#rn-916)
+- <a id="rn-917"></a>[RN-917](./api.md#rn-917)
+- <a id="rn-952"></a>[RN-952](./api.md#rn-952)
+- <a id="rn-953"></a>[RN-953](./api.md#rn-953)
+- <a id="rn-954"></a>[RN-954](./api.md#rn-954)
+- <a id="rn-958"></a>[RN-958](./api.md#rn-958)
+- <a id="rn-963"></a>[RN-963](./web.md#rn-963)
+- <a id="rn-964"></a>[RN-964](./api.md#rn-964)
+- <a id="rn-965"></a>[RN-965](./api.md#rn-965)
+- <a id="rn-969"></a>[RN-969](./api.md#rn-969)
+- <a id="rn-973"></a>[RN-973](./web.md#rn-973)
+- <a id="rn-997"></a>[RN-997](./api.md#rn-997)

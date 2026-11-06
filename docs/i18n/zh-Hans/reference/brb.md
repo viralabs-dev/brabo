@@ -4,7 +4,7 @@ title: BRB 登记表
 sidebar_position: 10
 description: 33 项 BRB 发现——id、标题、优先级、维护者 vault 记录的状态以及在此测得的状态，并附上证明它的 文件:行。
 keywords: [brb, 安全, 发现, backlog, 供应链]
-traducao_de: a4b2340131a6912b860a89172da66f34d1f31133
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # BRB 登记表
@@ -27,7 +27,7 @@ traducao_de: a4b2340131a6912b860a89172da66f34d1f31133
   这里决定。
 - **在此测得**——仓库所显示的内容，于 2026-09-27 针对 `dev` 在 `34c1c83bdc` 上测得，除非
   证据另有日期。
-- **证据**——该测量背后的 `文件:行`、PR 或运行。
+- **证据**——该测量背后的 `arquivo:linha`、PR 或运行。
 
 主题位于本仓库之外的发现（vault 自身的笔记、产品决定、付费凭据）仍然有一行，标记为
 **此处不可验证**，并附原因。一个毫无信息的 id 会带一个 `TODO(humano)`——目前没有。vault 中
@@ -48,7 +48,7 @@ traducao_de: a4b2340131a6912b860a89172da66f34d1f31133
 
 由此有两条规则：
 
-- **状态以 `文件:行` 为依据，测量得出，绝不凭记忆。**
+- **状态以 `arquivo:linha` 为依据，测量得出，绝不凭记忆。**
 - **vault 拥有发现；仓库拥有证据。** 当两者在某件事是否仍在发生上意见不一时，仓库胜出——它就
   是被描述的那个东西。一项是否正式*关闭*仍然是维护者在 vault 中的决定。
 
@@ -83,7 +83,7 @@ traducao_de: a4b2340131a6912b860a89172da66f34d1f31133
 | **BRB-025** | 将 `apps/api/scripts/` 和 `e2e/` 纳入生成的环境清单 | P3 | 开放 | **缺陷不再复现** | `scripts/docs/fontes-de-env.mjs:49-52` 扫描这两处，那里的新 `process.env.X` 会让 `docs:check` 失败（AT-124，PR #638，经变异测量）。仍然开放的那一半——`docs:generate` 之后 ⚠️ 不会失败，而 `HUGGINGFACE_API_TOKEN`/`HUGGINGFACE_HUB_URL` 就是这样被提交的——在 AT-211（2026-09-27）中关闭：`docs:check` 会让环境清单中的任何 ⚠️ 失败，两类来源都是（`scripts/docs/inventario-de-env.mjs`，在 `inventario-de-env.spec.ts` 中经变异证明），这两个变量已在 `configuration.md` 中描述 |
 | **BRB-026** | 重组 `docs/adr/index.md`——0044 以来的一切都在 "Phase 12" 下 | P3 | 开放 | **仍然复现** | `docs/adr/index.md:143` `## Phase 12 — Post-dogfooding operability` 仍然容纳之后的每个 ADR，且索引没有生成块 |
 | **BRB-027** | 记录"规模"表背后的方法论 | P3 | 开放 | **仍然复现** | 没有 `scripts/docs/escala.mjs`，`docs/architecture.md` 也没有生成的规模块；表本身位于 vault 中 |
-| **BRB-028** | 为 appsec 时刻（`threat_model`）提供触发器 | P2 | 已关闭 2026-09-27（AT-136） | **缺陷不再复现** | 原来：`SecOpsAgentServer.run_design/2` 没有生产调用方，`docs/fluxo.yml` 把 `assess_implementability` 称为自然的触发器，同时又宣布它超出范围。由 PR #514（**RN-539**——由 522 重新编号，该编号两天前已被占用）合并到 `dev`：`dev_lead_tools.ex:333-338` 从 `assess_implementability` 触发它，恰好在缺口说它应在的位置，通过 `Dispatcher.run_appsec_design/2`（`dispatcher.ex:112`）；`docs/fluxo.yml:188-196` 现在写着 `status: active`，没有声明的缺口。该触发器**由幂等性守护**，这并非过度谨慎：结果 `:sem_plano` 要求模型再次调用 `assess_implementability`，每次新调用都会再花一轮 appsec 的 LLM 并在同一个故事上再产生三个 handoff。代码中声明了一个限制：`artifact.threat_model` 在**故事**的会话中发出，而守卫读取的是 **DEV LEAD** 的会话——在常见路径上是同一个会话，两者不同时则是一轮重复的 LLM，绝不是错误的数据 |
+| **BRB-028** | 为 appsec 时刻（`threat_model`）提供触发器 | P2 | 已关闭 2026-09-27（AT-136） | **缺陷不再复现** | 原来：`SecOpsAgentServer.run_design/2` 没有生产调用方，`packages/contracts/fluxo.yml` 把 `assess_implementability` 称为自然的触发器，同时又宣布它超出范围。由 PR #514（**RN-539**——由 522 重新编号，该编号两天前已被占用）合并到 `dev`：`dev_lead_tools.ex:333-338` 从 `assess_implementability` 触发它，恰好在缺口说它应在的位置，通过 `Dispatcher.run_appsec_design/2`（`dispatcher.ex:112`）；`packages/contracts/fluxo.yml:188-196` 现在写着 `status: active`，没有声明的缺口。该触发器**由幂等性守护**，这并非过度谨慎：结果 `:sem_plano` 要求模型再次调用 `assess_implementability`，每次新调用都会再花一轮 appsec 的 LLM 并在同一个故事上再产生三个 handoff。代码中声明了一个限制：`artifact.threat_model` 在**故事**的会话中发出，而守卫读取的是 **DEV LEAD** 的会话——在常见路径上是同一个会话，两者不同时则是一轮重复的 LLM，绝不是错误的数据 |
 | **BRB-029** | 决定心理学家和 Anamnese 的去留（自 2026-08-10 起暂停） | P2 | 开放 | **此处不可验证——产品决定** | 该暂停在 CLAUDE.md 中声明为开放的产品决定，并随 [RN-540](../business-rules/engine.md#rn-540) 变得可逆；没有 ADR 记录在一段确定时期内保持关闭 |
 | **BRB-030** | 协调重复的标签页导航（轨道 × 侧边栏） | P3 | 开放 | **此处不可验证——产品决定** | CLAUDE.md 将这种重复（`LinhaDeAba`，RN-196）列为已接受的缺口和单独的产品决定，在 [ADR 0126](../adr/0126-trilho-vertical-de-navegacao-do-projeto.md) 中未做出 |
 | **BRB-031** | 去掉通过浏览器配置 runner 时的手动 `chmod +x` | P3 | 已关闭 2026-10-01（AT-014） | **缺陷不再复现** | 原来：File System Access API 不保留执行位（`docs/adr/0118-configuracao-automatica-do-runner-pelo-navegador.md:134-140`），因此 ADR 0118 的浏览器流程以手动 `chmod +x` 结束。一半此前已通过另一条路关闭：`install.sh` 用 `install -m 0755` 安装二进制（[RN-531](../business-rules/produto.md#rn-531)）并通过终端配对机器（[RN-547](../business-rules/produto.md#rn-547)）。另一半因所有者（10/01）**停用**浏览器流程的决定而关闭：[ADR 0203](../adr/0203-aposenta-o-fluxo-do-runner-pelo-navegador.md) / [RN-687](../business-rules/web.md#rn-687) 删除了 `apps/web/src/lib/runner-bootstrap.ts` 和 `POST /projects/:projectId/runner-device-keys`，`RunnerOnboardingPanel` 现在把人们引导到安装器的命令。`grep -rn "chmod +x" apps/web/src` 只找到面板讲述该步骤为何移除的 docblock。在此之前通过浏览器注册的项目密钥仍然有效且可撤销。该发现还要求的下载 e2e 覆盖失去了对象：已经没有可覆盖的浏览器下载 |

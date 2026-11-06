@@ -3,9 +3,9 @@ id: branching-policy
 title: 分支与版本策略
 sidebar_label: 分支策略
 sidebar_position: 2
-description: dev → qa → main 的阶梯、分支分类法、谁从哪里诞生，以及为什么策略是机械化的而不是约定的。
+description: dev → main 的阶梯、分支分类法、谁从哪里诞生，以及为什么策略是机械化的而不是约定的。
 keywords: [分支, gitflow, 晋升, hotfix, 版本, 发布]
-traducao_de: 929963d24eb727bd64875486f2f1889172f3084a
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # 分支与版本策略 {#branch-and-versioning-policy}
@@ -29,21 +29,24 @@ traducao_de: 929963d24eb727bd64875486f2f1889172f3084a
 
 ## 阶梯 {#the-ladder}
 
-三个永久分支，**每个环境一个**。代码一次上一级。
+两个永久分支，**每个环境一个**。`qa` 于 2026-11-02 被暂时停用（[ADR 0235](../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.md)）：
+要恢复，就回退该轮的 PR 并复活 `refs/archive/qa`。
 
 ```mermaid
 flowchart LR
-  D[dev<br/>desenvolvimento] -->|promoção| Q[qa<br/>homologação]
-  Q -->|promoção| M[main<br/>produção]
-  M -.->|retropropagação| Q
-  Q -.->|retropropagação| D
+  D[dev<br/>desenvolvimento] -->|promoção| M[main<br/>produção]
+  M -.->|retropropagação| D
 ```
 
 | 分支 | 环境 | 在这里意味着什么 |
 |---|---|---|
 | `dev` | 开发 | 已集成，经 CI 测试 |
-| `qa` | 预发布验收 | 正在进行功能验证 |
 | `main` | 生产 | 正在线上运行的 |
+
+分支还决定**写入镜像的环境**（`BRABO_AMBIENTE`，ADR 0245）：`release.yml` 以 `prd` 构建，`ci.yml` 在基础为
+`main` 时以 `prd` 构建 PR，其他情况为 `dev`。第三个值 `local` 从不经由 workflow 产生——它只存在于在本机
+进行的构建（dev 和本地安装），并且是唯一开启按角色快速访问的值。spec
+`scripts/ci/ambiente-nas-actions.spec.ts` 会让传入 `local` 的 workflow 失败。
 
 曾经有第四级 `rc`（预生产），位于 `qa` 和 `main` 之间。它被移除了：只有一个维护者且周期很短，
 多出来的一级要花一整次晋升和一个环境来区分"已验证"和"几乎就绪"——这个区分不划算。`qa` 成为
@@ -102,7 +105,7 @@ flowchart LR
 `hotfix` 直接进入问题出现的那一级。这让下面的级别**过时**——修复存在于 `main` 而不在 `dev`。
 
 因此每个在高处诞生的修复都会产生一次**反向传播**：`main →
-qa → dev`，链式地、按顺序。在它完成之前，受影响的级别保持锁定——见[反向传播闸门](#the-back-merge-gate)。
+dev`（直到 ADR 0235 之前是 `main → qa → dev`，链式）。在它完成之前，受影响的级别保持锁定——见[反向传播闸门](#the-back-merge-gate)。
 
 一个 hotfix 的完整链条是**三个 PR**：hotfix 加两次反向传播。
 
@@ -114,8 +117,8 @@ qa → dev`，链式地、按顺序。在它完成之前，受影响的级别保
 |---|---|---|
 | `trabalho` | 一个工作功能 → `dev` | `feature/pr-police` → `dev` |
 | `correcao-alta` | `hotfix` → `main` | `hotfix/vaza-token` → `main` |
-| `promocao` | 相邻级别，向上 | `dev` → `qa` |
-| `retropropagacao` | 相邻级别，向下 | `main` → `qa` |
+| `promocao` | 相邻级别，向上 | `dev` → `main` |
+| `retropropagacao` | 相邻级别，向下 | `main` → `dev` |
 
 标签不是装饰：正是它让人无需在 git 里考古就能回答"这个季度我们有多少次 hotfix？"。
 
@@ -152,15 +155,15 @@ GitHub 接收应用。
 
 ## 已合并的分支会被归档 {#merged-branches-get-archived}
 
-每个 PR 已被合并的分支会在**合并 7 天后**离开分支列表——机械地，由 `archive-merged-branch.yml`
-完成，它每天运行一次（`schedule:`，加上 `workflow_dispatch`）并遍历仓库的所有分支（AT-557，
+每个 PR 已被合并的分支会**无需宽限期、在下一轮**离开分支列表——机械地，由 `archive-merged-branch.yml`
+完成，它**每周一 09:00（巴西利亚）**运行（`schedule:` `0 12 * * 1`，加上
+`workflow_dispatch`；AT-661）。该定时任务只有在 workflow 位于默认分支 `main` 上时才会触发，并遍历仓库的所有分支（AT-557，
 负责人 2026-10-15 的决定）。在那之前分支保持原地，以便后续修正仍能在它之上进行。只有当以下
 各项都成立时，分支才会被归档：
 
 - 它不是下面排除的名称之一，也不来自 fork；
 - 没有以它为 head 的**打开**的 PR；
-- 有一个以它为 head 的 PR 在本仓库中被**合并**，且最近的那个是 7 天或更久之前合并的
-  （`DIAS_ATE_ARQUIVAR`）；
+- 有一个以它为 head 的 PR 在本仓库中被**合并**（`DIAS_ATE_ARQUIVAR` 为 0，无宽限期）；
 - 分支的尖端仍是该 PR 的 `head.sha`——合并后又收到提交的分支会**保留**。
 
 从未有 PR 被合并的分支没有合并日期，**永远**不会被这个 job 归档；删除它仍是手动决定。job 的
@@ -176,7 +179,7 @@ ref 的人可以恢复，用一条
 
 | 名称 | 为什么被排除 |
 |---|---|
-| `dev`、`qa`、`main` | 三个永久分支——它们作为每个已合并的晋升 PR（`dev`→`qa`、`qa`→`main`）的 `head` 出现，这正是这个排除要捕获的情况 |
+| `dev`、`qa`、`main` | 三个永久分支——它们作为每个已合并的晋升 PR（`dev`→`main`；此前还有 `qa`）的 `head` 出现，这正是这个排除要捕获的情况 |
 | `gh-pages` | 文档网站的部署分支（见上面"直接推送被阻止"）——不是功能分支，删除 `refs/heads/gh-pages` 会把线上网站一起拖垮 |
 
 第五个条件不是名称，而是边界：head 分支位于 **fork** 中的 PR
@@ -185,7 +188,7 @@ ref 的人可以恢复，用一条
 
 决定本身——哪四个名称被排除，以及 fork 检查——是一个经过测试的纯函数
 （[`scripts/ci/archive-branch.ts`](https://github.com/daneiel/brabo/blob/dev/scripts/ci/archive-branch.ts)），
-而不是内联 shell：这是这个机制中出错真正值得测试的部分——7 天的资格也是（`aptaParaArquivar`，
+而不是内联 shell：这是这个机制中出错真正值得测试的部分——资格也是（`aptaParaArquivar`，
 同一文件）。然后同一个脚本调用 GitHub API：创建 `refs/archive/` ref（或在该名称之前已被归档时
 强制更新它），读回它并确认它指向分支的 SHA，然后才删除 `refs/heads/`——这样一次失败永远不会在
 没有留下归档副本的情况下拖垮一个分支。
@@ -218,7 +221,7 @@ ref 的人可以恢复，用一条
 ## Dependabot 从 dev 进入 {#dependabot-enters-through-dev}
 
 上面的豁免是关于分支的**名称**。**目标**不豁免：依赖更新与其他一切一样从 `dev` 进入，并通过
-`dev → qa → main` 的晋升到达 `main`。直接合并到 `main` 的依赖会跳过阶梯，并让 `main` 与工作
+`dev → main` 的晋升到达 `main`。直接合并到 `main` 的依赖会跳过阶梯，并让 `main` 与工作
 发生的分支产生分歧。
 
 两个机制，因为 GitHub 对两种更新的处理方式不同：
@@ -315,10 +318,15 @@ workflow、一个人类作者——都不会写入任何东西：docmap 照常�
 |---|---|
 | 第三方的 PR | **owner 的 1 次批准** |
 | owner 编写的 PR | **无需审查**即通过检查 |
+| 指向 `dev` 的 Dependabot PR | **无需审查**即通过检查（[ADR 0236](../adr/0236-o-dependabot-dispensa-revisao-na-dev.md)） |
 
 第二行不是特权，而是 GitHub 的工作方式：**没有人能通过界面批准自己的 PR**。在一个 BDFL 项目中，
 **owner 的手动合并就是批准**——这是他深思熟虑的行为，在他选择点击按钮的那一刻。要求一个平台
 不允许的审查只会产生一个永久红色的检查。
+
+第三行在 `community` 模式下同样适用，且只适用于 `dev`。自 2026-11-02 起，由**其他检查**来完成对
+Dependabot 的审查：全部为绿色时，PR 即可合并。机器人通过**作者和分支**识别，与 `pr-police` 同一把
+尺子，因此一个把分支命名为 `dependabot/` 的人类仍然需要批准。对 `main`，阶梯依旧完整，经由晋升。
 
 在这种模式下，**不同的人**这一要求被**暂停**，而且是有意暂停：只有一个维护者时，它在算术上是
 不可能的。
@@ -328,10 +336,9 @@ workflow、一个人类作者——都不会写入任何东西：docmap 照常�
 | 目标 | 要求 |
 |---|---|
 | `dev` | 1 × devs |
-| `qa` | 2 × devs |
 | `main` | 1 × PO **+** 1 × 管理层 |
 
-对 `main` 来说，**不同的人**——这个要求重新生效。对 `dev` 和 `qa` 来说区分是自动的：席位属于
+对 `main` 来说，**不同的人**——这个要求重新生效。对 `dev` 来说区分是自动的：席位属于
 同一个角色，每个人只计一次审查。
 
 角色是仓库变量中的**账号列表**，不是 GitHub 的团队：
@@ -367,8 +374,7 @@ APROVADORES_GESTAO  = gustavo
 在翻转任何变量之前的前提条件：
 
 1. **每个角色都有真人。** `main` 需要 PO **和**管理层；如果两个列表指向同一个人，任何指向
-   `main` 的 PR 都永远不会通过——不同的人这条规则无法满足。`qa` 需要**两个**不同的 dev：只有
-   一个名字的列表会阻止晋升。
+   `main` 的 PR 都永远不会通过——不同的人这条规则无法满足。
 2. **一个关于谁进入每个列表的标准**，经过定义并写下来——谁进入、谁离开，以及依据什么。
 
 切换步骤：
@@ -405,8 +411,7 @@ workflow **不合并任何东西**——它计算并打开 PR。合并仍是手�
 |---|---|
 | 1 | **谁触发**——在 `APPROVAL_MODE=solo` 下，只有
 `OWNER_HANDLE`。任何其他执行者都失败，并说明谁可以 |
-| 2 | **相邻的一对**——`dev→qa` 和 `qa→main`。`dev→main` 被拒绝，
-并指向分级的路径 |
+| 2 | **相邻的一对**——`dev→main`（自 ADR 0235 起；此前是 `dev→qa` 和 `qa→main`） |
 | 3 | **周期的版本**——根据自上一个最终 tag 以来合并的 PR
 计算 |
 | 4 | **打开的 PR**——正文列出每个 PR、它的功能、它的影响以及
@@ -418,7 +423,9 @@ workflow **不合并任何东西**——它计算并打开 PR。合并仍是手�
 一个列**分隔符**——这一行多出一个单元格，表格就坏了。这就是两次替换的顺序是结构性的原因，而
 `promote.spec.ts` 中的测试计算的是该行**真实**的分隔符，而不是比较整个字符串。
 
-### 自动晋升到 qa（测试阶段） {#automatic-promotion-to-qa}
+### 自动晋升到 qa（测试阶段）——已撤销 {#automatic-promotion-to-qa}
+
+> **已于 2026-11-02 撤销（ADR 0235）：** 没有 `qa`，这个晋升就没有目标；`promote-auto-qa.yml` 和 `QA_FASE_DE_TESTE` 随之移除。下面的文字是 ADR 0217 的历史记录。
 
 在 QA 处于**测试阶段**期间，`dev` → `qa` 会自行晋升（ADR 0217，负责人 10月15日的决定）。开关是
 仓库变量 **`QA_FASE_DE_TESTE`**（Settings → Variables）：`true` 开启；删除它或任何其他值则关闭，
@@ -460,6 +467,15 @@ workflow **不合并任何东西**——它计算并打开 PR。合并仍是手�
 
 一个**无法执行**的验证算作失败，绝不算作通过——无法解析的 ref 是无知，不是许可。
 
+印章会**等待**仍在盖章的人（AT-663）。在合并到下一级之后，晋升 PR 会在 tag 存在之前运行。如果缺少
+印章，而该提交有一个 `tag-release` 正在进行，检查会每 20 秒重新拉取一次 tag，最长 10 分钟
+（`esperarCarimbo`、`PRAZO_DO_CARIMBO_MS`），只有期限到了才失败。没有运行中的 `tag-release`，或无法
+向 API 查询时，像以前一样立即失败。等待绝不会在没有 tag 的情况下通过。
+
+读取整个历史的三个检查（`pr-police`、`promotion-check` 和 `backmerge-gate`）使用带
+`fetch-depth: 0` 的 `actions/checkout`，job 上限为 15 分钟。深度为 5 时，随每个 PR 增长的仓库下载会在
+脚本运行之前就超时（AT-603）。获取深度不变：脚本比较整个历史。
+
 前两项验证由 `scripts/ci/promotion-check.spec.ts` 覆盖，与 `pr-police` 和 `approval-ladder` 的
 spec 精神相同。它固定的不是实现而是规则：每个目标要求哪个印章，以及印章必须是**那个提交的**——
 另一个提交上的、另一个阶段的、或无法解析为 sha 的 tag 都不算。接受其中任何一个都会让 `qa` 接收
@@ -471,7 +487,9 @@ spec 精神相同。它固定的不是实现而是规则：每个目标要求哪
 
 ## 版本 {#versioning}
 
-每个 tag 都诞生于 workflow，格式为 `vX.Y.Z-dev.N` / `-qa.N` / 最终。
+> **ADR 0235（2026-11-02）之后的读法：** 下面关于版本、锚点、反向传播和闸门的各节仍在讲述三级流水线。凡是把 `qa` 当作中间级的地方，如今的实际情况是：晋升是 `dev → main`，最终 tag 的锚点是合并父提交的 `-dev.N`，hotfix 的反向传播只有 `main → dev`。带 `-qa.N` 的示例都是历史性的。
+
+每个 tag 都诞生于 workflow，格式为 `vX.Y.Z-dev.N` / 最终（`-qa.N` 是 ADR 0235 之前的历史遗留）。
 
 **版本存在于 TAG 中，而不是文件中。** 没有人能直接提交到永久分支来提升 `package.json`，因此要求
 四个版本文件跟随会在每个周期强制一个 bump PR——这正是自动计算要消除的仪式。`release.yml` 把这些
@@ -546,7 +564,7 @@ tag 是版本的来源，但镜像无法读取自己的 tag：容器不知道自
 
 #### Release 依赖 PAT，而缺少它已经让六个 Release 落空 {#the-release-depends-on-the-pat-and-its-absence-has-already-cost-six}
 
-`release.yml` 在推送最终 tag 时触发。但**用 `GITHUB_TOKEN` 推送的 tag 不会触发 workflow**——这是
+`release.yml` 在最终 tag 的 `push` 上触发。但**用 `GITHUB_TOKEN` 推送的 tag 不会触发 workflow**——这是
 GitHub 的反递归规则。`tag-release` 使用 `secrets.BRABO_BOT_TOKEN || github.token`：没有 PAT，tag
 会诞生而 Release 不会出来。
 
@@ -768,7 +786,7 @@ squash 产生一个只有**一个父提交**的提交。在晋升中，第二个
 
 | 分支 | 进入什么 | 规则 |
 |---|---|---|
-| `qa`、`main` | 只有流水线流量 | 只有一个父提交总是缺陷 |
+| `main` | 只有流水线流量 | 只有一个父提交总是缺陷 |
 | `dev` | 工作，整天，**有意**用 squash | 只有当 PR 带来一条**新边**时才是缺陷——它的 head 是一个合并，其第二个父提交还不在基础中 |
 
 `dev` 的这个区分故意很窄。一个在合并前把 `dev` 拉入自身的工作 PR 也以一个合并作为 head——但它的
@@ -780,7 +798,7 @@ squash 产生一个只有**一个父提交**的提交。在晋升中，第二个
 正确地触发了。什么都没有因此发生：一个由 `push` 触发、在永久分支上失败的 workflow 没有可以变红的
 PR——合并已经发生了——所以它在 Actions 标签页留下一次红色的执行，仅此而已。仓库在整个历史中都没有
 issue；没有渠道。因此 `tag-release` 现在有一个 `avisar` job，它**打开一个 issue**，点名分支、提交、
-执行和修正方法，并在已有的 issue 上评论，而不是为同一个分支打开第二个。它用 `github.token` 认证，
+执行和修正方法，并在已有的 issue 上评论，而不是为同一个分支打开第二个，并在下一次绿色盖章时**关闭这个打开的 issue**，评论中附上 run 和 SHA（AT-664）。它用 `github.token` 认证，
 绝不用 PAT——一个无效的 `BRABO_BOT_TOKEN` 本身就是它必须报告的故障之一，而一个依赖可能已坏掉之物
 的警报，恰恰会在需要时沉默。
 
@@ -872,6 +890,8 @@ PR 的链接 |
 而背后没有任何 hotfix——也没有任何东西能解锁它，因为没有待处理的反向传播。仓库将永远被卡住。
 
 **核对失败会保持锁定。** 未知不是许可。
+
+该脚本的测试 job 也安装 `website/`，因为要用到 Redoc（ADR 0253）。
 
 ## 策略不解决的问题 {#what-the-policy-doesnt-solve}
 
