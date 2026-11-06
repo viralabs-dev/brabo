@@ -5,7 +5,7 @@ sidebar_label: Branching policy
 sidebar_position: 2
 description: The dev → main ladder, the branch taxonomy, who's born where, and why the policy is mechanized instead of agreed upon.
 keywords: [branches, gitflow, promotion, hotfix, versioning, release]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+traducao_de: 055ecb48c59d5392951c94db0e1aab8d78e3e43b
 ---
 
 # Branch and versioning policy {#branch-and-versioning-policy}
@@ -78,8 +78,9 @@ enum (already-run bootstraps have rows with it), and `rc` remains in the
 **protected-merge** list — see the note in
 [permissions.md](../reference/permissions.md).
 
-**No step can be skipped.** `dev → main` doesn't exist, not even in an
-emergency — an emergency has its own path (`hotfix`, below), and it too
+**No step can be skipped.** Since `qa` was retired (ADR 0235), the only
+promotion is `dev → main`; a direct merge into `main` outside it doesn't
+exist, not even in an emergency — an emergency has its own path (`hotfix`, below), and it too
 respects the ladder, just starting from the top.
 
 ## Taxonomy {#taxonomy}

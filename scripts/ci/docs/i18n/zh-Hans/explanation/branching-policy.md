@@ -5,7 +5,7 @@ sidebar_label: 分支策略
 sidebar_position: 2
 description: dev → main 的阶梯、分支分类法、谁从哪里诞生，以及为什么策略是机械化的而不是约定的。
 keywords: [分支, gitflow, 晋升, hotfix, 版本, 发布]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+traducao_de: 055ecb48c59d5392951c94db0e1aab8d78e3e43b
 ---
 
 # 分支与版本策略 {#branch-and-versioning-policy}
@@ -61,7 +61,7 @@ flowchart LR
 枚举中（已执行的 bootstrap 有带它的行），而 `rc` 仍在**受保护合并**的列表中——见
 [permissions.md](../reference/permissions.md) 中的说明。
 
-**任何一级都不能跳过。** `dev → main` 不存在，即使在紧急情况下也不存在——紧急情况有自己的路径
+**任何一级都不能跳过。** 自 `qa` 退役以来（ADR 0235），唯一的晋升是 `dev → main`；绕过它直接合并到 `main` 是不存在的，即使在紧急情况下也不存在——紧急情况有自己的路径
 （`hotfix`，见下），它也遵守阶梯，只是从顶部开始。
 
 ## 分类法 {#taxonomy}
