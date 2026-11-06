@@ -5,7 +5,7 @@ sidebar_label: Первые шаги
 sidebar_position: 5
 description: От клонирования до первого хода агента, с тем, что проверить, когда какой-то этап не работает.
 keywords: [instalação, setup, onboarding, primeiro projeto, ollama]
-traducao_de: c8911f3416983ed754a0274de9bf168cc5a25a49
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # Первые шаги {#primeiros-passos}
@@ -58,8 +58,8 @@ pnpm dev
 
 Когда кластер поднят, `pnpm dev` не может опубликовать порт `api`; поскольку
 сервис `web` зависит от него, **5173 так и не открывается**. Перед compose
-запускается `preflight`, который говорит именно это вместо `port is already
-allocated` от Docker:
+запускается `preflight`, который говорит именно это вместо
+`port is already allocated` от Docker:
 
 ```bash
 make k8s-down && pnpm dev     # do modo validação para o de desenvolvimento
@@ -187,7 +187,7 @@ pnpm --filter api seed
 docker compose -f docker/docker-compose.yml exec ollama ollama pull qwen2.5:7b
 ```
 
-**API провайдера** — в UI, в **Проект → Настройки → Учётные данные**. Ключ
+**API провайдера** — в UI, в **Providers** (внизу меню). Ключ
 шифруется envelope encryption до того, как попадёт в базу.
 
 Модель разрешается каскадом — **сессия > агент > проект > workspace**, первое
@@ -299,7 +299,7 @@ scripts/
   ci/       automação de release e política de branch (testada com vitest)
   dev/      ferramentas locais — o menu do `pnpm bootstrap` e o preflight
   docs/     geração e verificação da documentação
-website/    Docusaurus, que lê de docs/ — nunca de website/docs/
+website/    só a árvore do Redoc; o site é gerado por scripts/docs/site/ a partir de docs/
 ```
 
 `apps/engine` находится вне pnpm workspace (это проект Mix); скрипты в корне
