@@ -5,7 +5,7 @@ sidebar_label: 架构
 sidebar_position: 2
 description: Brabo 的地图——容器、代码地图、一次智能体轮次的流程、层级不变量和已知债务。
 keywords: [架构, 代码地图, 不变量, harness, event log]
-traducao_de: 9dbb82539548937b3d2f8bc0c7ecc2d1503061d6
+traducao_de: 72b7ce386be372596e8fa6caf64502089c39fa05
 ---
 
 # 架构
@@ -365,7 +365,7 @@ INNER JOIN 恰好隐藏了需要这个页面的项目。因此 `ContainerOvervie
 | 目录 | 是什么 |
 |---|---|
 | `packages/shared/` | `GitProviderContract`——十五个操作，**只有类型，别无其他**：一个在 `tsc` 之后仍存在的值会破坏 api 的启动（由一个测试锁定），所以常量放在消费者处 |
-| `packages/docker-port/` | Docker 的**端口**（五个操作）及其 CLI 适配器，由 `apps/runner` 和 `apps/broker` 共享——[ADR 0130](adr/0130-broker-de-container.md)。它是运行时代码，正因如此它**不**在 `packages/shared` 中；它没有构建步骤，两个消费者都会**打包**它，因此没有任何镜像会从 `node_modules` 解析它 |
+| `packages/docker-port/` | Docker 的**端口**（六个操作）及其 CLI 适配器，由 `apps/runner` 和 `apps/broker` 共享——[ADR 0130](adr/0130-broker-de-container.md)。它是运行时代码，正因如此它**不**在 `packages/shared` 中；它没有构建步骤，两个消费者都会**打包**它，因此没有任何镜像会从 `node_modules` 解析它 |
 | `docker/` | dev 和生产镜像；`smoke.sh` |
 | `deploy/k8s/` | Kustomize 基础 + overlays（local、staging、prod） |
 | `design/` | 设计系统：tokens、字体、组件 |

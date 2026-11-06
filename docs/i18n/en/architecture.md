@@ -1,5 +1,5 @@
 ---
-traducao_de: 9dbb82539548937b3d2f8bc0c7ecc2d1503061d6
+traducao_de: 72b7ce386be372596e8fa6caf64502089c39fa05
 id: architecture
 title: Architecture
 sidebar_label: Architecture
@@ -59,7 +59,7 @@ graph TB
   B -->|"WebSocket (channels)"| E
   A -->|"SQL"| P
   A -->|"internal HTTP<br/>sync command"| E
-  A -->|"internal HTTP<br/>five operations"| K
+  A -->|"internal HTTP<br/>six operations"| K
   K -->|"reads the Architect's decision"| A
   K -->|"docker CLI over the socket"| D
   A -->|"LLM turn"| L
@@ -453,7 +453,7 @@ confirmed folder.
 | directory | what it is |
 |---|---|
 | `packages/shared/` | the `GitProviderContract` — fifteen operations, **types and nothing else**: a value that survives `tsc` breaks the api's boot (locked by a test), so the constant lives in the consumer |
-| `packages/docker-port/` | the Docker PORT (five operations) and its CLI adapter, shared by `apps/runner` and `apps/broker` — [ADR 0130](adr/0130-broker-de-container.md). It is runtime code, which is exactly why it is NOT in `packages/shared`; it has no build step and both consumers BUNDLE it, so no image ever resolves it from `node_modules` |
+| `packages/docker-port/` | the Docker PORT (six operations) and its CLI adapter, shared by `apps/runner` and `apps/broker` — [ADR 0130](adr/0130-broker-de-container.md). It is runtime code, which is exactly why it is NOT in `packages/shared`; it has no build step and both consumers BUNDLE it, so no image ever resolves it from `node_modules` |
 | `docker/` | dev and production images; `smoke.sh` |
 | `deploy/k8s/` | Kustomize base + overlays (local, staging, prod) |
 | `design/` | design system: tokens, typography, components |
