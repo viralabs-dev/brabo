@@ -408,6 +408,11 @@ Markdown 内容在 `docs/` 中，但**路由**在 `website/sidebars.ts` 中—�
 ADR（`docs:check` 已会拒绝），构建会以具名错误失败，而不是绘制错误的侧边栏。
 「说明」部分按主题手工列为五个分组，在那里新增页面仍按上述方式加入。
 
+侧边栏分类可折叠（AT-767）：每个分类都是原生的 `<details>`/`<summary>`，不使用
+JavaScript，也不保存状态。当 `colapsada` 为假或其中包含当前页面时默认展开，
+否则默认折叠（ADR 主题和「说明」五个分组中的四个）。「Decisões (ADR)」的链接
+位于 `<summary>` 之外，作为列表的第一项。
+
 ### `api-render-check.mjs`——绿色的构建不等于能渲染的页面 {#api-render-checkmjs--a-green-build-isnt-a-page-that-renders}
 
 这个部件的存在源于一个昂贵的教训：**API 参考的 117 个操作页面在 `v1.0.0` 和 `v1.0.1` 版本中以死掉的
