@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: ADR 0267 e `rulesets.md` alinhados ao que foi ativado em 07/11/2026: o ruleset `main exige E2E` tem bypass só para o App (decisão do dono na AT-765), e não "sem bypass".
+
 - **docs**: ADR 0276 (AT-787): a PR declara a dependência de merge com `Depende-de: viralabs-dev/<repo>#<n>`, e o check `Dependências de merge` do App fica amarelo até a PR citada ser mergeada, com re-check no merge da dependência e cron horário no `brabo-ci`; exigido em `dev` e `main` só depois das provas (RN-1047 a RN-1050). `rulesets.md` registra a ligação prevista, e o CONTRIBUTING diz como declarar.
 - **docs**: ADR 0275 (AT-782): cada irmão confere as próprias refs com símbolo no CI, pelo reutilizável `refs-com-simbolo.yml` do `brabo-ci` (script sem layout, mesmo núcleo do gerador); a ref entre irmãos só é listada, a trava (ADR 0274) segue o portão, o check fica fora dos obrigatórios e o patch do reancoramento sai como artefato `refs-patch`. `documentation-workflow.md` e o `CLAUDE.md` dizem como.
 - **docs**: ADR 0268 (AT-769): o `brabo-qa` tem regressivo por funcionalidade (catálogo `funcionalidades.yml`, mapa caminho → funcionalidade, tag `@f-<id>`); a PR para a `dev` roda só o que tocou, pelo check `Regressivo do brabo-qa`, que NUNCA é exigido, com a imagem `sha-<12>`; a PR para a `main` roda o catálogo inteiro e funcionalidade sem spec aparece como "sem cobertura" sem reprovar. RN-1031 a RN-1035 em `scripts/ci/docs/business-rules/ci.md`, a linha "não exigido" no `rulesets.md`, a `branching-policy.md`, a página `explanation/regressivo-por-funcionalidade` e o CONTRIBUTING.
