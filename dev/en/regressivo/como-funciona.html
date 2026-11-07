@@ -93,11 +93,51 @@ globs de web, runner, broker e infra só são provados em máquina com os clones
 <li>O check <code>Regressivo do brabo-qa</code> (PR para a <code>dev</code>) só atesta e <strong>nunca é exigido</strong>; o <code>E2E do brabo-qa</code> na <code>main</code> roda o catálogo
 inteiro (ver <code>docs/e2e-portao/como-funciona.md</code>).</li>
 </ul>
+<h2 id="o-que-roda-aqui-modo-e-a-tabela-por-funcionalidade-rodada-b">O que roda aqui: <code>modo</code> e a tabela por funcionalidade (Rodada B)</h2>
+<p>O <code>e2e-pr.yml</code> tem dois modos, escolhidos pelo payload (<code>modo</code>) ou pelo input do ensaio manual:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>Modo</th>
+<th>Quando</th>
+<th>O que roda</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>completo</code> (padrão)</td>
+<td>portão da <code>main</code>; payload sem <code>modo</code></td>
+<td>todas as specs, sem filtro: comportamento idêntico ao de antes</td>
+<td><code>E2E do brabo-qa</code></td>
+</tr>
+<tr>
+<td><code>funcionalidades</code></td>
+<td>PR para a <code>dev</code>; <code>funcionalidades</code> = ids do catálogo</td>
+<td>só as specs com <code>@f-&lt;id&gt;</code>: <code>--grep &quot;@f-(a|b)( |$)&quot;</code> (a tag fecha em espaço ou fim, então <code>@f-git</code> não casa <code>@f-git-hub</code>)</td>
+<td><code>Regressivo do brabo-qa</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>validar-payload.ts</code> valida o modo (<code>completo</code>, <code>funcionalidades</code>), os ids (kebab-case, até 50) e monta o <code>GREP</code>; modo desconhecido ou
+<code>funcionalidades</code> sem id reprova o payload (vira <code>ambiente</code>). O <code>fechar-check.ts</code> fecha o check pelo nome em que o gatilho o criou.</p>
+<p>Depois das specs, <code>scripts/ci/cobertura.ts</code> cruza <code>funcionalidades.yml</code> (da <code>dev</code>) com o <code>resultado.json</code> do Playwright (as tags aparecem
+sem o <code>@</code>) e o resumo do check ganha <code>funcionalidade | specs | resultado</code>: <code>verde</code>, <code>vermelho</code> ou <code>sem cobertura</code> (funcionalidade ativa sem spec;
+<strong>não reprova</strong>). No modo <code>funcionalidades</code> a tabela lista só os ids pedidos. Se a suíte não produziu <code>resultado.json</code>, não há tabela. O
+resultado vem de PR, então o <code>fechar</code> só aceita linhas com id do catálogo e números válidos. Ensaio manual:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> workflow</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> e2e-pr.yml</span><span style="color:var(--shiki-token-string)"> -R</span><span style="color:var(--shiki-token-string)"> viralabs-dev/brabo-qa</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> modo=funcionalidades</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> funcionalidades=autenticacao,aprovacoes</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> repo=...</span><span style="color:var(--shiki-foreground)"> </span></span>
+<span class="line"></span></code></pre>
+<h2 id="vínculos-no-run-at-773">Vínculos no run (AT-773)</h2>
+<p>Cada run do <code>e2e-pr</code> mostra de onde veio: o <code>run-name</code> é <code>E2E ← brabo-api#48 · a1b2c3d · autor · c=&lt;run_id&gt;-&lt;attempt&gt;</code> (<code>Regressivo ← ...</code> na dev). A
+<code>c=</code> é a correlação que o gatilho procura para achar este run. O job <code>anunciar</code> aponta o check da PR para o run do brabo-qa assim que ele começa
+(o <code>fechar</code> o conclui) e nunca reprova. A action <code>vinculos</code> do <code>brabo-ci</code> escreve a tabela <code>## Vínculos</code> e o Mermaid no Summary de <code>e2e-pr</code> (jobs
+<code>e2e</code>, <code>anunciar</code>, <code>fechar</code>), <code>golden-set-*</code>, <code>ci</code> e <code>varrer-orfaos</code>. No <code>fechar</code> o <code>vinculos.md</code> entra no resumo do check, e o
+<code>alarmar-prova.sh</code> o anexa à issue (<code>VINCULOS_MD</code>). Uma <code>origem</code> inválida no payload é descartada com aviso, nunca reprova.</p>
 <nav class="site-pager"></nav>
 </article>
 <footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/regressivo/como-funciona.md">Edit this page</a></footer>
 </main>
-<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#o-catálogo-funcionalidadesyml">O catálogo: funcionalidades.yml</a></li><li class="n2"><a href="#a-spec-se-liga-por-tag">A spec se liga por tag</a></li><li class="n2"><a href="#o-validador">O validador</a></li><li class="n2"><a href="#como-mudar">Como mudar</a></li></ul></aside>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#o-catálogo-funcionalidadesyml">O catálogo: funcionalidades.yml</a></li><li class="n2"><a href="#a-spec-se-liga-por-tag">A spec se liga por tag</a></li><li class="n2"><a href="#o-validador">O validador</a></li><li class="n2"><a href="#como-mudar">Como mudar</a></li><li class="n2"><a href="#o-que-roda-aqui-modo-e-a-tabela-por-funcionalidade-rodada-b">O que roda aqui: modo e a tabela por funcionalidade (Rodada B)</a></li><li class="n2"><a href="#vínculos-no-run-at-773">Vínculos no run (AT-773)</a></li></ul></aside>
 </div>
 <script src="../../assets/site.js"></script>
 <script defer src="../assets/busca.js" data-indice="../assets/busca-en.json" data-base="../"></script></body>
