@@ -1,5 +1,7 @@
 name: Documentação
 
+run-name: ${{ format('Documentação · {0} · {1}', github.ref_name, github.event_name == 'push' && 'push' || format('manual · {0}', github.actor)) }}
+
 # Publica a documentação de CADA branch permanente no seu próprio lugar:
 #
 #   main → https://viralabs-dev.github.io/brabo/prd/   (a documentação real)
@@ -115,6 +117,15 @@ jobs:
         env:
           BRABO_REF: ${{ steps.degrau.outputs.branch == 'main' && 'main' || '' }}
         run: bash scripts/docs/montar-layout.sh
+
+      # Vínculos do run (AT-773, ADR 0271): os irmãos que o layout trouxe, `repo@SHA`.
+      - name: Ler os SHAs dos irmãos
+        id: irmaos
+        run: |
+          { echo 'lista<<IRMAOS_FIM'; cat "$(git rev-parse --git-dir)/irmaos-sha.lst"; echo IRMAOS_FIM; } >> "$GITHUB_OUTPUT"
+      - uses: viralabs-dev/brabo-ci/.github/actions/vinculos@13f3697aaf3e4a151637755babb58422a44db303  # brabo-ci dev, merge da ci#17
+        with:
+          irmaos: ${{ steps.irmaos.outputs.lista }}
 
       - name: Build do site
         env:

@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 306 de 314 (97.5%) | 99.3% de 3.793.382 | 295 | 10 | 1 | 8 | 0 |
-| `ru` | 306 de 314 (97.5%) | 99.3% de 3.793.382 | 295 | 10 | 1 | 8 | 0 |
-| `zh-Hans` | 306 de 314 (97.5%) | 99.3% de 3.793.382 | 295 | 10 | 1 | 8 | 0 |
+| `en` | 306 de 318 (96.2%) | 98.9% de 3.823.879 | 294 | 11 | 1 | 12 | 0 |
+| `ru` | 306 de 318 (96.2%) | 98.9% de 3.823.879 | 294 | 11 | 1 | 12 | 0 |
+| `zh-Hans` | 306 de 318 (96.2%) | 98.9% de 3.823.879 | 294 | 11 | 1 | 12 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -24,6 +24,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
+- `business-rules/ci.md` (tradução de 2026-11-06)
 - `explanation/branching-policy.md` (tradução de 2026-11-06)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
@@ -37,6 +38,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
+- `business-rules/ci.md` (tradução de 2026-11-06)
 - `explanation/branching-policy.md` (tradução de 2026-11-06)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
@@ -50,6 +52,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
+- `business-rules/ci.md` (tradução de 2026-11-06)
 - `explanation/branching-policy.md` (tradução de 2026-11-06)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)

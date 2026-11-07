@@ -587,6 +587,10 @@ O ruleset `main e dev sem force push` não muda. O check nasce "em andamento" no
 
 **A exceção ao "não se burla".** O dono pode aceitar um vermelho com o comentário `/qa-aceitar <justificativa>` (mínimo de 20 caracteres, só do `OWNER_HANDLE`, só com o check do head atual vermelho por `spec` ou `ambiente`). O check vira `success` com o título `Aceito com justificativa` e entra a label `qa-aceito-com-justificativa`. Vermelho de `digest` ou de `assinatura` nunca é aceito. Um commit novo gera check novo, sem herdar o aceite. Um check em andamento há mais de 90 min é fechado como vermelho pela varredura horária.
 
+### O que NÃO é exigido: `Regressivo do brabo-qa`
+
+O check `Regressivo do brabo-qa` (PR para a `dev`, ADR 0268, AT-769) **não é exigido**, por decisão do dono (06/11/2026): nenhum ruleset o cita, e vermelho dele não bloqueia o merge. Ele só atesta que a funcionalidade tocada não foi afetada. O nome é distinto de `E2E do brabo-qa` de propósito, para um ruleset futuro que inclua a `dev` por engano não o exigir. Em PR para a `main`, quem vale é o `E2E do brabo-qa`, que roda o catálogo inteiro de funcionalidades; funcionalidade sem spec aparece como "sem cobertura" e não reprova (RN-1034).
+
 ## Como aplicar
 
 Interface: **Settings → Rules → Rulesets → New ruleset**.

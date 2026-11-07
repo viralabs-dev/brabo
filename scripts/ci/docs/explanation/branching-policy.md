@@ -642,6 +642,8 @@ Nos seis repositórios com gatilho (`brabo-api`, `brabo-engine`, `brabo-web`, `b
 - **Promoção no `brabo-qa`:** tudo vem da `-dev` mais nova (imagens e compose do `brabo-infra`), e as specs são as do head da PR.
 - **Hotfix `hotfix/*` em api, engine, web e broker:** o `ci.yml` publica `sha-<12 caracteres do head>` e o E2E a usa, com a última tag final dos demais e do `brabo-infra`.
 - **Hotfix `hotfix/*` no `brabo-infra`:** as imagens são a última tag final de cada serviço e o compose vem do head.
+- **Catálogo inteiro:** na `main` o E2E roda todas as funcionalidades de `brabo-qa/funcionalidades.yml` e o resumo traz a tabela `funcionalidade | specs | resultado`. Funcionalidade sem spec aparece como "sem cobertura" e não reprova (ADR 0268, RN-1034).
+- **PR para a `dev`:** não é portão. O check `Regressivo do brabo-qa` roda só as funcionalidades que a PR tocou, contra a imagem `sha-<12>` do head, e **nunca é exigido** (RN-1032). Veja [Regressivo por funcionalidade](regressivo-por-funcionalidade.md).
 - **Aceite:** o dono pode aceitar um vermelho de `spec` ou `ambiente` com `/qa-aceitar <justificativa>`; digest divergente e assinatura inválida nunca são aceitos.
 
 ## Versionamento {#versioning}
