@@ -76,8 +76,9 @@ valor `create_rc_branch` continua no enum `bootstrap_step` do banco
 **merge protegido** — veja a nota em
 [permissions.md](../reference/permissions.md).
 
-**Nenhum degrau pode ser pulado.** `dev → main` não existe, nem em
-emergência — emergência tem caminho próprio (`hotfix`, abaixo), e ele também
+**Nenhum degrau pode ser pulado.** Desde que a `qa` saiu (ADR 0235), a
+única promoção é `dev → main`; merge direto na `main`, fora dela, não existe,
+nem em emergência — emergência tem caminho próprio (`hotfix`, abaixo), e ele também
 respeita a escada, só que começando do topo.
 
 ## Taxonomia {#taxonomy}
@@ -631,6 +632,19 @@ impossibilidade vira **aviso**, e a garantia real mora no `tag-release`:
 depois do merge, ele confirma que o commit tem **dois pais**. Isso não
 depende de permissão nenhuma, e olha para o fato consumado em vez da
 intenção declarada.
+
+### O E2E do brabo-qa na promoção e no hotfix
+
+Nos seis repositórios com gatilho (`brabo-api`, `brabo-engine`, `brabo-web`, `brabo-broker`, `brabo-infra` e `brabo-qa`), toda PR com destino `main` cria o check `E2E do brabo-qa` (ADR 0267), exigido pelo ruleset "main exige E2E".
+
+- **Promoção `dev → main` em api, engine, web e broker:** o E2E usa a imagem `vX.Y.Z-dev.N` que aponta para o head da PR, a `-dev` mais nova dos outros e a `-dev` mais nova do `brabo-infra` como compose. Se nenhuma tag `-dev` aponta para o head (por exemplo, um merge commit ainda sem carimbo), o check fica vermelho por `ambiente`, com mensagem clara, e não usa a `-dev` de outro commit. Tag ainda sendo publicada é esperada por até 30 min (consulta a cada 30 s).
+- **Promoção no `brabo-infra`:** o compose vem do head da PR e as imagens são a `-dev` mais nova de cada serviço.
+- **Promoção no `brabo-qa`:** tudo vem da `-dev` mais nova (imagens e compose do `brabo-infra`), e as specs são as do head da PR.
+- **Hotfix `hotfix/*` em api, engine, web e broker:** o `ci.yml` publica `sha-<12 caracteres do head>` e o E2E a usa, com a última tag final dos demais e do `brabo-infra`.
+- **Hotfix `hotfix/*` no `brabo-infra`:** as imagens são a última tag final de cada serviço e o compose vem do head.
+- **Catálogo inteiro:** na `main` o E2E roda todas as funcionalidades de `brabo-qa/funcionalidades.yml` e o resumo traz a tabela `funcionalidade | specs | resultado`. Funcionalidade sem spec aparece como "sem cobertura" e não reprova (ADR 0268, RN-1034).
+- **PR para a `dev`:** não é portão. O check `Regressivo do brabo-qa` roda só as funcionalidades que a PR tocou, contra a imagem `sha-<12>` do head, e **nunca é exigido** (RN-1032). Veja [Regressivo por funcionalidade](regressivo-por-funcionalidade.md).
+- **Aceite:** o dono pode aceitar um vermelho de `spec` ou `ambiente` com `/qa-aceitar <justificativa>`; digest divergente e assinatura inválida nunca são aceitos.
 
 ## Versionamento {#versioning}
 

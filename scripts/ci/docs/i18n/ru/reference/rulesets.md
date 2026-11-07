@@ -1,5 +1,5 @@
 ---
-traducao_de: f6d9c3688e413d451640bbae2d5606da150cc14e
+traducao_de: c165be09458a5dfdc42010867a29adf8a36ccd99
 id: rulesets
 title: Rulesets репозитория
 sidebar_position: 8
@@ -16,9 +16,13 @@ keywords: [rulesets, защита веток, обязательные пров�
 Политика, которую применяют эти правила, описана в
 [Política de branches](../explanation/branching-policy.md).
 
-> **Текущее состояние:** `gh api repos/daneiel/brabo/rulesets` возвращает **0**.
-> Ничего ещё не применено. До тех пор всё здесь — объявленное намерение, а не
-> реальная защита.
+> **Решённое состояние (ADR 0255, 05.11.2026):** `Política de branches` и
+> `Escada de aprovação` — **обязательные** (required) проверки в ruleset `dev` и `main`
+> всех 11 репозиториев `viralabs-dev/brabo*`; `brabo`, `brabo-qa` и `brabo-infra`
+> получают ruleset «main e dev sem force push»; а PR GitHub App
+> `viralabs-dev-brabo` из ветки `chore/regenera-gerados` в `dev` освобождается от
+> лестницы (автор И ветка; `main` по-прежнему проходит всю лестницу). Применение в
+> GitHub остаётся ручным.
 
 ## Предусловие: все три ветки должны существовать
 
@@ -142,7 +146,7 @@ gh variable set APPROVAL_MODE      --body community
   когда diff не затрагивает образ** (AT-303). Первый шаг классифицирует diff PR
   с помощью `scripts/ci/diff-toca-imagem.ts` (список разрешённого — того, что
   никогда не попадает в образ, в smoke или в E2E: `docs/` кроме
-  `docs/gates.yml`, `website/`, `scripts/docs/`, `deploy/k8s/`, `.github/`
+  `apps/api/config/gates.yml`, `website/`, `scripts/docs/`, `deploy/k8s/`, `.github/`
   кроме `ci.yml`, `*.md` в корне кроме `THIRD_PARTY_NOTICES.md`,
   `design/*.md`; spec доказывает список против настоящих Dockerfile, мутацией).
   Bake, Trivy, broker, smoke и E2E несут `if:` **на шаге**, и job всегда
@@ -550,7 +554,7 @@ gh workflow run release.yml -f tag=v1.1.0
 > `macos-15-intel`, планируется за секунды и собирает, но проваливает
 > `--self-test-pty` под Bun (`onData` из `node-pty` никогда не срабатывает —
 > oven-sh/bun#25822, открыт). То же доказательство проходит под Node, поэтому
-> Mac Intel устанавливает runner через `npm install -g @brabo/runner`. Запуск
+> Mac Intel остаётся без runner (npm убран в AT-774). Запуск
 > workflow с пустым входом `tag` — это репетиция: собирает и делает smoke,
 > ничего не прикрепляя, и именно так это было измерено без создания тега.
 
@@ -612,7 +616,6 @@ gh api repos/daneiel/brabo/rulesets --jq '.[] | "\(.name): \(.enforcement)"'
 |---|---|---|
 | — (индекс трёх) | `https://daneiel.github.io/brabo/` | ❌ `noindex, follow` |
 | `main` | `https://daneiel.github.io/brabo/prd/` | ✅ |
-| `qa` | `https://daneiel.github.io/brabo/qa/` | ❌ `noIndex` |
 | `dev` | `https://daneiel.github.io/brabo/dev/` | ❌ `noIndex` |
 
 Все три стали симметричными в

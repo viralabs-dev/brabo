@@ -12,22 +12,20 @@
  * Assim o `--check` é determinístico: antes do commit a fonte alterada já
  * conta como mudada, e depois dele também.
  *
- * Na interface, compara as chaves de cada namespace de
- * `apps/web/src/locales/<l>/` contra o pt-BR, e cobra as formas de plural de
- * `Intl.PluralRules` de cada locale para toda chave que é plural no pt-BR.
+ * Mede só a doc do PRÓPRIO `brabo` (ADR 0273): arquivo de repo irmão e `i18n/` não são fonte.
+ * A interface é medida no `brabo-web` e o catálogo da API só avisa no log do generate.
  *
  * O núcleo é PURO (recebe leituras injetadas) para ser provado por mutação no
  * spec ao lado; `medirDoRepositorio` é a única função que toca disco e git.
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
-import { caminhoDaApi, LOCALES_DA_API, lerCatalogo, medirApi } from './openapi-por-locale.mjs';
+import { join, relative, resolve } from 'node:path';
+import { idiomaOriginal } from './faixa-de-traducao.mjs';
 import { lerRaizesDeDoc } from './raizes-de-doc.mjs';
 
 export const LOCALES = ['en', 'ru', 'zh-Hans'];
 export const LOCALE_FONTE = 'pt-BR';
-const SUFIXOS_DE_PLURAL = ['zero', 'one', 'two', 'few', 'many', 'other'];
 
 /** Lê `traducao_de:` do frontmatter; `null` sem frontmatter ou sem o campo. */
 export function traducaoDe(texto) {
@@ -98,68 +96,16 @@ export function medirDocs(fontes, traducoes, commitDe) {
   return porLocale;
 }
 
-/** Achata um JSON de namespace em chaves `a.b.c`. */
-export function achatar(obj, prefixo = '') {
-  const out = [];
-  for (const [k, v] of Object.entries(obj)) {
-    const chave = prefixo ? `${prefixo}.${k}` : k;
-    if (v !== null && typeof v === 'object') out.push(...achatar(v, chave));
-    else out.push(chave);
-  }
-  return out;
-}
-
-/** Bases plurais do pt-BR: chave `x_one` → base `x`. */
-function basesPlurais(chaves) {
-  const bases = new Set();
-  for (const k of chaves) {
-    const m = new RegExp(`^(.*)_(${SUFIXOS_DE_PLURAL.join('|')})$`).exec(k);
-    if (m) bases.add(m[1]);
-  }
-  return bases;
-}
-
-/**
- * Mede a interface. `namespaces`: { [locale]: { [ns]: objeto } | undefined }.
- * Chave plural não conta como chave simples: a paridade de plural é cobrada
- * pelas categorias de `Intl.PluralRules` do locale, que diferem do pt-BR.
- */
-export function medirInterface(namespaces) {
-  const fonte = namespaces[LOCALE_FONTE] ?? {};
-  const out = {};
-  for (const locale of LOCALES) {
-    const categorias = new Intl.PluralRules(locale).resolvedOptions().pluralCategories;
-    const doLocale = namespaces[locale];
-    const r = { existe: doLocale !== undefined, categorias, namespaces: {}, chaves: 0, presentes: 0, pluraisIncompletos: [] };
-    for (const ns of Object.keys(fonte).sort()) {
-      const chavesFonte = achatar(fonte[ns]);
-      const bases = basesPlurais(chavesFonte);
-      const simples = chavesFonte.filter((k) => ![...bases].some((b) => k.startsWith(`${b}_`) && SUFIXOS_DE_PLURAL.includes(k.slice(b.length + 1))));
-      const alvo = new Set(doLocale?.[ns] ? achatar(doLocale[ns]) : []);
-      const esperadas = [...simples, ...[...bases].flatMap((b) => categorias.map((c) => `${b}_${c}`))];
-      const presentes = esperadas.filter((k) => alvo.has(k)).length;
-      for (const b of bases) {
-        const faltam = categorias.filter((c) => !alvo.has(`${b}_${c}`));
-        if (alvo.size > 0 && faltam.length > 0) r.pluraisIncompletos.push(`${ns}:${b} (${faltam.join(', ')})`);
-      }
-      r.namespaces[ns] = { esperadas: esperadas.length, presentes };
-      r.chaves += esperadas.length;
-      r.presentes += presentes;
-    }
-    out[locale] = r;
-  }
-  return out;
-}
-
 const pct = (a, b) => (b === 0 ? '—' : `${((100 * a) / b).toFixed(1)}%`);
 
 /** O relatório Markdown (determinístico: só depende das medições). */
-export function relatorio(docs, ui, aviso, api) {
+export function relatorio(docs, aviso) {
   const l = [];
   l.push('---', 'id: paridade-de-traducao', 'title: Paridade de tradução', '---', '', aviso, '');
   l.push('# Paridade de tradução', '');
   l.push(
-    'A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 0219); só esta página fica fora. ' +
+    'A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/reference/**` (ADR 0219); só esta página fica fora. ' +
+      'A doc dos repositórios irmãos e as traduções em `i18n/` não contam como fonte. A interface é medida no `brabo-web` e o catálogo da API só avisa no log do `docs:generate`. ' +
       'Uma tradução está **em dia** quando o `traducao_de:` do frontmatter é um commit tão ou mais novo ' +
       'que o último commit da fonte, e **defasada** quando a fonte mudou depois. Sem o campo, ela conta ' +
       'como **sem procedência**. As regras estão em [Localização](../explanation/localizacao.md).',
@@ -183,38 +129,6 @@ export function relatorio(docs, ui, aviso, api) {
     if (r.defasadas.length === 0) continue;
     l.push(`### Defasadas em \`${loc}\``, '');
     for (const rel of r.defasadas) l.push(`- \`${rel}\` (tradução de ${r.paginasDetalhe[rel].data ?? 'commit inexistente'})`);
-    l.push('');
-  }
-  l.push('## Interface', '');
-  l.push('Chaves de `apps/web/src/locales/<locale>/` contra o pt-BR. Chave plural conta uma vez por forma de `Intl.PluralRules` do locale.', '');
-  l.push('| locale | formas de plural | chaves presentes | plurais incompletos |');
-  l.push('|---|---|---|---|');
-  for (const loc of LOCALES) {
-    const r = ui[loc];
-    l.push(
-      `| \`${loc}\` | ${r.categorias.join(', ')} | ${r.existe ? `${r.presentes} de ${r.chaves} (${pct(r.presentes, r.chaves)})` : `catálogo ausente (0 de ${r.chaves})`} | ${r.pluraisIncompletos.length} |`,
-    );
-  }
-  l.push('');
-  for (const loc of LOCALES) {
-    const r = ui[loc];
-    if (!r.existe) continue;
-    const faltando = Object.entries(r.namespaces).filter(([, n]) => n.presentes < n.esperadas);
-    if (faltando.length === 0) continue;
-    l.push(`### Namespaces incompletos em \`${loc}\``, '');
-    for (const [ns, n] of faltando) l.push(`- \`${ns}\`: ${n.presentes} de ${n.esperadas}`);
-    l.push('');
-  }
-  if (api) {
-    l.push('## API (Redoc)', '');
-    l.push(
-      'Textos distintos da referência da API (`/reference/api/`) contra o catálogo `docs/i18n/<locale>/openapi-textos.json` (ADR 0220). ' +
-        'A fonte é o texto dos decorators da api, quase todo em inglês: `pt-BR`, `ru` e `zh-Hans` traduzem todos, e `en` só os que estão em pt-BR ' +
-        '(diacrítico do português ou palavra funcional como "não", "para", "que"). Não soma aos caracteres das páginas.',
-      '',
-    );
-    l.push('| locale | textos traduzidos |', '|---|---|');
-    for (const [loc, r] of Object.entries(api)) l.push(`| \`${loc}\` | ${r.traduzidos} de ${r.total} (${pct(r.traduzidos, r.total)}) |`);
     l.push('');
   }
   return l.join('\n');
@@ -243,8 +157,12 @@ function listar(dir, base = dir) {
   });
 }
 
-/** ADR 0219: `reference/` entra; o relatório (D4) e o spec OpenAPI não. */
-export const ehFonteTraduzivel = (rel) => !/^reference\/(paridade-de-traducao\.mdx?|openapi\.json)$/.test(rel);
+/**
+ * ADR 0219: `reference/` entra; o relatório (D4) e o spec OpenAPI não. ADR 0260:
+ * página com `idioma_original: en` (doc dos repos de código) não tem o que traduzir.
+ */
+export const ehFonteTraduzivel = (rel, conteudo = '') =>
+  !/^reference\/(paridade-de-traducao\.mdx?|openapi\.json)$/.test(rel) && idiomaOriginal(conteudo) !== 'en';
 
 /**
  * `raizesDeDoc`: as pastas `docs/` a unir (AT-693), relativas a `raiz`. Padrão:
@@ -253,6 +171,11 @@ export const ehFonteTraduzivel = (rel) => !/^reference\/(paridade-de-traducao\.m
  */
 export function medirDoRepositorio(raiz, raizesDeDoc = lerRaizesDeDoc().map((r) => r.raiz)) {
   const git = (...a) => execFileSync('git', a, { cwd: raiz, encoding: 'utf8' }).trim();
+  // ADR 0273: é do brabo o que está em HEAD, ou o que o layout dos irmãos não trouxe (página nova ainda não commitada).
+  const emHead = new Set(git('ls-tree', '-r', '--name-only', 'HEAD').split('\n'));
+  const lst = resolve(raiz, git('rev-parse', '--git-dir'), 'layout-irmaos.lst');
+  const irmaos = new Set(existsSync(lst) ? readFileSync(lst, 'utf8').split('\n').filter(Boolean) : []);
+  const doBrabo = (caminho) => emHead.has(caminho) || !irmaos.has(caminho);
   const fontes = new Map();
   const traducoes = Object.fromEntries(LOCALES.map((l) => [l, new Map()]));
   const unir = (mapa, rel, valor) => {
@@ -267,9 +190,11 @@ export function medirDoRepositorio(raiz, raizesDeDoc = lerRaizesDeDoc().map((r) 
         .map((l) => relative(base, l.slice(3))),
     );
     for (const rel of listar(join(raiz, base))) {
-      if (!ehFonteTraduzivel(rel)) continue;
+      if (rel.startsWith('i18n/') || !doBrabo(`${base}/${rel}`)) continue;
+      const texto = readFileSync(join(raiz, base, rel), 'utf8');
+      if (!ehFonteTraduzivel(rel, texto)) continue;
       const data = git('log', '-1', '--format=%cI', '--', `${base}/${rel}`) || null;
-      unir(fontes, rel, { chars: readFileSync(join(raiz, base, rel), 'utf8').length, data, suja: sujas.has(rel) });
+      unir(fontes, rel, { chars: texto.length, data, suja: sujas.has(rel) });
     }
     for (const loc of LOCALES) {
       const dir = join(raiz, base, 'i18n', loc);
@@ -287,17 +212,5 @@ export function medirDoRepositorio(raiz, raizesDeDoc = lerRaizesDeDoc().map((r) 
     }
     return cache.get(sha);
   };
-  const namespaces = {};
-  for (const loc of [LOCALE_FONTE, ...LOCALES]) {
-    const dir = join(raiz, 'apps/web/src/locales', loc);
-    if (!existsSync(dir)) continue;
-    namespaces[loc] = Object.fromEntries(
-      readdirSync(dir)
-        .filter((n) => n.endsWith('.json'))
-        .map((n) => [n.slice(0, -5), JSON.parse(readFileSync(join(dir, n), 'utf8'))]),
-    );
-  }
-  const spec = JSON.parse(readFileSync(caminhoDaApi(raiz, 'reference/openapi.json'), 'utf8'));
-  const api = medirApi(spec, Object.fromEntries(LOCALES_DA_API.map((l) => [l, lerCatalogo(raiz, l)])));
-  return { docs: medirDocs(fontes, traducoes, commitDe), ui: medirInterface(namespaces), api };
+  return { docs: medirDocs(fontes, traducoes, commitDe) };
 }

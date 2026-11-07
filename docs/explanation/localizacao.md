@@ -10,6 +10,12 @@ O Brabo fala quatro idiomas na documentação e na interface, e o **português d
 Brasil é a fonte e o padrão** dos dois produtos ([ADR 0216](../adr/0216-quatro-idiomas-com-pt-br-como-fonte.md)).
 Todo texto novo nasce em pt-BR; os outros idiomas são traduções dele.
 
+A regra vale para **todos os repositórios** ([ADR 0266](../adr/0266-doc-dos-repositorios-em-portugues-por-padrao.md),
+que substitui o [0260](../adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md)): a
+doc dos irmãos também nasce em pt-BR e pode ter traduções em `<raiz>/docs/i18n/`.
+A página de irmão que ainda está em inglês leva `idioma_original: en` no
+frontmatter e segue aceita até ser retraduzida.
+
 ## Idiomas e códigos
 
 | idioma | código | formas de plural (`Intl.PluralRules`) | nota |
@@ -47,12 +53,16 @@ O idioma das RESPOSTAS dos agentes é outra preferência, com mecanismo próprio
   mesmo endereço, e uma faixa no topo DIZ isso no idioma de quem lê. A página
   traduzida cuja fonte mudou depois da tradução diz a data da tradução e que o
   original mudou.
+- **No site, a página de irmão com `idioma_original: en`** é a própria fonte no
+  `/en/`, sem faixa; em pt-BR, `ru` e `zh-Hans` o site serve a MESMA fonte
+  inglesa com a faixa "esta página só existe em inglês". Se o irmão ainda tem a
+  tradução do locale, ela vale nele (estado misto, página a página).
 - **Na interface**, o texto não falta: a paridade de chaves e de plurais é
-  medida, e o `fallbackLng` é o pt-BR.
+  medida no `brabo-web` (não neste relatório, ADR 0273), e o `fallbackLng` é o pt-BR.
 
 Toda página traduzida leva no frontmatter `traducao_de: <SHA>` — o último
 commit da fonte que ela traduz. É ele que separa "em dia" de "defasada". A
-medição de hoje está em [Paridade de tradução](../reference/paridade-de-traducao.md),
+medição de hoje, só da doc do `brabo` (ADR 0273), está em [Paridade de tradução](../reference/paridade-de-traducao.md),
 gerada por `pnpm docs:generate`.
 
 Os rótulos da lateral de Referência e da barra de cima vêm de `scripts/docs/site/navegacao.mjs` e do `current.json` de cada idioma em `docs/i18n/<locale>/`; desde o ADR 0219 o conteúdo das páginas de `reference/` também é traduzido, inclusive o bloco gerado, e só a página de paridade fica fora.

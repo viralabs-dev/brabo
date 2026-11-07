@@ -16,9 +16,6 @@ import { fileURLToPath } from 'node:url';
 /** Pendências CONHECIDAS, declaradas: destinos que ainda não existem. Sai quando a A3 (referência da API) entrar. */
 export const PENDENTES = [];
 
-/** RNs que as traduções ainda não trazem (defasagem de tradução, não link quebrado do gerador); só valem fora do pt-BR. Saem quando o lote de tradução as cobrir. */
-export const RNS_SEM_TRADUCAO = ['rn-907', 'rn-914', 'rn-915', 'rn-917', 'rn-918', 'rn-924', 'rn-928', 'rn-929', 'rn-930', 'rn-950', 'rn-952'];
-
 const arquivosDe = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
     e.isDirectory() ? arquivosDe(path.join(dir, e.name)) : [path.join(dir, e.name)],
@@ -27,7 +24,7 @@ const arquivosDe = (dir) =>
 const idsDe = (html) => new Set([...html.matchAll(/\s(?:id|name)="([^"]*)"/g)].map((m) => m[1]));
 const decodificar = (s) => s.replace(/&amp;/g, '&').replace(/&quot;/g, '"');
 
-export function verificarLinks(dir, { pendentes = PENDENTES, rnsPendentes = RNS_SEM_TRADUCAO } = {}) {
+export function verificarLinks(dir, { pendentes = PENDENTES } = {}) {
   const htmls = arquivosDe(dir).filter((f) => f.endsWith('.html'));
   const cache = new Map();
   const idsDoArquivo = (f) => {
@@ -55,8 +52,7 @@ export function verificarLinks(dir, { pendentes = PENDENTES, rnsPendentes = RNS_
         r.ancoras++;
         const f = decodeURIComponent(frag);
         if (!idsDoArquivo(alvo).has(f)) {
-          const traduzido = /^(?:en|ru|zh-Hans)\//.test(rel);
-          (traduzido && rnsPendentes.includes(f) ? r.pendentes : r.erros).push(`${rel}: âncora quebrada -> ${ref}`);
+          r.erros.push(`${rel}: âncora quebrada -> ${ref}`);
         }
       }
     }
@@ -91,7 +87,7 @@ function main() {
   if (r.paginas === 0) { console.error(`links: CEGO — nenhum .html em ${dir}.`); process.exit(2); }
   const fora = carregaDeFora(dir);
   console.log(`links: ${r.paginas} páginas, ${r.links} links, ${r.ancoras} âncoras verificados.`);
-  if (r.pendentes.length) console.log(`links: ${r.pendentes.length} pendência(s) DECLARADA(S) (${PENDENTES.join(', ')} ; RNs sem tradução: ${RNS_SEM_TRADUCAO.join(', ')}).`);
+  if (r.pendentes.length) console.log(`links: ${r.pendentes.length} pendência(s) DECLARADA(S) (${PENDENTES.join(', ')}).`);
   for (const e of [...r.erros, ...fora]) console.error(`  ${e}`);
   if (r.erros.length || fora.length) { console.error(`links: ${r.erros.length} link(s)/âncora(s) quebrados, ${fora.length} recurso(s) de fora.`); process.exit(1); }
 }

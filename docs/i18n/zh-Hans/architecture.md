@@ -5,7 +5,7 @@ sidebar_label: 架构
 sidebar_position: 2
 description: Brabo 的地图——容器、代码地图、一次智能体轮次的流程、层级不变量和已知债务。
 keywords: [架构, 代码地图, 不变量, harness, event log]
-traducao_de: 4cc1b596659af65abb89f0dc4ed3ec7525de5906
+traducao_de: 72b7ce386be372596e8fa6caf64502089c39fa05
 ---
 
 # 架构
@@ -13,7 +13,7 @@ traducao_de: 4cc1b596659af65abb89f0dc4ed3ec7525de5906
 本文档是给要在代码上**工作**的人的地图。它告诉你从哪里开始读、每条边界承诺什么，
 以及哪些地方已知是歪的。
 
-决策及其理由在 [ADR](adr/index.md) 中——共 216 个，其中好几个记录了在执行中发现的
+决策及其理由在 [ADR](adr/index.md) 中——共 257 个，其中好几个记录了在执行中发现的
 真实缺陷。这里不重复论证：只指向它。
 
 ## 外部视角 {#the-outside-view}
@@ -365,7 +365,7 @@ INNER JOIN 恰好隐藏了需要这个页面的项目。因此 `ContainerOvervie
 | 目录 | 是什么 |
 |---|---|
 | `packages/shared/` | `GitProviderContract`——十五个操作，**只有类型，别无其他**：一个在 `tsc` 之后仍存在的值会破坏 api 的启动（由一个测试锁定），所以常量放在消费者处 |
-| `packages/docker-port/` | Docker 的**端口**（五个操作）及其 CLI 适配器，由 `apps/runner` 和 `apps/broker` 共享——[ADR 0130](adr/0130-broker-de-container.md)。它是运行时代码，正因如此它**不**在 `packages/shared` 中；它没有构建步骤，两个消费者都会**打包**它，因此没有任何镜像会从 `node_modules` 解析它 |
+| `packages/docker-port/` | Docker 的**端口**（六个操作）及其 CLI 适配器，由 `apps/runner` 和 `apps/broker` 共享——[ADR 0130](adr/0130-broker-de-container.md)。它是运行时代码，正因如此它**不**在 `packages/shared` 中；它没有构建步骤，两个消费者都会**打包**它，因此没有任何镜像会从 `node_modules` 解析它 |
 | `docker/` | dev 和生产镜像；`smoke.sh` |
 | `deploy/k8s/` | Kustomize 基础 + overlays（local、staging、prod） |
 | `design/` | 设计系统：tokens、字体、组件 |
@@ -596,7 +596,7 @@ erDiagram
   users ||--o{ detected_language_declines : "idioma detectado que a pessoa recusou (RN-624)"
 ```
 
-总共 56 张表。最新的是 `detected_language_declines`（[RN-624](business-rules/api.md#rn-624)）：
+总共 59 张表。最新的是 `chat_attachments`（[RN-986](business-rules/api.md#rn-986)：聊天附件的字节；`chat.message` 只保存引用，RN-987）；在它之前是 `source_clicks`（[RN-983](business-rules/api.md#rn-983)：对被查阅来源的点击，不是投票）；在它之前是 `detected_language_declines`（[RN-624](business-rules/api.md#rn-624)）：
 每个人和语言一行，记录此人在被问到"我们注意到你用 X 写作——回答中使用 X 吗？"时**拒绝**
 的语言，以及日期。它的存在使同一问题不会再回来；之后确认该语言会删除这一行。检测本身
 不保存状态——样本通过部分索引 `session_events_evidencia_de_idioma_idx`（用户执行者、两种
@@ -660,7 +660,7 @@ event log 会悄悄丢弃一切。三种永不塌缩的状态（[RN-088](busines
 `agent_areas`（FASE 14d，[ADR 0053](adr/0053-dev-lead-e-paralelismo-autorizado.md)）是 Fase 8
 曾经削减的东西。它回来了，因为 **dev** 领域无法在代码中枚举：`qa` 和 `infra` 能放进固定
 列表，但 dev 的成员是 `module_map` 中每个模块一个，由 Arquiteto 决定，每个项目都不同。唯一
-`(project_id, key)` 使播种幂等，`max_parallel`（默认 2）是 lead 无需询问就能使用的上限——
+`(project_id, key)` 使播种幂等，`max_parallel`（`dev` 初始为 5，`qa` 为 4，`infra` 为 2，[RN-910](business-rules/api.md#rn-910)）是 lead 无需询问就能使用的上限——
 超过它，就是 `proposed_action`（见 [RN-083](business-rules/api.md#rn-083)）。
 `budget_micros`/`spent_micros`（ADR 0110）在同一行中镜像 `max_parallel`——一个与
 `budgets`（项目/会话）**叠加**的花费上限，绝不是级联：它由已经负责项目和会话花费的同样的

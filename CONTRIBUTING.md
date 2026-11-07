@@ -8,7 +8,7 @@ processo funciona de verdade.
 
 **Com todas as letras: PR grande sem issue prévia provavelmente será
 recusado.** Não por burocracia — por respeito ao seu tempo. Este projeto tem
-decisões arquiteturais registradas em [252 ADRs](docs/adr/index.md), e uma
+decisões arquiteturais registradas em [270 ADRs](docs/adr/index.md), e uma
 mudança que contradiz uma delas custa muito trabalho para depois ser
 rejeitada.
 
@@ -17,20 +17,29 @@ Abra uma issue, descreva o problema, e espere alinhamento. Para correção
 
 ## Setup
 
+O Brabo é dividido em repositórios por camada (ADR 0252): este guarda a
+documentação, o `install.sh` e a release, e o código mora nos irmãos. O
+[`brabo-workspace`](https://github.com/viralabs-dev/brabo-workspace) clona todos
+lado a lado, e o [`brabo-infra`](https://github.com/viralabs-dev/brabo-infra)
+sobe o ambiente de dev a partir desses clones:
+
 ```bash
-git clone git@github.com:daneiel/brabo.git
-cd brabo
-cp .env.example .env
-pnpm install
-pnpm dev
+git clone https://github.com/viralabs-dev/brabo-workspace.git ~/dev/brabo
+cd ~/dev/brabo && ./clonar-tudo.sh
+cd brabo-infra && cp .env.example .env && make dev
 ```
 
-Depois: <http://localhost:5173>. `pnpm --filter api seed` cria os usuários de
-demonstração — o login é `owner@brabo.dev` / `brabo12345678`.
+Depois: <http://localhost:5173>. O seed da api (no `brabo-api`) cria os usuários
+de demonstração — o login é `owner@brabo.dev` / `brabo12345678`.
 
-`pnpm bootstrap` abre um menu de terminal com o que se faz no dia a dia (Docker,
-Kubernetes, banco e testes), se você preferir não decorar comando. Ele só chama o
-que já existe, e `pnpm bootstrap --print-commands` mostra exatamente o quê.
+`bash scripts/dev/bootstrap.sh`, no `brabo-infra`, abre um menu de terminal com
+o que se faz no dia a dia (Docker, Kubernetes, banco e testes), se você preferir
+não decorar comando. Ele só chama o que já existe, e `--print-commands` mostra
+exatamente o quê.
+
+Para mexer só na documentação, basta este repositório: `pnpm install`,
+`bash scripts/docs/montar-layout.sh` (traz os irmãos pelo SHA de `irmaos.lock`; `BRABO_REF=dev` traz a `dev` de agora), `pnpm docs:check`
+e `pnpm docs:build`.
 
 **Quanto tempo leva de verdade:** os comandos acima somam poucos minutos, mas a
 **primeira** subida baixa as imagens (Postgres, Elixir, Node) e o
@@ -43,19 +52,18 @@ O passo a passo comentado, com o que conferir quando cada etapa falha, está em
 
 ## Rodando os testes
 
-```bash
-pnpm --filter api test      # vitest
-pnpm --filter web test      # vitest
-pnpm engine:test            # ExUnit
-```
+Cada repositório roda os próprios testes; o README de cada um diz como. Em
+geral, `pnpm test` (vitest) no `brabo-api` e no `brabo-web` e `mix test`
+(ExUnit) no `brabo-engine`. Aqui, `pnpm test:scripts` roda os specs do gerador
+de docs e do instalador.
 
 Elixir **não** é obrigatório no host — o engine roda no container. Se for
 rodar fora do Docker, use a versão exata do projeto (**1.20.4 / OTP 29.1.1**):
 o `mix format` de versões diferentes produz saída diferente e deixa o
-`--check-formatted` do CI vermelho. Para formatar sem instalar:
+`--check-formatted` do CI vermelho. Para formatar sem instalar, no clone do `brabo-engine`:
 
 ```bash
-docker run --rm -v "$PWD/apps/engine:/app" -w /app \
+docker run --rm -v "$PWD:/app" -w /app \
   hexpm/elixir:1.20.4-erlang-29.1.1-alpine-3.24.2 mix format
 ```
 
@@ -80,7 +88,7 @@ oferta da chave do agente). Se o SSH não volta e o HTTPS responde, troque o
 
 ```bash
 gh auth setup-git
-git remote set-url origin https://github.com/daneiel/brabo.git
+git remote set-url origin https://github.com/viralabs-dev/brabo.git
 git ls-remote origin dev               # confere que voltou a responder
 ```
 
@@ -124,6 +132,15 @@ Três regras que caem daí:
 - Regra de negócio nova vira uma RN em
   [`docs/business-rules.md`](docs/business-rules.md), com `arquivo:linha` e o
   teste que a cobre.
+
+**PR que toca uma funcionalidade do catálogo** (`brabo-qa/funcionalidades.yml`,
+mapa por caminho) ajusta o regressivo dela no `brabo-qa` contra a `dev`, ou diz
+no card por que não precisa. Na PR para a `dev`, o check `Regressivo do brabo-qa`
+só atesta e **nunca é exigido**; na PR para a `main`, o `E2E do brabo-qa` roda o
+catálogo inteiro e bloqueia, salvo `/qa-aceitar`. Funcionalidade sem spec aparece
+como "sem cobertura" e não reprova. Veja
+[Regressivo por funcionalidade](docs/explanation/regressivo-por-funcionalidade.md)
+e o [ADR 0268](docs/adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.md).
 
 Rodar o site de documentação localmente — `website/` guarda só a árvore do
 Redoc, com lockfile próprio desde o [ADR 0117](docs/adr/0117-lockfile-proprio-para-o-website.md),
@@ -185,6 +202,22 @@ manutenção da documentação por N, e ninguém procura a doc de um patch.
 
 Branches permanentes são `dev`, `qa`, `rc` e `main`. Merge nelas é sempre
 manual — inclusive para mim, e há teste garantindo isso.
+
+## PR que depende de outra PR de outro repositório
+
+Quando a sua PR só pode ser mergeada depois de outra PR de outro repositório do Brabo (por exemplo, a `brabo-api` precisa sair antes da `brabo-infra`), declare a dependência **no corpo da PR**, numa linha por dependência:
+
+```
+Depende-de: viralabs-dev/brabo-api#56
+```
+
+- Só vale o formato acima: `viralabs-dev/<repo>#<n>`, com um dos 11 repositórios `brabo*`. Um erro de digitação reprova o check com o motivo, em vez de sumir.
+- Não cite a própria PR nem uma PR que cite a sua de volta (ciclo): o check reprova com o caminho.
+- O check `Dependências de merge` fica amarelo, com o título `esperando viralabs-dev/brabo-api#56`, até cada PR citada ser mergeada. Quando a dependência é mergeada, o check da sua PR é atualizado sozinho, sem push.
+- Se a PR citada for fechada sem merge, o check reprova: tire a linha ou aponte a PR que a substituiu.
+- Para tirar ou corrigir uma linha, edite o corpo da PR; o check é refeito.
+
+Enquanto o check não estiver ligado como obrigatório (ADR [0276](docs/adr/0276-a-pr-declara-de-que-pr-depende-o-merge.md), AT-787), ele é só informativo: a ordem de merge continua sendo responsabilidade de quem merge, e a linha serve para deixar a ordem escrita.
 
 ## Definition of Done
 

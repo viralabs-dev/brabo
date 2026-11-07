@@ -1,6 +1,6 @@
 ---
 sidebar_position: 7
-traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # The gates, and how they're measured
@@ -11,10 +11,10 @@ thirteen, and until PHASE 15a none of them existed as a list: they were
 scattered across pure rules, use cases, tests and CI workflows.
 Answering "which gates exist" required reading six files.
 
-`docs/gates.yml` is that list. This document explains what it is, and —
+`apps/api/config/gates.yml` is that list. This document explains what it is, and —
 more importantly — what it is **not**.
 
-## The registry describes; it doesn't execute
+## The registry describes; it doesn't execute {#the-registry-describes-it-doesnt-execute}
 
 No gate becomes enforced because of the file. Changing `severidade` in
 it doesn't change any behavior: who blocks a merge is still
@@ -32,7 +32,7 @@ What the registry buys is something else: making gates
 script, never annotated by hand — can't be applied to what can't be
 listed.
 
-## The two fields that age if left undefined
+## The two fields that age if left undefined {#the-two-fields-that-age-if-left-undefined}
 
 **`verificacao`** answers *how you prove this gate passed*, not who
 judges it. `script` means there's a mechanical artifact — an event, a
@@ -52,7 +52,7 @@ In the four gates the constitution declares manual, this field is
 invariant and locked by a test
 ([RN-071](../business-rules/api.md#rn-071)).
 
-## Three forms of evidence, because not every proof lives in the log
+## Three forms of evidence, because not every proof lives in the log {#three-forms-of-evidence-because-not-every-proof-lives-in-the-log}
 
 | type | when | what the locator brings |
 |---|---|---|
@@ -73,7 +73,7 @@ The two cases that forced the field to exist:
 Without `evidencia`, the rule "a `block` gate without proof fails"
 would turn the product's two hardest locks permanently red.
 
-## Two validations, and only one of them runs in production
+## Two validations, and only one of them runs in production {#two-validations-and-only-one-of-them-runs-in-production}
 
 The registry is validated in two layers, and the split is not cosmetic:
 
@@ -89,7 +89,7 @@ The two used to be one function, and the api's loader called it. The
 consequence was measured on the installed v6.1.0: `GET /gates` answered
 `500` with `RegistroDeGatesInvalido` listing all eleven targets as "does
 not exist" — twelve 5xx responses in about 55 minutes. Nothing was wrong
-with the registry. The production image carries `/app/docs/gates.yml`
+with the registry. The production image carries `/app/apps/api/config/gates.yml`
 and nothing else from `docs/`; `apps/api/test/`, `scripts/ci/` and
 `.github/` never enter it, so a repository claim evaluated against that
 tree fails for every gate, in every installation.
@@ -98,7 +98,7 @@ Nothing was loosened. The rule still exists, still covers the same
 targets, and a target that disappears still fails — it just runs where
 the question means something. Two guards keep it that way: the test that
 climbs to the repository root and checks every locator, and a loader test
-that rebuilds the image's tree on disk (a root with `docs/gates.yml` and
+that rebuilds the image's tree on disk (a root with `apps/api/config/gates.yml` and
 nothing else) and asserts the registry loads. Putting the check back in
 the loader turns that second one red with the exact message the
 installation produced.
@@ -111,7 +111,7 @@ is one shell function, `checar_registro_de_gates`, which
 bringing the stack up. No unit suite could have caught the original failure
 — vitest and ExUnit run from a checkout, where the targets exist.
 
-## The shared-type trap
+## The shared-type trap {#the-shared-type-trap}
 
 `qa-verificada` and `secops-segura` **are not two event types**: both
 record `pr.gate_changed`, discriminated by `payload.gate`. Worse — the
@@ -131,7 +131,7 @@ arbitrary column in the YAML would open up the entire query. Who
 promoted a story — a person or the PO — lives in the `actor_kind`
 column and stays outside the declarative vocabulary.
 
-## Measuring
+## Measuring {#measuring}
 
 ```bash
 pnpm --filter api validacao:gates                    # full report
@@ -163,7 +163,7 @@ an **execution**, and only exists if one happened — without
 freshly created database would make the script exit `1` always, and a
 script that always fails becomes noise nobody reads.
 
-## What enumerating already paid off
+## What enumerating already paid off {#what-enumerating-already-paid-off}
 
 Before measuring anything, writing the list found two things nobody
 was seeing:
@@ -186,11 +186,11 @@ and not payload, and the gate showed up as "never passed" on a database
 where it had passed hours before. A registry nobody runs is a registry
 that lies.
 
-## Activating a `planned` gate is the same work as any other
+## Activating a `planned` gate is the same work as any other {#activating-a-planned-gate-is-the-same-work-as-any-other}
 
 `implementavel` (owner `dev-lead`) was born `planned` in PHASE 14d,
-alongside the rest of the target org chart that `docs/gates.yml`/
-`docs/fluxo.yml` already described with no code behind it. The
+alongside the rest of the target org chart that `apps/api/config/gates.yml`/
+`packages/contracts/fluxo.yml` already described with no code behind it. The
 [ADR 0090](../adr/0090-qa-estrategia-e-appsec-segundo-momento.md)
 activated it — and the exercise is worth using as an example because
 **nothing about the registry's shape changed**: `status: planned →
@@ -205,7 +205,7 @@ require measuring real passages first, same discipline as PHASE 15a).
 The real work sits outside the file: the Dev Lead needed a new tool
 (`assess_implementability`) that proposes the assessment as a
 `proposed_action`, and QA-strategy — until then a `proposto` role in
-`docs/fluxo.yml`, with the separation criterion already written there
+`packages/contracts/fluxo.yml`, with the separation criterion already written there
 ("can be the qa-lead itself in a second moment") — had to exist to
 feed the assessment with a real test plan. The registry only started
 describing what the code now does.
@@ -220,14 +220,14 @@ has. The plan now feeds `qa-verificada`, as input to the one verdict that
 gate already gives. Same lesson in the other direction: the registry line
 changed because WHO DELIVERS WHAT TO WHOM changed, not to make a gate pass.
 
-## A registry can age in the wrong direction — stale, not inactive
+## A registry can age in the wrong direction — stale, not inactive {#a-registry-can-age-in-the-wrong-direction--stale-not-inactive}
 
 `implementavel` is the example of a gate that needed new code to leave
 `planned`. `paralelismo-autorizado` is the opposite: the mechanism
 (`RequestParallelizationUseCase`,
 [RN-083](../business-rules/api.md#rn-083)) has been in production since
 PHASE 14d — it was the registry that fell behind, declaring `planned`
-over something that was already `active` in the sibling `docs/fluxo.yml`
+over something that was already `active` in the sibling `packages/contracts/fluxo.yml`
 and in the code. The fluxo.yml × code audit (finding A1/B5,
 [auditoria-fluxo-vs-codigo.md](auditoria-fluxo-vs-codigo.md)) found the
 divergence; the fix was just the same two lines `implementavel` also
@@ -240,7 +240,7 @@ derives steps from `fluxo: pr` gates (see "Consumption" below) — a
 gate can become `active` in the registry without appearing anywhere in
 the UI, if its flow is a different one.
 
-## A gate can be born `active` directly — when the mechanism and the registry arrive together
+## A gate can be born `active` directly — when the mechanism and the registry arrive together {#a-gate-can-be-born-active-directly--when-the-mechanism-and-the-registry-arrive-together}
 
 `implementavel` and `paralelismo-autorizado` are the two examples of a
 gate that already existed (declared `planned` or stale) and gained its
@@ -299,7 +299,7 @@ reason moved from "no CI can run this" to "this CI doesn't sit on the merge
 path" — `warn` keeps describing exactly what's true, just not the same
 truth it described before.
 
-## The QA golden-set in CI: the clock fits, the instrument measures, and it runs weekly
+## The QA golden-set in CI: the clock fits, the instrument measures, and it runs weekly {#the-qa-golden-set-in-ci-the-clock-fits-the-instrument-measures-and-it-runs-weekly}
 
 The golden-set of the QA Automation agent's semantic judgment
 ([ADR 0123](../adr/0123-golden-set-regressao-qa-automacao.md)) is what
@@ -355,7 +355,7 @@ RN-502, and that was a decision for a human. Relaxing the refusal so the
 harness passes was never one of the options: it would weaken the
 isolation RN-502 exists for, to make a test pass.
 
-### The decision, and the second measurement (AT-076)
+### The decision, and the second measurement (AT-076) {#the-decision-and-the-second-measurement-at-076}
 
 On 2026-09-27 the maintainer chose the first path: **the seed brings up a
 real container through the broker and registers it `running`, by the
@@ -438,7 +438,7 @@ engine's heartbeat closed the idle sessions (`heartbeat_timeout`) about
 them (the QA runs in the `mix` process, outside any session process), with
 no visible effect on the round.
 
-### Scheduled, weekly (AT-149)
+### Scheduled, weekly (AT-149) {#scheduled-weekly-at-149}
 
 On 2026-09-27 the maintainer chose the cadence: **weekly**
 ([ADR 0168](../adr/0168-golden-set-do-qa-em-ci-semanal.md)).
@@ -490,11 +490,11 @@ run took a sixth of the AT-076 ones (10 against 48–83 minutes of
 ceiling. The timeout stays sized by the slowest run measured, not the
 fastest.
 
-## A gate can be missing from the registry while `fluxo.yml` already assigns it
+## A gate can be missing from the registry while `fluxo.yml` already assigns it {#a-gate-can-be-missing-from-the-registry-while-fluxoyml-already-assigns-it}
 
 `deployavel` is the fourth pattern, and the least flattering: it was
-declared as `area-infra`'s `gate_saida` in `docs/fluxo.yml` and was
-**absent from `docs/gates.yml` altogether** — not `planned`, not stale,
+declared as `area-infra`'s `gate_saida` in `packages/contracts/fluxo.yml` and was
+**absent from `apps/api/config/gates.yml` altogether** — not `planned`, not stale,
 simply not there. The team model has three pieces (catalogue, flow,
 registry) and nothing yet cross-checks them, so a gate can be a
 deliverable in one and not exist in another. This is the **second**
@@ -511,7 +511,7 @@ it. See [ADR 0153](../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.md),
 which also stops ten documents from citing `DEPLOY_ENABLED` as if it
 were a variable that exists in the code.
 
-## Consumption: the screen derives, it doesn't repeat
+## Consumption: the screen derives, it doesn't repeat {#consumption-the-screen-derives-it-doesnt-repeat}
 
 The PR track on the panel — Dev → QA → SecOps → You — used to be a
 list written into the component. Since PHASE 15b it comes from the
@@ -539,7 +539,7 @@ what ADR 0054 deliberately left undecided.
 (dev-lead, platform). On a screen that says what's happening now, it
 would appear as if it were happening.
 
-### What the screen still decides on its own
+### What the screen still decides on its own {#what-the-screen-still-decides-on-its-own}
 
 Each step's **label** (`QA`, `You`) and **which step each gate
 represents** stay in the component. It's not an inconsistency: the
@@ -550,7 +550,7 @@ A PR gate the registry brings that the screen doesn't yet know how to
 draw is **ignored**, with a test asserting it: an `undefined` step in
 the middle of the track would be worse than its absence.
 
-## References
+## References {#references}
 
 - [ADR 0054](../adr/0054-gates-como-registro-declarativo.md) — the
   decision

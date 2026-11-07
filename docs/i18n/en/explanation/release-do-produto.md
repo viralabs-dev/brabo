@@ -1,5 +1,5 @@
 ---
-traducao_de: 3a78654798305970710cc343ac2e70156f6b266b
+traducao_de: a766a77602f64b8f373dcf2fcd64c6af12aebc25
 ---
 
 # Product release {#product-release}
@@ -81,5 +81,10 @@ refused.
 > **TODO(humano):** `componentes.json` is edited by hand; it remains to decide whether a bot
 > updates it when a component stamps a new tag or whether it stays a PR decision.
 
-> **TODO(humano):** hotfix of a component (born from `main`) and the product tag that carries it:
-> the product hotfix process has not been written yet.
+## Hotfix of a component {#hotfix}
+
+The hotfix is a PATCH through the normal ladder (the owner's decision, AT-728); `hotfix/` is not used directly on `main`.
+
+1. The component fixes it through its own `dev` → `main` and gets `vX.Y.Z+1`.
+2. A PR in `brabo` bumps the component's tag in `componentes.json`.
+3. The `brabo` promotion goes out as a product patch.

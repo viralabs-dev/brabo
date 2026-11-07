@@ -10,7 +10,7 @@
  *     titulo     texto puro
  *     conteudo   HTML já renderizado (vai dentro de <article class="doc">)
  *     toc        [{ id, texto, nivel }]  (nivel 2 ou 3; vazio = sem sumário)
- *     nav        [{ rotulo, itens: [{ rotulo, href, itens? }] }]  href = slug do locale (sem prefixo; http(s) fica como está)
+ *     nav        [{ rotulo, colapsada?, itens: [{ rotulo, href, colapsada?, itens? }] }]  categoria com itens = <details> (aberta se !colapsada ou se contém a página atual); href da categoria vira o 1º item; href = slug do locale (sem prefixo; http(s) fica como está)
  *     textos     { buscar, menu, tema, idioma, degrau, nestaPagina, editar, atualizado }  (catálogo do locale; faltou = vazio)
  *     faixaTraducao  string|null   texto da faixa "página ainda não traduzida"
  *     editarUrl  string|null
@@ -39,12 +39,22 @@ export const LOCALES = ['pt-BR', 'en', 'ru', 'zh-Hans'];
 const esc = (s) =>
   String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
+const contem = (i, atual) => i.href === atual || !!i.itens?.some((f) => contem(f, atual));
+
+// Categoria = <details> nativo (sem JS): aberta se não recolhida ou se contém a página atual.
+// O link da própria categoria (ex.: "Decisões (ADR)") vira o 1º item, fora do <summary>.
+function categoria(i, atual, pre, rotuloHtml) {
+  const aberta = !i.colapsada || contem(i, atual) ? ' open' : '';
+  const proprio = i.href ? [{ rotulo: i.rotulo, href: i.href }] : [];
+  return `<details${aberta}><summary>${rotuloHtml}</summary>${lista([...proprio, ...i.itens], atual, pre)}</details>`;
+}
+
 function lista(itens, atual, pre) {
   return `<ul>${itens
     .map((i) => {
-      const filhos = i.itens?.length ? lista(i.itens, atual, pre) : '';
+      if (i.itens?.length) return `<li>${categoria(i, atual, pre, `<span>${esc(i.rotulo)}</span>`)}</li>`;
       const ativo = i.href === atual ? ' aria-current="page"' : '';
-      return `<li>${i.href ? `<a href="${/^https?:/.test(i.href) ? '' : pre}${esc(i.href)}"${ativo}>${esc(i.rotulo)}</a>` : `<span>${esc(i.rotulo)}</span>`}${filhos}</li>`;
+      return `<li>${i.href ? `<a href="${/^https?:/.test(i.href) ? '' : pre}${esc(i.href)}"${ativo}>${esc(i.rotulo)}</a>` : `<span>${esc(i.rotulo)}</span>`}</li>`;
     })
     .join('')}</ul>`;
 }
@@ -65,7 +75,7 @@ export function layout(p) {
     )
     .join('');
   const side = (p.nav ?? [])
-    .map((g) => `<section><h2>${esc(g.rotulo)}</h2>${lista(g.itens, p.slug, pre)}</section>`)
+    .map((g) => `<section>${g.rotulo ? categoria(g, p.slug, pre, `<h2>${esc(g.rotulo)}</h2>`) : lista(g.itens, p.slug, pre)}</section>`)
     .join('');
   const toc = (p.toc ?? []).length
     ? `<aside class="site-toc"><h2>${esc(t.nestaPagina)}</h2><ul>${p.toc
@@ -134,10 +144,10 @@ export function copiarAssets(destino) {
 }
 
 const TEXTOS = {
-  'pt-BR': { buscar: 'Buscar', menu: 'Menu', tema: 'Alternar tema', idioma: 'Idioma', degrau: 'Ambiente', nestaPagina: 'Nesta página', editar: 'Editar esta página', atualizado: 'Atualizado em', faixa: 'Esta página ainda não foi traduzida; mostrando o original em português.' },
-  en: { buscar: 'Search', menu: 'Menu', tema: 'Toggle theme', idioma: 'Language', degrau: 'Environment', nestaPagina: 'On this page', editar: 'Edit this page', atualizado: 'Updated', faixa: 'This page is not translated yet; showing the original in Portuguese.' },
-  ru: { buscar: 'Поиск', menu: 'Меню', tema: 'Сменить тему', idioma: 'Язык', degrau: 'Среда', nestaPagina: 'На этой странице', editar: 'Редактировать страницу', atualizado: 'Обновлено', faixa: 'Эта страница ещё не переведена; показан оригинал на португальском.' },
-  'zh-Hans': { buscar: '搜索', menu: '菜单', tema: '切换主题', idioma: '语言', degrau: '环境', nestaPagina: '本页内容', editar: '编辑此页', atualizado: '更新于', faixa: '此页尚未翻译；显示葡萄牙语原文。' },
+  'pt-BR': { buscar: 'Buscar', menu: 'Menu', tema: 'Alternar tema', idioma: 'Idioma', degrau: 'Ambiente', nestaPagina: 'Nesta página', editar: 'Editar esta página', atualizado: 'Atualizado em', faixa: 'Esta página ainda não foi traduzida; mostrando o original em português.', faixaSoIngles: 'Esta página só existe em inglês; mostrando o original em inglês.' },
+  en: { buscar: 'Search', menu: 'Menu', tema: 'Toggle theme', idioma: 'Language', degrau: 'Environment', nestaPagina: 'On this page', editar: 'Edit this page', atualizado: 'Updated', faixa: 'This page is not translated yet; showing the original in Portuguese.', faixaSoIngles: 'This page only exists in English.' },
+  ru: { buscar: 'Поиск', menu: 'Меню', tema: 'Сменить тему', idioma: 'Язык', degrau: 'Среда', nestaPagina: 'На этой странице', editar: 'Редактировать страницу', atualizado: 'Обновлено', faixa: 'Эта страница ещё не переведена; показан оригинал на португальском.', faixaSoIngles: 'Эта страница существует только на английском языке; показан оригинал.' },
+  'zh-Hans': { buscar: '搜索', menu: '菜单', tema: '切换主题', idioma: '语言', degrau: '环境', nestaPagina: '本页内容', editar: '编辑此页', atualizado: '更新于', faixa: '此页尚未翻译；显示葡萄牙语原文。', faixaSoIngles: '此页仅有英文版本；显示英文原文。' },
 };
 
 // Traduz o ctx do núcleo (build.mjs) para o layout(p) acima. `extraScripts` leva a busca.
@@ -148,6 +158,7 @@ export function renderizarPagina(ctx) {
   const hrefDe = (sl) => ctx.urlDe(sl);
   const item = (i) => ({
     rotulo: i.rotulo ?? ctx.rotuloDe(i.slug) ?? i.slug,
+    colapsada: i.colapsada,
     href: i.tipo === 'link' ? i.href : i.slug != null ? hrefDe(i.slug) : null,
     itens: i.itens?.map(item),
   });
@@ -158,7 +169,7 @@ export function renderizarPagina(ctx) {
     `<nav class="site-pager">${[ctx.anterior, ctx.proximo].map((v) => (v ? `<a href="${'../'.repeat(slug.split('/').length - 1)}${esc(hrefDe(v.slug))}">${esc(v.rotulo)}</a>` : '')).join('')}</nav>`;
   return layout({
     locale, slug, titulo: pagina.titulo, conteudo, toc: corpo.toc, nav: grupos, textos: t,
-    faixaTraducao: pagina.traduzida ? null : t.faixa,
+    faixaTraducao: pagina.traduzida ? null : pagina.somenteIngles ? t.faixaSoIngles : t.faixa,
     editarUrl: edicao.url, atualizadoEm: edicao.atualizadoEm ? `${edicao.atualizadoEm}${edicao.autor ? ` · ${edicao.autor}` : ''}` : null,
     degrau, degraus: ['dev', 'prd'], temMermaid: corpo.temMermaid, extraScripts: ctx.extraScripts, extraHead: ctx.extraHead,
   });

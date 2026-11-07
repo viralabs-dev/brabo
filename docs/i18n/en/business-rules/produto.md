@@ -1,10 +1,10 @@
 ---
-traducao_de: de061f649879891150d8c35e4aef5f9d65a09242
+traducao_de: c165be09458a5dfdc42010867a29adf8a36ccd99
 id: rn-produto
-title: 'Regras de negócio — Produto'
-sidebar_label: Produto
-description: 'As RNs hospedadas na raiz produto.'
-keywords: [regras de negócio, produto]
+title: 'Business rules — Product'
+sidebar_label: Product
+description: 'The RNs hosted in the product root.'
+keywords: [business rules, product]
 ---
 
 # Produto
@@ -88,7 +88,7 @@ valid X for this action" instead of a blank.
 - **Where:** `apps/web/src/lib/aprovacoes.ts` (`VERBO_DA_ACAO`, `fraseDaAcao`,
   `descreverAcao`, `descreverHipotese`), consumed by
   `apps/web/src/components/ApprovalCard.tsx` (Approvals + session chat,
-  `COM_CORPO_PROPRIO`, `previewConteudo` for the `write_file` `content`) and
+  `COM_CORPO_PROPRIO`, `previewConteudo` for the `content` `write_file`) and
   `apps/web/src/components/HypothesisCard.tsx` (Insights); collapse via the
   `Disclosure` of `apps/web/src/components/ui/Disclosure.tsx`
 - **Test:** `apps/web/src/lib/aprovacoes.test.ts` (reads `ACTION_TYPES` from
@@ -509,8 +509,7 @@ one accepts by clicking is a verification that does not exist (ADR 0149, decisio
 it would be the cheapest downgrade possible: deleting 400 bytes from the Release would turn off
 everyone's check. The cost is measured and small: in v5.0.0 there are two
 binaries (`linux-x64`, `linux-arm64`) and no manifest, and the binary step is
-**best-effort** in the browser flow ([RN-473](web.md#rn-473), step 4) — it falls back to
-`npm install -g @brabo/runner`, which depends on no release at all. Every release
+**best-effort** in the browser flow ([RN-473](web.md#rn-473), step 4) — it is left without the local agent and says so (npm was dropped in AT-774). Every release
 prior to the first tag after ADR 0149 falls into that path, by construction.
 
 **The six 502 outcomes do not collapse.** The status alone does not separate them and
@@ -676,7 +675,7 @@ to get to the command. Coming from the installer, the step disappears — the br
 Access API does not preserve the bit, a script does.
 
 A release without the platform's binary **does not interrupt the installation**: the rest is already
-up, and the message points to `npm install -g @brabo/runner`. It is the same
+up, and the message points to the issue on `brabo-runner` (npm was dropped in AT-774). It is the same
 disposition as the binary step in the browser setup (RN-473), and the
 reason is the same — the local agent is the last stage, not a prerequisite.
 
@@ -775,11 +774,13 @@ one per relation:
 | greater | `Atualizar 5.0.0 → 5.1.0?` | **yes** — it is what the person came to do, and the proven backup makes it reversible |
 | equal | `Já é a 5.0.0. Reinstalar do zero mesmo assim?` | no — there is no gain to offer |
 | lesser | names a **downgrade**, warning that a database migration does not go backwards | no — there may be no going back |
+| new line | `Atualizar 7.0.0 (linha anterior) → 1.0.0 (linha nova)?` — [RN-998](#rn-998) | **yes** — restarting the versions at 1.0.0 is not a downgrade |
 | unknown | a schema 1 marker has no version: says so, and **does not guess** | no |
 
-The `maior` branch is the **only** one with a default of yes, and it is the only one that can have it: the
-step is reversible through the backup that was just proven. The other three require
-a typed `s`.
+The `maior` branch was the **only** one with a default of yes, and it is the only one that can have it: the
+step is reversible through the backup that was just proven. Since
+[RN-998](#rn-998) the `nova-linha` relation shares that default, for the same reason
+(it is an upgrade, only with another numbering). The other three require a typed `s`.
 
 **In any branch the installation is deleted and recreated from scratch**, never brought up
 on top — a decision of the product owner, and the same reason as RN-530: an `up` over
@@ -1181,15 +1182,15 @@ credential; a password written anywhere; and any path that creates an account wi
 a TTY — without an interactive terminal the script reports and **exits 0**, at the step that already
 existed, before any write.
 
-- **Code:** `install.sh:1664` (`fechar_a_instalacao`, the chaining and the
-  "always 0"), `:1463` (`perguntar_e_criar_a_conta`, the consent, the loop and
-  the ceiling), `:1563` (`parear_esta_maquina`, the `id` becoming `--id`), `:1640`
-  (`subir_o_agente_como_servico`, the refusal passed on whole), `:1366`
+- **Code:** `install.sh:1835` (`fechar_a_instalacao`, the chaining and the
+  "always 0"), `:1634` (`perguntar_e_criar_a_conta`, the consent, the loop and
+  the ceiling), `:1734` (`parear_esta_maquina`, the `id` becoming `--id`), `:1811`
+  (`subir_o_agente_como_servico`, the refusal passed on whole), `:1537`
   (`post_interno`, the body via stdin and the header via the 600 `--config`),
-  `:1385` (`criar_primeira_conta`) and `:1426` (`registrar_chave_de_maquina`) —
-  the verdicts of the two routes —, `:1441` (`ler_sem_eco`), `:1345`
-  (`nome_da_maquina`), `:1586` (`avisar_chave_parcial`), `:1208`/`:1215`
-  (`escapar_json`/`sem_controle`), `:108` (`MARCADOR_SCHEMA=3`), `:1871` (the
+  `:1578` (`criar_primeira_conta`) and `:1597` (`registrar_chave_de_maquina`) —
+  the verdicts of the two routes —, `:1612` (`ler_sem_eco`), `:1516`
+  (`nome_da_maquina`), `:1798` (`avisar_chave_parcial`), `:1208`/`:1215`
+  (`escapar_json`/`sem_controle`), `:109` (`MARCADOR_SCHEMA=4`), `:1871` (the
   call, after the runner and before the marker), `:1882` (the `ownerEmail`).
   Numbers re-read by symbol on 09/18 (AT-096), on 09/27 (AT-065, which
   added the Mac Intel branch in `instalar_o_runner`) and on 10/01 (AT-122);
@@ -1408,7 +1409,7 @@ relative paths) and the installation compose declares the `backup_local` volume
 that the `backup` service references, whose absence refused the whole file with the
 profile on. Covered by `scripts/dev/prova-de-restauracao-env.spec.ts`.
 
-- **Code:** `install.sh:128` (`COMPOSE_DE_INSTALACAO` empty until materialized),
+- **Code:** `install.sh:129` (`COMPOSE_DE_INSTALACAO` empty until materialized),
   `:587` (`ASSETS_DO_INSTALADOR`), `:589` (`destino_do_asset_do_instalador`, the
   downloader side's table), `:614` (`baixar_e_verificar_os_arquivos_da_instalacao`),
   `:607`/`:615`/`:617` (the three refusals), `:648`
@@ -1485,8 +1486,8 @@ on Linux. Rootless or remote Docker does not have the socket at `/var/run/docker
 which is the path the compose mounts, and falls into the refusal of item 2 — turning the broker on
 there is not offered by another path.
 
-- **Code:** `install.sh:1050` (`consentir_broker`), `:1002`
-  (`medir_gid_do_socket`), `:1037` (`calcular_raiz_gerenciada`), `:1034`
+- **Code:** `install.sh:1196` (`consentir_broker`), `:1148`
+  (`medir_gid_do_socket`), `:1183` (`calcular_raiz_gerenciada`), `:1320`
   (`conferir_o_broker`), `:792` (`escrever_env_do_broker`), `:855` (the broker in the
   manifest), `:1812` (the order: after the base, before the `.env`);
   `docker/docker-compose.install.yml` (the `broker` service and the `broker` network)
@@ -1531,8 +1532,8 @@ skipped (api side, another front); and the tag's E2E answers NO (switching on wo
 download GBs of models), so startup with the `llm` profile is not proven end
 to end.
 
-- **Where:** `install.sh:1128` (`consentir_llm`), `:1113`
-  (`escolher_porta_do_ollama`), `:1103` (`porta_em_uso`), `:800`
+- **Where:** `install.sh:1274` (`consentir_llm`), `:1259`
+  (`escolher_porta_do_ollama`), `:1249` (`porta_em_uso`), `:800`
   (`escrever_env_do_llm`), `:821` (`escrever_env_dos_profiles`)
 - **Test:** `scripts/dev/install-llm.spec.ts` (without a terminal it stays off
   stating the cost; 11434 taken picks the next one; whole range taken fails
@@ -1551,15 +1552,74 @@ offered to migrate the development environment. Now it matches only the EXACT na
 And the migration confirmation gets a third answer: `z` reinstalls FROM
 SCRATCH. The order of ADR 0150 does not change — backup, PROOF, question, delete, install —,
 but the old data is NOT restored: the proven backup stays in the folder, and
-restoring it later is the runbook's `#restore`. `s` keeps restoring, and Enter
-still deletes nothing.
+restoring it later is the runbook's `#restore`. `s` restores — and, since
+[RN-998](#rn-998), restores EVERYTHING: Postgres into a freshly created, empty database, the git
+repositories and the reprojection of the graph and the artifacts; until then only
+the git repositories came back. Enter still deletes nothing.
 
 Along with it, the wrap-up stops saying that pairing a folder through the project screen
 "still exists (ADR 0118)": that flow left in ADR 0203 ([RN-687](web.md#rn-687)).
 
-- **Where:** `install.sh:370` (`detectar_por_sinais`), `:1694`
+- **Where:** `install.sh:440` (`detectar_por_sinais`), `:1918`
   (`migrar_instalacao_anterior`)
 - **Test:** `scripts/dev/install-llm.spec.ts` (`brabo-dev` does not count and `brabo`
   counts; `z` deletes after the proof and leaves `MIGRAR_DE` empty; Enter does not delete —
   failure case; the ADR 0118 sentence does not come back)
 - **Origin:** AT-358
+
+## The installer's migration brings the whole previous installation back (RN-998)
+
+### RN-998 — The migration restores the database into an empty database, keeps the master key, is resumable and understands the line of versions {#rn-998}
+
+The first real migration from a 7.0.0 to product 1.0.0 (AT-710) brought up an
+EMPTY installation with unreadable credentials. [ADR 0256](../adr/0256-a-migracao-restaura-o-banco-num-banco-vazio.md)
+closes the findings of AT-738, and the rules are these:
+
+1. **Postgres comes back on its own.** After `down -v`, the installer brings up ONLY
+   `postgres`, runs `brabo-restore --banco-vazio` (it refuses a database with any
+   table) and only then brings up the rest, with the migrations on top of the dump. Next,
+   the git repositories and the reprojection of the graph and the artifacts; a
+   reprojection that fails is a PENDING item with the command, never a refusal.
+2. **The git comes back as the volume's owner**, read in the api container (`stat`),
+   never assumed: uid 70 of the backup image does not write to a volume of another
+   owner, and neither does `--user 0:0`, because of `cap_drop`.
+3. **The secrets that encrypt restored data come from the previous `.env`**, at the minimum
+   `CREDENTIALS_MASTER_KEY` (environment → previous `.env` → generated), and every
+   key the new `.env` does not declare comes back with its last value
+   (`CREDENTIALS_MASTER_KEY_PREVIOUS`, `ANAMNESE_ENABLED`, `BRABO_BIND`…). Left
+   out are those the installer decides on the spot (`COMPOSE_PROFILES`,
+   `BROKER_URL`, `DOCKER_GID`, `PROJECT_WORKSPACES_HOST_ROOT`, `OLLAMA_PORT`) and the
+   `_PREVIOUS` of the ephemeral secrets, which are born new.
+4. **Backup, proof and deletion run with the migration's environment:** the five
+   `BRABO_*_IMAGE` of this version (the previous `.env` may cite a local image that
+   is gone), `BRABO_BACKUP_USER` = uid:gid of whoever runs it (the folder is theirs) and
+   `BRABO_BACKUP_HOST_DIR` = the destination, so the proof restores the SAME backup
+   that stays in the folder. The folder is born `0755`, declared.
+5. **The migration is resumable.** The marker (schema 4) is written right after
+   `down -v` with `restauracaoPendente` (`destino` and `etapas`: `banco git grafo
+   artefatos`), and again at each step and when the new version comes up. The next
+   run that finds the pending item RESUMES the restoration, without migrating again and without
+   deleting anything; an absent backup folder is a named refusal.
+6. **Line of versions.** The marker records `linha`. Without it, the installation belongs to the
+   previous line, except for images under `ghcr.io/viralabs-dev/` (the 1.0.0 of this line
+   recorded schema 3). Between lines the relation is `nova-linha`, with its own sentence and
+   a default of yes ([RN-542](#rn-542)).
+7. **Download with retry.** Every download goes through `baixar` (`curl
+   --retry 6 --retry-delay 10 --retry-connrefused`); 404 is "the Release does not
+   publish", and the rest is "the server did not deliver, run it again" — different
+   sentences.
+
+It revises [RN-530](infra.md#rn-530) (the dump no longer stays only in the folder) and
+the `s` sentence of [RN-692](#rn-692).
+
+- **Where:** `install.sh:1918` (`migrar_instalacao_anterior`), `:1903`
+  (`com_ambiente_do_backup`), `:1993` (`restaurar_o_banco`), `:2009`
+  (`restaurar_os_repositorios_git`), `:2025` (`reprojetar`), `:2062`
+  (`gravar_marcador`), `:930` (`relacao_com_o_instalado`), `:949`
+  (`restauracao_pendente`), `:736` (`gerar_segredos`), `:971`
+  (`preservar_do_env_anterior`), `:194` (`baixar`)
+- **Test:** `scripts/dev/install-migracao.spec.ts` (one case per item, with
+  `docker`, `curl` and the fake proof on the PATH; the failure case of each — a
+  backup that fails deletes nothing, a refused restore stays pending, an unreadable owner
+  refuses, 404 ≠ 504); `scripts/dev/install-fechamento.spec.ts` (schema 4)
+- **Origin:** AT-738 (EP-033), decisions of the owner of 5 November 2026

@@ -4,7 +4,7 @@ title: Внутренний API (api ↔ engine)
 sidebar_position: 6
 description: Два направления связи между api и engine — HTTP для синхронных команд, outbox и Oban для событий.
 keywords: [внутренний api, engine, outbox, oban, engine-service, контракт]
-traducao_de: 42533ef5cd2b8e519264de7fda1350171be59485
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # Внутренний API (api ↔ engine)
@@ -498,7 +498,7 @@ handoff `offered` для Arquiteto внутри закрытой сессии
 |---|---|
 | GET | `/internal/gates` (**не** ограничен сессией) |
 
-Чтение декларативного реестра в `docs/gates.yml`
+Чтение декларативного реестра в `apps/api/config/gates.yml`
 ([ADR 0054](../adr/0054-gates-como-registro-declarativo.md)). Он не
 ограничен сессией по той же причине, что и каталог моделей: реестр глобален —
 какие гейты существуют, это факт о продукте, одинаковый для каждого проекта.
@@ -508,9 +508,9 @@ PR, а не в runtime. Маршрут записи превратил бы ин
 конфигурацию продакшена, что и отверг ADR, выбрав
 YAML вместо таблицы.
 
-Файл едет внутри образа (`COPY docs/gates.yml` в
+Файл едет внутри образа (`COPY apps/api/config/gates.yml` в
 `docker/api/Dockerfile.prod`), как и миграции: загрузчик поднимается от
-`__dirname`, пока не найдёт его, и в продакшене находит его в `/app/docs/gates.yml`.
+`__dirname`, пока не найдёт его, и в продакшене находит его в `/app/apps/api/config/gates.yml`.
 Загрузка ленивая — нечитаемый файл возвращает ошибку на этом маршруте, вместо того чтобы
 помешать api запуститься.
 
@@ -687,7 +687,7 @@ id проекта**: ни поискового термина, ни пагина
 ([RN-407](../business-rules/contracts.md#rn-407)) — закрывает последний открытый пункт
 аудита `fluxo.yml` × код
 ([пункт B4](../explanation/auditoria-fluxo-vs-codigo.md#b-gaps-in-active-roles-already-implementable-work)):
-`docs/fluxo.yml` (роль `po`, вход `metricas-de-produto`) объявлял
+`packages/contracts/fluxo.yml` (роль `po`, вход `metricas-de-produto`) объявлял
 `status: lacuna` со времён ADR 0089 — ДАННЫЕ уже существовали (скрипт
 `analise:funil` измеряет воронку сессия → commit → PR → merge, реальное lead time
 и реальную частоту деплоя), не хватало только МЕХАНИЗМА чтения внутри
@@ -933,6 +933,27 @@ api записывает `project_mirror_states` — ТАБЛИЦУ, никог�
 подключённом сейчас runner; при отсутствии любого из двух явно
 отказывает — никогда не откатываясь к `System.cmd`/bind-mount режима `mounted`, которого
 не существует для проекта `runner`.
+
+### Эфемерный QA-экземпляр — новые маршруты ([RN-935](../business-rules/api.md#rn-935) — [RN-937](../business-rules/api.md#rn-937), [ADR 0229](../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.md))
+
+| метод | путь |
+|---|---|
+| POST | `/internal/projects/:projectId/qa-environments/:taskId/start` |
+| POST | `/internal/projects/:projectId/qa-environments/:taskId/remove` |
+| POST | `/internal/qa-environments/sweep` |
+
+`:taskId` — полный id или ключ из 8 символов. Первые два отвечают 200 с
+`{ sucesso, status, chave, motivo }` (`sucesso: false` — нормальная форма отказа
+брокера); 404 для проекта или задачи другого проекта; 409 `instancia_de_qa_ocupada`
+(потолок — 1 активный на проект), `qa_nao_suporta_runner` или `tarefa_ambigua`.
+`sweep` принимает `{ taskIdsEmVoo: uuid[], projectId?: uuid }` и отвечает
+`{ removidas, falhas }`. `container-exec` принимает `alvo: { qa: true, taskId }`, а
+`container-spec` принимает `?papel=qa&task=<id ou chave>` (добавляет
+`qa: { chave, services }`). Каждый сервис — `{ name, image, env?,
+tmpfs?, user?, command?, shared? }`: `user` — `"<uid>:<gid>"` с целыми, отличными
+от 0 ([RN-941](../business-rules/contracts.md#rn-941)), превращается в `--user` и задаёт
+владельца (`uid=`, `gid=`, `mode=0700`) для `tmpfs`; `command` — до 16
+аргументов, передаваемых после образа; `null` равнозначен отсутствию.
 
 ### Выполнение команды терминала внутри реального контейнера — новый маршрут ([RN-492](../business-rules/engine.md#rn-492), [ADR 0134](../adr/0134-dev-agents-executam-dentro-do-container.md))
 
@@ -1364,7 +1385,16 @@ broker не ПОЛУЧАЕТ spec контейнера — он получает
 3. `localizacao`, размеченный локатор папки проекта — см. ниже;
 4. действующее решение Arquiteto об образе или `null`, пока его нет
    ([RN-105](../business-rules/api.md#rn-105)), и в этом случае отклоняется только `start`,
-   а остальные четыре операции продолжают работать.
+   а остальные четыре операции продолжают работать;
+5. начиная с [ADR 0228](../adr/0228-comando-do-app-e-rede-do-container.md), четыре
+   необязательных поля, каждое `null`, когда объявления нет (и всегда `null`
+   в проекте `runner`): `comandoDoApp`, действующий `run.app.command` в
+   `artifact.run_instructions` ([RN-933](../business-rules/api.md#rn-933)); а также
+   `ports` (`[{host, container, protocol: 'tcp'}]`), `dns` (IP) и `extraHosts`
+   (`[{name, ip}]`) из действующего `artifact.container_network`
+   ([RN-932](../business-rules/api.md#rn-932)). Брокер заново проверяет все четыре по
+   правилам `docker-port` перед демоном, и они действуют только в
+   пересозданном контейнере (`container_recreate`, [RN-934](../business-rules/api.md#rn-934)).
 
 Исходя из этого, broker СОСТАВЛЯЕТ образ, сеть, ресурсы и единственный mount и
 перепроверяет всё, прежде чем что-либо передать демону. Нет поля, в
@@ -1543,7 +1573,7 @@ service token доказывает именно это.
 
 ## api → engine
 
-Двадцать один маршрут команд плюс маршруты здоровья. Под `/internal` с `VerifyServiceToken`:
+Двадцать два маршрута команд плюс маршруты здоровья. Под `/internal` с `VerifyServiceToken`:
 
 | метод | путь | что запускает |
 |---|---|---|
@@ -1553,18 +1583,20 @@ service token доказывает именно это.
 | POST | `/sessions/:id/agent/message` | сообщение пользователя в ленте — тело `{projectId, agent, text, idiomaDaResposta?, mensagemId?, perfilDoAutor?}`. **`202` при ПРИНЯТИИ**, до окончания хода: пустое тело, когда ход начался (`lida`), `{entrega: "enfileirada", posicao}`, когда агент был посреди хода и сообщение попало в его ОЧЕРЕДЬ — прочитанное вместе с остальными в одном ходе, когда текущий закончится ([RN-673](../business-rules/engine.md#rn-673), [ADR 0191](../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.md)). **`409`** `{error, motivo}`, когда агент отказывает до начала: `aguardando_aprovacao` (Dev Lead приостановлен) или `fila_de_mensagens_cheia` (10 уже в очереди) — сообщение больше не получает `turno_em_andamento` ([RN-578](../business-rules/engine.md#rn-578), [ADR 0163](../adr/0163-o-clique-responde-ao-aceitar.md)). `mensagemId` — id `chat.message`, который записал api; именно он отменяет сообщение в очереди. `idiomaDaResposta` НЕОБЯЗАТЕЛЕН: язык, который api определил для АВТОРА сообщения в этой сессии; engine добавляет его как эфемерное системное сообщение в конец каждого вызова LLM этого хода ([RN-622](../business-rules/engine.md#rn-622)). Отсутствие (более старый api или определение не удалось) означает отсутствие указания — никогда не отказ |
 | POST | `/sessions/:id/agent/queued-message/cancel` | тело `{projectId, agent, mensagemId, userId}` — отменяет ОДНО сообщение, ожидающее в очереди агента ([RN-673](../business-rules/engine.md#rn-673)); api уже проверил, что его отправил `userId`. Когда агент работает, решает его процесс: `204` или **`409`** `mensagem_fora_da_fila` (уже прочитано или отменено). Когда агент не работает, `chat.message_cancelled` записывается напрямую — очередь и есть лог. **`422`** для агента без разговора или неполного тела |
 | POST | `/sessions/:id/agent/cancel` | отменяет текущий ход активного агента ([RN-122](../business-rules/engine.md#rn-122)) — убивает Task, удерживающий вызов LLM (`Task.shutdown/2`, `:brutal_kill`); идемпотентно, NO-OP без текущего хода |
-| POST | `/sessions/:id/agent/readiness` | подтверждение готовности — `202` при принятии; `409` ход в процессе, **`422`** `sem_regra_de_negocio` ([RN-578](../business-rules/engine.md#rn-578)) |
+| POST | `/sessions/:id/agent/readiness` | подтверждение готовности — обязательное тело `{projectId}` (`400` без него); поднимает Criativo, если предыдущее закрытие его остановило ([RN-956](../business-rules/engine.md#rn-956)); `202` при принятии; `409` ход в процессе, **`422`** `sem_regra_de_negocio` ([RN-578](../business-rules/engine.md#rn-578)) |
 | POST | `/sessions/:id/agent/revise` | возвращает PO историю, продвижение которой пользователь отклонил (ФАЗА 12c — RN-048); **404, если PO не запущен**, и для api это не ошибка; `202` при принятии, `409` ход в процессе ([RN-578](../business-rules/engine.md#rn-578)) |
-| POST | `/sessions/:id/agent/offer-infra-handoff` | предложение handoff в Infra — `202` при принятии, при этом завершающий ход ещё выполняется; `409` ход в процессе ([RN-578](../business-rules/engine.md#rn-578)). Это ЕДИНСТВЕННОЕ предложение, которое делает подтверждение архитектуры: маршрут `offer-dev-handoff` удалён, и Dev Lead предлагается Infra Lead, когда контейнер проекта в состоянии `running` ([RN-672](../business-rules/api.md#rn-672)) |
+| POST | `/sessions/:id/agent/offer-infra-handoff` | предложение handoff в Infra — обязательное тело `{projectId}` (`400` без него); поднимает Arquiteto, если сессия была переоткрыта при остановленном нём ([RN-956](../business-rules/engine.md#rn-956)); `202` при принятии, при этом завершающий ход ещё выполняется; `409` ход в процессе ([RN-578](../business-rules/engine.md#rn-578)). Это ЕДИНСТВЕННОЕ предложение, которое делает подтверждение архитектуры: маршрут `offer-dev-handoff` удалён, и Dev Lead предлагается Infra Lead, когда контейнер проекта в состоянии `running` ([RN-672](../business-rules/api.md#rn-672)) |
 | POST | `/sessions/:id/execution/start` | активирует фазу выполнения |
 | POST | `/sessions/:id/execution/parallelize` | создаёт субагентов — **выполняет, а не решает** (см. ниже) |
 | POST | `/sessions/:id/dev-agents/:agentId/rearm` | перевзводит застрявшего dev agent (ФАЗА 12b — RN-047); 404, если не существует, **409, если не в `idle_tripped`** |
 | POST | `/sessions/:id/psychologist/reanalyze` | повторный анализ по требованию |
 | GET | `/psychologist/status` | читает глобальный флаг `PSYCHOLOGIST_ENABLED` ([RN-454](../business-rules/engine.md#rn-454)) — без побочных эффектов, глобальный (не ограничен сессией) |
+| POST | `/sessions/:id/agent/resume` | кнопка «Возобновить» для хода, прерванного перезапуском engine (AT-582, ADR 0226) — тело `{projectId, agent}`; записывает `agent.turn_resumed` с `automatica: false` и поднимает ход через `TurnoAssincrono`; `202` при принятии, `409` `turno_nao_interrompido` (последний исход агента — не перезапуск, либо идёт ход/возобновление) или `agente_sem_retomada` (агент, который не ведёт беседу или чей сервер не умеет возобновлять) |
 | POST | `/projects/:id/anamnese/run` | раунд Анамнеза, поставленный в очередь с `origem: "manual"`: раунд без подходящего субъекта не вызывает LLM и записывает `anamnese.run_skipped` с `causa: "sem_sujeito_elegivel"` ([RN-680](../business-rules/engine.md#rn-680)) |
 | POST | `/projects/:id/tasks/:taskId/gates/:gate/resume` | возобновляет по действию человека ЗАПАРКОВАННЫЙ цикл гейта ([RN-724](../business-rules/engine.md#rn-724), [ADR 0207](../adr/0207-ciclo-de-gate-velho-estaciona.md)) — `202`, и гейт отправляется заново; `409` `gate_nao_estacionado`, когда цикл не запаркован (или гейт не `qa`/`secops`) |
 | POST | `/projects/:id/agents/:agent/instructions/invalidate` | инвалидирует кеш инструкций |
-| POST | `/actions/execute` · `/actions/execute-git` | выполняет **уже одобренное** действие |
+| GET | `/agents/catalog` | каталог агентов только для чтения: `{agentes: [{agente, identidade, ferramentas: [{nome, descricao}]}]}`, без параметров и схемы, описание с потолком в 1 000 символов; api присоединяет к нему действующую инструкцию проекта в `GET /projects/:projectId/agent-catalog` и, при остановленном engine, отвечает `motivoSemCatalogo` вместо «без инструментов» ([RN-995](../business-rules/api.md#rn-995)) |
+| POST | `/actions/execute` · `/actions/execute-git` | выполняет **уже одобренное** действие; с AT-612 тело `/actions/execute` может нести `alvo: {qa: true, taskId}`, которое api передаёт только когда актор — `qa-automacao`, а задача принадлежит проекту ([RN-938](../business-rules/api.md#rn-938)), и engine запускает команду в QA-экземпляре задачи вместо рабочего контейнера ([RN-940](../business-rules/engine.md#rn-940)) |
 | POST | `/projects/:id/containers/start` · `/containers/stop` · `/containers/remove` | просит RUNNER, подключённый к проекту, поднять/остановить/удалить его контейнер ([RN-497](../business-rules/produto.md#rn-497), [ADR 0137](../adr/0137-o-runner-sobe-o-container-do-projeto.md)) — только для проектов `mounted`/`runner`; `container` по-прежнему идёт через broker, никогда не здесь |
 | POST | `/projects/:id/runner/disconnect` | обрывает ЖИВОЕ соединение runner этого пользователя в проекте, какие бы учётные данные ни использовались ([RN-520](../business-rules/api.md#rn-520), [ADR 0147](../adr/0147-agente-local-com-capacidades.md)) — с [ADR 0201](../adr/0201-revogacao-por-chave.md) вызывается при удалении участника ([RN-615](../business-rules/api.md#rn-615)) и как запасной вариант отзыва ключа; всегда `200`, с `desfecho` = `derrubado` \| `sem_runner` \| `de_outro_dono` \| `timeout` |
 | POST | `/runner/disconnect-credential` | обрывает каждое соединение runner, открытое С учётными данными, в любом проекте, и аннулирует их ожидающие тикеты ([RN-685](../business-rules/api.md#rn-685), [ADR 0201](../adr/0201-revogacao-por-chave.md)) — вызывается, когда ключ устройства или PAT отзывается. Тело: `credentialKind` (`device_key` \| `pat`), `credentialId` и, только для УСТАРЕВШЕГО соединения (тикет без учётных данных), `userId` + `projectIds`. `200` со счётчиками `derrubados`/`legados`/`intocados`/`semResposta`/`ticketsAnulados`; `400` только для некорректных учётных данных |
@@ -1588,7 +1620,7 @@ runner падает и переподключается с ещё действу
 `assigns` и в своём `id`, и engine спрашивает КАЖДЫЙ зарегистрированный runner, не
 родился ли он из отозванных учётных данных, — у ключа машины нет проекта, по которому
 можно адресовать. Другой runner того же пользователя, с PAT или другим ключом, остаётся работать.
-Маршрут `{проект, пользователь}` остаётся для удаления участника и как запасной вариант api,
+Маршрут `{projeto, usuário}` остаётся для удаления участника и как запасной вариант api,
 когда engine отвечает 404 на маршрут учётных данных.
 
 **Три маршрута `containers/*` — зеркало `container-exec`, ниже, в

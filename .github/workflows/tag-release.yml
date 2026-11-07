@@ -1,5 +1,7 @@
 name: tag-release
 
+run-name: ${{ format('Carimbo · {0} · {1}', github.ref_name, github.actor) }}
+
 # Carimba a tag do estágio a cada push em dev/main (tag-release do brabo-ci, AT-704).
 # A 1ª tag final na `main` sai `v1.0.0`: o ciclo inicial traz uma PR `breaking/` (MAJOR
 # sobre a base 0.0.0 de `proximaVersao`, coberto em brabo-ci `version.spec.ts`).
@@ -19,9 +21,9 @@ permissions:
 jobs:
   carimbar:
     if: vars.PRODUTO_RELEASE_LIGADA == 'true'
-    uses: viralabs-dev/brabo-ci/.github/workflows/tag-release.yml@242598dff5b306bfc7c2f71f28317826538f887a  # v1.0.0
+    uses: viralabs-dev/brabo-ci/.github/workflows/tag-release.yml@13f3697aaf3e4a151637755babb58422a44db303  # brabo-ci dev, merge da ci#17
     with:
-      ci_ref: 242598dff5b306bfc7c2f71f28317826538f887a
+      ci_ref: 13f3697aaf3e4a151637755babb58422a44db303
     secrets:
       APP_ID: ${{ secrets.BRABO_APP_ID }}
       APP_PRIVATE_KEY: ${{ secrets.BRABO_APP_PRIVATE_KEY }}

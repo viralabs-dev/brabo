@@ -3,7 +3,7 @@ id: cadeia-de-suprimentos-do-ci
 title: CI 的供应链
 sidebar_label: CI 的供应链
 description: 在我们的 CI runner 中运行的、不是我们写的东西，它们如何被固定，以及哪些仍然凭信任接受。
-traducao_de: 929963d24eb727bd64875486f2f1889172f3084a
+traducao_de: 3016564b5bb5b0752711c07b9babefd252829a8d
 ---
 
 # CI 的供应链

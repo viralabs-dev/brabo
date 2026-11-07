@@ -1,5 +1,9 @@
 name: E2E do instalador
 
+run-name: >-
+  ${{ github.ref_type == 'tag' && format('E2E do instalador {0} ← tag do carimbo', github.ref_name)
+    || format('E2E do instalador manual {0} · {1}', inputs.tag, github.actor) }}
+
 # DORMENTE ATÉ A AT-704 (Rodada 180, AT-702): o workflow veio do monorepo com os
 # gatilhos originais (o `docs:check` do runbook confere `push: tags` no `on:`), mas
 # CADA job só roda com a variável de repositório `PRODUTO_RELEASE_LIGADA=true`.
@@ -45,7 +49,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-14]
+        os: [ubuntu-26.04, macos-14]
     runs-on: ${{ matrix.os }}
     # 25 bastavam enquanto o job parava no `.env`. Com o fechamento inteiro
     # (RN-547) ele ainda espera o agente entrar na espera e, depois do projeto

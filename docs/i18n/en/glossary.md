@@ -5,7 +5,7 @@ sidebar_label: Glossary
 sidebar_position: 9
 description: Brabo's ubiquitous language — the terms that show up in the code, the screens, and the ADRs, with the meaning they carry here.
 keywords: [glossary, ubiquitous language, harness, gate, handoff, DEK, outbox]
-traducao_de: 4990612012ed4b363b8a96f95efb89c0d0c9d26c
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # Glossary
@@ -202,7 +202,7 @@ which is durable, never the status.
 
 **`proposed_action`** — every action with an external effect (a terminal
 command, commit, push, PR, merge, spend) is **born** here, it never
-executes directly. Twenty-one types. Six states
+executes directly. Twenty-three types. Six states
 ([RN-003](business-rules/api.md#rn-003)).
 
 **`permissions.json`** — the project's policy file. Matches a command

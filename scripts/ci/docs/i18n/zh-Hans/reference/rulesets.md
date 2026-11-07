@@ -4,7 +4,7 @@ title: 仓库 Rulesets
 sidebar_position: 8
 description: 三个永久分支和标签的 ruleset 的精确配置，供手动应用——仓库对来源做版本管理，GitHub 接收应用。
 keywords: [rulesets, 分支保护, 必需检查, 标签, release]
-traducao_de: f6d9c3688e413d451640bbae2d5606da150cc14e
+traducao_de: c165be09458a5dfdc42010867a29adf8a36ccd99
 ---
 
 # 仓库 Rulesets
@@ -15,8 +15,12 @@ traducao_de: f6d9c3688e413d451640bbae2d5606da150cc14e
 这些规则所执行的策略见
 [分支策略](../explanation/branching-policy.md)。
 
-> **当前状态：** `gh api repos/daneiel/brabo/rulesets` 返回 **0**。
-> 尚未应用任何内容。在那之前，这里的一切都是声明的意图，而不是真实的保护。
+> **已决定的状态（ADR 0255，2026-11-05）：** `Política de branches` 和
+> `Escada de aprovação` 是 11 个 `viralabs-dev/brabo*` 仓库中 `dev` 和 `main` 的
+> ruleset 里的 **required** 检查；`brabo`、`brabo-qa` 和 `brabo-infra` 获得
+> “main 与 dev 禁止 force push”ruleset；GitHub App `viralabs-dev-brabo` 在分支
+> `chore/regenera-gerados` → `dev` 上的 PR 免除阶梯（作者且分支；`main` 仍走完整阶梯）。
+> 在 GitHub 上的应用仍是手动的。
 
 ## 前提：三个分支必须存在
 
@@ -126,7 +130,7 @@ gh variable set APPROVAL_MODE      --body community
 
 - **当 diff 不涉及镜像时，`Build, scan e smoke das imagens de produção` 跳过繁重的步骤**
   （AT-303）。第一步用 `scripts/ci/diff-toca-imagem.ts` 对 PR 的 diff 分类（一个
-  允许列表，列出永远不会进入镜像、smoke 或 E2E 的内容：`docs/`（`docs/gates.yml`
+  允许列表，列出永远不会进入镜像、smoke 或 E2E 的内容：`docs/`（`apps/api/config/gates.yml`
   除外）、`website/`、`scripts/docs/`、`deploy/k8s/`、`.github/`（`ci.yml` 除外）、
   根目录的 `*.md`（`THIRD_PARTY_NOTICES.md` 除外）、`design/*.md`；spec 通过变异
   针对真实的 Dockerfile 证明该列表）。Bake、Trivy、broker、smoke 和 E2E **逐步**带
@@ -438,8 +442,8 @@ changelog 的 Release，而且没有任何错误。
 > 中**移出了矩阵**，原因是测量得出的（AT-065，2026-09-13）：它的 `macos-13` 标签指向一个
 > GitHub 已于 2025 年 12 月退役的镜像，而 Intel 替代品 `macos-15-intel` 在几秒内被调度并
 > 能构建，但在 Bun 下 `--self-test-pty` 失败（`node-pty` 的 `onData` 从不触发——
-> oven-sh/bun#25822，未关闭）。同样的验证在 Node 下通过，因此 Mac Intel 用
-> `npm install -g @brabo/runner` 安装 runner。以空的 `tag` 输入运行该 workflow 是一次演练：
+> oven-sh/bun#25822，未关闭）。同样的验证在 Node 下通过，但 Mac Intel
+> 没有 runner（npm 已在 AT-774 中移除）。以空的 `tag` 输入运行该 workflow 是一次演练：
 > 构建并做 smoke 而不附加任何东西，这正是在不切标签的情况下测得这些的方式。
 
 ### Bypass
@@ -491,14 +495,13 @@ gh api repos/daneiel/brabo/rulesets --jq '.[] | "\(.name): \(.enforcement)"'
 |---|---|---|
 | —（三者的索引） | `https://daneiel.github.io/brabo/` | ❌ `noindex, follow` |
 | `main` | `https://daneiel.github.io/brabo/prd/` | ✅ |
-| `qa` | `https://daneiel.github.io/brabo/qa/` | ❌ `noIndex` |
 | `dev` | `https://daneiel.github.io/brabo/dev/` | ❌ `noIndex` |
 
 三者在 [ADR 0071](../adr/0071-publicacao-simetrica-por-degrau.md) 中变得对称，该 ADR 也解释了
 生成的根目录以及把旧链接转发到稳定台阶的 `404.html`。
 [ADR 0073](../adr/0073-o-caminho-publicado-nomeia-o-ambiente.md) 把**路径**与**分支**分开：
 `main` 发布到 `/prd/`，因为地址为读者命名的是环境。`404.html` 开始把
-`/brabo/main/<某物>` 改写为 `/brabo/prd/<某物>`——旧目录从树中移出，`keep_files: false` 将其删除。
+`/brabo/main/<algo>` 改写为 `/brabo/prd/<algo>`——旧目录从树中移出，`keep_files: false` 将其删除。
 
 **Pages 的配置不因这两者中的任何一个而改变**——来源仍然是文件夹 `/ (root)` 中的分支
 `gh-pages`；改变的是 workflow 在推送前组装的内容。而 `prd` **不是**分支：它不在任何 ruleset

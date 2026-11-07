@@ -6,7 +6,7 @@ sidebar_position: 1
 slug: /
 description: 编排 AI 智能体以推进应用完整生命周期的平台，最终决定权始终在人手中。
 keywords: [brabo, agentes de IA, engenharia, orquestração, aprovação]
-traducao_de: 17899a38601ea4c2ea6f421cfc715152d1419d53
+traducao_de: 99089c043ec7e78c34587e3c0ea7fa6c87a2792e
 ---
 
 # Brabo 是什么 {#o-que-é-o-brabo}
@@ -77,7 +77,7 @@ sequenceDiagram
 
 ## 状态 {#estado}
 
-**第 1 至 26 阶段已完成**，版本 **v7.0.0**。已有的内容：
+**第 1 至 26 阶段已完成**，版本 **v2.0.0**。已有的内容：
 
 - IAM/RBAC、带不可变事件日志的会话、LLM 路由器、计量与预算、基于 `permissions.json`
   的审批流水线

@@ -3,9 +3,9 @@ id: adr-index
 title: 架构决策（ADR）
 sidebar_label: ADR 索引
 sidebar_position: 0
-description: Brabo 的 214 条架构决策记录，按主题分组，并附上每条决策的内容。
+description: Brabo 的 257 条架构决策记录，按主题分组，并附上每条决策的内容。
 keywords: [ADR, 架构决策, 架构, 历史]
-traducao_de: 4cc1b596659af65abb89f0dc4ed3ec7525de5906
+traducao_de: 9dbb82539548937b3d2f8bc0c7ecc2d1503061d6
 ---
 
 # 架构决策
@@ -45,6 +45,7 @@ git provider 的契约、仓库的创建与采纳、分支的保护与策略。
 | [0217](0217-promocao-automatica-para-qa-em-fase-de-teste.md) | 当 QA 处于测试阶段（`QA_FASE_DE_TESTE=true`）时，每次合并到 `dev` 都会在所有检查都通过后，自动开启并合并 `dev` → `qa` 的晋升；审批阶梯只豁免这一对由 bot 开启的晋升，`qa` → `main` 仍然是手动的 |
 | [0235](0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.md) | `qa` 在 Brabo 的仓库中暂时退役（AT-660）：流水线 `dev → main`，版本锚点 `-dev.N`，`qa` 归档到 `refs/archive/qa` 并附回退方案；产品的 Gitflow 不变。修订 0030，撤销 0217 的机制。 |
 | [0236](0236-o-dependabot-dispensa-revisao-na-dev.md) | 面向 `dev` 的 Dependabot PR 无需审查即可通过审批阶梯，两种模式皆然，通过作者**和**分支识别（`pr-police` 的标准）；其他检查通过后即可合并，`main` 仍保留完整阶梯（AT-668）。 |
+| [0255](0255-politica-de-pr-obrigatoria-em-todos-os-repos.md) | PR 政策在所有仓库中都是强制的（检查 `Política de branches` 和 `Escada de aprovação` 为 required，`brabo`、`brabo-qa` 和 `brabo-infra` 的 ruleset 禁止 force push），并且机器人 PR `chore/regenera-gerados` 在 `dev` 上免除阶梯。 |
 
 ## 智能体的 harness、回合与会话 {#tema-agentes}
 
@@ -102,6 +103,9 @@ git provider 的契约、仓库的创建与采纳、分支的保护与策略。
 | [0194](0194-aprovar-o-plano-ativa-a-execucao.md) | **批准** Dev Lead 的 `propose_execution_plan` 才是激活执行的动作，而接受发给 Dev Lead 的 handoff 只是让它来**规划**（AT-263，所有者 10月1日的决定，修订了 [ADR 0069](0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.md) 的合并，RN-161）。计划在 api 中获得一个执行器，它根据当前的 `module_map` 重新读取计划，写入每个任务的**模块**，并调用按钮所用的**同一个** `ActivateExecutionUseCase`，因此无仓库的 409、咨询会话的 409 和 `findActiveExecutionSession` 保持原样。任务新增 `module` 列（migration `0068`），由 Dev Lead 在计划中分配（`tarefas: [{ taskId, modulo }]`，AT-274）；没有模块或模块不在 `module_map` 中的任务会在提议时被以具名的 400 拒绝。只有该模块的 dev 能领取它；没有模块的任务只有在其故事恰好只有一个模块时才可领取 |
 | [0212](0212-historia-arquivada.md) | 一个故事可以被**归档**，这是一个列——`stories.archived_at`/`archived_reason`（migration `0069`）——而不是 `story_status` 的新值，因为状态是 claim 的闸门，而归档不是进度中的一步（AT-406，所有者 10月3日的决定"PO e usuário"）。每个做出**决定**的读取（backlog、覆盖率、晋升队列、Dev Lead 的计划、claim）都过滤 `archived_at IS NULL`，任务随故事一起退出；什么都不删除，新的不可变事件 `backlog.story_archived`/`backlog.story_updated` 记录这一点。PO 的工具和 Backlog 标签页用同一把尺子：只有 `draft` 且没有执行中的任务，其余情况为具名的 409 |
 | [0213](0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.md) | 交付物通过 Infra 的 compose 在用户的机器上运行，从不通过 broker 发布的端口（AT-517，所有者 10月11日的决定；ADR 0130 未改动）。compose 以 `FROM` = 已决定的镜像，从模块的 Dockerfile 构建应用，使用主机端口 `${APP_PORT:-8080}`，并提交一个 `.env.example`；`propose_infra_pr` 增加一个必填的 `run` payload（`command`、1–5 个 localhost `urls`、`envExample`），api 把它转换为版本化的 `artifact.run_instructions`。devs 提供 `/openapi.json` 和 `/docs`（在 `none` 网络下来自 CDN 的 Swagger），QA 在容器**内部**证明它们，概览的卡片写着"declarado pela Infra, não verificado na sua máquina"——真实的 `docker compose up` 留作已声明的缺口 |
+| [0259](0259-o-modulo-de-que-outros-dependem-tem-dono.md) | 被其他模块依赖的模块在计划中有负责人：Dev Lead 获得 `create_task` 用于基础任务，api 以 400 拒绝使其他模块的依赖没有任务的计划，claim 等待直接的 `dependsOn`。代价：并行度降低。仅就基础任务修订 [0194](0194-aprovar-o-plano-ativa-a-execucao.md) 的 RN-678。 |
+| [0261](0261-o-dev-lead-e-avisado-de-bloqueios-e-pede-ao-arquiteto.md) | Dev Lead 通过专用通道获知阻塞并向 Arquiteto 提问：`Wake` 在 `:tarefa_bloqueada` 和 `:contrato_publicado` 时唤醒它，工具 `pedir_ao_arquiteto` 写入一条 `dev-lead` 执行者的 `chat.message` 并交付给 Arquiteto。解除任务阻塞仍由人完成。补充 [0259](0259-o-modulo-de-que-outros-dependem-tem-dono.md) 并扩展 [0038](0038-hierarquia-de-agentes.md)。 |
+| [0262](0262-o-agente-retira-a-regra-de-negocio-obsoleta.md) | agent 自行撤销过时的业务规则，无需卡片，并引用替代规则（`replacedBy`）或用户的回答（`questionId`，RN-859 的标尺）。只有 Criativo 和 PO 可以撤销。事件 `artifact.business_rule_retired` 把该规则从所有做决定的读取中移除，而不触动日志；故事改为引用替代规则，若有故事会因此没有规则、或有任务正在执行，则拒绝撤销（AT-755，RN-1018，所有者 11月6日的决定）。 |
 
 ## Gates、QA 与安全审查 {#tema-gates}
 
@@ -124,6 +128,7 @@ gates 的注册表、QA 和 SecOps 的裁决，以及衡量它们的 golden-sets
 | [0207](0207-ciclo-de-gate-velho-estaciona.md) | 自最后一次活动以来停滞超过 2 小时的 gate 周期会以 `gate.rescue_parked` 事件**停放**，只有人类的动作才能恢复它；救援器向 lead 询问的是**任务**而不是项目，并且不去打扰有待处理人类决策的周期（AT-391，修订 0067）。 |
 | [0214](0214-pergunta-em-aberto-vira-pendencia.md) | 向用户提出的开放问题变成一个在日志中有状态的待办（`artifact.open_question` + `open_question.answered` + 一个 `decision_record`），只能通过 `declare_open_question` 工具声明，只能由会话的作者回答；QA 获得 `needs_user_decision` 裁决，它不消耗修正周期，并通过 ADR 0207 的机制停放 gate 直到得到回答；决策到达 dev-context 和 QA 的截取，PO 可以根据已回答的问题修正 `ready` 的故事（AT-521，扩展 0207，修订 0212 的一部分）。 |
 | [0215](0215-decisao-do-projeto-chega-ao-dev-e-ao-qa.md) | gate 裁决中的 `openQuestionId` 必须在项目中存在且处于开放状态（未知为 404，已回答为带决策的 409），`afeta.regras` 接受规则的确切标题并保存其 id，dev-context 还在同样 10 条的上限内以 `decisoesDoProjeto` 返回项目的其他决策（AT-526，修订 0214 的一部分）。 |
+| [0258](0258-a-resposta-pelo-chat-fecha-a-pergunta-em-aberto.md) | 用户通过聊天的回答会关闭开放问题：四个提问者获得 `answer_open_question`，只有在回答**明确无误**时才关闭，内部路由与人类的 `responder` 共用核心（同一个 `decision_record` + `open_question.answered`，像点击一样重新接上 gate）。扩展 [0214](0214-pergunta-em-aberto-vira-pendencia.md)。 |
 
 > **验收标准仍未关闭。** [0020](0020-destravar-gates-qa-secops.md)
 > 明确记录 gates 的演示是 **"FECHADA, mas NÃO
@@ -269,6 +274,7 @@ provider 的契约、模型目录与人工筛选、模型的 bindings、计量�
 | [0227](0227-provider-opencode-zen-de-llm.md) | **OpenCode Zen** 成为第 11 个 provider，仅使用 OpenAI 方言（`/chat/completions`）：`listModels: false`（模型路由是另一个公开的路由），凭据无连接测试，seed 只含两个零保留的免费模型（`deepseek-v4.1-flash-free`、`glm-5.3-flash-free`），capabilities 在 smoke 之前为 `false`。引用 0043 和 0222。 |
 | [0233](0233-membro-ve-o-gasto-do-projeto-sem-credencial.md) | **成员**可以查看**项目**的开销（总额以及按智能体/领域的成本，`GET /projects/:projectId/spend/team`）和自己按项目的消耗（`GET /workspaces/:workspaceId/spend/me`），绝不包含 provider 和凭据。修订 [0063](0063-duas-audiencias-para-o-mesmo-gasto.md)；owner 的报告新增 `?projectId=`（跨 workspace 为 404）和维度 `session`，策展标记 `billing` 将订阅与实际支付的美元分开。 |
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | 对不提供价格的 provider（Anthropic），使用厂商**唯一**表中的标价（RN-965），按去掉日期后缀的 ID 匹配；`manual_pricing` 仍然优先于同步，`supportsReasoning` 来自 SDK（ADR 0042 不变）。 |
+| [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | 在直连 Anthropic 时，关闭推理是**按模型**的（Haiku 5.5 `thinking: disabled`，Sonnet 5.5 `between_tools`，Opus 5.5 `effort: low`，它只能**减少**），开启的自适应推理在 `max_tokens` 上获得余量，声明 `aceitaRaciocinioDesligado`，`reasoning_tokens` 来自 `message_delta`。仅针对 Anthropic 修订 [0223](0223-orcamento-de-raciocinio-por-modelo.md) 的第 4 项。 |
 
 ## RAG、知识图谱与工件 {#tema-conhecimento}
 
@@ -346,6 +352,7 @@ chunks 和混合搜索、对它的测量、Neo4j 图谱，以及从事件日志�
 | [0169](0169-seaweedfs-no-lugar-do-minio-no-overlay-local.md) | 本地 overlay 的备份 S3 目标不再是 MinIO，而是 SeaweedFS（`docker.io/chrislusf/seaweedfs` 4.47，按**索引** digest 固定，`server -s3 -s3.port=9000`）。MinIO 停止发布社区镜像——固定的 digest 在 quay.io 上回应 401，Docker Hub 仓库回应 404——所以 bootstrap 死在 `rollout status` 上，没有任何属性证明能够运行（issue #633）。按维护者的标准依次测量：SeaweedFS 四项全部通过（官方、匿名、amd64+arm64 索引；`lib.sh` 通过 `aws-cli` 的真实流程——认证、`mb`、通过 stdin 的 30 MiB 分段上传、`head-object`、经 sha256 核对的下载、服务端复制、`list-objects-v2`、`rm`；只有服务器改变；Apache-2.0）；Garage 在第三项被淘汰（配置文件加上启动后的布局和密钥导入）；Bitnami、它冻结的旧镜像以及 Chainguard 只有 `:latest` 的 MinIO 在第一项被淘汰。资源获得一个中性的名称（`s3-local`）；客户端、备份脚本、Secret 和端口不变。已声明：digest 保证不可变性，不保证可用性；S3 兼容性是按操作的，所以 `lib.sh` 中的新操作要先针对它测量 |
 | [0170](0170-compose-de-dev-brabo-dev.md) | dev 的 compose 成为 Docker 项目 **`brabo-dev`**，dev 拒绝在一个安装旁边启动。2026-09-19 测得：dev 的 compose 和安装的 compose 都是 `name: brabo`——在同时有两者的机器上是**一个** Docker 项目，共享容器、网络和卷（`brabo_pgdata`……）；一个安装的数据库收到了 dev 的 migration，而 `reset-total.sh` 本会删除它的 schema。安装仍然是 `brabo`（重命名它会把每个现有安装与自己的卷断开）；改名的是 dev，可观测性 overlay 重复这个名称，因为最后一个 `-f` 胜出。只要存在任何容器的 `config_files` 标签指向安装的 compose（任何状态、任何 `-p` 下），或者 dev 的 compose 会解析为 `brabo`，`preflight.mjs` 和 `reset-total.sh` 就**拒绝**，并点名每个文件的容器和 `down`（不带 `-v`）；reset 的守卫在一切之前运行。dev 的旧 `brabo_*` 卷只产生**警告**——只有 dev 拥有、从两个 compose 文件推导出的键证明了它们，共享的键仍然有歧义，警告如实说明——运维手册带有复制或重新开始的步骤。声明的代价：在一台有安装的机器上开发，需要先把安装停掉 |
 | [0209](0209-engine-em-otp-29.md) | engine 在 dev、生产和 CI 中改用 Alpine 3.24.2 上的 Elixir 1.20.4 / OTP 29.1.1（AT-398）：在带 AMX 的主机上，OTP 27 在 Alpine 3.24 的 musl 1.2.6 之下启动时以 `sys_sigaltstack(): Internal error` 中止（erlang/otp#11349），只有从 OTP 29.1 起才修正；代价是重建 dev 的 `_build`/`deps` 卷。 |
+| [0256](0256-a-migracao-restaura-o-banco-num-banco-vazio.md) | 安装程序的迁移自己在一个新创建的空库中恢复 Postgres（`brabo-restore --banco-vazio`），先于 migrations；然后以卷所有者的身份恢复 git 仓库，并重新投影图谱和制品。澄清 [0152](0152-backup-de-volumes-contra-compose.md) 的决定 5（“从不覆盖”适用于有数据的库），修订 [RN-530](../business-rules/infra.md#rn-530)，并一并带来可恢复的迁移（标记中的 `restauracaoPendente`，schema 4）、沿用先前 `.env` 中加密数据的密钥，以及版本的 `linha` |
 
 ## CI、发布与供应链 {#tema-engenharia}
 
@@ -385,12 +392,13 @@ chunks 和混合搜索、对它的测量、Neo4j 图谱，以及从事件日志�
 | [0220](0220-api-traduzida-por-catalogo.md) | API 页面按目录翻译：源仍是 api 装饰器文本（pt-BR 源的例外），每个语言环境一个以文本哈希为键的目录，spec 在构建时派生且不进 git，孤立键失败、缺失只警告，Redoc 固定标签保持英文（AT-565，所有者 10/16 的决定） |
 | [0253](0253-o-site-de-docs-deixa-o-docusaurus.md) | 文档站点离开 Docusaurus，改用自有生成器，保持相同的 URL 和锚点；API 保留在 Redoc 3（界面标签为英文，遥测关闭），译文移至 `docs/i18n/`，搜索采用子串匹配。引用 [0117](0117-lockfile-proprio-para-o-website.md)、[0206](0206-referencia-da-api-numa-pagina-redoc.md)、[0216](0216-quatro-idiomas-com-pt-br-como-fonte.md) 和 [0220](0220-api-traduzida-por-catalogo.md) |
 | [0254](0254-a-doc-de-cada-area-mora-na-raiz-dela.md) | 每个领域的文档位于 `<raiz>/docs/`：站点是 URL 相同的并集树，RN 位于第一个 `caminho:N` 引用所在宿主的 `business-rules/<raiz>.md`（全局编号，锚点不变），`docs/business-rules.md` 变为生成的索引，检查带 `--raiz`，译文位于 `<raiz>/docs/i18n/` |
+| [0260](0260-doc-dos-repos-de-codigo-so-em-ingles.md) | 代码仓库的文档**只**用英语，站点在其他 locale 中提供英文原文并加横幅；`brabo` 保持多语言，API 的目录位于其中（AT-745） |
 
 ## 约定 {#a-convenção}
 
 - **每个决策一个文件**，位于 `docs/adr/NNNN-short-title.md`，使用
-  4 位顺序编号，标题为 `# ADR NNNN — <标题>`（[0218](0218-titulo-de-adr-com-prefixo.md)）。**编号不复用**，即使一份 ADR
-  被取代——下一个是 **0220**。
+  4 位顺序编号，标题为 `# ADR NNNN — <título>`（[0218](0218-titulo-de-adr-com-prefixo.md)）。**编号不复用**，即使一份 ADR
+  被取代——下一个是 **0263**。
 - **每个决策一个主题**，由编写 ADR 的人在同一个
   PR 中选择：`docs/adr/temas.yml` 中的一行，以及该主题章节下的索引行，
   按数字顺序。审阅者确认。新主题是

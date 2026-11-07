@@ -304,6 +304,8 @@ delas erradas em 2026-10-01), e a tradução está atrás da fonte em inglês
 de todo modo; conferir uma cópia que ninguém mantém em dia reprovaria
 todo PR pelo atraso da tradução.
 
+**No irmão.** Desde o [ADR 0275](../adr/0275-cada-irmao-confere-as-proprias-refs-com-simbolo.md), cada irmão confere as próprias refs com símbolo no CI, pelo reutilizável `refs-com-simbolo.yml` do `brabo-ci`, sem layout e sem o gerador (a conferência usa o mesmo núcleo, `refs-com-simbolo.ts`, com a mesma janela e o mesmo `CEGO`). Uma ref para código de outro irmão só é listada no summary: quem a confere é a subida da trava (ADR 0274), que nomeia o repo dono. Quando a ref do próprio irmão reprova, o job sobe o patch do reancoramento como artefato `refs-patch`, sem comentar na PR. O check fica fora dos obrigatórios: quem escapar cai na trava.
+
 ### Todo cabeçalho de RN carrega sua âncora {#every-rn-heading-carries-its-anchor}
 
 A âncora `{#rn-NNN}` num cabeçalho de RN é o contrato para links de
@@ -631,6 +633,12 @@ quebra com erro nomeado em vez de desenhar uma lateral errada. A Explicação é
 enumerada à mão em cinco grupos por assunto, e página nova ali ainda entra pelo
 caminho acima.
 
+As categorias da barra lateral são recolhíveis (AT-767): cada uma é um
+`<details>`/`<summary>` nativo, sem JavaScript e sem persistência. Nasce aberta
+quando `colapsada` é falso ou quando contém a página atual; do contrário nasce
+fechada (os temas de ADR e quatro dos cinco grupos da Explicação). O link de
+"Decisões (ADR)" fica fora do `<summary>`, como primeiro item da lista.
+
 ### `api-render-check.mjs` — build verde não é página que renderiza {#api-render-checkmjs--a-green-build-isnt-a-page-that-renders}
 
 Esta peça existe por causa de uma lição cara: **as 117 páginas de
@@ -699,18 +707,20 @@ O que segura o atraso é medição, não o docmap.
 lado) roda dentro do `pnpm docs:generate` e escreve dois arquivos:
 `docs/reference/paridade-de-traducao.md` (`generated: true`) e
 `docs/i18n/traducao.json`. Por locale ele conta páginas e
-caracteres traduzidos sobre a fonte (`docs/` inteiro, `reference/` incluído desde o ADR 0219, menos o próprio relatório e o `openapi.json`),
+caracteres traduzidos sobre a fonte (a `docs/` do próprio `brabo`, `reference/` incluído desde o ADR 0219, menos o próprio relatório, o `openapi.json` e `i18n/`; a doc dos irmãos fica fora, ADR 0273),
 e divide as páginas traduzidas em **em dia**, **desatualizadas** e **sem
 proveniência**. A proveniência é o `traducao_de: <SHA>` no frontmatter
 da página traduzida, o último commit da fonte que ela traduz. Uma página
 está desatualizada quando a fonte tem um commit com COMMIT DATE
 posterior a esse SHA, quando a fonte tem alterações não commitadas, ou
 quando o SHA não existe. Ele nunca usa o relógio, então o `--check` dá a
-mesma resposta antes e depois do commit que toca a fonte. Para a UI ele
-compara as chaves de cada namespace em `apps/web/src/locales/<l>/` com o
-pt-BR, e exige toda forma de plural que o `Intl.PluralRules` dá àquele
-locale. O `--check` reprova quando qualquer um dos dois arquivos está
-desatualizado.
+mesma resposta antes e depois do commit que toca a fonte. Um caminho é do
+`brabo` quando está em `HEAD` ou não consta do manifesto
+`.git/layout-irmaos.lst`; por isso um merge de doc num irmão não muda mais a
+paridade. A interface não é medida aqui: o portão de chaves e de plurais é o
+`src/lib/i18n-paridade.test.ts` do `brabo-web`, e os textos da API só avisam
+no log do `docs:generate`. O `--check` reprova quando qualquer um dos dois
+arquivos está desatualizado.
 
 A faixa é desenhada pelo `layout.mjs`. Fora do pt-BR, uma página servida do
 fallback pt-BR diz isso, e uma página traduzida que o `traducao.json` marca como
@@ -722,6 +732,20 @@ tenha página sem tradução; com todos completos não há fallback a conferir),
 enquanto a mesma página na raiz e uma página traduzida para `en` que não está
 desatualizada não têm. As regras para quem
 traduz estão em [Localização](localizacao.md).
+
+**A doc de todos os repos é em pt-BR por padrão (AT-766, ADR 0266, que
+substitui o 0260).** Os irmãos podem ter `<raiz>/docs/i18n/`, medido no repositório dono
+(a paridade do `brabo` não os conta, ADR 0273). A página de irmão que ainda está em inglês (estado misto, até a
+retradução) continua aceita: com
+`idioma_original: en` ela não entra na paridade (`ehFonteTraduzivel`), é servida
+sem faixa no `/en/` e com a faixa "esta página só existe em inglês" nos outros
+locales (`paginas.mjs` marca `somenteIngles`; `faixa-de-traducao-check.mjs`
+confere o HTML). O índice de RN de cada locale usa a tradução quando existe e
+a fonte quando não existe (`rnsDoLocale`), o bloco gerado numa fonte em inglês
+sai com os textos em inglês (`textosDaFonte`), e as frases ancoradas na prosa de
+irmão (`contagens-do-codigo.mjs`, o runbook) aceitam pt-BR ou inglês
+(`padraoEn`). Os catálogos `openapi-textos.json` moram no `brabo`, em
+`docs/i18n/<locale>/`.
 
 ### A página da API sai traduzida por catálogo (ADR 0220) {#the-api-page-is-translated-by-catalog-adr-0220}
 
@@ -1044,6 +1068,7 @@ flowchart LR
 ```
 
 - **RN nova** vai em `<raiz>/docs/business-rules/<raiz>.md`, na raiz que hospeda a primeira ref `caminho:N`. A numeração é global e a âncora `{#rn-NNN}` não muda; `docs/business-rules.md` é índice gerado e `custo.md`/`autenticacao.md` são stubs congelados.
-- **`docs:check`** soma todas as raízes e reprova RN duplicada entre elas. Com `--raiz <nome>` roda por raiz o que só depende dela (âncoras, refs internas, glob do docmap, drift) e deixa para o agregador o que cruza raízes (contagens, índice de RN, paridade, links entre idiomas).
+- **Os irmãos entram pela trava.** `irmaos.lock` (um SHA por irmão) é o que o `montar-layout.sh` usa no `docs-check`, no `docs-audit` e no degrau `dev` do deploy; `BRABO_REF` vence a trava (o degrau `main` usa `BRABO_REF=main`). Só o `regenera-gerados.yml` sobe a trava, junto com os gerados (ADR 0274). Assim, `scripts.md`, o índice de RN, as contagens e as refs com símbolo só mudam na subida, e a PR comum não fica vermelha por merge num irmão.
+- **`docs:check`** soma todas as raízes e reprova RN duplicada entre elas. Com `--raiz <nome>` roda por raiz o que só depende dela (âncoras, refs internas, glob do docmap, drift) e deixa para o agregador o que cruza raízes (contagens, índice de RN, paridade, links entre idiomas). *Hoje o `--raiz` só restringe as refs com símbolo; os demais geradores rodam inteiros. Por isso o irmão não o usa: as refs dele são conferidas no próprio CI (ADR 0275).*
 - **Traduções** ficam em `<raiz>/docs/i18n/<locale>/`, com um só `traducao.json`. Mover arquivos exige dois commits: a mudança e depois o recarimbo de `traducao_de`.
 - **Preço:** link entre raízes dá 404 na visualização do GitHub; no site funciona.

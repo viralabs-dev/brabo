@@ -52,6 +52,18 @@ export function naForma(n, forma) {
   return forma === 'pt_f' ? (FEMININO[pt] ?? pt) : pt;
 }
 
+/**
+ * Casa a frase ancorada na prosa de um repo irmão, que pode estar em pt-BR ou em
+ * inglês (AT-745, ADR 0260): tenta `padrao` (na `forma` da entrada) e, se não casar,
+ * `padraoEn` (sempre na forma `en`). Devolve `{achado, esperado}` ou `null` (CEGO).
+ */
+export function casarFrase(texto, { padrao, padraoEn, forma }, valor) {
+  const pt = padrao.exec(texto);
+  if (pt !== null) return { achado: pt[1], esperado: naForma(valor, forma) };
+  const en = padraoEn?.exec(texto);
+  return en ? { achado: en[1], esperado: naForma(valor, 'en') } : null;
+}
+
 // ------------------------------------------------------------------ extratores
 //
 // Cada um recebe o CONTEXTO (`ler`, `listar`, `rodarNode`, `externas`) e
@@ -153,10 +165,10 @@ export const FONTES = {
  */
 export const HOSPEDEIRO_RN = 'docs/business-rules.md';
 
-function hospedeiroDe(ctx, padrao) {
+function hospedeiroDe(ctx, padrao, padraoEn) {
   const achado = (ctx.arquivosDeRn?.() ?? arquivosDeRn(ctx.listar))
     .filter((a) => !a.includes('/i18n/'))
-    .find((a) => padrao.test(ctx.ler(a)));
+    .find((a) => padrao.test(ctx.ler(a)) || padraoEn?.test(ctx.ler(a)));
   return achado ?? HOSPEDEIRO_RN;
 }
 
@@ -171,14 +183,14 @@ export const AFERICOES = [
 
   // imagens que o produto publica / que o smoke confere
   // RN-524 e RN-527 (AT-192): ficaram em "quatro" depois do ADR 0162
-  { arquivo: HOSPEDEIRO_RN, padrao: /- as \*\*(\S+) imagens\*\* são assinadas \*\*por DIGEST\*\*/, fonte: 'imagensPublicadas', forma: 'pt_f' },
-  { arquivo: HOSPEDEIRO_RN, padrao: /- as (\S+) imagens vêm de \*\*variável obrigatória\*\*/, fonte: 'imagensPublicadas', forma: 'pt_f' },
+  { arquivo: HOSPEDEIRO_RN, padrao: /- as \*\*(\S+) imagens\*\* são assinadas \*\*por DIGEST\*\*/, padraoEn: /- the \*\*(\S+) images\*\* are signed \*\*by DIGEST\*\*/, fonte: 'imagensPublicadas', forma: 'pt_f' },
+  { arquivo: HOSPEDEIRO_RN, padrao: /- as (\S+) imagens vêm de \*\*variável obrigatória\*\*/, padraoEn: /- the (\S+) images come from a \*\*required variable\*\*/, fonte: 'imagensPublicadas', forma: 'pt_f' },
 
   // contrato de git
   { arquivo: 'README.md', padrao: /o contrato de (\S+) operações e as capabilities/, fonte: 'operacoesDoGit', forma: 'pt_f' },
   { arquivo: 'CONTRIBUTING.md', padrao: /implementar as (\S+) operações, declarar/, fonte: 'operacoesDoGit', forma: 'pt_f' },
-  { arquivo: 'apps/api/docs/reference/git-providers.md', padrao: /O contrato tem \*\*(\S+) operações\*\* —/, fonte: 'operacoesDoGit', forma: 'pt_f' },
-  { arquivo: 'apps/api/docs/reference/git-providers.md', padrao: /implementar todas as\s+(\S+) operações, declarando/, fonte: 'operacoesDoGit', forma: 'pt_f' },
+  { arquivo: 'apps/api/docs/reference/git-providers.md', padrao: /O contrato tem \*\*(\S+) operações\*\* —/, padraoEn: /The contract has \*\*(\S+) operations\*\* —/, fonte: 'operacoesDoGit', forma: 'pt_f' },
+  { arquivo: 'apps/api/docs/reference/git-providers.md', padrao: /implementar todas as\s+(\S+) operações, declarando/, padraoEn: /implement all\s+(\S+) operations, declaring/, fonte: 'operacoesDoGit', forma: 'pt_f' },
   { arquivo: 'docs/architecture.md', padrao: /`GitProviderContract` — (\S+) operações, \*\*tipos/, fonte: 'operacoesDoGit', forma: 'pt_f' },
 
   // porta de Docker
@@ -192,7 +204,7 @@ export const AFERICOES = [
 
   // artefatos e providers
   { arquivo: 'README.md', padrao: /os (\S+) schemas e quem pode emitir/, fonte: 'schemasDeArtefato', forma: 'pt_m' },
-  { arquivo: 'apps/api/docs/reference/artifacts.md', padrao: /^description: Os (\S+) schemas de artefato/m, fonte: 'schemasDeArtefato', forma: 'pt_m' },
+  { arquivo: 'apps/api/docs/reference/artifacts.md', padrao: /^description: Os (\S+) schemas de artefato/m, padraoEn: /^description: The (\S+) artifact schemas/m, fonte: 'schemasDeArtefato', forma: 'pt_m' },
 ];
 
 /**
@@ -217,7 +229,7 @@ export function aferirContagens(ctx, afericoes = AFERICOES, fontes = FONTES) {
     return cache.get(nome);
   };
 
-  return afericoes.map(({ arquivo: arquivoDeclarado, padrao, fonte, forma }) => {
+  return afericoes.map(({ arquivo: arquivoDeclarado, padrao, padraoEn, fonte, forma }) => {
     let arquivo = arquivoDeclarado;
     const descricao = fontes[fonte]?.descricao ?? fonte;
     const valor = contar(fonte);
@@ -226,18 +238,18 @@ export function aferirContagens(ctx, afericoes = AFERICOES, fontes = FONTES) {
     }
     let texto;
     try {
-      if (arquivo === HOSPEDEIRO_RN) arquivo = hospedeiroDe(ctx, padrao);
+      if (arquivo === HOSPEDEIRO_RN) arquivo = hospedeiroDe(ctx, padrao, padraoEn);
       texto = ctx.ler(arquivo);
     } catch {
       return { arquivo, estado: 'CEGO', motivo: 'o arquivo não existe' };
     }
-    const achado = padrao.exec(texto);
-    if (achado === null) {
+    const casou = casarFrase(texto, { padrao, padraoEn, forma }, valor);
+    if (casou === null) {
       return { arquivo, estado: 'CEGO', motivo: `não achei a frase (${padrao})` };
     }
-    const esperado = naForma(valor, forma);
-    if (achado[1].toLowerCase() !== esperado.toLowerCase()) {
-      return { arquivo, estado: 'DESATUAL', diz: achado[1], esperado, descricao };
+    const { achado, esperado } = casou;
+    if (achado.toLowerCase() !== esperado.toLowerCase()) {
+      return { arquivo, estado: 'DESATUAL', diz: achado, esperado, descricao };
     }
     return { arquivo, estado: 'ok', esperado, descricao };
   });

@@ -1,5 +1,5 @@
 ---
-traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
+traducao_de: 30ccc6978b8dbd50cc8a2f195d60a9bb3c0a71a6
 ---
 
 # Модель команды и поток результатов {#team-model-and-deliverable-flow}
