@@ -63,8 +63,7 @@ para a primeira tag.
 | `imagens.<alvo>` | repositório, tag e imagem de cada componente de imagem; o `imagem.json` precisa bater |
 | `runner` | repositório e tag do `brabo-runner`; o `install.sh` baixa o binário dali (`RUNNER_TAG`, conferido por `scripts/dev/install-runner-release.spec.ts`) |
 
-Subir um componente é editar a tag aqui, num PR, e o produto sai com ela na próxima tag.
-**A pin não anda sozinha:** se um componente carimba tag nova e o `componentes.json` não é subido, o produto sai com a imagem antiga (AT-793: broker v1.0.0 com CVE já corrigido no v1.2.0). Confira as tags contra as Releases atuais antes de promover para a `main`. Cinco de
+Subir um componente é editar a tag aqui, num PR, e o produto sai com ela na próxima tag. Cinco de
 cinco imagens ou nenhuma: Release de produto com componente sem `imagem.json` é recusada.
 
 ## Decisões que ainda não estão tomadas {#open}
