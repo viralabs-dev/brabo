@@ -591,6 +591,10 @@ O ruleset `main e dev sem force push` não muda. O check nasce "em andamento" no
 
 O check `Regressivo do brabo-qa` (PR para a `dev`, ADR 0268, AT-769) **não é exigido**, por decisão do dono (06/11/2026): nenhum ruleset o cita, e vermelho dele não bloqueia o merge. Ele só atesta que a funcionalidade tocada não foi afetada. O nome é distinto de `E2E do brabo-qa` de propósito, para um ruleset futuro que inclua a `dev` por engano não o exigir. Em PR para a `main`, quem vale é o `E2E do brabo-qa`, que roda o catálogo inteiro de funcionalidades; funcionalidade sem spec aparece como "sem cobertura" e não reprova (RN-1034).
 
+### Check previsto: `Dependências de merge` (ADR 0276, AT-787)
+
+O check `Dependências de merge` é publicado pelo App `viralabs-dev-brabo` no head da PR, com a linha `Depende-de: viralabs-dev/<repo>#<n>` do corpo (RN-1047 a RN-1050). **Ainda não é exigido.** Por decisão do dono (07/11/2026), ele entra como **obrigatório em `dev` e `main`** depois das provas P1 a P6 da AT-787 e com o App já com `checks: write`. Ligá-lo antes trava toda PR sem o check (App sem permissão, PR de fork). Quando for ligado, o nome é o do check-run, `Dependências de merge`, e a ligação entra aqui e no ruleset de `dev` e de `main` no mesmo passo.
+
 ## Como aplicar
 
 Interface: **Settings → Rules → Rulesets → New ruleset**.
