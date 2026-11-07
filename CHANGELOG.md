@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **release**: o `componentes.json` volta a apontar para as releases atuais (api v2.1.0, engine v2.1.0, web v1.2.0, broker v1.2.0, backup e `infra` v1.3.0). A pin ficou em v1.0.x e o Trivy do `Release` reprovava o broker v1.0.0 (docker-cli 29.9.2: CVE-2026-116587 e CVE-2026-116591, corrigidos em 29.9.3); os cinco digests atuais passam no Trivy com as flags do workflow, sem allowlist (AT-793).
+
 - **docs**: ADR 0267 e `rulesets.md` alinhados ao que foi ativado em 07/11/2026: o ruleset `main exige E2E` tem bypass só para o App (decisão do dono na AT-765), e não "sem bypass".
 
 - **docs**: ADR 0276 (AT-787): a PR declara a dependência de merge com `Depende-de: viralabs-dev/<repo>#<n>`, e o check `Dependências de merge` do App fica amarelo até a PR citada ser mergeada, com re-check no merge da dependência e cron horário no `brabo-ci`; exigido em `dev` e `main` só depois das provas (RN-1047 a RN-1050). `rulesets.md` registra a ligação prevista, e o CONTRIBUTING diz como declarar.
