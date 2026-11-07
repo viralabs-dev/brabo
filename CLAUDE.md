@@ -150,6 +150,8 @@ O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mj
   entre duas ocorrências segue relida pelo símbolo, à mão, nunca por um número
   antigo. NÃO alargue a janela
   para o vermelho sumir, nem estreite o padrão para esconder ref real.
+  Desde o ADR 0275 cada irmão confere as próprias refs com símbolo no CI (`refs-com-simbolo.yml`
+  do `brabo-ci`); a ref entre irmãos só é listada, e a trava (ADR 0274) segue o portão.
 - O runbook termina com a tabela `procedure | anchor | verification |
   schedule` dos procedimentos de OPERAÇÃO (AT-193, EP-015), e o `docs:check` a
   confere em `block` (`scripts/docs/procedimentos-do-runbook.mjs`, provado por
