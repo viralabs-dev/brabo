@@ -142,8 +142,8 @@ no `brabo-infra`: `bash scripts/dev/bootstrap.sh`. Os detalhes estão no README
 dele.
 
 Este repositório guarda a documentação, o instalador e a release. Para mexer
-na doc: `pnpm install`, `bash scripts/docs/montar-layout.sh` (traz a doc dos
-irmãos), `pnpm docs:check` e `pnpm docs:build`.
+na doc: `pnpm install`, `bash scripts/docs/montar-layout.sh` (traz os
+irmãos pelo SHA de `irmaos.lock`; `BRABO_REF=dev` traz a `dev` de agora), `pnpm docs:check` e `pnpm docs:build`.
 
 ## Repositórios do Brabo
 

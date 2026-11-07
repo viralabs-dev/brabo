@@ -23,12 +23,26 @@ const commit = (repo: string) => {
   git(d, 'add', '-A');
   git(d, 'commit', '-q', '--allow-empty', '-m', 'x');
 };
-const montar = () =>
-  execFileSync('bash', [join(brabo, 'scripts/docs/montar-layout.sh')], {
-    cwd: brabo,
-    env: { ...process.env, BRABO_IRMAOS: irmaos, BRABO_REF: 'dev' },
-    encoding: 'utf8',
-  });
+const montar = (env: Record<string, string> = { BRABO_REF: 'dev' }) => {
+  const e = { ...process.env, BRABO_IRMAOS: irmaos, ...env };
+  if (!('BRABO_REF' in env)) delete e.BRABO_REF;
+  return execFileSync('bash', [join(brabo, 'scripts/docs/montar-layout.sh')], { cwd: brabo, env: e, encoding: 'utf8', stdio: 'pipe' });
+};
+const head = (repo: string) => git(join(irmaos, `brabo-${repo}`), 'rev-parse', 'HEAD').trim();
+// commitada, como no repo real: o que está no índice e fora de HEAD o script trata como dos irmãos
+const trava = (mexe: (linhas: string[]) => string[] = (l) => l) => {
+  writeFileSync(join(brabo, 'irmaos.lock'), mexe(REPOS.map((r) => `brabo-${r} ${head(r)}`)).join('\n') + '\n');
+  git(brabo, 'add', 'irmaos.lock');
+  git(brabo, 'commit', '-q', '--allow-empty', '-m', 'trava', '--', 'irmaos.lock');
+};
+const falha = (env?: Record<string, string>) => {
+  try {
+    montar(env);
+  } catch (e) {
+    return String((e as { stdout?: string }).stdout) + String((e as { stderr?: string }).stderr);
+  }
+  return null;
+};
 
 beforeAll(() => {
   raiz = mkdtempSync(join(tmpdir(), 'layout-'));
@@ -71,5 +85,52 @@ describe('montar-layout.sh', () => {
     commit('web');
     montar();
     expect(readFileSync(join(brabo, 'apps/web/web.txt'), 'utf8')).toBe('novo');
+  });
+
+  describe('trava irmaos.lock (AT-780)', () => {
+    it('sem BRABO_REF, usa o SHA da trava e não a ponta da dev', () => {
+      writeFileSync(join(irmaos, 'brabo-web', 'web.txt'), 'travado');
+      commit('web');
+      trava();
+      writeFileSync(join(irmaos, 'brabo-web', 'web.txt'), 'depois da trava');
+      commit('web');
+      const saida = montar({});
+      expect(readFileSync(join(brabo, 'apps/web/web.txt'), 'utf8')).toBe('travado');
+      expect(saida).toContain(`brabo-web@${git(join(irmaos, 'brabo-web'), 'rev-parse', 'HEAD~1').trim().slice(0, 12)} (trava)`);
+    });
+
+    it('BRABO_REF explícito vence a trava', () => {
+      montar({ BRABO_REF: 'dev' });
+      expect(readFileSync(join(brabo, 'apps/web/web.txt'), 'utf8')).toBe('depois da trava');
+    });
+
+    it('grava repo@sha40 de cada irmão para o Vínculos (A3), na trava e no BRABO_REF', () => {
+      for (const env of [{}, { BRABO_REF: 'dev' }]) {
+        montar(env);
+        const l = readFileSync(join(brabo, '.git/irmaos-sha.lst'), 'utf8').trim().split('\n');
+        expect(l).toHaveLength(REPOS.length);
+        expect(l).toContain(`viralabs-dev/brabo-api@${head('api')}`);
+      }
+    });
+
+    it('repo faltando na trava reprova', () => {
+      trava((l) => l.filter((x) => !x.startsWith('brabo-qa ')));
+      expect(falha({})).toContain("'brabo-qa' sem SHA");
+    });
+
+    it('SHA inválido, ausente no clone ou repo desconhecido reprova', () => {
+      trava((l) => l.map((x) => (x.startsWith('brabo-ci ') ? 'brabo-ci zzz' : x)));
+      expect(falha({})).toContain("'brabo-ci' sem SHA");
+      trava((l) => l.map((x) => (x.startsWith('brabo-ci ') ? `brabo-ci ${'a'.repeat(40)}` : x)));
+      expect(falha({})).toContain('ausente');
+      trava((l) => [...l, `brabo-fantasma ${'a'.repeat(40)}`]);
+      expect(falha({})).toContain('brabo-fantasma');
+    });
+
+    it('sem trava e sem BRABO_REF reprova', () => {
+      git(brabo, 'rm', '-q', '-f', 'irmaos.lock');
+      git(brabo, 'commit', '-q', '-m', 'sem trava', '--', 'irmaos.lock');
+      expect(falha({})).toContain('irmaos.lock');
+    });
   });
 });

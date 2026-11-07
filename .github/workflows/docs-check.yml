@@ -85,7 +85,7 @@ jobs:
 
       # Glob que não casa com nada é regra morta: nunca dispara e finge
       # cobertura. Falha rápido, antes de qualquer coisa cara.
-      - name: Reconstruir o layout dos irmãos (dev)
+      - name: Reconstruir o layout dos irmãos (trava)
         run: bash scripts/docs/montar-layout.sh
 
       # Os specs dos geradores e do instalador (precisam do layout acima).
