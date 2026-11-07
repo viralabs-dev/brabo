@@ -58,11 +58,11 @@ O idioma das RESPOSTAS dos agentes é outra preferência, com mecanismo próprio
   inglesa com a faixa "esta página só existe em inglês". Se o irmão ainda tem a
   tradução do locale, ela vale nele (estado misto, página a página).
 - **Na interface**, o texto não falta: a paridade de chaves e de plurais é
-  medida, e o `fallbackLng` é o pt-BR.
+  medida no `brabo-web` (não neste relatório, ADR 0273), e o `fallbackLng` é o pt-BR.
 
 Toda página traduzida leva no frontmatter `traducao_de: <SHA>` — o último
 commit da fonte que ela traduz. É ele que separa "em dia" de "defasada". A
-medição de hoje está em [Paridade de tradução](../reference/paridade-de-traducao.md),
+medição de hoje, só da doc do `brabo` (ADR 0273), está em [Paridade de tradução](../reference/paridade-de-traducao.md),
 gerada por `pnpm docs:generate`.
 
 Os rótulos da lateral de Referência e da barra de cima vêm de `scripts/docs/site/navegacao.mjs` e do `current.json` de cada idioma em `docs/i18n/<locale>/`; desde o ADR 0219 o conteúdo das páginas de `reference/` também é traduzido, inclusive o bloco gerado, e só a página de paridade fica fora.

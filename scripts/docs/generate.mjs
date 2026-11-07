@@ -1208,8 +1208,8 @@ function verificarVersaoAnunciada() {
 // AT-550 (ADR 0216 itens 6–7): a paridade de tradução é MEDIDA e gerada; o
 // JSON alimenta a faixa de `website/src/theme/DocItem/Content`.
 function gerarParidadeDeTraducao() {
-  const { docs, ui, api } = medirDoRepositorio(RAIZ);
-  escrever('docs/reference/paridade-de-traducao.md', relatorioDeParidade(docs, ui, AVISO, api) + '\n');
+  const { docs } = medirDoRepositorio(RAIZ);
+  escrever('docs/reference/paridade-de-traducao.md', relatorioDeParidade(docs, AVISO) + '\n');
   escrever('docs/i18n/traducao.json', dadosDaFaixa(docs));
 }
 

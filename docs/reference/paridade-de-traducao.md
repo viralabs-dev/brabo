@@ -7,15 +7,15 @@ title: Paridade de tradução
 
 # Paridade de tradução
 
-A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 0219); só esta página fica fora. Uma tradução está **em dia** quando o `traducao_de:` do frontmatter é um commit tão ou mais novo que o último commit da fonte, e **defasada** quando a fonte mudou depois. Sem o campo, ela conta como **sem procedência**. As regras estão em [Localização](../explanation/localizacao.md).
+A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/reference/**` (ADR 0219); só esta página fica fora. A doc dos repositórios irmãos e as traduções em `i18n/` não contam como fonte. A interface é medida no `brabo-web` e o catálogo da API só avisa no log do `docs:generate`. Uma tradução está **em dia** quando o `traducao_de:` do frontmatter é um commit tão ou mais novo que o último commit da fonte, e **defasada** quando a fonte mudou depois. Sem o campo, ela conta como **sem procedência**. As regras estão em [Localização](../explanation/localizacao.md).
 
 ## Documentação
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 306 de 1249 (24.5%) | 23.1% de 16.330.519 | 296 | 9 | 1 | 943 | 0 |
-| `ru` | 306 de 1249 (24.5%) | 23.1% de 16.330.519 | 296 | 9 | 1 | 943 | 0 |
-| `zh-Hans` | 306 de 1249 (24.5%) | 23.1% de 16.330.519 | 296 | 9 | 1 | 943 | 0 |
+| `en` | 306 de 313 (97.8%) | 99.4% de 3.789.194 | 296 | 9 | 1 | 7 | 0 |
+| `ru` | 306 de 313 (97.8%) | 99.4% de 3.789.194 | 296 | 9 | 1 | 7 | 0 |
+| `zh-Hans` | 306 de 313 (97.8%) | 99.4% de 3.789.194 | 296 | 9 | 1 | 7 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -54,25 +54,4 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 - `intro.md` (tradução de 2026-11-04)
 - `reference/events.md` (tradução de 2026-11-06)
 - `reference/rulesets.md` (tradução de 2026-11-06)
-
-## Interface
-
-Chaves de `apps/web/src/locales/<locale>/` contra o pt-BR. Chave plural conta uma vez por forma de `Intl.PluralRules` do locale.
-
-| locale | formas de plural | chaves presentes | plurais incompletos |
-|---|---|---|---|
-| `en` | one, other | 2698 de 2698 (100.0%) | 0 |
-| `ru` | one, few, many, other | 2950 de 2950 (100.0%) | 0 |
-| `zh-Hans` | other | 2572 de 2572 (100.0%) | 0 |
-
-## API (Redoc)
-
-Textos distintos da referência da API (`/reference/api/`) contra o catálogo `docs/i18n/<locale>/openapi-textos.json` (ADR 0220). A fonte é o texto dos decorators da api, quase todo em inglês: `pt-BR`, `ru` e `zh-Hans` traduzem todos, e `en` só os que estão em pt-BR (diacrítico do português ou palavra funcional como "não", "para", "que"). Não soma aos caracteres das páginas.
-
-| locale | textos traduzidos |
-|---|---|
-| `pt-BR` | 1324 de 1455 (91.0%) |
-| `en` | 1 de 1 (100.0%) |
-| `ru` | 1324 de 1455 (91.0%) |
-| `zh-Hans` | 1324 de 1455 (91.0%) |
 
