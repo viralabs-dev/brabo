@@ -3,7 +3,7 @@
 - **Status:** aceito
 - **Data:** 2026-11-07
 - **Tema:** `docs`
-- **Referencia:** revisa a consequência "o `docs-check` compara com a `dev` dos irmãos" do `montar-layout.sh` (AT-726) e complementa o ADR [0273](0273-a-paridade-de-traducao-mede-so-a-doc-do-brabo.md). Usa a dispensa da escada do ADR [0255](0255-politica-de-pr-required-nos-11-repositorios.md). AT-780, Rodada 233.
+- **Referencia:** revisa a consequência "o `docs-check` compara com a `dev` dos irmãos" do `montar-layout.sh` (AT-726) e complementa o ADR [0273](0273-a-paridade-de-traducao-mede-so-a-doc-do-brabo.md). Usa a dispensa da escada do ADR [0255](0255-politica-de-pr-obrigatoria-em-todos-os-repos.md). AT-780, Rodada 233.
 
 ## Contexto
 
@@ -27,4 +27,4 @@ O `montar-layout.sh` clonava a ponta da `dev` de cada irmão na hora do run. A m
 
 ## Referências
 
-- [0255](0255-politica-de-pr-required-nos-11-repositorios.md), [0273](0273-a-paridade-de-traducao-mede-so-a-doc-do-brabo.md).
+- [0255](0255-politica-de-pr-obrigatoria-em-todos-os-repos.md), [0273](0273-a-paridade-de-traducao-mede-so-a-doc-do-brabo.md).
