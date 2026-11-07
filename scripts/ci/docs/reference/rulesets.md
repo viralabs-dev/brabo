@@ -71,7 +71,7 @@ não sabe que a `main` exige PO + gestão e a `dev` exige um dev, nem que no mod
 `solo` a PR do próprio dono passa sem revisão. Pôr `1` aqui **quebraria** o
 modo solo: o dono não consegue aprovar a própria PR pela interface, e a PR
 ficaria presa para sempre. A exigência real mora no `approval-ladder`, que é
-check obrigatório — e check obrigatório não se burla.
+check obrigatório — e check obrigatório não se burla (a única exceção é o aceite do `E2E do brabo-qa`, ver o Ruleset 3).
 
 ### As duas configurações, lado a lado
 
@@ -555,7 +555,7 @@ final. Só o `tag-release` pode criá-las.
 > `macos-15-intel`, é agendado em segundos e constrói, mas reprova o
 > `--self-test-pty` sob o Bun (o `onData` do `node-pty` nunca dispara —
 > oven-sh/bun#25822, aberto). A mesma prova passa sob o Node, então um Mac
-> Intel instala o runner com `npm install -g @brabo/runner`. Uma execução do
+> Intel fica sem runner (o npm saiu na AT-774). Uma execução do
 > workflow com a entrada `tag` vazia é um ensaio: constrói e faz o smoke sem
 > anexar nada, e foi assim que isso foi medido sem cortar uma tag.
 
@@ -570,6 +570,23 @@ workflow, nunca à mão**. Uma tag criada à mão não passa pela verificação 
 que a tag final aponta para o mesmo commit do último `-qa.N`, e é exatamente
 essa verificação que impede publicar algo diferente do que foi validado.
 
+## Ruleset 3 — main exige E2E
+
+**Nome:** `main exige E2E` (ADR 0267, AT-765)
+
+Vale em `brabo-api`, `brabo-engine`, `brabo-web`, `brabo-broker`, `brabo-infra` e `brabo-qa`. O `brabo-contracts` fica de fora.
+
+| campo | valor |
+|---|---|
+| alvo | só `refs/heads/main` |
+| regra | `required_status_checks` com o contexto `E2E do brabo-qa` |
+| `integration_id` | o do App `viralabs-dev-brabo`: um check de mesmo nome vindo de outro token não conta |
+| bypass | nenhum |
+
+O ruleset `main e dev sem force push` não muda. O check nasce "em andamento" no head da PR e o `brabo-qa` o fecha depois de rodar as imagens por digest.
+
+**A exceção ao "não se burla".** O dono pode aceitar um vermelho com o comentário `/qa-aceitar <justificativa>` (mínimo de 20 caracteres, só do `OWNER_HANDLE`, só com o check do head atual vermelho por `spec` ou `ambiente`). O check vira `success` com o título `Aceito com justificativa` e entra a label `qa-aceito-com-justificativa`. Vermelho de `digest` ou de `assinatura` nunca é aceito. Um commit novo gera check novo, sem herdar o aceite. Um check em andamento há mais de 90 min é fechado como vermelho pela varredura horária.
+
 ## Como aplicar
 
 Interface: **Settings → Rules → Rulesets → New ruleset**.
@@ -579,6 +596,28 @@ Pela API, se preferir versionar o comando:
 ```bash
 gh api -X POST repos/daneiel/brabo/rulesets --input ruleset-permanentes.json
 gh api repos/daneiel/brabo/rulesets --jq '.[] | "\(.name): \(.enforcement)"'
+```
+
+O Ruleset 3, em cada um dos seis repositórios (`<repo>`), com o id do App
+`viralabs-dev-brabo` em `<id do App>`:
+
+```bash
+gh api -X POST repos/viralabs-dev/<repo>/rulesets --input - <<'JSON'
+{
+  "name": "main exige E2E",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": { "ref_name": { "include": ["refs/heads/main"], "exclude": [] } },
+  "bypass_actors": [],
+  "rules": [{
+    "type": "required_status_checks",
+    "parameters": {
+      "strict_required_status_checks_policy": false,
+      "required_status_checks": [{ "context": "E2E do brabo-qa", "integration_id": <id do App> }]
+    }
+  }]
+}
+JSON
 ```
 
 > **TODO(humano):** os dois arquivos `.json` de payload não são versionados

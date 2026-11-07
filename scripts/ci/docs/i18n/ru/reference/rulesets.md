@@ -1,5 +1,5 @@
 ---
-traducao_de: a766a77602f64b8f373dcf2fcd64c6af12aebc25
+traducao_de: c165be09458a5dfdc42010867a29adf8a36ccd99
 id: rulesets
 title: Rulesets репозитория
 sidebar_position: 8
@@ -554,7 +554,7 @@ gh workflow run release.yml -f tag=v1.1.0
 > `macos-15-intel`, планируется за секунды и собирает, но проваливает
 > `--self-test-pty` под Bun (`onData` из `node-pty` никогда не срабатывает —
 > oven-sh/bun#25822, открыт). То же доказательство проходит под Node, поэтому
-> Mac Intel устанавливает runner через `npm install -g @brabo/runner`. Запуск
+> Mac Intel остаётся без runner (npm убран в AT-774). Запуск
 > workflow с пустым входом `tag` — это репетиция: собирает и делает smoke,
 > ничего не прикрепляя, и именно так это было измерено без создания тега.
 

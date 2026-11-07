@@ -633,6 +633,17 @@ depois do merge, ele confirma que o commit tem **dois pais**. Isso não
 depende de permissão nenhuma, e olha para o fato consumado em vez da
 intenção declarada.
 
+### O E2E do brabo-qa na promoção e no hotfix
+
+Nos seis repositórios com gatilho (`brabo-api`, `brabo-engine`, `brabo-web`, `brabo-broker`, `brabo-infra` e `brabo-qa`), toda PR com destino `main` cria o check `E2E do brabo-qa` (ADR 0267), exigido pelo ruleset "main exige E2E".
+
+- **Promoção `dev → main` em api, engine, web e broker:** o E2E usa a imagem `vX.Y.Z-dev.N` que aponta para o head da PR, a `-dev` mais nova dos outros e a `-dev` mais nova do `brabo-infra` como compose. Se nenhuma tag `-dev` aponta para o head (por exemplo, um merge commit ainda sem carimbo), o check fica vermelho por `ambiente`, com mensagem clara, e não usa a `-dev` de outro commit. Tag ainda sendo publicada é esperada por até 30 min (consulta a cada 30 s).
+- **Promoção no `brabo-infra`:** o compose vem do head da PR e as imagens são a `-dev` mais nova de cada serviço.
+- **Promoção no `brabo-qa`:** tudo vem da `-dev` mais nova (imagens e compose do `brabo-infra`), e as specs são as do head da PR.
+- **Hotfix `hotfix/*` em api, engine, web e broker:** o `ci.yml` publica `sha-<12 caracteres do head>` e o E2E a usa, com a última tag final dos demais e do `brabo-infra`.
+- **Hotfix `hotfix/*` no `brabo-infra`:** as imagens são a última tag final de cada serviço e o compose vem do head.
+- **Aceite:** o dono pode aceitar um vermelho de `spec` ou `ambiente` com `/qa-aceitar <justificativa>`; digest divergente e assinatura inválida nunca são aceitos.
+
 ## Versionamento {#versioning}
 
 > **Leitura depois do ADR 0235 (02/11/2026):** as seções de versionamento, âncora, retropropagação e portão abaixo ainda contam a esteira de três degraus. Onde citam `qa` como degrau intermediário, vale hoje: a promoção é `dev → main`, a âncora da tag final é a `-dev.N` do pai do merge, e a retropropagação de um hotfix é só `main → dev`. Os exemplos com `-qa.N` são históricos.
