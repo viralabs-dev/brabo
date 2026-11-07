@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 306 de 312 (98.1%) | 99.5% de 3.781.110 | 298 | 7 | 1 | 6 | 0 |
-| `ru` | 306 de 312 (98.1%) | 99.5% de 3.781.110 | 298 | 7 | 1 | 6 | 0 |
-| `zh-Hans` | 306 de 312 (98.1%) | 99.5% de 3.781.110 | 298 | 7 | 1 | 6 | 0 |
+| `en` | 306 de 313 (97.8%) | 99.4% de 3.789.194 | 296 | 9 | 1 | 7 | 0 |
+| `ru` | 306 de 313 (97.8%) | 99.4% de 3.789.194 | 296 | 9 | 1 | 7 | 0 |
+| `zh-Hans` | 306 de 313 (97.8%) | 99.4% de 3.789.194 | 296 | 9 | 1 | 7 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -24,28 +24,34 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
+- `explanation/branching-policy.md` (tradução de 2026-11-06)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `intro.md` (tradução de 2026-11-04)
 - `reference/events.md` (tradução de 2026-11-06)
+- `reference/rulesets.md` (tradução de 2026-11-06)
 
 ### Defasadas em `ru`
 
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
+- `explanation/branching-policy.md` (tradução de 2026-11-06)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `intro.md` (tradução de 2026-11-04)
 - `reference/events.md` (tradução de 2026-11-06)
+- `reference/rulesets.md` (tradução de 2026-11-06)
 
 ### Defasadas em `zh-Hans`
 
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
+- `explanation/branching-policy.md` (tradução de 2026-11-06)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `intro.md` (tradução de 2026-11-04)
 - `reference/events.md` (tradução de 2026-11-06)
+- `reference/rulesets.md` (tradução de 2026-11-06)
 
