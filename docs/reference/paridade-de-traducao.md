@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` (ADR 0216), inclusive `docs/reference/**` (ADR 021
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 306 de 1246 (24.6%) | 23.1% de 16.306.132 | 298 | 7 | 1 | 940 | 0 |
-| `ru` | 306 de 1246 (24.6%) | 23.1% de 16.306.132 | 298 | 7 | 1 | 940 | 0 |
-| `zh-Hans` | 306 de 1246 (24.6%) | 23.1% de 16.306.132 | 298 | 7 | 1 | 940 | 0 |
+| `en` | 306 de 1248 (24.5%) | 23.0% de 16.321.531 | 298 | 7 | 1 | 942 | 0 |
+| `ru` | 306 de 1248 (24.5%) | 23.0% de 16.321.531 | 298 | 7 | 1 | 942 | 0 |
+| `zh-Hans` | 306 de 1248 (24.5%) | 23.0% de 16.321.531 | 298 | 7 | 1 | 942 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -55,9 +55,9 @@ Chaves de `apps/web/src/locales/<locale>/` contra o pt-BR. Chave plural conta um
 
 | locale | formas de plural | chaves presentes | plurais incompletos |
 |---|---|---|---|
-| `en` | one, other | 2694 de 2694 (100.0%) | 0 |
-| `ru` | one, few, many, other | 2942 de 2942 (100.0%) | 0 |
-| `zh-Hans` | other | 2570 de 2570 (100.0%) | 0 |
+| `en` | one, other | 2698 de 2698 (100.0%) | 0 |
+| `ru` | one, few, many, other | 2950 de 2950 (100.0%) | 0 |
+| `zh-Hans` | other | 2572 de 2572 (100.0%) | 0 |
 
 ## API (Redoc)
 

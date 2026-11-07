@@ -119,6 +119,7 @@ Fonte: o `package.json` de cada pacote e o `Makefile` da raiz.
 
 | comando | executa |
 |---|---|
+| `pnpm --filter @brabo/docker-port build` | `tsc -p tsconfig.build.json` |
 | `pnpm --filter @brabo/docker-port test` | `vitest run` |
 | `pnpm --filter @brabo/docker-port typecheck` | `tsc --noEmit` |
 | `pnpm --filter @brabo/docker-port lint` | `oxlint --deny-warnings src vitest.config.ts` |
@@ -175,4 +176,4 @@ Fonte: o `package.json` de cada pacote e o `Makefile` da raiz.
 
 ---
 
-115 comandos no total. Alvo do Makefile sem a anotação `## descrição` não aparece aqui — anote-o na fonte.
+116 comandos no total. Alvo do Makefile sem a anotação `## descrição` não aparece aqui — anote-o na fonte.

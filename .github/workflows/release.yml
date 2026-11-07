@@ -32,7 +32,7 @@ jobs:
   release:
     if: vars.PRODUTO_RELEASE_LIGADA == 'true' || (github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' && inputs.tag == '')
     name: Release do produto
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
     steps:
       - name: Quem pode republicar
