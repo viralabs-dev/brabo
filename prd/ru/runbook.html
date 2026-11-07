@@ -2710,6 +2710,7 @@ outro alvo.</p>
 </tbody>
 </table></div>
 <h3 id="provas-de-propriedade-agendadas">Provas de propriedade agendadas</h3>
+<p>Desde a AT-773, cada run mostra no título quem o disparou (<code>Provas de propriedade · agendado</code>, ou <code>manual · &lt;ator&gt;</code>) e, no Summary, o bloco <code>## Vínculos</code>: a origem, os irmãos lidos com o SHA de cada um (<code>brabo-api</code>, <code>brabo-engine</code>, <code>brabo-web</code>) e o destino do resultado. O helper nunca reprova o job; sem a tabela a prova segue. A issue de alarme recebe o mesmo bloco no corpo.</p>
 <p><code>make test-restore</code>, <code>make rollout-test</code> e <code>make hpa-test</code> provam
 <strong>propriedades</strong>, não configuração — um backup que roda toda noite e não
 restaura passa nos cinco alertas de <code>brabo-alerts.yaml</code>. Até o BRB-009 eles rodavam

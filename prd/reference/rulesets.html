@@ -857,7 +857,7 @@ que a tag final aponta para o mesmo commit do último <code>-qa.N</code>, e é e
 essa verificação que impede publicar algo diferente do que foi validado.</p>
 <h2 id="ruleset-3--main-exige-e2e">Ruleset 3 — main exige E2E</h2>
 <p><strong>Nome:</strong> <code>main exige E2E</code> (ADR 0267, AT-765)</p>
-<p>Vale em <code>brabo-api</code>, <code>brabo-engine</code>, <code>brabo-web</code>, <code>brabo-broker</code>, <code>brabo-infra</code> e <code>brabo-qa</code>. O <code>brabo-contracts</code> fica de fora.</p>
+<p>Vale em <code>brabo-api</code>, <code>brabo-engine</code>, <code>brabo-web</code>, <code>brabo-broker</code>, <code>brabo-infra</code> e <code>brabo-qa</code>. O <code>brabo-contracts</code> fica de fora. <strong>Ativo desde 07/11/2026</strong>, criado por &quot;Import a ruleset&quot; com o JSON abaixo, depois das provas P1 a P5 (AT-765).</p>
 <div class="tabela-rolavel"><table>
 <thead>
 <tr>
@@ -880,7 +880,7 @@ essa verificação que impede publicar algo diferente do que foi validado.</p>
 </tr>
 <tr>
 <td>bypass</td>
-<td>nenhum</td>
+<td>só o App <code>viralabs-dev-brabo</code> (<code>Integration</code>, <code>always</code>), por causa do gate de hotfix (decisão do dono na AT-765)</td>
 </tr>
 </tbody>
 </table></div>
@@ -1029,7 +1029,7 @@ conferido é indistinguível de um ruleset ausente — e a diferença só aparec
 dia em que alguém empurra direto na <code>main</code>.</p>
 <nav class="site-pager"><a href="../reference/scripts.html">Scripts e comandos</a><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/scripts/ci/docs/reference/rulesets.md">Editar esta página</a><span>Atualizado em 2026-11-07T13:26:49-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/scripts/ci/docs/reference/rulesets.md">Editar esta página</a><span>Atualizado em 2026-11-07T14:08:27-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#pré-requisito-as-três-branches-precisam-existir">Pré-requisito: as três branches precisam existir</a></li><li class="n2"><a href="#ruleset-1--as-três-branches-permanentes">Ruleset 1 — as três branches permanentes</a></li><li class="n3"><a href="#regras-a-marcar">Regras a marcar</a></li><li class="n3"><a href="#as-duas-configurações-lado-a-lado">As duas configurações, lado a lado</a></li><li class="n3"><a href="#checks-obrigatórios">Checks obrigatórios</a></li><li class="n3"><a href="#o-que-uma-pr-entre-branches-permanentes-não-consegue-cumprir">O que uma PR entre branches permanentes não consegue cumprir</a></li><li class="n3"><a href="#bypass">Bypass</a></li><li class="n3"><a href="#o-segredo-brabo_bot_token">O segredo BRABO_BOT_TOKEN</a></li><li class="n3"><a href="#republishing-a-tag-that-was-orphaned">Republicando uma tag que ficou órfã</a></li><li class="n2"><a href="#ruleset-2--tags-de-versão">Ruleset 2 — tags de versão</a></li><li class="n3"><a href="#bypass-1">Bypass</a></li><li class="n2"><a href="#ruleset-3--main-exige-e2e">Ruleset 3 — main exige E2E</a></li><li class="n3"><a href="#o-que-não-é-exigido-regressivo-do-brabo-qa">O que NÃO é exigido: Regressivo do brabo-qa</a></li><li class="n3"><a href="#check-previsto-dependências-de-merge-adr-0276-at-787">Check previsto: Dependências de merge (ADR 0276, AT-787)</a></li><li class="n2"><a href="#como-aplicar">Como aplicar</a></li><li class="n2"><a href="#settings--pages-a-fonte-é-a-branch-gh-pages">Settings → Pages: a fonte é a branch gh-pages</a></li><li class="n2"><a href="#os-rótulos-de-família-precisam-existir">Os rótulos de família precisam existir</a></li><li class="n2"><a href="#conferir-que-está-de-pé">Conferir que está de pé</a></li></ul></aside>
 </div>
