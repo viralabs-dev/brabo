@@ -1,5 +1,9 @@
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { classificar, ehFonteTraduzivel, dadosDaFaixa, medirDocs, medirInterface, relatorio, traducaoDe } from './paridade-de-traducao.mjs';
+import { classificar, ehFonteTraduzivel, dadosDaFaixa, medirDocs, medirDoRepositorio, relatorio, traducaoDe } from './paridade-de-traducao.mjs';
 
 /**
  * AT-550 (ADR 0216 itens 6–7). Cada reprovação é uma MUTAÇÃO de um caso certo:
@@ -45,38 +49,11 @@ describe('medirDocs', () => {
   it('o relatório é determinístico e nomeia a defasada', () => {
     const f = new Map([['a.md', fonte('2026-10-12T00:00:00Z')]]);
     const r = medirDocs(f, { en: new Map([['a.md', pagina(SHA)]]) }, commitDe);
-    const ui = medirInterface({ 'pt-BR': {} });
-    const md = relatorio(r, ui, '> aviso');
-    expect(md).toBe(relatorio(r, ui, '> aviso'));
+    const md = relatorio(r, '> aviso');
+    expect(md).toBe(relatorio(r, '> aviso'));
+    expect(md).not.toContain('## Interface');
+    expect(md).not.toContain('## API');
     expect(md).toContain('- `a.md` (tradução de 2026-10-10)');
-  });
-});
-
-describe('medirInterface', () => {
-  const pt = { ns: { titulo: 'T', item_zero: 'nenhum', item_one: 'um', item_many: 'muitos', item_other: 'vários' } };
-  it('completo: chaves simples e as formas de plural de cada locale', () => {
-    const r = medirInterface({
-      'pt-BR': pt,
-      en: { ns: { titulo: 'T', item_one: 'one', item_other: 'many' } },
-      ru: { ns: { titulo: 'T', item_one: '1', item_few: '2', item_many: '5', item_other: 'x' } },
-      'zh-Hans': { ns: { titulo: 'T', item_other: 'x' } },
-    });
-    for (const l of ['en', 'ru', 'zh-Hans'] as const) {
-      expect(r[l].presentes).toBe(r[l].chaves);
-      expect(r[l].pluraisIncompletos).toEqual([]);
-    }
-    expect(new Set(r.ru.categorias)).toEqual(new Set(['one', 'few', 'many', 'other']));
-  });
-  it('mutação: falta a forma few no ru → plural incompleto', () => {
-    const r = medirInterface({ 'pt-BR': pt, ru: { ns: { titulo: 'T', item_one: '1', item_many: '5', item_other: 'x' } } });
-    expect(r.ru.pluraisIncompletos).toEqual(['ns:item (few)']);
-    expect(r.ru.presentes).toBe(r.ru.chaves - 1);
-  });
-  it('mutação: falta chave simples e catálogo ausente', () => {
-    const r = medirInterface({ 'pt-BR': pt, en: { ns: { item_one: 'one', item_other: 'x' } } });
-    expect(r.en.presentes).toBe(r.en.chaves - 1);
-    expect(r['zh-Hans'].existe).toBe(false);
-    expect(r['zh-Hans'].presentes).toBe(0);
   });
 });
 
@@ -100,5 +77,50 @@ describe('ehFonteTraduzivel (ADR 0219)', () => {
     expect(ehFonteTraduzivel('reference/openapi.json')).toBe(false);
     // mutação: o nome sozinho fora de reference/ não é exceção
     expect(ehFonteTraduzivel('explanation/paridade-de-traducao.md')).toBe(true);
+  });
+});
+
+// AT-779 (ADR 0273): a paridade mede só a doc do brabo.
+describe('medirDoRepositorio: só a doc do brabo', () => {
+  function repo() {
+    const dir = mkdtempSync(join(tmpdir(), 'paridade-brabo-'));
+    const escrever = (rel: string, texto: string) => {
+      mkdirSync(dirname(join(dir, rel)), { recursive: true });
+      writeFileSync(join(dir, rel), texto);
+    };
+    const git = (...a: string[]) => execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...a], { cwd: dir, encoding: 'utf8' });
+    escrever('docs/a.md', '# A\n');
+    escrever('docs/i18n/en/a.md', pagina(null));
+    escrever('docs/.docmap.yml', 'rules: []\n');
+    git('init', '-q');
+    git('add', '-A');
+    git('commit', '-qm', 'x');
+    return { dir, escrever, git };
+  }
+  const medir = (dir: string) => medirDoRepositorio(dir, ['docs', 'apps/api/docs']).docs.en;
+
+  it('tradução em i18n/ não é fonte', () => {
+    const { dir } = repo();
+    expect(medir(dir)).toMatchObject({ paginas: 1, traduzidas: 1, ausentes: [] });
+  });
+  it('mutação: arquivo do manifesto fora de HEAD (irmão) não é fonte; página nova fora do manifesto é', () => {
+    const { dir, escrever, git } = repo();
+    escrever('apps/api/docs/irma.md', '# irmã\n');
+    escrever('docs/nova.md', '# nova\n');
+    expect(medir(dir).paginas).toBe(3);
+    writeFileSync(join(dir, '.git/layout-irmaos.lst'), 'apps/api/docs/irma.md\n');
+    expect(medir(dir)).toMatchObject({ paginas: 2, ausentes: ['nova.md'] });
+    // mutação: o mesmo caminho dentro de HEAD volta a contar
+    git('add', '-A');
+    git('commit', '-qm', 'y');
+    expect(medir(dir).paginas).toBe(3);
+  });
+  it('mudar um arquivo de irmão não muda o relatório', () => {
+    const { dir, escrever } = repo();
+    escrever('apps/api/docs/irma.md', '# irmã\n');
+    writeFileSync(join(dir, '.git/layout-irmaos.lst'), 'apps/api/docs/irma.md\n');
+    const antes = relatorio(medirDoRepositorio(dir, ['docs', 'apps/api/docs']).docs, '> aviso');
+    escrever('apps/api/docs/irma.md', '# irmã X\n');
+    expect(relatorio(medirDoRepositorio(dir, ['docs', 'apps/api/docs']).docs, '> aviso')).toBe(antes);
   });
 });

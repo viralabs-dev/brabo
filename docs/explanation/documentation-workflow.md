@@ -699,18 +699,20 @@ O que segura o atraso é medição, não o docmap.
 lado) roda dentro do `pnpm docs:generate` e escreve dois arquivos:
 `docs/reference/paridade-de-traducao.md` (`generated: true`) e
 `docs/i18n/traducao.json`. Por locale ele conta páginas e
-caracteres traduzidos sobre a fonte (`docs/` inteiro, `reference/` incluído desde o ADR 0219, menos o próprio relatório e o `openapi.json`),
+caracteres traduzidos sobre a fonte (a `docs/` do próprio `brabo`, `reference/` incluído desde o ADR 0219, menos o próprio relatório, o `openapi.json` e `i18n/`; a doc dos irmãos fica fora, ADR 0273),
 e divide as páginas traduzidas em **em dia**, **desatualizadas** e **sem
 proveniência**. A proveniência é o `traducao_de: <SHA>` no frontmatter
 da página traduzida, o último commit da fonte que ela traduz. Uma página
 está desatualizada quando a fonte tem um commit com COMMIT DATE
 posterior a esse SHA, quando a fonte tem alterações não commitadas, ou
 quando o SHA não existe. Ele nunca usa o relógio, então o `--check` dá a
-mesma resposta antes e depois do commit que toca a fonte. Para a UI ele
-compara as chaves de cada namespace em `apps/web/src/locales/<l>/` com o
-pt-BR, e exige toda forma de plural que o `Intl.PluralRules` dá àquele
-locale. O `--check` reprova quando qualquer um dos dois arquivos está
-desatualizado.
+mesma resposta antes e depois do commit que toca a fonte. Um caminho é do
+`brabo` quando está em `HEAD` ou não consta do manifesto
+`.git/layout-irmaos.lst`; por isso um merge de doc num irmão não muda mais a
+paridade. A interface não é medida aqui: o portão de chaves e de plurais é o
+`src/lib/i18n-paridade.test.ts` do `brabo-web`, e os textos da API só avisam
+no log do `docs:generate`. O `--check` reprova quando qualquer um dos dois
+arquivos está desatualizado.
 
 A faixa é desenhada pelo `layout.mjs`. Fora do pt-BR, uma página servida do
 fallback pt-BR diz isso, e uma página traduzida que o `traducao.json` marca como
@@ -724,8 +726,8 @@ desatualizada não têm. As regras para quem
 traduz estão em [Localização](localizacao.md).
 
 **A doc de todos os repos é em pt-BR por padrão (AT-766, ADR 0266, que
-substitui o 0260).** Os irmãos podem ter `<raiz>/docs/i18n/`, medido na mesma
-paridade. A página de irmão que ainda está em inglês (estado misto, até a
+substitui o 0260).** Os irmãos podem ter `<raiz>/docs/i18n/`, medido no repositório dono
+(a paridade do `brabo` não os conta, ADR 0273). A página de irmão que ainda está em inglês (estado misto, até a
 retradução) continua aceita: com
 `idioma_original: en` ela não entra na paridade (`ehFonteTraduzivel`), é servida
 sem faixa no `/en/` e com a faixa "esta página só existe em inglês" nos outros

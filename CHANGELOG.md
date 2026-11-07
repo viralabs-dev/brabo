@@ -4,6 +4,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: a paridade de tradução mede só a doc do `brabo` (AT-779, ADR 0273): `i18n/` e os arquivos de irmão não são fonte, a seção "Interface" e os números da API saem do relatório (o portão da interface é do `brabo-web`, o catálogo da API segue no log do generate). Um merge de doc num irmão deixa de reprovar "Gerados em dia"; a tabela passa de "306 de 1248" para o total real do `brabo`.
 - CI: repina os reutilizáveis do `brabo-ci` em `13f3697` (merge da ci#17, que inclui a ci#16): `ubuntu-26.04`, `client-id` no lugar de `app-id`, rótulo de família criado antes de aplicar, linha `Carimbo:` na tag e helper `vinculos` (AT-772, AT-773).
 - CI: todo `runs-on` fixa `ubuntu-26.04` no lugar de `ubuntu-latest`, e o `create-github-app-token` usa `client-id` no lugar do `app-id` obsoleto; os runs saem sem anotação de aviso (AT-772).
 - **docs**: ADR 0261 (o Dev Lead é avisado de bloqueios e pede ao Arquiteto pela ferramenta `pedir_ao_arquiteto`, AT-748) com traduções, e gerados regenerados com as RN-1009 a RN-1012 (836 RNs).

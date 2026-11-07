@@ -397,6 +397,7 @@ Como a documentação é gerada, verificada e publicada.
 | [0254](0254-a-doc-de-cada-area-mora-na-raiz-dela.md) | A doc de cada área mora em `<raiz>/docs/`: o site é a árvore de união com as mesmas URLs, RN no `business-rules/<raiz>.md` do hospedeiro da 1ª ref `caminho:N` (numeração global, âncora inalterada), `docs/business-rules.md` vira índice gerado, checks com `--raiz` e traduções em `<raiz>/docs/i18n/` |
 | [0260](0260-doc-dos-repos-de-codigo-so-em-ingles.md) | A doc dos repos de código é SÓ em inglês e o site serve a fonte inglesa com faixa nos outros locales; o `brabo` segue multilíngue e os catálogos da API moram nele (AT-745). **Substituído pelo [0266](0266-doc-dos-repositorios-em-portugues-por-padrao.md)** |
 | [0266](0266-doc-dos-repositorios-em-portugues-por-padrao.md) | A doc de todos os repositórios é em pt-BR por padrão, substituindo o [0260](0260-doc-dos-repos-de-codigo-so-em-ingles.md): traduções em `<raiz>/docs/i18n/` são permitidas nos irmãos, o `Unreleased` dos CHANGELOGs é traduzido e a guarda `idioma-dos-irmaos.mjs` sai; a página `idioma_original: en` segue aceita até o irmão retraduzir (AT-766) |
+| [0273](0273-a-paridade-de-traducao-mede-so-a-doc-do-brabo.md) | A paridade de tradução mede só a doc do `brabo`: caminho em `HEAD` ou fora do manifesto do layout, sem `i18n/`, sem a seção de interface e sem os números da API. Revisa o item 7 do 0216 e o item 2 do 0266 (AT-779). |
 
 ## A convenção
 
