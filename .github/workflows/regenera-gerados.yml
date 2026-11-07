@@ -21,13 +21,13 @@ env:
 jobs:
   regenera:
     name: Regenerar e abrir PR
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 20
     steps:
       - id: app
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510  # v3.3.0
         with:
-          app-id: ${{ secrets.BRABO_APP_ID }}
+          client-id: ${{ secrets.BRABO_APP_ID }}
           private-key: ${{ secrets.BRABO_APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1

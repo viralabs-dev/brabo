@@ -45,7 +45,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-14]
+        os: [ubuntu-26.04, macos-14]
     runs-on: ${{ matrix.os }}
     # 25 bastavam enquanto o job parava no `.env`. Com o fechamento inteiro
     # (RN-547) ele ainda espera o agente entrar na espera e, depois do projeto
