@@ -4,7 +4,7 @@ title: 仓库 Rulesets
 sidebar_position: 8
 description: 三个永久分支和标签的 ruleset 的精确配置，供手动应用——仓库对来源做版本管理，GitHub 接收应用。
 keywords: [rulesets, 分支保护, 必需检查, 标签, release]
-traducao_de: a766a77602f64b8f373dcf2fcd64c6af12aebc25
+traducao_de: c165be09458a5dfdc42010867a29adf8a36ccd99
 ---
 
 # 仓库 Rulesets
@@ -442,8 +442,8 @@ changelog 的 Release，而且没有任何错误。
 > 中**移出了矩阵**，原因是测量得出的（AT-065，2026-09-13）：它的 `macos-13` 标签指向一个
 > GitHub 已于 2025 年 12 月退役的镜像，而 Intel 替代品 `macos-15-intel` 在几秒内被调度并
 > 能构建，但在 Bun 下 `--self-test-pty` 失败（`node-pty` 的 `onData` 从不触发——
-> oven-sh/bun#25822，未关闭）。同样的验证在 Node 下通过，因此 Mac Intel 用
-> `npm install -g @brabo/runner` 安装 runner。以空的 `tag` 输入运行该 workflow 是一次演练：
+> oven-sh/bun#25822，未关闭）。同样的验证在 Node 下通过，但 Mac Intel
+> 没有 runner（npm 已在 AT-774 中移除）。以空的 `tag` 输入运行该 workflow 是一次演练：
 > 构建并做 smoke 而不附加任何东西，这正是在不切标签的情况下测得这些的方式。
 
 ### Bypass

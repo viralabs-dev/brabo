@@ -1,5 +1,5 @@
 ---
-traducao_de: ef850f307d04a45ee51b6a0918652f46941addd2
+traducao_de: c165be09458a5dfdc42010867a29adf8a36ccd99
 id: rn-produto
 title: 'Regras de negócio — Produto'
 sidebar_label: Produto
@@ -282,7 +282,7 @@ containers/{start,stop,remove}`）是唯一的调用方；engine 一侧没有其
 
 校验「签名」的是 `install.sh`（第 4/7 次会话），它有真正的 `cosign`，并以 `sha256sum -c` 固定方式下载它（ADR 0149 的决定 4）。**对于这条路由的来源一半，BRB-005 仍然开放**，[登记表](../reference/brb.md)说明了这一点——这不是脚注，而是这条路由所能证明之事的边界。
 
-**没有 `checksums.txt` 的 Release 就「拒绝」，绝不是「带警告地提供」。** 点一下就能接受的警告，就是不存在的校验（ADR 0149，决定 3）——而且这会是最廉价的降级：删除 Release 中 400 个字节就能关掉所有人的核对。代价已测量且很小：v5.0.0 中有两个二进制（`linux-x64`、`linux-arm64`），没有清单，而二进制这一步在浏览器流程中是**尽力而为**的（[RN-473](web.md#rn-473)，第 4 步）——它会落到 `npm install -g @brabo/runner`，后者不依赖任何发布。ADR 0149 之后第一个 tag 之前的每个发布，按构造都落入这条路径。
+**没有 `checksums.txt` 的 Release 就「拒绝」，绝不是「带警告地提供」。** 点一下就能接受的警告，就是不存在的校验（ADR 0149，决定 3）——而且这会是最廉价的降级：删除 Release 中 400 个字节就能关掉所有人的核对。代价已测量且很小：v5.0.0 中有两个二进制（`linux-x64`、`linux-arm64`），没有清单，而二进制这一步在浏览器流程中是**尽力而为**的（[RN-473](web.md#rn-473)，第 4 步）——它会留下没有本地代理的状态并如实说明（npm 已在 AT-774 中移除）。ADR 0149 之后第一个 tag 之前的每个发布，按构造都落入这条路径。
 
 **六种 502 结果不坍缩。** 仅凭状态码无法区分它们，而它们要求调用方采取不同的行动，所以拒绝在正文中携带一个 `motivo`——`plataforma_nao_publicada`、`release_sem_manifesto`、
 `manifesto_nao_cobre_a_plataforma`、`manifesto_ilegivel`、`download_falhou`、
@@ -337,7 +337,7 @@ containers/{start,stop,remove}`）是唯一的调用方；engine 一侧没有其
 
 **这关闭了 BRB-031。** 手动的 `chmod +x` 在 FASE 28 中幸存下来，因为作为服务的安装并非来自一个版本化的产物：走到运行 `brabo-runner service install` 的人，为了到达这个命令，已经必须让二进制可执行。来自安装程序时，这一步消失了——浏览器的 File System Access API 不保留该位，脚本保留。
 
-没有该平台二进制的 Release **不会中断安装**：其余部分已经运行起来，消息指向 `npm install -g @brabo/runner`。这与通过浏览器配置时二进制那一步的处置相同（RN-473），原因也相同——本地代理是最后一步，不是前置条件。
+没有该平台二进制的 Release **不会中断安装**：其余部分已经运行起来，消息指向 `brabo-runner` 上的 issue（npm 已在 AT-774 中移除）。这与通过浏览器配置时二进制那一步的处置相同（RN-473），原因也相同——本地代理是最后一步，不是前置条件。
 
 **位置：** `install.sh`、`consentir_base` 和 `instalar_o_runner`。
 **测试：** `scripts/dev/install.spec.ts`——存在 `install -m 0755`，不存在面向用户的 `chmod` 指令，以及点名的对照已签名清单的核对。

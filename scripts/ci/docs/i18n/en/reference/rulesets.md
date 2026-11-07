@@ -1,5 +1,5 @@
 ---
-traducao_de: a766a77602f64b8f373dcf2fcd64c6af12aebc25
+traducao_de: c165be09458a5dfdc42010867a29adf8a36ccd99
 id: rulesets
 title: Repository rulesets
 sidebar_label: Rulesets
@@ -568,7 +568,7 @@ The `v*` pattern covers the three forms the pipeline creates: `-dev.N`,
 > `macos-15-intel`, is scheduled within seconds and builds, but fails
 > `--self-test-pty` under Bun (the `node-pty` `onData` never fires —
 > oven-sh/bun#25822, open). The same proof passes under Node, so an Intel Mac
-> installs the runner with `npm install -g @brabo/runner`. A workflow run with an empty
+> is left without a runner (npm was dropped in AT-774). A workflow run with an empty
 > `tag` input is a dry run: it builds and smoke-tests without attaching
 > anything, which is how that was measured without cutting a tag.
 

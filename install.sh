@@ -1361,8 +1361,8 @@ instalar_o_runner() {
     darwin-arm64) alvo='darwin-arm64' ;;
     # Mac Intel NÃO tem binário, por decisão (ADR 0174): o runner `macos-13`
     # foi aposentado pelo GitHub e, no `macos-15-intel`, o Bun quebra o
-    # `onData` do node-pty (oven-sh/bun#25822). A MESMA prova passa sob Node,
-    # então o caminho dele é o pacote npm. Nenhum download é tentado — pedir
+    # `onData` do node-pty (oven-sh/bun#25822). O runner só sai como
+    # binário da Release (AT-774), então não há caminho para ele. Nenhum download é tentado — pedir
     # um asset que a Release não publica só produziria um 404 com cara de
     # rede fora. O resto da instalação segue, e `RUNNER_BIN` fica vazio, que é
     # como o fechamento sabe dizer o que ficou para depois.
@@ -1371,7 +1371,7 @@ instalar_o_runner() {
       dizer "${C_BOLD}Agente local${C_RESET}"
       dizer 'Mac Intel (darwin-x64) não tem binário do agente local — decisão do ADR 0174.' >&2
       dizer 'O agente local NÃO foi instalado; o resto da instalação está de pé.' >&2
-      dizer 'Instale pelo npm (roda sob Node): npm install -g @brabo/runner' >&2
+      dizer "Para pedir suporte, abra uma issue em https://github.com/${RUNNER_REPO}/issues" >&2
       return 0
       ;;
     *) recusar "sem binário de runner para '${plataforma}'." ;;
@@ -1389,7 +1389,7 @@ instalar_o_runner() {
       dizer "Não consegui baixar ${nome} da Release ${RUNNER_TAG} do ${RUNNER_REPO}: o servidor não o entregou nem depois de 6 novas tentativas." >&2
     fi
     dizer 'O agente local NÃO foi instalado; o resto da instalação está de pé.' >&2
-    dizer "Alternativa: npm install -g @brabo/runner" >&2
+    dizer "Se persistir, abra uma issue em https://github.com/${RUNNER_REPO}/issues" >&2
     # `RUNNER_BIN` fica vazio de propósito: é por ele que o fechamento sabe que
     # não há binário para criar chave nem instalar serviço, e diz isso em vez
     # de falhar chamando um comando que não existe.
