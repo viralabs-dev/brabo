@@ -802,7 +802,7 @@ SHAs do `.git/irmaos-sha.lst` que o `montar-layout.sh` grava
 `release.yml` passa o `infra` por caminho.
 
 - **Código:** `scripts/ci/vinculos.ts:57` (`montar`), `.github/actions/vinculos/action.yml:31`
-  (o `continue-on-error`), `scripts/ci/validar-payload.ts:55` (`validarOrigem`),
+  (o `continue-on-error`), `scripts/ci/validar-payload.ts:85` (`validarOrigem`),
   `.github/workflows/docs-check.yml:89` (o `brabo` repassa os irmãos)
 - **Teste:** `scripts/ci/vinculos.spec.ts` (fixtures, valor malicioso, origem
   vazia) e `scripts/ci/validar-payload.spec.ts`
