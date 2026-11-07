@@ -659,8 +659,7 @@ pode depender dela — é justamente por depender dela que ele não saía.
 > a plataforma saiu.** A matriz passou a QUATRO alvos, e `ALVOS_ESPERADOS`
 > acompanhou — é contra ele que a ausência é declarada, e deixar `darwin-x64`
 > ali faria todo manifesto anunciar, para sempre, uma falta que é decisão. O
-> Mac Intel fica com `npm install -g @brabo/runner` (sob Node, onde a mesma
-> prova passa): o `install.sh` diz isso sem tentar baixar, o proxy
+> Mac Intel fica sem runner (o npm saiu na AT-774): o `install.sh` diz isso sem tentar baixar, o proxy
 > `GET /runner-releases/binary` recusa `darwin-x64` com 400 próprio que aponta
 > o npm, e o painel do navegador nem pede o download. A regra desta RN não
 > muda: ela continua valendo para qualquer alvo que fique sem runner, e
