@@ -886,4 +886,8 @@ test.
 - <a id="rn-1044"></a>[RN-1044](business-rules/ci.md#rn-1044) — O run de destino de um dispatch ou de uma tag tem `run-name` com a origem, e a correlação do dispatch vai no nome como `c=<run_id>-<attempt>`
 - <a id="rn-1045"></a>[RN-1045](business-rules/ci.md#rn-1045) — O check do App aponta para o run do `brabo-qa` desde o início, e o run de origem registra o link do run disparado
 - <a id="rn-1046"></a>[RN-1046](business-rules/api.md#rn-1046) — A busca híbrida devolve no máximo N trechos do mesmo arquivo
+- <a id="rn-1047"></a>[RN-1047](business-rules/ci.md#rn-1047) — A PR declara a dependência com `Depende-de: viralabs-dev/<repo>#<n>`, e a linha malformada reprova em vez de passar calada
+- <a id="rn-1048"></a>[RN-1048](business-rules/ci.md#rn-1048) — O check `Dependências de merge` tem quatro estados, nunca `neutral`, e a espera é amarela
+- <a id="rn-1049"></a>[RN-1049](business-rules/ci.md#rn-1049) — O merge da dependência atualiza o check das PRs que a citam, e o cron horário é só rede
+- <a id="rn-1050"></a>[RN-1050](business-rules/ci.md#rn-1050) — O ciclo de dependências reprova com o caminho inteiro, até a profundidade 5
 <!-- END:GENERATED:indice-de-rn -->

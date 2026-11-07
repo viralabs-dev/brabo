@@ -849,3 +849,75 @@ link do check (que já aponta para o qa) e um aviso. O `alarmar-prova.sh` anexa 
 - **Teste:** `scripts/ci/fechar-check.spec.ts` e `scripts/ci/qa-e2e-vinculos.spec.ts`
 - **ADR:** [0271](../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.md)
 - **Origem:** AT-773 (EP-033)
+
+## Dependência de merge entre repositórios (RN-1047..1050)
+
+### RN-1047 — A PR declara a dependência com `Depende-de: viralabs-dev/<repo>#<n>`, e a linha malformada reprova em vez de passar calada {#rn-1047}
+
+Cada dependência de merge da PR é uma linha do corpo, `Depende-de:` seguido de
+`viralabs-dev/<repo>#<n>`, em qualquer lugar do texto, com ou sem `- ` na frente.
+A regra casa linha por linha e não ignora caixa. O repo tem de estar na lista dos
+11 repositórios `brabo*` do mapa da pasta-mãe, o owner tem de ser `viralabs-dev`,
+a PR não pode citar a si mesma e a PR citada tem de existir (404 reprova). Uma
+linha que começa como declaração (`Depende-de` ou `depende de`) mas não casa a
+regra reprova com o motivo, para que um erro de digitação não faça a dependência
+sumir. O corpo é texto de terceiro: vai ao script por variável de ambiente, nunca
+interpolado num `run:`.
+
+- **Código:** `scripts/ci/dependencias-de-merge.ts` (a regra e a validação), a ser
+  publicado no `brabo-ci`; ainda não existe na `dev` do `brabo`
+- **Teste:** `scripts/ci/dependencias-de-merge.spec.ts`, com a regex, a allowlist,
+  o owner, a autorreferência e a linha malformada
+- **ADR:** [0276](../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.md)
+- **Origem:** AT-787 (EP-033)
+
+### RN-1048 — O check `Dependências de merge` tem quatro estados, nunca `neutral`, e a espera é amarela {#rn-1048}
+
+O check é publicado pelo App no `head_sha` da PR, com o nome `Dependências de
+merge`. Sem linha `Depende-de`, sai `success` "Sem dependências declaradas", e
+ele sempre publica, para não deixar um check velho colado. Com alguma dependência
+`OPEN`, sai `in_progress` (amarelo), com o título `esperando viralabs-dev/<repo>#<n>`
+listando as que faltam. Com todas `MERGED`, sai `success` "Dependências mergeadas".
+Com uma dependência `CLOSED` sem merge, com linha inválida, com ciclo ou com 404,
+sai `failure` com o motivo; a dependência fechada sem merge pede que se tire a
+linha ou se aponte a PR que a substituiu, e não espera para sempre. `neutral` não
+é usado em nenhum caso, porque para um ruleset ele conta como verde. O job em si
+usa `continue-on-error`: o que reprova é o check, e a falha do job só avisa.
+
+- **Código:** `scripts/ci/dependencias-de-merge.ts` (a função pura de avaliação) e
+  `.github/workflows/dependencias-de-merge.yml` (o reutilizável), no `brabo-ci`
+- **Teste:** `scripts/ci/dependencias-de-merge.spec.ts`, um caso para cada estado
+- **ADR:** [0276](../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.md)
+- **Origem:** AT-787 (EP-033)
+
+### RN-1049 — O merge da dependência atualiza o check das PRs que a citam, e o cron horário é só rede {#rn-1049}
+
+Quando uma PR de um repo é mergeada, o job `avisar-dependentes`, no próprio
+repo dono da PR mergeada, procura as PRs abertas da organização que citam a
+mergeada no corpo e refaz a avaliação de cada uma. A busca é difusa, então cada
+candidata tem o corpo reparseado pela regra de [RN-1047](#rn-1047) antes de
+qualquer escrita. O check é atualizado com o token do App, sem reexecutar o
+workflow da PR dependente. Um cron de hora em hora no `brabo-ci` refaz a mesma
+varredura para as PRs abertas com `Depende-de`, e cobre o merge perdido quando o
+run do repo dono quebra. O cron só liga quando o `brabo-ci` chegar à `main`,
+porque o `schedule` só roda da branch padrão.
+
+- **Código:** `scripts/ci/dependencias-de-merge.ts` (modo `avisar-dependentes`) e
+  `.github/workflows/dependencias-de-merge.yml` (o job e o cron), no `brabo-ci`
+- **Teste:** `scripts/ci/dependencias-de-merge.spec.ts`, com a busca simulada e o
+  corpo que não casa mais
+- **ADR:** [0276](../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.md)
+- **Origem:** AT-787 (EP-033)
+
+### RN-1050 — O ciclo de dependências reprova com o caminho inteiro, até a profundidade 5 {#rn-1050}
+
+A avaliação segue as linhas `Depende-de` das dependências abertas, passo a passo,
+até a profundidade 5. Se a cadeia volta à PR avaliada, o check reprova com o
+caminho completo (`A → B → A`) e o link de cada PR do caminho. Profundidade maior
+que 5 também reprova. A saída para o ciclo é editar o corpo de uma das PRs para
+tirar a linha que fecha o ciclo: a PR não precisa de bypass.
+
+- **Código:** `scripts/ci/dependencias-de-merge.ts` (o percurso até a profundidade 5), no `brabo-ci`
+- **Teste:** `scripts/ci/dependencias-de-merge.spec.ts`, com o ciclo A↔B e a profundidade estourada
+- **ADR:** [0276](../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.md)
+- **Origem:** AT-787 (EP-033)

@@ -8,7 +8,7 @@ processo funciona de verdade.
 
 **Com todas as letras: PR grande sem issue prévia provavelmente será
 recusado.** Não por burocracia — por respeito ao seu tempo. Este projeto tem
-decisões arquiteturais registradas em [269 ADRs](docs/adr/index.md), e uma
+decisões arquiteturais registradas em [270 ADRs](docs/adr/index.md), e uma
 mudança que contradiz uma delas custa muito trabalho para depois ser
 rejeitada.
 
@@ -202,6 +202,22 @@ manutenção da documentação por N, e ninguém procura a doc de um patch.
 
 Branches permanentes são `dev`, `qa`, `rc` e `main`. Merge nelas é sempre
 manual — inclusive para mim, e há teste garantindo isso.
+
+## PR que depende de outra PR de outro repositório
+
+Quando a sua PR só pode ser mergeada depois de outra PR de outro repositório do Brabo (por exemplo, a `brabo-api` precisa sair antes da `brabo-infra`), declare a dependência **no corpo da PR**, numa linha por dependência:
+
+```
+Depende-de: viralabs-dev/brabo-api#56
+```
+
+- Só vale o formato acima: `viralabs-dev/<repo>#<n>`, com um dos 11 repositórios `brabo*`. Um erro de digitação reprova o check com o motivo, em vez de sumir.
+- Não cite a própria PR nem uma PR que cite a sua de volta (ciclo): o check reprova com o caminho.
+- O check `Dependências de merge` fica amarelo, com o título `esperando viralabs-dev/brabo-api#56`, até cada PR citada ser mergeada. Quando a dependência é mergeada, o check da sua PR é atualizado sozinho, sem push.
+- Se a PR citada for fechada sem merge, o check reprova: tire a linha ou aponte a PR que a substituiu.
+- Para tirar ou corrigir uma linha, edite o corpo da PR; o check é refeito.
+
+Enquanto o check não estiver ligado como obrigatório (ADR [0276](docs/adr/0276-a-pr-declara-de-que-pr-depende-o-merge.md), AT-787), ele é só informativo: a ordem de merge continua sendo responsabilidade de quem merge, e a linha serve para deixar a ordem escrita.
 
 ## Definition of Done
 
