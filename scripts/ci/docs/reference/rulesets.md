@@ -555,7 +555,7 @@ final. Só o `tag-release` pode criá-las.
 > `macos-15-intel`, é agendado em segundos e constrói, mas reprova o
 > `--self-test-pty` sob o Bun (o `onData` do `node-pty` nunca dispara —
 > oven-sh/bun#25822, aberto). A mesma prova passa sob o Node, então um Mac
-> Intel instala o runner com `npm install -g @brabo/runner`. Uma execução do
+> Intel fica sem runner (o npm saiu na AT-774). Uma execução do
 > workflow com a entrada `tag` vazia é um ensaio: constrói e faz o smoke sem
 > anexar nada, e foi assim que isso foi medido sem cortar uma tag.
 

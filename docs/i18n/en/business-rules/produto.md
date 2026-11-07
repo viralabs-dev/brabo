@@ -1,5 +1,5 @@
 ---
-traducao_de: ef850f307d04a45ee51b6a0918652f46941addd2
+traducao_de: c165be09458a5dfdc42010867a29adf8a36ccd99
 id: rn-produto
 title: 'Business rules — Product'
 sidebar_label: Product
@@ -509,8 +509,7 @@ one accepts by clicking is a verification that does not exist (ADR 0149, decisio
 it would be the cheapest downgrade possible: deleting 400 bytes from the Release would turn off
 everyone's check. The cost is measured and small: in v5.0.0 there are two
 binaries (`linux-x64`, `linux-arm64`) and no manifest, and the binary step is
-**best-effort** in the browser flow ([RN-473](web.md#rn-473), step 4) — it falls back to
-`npm install -g @brabo/runner`, which depends on no release at all. Every release
+**best-effort** in the browser flow ([RN-473](web.md#rn-473), step 4) — it is left without the local agent and says so (npm was dropped in AT-774). Every release
 prior to the first tag after ADR 0149 falls into that path, by construction.
 
 **The six 502 outcomes do not collapse.** The status alone does not separate them and
@@ -676,7 +675,7 @@ to get to the command. Coming from the installer, the step disappears — the br
 Access API does not preserve the bit, a script does.
 
 A release without the platform's binary **does not interrupt the installation**: the rest is already
-up, and the message points to `npm install -g @brabo/runner`. It is the same
+up, and the message points to the issue on `brabo-runner` (npm was dropped in AT-774). It is the same
 disposition as the binary step in the browser setup (RN-473), and the
 reason is the same — the local agent is the last stage, not a prerequisite.
 

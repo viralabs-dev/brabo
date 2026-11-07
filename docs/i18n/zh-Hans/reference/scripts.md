@@ -119,6 +119,7 @@ keywords: [scripts, pnpm, make, commands]
 
 | 命令 | 执行 |
 |---|---|
+| `pnpm --filter @brabo/docker-port build` | `tsc -p tsconfig.build.json` |
 | `pnpm --filter @brabo/docker-port test` | `vitest run` |
 | `pnpm --filter @brabo/docker-port typecheck` | `tsc --noEmit` |
 | `pnpm --filter @brabo/docker-port lint` | `oxlint --deny-warnings src vitest.config.ts` |
@@ -175,4 +176,4 @@ keywords: [scripts, pnpm, make, commands]
 
 ---
 
-共 115 条命令。没有 `## 描述` 注释的 Makefile 目标不会出现在这里——请在源码中添加注释。
+共 116 条命令。没有 `## 描述` 注释的 Makefile 目标不会出现在这里——请在源码中添加注释。

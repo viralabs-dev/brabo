@@ -631,6 +631,12 @@ quebra com erro nomeado em vez de desenhar uma lateral errada. A Explicação é
 enumerada à mão em cinco grupos por assunto, e página nova ali ainda entra pelo
 caminho acima.
 
+As categorias da barra lateral são recolhíveis (AT-767): cada uma é um
+`<details>`/`<summary>` nativo, sem JavaScript e sem persistência. Nasce aberta
+quando `colapsada` é falso ou quando contém a página atual; do contrário nasce
+fechada (os temas de ADR e quatro dos cinco grupos da Explicação). O link de
+"Decisões (ADR)" fica fora do `<summary>`, como primeiro item da lista.
+
 ### `api-render-check.mjs` — build verde não é página que renderiza {#api-render-checkmjs--a-green-build-isnt-a-page-that-renders}
 
 Esta peça existe por causa de uma lição cara: **as 117 páginas de
