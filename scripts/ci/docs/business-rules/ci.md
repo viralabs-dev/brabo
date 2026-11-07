@@ -659,8 +659,7 @@ pode depender dela — é justamente por depender dela que ele não saía.
 > a plataforma saiu.** A matriz passou a QUATRO alvos, e `ALVOS_ESPERADOS`
 > acompanhou — é contra ele que a ausência é declarada, e deixar `darwin-x64`
 > ali faria todo manifesto anunciar, para sempre, uma falta que é decisão. O
-> Mac Intel fica com `npm install -g @brabo/runner` (sob Node, onde a mesma
-> prova passa): o `install.sh` diz isso sem tentar baixar, o proxy
+> Mac Intel fica sem runner (o npm saiu na AT-774): o `install.sh` diz isso sem tentar baixar, o proxy
 > `GET /runner-releases/binary` recusa `darwin-x64` com 400 próprio que aponta
 > o npm, e o painel do navegador nem pede o download. A regra desta RN não
 > muda: ela continua valendo para qualquer alvo que fique sem runner, e
@@ -691,3 +690,162 @@ pode depender dela — é justamente por depender dela que ele não saía.
   falhando inteira, o job gasta as duas esperas antes de recusar
 - **ADR:** [0149](../adr/0149-assinatura-dos-artefatos-publicados.md)
 - **Origem:** AT-051 (EP-009/HS-035)
+
+## O regressivo por funcionalidade e os vínculos dos runs (RN-1031..1035, RN-1043..1045)
+
+### RN-1031 — O catálogo de funcionalidades e o mapa caminho → funcionalidade moram num arquivo só, e a spec se liga por tag {#rn-1031}
+
+`brabo-qa/funcionalidades.yml` é a única fonte: cada funcionalidade tem `id`
+(kebab-case, estável, nunca renomeado; aposentar é `status: aposentada`),
+`nome`, `descricao`, `tema` (do `temas.yml` dos ADRs), `status` e
+`caminhos: {<repo>: [globs]}`. Mora no `brabo-qa`, e não no `brabo-contracts`,
+porque o contracts é consumido por TAG e cada ajuste do mapa viraria tag e bump
+em seis consumidores. A spec do Playwright se liga à funcionalidade pela tag do
+próprio teste (`{ tag: '@f-<id>' }`) e o filtro é `--grep`: o catálogo não
+guarda lista de arquivos. Um teste do `brabo-qa` reprova id repetido ou fora de
+kebab-case, tema fora do `temas.yml`, glob que não casa nenhum arquivo do irmão
+(mapa podre) e tag `@f-<id>` sem entrada; funcionalidade sem spec é só listada.
+
+- **Código:** `funcionalidades.yml:1` (o catálogo e o contrato do arquivo),
+  `scripts/ci/funcionalidades.ts:29` (`validarCatalogo`)
+- **Teste:** `scripts/ci/funcionalidades.spec.ts` (o validador) e
+  `scripts/ci/qa-regressivo-catalogo-real.spec.ts:12` (o catálogo real tem as 14
+  funcionalidades ativas e globs que casam)
+- **ADR:** [0268](../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.md)
+- **Origem:** AT-769 (EP-033)
+
+### RN-1032 — A PR para a `dev` roda o regressivo só das funcionalidades que tocou, sob o check `Regressivo do brabo-qa`, que NUNCA é exigido {#rn-1032}
+
+Na PR com destino `dev`, o job `regressivo-dev` do `qa-e2e-gatilho.yml` cruza os
+arquivos da PR com o mapa de [RN-1031](#rn-1031) e dispara o `brabo-qa` com as
+funcionalidades tocadas. O resultado volta como o check `Regressivo do
+brabo-qa`, criado pelo App no `head_sha`: `success`, `failure` (visível, mas o
+merge segue livre) ou `neutral` (nada tocado, só docs, PR de fork, repositório
+sem spec). O nome é distinto do `E2E do brabo-qa` de propósito: o ruleset "main
+exige E2E" amarra esse contexto, e o regressivo nunca entra em ruleset algum
+(o `rulesets.md` registra a linha "não exigido"). O job tem `continue-on-error`,
+o `/qa-aceitar` não se aplica na `dev`, e o App comenta uma vez, como lembrete,
+quando o mapa diz que a funcionalidade foi tocada e nenhuma spec `@f-<id>`
+mudou.
+
+- **Código:** `.github/workflows/qa-e2e-gatilho.yml:74` (o job
+  `regressivo-dev`, com `continue-on-error`), `scripts/ci/qa-e2e-resumo.ts:22`
+  (o nome do check por modo)
+- **Teste:** `scripts/ci/qa-e2e-resumo.spec.ts` (o nome por modo) e
+  `scripts/ci/qa-regressivo-selecao.spec.ts:33` (a seleção por mapa)
+- **ADR:** [0268](../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.md)
+- **Origem:** AT-769 (EP-033)
+
+### RN-1033 — Três regras de arquivo transversal valem antes do mapa: nada, catálogo inteiro e sem dono {#rn-1033}
+
+Na ordem: (1) docs, `*.md`, `CHANGELOG.md`, `.github/**` (exceto o próprio
+`qa-e2e.yml`), testes do repositório e `.claude/**` não tocam funcionalidade, e
+o check sai `neutral`; (2) lockfiles e manifestos, `Dockerfile`, a entrada da
+app, schema e migrações, o cliente do web, `config/**` do engine e a suíte do
+`brabo-qa` (`e2e/suporte/**`, `playwright.config.ts`) rodam o catálogo inteiro,
+e a subida de TAG do contracts cai aqui; (3) caminho que nenhum glob casa roda o
+smoke `instalacao` + `autenticacao` e o resumo o lista como "sem dono no mapa",
+para o mapa ser corrigido. O `brabo-contracts` não tem regressivo na própria PR.
+
+- **Código:** `scripts/ci/qa-regressivo-selecao.ts:60` (`selecionar`),
+  `scripts/ci/qa-regressivo-selecao.ts:36` (`SMOKE`)
+- **Teste:** `scripts/ci/qa-regressivo-selecao.spec.ts:41` (regra 1),
+  `:55` (regra 2 por repositório), `:58` (regra 3)
+- **ADR:** [0268](../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.md)
+- **Origem:** AT-769 (EP-033)
+
+### RN-1034 — A PR para a `main` roda o catálogo inteiro no `E2E do brabo-qa`, e funcionalidade sem spec aparece como "sem cobertura" sem reprovar {#rn-1034}
+
+O check `E2E do brabo-qa` ([ADR 0267](../adr/0267-o-e2e-do-brabo-qa-e-portao-da-main.md))
+roda todas as specs e monta a tabela `funcionalidade | specs | resultado`.
+Funcionalidade do catálogo sem spec entra como `sem cobertura` e **não
+reprova** (decisão do dono de 06/11/2026): com a regra oposta a `main` ficaria
+vermelha por semanas e o `/qa-aceitar` viraria rotina. Os testes que existem
+passam sem alteração; vermelho de `spec` ou `ambiente` segue aceitável por
+`/qa-aceitar`, e de `digest` ou `assinatura` nunca.
+
+- **Código:** `scripts/ci/qa-e2e-resumo.ts:28` (o resultado `sem cobertura` na
+  linha da tabela), `scripts/ci/qa-e2e-resumo.ts:22` (o nome do check da `main`)
+- **Teste:** `scripts/ci/qa-e2e-resumo.spec.ts` (a tabela e a linha sem
+  cobertura)
+- **ADR:** [0268](../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.md)
+- **Origem:** AT-769 (EP-033)
+
+### RN-1035 — A PR para a `dev` publica a imagem `sha-<12>` assinada, só do próprio repositório, e a limpeza apaga as órfãs {#rn-1035}
+
+Para o regressivo ter o que rodar, o `ci.yml` de api, engine, web e broker
+publica `ghcr.io/viralabs-dev/brabo-<app>:sha-<12 primeiros do head>` também
+quando a base é `dev`, com Trivy e `cosign sign` keyless, como na `main`. PR de
+fork não recebe segredo: a imagem é pulada e o regressivo diz "não roda em PR de
+fork". O gatilho usa a `sha-<12>` no repositório da PR e a `-dev.N` mais nova
+nos outros. Cada `synchronize` deixa uma `sha-*` órfã, então o
+`limpeza-ghcr.yml` apaga toda `sha-*` de PR fechada e as com mais de 7 dias.
+
+- **Código:** `scripts/ci/qa-e2e-imagens.ts:83` (a escolha de `sha-<12>` para
+  `dev` e `hotfix`)
+- **Teste:** `scripts/ci/qa-e2e-imagens.spec.ts` (a escolha por base)
+- **ADR:** [0268](../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.md)
+- **Origem:** AT-769 (EP-033)
+
+### RN-1043 — Todo run que lê outro repositório publica `## Vínculos` no topo do Summary, e o helper nunca reprova o job {#rn-1043}
+
+Pela action `vinculos` do `brabo-ci`, o Summary de cada job que liga repositórios
+traz a tabela `## Vínculos` (origem, irmãos `repo@SHA` com link, destino e runs
+disparados) e um diagrama Mermaid, logo depois dos checkouts. Todo valor passa
+por regex antes de entrar no Markdown: repositório `viralabs-dev/brabo(-x)?`,
+SHA de 40 hex, PR numérica, URL do GitHub da organização, ator. O que não casa
+vira `?` e um `::warning::`. A `origem` inválida é só descartada, com aviso. O
+step leva `continue-on-error`: o helper nunca reprova um job. No `brabo`, o
+`docs-check`, o `docs-deploy`, o `docs-audit` e o `regenera-gerados` passam os
+SHAs do `.git/irmaos-sha.lst` que o `montar-layout.sh` grava
+([ADR 0274](../adr/0274-os-gerados-leem-os-irmaos-por-uma-trava-de-shas.md)), e o
+`release.yml` passa o `infra` por caminho.
+
+- **Código:** `scripts/ci/vinculos.ts:57` (`montar`), `.github/actions/vinculos/action.yml:31`
+  (o `continue-on-error`), `scripts/ci/validar-payload.ts:85` (`validarOrigem`),
+  `.github/workflows/docs-check.yml:89` (o `brabo` repassa os irmãos)
+- **Teste:** `scripts/ci/vinculos.spec.ts` (fixtures, valor malicioso, origem
+  vazia) e `scripts/ci/validar-payload.spec.ts`
+- **ADR:** [0271](../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.md)
+- **Origem:** AT-773 (EP-033)
+
+### RN-1044 — O run de destino de um dispatch ou de uma tag tem `run-name` com a origem, e a correlação do dispatch vai no nome como `c=<run_id>-<attempt>` {#rn-1044}
+
+O `run-name` de um reutilizável é ignorado: vale o do chamador. O `e2e-pr.yml`
+do `brabo-qa` se chama `E2E ← <repo>#<pr> · <sha7> · <ator> · c=<correlação>`
+(`Regressivo ← …` no modo dev); os runs disparados por tag, como `release` e
+`install-e2e` do `brabo`, `release <tag> ← tag do carimbo`. O `repository_dispatch`
+responde 204 sem id, e o `client_payload` não aparece na API de runs; só o
+`display_title` fica consultável. Por isso o gatilho manda `origem.correlacao =
+<run_id>-<attempt>`, que entra no `run-name`, e o `qa-e2e-disparar.ts` consulta
+os runs do `brabo-qa` a cada 5 s por até 60 s, casando o `c=`. O `attempt` torna a
+correlação única por re-run. Payload antigo, sem `origem`, gera campos vazios e
+não quebra. A origem de um run disparado por tag sai da linha `Carimbo: <url>` que
+o `tag-release` grava na mensagem da tag anotada.
+
+- **Código:** `scripts/ci/qa-e2e-imagens.ts:113` (`origem.correlacao` no
+  payload), `scripts/ci/qa-e2e-vinculos.ts:18` (`acharRun`),
+  `scripts/ci/qa-e2e-disparar.ts:133` (a correlação), `scripts/ci/tag-release.ts:35`
+  (`comCarimbo`), `.github/workflows/release.yml:3` (o `run-name` da tag)
+- **Teste:** `scripts/ci/qa-e2e-vinculos.spec.ts` (o casamento do `c=`) e
+  `scripts/ci/qa-e2e-imagens.spec.ts`
+- **ADR:** [0271](../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.md)
+- **Origem:** AT-773 (EP-033)
+
+### RN-1045 — O check do App aponta para o run do `brabo-qa` desde o início, e o run de origem registra o link do run disparado {#rn-1045}
+
+O job `anunciar` do `e2e-pr.yml`, sem `needs` e em paralelo ao `e2e`, atualiza o
+check pelo `check_run_id` do payload com `details_url` do run do `brabo-qa` e os
+Vínculos, com o token do App só com `checks: write` e checkout limpo da `dev`. O
+`fechar` mantém o `details_url` no fim e anexa os Vínculos. Falha do `anunciar` só
+avisa. No run de origem, o gatilho escreve em `disparados` o run do `brabo-qa`
+que achou pela correlação de [RN-1044](#rn-1044); se não achou em 60 s, registra o
+link do check (que já aponta para o qa) e um aviso. O `alarmar-prova.sh` anexa o
+`vinculos.md` ao corpo da issue quando o arquivo existe.
+
+- **Código:** `scripts/ci/fechar-check.ts:39` (os Vínculos no fechamento),
+  `scripts/ci/qa-e2e-vinculos.ts:42` (`vinculosDoGatilho`),
+  `scripts/ci/qa-e2e-disparar.ts:154` (o aviso quando o run não é achado)
+- **Teste:** `scripts/ci/fechar-check.spec.ts` e `scripts/ci/qa-e2e-vinculos.spec.ts`
+- **ADR:** [0271](../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.md)
+- **Origem:** AT-773 (EP-033)

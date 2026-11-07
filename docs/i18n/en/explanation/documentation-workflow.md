@@ -5,7 +5,7 @@ sidebar_label: Docs sync
 sidebar_position: 1
 description: The mechanism that keeps documentation from rotting — what each piece does, why it exists, and what to do when the check complains unfairly.
 keywords: [documentation, drift, docmap, CI, generation]
-traducao_de: 4cc1b596659af65abb89f0dc4ed3ec7525de5906
+traducao_de: 2d508b95c379df9edb51cc94523fd3f05edd83b2
 ---
 
 # How documentation stays alive
@@ -609,6 +609,12 @@ named error instead of drawing a wrong sidebar. The Explanation section is
 listed by hand in five groups by subject, and a new page there still goes in
 by the path above.
 
+Sidebar categories are collapsible (AT-767): each one is a native
+`<details>`/`<summary>`, with no JavaScript and no persistence. It starts open
+when `colapsada` is false or when it contains the current page; otherwise it
+starts closed (the ADR themes and four of the five Explanation groups). The
+"Decisões (ADR)" link sits outside the `<summary>`, as the first list item.
+
 ### `api-render-check.mjs` — a green build isn't a page that renders
 
 This piece exists because of an expensive lesson: **the API
@@ -705,6 +711,8 @@ an untranslated page; with all of them complete there is no fallback to check),
 while the same page at the root and a page translated to `en` that is not stale
 do not. The rules for translators are in
 [Localização](localizacao.md).
+
+**The documentation of the code repos is English-only (AT-745, ADR 0260).** A page with `idioma_original: en` is not part of the parity (`ehFonteTraduzivel`), is served without a banner on `/en/` and with the banner "this page only exists in English" in the other locales (`paginas.mjs` sets `somenteIngles`; `faixa-de-traducao-check.mjs` checks the HTML). Each locale's RN index uses the translation when it exists and the source when it does not (`rnsDoLocale`), the generated block in an English source is emitted with English texts (`textosDaFonte`), and the sentences anchored in sibling prose (`contagens-do-codigo.mjs`, the runbook) accept pt-BR or English (`padraoEn`). The `openapi-textos.json` catalogs live in `brabo`, under `docs/i18n/<locale>/`.
 
 ### The API page is translated by catalog (ADR 0220) {#the-api-page-is-translated-by-catalog-adr-0220}
 

@@ -5,7 +5,7 @@ sidebar_label: Глоссарий
 sidebar_position: 9
 description: Единый язык Brabo — термины, которые встречаются в коде, на экранах и в ADR, со значением, которое они имеют здесь.
 keywords: [glossary, ubiquitous language, harness, gate, handoff, DEK, outbox]
-traducao_de: 4990612012ed4b363b8a96f95efb89c0d0c9d26c
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # Глоссарий {#glossary}
@@ -196,7 +196,7 @@ PR**, [RN-050](business-rules/engine.md#rn-050)), `awaiting_gate` (PR откры
 
 **`proposed_action`** — каждое действие с внешним эффектом (команда терминала,
 commit, push, PR, merge, расход) **рождается** здесь и никогда не выполняется
-напрямую. Всего 21 тип и 6 состояний
+напрямую. Всего 23 типа и 6 состояний
 ([RN-003](business-rules/api.md#rn-003)).
 
 **`permissions.json`** — файл политики проекта. Сопоставляет шаблон команды

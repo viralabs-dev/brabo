@@ -1,5 +1,5 @@
 ---
-traducao_de: 4cc1b596659af65abb89f0dc4ed3ec7525de5906
+traducao_de: 72b7ce386be372596e8fa6caf64502089c39fa05
 id: architecture
 title: Architecture
 sidebar_label: Architecture
@@ -14,11 +14,11 @@ This document is the map for anyone who's going to **work** on the code. It
 says where to start reading, what each boundary promises, and what's already
 known to be crooked.
 
-Decisions and their rationale live in the [ADRs](adr/index.md) — 216 of
+Decisions and their rationale live in the [ADRs](adr/index.md) — 257 of
 them, several recording a real defect found in execution. Here we don't
 repeat the argument: we point at it.
 
-## The outside view
+## The outside view {#the-outside-view}
 
 Brabo receives **a product intent** ("I want a system that does X") and
 returns **a git repository with code, tests, and a history of decisions**,
@@ -32,7 +32,7 @@ work is done by long-running processes talking to language models, and that
 the system is built so that **nothing happens without a trace and without
 permission**.
 
-## Containers
+## Containers {#containers}
 
 ```mermaid
 graph TB
@@ -59,7 +59,7 @@ graph TB
   B -->|"WebSocket (channels)"| E
   A -->|"SQL"| P
   A -->|"internal HTTP<br/>sync command"| E
-  A -->|"internal HTTP<br/>five operations"| K
+  A -->|"internal HTTP<br/>six operations"| K
   K -->|"reads the Architect's decision"| A
   K -->|"docker CLI over the socket"| D
   A -->|"LLM turn"| L
@@ -145,9 +145,9 @@ threat model IN PARALLEL — the verdict never waits for it, and the ask happens
 only once per story ([RN-539](business-rules/engine.md#rn-539),
 [ADR 0090](adr/0090-qa-estrategia-e-appsec-segundo-momento.md)).
 
-## Code map
+## Code map {#code-map}
 
-### `apps/api` — NestJS, 906 files in `src/` (measured 2026-09-25)
+### `apps/api` — NestJS, 906 files in `src/` (measured 2026-09-25) {#appsapi--nestjs-906-files-in-src-measured-2026-09-25}
 
 Four layers, and the order matters:
 
@@ -167,7 +167,7 @@ auto-instrumentation doesn't catch an already-loaded module, and a separate
 module is what guarantees that: TypeScript hoists all `require`s to the
 top, so a call written between imports would run too late).
 
-### `apps/engine` — Elixir/OTP, 219 files in `lib/` (measured 2026-09-25)
+### `apps/engine` — Elixir/OTP, 219 files in `lib/` (measured 2026-09-25) {#appsengine--elixirotp-219-files-in-lib-measured-2026-09-25}
 
 | module | what it is | start with |
 |---|---|---|
@@ -183,7 +183,7 @@ top, so a call written between imports would run too late).
 **Entrypoint:** `lib/engine/application.ex` — the whole supervision tree is
 there, and it's the best file to understand what's running.
 
-### `apps/broker` — Node/TS, 9 files in `src/` (measured 2026-09-25)
+### `apps/broker` — Node/TS, 9 files in `src/` (measured 2026-09-25) {#appsbroker--nodets-9-files-in-src-measured-2026-09-25}
 
 The only process in the product with access to a Docker daemon
 ([ADR 0130](adr/0130-broker-de-container.md)), and the smallest service here:
@@ -199,7 +199,7 @@ no framework, `node:http`, six routes (measured 2026-09-25 in `src/servidor.ts`)
 **Entrypoint:** `src/index.ts`. Docker access itself is not here: it comes from
 `packages/docker-port`, the same file the runner uses.
 
-### `apps/web` — React 19, 487 files in `src/` (measured 2026-09-25)
+### `apps/web` — React 19, 487 files in `src/` (measured 2026-09-25) {#appsweb--react-19-487-files-in-src-measured-2026-09-25}
 
 `src/lib/api-types.ts` and `src/lib/activity.ts` are the two files worth
 reading first: the first is the contract with the api, the second
@@ -448,17 +448,17 @@ is still emitted so a local refusal never disappears from the timeline. What the
 agent does NOT check, and the screen does, is the decided image and the
 confirmed folder.
 
-### Outside the applications
+### Outside the applications {#outside-the-applications}
 
 | directory | what it is |
 |---|---|
 | `packages/shared/` | the `GitProviderContract` — fifteen operations, **types and nothing else**: a value that survives `tsc` breaks the api's boot (locked by a test), so the constant lives in the consumer |
-| `packages/docker-port/` | the Docker PORT (five operations) and its CLI adapter, shared by `apps/runner` and `apps/broker` — [ADR 0130](adr/0130-broker-de-container.md). It is runtime code, which is exactly why it is NOT in `packages/shared`; it has no build step and both consumers BUNDLE it, so no image ever resolves it from `node_modules` |
+| `packages/docker-port/` | the Docker PORT (six operations) and its CLI adapter, shared by `apps/runner` and `apps/broker` — [ADR 0130](adr/0130-broker-de-container.md). It is runtime code, which is exactly why it is NOT in `packages/shared`; it has no build step and both consumers BUNDLE it, so no image ever resolves it from `node_modules` |
 | `docker/` | dev and production images; `smoke.sh` |
 | `deploy/k8s/` | Kustomize base + overlays (local, staging, prod) |
 | `design/` | design system: tokens, typography, components |
 
-## An agent turn's flow
+## An agent turn's flow {#an-agent-turns-flow}
 
 The hot path, end to end. This is where most of the complexity lives.
 
@@ -502,10 +502,10 @@ sequenceDiagram
   A-->>W: Phoenix broadcast → panel updates
 ```
 
-The `Harness → tool call → approval → event` loop repeats until the agent
+The `Harness → chamada de ferramenta → aprovação → evento` loop repeats until the agent
 calls the finishing tool or hits a ceiling (iterations, tokens, budget).
 
-## Boundaries and invariants
+## Boundaries and invariants {#boundaries-and-invariants}
 
 This is the part that matters most. Every item below is verifiable, and
 several have a test that fails on violation.
@@ -593,7 +593,7 @@ delivered to the model. And an agent's loop doesn't end silently — an
 iteration ceiling emits `toolloop.limit_reached`, an unmet obligation emits
 a durable outcome with an origin ([RN-166](business-rules/engine.md#rn-166)).
 
-## Cross-cutting concerns
+## Cross-cutting concerns {#cross-cutting-concerns}
 
 **Cross-origin.** The web is served from its own origin and talks to
 **two** others, so CORS is an architectural boundary, not a configuration
@@ -709,7 +709,7 @@ area, and narrates `delegation.completed`/`failed`/`dispensed` in the feed
 became a real artifact — QA and Infra reuse `qa_verdict`/`open_infra_pr`,
 see the [ADR's closing note](adr/0038-hierarquia-de-agentes.md#fechamento-fase-8d).
 
-## Data
+## Data {#data}
 
 ```mermaid
 erDiagram
@@ -737,7 +737,7 @@ erDiagram
   users ||--o{ detected_language_declines : "detected language the person said no to (RN-624)"
 ```
 
-56 tables in total. The most recent is `detected_language_declines`
+59 tables in total. The most recent is `chat_attachments` ([RN-986](business-rules/api.md#rn-986): the bytes of the chat attachments; `chat.message` keeps only the reference, RN-987); before it came `source_clicks` ([RN-983](business-rules/api.md#rn-983): the click on a consulted source, which is not a vote); before it came `detected_language_declines`
 ([RN-624](business-rules/api.md#rn-624)): one row per person and language the
 person DECLINED when asked "we noticed you write in X — use X for the
 answers?", with the date. Its presence is what keeps the same question from
@@ -834,7 +834,7 @@ had cut. It came back because the **dev** area isn't enumerable in code:
 `qa` and `infra` fit in a fixed list, but dev's members are one per
 `module_map` module, decided by the Architect and different in each
 project. The unique `(project_id, key)` is what makes seeding idempotent,
-and `max_parallel` (starts at 5 for dev, 4 for qa and 2 for infra) is the ceiling the lead uses without asking
+and `max_parallel` (starts at 5 for `dev`, 4 for `qa` and 2 for `infra`, [RN-910](business-rules/api.md#rn-910)) is the ceiling the lead uses without asking
 — above it, `proposed_action`
 (see [RN-083](business-rules/api.md#rn-083)). `budget_micros`/`spent_micros`
 (ADR 0110) mirror `max_parallel` on the same row — a spend ceiling that is

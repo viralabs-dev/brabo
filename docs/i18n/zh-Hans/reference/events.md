@@ -4,12 +4,12 @@ title: 事件
 sidebar_position: 2
 description: 不可变日志中的事件类型、通道的 broadcast 以及 trace 的 span——名字相似的三种不同东西。
 keywords: [事件, event log, session_events, broadcast, span, outbox]
-traducao_de: 5c8b2358773a5a9c46596ec50d9e5b8c29afaaf8
+traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 ---
 
 # 事件
 
-Brabo 中并存着三族名称，而且很容易混淆，因为它们都使用 `主题.动词` 的形式：
+Brabo 中并存着三族名称，而且很容易混淆，因为它们都使用 `assunto.verbo` 的形式：
 
 | 族 | 所在位置 | 持久性 |
 |---|---|---|
@@ -134,6 +134,10 @@ Brabo 中并存着三族名称，而且很容易混淆，因为它们都使用 `
 | `infra.gate_changed` | Infra 的 gate |
 | `gate.rescue_parked` | `GateRescuer` **搁置**了一个停滞超过 2 小时的 QA/SecOps 周期，而不是重启它（[RN-722](../business-rules/engine.md#rn-722)，ADR 0207）；对话流显示一个"恢复 gate"按钮（[RN-724](../business-rules/engine.md#rn-724)）。Payload：`taskId`、`gate`、`idadeSegundos`、`motivo`。Actor `system`/`gate-rescuer` |
 | `gate.interrupted` | 在 engine **启动**时，一个最近的 `in_progress` gate 周期在集群的任何节点上都没有活着的进程：是重启杀死了它，救援者立即重启它，而不是等待 15 分钟的阈值（[RN-823](../business-rules/engine.md#rn-823)）。Payload：`taskId`、`gate`、`ultimaAtividadeEm`、`retomadoEm`。Actor `system`/`gate-rescuer`；对话流把它显示为提示。不投影到图谱 |
+| `agent.plan` | agent 用 `registrar_plano` 记录了本回合或本任务的计划（[RN-918](../business-rules/engine.md#rn-918)）：`objetivo` 和 `passos`（`texto`，`estado` 为 `pendente`/`em_curso`/`feito`/`descartado`）。每个事件替换前一个；最后一个为当前有效，并为日志和线程卡片提供数据 |
+| `agent.turn_resumed` | 被重启中断的回合已恢复（[RN-920](../business-rules/engine.md#rn-920)、[RN-921](../business-rules/api.md#rn-921)）。Payload：`retomaDe`、`ultimaAtividadeEm`、`automatica`（启动时为 `true`，点击“恢复”按钮为 `false`）。它是 1 次自动恢复上限的标记；gate 子 agent 在被恢复时写入它 |
+| `infra.correction_queued` | 一个 gate 的修正送达 Infra Lead 并持久地处于待处理状态（[RN-924](../business-rules/engine.md#rn-924)）。Payload：`id`、`gate`、`reason`、`diagnosis` |
+| `infra.correction_delivered` | 修正 `id` 已交付给 Infra Lead；有 `queued` 而无 `delivered` 的修正会在启动时重新交付 |
 | `infra.artifact_blocked` | Infra 的产物被拒绝 |
 
 ### 委派（Fase 8b，ADR 0038）
@@ -283,7 +287,7 @@ OpenTelemetry 的 span 名称。一个会话是贯穿 api 和 engine 的**根 tr
 
 ### 从代码派生的名称
 
-api 的 `@Traced` 装饰器（[ADR 0035](../adr/0035-observabilidade-legivel-e-trace-sem-coletor.md)）把 span 命名为 **`类.方法`**——例如 `TransitionSessionUseCase.execute`、`DrizzleOutboxRepository.append`。它们无法列在这里：它们随代码生灭，列表会在第一次改名时过时。
+api 的 `@Traced` 装饰器（[ADR 0035](../adr/0035-observabilidade-legivel-e-trace-sem-coletor.md)）把 span 命名为 **`Classe.metodo`**——例如 `TransitionSessionUseCase.execute`、`DrizzleOutboxRepository.append`。它们无法列在这里：它们随代码生灭，列表会在第一次改名时过时。
 
 这个区别在查询时很重要：领域名称是稳定的，可以放进保存的查询或仪表盘；从代码派生的名称则不行。
 
@@ -321,7 +325,7 @@ sequenceDiagram
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从发出点提取：**116 个标识符**，其中 **4** 个未在上文描述。
+从发出点提取：**118 个标识符**，其中 **6** 个未在上文描述。
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
@@ -342,6 +346,7 @@ sequenceDiagram
 - `anamnese.run_skipped` <sub>(apps/engine/lib/engine/session_events/event.ex)</sub>
 - `architecture.readiness_confirmed` <sub>(apps/api/src/application/use-cases/agents/offer-infra-handoff.use-case.ts)</sub>
 - `artifact.business_rule` <sub>(apps/engine/lib/engine/agents/arquiteto_server.ex)</sub>
+- `artifact.business_rule_retired` — ⚠️ **上文未描述** <sub>(apps/engine/lib/engine/agents/arquiteto_server.ex)</sub>
 - `artifact.decision_record` <sub>(apps/api/src/application/use-cases/backlog/perguntas-em-aberto.use-case.ts)</sub>
 - `artifact.insight` <sub>(apps/engine/lib/engine/harness/tools/emit_insight.ex)</sub>
 - `artifact.module_map` <sub>(apps/api/src/application/use-cases/architecture/create-module-map.use-case.ts)</sub>
@@ -417,6 +422,7 @@ sequenceDiagram
 - `project.git_connected` <sub>(apps/api/src/application/use-cases/git/handle-git-oauth-callback.use-case.ts)</sub>
 - `project.repository_adopted` <sub>(apps/api/src/application/use-cases/git/adopt-repository.use-case.ts)</sub>
 - `project.repository_provisioned` <sub>(apps/api/src/application/use-cases/git/provision-repository.use-case.ts)</sub>
+- `project.trunk_merged` — ⚠️ **上文未描述** <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `project.workspace_verified` <sub>(apps/api/src/application/use-cases/iam/confirm-project-workspace.use-case.ts)</sub>
 - `proposed_action.approved` <sub>(apps/api/src/application/use-cases/actions/approve-action.use-case.ts)</sub>
 - `proposed_action.created` <sub>(apps/api/src/application/use-cases/actions/propose-action.use-case.ts)</sub>

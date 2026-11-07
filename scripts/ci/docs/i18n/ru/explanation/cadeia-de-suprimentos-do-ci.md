@@ -3,7 +3,7 @@ id: cadeia-de-suprimentos-do-ci
 title: Цепочка поставок CI
 sidebar_label: Цепочка поставок CI
 description: Что выполняется внутри наших CI-runner'ов, но написано не нами, как это закреплено и что до сих пор принимается на веру.
-traducao_de: 929963d24eb727bd64875486f2f1889172f3084a
+traducao_de: 3016564b5bb5b0752711c07b9babefd252829a8d
 ---
 
 # Цепочка поставок CI

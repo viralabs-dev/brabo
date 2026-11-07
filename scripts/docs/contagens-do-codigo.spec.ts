@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { AFERICOES, FONTES, aferirContagens, naForma } from './contagens-do-codigo.mjs';
+import { AFERICOES, FONTES, aferirContagens, casarFrase, naForma } from './contagens-do-codigo.mjs';
 
 // Cada fonte é provada por MUTAÇÃO sobre o repositório de verdade: o teste lê
 // os arquivos reais e troca UM trecho em memória — nunca escreve no disco. Se
@@ -119,5 +119,38 @@ describe('contagens derivadas do código (AT-123)', () => {
     expect(naForma(21, 'en')).toBe('twenty-one');
     expect(naForma(99, 'en')).toBe('99');
     expect(naForma(17, 'digito')).toBe('17');
+  });
+});
+
+describe('frase de irmão em pt-BR ou em inglês (AT-745, ADR 0260)', () => {
+  const git = AFERICOES.find((a: any) => a.arquivo.endsWith('git-providers.md') && a.padraoEn?.source.includes('contract has'));
+  it('a entrada tem os dois padrões', () => {
+    expect(git?.padraoEn).toBeInstanceOf(RegExp);
+  });
+  it('casa a frase inglesa na forma en e a portuguesa na forma pt', () => {
+    expect(casarFrase('The contract has **fifteen operations** — x', git as any, 15)).toEqual({ achado: 'fifteen', esperado: 'fifteen' });
+    expect(casarFrase('O contrato tem **quinze operações** — x', git as any, 15)).toEqual({ achado: 'quinze', esperado: 'quinze' });
+  });
+  it('mutação: número errado na frase inglesa é DESATUAL, não passa calado', () => {
+    const r = casarFrase('The contract has **fourteen operations** — x', git as any, 15);
+    expect(r?.achado).not.toBe(r?.esperado);
+  });
+  it('mutação: frase em nenhum dos dois idiomas é CEGO (null)', () => {
+    expect(casarFrase('o contrato tem 15 coisas', git as any, 15)).toBeNull();
+  });
+  it('aferirContagens aceita o arquivo em inglês e reprova o número velho', () => {
+    const entrada = { arquivo: 'x.md', padrao: /tem (\S+) itens/, padraoEn: /has (\S+) items/, fonte: 'f', forma: 'pt_m' };
+    const fontes = { f: { descricao: 'f', contar: () => 3 } };
+    const roda = (texto: string) => aferirContagens({ ler: () => texto, listar: () => [] } as any, [entrada] as any, fontes as any)[0];
+    expect(roda('the doc has three items').estado).toBe('ok');
+    expect(roda('the doc has two items').estado).toBe('DESATUAL');
+    expect(roda('nada').estado).toBe('CEGO');
+  });
+  it('o RN-hospedeiro também é achado quando a RN está em inglês', () => {
+    const entrada = { arquivo: 'docs/business-rules.md', padrao: /- as (\S+) imagens/, padraoEn: /- the (\S+) images/, fonte: 'f', forma: 'pt_f' };
+    const fontes = { f: { descricao: 'f', contar: () => 5 } };
+    const ctx = { ler: (a: string) => (a === 'apps/infra/rn.md' ? '- the five images come' : ''), listar: () => [], arquivosDeRn: () => ['docs/business-rules.md', 'apps/infra/rn.md'] };
+    const r = aferirContagens(ctx as any, [entrada] as any, fontes as any)[0];
+    expect(r).toMatchObject({ arquivo: 'apps/infra/rn.md', estado: 'ok' });
   });
 });

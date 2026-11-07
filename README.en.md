@@ -13,19 +13,20 @@
 **A team of AI agents takes your application from brief to deploy.
 Final authority stays yours — by construction, not by convention.**
 
-[![CI](https://img.shields.io/github/actions/workflow/status/daneiel/brabo/ci.yml?branch=dev&label=CI&style=flat-square)](https://github.com/daneiel/brabo/actions/workflows/ci.yml)
+[![Docs check](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/docs-check.yml?branch=dev&label=docs-check&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/docs-check.yml)
+[![Release](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/release.yml?label=release&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/github/v/release/daneiel/brabo?label=version&color=informational&style=flat-square)](CHANGELOG.md)
-[![Documentation](https://img.shields.io/badge/docs-daneiel.github.io/brabo-8A2BE2.svg?style=flat-square)](https://daneiel.github.io/brabo/)
+[![Version](https://img.shields.io/github/v/release/viralabs-dev/brabo?label=version&color=informational&style=flat-square)](https://github.com/viralabs-dev/brabo/releases/latest)
+[![Documentation](https://img.shields.io/badge/docs-viralabs--dev.github.io/brabo-8A2BE2.svg?style=flat-square)](https://viralabs-dev.github.io/brabo/prd/en/)
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-buy%20me%20a%20coffee-FF5E5B?logo=ko-fi&logoColor=white&style=flat-square)](https://ko-fi.com/daneiel)
 
-[Documentation](https://daneiel.github.io/brabo/) · [From zero to a deliverable](https://daneiel.github.io/brabo/prd/en/tutorials/from-zero-to-deliverable) · [CHANGELOG](CHANGELOG.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
+[Documentation](https://viralabs-dev.github.io/brabo/prd/en/) · [From zero to a deliverable](https://viralabs-dev.github.io/brabo/prd/en/tutorials/from-zero-to-deliverable) · [CHANGELOG](CHANGELOG.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
 <img src="docs/assets/readme/perguntas-no-chat.png" alt="Brabo session screen: the Creative records the business rules and hands the open questions back in the chat, each with a suggestion and the rules it affects" />
 
 <sub>The idea becomes rules, and what is missing becomes a question — the Creative hands the doubts back in the chat.</sub>
 
-[Highlights](#highlights) · [Features](#features) · [What it is](#what-it-is) · [Get started](#get-started-in-three-commands) · [Documentation](#documentation) · [License](#license)
+[Highlights](#highlights) · [Features](#features) · [What it is](#what-it-is) · [Get started](#get-started) · [Repositories](#brabo-repositories) · [Release](#how-the-release-is-built) · [Documentation](#documentation) · [License](#license)
 
 </div>
 
@@ -76,7 +77,7 @@ stays in the session thread.
 Pull requests that pass the gates arrive in the chat, and one click on Approve
 confirms.
 
-**From zero to a deliverable, in a real run:** [the walkthrough with the recordings](https://daneiel.github.io/brabo/prd/en/tutorials/from-zero-to-deliverable) — 8 of 8 tasks, 102/102 tests, US$ 1.07.
+**From zero to a deliverable, in a real run:** [the walkthrough with the recordings](https://viralabs-dev.github.io/brabo/prd/en/tutorials/from-zero-to-deliverable) — 8 of 8 tasks, 102/102 tests, US$ 1.07.
 
 ---
 
@@ -113,168 +114,106 @@ hypotheses anchored in real events; Anamnesis derives your proficiency profile
 and proposes versioned instruction patches. Every patch needs your sign-off,
 and reverting creates a new version instead of erasing history.
 
-## Get started in three commands
+## Get started
+
+### Install Brabo
 
 ```bash
-cp .env.example .env
-pnpm install
-pnpm dev
+curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh && bash install.sh
 ```
 
-`pnpm dev` brings up Docker Compose (Postgres 16 + pgvector, api, engine, web)
-with hot reload. On the first start the api and the engine apply their own
-migrations. `pnpm --filter api seed` creates the demo users.
+The installer is a bash script: download the file and run it with `bash`, never
+`curl | sh`. It checks the signature of the Release's `checksums.txt` before
+using any file, brings the stack up with images pinned by digest, creates the
+first account and turns on the runner on this machine. Each step says what it
+did, and whatever went wrong is named at the end. `bash install.sh --print-plan`
+shows what it would do without running anything. The walkthrough is in
+[Getting started](https://viralabs-dev.github.io/brabo/prd/en/getting-started).
 
-| service | address | note |
-|---|---|---|
-| Web | <http://localhost:5173> | login `owner@brabo.dev` / `brabo12345678` (from the seed) |
-| API | <http://localhost:3000> | `GET /health` |
-| Engine | <http://localhost:4000> | `GET /health` |
+### Develop Brabo
 
-`pnpm dev:down` tears everything down. `pnpm dev:build` forces a rebuild.
-
-### The menu, if you'd rather not memorize commands
+The code lives in sibling repositories, cloned side by side by
+[`brabo-workspace`](https://github.com/viralabs-dev/brabo-workspace). The dev environment is brought up by
+[`brabo-infra`](https://github.com/viralabs-dev/brabo-infra), which builds each service from those clones:
 
 ```bash
-pnpm bootstrap
+git clone https://github.com/viralabs-dev/brabo-workspace.git ~/dev/brabo
+cd ~/dev/brabo && ./clonar-tudo.sh
+cd brabo-infra && make dev
 ```
 
-Day-to-day commands live in three places that don't talk to each other:
-`package.json` (the pnpm scripts), the `Makefile` (the Kubernetes targets) and
-loose scripts in `deploy/k8s/` and `docker/`. The menu is the single door. It
-**reimplements nothing** — each item calls exactly the `pnpm`, `make` or script
-that already exists.
+`make dev` checks that the siblings are in place and brings Docker Compose up.
+The menu of everyday commands (Docker, Kubernetes, database and tests) also
+lives in `brabo-infra`: `bash scripts/dev/bootstrap.sh`. The details are in its
+README.
 
-| key | what it does |
-|---|---|
-| `1`–`6` | picks the item, **no Enter** |
-| `v` | goes back one level |
-| `q` | quits |
-| `↓` | while running, shows the live output |
-| `↑` | goes back to the "running" screen |
-| mouse wheel · `j`/`k` · `PgUp`/`PgDn` | with the output shown, scrolls the whole log |
-| `G` | goes back to the end of the log (live) |
-| `Ctrl+C` | aborts the running command |
+This repository holds the documentation, the installer and the release. To work
+on the docs: `pnpm install`, `bash scripts/docs/montar-layout.sh` (brings in the
+siblings' docs), `pnpm docs:check` and `pnpm docs:build`.
 
-The valid shortcuts show in the footer of the screen you're on — no need to
-remember them. The banner stays pinned at the top while you navigate, scroll
-or resize the window.
+## Brabo repositories
 
-**Scrolling the log.** The expanded output used to show only the end of the
-file; now it is a window that moves backwards, and the command's whole log is
-reachable without waiting for it to finish. Two consequences the footer
-announces right away:
+Brabo is split into repositories by layer ([ADR 0252](https://viralabs-dev.github.io/brabo/prd/en/adr/0252-o-brabo-vira-um-conjunto-de-repositorios)).
+`brabo` is the center of the documentation: the site at <https://viralabs-dev.github.io/brabo/prd/en/> joins the
+siblings' `docs/` folders into a single tree.
 
-- **Scrolling back FREEZES the window** (like `less +F`), otherwise redrawing
-  five times a second would undo the scroll before you read the line. `G`
-  follows the end again.
-- **While the command runs, the menu turns on mouse tracking** to receive the
-  wheel — and with it on, dragging no longer selects text. **Hold `Shift`** for
-  the terminal's native selection. Outside that screen tracking stays off, and
-  it is also turned off on exit, including by `Ctrl+C`.
+| repo | role | depends on | used by |
+|---|---|---|---|
+| [brabo](https://github.com/viralabs-dev/brabo) | product: documentation, installer, release | all | infra, workspace |
+| [brabo-api](https://github.com/viralabs-dev/brabo-api) | API (NestJS, Drizzle, PostgreSQL/pgvector) | contracts, ci, infra | brabo, infra, qa, web, contracts |
+| [brabo-engine](https://github.com/viralabs-dev/brabo-engine) | engine (Elixir/OTP, Phoenix, Oban) | contracts, ci | brabo, infra, qa |
+| [brabo-web](https://github.com/viralabs-dev/brabo-web) | web interface (React 19, Vite) | contracts, ci, api | brabo, infra |
+| [brabo-runner](https://github.com/viralabs-dev/brabo-runner) | CLI on the user's machine | contracts, ci | brabo, infra |
+| [brabo-broker](https://github.com/viralabs-dev/brabo-broker) | container broker | contracts, ci | brabo, infra, qa |
+| [brabo-contracts](https://github.com/viralabs-dev/brabo-contracts) | shared contracts | ci (receives the api's areas.json) | api, broker, runner, web, engine, infra, brabo |
+| [brabo-infra](https://github.com/viralabs-dev/brabo-infra) | composes, k8s, backup | ci, api, engine, web, runner, broker, contracts, brabo | brabo, qa, api |
+| [brabo-ci](https://github.com/viralabs-dev/brabo-ci) | reusable workflows for policy, ladder and stamp | — | all |
+| [brabo-qa](https://github.com/viralabs-dev/brabo-qa) | E2E, golden sets, instruments | ci, api, engine, broker, infra | brabo |
+| [brabo-workspace](https://github.com/viralabs-dev/brabo-workspace) | parent folder with the clones side by side | ci | — |
 
-**The four areas.** `Create` provisions the environment from scratch, `Deploy`
-publishes code to an environment that already exists (that's why it's the only
-one with a per-service choice) and `Destroy` tears down:
+## How the release is built
 
-| area | items |
-|---|---|
-| **1. Docker** | `Deploy` → All · Api · Engine · Web — `Create` — `Destroy` — `Reset total` — `Reconfigurar Ollama` — `Base de projetos` |
-| **2. K8s** | `Deploy` → All — `Create` — `Destroy` |
-| **3. Database** | `Generate` — `Migrate` — `Seed` — `Delete` |
-| **4. Test** | All · Api · Engine · Web · Smoke · Docs |
+The product release is born here, from a `vX.Y.Z` tag, by the
+[`release.yml`](.github/workflows/release.yml) workflow:
 
-Four things the menu does that are worth knowing:
+1. **[`componentes.json`](componentes.json)** pins the version of each
+   component: the `brabo-infra` ref, the `brabo-runner` tag and the tag of each
+   image (api, engine, web, broker and backup).
+2. **Each repo's `imagem.json`.** The Release of each app tag carries an
+   `imagem.json` with `imagem`, `tag` and `digest`. The workflow downloads the
+   five and builds the product's `images.json`, with the images pinned by digest.
+3. **Trivy by digest.** Each image is scanned by its digest, and a HIGH or
+   CRITICAL vulnerability with a fix fails the release before signing.
+4. **Signed `checksums.txt`.** `install.sh`, the `brabo-install-*` assets and
+   `images.json` go into one `checksums.txt`, signed with cosign keyless by the
+   workflow's identity. That signature is what `install.sh` verifies.
 
-- **`Docker › Destroy` keeps the volumes** (`down`, never `down -v`):
-  destroying containers is not destroying data.
-- **In K8s only `All` works.** The cluster bootstrap installs api, engine and
-  web together; Api/Engine/Web show in the menu **disabled**, with the reason.
-  Hiding them would hide the limit; running them would invent a path that
-  doesn't exist.
-- **`Database › Delete` is the only screen that asks for Enter**, and it
-  requires typing the database name. It wipes the schema and **recreates the
-  pgvector extension** — `init.sql` only runs on the volume's first
-  initialization, so a bare `DROP SCHEMA` would make the next migration fail.
-  Since the engine shares the same database, the script warns that recovering
-  takes `pnpm db:migrate` **and** `pnpm engine:migrate`.
-- **`Docker › Reset total` stops the api and the engine before erasing** —
-  those two, and no other: they are the ones holding a live connection to the
-  database, and a `DROP SCHEMA` under them kills the processes with nothing to
-  bring them back (the engine dies inside the drop itself, because the
-  `Rehydrator` queries a table that just vanished). After migrating it brings
-  everything up again, waits for it to be healthy and seeds; at the end it
-  **asks** the `/health` of the api and the engine and the web's `/` before
-  saying anything — if one doesn't answer, it names it and exits with code 1,
-  instead of announcing success. It is the second screen that asks for
-  confirmation (typing `RESET`), and it doesn't remove volumes — and says so
-  when it runs, because the flip side is that a reset never reproduces a first
-  clone (a defect that only shows with a new volume goes unnoticed). Details in
-  [`deploy/docs/runbook.md`](deploy/docs/runbook.md#reset-total).
-
-**Command-line options:**
-
-```bash
-pnpm bootstrap                                # opens the menu (needs a terminal)
-pnpm bootstrap --print-commands               # prints the whole tree and exits
-pnpm bootstrap --print-commands --path 1.1    # just one subtree
-pnpm bootstrap --help                         # the usage header
-```
-
-`--print-commands` resolves each leaf of the menu to the real command **without
-running anything** — that's how you audit what the menu does, and it's what the
-test runs on (`scripts/dev/bootstrap.spec.ts`). Without an interactive terminal
-the menu refuses to open and points at that option, instead of hanging on a key
-that never comes. For the same reason there is
-`--print-window <log> <lines> <offset>`: the slice the scroll takes from the log
-is pure arithmetic, and this way it's testable without a TTY.
-
-`NO_COLOR=1` turns color off; otherwise it uses the design system's tokens in
-24-bit ANSI and degrades to 256 colors where the terminal doesn't support it.
-
-> **`pnpm dev` and `make deploy-local` don't coexist.** Both publish api and
-> engine on the same ports — on purpose, so the smoke test holds for
-> both. With the local cluster up, **5173 doesn't open**, and the web is at
-> <http://localhost:8088>. `pnpm dev:preflight` tells you which mode you're in;
-> `make k8s-down` brings you back to this one. Details in
-> [Getting started](docs/getting-started.md#os-dois-modos-locais-não-coexistem).
-
-> The `api`, `web` and `engine` containers run with the SAME UID/GID as your
-> host user — never as root — so that `apps/api/dist` and whatever else the
-> agent writes in the bind mount is born with YOUR ownership. Find your pair
-> with `id -u` and `id -g`; if it doesn't match the default (1000/1000, the most
-> common on a single-developer Linux machine), set `DEV_UID`/`DEV_GID` in `.env`
-> (see `.env.example`) before the first `docker compose up`.
-> An environment that existed before this change: the named volumes of
-> `node_modules`/`_build`/`deps`/`.mix`/`.hex` still have content written by
-> root in the old containers — run once
-> `sudo chown -R $USER apps/api/dist apps/*/node_modules` (or delete the
-> volumes with `docker compose down -v` and let the next `up` recreate them) to
-> clear what got stuck.
+A `workflow_dispatch` without a tag is the dry run: it builds, scans and checks
+everything, but neither signs nor publishes.
 
 ## Documentation
 
-**📖 [daneiel.github.io/brabo](https://daneiel.github.io/brabo/)** — the same
-documentation below, browsable and searchable. The site reads from `docs/`,
-publishes on merge to `main`, and so it sits one promotion cycle behind what is
-in `dev`: for the latest state, read the files here.
+**📖 [viralabs-dev.github.io/brabo](https://viralabs-dev.github.io/brabo/prd/en/)** — the documentation, browsable and
+searchable, in four languages. The site joins this repo's `docs/` folder with
+the siblings' and publishes two environments: [`/prd/`](https://viralabs-dev.github.io/brabo/prd/en/) from `main` and
+[`/dev/`](https://viralabs-dev.github.io/brabo/dev/en//) from `dev`. For the latest state, use `/dev/`.
 
 | document | for |
 |---|---|
-| [Introduction](docs/intro.md) | the overview |
-| [Getting started](docs/getting-started.md) | from the clone to the first agent turn |
-| [Architecture](docs/architecture.md) | code map, boundaries, invariants, technical debt |
-| [Business rules](docs/business-rules.md) | the RNs, each with `file:line` and the test that covers it (count in the [Portuguese README](README.md)) |
-| [Runbook](deploy/docs/runbook.md) | deploy, rollout, restore, key rotation, cost incident |
-| [Glossary](docs/glossary.md) | harness, gate, handoff, DEK, outbox, cycle K |
-| [Observability](deploy/docs/explanation/observability.md) | how to follow an action across the three processes: trace, log and the path across layers |
-| [Configuration](docs/reference/configuration.md) | every environment variable |
-| [Scripts](docs/reference/scripts.md) | every `pnpm` command and `Makefile` target, extracted from the source |
-| [Events](docs/reference/events.md) | the event log types, broadcasts and spans |
-| [Permissions](apps/api/docs/reference/permissions.md) | the `permissions.json` format and the decision order |
-| [Artifacts](apps/api/docs/reference/artifacts.md) | the schemas and who may emit each one |
-| [Git providers](apps/api/docs/reference/git-providers.md) | the operation contract and the capabilities |
-| [Internal API](docs/reference/internal-api.md) | the api ↔ engine contract |
+| [Introduction](https://viralabs-dev.github.io/brabo/prd/en/) | the overview |
+| [Getting started](https://viralabs-dev.github.io/brabo/prd/en/getting-started) | from the installation to the first agent turn |
+| [Architecture](https://viralabs-dev.github.io/brabo/prd/en/architecture) | code map, boundaries, invariants, technical debt |
+| [Business rules](https://viralabs-dev.github.io/brabo/prd/en/business-rules) | the RNs, each with `file:line` and the test that covers it (count in the [Portuguese README](README.md)) |
+| [Runbook](https://viralabs-dev.github.io/brabo/prd/en/runbook) | deploy, rollout, restore, key rotation, cost incident |
+| [Glossary](https://viralabs-dev.github.io/brabo/prd/en/glossary) | harness, gate, handoff, DEK, outbox, cycle K |
+| [Observability](https://viralabs-dev.github.io/brabo/prd/en/explanation/observability) | how to follow an action across the three processes: trace, log and the path across layers |
+| [Configuration](https://viralabs-dev.github.io/brabo/prd/en/reference/configuration) | every environment variable |
+| [Scripts](https://viralabs-dev.github.io/brabo/prd/en/reference/scripts) | every `pnpm` command and `Makefile` target, extracted from the source |
+| [Events](https://viralabs-dev.github.io/brabo/prd/en/reference/events) | the event log types, broadcasts and spans |
+| [Permissions](https://viralabs-dev.github.io/brabo/prd/en/reference/permissions) | the `permissions.json` format and the decision order |
+| [Artifacts](https://viralabs-dev.github.io/brabo/prd/en/reference/artifacts) | the schemas and who may emit each one |
+| [Git providers](https://viralabs-dev.github.io/brabo/prd/en/reference/git-providers) | the operation contract and the capabilities |
+| [Internal API](https://viralabs-dev.github.io/brabo/prd/en/reference/internal-api) | the api ↔ engine contract |
 | [Security](SECURITY.md) | how to report a vulnerability |
 | [Contributing](CONTRIBUTING.md) | flow, Definition of Done, what is accepted |
 | [Governance](GOVERNANCE.md) | today's model (single maintainer), the three roles of the `community` mode and who gets into each |
@@ -283,13 +222,14 @@ in `dev`: for the latest state, read the files here.
 
 ## Stack
 
-| layer | technology |
-|---|---|
-| `apps/api` | NestJS 11 + Drizzle ORM + PostgreSQL 16 + pgvector |
-| `apps/engine` | Elixir/OTP + Phoenix (channels) + Oban (queues in Postgres) |
-| `apps/web` | React 19 + Vite + TanStack Query/Router; `mermaid` at runtime (only the Architect's C4 diagram, behind a dynamic `import()`) |
-| auth | first-party in the api (argon2id + Ed25519 access JWT + opaque refresh with rotation); RBAC in the api's domain |
-| deploy | Kubernetes via Kustomize; Docker Compose for development |
+- **api** — NestJS, Drizzle, PostgreSQL 16 with pgvector
+- **engine** — Elixir/OTP, Phoenix and Oban (queues in Postgres)
+- **web** — React 19, Vite and TanStack
+- **runner** — the `brabo-runner` CLI on the user's machine, which runs the approved commands
+- **broker** — the only process with the Docker socket, which brings up the projects' containers
+- **Ollama** — local models, served by a container of their own
+- **Neo4j** — optional: the knowledge graph, memory derived from the event log
+- **deploy** — Docker Compose (dev, production and installation) and Kubernetes with Kustomize, in `brabo-infra`
 
 No Redis: queues live in Postgres via Oban, and the rate limit is a sliding
 window in SQL.
@@ -304,11 +244,10 @@ hadolint, semgrep, yamllint), **some under the GPL**. Running them as a
 separate process contaminates nothing, but **publishing the image** to a
 registry creates an obligation to make the source available. It's all listed,
 with each one's version and license, in
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) — read it before the first
-push to a registry.
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 The web image bundles the design system's three fonts, all **OFL 1.1** — a
 permissive license, but one that requires distributing the copyright notice
-with the binary. It's in `apps/web/public/fonts/LICENSE.txt`, served with the
-rest of the static files, and the obligation is recorded in the same notices
-file.
+with the binary. It lives in [`brabo-web`](https://github.com/viralabs-dev/brabo-web), at
+`public/fonts/LICENSE.txt`, served with the rest of the static files, and the
+obligation is recorded in the same notices file.

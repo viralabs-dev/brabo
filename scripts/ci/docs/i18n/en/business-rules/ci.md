@@ -1,10 +1,10 @@
 ---
-traducao_de: 715e7330f7f738c55bc7cd3a0d770a0fc9304e11
+traducao_de: c165be09458a5dfdc42010867a29adf8a36ccd99
 id: rn-ci
-title: 'Regras de negócio — CI'
+title: 'Business rules — CI'
 sidebar_label: CI
-description: 'As RNs hospedadas na raiz ci.'
-keywords: [regras de negócio, ci]
+description: 'The RNs hosted in the ci root.'
+keywords: [business rules, ci]
 ---
 
 # CI
@@ -226,7 +226,7 @@ out of 6). `ubuntu-latest`, with no GPU at all, suffices here — it wouldn't su
 QA. The QA golden-set **doesn't change at all** with this RN: it remains entirely
 manual, a `TODO(humano)` in CLAUDE.md.
 
-**`severidade: warn` (`docs/gates.yml`) STAYS `warn`, and the reason changed.**
+**`severidade: warn` (`apps/api/config/gates.yml`) STAYS `warn`, and the reason changed.**
 It's no longer "there's no CI with an LLM" — it becomes cadence: the workflow is
 SCHEDULED (nightly + manual trigger), it never runs on `pull_request`. `block`
 would promise a merge lock that doesn't exist — the same reasoning that
@@ -294,7 +294,7 @@ Measured after the three fixes, on this machine, through the path the job
 now follows: **17/17 in the top-5**, the same as the two manual rounds that
 recorded the floor.
 
-- **Where:** `.github/workflows/golden-set-rag.yml`, `docs/gates.yml`
+- **Where:** `.github/workflows/golden-set-rag.yml`, `apps/api/config/gates.yml`
   (`rag-acertivo`), `apps/engine/mix.exs`,
   `apps/api/scripts/seed-golden-set-rag.ts`
 - **ADR:** [0138](../adr/0138-golden-set-do-rag-em-ci-agendado.md)
@@ -660,8 +660,7 @@ depend on it — it is precisely because it depended on it that it did not come 
 > the platform left.** The matrix went to FOUR targets, and `ALVOS_ESPERADOS`
 > followed — it is against it that the absence is declared, and leaving `darwin-x64`
 > there would make every manifest announce, forever, a gap that is a decision. The
-> Mac Intel stays with `npm install -g @brabo/runner` (under Node, where the same
-> proof passes): `install.sh` says so without trying to download, the
+> Mac Intel stays without a runner (npm was dropped in AT-774): `install.sh` says so without trying to download, the
 > `GET /runner-releases/binary` proxy refuses `darwin-x64` with its own 400 pointing to
 > npm, and the browser panel does not even ask for the download. This RN's rule does not
 > change: it keeps holding for any target left without a runner, and
@@ -670,7 +669,7 @@ depend on it — it is precisely because it depended on it that it did not come 
 
 - **Code:** `.github/workflows/build-runner-binaries.yml:283` (the job, now
   without `needs:`), `:318` (`timeout-minutes: 40`, which fits both waits),
-  `:335` (`ALVOS_ESPERADOS` at the JOB level, so both steps read the same list),
+  `:358` (`ALVOS_ESPERADOS` at the JOB level, so both steps read the same list),
   `:397` (the step that waits), `:401`/`:402` (the two ceilings), `:410` (the absent
   Release, which is an error), `:433` (the binaries ceiling, which is a `notice`), `:499` (the
   manifest naming what it does not cover)

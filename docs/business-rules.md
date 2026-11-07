@@ -20,22 +20,22 @@ framework, no database. That's why each one has a fast, deterministic unit
 test.
 
 <!-- BEGIN:GENERATED:indice-de-rn -->
-- <a id="rn-001"></a>[RN-001](business-rules/api.md#rn-001) — The session has five states and closed transitions
-- <a id="rn-002"></a>[RN-002](business-rules/api.md#rn-002) — Every session event is immutable and `seq` is dense
-- <a id="rn-003"></a>[RN-003](business-rules/api.md#rn-003) — The action has six states, and denied is terminal
-- <a id="rn-004"></a>[RN-004](business-rules/api.md#rn-004) — The decision is evaluated in three stages, and `deny` wins immediately
-- <a id="rn-005"></a>[RN-005](business-rules/api.md#rn-005) — Minimum role per action type
-- <a id="rn-006"></a>[RN-006](business-rules/api.md#rn-006) — Ceiling: merge into a protected branch is never auto-approvable
-- <a id="rn-007"></a>[RN-007](business-rules/api.md#rn-007) — Ceiling: an instruction patch is never auto-approvable
-- <a id="rn-008"></a>[RN-008](business-rules/api.md#rn-008) — Command matching is by pattern, not substring
-- <a id="rn-009"></a>[RN-009](business-rules/api.md#rn-009) — The story has four states, and `done` is terminal
-- <a id="rn-010"></a>[RN-010](business-rules/api.md#rn-010) — `draft → ready` requires four things, validated in the domain
-- <a id="rn-011"></a>[RN-011](business-rules/api.md#rn-011) — Business rule with no story is a finding, not an error
+- <a id="rn-001"></a>[RN-001](business-rules/api.md#rn-001) — A sessão tem cinco estados e transições fechadas
+- <a id="rn-002"></a>[RN-002](business-rules/api.md#rn-002) — Todo evento de sessão é imutável e o `seq` é denso
+- <a id="rn-003"></a>[RN-003](business-rules/api.md#rn-003) — A ação tem seis estados, e negada é terminal
+- <a id="rn-004"></a>[RN-004](business-rules/api.md#rn-004) — A decisão é avaliada em três estágios, e `deny` vence na hora
+- <a id="rn-005"></a>[RN-005](business-rules/api.md#rn-005) — Papel mínimo por tipo de ação
+- <a id="rn-006"></a>[RN-006](business-rules/api.md#rn-006) — Teto: merge em branch protegida nunca é auto-aprovável
+- <a id="rn-007"></a>[RN-007](business-rules/api.md#rn-007) — Teto: patch de instrução nunca é auto-aprovável
+- <a id="rn-008"></a>[RN-008](business-rules/api.md#rn-008) — O casamento de comando é por padrão, não por substring
+- <a id="rn-009"></a>[RN-009](business-rules/api.md#rn-009) — A história tem quatro estados, e `done` é terminal
+- <a id="rn-010"></a>[RN-010](business-rules/api.md#rn-010) — `draft → ready` exige quatro coisas, validadas no domínio
+- <a id="rn-011"></a>[RN-011](business-rules/api.md#rn-011) — Regra de negócio sem história é achado, não erro
 - <a id="rn-012"></a>[RN-012](business-rules/produto.md#rn-012) — A module removed from `module_map` demotes the story
-- <a id="rn-013"></a>[RN-013](business-rules/api.md#rn-013) — The module graph cannot have a cycle
-- <a id="rn-014"></a>[RN-014](business-rules/api.md#rn-014) — The gate order is immutable and `awaiting_user` is terminal
-- <a id="rn-015"></a>[RN-015](business-rules/api.md#rn-015) — Cycle K: the correction ceiling is finite and inherited
-- <a id="rn-016"></a>[RN-016](business-rules/engine.md#rn-016) — The gate's verdict prevails over the task's statement
+- <a id="rn-013"></a>[RN-013](business-rules/api.md#rn-013) — O grafo de módulos não pode ter ciclo
+- <a id="rn-014"></a>[RN-014](business-rules/api.md#rn-014) — A ordem dos gates é imutável e `awaiting_user` é terminal
+- <a id="rn-015"></a>[RN-015](business-rules/api.md#rn-015) — Ciclo K: o teto de correção é finito e herdado
+- <a id="rn-016"></a>[RN-016](business-rules/engine.md#rn-016) — O veredito do gate prevalece sobre o enunciado da task
 - <a id="rn-017"></a>[RN-017](business-rules/api.md#rn-017) — Orçamento tem escopo exclusivo: projeto **ou** sessão
 - <a id="rn-018"></a>[RN-018](business-rules/api.md#rn-018) — Notificação de orçamento em 70%, 90% e 100%, sem repetir
 - <a id="rn-019"></a>[RN-019](business-rules/api.md#rn-019) — `policy = 'block'` recusa a chamada; `'allow'` só registra
@@ -55,7 +55,7 @@ test.
 - <a id="rn-033"></a>[RN-033](business-rules/api.md#rn-033) — Token de verificação e de reset vale uma vez só
 - <a id="rn-034"></a>[RN-034](business-rules/api.md#rn-034) — A sessão da web vive em cookie httpOnly, com CSRF
 - <a id="rn-035"></a>[RN-035](business-rules/api.md#rn-035) — O tráfego interno engine ↔ api exige o segredo de serviço
-- <a id="rn-036"></a>[RN-036](business-rules/engine.md#rn-036) — QA becomes an area: the Lead consolidates without changing the gate's contract
+- <a id="rn-036"></a>[RN-036](business-rules/engine.md#rn-036) — QA vira área: o Lead consolida sem mudar o contrato do gate
 - <a id="rn-037"></a>[RN-037](business-rules/ci.md#rn-037) — Infra becomes an area: Workflows generates CI per provider, Lead consolidates into a single PR
 - <a id="rn-038"></a>[RN-038](business-rules/api.md#rn-038) — Agente contado no resumo do workspace = gastou tokens este mês
 - <a id="rn-039"></a>[RN-039](business-rules/web.md#rn-039) — Dot de status do projeto: risco sempre vence inatividade
@@ -73,7 +73,7 @@ test.
 - <a id="rn-051"></a>[RN-051](business-rules/api.md#rn-051) — Um preço digitado à mão vence o catálogo do provider
 - <a id="rn-052"></a>[RN-052](business-rules/api.md#rn-052) — A curadoria de modelos vale só no workspace que a decidiu
 - <a id="rn-053"></a>[RN-053](business-rules/api.md#rn-053) — Reativar a execução acorda quem está parado, dentro da sessão que já existe
-- <a id="rn-054"></a>[RN-054](business-rules/api.md#rn-054) — External handoff addresses the area's lead or an agent with no area — never a subagent
+- <a id="rn-054"></a>[RN-054](business-rules/api.md#rn-054) — O handoff externo se dirige ao lead da área ou a um agente sem área — nunca a um subagente
 - <a id="rn-055"></a>[RN-055](business-rules/api.md#rn-055) — Credencial é sempre cifrada e gravada; verificar é ação à parte, com três respostas
 - <a id="rn-056"></a>[RN-056](business-rules/api.md#rn-056) — Faceta de capability vem do provider; silêncio preserva o que estava
 - <a id="rn-057"></a>[RN-057](business-rules/api.md#rn-057) — "Para que serve" é curadoria do workspace, e marcar uso não liga o modelo
@@ -116,14 +116,14 @@ test.
 - <a id="rn-094"></a>[RN-094](business-rules/api.md#rn-094) — A área de agentes nasce com o projeto
 - <a id="rn-095"></a>[RN-095](business-rules/api.md#rn-095) — A leitura de repositório é contida ao projeto e limitada
 - <a id="rn-096"></a>[RN-096](business-rules/produto.md#rn-096) — Toda decisão diz em português o que acontece; o payload cru nasce colapsado
-- <a id="rn-097"></a>[RN-097](business-rules/api.md#rn-097) — The session's kind is creation intent; execution stays an event
-- <a id="rn-098"></a>[RN-098](business-rules/web.md#rn-098) — The session name adds to the hashtag, never replaces it
+- <a id="rn-097"></a>[RN-097](business-rules/api.md#rn-097) — O tipo da sessão é intenção de criação; a execução continua sendo evento
+- <a id="rn-098"></a>[RN-098](business-rules/web.md#rn-098) — O nome da sessão soma à hashtag, nunca a substitui
 - <a id="rn-099"></a>[RN-099](business-rules/web.md#rn-099) — Atividades pagina o passado sem repolar o que não muda
 - <a id="rn-100"></a>[RN-100](business-rules/api.md#rn-100) — A ordem do sino é do SQL, não do front
 - <a id="rn-101"></a>[RN-101](business-rules/api.md#rn-101) — O mesmo gasto, duas audiências: a fatura é do owner, o consumo é de quem gastou
 - <a id="rn-102"></a>[RN-102](business-rules/api.md#rn-102) — O modelo da área é padrão herdável; divergir é decisão do agente, e voltar a herdar apaga a decisão
 - <a id="rn-103"></a>[RN-103](business-rules/api.md#rn-103) — O binding de agente é POR PROJETO, não mais global
-- <a id="rn-104"></a>[RN-104](business-rules/web.md#rn-104) — The tab derives from the recorded kind, and creates in that kind
+- <a id="rn-104"></a>[RN-104](business-rules/web.md#rn-104) — A aba deriva do tipo gravado, e cria nesse tipo
 - <a id="rn-105"></a>[RN-105](business-rules/api.md#rn-105) — Sem imagem decidida pelo Arquiteto, o container não sobe e o Code não abre
 - <a id="rn-106"></a>[RN-106](business-rules/api.md#rn-106) — `git push`, PR e deploy não saem pelo terminal — mesmo dentro do escopo do projeto
 - <a id="rn-107"></a>[RN-107](business-rules/web.md#rn-107) — A aba Code tem um QUARTO estado: bloqueada por decisão pendente
@@ -138,11 +138,11 @@ test.
 - <a id="rn-116"></a>[RN-116](business-rules/engine.md#rn-116) — Falha ao CRIAR um handoff não derruba o agente
 - <a id="rn-117"></a>[RN-117](business-rules/engine.md#rn-117) — O Psicólogo pode ser pausado globalmente; a pausa é do PRODUTO, nunca apaga dado
 - <a id="rn-118"></a>[RN-118](business-rules/web.md#rn-118) — A árvore do time expõe detalhe de execução por marco, e abre os "5 últimos"
-- <a id="rn-119"></a>[RN-119](business-rules/web.md#rn-119) — The session's ACTIVE agent is the one with the most recent `agent.activated` — never a fixed chain
-- <a id="rn-120"></a>[RN-120](business-rules/web.md#rn-120) — The session's event poll pauses during an in-progress turn
+- <a id="rn-119"></a>[RN-119](business-rules/web.md#rn-119) — O agente ATIVO da sessão é o do `agent.activated` mais recente — nunca uma cadeia fixa
+- <a id="rn-120"></a>[RN-120](business-rules/web.md#rn-120) — O poll de eventos da sessão pausa durante um turno em andamento
 - <a id="rn-121"></a>[RN-121](business-rules/web.md#rn-121) — Dev agent e QA são "executores": aba própria, fora do "Time de agentes"
-- <a id="rn-122"></a>[RN-122](business-rules/engine.md#rn-122) — The "Stop" button cancels the turn FOR REAL, killing the task holding the LLM call
-- <a id="rn-123"></a>[RN-123](business-rules/web.md#rn-123) — Creative session with no active Creative agent: the first message ALSO activates it
+- <a id="rn-122"></a>[RN-122](business-rules/engine.md#rn-122) — O botão "Parar" cancela o turno DE VERDADE, matando a task que segura a chamada de LLM
+- <a id="rn-123"></a>[RN-123](business-rules/web.md#rn-123) — Sessão criativa sem agente Criativo ativo: a primeira mensagem TAMBÉM o ativa
 - <a id="rn-124"></a>[RN-124](business-rules/web.md#rn-124) — O PO narra épico/história criados no fio, com link direto pro Backlog
 - <a id="rn-125"></a>[RN-125](business-rules/web.md#rn-125) — O aceite de handoff é INLINE no fio, com CTA pro Dev Lead apontando pra Executores
 - <a id="rn-126"></a>[RN-126](business-rules/web.md#rn-126) — Promoção de história é decidível INLINE no fio, com o mesmo mecanismo da aba Backlog
@@ -155,9 +155,9 @@ test.
 - <a id="rn-137"></a>[RN-137](business-rules/web.md#rn-137) — "Ativar execução" tem atalho inline no card do Dev Lead, sem baixar a exigência de papel
 - <a id="rn-138"></a>[RN-138](business-rules/web.md#rn-138) — Mensagens de um agente colapsam depois que ele passa o bastão
 - <a id="rn-139"></a>[RN-139](business-rules/api.md#rn-139) — A aba Executores lê a sessão de execução VIGENTE, nunca a mais recente do projeto
-- <a id="rn-140"></a>[RN-140](business-rules/engine.md#rn-140) — A gate cycle that dies mid-way resumes on its own, with no manual intervention
+- <a id="rn-140"></a>[RN-140](business-rules/engine.md#rn-140) — Um ciclo de gate que morre no meio retoma sozinho, sem intervenção manual
 - <a id="rn-141"></a>[RN-141](business-rules/engine.md#rn-141) — O conteúdo lido por `read_file` também tem teto de bytes
-- <a id="rn-142"></a>[RN-142](business-rules/engine.md#rn-142) — Confirming readiness with NO business rule at all is refused by the engine, not just hidden in the UI
+- <a id="rn-142"></a>[RN-142](business-rules/engine.md#rn-142) — Confirmar prontidão SEM nenhuma regra de negócio é recusado pelo engine, não só escondido na UI
 - <a id="rn-143"></a>[RN-143](business-rules/api.md#rn-143) — Um subcomando de git somente leitura só é permitido ancorado pela flag que torna a leitura inequívoca, nunca pelo verbo solto
 - <a id="rn-144"></a>[RN-144](business-rules/web.md#rn-144) — A aba Criativo não lista a sessão de execução vigente
 - <a id="rn-145"></a>[RN-145](business-rules/api.md#rn-145) — O Arquiteto também tem um botão de prontidão, e a MESMA confirmação oferece Infra e Dev Lead
@@ -588,7 +588,7 @@ test.
 - <a id="rn-726"></a>[RN-726](business-rules/engine.md#rn-726) — Crédito do provedor esgotado pausa o dev agent, com origem `infra`, sem queimar as tarefas seguintes
 - <a id="rn-727"></a>[RN-727](business-rules/api.md#rn-727) — A história draft se corrige e se arquiva, pelo PO e pelo usuário, sem apagar nada
 - <a id="rn-728"></a>[RN-728](business-rules/web.md#rn-728) — A mensagem do usuário tem uma bolha só, e o card do Dev Lead tem um primário só
-- <a id="rn-729"></a>[RN-729](business-rules/api.md#rn-729) — A PR de infra mira `dev` e diz onde mergear; a sidebar abre só o projeto aberto
+- <a id="rn-729"></a>[RN-729](business-rules/api.md#rn-729) — A PR de infra mira `main` e diz onde mergear; a sidebar abre só o projeto aberto
 - <a id="rn-730"></a>[RN-730](business-rules/api.md#rn-730) — O 402 do provider tem `code` próprio, e é ele que decide o crédito esgotado
 - <a id="rn-731"></a>[RN-731](business-rules/engine.md#rn-731) — O fecho do turno diz o que foi gravado com o número do servidor
 - <a id="rn-732"></a>[RN-732](business-rules/engine.md#rn-732) — O texto do turno passa pela mesma régua de escape dos argumentos
@@ -844,4 +844,46 @@ test.
 - <a id="rn-998"></a>[RN-998](business-rules/produto.md#rn-998) — A migração restaura o banco num banco vazio, mantém a chave mestra, é retomável e entende a linha de versões
 - <a id="rn-999"></a>[RN-999](business-rules/engine.md#rn-999) — A chamada irmã da pendente recebe recusa, para todo `tool_use` ter o seu `tool_result`
 - <a id="rn-1000"></a>[RN-1000](business-rules/api.md#rn-1000) — Na Anthropic direta o raciocínio desligado é POR MODELO, o adaptativo ganha a folga e o `thinking_tokens` chega ao metering
+- <a id="rn-1001"></a>[RN-1001](business-rules/api.md#rn-1001) — O decorator de tracing repassa `aceitaRaciocinioDesligado`, então a retentativa sem raciocínio roda de verdade
+- <a id="rn-1002"></a>[RN-1002](business-rules/api.md#rn-1002) — O agente fecha a pergunta em aberto que o usuário respondeu no chat; a resposta humana e a do agente dividem um núcleo só
+- <a id="rn-1003"></a>[RN-1003](business-rules/engine.md#rn-1003) — O agente fecha a pergunta em aberto que o usuário já respondeu no chat, só quando a resposta é inequívoca
+- <a id="rn-1004"></a>[RN-1004](business-rules/api.md#rn-1004) — O plano de execução do Dev Lead é recusado quando um módulo sem tarefa é dependência de um módulo que tem tarefa
+- <a id="rn-1005"></a>[RN-1005](business-rules/api.md#rn-1005) — O claim não entrega a tarefa de um módulo enquanto houver tarefa aberta de um módulo do `dependsOn` direto dele
+- <a id="rn-1006"></a>[RN-1006](business-rules/engine.md#rn-1006) — O Dev Lead cria a task de fundação do módulo de que outros dependem
+- <a id="rn-1007"></a>[RN-1007](business-rules/api.md#rn-1007) — O Claude Haiku 5.5 na Anthropic direta tem uma folga de raciocínio curada de 12288 tokens
+- <a id="rn-1008"></a>[RN-1008](business-rules/api.md#rn-1008) — O provider Anthropic direto usa prompt caching, soma as parcelas de cache na entrada e precifica a chamada pela tabela do fabricante
+- <a id="rn-1009"></a>[RN-1009](business-rules/api.md#rn-1009) — O merge que fecha uma tarefa acorda os módulos que dependem dela
+- <a id="rn-1010"></a>[RN-1010](business-rules/engine.md#rn-1010) — Conflito ao integrar a `dev` no claim vai para o agente; só o que ele não resolve bloqueia
+- <a id="rn-1011"></a>[RN-1011](business-rules/engine.md#rn-1011) — O plano do Dev Lead é recusado quando uma task cita rota que o contrato declara em outro módulo
+- <a id="rn-1012"></a>[RN-1012](business-rules/engine.md#rn-1012) — Task bloqueada pelo modelo acorda o Dev Lead, que pede ao Arquiteto o contrato que falta
+- <a id="rn-1013"></a>[RN-1013](business-rules/engine.md#rn-1013) — Cada mensagem assistant do turno guarda os próprios blocos de raciocínio, e o prefixo enviado só cresce
+- <a id="rn-1014"></a>[RN-1014](business-rules/api.md#rn-1014) — O provider Anthropic direto também põe um ponto de cache no penúltimo turno `user`
+- <a id="rn-1015"></a>[RN-1015](business-rules/api.md#rn-1015) — Na Anthropic direta, as mensagens `system` tardias vão para o fim do último turno `user`, depois do ponto de cache, nunca para o `system` do topo
+- <a id="rn-1016"></a>[RN-1016](business-rules/engine.md#rn-1016) — O reporter JUnit é configurado na primeira task de código do módulo, nunca numa task própria
+- <a id="rn-1017"></a>[RN-1017](business-rules/api.md#rn-1017) — `git push` de terminal para branch protegida, com force, `--all` ou `--mirror` é decisão humana, mesmo no modo automático
+- <a id="rn-1018"></a>[RN-1018](business-rules/api.md#rn-1018) — O agente retira uma regra de negócio obsoleta, citando a substituta ou a resposta do usuário; todo leitor a ignora
+- <a id="rn-1019"></a>[RN-1019](business-rules/api.md#rn-1019) — No modo automático, um `git merge` de terminal dentro do escopo da tarefa é auto-aprovado
+- <a id="rn-1020"></a>[RN-1020](business-rules/engine.md#rn-1020) — O Criativo e o PO retiram sozinhos uma regra de negócio obsoleta, citando a substituta ou a resposta do usuário
+- <a id="rn-1021"></a>[RN-1021](business-rules/engine.md#rn-1021) — Depois de um merge na `main` do projeto, a pasta do projeto avança até ela
+- <a id="rn-1022"></a>[RN-1022](business-rules/api.md#rn-1022) — O repositório do projeto é trunk: o bootstrap cria e protege só a `main`, merges nela avisam o engine, e projetos antigos migram por script
+- <a id="rn-1023"></a>[RN-1023](business-rules/engine.md#rn-1023) — Projeto cuja `dev` está à frente da `main` recusa o claim, nomeando a migração
+- <a id="rn-1024"></a>[RN-1024](business-rules/contracts.md#rn-1024) — O app é reiniciado no lugar: só o processo dele, nunca o container nem os outros `exec`
+- <a id="rn-1025"></a>[RN-1025](business-rules/broker.md#rn-1025) — `POST /containers/:projectId/app/restart` reinicia o processo do app no lugar
+- <a id="rn-1026"></a>[RN-1026](business-rules/api.md#rn-1026) — A api reinicia só o processo do app no container do projeto, com resposta tipada
+- <a id="rn-1027"></a>[RN-1027](business-rules/engine.md#rn-1027) — No modo `runner` a pasta do projeto avança pelo canal do runner, e o avanço é reaplicado quando o runner entra
+- <a id="rn-1028"></a>[RN-1028](business-rules/engine.md#rn-1028) — Depois que a pasta do projeto avança, o processo do app é reiniciado no lugar, uma vez por rajada de merges
+- <a id="rn-1029"></a>[RN-1029](business-rules/api.md#rn-1029) — Depois do merge da PR de infra que declara `run.app`, a api propõe `container_recreate` com a porta do app, uma vez
+- <a id="rn-1030"></a>[RN-1030](business-rules/api.md#rn-1030) — Todo nó do grafo gravado por `MERGE` numa chave natural tem restrição de unicidade, e a subida funde as duplicatas preexistentes antes de criá-la
+- <a id="rn-1031"></a>[RN-1031](business-rules/ci.md#rn-1031) — O catálogo de funcionalidades e o mapa caminho → funcionalidade moram num arquivo só, e a spec se liga por tag
+- <a id="rn-1032"></a>[RN-1032](business-rules/ci.md#rn-1032) — A PR para a `dev` roda o regressivo só das funcionalidades que tocou, sob o check `Regressivo do brabo-qa`, que NUNCA é exigido
+- <a id="rn-1033"></a>[RN-1033](business-rules/ci.md#rn-1033) — Três regras de arquivo transversal valem antes do mapa: nada, catálogo inteiro e sem dono
+- <a id="rn-1034"></a>[RN-1034](business-rules/ci.md#rn-1034) — A PR para a `main` roda o catálogo inteiro no `E2E do brabo-qa`, e funcionalidade sem spec aparece como "sem cobertura" sem reprovar
+- <a id="rn-1035"></a>[RN-1035](business-rules/ci.md#rn-1035) — A PR para a `dev` publica a imagem `sha-<12>` assinada, só do próprio repositório, e a limpeza apaga as órfãs
+- <a id="rn-1036"></a>[RN-1036](business-rules/api.md#rn-1036) — A indexação de docs nunca descarta em silêncio o conteúdo de um arquivo
+- <a id="rn-1037"></a>[RN-1037](business-rules/contracts.md#rn-1037) — O `dist` do `shared` não exporta nenhum valor
+- <a id="rn-1041"></a>[RN-1041](business-rules/contracts.md#rn-1041) — O `docker-cli.json` é o espelho das constantes de controle do `docker-cli.ts`
+- <a id="rn-1043"></a>[RN-1043](business-rules/ci.md#rn-1043) — Todo run que lê outro repositório publica `## Vínculos` no topo do Summary, e o helper nunca reprova o job
+- <a id="rn-1044"></a>[RN-1044](business-rules/ci.md#rn-1044) — O run de destino de um dispatch ou de uma tag tem `run-name` com a origem, e a correlação do dispatch vai no nome como `c=<run_id>-<attempt>`
+- <a id="rn-1045"></a>[RN-1045](business-rules/ci.md#rn-1045) — O check do App aponta para o run do `brabo-qa` desde o início, e o run de origem registra o link do run disparado
+- <a id="rn-1046"></a>[RN-1046](business-rules/api.md#rn-1046) — A busca híbrida devolve no máximo N trechos do mesmo arquivo
 <!-- END:GENERATED:indice-de-rn -->

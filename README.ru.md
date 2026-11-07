@@ -13,19 +13,20 @@
 **Команда ИИ-агентов ведёт ваше приложение от брифа до деплоя.
 Последнее слово остаётся за вами — по устройству системы, а не по договорённости.**
 
-[![CI](https://img.shields.io/github/actions/workflow/status/daneiel/brabo/ci.yml?branch=dev&label=CI&style=flat-square)](https://github.com/daneiel/brabo/actions/workflows/ci.yml)
+[![Docs check](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/docs-check.yml?branch=dev&label=docs-check&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/docs-check.yml)
+[![Release](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/release.yml?label=release&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/release.yml)
 [![Лицензия: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Версия](https://img.shields.io/github/v/release/daneiel/brabo?label=version&color=informational&style=flat-square)](CHANGELOG.md)
-[![Документация](https://img.shields.io/badge/docs-daneiel.github.io/brabo-8A2BE2.svg?style=flat-square)](https://daneiel.github.io/brabo/)
+[![Версия](https://img.shields.io/github/v/release/viralabs-dev/brabo?label=version&color=informational&style=flat-square)](https://github.com/viralabs-dev/brabo/releases/latest)
+[![Документация](https://img.shields.io/badge/docs-viralabs--dev.github.io/brabo-8A2BE2.svg?style=flat-square)](https://viralabs-dev.github.io/brabo/prd/ru/)
 [![Поддержать на Ko-fi](https://img.shields.io/badge/Ko--fi-%D1%83%D0%B3%D0%BE%D1%81%D1%82%D0%B8%D1%82%D1%8C%20%D0%BA%D0%BE%D1%84%D0%B5-FF5E5B?logo=ko-fi&logoColor=white&style=flat-square)](https://ko-fi.com/daneiel)
 
-[Документация](https://daneiel.github.io/brabo/) · [С нуля до результата](https://daneiel.github.io/brabo/prd/ru/tutorials/from-zero-to-deliverable) · [CHANGELOG](CHANGELOG.md) · [Безопасность](SECURITY.md) · [Участие](CONTRIBUTING.md)
+[Документация](https://viralabs-dev.github.io/brabo/prd/ru/) · [С нуля до результата](https://viralabs-dev.github.io/brabo/prd/ru/tutorials/from-zero-to-deliverable) · [CHANGELOG](CHANGELOG.md) · [Безопасность](SECURITY.md) · [Участие](CONTRIBUTING.md)
 
 <img src="docs/assets/readme/perguntas-no-chat.png" alt="Экран сессии Brabo: Креатив записывает бизнес-правила и возвращает в чат открытые вопросы, каждый с предложенным ответом и затронутыми правилами" />
 
 <sub>Идея превращается в правила, а то, чего не хватает, — в вопрос: Креатив возвращает сомнения в чат.</sub>
 
-[Отличия](#отличия) · [Возможности](#возможности) · [Что это](#что-это) · [Начало](#начало-за-три-команды) · [Документация](#документация) · [Лицензия](#лицензия)
+[Отличия](#отличия) · [Возможности](#возможности) · [Что это](#что-это) · [Начало](#начало) · [Репозитории](#репозитории-brabo) · [Релиз](#как-собирается-релиз) · [Документация](#документация) · [Лицензия](#лицензия)
 
 </div>
 
@@ -77,7 +78,7 @@
 Pull request, прошедшие гейты, приходят в чат, и один клик на «Одобрить»
 подтверждает merge.
 
-**С нуля до результата, в реальном прогоне:** [пошаговый разбор с записями](https://daneiel.github.io/brabo/prd/ru/tutorials/from-zero-to-deliverable) — 8 из 8 задач, 102/102 тестов, US$ 1,07.
+**С нуля до результата, в реальном прогоне:** [пошаговый разбор с записями](https://viralabs-dev.github.io/brabo/prd/ru/tutorials/from-zero-to-deliverable) — 8 из 8 задач, 102/102 тестов, US$ 1,07.
 
 ---
 
@@ -114,201 +115,140 @@ push, PR, merge, расход токенов — всё рождается ка�
 квалификации и предлагает версионированные патчи инструкций. Каждый патч
 требует вашего согласия, а откат создаёт новую версию вместо удаления истории.
 
-## Начало за три команды
+## Начало
+
+### Установить Brabo
 
 ```bash
-cp .env.example .env
-pnpm install
-pnpm dev
+curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh && bash install.sh
 ```
 
-`pnpm dev` поднимает Docker Compose (Postgres 16 + pgvector, api, engine, web)
-с горячей перезагрузкой. При первом запуске api и engine применяют свои
-миграции. `pnpm --filter api seed` создаёт демонстрационных пользователей.
+Установщик — это скрипт на bash: скачайте файл и запустите его через `bash`,
+никогда не через `curl | sh`. Прежде чем использовать любой файл, он проверяет
+подпись `checksums.txt` релиза, поднимает стек с образами, закреплёнными по
+digest, создаёт первую учётную запись и включает runner на этой машине. Каждый
+шаг сообщает, что сделал, а то, что не удалось, названо в конце.
+`bash install.sh --print-plan` показывает, что он сделал бы, ничего не выполняя.
+Пошаговое описание — в [Первых шагах](https://viralabs-dev.github.io/brabo/prd/ru/getting-started).
 
-| сервис | адрес | примечание |
-|---|---|---|
-| Web | <http://localhost:5173> | вход `owner@brabo.dev` / `brabo12345678` (из seed) |
-| API | <http://localhost:3000> | `GET /health` |
-| Engine | <http://localhost:4000> | `GET /health` |
+### Разрабатывать Brabo
 
-`pnpm dev:down` останавливает всё. `pnpm dev:build` принудительно пересобирает.
-
-### Меню, если не хочется запоминать команды
+Код живёт в соседних репозиториях, которые
+[`brabo-workspace`](https://github.com/viralabs-dev/brabo-workspace) клонирует рядом друг с другом. Среду
+разработки поднимает [`brabo-infra`](https://github.com/viralabs-dev/brabo-infra), собирая каждый сервис
+из этих клонов:
 
 ```bash
-pnpm bootstrap
+git clone https://github.com/viralabs-dev/brabo-workspace.git ~/dev/brabo
+cd ~/dev/brabo && ./clonar-tudo.sh
+cd brabo-infra && make dev
 ```
 
-Повседневные команды живут в трёх местах, которые не связаны между собой:
-`package.json` (скрипты pnpm), `Makefile` (цели Kubernetes) и отдельные скрипты
-в `deploy/k8s/` и `docker/`. Меню — единая дверь. Оно **ничего не
-переизобретает**: каждый пункт вызывает ровно тот `pnpm`, `make` или скрипт,
-который уже существует.
+`make dev` проверяет, что соседние репозитории на месте, и поднимает Docker
+Compose. Меню повседневных команд (Docker, Kubernetes, база данных и тесты)
+тоже живёт в `brabo-infra`: `bash scripts/dev/bootstrap.sh`. Подробности — в
+его README.
 
-| клавиша | действие |
-|---|---|
-| `1`–`6` | выбирает пункт, **без Enter** |
-| `v` | на уровень назад |
-| `q` | выход |
-| `↓` | во время выполнения показывает вывод в реальном времени |
-| `↑` | возвращает на экран «выполняется» |
-| колесо мыши · `j`/`k` · `PgUp`/`PgDn` | при показанном выводе прокручивает весь лог |
-| `G` | возвращает в конец лога (в реальном времени) |
-| `Ctrl+C` | прерывает текущую команду |
+Этот репозиторий хранит документацию, установщик и релиз. Чтобы работать с
+документацией: `pnpm install`, `bash scripts/docs/montar-layout.sh` (подтягивает
+документацию соседних репозиториев), `pnpm docs:check` и `pnpm docs:build`.
 
-Допустимые сочетания показаны в нижней строке текущего экрана — запоминать не
-нужно. Баннер остаётся закреплённым сверху, пока вы перемещаетесь,
-прокручиваете или меняете размер окна.
+## Репозитории Brabo
 
-**Прокрутка лога.** Развёрнутый вывод раньше показывал только конец файла;
-теперь это окно, которое движется назад, и весь лог команды доступен, не
-дожидаясь её завершения. Два следствия, о которых сразу сообщает нижняя
-строка:
+Brabo разделён на репозитории по слоям ([ADR 0252](https://viralabs-dev.github.io/brabo/prd/ru/adr/0252-o-brabo-vira-um-conjunto-de-repositorios)).
+`brabo` — центр документации: сайт <https://viralabs-dev.github.io/brabo/prd/ru/> объединяет папки `docs/` соседних
+репозиториев в одно дерево.
 
-- **Прокрутка назад ЗАМОРАЖИВАЕТ окно** (как `less +F`), иначе перерисовка
-  пять раз в секунду отменила бы прокрутку раньше, чем вы прочтёте строку. `G`
-  снова следует за концом.
-- **Пока команда выполняется, меню включает отслеживание мыши**, чтобы
-  получать колесо, — и с ним перетаскивание больше не выделяет текст.
-  **Удерживайте `Shift`** для родного выделения терминала. Вне этого экрана
-  отслеживание выключено, и оно выключается также при выходе, в том числе по
-  `Ctrl+C`.
+| репозиторий | роль | зависит от | используется в |
+|---|---|---|---|
+| [brabo](https://github.com/viralabs-dev/brabo) | продукт: документация, установщик, релиз | все | infra, workspace |
+| [brabo-api](https://github.com/viralabs-dev/brabo-api) | API (NestJS, Drizzle, PostgreSQL/pgvector) | contracts, ci, infra | brabo, infra, qa, web, contracts |
+| [brabo-engine](https://github.com/viralabs-dev/brabo-engine) | engine (Elixir/OTP, Phoenix, Oban) | contracts, ci | brabo, infra, qa |
+| [brabo-web](https://github.com/viralabs-dev/brabo-web) | веб-интерфейс (React 19, Vite) | contracts, ci, api | brabo, infra |
+| [brabo-runner](https://github.com/viralabs-dev/brabo-runner) | CLI на машине пользователя | contracts, ci | brabo, infra |
+| [brabo-broker](https://github.com/viralabs-dev/brabo-broker) | брокер контейнеров | contracts, ci | brabo, infra, qa |
+| [brabo-contracts](https://github.com/viralabs-dev/brabo-contracts) | общие контракты | ci (получает areas.json от api) | api, broker, runner, web, engine, infra, brabo |
+| [brabo-infra](https://github.com/viralabs-dev/brabo-infra) | composes, k8s, резервное копирование | ci, api, engine, web, runner, broker, contracts, brabo | brabo, qa, api |
+| [brabo-ci](https://github.com/viralabs-dev/brabo-ci) | переиспользуемые workflows политики, лестницы и штампа | — | все |
+| [brabo-qa](https://github.com/viralabs-dev/brabo-qa) | E2E, golden-наборы, инструменты | ci, api, engine, broker, infra | brabo |
+| [brabo-workspace](https://github.com/viralabs-dev/brabo-workspace) | родительская папка с клонами рядом друг с другом | ci | — |
 
-**Четыре области.** `Create` готовит окружение с нуля, `Deploy` публикует код в
-уже существующее окружение (поэтому только у него есть выбор по сервисам), а
-`Destroy` сносит:
+## Как собирается релиз
 
-| область | пункты |
-|---|---|
-| **1. Docker** | `Deploy` → All · Api · Engine · Web — `Create` — `Destroy` — `Reset total` — `Reconfigurar Ollama` — `Base de projetos` |
-| **2. K8s** | `Deploy` → All — `Create` — `Destroy` |
-| **3. Database** | `Generate` — `Migrate` — `Seed` — `Delete` |
-| **4. Test** | All · Api · Engine · Web · Smoke · Docs |
+Релиз продукта рождается здесь, из тега `vX.Y.Z`, в workflow
+[`release.yml`](.github/workflows/release.yml):
 
-Четыре вещи, которые делает меню и о которых стоит знать:
+1. **[`componentes.json`](componentes.json)** закрепляет версию каждого
+   компонента: ref `brabo-infra`, тег `brabo-runner` и тег каждого образа
+   (api, engine, web, broker и backup).
+2. **`imagem.json` каждого репозитория.** Релиз каждого тега приложения несёт
+   `imagem.json` с `imagem`, `tag` и `digest`. Workflow скачивает все пять и
+   собирает `images.json` продукта с образами, закреплёнными по digest.
+3. **Trivy по digest.** Каждый образ сканируется по digest, и уязвимость HIGH
+   или CRITICAL, у которой есть исправление, проваливает релиз до подписи.
+4. **Подписанный `checksums.txt`.** `install.sh`, ассеты `brabo-install-*` и
+   `images.json` попадают в один `checksums.txt`, подписанный cosign keyless
+   идентичностью workflow. Именно эту подпись проверяет `install.sh`.
 
-- **`Docker › Destroy` сохраняет тома** (`down`, никогда `down -v`): уничтожить
-  контейнеры — не значит уничтожить данные.
-- **В K8s работает только `All`.** Bootstrap кластера ставит api, engine и web
-  вместе; Api/Engine/Web видны в меню **неактивными**, с причиной. Скрыть их —
-  значит скрыть ограничение; выполнить — выдумать несуществующий путь.
-- **`Database › Delete` — единственный экран, требующий Enter**, и он требует
-  ввести имя базы. Он очищает схему и **заново создаёт расширение pgvector** —
-  `init.sql` выполняется только при первой инициализации тома, поэтому голый
-  `DROP SCHEMA` сломал бы следующую миграцию. Так как engine делит ту же базу,
-  скрипт предупреждает, что для восстановления нужны `pnpm db:migrate` **и**
-  `pnpm engine:migrate`.
-- **`Docker › Reset total` останавливает api и engine перед удалением** —
-  только эти два: именно они держат живое соединение с базой, и `DROP SCHEMA`
-  под ними убивает процессы, а поднять их снова нечему (engine умирает внутри
-  самого drop, потому что `Rehydrator` обращается к только что исчезнувшей
-  таблице). После миграции он снова поднимает всё, ждёт здорового состояния и
-  выполняет seed; в конце он **опрашивает** `/health` api и engine и `/` web,
-  прежде чем что-либо сказать, — если кто-то не отвечает, он называет его и
-  выходит с кодом 1 вместо объявления успеха. Это второй экран, требующий
-  подтверждения (ввод `RESET`), и он не удаляет тома — и говорит об этом при
-  запуске, потому что обратная сторона в том, что reset никогда не
-  воспроизводит первый клон (дефект, проявляющийся только с новым томом,
-  остаётся незамеченным). Подробнее в
-  [`deploy/docs/runbook.md`](deploy/docs/runbook.md#reset-total).
-
-**Параметры командной строки:**
-
-```bash
-pnpm bootstrap                                # открывает меню (нужен терминал)
-pnpm bootstrap --print-commands               # печатает всё дерево и выходит
-pnpm bootstrap --print-commands --path 1.1    # только одно поддерево
-pnpm bootstrap --help                         # заголовок с использованием
-```
-
-`--print-commands` разворачивает каждый лист меню в настоящую команду, **ничего
-не выполняя**, — так проверяют, что делает меню, и именно на нём работает тест
-(`scripts/dev/bootstrap.spec.ts`). Без интерактивного терминала меню
-отказывается открываться и указывает на этот параметр, вместо того чтобы
-зависнуть в ожидании клавиши, которая никогда не придёт. По той же причине есть
-`--print-window <log> <строки> <смещение>`: вырезка, которую прокрутка делает из
-лога, — чистая арифметика, и так её можно тестировать без TTY.
-
-`NO_COLOR=1` отключает цвет; иначе используются токены дизайн-системы в 24-битном
-ANSI с деградацией до 256 цветов там, где терминал их не поддерживает.
-
-> **`pnpm dev` и `make deploy-local` не сосуществуют.** Оба публикуют api и
-> engine на одних и тех же портах — намеренно, чтобы smoke-тест был
-> верен для обоих. С поднятым локальным кластером **5173 не открывается**, а web
-> находится на <http://localhost:8088>. `pnpm dev:preflight` скажет, в каком
-> режиме вы находитесь; `make k8s-down` вернёт в этот. Подробнее в
-> [Первых шагах](docs/getting-started.md#os-dois-modos-locais-não-coexistem).
-
-> Контейнеры `api`, `web` и `engine` работают с ТЕМ ЖЕ UID/GID, что и ваш
-> пользователь хоста, — никогда не от root, — чтобы `apps/api/dist` и всё, что
-> агент пишет в bind mount, сразу принадлежало ВАМ. Узнайте свою пару через
-> `id -u` и `id -g`; если она не совпадает со значением по умолчанию
-> (1000/1000, самым частым на Linux-машине одного разработчика), запишите
-> `DEV_UID`/`DEV_GID` в `.env` (см. `.env.example`) до первого
-> `docker compose up`. Окружение, существовавшее до этого изменения: в
-> именованных томах `node_modules`/`_build`/`deps`/`.mix`/`.hex` ещё лежит
-> содержимое, записанное root в старых контейнерах, — выполните один раз
-> `sudo chown -R $USER apps/api/dist apps/*/node_modules` (или удалите тома
-> через `docker compose down -v` и дайте следующему `up` создать их заново),
-> чтобы освободить застрявшее.
+`workflow_dispatch` без тега — это репетиция: он собирает, сканирует и
+проверяет всё, но не подписывает и не публикует.
 
 ## Документация
 
-**📖 [daneiel.github.io/brabo](https://daneiel.github.io/brabo/)** — та же
-документация, что ниже, с навигацией и поиском. Сайт читает из `docs/`,
-публикуется при merge в `main` и поэтому отстаёт на один цикл продвижения от
-того, что есть в `dev`: для самого свежего состояния читайте файлы здесь.
+**📖 [viralabs-dev.github.io/brabo](https://viralabs-dev.github.io/brabo/prd/ru/)** — документация с навигацией и
+поиском, на четырёх языках. Сайт объединяет папку `docs/` этого репозитория с
+папками соседних и публикует два окружения: [`/prd/`](https://viralabs-dev.github.io/brabo/prd/ru/) из `main` и
+[`/dev/`](https://viralabs-dev.github.io/brabo/dev/ru//) из `dev`. Для самого свежего состояния используйте `/dev/`.
 
 | документ | для чего |
 |---|---|
-| [Введение](docs/intro.md) | общая картина |
-| [Первые шаги](docs/getting-started.md) | от клона до первого хода агента |
-| [Архитектура](docs/architecture.md) | карта кода, границы, инварианты, технический долг |
-| [Бизнес-правила](docs/business-rules.md) | RN, каждое с `файл:строка` и покрывающим его тестом (количество — в [README на португальском](README.md)) |
-| [Runbook](deploy/docs/runbook.md) | деплой, rollout, восстановление, ротация ключа, инцидент по стоимости |
-| [Глоссарий](docs/glossary.md) | harness, gate, handoff, DEK, outbox, цикл K |
-| [Наблюдаемость](deploy/docs/explanation/observability.md) | как проследить действие через три процесса: trace, лог и путь между слоями |
-| [Конфигурация](docs/reference/configuration.md) | все переменные окружения |
-| [Скрипты](docs/reference/scripts.md) | каждая команда `pnpm` и цель `Makefile`, извлечённые из исходников |
-| [События](docs/reference/events.md) | типы журнала событий, broadcast и span |
-| [Разрешения](apps/api/docs/reference/permissions.md) | формат `permissions.json` и порядок решения |
-| [Артефакты](apps/api/docs/reference/artifacts.md) | схемы и кто может выпускать каждую |
-| [Git-провайдеры](apps/api/docs/reference/git-providers.md) | контракт операций и capabilities |
-| [Внутренний API](docs/reference/internal-api.md) | контракт api ↔ engine |
+| [Введение](https://viralabs-dev.github.io/brabo/prd/ru/) | общая картина |
+| [Первые шаги](https://viralabs-dev.github.io/brabo/prd/ru/getting-started) | от установки до первого хода агента |
+| [Архитектура](https://viralabs-dev.github.io/brabo/prd/ru/architecture) | карта кода, границы, инварианты, технический долг |
+| [Бизнес-правила](https://viralabs-dev.github.io/brabo/prd/ru/business-rules) | RN, каждое с `файл:строка` и тестом, который его покрывает (количество — в [португальском README](README.md)) |
+| [Runbook](https://viralabs-dev.github.io/brabo/prd/ru/runbook) | deploy, rollout, восстановление, ротация ключа, инцидент расходов |
+| [Глоссарий](https://viralabs-dev.github.io/brabo/prd/ru/glossary) | harness, gate, handoff, DEK, outbox, цикл K |
+| [Наблюдаемость](https://viralabs-dev.github.io/brabo/prd/ru/explanation/observability) | как проследить действие через три процесса: trace, log и путь между слоями |
+| [Конфигурация](https://viralabs-dev.github.io/brabo/prd/ru/reference/configuration) | все переменные окружения |
+| [Скрипты](https://viralabs-dev.github.io/brabo/prd/ru/reference/scripts) | каждая команда `pnpm` и цель `Makefile`, извлечённые из исходников |
+| [События](https://viralabs-dev.github.io/brabo/prd/ru/reference/events) | типы event log, broadcasts и spans |
+| [Права](https://viralabs-dev.github.io/brabo/prd/ru/reference/permissions) | формат `permissions.json` и порядок принятия решения |
+| [Артефакты](https://viralabs-dev.github.io/brabo/prd/ru/reference/artifacts) | схемы и кто может выпускать каждую |
+| [Git-провайдеры](https://viralabs-dev.github.io/brabo/prd/ru/reference/git-providers) | контракт операций и capabilities |
+| [Внутренний API](https://viralabs-dev.github.io/brabo/prd/ru/reference/internal-api) | контракт api ↔ engine |
 | [Безопасность](SECURITY.md) | как сообщить об уязвимости |
 | [Участие](CONTRIBUTING.md) | процесс, Definition of Done, что принимается |
-| [Управление](GOVERNANCE.md) | текущая модель (один сопровождающий), три роли режима `community` и критерий допуска в каждую |
-| [Где получить помощь](SUPPORT.md) | какой канал для какого вопроса |
+| [Управление](GOVERNANCE.md) | модель сегодня (единственный мейнтейнер), три роли режима `community` и кто попадает в каждую |
+| [Где получить помощь](SUPPORT.md) | какой канал для какой темы |
 | [Кодекс поведения](CODE_OF_CONDUCT.md) | Contributor Covenant 2.1 |
 
 ## Стек
 
-| слой | технология |
-|---|---|
-| `apps/api` | NestJS 11 + Drizzle ORM + PostgreSQL 16 + pgvector |
-| `apps/engine` | Elixir/OTP + Phoenix (каналы) + Oban (очереди в Postgres) |
-| `apps/web` | React 19 + Vite + TanStack Query/Router; `mermaid` во время выполнения (только C4-диаграмма Архитектора, за динамическим `import()`) |
-| auth | собственная в api (argon2id + access JWT Ed25519 + непрозрачный refresh с ротацией); RBAC в домене api |
-| deploy | Kubernetes через Kustomize; Docker Compose для разработки |
+- **api** — NestJS, Drizzle, PostgreSQL 16 с pgvector
+- **engine** — Elixir/OTP, Phoenix и Oban (очереди в Postgres)
+- **web** — React 19, Vite и TanStack
+- **runner** — CLI `brabo-runner` на машине пользователя, который выполняет одобренные команды
+- **broker** — единственный процесс с сокетом Docker, который поднимает контейнеры проектов
+- **Ollama** — локальные модели в собственном контейнере
+- **Neo4j** — необязательно: граф знаний, память, производная от event log
+- **deploy** — Docker Compose (разработка, production и установка) и Kubernetes с Kustomize, в `brabo-infra`
 
-Без Redis: очереди живут в Postgres через Oban, а rate limit — скользящее окно
-на SQL.
+Без Redis: очереди живут в Postgres через Oban, а rate limit — это скользящее
+окно в SQL.
 
 ## Лицензия
 
 [MIT](LICENSE) © 2026 Daniel Souza — официальный текст, без дополнительных
 условий.
 
-Образ engine включает сторонние инструменты, от которых зависят гейты
-(gitleaks, hadolint, semgrep, yamllint), **часть из них под GPL**. Запуск их
-отдельным процессом ничего не заражает, но **публикация образа** в registry
+Образ engine включает сторонние инструменты, от которых зависят gates
+(gitleaks, hadolint, semgrep, yamllint), **некоторые под GPL**. Запуск их
+отдельным процессом ничего не «заражает», но **публикация образа** в registry
 создаёт обязанность предоставить исходный код. Всё перечислено, с версией и
-лицензией каждого, в [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) —
-прочитайте перед первым push в registry.
+лицензией каждого, в [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-Образ web включает три шрифта дизайн-системы, все под **OFL 1.1** — лицензией
-разрешительной, но требующей распространять уведомление об авторском праве
-вместе с бинарником. Оно лежит в `apps/web/public/fonts/LICENSE.txt`,
-отдаётся вместе с остальной статикой, а обязанность записана в том же файле
-уведомлений.
+Образ web включает три шрифта дизайн-системы, все под **OFL 1.1** — разрешающей
+лицензией, которая всё же требует распространять уведомление об авторских
+правах вместе с бинарником. Оно лежит в [`brabo-web`](https://github.com/viralabs-dev/brabo-web), в
+`public/fonts/LICENSE.txt`, отдаётся вместе с остальной статикой, а
+обязанность записана в том же файле уведомлений.

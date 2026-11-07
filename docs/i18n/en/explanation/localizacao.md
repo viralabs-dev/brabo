@@ -2,7 +2,7 @@
 id: localizacao
 title: Localization
 description: Brabo's four languages (pt-BR as the source, en, ru and zh-Hans), the codes, the plural forms, how the language is resolved, what happens to missing text and what is never translated.
-traducao_de: 8e484d595305b002e81cb1e86be2739b3b963123
+traducao_de: 2d508b95c379df9edb51cc94523fd3f05edd83b2
 ---
 
 # Localization
@@ -10,6 +10,8 @@ traducao_de: 8e484d595305b002e81cb1e86be2739b3b963123
 Brabo speaks four languages in the documentation and in the interface, and
 **Brazilian Portuguese is the source and the default** of both products ([ADR 0216](../adr/0216-quatro-idiomas-com-pt-br-como-fonte.md)).
 All new text is born in pt-BR; the other languages are translations of it.
+
+**Exception (ADR [0260](../adr/0260-doc-dos-repos-de-codigo-so-em-ingles.md)):** this rule applies only to `brabo`, the customer's front door. The documentation of the ten code repositories is **English-only**: a sibling page in English carries `idioma_original: en` in the frontmatter and has no `docs/i18n/`. Their `CLAUDE.md` and `.claude/` stay in pt-BR.
 
 ## Languages and codes {#idiomas-e-códigos}
 
@@ -49,6 +51,7 @@ The language of the agents' REPLIES is another preference, with its own mechanis
   source, at the same address, and a banner at the top SAYS so in the reader's
   language. A translated page whose source changed after the translation states the
   translation date and that the original changed.
+- **On the site, a sibling page with `idioma_original: en`** is the source itself on `/en/`, with no banner; on pt-BR, `ru` and `zh-Hans` the site serves the SAME English source with the banner "this page only exists in English". If the sibling still has the locale's translation, it applies there (mixed state, page by page).
 - **In the interface**, text is never missing: key and plural parity is
   measured, and `fallbackLng` is pt-BR.
 

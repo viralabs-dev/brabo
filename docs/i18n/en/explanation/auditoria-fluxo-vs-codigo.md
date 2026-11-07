@@ -1,11 +1,11 @@
 ---
 sidebar_position: 13
-traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
+traducao_de: 30ccc6978b8dbd50cc8a2f195d60a9bb3c0a71a6
 ---
 
-# Audit: fluxo.yml × code (v3, ADR 0085)
+# Audit: fluxo.yml × code (v3, ADR 0085) {#audit-fluxoyml--code-v3-adr-0085}
 
-An isolated audit session — **read-only**. Cross-references `docs/fluxo.yml`
+An isolated audit session — **read-only**. Cross-references `packages/contracts/fluxo.yml`
 (the target model declared by ADR 0085) against the real code, to answer two
 questions: what's missing for the code to honor everything the flow declares
 as `active`, and what's genuinely staged behind each trigger in the
@@ -21,7 +21,7 @@ treated as a **finding**, not a license to fix in passing.
 > anticipate any `proposto`/`planned` role; where it found something beyond
 > what should exist, it's explicitly marked as a finding.
 
-## How to read this document
+## How to read this document {#how-to-read-this-document}
 
 - **Section A — Divergences.** The flow declares X, the code (or its
   sibling `gates.yml`) does Y. It's a conflict between sources and requires
@@ -38,18 +38,18 @@ treated as a **finding**, not a license to fix in passing.
 
 ---
 
-## A. Divergences
+## A. Divergences {#a-divergences}
 
 | # | Severity | Item | Evidence |
 |---|---|---|---|
-| A1 | **Critical** | `gate_saida: paralelismo-autorizado` of `dev-lead` — `docs/fluxo.yml` (role `dev-lead`) declares `status: ativo`; `docs/gates.yml:239-248` declares `status: planned`, with the comment "FASE 14d — becomes active once it closes." FASE 14d closed on 2026-08-07 (the same day as FASE 15, which created `gates.yml`) and the mechanism has been active, tested and in production ever since — `gates.yml` was never updated afterward. | Real mechanism: `apps/api/src/application/use-cases/execution/request-parallelization.use-case.ts:35-78` (above the cap, creates a `proposed_action` of type `parallelize`); guarded against auto-approval in `apps/api/src/domain/actions/decide.ts:266-276` (`parallelize`/`raise_max_parallel` never leave `require_approval`); tests: `apps/api/test/application/use-cases/execution/request-parallelization.use-case.spec.ts:97`, `apps/api/test/domain/actions/decide.spec.ts:273-303`. `docs/fluxo.yml` itself already records this gate as `ativo` — the divergence is `gates.yml` × (fluxo.yml + code), not fluxo.yml × code. |
+| A1 | **Critical** | `gate_saida: paralelismo-autorizado` of `dev-lead` — `packages/contracts/fluxo.yml` (role `dev-lead`) declares `status: ativo`; `apps/api/config/gates.yml:239-248` declares `status: planned`, with the comment "FASE 14d — becomes active once it closes." FASE 14d closed on 2026-08-07 (the same day as FASE 15, which created `gates.yml`) and the mechanism has been active, tested and in production ever since — `gates.yml` was never updated afterward. | Real mechanism: `apps/api/src/application/use-cases/execution/request-parallelization.use-case.ts:35-78` (above the cap, creates a `proposed_action` of type `parallelize`); guarded against auto-approval in `apps/api/src/domain/actions/decide.ts:266-276` (`parallelize`/`raise_max_parallel` never leave `require_approval`); tests: `apps/api/test/application/use-cases/execution/request-parallelization.use-case.spec.ts:97`, `apps/api/test/domain/actions/decide.spec.ts:273-303`. `packages/contracts/fluxo.yml` itself already records this gate as `ativo` — the divergence is `gates.yml` × (fluxo.yml + code), not fluxo.yml × code. |
 | A2 | High | The `dev-lead`'s `plano-de-paralelismo` output, declared `via: proposed_action` (RN-083/154). What the code actually produces is a plain `execution.plan_proposed` event (`apps/engine/lib/engine/agents/dev_lead_tools.ex:14-18,60-77`), **without** an approval pipeline — a deliberate decision, documented in the code's own comment ("turning the proposal into an action to decide would make the user decide twice"). The `parallelize`-type `proposed_action` that actually exists (the same mechanism as A1) is triggered by a **user action in the UI** requesting reinforcement above the cap (`apps/web/src/routes/ProjectOverviewTab.tsx:361` → `POST /sessions/:sessionId/execution/parallelize`), not by the dev-lead's initial plan output. `fluxo.yml` merges two distinct mechanisms into a single output. | `apps/engine/lib/engine/agents/dev_lead_tools.ex:14-18,60-77`; `apps/web/src/routes/ProjectOverviewTab.tsx:361`; `apps/engine/lib/engine_web/router.ex:57`. |
 | A3 | Medium | The `dev` state machine — `fluxo.yml:134` declares 4 states (`working\|awaiting_gate\|idle\|idle_tripped`); the real code has **5**: it adds `:awaiting_approval` (Phase 12e, ADR 0052), a persisted state with its own transitions, not a transient one. | `apps/engine/lib/engine/dev/dev_agent_server.ex:17-18,300-333,622-654`. |
-| A4 | Low | The RN-160 citation attached to the `backlog-promovido` entry (origin `po`) of the Architect. The real RN-160 is about the "Confirm architecture ready" gate on the **output** side (Architect → Dev Lead), not the PO → Architect input. | `docs/business-rules.md:5606-5622` vs. `docs/fluxo.yml` (role `arquiteto`, inputs). |
-| A5 | Low | The RN-161 citation attached to the Architect's `handoff-duplo` output. The real RN-161 (ADR 0069) is about the **next** step — accepting the handoff to the Dev Lead chains execution activation —, not about the double handoff itself. | `docs/business-rules.md:5624-5644` vs. `docs/fluxo.yml` (role `arquiteto`, outputs). |
+| A4 | Low | The RN-160 citation attached to the `backlog-promovido` entry (origin `po`) of the Architect. The real RN-160 is about the "Confirm architecture ready" gate on the **output** side (Architect → Dev Lead), not the PO → Architect input. | `docs/business-rules.md:5606-5622` vs. `packages/contracts/fluxo.yml` (role `arquiteto`, inputs). |
+| A5 | Low | The RN-161 citation attached to the Architect's `handoff-duplo` output. The real RN-161 (ADR 0069) is about the **next** step — accepting the handoff to the Dev Lead chains execution activation —, not about the double handoff itself. | `docs/business-rules.md:5624-5644` vs. `packages/contracts/fluxo.yml` (role `arquiteto`, outputs). |
 | A6 | Low | The "Confirm architecture ready" gate (RN-160, ≥1 promoted story) is only guaranteed on the **client** (`SessionPage.tsx`, `hasPromotedStory`); the backend (`OfferInfraHandoffUseCase`) doesn't revalidate it. A direct call to the internal route, bypassing the UI, would ignore the rule entirely. Not a divergence declared in `fluxo.yml` — it's an additional finding from the audit. | `apps/api/src/application/use-cases/agents/offer-infra-handoff.use-case.ts:19-38`. |
 | A7 | Informational | The Creative agent's output artifact is `artifact.product_brief` in the code, not literally `necessidade-de-negocio` — it's the same concept with a different event name; terminology imprecision, not structural. | `apps/engine/lib/engine/agents/criativo_server.ex:396-420`. |
-| A8 | Low | The `dev`'s `worktree-por-agente` input is labeled "origin: harness"; `WorktreeManager` lives in `Engine.Dev`, and isn't one of the 4 components listed for the `harness` role (`PromptAssembler`, `ToolLoop`, `ContextManager`, `Hooks`, `fluxo.yml:244`). | `apps/engine/lib/engine/dev/worktree_manager.ex:19-49` vs. `docs/fluxo.yml` (role `harness`, components). |
+| A8 | Low | The `dev`'s `worktree-por-agente` input is labeled "origin: harness"; `WorktreeManager` lives in `Engine.Dev`, and isn't one of the 4 components listed for the `harness` role (`PromptAssembler`, `ToolLoop`, `ContextManager`, `Hooks`, `fluxo.yml:244`). | `apps/engine/lib/engine/dev/worktree_manager.ex:19-49` vs. `packages/contracts/fluxo.yml` (role `harness`, components). |
 | A9 | Nuance (not a divergence) | The `dev`'s `pr-remota` output declares a simultaneous destination `[area-qa, secops]`; the real mechanism is sequential and ordered by a state machine — QA always before SecOps, never in parallel. Doesn't quite contradict fluxo.yml (both are indeed final destinations), but could be read as simultaneous fan-out. | `apps/api/src/domain/execution/pr-gate-state-machine.ts:21-30`. |
 
 **Finding discarded by verification.** An initial exploration flagged the
@@ -62,7 +62,7 @@ search isn't repeated.
 
 ---
 
-## B. Gaps in active roles (already implementable work)
+## B. Gaps in active roles (already implementable work) {#b-gaps-in-active-roles-already-implementable-work}
 
 All items below are on roles with `status: active` — none depends on a
 `proposto`/`planned` role existing first.
@@ -71,15 +71,15 @@ All items below are on roles with `status: active` — none depends on a
 |---|---|---|---|
 | B1 | **Dev Lead → dev delegation** (ADR 0053 item 5) | `fluxo.yml`, `dev-lead`'s `delegacao` output, `status: lacuna` | Confirmed absent: `dev_lead_server.ex` only registers `DevLeadTools.spec()` (`apps/engine/lib/engine/agents/dev_lead_server.ex:75`); the `delegations` table already accepts a generic `area: text` (`apps/api/src/db/schema.ts:1051-1091`), but the only callers of `RecordDelegationUseCase` are `qa_lead_server.ex` and `infra_lead_server.ex` — none with `area = 'dev'`. The pattern to copy already exists twice (QA and Infra); it's missing on the Dev Lead. |
 | B2 | **`necessidade-validada` gate** (Creative agent → PO) | `modelo-de-time.md`, "State of the mesh" — "new gate = ADR" | Doesn't exist in `gates.yml`, nor in code. `modelo-de-time.md` already lists an open proposal ("Anti-pattern of the Creative agent as real gate validation") — missing is the objective criterion's decision, the ADR and registration in `gates.yml` (can be born `warn`, like `implementavel`/`operavel`). |
-| B3 | **`implementavel` gate** (dev-lead's `gate_futuro`) | `docs/gates.yml:250-259`, `status: planned`, owner `dev-lead` | The dev-lead is already an active role; the gate doesn't depend on `qa-estrategia`/`appsec` existing — it's the opposite: it's this gate's CREATION that activates them (see C1). Missing is the "implementable" criterion (e.g., a story with a minimum acceptance criterion, no blocking dependency) and registration in `gates.yml`. |
+| B3 | **`implementavel` gate** (dev-lead's `gate_futuro`) | `apps/api/config/gates.yml:250-259`, `status: planned`, owner `dev-lead` | The dev-lead is already an active role; the gate doesn't depend on `qa-estrategia`/`appsec` existing — it's the opposite: it's this gate's CREATION that activates them (see C1). Missing is the "implementable" criterion (e.g., a story with a minimum acceptance criterion, no blocking dependency) and registration in `gates.yml`. |
 | B4 | **Product metrics → PO** | `fluxo.yml`, PO's `metricas-de-produto` input, `status: lacuna`; target output of `analytics` (proposed) | `po_server.ex` has no product-metrics tool at all (`apps/engine/lib/engine/agents/po_server.ex:86-99`). `modelo-de-time.md:21-25` already records the principle: "analytics is born as a new output of `medicao` before becoming a role" — meaning this does NOT need to wait for the `analytics` role to split off; it's an extension of `medicao` (already active, with `sumGroupedBy` in production) that, once it exists, is itself the act of crossing the "product metrics become an input to the PO" trigger (see C2). |
-| B5 | **`docs/gates.yml` out of date** (same finding as A1) | — | Fix `status: planned` → `active` for `paralelismo-autorizado`, with `evidencia` `event_log`/`proposed_action.created` filtered by `actionType: parallelize`, `onde: request-parallelization.use-case.ts`. This is a metadata fix, instantly verifiable by `pnpm --filter api validacao:gates` — the script would already have real evidence to cite. |
+| B5 | **`apps/api/config/gates.yml` out of date** (same finding as A1) | — | Fix `status: planned` → `active` for `paralelismo-autorizado`, with `evidencia` `event_log`/`proposed_action.created` filtered by `actionType: parallelize`, `onde: request-parallelization.use-case.ts`. This is a metadata fix, instantly verifiable by `pnpm --filter api validacao:gates` — the script would already have real evidence to cite. |
 | B6 | **RN-160 without backend revalidation** (finding A6) | — | Optional hardening: `OfferInfraHandoffUseCase` should require ≥1 promoted story before emitting the double handoff — today only the UI disables the button. |
 | B7 | **DORA report via `medicao`** | `fluxo.yml`, `delivery-metricas` role (proposed, `status: — (never)` in the activation table — "becomes a `medicao` REPORT, never an agent") | Since the role never becomes an agent, this item isn't staged behind any trigger — it's work available today on the already-active `medicao`: lead time, deployment frequency, MTTR and change failure rate extracted from the event log + `gates.yml`, in the same pattern as `medir:execucao`/`sumGroupedBy`. |
 
 ---
 
-## C. Staged behind a trigger
+## C. Staged behind a trigger {#c-staged-behind-a-trigger}
 
 Activation table (`modelo-de-time.md:52-62`), each row with the real state
 verified in this audit.
@@ -96,7 +96,7 @@ verified in this audit.
 
 ---
 
-## D. Proposed wave plan
+## D. Proposed wave plan {#d-proposed-wave-plan}
 
 Ordered from the gate cheapest to verify by script (pure metadata, no new
 logic) to the most expensive (requiring an ADR and a product decision).
@@ -122,7 +122,7 @@ depends on real production data volume).
 
 ---
 
-## Documentation infrastructure note (out of scope for this audit)
+## Documentation infrastructure note (out of scope for this audit) {#documentation-infrastructure-note-out-of-scope-for-this-audit}
 
 `docs/explanation/modelo-de-time.md` exists and is complete, but **isn't
 listed in `website/sidebars.ts`** — only reachable by direct link, not
@@ -132,7 +132,7 @@ in this session (out of the declared scope: "no code change").
 
 ---
 
-## Summary
+## Summary {#summary}
 
 - **9 divergences** (A1–A9): 1 critical (a gate mismarked `planned` in a
   document that already operates it `active`), 1 high (the parallelism

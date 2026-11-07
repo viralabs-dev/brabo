@@ -4,14 +4,14 @@ title: 配置
 sidebar_position: 1
 description: api、engine 和 web 的全部环境变量，附默认值以及取值错误时会坏掉什么。
 keywords: [配置, 环境变量, env, 部署]
-traducao_de: e018c045407daa7a92211fac958c4bc2ff981545
+traducao_de: 3016564b5bb5b0752711c07b9babefd252829a8d
 ---
 
 # 配置
 
 所有配置都通过**环境变量**完成。应用没有配置文件——存在的是 `permissions.json`，它是项目的策略，而不是进程的配置。
 
-有两个受版本控制的文件会在运行时被读取，它们不是配置，但很容易与配置混淆：上面的 `permissions.json`，以及 `docs/gates.yml`（[ADR 0054](../adr/0054-gates-como-registro-declarativo.md)），即 gate 的声明式注册表。两者都没有指向某个路径的环境变量——注册表是从 `__dirname` 向上查找得到的——并且在生产环境中编辑它们都不会改变行为：注册表**描述** gate，而不执行 gate。它随 api 镜像一起发布；参见 [runbook](../runbook.md#registro-de-gates)。
+有两个受版本控制的文件会在运行时被读取，它们不是配置，但很容易与配置混淆：上面的 `permissions.json`，以及 `apps/api/config/gates.yml`（[ADR 0054](../adr/0054-gates-como-registro-declarativo.md)），即 gate 的声明式注册表。两者都没有指向某个路径的环境变量——注册表是从 `__dirname` 向上查找得到的——并且在生产环境中编辑它们都不会改变行为：注册表**描述** gate，而不执行 gate。它随 api 镜像一起发布；参见 [runbook](../runbook.md#registro-de-gates)。
 
 随镜像发布的是注册表，**而不是它所指向的任何东西**。`teste`/`ci` 类 gate 的 `evidencia` 指向 `apps/api/test/`、`scripts/ci/` 和 `.github/` 下的文件，而这些都不在镜像里。因此，核对这些目标是否存在是关于仓库的断言，由 CI 负责，而绝不由提供 `GET /gates` 的进程负责——所以 api 读取注册表时不会去找它们。它曾经去找过，结果在每个安装中都返回 `500`（[RN-070](../business-rules/api.md#rn-070)）。
 
@@ -101,7 +101,7 @@ traducao_de: e018c045407daa7a92211fac958c4bc2ff981545
 | `AUTH_REGISTRATION_ENABLED` | `true` | 任何不同于 `"false"` 的值都保持注册开放 |
 | `AUTH_LOCKOUT_ENABLED` | `true` | 同样的约定 |
 | `AUTH_LOCKOUT_WINDOW_MS` | `900000` | 计数的滑动窗口 |
-| `AUTH_LOCKOUT_THRESHOLDS` | `5:30,8:300,12:900` | 按邮箱分桶的阶梯，`失败次数:秒数` |
+| `AUTH_LOCKOUT_THRESHOLDS` | `5:30,8:300,12:900` | 按邮箱分桶的阶梯，`falhas:segundos` |
 | `AUTH_LOCKOUT_IP_THRESHOLDS` | `20:30,30:120` | 按 IP 分桶的阶梯，更宽松，上限更短 |
 | `AUTH_EMAIL_TOKEN_TTL_MS` | `172800000` | 邮箱验证，48 小时 |
 | `AUTH_RESET_TOKEN_TTL_MS` | `3600000` | 密码重置，1 小时 |
@@ -139,6 +139,8 @@ traducao_de: e018c045407daa7a92211fac958c4bc2ff981545
 | 变量 | 默认值 | 作用 |
 |---|---|---|
 | `BRABO_SEED_PASSWORD` | `brabo12345678` | 种子用户（`owner@brabo.dev`、`maintainer@brabo.dev`、`developer@brabo.dev`、`viewer@brabo.dev`）的密码，创建时邮箱**已验证** |
+| `BRABO_AMBIENTE` | — | `dev`、`prd` 或 `local`（ADR 0245，RN-984）。只有 `local` 会注册 `GET`/`POST /auth/dev-login`，即按角色的快速访问；缺失、为空或其他值时，该路由不存在。Actions 的镜像在构建时被标记为 `dev`/`prd`（`docker-bake.hcl` 的 `AMBIENTE`，文件 `/app/AMBIENTE_DA_IMAGEM`），并优先于该变量。DEV 的 compose 将它设为 `local`；安装用的 compose 将它留空 |
+| `BRABO_BIND` | `0.0.0.0` | 安装用 compose 发布 api 和 web 端口所用的地址。当 `BRABO_AMBIENTE=local` 时，请设为 `127.0.0.1`：否则网络上的任何人都能以任意角色进入 |
 | `BRABO_FORCE_SEED` | — | 在 `NODE_ENV=production` 下解锁种子，默认情况下种子在那里**拒绝运行**。不要在真实环境中定义它：账户会带着已知且已验证的密码被创建 |
 
 > 种子是幂等的，**不会改动**已存在用户的密码。在有人修改自己的密码后再次运行它，不会把密码改回去。
@@ -174,6 +176,8 @@ traducao_de: e018c045407daa7a92211fac958c4bc2ff981545
 | `GIT_LOCAL_REPOS_ROOT` | `/tmp/brabo-git-repos` | 本地 provider。在 `/tmp` 中，仓库会在重启后消失 |
 | `PROJECT_WORKSPACES_ROOT` | `/tmp/brabo-project-workspaces` | **Container** 模式下项目 agent 的 worktree。**在 engine 中必须是相同路径**，并且是同一个卷 |
 | `BRABO_PROJECTS_BASE` | 空 | 宿主机上唯一的文件夹，**Mounted** 模式的项目都位于其下，以同一路径挂载到 `api` 和 `engine`。空是**正常**状态：api 报告 `projectsBase: null`，项目向导根本不会提供 Mounted 模式 |
+| `BRABO_RUNNER_RELEASES_REPO` | `daneiel/brabo` | 仓库（`dono/nome`），`GET /runner-releases/binary` 在 GitHub 上查询其最新 Release。所有者不再固定在代码中（AT-691，EP-033） |
+| `BRABO_REPO` | `daneiel/brabo` | 产品仓库的 `dono/nome`：`install.sh` 从中下载 Release 并核对 cosign 身份，runner 的 unit 把文档指向它 |
 | `GITHUB_OAUTH_CLIENT_ID` / `_SECRET` | 空 | 空 = 与 GitHub 的 OAuth 连接不可用（PAT 仍然可用） |
 | `GITLAB_OAUTH_CLIENT_ID` / `_SECRET` | 空 | 同上 |
 
@@ -213,6 +217,7 @@ BRABO_PROJECTS_BASE=/home/voce/projetos-brabo
 | 变量 | 默认值 | 说明 |
 |---|---|---|
 | `OLLAMA_HOST` | `http://localhost:11434` | — |
+| `NINE_ROUTER_BASE_URL` | `http://host.docker.internal:20128/v1` | 9Router（provider `9router`，ADR 0222）的基础 URL，它运行在所有者的机器上，位于 compose 之外。它属于安装，而不是工作区：默认值之所以能到达宿主机，只是因为安装和生产的 compose 在 api 上映射了 `host.docker.internal:host-gateway`。适用于聊天调用、目录以及凭据的连接测试 |
 | `OLLAMA_REQUEST_TIMEOUT_MS` | `300000` | Ollama socket 的**不活动**上限，而不是总时长上限。本地模型到第一个 token 的延迟高出一个数量级，因此有独立的变量；参见[推理环境](../runbook.md#ambiente-de-inferencia) |
 | `LLM_REQUEST_TIMEOUT_MS` | `300000` | API 类 provider（OpenAI 及兼容者、Anthropic）的同一不活动上限。适用于"连响应头都没发"以及"在流的中途停止发送数据块"——参见 [LLM provider](llm-providers.md#inactivity-ceiling) |
 | `HUGGINGFACE_API_TOKEN` | *（未定义）* | 用于模型搜索（`GET /workspaces/:workspaceId/huggingface/models`）的 Hugging Face Hub **可选** token。存在时，以 `Authorization: Bearer …` 发送，并提高 Hub 的速率限制；缺失时，干脆不发送这个头——Hub 接受无凭据的公开搜索，token 缺失从来不是错误 |
@@ -229,6 +234,7 @@ BRABO_PROJECTS_BASE=/home/voce/projetos-brabo
 | `NEO4J_USER` | `neo4j`（dev） | 以 `neo4j` 服务用于 `NEO4J_AUTH` 的同一默认值到达容器，所以只在需要**更换**用户时才定义它——在那里更换会一次性更换两边。两个独立的默认值会让 api 用服务器已不存在的凭据去认证 |
 | `NEO4J_PASSWORD` 🔒 | `dev-neo4j-password-change-me`（仅 dev） | 与 `NEO4J_USER` 相同的配对规则。**生产环境中故意没有公开默认值**——数据库密码不存在合理的"示例值"，`docker-compose.prod.yml` 让 `NEO4J_AUTH` 保持为空，使官方镜像的 entrypoint 自己拒绝启动，而不是以一个可猜测的密码启动 |
 | `GRAPH_PROJECTOR_INTERVAL_MS` | `2000` | 轮询器的周期，它清空 outbox 的 `graph_projection` 队列，并把 handoff/假设/画像/交互写入图谱（RN-416） |
+| `CUSTO_RECONCILIACAO_INTERVAL_MS` | `300000` | api 作业的周期，该作业把因推理预算而中止的调用的成本估算替换为 OpenRouter `GET /generation` 给出的真实成本（[RN-915](../business-rules/api.md#rn-915)）；`0` 关闭 |
 | `ARTIFACT_PROJECTOR_INTERVAL_MS` | `2000` | 轮询器的周期，它清空 outbox 的 `artifact_projection` 队列，并把每个 agent 的产物以 Markdown 形式写入项目的 `docs/` 文件夹（[RN-523](../business-rules/engine.md#rn-523)）。**派生**投影：event log 仍是来源，该文件夹可以删除并重建 |
 
 ### 可观测性
@@ -286,7 +292,7 @@ BRABO_PROJECTS_BASE=/home/voce/projetos-brabo
 | `SEARCH_WORKSPACE_MAX_BYTES` | `32768` | `search_workspace` 最终文本的**字节**上限（[RN-150](../business-rules/engine.md#rn-150)）——与 RN-074/RN-141 同类的溢出，从搜索入口进入；独立变量 |
 | `SEARCH_WORKSPACE_MAX_HITS` | `500` | `search_workspace` 在组装响应前收集的命中**数量**上限（[RN-150](../business-rules/engine.md#rn-150)）——一旦达到上限就停止扫描/读取内容，避免在命中过多的目录树上付出 I/O 代价、之后又按字节截断 |
 | `SECOPS_SCAN_TIMEOUT_MS` | `180000` | SecOps 扫描器 3 分钟 |
-| `TRANSPORT_MAX_BODY_BYTES` | `8388608`（8 MiB） | 上下文压缩在模型窗口之上还要遵守的**传输**上限（[RN-412](../business-rules/api.md#rn-412)）——有效窗口是 `min(context_window, 该上限换算成的 token 数)`，所以压缩会在请求体超过 api 的 HTTP 限制**之前**触发，而不只是在模型会"遗忘"时 |
+| `TRANSPORT_MAX_BODY_BYTES` | `8388608`（8 MiB） | 上下文压缩在模型窗口之上还要遵守的**传输**上限（[RN-412](../business-rules/api.md#rn-412)）——有效窗口是 `min(context_window, este teto convertido em tokens)`，所以压缩会在请求体超过 api 的 HTTP 限制**之前**触发，而不只是在模型会"遗忘"时 |
 | `GRAPH_INSTRUCTION_TEMPLATES_ENABLED` | `false` | 开启 `InstructionFiles` 的 `:graph` 来源——目前只有 ux-designer 的身份会在内联文本之前解析图谱中的模板（RN-413）。是**独立**的名字，不是下面的 `GRAPH_TEMPLATES_ENABLED`——如果共用一个开关，两者会因相反的默认值而冲突 |
 
 ### 心理学家
@@ -321,7 +327,7 @@ BRABO_PROJECTS_BASE=/home/voce/projetos-brabo
 |---|---|---|
 | `START_OUTBOX_DRAIN` | `true` | outbox 排空（`Engine.Workers.OutboxDrainWorker`，每 2 秒一次）的启动开关——它是 api 写入 outbox 的 `session`/`task`/`container` 事件的**唯一**消费者——另外还负责清理孤立 worktree 和接管孤立会话。关闭后没有人投递这些事件：api 已关闭的会话仍保留着进程和运行中的对话 agent（[RN-581](../business-rules/api.md#rn-581)），等待动作决策、gate、自己的 PR 或容器进入 `running` 的 dev agent 永远不会被唤醒。它**不会**开启心理学家：只有在 `PSYCHOLOGIST_ENABLED=true` 时排空才会把它加入队列。**只**在生产 compose（`docker-compose.prod.yml`）中故意设为 `false`；安装用 compose 自 AT-219 起使用代码中的 `true` |
 | `START_ANAMNESE` | `true` | 测试/开发的**负载**保护：阻止启动时调用 `kickoff/0`，但不决定任何产品行为——不要与 `ANAMNESE_ENABLED`（产品：**全局**暂停，无论本变量取何值都有效）混淆。关闭它会阻止**新的**入队，**不会清空队列**。积累的 job 会在下次启动时运行——队列需要被清除。参见[推理环境](../runbook.md#ambiente-de-inferencia) |
-| `START_MODEL_SYNC` | `true` | 模型目录同步的周期性 tick。关闭它不会冻结任何东西：设置页面上的"更新目录"按钮调用同一个用例（[RN-043](../business-rules/api.md#rn-043)） |
+| `START_MODEL_SYNC` | `true` | 模型目录同步的周期性 tick。关闭它不会冻结任何东西：Providers 页面上的“更新目录”按钮调用同一个用例（[RN-043](../business-rules/api.md#rn-043)） |
 | `MODEL_SYNC_INTERVAL_SECONDS` | `21600`（6 小时） | provider 的目录以天为尺度变化，每一轮每个 provider 要花一次 API 调用——所以默认值很宽松 |
 | `START_GATE_RESCUE` | `true` | gate 周期救援（`Engine.Gates.GateRescuer`，[RN-140](../business-rules/engine.md#rn-140)）的周期性 tick。关闭它不改变启动：救援在启动时无论如何都会运行一次 |
 | `GATE_RESCUE_INTERVAL_SECONDS` | `300`（5 分钟） | 卡住的 gate 会阻塞用户的整个 PR——间隔比 Anamnese/模型同步短得多，每次 tick 只花一次几乎总是空的查询 |
@@ -358,6 +364,8 @@ web 是静态的，由 nginx 提供服务。它从**两个**来源读取配置�
 | `VITE_ENGINE_URL` | engine 地址（Phoenix 通道） |
 | `VITE_LOG_LEVEL` | 浏览器 JSON logger 的级别（默认 `info`）。在集群中以 `brabo-config` 的 `WEB_LOG_LEVEL` 键为准，由 entrypoint 写入 `/config.js`——`VITE_*` 只在本地构建中起作用 |
 | `VITE_BRABO_VERSION` | 显示在认证页面页脚的版本（默认 `dev`）。**唯一一个出于选择而非限制在构建时确定的变量**——见下文 |
+| `VITE_BRABO_REPO` | 产品仓库的 `dono/nome`（默认 `daneiel/brabo`）；构建时。runner 面板中的安装器命令和文档站点的地址由它而来（AT-691） |
+| `VITE_BRABO_AMBIENTE` | `dev`、`prd` 或 `local`；构建时，来自 `docker-bake.hcl` 的 `AMBIENTE`（默认为空）。只有 `local` 会在登录页组装按角色的快速访问（ADR 0245）；Actions 传入 `dev` 或 `prd` |
 
 部署后页面空白，几乎总是 `/config.js` 指向了 `localhost`——部署的 smoke 检查的正是这一点。
 
@@ -472,7 +480,7 @@ docker compose -f docker/docker-compose.prod.yml \
 
 两个 engine 镜像都用构建参数 `SEMGREP_VERSION` 固定 semgrep（`1.183.0`，在 `docker/engine/Dockerfile` 和 `Dockerfile.prod` 中相同，由 `scripts/ci/semgrep-do-engine.spec.ts` 保持一致）。它是构建参数，不是运行时变量——`.env` 中什么都不用写。没有固定时，pip 取到了 1.179.0，而它不发布 `musllinux` wheel：在 Alpine 镜像中，包来自不含 `semgrep-core` 的 sdist，所有扫描都失败了。升级版本就是选择一个在 PyPI 上有 `musllinux` wheel 的 release，并在同一个 PR 中修改两个 Dockerfile。
 
-engine 镜像运行于 Alpine 3.24 上的 **Elixir 1.20.4 / OTP 29.1.1**（builder `hexpm/elixir:1.20.4-erlang-29.1.1-alpine-3.24.2`，runtime `alpine:3.24.2`，两者都按 digest——[ADR 0209](../adr/0209-engine-em-otp-29.md)）。低于 29.1 的 OTP 在 CPU 带有 AMX 的宿主机上、在 Alpine 3.24 的 musl 1.2.6 下启动时会中止（`sys_sigaltstack(): Internal error`）；不要在不降级 musl 的情况下降级 OTP。`.env` 中什么都不用写。
+engine 镜像运行于 Alpine 3.24 上的 **Elixir 1.20.4 / OTP 29.1.1**（builder `hexpm/elixir:1.20.4-erlang-29.1.1-alpine-3.24.2`，runtime `alpine:3.24.3`，两者都按 digest——[ADR 0209](../adr/0209-engine-em-otp-29.md)）。低于 29.1 的 OTP 在 CPU 带有 AMX 的宿主机上、在 Alpine 3.24 的 musl 1.2.6 下启动时会中止（`sys_sigaltstack(): Internal error`）；不要在不降级 musl 的情况下降级 OTP。`.env` 中什么都不用写。
 
 六个 Dockerfile 都不使用 corepack（Node 25+ 不再附带它，AT-360）：构建从 registry 的 tarball 安装 pnpm，并与写在 Dockerfile 中的 sha512 核对——构建参数 `PNPM_VERSION`（`11.3.0`，与 `package.json` 中 `packageManager` 相同，这样 pnpm 永远不会在运行时尝试下载另一个版本）和 `PNPM_SHA512`。它们是构建参数，不是运行时变量，`.env` 中没有要定义的东西：升级 pnpm 就是在同一个 PR 中修改 `packageManager`、各 workflow 的 `PNPM_VERSION` 以及六个 Dockerfile 中的两个参数——参见 runbook 中关于 broker 镜像的一节。
 
@@ -522,6 +530,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 | `BRABO_CLUSTER_NAME` | `brabo` | bootstrap 创建或复用的 k3d/kind 集群名 |
 | `BRABO_CLUSTER_TOOL` | `k3d` | `kind` 让 bootstrap 改用 kind——它会悄无声息地忽略 NetworkPolicy，因此默认使用 k3d |
 | `BRABO_KEEP_CLUSTER` | 未定义 | `1` 复用已有的同名集群，而不是删除并重建 |
+| `BRABO_IRMAOS` | 检出目录的父目录（`<raiz>/..`） | 同级克隆 `brabo-api`、`brabo-engine` 等所在的位置，本地集群的 bootstrap 由它们构建生产镜像（Dockerfile 位于各应用的仓库中，AT-696..700） |
 | `BRABO_SKIP_BUILD` | 未定义 | `1` 跳过生产镜像的构建，使用 Docker daemon 中已有的镜像 |
 | `BRABO_SKIP_OBSERVABILITY` | 未定义 | `1` 跳过 Tempo、Loki、Collector、Alloy 和 Grafana（Prometheus 和 adapter 保留：engine 的 HPA 读取它们）。只有 `propriedades.yml` 定义它（AT-177） |
 | `TAG` | 未定义 | 一个 release tag（`vX.Y.Z-qa.N`），让 bootstrap 检出并部署它而不是工作树；要求工作树干净 |
@@ -550,7 +559,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从代码中提取的清单：运行时读取 **186 个变量**。全部都在上方表格中有描述。
+从代码中提取的清单：运行时读取 **187 个变量**。全部都在上方表格中有描述。
 
 每个来源都标记为 **产品**——运维安装的人在部署 `.env` 中设置的内容——或 **工具**，仅由 CI 和开发产品的人读取。工具变量绝不应出现在运维人员的 `.env` 中。
 
@@ -710,7 +719,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 - `NODE_ENV` <sub>(apps/broker/src/config.ts)</sub>
 - `PROJECT_WORKSPACES_HOST_ROOT` <sub>(apps/broker/src/config.ts)</sub>
 
-**api/scripts** — 15 个变量 · 工具
+**api/scripts** — 16 个变量 · 工具
 
 - `DATABASE_URL` <sub>(apps/api/scripts/demo-repo-bootstrap.ts)</sub>
 - `DEMO_ANAMNESE_TIMEOUT_MS` <sub>(apps/api/scripts/demo-anamnese.ts)</sub>
@@ -724,6 +733,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 - `DEMO_WORKFLOWS_MODEL` <sub>(apps/api/scripts/demo-infra-workflows-github.ts)</sub>
 - `GIT_LOCAL_REPOS_ROOT` <sub>(apps/api/scripts/demo-repo-bootstrap.ts)</sub>
 - `GOLDEN_SET_QA_MODEL` <sub>(apps/api/scripts/seed-golden-set-qa.ts)</sub>
+- `GOLDEN_SET_RAG_MAX_PER_FILE` <sub>(apps/api/scripts/seed-golden-set-rag.ts)</sub>
 - `NOME` <sub>(apps/api/scripts/demo-pr-gates.ts)</sub>
 - `OLLAMA_HOST` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
 - `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub>

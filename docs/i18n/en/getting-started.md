@@ -5,7 +5,7 @@ sidebar_label: Getting Started
 sidebar_position: 5
 description: From clone to a first agent turn, with what to check when each step doesn't work.
 keywords: [installation, setup, onboarding, first project, ollama]
-traducao_de: c8911f3416983ed754a0274de9bf168cc5a25a49
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # Getting Started
@@ -43,7 +43,7 @@ run you don't need to edit anything.
 applies migrations on both sides. The first time pulls images and takes a
 few minutes.
 
-### The two local modes don't coexist
+### The two local modes don't coexist {#the-two-local-modes-dont-coexist}
 
 There are two ways to run Brabo on your machine, and they **fight over the
 same ports**:
@@ -72,7 +72,7 @@ To know which one you're in without guessing: `pnpm dev:preflight`.
 
 The dev compose is the Docker project **`brabo-dev`** (containers
 `brabo-dev-api-1`…, volumes `brabo-dev_pgdata`…); an installation made with
-`install.sh` is **`brabo`**. Until [ADR 0170](adr/0170-compose-de-dev-brabo-dev.md)
+`install.sh` is **`brabo`**. Until ADR 0170
 both were `brabo`, so the two shared containers, network and volumes, and
 `reset-total.sh` would have wiped the installation's database.
 
@@ -90,25 +90,18 @@ docker compose -f <installation folder>/docker/docker-compose.install.yml \
 volumes and the next `pnpm dev` starts with empty `brabo-dev_*` ones; the
 preflight warns about it. Copying the data over, starting from scratch, and
 telling your old dev volumes from an installation's are in the runbook,
-[Moving a dev environment to brabo-dev](runbook.md#dev-para-brabo-dev).
+"Moving a dev environment to brabo-dev".
 
-### Local folder for workspaces
+### Local folder for workspaces {#local-folder-for-workspaces}
 
 By default, the files agents write live in a managed Docker volume — not a
 folder you can open in Finder/Explorer. To swap it for a real folder on
 your disk, set in `.env`:
 
 ```bash
-PROJECT_WORKSPACES_HOST_DIR=/home/you/brabo-projetos
-GIT_LOCAL_REPOS_HOST_DIR=/home/you/brabo-projetos-bare
+PROJECT_WORKSPACES_HOST_DIR=~/brabo-projetos
+GIT_LOCAL_REPOS_HOST_DIR=~/brabo-projetos-bare
 ```
-
-Write the path ALREADY EXPANDED, never with `~`: Compose expands `~` in the
-bind mount that `api` and `engine` use, but not in the variable the broker
-derives from it, and **Container** mode would then fail to bring its container
-up. Without this folder at all, **Container** mode has no container either —
-`pnpm dev` reports both cases on every run
-([RN-599](business-rules/infra.md#rn-599)).
 
 Both together, always — `api` and `engine` read the same path, and
 different values would make the two see different trees of the same
@@ -131,16 +124,14 @@ approval (RN-075) — the only thing that changes is that what used to be
 invisible inside the volume is now in a folder you can open with your own
 editor and `git`.
 
-The `api` and `engine` containers run with the **same UID/GID as your host
-user** (see the warning at the top of this repository) — never as root.
-Discover your pair with `id -u`/`id -g` and, if it doesn't match the
-default (1000/1000, the most common on a single-developer Linux machine),
-set `DEV_UID`/`DEV_GID` in `.env` (see `.env.example`) before the first
-`docker compose up`. With that in place, every file the agent writes to the
-local folder ends up owned by YOU, editable/removable without `sudo`.
-Confirmed by execution: with the UID mapped, a `docker run` writing to a
-test bind mount left the file owned by the host user and freely removable
-from the host — the exact opposite of what an earlier root-only image did.
+The `api` and `engine` containers run as **root** in development
+(the same situation already known for `node_modules`/`apps/api/dist` — see the
+warning at the top of this repository). Every file the agent writes to the
+local folder ends up owned by `root` on your disk — to edit/delete it without
+`sudo` afterwards, run `sudo chown -R $USER ~/brabo-projetos` once
+(adjust the path to the one you chose). Confirmed by execution: a
+`docker run` writing to a test bind mount left the file inaccessible to the
+regular user until a second container (running as root) removed it.
 
 Only tested on Linux/macOS. Host bind mounts on Docker Desktop for Windows
 have known pitfalls (permission/ownership between NTFS and the container
@@ -200,8 +191,8 @@ It's too small for real work, so when you want more:
 docker compose -f docker/docker-compose.yml exec ollama ollama pull qwen2.5:7b
 ```
 
-**A provider API** — in the UI, under **Project → Settings →
-Credentials**. The key is encrypted with envelope encryption before it
+**A provider API** — in the UI, under **Providers** (footer of the
+menu). The key is encrypted with envelope encryption before it
 touches the database.
 
 The model is resolved in a cascade — **session > agent > project >
@@ -301,25 +292,7 @@ pnpm db:migrate             # applies the migrations
 pnpm dev:down               # tear everything down
 ```
 
-### The browser E2E
-
-Three layers below it already run on `pnpm test`. The fourth needs the
-**production compose up**, because what it proves — the `httpOnly` refresh
-cookie, the cross-origin CSRF, the session socket's single-use ticket —
-only exists when the web, the api and the engine sit on three different
-origins ([ADR 0120](adr/0120-e2e-de-navegador-contra-o-compose-de-producao.md)).
-
-```bash
-pnpm e2e:navegadores                      # once: downloads chromium
-SMOKE_KEEP_UP=1 bash docker/smoke.sh      # brings the prod stack up and leaves it
-pnpm e2e                                  # runs the specs against it
-docker compose -f docker/docker-compose.prod.yml down -v
-```
-
-`e2e/` is not a workspace member — it has its own lockfile, so `pnpm --filter`
-won't find it. That's deliberate, and `e2e/README.md` says why.
-
-### Where everything lives {#onde-fica-cada-coisa}
+### Where everything lives
 
 ```
 apps/
@@ -336,7 +309,7 @@ scripts/
   ci/       automação de release e política de branch (testada com vitest)
   dev/      ferramentas locais — o menu do `pnpm bootstrap` e o preflight
   docs/     geração e verificação da documentação
-website/    Docusaurus, que lê de docs/ — nunca de website/docs/
+website/    só a árvore do Redoc; o site é gerado por scripts/docs/site/ a partir de docs/
 ```
 
 `apps/engine` sits outside the pnpm workspace (it is a Mix project), with root
@@ -417,34 +390,12 @@ screen that requires pressing Enter, requires typing the database name,
 and says at the end that recovering means `pnpm db:migrate` **and**
 `pnpm engine:migrate`.
 
-Its bigger sibling is **`Docker › Reset total`**
-(`bash scripts/dev/reset-total.sh`): rebuild, wipe the database, migrate and
-seed again in one go, keeping the provider credentials from `.env`. It
-**stops the api and the engine before wiping** — those two, and no others,
-hold live connections to the database — brings them back before seeding, and
-then **asks** `/health` of the api and the engine and `/` of the web before
-saying anything. If something didn't come back, it names it and exits
-non-zero instead of announcing success. It never removes volumes, so
-`node_modules`, `_build` and your local bare repos survive — and it says so
-when it runs, because the flip side is that a reset never reproduces a fresh
-clone (a defect that only shows up with a brand-new volume stays hidden); if it stops in
-the middle it says at which step, and the answer is to run it again. Details
-and symptoms in the [Runbook](runbook.md#reset-total).
-
 Always work in `feature/*` off `dev`, with conventional commits in
 pt-BR. `CLAUDE.md` has the full conventions.
 
-> The `api`, `web` and `engine` containers run with the same UID/GID as your
-> host user in development — never as root — so `apps/api/dist` and
-> whatever else gets written to the bind mount are already yours. Run
-> `id -u`/`id -g` and, if the pair isn't 1000/1000, set `DEV_UID`/`DEV_GID`
-> in `.env` (see `.env.example`) before the first `docker compose up`.
-> Upgrading an environment that predates this change: the named volumes for
-> `node_modules`/`_build`/`deps`/`.mix`/`.hex` still hold content written by
-> the old root containers — run once
-> `sudo chown -R $USER apps/api/dist apps/*/node_modules` (or drop the
-> volumes with `docker compose down -v` and let the next `up` recreate them)
-> to clear what's stuck.
+> The `api` and `web` containers run as root in development and write to
+> the bind mount. If you later want to build on the host, run once
+> `sudo chown -R $USER apps/api/dist apps/*/node_modules`.
 
 ## Next
 

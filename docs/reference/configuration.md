@@ -796,6 +796,7 @@ Eles conduzem agentes reais contra um Ollama local, então o que recebem é um
 | `DEMO_ANAMNESE_TIMEOUT_MS` | `900000` (15 min) | o mesmo prazo, para a demonstração da Anamnese |
 | `DEMO_PSICOLOGO_TIMEOUT_MS` | `600000` (10 min) | o mesmo prazo, para a demonstração do Psicólogo |
 | `GOLDEN_SET_QA_MODEL` | `qwen2.5-coder:latest` | o modelo que `seed-golden-set-qa.ts` registra como juiz do golden-set de QA ([ADR 0123](../adr/0123-golden-set-regressao-qa-automacao.md)) |
+| `GOLDEN_SET_RAG_MAX_PER_FILE` | `2` (`RAG_SEARCH_MAX_CHUNKS_PER_FILE`) | quantos trechos por arquivo o `seed-golden-set-rag.ts` deixa passar ao medir o golden-set de RAG; o seed imprime onde o esperado ficou antes desse corte (AT-778) |
 
 `NOME`, que o inventário abaixo lista sob esta fonte, **não é variável**: é o
 literal `process.env.NOME` dentro de uma string de prompt em
@@ -866,7 +867,7 @@ ninguém perceba.
 
 > ⚠️ Bloco gerado por `pnpm docs:generate`. Não edite à mão — o próximo build o sobrescreve.
 
-Inventário extraído do código: **186 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
+Inventário extraído do código: **187 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
 
 Cada fonte é marcada **produto** — o que quem opera a instalação configura no `.env` do deploy — ou **ferramenta**, lida só pelo CI e por quem desenvolve o produto. Variável de ferramenta nunca pertence ao `.env` de um operador.
 
@@ -1026,7 +1027,7 @@ Cada fonte é marcada **produto** — o que quem opera a instalação configura 
 - `NODE_ENV` <sub>(apps/broker/src/config.ts)</sub>
 - `PROJECT_WORKSPACES_HOST_ROOT` <sub>(apps/broker/src/config.ts)</sub>
 
-**api/scripts** — 15 variáveis · ferramenta
+**api/scripts** — 16 variáveis · ferramenta
 
 - `DATABASE_URL` <sub>(apps/api/scripts/demo-repo-bootstrap.ts)</sub>
 - `DEMO_ANAMNESE_TIMEOUT_MS` <sub>(apps/api/scripts/demo-anamnese.ts)</sub>
@@ -1040,6 +1041,7 @@ Cada fonte é marcada **produto** — o que quem opera a instalação configura 
 - `DEMO_WORKFLOWS_MODEL` <sub>(apps/api/scripts/demo-infra-workflows-github.ts)</sub>
 - `GIT_LOCAL_REPOS_ROOT` <sub>(apps/api/scripts/demo-repo-bootstrap.ts)</sub>
 - `GOLDEN_SET_QA_MODEL` <sub>(apps/api/scripts/seed-golden-set-qa.ts)</sub>
+- `GOLDEN_SET_RAG_MAX_PER_FILE` <sub>(apps/api/scripts/seed-golden-set-rag.ts)</sub>
 - `NOME` <sub>(apps/api/scripts/demo-pr-gates.ts)</sub>
 - `OLLAMA_HOST` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
 - `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub>

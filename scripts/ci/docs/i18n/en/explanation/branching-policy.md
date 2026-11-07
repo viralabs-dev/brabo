@@ -3,18 +3,18 @@ id: branching-policy
 title: Branch and versioning policy
 sidebar_label: Branching policy
 sidebar_position: 2
-description: The dev → qa → main ladder, the branch taxonomy, who's born where, and why the policy is mechanized instead of agreed upon.
+description: The dev → main ladder, the branch taxonomy, who's born where, and why the policy is mechanized instead of agreed upon.
 keywords: [branches, gitflow, promotion, hotfix, versioning, release]
-traducao_de: 929963d24eb727bd64875486f2f1889172f3084a
+traducao_de: 055ecb48c59d5392951c94db0e1aab8d78e3e43b
 ---
 
-# Branch and versioning policy
+# Branch and versioning policy {#branch-and-versioning-policy}
 
 This page is the **source** of the policy. The workflows that apply it
 derive from here — if a mechanism diverges from what's written, the
 mechanism is wrong.
 
-## Why mechanize it
+## Why mechanize it {#why-mechanize-it}
 
 A branching policy agreed upon in a meeting survives until the first
 Friday night. The rush isn't bad faith: it's that the rule lives in
@@ -33,24 +33,29 @@ Two consequences we accept on purpose:
   trains people to work around it. Every error cites the rule, what came
   in, and the correct example.
 
-## The ladder
+## The ladder {#the-ladder}
 
-Three permanent branches, **one per environment**. Code climbs one step
-at a time.
+Two permanent branches, **one per environment**. `qa` was retired for now on
+2 November 2026 ([ADR 0235](../adr/0235-a-qa-e-aposentada-e-a-esteira-fica-dev-e-main.md)):
+to bring it back, revert the round's PR and revive `refs/archive/qa`.
 
 ```mermaid
 flowchart LR
-  D[dev<br/>development] -->|promotion| Q[qa<br/>staging]
-  Q -->|promotion| M[main<br/>production]
-  M -.->|back-merge| Q
-  Q -.->|back-merge| D
+  D[dev<br/>development] -->|promotion| M[main<br/>production]
+  M -.->|back-merge| D
 ```
 
 | branch | environment | what being here means |
 |---|---|---|
 | `dev` | development | integrated, tested by CI |
-| `qa` | staging | under functional validation |
 | `main` | production | what's live |
+
+The branch also decides the **environment stamped into the image** (`BRABO_AMBIENTE`,
+ADR 0245): `release.yml` builds with `prd`, and `ci.yml` builds the PR with
+`prd` when the base is `main` and `dev` in the other cases. The third value,
+`local`, never comes out of a workflow — it only exists in a build made on the machine (dev and
+local installation) and is the only one that turns on the quick access by role. The spec
+`scripts/ci/ambiente-nas-actions.spec.ts` fails a workflow that passes `local`.
 
 There used to be a fourth step, `rc` (pre-prod), between `qa` and `main`.
 It was removed: with a single maintainer and a short cycle, the extra step
@@ -73,11 +78,12 @@ enum (already-run bootstraps have rows with it), and `rc` remains in the
 **protected-merge** list — see the note in
 [permissions.md](../reference/permissions.md).
 
-**No step can be skipped.** `dev → main` doesn't exist, not even in an
-emergency — an emergency has its own path (`hotfix`, below), and it too
+**No step can be skipped.** Since `qa` was retired (ADR 0235), the only
+promotion is `dev → main`; a direct merge into `main` outside it doesn't
+exist, not even in an emergency — an emergency has its own path (`hotfix`, below), and it too
 respects the ladder, just starting from the top.
 
-## Taxonomy
+## Taxonomy {#taxonomy}
 
 Every branch is `function/descriptor`, validated by
 `^.{0,30}/\S{0,32}$` — up to 30 characters for the function, up to 32 for
@@ -95,7 +101,7 @@ the descriptor, no spaces.
 The regex alone isn't enough: the function needs to be on the **closed
 list**.
 
-### Who's born where
+### Who's born where {#whos-born-where}
 
 | function | born from | PR targets | for |
 |---|---|---|---|
@@ -119,20 +125,20 @@ The origin isn't a suggestion — it's **verified by merge-base**. A
 hasn't been validated yet; rushing that into production during an
 incident is how disaster happens.
 
-### A fix born high goes back down
+### A fix born high goes back down {#a-fix-born-high-goes-back-down}
 
 `hotfix` enters directly at the step where the problem showed up. That
 leaves the steps below it **out of date** — the fix exists in `main` and
 not in `dev`.
 
-That's why every high-born fix generates a **back-merge**: `main → qa →
-dev`, in a chain, in order. While it hasn't completed, the affected steps
+That's why every high-born fix generates a **back-merge**: `main →
+dev` (until ADR 0235, `main → qa → dev`, in a chain). While it hasn't completed, the affected steps
 stay locked — see [The back-merge gate](#the-back-merge-gate).
 
 The full chain for a hotfix is **three PRs**: the hotfix plus the two
 back-merges.
 
-## PR families
+## PR families {#pr-families}
 
 Every PR gets a family label, applied automatically:
 
@@ -140,15 +146,15 @@ Every PR gets a family label, applied automatically:
 |---|---|---|
 | `trabalho` (work) | a work function → `dev` | `feature/pr-police` → `dev` |
 | `correcao-alta` (high fix) | `hotfix` → `main` | `hotfix/vaza-token` → `main` |
-| `promocao` (promotion) | adjacent step, going up | `dev` → `qa` |
-| `retropropagacao` (back-merge) | adjacent step, going down | `main` → `qa` |
+| `promocao` (promotion) | adjacent step, going up | `dev` → `main` |
+| `retropropagacao` (back-merge) | adjacent step, going down | `main` → `dev` |
 
 The label isn't decoration: it's what lets you answer "how many hotfixes
 did we have this quarter?" without git archaeology.
 
 <a id="push-direto-é-bloqueado"></a>
 
-## Direct push is blocked
+## Direct push is blocked {#direct-push-is-blocked}
 
 None of the three permanents accept direct push. Every change enters via
 PR. It's the **single door** — and it has exactly three exceptions, all
@@ -187,19 +193,21 @@ The exact configuration is in [Rulesets](../reference/rulesets.md), and
 applying it is a manual step — the repository versions the source, GitHub
 receives the application.
 
-## Merged branches get archived
+## Merged branches get archived {#merged-branches-get-archived}
 
-Every branch whose PR merged gets moved out of the branch list **7 days
-after the merge** — mechanically, by `archive-merged-branch.yml`, which runs
-once a day (`schedule:`, plus `workflow_dispatch`) and walks every branch of
-the repository (AT-557, owner's decision of 2026-10-15). Until then the
+Every branch whose PR merged gets moved out of the branch list **with no grace
+period, in the next round** — mechanically, by `archive-merged-branch.yml`, which runs
+**every Monday at 09:00 (Brasília)** (`schedule:` `0 12 * * 1`, plus
+`workflow_dispatch`; AT-661). The schedule only fires with the workflow on the
+default branch `main` and walks every branch
+of the repository (AT-557, owner's decision of 2026-10-15). Until then the
 branch stays where it is, so a follow-up fix can still go on top of it. A
 branch is archived only when all of these hold:
 
 - it is not one of the excluded names below, and not from a fork;
 - no PR with that head is **open**;
 - a PR with that head **merged** in this repository, and the most recent
-  one merged 7 or more days ago (`DIAS_ATE_ARQUIVAR`);
+  one merged (`DIAS_ATE_ARQUIVAR` is 0, no grace period);
 - the branch tip is still that PR's `head.sha` — a branch that received a
   commit after the merge **stays**.
 
@@ -220,7 +228,7 @@ none of them is disposable feature work.
 
 | name | why it's excluded |
 |---|---|
-| `dev`, `qa`, `main` | the three permanents — they appear as the `head` of every merged promotion PR (`dev`→`qa`, `qa`→`main`), which is exactly the case this exclusion exists to catch |
+| `dev`, `qa`, `main` | the three permanents — they appear as the `head` of every merged promotion PR (`dev`→`main`; before, also `qa`), which is exactly the case this exclusion exists to catch |
 | `gh-pages` | the documentation site's deploy branch (see "Direct push is blocked" above) — not a feature branch, and deleting `refs/heads/gh-pages` would take the live site down with it |
 
 A fifth condition isn't a name, it's a boundary: a PR whose head branch
@@ -232,14 +240,14 @@ The decision itself — which four names are excluded, and the fork check —
 is a tested pure function
 ([`scripts/ci/archive-branch.ts`](https://github.com/daneiel/brabo/blob/dev/scripts/ci/archive-branch.ts)),
 not inline shell: it's the part of this mechanism that's actually worth
-getting wrong tests for — and so is the 7-day eligibility
+getting wrong tests for — and so is the eligibility
 (`aptaParaArquivar`, same file). The same script then calls the GitHub
 API: create the `refs/archive/` ref (or force it, when the name was archived
 before), read it back and check it points at the branch's SHA, and only then
 delete the `refs/heads/` one — so a failure never drops a branch without
 leaving the archived copy behind.
 
-## Bots skip the ladder
+## Bots skip the ladder {#bots-skip-the-ladder}
 
 PRs opened by `dependabot[bot]` and `github-actions[bot]` are **exempt**
 from name, origin and destination validation.
@@ -254,7 +262,7 @@ A pedagogical message doesn't teach a bot. The exemption is by
 **author**, not by prefix, so no one uses it as a loophole by naming a
 branch `dependabot/`.
 
-### Dependabot branches are allowed with no character limit
+### Dependabot branches are allowed with no character limit {#dependabot-branches-are-allowed-with-no-character-limit}
 
 Besides the generic bot exemption, the policy names Dependabot's branches
 explicitly: **`dependabot/…` is an allowed branch name, with no character
@@ -273,11 +281,11 @@ prefix is reserved and that a hand-made dependency bump is `chore/`. The rule
 does not check the destination: bringing a security PR from `main` to `dev`
 is the job of `dependabot-para-dev.yml` (next section).
 
-## Dependabot enters through dev
+## Dependabot enters through dev {#dependabot-enters-through-dev}
 
 The exemption above is about the branch **name**. The **destination** is not
 exempt: a dependency update enters through `dev`, like everything else, and
-reaches `main` through the `dev → qa → main` promotion. A dependency merged
+reaches `main` through the `dev → main` promotion. A dependency merged
 straight into `main` skips the ladder and makes `main` diverge from the branch
 where the work happens.
 
@@ -327,7 +335,7 @@ their own — events created by `GITHUB_TOKEN` don't trigger workflows, and
 Dependabot doesn't accept commands from that bot. Someone with write access
 comments `@dependabot rebase`; the workflow's comment says so on the PR.
 
-### A pin bump justifies itself
+### A pin bump justifies itself {#a-pin-bump-justifies-itself}
 
 A Dependabot PR that bumps an action touches workflow files, and the
 documentation drift check fires by **file**: `release.yml` is watched by the
@@ -384,13 +392,13 @@ Measured against every Dependabot PR in the repository's history: the ten
 `github_actions` ones (#561–#565, #577–#581) are pure pin changes; the
 `npm_and_yarn` one (#553) is not.
 
-## Who approves
+## Who approves {#who-approves}
 
 The approval requirement has **two modes**, chosen by the repository
 variable `APPROVAL_MODE`. Both are implemented and tested; switching from
 one to the other is **just changing variables**, no code touched.
 
-### `solo` mode — what applies today
+### `solo` mode — what applies today {#solo-mode--what-applies-today}
 
 The project has **one maintainer**. The full approver ladder assumes
 teams that don't exist yet, and a rule that can't be fulfilled is a rule
@@ -400,6 +408,7 @@ that teaches people to cheat.
 |---|---|
 | PR from a third party | **1 approval from the owner** |
 | PR authored by the owner | passes the check **without review** |
+| Dependabot PR to `dev` | passes the check **without review** ([ADR 0236](../adr/0236-o-dependabot-dispensa-revisao-na-dev.md)) |
 
 The second line isn't a privilege, it's how GitHub works: **no one can
 approve their own PR through the interface**. In a BDFL project, the
@@ -407,20 +416,26 @@ approve their own PR through the interface**. In a BDFL project, the
 the moment they choose to click the button. Requiring a review the
 platform doesn't allow would only produce a permanently red check.
 
+The third line also holds in `community` mode, and only on `dev`. Since
+2 November 2026 the **other checks** do the Dependabot review: with all of them
+green, the PR is mergeable. The bot is recognized by **author and branch**, with the
+same yardstick as `pr-police`, so a human who names a branch `dependabot/`
+still needs approval. For `main` the full ladder stays, through the
+promotion.
+
 The requirement for **distinct people is suspended** in this mode, and
 it's suspended on purpose: with a single maintainer, it's arithmetically
 impossible.
 
-### `community` mode — for when there are people
+### `community` mode — for when there are people {#community-mode--for-when-there-are-people}
 
 | target | requirement |
 |---|---|
 | `dev` | 1 × devs |
-| `qa` | 2 × devs |
 | `main` | 1 × PO **+** 1 × management |
 
-For `main`, **distinct people** — the requirement applies again. For
-`dev` and `qa` the distinction is automatic: the slots are the same role
+For `main`, **distinct people** — the requirement applies again. For `dev`
+the distinction is automatic: the slots are the same role
 and each person only gets one review.
 
 The roles are **lists of handles** in repository variables, not GitHub
@@ -444,7 +459,7 @@ variable. If the project becomes an org with real teams, changing the
 source is a one-function change — the ladder and the distinct-people rule
 don't change.
 
-#### Why "distinct people" needs more than counting
+#### Why "distinct people" needs more than counting {#why-distinct-people-needs-more-than-counting}
 
 For `main`, whoever is on **both lists** (`po` and `gestao`) could
 satisfy both slots alone, if the check simply counted approvals per role.
@@ -456,7 +471,7 @@ but is also in `gestao`, giving the `gestao` slot to her would leave `po`
 uncovered — even though another person could have filled it. The correct
 assignment exists, and the check finds it.
 
-### Rules common to both modes
+### Rules common to both modes {#rules-common-to-both-modes}
 
 - Only reviews **`APPROVED` on the last commit** count. An approval on an
   old commit doesn't count: what was approved isn't what's about to be
@@ -465,15 +480,13 @@ assignment exists, and the check finds it.
   missing**. A check that only says "approvals missing" forces you to
   guess.
 
-### Migrating to `community` mode
+### Migrating to `community` mode {#migrating-to-community-mode}
 
 Prerequisites, before flipping any variable:
 
 1. **Every role with real people.** `main` requires PO **and**
    management; if both lists point to the same person, no PR to `main`
-   ever passes — the distinct-people rule can't be satisfied. `qa`
-   requires **two** distinct devs: a list with a single name blocks
-   promotion.
+   ever passes — the distinct-people rule can't be satisfied.
 2. **A criterion for who joins each list**, defined and written down —
    who joins, who leaves, and based on what.
 
@@ -504,7 +517,7 @@ remains the source of the MECHANISM (the ladder, the distinct-people
 requirement, the switch's step by step); `GOVERNANCE.md` is the source of
 the CRITERION for who fills each role.
 
-## Promotion
+## Promotion {#promotion}
 
 Code climbs a step via a **promotion PR**, opened by the `promote`
 workflow (`workflow_dispatch`, input: the pipeline pair).
@@ -516,8 +529,7 @@ The merge remains a manual act, like every entry into a permanent branch.
 |---|---|
 | 1 | **who triggers it** — under `APPROVAL_MODE=solo`, only
 `OWNER_HANDLE`. Any other actor fails, naming who's allowed |
-| 2 | **adjacent pair** — `dev→qa` and `qa→main`. `dev→main` is refused,
-pointing to the staged path |
+| 2 | **adjacent pair** — `dev→main` (since ADR 0235; before, `dev→qa` and `qa→main`) |
 | 3 | **cycle version** — computed from the PRs merged since the last
 final tag |
 | 4 | **PR opened** — body listing each PR, its function, its impact and
@@ -533,7 +545,9 @@ extra cell and the table breaks. That's why the order of the two
 substitutions is load-bearing, and the test in `promote.spec.ts` counts
 the line's REAL delimiters instead of comparing the whole string.
 
-### Automatic promotion to qa (test phase) {#automatic-promotion-to-qa}
+### Automatic promotion to qa (test phase) — REVOKED {#automatic-promotion-to-qa}
+
+> **Revoked on 2 November 2026 (ADR 0235):** without `qa` this promotion has no destination; `promote-auto-qa.yml` and `QA_FASE_DE_TESTE` are gone. The text below is the historical record of ADR 0217.
 
 While QA is in its **test phase**, `dev` → `qa` promotes itself (ADR 0217,
 owner's decision of 15/10). The switch is the repository variable
@@ -566,7 +580,7 @@ require approval.
 > Each automatic promotion also produces a `-qa.N` tag and republishes
 > `/brabo/qa/`.
 
-### The promotion check
+### The promotion check {#the-promotion-check}
 
 A promotion PR goes through a check of its own, separate from
 `pr-police`. That one validates the **shape** (name, origin, destination);
@@ -587,6 +601,19 @@ pointing to a commit that no longer exists |
 A check that **couldn't be performed** counts as failed, never as
 passed — a ref that fails to resolve is ignorance, not permission.
 
+The stamp **waits** for whoever is still stamping (AT-663). Right after the merge into
+the step below, the promotion PR runs before the tag exists. If the stamp is missing
+and there is a `tag-release` in progress for that commit, the check fetches the tags again
+every 20 s, for up to 10 min (`esperarCarimbo`, `PRAZO_DO_CARIMBO_MS`), and only fails if the
+deadline expires. With no `tag-release` running, or unable to ask the API, it fails
+at once, as before. Waiting never approves without the tag.
+
+The three checks that read the whole history (`pr-police`, `promotion-check` and
+`backmerge-gate`) do `actions/checkout` with `fetch-depth: 0` and have a
+15-minute ceiling on the job. With 5, the repository download, which grows with every PR,
+blew up before the script ran (AT-603). The fetch depth does not change:
+the scripts compare the whole history.
+
 The first two checks are exercised by
 `scripts/ci/promotion-check.spec.ts`, in the same spirit as
 `pr-police`'s and `approval-ladder`'s specs. What it fixes isn't the
@@ -603,10 +630,11 @@ guarantee lives in `tag-release`: after the merge, it confirms the
 commit has **two parents**. That doesn't depend on any permission, and it
 looks at the fact on the ground rather than the declared intent.
 
-## Versioning
+## Versioning {#versioning}
 
-Every tag is born from a workflow, in the format `vX.Y.Z-dev.N` /
-`-qa.N` / final.
+> **Reading after ADR 0235 (2 November 2026):** the sections on versioning, anchor, back-merge and gate below still describe the three-step ladder. Where they cite `qa` as the intermediate step, today it holds that: the promotion is `dev → main`, the anchor of the final tag is the `-dev.N` of the merge's parent, and the back-merge of a hotfix is only `main → dev`. The examples with `-qa.N` are historical.
+
+Every tag is born from a workflow, in the format `vX.Y.Z-dev.N` / final (the `-qa.N` ones are historical, from before ADR 0235).
 
 **The version lives in the TAG, not in files.** No one can commit
 directly to a permanent branch to bump `package.json`, so requiring the
@@ -615,7 +643,7 @@ ceremony automated calculation exists to eliminate.
 `release.yml` checks the files as a **warning** and only fires on a final
 tag.
 
-### What the final tag produces
+### What the final tag produces {#what-the-final-tag-produces}
 
 `release.yml` is the end of the pipeline, and what it delivers is
 deliberately modest:
@@ -658,7 +686,7 @@ signed `checksums.txt` covering the four targets rather than one
 signature per binary: verifying three and forgetting the fourth is a failure
 mode nobody notices, and a single manifest removes it.
 
-#### The version lives in the tag, and the release is what carries it to the artifact
+#### The version lives in the tag, and the release is what carries it to the artifact {#the-version-lives-in-the-tag-and-the-release-is-what-carries-it-to-the-artifact}
 
 The tag is the source of the version, but an image can't read its own
 tag: the container doesn't know what name it was published under, and
@@ -707,7 +735,7 @@ notices when it breaks, and on the day it's flipped on it'll be wrong.
 When there's an environment, the deploy will be its **own** workflow,
 triggered by the tag.
 
-#### The Release depends on the PAT, and its absence has already cost six
+#### The Release depends on the PAT, and its absence has already cost six {#the-release-depends-on-the-pat-and-its-absence-has-already-cost-six}
 
 `release.yml` fires on a final tag `push`. But **a tag pushed with the
 `GITHUB_TOKEN` doesn't trigger a workflow** — it's GitHub's anti-recursion
@@ -740,7 +768,7 @@ its own effect. Whoever republishes is the release owner, the same
 restriction as `promote`. The procedure is in
 [Rulesets](../reference/rulesets.md#republishing-a-tag-that-was-orphaned).
 
-### The CHANGELOG comes back via PR, and why not by push
+### The CHANGELOG comes back via PR, and why not by push {#the-changelog-comes-back-via-pr-and-why-not-by-push}
 
 Once the Release is published, `release.yml` opens a `chore/changelog-<tag>`
 PR to **`dev`** with the version's cut in `CHANGELOG.md` — and, in the
@@ -780,7 +808,7 @@ It's not information loss: the authoritative source of the notes is the
 **GitHub Release**, published at the same moment as the tag, and the cut
 lands in the next cycle like any other change.
 
-### `.release/images.json` rides the same PR — and adds no exception
+### `.release/images.json` rides the same PR — and adds no exception {#releaseimagesjson-rides-the-same-pr--and-adds-no-exception}
 
 Since [ADR 0119](../adr/0119-imagens-publicadas-no-ghcr-por-digest.md),
 `release.yml` publishes the production images to GHCR — five since
@@ -813,7 +841,7 @@ the one to trust in the meantime.
 > "Unreleased" — while six Releases went out with an empty body, because
 > the "previous tag" included that same version's own pre-releases.
 
-### The cycle's version
+### The cycle's version {#the-cycles-version}
 
 Comes from the **largest impact** among the PRs merged since the last
 final tag:
@@ -828,7 +856,7 @@ A single `breaking` among ten `docs` makes the whole cycle MAJOR. And
 it's the **branch's function** that decides, not the family label:
 `breaking/x` and `docs/y` are both in the `trabalho` family.
 
-#### `breaking/` requires the marker on the commit
+#### `breaking/` requires the marker on the commit {#breaking-requires-the-marker-on-the-commit}
 
 `pr-police` rejects a `breaking/` PR whose commits don't mark the break
 — `!` in the subject (`feat(api)!: …`) or `BREAKING CHANGE:` in the body
@@ -864,7 +892,7 @@ An **empty** cycle — no PR since the last final — fails with a message
 instead of generating a tag. A new tag pointing at the same commit as the
 previous one would make the version history lie.
 
-#### Where the cycle's PRs come from
+#### Where the cycle's PRs come from {#where-the-cycles-prs-come-from}
 
 From the `git log` between the last final tag and `dev`, reading the PR
 number from the commit's subject. The **two merge styles** need to be
@@ -900,7 +928,7 @@ right after `tag-release` had stamped `-dev.2`.
 > then, the workaround is the one already documented: run
 > `node scripts/ci/promote.ts` by hand, with the same script.
 
-### The `N`
+### The `N` {#the-n}
 
 `N` is however many tags of that version already exist at that stage,
 plus one.
@@ -910,7 +938,7 @@ counter**. That's what makes "promoted, rejected, fixed, re-promoted"
 become `-qa.2` with no one recording the rejection — and the number ends
 up saying how many laps the cycle took before passing.
 
-### The final tag's anchor
+### The final tag's anchor {#the-final-tags-anchor}
 
 The final tag is only born if what's in `main` is **exactly** what
 passed through `qa`. If it isn't, the workflow fails loudly instead of
@@ -933,7 +961,7 @@ merge brought in a file, the tree would change and the check would fail
 — exactly the case the anchor exists to catch. Tree equality is stronger
 than commit equality: it looks at content, not identity.
 
-### `main`'s two paths
+### `main`'s two paths {#mains-two-paths}
 
 `main` receives merges in two ways, and they call for different
 versions. The distinction comes from the merge commit's **second
@@ -968,7 +996,7 @@ hatch, the back-merge would stamp a `-qa.N` on a commit that was never
 promoted from `dev` — a tag saying "this passed through qa" on something
 that didn't.
 
-### There's no deploy
+### There's no deploy {#theres-no-deploy}
 
 The workflows **end at the tag**. There's no environment, no GitHub
 Environments, no deploy step — not even a disabled one. The tag is the
@@ -985,7 +1013,7 @@ To look with your own eyes at what a tag stamped:
 make deploy-local TAG=v0.2.0-qa.1
 ```
 
-### Squash on a conveyor merge, and the alarm that has an addressee
+### Squash on a conveyor merge, and the alarm that has an addressee {#squash-on-a-conveyor-merge-and-the-alarm-that-has-an-addressee}
 
 Promotion is `--no-ff`, and this is the rule that has been broken the most:
 **three times** (#367, #394, #464). It deserves its own section because the
@@ -1010,7 +1038,7 @@ does:
 
 | branch | what enters | rule |
 |---|---|---|
-| `qa`, `main` | only conveyor traffic | one parent is always a defect |
+| `main` | only conveyor traffic | one parent is always a defect |
 | `dev` | work, all day, by squash **on purpose** | a defect only when the PR carried a **new edge** — its head was a merge whose second parent was not already in the base |
 
 That `dev` distinction is narrow on purpose. A work PR that pulled `dev` into
@@ -1046,7 +1074,7 @@ And that PR **also** has to enter as a merge commit. Squashing it is
 mathematically guaranteed not to work: the correction *is* the second parent.
 That is precisely how #464 failed.
 
-## The back-merge gate
+## The back-merge gate {#the-back-merge-gate}
 
 `hotfix` solves the incident and creates a new problem: the fix is in
 `main` and not in `qa` or `dev`. If someone promotes `dev → qa → main`
@@ -1057,7 +1085,7 @@ to that merge.
 The gate closes that hole by locking the lower steps until the fix comes
 down.
 
-### The state
+### The state {#the-state}
 
 The gate lives at `.release/gate.json`, on `main`:
 
@@ -1085,7 +1113,7 @@ back-merge PRs carry a copy of the file along, and reading that copy
 would give the stale state precisely during the chain it changes at
 every merge.
 
-### What happens when a hotfix merges
+### What happens when a hotfix merges {#what-happens-when-a-hotfix-merges}
 
 All in the same workflow (`tag-release`), in this order — and the order
 matters, because the PRs need to cite the tag:
@@ -1094,7 +1122,7 @@ matters, because the PRs need to cite the tag:
 2. the **two back-merge PRs** are opened: `main → qa` and `main → dev`;
 3. `.release/gate.json` is written on `main`, locking `qa` and `dev`.
 
-### Accumulation comes free
+### Accumulation comes free {#accumulation-comes-free}
 
 A second hotfix during an active gate **doesn't open a new PR and
 doesn't create a parallel queue**. The `main → qa` and `main → dev` PRs
@@ -1103,7 +1131,7 @@ hotfix. The gate only appends the entry to `historico` and re-affirms the
 lock. A branch already unlocked **locks again**, because now there's new
 content that needs to come down.
 
-### The check, on every PR
+### The check, on every PR {#the-check-on-every-pr}
 
 | situation | verdict |
 |---|---|
@@ -1119,13 +1147,13 @@ to think "it's a fix, so it should pass": it can't. It's born from `dev`,
 doesn't carry the hotfix, doesn't resolve the lock, and just piles more
 work on top of the hole.
 
-### The order isn't bureaucracy
+### The order isn't bureaucracy {#the-order-isnt-bureaucracy}
 
 Unlocking `dev` before `qa` would leave the middle step without the fix
 — exactly the hole the gate exists to close. The last unlock clears
 `awaiting` and resets the history.
 
-### The lock is checked, not just declared
+### The lock is checked, not just declared {#the-lock-is-checked-not-just-declared}
 
 `locked` is the **record of intent**; the truth is the containment.
 Before evaluating, the check asks git whether the hotfix commit is
@@ -1141,7 +1169,9 @@ stay stuck forever.
 
 **Failing to verify keeps the lock.** Unknown isn't permission.
 
-## What the policy doesn't solve
+The scripts test job also installs `website/`, because of Redoc (ADR 0253).
+
+## What the policy doesn't solve {#what-the-policy-doesnt-solve}
 
 **It doesn't prevent bad code.** It guarantees the code went through the
 steps, not that it's good. That's review, testing and the QA/SecOps gates'
@@ -1152,7 +1182,7 @@ path (`hotfix`) so no one has to choose between "follow the rule" and
 "fix it now." If the policy is getting in the way during an incident, the
 policy is the problem — open an issue afterward, don't cheat during.
 
-## Roles
+## Roles {#roles}
 
 While `APPROVAL_MODE=solo`, the two roles below are held by the
 **owner**. It's not concentration by neglect — it's the acknowledgment,

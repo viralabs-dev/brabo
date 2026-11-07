@@ -23,8 +23,9 @@ monorepo antigo é `viralabs-dev/brabo-legacy`. O site publica em
 ## Como o docs lê o código dos irmãos
 `bash scripts/docs/montar-layout.sh` RECONSTRÓI neste checkout o layout do
 monorepo (`apps/api`, `apps/engine`, `apps/web`, `apps/runner`, `apps/broker`,
-`packages/`, e a raiz de `brabo-infra` e `brabo-ci`), clonando a `dev` de cada
-um (`BRABO_REF` muda o ref; `BRABO_IRMAOS=<pasta>` usa clones locais). Os
+`packages/`, e a raiz de `brabo-infra` e `brabo-ci`), trazendo o SHA de cada um
+em `irmaos.lock` (a trava, ADR 0274; `BRABO_REF` vence a trava, e `BRABO_REF=dev`
+mostra a `dev` de agora; `BRABO_IRMAOS=<pasta>` usa clones locais). Os
 arquivos entram no ÍNDICE do git (`git add -f`), nunca em commit: `git ls-files`
 é a régua do gerador. As refs `caminho:N` das RNs e os globs do docmap seguem
 iguais. Raiz opcional ausente vira AVISO. O `docs-check` e o `docs-deploy`
@@ -33,8 +34,9 @@ código" não vale entre repos: o drift só enxerga o diff deste repo.
 O script grava o que trouxe em `.git/layout-irmaos.lst` e, na rodada seguinte,
 remove o que já não está em `HEAD` (senão o `--update=none` esconde diff).
 `.github/workflows/regenera-gerados.yml` (a cada 6 h e por `workflow_dispatch`)
-regenera os gerados que dependem dos irmãos e abre/atualiza a PR fixa
-`chore/regenera-gerados` na `dev` (segue a escada normal); pendência em arquivo
+sobe a trava e regenera os gerados que dependem dos irmãos no mesmo commit, e
+abre/atualiza a PR fixa `chore/regenera-gerados` na `dev` (dispensa a escada,
+ADR 0255; o merge é humano); pendência em arquivo
 de irmão deixa o job vermelho nomeando o repo dono (AT-726).
 O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mjs`).
 
@@ -43,8 +45,13 @@ O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mj
   `funcao/descritivo` (descritivo até 32 caracteres); commits conventional em
   pt-BR; toda mudança entra por PR; merge em branch protegida é do dono.
 - A release do PRODUTO (1.0.0, AT-704) nasce daqui; nunca versionar à mão.
+- PR que toca uma funcionalidade do catálogo (`brabo-qa/funcionalidades.yml`) ajusta o regressivo dela no `brabo-qa` contra a `dev`, ou diz no card por que não precisa. `Regressivo do brabo-qa` (PR para a `dev`) só atesta e NUNCA é exigido; o `E2E do brabo-qa` (PR para a `main`) roda o catálogo inteiro (ADR 0268).
+- Os workflows que leem irmãos publicam `## Vínculos` no Summary pela action `vinculos` do `brabo-ci` (SHAs do `.git/irmaos-sha.lst`, ADR 0271); o helper nunca reprova o job.
 - Responder e escrever docs em pt-BR (a FONTE); `en`, `ru`, `zh-Hans` são
-  traduções com paridade medida.
+  traduções com paridade medida (no `brabo`, só da doc dele; ADR 0273). Vale para TODOS os repos (ADR 0266, que
+  substitui o 0260): os irmãos também podem ter `docs/i18n/`, e o `Unreleased`
+  dos CHANGELOGs é em pt-BR. Página com `idioma_original: en` ainda é aceita
+  (o site a serve com a faixa "só em inglês") até o irmão retraduzi-la.
 - `install.sh` é bash 3.2 (sem Node); mudar o `case` dos assets exige mudar
   `scripts/ci/assets-do-instalador.ts` junto (o spec reprova a divergência).
 
@@ -143,6 +150,8 @@ O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mj
   entre duas ocorrências segue relida pelo símbolo, à mão, nunca por um número
   antigo. NÃO alargue a janela
   para o vermelho sumir, nem estreite o padrão para esconder ref real.
+  Desde o ADR 0275 cada irmão confere as próprias refs com símbolo no CI (`refs-com-simbolo.yml`
+  do `brabo-ci`); a ref entre irmãos só é listada, e a trava (ADR 0274) segue o portão.
 - O runbook termina com a tabela `procedure | anchor | verification |
   schedule` dos procedimentos de OPERAÇÃO (AT-193, EP-015), e o `docs:check` a
   confere em `block` (`scripts/docs/procedimentos-do-runbook.mjs`, provado por

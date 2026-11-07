@@ -78,6 +78,55 @@ describe('render', () => {
   });
 });
 
+describe('estado misto: fonte em inglês e fonte em pt-BR com i18n (AT-745, ADR 0260)', () => {
+  const misto = () => {
+    const raiz = repo();
+    const w = (rel: string, txt: string) => {
+      mkdirSync(path.dirname(path.join(raiz, rel)), { recursive: true });
+      writeFileSync(path.join(raiz, rel), txt);
+    };
+    // raiz em inglês: marcada, sem i18n
+    w('apps/api/docs/reference/gates.md', '---\nidioma_original: en\n---\n# Gates\n');
+    // raiz ainda em pt-BR, com tradução para en
+    w('apps/engine/docs/reference/agentes.md', '# Agentes\n');
+    w('apps/engine/docs/i18n/en/reference/agentes.md', '# Agents\n');
+    return raiz;
+  };
+  const raizesDeDoc = ['docs', 'apps/api/docs', 'apps/engine/docs'];
+  const pagina = (raiz: string, locale: string, slug: string) =>
+    descobrirPaginas({ raiz, locale, raizesDeDoc }).find((p) => p.slug === slug);
+
+  it('no /en/ a fonte inglesa é a própria página, sem faixa', () => {
+    expect(pagina(misto(), 'en', 'reference/gates')).toMatchObject({ traduzida: true, somenteIngles: false, titulo: 'Gates' });
+  });
+  it.each(['pt-BR', 'ru', 'zh-Hans'])('em %s serve a fonte inglesa com a faixa "só em inglês"', (loc) => {
+    expect(pagina(misto(), loc, 'reference/gates')).toMatchObject({ traduzida: false, somenteIngles: true, titulo: 'Gates' });
+  });
+  it('mutação: sem o idioma_original a mesma página cai na faixa comum, não na de inglês', () => {
+    const raiz = misto();
+    writeFileSync(path.join(raiz, 'apps/api/docs/reference/gates.md'), '# Gates\n');
+    expect(pagina(raiz, 'ru', 'reference/gates')).toMatchObject({ traduzida: false, somenteIngles: false });
+    expect(pagina(raiz, 'en', 'reference/gates')).toMatchObject({ traduzida: false });
+  });
+  it('a raiz pt-BR com i18n segue como era: traduzida no en, fallback no ru, sem somenteIngles', () => {
+    const raiz = misto();
+    expect(pagina(raiz, 'en', 'reference/agentes')).toMatchObject({ traduzida: true, somenteIngles: false, titulo: 'Agents' });
+    expect(pagina(raiz, 'ru', 'reference/agentes')).toMatchObject({ traduzida: false, somenteIngles: false });
+    expect(pagina(raiz, 'pt-BR', 'reference/agentes')).toMatchObject({ traduzida: true });
+  });
+  it('o HTML: faixa de inglês no pt-BR e no ru, nenhuma no en, e a faixa comum no fallback pt-BR', async () => {
+    const raiz = misto();
+    const saida = path.join(raiz, 'out');
+    await construir({ raiz, saida, degrau: 'dev', git: false, raizesDeDoc });
+    const h = (rel: string) => readFileSync(path.join(saida, rel), 'utf8');
+    expect(h('reference/gates.html')).toContain('só existe em inglês');
+    expect(h('ru/reference/gates.html')).toContain('существует только на английском');
+    expect(h('zh-Hans/reference/gates.html')).toContain('仅有英文版本');
+    expect(h('en/reference/gates.html')).not.toContain('class="site-faixa"');
+    expect(h('ru/reference/agentes.html')).toContain('ещё не переведена');
+  }, 120_000);
+});
+
 describe('navegacao', () => {
   it('agrupa ADRs pelo temas.yml e lança se o parse se perde', () => {
     const raiz = repo();

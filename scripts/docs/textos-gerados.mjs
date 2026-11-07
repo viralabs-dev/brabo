@@ -4,6 +4,8 @@
  * `docs/i18n/<locale>/` recebem o bloco no idioma delas. Chave faltando num
  * locale reprova em `textos-gerados.spec.ts`.
  */
+import { idiomaOriginal } from './faixa-de-traducao.mjs';
+
 export const LOCALES_GERADOS = ['en', 'ru', 'zh-Hans'];
 
 /** Onde mora a cópia traduzida de `<raiz>/docs/<rel>` (AT-693: `<raiz>/docs/i18n/<locale>/<rel>`). */
@@ -11,6 +13,9 @@ export const copiaDoLocale = (locale, rel) => {
   const [, raiz, resto] = /^((?:.+\/)?docs)\/(.*)$/.exec(rel) ?? [, 'docs', rel];
   return `${raiz}/i18n/${locale}/${resto}`;
 };
+
+/** Os textos do bloco gerado na FONTE: inglês se ela é `idioma_original: en` (AT-745), senão pt-BR. */
+export const textosDaFonte = (conteudo, textos) => (idiomaOriginal(conteudo) === 'en' ? textos.en : textos['pt-BR']);
 
 /** Chaves que um locale não tem (ou tem a mais), comparado à fonte pt-BR. Vazio = em dia. */
 export function chavesFaltando(textos) {

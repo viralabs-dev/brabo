@@ -1,20 +1,20 @@
 ---
-traducao_de: de061f649879891150d8c35e4aef5f9d65a09242
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 id: custo
-title: 'Regras de negócio — Custo'
-sidebar_label: Custo e metering
-description: 'As RNs de orçamento, metering, relatório de gasto e teto de custo — extraídas do business-rules.md por tamanho.'
-keywords: [regras de negócio, custo, orçamento, metering, token]
+title: 'Business rules — Cost'
+sidebar_label: Cost and metering
+description: 'The RNs on budget, metering, spend reports and the cost ceiling — extracted from business-rules.md by size.'
+keywords: [business rules, cost, budget, metering, token]
 ---
 
 # Cost
 
-> Estas RNs saíram de [`business-rules.md`](../business-rules.md) sem
-> mudar uma vírgula do conteúdo: a página única passava de 640 KB e
-> estas duas seções sozinhas eram metade dela. As âncoras `#rn-NNN`
-> continuam idênticas — só o arquivo que as hospeda mudou.
+> These RNs came out of [`business-rules.md`](../business-rules.md) without
+> changing a comma of the content: the single page was over 640 KB and
+> these two sections alone were half of it. The `#rn-NNN` anchors
+> remain identical — only the file that hosts them changed.
 
-Estas RNs agora moram por área, na página da raiz que as hospeda (`business-rules/<raiz>.md`). Esta página está congelada: só preserva as âncoras antigas.
+These RNs now live per area, on the page of the root that hosts them (`business-rules/<raiz>.md`). This page is frozen: it only preserves the old anchors.
 
 - <a id="rn-017"></a>[RN-017](./api.md#rn-017)
 - <a id="rn-018"></a>[RN-018](./api.md#rn-018)
@@ -95,4 +95,18 @@ Estas RNs agora moram por área, na página da raiz que as hospeda (`business-ru
 - <a id="rn-774"></a>[RN-774](./engine.md#rn-774)
 - <a id="rn-802"></a>[RN-802](./api.md#rn-802)
 - <a id="rn-892"></a>[RN-892](./api.md#rn-892)
+- <a id="rn-907"></a>[RN-907](./api.md#rn-907)
 - <a id="rn-910"></a>[RN-910](./api.md#rn-910)
+- <a id="rn-915"></a>[RN-915](./api.md#rn-915)
+- <a id="rn-916"></a>[RN-916](./api.md#rn-916)
+- <a id="rn-917"></a>[RN-917](./api.md#rn-917)
+- <a id="rn-952"></a>[RN-952](./api.md#rn-952)
+- <a id="rn-953"></a>[RN-953](./api.md#rn-953)
+- <a id="rn-954"></a>[RN-954](./api.md#rn-954)
+- <a id="rn-958"></a>[RN-958](./api.md#rn-958)
+- <a id="rn-963"></a>[RN-963](./web.md#rn-963)
+- <a id="rn-964"></a>[RN-964](./api.md#rn-964)
+- <a id="rn-965"></a>[RN-965](./api.md#rn-965)
+- <a id="rn-969"></a>[RN-969](./api.md#rn-969)
+- <a id="rn-973"></a>[RN-973](./web.md#rn-973)
+- <a id="rn-997"></a>[RN-997](./api.md#rn-997)

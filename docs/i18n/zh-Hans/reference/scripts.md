@@ -71,6 +71,7 @@ keywords: [scripts, pnpm, make, commands]
 | `pnpm --filter api gerar:areas` | `ts-node scripts/gerar-areas.ts` |
 | `pnpm --filter api lint:migracao` | `ts-node scripts/lint-migracao.ts` |
 | `pnpm --filter api relatorio:backup` | `ts-node scripts/relatorio-backup.ts` |
+| `pnpm --filter api migrar-projeto-para-trunk` | `ts-node src/scripts/migrar-projeto-para-trunk.ts` |
 | `pnpm --filter api grafo:reprojetar` | `ts-node src/scripts/reprojetar-grafo.ts` |
 | `pnpm --filter api artefatos:reprojetar` | `ts-node src/scripts/reprojetar-artefatos.ts` |
 | `pnpm --filter api db:generate` | `drizzle-kit generate` |
@@ -118,6 +119,7 @@ keywords: [scripts, pnpm, make, commands]
 
 | 命令 | 执行 |
 |---|---|
+| `pnpm --filter @brabo/docker-port build` | `tsc -p tsconfig.build.json` |
 | `pnpm --filter @brabo/docker-port test` | `vitest run` |
 | `pnpm --filter @brabo/docker-port typecheck` | `tsc --noEmit` |
 | `pnpm --filter @brabo/docker-port lint` | `oxlint --deny-warnings src vitest.config.ts` |
@@ -174,4 +176,4 @@ keywords: [scripts, pnpm, make, commands]
 
 ---
 
-共 114 条命令。没有 `## 描述` 注释的 Makefile 目标不会出现在这里——请在源码中添加注释。
+共 116 条命令。没有 `## 描述` 注释的 Makefile 目标不会出现在这里——请在源码中添加注释。

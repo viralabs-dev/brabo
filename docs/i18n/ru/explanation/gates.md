@@ -1,6 +1,6 @@
 ---
 sidebar_position: 7
-traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 ---
 
 # Gates и то, как они измеряются
@@ -12,7 +12,7 @@ traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
 сценариям использования, тестам и workflow CI. Чтобы ответить на вопрос
 «какие gates существуют», нужно было прочитать шесть файлов.
 
-`docs/gates.yml` — это и есть такой список. Этот документ объясняет, что
+`apps/api/config/gates.yml` — это и есть такой список. Этот документ объясняет, что
 он собой представляет и — что важнее — чем он **не** является.
 
 ## Реестр описывает, а не исполняет {#the-registry-describes-it-doesnt-execute}
@@ -90,7 +90,7 @@ traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
 было измерено на установленной v6.1.0: `GET /gates` отвечал `500` с
 `RegistroDeGatesInvalido`, перечисляя одиннадцать целей как «не
 существует», — двенадцать ответов 5xx примерно за 55 минут. С реестром
-всё было в порядке. Образ production несёт `/app/docs/gates.yml` и больше
+всё было в порядке. Образ production несёт `/app/apps/api/config/gates.yml` и больше
 ничего из `docs/`; `apps/api/test/`, `scripts/ci/` и `.github/` в него
 никогда не попадают, поэтому утверждение о репозитории, проверяемое
 против этого дерева, проваливает каждый gate в каждой установке.
@@ -100,7 +100,7 @@ traducao_de: bda80d7769fa531bc19874c86aedfff70d7ca051
 выполняется там, где вопрос имеет смысл. Это удерживают два стража: тест,
 который поднимается к корню репозитория и проверяет каждый локатор, и
 тест загрузчика, который воссоздаёт на диске дерево образа (корень с
-`docs/gates.yml` и ничем больше) и утверждает, что реестр загружается.
+`apps/api/config/gates.yml` и ничем больше) и утверждает, что реестр загружается.
 Возврат проверки в загрузчик делает второй тест красным с ровно тем же
 сообщением, которое выдала установка.
 
@@ -190,7 +190,7 @@ gates `active`+`block`. Когда-то у неё был собственный,
 ## Активация gate `planned` — такая же работа, как любая другая {#activating-a-planned-gate-is-the-same-work-as-any-other}
 
 `implementavel` (владелец `dev-lead`) родился `planned` в FASE 14d вместе
-с остальной целевой оргструктурой, которую `docs/gates.yml`/`docs/fluxo.yml`
+с остальной целевой оргструктурой, которую `apps/api/config/gates.yml`/`packages/contracts/fluxo.yml`
 уже описывали без кода за ней.
 [ADR 0090](../adr/0090-qa-estrategia-e-appsec-segundo-momento.md) его
 активировал — и это упражнение полезно как пример, потому что **в форме
@@ -205,7 +205,7 @@ warn даже при активации», а активация — не то �
 
 Настоящая работа лежит вне файла: Dev Lead понадобился новый инструмент
 (`assess_implementability`), предлагающий оценку как `proposed_action`, а
-QA-стратегия — до того роль `proposto` в `docs/fluxo.yml`, с уже
+QA-стратегия — до того роль `proposto` в `packages/contracts/fluxo.yml`, с уже
 записанным там критерием разделения («может быть самим qa-lead на втором
 этапе», в оригинале «pode ser o próprio qa-lead num segundo momento»), —
 должна была появиться, чтобы питать оценку реальным планом тестирования.
@@ -229,7 +229,7 @@ QA-стратегия — до того роль `proposto` в `docs/fluxo.yml`,
 (`RequestParallelizationUseCase`,
 [RN-083](../business-rules/api.md#rn-083)) работает в production со
 времён FASE 14d — отстал именно реестр, объявляя `planned` о том, что уже
-было `active` в родственном `docs/fluxo.yml` и в коде. Аудит fluxo.yml ×
+было `active` в родственном `packages/contracts/fluxo.yml` и в коде. Аудит fluxo.yml ×
 код (находка A1/B5,
 [auditoria-fluxo-vs-codigo.md](auditoria-fluxo-vs-codigo.md)) обнаружил
 расхождение; исправлением были те же две строки, которые получил и
@@ -506,8 +506,8 @@ PR:
 ## Gate может отсутствовать в реестре, пока `fluxo.yml` уже его назначает {#a-gate-can-be-missing-from-the-registry-while-fluxoyml-already-assigns-it}
 
 `deployavel` — четвёртый шаблон и наименее лестный: он был объявлен как
-`gate_saida` области `area-infra` в `docs/fluxo.yml` и **полностью
-отсутствовал в `docs/gates.yml`** — ни `planned`, ни устаревший, его там
+`gate_saida` области `area-infra` в `packages/contracts/fluxo.yml` и **полностью
+отсутствовал в `apps/api/config/gates.yml`** — ни `planned`, ни устаревший, его там
 просто не было. Модель команды состоит из трёх частей (каталог, поток,
 реестр), и ничто их пока не сопоставляет, поэтому gate может быть
 результатом в одной и не существовать в другой. Это **вторая** находка

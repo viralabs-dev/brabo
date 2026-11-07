@@ -13,19 +13,20 @@
 **一支 AI 智能体团队把你的应用从需求简报带到部署。
 最终决定权始终在你手里——靠设计保证，而不是靠约定。**
 
-[![CI](https://img.shields.io/github/actions/workflow/status/daneiel/brabo/ci.yml?branch=dev&label=CI&style=flat-square)](https://github.com/daneiel/brabo/actions/workflows/ci.yml)
+[![Docs check](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/docs-check.yml?branch=dev&label=docs-check&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/docs-check.yml)
+[![Release](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/release.yml?label=release&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/release.yml)
 [![许可证：MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![版本](https://img.shields.io/github/v/release/daneiel/brabo?label=version&color=informational&style=flat-square)](CHANGELOG.md)
-[![文档](https://img.shields.io/badge/docs-daneiel.github.io/brabo-8A2BE2.svg?style=flat-square)](https://daneiel.github.io/brabo/)
+[![版本](https://img.shields.io/github/v/release/viralabs-dev/brabo?label=version&color=informational&style=flat-square)](https://github.com/viralabs-dev/brabo/releases/latest)
+[![文档](https://img.shields.io/badge/docs-viralabs--dev.github.io/brabo-8A2BE2.svg?style=flat-square)](https://viralabs-dev.github.io/brabo/prd/zh-Hans/)
 [![在 Ko-fi 上支持](https://img.shields.io/badge/Ko--fi-%E8%AF%B7%E6%88%91%E5%96%9D%E5%92%96%E5%95%A1-FF5E5B?logo=ko-fi&logoColor=white&style=flat-square)](https://ko-fi.com/daneiel)
 
-[文档](https://daneiel.github.io/brabo/) · [从零到交付物](https://daneiel.github.io/brabo/prd/zh-Hans/tutorials/from-zero-to-deliverable) · [CHANGELOG](CHANGELOG.md) · [安全](SECURITY.md) · [参与贡献](CONTRIBUTING.md)
+[文档](https://viralabs-dev.github.io/brabo/prd/zh-Hans/) · [从零到交付物](https://viralabs-dev.github.io/brabo/prd/zh-Hans/tutorials/from-zero-to-deliverable) · [CHANGELOG](CHANGELOG.md) · [安全](SECURITY.md) · [参与贡献](CONTRIBUTING.md)
 
 <img src="docs/assets/readme/perguntas-no-chat.png" alt="Brabo 会话界面：创意智能体记录业务规则，并在聊天中返回待解决的问题，每个问题都附有建议答案和它影响的规则" />
 
 <sub>想法变成规则，缺少的部分变成问题——创意智能体在聊天中把疑问交还给你。</sub>
 
-[亮点](#亮点) · [功能](#功能) · [它是什么](#它是什么) · [开始](#三条命令开始) · [文档](#文档) · [许可证](#许可证)
+[亮点](#亮点) · [功能](#功能) · [它是什么](#它是什么) · [开始](#开始) · [仓库](#brabo-的仓库) · [发布](#发布如何组装) · [文档](#文档) · [许可证](#许可证)
 
 </div>
 
@@ -70,7 +71,7 @@
 
 通过各道关卡的 pull request 会出现在聊天中，点一下「批准」即可确认。
 
-**从零到交付物，一次真实运行：** [带录屏的分步讲解](https://daneiel.github.io/brabo/prd/zh-Hans/tutorials/from-zero-to-deliverable)——8/8 个任务，102/102 个测试，US$ 1.07。
+**从零到交付物，一次真实运行：** [带录屏的分步讲解](https://viralabs-dev.github.io/brabo/prd/zh-Hans/tutorials/from-zero-to-deliverable)——8/8 个任务，102/102 个测试，US$ 1.07。
 
 ---
 
@@ -90,125 +91,102 @@ Brabo 编排一组专业智能体——创意、PO、架构师、Dev Lead 与按
 
 **团队在进步，而你始终在环路中。** 心理学家提出基于真实事件的假设；Anamnese 推导出你的熟练度画像，并提出带版本的指令补丁。每个补丁都需要你的同意，回滚会创建新版本，而不是抹掉历史。
 
-## 三条命令开始
+## 开始
+
+### 安装 Brabo
 
 ```bash
-cp .env.example .env
-pnpm install
-pnpm dev
+curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh && bash install.sh
 ```
 
-`pnpm dev` 启动 Docker Compose（Postgres 16 + pgvector、api、engine、web），支持热重载。首次启动时 api 和 engine 会各自执行迁移。`pnpm --filter api seed` 创建演示用户。
+安装程序是一个 bash 脚本：下载文件后用 `bash` 运行，不要用 `curl | sh`。它在使用任何文件之前先校验 Release 中 `checksums.txt` 的签名，用按 digest 固定的镜像启动整套服务，创建第一个账户，并在本机启用 runner。每一步都会说明做了什么，没成功的部分会在最后点名列出。`bash install.sh --print-plan` 只显示它将做什么，不执行任何操作。分步说明见[快速开始](https://viralabs-dev.github.io/brabo/prd/zh-Hans/getting-started)。
 
-| 服务 | 地址 | 说明 |
-|---|---|---|
-| Web | <http://localhost:5173> | 登录 `owner@brabo.dev` / `brabo12345678`（来自 seed） |
-| API | <http://localhost:3000> | `GET /health` |
-| Engine | <http://localhost:4000> | `GET /health` |
+### 开发 Brabo
 
-`pnpm dev:down` 关闭全部服务。`pnpm dev:build` 强制重新构建。
-
-### 菜单：不想记命令时用
+代码位于各个兄弟仓库中，由 [`brabo-workspace`](https://github.com/viralabs-dev/brabo-workspace) 并排克隆。开发环境由 [`brabo-infra`](https://github.com/viralabs-dev/brabo-infra) 启动，它从这些克隆构建每个服务：
 
 ```bash
-pnpm bootstrap
+git clone https://github.com/viralabs-dev/brabo-workspace.git ~/dev/brabo
+cd ~/dev/brabo && ./clonar-tudo.sh
+cd brabo-infra && make dev
 ```
 
-日常命令分散在三个互不相通的地方：`package.json`（pnpm 脚本）、`Makefile`（Kubernetes 目标）以及 `deploy/k8s/` 和 `docker/` 中的零散脚本。菜单是唯一的入口。它**不重新实现任何东西**——每一项都恰好调用已经存在的 `pnpm`、`make` 或脚本。
+`make dev` 会检查兄弟仓库是否就位，然后启动 Docker Compose。日常命令菜单（Docker、Kubernetes、数据库和测试）也在 `brabo-infra` 中：`bash scripts/dev/bootstrap.sh`。详情见它的 README。
 
-| 按键 | 作用 |
-|---|---|
-| `1`–`6` | 选择条目，**无需回车** |
-| `v` | 返回上一级 |
-| `q` | 退出 |
-| `↓` | 执行期间显示实时输出 |
-| `↑` | 回到「执行中」界面 |
-| 鼠标滚轮 · `j`/`k` · `PgUp`/`PgDn` | 显示输出时滚动整个日志 |
-| `G` | 回到日志末尾（实时） |
-| `Ctrl+C` | 中止当前命令 |
+本仓库保存文档、安装程序和发布。要修改文档：`pnpm install`、`bash scripts/docs/montar-layout.sh`（拉取兄弟仓库的文档）、`pnpm docs:check` 和 `pnpm docs:build`。
 
-可用的快捷键显示在当前界面的底部——无需记忆。浏览、滚动或调整窗口大小时，横幅始终固定在顶部。
+## Brabo 的仓库
 
-**滚动日志。** 展开的输出以前只显示文件末尾；现在它是一个可以向后移动的窗口，无需等待命令结束即可查看完整日志。底部会立即提示两个结果：
+Brabo 按层拆分为多个仓库（[ADR 0252](https://viralabs-dev.github.io/brabo/prd/zh-Hans/adr/0252-o-brabo-vira-um-conjunto-de-repositorios)）。`brabo` 是文档的中心：<https://viralabs-dev.github.io/brabo/prd/zh-Hans/> 上的网站把各兄弟仓库的 `docs/` 目录合并成一棵树。
 
-- **向后滚动会冻结窗口**（类似 `less +F`），否则每秒五次的重绘会在你读完一行之前撤销滚动。按 `G` 重新跟随末尾。
-- **命令运行期间，菜单会开启鼠标追踪**以接收滚轮——开启后拖动不再选中文本。**按住 `Shift`** 使用终端原生的选择。离开该界面后追踪即关闭，退出时（包括 `Ctrl+C`）也会关闭。
+| 仓库 | 角色 | 依赖 | 被谁使用 |
+|---|---|---|---|
+| [brabo](https://github.com/viralabs-dev/brabo) | 产品：文档、安装程序、发布 | 全部 | infra, workspace |
+| [brabo-api](https://github.com/viralabs-dev/brabo-api) | API（NestJS、Drizzle、PostgreSQL/pgvector） | contracts, ci, infra | brabo, infra, qa, web, contracts |
+| [brabo-engine](https://github.com/viralabs-dev/brabo-engine) | engine（Elixir/OTP、Phoenix、Oban） | contracts, ci | brabo, infra, qa |
+| [brabo-web](https://github.com/viralabs-dev/brabo-web) | Web 界面（React 19、Vite） | contracts, ci, api | brabo, infra |
+| [brabo-runner](https://github.com/viralabs-dev/brabo-runner) | 用户机器上的 CLI | contracts, ci | brabo, infra |
+| [brabo-broker](https://github.com/viralabs-dev/brabo-broker) | 容器代理（broker） | contracts, ci | brabo, infra, qa |
+| [brabo-contracts](https://github.com/viralabs-dev/brabo-contracts) | 共享契约 | ci（接收 api 的 areas.json） | api, broker, runner, web, engine, infra, brabo |
+| [brabo-infra](https://github.com/viralabs-dev/brabo-infra) | composes、k8s、备份 | ci, api, engine, web, runner, broker, contracts, brabo | brabo, qa, api |
+| [brabo-ci](https://github.com/viralabs-dev/brabo-ci) | 策略、审批阶梯和盖章的可复用 workflows | — | 全部 |
+| [brabo-qa](https://github.com/viralabs-dev/brabo-qa) | E2E、golden set、测量工具 | ci, api, engine, broker, infra | brabo |
+| [brabo-workspace](https://github.com/viralabs-dev/brabo-workspace) | 把各克隆并排放置的父目录 | ci | — |
 
-**四个区域。** `Create` 从零准备环境，`Deploy` 把代码发布到已存在的环境（所以只有它可以按服务选择），`Destroy` 负责拆除：
+## 发布如何组装
 
-| 区域 | 条目 |
-|---|---|
-| **1. Docker** | `Deploy` → All · Api · Engine · Web — `Create` — `Destroy` — `Reset total` — `Reconfigurar Ollama` — `Base de projetos` |
-| **2. K8s** | `Deploy` → All — `Create` — `Destroy` |
-| **3. Database** | `Generate` — `Migrate` — `Seed` — `Delete` |
-| **4. Test** | All · Api · Engine · Web · Smoke · Docs |
+产品发布在这里诞生，由 `vX.Y.Z` 标签触发 [`release.yml`](.github/workflows/release.yml) workflow：
 
-菜单做的四件值得知道的事：
+1. **[`componentes.json`](componentes.json)** 固定每个组件的版本：`brabo-infra` 的 ref、`brabo-runner` 的标签，以及每个镜像（api、engine、web、broker 和 backup）的标签。
+2. **每个仓库的 `imagem.json`。** 每个应用标签的 Release 都附带一个 `imagem.json`，包含 `imagem`、`tag` 和 `digest`。workflow 下载这五个文件，组装出产品的 `images.json`，镜像按 digest 固定。
+3. **按 digest 运行 Trivy。** 每个镜像按 digest 扫描，存在可修复的 HIGH 或 CRITICAL 漏洞时，在签名之前就判定失败。
+4. **签名的 `checksums.txt`。** `install.sh`、`brabo-install-*` 资产和 `images.json` 写入同一个 `checksums.txt`，由 workflow 的身份用 cosign keyless 签名。`install.sh` 校验的正是这个签名。
 
-- **`Docker › Destroy` 保留数据卷**（`down`，从不 `down -v`）：销毁容器不等于销毁数据。
-- **在 K8s 中只有 `All` 可用。** 集群的 bootstrap 会一起安装 api、engine 和 web；Api/Engine/Web 在菜单中显示为**禁用**并附上原因。隐藏它们会掩盖限制；执行它们则是虚构一条不存在的路径。
-- **`Database › Delete` 是唯一需要回车的界面**，并要求输入数据库名。它会清空 schema 并**重新创建 pgvector 扩展**——`init.sql` 只在数据卷首次初始化时运行，因此单纯的 `DROP SCHEMA` 会让下一次迁移失败。由于 engine 共用同一个数据库，脚本会提示恢复需要 `pnpm db:migrate` **和** `pnpm engine:migrate`。
-- **`Docker › Reset total` 在删除前先停止 api 和 engine**——只停这两个，不多不少：它们与数据库保持着活动连接，在它们底下执行 `DROP SCHEMA` 会杀死进程，而且没有东西会把它们重新拉起（engine 会在 drop 过程中死掉，因为 `Rehydrator` 查询了一张刚消失的表）。迁移后它会重新启动所有服务、等待其健康并执行 seed；最后在给出任何结论之前，它会**询问** api 和 engine 的 `/health` 以及 web 的 `/`——若有一个没有响应，它会点名并以退出码 1 结束，而不是宣布成功。这是第二个需要确认的界面（输入 `RESET`），它不删除数据卷——并在运行时说明这一点，因为另一面是 reset 永远无法复现首次克隆（只在新数据卷上出现的缺陷会被忽略）。详见 [`deploy/docs/runbook.md`](deploy/docs/runbook.md#reset-total)。
-
-**命令行选项：**
-
-```bash
-pnpm bootstrap                                # 打开菜单（需要终端）
-pnpm bootstrap --print-commands               # 打印整棵树后退出
-pnpm bootstrap --print-commands --path 1.1    # 只打印一个子树
-pnpm bootstrap --help                         # 用法说明
-```
-
-`--print-commands` 把菜单的每个叶子解析成真实命令，**但不执行任何东西**——这是审计菜单行为的方式，测试也基于它运行（`scripts/dev/bootstrap.spec.ts`）。没有交互式终端时，菜单会拒绝打开并指向这个选项，而不是卡住等待永远不会到来的按键。出于同样的原因还有 `--print-window <log> <行数> <偏移>`：滚动从日志中截取的片段是纯算术，这样就可以在没有 TTY 的情况下测试。
-
-`NO_COLOR=1` 关闭颜色；否则它会以 24 位 ANSI 使用设计系统的 token，在终端不支持时降级为 256 色。
-
-> **`pnpm dev` 与 `make deploy-local` 不能共存。** 两者把 api 和 engine 发布在相同端口上——这是有意的，以便冒烟测试对两者都有效。本地集群运行时，**5173 打不开**，web 位于 <http://localhost:8088>。`pnpm dev:preflight` 会告诉你当前处于哪种模式；`make k8s-down` 切回本模式。详见[入门指南](docs/getting-started.md#os-dois-modos-locais-não-coexistem)。
-
-> `api`、`web` 和 `engine` 容器以与你的主机用户**相同**的 UID/GID 运行——绝不以 root 运行——这样 `apps/api/dist` 以及智能体在 bind mount 中写入的其他内容一产生就归**你**所有。用 `id -u` 和 `id -g` 查看你的组合；如果与默认值（1000/1000，单人开发的 Linux 机器上最常见）不符，请在首次 `docker compose up` 之前把 `DEV_UID`/`DEV_GID` 写入 `.env`（参见 `.env.example`）。在此改动之前就已存在的环境：`node_modules`/`_build`/`deps`/`.mix`/`.hex` 的命名卷中仍有旧容器以 root 写入的内容——执行一次 `sudo chown -R $USER apps/api/dist apps/*/node_modules`（或用 `docker compose down -v` 删除这些卷，让下一次 `up` 重新创建）来清理被卡住的部分。
+不带标签的 `workflow_dispatch` 是演练：组装、扫描并检查一切，但既不签名也不发布。
 
 ## 文档
 
-**📖 [daneiel.github.io/brabo](https://daneiel.github.io/brabo/)**——与下面相同的文档，可浏览、可搜索。站点读取 `docs/`，在合并到 `main` 时发布，因此比 `dev` 中的内容落后一个推进周期：想看最新状态，请直接阅读这里的文件。
+**📖 [viralabs-dev.github.io/brabo](https://viralabs-dev.github.io/brabo/prd/zh-Hans/)**——可浏览、可搜索的文档，提供四种语言。网站把本仓库的 `docs/` 目录与兄弟仓库的合并，并发布两个环境：来自 `main` 的 [`/prd/`](https://viralabs-dev.github.io/brabo/prd/zh-Hans/) 和来自 `dev` 的 [`/dev/`](https://viralabs-dev.github.io/brabo/dev/zh-Hans//)。要看最新状态，请用 `/dev/`。
 
 | 文档 | 用途 |
 |---|---|
-| [简介](docs/intro.md) | 全景 |
-| [入门指南](docs/getting-started.md) | 从克隆到第一个智能体回合 |
-| [架构](docs/architecture.md) | 代码地图、边界、不变量、技术债 |
-| [业务规则](docs/business-rules.md) | 各条 RN，每条都附 `文件:行号` 和覆盖它的测试（数量见[葡萄牙语 README](README.md)） |
-| [Runbook](deploy/docs/runbook.md) | 部署、rollout、恢复、密钥轮换、成本事故 |
-| [术语表](docs/glossary.md) | harness、gate、handoff、DEK、outbox、K 周期 |
-| [可观测性](deploy/docs/explanation/observability.md) | 如何跨三个进程追踪一个动作：trace、日志和跨层路径 |
-| [配置](docs/reference/configuration.md) | 所有环境变量 |
-| [脚本](docs/reference/scripts.md) | 每个 `pnpm` 命令和 `Makefile` 目标，从源码提取 |
-| [事件](docs/reference/events.md) | 事件日志的类型、广播和 span |
-| [权限](apps/api/docs/reference/permissions.md) | `permissions.json` 的格式和决策顺序 |
-| [工件](apps/api/docs/reference/artifacts.md) | 各个 schema 以及谁可以产生它们 |
-| [Git 提供方](apps/api/docs/reference/git-providers.md) | 操作契约和能力声明 |
-| [内部 API](docs/reference/internal-api.md) | api ↔ engine 契约 |
+| [简介](https://viralabs-dev.github.io/brabo/prd/zh-Hans/) | 全景 |
+| [快速开始](https://viralabs-dev.github.io/brabo/prd/zh-Hans/getting-started) | 从安装到智能体的第一轮 |
+| [架构](https://viralabs-dev.github.io/brabo/prd/zh-Hans/architecture) | 代码地图、边界、不变式、技术债 |
+| [业务规则](https://viralabs-dev.github.io/brabo/prd/zh-Hans/business-rules) | 各条 RN，每条都带 `文件:行号` 和覆盖它的测试（数量见[葡萄牙语 README](README.md)） |
+| [运维手册](https://viralabs-dev.github.io/brabo/prd/zh-Hans/runbook) | 部署、rollout、恢复、密钥轮换、成本事故 |
+| [术语表](https://viralabs-dev.github.io/brabo/prd/zh-Hans/glossary) | harness、gate、handoff、DEK、outbox、K 循环 |
+| [可观测性](https://viralabs-dev.github.io/brabo/prd/zh-Hans/explanation/observability) | 如何跨三个进程追踪一个动作：trace、log 以及跨层路径 |
+| [配置](https://viralabs-dev.github.io/brabo/prd/zh-Hans/reference/configuration) | 所有环境变量 |
+| [脚本](https://viralabs-dev.github.io/brabo/prd/zh-Hans/reference/scripts) | 每个 `pnpm` 命令和 `Makefile` 目标，从源码提取 |
+| [事件](https://viralabs-dev.github.io/brabo/prd/zh-Hans/reference/events) | event log 的类型、broadcasts 和 spans |
+| [权限](https://viralabs-dev.github.io/brabo/prd/zh-Hans/reference/permissions) | `permissions.json` 的格式和决策顺序 |
+| [工件](https://viralabs-dev.github.io/brabo/prd/zh-Hans/reference/artifacts) | 各个 schema 以及谁可以发出每一种 |
+| [Git 提供方](https://viralabs-dev.github.io/brabo/prd/zh-Hans/reference/git-providers) | 操作契约和 capabilities |
+| [内部 API](https://viralabs-dev.github.io/brabo/prd/zh-Hans/reference/internal-api) | api ↔ engine 契约 |
 | [安全](SECURITY.md) | 如何报告漏洞 |
 | [参与贡献](CONTRIBUTING.md) | 流程、Definition of Done、接受什么 |
-| [治理](GOVERNANCE.md) | 当前模式（单一维护者）、`community` 模式的三个角色及准入标准 |
-| [获取帮助](SUPPORT.md) | 各类问题对应的渠道 |
+| [治理](GOVERNANCE.md) | 当前模式（单一维护者）、`community` 模式的三种角色以及谁进入每种角色 |
+| [获取帮助](SUPPORT.md) | 每类问题用哪个渠道 |
 | [行为准则](CODE_OF_CONDUCT.md) | Contributor Covenant 2.1 |
 
 ## 技术栈
 
-| 层 | 技术 |
-|---|---|
-| `apps/api` | NestJS 11 + Drizzle ORM + PostgreSQL 16 + pgvector |
-| `apps/engine` | Elixir/OTP + Phoenix（通道）+ Oban（队列在 Postgres 中） |
-| `apps/web` | React 19 + Vite + TanStack Query/Router；运行时 `mermaid`（仅用于架构师的 C4 图，通过动态 `import()` 加载） |
-| auth | api 自有（argon2id + Ed25519 access JWT + 带轮换的不透明 refresh）；RBAC 在 api 的领域中 |
-| deploy | 通过 Kustomize 部署到 Kubernetes；开发用 Docker Compose |
+- **api**——NestJS、Drizzle、带 pgvector 的 PostgreSQL 16
+- **engine**——Elixir/OTP、Phoenix 和 Oban（队列在 Postgres 中）
+- **web**——React 19、Vite 和 TanStack
+- **runner**——用户机器上的 `brabo-runner` CLI，执行已批准的命令
+- **broker**——唯一持有 Docker 套接字的进程，负责启动项目的容器
+- **Ollama**——本地模型，由独立容器提供
+- **Neo4j**——可选：知识图谱，是从 event log 派生的记忆
+- **deploy**——Docker Compose（开发、生产和安装）以及带 Kustomize 的 Kubernetes，位于 `brabo-infra`
 
-没有 Redis：队列通过 Oban 存放在 Postgres 中，限流是 SQL 中的滑动窗口。
+没有 Redis：队列通过 Oban 存在 Postgres 中，限流是 SQL 中的滑动窗口。
 
 ## 许可证
 
 [MIT](LICENSE) © 2026 Daniel Souza——官方文本，无附加条款。
 
-engine 镜像内置了关卡所依赖的第三方工具（gitleaks、hadolint、semgrep、yamllint），**其中一些采用 GPL**。以独立进程运行它们不会造成任何传染，但把**镜像发布**到 registry 会产生提供源码的义务。所有内容连同各自的版本和许可证都列在 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 中——首次推送到 registry 之前请先阅读。
+engine 镜像内置了 gates 依赖的第三方工具（gitleaks、hadolint、semgrep、yamllint），**其中一些采用 GPL**。作为独立进程运行它们不会“传染”任何东西，但**把镜像发布**到 registry 会产生提供源码的义务。每个工具的版本和许可证都列在 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 中。
 
-web 镜像内置了设计系统的三种字体，均采用 **OFL 1.1**——这是一种宽松的许可证，但要求随二进制文件一起分发版权声明。它位于 `apps/web/public/fonts/LICENSE.txt`，与其余静态文件一同提供，相关义务记录在同一个声明文件中。
+web 镜像内置了设计系统的三种字体，均为 **OFL 1.1**——一种宽松的许可证，但要求随二进制文件一起分发版权声明。它位于 [`brabo-web`](https://github.com/viralabs-dev/brabo-web) 的 `public/fonts/LICENSE.txt`，与其余静态文件一起提供，该义务记录在同一个声明文件中。

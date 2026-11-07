@@ -1,5 +1,5 @@
 ---
-traducao_de: 3a78654798305970710cc343ac2e70156f6b266b
+traducao_de: a766a77602f64b8f373dcf2fcd64c6af12aebc25
 ---
 
 # 产品发布 {#product-release}
@@ -52,4 +52,10 @@ flowchart LR
 
 > **TODO(humano):** `componentes.json` 是手工编辑的；还需决定：在某个组件盖上新 tag 时由机器人更新它，还是仍由 PR 来决定。
 
-> **TODO(humano):** 某个组件的 hotfix（从 `main` 创建）以及承载它的产品 tag：产品的 hotfix 流程尚未编写。
+## 组件的 hotfix {#hotfix}
+
+hotfix 通过正常阶梯作为 PATCH 处理（负责人的决定，AT-728）；不直接在 `main` 上使用 `hotfix/`。
+
+1. 组件通过自己的 `dev` → `main` 修复，并获得 `vX.Y.Z+1`。
+2. 在 `brabo` 中提交一个 PR，把组件的 tag 在 `componentes.json` 中升级。
+3. `brabo` 的晋升作为产品的 patch 发布。

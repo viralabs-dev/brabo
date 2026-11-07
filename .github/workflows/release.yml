@@ -1,5 +1,9 @@
 name: Release
 
+run-name: >-
+  ${{ github.ref_type == 'tag' && format('release {0} ← tag do carimbo', github.ref_name)
+    || format('release manual {0} · {1}', inputs.tag || 'ensaio', github.actor) }}
+
 # Release do PRODUTO (AT-704): monta o `images.json` com os DIGESTS que cada repo de app
 # publicou, junta o `install.sh` e os assets `brabo-install-*` e assina UM `checksums.txt`
 # (cosign keyless) com a identidade DESTE workflow — a que o `install.sh` confere.
@@ -32,7 +36,7 @@ jobs:
   release:
     if: vars.PRODUTO_RELEASE_LIGADA == 'true' || (github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' && inputs.tag == '')
     name: Release do produto
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
     steps:
       - name: Quem pode republicar
@@ -94,6 +98,12 @@ jobs:
           repository: viralabs-dev/brabo-infra
           ref: ${{ steps.infra.outputs.ref }}
           path: infra
+
+      # Vínculos (AT-773, ADR 0271): a origem sai da linha `Carimbo:` da tag e o irmão é o infra
+      # por caminho. Nunca reprova o job.
+      - uses: viralabs-dev/brabo-ci/.github/actions/vinculos@13f3697aaf3e4a151637755babb58422a44db303  # brabo-ci dev, merge da ci#17
+        with:
+          irmaos: infra
 
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
         with:

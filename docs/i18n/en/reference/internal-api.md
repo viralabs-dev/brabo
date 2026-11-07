@@ -4,7 +4,7 @@ title: Internal API (api ↔ engine)
 sidebar_label: Internal API
 sidebar_position: 6
 description: The two directions of communication between api and engine — HTTP for synchronous commands, outbox and Oban for events.
-traducao_de: 42533ef5cd2b8e519264de7fda1350171be59485
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 keywords: [internal api, engine, outbox, oban, engine-service, contract]
 ---
 
@@ -499,7 +499,7 @@ error (the heartbeat close), never as "no ceiling".
 |---|---|
 | GET | `/internal/gates` (**not** session-scoped) |
 
-Read of the declarative registry in `docs/gates.yml`
+Read of the declarative registry in `apps/api/config/gates.yml`
 ([ADR 0054](../adr/0054-gates-como-registro-declarativo.md)). It's not
 session-scoped for the same reason as the model catalog: the registry is global —
 which gates exist is a fact about the product, the same for every project.
@@ -509,9 +509,9 @@ review, not at runtime. A write route would turn an engineering decision into
 production configuration, which is what the ADR rejected by choosing
 YAML instead of a table.
 
-The file travels inside the image (`COPY docs/gates.yml` in
+The file travels inside the image (`COPY apps/api/config/gates.yml` in
 `docker/api/Dockerfile.prod`), like the migrations: the loader climbs from
-`__dirname` until it finds it, and in production finds it at `/app/docs/gates.yml`. The
+`__dirname` until it finds it, and in production finds it at `/app/apps/api/config/gates.yml`. The
 loading is lazy — an unreadable file returns an error on this route, instead of
 preventing the api from starting.
 
@@ -688,7 +688,7 @@ The THIRD PO read route, same design as the two above
 ([RN-407](../business-rules/contracts.md#rn-407)) — closes the last pending item from the
 `fluxo.yml` × code audit
 ([item B4](../explanation/auditoria-fluxo-vs-codigo.md#b-gaps-in-active-roles-already-implementable-work)):
-`docs/fluxo.yml` (role `po`, entry `metricas-de-produto`) declared
+`packages/contracts/fluxo.yml` (role `po`, entry `metricas-de-produto`) declared
 `status: lacuna` since ADR 0089 — the DATA already existed (the
 `analise:funil` script measures the session → commit → PR → merge funnel, real lead time
 and real deployment frequency), only the reading MECHANISM within the
@@ -934,6 +934,27 @@ result: routes to the runner only with `workspaceVerifiedAt` non-null **and**
 a runner connected right now; missing either of the two, it rejects
 explicitly — never falling back to `mounted`'s `System.cmd`/bind-mount, which does not
 exist for a `runner` project.
+
+### Ephemeral QA instance — new routes ([RN-935](../business-rules/api.md#rn-935) to [RN-937](../business-rules/api.md#rn-937), [ADR 0229](../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.md))
+
+| method | path |
+|---|---|
+| POST | `/internal/projects/:projectId/qa-environments/:taskId/start` |
+| POST | `/internal/projects/:projectId/qa-environments/:taskId/remove` |
+| POST | `/internal/qa-environments/sweep` |
+
+`:taskId` is the full id or the 8-character key. The first two
+answer 200 with `{ sucesso, status, chave, motivo }` (`sucesso: false` is the
+normal form of the broker refusing); 404 for a project or a task from another project;
+409 `instancia_de_qa_ocupada` (ceiling of 1 active per project),
+`qa_nao_suporta_runner` or `tarefa_ambigua`. The `sweep` receives
+`{ taskIdsEmVoo: uuid[], projectId?: uuid }` and answers `{ removidas, falhas }`.
+The `container-exec` accepts `alvo: { qa: true, taskId }` and the `container-spec`
+accepts `?papel=qa&task=<id ou chave>` (adds `qa: { chave, services }`). Each service is `{ name, image, env?,
+tmpfs?, user?, command?, shared? }`: `user` is `"<uid>:<gid>"` with integers
+other than 0 ([RN-941](../business-rules/contracts.md#rn-941)), becomes `--user` and gives the
+owner (`uid=`, `gid=`, `mode=0700`) to the `tmpfs`; `command` is up to 16
+arguments passed after the image; `null` is equivalent to absent.
 
 ### Terminal command execution inside the real container — a new route ([RN-492](../business-rules/engine.md#rn-492), [ADR 0134](../adr/0134-dev-agents-executam-dentro-do-container.md))
 
@@ -1364,7 +1385,16 @@ of five operations and comes here to read:
 3. `localizacao`, the discriminated locator of the project folder — see below;
 4. the Architect's current image decision, or `null` while there is none
    ([RN-105](../business-rules/api.md#rn-105)), in which case only `start` is refused
-   and the other four operations still work.
+   and the other four operations still work;
+5. since [ADR 0228](../adr/0228-comando-do-app-e-rede-do-container.md), four
+   optional fields, each `null` when there is no declaration (and always `null`
+   in a `runner` project): `comandoDoApp`, the current `run.app.command` in
+   `artifact.run_instructions` ([RN-933](../business-rules/api.md#rn-933)); and
+   `ports` (`[{host, container, protocol: 'tcp'}]`), `dns` (IPs) and `extraHosts`
+   (`[{name, ip}]`), from the current `artifact.container_network`
+   ([RN-932](../business-rules/api.md#rn-932)). The broker revalidates the four with the
+   `docker-port` rules before the daemon, and they only take effect on a
+   recreated container (`container_recreate`, [RN-934](../business-rules/api.md#rn-934)).
 
 From that the broker COMPOSES image, network, resources and the single mount, and
 revalidates all of it before handing anything to the daemon. There is no field in
@@ -1543,7 +1573,7 @@ already exists where it has a human owner
 
 ## api → engine
 
-Twenty-one command routes, plus the health ones. Under `/internal` with `VerifyServiceToken`:
+Twenty-two command routes, plus the health ones. Under `/internal` with `VerifyServiceToken`:
 
 | method | path | what it triggers |
 |---|---|---|
@@ -1553,9 +1583,10 @@ Twenty-one command routes, plus the health ones. Under `/internal` with `VerifyS
 | POST | `/sessions/:id/agent/message` | user message in the thread — body `{projectId, agent, text, idiomaDaResposta?, mensagemId?, perfilDoAutor?}`. **`202` on ACCEPTANCE**, before the turn ends: empty body when the turn started (`lida`), `{entrega: "enfileirada", posicao}` when the agent was mid-turn and the message joined its QUEUE — read with any others in one turn when the current one ends ([RN-673](../business-rules/engine.md#rn-673), [ADR 0191](../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.md)). **`409`** `{error, motivo}` when the agent refuses before starting: `aguardando_aprovacao` (Dev Lead suspended) or `fila_de_mensagens_cheia` (10 already queued) — a message no longer gets `turno_em_andamento` ([RN-578](../business-rules/engine.md#rn-578), [ADR 0163](../adr/0163-o-clique-responde-ao-aceitar.md)). `mensagemId` is the id of the `chat.message` the api recorded; it is what cancels the queued message. `idiomaDaResposta` is OPTIONAL: the language the api resolved for the message's AUTHOR in that session; the engine appends it as an ephemeral system message at the end of every LLM call of that turn ([RN-622](../business-rules/engine.md#rn-622)). Absent (older api, or resolution failed) means no guidance — never a refusal |
 | POST | `/sessions/:id/agent/queued-message/cancel` | body `{projectId, agent, mensagemId, userId}` — cancels ONE message waiting in the agent's queue ([RN-673](../business-rules/engine.md#rn-673)); the api already checked that `userId` sent it. With the agent up, its process decides: `204`, or **`409`** `mensagem_fora_da_fila` (already read or cancelled). With the agent down, `chat.message_cancelled` is recorded directly — the queue is the log. **`422`** for an agent with no conversation or an incomplete body |
 | POST | `/sessions/:id/agent/cancel` | cancels the active agent's ongoing turn ([RN-122](../business-rules/engine.md#rn-122)) — kills the Task holding the LLM call (`Task.shutdown/2`, `:brutal_kill`); idempotent, NO-OP with no turn in progress |
-| POST | `/sessions/:id/agent/readiness` | readiness confirmation — `202` on acceptance; `409` turn in progress, **`422`** `sem_regra_de_negocio` ([RN-578](../business-rules/engine.md#rn-578)) |
+| POST | `/sessions/:id/agent/readiness` | readiness confirmation — body `{projectId}` required (`400` without it); brings the Creative back up if the previous closing stopped it ([RN-956](../business-rules/engine.md#rn-956)); `202` on acceptance; `409` turn in progress, **`422`** `sem_regra_de_negocio` ([RN-578](../business-rules/engine.md#rn-578)) |
 | POST | `/sessions/:id/agent/revise` | returns to the PO a story the user declined to promote (FASE 12c — RN-048); **404 if the PO is not up**, and that is not an error for the api; `202` on acceptance, `409` turn in progress ([RN-578](../business-rules/engine.md#rn-578)) |
-| POST | `/sessions/:id/agent/offer-infra-handoff` | handoff offer to Infra — `202` on acceptance, with the closing turn still running; `409` turn in progress ([RN-578](../business-rules/engine.md#rn-578)). It is the ONLY offer the architecture confirmation makes: the `offer-dev-handoff` route is gone, and the Dev Lead is offered by the Infra Lead once the project container is `running` ([RN-672](../business-rules/api.md#rn-672)) |
+| POST | `/sessions/:id/agent/offer-infra-handoff` | handoff offer to Infra — body `{projectId}` required (`400` without it); brings the Architect back up if the session was reopened with it stopped ([RN-956](../business-rules/engine.md#rn-956)); `202` on acceptance, with the closing turn still running; `409` turn in progress ([RN-578](../business-rules/engine.md#rn-578)). It is the ONLY offer the architecture confirmation makes: the `offer-dev-handoff` route is gone, and the Dev Lead is offered by the Infra Lead once the project container is `running` ([RN-672](../business-rules/api.md#rn-672)) |
+| POST | `/sessions/:id/agent/resume` | the "Resume" button for the turn that the engine restart interrupted (AT-582, ADR 0226) — body `{projectId, agent}`; records `agent.turn_resumed` with `automatica: false` and brings the turn up through `TurnoAssincrono`; `202` on acceptance, `409` `turno_nao_interrompido` (the agent's last outcome is not the restart, or a turn/resume is in progress) or `agente_sem_retomada` (an agent that does not converse or whose server does not know how to resume) |
 | POST | `/sessions/:id/execution/start` | activates the execution phase |
 | POST | `/sessions/:id/execution/parallelize` | creates subagents — **executes, does not decide** (see below) |
 | POST | `/sessions/:id/dev-agents/:agentId/rearm` | rearms a stuck dev agent (FASE 12b — RN-047); 404 if it doesn't exist, **409 if it isn't `idle_tripped`** |
@@ -1564,7 +1595,8 @@ Twenty-one command routes, plus the health ones. Under `/internal` with `VerifyS
 | POST | `/projects/:id/anamnese/run` | Anamnese run, enqueued with `origem: "manual"`: a round with no eligible subject makes no LLM call and records `anamnese.run_skipped` with `causa: "sem_sujeito_elegivel"` ([RN-680](../business-rules/engine.md#rn-680)) |
 | POST | `/projects/:id/tasks/:taskId/gates/:gate/resume` | resumes, by human gesture, a PARKED gate cycle ([RN-724](../business-rules/engine.md#rn-724), [ADR 0207](../adr/0207-ciclo-de-gate-velho-estaciona.md)) — `202` and the gate is dispatched again; `409` `gate_nao_estacionado` when the cycle is not parked (or the gate is not `qa`/`secops`) |
 | POST | `/projects/:id/agents/:agent/instructions/invalidate` | invalidates the instruction cache |
-| POST | `/actions/execute` · `/actions/execute-git` | executes an **already approved** action |
+| GET | `/agents/catalog` | read-only catalog of the agents: `{agentes: [{agente, identidade, ferramentas: [{nome, descricao}]}]}`, no parameter and no schema, description capped at 1,000 characters; the api joins it with the project's current instruction at `GET /projects/:projectId/agent-catalog` and, with the engine down, answers `motivoSemCatalogo` instead of "no tools" ([RN-995](../business-rules/api.md#rn-995)) |
+| POST | `/actions/execute` · `/actions/execute-git` | executes an **already approved** action; since AT-612 the body of `/actions/execute` may carry `alvo: {qa: true, taskId}`, which the api only passes on when the actor is `qa-automacao` and the task belongs to the project ([RN-938](../business-rules/api.md#rn-938)), and the engine runs the command in the task's QA instance instead of the work container ([RN-940](../business-rules/engine.md#rn-940)) |
 | POST | `/projects/:id/containers/start` · `/containers/stop` · `/containers/remove` | asks the RUNNER connected to the project to start/stop/remove its container ([RN-497](../business-rules/produto.md#rn-497), [ADR 0137](../adr/0137-o-runner-sobe-o-container-do-projeto.md)) — only for `mounted`/`runner` projects; `container` still goes through the broker, never here |
 | POST | `/projects/:id/runner/disconnect` | drops the LIVE connection of that user's runner in the project, whatever credential it used ([RN-520](../business-rules/api.md#rn-520), [ADR 0147](../adr/0147-agente-local-com-capacidades.md)) — since [ADR 0201](../adr/0201-revogacao-por-chave.md) called by member removal ([RN-615](../business-rules/api.md#rn-615)) and as the fallback of a key revocation; always `200`, with `desfecho` = `derrubado` \| `sem_runner` \| `de_outro_dono` \| `timeout` |
 | POST | `/runner/disconnect-credential` | drops every runner connection opened WITH one credential, in any project, and voids its pending tickets ([RN-685](../business-rules/api.md#rn-685), [ADR 0201](../adr/0201-revogacao-por-chave.md)) — called when a device key or a PAT is revoked. Body: `credentialKind` (`device_key` \| `pat`), `credentialId`, and, only for a LEGACY connection (ticket without a credential), `userId` + `projectIds`. `200` with the tally `derrubados`/`legados`/`intocados`/`semResposta`/`ticketsAnulados`; `400` only for a malformed credential |

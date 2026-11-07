@@ -1,5 +1,5 @@
 ---
-traducao_de: 42533ef5cd2b8e519264de7fda1350171be59485
+traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 id: internal-api
 title: 内部 API（api ↔ engine）
 sidebar_position: 6
@@ -288,13 +288,13 @@ PO、Arquiteto 和 Dev Lead（拥有 `declare_open_question` 的智能体）—�
 |---|---|
 | GET | `/internal/gates`（**不**在会话范围内） |
 
-读取 `docs/gates.yml` 中的声明式注册表
+读取 `apps/api/config/gates.yml` 中的声明式注册表
 （[ADR 0054](../adr/0054-gates-como-registro-declarativo.md)）。它不在会话范围内，理由与模型目录相同：注册表是全局的——存在哪些 gate 是关于产品的事实，对每个项目都一样。
 
 只读，并且**有意**没有写路由：注册表通过 PR 审查改变，而不是在运行时。写路由会把一项工程决策变成生产配置，而这正是该 ADR 选择 YAML 而非数据表时所拒绝的。
 
-该文件随镜像一起发布（`docker/api/Dockerfile.prod` 中的 `COPY docs/gates.yml`），和 migrations 一样：加载器从
-`__dirname` 向上查找它，在生产中会在 `/app/docs/gates.yml` 找到。加载是惰性的——文件不可读时在这条路由上返回错误，而不是阻止 api 启动。
+该文件随镜像一起发布（`docker/api/Dockerfile.prod` 中的 `COPY apps/api/config/gates.yml`），和 migrations 一样：加载器从
+`__dirname` 向上查找它，在生产中会在 `/app/apps/api/config/gates.yml` 找到。加载是惰性的——文件不可读时在这条路由上返回错误，而不是阻止 api 启动。
 
 完整机制记录在
 [docs/explanation/gates.md](../explanation/gates.md)。
@@ -397,7 +397,7 @@ PO 曾有**四个工具，全是写入工具**（`create_epic`、
 PO 的**第三条**读取路由，设计与上面两条相同
 （[RN-407](../business-rules/contracts.md#rn-407)）——它关闭了 `fluxo.yml` × 代码审计中最后一个待办项
 （[item B4](../explanation/auditoria-fluxo-vs-codigo.md#b-gaps-in-active-roles-already-implementable-work)）：
-`docs/fluxo.yml`（角色 `po`，条目 `metricas-de-produto`）自 ADR 0089 起就声明
+`packages/contracts/fluxo.yml`（角色 `po`，条目 `metricas-de-produto`）自 ADR 0089 起就声明
 `status: lacuna`——**数据**早已存在（脚本 `analise:funil` 测量会话 → commit → PR → merge 的漏斗、真实的 lead time 和真实的部署频率），缺的只是在轮次内读取它的**机制**。
 
 报告由与脚本**相同**的纯函数和**相同**的查询组装——
@@ -554,6 +554,16 @@ motivo }` 是这种情况的**正常**形式；engine 把它变成一个普通�
 `receive_timeout: TERMINAL_ACTION_TIMEOUT_MS + 120s`
 （`teto_do_propose_action_de_terminal_ms/0`）。在 AT-440 之前它使用 Req 的 15s 默认值，一次 `npm install` 会以原始的
 `%Req.TransportError{reason: :timeout}` 到达智能体；现在这种结局到达模型时会点出上限并建议使用 `nohup … &`。
+
+### QA 临时实例——新路由（[RN-935](../business-rules/api.md#rn-935) 至 [RN-937](../business-rules/api.md#rn-937)，[ADR 0229](../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.md)）
+
+| 方法 | 路径 |
+|---|---|
+| POST | `/internal/projects/:projectId/qa-environments/:taskId/start` |
+| POST | `/internal/projects/:projectId/qa-environments/:taskId/remove` |
+| POST | `/internal/qa-environments/sweep` |
+
+`:taskId` 是完整 id 或 8 个字符的键。前两条以 200 响应 `{ sucesso, status, chave, motivo }`（`sucesso: false` 是 broker 拒绝时的正常形式）；项目或任务属于其他项目时为 404；`instancia_de_qa_ocupada`（每个项目最多 1 个活跃实例的上限）、`qa_nao_suporta_runner` 或 `tarefa_ambigua` 时为 409。`sweep` 接收 `{ taskIdsEmVoo: uuid[], projectId?: uuid }`，响应 `{ removidas, falhas }`。`container-exec` 接受 `alvo: { qa: true, taskId }`，`container-spec` 接受 `?papel=qa&task=<id ou chave>`（追加 `qa: { chave, services }`）。每个服务是 `{ name, image, env?, tmpfs?, user?, command?, shared? }`：`user` 是 `"<uid>:<gid>"`，其整数均不为 0（[RN-941](../business-rules/contracts.md#rn-941)），变成 `--user`，并把属主（`uid=`、`gid=`、`mode=0700`）赋予 `tmpfs`；`command` 是镜像之后传入的至多 16 个参数；`null` 等同于缺省。
 
 ### 按智能体的上下文
 
@@ -776,7 +786,8 @@ broker 并不**接收**容器 spec——它接收一个 `projectId` 加上五种
    `runner`——runner 项目的目录在用户的机器上，这台主机看不到它（[RN-503](../business-rules/api.md#rn-503)）；
 3. `localizacao`，项目目录的可区分定位符——见下文；
 4. Arquiteto 当前有效的镜像决定，在还没有任何决定时为 `null`
-   （[RN-105](../business-rules/api.md#rn-105)），此时只有 `start` 被拒绝，其他四种操作照常工作。
+   （[RN-105](../business-rules/api.md#rn-105)），此时只有 `start` 被拒绝，其他四种操作照常工作；
+5. 自 [ADR 0228](../adr/0228-comando-do-app-e-rede-do-container.md) 起，四个可选字段，没有声明时各为 `null`（`runner` 项目则始终为 `null`）：`comandoDoApp`，即 `artifact.run_instructions` 中当前有效的 `run.app.command`（[RN-933](../business-rules/api.md#rn-933)）；以及 `ports`（`[{host, container, protocol: 'tcp'}]`）、`dns`（IP）和 `extraHosts`（`[{name, ip}]`），来自当前有效的 `artifact.container_network`（[RN-932](../business-rules/api.md#rn-932)）。broker 在交给守护进程之前，用 `docker-port` 的规则重新校验这四项，它们只对重建的容器生效（`container_recreate`，[RN-934](../business-rules/api.md#rn-934)）。
 
 broker 据此**组装**镜像、网络、资源和唯一的挂载，并在把任何东西交给守护进程之前重新校验一切。不存在任何可让调用方写入 `privileged`、`cap_add`、`network: host` 或任意 `-v` 的字段，因为根本没有字段。
 
@@ -866,7 +877,7 @@ broker 拒绝 `start` 时会**点名**缺的是哪一个，且不触碰容器。
 
 ## api → engine
 
-二十一条命令路由，外加健康检查路由。位于 `/internal` 之下，使用 `VerifyServiceToken`：
+二十二条命令路由，外加健康检查路由。位于 `/internal` 之下，使用 `VerifyServiceToken`：
 
 | 方法 | 路径 | 触发什么 |
 |---|---|---|
@@ -876,18 +887,20 @@ broker 拒绝 `start` 时会**点名**缺的是哪一个，且不触碰容器。
 | POST | `/sessions/:id/agent/message` | 用户在对话流中的消息——请求体 `{projectId, agent, text, idiomaDaResposta?, mensagemId?, perfilDoAutor?}`。**在接受时回 `202`**，早于轮次结束：轮次已开始时响应体为空（`lida`），智能体正处于某个轮次中、消息进入其**队列**时为 `{entrega: "enfileirada", posicao}`——当前轮次结束后与其他消息在一个轮次中一并读取（[RN-673](../business-rules/engine.md#rn-673)，[ADR 0191](../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.md)）。智能体在开始前拒绝时 **`409`** `{error, motivo}`：`aguardando_aprovacao`（Dev Lead 挂起）或 `fila_de_mensagens_cheia`（队列中已有 10 条）——消息不再收到 `turno_em_andamento`（[RN-578](../business-rules/engine.md#rn-578)，[ADR 0163](../adr/0163-o-clique-responde-ao-aceitar.md)）。`mensagemId` 是 api 写入的 `chat.message` 的 id；取消排队消息靠的就是它。`idiomaDaResposta` 是**可选的**：api 为该会话中消息**作者**解析出的语言；engine 在该轮次每次 LLM 调用的末尾把它作为短暂的系统消息追加（[RN-622](../business-rules/engine.md#rn-622)）。缺失（更旧的 api，或解析失败）意味着没有指引——从不拒绝 |
 | POST | `/sessions/:id/agent/queued-message/cancel` | 请求体 `{projectId, agent, mensagemId, userId}`——取消在智能体队列中等待的**一条**消息（[RN-673](../business-rules/engine.md#rn-673)）；api 已经确认发送者是 `userId`。智能体在运行时由其进程决定：`204`，或 **`409`** `mensagem_fora_da_fila`（已读取或已取消）。智能体不在运行时直接写入 `chat.message_cancelled`——队列就是日志。对没有对话的智能体或不完整的请求体回 **`422`** |
 | POST | `/sessions/:id/agent/cancel` | 取消当前活跃智能体正在进行的轮次（[RN-122](../business-rules/engine.md#rn-122)）——杀掉持有 LLM 调用的 Task（`Task.shutdown/2`，`:brutal_kill`）；幂等，没有进行中的轮次时为空操作 |
-| POST | `/sessions/:id/agent/readiness` | 就绪确认——接受时 `202`；轮次进行中 `409`，**`422`** `sem_regra_de_negocio`（[RN-578](../business-rules/engine.md#rn-578)） |
+| POST | `/sessions/:id/agent/readiness` | 就绪确认——请求体 `{projectId}` 必填（缺少则 `400`）；若上一次收尾使 Criativo 停止，则将其拉起（[RN-956](../business-rules/engine.md#rn-956)）；接受时 `202`；轮次进行中 `409`，**`422`** `sem_regra_de_negocio`（[RN-578](../business-rules/engine.md#rn-578)） |
 | POST | `/sessions/:id/agent/revise` | 把用户拒绝晋升的故事退回给 PO（FASE 12c——RN-048）；**PO 不在运行时回 404**，这对 api 来说不是错误；接受时 `202`，轮次进行中 `409`（[RN-578](../business-rules/engine.md#rn-578)） |
-| POST | `/sessions/:id/agent/offer-infra-handoff` | 向 Infra 提议 handoff——接受时 `202`，收尾轮次仍在运行；轮次进行中 `409`（[RN-578](../business-rules/engine.md#rn-578)）。这是架构确认所做的**唯一**提议：`offer-dev-handoff` 路由已移除，Dev Lead 由 Infra Lead 在项目容器处于 `running` 时提议（[RN-672](../business-rules/api.md#rn-672)） |
+| POST | `/sessions/:id/agent/offer-infra-handoff` | 向 Infra 提议 handoff——请求体 `{projectId}` 必填（缺少则 `400`）；若会话在 Arquiteto 停止的情况下被重新打开，则将其拉起（[RN-956](../business-rules/engine.md#rn-956)）；接受时 `202`，收尾轮次仍在运行；轮次进行中 `409`（[RN-578](../business-rules/engine.md#rn-578)）。这是架构确认所做的**唯一**提议：`offer-dev-handoff` 路由已移除，Dev Lead 由 Infra Lead 在项目容器处于 `running` 时提议（[RN-672](../business-rules/api.md#rn-672)） |
 | POST | `/sessions/:id/execution/start` | 激活执行阶段 |
 | POST | `/sessions/:id/execution/parallelize` | 创建子智能体——**执行，不决定**（见下文） |
 | POST | `/sessions/:id/dev-agents/:agentId/rearm` | 重新武装一个卡住的 dev agent（FASE 12b——RN-047）；不存在时 404，**不处于 `idle_tripped` 时 409** |
 | POST | `/sessions/:id/psychologist/reanalyze` | 按需重新分析 |
 | GET | `/psychologist/status` | 读取全局开关 `PSYCHOLOGIST_ENABLED`（[RN-454](../business-rules/engine.md#rn-454)）——无副作用，全局（不在会话范围内） |
 | POST | `/projects/:id/anamnese/run` | Anamnese 的一轮，以 `origem: "manual"` 入队：没有合格主体的一轮不发起 LLM 调用，并写入 `anamnese.run_skipped`，`causa: "sem_sujeito_elegivel"`（[RN-680](../business-rules/engine.md#rn-680)） |
+| POST | `/sessions/:id/agent/resume` | 针对被 engine 重启中断的回合的“恢复”按钮（AT-582，ADR 0226）——请求体 `{projectId, agent}`；写入带 `automatica: false` 的 `agent.turn_resumed`，并通过 `TurnoAssincrono` 拉起该回合；接受时 `202`，`409` `turno_nao_interrompido`（该 agent 的最后结局不是重启，或有回合/恢复正在进行）或 `agente_sem_retomada`（不进行对话、或其服务器不知道如何恢复的 agent） |
 | POST | `/projects/:id/tasks/:taskId/gates/:gate/resume` | 通过人的操作恢复一个**已挂起**的 gate 循环（[RN-724](../business-rules/engine.md#rn-724)，[ADR 0207](../adr/0207-ciclo-de-gate-velho-estaciona.md)）——`202`，gate 被重新派发；循环未挂起（或 gate 不是 `qa`/`secops`）时 `409` `gate_nao_estacionado` |
 | POST | `/projects/:id/agents/:agent/instructions/invalidate` | 使指令缓存失效 |
-| POST | `/actions/execute` · `/actions/execute-git` | 执行一个**已批准**的动作 |
+| GET | `/agents/catalog` | 只读的 agent 目录：`{agentes: [{agente, identidade, ferramentas: [{nome, descricao}]}]}`，无参数、无 schema，描述上限 1 000 个字符；api 把它与项目当前有效的指令合并，经由 `GET /projects/:projectId/agent-catalog` 提供，engine 不可用时回应 `motivoSemCatalogo`，而不是“没有工具”（[RN-995](../business-rules/api.md#rn-995)） |
+| POST | `/actions/execute` · `/actions/execute-git` | 执行一个**已批准**的动作；自 AT-612 起，`/actions/execute` 的请求体可携带 `alvo: {qa: true, taskId}`，api 仅在执行者为 `qa-automacao` 且该任务属于该项目时才转发（[RN-938](../business-rules/api.md#rn-938)），engine 则在该任务的 QA 实例中运行命令，而不是在工作容器中（[RN-940](../business-rules/engine.md#rn-940)） |
 | POST | `/projects/:id/containers/start` · `/containers/stop` · `/containers/remove` | 请求连接到该项目的 **runner** 启动/停止/移除它的容器（[RN-497](../business-rules/produto.md#rn-497)，[ADR 0137](../adr/0137-o-runner-sobe-o-container-do-projeto.md)）——仅用于 `mounted`/`runner` 项目；`container` 仍然经过 broker，从不经过这里 |
 | POST | `/projects/:id/runner/disconnect` | 断开该用户在该项目中 runner 的**活跃**连接，无论所用凭据为何（[RN-520](../business-rules/api.md#rn-520)，[ADR 0147](../adr/0147-agente-local-com-capacidades.md)）——自 [ADR 0201](../adr/0201-revogacao-por-chave.md) 起由成员移除调用（[RN-615](../business-rules/api.md#rn-615)），并作为密钥吊销的后备；总是 `200`，`desfecho` = `derrubado` \| `sem_runner` \| `de_outro_dono` \| `timeout` |
 | POST | `/runner/disconnect-credential` | 断开以某个凭据打开的所有 runner 连接，跨任何项目，并作废其待处理的 ticket（[RN-685](../business-rules/api.md#rn-685)，[ADR 0201](../adr/0201-revogacao-por-chave.md)）——在设备密钥或 PAT 被吊销时调用。请求体：`credentialKind`（`device_key` \| `pat`）、`credentialId`，以及仅针对**旧式**连接（没有凭据的 ticket）的 `userId` + `projectIds`。`200`，附带计数 `derrubados`/`legados`/`intocados`/`semResposta`/`ticketsAnulados`；只有凭据格式错误时 `400` |
@@ -900,7 +913,7 @@ broker 拒绝 `start` 时会**点名**缺的是哪一个，且不触碰容器。
 （`credential_kind`/`credential_id`，由 api 在 `runner-tickets` 中以
 `credentialKind`/`credentialId` 发送），socket 把它保存在
 `assigns` 和自己的 `id` 中，engine 询问**每个**已登记的 runner 是否由被吊销的凭据产生——机器密钥没有可以寻址的项目。同一用户的另一个 runner，用 PAT 或另一把密钥，保持运行。
-`{项目, 用户}` 路由留给成员移除，以及在 engine 对凭据路由回 404 时作为 api 的后备。
+`{projeto, usuário}` 路由留给成员移除，以及在 engine 对凭据路由回 404 时作为 api 的后备。
 
 **三条 `containers/*` 路由是下文 `container-exec` 在相反方向上的镜像。** `container-exec` 是 **engine** 请求 api 在**服务器**的容器中运行一条命令（经由 broker）；`containers/*` 是 **api** 请求 **engine** 对位于**用户**机器上的容器执行一项操作（经由 runner，经由 `terminal:<projectId>` 通道）。
 响应总是 `200`：“没有已连接的 runner”/“超时”为 `{ sucesso: false, motivoCodigo, motivo }`，“runner 尝试了但拒绝了”为 `{ sucesso: false, motivo }`——两者都从不返回错误的 HTTP 状态，与 `container-exec` 的纪律相同。

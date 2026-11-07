@@ -1,8 +1,12 @@
 name: Regenera os gerados
 
-# AT-726: scripts.md, paridade de tradução, índice e refs de RN dependem dos
-# repositórios irmãos e ficam velhos a cada merge lá. Este workflow regenera por
-# agenda e abre UMA PR fixa na `dev` quando há diff. A PR segue a escada normal.
+run-name: ${{ format('Regenera os gerados · {0}', github.event_name == 'schedule' && 'agendado' || format('manual · {0}', github.actor)) }}
+
+# AT-726: scripts.md, índice e refs de RN dependem dos
+# repositórios irmãos e ficam velhos a cada merge lá. Este workflow sobe a trava
+# `irmaos.lock` (AT-780, ADR 0274), regenera por agenda e abre UMA PR fixa na
+# `dev` com a trava e os gerados no MESMO commit. A PR dispensa a escada (ADR
+# 0255); o merge continua sendo humano. Só ela sobe a trava.
 on:
   schedule:
     - cron: '23 */6 * * *'
@@ -21,13 +25,13 @@ env:
 jobs:
   regenera:
     name: Regenerar e abrir PR
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 20
     steps:
       - id: app
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510  # v3.3.0
         with:
-          app-id: ${{ secrets.BRABO_APP_ID }}
+          client-id: ${{ secrets.BRABO_APP_ID }}
           private-key: ${{ secrets.BRABO_APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -48,8 +52,32 @@ jobs:
         working-directory: website
         run: pnpm install --frozen-lockfile
 
-      - name: Reconstruir o layout dos irmãos (dev)
+      # `ls-remote` de repo público, sem token. Falhou ou veio vazio: aborta, a
+      # trava velha continua valendo.
+      - name: Subir a trava dos irmãos
+        run: |
+          set -euo pipefail
+          {
+            sed -n '/^#/p' irmaos.lock
+            for r in $(awk '!/^[[:space:]]*(#|$)/ { print $1 }' irmaos.lock); do
+              sha=$(git ls-remote "https://github.com/viralabs-dev/$r" refs/heads/dev | cut -f1)
+              printf '%s' "$sha" | grep -Eq '^[0-9a-f]{40}$' || { echo "::error::$r: sem dev no remoto"; exit 1; }
+              echo "$r $sha"
+            done
+          } > "$RUNNER_TEMP/irmaos.lock"
+          mv "$RUNNER_TEMP/irmaos.lock" irmaos.lock
+
+      - name: Reconstruir o layout dos irmãos (trava nova)
         run: bash scripts/docs/montar-layout.sh
+
+      # Vínculos do run (AT-773, ADR 0271): os irmãos que o layout trouxe, `repo@SHA`.
+      - name: Ler os SHAs dos irmãos
+        id: irmaos
+        run: |
+          { echo 'lista<<IRMAOS_FIM'; cat "$(git rev-parse --git-dir)/irmaos-sha.lst"; echo IRMAOS_FIM; } >> "$GITHUB_OUTPUT"
+      - uses: viralabs-dev/brabo-ci/.github/actions/vinculos@13f3697aaf3e4a151637755babb58422a44db303  # brabo-ci dev, merge da ci#17
+        with:
+          irmaos: ${{ steps.irmaos.outputs.lista }}
 
       - name: Regenerar
         run: node scripts/docs/generate.mjs
@@ -62,11 +90,13 @@ jobs:
           set -euo pipefail
           : > "$RUNNER_TEMP/meus.lst"; : > "$RUNNER_TEMP/irmaos.lst"
           # o layout já pôs os irmãos no índice: o que o gerador mudou é worktree x índice
-          { git diff --name-only -z | tr '\0' '\n'; git ls-files -o --exclude-standard | grep -v node_modules || true; } |
+          # `--cached --diff-filter=M`: o layout deu `git add -A` e escondeu do worktree a trava que subiu
+          { git diff --name-only -z | tr '\0' '\n'; git diff --cached --name-only -z --diff-filter=M | tr '\0' '\n'; git ls-files -o --exclude-standard | grep -v node_modules || true; } |
           while IFS= read -r f; do
             [ -n "$f" ] || continue
             if git cat-file -e "HEAD:$f" 2>/dev/null || ! git ls-files --error-unmatch -- "$f" >/dev/null 2>&1; then echo "$f" >> "$RUNNER_TEMP/meus.lst"; else echo "$f" >> "$RUNNER_TEMP/irmaos.lst"; fi
           done
+          # a trava está em HEAD, então já caiu em meus.lst quando mudou
           echo "meus=$(wc -l < "$RUNNER_TEMP/meus.lst" | tr -d ' ')" >> "$GITHUB_OUTPUT"
 
       - name: Commitar e abrir, atualizar ou fechar a PR
@@ -95,10 +125,12 @@ jobs:
             if [ -z "$aberta" ]; then
               gh pr create -R "$REPO" --base dev --head "$BRANCH" \
                 --title 'docs: regenera os gerados que dependem dos irmãos' \
-                --body 'Aberta por `regenera-gerados.yml` (AT-726): os gerados do brabo ficaram velhos depois de mudança num repositório irmão. Segue a escada normal.'
+                --body 'Aberta por `regenera-gerados.yml` (AT-726): os gerados do brabo ficaram velhos depois de mudança num repositório irmão. A PR dispensa a escada (ADR 0255); o merge é humano.'
             fi
           fi
           if [ -s "$RUNNER_TEMP/irmaos.lst" ]; then
+            # 3b: o conserto no irmão vira `git apply`, sem montar o layout na máquina
+            xargs -d '\n' -a "$RUNNER_TEMP/irmaos.lst" git diff -- > "$RUNNER_TEMP/irmaos.patch" || true
             echo '::error::O gerador alterou arquivos que são de repositórios irmãos; a correção é uma PR no repo dono:'
             while read -r f; do
               case "$f" in
@@ -110,3 +142,11 @@ jobs:
             done < "$RUNNER_TEMP/irmaos.lst"
             exit 1
           fi
+
+      - name: Guardar o patch dos arquivos de irmãos
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        with:
+          name: irmaos-patch
+          path: ${{ runner.temp }}/irmaos.patch
+          if-no-files-found: ignore
