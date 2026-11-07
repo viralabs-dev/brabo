@@ -403,6 +403,7 @@ Como a documentação é gerada, verificada e publicada.
 | [0266](0266-doc-dos-repositorios-em-portugues-por-padrao.md) | A doc de todos os repositórios é em pt-BR por padrão, substituindo o [0260](0260-doc-dos-repos-de-codigo-so-em-ingles.md): traduções em `<raiz>/docs/i18n/` são permitidas nos irmãos, o `Unreleased` dos CHANGELOGs é traduzido e a guarda `idioma-dos-irmaos.mjs` sai; a página `idioma_original: en` segue aceita até o irmão retraduzir (AT-766) |
 | [0273](0273-a-paridade-de-traducao-mede-so-a-doc-do-brabo.md) | A paridade de tradução mede só a doc do `brabo`: caminho em `HEAD` ou fora do manifesto do layout, sem `i18n/`, sem a seção de interface e sem os números da API. Revisa o item 7 do 0216 e o item 2 do 0266 (AT-779). |
 | [0274](0274-os-gerados-leem-os-irmaos-por-uma-trava-de-shas.md) | Os gerados do `brabo` leem os irmãos por uma trava de SHAs: `irmaos.lock` na raiz, `BRABO_REF` vence a trava, o `regenera-gerados` a sobe com os gerados no mesmo commit, o deploy da `main` segue a `main` dos irmãos (AT-780). |
+| [0275](0275-cada-irmao-confere-as-proprias-refs-com-simbolo.md) | Cada irmão confere as próprias refs com símbolo no CI, pelo reutilizável `refs-com-simbolo.yml` do `brabo-ci`; a ref entre irmãos só é listada (a trava do 0274 segue o portão), o check fica fora dos obrigatórios e o patch sai como artefato |
 
 ## A convenção
 
