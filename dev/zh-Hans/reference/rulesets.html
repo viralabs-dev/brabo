@@ -723,8 +723,8 @@ job——因此一个构建失败或从未获得 runner 的目标，不会让其
 中<strong>移出了矩阵</strong>，原因是测量得出的（AT-065，2026-09-13）：它的 <code>macos-13</code> 标签指向一个
 GitHub 已于 2025 年 12 月退役的镜像，而 Intel 替代品 <code>macos-15-intel</code> 在几秒内被调度并
 能构建，但在 Bun 下 <code>--self-test-pty</code> 失败（<code>node-pty</code> 的 <code>onData</code> 从不触发——
-oven-sh/bun#25822，未关闭）。同样的验证在 Node 下通过，因此 Mac Intel 用
-<code>npm install -g @brabo/runner</code> 安装 runner。以空的 <code>tag</code> 输入运行该 workflow 是一次演练：
+oven-sh/bun#25822，未关闭）。同样的验证在 Node 下通过，但 Mac Intel
+没有 runner（npm 已在 AT-774 中移除）。以空的 <code>tag</code> 输入运行该 workflow 是一次演练：
 构建并做 smoke 而不附加任何东西，这正是在不切标签的情况下测得这些的方式。</p>
 </blockquote>
 <h3 id="bypass-1">Bypass</h3>
@@ -841,7 +841,7 @@ PR <strong>#78</strong>——它首次亮相后第一个被扫描的——失败
 而区别只在有人直接向 <code>main</code> 推送的那一天才显现。</p>
 <nav class="site-pager"><a href="../reference/scripts.html">Scripts e comandos</a><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/scripts/ci/docs/reference/rulesets.md">编辑此页</a><span>更新于 2026-11-05T10:38:30-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/scripts/ci/docs/reference/rulesets.md">编辑此页</a><span>更新于 2026-11-06T23:19:16-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#前提三个分支必须存在">前提：三个分支必须存在</a></li><li class="n2"><a href="#ruleset-1--三个永久分支">Ruleset 1 —— 三个永久分支</a></li><li class="n3"><a href="#要勾选的规则">要勾选的规则</a></li><li class="n3"><a href="#两种配置并列">两种配置并列</a></li><li class="n3"><a href="#必需检查">必需检查</a></li><li class="n3"><a href="#永久分支之间的-pr-无法满足的内容">永久分支之间的 PR 无法满足的内容</a></li><li class="n3"><a href="#bypass">Bypass</a></li><li class="n3"><a href="#密钥-brabo_bot_token">密钥 BRABO_BOT_TOKEN</a></li><li class="n3"><a href="#republishing-a-tag-that-was-orphaned">重新发布孤立的标签</a></li><li class="n2"><a href="#ruleset-2--版本标签">Ruleset 2 —— 版本标签</a></li><li class="n3"><a href="#bypass-1">Bypass</a></li><li class="n2"><a href="#如何应用">如何应用</a></li><li class="n2"><a href="#settings--pages来源是分支-gh-pages">Settings → Pages：来源是分支 gh-pages</a></li><li class="n2"><a href="#家族标签必须存在">家族标签必须存在</a></li><li class="n2"><a href="#确认它已生效">确认它已生效</a></li></ul></aside>
 </div>

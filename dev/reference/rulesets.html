@@ -833,7 +833,7 @@ GitHub aposentou em dezembro de 2025, e o substituto Intel,
 <code>macos-15-intel</code>, é agendado em segundos e constrói, mas reprova o
 <code>--self-test-pty</code> sob o Bun (o <code>onData</code> do <code>node-pty</code> nunca dispara —
 oven-sh/bun#25822, aberto). A mesma prova passa sob o Node, então um Mac
-Intel instala o runner com <code>npm install -g @brabo/runner</code>. Uma execução do
+Intel fica sem runner (o npm saiu na AT-774). Uma execução do
 workflow com a entrada <code>tag</code> vazia é um ensaio: constrói e faz o smoke sem
 anexar nada, e foi assim que isso foi medido sem cortar uma tag.</p>
 </blockquote>
@@ -976,7 +976,7 @@ conferido é indistinguível de um ruleset ausente — e a diferença só aparec
 dia em que alguém empurra direto na <code>main</code>.</p>
 <nav class="site-pager"><a href="../reference/scripts.html">Scripts e comandos</a><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/scripts/ci/docs/reference/rulesets.md">Editar esta página</a><span>Atualizado em 2026-11-05T10:38:30-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/scripts/ci/docs/reference/rulesets.md">Editar esta página</a><span>Atualizado em 2026-11-06T23:19:16-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#pré-requisito-as-três-branches-precisam-existir">Pré-requisito: as três branches precisam existir</a></li><li class="n2"><a href="#ruleset-1--as-três-branches-permanentes">Ruleset 1 — as três branches permanentes</a></li><li class="n3"><a href="#regras-a-marcar">Regras a marcar</a></li><li class="n3"><a href="#as-duas-configurações-lado-a-lado">As duas configurações, lado a lado</a></li><li class="n3"><a href="#checks-obrigatórios">Checks obrigatórios</a></li><li class="n3"><a href="#o-que-uma-pr-entre-branches-permanentes-não-consegue-cumprir">O que uma PR entre branches permanentes não consegue cumprir</a></li><li class="n3"><a href="#bypass">Bypass</a></li><li class="n3"><a href="#o-segredo-brabo_bot_token">O segredo BRABO_BOT_TOKEN</a></li><li class="n3"><a href="#republishing-a-tag-that-was-orphaned">Republicando uma tag que ficou órfã</a></li><li class="n2"><a href="#ruleset-2--tags-de-versão">Ruleset 2 — tags de versão</a></li><li class="n3"><a href="#bypass-1">Bypass</a></li><li class="n2"><a href="#como-aplicar">Como aplicar</a></li><li class="n2"><a href="#settings--pages-a-fonte-é-a-branch-gh-pages">Settings → Pages: a fonte é a branch gh-pages</a></li><li class="n2"><a href="#os-rótulos-de-família-precisam-existir">Os rótulos de família precisam existir</a></li><li class="n2"><a href="#conferir-que-está-de-pé">Conferir que está de pé</a></li></ul></aside>
 </div>

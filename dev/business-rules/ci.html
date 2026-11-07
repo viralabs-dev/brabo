@@ -861,8 +861,7 @@ tirar a plataforma. A regra acima não muda com isso.</p>
 a plataforma saiu.</strong> A matriz passou a QUATRO alvos, e <code>ALVOS_ESPERADOS</code>
 acompanhou — é contra ele que a ausência é declarada, e deixar <code>darwin-x64</code>
 ali faria todo manifesto anunciar, para sempre, uma falta que é decisão. O
-Mac Intel fica com <code>npm install -g @brabo/runner</code> (sob Node, onde a mesma
-prova passa): o <code>install.sh</code> diz isso sem tentar baixar, o proxy
+Mac Intel fica sem runner (o npm saiu na AT-774): o <code>install.sh</code> diz isso sem tentar baixar, o proxy
 <code>GET /runner-releases/binary</code> recusa <code>darwin-x64</code> com 400 próprio que aponta
 o npm, e o painel do navegador nem pede o download. A regra desta RN não
 muda: ela continua valendo para qualquer alvo que fique sem runner, e
@@ -897,7 +896,7 @@ falhando inteira, o job gasta as duas esperas antes de recusar</li>
 </ul>
 <nav class="site-pager"><a href="../business-rules/broker.html"></a><a href="../business-rules/contracts.html"></a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/scripts/ci/docs/business-rules/ci.md">Editar esta página</a><span>Atualizado em 2026-11-05T02:47:28-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/scripts/ci/docs/business-rules/ci.md">Editar esta página</a><span>Atualizado em 2026-11-06T23:19:16-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#pr-gates">PR Gates</a></li><li class="n3"><a href="#rn-037">RN-037 — Infra becomes an area: Workflows generates CI per provider, Lead consolidates into a single PR</a></li><li class="n2"><a href="#o-papel-dbre-vira-dois-scripts-mecânicos-rn-400403-adr-0093">O papel dbre vira dois scripts mecânicos (RN-400..403, ADR 0093)</a></li><li class="n3"><a href="#rn-401">RN-401 — O linter não é gate de CI: varre o repositório inteiro, não o diff da PR</a></li><li class="n2"><a href="#n-agentes-online-no-dashboard--status-ao-vivo-nunca-presença-histórica-rn-409-adr-0097">&quot;N agentes online&quot; no dashboard — status AO VIVO, nunca presença histórica (RN-409, ADR 0097)</a></li><li class="n3"><a href="#rn-411">RN-411 — O quarto sinal de trabalho pendente: dev agents falam dev.*, não agent.status</a></li><li class="n2"><a href="#a-busca-do-rag-deixa-rastro-e-o-rastro-congela-os-pesos-rn-479481">A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)</a></li><li class="n3"><a href="#rn-498">RN-498 — O golden-set do RAG roda em CI de verdade, AGENDADO — e o gate continua warn</a></li><li class="n2"><a href="#fase-29--a-instalação-de-uma-linha-assinar-o-que-se-publica">FASE 29 — a instalação de uma linha: assinar o que se publica</a></li><li class="n2"><a href="#quando-dá-errado">Quando dá errado</a></li><li class="n3"><a href="#rn-524">RN-524 — Artefato publicado é assinado por identidade de workflow, verificado no mesmo run, e a verificação recusa em vez de avisar</a></li><li class="n2"><a href="#o-installsh-fecha-a-instalação-rn-547-fase-30">O install.sh fecha a instalação (RN-547, FASE 30)</a></li><li class="n3"><a href="#rn-549">RN-549 — O E2E em máquina limpa prova a instalação INTEIRA: os cinco elos, o agente de pé esperando, e o primeiro projeto pego sem ninguém voltar ao terminal</a></li><li class="n2"><a href="#a-chave-de-dispositivo-ganha-tela-e-a-tela-diz-o-alcance-de-revogar-rn-561">A chave de dispositivo ganha tela, e a tela diz o alcance de revogar (RN-561)</a></li><li class="n3"><a href="#rn-565">RN-565 — O manifesto assinado sai com o que a Release TEM, e não espera a plataforma que nunca constrói</a></li></ul></aside>
 </div>
