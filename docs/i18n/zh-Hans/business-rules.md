@@ -871,4 +871,7 @@ traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 - <a id="rn-1028"></a>[RN-1028](business-rules/engine.md#rn-1028) — Depois que a pasta do projeto avança, o processo do app é reiniciado no lugar, uma vez por rajada de merges
 - <a id="rn-1029"></a>[RN-1029](business-rules/api.md#rn-1029) — Depois do merge da PR de infra que declara `run.app`, a api propõe `container_recreate` com a porta do app, uma vez
 - <a id="rn-1030"></a>[RN-1030](business-rules/api.md#rn-1030) — Todo nó do grafo gravado por `MERGE` numa chave natural tem restrição de unicidade, e a subida funde as duplicatas preexistentes antes de criá-la
+- <a id="rn-1036"></a>[RN-1036](business-rules/api.md#rn-1036) — A indexação de docs nunca descarta em silêncio o conteúdo de um arquivo
+- <a id="rn-1037"></a>[RN-1037](business-rules/contracts.md#rn-1037) — O `dist` do `shared` não exporta nenhum valor
+- <a id="rn-1041"></a>[RN-1041](business-rules/contracts.md#rn-1041) — O `docker-cli.json` é o espelho das constantes de controle do `docker-cli.ts`
 <!-- END:GENERATED:indice-de-rn -->

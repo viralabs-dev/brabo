@@ -119,6 +119,7 @@ keywords: [scripts, pnpm, make, commands]
 
 | команда | запускает |
 |---|---|
+| `pnpm --filter @brabo/docker-port build` | `tsc -p tsconfig.build.json` |
 | `pnpm --filter @brabo/docker-port test` | `vitest run` |
 | `pnpm --filter @brabo/docker-port typecheck` | `tsc --noEmit` |
 | `pnpm --filter @brabo/docker-port lint` | `oxlint --deny-warnings src vitest.config.ts` |
@@ -175,4 +176,4 @@ keywords: [scripts, pnpm, make, commands]
 
 ---
 
-Всего команд: 115. Цель Makefile без аннотации `## описание` здесь не появляется — добавьте её в исходнике.
+Всего команд: 116. Цель Makefile без аннотации `## описание` здесь не появляется — добавьте её в исходнике.

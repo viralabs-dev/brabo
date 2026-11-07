@@ -55,7 +55,7 @@ jobs:
   guardiao:
     name: Drift, gerados e build
     if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     # AT-306: sem teto, um passo pendurado (build do site, render da
     # referência da API) segurava o runner pelas 6h do default do GitHub.
     # Medido: 53s frio, 51s quente (scripts/ci/docs/reference/rulesets.md) — 15min é
@@ -194,7 +194,7 @@ jobs:
   links-externos:
     name: Links externos (semanal)
     if: github.event_name == 'schedule'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     # AT-306: site de terceiro lento não pode prender o runner por 6h.
     timeout-minutes: 20
     steps:
