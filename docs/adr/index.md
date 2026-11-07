@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 262 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 263 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -46,6 +46,7 @@ O contrato do provider de git, o nascimento e a adoção do repositório, a prot
 | [0236](0236-o-dependabot-dispensa-revisao-na-dev.md) | PR do Dependabot para a `dev` passa na escada de aprovação sem revisão, nos dois modos, reconhecido por autor E branch (a régua do `pr-police`); fica mergeável quando os outros checks passam, e a `main` segue com a escada inteira (AT-668). |
 | [0255](0255-politica-de-pr-obrigatoria-em-todos-os-repos.md) | A política de PR é obrigatória em todos os repositórios (checks `Política de branches` e `Escada de aprovação` required, ruleset sem force push em `brabo`, `brabo-qa` e `brabo-infra`) e a PR do bot `chore/regenera-gerados` dispensa a escada na `dev`. |
 | [0263](0263-o-projeto-do-usuario-trabalha-em-trunk.md) | O repositório do PROJETO do usuário trabalha em trunk: a tarefa nasce da `main` e volta para a `main`, e o bootstrap cria e protege só a `main`. Depois de cada merge, `project.trunk_merged` leva a pasta (container, mounted e runner) até a `main` nova por fast-forward, que recusa com motivo quando há branch outra, árvore suja, divergência ou não rastreado sobrescrito. Projeto antigo tem o claim recusado até o script de migração; o Brabo segue `dev → main` (AT-617, decisão do dono de 06/11). |
+| [0267](0267-o-e2e-do-brabo-qa-e-portao-da-main.md) | O E2E do `brabo-qa` é portão da `main` nos seis repositórios com gatilho, pelo check `E2E do brabo-qa` e o ruleset "main exige E2E"; o `/qa-aceitar <justificativa>` do dono é a única exceção ao check obrigatório, nunca para digest nem assinatura |
 
 ## Harness de agente, turnos e sessões {#tema-agentes}
 

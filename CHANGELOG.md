@@ -4,6 +4,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: ADR 0267 (AT-765): o E2E do `brabo-qa` vira portão da `main` nos seis repositórios com gatilho, pelo check `E2E do brabo-qa` e o ruleset "main exige E2E"; o `/qa-aceitar <justificativa>` do dono é a exceção registrada, nunca para digest nem assinatura. `rulesets.md` e `branching-policy.md` atualizados.
 - `install.sh`: sem o plano B do npm. Mac Intel, e a Release sem o binário da plataforma, passam a dizer que não há binário e a apontar a issue no `brabo-runner`; o runner sai só como binário (AT-774).
 - CI: repina os reutilizáveis do `brabo-ci` em `13f3697` (merge da ci#17, que inclui a ci#16): `ubuntu-26.04`, `client-id` no lugar de `app-id`, rótulo de família criado antes de aplicar, linha `Carimbo:` na tag e helper `vinculos` (AT-772, AT-773).
 - CI: todo `runs-on` fixa `ubuntu-26.04` no lugar de `ubuntu-latest`, e o `create-github-app-token` usa `client-id` no lugar do `app-id` obsoleto; os runs saem sem anotação de aviso (AT-772).
