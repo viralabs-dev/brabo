@@ -5114,7 +5114,7 @@ o andamento do gate retomado chega pelo log da sessão.</li>
 <code>apps/api/src/infrastructure/http-clients/api-to-engine-client.ts:379</code>
 (<code>resumeParkedGate</code>),
 <code>apps/api/src/interfaces/http/gates/gate-resume.controller.ts:40</code>
-(<code>resume</code>), <code>apps/web/src/routes/RetomarGateEstacionado.tsx:59</code>
+(<code>resume</code>), <code>apps/web/src/routes/RetomarGateEstacionado.tsx:31</code>
 (<code>RetomarGateEstacionado</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine_web/controllers/gate_command_controller_test.exs</code>
 (&quot;ciclo estacionado: 202 e despacha o gate de novo&quot;; falha: &quot;ciclo NÃO
@@ -6048,7 +6048,7 @@ boot não é perguntado, e o pior desfecho é o de sempre (trabalho duplicado e
 barato; o segundo veredito é recusado pela api).</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/gate_rescuer.ex:231</code> (<code>run_boot</code>),
 <code>:240</code> (<code>interrompido_no_boot</code>),
-<code>apps/web/src/routes/RetomarGateEstacionado.tsx:33</code> (<code>cicloInterrompido</code>)</li>
+<code>apps/web/src/routes/RetomarGateEstacionado.helpers.ts:21</code> (<code>cicloInterrompido</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/gate_rescuer_test.exs</code> (&quot;boot com
 ciclo RECENTE órfão do reinício: grava gate.interrupted e retoma já
 (RN-823)&quot;; falhas: &quot;boot com ciclo recente esperando ação PENDENTE do gate:
@@ -6663,7 +6663,7 @@ RN-673 absorve com turno em curso) só para os sete conversacionais com a
 sessão ativa; <code>dev-*</code>/<code>qa-*</code> ganham o texto, sem botão. O botão nunca continua
 sozinho.</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/po_server.ex:254</code> (<code>run_turn</code>);
-<code>apps/web/src/routes/session-timeline-montagem.tsx:1098</code> (<code>conversacional</code>)</li>
+<code>apps/web/src/routes/session-timeline-montagem.tsx:1094</code> (<code>conversacional</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/po_server_test.exs:548</code> (gravado e
 regrasSemHistoria; sem a leitura, sem a chave);
 <code>apps/web/src/routes/session-timeline-montagem.falha-de-turno.test.tsx:108</code>

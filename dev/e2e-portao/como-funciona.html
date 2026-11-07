@@ -104,11 +104,13 @@ Comentário editado, comentário de review e segundo <code>/qa-aceitar</code> no
 <!-- print P6 -->
 <h2 id="ensaio-manual">Ensaio manual</h2>
 <p><code>workflow_dispatch</code> do <code>e2e-pr.yml</code> com os mesmos campos do payload (<code>repo</code>, <code>pr</code>, <code>head_sha</code>, <code>check_run_id</code>, <code>compose_ref</code>, <code>imagens</code>).</p>
+<h2 id="origem-e-vínculos-at-773">Origem e vínculos (AT-773)</h2>
+<p>O payload do <code>e2e-pr</code> pode trazer <code>origem</code> (<code>run_id</code>, <code>run_attempt</code>, <code>ator</code>, <code>sha_curto</code>, <code>correlacao</code> = <code>&lt;run_id&gt;-&lt;attempt&gt;</code>). O <code>validar-payload.ts</code> a valida por regex (uma <code>origem</code> malformada é descartada inteira com <code>::warning::</code>, sem exportar nada e sem reprovar o payload; campos extras são aceitos) e exporta <code>ORIGEM_RUN_ID</code>, <code>ORIGEM_ATOR</code>, <code>ORIGEM_CORRELACAO</code> e <code>ORIGEM_JSON</code> para os passos seguintes; sem <code>origem</code>, nada é exportado. O <code>fechar-check.ts</code> anexa ao resumo do check o <code>vinculos.md</code> gerado pela action <code>vinculos</code> do brabo-ci (variável <code>VINCULOS_MD</code>), e nunca deixa a ausência dele impedir o fechamento.</p>
 <nav class="site-pager"></nav>
 </article>
 <footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/e2e-portao/como-funciona.md">Editar esta página</a></footer>
 </main>
-<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#o-fluxo">O fluxo</a></li><li class="n2"><a href="#causas-de-vermelho">Causas de vermelho</a></li><li class="n2"><a href="#aceitar-com-justificativa">Aceitar com justificativa</a></li><li class="n2"><a href="#ensaio-manual">Ensaio manual</a></li></ul></aside>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#o-fluxo">O fluxo</a></li><li class="n2"><a href="#causas-de-vermelho">Causas de vermelho</a></li><li class="n2"><a href="#aceitar-com-justificativa">Aceitar com justificativa</a></li><li class="n2"><a href="#ensaio-manual">Ensaio manual</a></li><li class="n2"><a href="#origem-e-vínculos-at-773">Origem e vínculos (AT-773)</a></li></ul></aside>
 </div>
 <script src="../assets/site.js"></script>
 <script defer src="../assets/busca.js" data-indice="../assets/busca-pt-BR.json" data-base="../"></script></body>

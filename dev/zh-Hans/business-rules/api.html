@@ -8897,7 +8897,7 @@ com a causa do fechamento anterior quando ela foi gravada.</p>
 <ul>
 <li><strong>Onde:</strong> <code>src/interfaces/http/sessions/sessions.controller.ts:214</code>
 (<code>reopen</code>); <code>apps/web/src/lib/api-client.ts:634</code> (<code>reopenSession</code>);
-<code>apps/web/src/routes/SessionPage.tsx:158</code> (<code>podeReabrir</code>);
+<code>apps/web/src/routes/SessionPage.tsx:147</code> (<code>podeReabrir</code>);
 <code>apps/web/src/lib/session-acoes-da-sessao.ts:77</code> (<code>handleReopen</code>); <code>apps/web/src/routes/SessionComposer.tsx:383</code> (o botão);
 <code>apps/web/src/lib/activity.ts:633</code> (a frase do fio)</li>
 <li><strong>Teste:</strong> <code>test/interfaces/http/sessions/sessions-reopen.controller.spec.ts:22</code>
@@ -9307,15 +9307,15 @@ há trava por PR), e é a regra 2 que segura a segunda.</li>
 <code>src/application/use-cases/actions/approve-action.use-case.ts:327</code> (<code>recusaDeMerge</code>);
 <code>src/infrastructure/git/local-git-provider.ts:339</code> (<code>GitPullRequestAlreadyMergedError</code>);
 <code>apps/web/src/lib/gate-do-merge.ts:19</code> (<code>gatePendenteNoMerge</code>);
-<code>apps/web/src/routes/ProjectPrsTab.tsx:236</code> (<code>gatePendenteNoMerge</code>);
-<code>apps/web/src/routes/session-timeline-montagem.tsx:1249</code> (<code>gatePendenteNoMerge</code>)
-<code>apps/web/src/routes/ProjectPrsTab.tsx:236</code> (<code>gatePendenteNoMerge</code>);
-<code>apps/web/src/routes/session-timeline-montagem.tsx:1249</code> (<code>gatePendenteNoMerge</code>)</p>
+<code>apps/web/src/routes/ProjectPrsTab.tsx:214</code> (<code>gatePendenteNoMerge</code>);
+<code>apps/web/src/routes/session-timeline-montagem.tsx:1244</code> (<code>gatePendenteNoMerge</code>)
+<code>apps/web/src/routes/ProjectPrsTab.tsx:214</code> (<code>gatePendenteNoMerge</code>);
+<code>apps/web/src/routes/session-timeline-montagem.tsx:1244</code> (<code>gatePendenteNoMerge</code>)</p>
 </li>
 <li>
 <p><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:675</code>
 (<code>merge_ja_proposto</code>), <code>:698</code> (<code>pr_ja_mergeado</code> — caso de falha), <code>:696</code></p>
-<p><code>apps/web/src/routes/session-timeline-montagem.tsx:1249</code> (<code>gatePendenteNoMerge</code>)</p>
+<p><code>apps/web/src/routes/session-timeline-montagem.tsx:1244</code> (<code>gatePendenteNoMerge</code>)</p>
 </li>
 <li>
 <p><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:675</code>
@@ -9983,7 +9983,7 @@ sobre a consultiva sem agente, e fechar a rota inteira é decisão à parte.</p>
 (<code>GarantirDestinatarioDoChatUseCase</code>);
 <code>src/interfaces/http/llm/chat.controller.ts:82</code> (<code>chat</code>);
 <code>apps/web/src/lib/session-destinatario.ts:347</code> (<code>agentesParaChamar</code>);
-<code>apps/web/src/routes/SessionPage.tsx:684</code> (<code>handleSend</code>);
+<code>apps/web/src/routes/SessionPage.tsx:690</code> (<code>handleSend</code>);
 <code>apps/web/src/routes/SessionComposer.tsx:276</code></p>
 </li>
 <li>
@@ -10390,7 +10390,7 @@ executado, a PR seguia em &quot;Abertas&quot; até recarregar, o card mostrava o
 usuário e <code>#pr-3</code>, e toda PR local era &quot;autor desconhecido&quot;.</li>
 <li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-git-action.use-case.ts:73</code> (<code>resultadoDaFalha</code>),
 <code>src/application/use-cases/actions/list-project-pending-actions.use-case.ts:22</code> (<code>execute</code>),
-<code>apps/web/src/routes/ProjectPrsTab.tsx:69</code> (<code>ultimaRecusaDeMerge</code>),
+<code>apps/web/src/routes/ProjectPrsTab.helpers.ts:9</code> (<code>ultimaRecusaDeMerge</code>),
 <code>apps/web/src/lib/canal-vivo.ts:134</code> (<code>alvosDoEvento</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/execute-git-action.use-case.spec.ts</code>
 (&quot;conflito de merge → kind git_merge, arquivos no resultado e evento na
@@ -10619,7 +10619,7 @@ quantas tarefas tem.</li>
 (<code>updateStoryRoute</code>), <code>:612</code> (<code>archiveStoryRoute</code>),
 <code>apps/engine/lib/engine/harness/tools/update_story.ex:45</code> (<code>run</code>),
 <code>apps/engine/lib/engine/harness/tools/archive_story.ex:38</code> (<code>run</code>),
-<code>apps/web/src/routes/ProjectBacklogTab.tsx:80</code> (<code>motivoDeCorrecaoInerte</code>)</li>
+<code>apps/web/src/lib/correcao-de-historia.ts:10</code> (<code>motivoDeCorrecaoInerte</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/backlog/corrigir-historia.use-case.spec.ts</code>
 (feliz: título e arquivo com evento; falha: tarefa <code>in_progress</code>/<code>in_review</code>
 é 409 <code>historia_com_tarefa_em_execucao</code> sem escrita),
@@ -10661,7 +10661,7 @@ query nem poll novo.</li>
 <code>apps/web/src/routes/ProjectApprovalsTab.tsx:106</code> (<code>ProjectApprovalsTab</code>),
 <code>apps/web/src/routes/Shell.tsx:562</code> (<code>idDoProjetoAtual</code>),
 <code>apps/web/src/routes/NewProjectWizard.tsx:155</code> (<code>NewProjectWizard</code>),
-<code>apps/web/src/routes/ProjectPrsTab.tsx:141</code> (<code>invalidateMergeActions</code>),
+<code>apps/web/src/routes/ProjectPrsTab.tsx:150</code> (<code>invalidateMergeActions</code>),
 <code>apps/web/src/lib/agent-status.ts:222</code> (<code>gateStatus</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/execute-infra-pr.use-case.spec.ts</code>
 (&quot;a branch nasce de dev, a PR mira dev e leva infra[bot]&quot;; falha:
@@ -11891,7 +11891,7 @@ O <code>spentMicros</code> de budget/área não é corrigido.</li>
 <h3 id="rn-921">RN-921 — O botão &quot;Retomar&quot; do fio é gesto humano, sem teto, e só vale para o turno interrompido</h3>
 <ul>
 <li><strong>Regra:</strong> o <code>agent.error</code> com <code>reason: turno_interrompido_por_reinicio</code> ganha no fio o cartão <code>RetomarTurnoInterrompido</code> (objetivo e passos do último plano, &quot;Parou em&quot;, botão). O clique chama <code>POST /projects/:projectId/sessions/:sessionId/agents/:agent/resume</code> (<code>developer</code>; 200 <code>{ok:true}</code>; 404 sessão alheia; 409 <code>turno_nao_interrompido</code> quando o último desfecho do agente não é a interrupção ou há turno em curso; 409 <code>agente_sem_retomada</code>), que pede ao engine <code>POST /internal/sessions/:sessionId/agent/resume</code>: ele grava <code>agent.turn_resumed</code> com <code>automatica: false</code> e manda <code>:retomar_turno_interrompido</code> à MESMA <code>TurnoAssincrono</code>. Sem teto: cada clique é uma retomada. O cartão some quando algo segue o erro, e a retomada automática vira uma linha discreta. O &quot;sem desfecho&quot; do diário NÃO aparece na tela (o evento não o traz).</li>
-<li><strong>Onde:</strong> <code>src/interfaces/http/sessions/agent-resume.controller.ts:23</code> (<code>AgentResumeController</code>), <code>src/application/use-cases/sessions/resume-agent-turn.use-case.ts:29</code> (<code>execute</code>), <code>apps/engine/lib/engine_web/controllers/agent_command_controller.ex:638</code> (<code>resume</code>), <code>apps/web/src/routes/RetomarTurnoInterrompido.tsx:23</code> (<code>ehTurnoInterrompido</code>)</li>
+<li><strong>Onde:</strong> <code>src/interfaces/http/sessions/agent-resume.controller.ts:23</code> (<code>AgentResumeController</code>), <code>src/application/use-cases/sessions/resume-agent-turn.use-case.ts:29</code> (<code>execute</code>), <code>apps/engine/lib/engine_web/controllers/agent_command_controller.ex:638</code> (<code>resume</code>), <code>apps/web/src/routes/RetomarTurnoInterrompido.helpers.ts:10</code> (<code>ehTurnoInterrompido</code>)</li>
 <li><strong>Teste:</strong> <code>test/interfaces/http/sessions/agent-resume.controller.spec.ts</code> (feliz, duas recusas 409, 404, papel); <code>apps/web/src/routes/RetomarTurnoInterrompido.test.tsx</code>; ExUnit do <code>agent_command_controller</code></li>
 <li><strong>Origem:</strong> AT-582 (EP-031); <a href="../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226</a>.</li>
 </ul>
