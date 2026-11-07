@@ -1,5 +1,5 @@
 ---
-traducao_de: b3289c8b759dd5571d375e7a14c64ec9f9124c11
+traducao_de: c165be09458a5dfdc42010867a29adf8a36ccd99
 id: rn-ci
 title: 'Regras de negócio — CI'
 sidebar_label: CI
@@ -314,7 +314,7 @@ as imagens publicadas」，`permissions` 块中带 `id-token: write`）；
 > 待定的决定不再是关于 runner 的，而是等待 Bun 还是去掉该平台。上面的规则不因此改变。
 
 > **于 2026-09-27 决定（[ADR 0174](../adr/0174-runner-sem-binario-darwin-x64.md)，AT-065）：
-> 该平台已移除。** 矩阵变为「四个」目标，`ALVOS_ESPERADOS` 随之调整——缺失正是对照它来声明的，把 `darwin-x64` 留在那里会让每个清单永远宣布一个本是决定的缺失。Mac Intel 使用 `npm install -g @brabo/runner`（在 Node 下，同样的证明能通过）：`install.sh` 说明这一点而不尝试下载，代理 `GET /runner-releases/binary` 以指向 npm 的自己的 400 拒绝 `darwin-x64`，浏览器面板甚至不请求下载。本 RN 的规则不变：它仍适用于任何失去 runner 的目标，而当矩阵、api 的列表、安装程序的 `case` 和浏览器的列表出现分歧时，`scripts/ci/alvos-do-runner.spec.ts` 会失败。
+> 该平台已移除。** 矩阵变为「四个」目标，`ALVOS_ESPERADOS` 随之调整——缺失正是对照它来声明的，把 `darwin-x64` 留在那里会让每个清单永远宣布一个本是决定的缺失。Mac Intel 没有 runner（npm 已在 AT-774 中移除）：`install.sh` 说明这一点而不尝试下载，代理 `GET /runner-releases/binary` 以指向 npm 的自己的 400 拒绝 `darwin-x64`，浏览器面板甚至不请求下载。本 RN 的规则不变：它仍适用于任何失去 runner 的目标，而当矩阵、api 的列表、安装程序的 `case` 和浏览器的列表出现分歧时，`scripts/ci/alvos-do-runner.spec.ts` 会失败。
 
 - **代码：** `.github/workflows/build-runner-binaries.yml:283`（作业，现在没有 `needs:`）、`:318`（`timeout-minutes: 40`，容得下两次等待）、`:358`（作业级的 `ALVOS_ESPERADOS`，让两个步骤读取同一个列表）、`:397`（等待的步骤）、`:401`/`:402`（两个上限）、`:410`（缺失的 Release，这是错误）、`:433`（二进制的上限，这是 `notice`）、`:499`（点名未覆盖内容的清单）
 - **测试：** `scripts/ci/checksums-nao-espera-a-matriz.spec.ts`——作业没有 `needs:`、两个上限都存在、二进制的上限由 `build` 的 `timeout-minutes` 推导（而不是复制）、它容得进作业自身的 `timeout-minutes`、目标缺失是 `notice` 而 Release 缺失是 `error`、`ALVOS_ESPERADOS` 与矩阵一致，以及本次改动不触及的 ADR 0149 的四项保证（一个签名、附加之前校验、`id-token: write`、清单中的 `install.sh`）。它是「静态」的，其局限在文件顶部声明：该作业只能在正式 tag 中证明，而它从未在任何 tag 中运行过

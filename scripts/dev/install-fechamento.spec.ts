@@ -641,10 +641,10 @@ esac
 
 // ADR 0174 (AT-065): Mac Intel deixou de ter binário. O instalador não tenta
 // baixar um asset que a Release não publica — diz em texto qual é o caminho
-// (o pacote npm, sob Node) e deixa `RUNNER_BIN` vazio, que é o que faz o
+// (sem binário; pedir por issue) e deixa `RUNNER_BIN` vazio, que é o que faz o
 // fechamento relatar a pendência em vez de chamar um comando inexistente.
 describe('install.sh — o agente local em Mac Intel', () => {
-  it('não baixa nada, aponta o npm e deixa RUNNER_BIN vazio', async () => {
+  it('não baixa nada, aponta a issue e deixa RUNNER_BIN vazio', async () => {
     const trilha = path.join(os.tmpdir(), `brabo-curl-${process.pid}-${Date.now()}.txt`);
     const curl = comBinario('curl', `#!/bin/sh\nprintf '%s\\n' "$*" >> '${trilha}'\nexit 0\n`);
     const home = fs.mkdtempSync(path.join(os.tmpdir(), 'brabo-home-'));
@@ -655,7 +655,7 @@ describe('install.sh — o agente local em Mac Intel', () => {
       );
       expect(r.stdout).toContain('SAIU=0');
       expect(r.stdout).toContain('bin=[]');
-      expect(r.stderr).toContain('npm install -g @brabo/runner');
+      expect(r.stderr).toContain('viralabs-dev/brabo-runner/issues');
       expect(r.stderr).toContain('ADR 0174');
       expect(fs.existsSync(trilha)).toBe(false);
       expect(fs.existsSync(path.join(home, '.local', 'bin', 'brabo-runner'))).toBe(false);

@@ -508,8 +508,7 @@ se aceita clicando é uma verificação que não existe (ADR 0149, decisão 3) �
 seria o downgrade mais barato possível: apagar 400 bytes da Release desligaria a
 conferência de todo mundo. O custo está medido e é pequeno: na v5.0.0 há dois
 binários (`linux-x64`, `linux-arm64`) e nenhum manifesto, e o passo do binário é
-**best-effort** no fluxo do navegador ([RN-473](web.md#rn-473), passo 4) — ele cai em
-`npm install -g @brabo/runner`, que não depende de release nenhuma. Toda release
+**best-effort** no fluxo do navegador ([RN-473](web.md#rn-473), passo 4) — ele fica sem o agente local e diz isso (o npm saiu na AT-774). Toda release
 anterior à primeira tag depois do ADR 0149 cai nesse caminho, por construção.
 
 **Os seis desfechos de 502 não colapsam.** O status sozinho não os separa e
@@ -675,7 +674,7 @@ para chegar ao comando. Vindo do instalador, o passo desaparece — a File Syste
 Access API do navegador não preserva o bit, um script preserva.
 
 Release sem o binário da plataforma **não interrompe a instalação**: o resto já
-está de pé, e a mensagem aponta `npm install -g @brabo/runner`. É a mesma
+está de pé, e a mensagem aponta a issue no `brabo-runner` (o npm saiu na AT-774). É a mesma
 disposição do passo do binário na configuração pelo navegador (RN-473), e a
 razão é a mesma — o agente local é a última etapa, não um pré-requisito.
 

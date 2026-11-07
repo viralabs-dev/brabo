@@ -1,5 +1,5 @@
 ---
-traducao_de: b3289c8b759dd5571d375e7a14c64ec9f9124c11
+traducao_de: c165be09458a5dfdc42010867a29adf8a36ccd99
 id: rn-ci
 title: 'Business rules — CI'
 sidebar_label: CI
@@ -660,8 +660,7 @@ depend on it — it is precisely because it depended on it that it did not come 
 > the platform left.** The matrix went to FOUR targets, and `ALVOS_ESPERADOS`
 > followed — it is against it that the absence is declared, and leaving `darwin-x64`
 > there would make every manifest announce, forever, a gap that is a decision. The
-> Mac Intel stays with `npm install -g @brabo/runner` (under Node, where the same
-> proof passes): `install.sh` says so without trying to download, the
+> Mac Intel stays without a runner (npm was dropped in AT-774): `install.sh` says so without trying to download, the
 > `GET /runner-releases/binary` proxy refuses `darwin-x64` with its own 400 pointing to
 > npm, and the browser panel does not even ask for the download. This RN's rule does not
 > change: it keeps holding for any target left without a runner, and
