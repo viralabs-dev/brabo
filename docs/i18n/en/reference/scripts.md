@@ -119,6 +119,7 @@ Source: each package's `package.json` and the root `Makefile`.
 
 | command | runs |
 |---|---|
+| `pnpm --filter @brabo/docker-port build` | `tsc -p tsconfig.build.json` |
 | `pnpm --filter @brabo/docker-port test` | `vitest run` |
 | `pnpm --filter @brabo/docker-port typecheck` | `tsc --noEmit` |
 | `pnpm --filter @brabo/docker-port lint` | `oxlint --deny-warnings src vitest.config.ts` |
@@ -175,4 +176,4 @@ Source: each package's `package.json` and the root `Makefile`.
 
 ---
 
-115 commands total. A Makefile target without a `## description` annotation doesn't appear here — annotate it at the source.
+116 commands total. A Makefile target without a `## description` annotation doesn't appear here — annotate it at the source.
