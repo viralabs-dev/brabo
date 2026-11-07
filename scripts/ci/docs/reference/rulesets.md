@@ -574,14 +574,14 @@ essa verificação que impede publicar algo diferente do que foi validado.
 
 **Nome:** `main exige E2E` (ADR 0267, AT-765)
 
-Vale em `brabo-api`, `brabo-engine`, `brabo-web`, `brabo-broker`, `brabo-infra` e `brabo-qa`. O `brabo-contracts` fica de fora.
+Vale em `brabo-api`, `brabo-engine`, `brabo-web`, `brabo-broker`, `brabo-infra` e `brabo-qa`. O `brabo-contracts` fica de fora. **Ativo desde 07/11/2026**, criado por "Import a ruleset" com o JSON abaixo, depois das provas P1 a P5 (AT-765).
 
 | campo | valor |
 |---|---|
 | alvo | só `refs/heads/main` |
 | regra | `required_status_checks` com o contexto `E2E do brabo-qa` |
 | `integration_id` | o do App `viralabs-dev-brabo`: um check de mesmo nome vindo de outro token não conta |
-| bypass | nenhum |
+| bypass | só o App `viralabs-dev-brabo` (`Integration`, `always`), por causa do gate de hotfix (decisão do dono na AT-765) |
 
 O ruleset `main e dev sem force push` não muda. O check nasce "em andamento" no head da PR e o `brabo-qa` o fecha depois de rodar as imagens por digest.
 
