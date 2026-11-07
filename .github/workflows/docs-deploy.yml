@@ -21,8 +21,9 @@ name: Documentação
 on:
   push:
     branches: [dev, main]
-    paths: ['docs/**', 'scripts/ci/docs/**', 'scripts/docs/**', 'website/**', '.github/workflows/docs-deploy.yml']
-  # republicar à mão quando um repositório irmão mudou (não há repository_dispatch:
+    paths: ['docs/**', 'scripts/ci/docs/**', 'scripts/docs/**', 'website/**', 'irmaos.lock', '.github/workflows/docs-deploy.yml']
+  # a subida da trava (`irmaos.lock`, AT-780) já republica o `/dev/`; à mão serve
+  # para o `/prd/` quando a `main` de um irmão mudou (não há repository_dispatch:
   # a branch default é `dev`, e ele publicaria `dev` quando o alvo pode ser `prd`)
   workflow_dispatch:
 
@@ -107,9 +108,12 @@ jobs:
       # `DOCS_BRANCH` declara o degrau (noindex fora de `main`, aviso da fase de
       # teste, seletor de ambiente). Os assets são RELATIVOS, então o gerador
       # não precisa do `baseUrl` do degrau.
-      - name: Reconstruir o layout dos irmãos (mesma branch)
+      # `dev` usa a trava (`irmaos.lock`), coerente com os gerados commitados.
+      # `main` segue a `main` dos irmãos: a trava aponta SHAs da `dev` deles,
+      # que podem não estar na `main` (ADR 0274).
+      - name: Reconstruir o layout dos irmãos (dev pela trava, main pela main)
         env:
-          BRABO_REF: ${{ steps.degrau.outputs.branch }}
+          BRABO_REF: ${{ steps.degrau.outputs.branch == 'main' && 'main' || '' }}
         run: bash scripts/docs/montar-layout.sh
 
       - name: Build do site

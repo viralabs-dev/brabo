@@ -23,8 +23,9 @@ monorepo antigo é `viralabs-dev/brabo-legacy`. O site publica em
 ## Como o docs lê o código dos irmãos
 `bash scripts/docs/montar-layout.sh` RECONSTRÓI neste checkout o layout do
 monorepo (`apps/api`, `apps/engine`, `apps/web`, `apps/runner`, `apps/broker`,
-`packages/`, e a raiz de `brabo-infra` e `brabo-ci`), clonando a `dev` de cada
-um (`BRABO_REF` muda o ref; `BRABO_IRMAOS=<pasta>` usa clones locais). Os
+`packages/`, e a raiz de `brabo-infra` e `brabo-ci`), trazendo o SHA de cada um
+em `irmaos.lock` (a trava, ADR 0274; `BRABO_REF` vence a trava, e `BRABO_REF=dev`
+mostra a `dev` de agora; `BRABO_IRMAOS=<pasta>` usa clones locais). Os
 arquivos entram no ÍNDICE do git (`git add -f`), nunca em commit: `git ls-files`
 é a régua do gerador. As refs `caminho:N` das RNs e os globs do docmap seguem
 iguais. Raiz opcional ausente vira AVISO. O `docs-check` e o `docs-deploy`
@@ -33,8 +34,9 @@ código" não vale entre repos: o drift só enxerga o diff deste repo.
 O script grava o que trouxe em `.git/layout-irmaos.lst` e, na rodada seguinte,
 remove o que já não está em `HEAD` (senão o `--update=none` esconde diff).
 `.github/workflows/regenera-gerados.yml` (a cada 6 h e por `workflow_dispatch`)
-regenera os gerados que dependem dos irmãos e abre/atualiza a PR fixa
-`chore/regenera-gerados` na `dev` (segue a escada normal); pendência em arquivo
+sobe a trava e regenera os gerados que dependem dos irmãos no mesmo commit, e
+abre/atualiza a PR fixa `chore/regenera-gerados` na `dev` (dispensa a escada,
+ADR 0255; o merge é humano); pendência em arquivo
 de irmão deixa o job vermelho nomeando o repo dono (AT-726).
 O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mjs`).
 

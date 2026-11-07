@@ -8,7 +8,7 @@ processo funciona de verdade.
 
 **Com todas as letras: PR grande sem issue prévia provavelmente será
 recusado.** Não por burocracia — por respeito ao seu tempo. Este projeto tem
-decisões arquiteturais registradas em [264 ADRs](docs/adr/index.md), e uma
+decisões arquiteturais registradas em [265 ADRs](docs/adr/index.md), e uma
 mudança que contradiz uma delas custa muito trabalho para depois ser
 rejeitada.
 
@@ -38,7 +38,7 @@ não decorar comando. Ele só chama o que já existe, e `--print-commands` mostr
 exatamente o quê.
 
 Para mexer só na documentação, basta este repositório: `pnpm install`,
-`bash scripts/docs/montar-layout.sh` (traz a doc dos irmãos), `pnpm docs:check`
+`bash scripts/docs/montar-layout.sh` (traz os irmãos pelo SHA de `irmaos.lock`; `BRABO_REF=dev` traz a `dev` de agora), `pnpm docs:check`
 e `pnpm docs:build`.
 
 **Quanto tempo leva de verdade:** os comandos acima somam poucos minutos, mas a
