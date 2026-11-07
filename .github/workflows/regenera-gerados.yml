@@ -1,5 +1,7 @@
 name: Regenera os gerados
 
+run-name: ${{ format('Regenera os gerados · {0}', github.event_name == 'schedule' && 'agendado' || format('manual · {0}', github.actor)) }}
+
 # AT-726: scripts.md, índice e refs de RN dependem dos
 # repositórios irmãos e ficam velhos a cada merge lá. Este workflow sobe a trava
 # `irmaos.lock` (AT-780, ADR 0274), regenera por agenda e abre UMA PR fixa na
@@ -67,6 +69,15 @@ jobs:
 
       - name: Reconstruir o layout dos irmãos (trava nova)
         run: bash scripts/docs/montar-layout.sh
+
+      # Vínculos do run (AT-773, ADR 0271): os irmãos que o layout trouxe, `repo@SHA`.
+      - name: Ler os SHAs dos irmãos
+        id: irmaos
+        run: |
+          { echo 'lista<<IRMAOS_FIM'; cat "$(git rev-parse --git-dir)/irmaos-sha.lst"; echo IRMAOS_FIM; } >> "$GITHUB_OUTPUT"
+      - uses: viralabs-dev/brabo-ci/.github/actions/vinculos@13f3697aaf3e4a151637755babb58422a44db303  # brabo-ci dev, merge da ci#17
+        with:
+          irmaos: ${{ steps.irmaos.outputs.lista }}
 
       - name: Regenerar
         run: node scripts/docs/generate.mjs

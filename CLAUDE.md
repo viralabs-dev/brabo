@@ -45,6 +45,8 @@ O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mj
   `funcao/descritivo` (descritivo até 32 caracteres); commits conventional em
   pt-BR; toda mudança entra por PR; merge em branch protegida é do dono.
 - A release do PRODUTO (1.0.0, AT-704) nasce daqui; nunca versionar à mão.
+- PR que toca uma funcionalidade do catálogo (`brabo-qa/funcionalidades.yml`) ajusta o regressivo dela no `brabo-qa` contra a `dev`, ou diz no card por que não precisa. `Regressivo do brabo-qa` (PR para a `dev`) só atesta e NUNCA é exigido; o `E2E do brabo-qa` (PR para a `main`) roda o catálogo inteiro (ADR 0268).
+- Os workflows que leem irmãos publicam `## Vínculos` no Summary pela action `vinculos` do `brabo-ci` (SHAs do `.git/irmaos-sha.lst`, ADR 0271); o helper nunca reprova o job.
 - Responder e escrever docs em pt-BR (a FONTE); `en`, `ru`, `zh-Hans` são
   traduções com paridade medida (no `brabo`, só da doc dele; ADR 0273). Vale para TODOS os repos (ADR 0266, que
   substitui o 0260): os irmãos também podem ter `docs/i18n/`, e o `Unreleased`

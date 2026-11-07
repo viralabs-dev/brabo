@@ -1,5 +1,7 @@
 name: tag-release
 
+run-name: ${{ format('Carimbo · {0} · {1}', github.ref_name, github.actor) }}
+
 # Carimba a tag do estágio a cada push em dev/main (tag-release do brabo-ci, AT-704).
 # A 1ª tag final na `main` sai `v1.0.0`: o ciclo inicial traz uma PR `breaking/` (MAJOR
 # sobre a base 0.0.0 de `proximaVersao`, coberto em brabo-ci `version.spec.ts`).

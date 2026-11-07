@@ -874,8 +874,16 @@ test.
 - <a id="rn-1028"></a>[RN-1028](business-rules/engine.md#rn-1028) — Depois que a pasta do projeto avança, o processo do app é reiniciado no lugar, uma vez por rajada de merges
 - <a id="rn-1029"></a>[RN-1029](business-rules/api.md#rn-1029) — Depois do merge da PR de infra que declara `run.app`, a api propõe `container_recreate` com a porta do app, uma vez
 - <a id="rn-1030"></a>[RN-1030](business-rules/api.md#rn-1030) — Todo nó do grafo gravado por `MERGE` numa chave natural tem restrição de unicidade, e a subida funde as duplicatas preexistentes antes de criá-la
+- <a id="rn-1031"></a>[RN-1031](business-rules/ci.md#rn-1031) — O catálogo de funcionalidades e o mapa caminho → funcionalidade moram num arquivo só, e a spec se liga por tag
+- <a id="rn-1032"></a>[RN-1032](business-rules/ci.md#rn-1032) — A PR para a `dev` roda o regressivo só das funcionalidades que tocou, sob o check `Regressivo do brabo-qa`, que NUNCA é exigido
+- <a id="rn-1033"></a>[RN-1033](business-rules/ci.md#rn-1033) — Três regras de arquivo transversal valem antes do mapa: nada, catálogo inteiro e sem dono
+- <a id="rn-1034"></a>[RN-1034](business-rules/ci.md#rn-1034) — A PR para a `main` roda o catálogo inteiro no `E2E do brabo-qa`, e funcionalidade sem spec aparece como "sem cobertura" sem reprovar
+- <a id="rn-1035"></a>[RN-1035](business-rules/ci.md#rn-1035) — A PR para a `dev` publica a imagem `sha-<12>` assinada, só do próprio repositório, e a limpeza apaga as órfãs
 - <a id="rn-1036"></a>[RN-1036](business-rules/api.md#rn-1036) — A indexação de docs nunca descarta em silêncio o conteúdo de um arquivo
 - <a id="rn-1037"></a>[RN-1037](business-rules/contracts.md#rn-1037) — O `dist` do `shared` não exporta nenhum valor
 - <a id="rn-1041"></a>[RN-1041](business-rules/contracts.md#rn-1041) — O `docker-cli.json` é o espelho das constantes de controle do `docker-cli.ts`
+- <a id="rn-1043"></a>[RN-1043](business-rules/ci.md#rn-1043) — Todo run que lê outro repositório publica `## Vínculos` no topo do Summary, e o helper nunca reprova o job
+- <a id="rn-1044"></a>[RN-1044](business-rules/ci.md#rn-1044) — O run de destino de um dispatch ou de uma tag tem `run-name` com a origem, e a correlação do dispatch vai no nome como `c=<run_id>-<attempt>`
+- <a id="rn-1045"></a>[RN-1045](business-rules/ci.md#rn-1045) — O check do App aponta para o run do `brabo-qa` desde o início, e o run de origem registra o link do run disparado
 - <a id="rn-1046"></a>[RN-1046](business-rules/api.md#rn-1046) — A busca híbrida devolve no máximo N trechos do mesmo arquivo
 <!-- END:GENERATED:indice-de-rn -->

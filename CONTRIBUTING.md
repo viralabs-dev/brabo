@@ -8,7 +8,7 @@ processo funciona de verdade.
 
 **Com todas as letras: PR grande sem issue prévia provavelmente será
 recusado.** Não por burocracia — por respeito ao seu tempo. Este projeto tem
-decisões arquiteturais registradas em [265 ADRs](docs/adr/index.md), e uma
+decisões arquiteturais registradas em [268 ADRs](docs/adr/index.md), e uma
 mudança que contradiz uma delas custa muito trabalho para depois ser
 rejeitada.
 
@@ -132,6 +132,15 @@ Três regras que caem daí:
 - Regra de negócio nova vira uma RN em
   [`docs/business-rules.md`](docs/business-rules.md), com `arquivo:linha` e o
   teste que a cobre.
+
+**PR que toca uma funcionalidade do catálogo** (`brabo-qa/funcionalidades.yml`,
+mapa por caminho) ajusta o regressivo dela no `brabo-qa` contra a `dev`, ou diz
+no card por que não precisa. Na PR para a `dev`, o check `Regressivo do brabo-qa`
+só atesta e **nunca é exigido**; na PR para a `main`, o `E2E do brabo-qa` roda o
+catálogo inteiro e bloqueia, salvo `/qa-aceitar`. Funcionalidade sem spec aparece
+como "sem cobertura" e não reprova. Veja
+[Regressivo por funcionalidade](docs/explanation/regressivo-por-funcionalidade.md)
+e o [ADR 0268](docs/adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.md).
 
 Rodar o site de documentação localmente — `website/` guarda só a árvore do
 Redoc, com lockfile próprio desde o [ADR 0117](docs/adr/0117-lockfile-proprio-para-o-website.md),
