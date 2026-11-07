@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 306 de 313 (97.8%) | 99.4% de 3.789.194 | 296 | 9 | 1 | 7 | 0 |
-| `ru` | 306 de 313 (97.8%) | 99.4% de 3.789.194 | 296 | 9 | 1 | 7 | 0 |
-| `zh-Hans` | 306 de 313 (97.8%) | 99.4% de 3.789.194 | 296 | 9 | 1 | 7 | 0 |
+| `en` | 306 de 314 (97.5%) | 99.3% de 3.793.380 | 295 | 10 | 1 | 8 | 0 |
+| `ru` | 306 de 314 (97.5%) | 99.3% de 3.793.380 | 295 | 10 | 1 | 8 | 0 |
+| `zh-Hans` | 306 de 314 (97.5%) | 99.3% de 3.793.380 | 295 | 10 | 1 | 8 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -28,6 +28,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `intro.md` (tradução de 2026-11-04)
+- `reference/configuration.md` (tradução de 2026-11-05)
 - `reference/events.md` (tradução de 2026-11-06)
 - `reference/rulesets.md` (tradução de 2026-11-06)
 
@@ -40,6 +41,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `intro.md` (tradução de 2026-11-04)
+- `reference/configuration.md` (tradução de 2026-11-05)
 - `reference/events.md` (tradução de 2026-11-06)
 - `reference/rulesets.md` (tradução de 2026-11-06)
 
@@ -52,6 +54,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `intro.md` (tradução de 2026-11-04)
+- `reference/configuration.md` (tradução de 2026-11-05)
 - `reference/events.md` (tradução de 2026-11-06)
 - `reference/rulesets.md` (tradução de 2026-11-06)
 

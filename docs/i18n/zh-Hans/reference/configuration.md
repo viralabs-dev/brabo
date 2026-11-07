@@ -559,7 +559,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从代码中提取的清单：运行时读取 **186 个变量**。全部都在上方表格中有描述。
+从代码中提取的清单：运行时读取 **187 个变量**。全部都在上方表格中有描述。
 
 每个来源都标记为 **产品**——运维安装的人在部署 `.env` 中设置的内容——或 **工具**，仅由 CI 和开发产品的人读取。工具变量绝不应出现在运维人员的 `.env` 中。
 
@@ -719,7 +719,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 - `NODE_ENV` <sub>(apps/broker/src/config.ts)</sub>
 - `PROJECT_WORKSPACES_HOST_ROOT` <sub>(apps/broker/src/config.ts)</sub>
 
-**api/scripts** — 15 个变量 · 工具
+**api/scripts** — 16 个变量 · 工具
 
 - `DATABASE_URL` <sub>(apps/api/scripts/demo-repo-bootstrap.ts)</sub>
 - `DEMO_ANAMNESE_TIMEOUT_MS` <sub>(apps/api/scripts/demo-anamnese.ts)</sub>
@@ -733,6 +733,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 - `DEMO_WORKFLOWS_MODEL` <sub>(apps/api/scripts/demo-infra-workflows-github.ts)</sub>
 - `GIT_LOCAL_REPOS_ROOT` <sub>(apps/api/scripts/demo-repo-bootstrap.ts)</sub>
 - `GOLDEN_SET_QA_MODEL` <sub>(apps/api/scripts/seed-golden-set-qa.ts)</sub>
+- `GOLDEN_SET_RAG_MAX_PER_FILE` <sub>(apps/api/scripts/seed-golden-set-rag.ts)</sub>
 - `NOME` <sub>(apps/api/scripts/demo-pr-gates.ts)</sub>
 - `OLLAMA_HOST` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
 - `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub>
