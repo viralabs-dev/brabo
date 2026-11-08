@@ -9,6 +9,8 @@ keywords: [documentation, drift, docmap, CI, generation]
 
 # Como a documentação se mantém viva {#how-documentation-stays-alive}
 
+> Para **escrever** uma página, leia [Como escrevemos a documentação](../contribuir/como-escrevemos.md). Esta página descreve o **mecanismo** que mantém a doc em dia.
+
 Documentação não morre por falta de escrita inicial. Ela morre por
 **drift**: o código muda, a doc fica, e um dia alguém percebe que ela
 descreve um sistema que não existe mais. Desse ponto em diante ninguém
@@ -605,6 +607,10 @@ vira spam, e spam é desligado. O workflow cria o próprio rótulo `docs`
 `scripts/ci/rotulos-dos-workflows.spec.ts` reprova todo `--label` sem esse
 create no mesmo arquivo.
 
+### `estilo.mjs` — cobra o guia de escrita {#estilo-mjs}
+
+`scripts/docs/estilo.mjs` mede cada página que declara `tipo:` no frontmatter. Ele conta as palavras de prosa (sem frontmatter, código, tabela, título nem a seção "Para saber mais") e reprova o que passa do limite do tipo: tutorial 1 500, guia 800, conceito 1 200. Referência não tem limite. Também acusa ID interno (ADR, RN, AT, EP, HS, Fase, Rodada) fora de "Para saber mais". A CLI só avisa e sai 0. A cobrança é a catraca `PENDENTES` do `estilo.spec.ts`, que roda no `pnpm test:scripts` e só encolhe: página nova que estoura reprova, e página da lista que já passa também reprova ("tire da lista"). As regras de escrita estão em [Como escrevemos a documentação](../contribuir/como-escrevemos.md).
+
 ### O build do site {#the-site-build}
 
 `onBrokenLinks`, `onBrokenAnchors` e `onBrokenMarkdownLinks` estão em
@@ -954,6 +960,7 @@ pnpm docs:generate   # regenerates
 pnpm docs:drift      # simulates the PR check (origin/dev...HEAD)
 pnpm docs:build      # the build CI runs — generates build/docs-site and checks links
 pnpm docs:start      # builds and serves on http://localhost:3000
+node scripts/docs/estilo.mjs  # style check: word budget per page type
 
 # does the API reference render? needs the build above, and isn't part
 # of docs:check because that one doesn't build the site
