@@ -10,6 +10,10 @@ tipo: historico
 
 # A validação de que os três achados morreram
 
+:::historico 2026-08-07
+Prova de que os três achados P1 do primeiro dogfooding morreram na mesma execução, por um script que sai com código diferente de zero se o critério não fecha. Começa pelo que a validação não prova (provider local, dev agent noop) e traz a evidência lida do banco.
+:::
+
 A [colheita do primeiro dogfooding](./primeiro-dogfooding.md) deixou três
 achados P1 de operabilidade. A Fase 12 os endereçou um a um; este documento é a
 prova de que os três morreram **na mesma execução**, e não só em testes

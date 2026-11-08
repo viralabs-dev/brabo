@@ -10,6 +10,10 @@ tipo: historico
 
 # O que o primeiro dogfooding ensinou
 
+:::historico 2026-08-02
+Colheita da Fase 10, quando o Brabo construiu parte de si mesmo (suporte a Bitbucket) pela primeira vez. Registra os 17 achados reais, o que ficou sem medição porque a tabela de observação nunca foi preenchida e o que a Fase 12 fez com tudo isso.
+:::
+
 Na Fase 10 o Brabo construiu uma parte do próprio Brabo: o suporte a Bitbucket e
 o `GenericGitProvider` foram entregues pelos agentes do produto, num fork, com
 um humano no papel de usuário. Foi a primeira execução real fora de demo.
