@@ -26,38 +26,76 @@
 <div class="site-faixa" role="note">This page is not translated yet; showing the original in Portuguese.</div>
 <article class="doc">
 <h1 id="painel-da-mudança">Painel da mudança</h1>
-<p>Uma mudança do Brabo pode tocar sete a onze repositórios. O painel da mudança é o
-run <code>Painel da mudança</code> no <code>brabo-ci</code>: ele junta, num lugar só, as runs dessa mudança.</p>
-<h2 id="o-que-ele-junta">O que ele junta</h2>
-<p>Cada mudança (um componente do <code>Depende-de</code>, uma PR solta ou uma tag) tem um painel.
-Ele reúne as runs pelo head SHA, pelo merge SHA, pela tag e pelo <code>c=</code> do E2E.
-O Summary traz uma tabela por repo e um diagrama Mermaid.</p>
+<p>Uma mudança do Brabo pode tocar de sete a onze repositórios. O painel da mudança é o
+run <code>painel.yml</code> no <code>brabo-ci</code>: ele junta, num lugar só, as runs dessa mudança (PR, E2E
+do brabo-qa, merge, carimbo, tag e release), cada uma com status, duração e link.</p>
+<h2 id="o-que-é-uma-mudança">O que é uma mudança</h2>
+<p>Cada mudança tem um painel. A mudança é uma destas três coisas:</p>
+<ul>
+<li><strong>Componente do <code>Depende-de</code></strong>: a partir da PR do evento, o painel segue o <code>Depende-de:</code>
+nos dois sentidos (a PR cita; a PR é citada), com profundidade máxima 5 e só os 11
+repos do Brabo.</li>
+<li><strong>PR de uma tag</strong>: <code>tag=repo@vX</code> resolve o commit da tag e a PR mergeada que o contém.</li>
+<li><strong>À mão</strong>: <code>workflow_dispatch</code> com <code>prs=</code>, a lista de PRs da mudança.</li>
+</ul>
+<h2 id="quem-acorda-o-painel">Quem acorda o painel</h2>
+<p>O job <code>avisar-painel</code> do <code>dependencias-de-merge.yml</code> (reutilizável) faz um
+<code>repository_dispatch</code> (<code>event_type: painel</code>, com <code>{repo, pr}</code>) a cada evento da PR,
+merge incluso. Antes de disparar, ele confere o debounce: não dispara se já há um painel
+<code>queued</code> ou <code>in_progress</code> com <code>&lt;repo&gt;#&lt;n&gt;</code> no título. O token desse job é restrito ao
+brabo-ci (<code>contents: write</code>, <code>actions: read</code>).</p>
+<h2 id="como-acha-as-runs">Como acha as runs</h2>
+<ul>
+<li>Por PR: <code>runs?head_sha=&lt;head&gt;</code>. Se a PR foi mergeada, também <code>runs?head_sha=&lt;merge_commit_sha&gt;</code>,
+que traz o carimbo, o <code>ci</code> da base e as runs por tag (todas com o mesmo SHA).</li>
+<li>No brabo-qa: as runs do <code>e2e-pr.yml</code> cujo <code>display_title</code> traz
+<code>← viralabs-dev/&lt;repo&gt;#&lt;n&gt; · &lt;sha7&gt;</code>.</li>
+<li>De cada workflow fica a run de maior <code>run_attempt</code>.</li>
+</ul>
 <h2 id="quando-ele-atualiza-e-quando-para">Quando ele atualiza e quando para</h2>
 <ul>
-<li>Acompanha a mudança a cada 60 s, com ETag. Se restarem menos de 500 requisições, o
-intervalo passa a 5 min.</li>
-<li>Para quando tudo terminou e há 3 min de quietude, ou no teto de 45 min. Um run ainda
-em andamento no teto sai como &quot;em andamento há N min&quot;.</li>
-<li>O painel <strong>nunca reprova</strong>. Ele descreve; quem reprova é o run de origem.</li>
+<li>Acompanha a mudança a cada 60 s, com ETag. Um 304 não conta no rate limit. Abaixo de
+500 requisições restantes, a volta passa a 5 min.</li>
+<li>Para quando tudo terminou e houve 3 min sem run nova nem mudança de status. Isso cobre
+o carimbo, a tag e a release, que vêm um depois do outro.</li>
+<li>Para com <strong>&quot;aguarda merge&quot;</strong> quando tudo terminou e a PR ainda não foi mergeada. O painel
+não espera o merge: o próprio merge dispara um painel novo, pelo <code>avisar-painel</code>.</li>
+<li>Para no teto de 45 min. Um run ainda em andamento sai como &quot;em andamento há N min&quot;.</li>
+<li>Se o componente muda (outra PR passou a depender), o painel escreve &quot;superado&quot; e sai.
+O remetente dispara o novo.</li>
 </ul>
+<h2 id="chave-e-run-name">Chave e <code>run-name</code></h2>
+<p>A chave é curta: <code>ci#29 api#65 … m=&lt;8 hex&gt;</code>. O <code>m=</code> é um hash da lista completa, então
+um componente que cresce ganha outra chave. O <code>run-name</code> é <code>Painel · &lt;repo&gt;#&lt;n&gt;</code> quando
+o painel nasce do <code>avisar-painel</code>, e a própria lista de PRs ou a tag quando sai do
+disparo à mão.</p>
+<h2 id="disparo-à-mão">Disparo à mão</h2>
+<p>Serve para a promoção <code>dev → main</code> e para qualquer mudança sem <code>Depende-de</code> que a leve:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> workflow</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> painel.yml</span><span style="color:var(--shiki-token-string)"> -R</span><span style="color:var(--shiki-token-string)"> viralabs-dev/brabo-ci</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> prs=</span><span style="color:var(--shiki-token-string-expression)">'brabo-ci#NN brabo-api#NN'</span></span>
+<span class="line"></span></code></pre>
+<p>Para uma tag, use <code>-f tag=brabo@vX.Y.Z</code> no lugar de <code>prs</code>.</p>
+<h2 id="nunca-reprova">Nunca reprova</h2>
+<p>O painel <strong>nunca reprova</strong> e <strong>não publica check</strong> nas PRs (decisão do dono, 07/11/2026).
+Ele descreve; quem reprova é o run de origem.</p>
 <h2 id="onde-o-link-aparece">Onde o link aparece</h2>
-<p>O painel não publica check nas PRs. O link fica nas runs de origem, na linha
-<code>Disparado | Painel da mudança</code> dos Vínculos. Ele aponta para
-<code>brabo-ci/actions/workflows/painel.yml</code> com a busca pelo repo e pelo número da PR.</p>
-<h2 id="um-painel-por-componente">Um painel por componente</h2>
-<p>Antes de disparar, o remetente (job <code>avisar-painel</code>) confere se já existe um painel
-<code>queued</code> ou <code>in_progress</code> com o <code>&lt;repo&gt;#&lt;n&gt;</code> no título. Se sim, não dispara outro.
-Quando o componente cresce (outra chave <code>m=&lt;hash&gt;</code>), o painel em curso escreve
-&quot;superado&quot; e sai, e o remetente dispara o novo.</p>
+<p>O link fica nas runs de origem, na linha <code>Disparado | Painel da mudança</code> dos Vínculos.
+Ele aponta para <code>brabo-ci/actions/workflows/painel.yml</code> com a busca pelo repo e pelo
+número da PR. A linha só sai no modo automático, com PR. Vale para cada chamador no
+repin seguinte do brabo-ci.</p>
 <h2 id="permissões">Permissões</h2>
-<p>O token do App do painel só lê (<code>actions</code>, <code>pull-requests</code> e <code>contents</code>). O único
-token com escrita é o do dispatch (<code>contents: write</code>, restrito ao <code>brabo-ci</code>).</p>
+<p>O token do App do painel só lê (<code>actions</code>, <code>pull-requests</code> e <code>contents</code>). O único token
+com escrita é o do dispatch (<code>contents: write</code>, restrito ao brabo-ci).</p>
+<h2 id="segurança">Segurança</h2>
+<p>Todo texto vindo da API (nome de workflow, título, URL) passa por uma lista de caracteres
+permitidos antes de entrar no Markdown. O que não casa vira <code>?</code>. Uma URL só entra no link
+se passar na checagem de URL. O Mermaid leva só o repo da allowlist, o número e o status
+da fase.</p>
 <p>Regras: <a href="../business-rules/ci.html">RN-1054 a RN-1056</a>. Decisão: <a href="../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.html">ADR 0278</a>.</p>
 <nav class="site-pager"><a href="../explanation/documentation-workflow.html"></a><a href="../explanation/politica-em-10-minutos.html"></a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/painel-da-mudanca.md">Edit this page</a><span>Updated 2026-11-08T12:34:56-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/painel-da-mudanca.md">Edit this page</a><span>Updated 2026-11-08T16:50:04-03:00 · Daniel Souza</span></footer>
 </main>
-<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#o-que-ele-junta">O que ele junta</a></li><li class="n2"><a href="#quando-ele-atualiza-e-quando-para">Quando ele atualiza e quando para</a></li><li class="n2"><a href="#onde-o-link-aparece">Onde o link aparece</a></li><li class="n2"><a href="#um-painel-por-componente">Um painel por componente</a></li><li class="n2"><a href="#permissões">Permissões</a></li></ul></aside>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#o-que-é-uma-mudança">O que é uma mudança</a></li><li class="n2"><a href="#quem-acorda-o-painel">Quem acorda o painel</a></li><li class="n2"><a href="#como-acha-as-runs">Como acha as runs</a></li><li class="n2"><a href="#quando-ele-atualiza-e-quando-para">Quando ele atualiza e quando para</a></li><li class="n2"><a href="#chave-e-run-name">Chave e run-name</a></li><li class="n2"><a href="#disparo-à-mão">Disparo à mão</a></li><li class="n2"><a href="#nunca-reprova">Nunca reprova</a></li><li class="n2"><a href="#onde-o-link-aparece">Onde o link aparece</a></li><li class="n2"><a href="#permissões">Permissões</a></li><li class="n2"><a href="#segurança">Segurança</a></li></ul></aside>
 </div>
 <script src="../../assets/site.js"></script>
 <script defer src="../assets/busca.js" data-indice="../assets/busca-en.json" data-base="../"></script></body>
