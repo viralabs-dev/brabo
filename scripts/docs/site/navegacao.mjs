@@ -91,6 +91,7 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
       cat('Contribuir', [pg('contribuir/como-escrevemos', 'Como escrevemos'), link('Como contribuir', 'CONTRIBUTING.md'), link('Onde pedir ajuda', 'SUPPORT.md'), link('Reportar vulnerabilidade', 'SECURITY.md')]),
     ], { espera: ['guia'] }),
     cat('💡 Conceitos', [
+      pg('intro', 'O que é o Brabo'),
       ...pgs('architecture', 'explanation/gates', 'explanation/modelo-de-time', 'explanation/regressivo-por-funcionalidade', 'e2e-portao/como-funciona', 'regressivo/como-funciona', 'explanation/observability'),
       cat('Processo e esteira', pgs('explanation/painel-da-mudanca', 'explanation/politica-em-10-minutos', 'explanation/branching-policy', 'explanation/ordem-da-promocao', 'explanation/reutilizaveis-sem-chamador', 'explanation/cadeia-de-suprimentos-do-ci', 'explanation/release-do-produto', 'explanation/licoes-do-ci')),
       cat('Localização', pgs('explanation/localizacao', 'explanation/localizacao-en', 'explanation/localizacao-ru', 'explanation/localizacao-zh-hans'), { colapsada: true }),

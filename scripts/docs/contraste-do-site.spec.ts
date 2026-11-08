@@ -86,6 +86,7 @@ const PARES: [string, string][] = [
   ['--site-link', '--site-fundo-lateral'],
   ['--site-codigo-texto', '--site-codigo-fundo'],
   ['--site-passo-texto', '--site-passo-fundo'],
+  ['--site-logo-texto', '--site-logo-fundo'],
   ['--site-texto', '--site-historico-fundo'],
   ['--site-texto-2', '--site-historico-fundo'],
   ['--site-link', '--site-historico-fundo'],

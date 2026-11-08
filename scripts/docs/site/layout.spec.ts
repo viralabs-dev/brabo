@@ -22,9 +22,32 @@ describe('layout do site', () => {
     expect(h).toContain('noindex');
     expect(h).toContain('X &lt;b&gt; | Brabo');
     expect(h).toContain('aria-current="page"');
-    expect(h).not.toMatch(/(src|href)="https?:/);
+    expect(h).not.toMatch(/(src|href)="https?:(?!\/\/github\.com\/)/); // só o link do GitHub sai do site
     expect(h).not.toMatch(/<script>/);
     expect(layout({ ...base, degrau: 'prd' })).not.toContain('noindex');
+  });
+
+  it('topo: LogoMark inline + Brabo + link do GitHub do repo', () => {
+    const h: string = layout({ ...base, repo: 'org/rep' });
+    expect(h).toMatch(/<a class="marca" href="[^"]*"><span class="marca-logo"><svg[^>]*>.*<\/svg><\/span>Brabo<\/a>/);
+    expect(h).toContain('href="https://github.com/org/rep"');
+    expect(layout(base)).toContain('https://github.com/viralabs-dev/brabo');
+  });
+
+  it('variante inicio: sem barra lateral, sumário e paginador; as demais mantêm', () => {
+    const toc = [{ id: 'a', texto: 'A', nivel: 2 }];
+    const h: string = layout({ ...base, variante: 'inicio', toc });
+    expect(h).toContain('class="site-corpo inicio"');
+    expect(h).not.toContain('site-side');
+    expect(h).not.toContain('site-toc');
+    const normal: string = layout({ ...base, toc });
+    expect(normal).toContain('site-side');
+    expect(normal).toContain('site-toc');
+    const r: string = renderizarPagina({
+      locale: 'pt-BR', pagina: { url: 'index.html', titulo: 'I', traduzida: true, dados: { layout: 'inicio' } }, corpo: { html: '', toc: [] },
+      degrau: 'dev', edicao: {}, urlDe: (s: string) => `${s}.html`, rotuloDe: (s: string) => s, navegacao: [], anterior: { slug: 'x', rotulo: 'X' },
+    });
+    expect(r).not.toContain('site-pager');
   });
 
   it('falha: seletor de idioma leva ao mesmo slug nos outros locales', () => {

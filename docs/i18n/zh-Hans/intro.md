@@ -3,7 +3,6 @@ id: intro
 title: Brabo 是什么
 sidebar_label: 简介
 sidebar_position: 1
-slug: /
 description: 编排 AI 智能体以推进应用完整生命周期的平台，最终决定权始终在人手中。
 keywords: [brabo, agentes de IA, engenharia, orquestração, aprovação]
 tipo: conceito
