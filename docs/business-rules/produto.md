@@ -1182,14 +1182,14 @@ de LLM; senha gravada em qualquer lugar; e qualquer caminho que crie conta sem
 TTY — sem terminal interativo o script relata e **sai 0**, no passo que já
 existia, antes de qualquer escrita.
 
-- **Código:** `install.sh:1835` (`fechar_a_instalacao`, o encadeamento e o
-  "sempre 0"), `:1634` (`perguntar_e_criar_a_conta`, o consentimento, o laço e
-  o teto), `:1734` (`parear_esta_maquina`, o `id` virando `--id`), `:1811`
-  (`subir_o_agente_como_servico`, a recusa repassada inteira), `:1537`
+- **Código:** `install.sh:1850` (`fechar_a_instalacao`, o encadeamento e o
+  "sempre 0"), `:1649` (`perguntar_e_criar_a_conta`, o consentimento, o laço e
+  o teto), `:1749` (`parear_esta_maquina`, o `id` virando `--id`), `:1826`
+  (`subir_o_agente_como_servico`, a recusa repassada inteira), `:1552`
   (`post_interno`, o corpo pelo stdin e o cabeçalho pelo `--config` 600),
-  `:1578` (`criar_primeira_conta`) e `:1597` (`registrar_chave_de_maquina`) —
-  os vereditos das duas rotas —, `:1612` (`ler_sem_eco`), `:1516`
-  (`nome_da_maquina`), `:1798` (`avisar_chave_parcial`), `:1208`/`:1215`
+  `:1571` (`criar_primeira_conta`) e `:1612` (`registrar_chave_de_maquina`) —
+  os vereditos das duas rotas —, `:1627` (`ler_sem_eco`), `:1531`
+  (`nome_da_maquina`), `:1790` (`avisar_chave_parcial`), `:1208`/`:1215`
   (`escapar_json`/`sem_controle`), `:109` (`MARCADOR_SCHEMA=4`, AT-738), `:1871` (a
   chamada, depois do runner e antes do marcador), `:1882` (o `ownerEmail`).
   Números relidos pelo símbolo em 18/09 (AT-096), em 27/09 (AT-065, que
@@ -1486,8 +1486,8 @@ no Linux. Docker rootless ou remoto não tem o socket em `/var/run/docker.sock`,
 que é o caminho que o compose monta, e cai na recusa do item 2 — ligar o broker
 ali não é oferecido por outro caminho.
 
-- **Código:** `install.sh:1196` (`consentir_broker`), `:1148`
-  (`medir_gid_do_socket`), `:1183` (`calcular_raiz_gerenciada`), `:1320`
+- **Código:** `install.sh:1211` (`consentir_broker`), `:1163`
+  (`medir_gid_do_socket`), `:1198` (`calcular_raiz_gerenciada`), `:1335`
   (`conferir_o_broker`), `:792` (`escrever_env_do_broker`), `:855` (o broker no
   manifesto), `:1812` (a ordem: depois da base, antes do `.env`);
   `docker/docker-compose.install.yml` (o serviço `broker` e a rede `broker`)
@@ -1532,8 +1532,8 @@ pulada (lado da api, outra frente); e o E2E da tag responde NÃO (ligar
 baixaria GBs de modelo), então a subida com o profile `llm` não é provada ponta
 a ponta.
 
-- **Onde:** `install.sh:1274` (`consentir_llm`), `:1259`
-  (`escolher_porta_do_ollama`), `:1249` (`porta_em_uso`), `:800`
+- **Onde:** `install.sh:1289` (`consentir_llm`), `:1274`
+  (`escolher_porta_do_ollama`), `:1264` (`porta_em_uso`), `:800`
   (`escrever_env_do_llm`), `:821` (`escrever_env_dos_profiles`)
 - **Teste:** `scripts/dev/install-llm.spec.ts` (sem terminal fica desligado
   dizendo o custo; 11434 ocupada escolhe a próxima; faixa inteira ocupada falha
@@ -1560,7 +1560,7 @@ os repositórios git. Enter continua não apagando nada.
 Junto, o fechamento deixa de dizer que parear uma pasta pela tela do projeto
 "continua existindo (ADR 0118)": esse fluxo saiu no ADR 0203 ([RN-687](web.md#rn-687)).
 
-- **Onde:** `install.sh:440` (`detectar_por_sinais`), `:1918`
+- **Onde:** `install.sh:440` (`detectar_por_sinais`), `:1935`
   (`migrar_instalacao_anterior`)
 - **Teste:** `scripts/dev/install-llm.spec.ts` (`brabo-dev` não conta e `brabo`
   conta; `z` apaga depois da prova e deixa `MIGRAR_DE` vazio; Enter não apaga —
@@ -1612,9 +1612,9 @@ fecha os achados da AT-738, e as regras são estas:
 Ela revisa a [RN-530](infra.md#rn-530) (o dump deixa de ficar só na pasta) e
 a frase de `s` da [RN-692](#rn-692).
 
-- **Onde:** `install.sh:1918` (`migrar_instalacao_anterior`), `:1903`
-  (`com_ambiente_do_backup`), `:1993` (`restaurar_o_banco`), `:2009`
-  (`restaurar_os_repositorios_git`), `:2025` (`reprojetar`), `:2062`
+- **Onde:** `install.sh:1935` (`migrar_instalacao_anterior`), `:1920`
+  (`com_ambiente_do_backup`), `:2010` (`restaurar_o_banco`), `:2026`
+  (`restaurar_os_repositorios_git`), `:2042` (`reprojetar`), `:2062`
   (`gravar_marcador`), `:930` (`relacao_com_o_instalado`), `:949`
   (`restauracao_pendente`), `:736` (`gerar_segredos`), `:971`
   (`preservar_do_env_anterior`), `:194` (`baixar`)

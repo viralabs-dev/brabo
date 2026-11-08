@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **feat(install)**: AT-849. `install.sh --source=local` confere, antes do `docker buildx bake`, que `${NPMRC:-$HOME/.npmrc}` tem a linha `//npm.pkg.github.com/:_authToken=` e recusa com o passo a passo do PAT classic só com `read:packages` (RN-1039); nunca imprime o valor. O `--source=ghcr` não muda. Página nova `docs/how-to/token-do-github-packages.md`, nos quatro idiomas.
+
 - **docs**: AT-830. Nova trilha "Orquestrar um produto em vários repositórios" em `docs/tutorials/orquestrar-repositorios/` (índice e seis páginas: por que separar, o mapa, como cada repositório é consumido, a vida de uma mudança, monte o seu e erros que já cometemos), nos quatro idiomas e ligada em "Comece aqui" no `navegacao.mjs`. Reaproveita o `repos.yml`, o guia de adoção do `brabo-ci`, os pins e a promoção por camadas; o que falta de evidência fica como `TODO(humano)`. A doc do `BRABO_BIND` no `configuration.md` (AT-811) já estava na `dev`.
 
 - **docs**: AT-840. `docs/reference/configuration.md` (e as três traduções) diz que `RATE_LIMIT_ENABLED`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_USER`, `RATE_LIMIT_IP` e `AUTH_LOCKOUT_IP_THRESHOLDS` valem os padrões da api na instalação e que o compose de instalação os repassa desde o `brabo-infra#38` (RN-1074); só o compose de teste do `brabo-qa` sobe esses valores.

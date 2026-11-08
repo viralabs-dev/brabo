@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 309 de 333 (92.8%) | 97.8% de 3.715.479 | 298 | 10 | 1 | 24 | 4 |
-| `ru` | 309 de 333 (92.8%) | 97.8% de 3.715.479 | 298 | 10 | 1 | 24 | 4 |
-| `zh-Hans` | 309 de 333 (92.8%) | 97.8% de 3.715.479 | 298 | 10 | 1 | 24 | 4 |
+| `en` | 310 de 334 (92.8%) | 97.8% de 3.717.496 | 297 | 11 | 2 | 24 | 4 |
+| `ru` | 310 de 334 (92.8%) | 97.8% de 3.717.496 | 297 | 11 | 2 | 24 | 4 |
+| `zh-Hans` | 310 de 334 (92.8%) | 97.8% de 3.717.496 | 297 | 11 | 2 | 24 | 4 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -24,6 +24,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
+- `business-rules/produto.md` (tradução de 2026-11-06)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `explanation/release-do-produto.md` (tradução de 2026-11-05)
@@ -37,6 +38,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
+- `business-rules/produto.md` (tradução de 2026-11-06)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `explanation/release-do-produto.md` (tradução de 2026-11-05)
@@ -50,6 +52,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
+- `business-rules/produto.md` (tradução de 2026-11-06)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `explanation/release-do-produto.md` (tradução de 2026-11-05)
