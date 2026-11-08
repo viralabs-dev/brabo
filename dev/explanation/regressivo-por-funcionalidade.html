@@ -91,6 +91,8 @@ que a PR toca, ou sem funcionalidade, pede aceite com justificativa. Quando o do
 aceita um vermelho com <code>/qa-aceitar</code>, o check preserva esse relatório e registra
 o aceite contra a recomendação (RN-1052).</p>
 <p>Na <code>main</code> o relatório é o portão. Na <code>dev</code> ele é só o atestado, e nada bloqueia.</p>
+<h2 id="o-que-o-regressivo-não-cobre">O que o regressivo não cobre</h2>
+<p>O <code>brabo-runner</code> não tem regressivo no catálogo: a PR dele se atesta pelo próprio CI (o binário linux-x64 entra na PR, runner#28), e o contrato runner ↔ engine só é provado no TP-01 (<a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/business-rules/ci.md">RN-1075</a>, no <code>brabo-ci</code>).</p>
 <h2 id="o-que-isto-custa">O que isto custa</h2>
 <p>Uma PR para a <code>dev</code> gasta de 8 a 12 minutos assíncronos de CI no <code>brabo-qa</code> e de 3
 a 5 minutos no CI do repositório (a imagem). Os repositórios são públicos, e o
@@ -100,9 +102,9 @@ continuam agendados: o resumo cita o último run, sem rodar na PR.</p>
 os Vínculos no Summary (<a href="../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.html">ADR 0271</a>).</p>
 <nav class="site-pager"><a href="../explanation/gates.html"></a><a href="../explanation/observability.html"></a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/regressivo-por-funcionalidade.md">Editar esta página</a><span>Atualizado em 2026-11-08T11:23:03-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/regressivo-por-funcionalidade.md">Editar esta página</a><span>Atualizado em 2026-11-08T17:55:13-03:00 · Daniel Souza</span></footer>
 </main>
-<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#o-catálogo-e-o-mapa">O catálogo e o mapa</a></li><li class="n2"><a href="#pr-para-a-dev-atesta-não-bloqueia">PR para a dev: atesta, não bloqueia</a></li><li class="n2"><a href="#pr-para-a-main-o-catálogo-inteiro">PR para a main: o catálogo inteiro</a></li><li class="n2"><a href="#a-regra-do-card">A regra do card</a></li><li class="n2"><a href="#o-que-o-run-mostra">O que o run mostra</a></li><li class="n2"><a href="#o-relatório-de-decisão">O relatório de decisão</a></li><li class="n2"><a href="#o-que-isto-custa">O que isto custa</a></li></ul></aside>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#o-catálogo-e-o-mapa">O catálogo e o mapa</a></li><li class="n2"><a href="#pr-para-a-dev-atesta-não-bloqueia">PR para a dev: atesta, não bloqueia</a></li><li class="n2"><a href="#pr-para-a-main-o-catálogo-inteiro">PR para a main: o catálogo inteiro</a></li><li class="n2"><a href="#a-regra-do-card">A regra do card</a></li><li class="n2"><a href="#o-que-o-run-mostra">O que o run mostra</a></li><li class="n2"><a href="#o-relatório-de-decisão">O relatório de decisão</a></li><li class="n2"><a href="#o-que-o-regressivo-não-cobre">O que o regressivo não cobre</a></li><li class="n2"><a href="#o-que-isto-custa">O que isto custa</a></li></ul></aside>
 </div>
 <script src="../assets/site.js"></script>
 <script defer src="../assets/busca.js" data-indice="../assets/busca-pt-BR.json" data-base="../"></script></body>
