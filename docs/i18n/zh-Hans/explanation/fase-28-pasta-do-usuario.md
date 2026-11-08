@@ -6,10 +6,14 @@ sidebar_position: 15
 description: FASE 28 的切分——在引导中征得同意的 base，mounted 作为本地默认，以及一个声明能力的本地 agent。决策位于 ADR 0146 和 0147。
 keywords: [fase 28, 用户的目录, 项目 base, runner, 镜像, 能力]
 tipo: historico
-traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # FASE 28 — 用户的目录
+
+:::historico 2026-09-06
+第 28 阶段的一个切片：给用户一个属于自己的文件夹，让工作在其中发生；在 bootstrap 时经同意取得基础目录，本地默认使用 `mounted`，并有一个声明自身能力的本地智能体。它说明了这一阶段追求什么、拒绝什么以及按什么顺序。相关决定位于 ADR 0146 和 0147。
+:::
 
 > 本文档是该阶段的**切分**：它追求什么、拒绝什么、按什么顺序。**决策**位于 [ADR 0146](../adr/0146-base-consentida-no-bootstrap.md) 和 [ADR 0147](../adr/0147-agente-local-com-capacidades.md)——在这里而不在那里的内容是意图，不是决策。
 

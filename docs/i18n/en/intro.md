@@ -3,11 +3,10 @@ id: intro
 title: What Brabo Is
 sidebar_label: Introduction
 sidebar_position: 1
-slug: /
 description: A platform that orchestrates AI agents to run the full lifecycle of an application, keeping final authority with the human.
 keywords: [brabo, AI agents, engineering, orchestration, approval]
 tipo: conceito
-traducao_de: c724b4226dc3d2dc6876c186a74cdb5db4192ba8
+traducao_de: 36bc8448738f1d92cc93cab3a95fd2bde710a923
 ---
 
 # What Brabo Is

@@ -30,6 +30,7 @@ import {
 } from './refs-com-simbolo.mjs';
 import { deduplicarProximoAdr, PROXIMO_ADR, substituirGrupo } from './reescrita.mjs';
 import { aferirAncoras } from './ancoras-de-rn.mjs';
+import { gerarIndiceDeAdr, statusDoAdr, tituloDoAdr } from './indice-de-adr.mjs';
 import { arquivosDeRn, contarRegras, gerarIndiceDeRn, numerosDuplicados, rnsDoLocale } from './regras-de-negocio.mjs';
 import { aferirContagens } from './contagens-do-codigo.mjs';
 import { conferirTabela, repositorio, RUNBOOK } from './procedimentos-do-runbook.mjs';
@@ -278,12 +279,18 @@ function gerarEnv() {
       `\n${T.avisoBloco}\n\n${T.envInventario(total)}` +
       (naoDocumentadas > 0 ? T.envNaoDoc(naoDocumentadas) : T.envTodasDoc) +
       `\n\n${T.envEscopos}\n`;
+    // Por serviço (AT-862): um índice dos serviços, um título por serviço e uma âncora `{#env-NOME}` por variável (a busca e os links a usam).
+    const idDe = (app) => `env-servico-${app.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+    corpo += `\n${porFonte.map(({ app, variaveis }) => `[${app}](#${idDe(app)}) (${variaveis.length})`).join(' · ')}\n`;
+    const comAncora = new Set(); // a mesma variável em dois serviços: a âncora é da primeira
     for (const { app, escopo, variaveis } of porFonte) {
-      corpo += `\n**${app}** — ${T.envVariaveis(variaveis.length)} · ${escopo === 'produto' ? T.produto : T.ferramenta}\n\n`;
+      corpo += `\n### ${app} {#${idDe(app)}}\n\n${T.envVariaveis(variaveis.length)} · ${escopo === 'produto' ? T.produto : T.ferramenta}\n\n`;
       for (const { nome, arquivo, documentada } of variaveis) {
         // A prosa da FONTE documenta? Senão a lacuna aparece aqui — e, desde a
         // AT-211, o check reprova (abaixo).
-        corpo += `- \`${nome}\`${documentada ? '' : T.envSemDescricao} <sub>(${arquivo})</sub>\n`;
+        const ancora = comAncora.has(nome) ? '' : `<a id="env-${nome}"></a>`;
+        comAncora.add(nome);
+        corpo += `- ${ancora}\`${nome}\`${documentada ? '' : T.envSemDescricao} <sub>(${arquivo})</sub>\n`;
       }
     }
     return corpo;
@@ -531,8 +538,9 @@ const SPEC = 'apps/api/docs/reference/openapi.json';
 // ----------------------------------------------------------- 5. índice de ADR
 
 /**
- * NÃO gera o índice: ele tem uma linha curada por ADR, que nenhum script
- * escreve. Verifica que todo ADR está linkado — a lacuna que importa.
+ * O índice é gerado por `gerarIndiceDeAdrNoBloco` (ADR 0287, que revisa o item 2
+ * do 0202). Esta função segue conferindo que todo ADR está linkado — a lacuna
+ * que importa — e pega o índice cujo bloco ainda não foi gerado.
  */
 function verificarIndiceAdr() {
   const indice = ler('docs/adr/index.md');
@@ -1246,8 +1254,28 @@ function gerarIndiceDeRnNoBloco() {
   }
 }
 
+/**
+ * Índice de ADR (AT-862, ADR 0287): a tabela por tema (número, título, status) é
+ * GERADA em `docs/adr/index.md` e nas cópias traduzidas, no bloco `indice-de-adr`.
+ * O título vem do H1 de cada ADR (do locale, quando a cópia existe).
+ */
+function gerarIndiceDeAdrNoBloco() {
+  const arqs = arquivos('docs/adr/[0-9]*.md').map((f) => f.replace('docs/adr/', '')).sort();
+  const status = new Map(arqs.map((a) => [a, statusDoAdr(ler(`docs/adr/${a}`))]));
+  for (const locale of [null, ...LOCALES_GERADOS]) {
+    const rel = locale ? copiaDoLocale(locale, 'docs/adr/index.md') : 'docs/adr/index.md';
+    if (!existsSync(join(RAIZ, rel)) || !ler(rel).includes('<!-- BEGIN:GENERATED:indice-de-adr -->')) continue;
+    const adrs = arqs.map((arquivo) => {
+      const copia = locale ? copiaDoLocale(locale, `docs/adr/${arquivo}`) : `docs/adr/${arquivo}`;
+      return { arquivo, titulo: tituloDoAdr(ler(existsSync(join(RAIZ, copia)) ? copia : `docs/adr/${arquivo}`)), status: status.get(arquivo) };
+    });
+    escreverBloco(rel, 'indice-de-adr', gerarIndiceDeAdr({ temasYml: ler(TEMAS_DE_ADR), adrs, T: locale ? TEXTOS[locale] : textosDaFonte(ler(rel), TEXTOS), locale }));
+  }
+}
+
 gerarScripts();
 gerarIndiceDeRnNoBloco();
+gerarIndiceDeAdrNoBloco();
 gerarEnv();
 gerarEventos();
 gerarOpenapi();

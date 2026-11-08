@@ -1,10 +1,14 @@
 ---
 sidebar_position: 13
 tipo: historico
-traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # Audit: fluxo.yml × code (v3, ADR 0085) {#audit-fluxoyml--code-v3-adr-0085}
+
+:::historico 2026-08-10
+A read-only audit that crosses `fluxo.yml` (ADR 0085) with the real code. It lists the divergences, what is laddered behind each activation trigger and what the code does beyond what is declared. Nothing was fixed in passing: each divergence became a finding. The closing is in the Phase history.
+:::
 
 An isolated audit session — **read-only**. Cross-references `packages/contracts/fluxo.yml`
 (the target model declared by ADR 0085) against the real code, to answer two

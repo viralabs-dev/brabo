@@ -4,7 +4,7 @@ title: 配置
 sidebar_position: 1
 description: api、engine 和 web 的全部环境变量，附默认值以及取值错误时会坏掉什么。
 keywords: [配置, 环境变量, env, 部署]
-traducao_de: 3016564b5bb5b0752711c07b9babefd252829a8d
+traducao_de: d7d790431657e61a049b452214cfd432da2199df
 ---
 
 # 配置
@@ -577,216 +577,232 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 
 每个来源都标记为 **产品**——运维安装的人在部署 `.env` 中设置的内容——或 **工具**，仅由 CI 和开发产品的人读取。工具变量绝不应出现在运维人员的 `.env` 中。
 
-**api** — 68 个变量 · 产品
+[api](#env-servico-api) (68) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (7) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (6) · [deploy/k8s](#env-servico-deploy-k8s) (24)
 
-- `API_JSON_BODY_LIMIT` <sub>(apps/api/src/main.ts)</sub>
-- `API_PUBLIC_URL` <sub>(apps/api/src/application/use-cases/auth/start-social-login.use-case.ts)</sub>
-- `ARTIFACT_PROJECTOR_INTERVAL_MS` <sub>(apps/api/src/application/artifact-projection/artifact-projector.ts)</sub>
-- `AUTH_ACCESS_TOKEN_TTL_MS` <sub>(apps/api/src/infrastructure/security/ed25519-access-token-issuer.ts)</sub>
-- `AUTH_EMAIL_TOKEN_TTL_MS` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
-- `AUTH_IP_ATTEMPT_THRESHOLD` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
-- `AUTH_JWT_SECRET` <sub>(apps/api/src/infrastructure/security/auth-key-material.ts)</sub>
-- `AUTH_JWT_SECRET_PREVIOUS` <sub>(apps/api/src/infrastructure/security/auth-key-material.ts)</sub>
-- `AUTH_LOCKOUT_ENABLED` <sub>(apps/api/src/infrastructure/persistence/drizzle/drizzle-login-throttle.ts)</sub>
-- `AUTH_LOCKOUT_IP_THRESHOLDS` <sub>(apps/api/src/infrastructure/persistence/drizzle/drizzle-login-throttle.ts)</sub>
-- `AUTH_LOCKOUT_THRESHOLDS` <sub>(apps/api/src/infrastructure/persistence/drizzle/drizzle-login-throttle.ts)</sub>
-- `AUTH_LOCKOUT_WINDOW_MS` <sub>(apps/api/src/infrastructure/persistence/drizzle/drizzle-login-throttle.ts)</sub>
-- `AUTH_MAIL_LOG_TOKENS` <sub>(apps/api/src/infrastructure/mail/log-mail-sender.ts)</sub>
-- `AUTH_REFRESH_ABSOLUTE_TTL_MS` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
-- `AUTH_REFRESH_TOKEN_TTL_MS` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
-- `AUTH_REGISTRATION_ENABLED` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
-- `AUTH_RESET_TOKEN_TTL_MS` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
-- `AUTH_SET_PASSWORD_TTL_MS` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
-- `AUTH_TOKEN_PEPPER` <sub>(apps/api/src/infrastructure/security/auth-key-material.ts)</sub>
-- `BRABO_FORCE_SEED` <sub>(apps/api/src/scripts/provisionar-usuario.ts)</sub>
-- `BRABO_PROJECTS_BASE` <sub>(apps/api/src/infrastructure/filesystem/project-workspaces-root.ts)</sub>
-- `BRABO_RUNNER_RELEASES_REPO` <sub>(apps/api/src/interfaces/http/runner/runner-releases.controller.ts)</sub>
-- `BRABO_SEED_PASSWORD` <sub>(apps/api/src/db/seed.ts)</sub>
-- `BRABO_SERVICE_TOKEN` <sub>(apps/api/src/infrastructure/security/service-token.ts)</sub>
-- `BRABO_SERVICE_TOKEN_PREVIOUS` <sub>(apps/api/src/infrastructure/security/service-token.ts)</sub>
-- `BRABO_VERSION` <sub>(apps/api/src/tracing.ts)</sub>
-- `BROKER_URL` <sub>(apps/api/src/infrastructure/http-clients/container-broker.client.ts)</sub>
-- `CREDENTIALS_MASTER_KEY` <sub>(apps/api/src/infrastructure/security/envelope-encryption.service.ts)</sub>
-- `CREDENTIALS_MASTER_KEY_PREVIOUS` <sub>(apps/api/src/infrastructure/security/envelope-encryption.service.ts)</sub>
-- `CUSTO_RECONCILIACAO_INTERVAL_MS` <sub>(apps/api/src/application/use-cases/llm/reconciliar-custo-estimado.use-case.ts)</sub>
-- `DATABASE_URL` <sub>(apps/api/src/db/migrate.ts)</sub>
-- `ENGINE_PUBLIC_URL` <sub>(apps/api/src/application/use-cases/runner/request-runner-ticket.use-case.ts)</sub>
-- `ENGINE_URL` <sub>(apps/api/src/application/use-cases/runner/request-runner-ticket.use-case.ts)</sub>
-- `GIT_LOCAL_REPOS_ROOT` <sub>(apps/api/src/infrastructure/git/local-git-provider.ts)</sub>
-- `GIT_OAUTH_STATE_SECRET` <sub>(apps/api/src/infrastructure/security/oauth-state-secret.ts)</sub>
-- `GITHUB_OAUTH_CLIENT_ID` <sub>(apps/api/src/infrastructure/git/github-oauth-client.ts)</sub>
-- `GITHUB_OAUTH_CLIENT_SECRET` <sub>(apps/api/src/infrastructure/git/github-oauth-client.ts)</sub>
-- `GITLAB_OAUTH_CLIENT_ID` <sub>(apps/api/src/infrastructure/git/gitlab-oauth-client.ts)</sub>
-- `GITLAB_OAUTH_CLIENT_SECRET` <sub>(apps/api/src/infrastructure/git/gitlab-oauth-client.ts)</sub>
-- `GRAPH_PROJECTOR_INTERVAL_MS` <sub>(apps/api/src/application/graph-projection/graph-projector.ts)</sub>
-- `HUGGINGFACE_API_TOKEN` <sub>(apps/api/src/infrastructure/huggingface/huggingface-client.ts)</sub>
-- `HUGGINGFACE_HUB_URL` <sub>(apps/api/src/infrastructure/huggingface/huggingface-client.ts)</sub>
-- `LOG_LEVEL` <sub>(apps/api/src/infrastructure/observability/logger.config.ts)</sub>
-- `MAIL_TRANSPORT` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
-- `METRICS_GAUGE_INTERVAL_MS` <sub>(apps/api/src/infrastructure/observability/domain-gauges.collector.ts)</sub>
-- `MIGRATIONS_FOLDER` <sub>(apps/api/src/db/migrate.ts)</sub>
-- `NEO4J_PASSWORD` <sub>(apps/api/src/infrastructure/graph/neo4j-config.ts)</sub>
-- `NEO4J_URI` <sub>(apps/api/src/infrastructure/graph/neo4j-config.ts)</sub>
-- `NEO4J_USER` <sub>(apps/api/src/infrastructure/graph/neo4j-config.ts)</sub>
-- `NINE_ROUTER_BASE_URL` <sub>(apps/api/src/infrastructure/llm/nine-router-provider.ts)</sub>
-- `NODE_ENV` <sub>(apps/api/src/infrastructure/graph/neo4j-config.ts)</sub>
-- `OLLAMA_HOST` <sub>(apps/api/src/infrastructure/llm/ollama-provider.ts)</sub>
-- `OTEL_DIAG_LOG` <sub>(apps/api/src/tracing.ts)</sub>
-- `OTEL_EXPORTER_OTLP_ENDPOINT` <sub>(apps/api/src/tracing.ts)</sub>
-- `OTEL_SERVICE_NAME` <sub>(apps/api/src/tracing.ts)</sub>
-- `PORT` <sub>(apps/api/src/main.ts)</sub>
-- `PROJECT_WORKSPACES_ROOT` <sub>(apps/api/src/infrastructure/filesystem/project-workspaces-root.ts)</sub>
-- `RATE_LIMIT_ENABLED` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
-- `RATE_LIMIT_IP` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
-- `RATE_LIMIT_USER` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
-- `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/src/infrastructure/observability/domain-gauges.collector.ts)</sub>
-- `SMTP_FROM` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
-- `SMTP_HOST` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
-- `SMTP_PASSWORD` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
-- `SMTP_PORT` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
-- `SMTP_SECURE` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
-- `SMTP_USER` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
-- `WEB_ORIGIN` <sub>(apps/api/src/infrastructure/mail/smtp-mail-sender.ts)</sub>
+### api {#env-servico-api}
 
-**engine** — 63 个变量 · 产品
+68 个变量 · 产品
 
-- `ANAMNESE_BUDGET_MICROS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `ANAMNESE_ENABLED` <sub>(apps/engine/config/runtime.exs)</sub>
-- `ANAMNESE_INITIAL_WINDOW_DAYS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `ANAMNESE_INTERVAL_SECONDS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `ANAMNESE_MAX_ITERATIONS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `ANAMNESE_MAX_PAYLOAD_CHARS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `ANAMNESE_MAX_PROMPT_EVENTS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `ANAMNESE_MIN_EVENTS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `API_URL` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-API_JSON_BODY_LIMIT"></a>`API_JSON_BODY_LIMIT` <sub>(apps/api/src/main.ts)</sub>
+- <a id="env-API_PUBLIC_URL"></a>`API_PUBLIC_URL` <sub>(apps/api/src/application/use-cases/auth/start-social-login.use-case.ts)</sub>
+- <a id="env-ARTIFACT_PROJECTOR_INTERVAL_MS"></a>`ARTIFACT_PROJECTOR_INTERVAL_MS` <sub>(apps/api/src/application/artifact-projection/artifact-projector.ts)</sub>
+- <a id="env-AUTH_ACCESS_TOKEN_TTL_MS"></a>`AUTH_ACCESS_TOKEN_TTL_MS` <sub>(apps/api/src/infrastructure/security/ed25519-access-token-issuer.ts)</sub>
+- <a id="env-AUTH_EMAIL_TOKEN_TTL_MS"></a>`AUTH_EMAIL_TOKEN_TTL_MS` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
+- <a id="env-AUTH_IP_ATTEMPT_THRESHOLD"></a>`AUTH_IP_ATTEMPT_THRESHOLD` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
+- <a id="env-AUTH_JWT_SECRET"></a>`AUTH_JWT_SECRET` <sub>(apps/api/src/infrastructure/security/auth-key-material.ts)</sub>
+- <a id="env-AUTH_JWT_SECRET_PREVIOUS"></a>`AUTH_JWT_SECRET_PREVIOUS` <sub>(apps/api/src/infrastructure/security/auth-key-material.ts)</sub>
+- <a id="env-AUTH_LOCKOUT_ENABLED"></a>`AUTH_LOCKOUT_ENABLED` <sub>(apps/api/src/infrastructure/persistence/drizzle/drizzle-login-throttle.ts)</sub>
+- <a id="env-AUTH_LOCKOUT_IP_THRESHOLDS"></a>`AUTH_LOCKOUT_IP_THRESHOLDS` <sub>(apps/api/src/infrastructure/persistence/drizzle/drizzle-login-throttle.ts)</sub>
+- <a id="env-AUTH_LOCKOUT_THRESHOLDS"></a>`AUTH_LOCKOUT_THRESHOLDS` <sub>(apps/api/src/infrastructure/persistence/drizzle/drizzle-login-throttle.ts)</sub>
+- <a id="env-AUTH_LOCKOUT_WINDOW_MS"></a>`AUTH_LOCKOUT_WINDOW_MS` <sub>(apps/api/src/infrastructure/persistence/drizzle/drizzle-login-throttle.ts)</sub>
+- <a id="env-AUTH_MAIL_LOG_TOKENS"></a>`AUTH_MAIL_LOG_TOKENS` <sub>(apps/api/src/infrastructure/mail/log-mail-sender.ts)</sub>
+- <a id="env-AUTH_REFRESH_ABSOLUTE_TTL_MS"></a>`AUTH_REFRESH_ABSOLUTE_TTL_MS` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
+- <a id="env-AUTH_REFRESH_TOKEN_TTL_MS"></a>`AUTH_REFRESH_TOKEN_TTL_MS` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
+- <a id="env-AUTH_REGISTRATION_ENABLED"></a>`AUTH_REGISTRATION_ENABLED` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
+- <a id="env-AUTH_RESET_TOKEN_TTL_MS"></a>`AUTH_RESET_TOKEN_TTL_MS` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
+- <a id="env-AUTH_SET_PASSWORD_TTL_MS"></a>`AUTH_SET_PASSWORD_TTL_MS` <sub>(apps/api/src/application/use-cases/auth/auth-config.ts)</sub>
+- <a id="env-AUTH_TOKEN_PEPPER"></a>`AUTH_TOKEN_PEPPER` <sub>(apps/api/src/infrastructure/security/auth-key-material.ts)</sub>
+- <a id="env-BRABO_FORCE_SEED"></a>`BRABO_FORCE_SEED` <sub>(apps/api/src/scripts/provisionar-usuario.ts)</sub>
+- <a id="env-BRABO_PROJECTS_BASE"></a>`BRABO_PROJECTS_BASE` <sub>(apps/api/src/infrastructure/filesystem/project-workspaces-root.ts)</sub>
+- <a id="env-BRABO_RUNNER_RELEASES_REPO"></a>`BRABO_RUNNER_RELEASES_REPO` <sub>(apps/api/src/interfaces/http/runner/runner-releases.controller.ts)</sub>
+- <a id="env-BRABO_SEED_PASSWORD"></a>`BRABO_SEED_PASSWORD` <sub>(apps/api/src/db/seed.ts)</sub>
+- <a id="env-BRABO_SERVICE_TOKEN"></a>`BRABO_SERVICE_TOKEN` <sub>(apps/api/src/infrastructure/security/service-token.ts)</sub>
+- <a id="env-BRABO_SERVICE_TOKEN_PREVIOUS"></a>`BRABO_SERVICE_TOKEN_PREVIOUS` <sub>(apps/api/src/infrastructure/security/service-token.ts)</sub>
+- <a id="env-BRABO_VERSION"></a>`BRABO_VERSION` <sub>(apps/api/src/tracing.ts)</sub>
+- <a id="env-BROKER_URL"></a>`BROKER_URL` <sub>(apps/api/src/infrastructure/http-clients/container-broker.client.ts)</sub>
+- <a id="env-CREDENTIALS_MASTER_KEY"></a>`CREDENTIALS_MASTER_KEY` <sub>(apps/api/src/infrastructure/security/envelope-encryption.service.ts)</sub>
+- <a id="env-CREDENTIALS_MASTER_KEY_PREVIOUS"></a>`CREDENTIALS_MASTER_KEY_PREVIOUS` <sub>(apps/api/src/infrastructure/security/envelope-encryption.service.ts)</sub>
+- <a id="env-CUSTO_RECONCILIACAO_INTERVAL_MS"></a>`CUSTO_RECONCILIACAO_INTERVAL_MS` <sub>(apps/api/src/application/use-cases/llm/reconciliar-custo-estimado.use-case.ts)</sub>
+- <a id="env-DATABASE_URL"></a>`DATABASE_URL` <sub>(apps/api/src/db/migrate.ts)</sub>
+- <a id="env-ENGINE_PUBLIC_URL"></a>`ENGINE_PUBLIC_URL` <sub>(apps/api/src/application/use-cases/runner/request-runner-ticket.use-case.ts)</sub>
+- <a id="env-ENGINE_URL"></a>`ENGINE_URL` <sub>(apps/api/src/application/use-cases/runner/request-runner-ticket.use-case.ts)</sub>
+- <a id="env-GIT_LOCAL_REPOS_ROOT"></a>`GIT_LOCAL_REPOS_ROOT` <sub>(apps/api/src/infrastructure/git/local-git-provider.ts)</sub>
+- <a id="env-GIT_OAUTH_STATE_SECRET"></a>`GIT_OAUTH_STATE_SECRET` <sub>(apps/api/src/infrastructure/security/oauth-state-secret.ts)</sub>
+- <a id="env-GITHUB_OAUTH_CLIENT_ID"></a>`GITHUB_OAUTH_CLIENT_ID` <sub>(apps/api/src/infrastructure/git/github-oauth-client.ts)</sub>
+- <a id="env-GITHUB_OAUTH_CLIENT_SECRET"></a>`GITHUB_OAUTH_CLIENT_SECRET` <sub>(apps/api/src/infrastructure/git/github-oauth-client.ts)</sub>
+- <a id="env-GITLAB_OAUTH_CLIENT_ID"></a>`GITLAB_OAUTH_CLIENT_ID` <sub>(apps/api/src/infrastructure/git/gitlab-oauth-client.ts)</sub>
+- <a id="env-GITLAB_OAUTH_CLIENT_SECRET"></a>`GITLAB_OAUTH_CLIENT_SECRET` <sub>(apps/api/src/infrastructure/git/gitlab-oauth-client.ts)</sub>
+- <a id="env-GRAPH_PROJECTOR_INTERVAL_MS"></a>`GRAPH_PROJECTOR_INTERVAL_MS` <sub>(apps/api/src/application/graph-projection/graph-projector.ts)</sub>
+- <a id="env-HUGGINGFACE_API_TOKEN"></a>`HUGGINGFACE_API_TOKEN` <sub>(apps/api/src/infrastructure/huggingface/huggingface-client.ts)</sub>
+- <a id="env-HUGGINGFACE_HUB_URL"></a>`HUGGINGFACE_HUB_URL` <sub>(apps/api/src/infrastructure/huggingface/huggingface-client.ts)</sub>
+- <a id="env-LOG_LEVEL"></a>`LOG_LEVEL` <sub>(apps/api/src/infrastructure/observability/logger.config.ts)</sub>
+- <a id="env-MAIL_TRANSPORT"></a>`MAIL_TRANSPORT` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
+- <a id="env-METRICS_GAUGE_INTERVAL_MS"></a>`METRICS_GAUGE_INTERVAL_MS` <sub>(apps/api/src/infrastructure/observability/domain-gauges.collector.ts)</sub>
+- <a id="env-MIGRATIONS_FOLDER"></a>`MIGRATIONS_FOLDER` <sub>(apps/api/src/db/migrate.ts)</sub>
+- <a id="env-NEO4J_PASSWORD"></a>`NEO4J_PASSWORD` <sub>(apps/api/src/infrastructure/graph/neo4j-config.ts)</sub>
+- <a id="env-NEO4J_URI"></a>`NEO4J_URI` <sub>(apps/api/src/infrastructure/graph/neo4j-config.ts)</sub>
+- <a id="env-NEO4J_USER"></a>`NEO4J_USER` <sub>(apps/api/src/infrastructure/graph/neo4j-config.ts)</sub>
+- <a id="env-NINE_ROUTER_BASE_URL"></a>`NINE_ROUTER_BASE_URL` <sub>(apps/api/src/infrastructure/llm/nine-router-provider.ts)</sub>
+- <a id="env-NODE_ENV"></a>`NODE_ENV` <sub>(apps/api/src/infrastructure/graph/neo4j-config.ts)</sub>
+- <a id="env-OLLAMA_HOST"></a>`OLLAMA_HOST` <sub>(apps/api/src/infrastructure/llm/ollama-provider.ts)</sub>
+- <a id="env-OTEL_DIAG_LOG"></a>`OTEL_DIAG_LOG` <sub>(apps/api/src/tracing.ts)</sub>
+- <a id="env-OTEL_EXPORTER_OTLP_ENDPOINT"></a>`OTEL_EXPORTER_OTLP_ENDPOINT` <sub>(apps/api/src/tracing.ts)</sub>
+- <a id="env-OTEL_SERVICE_NAME"></a>`OTEL_SERVICE_NAME` <sub>(apps/api/src/tracing.ts)</sub>
+- <a id="env-PORT"></a>`PORT` <sub>(apps/api/src/main.ts)</sub>
+- <a id="env-PROJECT_WORKSPACES_ROOT"></a>`PROJECT_WORKSPACES_ROOT` <sub>(apps/api/src/infrastructure/filesystem/project-workspaces-root.ts)</sub>
+- <a id="env-RATE_LIMIT_ENABLED"></a>`RATE_LIMIT_ENABLED` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
+- <a id="env-RATE_LIMIT_IP"></a>`RATE_LIMIT_IP` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
+- <a id="env-RATE_LIMIT_USER"></a>`RATE_LIMIT_USER` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
+- <a id="env-RATE_LIMIT_WINDOW_MS"></a>`RATE_LIMIT_WINDOW_MS` <sub>(apps/api/src/infrastructure/observability/domain-gauges.collector.ts)</sub>
+- <a id="env-SMTP_FROM"></a>`SMTP_FROM` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
+- <a id="env-SMTP_HOST"></a>`SMTP_HOST` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
+- <a id="env-SMTP_PASSWORD"></a>`SMTP_PASSWORD` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
+- <a id="env-SMTP_PORT"></a>`SMTP_PORT` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
+- <a id="env-SMTP_SECURE"></a>`SMTP_SECURE` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
+- <a id="env-SMTP_USER"></a>`SMTP_USER` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
+- <a id="env-WEB_ORIGIN"></a>`WEB_ORIGIN` <sub>(apps/api/src/infrastructure/mail/smtp-mail-sender.ts)</sub>
+
+### engine {#env-servico-engine}
+
+63 个变量 · 产品
+
+- <a id="env-ANAMNESE_BUDGET_MICROS"></a>`ANAMNESE_BUDGET_MICROS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-ANAMNESE_ENABLED"></a>`ANAMNESE_ENABLED` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-ANAMNESE_INITIAL_WINDOW_DAYS"></a>`ANAMNESE_INITIAL_WINDOW_DAYS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-ANAMNESE_INTERVAL_SECONDS"></a>`ANAMNESE_INTERVAL_SECONDS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-ANAMNESE_MAX_ITERATIONS"></a>`ANAMNESE_MAX_ITERATIONS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-ANAMNESE_MAX_PAYLOAD_CHARS"></a>`ANAMNESE_MAX_PAYLOAD_CHARS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-ANAMNESE_MAX_PROMPT_EVENTS"></a>`ANAMNESE_MAX_PROMPT_EVENTS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-ANAMNESE_MIN_EVENTS"></a>`ANAMNESE_MIN_EVENTS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-API_URL"></a>`API_URL` <sub>(apps/engine/config/runtime.exs)</sub>
 - `BRABO_SERVICE_TOKEN` <sub>(apps/engine/config/runtime.exs)</sub>
 - `BRABO_SERVICE_TOKEN_PREVIOUS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `CONTEXT_COMPACTION_THRESHOLD` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-CONTEXT_COMPACTION_THRESHOLD"></a>`CONTEXT_COMPACTION_THRESHOLD` <sub>(apps/engine/config/runtime.exs)</sub>
 - `DATABASE_URL` <sub>(apps/engine/config/dev.exs)</sub>
-- `DEFAULT_CONTEXT_WINDOW` <sub>(apps/engine/config/runtime.exs)</sub>
-- `DNS_CLUSTER_QUERY` <sub>(apps/engine/config/runtime.exs)</sub>
-- `ECTO_IPV6` <sub>(apps/engine/config/runtime.exs)</sub>
-- `GATE_RESCUE_INTERVAL_SECONDS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `GATE_RESCUE_STALE_AFTER_SECONDS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `GRAPH_INSTRUCTION_TEMPLATES_ENABLED` <sub>(apps/engine/config/runtime.exs)</sub>
-- `GRAPH_TEMPLATES_ENABLED` <sub>(apps/engine/config/runtime.exs)</sub>
-- `LLM_TURN_TIMEOUT_MS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `MIX_TEST_PARTITION` <sub>(apps/engine/config/test.exs)</sub>
-- `MODEL_SYNC_INTERVAL_SECONDS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-DEFAULT_CONTEXT_WINDOW"></a>`DEFAULT_CONTEXT_WINDOW` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-DNS_CLUSTER_QUERY"></a>`DNS_CLUSTER_QUERY` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-ECTO_IPV6"></a>`ECTO_IPV6` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-GATE_RESCUE_INTERVAL_SECONDS"></a>`GATE_RESCUE_INTERVAL_SECONDS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-GATE_RESCUE_STALE_AFTER_SECONDS"></a>`GATE_RESCUE_STALE_AFTER_SECONDS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-GRAPH_INSTRUCTION_TEMPLATES_ENABLED"></a>`GRAPH_INSTRUCTION_TEMPLATES_ENABLED` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-GRAPH_TEMPLATES_ENABLED"></a>`GRAPH_TEMPLATES_ENABLED` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-LLM_TURN_TIMEOUT_MS"></a>`LLM_TURN_TIMEOUT_MS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-MIX_TEST_PARTITION"></a>`MIX_TEST_PARTITION` <sub>(apps/engine/config/test.exs)</sub>
+- <a id="env-MODEL_SYNC_INTERVAL_SECONDS"></a>`MODEL_SYNC_INTERVAL_SECONDS` <sub>(apps/engine/config/runtime.exs)</sub>
 - `OTEL_EXPORTER_OTLP_ENDPOINT` <sub>(apps/engine/config/runtime.exs)</sub>
-- `PHX_HOST` <sub>(apps/engine/config/runtime.exs)</sub>
-- `PHX_SERVER` <sub>(apps/engine/config/runtime.exs)</sub>
-- `POOL_SIZE` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-PHX_HOST"></a>`PHX_HOST` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-PHX_SERVER"></a>`PHX_SERVER` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-POOL_SIZE"></a>`POOL_SIZE` <sub>(apps/engine/config/runtime.exs)</sub>
 - `PORT` <sub>(apps/engine/config/runtime.exs)</sub>
-- `POSTGRES_HOST` <sub>(apps/engine/config/test.exs)</sub>
-- `POSTGRES_PASSWORD` <sub>(apps/engine/config/test.exs)</sub>
-- `POSTGRES_USER` <sub>(apps/engine/config/test.exs)</sub>
+- <a id="env-POSTGRES_HOST"></a>`POSTGRES_HOST` <sub>(apps/engine/config/test.exs)</sub>
+- <a id="env-POSTGRES_PASSWORD"></a>`POSTGRES_PASSWORD` <sub>(apps/engine/config/test.exs)</sub>
+- <a id="env-POSTGRES_USER"></a>`POSTGRES_USER` <sub>(apps/engine/config/test.exs)</sub>
 - `PROJECT_WORKSPACES_ROOT` <sub>(apps/engine/config/runtime.exs)</sub>
-- `PSYCHOLOGIST_BUDGET_MICROS_LEVE` <sub>(apps/engine/config/runtime.exs)</sub>
-- `PSYCHOLOGIST_BUDGET_MICROS_PESADA` <sub>(apps/engine/config/runtime.exs)</sub>
-- `PSYCHOLOGIST_ENABLED` <sub>(apps/engine/config/runtime.exs)</sub>
-- `PSYCHOLOGIST_MAX_ITERATIONS_LEVE` <sub>(apps/engine/config/runtime.exs)</sub>
-- `PSYCHOLOGIST_MAX_ITERATIONS_PESADA` <sub>(apps/engine/config/runtime.exs)</sub>
-- `PSYCHOLOGIST_MAX_PAYLOAD_CHARS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `PSYCHOLOGIST_MAX_PROMPT_EVENTS_LEVE` <sub>(apps/engine/config/runtime.exs)</sub>
-- `PSYCHOLOGIST_MAX_PROMPT_EVENTS_PESADA` <sub>(apps/engine/config/runtime.exs)</sub>
-- `PSYCHOLOGIST_RAG_TOP_K` <sub>(apps/engine/config/runtime.exs)</sub>
-- `PSYCHOLOGIST_TRIAGE_THRESHOLD` <sub>(apps/engine/config/runtime.exs)</sub>
-- `READ_FILE_MAX_BYTES` <sub>(apps/engine/config/runtime.exs)</sub>
-- `SEARCH_WORKSPACE_MAX_BYTES` <sub>(apps/engine/config/runtime.exs)</sub>
-- `SEARCH_WORKSPACE_MAX_HITS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `SECOPS_SCAN_TIMEOUT_MS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `SECRET_KEY_BASE` <sub>(apps/engine/config/runtime.exs)</sub>
-- `SESSION_CONVERSATION_IDLE_TIMEOUT_MS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `SESSION_HEARTBEAT_TIMEOUT_MS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `SHUTDOWN_DRAIN_TIMEOUT_MS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `SOME_APP_SSL_CERT_PATH` <sub>(apps/engine/config/runtime.exs)</sub>
-- `SOME_APP_SSL_KEY_PATH` <sub>(apps/engine/config/runtime.exs)</sub>
-- `START_ANAMNESE` <sub>(apps/engine/config/runtime.exs)</sub>
-- `START_GATE_RESCUE` <sub>(apps/engine/config/runtime.exs)</sub>
-- `START_MODEL_SYNC` <sub>(apps/engine/config/runtime.exs)</sub>
-- `START_OUTBOX_DRAIN` <sub>(apps/engine/config/runtime.exs)</sub>
-- `TERMINAL_ACTION_TIMEOUT_MS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `TERMINAL_OUTPUT_MAX_BYTES` <sub>(apps/engine/config/runtime.exs)</sub>
-- `TOOL_LOOP_MAX_ITERATIONS` <sub>(apps/engine/config/runtime.exs)</sub>
-- `TOOL_LOOP_MAX_ITERATIONS_EXECUCAO` <sub>(apps/engine/config/runtime.exs)</sub>
-- `TOOL_LOOP_MAX_ITERATIONS_GATE` <sub>(apps/engine/config/runtime.exs)</sub>
-- `TRANSPORT_MAX_BODY_BYTES` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-PSYCHOLOGIST_BUDGET_MICROS_LEVE"></a>`PSYCHOLOGIST_BUDGET_MICROS_LEVE` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-PSYCHOLOGIST_BUDGET_MICROS_PESADA"></a>`PSYCHOLOGIST_BUDGET_MICROS_PESADA` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-PSYCHOLOGIST_ENABLED"></a>`PSYCHOLOGIST_ENABLED` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-PSYCHOLOGIST_MAX_ITERATIONS_LEVE"></a>`PSYCHOLOGIST_MAX_ITERATIONS_LEVE` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-PSYCHOLOGIST_MAX_ITERATIONS_PESADA"></a>`PSYCHOLOGIST_MAX_ITERATIONS_PESADA` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-PSYCHOLOGIST_MAX_PAYLOAD_CHARS"></a>`PSYCHOLOGIST_MAX_PAYLOAD_CHARS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-PSYCHOLOGIST_MAX_PROMPT_EVENTS_LEVE"></a>`PSYCHOLOGIST_MAX_PROMPT_EVENTS_LEVE` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-PSYCHOLOGIST_MAX_PROMPT_EVENTS_PESADA"></a>`PSYCHOLOGIST_MAX_PROMPT_EVENTS_PESADA` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-PSYCHOLOGIST_RAG_TOP_K"></a>`PSYCHOLOGIST_RAG_TOP_K` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-PSYCHOLOGIST_TRIAGE_THRESHOLD"></a>`PSYCHOLOGIST_TRIAGE_THRESHOLD` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-READ_FILE_MAX_BYTES"></a>`READ_FILE_MAX_BYTES` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-SEARCH_WORKSPACE_MAX_BYTES"></a>`SEARCH_WORKSPACE_MAX_BYTES` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-SEARCH_WORKSPACE_MAX_HITS"></a>`SEARCH_WORKSPACE_MAX_HITS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-SECOPS_SCAN_TIMEOUT_MS"></a>`SECOPS_SCAN_TIMEOUT_MS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-SECRET_KEY_BASE"></a>`SECRET_KEY_BASE` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-SESSION_CONVERSATION_IDLE_TIMEOUT_MS"></a>`SESSION_CONVERSATION_IDLE_TIMEOUT_MS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-SESSION_HEARTBEAT_TIMEOUT_MS"></a>`SESSION_HEARTBEAT_TIMEOUT_MS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-SHUTDOWN_DRAIN_TIMEOUT_MS"></a>`SHUTDOWN_DRAIN_TIMEOUT_MS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-SOME_APP_SSL_CERT_PATH"></a>`SOME_APP_SSL_CERT_PATH` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-SOME_APP_SSL_KEY_PATH"></a>`SOME_APP_SSL_KEY_PATH` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-START_ANAMNESE"></a>`START_ANAMNESE` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-START_GATE_RESCUE"></a>`START_GATE_RESCUE` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-START_MODEL_SYNC"></a>`START_MODEL_SYNC` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-START_OUTBOX_DRAIN"></a>`START_OUTBOX_DRAIN` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-TERMINAL_ACTION_TIMEOUT_MS"></a>`TERMINAL_ACTION_TIMEOUT_MS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-TERMINAL_OUTPUT_MAX_BYTES"></a>`TERMINAL_OUTPUT_MAX_BYTES` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-TOOL_LOOP_MAX_ITERATIONS"></a>`TOOL_LOOP_MAX_ITERATIONS` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-TOOL_LOOP_MAX_ITERATIONS_EXECUCAO"></a>`TOOL_LOOP_MAX_ITERATIONS_EXECUCAO` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-TOOL_LOOP_MAX_ITERATIONS_GATE"></a>`TOOL_LOOP_MAX_ITERATIONS_GATE` <sub>(apps/engine/config/runtime.exs)</sub>
+- <a id="env-TRANSPORT_MAX_BODY_BYTES"></a>`TRANSPORT_MAX_BODY_BYTES` <sub>(apps/engine/config/runtime.exs)</sub>
 - `WEB_ORIGIN` <sub>(apps/engine/config/runtime.exs)</sub>
 
-**web** — 6 个变量 · 产品
+### web {#env-servico-web}
 
-- `VITE_API_URL` <sub>(apps/web/src/lib/runtime-config.ts)</sub>
-- `VITE_BRABO_AMBIENTE` <sub>(apps/web/src/routes/LoginPage.tsx)</sub>
-- `VITE_BRABO_REPO` <sub>(apps/web/src/components/RunnerOnboardingPanel.tsx)</sub>
-- `VITE_BRABO_VERSION` <sub>(apps/web/src/lib/runtime-config.ts)</sub>
-- `VITE_ENGINE_URL` <sub>(apps/web/src/lib/runtime-config.ts)</sub>
-- `VITE_LOG_LEVEL` <sub>(apps/web/src/lib/runtime-config.ts)</sub>
+6 个变量 · 产品
 
-**broker** — 7 个变量 · 产品
+- <a id="env-VITE_API_URL"></a>`VITE_API_URL` <sub>(apps/web/src/lib/runtime-config.ts)</sub>
+- <a id="env-VITE_BRABO_AMBIENTE"></a>`VITE_BRABO_AMBIENTE` <sub>(apps/web/src/routes/LoginPage.tsx)</sub>
+- <a id="env-VITE_BRABO_REPO"></a>`VITE_BRABO_REPO` <sub>(apps/web/src/components/RunnerOnboardingPanel.tsx)</sub>
+- <a id="env-VITE_BRABO_VERSION"></a>`VITE_BRABO_VERSION` <sub>(apps/web/src/lib/runtime-config.ts)</sub>
+- <a id="env-VITE_ENGINE_URL"></a>`VITE_ENGINE_URL` <sub>(apps/web/src/lib/runtime-config.ts)</sub>
+- <a id="env-VITE_LOG_LEVEL"></a>`VITE_LOG_LEVEL` <sub>(apps/web/src/lib/runtime-config.ts)</sub>
+
+### broker {#env-servico-broker}
+
+7 个变量 · 产品
 
 - `API_URL` <sub>(apps/broker/src/config.ts)</sub>
-- `BRABO_PROJECTS_HOST_BASE` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BRABO_PROJECTS_HOST_BASE"></a>`BRABO_PROJECTS_HOST_BASE` <sub>(apps/broker/src/config.ts)</sub>
 - `BRABO_SERVICE_TOKEN` <sub>(apps/broker/src/config.ts)</sub>
 - `BRABO_SERVICE_TOKEN_PREVIOUS` <sub>(apps/broker/src/config.ts)</sub>
-- `BROKER_PORT` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BROKER_PORT"></a>`BROKER_PORT` <sub>(apps/broker/src/config.ts)</sub>
 - `NODE_ENV` <sub>(apps/broker/src/config.ts)</sub>
-- `PROJECT_WORKSPACES_HOST_ROOT` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-PROJECT_WORKSPACES_HOST_ROOT"></a>`PROJECT_WORKSPACES_HOST_ROOT` <sub>(apps/broker/src/config.ts)</sub>
 
-**api/scripts** — 16 个变量 · 工具
+### api/scripts {#env-servico-api-scripts}
+
+16 个变量 · 工具
 
 - `DATABASE_URL` <sub>(apps/api/scripts/demo-repo-bootstrap.ts)</sub>
-- `DEMO_ANAMNESE_TIMEOUT_MS` <sub>(apps/api/scripts/demo-anamnese.ts)</sub>
-- `DEMO_MODEL` <sub>(apps/api/scripts/demo-anamnese.ts)</sub>
-- `DEMO_MODEL_LEVE` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
-- `DEMO_MODEL_PESADO` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
-- `DEMO_OLLAMA_COPY_FROM` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
-- `DEMO_PSICOLOGO_TIMEOUT_MS` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
-- `DEMO_QA_MODEL` <sub>(apps/api/scripts/demo-pr-gates-area-qa.ts)</sub>
-- `DEMO_TIMEOUT_MS` <sub>(apps/api/scripts/demo-dev-agent-real.ts)</sub>
-- `DEMO_WORKFLOWS_MODEL` <sub>(apps/api/scripts/demo-infra-workflows-github.ts)</sub>
+- <a id="env-DEMO_ANAMNESE_TIMEOUT_MS"></a>`DEMO_ANAMNESE_TIMEOUT_MS` <sub>(apps/api/scripts/demo-anamnese.ts)</sub>
+- <a id="env-DEMO_MODEL"></a>`DEMO_MODEL` <sub>(apps/api/scripts/demo-anamnese.ts)</sub>
+- <a id="env-DEMO_MODEL_LEVE"></a>`DEMO_MODEL_LEVE` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
+- <a id="env-DEMO_MODEL_PESADO"></a>`DEMO_MODEL_PESADO` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
+- <a id="env-DEMO_OLLAMA_COPY_FROM"></a>`DEMO_OLLAMA_COPY_FROM` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
+- <a id="env-DEMO_PSICOLOGO_TIMEOUT_MS"></a>`DEMO_PSICOLOGO_TIMEOUT_MS` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
+- <a id="env-DEMO_QA_MODEL"></a>`DEMO_QA_MODEL` <sub>(apps/api/scripts/demo-pr-gates-area-qa.ts)</sub>
+- <a id="env-DEMO_TIMEOUT_MS"></a>`DEMO_TIMEOUT_MS` <sub>(apps/api/scripts/demo-dev-agent-real.ts)</sub>
+- <a id="env-DEMO_WORKFLOWS_MODEL"></a>`DEMO_WORKFLOWS_MODEL` <sub>(apps/api/scripts/demo-infra-workflows-github.ts)</sub>
 - `GIT_LOCAL_REPOS_ROOT` <sub>(apps/api/scripts/demo-repo-bootstrap.ts)</sub>
-- `GOLDEN_SET_QA_MODEL` <sub>(apps/api/scripts/seed-golden-set-qa.ts)</sub>
-- `GOLDEN_SET_RAG_MAX_PER_FILE` <sub>(apps/api/scripts/seed-golden-set-rag.ts)</sub>
-- `NOME` <sub>(apps/api/scripts/demo-pr-gates.ts)</sub>
+- <a id="env-GOLDEN_SET_QA_MODEL"></a>`GOLDEN_SET_QA_MODEL` <sub>(apps/api/scripts/seed-golden-set-qa.ts)</sub>
+- <a id="env-GOLDEN_SET_RAG_MAX_PER_FILE"></a>`GOLDEN_SET_RAG_MAX_PER_FILE` <sub>(apps/api/scripts/seed-golden-set-rag.ts)</sub>
+- <a id="env-NOME"></a>`NOME` <sub>(apps/api/scripts/demo-pr-gates.ts)</sub>
 - `OLLAMA_HOST` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
 - `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub>
 
-**e2e** — 6 个变量 · 工具
+### e2e {#env-servico-e2e}
 
-- `E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
-- `E2E_ENGINE_URL` <sub>(e2e/testes/instalacao.spec.ts)</sub>
-- `E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
-- `E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
-- `E2E_USER` <sub>(e2e/suporte/api.ts)</sub>
-- `E2E_WEB_URL` <sub>(e2e/playwright.config.ts)</sub>
+6 个变量 · 工具
 
-**deploy/k8s** — 24 个变量 · 工具
+- <a id="env-E2E_API_URL"></a>`E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
+- <a id="env-E2E_ENGINE_URL"></a>`E2E_ENGINE_URL` <sub>(e2e/testes/instalacao.spec.ts)</sub>
+- <a id="env-E2E_PASSWORD"></a>`E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
+- <a id="env-E2E_SERVICE_TOKEN"></a>`E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
+- <a id="env-E2E_USER"></a>`E2E_USER` <sub>(e2e/suporte/api.ts)</sub>
+- <a id="env-E2E_WEB_URL"></a>`E2E_WEB_URL` <sub>(e2e/playwright.config.ts)</sub>
+
+### deploy/k8s {#env-servico-deploy-k8s}
+
+24 个变量 · 工具
 
 - `API_URL` <sub>(deploy/k8s/rollout-test.sh)</sub>
-- `BRABO_CLUSTER_NAME` <sub>(deploy/k8s/bootstrap.sh)</sub>
-- `BRABO_CLUSTER_TOOL` <sub>(deploy/k8s/bootstrap.sh)</sub>
-- `BRABO_IRMAOS` <sub>(deploy/k8s/bootstrap.sh)</sub>
-- `BRABO_KEEP_CLUSTER` <sub>(deploy/k8s/bootstrap.sh)</sub>
-- `BRABO_NAMESPACE` <sub>(deploy/k8s/hpa-test.sh)</sub>
-- `BRABO_SKIP_BUILD` <sub>(deploy/k8s/bootstrap.sh)</sub>
-- `BRABO_SKIP_OBSERVABILITY` <sub>(deploy/k8s/bootstrap.sh)</sub>
-- `BRABO_SMOKE_PASSWORD` <sub>(deploy/k8s/bootstrap.sh)</sub>
+- <a id="env-BRABO_CLUSTER_NAME"></a>`BRABO_CLUSTER_NAME` <sub>(deploy/k8s/bootstrap.sh)</sub>
+- <a id="env-BRABO_CLUSTER_TOOL"></a>`BRABO_CLUSTER_TOOL` <sub>(deploy/k8s/bootstrap.sh)</sub>
+- <a id="env-BRABO_IRMAOS"></a>`BRABO_IRMAOS` <sub>(deploy/k8s/bootstrap.sh)</sub>
+- <a id="env-BRABO_KEEP_CLUSTER"></a>`BRABO_KEEP_CLUSTER` <sub>(deploy/k8s/bootstrap.sh)</sub>
+- <a id="env-BRABO_NAMESPACE"></a>`BRABO_NAMESPACE` <sub>(deploy/k8s/hpa-test.sh)</sub>
+- <a id="env-BRABO_SKIP_BUILD"></a>`BRABO_SKIP_BUILD` <sub>(deploy/k8s/bootstrap.sh)</sub>
+- <a id="env-BRABO_SKIP_OBSERVABILITY"></a>`BRABO_SKIP_OBSERVABILITY` <sub>(deploy/k8s/bootstrap.sh)</sub>
+- <a id="env-BRABO_SMOKE_PASSWORD"></a>`BRABO_SMOKE_PASSWORD` <sub>(deploy/k8s/bootstrap.sh)</sub>
 - `ENGINE_URL` <sub>(deploy/k8s/smoke.sh)</sub>
-- `EVIDENCIA_INTERVALO` <sub>(deploy/k8s/rollout-evidencia.sh)</sub>
-- `HPA_JOBS` <sub>(deploy/k8s/hpa-test.sh)</sub>
-- `HPA_TIMEOUT` <sub>(deploy/k8s/hpa-test.sh)</sub>
-- `KUBE_VERSION` <sub>(deploy/k8s/validate.sh)</sub>
-- `NPMRC` <sub>(deploy/k8s/bootstrap.sh)</sub>
-- `PROJECT_WORKSPACES_ROOT_NO_POD` <sub>(deploy/k8s/test-reprojecao-artefatos.sh)</sub>
-- `RESTORE_KEEP_JOB` <sub>(deploy/k8s/test-restore.sh)</sub>
-- `RESTORE_MUTACAO` <sub>(deploy/k8s/test-restore.sh)</sub>
-- `ROLLOUT_CONVERGENCE_SECONDS` <sub>(deploy/k8s/rollout-test.sh)</sub>
-- `ROLLOUT_EVIDENCE_DIR` <sub>(deploy/k8s/rollout-test.sh)</sub>
-- `ROLLOUT_SESSIONS` <sub>(deploy/k8s/rollout-test.sh)</sub>
-- `SMOKE_USER` <sub>(deploy/k8s/bootstrap.sh)</sub>
-- `TAG` <sub>(deploy/k8s/bootstrap.sh)</sub>
-- `WEB_URL` <sub>(deploy/k8s/smoke.sh)</sub>
+- <a id="env-EVIDENCIA_INTERVALO"></a>`EVIDENCIA_INTERVALO` <sub>(deploy/k8s/rollout-evidencia.sh)</sub>
+- <a id="env-HPA_JOBS"></a>`HPA_JOBS` <sub>(deploy/k8s/hpa-test.sh)</sub>
+- <a id="env-HPA_TIMEOUT"></a>`HPA_TIMEOUT` <sub>(deploy/k8s/hpa-test.sh)</sub>
+- <a id="env-KUBE_VERSION"></a>`KUBE_VERSION` <sub>(deploy/k8s/validate.sh)</sub>
+- <a id="env-NPMRC"></a>`NPMRC` <sub>(deploy/k8s/bootstrap.sh)</sub>
+- <a id="env-PROJECT_WORKSPACES_ROOT_NO_POD"></a>`PROJECT_WORKSPACES_ROOT_NO_POD` <sub>(deploy/k8s/test-reprojecao-artefatos.sh)</sub>
+- <a id="env-RESTORE_KEEP_JOB"></a>`RESTORE_KEEP_JOB` <sub>(deploy/k8s/test-restore.sh)</sub>
+- <a id="env-RESTORE_MUTACAO"></a>`RESTORE_MUTACAO` <sub>(deploy/k8s/test-restore.sh)</sub>
+- <a id="env-ROLLOUT_CONVERGENCE_SECONDS"></a>`ROLLOUT_CONVERGENCE_SECONDS` <sub>(deploy/k8s/rollout-test.sh)</sub>
+- <a id="env-ROLLOUT_EVIDENCE_DIR"></a>`ROLLOUT_EVIDENCE_DIR` <sub>(deploy/k8s/rollout-test.sh)</sub>
+- <a id="env-ROLLOUT_SESSIONS"></a>`ROLLOUT_SESSIONS` <sub>(deploy/k8s/rollout-test.sh)</sub>
+- <a id="env-SMOKE_USER"></a>`SMOKE_USER` <sub>(deploy/k8s/bootstrap.sh)</sub>
+- <a id="env-TAG"></a>`TAG` <sub>(deploy/k8s/bootstrap.sh)</sub>
+- <a id="env-WEB_URL"></a>`WEB_URL` <sub>(deploy/k8s/smoke.sh)</sub>
 <!-- END:GENERATED:env-inventario -->
 
 ---

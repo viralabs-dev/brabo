@@ -27,6 +27,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { LOGO_SVG } from './site/layout.mjs';
 
 // `caminho` é o diretório publicado (e o que aparece na URL); `branch` é de
 // onde vem a TAG que carimba a versão daquele degrau. Para `qa` e `dev` os dois
@@ -150,6 +151,7 @@ function paginaIndice(degraus) {
     --suave: #a1a1aa;
     --tenue: #86868f;
     --destaque: #c8744f;
+    --sobre-destaque: #0d0d0f;
   }
   @media (prefers-color-scheme: light) {
     :root {
@@ -160,6 +162,7 @@ function paginaIndice(degraus) {
       --suave: #52525b;
       --tenue: #696972;
       --destaque: #a4502c;
+      --sobre-destaque: #ffffff;
     }
   }
   * { box-sizing: border-box; }
@@ -173,7 +176,8 @@ function paginaIndice(degraus) {
     justify-content: center;
   }
   main { width: 100%; max-width: 720px; }
-  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
+  h1 { display: flex; align-items: center; gap: 10px; font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
+  .logo { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--destaque); color: var(--sobre-destaque); }
   .tagline { color: var(--tenue); margin: 0 0 32px; font-size: 14px;
              text-transform: uppercase; letter-spacing: .12em; }
   .degrau {
@@ -209,7 +213,7 @@ function paginaIndice(degraus) {
 </head>
 <body>
   <main>
-    <h1>Brabo</h1>
+    <h1><span class="logo">${LOGO_SVG}</span>Brabo</h1>
     <p class="tagline">Documentação por degrau da esteira</p>
 ${corpo}
     <footer>

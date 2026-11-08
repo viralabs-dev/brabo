@@ -123,7 +123,7 @@ describe('componentes da doc (AT-857)', () => {
   });
 
   it('COMPONENTES lista os nomes canônicos (contrato com o linter)', () => {
-    expect(COMPONENTES).toEqual(['nota', 'dica', 'cuidado', 'perigo', 'historico', 'passos', 'cartoes', 'abas']);
+    expect(COMPONENTES).toEqual(['nota', 'dica', 'cuidado', 'perigo', 'historico', 'passos', 'cartoes', 'abas', 'hero', 'diferenciais']);
   });
 });
 
@@ -252,3 +252,40 @@ describe('árvore de união das raízes (AT-693)', () => {
     expect(readFileSync(path.join(saida, 'index.html'), 'utf8')).toContain('/brabo/blob/dev/docs/intro.md');
   }, 120_000);
 });
+
+describe('página inicial (AT-856)', () => {
+  const tabela = (a: string) => `# L\n\n<table><tr><td><b>${a}</b><br />um</td><td><b>B</b><br />dois</td></tr></table>\n`;
+  const render = async (raiz: string, locale: string, corpo: string) => {
+    const pagina = { locale, url: 'index.html', relativo: 'index.md', slug: '', corpo };
+    return (await criarRenderizador({ paginas: [pagina as never], raiz }))(pagina as never).html;
+  };
+  const raizCom = (readme: string) => {
+    const raiz = mkdtempSync(path.join(tmpdir(), 'inicio-'));
+    writeFileSync(path.join(raiz, 'README.md'), readme);
+    writeFileSync(path.join(raiz, 'README.en.md'), tabela('Hello'));
+    return raiz;
+  };
+
+  it('diferenciais lê a tabela do README do locale: mudar o README muda a página', async () => {
+    const raiz = raizCom(tabela('Aprovação'));
+    const antes = await render(raiz, 'pt-BR', ':::diferenciais\n:::');
+    expect(antes).toContain('<div class="diferencial"><b>Aprovação</b>');
+    expect((antes.match(/class="diferencial"/g) ?? []).length).toBe(2);
+    writeFileSync(path.join(raiz, 'README.md'), tabela('Outro texto'));
+    expect(await render(raiz, 'pt-BR', ':::diferenciais\n:::')).toContain('<b>Outro texto</b>');
+    expect(await render(raiz, 'en', ':::diferenciais\n:::')).toContain('<b>Hello</b>');
+  });
+
+  it('falha: README sem a tabela reprova o build, nunca sai faixa vazia', async () => {
+    await expect(render(raizCom('# sem tabela\n'), 'pt-BR', ':::diferenciais\n:::')).rejects.toThrow(/diferenciais/);
+  });
+
+  it('hero leva o logo e o corpo em Markdown; o h1 do hero conta como título', async () => {
+    const pagina = { locale: 'pt-BR', url: 'index.html', relativo: 'index.md', slug: '', corpo: ':::hero\n# Brabo\n\nfrase\n:::' };
+    const r = (await criarRenderizador({ paginas: [pagina as never], raiz: raizCom(tabela('x')) }))(pagina as never);
+    expect(r.html).toMatch(/<div class="hero"><span class="hero-logo"><svg/);
+    expect(r.html).toContain('<h1 id="brabo">Brabo</h1>');
+    expect(r.temH1).toBe(true);
+  });
+});
+

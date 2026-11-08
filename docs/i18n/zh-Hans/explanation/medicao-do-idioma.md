@@ -3,10 +3,14 @@ id: medicao-do-idioma
 title: 语言启发式的测量
 description: 针对一个带标签的语料库测量 AT-080 语言检测启发式的工具、它在合成语料库上产生的数字，以及语言引导及其成本的付费验证（AT-167，2026-09-29）。
 tipo: historico
-traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # 语言启发式的测量 {#measuring-the-language-heuristic}
+
+:::historico 2026-09-29
+AT-160 语言启发式的度量：一份标记词和正则表达式的列表，没有新增依赖。其中给出了各语料库上的数字、产品使用的临时阈值，以及用 Haiku 做的付费验证（AT-167）。自 AT-163 起，产品会运行这套启发式，并在改动任何东西之前先询问。
+:::
 
 > AT-160（EP-028，HS-053）。被测量的启发式是 AT-080 的规范所提出的（"A — heurística própria, sem
 > dependência"）。自 AT-163（[RN-624](../business-rules/api.md#rn-624)）起产品运行它：api 用它检测作者的语言，

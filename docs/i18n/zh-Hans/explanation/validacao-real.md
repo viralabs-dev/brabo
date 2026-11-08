@@ -1,6 +1,6 @@
 ---
 tipo: historico
-traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 id: validacao-real
 title: 真实验证——远程 GitHub 与真实模型
 sidebar_label: 真实验证（13b）
@@ -10,6 +10,10 @@ keywords: [验证, dogfooding, GitHub, dev agent, 测量, FASE 13b]
 ---
 
 # 真实验证——远程 GitHub 与真实模型
+
+:::historico 2026-08-06
+使用远程 GitHub、真实的 dev agent 和 API 模型的验证：这是第 12 阶段当时遗漏的部分。便宜的那一半完全通过，昂贵的那一半以任何测试都没有显示过的方式失败。文章讲述了十次运行、每次修复以及它所揭示的内容，直到整条链路端到端跑通。
+:::
 
 [阶段 12 的验证](./validacao-fase-12.md)白纸黑字地声明了自己的局限：
 `LocalGitProvider`、`NoopDevAgent`、由脚本自己写下的 gate 裁决。它的存在是为了在不依赖

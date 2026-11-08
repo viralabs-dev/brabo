@@ -10,6 +10,10 @@ tipo: historico
 
 # FASE 28 — a pasta do usuário
 
+:::historico 2026-09-06
+Recorte da Fase 28: dar ao usuário uma pasta dele onde o trabalho acontece, com base consentida no bootstrap, `mounted` como padrão local e um agente local que declara capacidades. Diz o que a fase persegue, o que recusa e em que ordem. As decisões moram nos ADR 0146 e 0147.
+:::
+
 > Este documento é o **recorte** da fase: o que ela persegue, o que ela recusa,
 > e em que ordem. As **decisões** moram nos [ADR 0146](../adr/0146-base-consentida-no-bootstrap.md)
 > e [ADR 0147](../adr/0147-agente-local-com-capacidades.md) — o que estiver aqui

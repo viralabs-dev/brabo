@@ -36,10 +36,20 @@ const AQUI = dirname(fileURLToPath(import.meta.url));
 const RAIZ = resolve(AQUI, '../../..');
 export const LOCALES = ['pt-BR', 'en', 'ru', 'zh-Hans'];
 
+/** LogoMark do brabo-web (icons.tsx): 3 traços em currentColor; o quadrado `--accent` vem do CSS (`.marca-logo`). */
+export const LOGO_SVG =
+  '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg>';
+
 const esc = (s) =>
   String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
 const contem = (i, atual) => i.href === atual || !!i.itens?.some((f) => contem(f, atual));
+
+// Menu enxuto (AT-862): categoria recolhida COM `slug` e sem a página atual por dentro sai só como link, sem os filhos
+// (`<details>` fechado ainda pesa no HTML: a árvore de ADR sozinha eram 44 KB em toda página).
+const dentro = (i, atual) => !!i.itens?.some((f) => contem(f, atual));
+const enxuta = (i, atual) => !!(i.colapsada && i.href && i.itens?.length && !dentro(i, atual));
+const elo = (i, atual, pre) => `<a href="${pre}${esc(i.href)}"${i.href === atual ? ' aria-current="page"' : ''}>${esc(i.rotulo)}</a>`;
 
 // Categoria = <details> nativo (sem JS): aberta se não recolhida ou se contém a página atual.
 // O link da própria categoria (ex.: "Decisões (ADR)") vira o 1º item, fora do <summary>.
@@ -52,6 +62,7 @@ function categoria(i, atual, pre, rotuloHtml) {
 function lista(itens, atual, pre) {
   return `<ul>${itens
     .map((i) => {
+      if (enxuta(i, atual)) return `<li>${elo(i, atual, pre)}</li>`;
       if (i.itens?.length) return `<li>${categoria(i, atual, pre, `<span>${esc(i.rotulo)}</span>`)}</li>`;
       const ativo = i.href === atual ? ' aria-current="page"' : '';
       return `<li>${i.href ? `<a href="${/^https?:/.test(i.href) ? '' : pre}${esc(i.href)}"${ativo}>${esc(i.rotulo)}</a>` : `<span>${esc(i.rotulo)}</span>`}</li>`;
@@ -74,10 +85,11 @@ export function layout(p) {
         `<option value="${esc(`${raiz}../${d}/${p.locale === 'pt-BR' ? '' : `${p.locale}/`}${p.slug}`)}"${d === p.degrau ? ' selected' : ''}>${esc(d)}</option>`,
     )
     .join('');
-  const side = (p.nav ?? [])
-    .map((g) => `<section>${g.rotulo ? categoria(g, p.slug, pre, `<h2>${esc(g.rotulo)}</h2>`) : lista(g.itens, p.slug, pre)}</section>`)
+  const inicio = p.variante === 'inicio'; // página inicial: sem barra lateral, sumário nem paginador
+  const side = inicio ? '' : (p.nav ?? [])
+    .map((g) => `<section>${enxuta(g, p.slug) ? `<h2>${elo(g, p.slug, pre)}</h2>` : g.rotulo ? categoria(g, p.slug, pre, `<h2>${esc(g.rotulo)}</h2>`) : lista(g.itens, p.slug, pre)}</section>`)
     .join('');
-  const toc = (p.toc ?? []).length
+  const toc = !inicio && (p.toc ?? []).length
     ? `<aside class="site-toc"><h2>${esc(t.nestaPagina)}</h2><ul>${p.toc
         .map((h) => `<li class="n${h.nivel}"><a href="#${esc(h.id)}">${esc(h.texto)}</a></li>`)
         .join('')}</ul></aside>`
@@ -100,15 +112,16 @@ ${p.extraHead ?? ''}</head>
 <body>
 <header class="site-nav">
 <button type="button" data-menu-alternar aria-label="${esc(t.menu)}">&#9776;</button>
-<a class="marca" href="${pre}index.html">Brabo</a>
+<a class="marca" href="${pre}index.html"><span class="marca-logo">${LOGO_SVG}</span>Brabo</a>
+<a class="site-github" href="https://github.com/${esc(p.repo ?? 'viralabs-dev/brabo')}">GitHub</a>
 <input type="search" data-busca placeholder="${esc(t.buscar)}" aria-label="${esc(t.buscar)}" autocomplete="off">
 <ul data-busca-lista hidden></ul>
 <select data-seletor aria-label="${esc(t.idioma)}">${idiomas}</select>
 ${degraus ? `<select data-seletor aria-label="${esc(t.degrau)}">${degraus}</select>` : ''}
 <button type="button" data-tema-alternar aria-label="${esc(t.tema)}">&#9680;</button>
 </header>
-<div class="site-corpo">
-<nav class="site-side" aria-label="docs">${side}</nav>
+<div class="site-corpo${inicio ? ' inicio' : ''}">
+${inicio ? '' : `<nav class="site-side" aria-label="docs">${side}</nav>`}
 <main>
 ${p.faixaTraducao ? `<div class="site-faixa" role="note">${esc(p.faixaTraducao)}</div>` : ''}
 <article class="doc">
@@ -166,9 +179,9 @@ export function renderizarPagina(ctx) {
   const conteudo =
     (corpo.temH1 ? '' : `<h1>${esc(pagina.titulo)}</h1>`) +
     corpo.html +
-    `<nav class="site-pager">${[ctx.anterior, ctx.proximo].map((v) => (v ? `<a href="${'../'.repeat(slug.split('/').length - 1)}${esc(hrefDe(v.slug))}">${esc(v.rotulo)}</a>` : '')).join('')}</nav>`;
+    (pagina.dados?.layout === 'inicio' ? '' : `<nav class="site-pager">${[ctx.anterior, ctx.proximo].map((v) => (v ? `<a href="${'../'.repeat(slug.split('/').length - 1)}${esc(hrefDe(v.slug))}">${esc(v.rotulo)}</a>` : '')).join('')}</nav>`);
   return layout({
-    locale, slug, titulo: pagina.titulo, conteudo, toc: corpo.toc, nav: grupos, textos: t,
+    locale, slug, titulo: pagina.titulo, conteudo, repo: ctx.repo, variante: pagina.dados?.layout, toc: corpo.toc, nav: grupos, textos: t,
     faixaTraducao: pagina.traduzida ? null : pagina.somenteIngles ? t.faixaSoIngles : t.faixa,
     editarUrl: edicao.url, atualizadoEm: edicao.atualizadoEm ? `${edicao.atualizadoEm}${edicao.autor ? ` · ${edicao.autor}` : ''}` : null,
     degrau, degraus: ['dev', 'prd'], temMermaid: corpo.temMermaid, extraScripts: ctx.extraScripts, extraHead: ctx.extraHead,

@@ -1,5 +1,5 @@
 ---
-traducao_de: f9981957e3564e59e86f24d25dde64cac77ab183
+traducao_de: 79c254589fcc8fb071f6286f04004fb413b3bbf7
 title: Orchestrating a product across many repositories
 description: A seven-page path for anyone who is about to split, or has already split, a product into several repositories. It uses Brabo's 11 repositories as a real example, with the map, the consumption modes, the life of a change and a checklist to build your own.
 ---
@@ -30,6 +30,10 @@ Brabo is a platform that orchestrates engineering agents. It lives in **11 publi
 | 4 | [The life of a change](vida-de-uma-mudanca.md) | How does a line of code become a release? |
 | 5 | [Build your own](monte-o-seu.md) | In what order do I replicate this? |
 | 6 | [Mistakes we already made](erros-que-ja-cometemos.md) | What can I avoid? |
+
+## And the way of working?
+
+This path is the **structure**. The method that makes it move (board, tasks, rounds with agents, the permanent acceptance test) is in [How Brabo is built](../como-o-brabo-e-construido/index.md).
 
 ## How to read
 

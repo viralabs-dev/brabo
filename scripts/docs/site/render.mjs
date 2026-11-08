@@ -21,7 +21,9 @@
  */
 import MarkdownIt from 'markdown-it';
 import { createCssVariablesTheme, createHighlighter } from 'shiki';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { LOGO_SVG } from './layout.mjs';
 import { urlRelativa } from './paginas.mjs';
 import { urlDeEdicao } from './repo-dono.mjs';
 
@@ -29,7 +31,7 @@ const LINGUAGENS = ['bash', 'json', 'sql', 'elixir', 'yaml', 'typescript', 'tsx'
 // Avisos: nome canônico (pt-BR) e os sinônimos em inglês que o site já aceitava.
 const AVISOS = { nota: 'nota', dica: 'dica', cuidado: 'cuidado', perigo: 'perigo', note: 'nota', tip: 'dica', info: 'nota', warning: 'cuidado', caution: 'cuidado', danger: 'perigo' };
 /** Contrato com o linter (AT-861): os nomes de `:::nome` que a doc pode usar. */
-export const COMPONENTES = ['nota', 'dica', 'cuidado', 'perigo', 'historico', 'passos', 'cartoes', 'abas'];
+export const COMPONENTES = ['nota', 'dica', 'cuidado', 'perigo', 'historico', 'passos', 'cartoes', 'abas', 'hero', 'diferenciais'];
 export const COMPONENTES_ANTIGOS = Object.keys(AVISOS).filter((n) => !COMPONENTES.includes(n));
 const NOMES = new Set([...COMPONENTES, ...COMPONENTES_ANTIGOS]);
 // Título padrão por locale; `info` e `warning` (nomes antigos) mantêm o título deles.
@@ -45,6 +47,17 @@ const REGISTRO = {
   ru: (d) => `Запись от ${d}: описывает Brabo на ту дату`,
   'zh-Hans': (d) => `${d} 的记录：描述当时的 Brabo`,
 };
+
+const README = { 'pt-BR': 'README.md', en: 'README.en.md', ru: 'README.ru.md', 'zh-Hans': 'README.zh-Hans.md' };
+
+/** `:::diferenciais`: os 4 `<td>` da primeira `<table>` do README do locale viram cartões (fonte única). */
+function diferenciais(raiz, locale) {
+  const arquivo = README[locale] ?? README['pt-BR'];
+  const tabela = /<table[\s\S]*?<\/table>/.exec(readFileSync(path.join(raiz, arquivo), 'utf8'))?.[0];
+  const celulas = [...(tabela ?? '').matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)].map((m) => m[1].trim());
+  if (!celulas.length) throw new Error(`:::diferenciais: ${arquivo} não tem a tabela de diferenciais (<table> com <td>)`);
+  return `<div class="diferenciais">${celulas.map((c) => `<div class="diferencial">${c}</div>`).join('')}</div>\n`;
+}
 
 function dataDoRegistro(iso, locale) {
   const ok = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso ?? '');
@@ -102,6 +115,13 @@ function regraDeComponente(state, inicio, fim, silencioso) {
   } else if (nome === 'historico') {
     const data = dataDoRegistro(arg, locale);
     abre.meta.html = `<div class="historico" data-historico="${esc(arg)}"><p class="historico-faixa">${esc((REGISTRO[locale] ?? REGISTRO['pt-BR'])(data))}</p>\n`;
+    corpoDe(state, inicio + 1, prox);
+    comp(state, false, '</div>\n');
+  } else if (nome === 'diferenciais') {
+    abre.meta.html = diferenciais(state.env.raiz, locale);
+    comp(state, false, '');
+  } else if (nome === 'hero') {
+    abre.meta.html = `<div class="hero"><span class="hero-logo">${LOGO_SVG.replace('width="20" height="20"', 'width="32" height="32"')}</span>\n`;
     corpoDe(state, inicio + 1, prox);
     comp(state, false, '</div>\n');
   } else if (nome === 'abas') {
@@ -196,7 +216,7 @@ function resolverLink(href, pagina, porRelativo, repo) {
   return href; // quebrado: o checador (A5) reprova
 }
 
-export async function criarRenderizador({ paginas, repo = 'viralabs-dev/brabo' }) {
+export async function criarRenderizador({ paginas, repo = 'viralabs-dev/brabo', raiz = process.cwd() }) {
   const porRelativo = new Map(paginas.map((p) => [p.relativo, p]));
   const realce = await createHighlighter({ themes: [createCssVariablesTheme({ name: 'brabo', variablePrefix: '--shiki-' })], langs: LINGUAGENS });
   const md = new MarkdownIt({ html: true, linkify: false });
@@ -233,7 +253,7 @@ export async function criarRenderizador({ paginas, repo = 'viralabs-dev/brabo' }
   };
 
   return (pagina) => {
-    const env = { pagina };
+    const env = { pagina, raiz };
     const tokens = md.parse(pagina.corpo, env);
     const html = md.renderer.render(tokens, md.options, env);
     const texto = tokens.filter((t) => t.type === 'inline').map((t) => t.content).join('\n')

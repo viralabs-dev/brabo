@@ -74,7 +74,8 @@ A `docs/` de irmão posto em `.` (hoje o `brabo-qa`) vai para `<nome>/docs` (`qa
   ADR aceito NUNCA é editado: o novo referencia o antigo.
 - Regra de negócio nova → RN-XXX com arquivo:linha e o teste que a cobre, no
   `<raiz>/docs/business-rules/<raiz>.md` da ÁREA DONA DO CÓDIGO (a raiz que
-  hospeda a 1ª ref `caminho:N`; ADR 0254). `docs/business-rules.md` é ÍNDICE
+  hospeda a 1ª ref `caminho:N`; ADR 0254), ou na ÚLTIMA
+  `business-rules/<raiz>/parte-NN.md` quando a área foi partida (ADR 0287). `docs/business-rules.md` é ÍNDICE
   GERADO e `custo.md`/`autenticacao.md` são stubs congelados: não escreva RN
   neles. A numeração é GLOBAL (nunca reinicie por raiz) e o `docs:check` soma
   todas as raízes e reprova número duplicado. Âncora `{#rn-NNN}` é o contrato:

@@ -1,5 +1,5 @@
 ---
-traducao_de: f9981957e3564e59e86f24d25dde64cac77ab183
+traducao_de: 79c254589fcc8fb071f6286f04004fb413b3bbf7
 title: 跨多个仓库编排一个产品
 description: 面向打算把产品拆成多个仓库、或已经拆分的人的七页路径。以 Brabo 的 11 个仓库为真实案例，包含地图、消费方式、一次变更的生命周期，以及搭建你自己的清单。
 ---
@@ -30,6 +30,10 @@ Brabo 是一个编排工程智能体的平台。它位于 [`viralabs-dev`](https
 | 4 | [一次变更的生命周期](vida-de-uma-mudanca.md) | 一行代码如何变成发布？ |
 | 5 | [搭建你自己的](monte-o-seu.md) | 按什么顺序复制这套做法？ |
 | 6 | [我们犯过的错误](erros-que-ja-cometemos.md) | 我能避免什么？ |
+
+## 那么工作方式呢？
+
+本路径讲的是**结构**。让结构运转起来的方法（看板、任务、与智能体一起的轮次、常驻验收测试）见[Brabo 是如何构建的](../como-o-brabo-e-construido/index.md)。
 
 ## 如何阅读
 

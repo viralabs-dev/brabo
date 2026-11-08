@@ -7,6 +7,10 @@ tipo: historico
 
 # Auditoria visual, antes e depois da Rodada 29 {#visual-audit-before-and-after-rodada-29}
 
+:::historico 2026-09-30
+Medição, não mudança: a interface antes e depois da Rodada 29, capturada contra a `dev` em dois commits do mesmo dia. Registra o que o verificador mediu e o que melhorou ou não. As capturas não estão no repositório; cada achado cita o nome do arquivo.
+:::
+
 > AT-290 (EP-031, HS-074). Uma **medição, não uma mudança**: nada em `apps/`
 > foi tocado para escrever esta página. A captura do "antes" rodou em 2026-09-30
 > contra a `dev` em `de18e6a6e2`; a do "depois" rodou no mesmo dia contra a

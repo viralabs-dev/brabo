@@ -32,6 +32,13 @@ import { construirReferenciaDaApi } from './openapi.mjs';
 import { criarRenderizador } from './render.mjs';
 import { urlDeEdicao } from './repo-dono.mjs';
 
+// Títulos de RN (`{#rn-NNN}`) e âncoras de variável (`{#env-NOME}`) (AT-862): a busca acha RN e variável pelo nome.
+// Só estes: indexar todo título de seção custou +550 KB (37%) por locale, e o resto da página se acha pelo título dela.
+const secoesDe = ({ toc, html }) => [
+  ...toc.filter((h) => /^rn-\d+$/.test(h.id)),
+  ...[...html.matchAll(/<a id="(env-[^"]+)"><\/a><code>([^<]+)<\/code>/g)].map((m) => ({ id: m[1], texto: m[2] })),
+];
+
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
 const GRAU = { main: 'prd', dev: 'dev' }; // DOCS_BRANCH -> degrau; o resto é local (qa foi aposentada, ADR 0235)
@@ -44,7 +51,7 @@ export async function construir({ raiz = RAIZ, saida = path.join(raiz, 'build/do
   const resultado = { saida, locales: {} };
   for (const locale of LOCALES) {
     const paginas = descobrirPaginas({ raiz, locale, raizesDeDoc });
-    const render = await criarRenderizador({ paginas, repo });
+    const render = await criarRenderizador({ paginas, repo, raiz });
     const navegacao = construirNavegacao({ raiz, repo, rotulos: lerRotulosDaBarra(raiz, locale), raizesDeDoc });
     const ordem = listaPlana(navegacao);
     const porSlug = new Map(paginas.map((p) => [p.slug, p]));
@@ -52,7 +59,7 @@ export async function construir({ raiz = RAIZ, saida = path.join(raiz, 'build/do
     const renderizadas = new Map(paginas.map((p) => [p.slug, render(p)]));
     for (const pagina of paginas) {
       const i = ordem.findIndex((o) => o.slug === pagina.slug);
-      const vizinho = (o) => (o && porSlug.get(o.slug) ? { ...o, url: porSlug.get(o.slug).url } : null);
+      const vizinho = (o) => (o && porSlug.get(o.slug) ? { ...o, rotulo: o.rotulo ?? porSlug.get(o.slug).rotulo, url: porSlug.get(o.slug).url } : null);
       const h = historico.get(`${pagina.raiz}/${pagina.relativo}`);
       const html = layout({
         locale, locales: LOCALES, pagina, corpo: renderizadas.get(pagina.slug), navegacao,
@@ -66,7 +73,7 @@ export async function construir({ raiz = RAIZ, saida = path.join(raiz, 'build/do
       mkdirSync(path.dirname(destino), { recursive: true });
       writeFileSync(destino, html);
     }
-    await gravarIndice(path.join(saida, locale === 'pt-BR' ? '' : locale), locale, paginas.map((p) => ({ slug: p.slug || 'index', titulo: p.titulo, texto: renderizadas.get(p.slug).texto })));
+    await gravarIndice(path.join(saida, locale === 'pt-BR' ? '' : locale), locale, paginas.map((p) => ({ slug: p.slug || 'index', titulo: p.titulo, texto: renderizadas.get(p.slug).texto, secoes: secoesDe(renderizadas.get(p.slug)) })));
     resultado.locales[locale] = { paginas, navegacao };
   }
   const moldura = (locale, { slug, titulo, conteudo, extraHead }) => {

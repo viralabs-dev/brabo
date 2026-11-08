@@ -10,6 +10,10 @@ tipo: historico
 
 # A validação real — GitHub remoto e modelo de verdade
 
+:::historico 2026-08-06
+Validação com GitHub remoto, dev agent real e modelo de API: o que a Fase 12 deixara de fora. A metade barata passou inteira e a cara falhou de um jeito que nenhum teste mostrara. Relata dez execuções, cada correção e o que ela revelou, até a cadeia inteira ponta a ponta.
+:::
+
 A [validação da Fase 12](./validacao-fase-12.md) declara os próprios limites com
 todas as letras: `LocalGitProvider`, `NoopDevAgent`, veredito de gate escrito
 pelo próprio script. Ela existe para provar a **cadeia** sem depender de rede

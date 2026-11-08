@@ -48,17 +48,41 @@ export function lerRotulosDaBarra(raiz, locale) {
   return mapa;
 }
 
-/** Índice `business-rules` + uma página por `business-rules/<x>.md` de cada raiz; custo e autenticação primeiro (ordem histórica), o resto alfabético. */
-export function slugsDeRegras(raiz, raizesDeDoc) {
+/**
+ * Índice `business-rules` + uma página por `business-rules/<x>.md` de cada raiz; custo e autenticação primeiro (ordem histórica), o resto alfabético.
+ * Área partida (AT-862, ADR 0287): `business-rules/<x>/parte-NN.md` existe, e o `<x>.md` é o índice dela. Devolve só os slugs de página
+ * (`business-rules/<x>` e as partes), que é o que a ordem de leitura precisa; `itensDeRegras` monta a árvore.
+ */
+export function regrasPorArea(raiz, raizesDeDoc) {
   const nomes = new Set();
+  const partes = new Map(); // <x> -> ['parte-01', ...]
   for (const rd of raizesExistentes(raiz, raizesDeDoc)) {
     try {
-      for (const f of readdirSync(path.join(raiz, rd, 'business-rules'))) if (f.endsWith('.md')) nomes.add(f.slice(0, -3));
+      for (const e of readdirSync(path.join(raiz, rd, 'business-rules'), { withFileTypes: true })) {
+        if (e.isFile() && e.name.endsWith('.md')) nomes.add(e.name.slice(0, -3));
+        else if (e.isDirectory()) {
+          const ps = readdirSync(path.join(raiz, rd, 'business-rules', e.name)).filter((f) => /^parte-\d+\.md$/.test(f)).map((f) => f.slice(0, -3));
+          if (ps.length) partes.set(e.name, [...new Set([...(partes.get(e.name) ?? []), ...ps])].sort());
+        }
+      }
     } catch { /* raiz sem regras */ }
   }
   const fixos = ['custo', 'autenticacao'];
   const resto = [...nomes].filter((n) => !fixos.includes(n)).sort();
-  return ['business-rules', ...[...fixos.filter((n) => nomes.has(n)), ...resto].map((n) => `business-rules/${n}`)];
+  return [...fixos.filter((n) => nomes.has(n)), ...resto].map((n) => ({ nome: n, partes: partes.get(n) ?? [] }));
+}
+
+export function slugsDeRegras(raiz, raizesDeDoc) {
+  return ['business-rules', ...regrasPorArea(raiz, raizesDeDoc).flatMap(({ nome, partes }) => [`business-rules/${nome}`, ...partes.map((p) => `business-rules/${nome}/${p}`)])];
+}
+
+/** Os itens do menu de "Regras de negócio": uma página por área, ou (partida) uma subcategoria recolhida, com o índice como link dela. */
+export function itensDeRegras(raiz, raizesDeDoc) {
+  return regrasPorArea(raiz, raizesDeDoc).map(({ nome, partes }) =>
+    partes.length
+      ? { tipo: 'categoria', colapsada: true, slug: `business-rules/${nome}`, itens: partes.map((p) => ({ tipo: 'pagina', slug: `business-rules/${nome}/${p}` })) }
+      : { tipo: 'pagina', slug: `business-rules/${nome}` },
+  );
 }
 
 /** Uma página por `reference/workflows/<x>.md` de cada raiz (hoje só as do brabo-ci), alfabético. */
@@ -85,12 +109,14 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
     cat('🎓 Tutoriais', [
       pg('tutorials/from-zero-to-deliverable'),
       cat('Orquestrar repositórios', pgs(...orquestrar), { slug: 'tutorials/orquestrar-repositorios', colapsada: true }),
+      cat('Como o Brabo é construído', pgs(...['do-pedido-a-atividade', 'a-rodada', 'a-regra-vira-codigo', 'qualidade-e-o-teste-permanente', 'copie-o-metodo'].map((s) => `tutorials/como-o-brabo-e-construido/${s}`)), { slug: 'tutorials/como-o-brabo-e-construido', colapsada: true }),
     ], { espera: ['tutorial'] }),
     cat('🧭 Guias práticos', [
       ...pgs('how-to/desenvolver-o-brabo', 'how-to/usar-o-runner', 'how-to/token-do-github-packages', 'runbook', 'tutorials/adotar', 'explanation/usar-em-outra-org', 'rodadas-manuais'),
       cat('Contribuir', [pg('contribuir/como-escrevemos', 'Como escrevemos'), link('Como contribuir', 'CONTRIBUTING.md'), link('Onde pedir ajuda', 'SUPPORT.md'), link('Reportar vulnerabilidade', 'SECURITY.md')]),
     ], { espera: ['guia'] }),
     cat('💡 Conceitos', [
+      pg('intro', 'O que é o Brabo'),
       ...pgs('architecture', 'explanation/gates', 'explanation/modelo-de-time', 'explanation/regressivo-por-funcionalidade', 'e2e-portao/como-funciona', 'regressivo/como-funciona', 'explanation/observability'),
       cat('Processo e esteira', pgs('explanation/painel-da-mudanca', 'explanation/politica-em-10-minutos', 'explanation/branching-policy', 'explanation/ordem-da-promocao', 'explanation/reutilizaveis-sem-chamador', 'explanation/cadeia-de-suprimentos-do-ci', 'explanation/release-do-produto', 'explanation/licoes-do-ci')),
       cat('Localização', pgs('explanation/localizacao', 'explanation/localizacao-en', 'explanation/localizacao-ru', 'explanation/localizacao-zh-hans'), { colapsada: true }),
@@ -106,13 +132,13 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
       cat('Workflows do brabo-ci', pgs(...slugsDeWorkflows(raiz, raizesDeDoc)), { colapsada: true }),
       pg('reference/paridade-de-traducao', 'Paridade de tradução'), pg('reference/brb', 'Registro BRB'),
       pg('security-surface'), pg('dependencias-e-imagens', 'Dependências e imagens do broker'), pg('reference/contratos-e-imagem', 'Contratos e imagem da api'),
-      cat('Regras de negócio', pgs(...slugsDeRegras(raiz, raizesDeDoc).slice(1)), { slug: 'business-rules', colapsada: true }),
+      cat('Regras de negócio', itensDeRegras(raiz, raizesDeDoc), { slug: 'business-rules', colapsada: true }),
       { tipo: 'rota', slug: 'reference/api', rotulo: t('Referência da API') },
     ], { espera: ['referencia'] }),
     cat('🏛️ Decisões (ADR)', adrsPorTema(raiz).map((c) => ({ tipo: 'categoria', rotulo: c.rotulo, colapsada: true, itens: c.itens.map((s) => pg(s)) })), { slug: 'adr', colapsada: true, espera: ['decisao'] }),
     // sempre o ÚLTIMO grupo
     cat('🗂️ Histórico do projeto', [
-      ...pgs('tutorials/interface-antes-e-depois-shadcn', 'explanation/historico-de-fases', 'explanation/fase-28-pasta-do-usuario', 'explanation/fase-29-instalacao-de-uma-linha', 'explanation/fase-30-runner-por-maquina', 'explanation/backlog'),
+      ...pgs('historico/linha-do-tempo', 'tutorials/interface-antes-e-depois-shadcn', 'explanation/historico-de-fases', 'explanation/historico-de-fases-parte-1', 'explanation/historico-de-fases-parte-2', 'explanation/historico-de-fases-parte-3', 'explanation/historico-de-fases-parte-4', 'explanation/fase-28-pasta-do-usuario', 'explanation/fase-29-instalacao-de-uma-linha', 'explanation/fase-30-runner-por-maquina', 'explanation/backlog'),
       cat('Validações e medições', pgs('explanation/primeiro-dogfooding', 'explanation/execucao-real-hello-world', 'explanation/achados-execucao-real', 'explanation/validacao-fase-12', 'explanation/validacao-real', 'explanation/aceite-providers', 'explanation/medicao-do-idioma', 'explanation/medicao-do-jev', 'explanation/auditoria-fluxo-vs-codigo', 'explanation/auditoria-visual-rodada-29'), { colapsada: true }),
     ], { colapsada: true, espera: ['historico'] }),
   ];

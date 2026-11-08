@@ -6,10 +6,14 @@ sidebar_position: 17
 description: The scope of FASE 30 — the local agent's identity stops being per project and becomes the machine's, and the installer closes the installation by creating the first account and bringing up the paired agent. The decisions are in ADRs 0154 and 0155.
 keywords: [fase 30, runner, local agent, device key, installer, service]
 tipo: historico
-traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # FASE 30 — the machine's local agent
+
+:::historico 2026-09-11
+A slice of Phase 30: install Brabo in one line and use it, with one local agent per machine and the first account being born in the terminal. It includes what the measurement changed in the slice, the sessions, what the phase does not touch and the gaps it brushes against. Where they disagree, ADR 0154 or 0155 prevails.
+:::
 
 > This document is the phase's **scope**: what it pursues, what it refuses,
 > and in what order. The **decisions** live in

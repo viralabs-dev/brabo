@@ -72,15 +72,27 @@ export function paginaNaUniao(arquivo, raizes = lerRaizesDeDoc()) {
 }
 
 /**
- * O bloco do índice: uma linha por RN, com a âncora `rn-NNN` e o link para a
- * página hospedeira. `rns`: `[{numero, titulo, pagina}]`.
+ * O bloco do índice (AT-862, ADR 0287): uma linha por domínio (contagem e link
+ * para a página dele) e, por baixo, a GRADE de números, uma âncora `rn-NNN` por
+ * RN com o link para a página hospedeira (a parte, quando a área foi partida).
+ * Os títulos moram nas páginas; a grade só preserva as âncoras, que são contrato.
+ * `rns`: `[{numero, titulo, pagina}]`.
  */
 export function gerarIndiceDeRn(rns) {
-  const linhas = [...rns]
-    .sort((a, b) => a.numero - b.numero)
-    .map((r) => {
-      const n = String(r.numero).padStart(3, '0');
-      return `- <a id="rn-${n}"></a>[RN-${n}](${r.pagina}#rn-${n}) — ${r.titulo}`;
-    });
-  return ['<!-- BEGIN:GENERATED:indice-de-rn -->', ...linhas, '<!-- END:GENERATED:indice-de-rn -->'].join('\n');
+  const ordenadas = [...rns].sort((a, b) => a.numero - b.numero);
+  const dominios = new Map();
+  for (const r of ordenadas) {
+    const d = r.pagina.replace(/^business-rules\//, '').replace(/\.md$/, '').split('/')[0];
+    dominios.set(d, (dominios.get(d) ?? 0) + 1);
+  }
+  const linhasDeDominio = [...dominios]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([d, n]) => `- [${d}](business-rules/${d}.md) — ${n} RN`);
+  const celulas = ordenadas.map((r) => {
+    const n = String(r.numero).padStart(3, '0');
+    return `<a id="rn-${n}"></a>[${n}](${r.pagina}#rn-${n})`;
+  });
+  const grade = [];
+  for (let i = 0; i < celulas.length; i += 10) grade.push(celulas.slice(i, i + 10).join(' '));
+  return ['<!-- BEGIN:GENERATED:indice-de-rn -->', ...linhasDeDominio, '', ...grade, '<!-- END:GENERATED:indice-de-rn -->'].join('\n');
 }

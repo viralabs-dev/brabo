@@ -1,6 +1,6 @@
 ---
 tipo: historico
-traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 id: primeiro-dogfooding
 title: What the first dogfooding run taught
 sidebar_label: First dogfooding
@@ -10,6 +10,10 @@ keywords: [dogfooding, harvest, Phase 10, findings, operability]
 ---
 
 # What the first dogfooding run taught
+
+:::historico 2026-08-02
+The harvest of Phase 10, when Brabo built part of itself (Bitbucket support) for the first time. It records the 17 real findings, what was left unmeasured because the observation table was never filled in, and what Phase 12 did with all of it.
+:::
 
 In Phase 10, Brabo built part of itself: Bitbucket support and the
 `GenericGitProvider` were delivered by the product's own agents, on a fork,
