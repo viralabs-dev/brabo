@@ -14,9 +14,12 @@
 最终决定权始终在你手里——靠设计保证，而不是靠约定。**
 
 [![Docs check](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/docs-check.yml?branch=dev&label=docs-check&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/docs-check.yml)
+[![CI dev](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/ci.yml?branch=dev&label=CI%20dev&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/ci.yml?query=branch%3Adev)
+[![CI main](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/ci.yml?branch=main&label=CI%20main&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/ci.yml?query=branch%3Amain)
 [![Release](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/release.yml?label=release&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/release.yml)
 [![许可证：MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![版本](https://img.shields.io/github/v/release/viralabs-dev/brabo?label=version&color=informational&style=flat-square)](https://github.com/viralabs-dev/brabo/releases/latest)
+[![dev](https://img.shields.io/github/v/tag/viralabs-dev/brabo?include_prereleases&filter=*-dev*&label=dev&color=informational&style=flat-square)](https://github.com/viralabs-dev/brabo/tags)
+[![main](https://img.shields.io/github/v/release/viralabs-dev/brabo?label=main&color=informational&style=flat-square)](https://github.com/viralabs-dev/brabo/releases/latest)
 [![文档](https://img.shields.io/badge/docs-viralabs--dev.github.io/brabo-8A2BE2.svg?style=flat-square)](https://viralabs-dev.github.io/brabo/prd/zh-Hans/)
 [![在 Ko-fi 上支持](https://img.shields.io/badge/Ko--fi-%E8%AF%B7%E6%88%91%E5%96%9D%E5%92%96%E5%95%A1-FF5E5B?logo=ko-fi&logoColor=white&style=flat-square)](https://ko-fi.com/daneiel)
 

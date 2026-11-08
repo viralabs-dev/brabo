@@ -14,9 +14,12 @@
 Final authority stays yours — by construction, not by convention.**
 
 [![Docs check](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/docs-check.yml?branch=dev&label=docs-check&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/docs-check.yml)
+[![CI dev](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/ci.yml?branch=dev&label=CI%20dev&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/ci.yml?query=branch%3Adev)
+[![CI main](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/ci.yml?branch=main&label=CI%20main&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/ci.yml?query=branch%3Amain)
 [![Release](https://img.shields.io/github/actions/workflow/status/viralabs-dev/brabo/release.yml?label=release&style=flat-square)](https://github.com/viralabs-dev/brabo/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/github/v/release/viralabs-dev/brabo?label=version&color=informational&style=flat-square)](https://github.com/viralabs-dev/brabo/releases/latest)
+[![dev](https://img.shields.io/github/v/tag/viralabs-dev/brabo?include_prereleases&filter=*-dev*&label=dev&color=informational&style=flat-square)](https://github.com/viralabs-dev/brabo/tags)
+[![main](https://img.shields.io/github/v/release/viralabs-dev/brabo?label=main&color=informational&style=flat-square)](https://github.com/viralabs-dev/brabo/releases/latest)
 [![Documentation](https://img.shields.io/badge/docs-viralabs--dev.github.io/brabo-8A2BE2.svg?style=flat-square)](https://viralabs-dev.github.io/brabo/prd/en/)
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-buy%20me%20a%20coffee-FF5E5B?logo=ko-fi&logoColor=white&style=flat-square)](https://ko-fi.com/daneiel)
 
