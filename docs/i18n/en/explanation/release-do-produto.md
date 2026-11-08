@@ -1,5 +1,6 @@
 ---
-traducao_de: a766a77602f64b8f373dcf2fcd64c6af12aebc25
+tipo: conceito
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # Product release {#product-release}

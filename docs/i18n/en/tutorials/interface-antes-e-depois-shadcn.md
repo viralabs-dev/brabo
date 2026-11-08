@@ -1,5 +1,6 @@
 ---
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 title: Interface before and after shadcn (10/31/2026)
 description: Recording of the screens and of a Creative session before and after migrating the primitives to shadcn/ui (ADR 0232) and fixing the tools on 9Router (RN-950).
 ---

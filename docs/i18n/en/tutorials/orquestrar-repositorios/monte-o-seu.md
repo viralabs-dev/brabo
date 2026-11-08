@@ -1,5 +1,5 @@
 ---
-traducao_de: 23e2f214c5dfa908580e5bb65ad5c7ecf7e0e64c
+traducao_de: f9981957e3564e59e86f24d25dde64cac77ab183
 title: Build your own
 description: An ordered checklist to replicate Brabo's pattern in another product - parent folder, CI repository with the policy, contracts repository, orchestrating repository, quality repository with the gate and front door - with what to copy and what to adapt at each step.
 ---
@@ -10,7 +10,9 @@ description: An ordered checklist to replicate Brabo's pattern in another produc
 
 **After reading, you can:** list the repositories you will create, in order, and say for each what you copy from Brabo and what you adapt.
 
-Order matters: each step depends only on the earlier ones. Do one at a time and **advance only when the step's example PR is green**.
+:::dica[Order matters]
+Each step depends only on the earlier ones. Do one at a time and **advance only when the step's example PR is green**.
+:::
 
 ## 0. Before anything: the map
 
@@ -67,6 +69,10 @@ Do this one **first among the code ones**, because all the others call it.
 
 ## Once it is standing
 
-Generate each README's "Onde se encaixa" block from `repos.yml`, turn on the merge-order and pin checks, and read the [mistakes we already made](erros-que-ja-cometemos.md) before assuming all is well.
+:::passos
+1. Generate each README's "Onde se encaixa" block from `repos.yml`.
+2. Turn on the merge-order and pin checks.
+3. Read the [mistakes we already made](erros-que-ja-cometemos.md) before assuming all is well.
+:::
 
 > **TODO(humano):** this path has not yet been validated by someone outside the project. The agreed proof is that someone from the SmartSky team, reading only the path, draws the map and narrates a change's path to the release; the result and any divergences must be recorded here.

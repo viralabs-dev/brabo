@@ -1,7 +1,7 @@
 ---
 title: From zero to a deliverable
 description: A real project walked end to end on Brabo — create, pick a model, answer the agents' open questions in the chat, confirm the architecture, approve the plan, and merge every pull request without leaving the Creative's chat.
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+traducao_de: f9981957e3564e59e86f24d25dde64cac77ab183
 ---
 
 # From zero to a deliverable
@@ -17,11 +17,25 @@ infrastructure pull request, merged into the project's `dev` branch, and a
 deliverable whose test suite passes **102/102** in a clean clone and that
 starts with `docker compose up`.
 
+:::dica[Everything through the Creative's chat]
 The whole run was driven from **one place, the Creative's session chat**:
 open questions, the architecture confirmation and every merge were decided
-there, without reloading the page or opening another tab. Each step below
-says what you do and what the agents hand back. The recordings are the real
-screen of Brabo; the path of the mounted folder is blurred in step 1.
+there, without reloading the page or opening another tab.
+:::
+
+The path, in six steps:
+
+:::passos
+1. **Create the project** and choose where the code lives.
+2. **Give the team a model**, in a single action.
+3. **Describe the idea** and answer the agents' open questions.
+4. **Check the PO, the Architect and the ADR**, and confirm the architecture.
+5. **Approve the execution plan** and turn on automatic mode.
+6. **Merge every pull request** that passes the gates, from the chat.
+:::
+
+Each step below says what you do and what the agents hand back. The recordings
+are the real screen of Brabo; the path of the mounted folder is blurred in step 1.
 
 ## 1. Create the project
 
@@ -107,3 +121,9 @@ count and the click history; `npm run user:create` refuses a password shorter
 than 12 characters; and `/docs` serves the API reference. The CORS preflight
 from `127.0.0.1:8080` and from `localhost:8080` gets each its own
 `Access-Control-Allow-Origin`, and a foreign origin gets none.
+
+## Next step
+
+:::cartoes
+- [Orchestrate a product across several repositories](orquestrar-repositorios/index.md): the path for splitting a product the way Brabo was split.
+:::

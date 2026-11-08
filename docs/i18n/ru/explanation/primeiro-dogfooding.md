@@ -5,7 +5,8 @@ sidebar_label: Первый dogfooding
 sidebar_position: 4
 description: Сбор урожая Фазы 10 — семнадцать находок первого раза, когда Brabo строил сам Brabo, что было измерено и что потерялось из-за того, что не было записано.
 keywords: [dogfooding, сбор урожая, Фаза 10, находки, эксплуатируемость]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # Чему научил первый dogfooding

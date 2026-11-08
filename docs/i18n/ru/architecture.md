@@ -5,7 +5,8 @@ sidebar_label: Архитектура
 sidebar_position: 2
 description: Карта Brabo — контейнеры, карта кода, поток хода агента, инварианты слоёв и известный долг.
 keywords: [архитектура, карта кода, инварианты, harness, event log]
-traducao_de: 72b7ce386be372596e8fa6caf64502089c39fa05
+tipo: conceito
+traducao_de: e670474d198203d7a03d4054457ade5237e7dd02
 ---
 
 # Архитектура
@@ -14,7 +15,7 @@ traducao_de: 72b7ce386be372596e8fa6caf64502089c39fa05
 с чего начинать чтение, что обещает каждая граница и что, как уже известно,
 кривое.
 
-Решения и их обоснования живут в [ADR](adr/index.md) — их 257, и многие
+Решения и их обоснования живут в [ADR](adr/index.md) — их 281, и многие
 фиксируют реальный дефект, найденный при исполнении. Здесь мы не
 повторяем аргумент: мы указываем на него.
 
@@ -575,9 +576,13 @@ sequenceDiagram
 разрешать» записало бы шаблон в `allow` и снова открыло бы дверь
 ([RN-106](business-rules/api.md#rn-106),
 [ADR 0065](adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.md)).
-Жизненного цикла контейнера (подготовить, перезапустить, очистить) пока не
-существует — объявленный срез FASE 25, записанный в CLAUDE.md, — поэтому
-этот инвариант пока сосуществует с политикой области путей
+Жизненный цикл контейнера (подготовить, перезапустить, очистить) существует как
+таблица `project_containers` и конечный автомат
+`provisioning → running ⇄ stopped` ([RN-243](business-rules/api.md#rn-243) —
+[RN-248](business-rules/api.md#rn-248), [ADR 0081](adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.md)):
+сценарии использования лишь записывают переход, и ни один из них не обращается
+к Docker. Сокет Docker сервера держит `brabo-broker`. Поэтому этот инвариант
+сосуществует с политикой области путей
 [ADR 0055](adr/0055-escopo-de-caminho-na-politica-de-terminal.md).
 
 А начиная с [ADR 0143](adr/0143-agentes-de-dev-so-depois-do-container.md)

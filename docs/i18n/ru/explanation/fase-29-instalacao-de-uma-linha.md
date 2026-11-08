@@ -5,7 +5,8 @@ sidebar_label: FASE 29 — установка одной строкой
 sidebar_position: 16
 description: Срез FASE 29 — подпись опубликованных артефактов, версионируемый install.sh с выбранным источником и маркером, резервное копирование томов и согласованная база runner. Решения находятся в ADR с 0149 по 0152.
 keywords: [фаза 29, установщик, подпись, cosign, резервное копирование, runner, база проектов]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # FASE 29 — установка одной строкой

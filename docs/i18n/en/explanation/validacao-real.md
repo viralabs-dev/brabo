@@ -1,5 +1,6 @@
 ---
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 id: validacao-real
 title: The real validation — remote GitHub and a real model
 sidebar_label: Real validation (13b)

@@ -5,7 +5,8 @@ sidebar_label: FASE 30——机器的本地智能体
 sidebar_position: 17
 description: FASE 30 的范围——本地智能体的身份不再按项目，而改为属于机器，安装器通过创建第一个账户并启动已配对的智能体来完成安装。决定在 ADR 0154 和 0155 中。
 keywords: [fase 30, runner, 本地智能体, 设备密钥, 安装器, 服务]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # FASE 30——机器的本地智能体

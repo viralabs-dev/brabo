@@ -5,7 +5,8 @@ sidebar_label: Реальная валидация (13b)
 sidebar_position: 6
 description: Прогон на настоящем удалённом репозитории, с реальным dev agent и моделью через API — что он доказал, что он провалил и почему провал здесь ценнее прохождения.
 keywords: [валидация, dogfooding, GitHub, dev agent, измерение, FASE 13b]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # Реальная валидация — удалённый GitHub и настоящая модель
