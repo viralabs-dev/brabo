@@ -10,18 +10,14 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { lerFrontmatter } from './site/paginas.mjs';
+import { tipoDaPagina } from './site/tipos.mjs';
 
 /** Limite de palavras de prosa por tipo; tipo fora daqui é isento. */
 export const LIMITES = { tutorial: 1500, guia: 800, conceito: 1200 };
 
 const ID_INTERNO = /\b(?:ADR \d{3,4}|RN-\d+|AT-\d+|EP-\d+|HS-\d+|Fase \d+|Rodada \d+)\b/g;
 const PARA_SABER_MAIS = /^##\s+Para saber mais\b/;
-
-// shortcut: o tipo é lido do `tipo:` do frontmatter aqui; na integração troca
-// por `tipoDaPagina` do `tipos.mjs` (L1), que também valida o valor.
-export function tipoDoTexto(texto) {
-  return /^---\n[\s\S]*?^tipo:\s*(\S+)\s*$[\s\S]*?^---/m.exec(texto)?.[1] ?? null;
-}
 
 /** Palavras da prosa + IDs internos (linha 1-based). Funções puras sobre texto. */
 export function medirPagina(texto) {
@@ -47,7 +43,8 @@ export function medirPagina(texto) {
 }
 
 /** Avisos de uma página; vazio quando passa ou quando o tipo é isento. */
-export function avisos(texto, tipo = tipoDoTexto(texto)) {
+export function avisos(texto, slug = '') {
+  const tipo = tipoDaPagina({ slug, dados: lerFrontmatter(texto).dados });
   const limite = LIMITES[tipo];
   if (limite === undefined) return [];
   const { palavras, ids } = medirPagina(texto);
@@ -77,7 +74,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const alvos = process.argv.length > 2 ? process.argv.slice(2) : paginas(raiz);
   let n = 0;
   for (const arq of alvos) {
-    for (const a of avisos(readFileSync(join(raiz, arq), 'utf8'))) {
+    for (const a of avisos(readFileSync(join(raiz, arq), 'utf8'), arq.replace(/^docs\//, '').replace(/\.md$/, ''))) {
       console.warn(`AVISO ${arq}: ${a}`);
       n++;
     }
