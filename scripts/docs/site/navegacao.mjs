@@ -88,7 +88,7 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
     ], { espera: ['tutorial'] }),
     cat('🧭 Guias práticos', [
       ...pgs('how-to/desenvolver-o-brabo', 'how-to/usar-o-runner', 'how-to/token-do-github-packages', 'runbook', 'tutorials/adotar', 'explanation/usar-em-outra-org', 'rodadas-manuais'),
-      cat('Contribuir', [link('Como contribuir', 'CONTRIBUTING.md'), link('Onde pedir ajuda', 'SUPPORT.md'), link('Reportar vulnerabilidade', 'SECURITY.md')]),
+      cat('Contribuir', [pg('contribuir/como-escrevemos', 'Como escrevemos'), link('Como contribuir', 'CONTRIBUTING.md'), link('Onde pedir ajuda', 'SUPPORT.md'), link('Reportar vulnerabilidade', 'SECURITY.md')]),
     ], { espera: ['guia'] }),
     cat('💡 Conceitos', [
       ...pgs('architecture', 'explanation/gates', 'explanation/modelo-de-time', 'explanation/regressivo-por-funcionalidade', 'e2e-portao/como-funciona', 'regressivo/como-funciona', 'explanation/observability'),
@@ -97,7 +97,7 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
       cat('Notas técnicas', pgs('explanation/tanstack-ai'), { colapsada: true }),
     ], { espera: ['conceito'] }),
     cat('📖 Referência', [
-      pg('glossary'),
+      pg('glossary'), pg('reference/componentes-da-doc', 'Componentes da doc'),
       pg('reference/configuration', 'Configuração'), pg('reference/events', 'Eventos'), pg('reference/permissions', 'Permissões'),
       pg('reference/artifacts', 'Artefatos'), pg('reference/git-providers', 'Provedores de git'), pg('reference/llm-providers', 'Provedores de LLM'),
       pg('reference/internal-api', 'API interna'), pg('reference/internal-open-questions-api', 'Perguntas em aberto da API interna'),
