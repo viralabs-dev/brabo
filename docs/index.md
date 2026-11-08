@@ -19,7 +19,7 @@ Um time de agentes de IA conduz sua aplicação do brief ao deploy; o merge é s
 :::cartoes
 - [Usar o Brabo](getting-started.md): instale, abra o primeiro projeto e acompanhe uma sessão.
 - [Entender como funciona](intro.md): os agentes, a política de aprovação e o registro imutável.
-- [Replicar o método](tutorials/orquestrar-repositorios/index.md): organize vários repositórios para um time de agentes.
+- [Replicar o método](tutorials/como-o-brabo-e-construido/index.md): organize vários repositórios para um time de agentes.
 :::
 
 :::diferenciais
