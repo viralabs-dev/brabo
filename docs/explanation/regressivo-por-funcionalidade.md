@@ -75,11 +75,11 @@ nunca some do relatório. Os números e as opções descartadas estão no
 O `brabo-qa` gera um relatório (`relatorio-regressivo.md`, derivado de um
 `relatorio-regressivo.json`) com a recomendação que compõe a decisão:
 **aprovar**, **aceitar com justificativa** ou **bloquear**. A regra é fixa e
-está em [RN-1051](../business-rules/ci.md#rn-1051): digest ou
+está em RN-1051: digest ou
 assinatura bloqueia; spec em funcionalidade que a PR toca bloqueia; spec fora do
 que a PR toca, ou sem funcionalidade, pede aceite com justificativa. Quando o dono
 aceita um vermelho com `/qa-aceitar`, o check preserva esse relatório e registra
-o aceite contra a recomendação ([RN-1052](../business-rules/ci.md#rn-1052)).
+o aceite contra a recomendação (RN-1052).
 
 Na `main` o relatório é o portão. Na `dev` ele é só o atestado, e nada bloqueia.
 
