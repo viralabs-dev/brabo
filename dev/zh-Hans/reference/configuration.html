@@ -370,6 +370,17 @@
 <blockquote>
 <p>邮件正文是<strong>纯文本</strong>，没有 HTML——<code>MailSender</code> 端口不携带富文本正文的结构，而模板引擎会是一个毫无收益的注入面。链接使用 <code>WEB_ORIGIN</code>（见上文）。</p>
 </blockquote>
+<h3 id="recuperar-a-senha-sem-smtp">无 SMTP 时找回密码</h3>
+<p>安装默认 <code>MAIL_TRANSPORT=log</code>，<code>install.sh</code> 不会启用 SMTP，因此<strong>任何</strong>账户（包括所有者）都收不到重置邮件。没有 SMTP 时，经由 api 日志：</p>
+<ol>
+<li>在安装 compose 的<strong>临时</strong> override 中，为 <code>api</code> 服务设置 <code>AUTH_MAIL_LOG_TOKENS=true</code>，只重建 <code>api</code>。</li>
+<li>在登录页为该账户的邮箱申请重置密码。</li>
+<li>从 <code>docker compose logs api</code> 取得带令牌的重置链接，在界面中设置新密码。</li>
+<li><strong>撤销 override</strong> 并重建 <code>api</code>：应用日志中的令牌就是明文凭据（<a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032</a>）。</li>
+</ol>
+<blockquote>
+<p><strong>针对 <code>main</code> 的 TP-01。</strong> TP-01 使用<strong>所有者</strong>账户（<code>first-account</code>）登录，而非 <code>owner@brabo.dev</code>：按角色快速访问只存在于 <code>local</code>（RN-984）。</p>
+</blockquote>
 <h3 id="开发种子数据">开发种子数据</h3>
 <p>由 <code>pnpm --filter api seed</code> 使用，而不是运行中的 api。没有外部 IdP，登录本地 web 和 smoke 所需的凭据就来自这里。</p>
 <div class="tabela-rolavel"><table>
@@ -389,7 +400,7 @@
 <tr>
 <td><code>BRABO_AMBIENTE</code></td>
 <td>—</td>
-<td><code>dev</code>、<code>prd</code> 或 <code>local</code>（ADR 0245，RN-984）。只有 <code>local</code> 会注册 <code>GET</code>/<code>POST /auth/dev-login</code>，即按角色的快速访问；缺失、为空或其他值时，该路由不存在。Actions 的镜像在构建时被标记为 <code>dev</code>/<code>prd</code>（<code>docker-bake.hcl</code> 的 <code>AMBIENTE</code>，文件 <code>/app/AMBIENTE_DA_IMAGEM</code>），并优先于该变量。DEV 的 compose 将它设为 <code>local</code>；安装用的 compose 将它留空</td>
+<td><code>dev</code>、<code>prd</code> 或 <code>local</code>（ADR 0245，RN-984）。只有 <code>local</code> 会注册 <code>GET</code>/<code>POST /auth/dev-login</code>，即按角色的快速访问；缺失、为空或其他值时，该路由不存在。Actions 的镜像在构建时被标记为 <code>dev</code>/<code>prd</code>（<code>docker-bake.hcl</code> 的 <code>AMBIENTE</code>，文件 <code>/app/AMBIENTE_DA_IMAGEM</code>），并优先于该变量。DEV 的 compose 将它设为 <code>local</code>；安装用的 compose 将它留空。若该安装曾经是 <code>local</code>，当时创建的 <code>&lt;角色&gt;@brabo.dev</code> 账户和 <code>acesso-rapido-local</code> 工作区在变量置空后<strong>仍留在数据库中</strong>：路由消失，账户不会消失，且都没有可用密码（创建时为随机并丢弃）。全新的发布版安装没有这些账户；见<a href="#recuperar-a-senha-sem-smtp">无 SMTP 时找回密码</a></td>
 </tr>
 <tr>
 <td><code>BRABO_BIND</code></td>
@@ -1755,9 +1766,9 @@
 </blockquote>
 <nav class="site-pager"><a href="../business-rules/web.html"></a><a href="../reference/events.html">Eventos</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">编辑此页</a><span>更新于 2026-11-07T00:52:33-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">编辑此页</a><span>更新于 2026-11-07T21:06:54-03:00 · Daniel Souza</span></footer>
 </main>
-<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#安装用-composedocker-composeinstallyml">安装用 compose（docker-compose.install.yml）</a></li><li class="n2"><a href="#api">api</a></li><li class="n3"><a href="#基本">基本</a></li><li class="n3"><a href="#安全-">安全 🔒</a></li><li class="n3"><a href="#第一方认证">第一方认证</a></li><li class="n3"><a href="#真实-smtpmailsender">真实 SMTP（MailSender）</a></li><li class="n3"><a href="#开发种子数据">开发种子数据</a></li><li class="n3"><a href="#速率限制">速率限制</a></li><li class="n3"><a href="#内部流量-">内部流量 🔒</a></li><li class="n3"><a href="#git">Git</a></li><li class="n3"><a href="#llm">LLM</a></li><li class="n3"><a href="#知识图谱adr-0099">知识图谱（ADR 0099）</a></li><li class="n3"><a href="#可观测性">可观测性</a></li><li class="n2"><a href="#engine">engine</a></li><li class="n3"><a href="#基本-1">基本</a></li><li class="n3"><a href="#集群与关闭">集群与关闭</a></li><li class="n3"><a href="#harness">Harness</a></li><li class="n3"><a href="#心理学家">心理学家</a></li><li class="n3"><a href="#anamnese">Anamnese</a></li><li class="n3"><a href="#负载保护">负载保护</a></li><li class="n3"><a href="#内部流量与可观测性">内部流量与可观测性</a></li><li class="n2"><a href="#web">web</a></li><li class="n3"><a href="#为什么版本不经过-configjs">为什么版本不经过 /config.js</a></li><li class="n2"><a href="#备份">备份</a></li><li class="n2"><a href="#本地推理容器">本地推理（容器）</a></li><li class="n2"><a href="#本地可观测性容器">本地可观测性（容器）</a></li><li class="n2"><a href="#容器-broker">容器 broker</a></li><li class="n2"><a href="#dev-container-user-build-time">开发容器的用户（构建时）</a></li><li class="n2"><a href="#工具变量非产品">工具变量（非产品）</a></li><li class="n3"><a href="#演示与种子脚本appsapiscripts">演示与种子脚本——apps/api/scripts/</a></li><li class="n3"><a href="#浏览器-e2ee2e">浏览器 E2E——e2e/</a></li><li class="n3"><a href="#本地集群与定期证明deployk8s">本地集群与定期证明——deploy/k8s/</a></li><li class="n2"><a href="#完整清单">完整清单</a></li></ul></aside>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#安装用-composedocker-composeinstallyml">安装用 compose（docker-compose.install.yml）</a></li><li class="n2"><a href="#api">api</a></li><li class="n3"><a href="#基本">基本</a></li><li class="n3"><a href="#安全-">安全 🔒</a></li><li class="n3"><a href="#第一方认证">第一方认证</a></li><li class="n3"><a href="#真实-smtpmailsender">真实 SMTP（MailSender）</a></li><li class="n3"><a href="#recuperar-a-senha-sem-smtp">无 SMTP 时找回密码</a></li><li class="n3"><a href="#开发种子数据">开发种子数据</a></li><li class="n3"><a href="#速率限制">速率限制</a></li><li class="n3"><a href="#内部流量-">内部流量 🔒</a></li><li class="n3"><a href="#git">Git</a></li><li class="n3"><a href="#llm">LLM</a></li><li class="n3"><a href="#知识图谱adr-0099">知识图谱（ADR 0099）</a></li><li class="n3"><a href="#可观测性">可观测性</a></li><li class="n2"><a href="#engine">engine</a></li><li class="n3"><a href="#基本-1">基本</a></li><li class="n3"><a href="#集群与关闭">集群与关闭</a></li><li class="n3"><a href="#harness">Harness</a></li><li class="n3"><a href="#心理学家">心理学家</a></li><li class="n3"><a href="#anamnese">Anamnese</a></li><li class="n3"><a href="#负载保护">负载保护</a></li><li class="n3"><a href="#内部流量与可观测性">内部流量与可观测性</a></li><li class="n2"><a href="#web">web</a></li><li class="n3"><a href="#为什么版本不经过-configjs">为什么版本不经过 /config.js</a></li><li class="n2"><a href="#备份">备份</a></li><li class="n2"><a href="#本地推理容器">本地推理（容器）</a></li><li class="n2"><a href="#本地可观测性容器">本地可观测性（容器）</a></li><li class="n2"><a href="#容器-broker">容器 broker</a></li><li class="n2"><a href="#dev-container-user-build-time">开发容器的用户（构建时）</a></li><li class="n2"><a href="#工具变量非产品">工具变量（非产品）</a></li><li class="n3"><a href="#演示与种子脚本appsapiscripts">演示与种子脚本——apps/api/scripts/</a></li><li class="n3"><a href="#浏览器-e2ee2e">浏览器 E2E——e2e/</a></li><li class="n3"><a href="#本地集群与定期证明deployk8s">本地集群与定期证明——deploy/k8s/</a></li><li class="n2"><a href="#完整清单">完整清单</a></li></ul></aside>
 </div>
 <script src="../../assets/site.js"></script>
 <script defer src="../assets/busca.js" data-indice="../assets/busca-zh-Hans.json" data-base="../"></script></body>
