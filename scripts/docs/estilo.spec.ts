@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { avisos, medirPagina, paginas, tipoDoTexto } from './estilo.mjs';
+import { avisos, medirPagina, paginas } from './estilo.mjs';
+import { lerFrontmatter } from './site/paginas.mjs';
+import { tipoDaPagina } from './site/tipos.mjs';
 
 const raiz = join(__dirname, '..', '..');
 
@@ -10,7 +12,19 @@ const raiz = join(__dirname, '..', '..');
  * página fora da lista que estoura reprova; página da lista que já passa
  * também reprova ("tire da lista").
  */
-const PENDENTES: string[] = [];
+const PENDENTES: string[] = [
+  'docs/architecture.md',
+  'docs/explanation/gates.md',
+  'docs/explanation/localizacao.md',
+  'docs/explanation/modelo-de-time.md',
+  'docs/explanation/regressivo-por-funcionalidade.md',
+  'docs/explanation/release-do-produto.md',
+  'docs/tutorials/orquestrar-repositorios/como-cada-repo-e-consumido.md',
+  'docs/tutorials/orquestrar-repositorios/erros-que-ja-cometemos.md',
+  'docs/tutorials/orquestrar-repositorios/o-mapa.md',
+  'docs/tutorials/orquestrar-repositorios/por-que-separar.md',
+  'docs/tutorials/orquestrar-repositorios/vida-de-uma-mudanca.md',
+];
 
 const pagina = (tipo: string, corpo: string) => `---\ntipo: ${tipo}\n---\n# T\n\n${corpo}\n`;
 const palavras = (n: number) => Array.from({ length: n }, () => 'a').join(' ');
@@ -38,13 +52,13 @@ describe('estilo.mjs', () => {
   });
 
   it('página sem tipo é ignorada', () => {
-    expect(tipoDoTexto('# sem frontmatter')).toBeNull();
+    expect(tipoDaPagina({ slug: 'runbook', dados: lerFrontmatter('# sem frontmatter').dados })).toBeUndefined();
     expect(avisos('# T\n\nRN-1 ' + palavras(5000))).toEqual([]);
   });
 });
 
 describe('catraca PENDENTES', () => {
-  const reprovadas = paginas(raiz).filter((p) => avisos(readFileSync(join(raiz, p), 'utf8')).length > 0);
+  const reprovadas = paginas(raiz).filter((p) => avisos(readFileSync(join(raiz, p), 'utf8'), p.replace(/^docs\//, '').replace(/\.md$/, '')).length > 0);
 
   it('nenhuma página reprova fora da lista', () => {
     expect(reprovadas.filter((p) => !PENDENTES.includes(p))).toEqual([]);
@@ -56,7 +70,7 @@ describe('catraca PENDENTES', () => {
 
   it('o guia Como escrevemos cabe no próprio orçamento (guia, 800)', () => {
     const texto = readFileSync(join(raiz, 'docs/contribuir/como-escrevemos.md'), 'utf8');
-    expect(tipoDoTexto(texto)).toBe('guia');
-    expect(avisos(texto)).toEqual([]);
+    expect(tipoDaPagina({ slug: 'contribuir/como-escrevemos', dados: lerFrontmatter(texto).dados })).toBe('guia');
+    expect(avisos(texto, 'contribuir/como-escrevemos')).toEqual([]);
   });
 });
