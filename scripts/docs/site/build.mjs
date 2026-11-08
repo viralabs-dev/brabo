@@ -51,7 +51,7 @@ export async function construir({ raiz = RAIZ, saida = path.join(raiz, 'build/do
   const resultado = { saida, locales: {} };
   for (const locale of LOCALES) {
     const paginas = descobrirPaginas({ raiz, locale, raizesDeDoc });
-    const render = await criarRenderizador({ paginas, repo });
+    const render = await criarRenderizador({ paginas, repo, raiz });
     const navegacao = construirNavegacao({ raiz, repo, rotulos: lerRotulosDaBarra(raiz, locale), raizesDeDoc });
     const ordem = listaPlana(navegacao);
     const porSlug = new Map(paginas.map((p) => [p.slug, p]));
