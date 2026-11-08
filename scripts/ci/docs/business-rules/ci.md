@@ -938,7 +938,7 @@ funcionalidade", vira **aceitar com justificativa** (`/qa-aceitar`); `ambiente` 
 `sem-resposta` vira **rodar de novo**, e se repetir, **aceitar com justificativa**.
 No modo `dev` o mesmo rótulo sai com o prefixo "atestado (não bloqueia)".
 
-- **Código:** `scripts/ci/qa-e2e-resumo.ts:66` (`montarCheck`, que hoje monta o
+- **Código:** `scripts/ci/qa-e2e-resumo.ts:292` (`montarCheck`, que hoje monta o
   check a partir do resultado); o `relatorio.ts` do `brabo-qa` e o JSON v1 ainda não
   existem na `dev` (AT-791, lanes L1 e L2)
 - **Teste:** `scripts/ci/qa-e2e-resumo.spec.ts` (o check por modo); a regra de
