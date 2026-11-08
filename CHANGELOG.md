@@ -4,6 +4,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs(estilo)**: AT-861. Guia `docs/contribuir/como-escrevemos.md` (`tipo: guia`) e o check `scripts/docs/estilo.mjs`: orçamento de palavras por tipo (tutorial 1 500, guia 800, conceito 1 200) e ID interno fora de "Para saber mais". Só avisa; a catraca `PENDENTES` do `estilo.spec.ts` roda no `test:scripts` e só encolhe.
 - **docs(regressivo)**: AT-853. A página de regressivo diz que o `brabo-runner` não tem regressivo no catálogo: a PR dele se atesta pelo próprio CI (binário linux-x64 na PR, runner#28), e o contrato runner ↔ engine só é provado no TP-01 (RN-1075, `brabo-ci`).
 - **fix(docs)**: AT-846. A `docs/` do `brabo-qa` (e a de todo irmão posto em `.`) passa para `qa/docs` no layout, com raiz `qa` e dono `brabo-qa`: o "editar esta página" e o `../README.md` de `rodadas-manuais`, `e2e-portao/como-funciona` e `regressivo/como-funciona` deixam de apontar para o `brabo`. As URLs não mudam. As duas páginas órfãs entram no menu.
 
