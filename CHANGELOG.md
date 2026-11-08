@@ -4,6 +4,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs(regressivo)**: AT-853. A página de regressivo diz que o `brabo-runner` não tem regressivo no catálogo: a PR dele se atesta pelo próprio CI (binário linux-x64 na PR, runner#28), e o contrato runner ↔ engine só é provado no TP-01 (RN-1075, `brabo-ci`).
 - **fix(docs)**: AT-846. A `docs/` do `brabo-qa` (e a de todo irmão posto em `.`) passa para `qa/docs` no layout, com raiz `qa` e dono `brabo-qa`: o "editar esta página" e o `../README.md` de `rodadas-manuais`, `e2e-portao/como-funciona` e `regressivo/como-funciona` deixam de apontar para o `brabo`. As URLs não mudam. As duas páginas órfãs entram no menu.
 
 - **feat(ci)**: AT-848, ADR 0285. A `prova` de cada aresta do `repos.yml` passa de `arquivo:linha` para `{ arquivo, trecho }` (trecho literal de uma linha que cita o destino, fora do bloco gerado `mapa:`), e a aresta `brabo → brabo-contracts` (`contrato`) entra no mapa: o número da linha deixa de derivar a cada commit. Os blocos "Onde se encaixa" dos READMEs são regenerados. O `.github/workflows/arestas-alinhadas.yml` chama a prova do `brabo-ci` toda segunda-feira e por `workflow_dispatch`. Todos os `uses:` e `ci_ref` do brabo-ci repinam em `6390ef5` (`v1.4.0-dev.17`).
