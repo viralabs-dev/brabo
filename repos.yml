@@ -1,0 +1,144 @@
+# A fonte ÚNICA do mapa dos 11 repos do Brabo (AT-825, ADR 0281).
+# Cada aresta de `depende_de` diz QUEM o repo usa, por qual CANAL (`tipo`) e onde o código prova (`prova`, arquivo:linha na dev).
+# Os READMEs recebem o bloco "Onde se encaixa" GERADO daqui por `brabo-ci:scripts/ci/mapa-dos-repos.ts`; não edite o bloco à mão.
+#
+# tipo:
+#   codigo    o CI ou o build lê o código do outro (clone, compose, checkout)
+#   imagem    usa a imagem ou o binário publicado, numa tag
+#   workflow  `uses:` de workflow reutilizável ou dispatch
+#   contrato  pacote do brabo-contracts ou arquivo de dados numa versão fixada
+#   doc       o site agrega a `docs/` do outro
+repos:
+  brabo:
+    papel: porta de entrada
+    proposito: Porta de entrada do produto — documentação agregada, site, instalador e release.
+    como_e_usado: Quem instala usa o `install.sh` e as imagens e o binário das tags de `componentes.json`; o brabo-infra o clona nas aferições cruzadas.
+    depende_de:
+      - { repo: brabo-api, tipo: imagem, prova: "componentes.json:5" }
+      - { repo: brabo-engine, tipo: imagem, prova: "componentes.json:6" }
+      - { repo: brabo-web, tipo: imagem, prova: "componentes.json:7" }
+      - { repo: brabo-broker, tipo: imagem, prova: "componentes.json:8" }
+      - { repo: brabo-runner, tipo: imagem, prova: "componentes.json:3" }
+      - { repo: brabo-infra, tipo: imagem, prova: "componentes.json:9" }
+      - { repo: brabo-infra, tipo: codigo, prova: ".github/workflows/release.yml:98" }
+      - { repo: brabo-api, tipo: doc, prova: "irmaos.lock:3" }
+      - { repo: brabo-engine, tipo: doc, prova: "irmaos.lock:4" }
+      - { repo: brabo-web, tipo: doc, prova: "irmaos.lock:5" }
+      - { repo: brabo-runner, tipo: doc, prova: "irmaos.lock:6" }
+      - { repo: brabo-broker, tipo: doc, prova: "irmaos.lock:7" }
+      - { repo: brabo-contracts, tipo: doc, prova: "irmaos.lock:8" }
+      - { repo: brabo-infra, tipo: doc, prova: "irmaos.lock:9" }
+      - { repo: brabo-ci, tipo: doc, prova: "irmaos.lock:10" }
+      - { repo: brabo-qa, tipo: doc, prova: "irmaos.lock:11" }
+      - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/ci.yml:19" }
+
+  brabo-api:
+    papel: código
+    proposito: API do produto (NestJS, Drizzle, PostgreSQL/pgvector) — schema, RBAC, LLM, metering e gates.
+    como_e_usado: Imagem publicada por tag e consumida pelo brabo e pelo brabo-infra; o brabo-web, o brabo-engine e o brabo-qa leem o código ou o `openapi.json` dele.
+    depende_de:
+      - { repo: brabo-contracts, tipo: contrato, prova: "package.json:91" }
+      - { repo: brabo-infra, tipo: codigo, prova: ".github/workflows/ci.yml:72" }
+      - { repo: brabo-qa, tipo: workflow, prova: ".github/workflows/qa-e2e.yml:16" }
+      - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/carimbo.yml:18" }
+
+  brabo-engine:
+    papel: código
+    proposito: Engine (Elixir/OTP, Phoenix, Oban) — agentes, sessões, gates e roteamento de runners.
+    como_e_usado: Imagem publicada por tag, usada pelo brabo e pelo brabo-infra.
+    depende_de:
+      - { repo: brabo-contracts, tipo: contrato, prova: "scripts/baixar-contratos.sh:5" }
+      - { repo: brabo-api, tipo: codigo, prova: ".github/workflows/ci.yml:126" }
+      - { repo: brabo-runner, tipo: codigo, prova: ".github/workflows/ci.yml:132" }
+      - { repo: brabo-qa, tipo: workflow, prova: ".github/workflows/qa-e2e.yml:16" }
+      - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/carimbo.yml:18" }
+
+  brabo-web:
+    papel: código
+    proposito: Interface web (React 19, Vite) — telas, i18n e design system.
+    como_e_usado: Imagem publicada por tag, usada pelo brabo e pelo brabo-infra.
+    depende_de:
+      - { repo: brabo-contracts, tipo: contrato, prova: "package.json:20" }
+      - { repo: brabo-api, tipo: contrato, prova: "fixados/ORIGEM.md:9" }
+      - { repo: brabo-qa, tipo: workflow, prova: ".github/workflows/qa-e2e.yml:16" }
+      - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/carimbo.yml:18" }
+
+  brabo-runner:
+    papel: código
+    proposito: CLI `brabo-runner` na máquina do usuário — PTY, container local e espelho.
+    como_e_usado: Binário publicado por tag, instalado pelo brabo; o brabo-engine e o brabo-qa leem o código dele nos testes.
+    depende_de:
+      - { repo: brabo-contracts, tipo: contrato, prova: "package.json:46" }
+      - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/ci.yml:16" }
+
+  brabo-broker:
+    papel: código
+    proposito: Único processo com o socket do Docker do servidor.
+    como_e_usado: Imagem publicada por tag, usada pelo brabo e pelo brabo-infra.
+    depende_de:
+      - { repo: brabo-contracts, tipo: contrato, prova: "package.json:17" }
+      - { repo: brabo-qa, tipo: workflow, prova: ".github/workflows/qa-e2e.yml:16" }
+      - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/carimbo.yml:18" }
+
+  brabo-contracts:
+    papel: contrato
+    proposito: Contratos compartilhados — os pacotes `shared` e `docker-port`, `areas.json` e `fluxo.yml`.
+    como_e_usado: Consumido por TAG (pacote no GitHub Packages ou arquivo baixado por raw na mesma tag); uma tag nova pede bump em api, web, runner, broker, engine, qa e infra.
+    depende_de:
+      - { repo: brabo-api, tipo: contrato, prova: "README.md:34" }
+      - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/ci.yml:13" }
+
+  brabo-ci:
+    papel: CI
+    proposito: Workflows reutilizáveis e a política de PR, escada de aprovação, promoção, tag e Dependabot.
+    como_e_usado: "Cada repo chama `uses: viralabs-dev/brabo-ci/...@<sha>`, fixado por SHA."
+    depende_de:
+      - { repo: brabo-qa, tipo: contrato, prova: "scripts/ci/qa-e2e-disparar.ts:30" }
+      - { repo: brabo-qa, tipo: workflow, prova: "scripts/ci/qa-e2e-disparar.ts:180" }
+      - { repo: brabo, tipo: contrato, prova: "scripts/ci/contracts-alinhado.ts:70" }
+
+  brabo-infra:
+    papel: orquestração
+    proposito: Composes, Dockerfiles de integração, `deploy/k8s`, scripts de dev, release e cadeia de suprimentos.
+    como_e_usado: O brabo clona o brabo-infra no ref de `componentes.json` para subir a instalação; o brabo-api e o brabo-qa o clonam no CI.
+    depende_de:
+      - { repo: brabo-api, tipo: codigo, prova: "docker/docker-compose.prod.yml:104" }
+      - { repo: brabo-engine, tipo: codigo, prova: "docker/docker-compose.prod.yml:123" }
+      - { repo: brabo-web, tipo: codigo, prova: "docker/docker-compose.prod.yml:504" }
+      - { repo: brabo-broker, tipo: codigo, prova: "docker/docker-compose.prod.yml:394" }
+      - { repo: brabo-runner, tipo: codigo, prova: ".github/actions/irmaos/action.yml:13" }
+      - { repo: brabo-contracts, tipo: codigo, prova: ".github/actions/irmaos/action.yml:17" }
+      - { repo: brabo, tipo: codigo, prova: ".github/actions/irmaos/action.yml:21" }
+      - { repo: brabo-qa, tipo: workflow, prova: ".github/workflows/qa-e2e.yml:16" }
+      - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/ci.yml:22" }
+
+  brabo-qa:
+    papel: qualidade
+    proposito: E2E de navegador (Playwright), golden-sets e catálogo de funcionalidades — o portão da `main`.
+    como_e_usado: O brabo-ci dispara o `e2e-pr` dele e lê o `funcionalidades.yml`; api, engine, web, broker e infra o chamam como portão.
+    depende_de:
+      - { repo: brabo-api, tipo: codigo, prova: ".github/workflows/ci.yml:48" }
+      - { repo: brabo-engine, tipo: codigo, prova: ".github/workflows/ci.yml:53" }
+      - { repo: brabo-web, tipo: codigo, prova: ".github/workflows/ci.yml:58" }
+      - { repo: brabo-runner, tipo: codigo, prova: ".github/workflows/ci.yml:63" }
+      - { repo: brabo-broker, tipo: codigo, prova: ".github/workflows/ci.yml:68" }
+      - { repo: brabo-infra, tipo: codigo, prova: ".github/workflows/ci.yml:73" }
+      - { repo: brabo-contracts, tipo: contrato, prova: ".github/workflows/ci.yml:14" }
+      - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/ci.yml:28" }
+
+  brabo-workspace:
+    papel: pasta-mãe
+    proposito: Pasta-mãe `~/dev/brabo/` com os clones lado a lado e o `clonar-tudo.sh`.
+    como_e_usado: Quem desenvolve roda `clonar-tudo.sh` uma vez; as sessões do Claude abrem nela.
+    depende_de:
+      - { repo: brabo, tipo: codigo, prova: "clonar-tudo.sh:7" }
+      - { repo: brabo-api, tipo: codigo, prova: "clonar-tudo.sh:7" }
+      - { repo: brabo-engine, tipo: codigo, prova: "clonar-tudo.sh:7" }
+      - { repo: brabo-web, tipo: codigo, prova: "clonar-tudo.sh:7" }
+      - { repo: brabo-runner, tipo: codigo, prova: "clonar-tudo.sh:7" }
+      - { repo: brabo-broker, tipo: codigo, prova: "clonar-tudo.sh:7" }
+      - { repo: brabo-contracts, tipo: codigo, prova: "clonar-tudo.sh:7" }
+      - { repo: brabo-ci, tipo: codigo, prova: "clonar-tudo.sh:7" }
+      - { repo: brabo-infra, tipo: codigo, prova: "clonar-tudo.sh:7" }
+      - { repo: brabo-qa, tipo: codigo, prova: "clonar-tudo.sh:7" }
+      - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/politica.yml:16" }
