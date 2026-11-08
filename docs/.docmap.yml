@@ -185,6 +185,15 @@ rules:
     docs: ["docs/reference/internal-api.md"]
     severity: block
 
+  # AT-826: o detalhe de contratos e imagem saiu do README da api para esta página.
+  - id: api-contratos-e-imagem
+    watch:
+      - "apps/api/Dockerfile"
+      - "apps/api/Dockerfile.dev"
+    docs: ["apps/api/docs/reference/contratos-e-imagem.md"]
+    severity: warn
+    note: "Mudou a imagem ou o consumo dos contratos? A página diz como a api os usa."
+
   - id: superficie-http-interna
     watch:
       - "apps/api/src/interfaces/http/internal/**"
@@ -644,6 +653,7 @@ rules:
       - "e2e/package.json"
     docs:
       - "docs/getting-started.md"
+      - "docs/rodadas-manuais.md"
     severity: warn
     note: "Mudou como o E2E sobe ou roda? O getting-started ensina o comando."
 
