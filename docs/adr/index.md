@@ -389,6 +389,7 @@ O pipeline, as imagens publicadas, a assinatura, a varredura, o pin, as camadas 
 | [0281](0281-o-mapa-dos-repos-tem-uma-fonte-so.md) | O mapa dos 11 repos tem uma fonte só, o `repos.yml` do `brabo` (propósito, uso e dependências com tipo e prova); o bloco "Onde se encaixa" dos READMEs é gerado dele pelo `brabo-ci` e o `mapa-alinhado` reprova o que divergir |
 | [0282](0282-a-pin-dos-componentes-segue-a-release-final.md) | A pin do `componentes.json` segue a última Release final: o `regenera-gerados` sobe a pin (e o `RUNNER_TAG`) na PR fixa, e a trava `pins-dos-componentes` reprova a PR para a `main` e a tag do produto se a pin estiver atrás |
 | [0285](0285-a-prova-de-uma-aresta-e-arquivo-mais-trecho.md) | A prova de uma aresta do `repos.yml` é `{ arquivo, trecho }`, com o trecho literal de uma linha que cita o destino e não vale dentro do bloco gerado `mapa:`; o número da linha não é gravado e o `arestas-alinhadas` ganha chamador semanal no `brabo` |
+| [0286](0286-as-capturas-da-doc-sao-geradas-pelo-qa-e-entram-por-pr.md) | As capturas da doc são geradas pelo `brabo-qa` (cenário Playwright com ocultação embutida e guarda de texto) e entram no `brabo` por PR fixa do App, com a escada inteira |
 
 ## Documentação {#tema-docs}
 
