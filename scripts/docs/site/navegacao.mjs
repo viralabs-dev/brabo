@@ -93,6 +93,8 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
       cat('Workflows do brabo-ci', pgs(...slugsDeWorkflows(raiz, raizesDeDoc)), { colapsada: true }),
       pg('reference/paridade-de-traducao', 'Paridade de tradução'), pg('reference/brb', 'Registro BRB'),
       pg('security-surface'),
+      pg('how-to/usar-o-runner', 'Usar o runner'), pg('dependencias-e-imagens', 'Dependências e imagens do broker'),
+      pg('reference/contratos-e-imagem', 'Contratos e imagem da api'), pg('rodadas-manuais', 'Rodadas manuais do QA'),
       { tipo: 'rota', slug: 'reference/api', rotulo: t('Referência da API') },
     ]),
     cat('💡 Explicação', [
