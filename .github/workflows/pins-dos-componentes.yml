@@ -1,6 +1,6 @@
 name: Pins dos componentes
 
-run-name: ${{ format('Pins dos componentes · {0}', github.event_name == 'pull_request' && format('PR #{0}', github.event.number) || format('manual · {0}', github.actor)) }}
+run-name: ${{ format('Pins dos componentes · {0}', github.event_name == 'pull_request' && format('PR {0}', github.event.number) || format('manual · {0}', github.actor)) }}
 
 # AT-796, ADR 0282: a promoção `dev → main` reprova se alguma pin do `componentes.json`
 # (ou o `RUNNER_TAG` do install.sh) estiver atrás da última Release final do componente, sem

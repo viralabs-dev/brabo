@@ -1,1 +1,0 @@
-ALTER TABLE "runner_device_keys" ALTER COLUMN "project_id" DROP NOT NULL;

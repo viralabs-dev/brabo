@@ -1,1 +1,0 @@
-ALTER TYPE "public"."bootstrap_step" ADD VALUE 'commit_gitignore';
