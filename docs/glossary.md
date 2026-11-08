@@ -5,6 +5,7 @@ sidebar_label: Glossário
 sidebar_position: 9
 description: A linguagem ubíqua do Brabo — os termos que aparecem no código, nas telas e nos ADRs, com o sentido que têm aqui.
 keywords: [glossário, linguagem ubíqua, harness, gate, handoff, DEK, outbox]
+tipo: referencia
 ---
 
 # Glossário

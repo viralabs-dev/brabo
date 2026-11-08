@@ -5,6 +5,7 @@ sidebar_label: Validação real (13b)
 sidebar_position: 6
 description: A execução contra um repositório remoto de verdade, com dev agent real e modelo de API — o que ela provou, o que ela reprovou, e por que reprovar aqui vale mais que passar.
 keywords: [validação, dogfooding, GitHub, dev agent, medição, FASE 13b]
+tipo: historico
 ---
 
 # A validação real — GitHub remoto e modelo de verdade

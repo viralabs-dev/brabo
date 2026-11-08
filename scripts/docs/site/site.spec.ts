@@ -136,9 +136,17 @@ describe('navegacao', () => {
   });
 
   it('aplica rótulos traduzidos e lista na ordem de leitura', () => {
-    const nav = construirNavegacao({ raiz: repo(), rotulos: { '🛠️ Operação': 'Ops' } });
-    expect(nav.some((i) => i.rotulo === 'Ops')).toBe(true);
+    const nav = construirNavegacao({ raiz: repo(), rotulos: { '🧭 Guias práticos': 'Guides' } });
+    expect(nav.some((i) => i.rotulo === 'Guides')).toBe(true);
     expect(listaPlana(nav)[0]?.slug).toBe('');
+  });
+
+  it('tem 7 grupos de topo, com os ADRs recolhidos e o Histórico por último (AT-854)', () => {
+    const nav: any[] = construirNavegacao({ raiz: repo() });
+    expect(nav).toHaveLength(7);
+    expect(nav.at(-1)).toMatchObject({ rotulo: '🗂️ Histórico do projeto', colapsada: true, espera: ['historico'] });
+    expect(nav.find((i) => i.rotulo.includes('Decisões (ADR)'))).toMatchObject({ slug: 'adr', colapsada: true });
+    expect(nav.every((i) => i.espera.length > 0)).toBe(true);
   });
 });
 
@@ -186,8 +194,9 @@ describe('árvore de união das raízes (AT-693)', () => {
   it('as Regras listam uma página por raiz e a edição aponta para a raiz da página', async () => {
     const { raiz } = duas();
     const nav = construirNavegacao({ raiz, repo: 'x/y', raizesDeDoc });
-    const regras = nav.find((i: any) => i.rotulo.includes('Regras'));
-    expect(regras.itens.map((i: any) => i.slug)).toEqual(['business-rules', 'business-rules/api']);
+    const regras = nav.find((i: any) => i.rotulo.includes('Referência')).itens.find((i: any) => i.rotulo === 'Regras de negócio');
+    expect(regras.slug).toBe('business-rules');
+    expect(regras.itens.map((i: any) => i.slug)).toEqual(['business-rules/api']);
     const saida = path.join(raiz, 'out');
     await construir({ raiz, saida, git: false, repo: 'x/y', raizesDeDoc });
     expect(readFileSync(path.join(saida, 'reference/permissions.html'), 'utf8')).toContain('/brabo-api/blob/dev/docs/reference/permissions.md');

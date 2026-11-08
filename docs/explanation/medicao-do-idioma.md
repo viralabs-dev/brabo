@@ -2,6 +2,7 @@
 id: medicao-do-idioma
 title: Medição da heurística de idioma
 description: O instrumento que mede a heurística de detecção de idioma da AT-080 contra um corpus rotulado, os números que ele produziu no corpus sintético, e a validação paga da orientação de idioma e do custo dela (AT-167, 2026-09-29).
+tipo: historico
 ---
 
 # Medição da heurística de idioma {#measuring-the-language-heuristic}

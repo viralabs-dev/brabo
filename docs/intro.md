@@ -6,6 +6,7 @@ sidebar_position: 1
 slug: /
 description: Plataforma que orquestra agentes de IA para conduzir o ciclo completo de uma aplicação, mantendo a autoridade final com o humano.
 keywords: [brabo, agentes de IA, engenharia, orquestração, aprovação]
+tipo: conceito
 ---
 
 # O que é o Brabo

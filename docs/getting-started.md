@@ -5,6 +5,7 @@ sidebar_label: Primeiros passos
 sidebar_position: 5
 description: Do clone ao primeiro turno de agente, com o que checar quando cada etapa não funciona.
 keywords: [instalação, setup, onboarding, primeiro projeto, ollama]
+tipo: tutorial
 ---
 
 # Primeiros passos

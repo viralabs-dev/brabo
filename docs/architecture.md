@@ -5,6 +5,7 @@ sidebar_label: Arquitetura
 sidebar_position: 2
 description: Mapa do Brabo — containers, mapa do código, o fluxo de um turno de agente, invariantes de camada e dívida conhecida.
 keywords: [arquitetura, mapa do código, invariantes, harness, event log]
+tipo: conceito
 ---
 
 # Arquitetura

@@ -4,6 +4,7 @@ title: A execução real — o hello world
 sidebar_label: Execução real (hello world)
 description: A primeira execução do Brabo com modelo de API de ponta a ponta, os dezesseis achados que ela produziu e o que ainda não foi provado.
 keywords: [dogfooding, execução real, achados, fase 13]
+tipo: historico
 ---
 
 # A execução real — o hello world

@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: AT-854. O menu do site passa a ter 7 grupos de topo (Comece aqui, Tutoriais, Guias práticos, Conceitos, Referência, Decisões (ADR) e Histórico do projeto), com a árvore de ADRs e o Histórico recolhidos e as 6 páginas que estavam fora do menu dentro dele. Cada página tem um tipo (`tutorial|guia|conceito|referencia|decisao|historico`), declarado em `tipo:` ou dado pela pasta, e o novo `scripts/docs/site/tipos.mjs` (no fim do `docs:site:check`) reprova página sem tipo, no grupo errado ou fora do menu; página de repo irmão que não bate só gera aviso.
+
 - **docs(regressivo)**: AT-853. A página de regressivo diz que o `brabo-runner` não tem regressivo no catálogo: a PR dele se atesta pelo próprio CI (binário linux-x64 na PR, runner#28), e o contrato runner ↔ engine só é provado no TP-01 (RN-1075, `brabo-ci`).
 - **fix(docs)**: AT-846. A `docs/` do `brabo-qa` (e a de todo irmão posto em `.`) passa para `qa/docs` no layout, com raiz `qa` e dono `brabo-qa`: o "editar esta página" e o `../README.md` de `rodadas-manuais`, `e2e-portao/como-funciona` e `regressivo/como-funciona` deixam de apontar para o `brabo`. As URLs não mudam. As duas páginas órfãs entram no menu.
 

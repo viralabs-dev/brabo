@@ -5,6 +5,7 @@ sidebar_label: FASE 30 — agente local da máquina
 sidebar_position: 17
 description: O recorte da FASE 30 — a identidade do agente local deixa de ser por projeto e passa a ser da máquina, e o instalador fecha a instalação criando a primeira conta e subindo o agente pareado. As decisões estão nos ADRs 0154 e 0155.
 keywords: [fase 30, runner, agente local, chave de dispositivo, instalador, serviço]
+tipo: historico
 ---
 
 # FASE 30 — o agente local da máquina
