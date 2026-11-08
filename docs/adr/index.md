@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 276 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 279 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -48,6 +48,7 @@ O contrato do provider de git, o nascimento e a adoção do repositório, a prot
 | [0263](0263-o-projeto-do-usuario-trabalha-em-trunk.md) | O repositório do PROJETO do usuário trabalha em trunk: a tarefa nasce da `main` e volta para a `main`, e o bootstrap cria e protege só a `main`. Depois de cada merge, `project.trunk_merged` leva a pasta (container, mounted e runner) até a `main` nova por fast-forward, que recusa com motivo quando há branch outra, árvore suja, divergência ou não rastreado sobrescrito. Projeto antigo tem o claim recusado até o script de migração; o Brabo segue `dev → main` (AT-617, decisão do dono de 06/11). |
 | [0267](0267-o-e2e-do-brabo-qa-e-portao-da-main.md) | O E2E do `brabo-qa` é portão da `main` nos seis repositórios com gatilho, pelo check `E2E do brabo-qa` e o ruleset "main exige E2E"; o `/qa-aceitar <justificativa>` do dono é a única exceção ao check obrigatório, nunca para digest nem assinatura |
 | [0276](0276-a-pr-declara-de-que-pr-depende-o-merge.md) | A PR declara de que PR de outro repo depende (`Depende-de: viralabs-dev/<repo>#<n>`), e o check `Dependências de merge` do App espera o merge: amarelo na espera, re-check no merge da dependência e cron horário; exigido em `dev` e `main` depois das provas (decisão do dono, 07/11), e a fase 2 da promoção sai para a AT-788 |
+| [0284](0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.md) | A promoção infere as dependências pela ordem dos repos: o check soma as promoções abertas das camadas anteriores (ci; contracts e workspace; api, engine, web, runner e broker; infra; qa; brabo), o `promote` também escreve a linha, e a camada com a `dev` à frente fica amarela dizendo qual repo promover; revê a decisão 7 do ADR 0276 (AT-788, RN-1071 e RN-1072). |
 
 ## Harness de agente, turnos e sessões {#tema-agentes}
 
@@ -70,6 +71,7 @@ Como um agente roda — contexto, o laço de ferramentas, o turno conversacional
 | [0246](0246-anexos-do-chat-bytes-no-postgres-referencia-no-evento.md) | Anexos do chat (AT-715): os BYTES moram no Postgres (`chat_attachments`, `bytea`, cascade com a sessão), o `chat.message` guarda só a referência `{id, nome, mime, tamanho}` e a visão do modelo é capability de provider, `false` sem prova (ADR 0041). Tipo pelos bytes, 5 MB por imagem, 512 KB por texto, 4 por mensagem, upload JSON com base64, todo `viewer` lê e SEM antivírus, lacuna declarada. |
 | [0247](0247-uma-mensagem-varios-destinatarios.md) | Uma mensagem, vários destinatários (AT-717): `POST .../sessions/:sessionId/messages` grava UM `chat.message` com `destinatarios` e entrega a cada agente pelo caminho de sempre (turno, fila RN-673, recusa nomeada), com o mesmo `mensagemId`; revisa a RN-584/631. |
 | [0249](0249-o-raciocinio-do-agente-e-gravado-e-mostrado-so-a-developer.md) | O raciocínio do agente é gravado e mostrado só a developer ou mais (AT-676): chunk `reasoning` no contrato de LLM (OpenRouter, `reasoning_content`, `thinking` da Anthropic com os blocos assinados devolvidos no laço), frame `raciocinio` ao vivo e `final` com o texto inteiro; a api tira `payload.raciocinio` de quem está abaixo de `developer`; `reasoningText` `false` até haver smoke. Complementa o 0224. |
+| [0283](0283-a-adr-proposta-declara-qual-substitui.md) | A ADR proposta declara qual ADR substitui (`supersedes`): a api valida que a citada é uma `open_adr_pr` do projeto já `executed`, o engine escreve `Substitui:` e a PR leva a mesma linha; a ADR substituída não é alterada (AT-806, RN-1069). |
 
 ## O time de agentes — papéis, áreas e handoffs {#tema-time}
 
@@ -379,6 +381,7 @@ O pipeline, as imagens publicadas, a assinatura, a varredura, o pin, as camadas 
 | [0197](0197-a-imagem-dos-workflows-vem-do-compose.md) | Os `services:` dos workflows leem a imagem do compose de dev, e os ecossistemas `docker`/`docker-compose` do Dependabot são ligados (AT-246, decisão do dono de 01/10, sobre o [ADR 0159](0159-imagem-de-terceiro-por-digest.md) e o [ADR 0178](0178-tag-inline-na-imagem-de-terceiro.md)). Os seis literais (pgvector e ollama no `ci.yml` e nos dois golden-sets) dão lugar a `${{ needs.imagens.outputs.<image> }}` vindo de um `imagens-do-compose.yml` reutilizável que roda `scripts/ci/imagens-do-compose.ts` — uma fonte de digest, então o PR do bot nunca toca `.github/workflows/`, e o "mesmo Ollama do dev" do `golden-set-rag.yml` passa de promessa a construção. O `imagens-pinadas.ts` agora reprova, num workflow, qualquer literal de imagem, qualquer expressão que não seja exatamente essa (um literal, `||`, `env.`, `vars.`, `format()`), e um job em `needs` que não chama o workflow reutilizável — cada regra provada por mutação. Os jobs obrigatórios que esperam por ele levam `if: !cancelled()`, já que `skipped` conta como verde. Declarado e NÃO corrigido: `neo4j`/`ollama` moram também em `deploy/k8s/base/`, os dois ecossistemas nunca compartilham um PR, e uma troca de digest com a mesma tag deixa os dois PRs vermelhos até um humano juntá-los; o `imageName` do CNPG e o `IMAGEM_DO_GOLDEN_SET_QA` continuam manuais |
 | [0252](0252-o-brabo-vira-um-conjunto-de-repositorios.md) | O Brabo deixa de ser um monorepo e vira um conjunto de repositórios `brabo-*` em `viralabs-dev`, todos públicos, com a porta de entrada em `viralabs-dev/brabo` (docs, instalador e release do produto), doc dentro de cada repositório, versões próprias recomeçando em 1.0.0 e histórico preservado. Estado: decidido, em migração (onda A). |
 | [0268](0268-o-brabo-qa-tem-regressivo-por-funcionalidade.md) | O `brabo-qa` tem regressivo por funcionalidade (`funcionalidades.yml`, tag `@f-<id>`): a PR para a `dev` roda só o que tocou, pelo check `Regressivo do brabo-qa`, que NUNCA é exigido, com imagem `sha-<12>`; a PR para a `main` roda o catálogo inteiro e funcionalidade sem spec é "sem cobertura", sem reprovar (AT-769, RN-1031 a RN-1035). |
+| [0270](0270-o-contracts-e-publicado-no-github-packages.md) | O `brabo-contracts` é publicado no GitHub Packages (`@viralabs-dev/brabo-shared` e `brabo-docker-port`, públicos, mesma versão da TAG, alias `@brabo/*` no consumidor), o `shared` segue só de tipos, o token entra por ponto de instalação (nunca em camada) e a chave `contracts` do `componentes.json` é a versão vigente (AT-770). |
 | [0271](0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.md) | Cada run do Actions mostra os vínculos entre os repositórios: a action `vinculos` do `brabo-ci` (tabela e Mermaid no Summary, nunca reprova), o `run-name` com a origem, a correlação `c=<run_id>-<attempt>`, o job `anunciar` e a linha `Carimbo:` na tag (AT-773, RN-1043 a RN-1045). |
 | [0277](0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.md) | O regressivo roda num compose só; o grafo mostra cada funcionalidade por uma matrix de exibição (job leve, sem compose), e o relatório em JSON é a fonte da decisão de aprovar ou não
 | [0278](0278-a-mudanca-e-vista-num-painel-do-brabo-ci.md) | A mudança é vista num painel do brabo-ci (run `Painel da mudança`, Summary com tabela e Mermaid), sem check nas PRs: o link fica nas runs de origem pelos Vínculos |
@@ -417,7 +420,7 @@ Como a documentação é gerada, verificada e publicada.
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0283**.
+  é substituído — o próximo é **0285**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml` e a linha do índice sob a seção desse
   tema, em ordem numérica. Quem revisa confirma. Um tema novo é uma
