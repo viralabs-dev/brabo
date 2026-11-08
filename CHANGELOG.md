@@ -4,13 +4,15 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: ADR 0283 (AT-806): a ADR proposta declara qual substitui (`supersedes`); a api valida a ADR citada, o engine escreve `Substitui:` e a ADR substituída não é alterada (RN-1069).
+
 - **chore**: AT-787. `.github/workflows/dependencias.yml` chama o check `Dependências de merge` do `brabo-ci` (pin `v1.4.0-dev.11`), como nos outros repos. ADR 0276.
 
 - **chore**: AT-770 R2b. O `componentes.json` ganha a chave `contracts` (`v1.2.0`), a versão vigente do `brabo-contracts`; o aviso do `contracts-alinhado` do `brabo-ci` passa a disparar. A trava `pins-dos-componentes` não a cobre: o contracts não tem Release, só TAG (ADR 0270).
 
 - **docs**: ADR 0270 (AT-770): o `brabo-contracts` é publicado no GitHub Packages (`@viralabs-dev/brabo-shared` e `brabo-docker-port`, públicos, mesma versão da TAG), o `shared` segue só de tipos e o token entra por ponto de instalação, nunca em camada. Revê o item 2 do ADR 0252.
 
-- **docs**: ADR 0284 (AT-788): a promoção infere as dependências pela ordem dos repos (camadas ci; contracts e workspace; api, engine, web, runner e broker; infra; qa; brabo). O check soma as promoções abertas das camadas anteriores, o `promote` também escreve a linha `Depende-de` e a camada com a `dev` à frente fica amarela. Revê a decisão 7 do ADR 0276; adendo ao ADR 0280 isenta o `brabo-ci` do próprio pin.
+- **docs**: ADR 0284 (AT-788): a promoção infere as dependências pela ordem dos repos (camadas ci; contracts e workspace; api, engine, web, runner e broker; infra; qa; brabo). O check soma as promoções abertas das camadas anteriores, o `promote` também escreve a linha `Depende-de` e a camada com a `dev` à frente fica amarela. Revê a decisão 7 do ADR 0276; a decisão 7 isenta o `brabo-ci` do próprio pin, complementando o ADR 0280 sem editá-lo.
 
 - **docs**: AT-823. A doc da área ci (`scripts/ci/docs/**`) sai do `brabo` e passa a vir do `brabo-ci` pela trava (`irmaos.lock`, brabo-ci#41). O `repo-dono.mjs` aponta o "editar esta página" para o `brabo-ci`; o menu ganha `politica-em-10-minutos`, `licoes-do-ci`, `codigos-de-violacao`, `glossario-da-politica` e `reference/workflows/`; o `docs-deploy.yml` deixa de vigiar `scripts/ci/docs/**` (a subida da trava já republica); o `GOVERNANCE.md` corrige as âncoras do `branching-policy.md`; o `glossary.md` aponta para o glossário da política.
 
