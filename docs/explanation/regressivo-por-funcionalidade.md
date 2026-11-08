@@ -59,6 +59,30 @@ entra, o levantamento avalia se ele mexe numa funcionalidade e anota os `id` do
 catálogo. Se o mapa diz que a funcionalidade foi tocada e nenhuma spec `@f-<id>`
 mudou, o App comenta uma vez na PR, como lembrete.
 
+## O que o run mostra
+
+Cada run do regressivo mostra o resultado **por funcionalidade**, e não só o
+bloco de specs. O grafo ganha um job `Funcionalidade · <id>` para cada
+funcionalidade com spec executada, verde ou vermelho. O Summary traz o veredito,
+a recomendação, a tabela, as falhas sem ANSI, o flaky, uma seção por
+funcionalidade e o link do HTML do Playwright. Cada spec que falhou vira anotação
+no arquivo dela. A spec sem tag `@f-*` aparece como **"sem funcionalidade"** e
+nunca some do relatório. Os números e as opções descartadas estão no
+[ADR 0277](../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.md).
+
+## O relatório de decisão
+
+O `brabo-qa` gera um relatório (`relatorio-regressivo.md`, derivado de um
+`relatorio-regressivo.json`) com a recomendação que compõe a decisão:
+**aprovar**, **aceitar com justificativa** ou **bloquear**. A regra é fixa e
+está em RN-1051: digest ou
+assinatura bloqueia; spec em funcionalidade que a PR toca bloqueia; spec fora do
+que a PR toca, ou sem funcionalidade, pede aceite com justificativa. Quando o dono
+aceita um vermelho com `/qa-aceitar`, o check preserva esse relatório e registra
+o aceite contra a recomendação (RN-1052).
+
+Na `main` o relatório é o portão. Na `dev` ele é só o atestado, e nada bloqueia.
+
 ## O que isto custa
 
 Uma PR para a `dev` gasta de 8 a 12 minutos assíncronos de CI no `brabo-qa` e de 3

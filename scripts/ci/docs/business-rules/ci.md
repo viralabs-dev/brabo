@@ -921,3 +921,66 @@ tirar a linha que fecha o ciclo: a PR não precisa de bypass.
 - **Teste:** `scripts/ci/dependencias-de-merge.spec.ts`, com o ciclo A↔B e a profundidade estourada
 - **ADR:** [0276](../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.md)
 - **Origem:** AT-787 (EP-033)
+
+## O relatório de decisão do regressivo (RN-1051..1053)
+
+### RN-1051 — O relatório do regressivo sai de um JSON único, e a recomendação segue uma regra fixa de seis linhas {#rn-1051}
+
+O run do regressivo do `brabo-qa` grava um `relatorio-regressivo.json` (versão 1)
+e deriva dele o `relatorio-regressivo.md`. O Summary, o texto do check e o
+comentário da PR são apresentações desse JSON, nunca fontes à parte. A
+recomendação não é escrita à mão: sai da primeira linha que casar, nesta ordem:
+verde sem flaky vira **aprovar**; verde com flaky vira **aprovar**, com aviso e a
+lista; `digest` ou `assinatura` vira **bloquear**, porque nunca se aceita (AT-765)
+e o E2E roda de novo; `spec` em funcionalidade que a PR **toca** pelo mapa vira
+**bloquear**; `spec` só em funcionalidade que a PR **não** toca, ou em "sem
+funcionalidade", vira **aceitar com justificativa** (`/qa-aceitar`); `ambiente` ou
+`sem-resposta` vira **rodar de novo**, e se repetir, **aceitar com justificativa**.
+No modo `dev` o mesmo rótulo sai com o prefixo "atestado (não bloqueia)".
+
+- **Código:** `scripts/ci/qa-e2e-resumo.ts:66` (`montarCheck`, que hoje monta o
+  check a partir do resultado); o `relatorio.ts` do `brabo-qa` e o JSON v1 ainda não
+  existem na `dev` (AT-791, lanes L1 e L2)
+- **Teste:** `scripts/ci/qa-e2e-resumo.spec.ts` (o check por modo); a regra de
+  recomendação e o JSON v1 ganham o teste na L1 e na L2
+- **ADR:** [0277](../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.md)
+- **Origem:** AT-791 (EP-033)
+
+### RN-1052 — O `/qa-aceitar` preserva o relatório do vermelho e registra o aceite contra a recomendação {#rn-1052}
+
+Hoje o aceite monta o check de novo com `linhas: []`, e por isso apaga a tabela de
+digests e a de funcionalidades do vermelho: quem olha depois não vê o que foi
+aceito. A regra nova: o `/qa-aceitar` **preserva** o `summary` e o `text` do check
+vermelho, põe por cima o bloco do aceite (quem, quando, justificativa, o link do
+run vermelho e a recomendação que o relatório dava) e troca só o título para
+`Aceito com justificativa`. Quando a recomendação era **bloquear** por spec de
+funcionalidade tocada, o aceite vale mesmo assim, porque a decisão é do dono, mas o
+check e o comentário registram "aceito contra a recomendação". Na `dev` o aceite não
+se aplica: o relatório é só o atestado.
+
+- **Código:** `scripts/ci/qa-e2e-aceitar.ts:53` (`montarCheck`, chamado com
+  `linhas: []`, que é o defeito a corrigir); `scripts/ci/qa-e2e-aceite.ts:21`
+  (`avaliarAceite`, que segue lendo o `external_id` `causa:*`)
+- **Teste:** `scripts/ci/qa-e2e-aceite.spec.ts` (o veredito do aceite); o
+  preservar do resumo e o registro "contra a recomendação" ganham o teste na L1
+- **ADR:** [0277](../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.md)
+- **Origem:** AT-791 (EP-033)
+
+### RN-1053 — A spec sem tag `@f-*` aparece como "sem funcionalidade" e nunca some do relatório {#rn-1053}
+
+A seleção do regressivo já separa o que não tem dono no mapa (`semDono`,
+`scripts/ci/qa-regressivo-selecao.ts:86`), mas esse dado não chega ao relatório. A
+regra nova: uma spec que não tem nenhuma tag `@f-<id>` cai no balde **"sem
+funcionalidade"**, na tabela e na lista de falhas, e nunca desaparece. Uma spec
+vermelha nesse balde vira **aceitar com justificativa**, nunca bloquear, pela regra
+de [RN-1051](#rn-1051). O `setup` de login
+(`entrar.setup.ts`) também cai nesse balde e é marcado como preparação, para não
+parecer um teste de funcionalidade. Sem o balde, a tabela mostraria tudo "sem
+cobertura" com um vermelho de spec, que é o achado da qa#28.
+
+- **Código:** `scripts/ci/qa-regressivo-selecao.ts:86` (`semDono.push`); o balde
+  "sem funcionalidade" no relatório ainda não existe (AT-791, lanes L1 e L2)
+- **Teste:** `scripts/ci/qa-regressivo-selecao.spec.ts` (a seleção por mapa e o
+  `semDono`); o balde no relatório ganha o teste na L2
+- **ADR:** [0277](../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.md)
+- **Origem:** AT-791 (EP-033)

@@ -890,4 +890,7 @@ test.
 - <a id="rn-1048"></a>[RN-1048](business-rules/ci.md#rn-1048) — O check `Dependências de merge` tem quatro estados, nunca `neutral`, e a espera é amarela
 - <a id="rn-1049"></a>[RN-1049](business-rules/ci.md#rn-1049) — O merge da dependência atualiza o check das PRs que a citam, e o cron horário é só rede
 - <a id="rn-1050"></a>[RN-1050](business-rules/ci.md#rn-1050) — O ciclo de dependências reprova com o caminho inteiro, até a profundidade 5
+- <a id="rn-1051"></a>[RN-1051](business-rules/ci.md#rn-1051) — O relatório do regressivo sai de um JSON único, e a recomendação segue uma regra fixa de seis linhas
+- <a id="rn-1052"></a>[RN-1052](business-rules/ci.md#rn-1052) — O `/qa-aceitar` preserva o relatório do vermelho e registra o aceite contra a recomendação
+- <a id="rn-1053"></a>[RN-1053](business-rules/ci.md#rn-1053) — A spec sem tag `@f-*` aparece como "sem funcionalidade" e nunca some do relatório
 <!-- END:GENERATED:indice-de-rn -->

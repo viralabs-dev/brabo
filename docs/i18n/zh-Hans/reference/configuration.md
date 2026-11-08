@@ -151,7 +151,7 @@ traducao_de: 3016564b5bb5b0752711c07b9babefd252829a8d
 |---|---|---|
 | `BRABO_SEED_PASSWORD` | `brabo12345678` | 种子用户（`owner@brabo.dev`、`maintainer@brabo.dev`、`developer@brabo.dev`、`viewer@brabo.dev`）的密码，创建时邮箱**已验证** |
 | `BRABO_AMBIENTE` | — | `dev`、`prd` 或 `local`（ADR 0245，RN-984）。只有 `local` 会注册 `GET`/`POST /auth/dev-login`，即按角色的快速访问；缺失、为空或其他值时，该路由不存在。Actions 的镜像在构建时被标记为 `dev`/`prd`（`docker-bake.hcl` 的 `AMBIENTE`，文件 `/app/AMBIENTE_DA_IMAGEM`），并优先于该变量。DEV 的 compose 将它设为 `local`；安装用的 compose 将它留空。若该安装曾经是 `local`，当时创建的 `<角色>@brabo.dev` 账户和 `acesso-rapido-local` 工作区在变量置空后**仍留在数据库中**：路由消失，账户不会消失，且都没有可用密码（创建时为随机并丢弃）。全新的发布版安装没有这些账户；见[无 SMTP 时找回密码](#recuperar-a-senha-sem-smtp) |
-| `BRABO_BIND` | `0.0.0.0` | 安装用 compose 发布 api 和 web 端口所用的地址。当 `BRABO_AMBIENTE=local` 时，请设为 `127.0.0.1`：否则网络上的任何人都能以任意角色进入 |
+| `BRABO_BIND` | `0.0.0.0` | 安装用 compose 发布 api、web 和 engine 端口所用的地址：三者都遵循 `BRABO_BIND`。当 `BRABO_AMBIENTE=local` 时，请设为 `127.0.0.1`：否则网络上的任何人都能以任意角色进入。Ollama 和 neo4j 始终绑定在 `127.0.0.1`，与该值无关（RN-1057、brabo-infra#33、AT-811） |
 | `BRABO_FORCE_SEED` | — | 在 `NODE_ENV=production` 下解锁种子，默认情况下种子在那里**拒绝运行**。不要在真实环境中定义它：账户会带着已知且已验证的密码被创建 |
 
 > 种子是幂等的，**不会改动**已存在用户的密码。在有人修改自己的密码后再次运行它，不会把密码改回去。
