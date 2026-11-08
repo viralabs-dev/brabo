@@ -573,7 +573,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从代码中提取的清单：运行时读取 **189 个变量**。全部都在上方表格中有描述。
+从代码中提取的清单：运行时读取 **190 个变量**。全部都在上方表格中有描述。
 
 每个来源都标记为 **产品**——运维安装的人在部署 `.env` 中设置的内容——或 **工具**，仅由 CI 和开发产品的人读取。工具变量绝不应出现在运维人员的 `.env` 中。
 
@@ -752,9 +752,10 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 - `OLLAMA_HOST` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
 - `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub>
 
-**e2e** — 5 个变量 · 工具
+**e2e** — 6 个变量 · 工具
 
 - `E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
+- `E2E_ENGINE_URL` <sub>(e2e/testes/instalacao.spec.ts)</sub>
 - `E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
 - `E2E_USER` <sub>(e2e/suporte/api.ts)</sub>

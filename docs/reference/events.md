@@ -416,7 +416,7 @@ ele.
 
 > ⚠️ Bloco gerado por `pnpm docs:generate`. Não edite à mão — o próximo build o sobrescreve.
 
-Extraídos dos pontos de emissão: **119 identificadores**, dos quais **7** não estão descritos acima.
+Extraídos dos pontos de emissão: **120 identificadores**, dos quais **8** não estão descritos acima.
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
@@ -471,6 +471,7 @@ Extraídos dos pontos de emissão: **119 identificadores**, dos quais **7** não
 - `backlog.task_merge_conflict` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `backlog.task_status_changed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `backlog.task_unblocked` <sub>(apps/api/src/application/use-cases/execution/unblock-task.use-case.ts)</sub>
+- `backlog.task_updated` — ⚠️ **não descrito acima** <sub>(apps/api/src/application/use-cases/backlog/corrigir-historia.use-case.ts)</sub>
 - `bootstrap.adopted_as_is` <sub>(apps/api/src/application/use-cases/git/decide-bootstrap-plan.use-case.ts)</sub>
 - `bootstrap.plan_approved` <sub>(apps/api/src/application/use-cases/git/decide-bootstrap-plan.use-case.ts)</sub>
 - `bootstrap.repository_adopted` <sub>(apps/api/src/application/use-cases/git/adopt-repository.use-case.ts)</sub>
