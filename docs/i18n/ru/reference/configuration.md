@@ -879,7 +879,7 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 > ⚠️ Блок сгенерирован `pnpm docs:generate`. Не редактируйте вручную — следующая сборка его перезапишет.
 
-Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **189**. У всех есть описание в таблицах выше.
+Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **190**. У всех есть описание в таблицах выше.
 
 Каждый источник помечен как **продукт** — то, что оператор установки задаёт в `.env` развёртывания, — или **инструменты**: их читают только CI и разработчики продукта. Переменной инструментов не место в `.env` оператора.
 
@@ -1058,9 +1058,10 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 - `OLLAMA_HOST` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
 - `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub>
 
-**e2e** — переменных: 5 · инструменты
+**e2e** — переменных: 6 · инструменты
 
 - `E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
+- `E2E_ENGINE_URL` <sub>(e2e/testes/instalacao.spec.ts)</sub>
 - `E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
 - `E2E_USER` <sub>(e2e/suporte/api.ts)</sub>

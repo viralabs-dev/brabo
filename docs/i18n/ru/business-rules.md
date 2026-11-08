@@ -889,4 +889,8 @@ traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 - <a id="rn-1062"></a>[RN-1062](business-rules/web.md#rn-1062) — O cartão do plano mostra o teto do projeto e das áreas dev/qa, avisa quando a estimativa passa do que resta e ajusta o teto da área dev ali
 - <a id="rn-1063"></a>[RN-1063](business-rules/web.md#rn-1063) — PR que entra na fila de prontas avisa na borda do fio e no título da aba, com Mergear e o tempo de espera, e se dispensa
 - <a id="rn-1065"></a>[RN-1065](business-rules/api.md#rn-1065) — O provider de LLM dublê do regressivo só carrega com `LLM_DUBLE=1` e com a imagem sem a marca `prd`; o custo dele é 0 e o modelo sai como `duble-llm`
+- <a id="rn-1068"></a>[RN-1068](business-rules/api.md#rn-1068) — O PO e o Dev Lead corrigem o texto de uma tarefa `todo`, com a régua da história
+- <a id="rn-1069"></a>[RN-1069](business-rules/api.md#rn-1069) — A ADR proposta declara qual ADR substitui (`supersedes`), e a api confere
+- <a id="rn-1070"></a>[RN-1070](business-rules/engine.md#rn-1070) — O Dev Lead lê o estado de ADR, PR e tarefa antes de afirmá-lo, e cita tarefa pelo título no `porque`
+- <a id="rn-1074"></a>[RN-1074](business-rules/infra.md#rn-1074) — O compose de instalação repassa os tetos de rate limit e de lockout da api, com o padrão da própria api, e só o compose de teste sobe esses valores
 <!-- END:GENERATED:indice-de-rn -->
