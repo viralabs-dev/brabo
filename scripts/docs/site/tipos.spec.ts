@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TIPOS, conferirTipos, tipoDaPagina } from './tipos.mjs';
+import { TIPOS, comandosDoMonorrepo, conferirTipos, tipoDaPagina } from './tipos.mjs';
 
 const pg = (slug: string, rotulo?: string) => ({ tipo: 'pagina', slug, rotulo });
 const grupo = (rotulo: string, espera: string[], itens: unknown[]) => ({ tipo: 'categoria', rotulo, colapsada: false, espera, itens });
@@ -51,5 +51,24 @@ describe('conferirTipos', () => {
     expect(pasta.avisos[0]).toContain('brabo-api');
     const declarado = conferirTipos({ paginas: [pagina('explanation/velha', { tipo: 'conceito' }, 'apps/api/docs')], navegacao: nav });
     expect(declarado.erros).toHaveLength(1);
+  });
+});
+
+describe('comando do monorepo legado (AT-855)', () => {
+  const cerca = '```';
+  const corpo = `texto com pnpm dev na prosa\n\n${cerca}bash\ngit clone git@github.com:daneiel/brabo.git\n  pnpm dev\nmake dev\n${cerca}\n\n| run | https://github.com/daneiel/brabo/actions |\n`;
+
+  it('acha a linha de comando dentro da cerca e ignora a prosa e a tabela', () => {
+    expect(comandosDoMonorrepo(corpo)).toEqual([4, 5]);
+    expect(comandosDoMonorrepo(`${cerca}\ngit clone https://github.com/viralabs-dev/brabo-api.git\n${cerca}`)).toEqual([]);
+  });
+
+  it('reprova num tutorial, e a mesma linha numa página historico passa', () => {
+    const item = (extra: Record<string, unknown>) => ({ ...pagina('explanation/fase-1', extra), corpo });
+    const n = [grupo('Tutoriais', ['tutorial', 'historico'], [pg('explanation/fase-1')])];
+    const ruim = conferirTipos({ paginas: [item({ tipo: 'tutorial' })], navegacao: n });
+    expect(ruim.erros).toHaveLength(2);
+    expect(ruim.erros[0]).toMatch(/monorepo legado/);
+    expect(conferirTipos({ paginas: [item({ tipo: 'historico' })], navegacao: n }).erros).toEqual([]);
   });
 });

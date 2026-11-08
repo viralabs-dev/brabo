@@ -895,7 +895,7 @@ function verificarFrasesAncoradasNoCodigo() {
       oque: 'a escada da esteira no `description` do frontmatter',
     },
     {
-      arquivo: 'docs/getting-started.md',
+      arquivo: 'docs/how-to/desenvolver-o-brabo.md',
       padrao: /db:generate\s+# depois de mudar (apps\/api\/src\/db\/schema(?:\/|\.ts))/,
       esperado: moradaDoSchema,
       oque: 'onde o `db:generate` manda mexer',
@@ -1169,13 +1169,11 @@ function verificarVersaoAnunciada() {
       padrao: /versão \*\*v(\d+\.\d+\.\d+)\*\*/,
     },
     {
-      // A primeira página do site publicado. O padrão exige a frase INTEIRA
-      // ("Fases 1 a NN concluídas**, versão **vX.Y.Z**") de propósito:
-      // as duas metades envelhecem juntas, e casar só a versão deixaria a
-      // contagem de fases mentindo do lado dela sem nada reprovar. Voltou a pt-BR
-      // com o ADR 0216 (pt-BR é a fonte); a tradução em inglês não é aferida.
+      // A primeira página do site publicado. A linha "Versão atual: **vX.Y.Z**"
+      // substituiu a seção "Estado" (AT-855): o estado das fases virou histórico.
+      // Voltou a pt-BR com o ADR 0216 (pt-BR é a fonte); a tradução em inglês não é aferida.
       arquivo: 'docs/intro.md',
-      padrao: /\*\*Fases 1 a \d+ concluídas\*\*, versão \*\*v(\d+\.\d+\.\d+)\*\*/,
+      padrao: /Versão atual: \*\*v(\d+\.\d+\.\d+)\*\*/,
     },
   ];
 

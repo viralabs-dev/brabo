@@ -559,9 +559,13 @@ etapa permissiva — não `require_approval`, porque "sempre permitir" gravaria
 o padrão em `allow` e reabriria a porta
 ([RN-106](business-rules/api.md#rn-106),
 [ADR 0065](adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.md)).
-O ciclo de vida do container (provisionar, reciclar, limpar) ainda não existe
-— um corte declarado da FASE 25, registrado no CLAUDE.md — então este invariante
-convive, por ora, com a política de escopo de caminho do
+O ciclo de vida do container (provisionar, reciclar, limpar) existe como a
+tabela `project_containers` e a máquina de estados
+`provisioning → running ⇄ stopped` ([RN-243](business-rules/api.md#rn-243) a
+[RN-248](business-rules/api.md#rn-248), [ADR 0081](adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.md)):
+os casos de uso só registram a transição, e nenhum deles chama o Docker. Quem
+tem o socket do Docker do servidor é o `brabo-broker`. Por isso este invariante
+convive com a política de escopo de caminho do
 [ADR 0055](adr/0055-escopo-de-caminho-na-politica-de-terminal.md).
 
 E desde o [ADR 0143](adr/0143-agentes-de-dev-so-depois-do-container.md)

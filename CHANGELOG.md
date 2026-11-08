@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: AT-855. A introdução deixa a seção "Estado" (fases 1 a 26) e ganha uma linha `Versão atual: **vX.Y.Z**` e "Por onde começar" com 3 caminhos (usar, entender, replicar). "Primeiros passos" passa a ensinar a USAR o Brabo (`install.sh`, entrar, modelo, projeto, primeiro turno, com "Como saber que deu certo" por passo), sem clonar o monorepo legado. O que era de desenvolvimento vai para o guia novo `how-to/desenvolver-o-brabo` (`clonar-tudo.sh`, `make dev` do `brabo-infra`, os dois modos e as portas, a pasta dos workspaces). As âncoras do `docs:check` (versão da intro e `db:generate`) acompanham. `architecture.md` deixa de dizer que o ciclo de vida do container "ainda não existe" (RN-243 a RN-248, ADR 0081).
+
 - **docs**: AT-854. O menu do site passa a ter 7 grupos de topo (Comece aqui, Tutoriais, Guias práticos, Conceitos, Referência, Decisões (ADR) e Histórico do projeto), com a árvore de ADRs e o Histórico recolhidos e as 6 páginas que estavam fora do menu dentro dele. Cada página tem um tipo (`tutorial|guia|conceito|referencia|decisao|historico`), declarado em `tipo:` ou dado pela pasta, e o novo `scripts/docs/site/tipos.mjs` (no fim do `docs:site:check`) reprova página sem tipo, no grupo errado ou fora do menu; página de repo irmão que não bate só gera aviso.
 
 - **docs(regressivo)**: AT-853. A página de regressivo diz que o `brabo-runner` não tem regressivo no catálogo: a PR dele se atesta pelo próprio CI (binário linux-x64 na PR, runner#28), e o contrato runner ↔ engine só é provado no TP-01 (RN-1075, `brabo-ci`).

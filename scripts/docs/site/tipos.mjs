@@ -10,7 +10,9 @@
  * (`espera`, em `navegacao.mjs`).
  *
  *  - ERRO: página do `brabo` sem tipo; tipo fora de `TIPOS`; tipo fora do que o
- *    grupo espera (também para irmão que DECLAROU o tipo); página que existe e não está no menu.
+ *    grupo espera (também para irmão que DECLAROU o tipo); página que existe e não está no menu;
+ *    linha de comando do monorepo legado (AT-855) em página que não é `historico`
+ *    (no irmão que não declarou tipo, vira AVISO).
  *  - AVISO: página de irmão que não declarou tipo e a pasta não bate com o grupo.
  *    O aviso nomeia o repo dono, que ajusta o frontmatter na próxima PR de doc dele.
  */
@@ -36,6 +38,19 @@ export function tipoDaPagina({ slug, dados = {} }) {
   return dados.tipo ?? PASTAS.find(([re]) => re.test(slug))?.[1];
 }
 
+/** Comando do monorepo legado (`git clone …daneiel/brabo`, `pnpm dev`) numa linha de bloco de código. Só linha de comando: a prosa e as tabelas de runs antigos citam o repo à vontade. */
+const COMANDO_DO_MONORREPO = /^\s*(git clone \S*daneiel\/brabo(\.git)?\s*$|pnpm dev\b)/;
+
+export function comandosDoMonorrepo(corpo) {
+  let dentro = false;
+  const achados = [];
+  corpo.split('\n').forEach((linha, i) => {
+    if (/^\s*(```|~~~)/.test(linha)) dentro = !dentro;
+    else if (dentro && COMANDO_DO_MONORREPO.test(linha)) achados.push(i + 1);
+  });
+  return achados;
+}
+
 export function conferirTipos({ paginas, navegacao }) {
   const grupoDe = new Map();
   for (const g of navegacao) for (const { slug } of listaPlana([g])) grupoDe.set(slug, g);
@@ -47,6 +62,9 @@ export function conferirTipos({ paginas, navegacao }) {
     const declarado = p.dados?.tipo;
     const tipo = tipoDaPagina(p);
     if (declarado !== undefined && !TIPOS.includes(declarado)) { erros.push(`${quem}: tipo "${declarado}" não existe (${TIPOS.join('|')})`); continue; }
+    if (tipo !== 'historico') {
+      for (const n of comandosDoMonorrepo(p.corpo ?? '')) (dono || declarado ? erros : avisos).push(`${quem}:${n}: comando do monorepo legado fora de uma página \`historico\``);
+    }
     const grupo = grupoDe.get(p.slug);
     if (!grupo) { erros.push(`${quem}: a página existe e não está no menu`); continue; }
     if (!tipo && dono) { erros.push(`${quem}: sem \`tipo:\` e a pasta não diz o tipo`); continue; }
