@@ -67,7 +67,6 @@ Os dois publicam a api em `:3000` e o engine em `:4000`, de propósito, para o
 `WEB_PORT` ou `OLLAMA_PORT` no `.env`; o CORS acompanha o `WEB_PORT`.
 
 Para saber em qual modo você está, o `preflight` do `make dev` diz.
-Veja o [ADR 0025](../adr/0025-fase5-deploy-kubernetes-kustomize.md).
 
 </details>
 
@@ -78,7 +77,6 @@ O compose de dev é o projeto Docker **`brabo-dev`**; a instalação do `install
 é **`brabo`**. Os nomes são separados, mas o `make dev` e o `reset-total.sh`
 **recusam** enquanto houver container do compose de instalação, e os listam.
 Derrube a instalação **sem** `-v`: os dados ficam, e `up -d` a traz de volta.
-Veja o [ADR 0170](../adr/0170-compose-de-dev-brabo-dev.md).
 
 </details>
 
@@ -92,7 +90,7 @@ PROJECT_WORKSPACES_HOST_DIR=~/brabo-projetos
 GIT_LOCAL_REPOS_HOST_DIR=~/brabo-projetos-bare
 ```
 
-- Cada projeto ganha uma subpasta `<slug>-<8 chars do id>` ([RN-109](../business-rules/api.md#rn-109)), decidida na criação.
+- Cada projeto ganha uma subpasta `<slug>-<8 chars do id>`, decidida na criação.
 - Não aponte para `$HOME` inteiro nem para uma pasta com outros segredos: ela vira a raiz de **todos** os projetos.
 - Os containers rodam como root em dev, então o que os agentes escrevem sai dono de `root`. Rode uma vez `sudo chown -R $USER ~/brabo-projetos`.
 - Só testado em Linux e macOS. No Windows, o bind mount tem armadilhas conhecidas.
@@ -129,3 +127,7 @@ Trabalhe sempre em `feature/*` a partir de `dev`, com conventional commits em pt
 | `brabo-workspace` | a pasta-mãe e o `clonar-tudo.sh` |
 
 O mapa completo, com o que cada um consome, está em [O mapa](../tutorials/orquestrar-repositorios/o-mapa.md).
+
+## Para saber mais
+
+- [ADR 0025](../adr/0025-fase5-deploy-kubernetes-kustomize.md) (modos do dev), [ADR 0170](../adr/0170-compose-de-dev-brabo-dev.md) (compose do dev) e [RN-109](../business-rules/api.md#rn-109) (pasta de cada projeto).

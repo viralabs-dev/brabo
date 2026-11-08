@@ -36,8 +36,7 @@ Para ver o que ele faria antes de deixá-lo fazer, rode `bash install.sh --print
 
 Ele precisa ser um arquivo, e não `curl … | sh`, por dois motivos: faz perguntas
 no terminal (que o pipe tomaria) e confere o próprio hash contra o manifesto
-assinado da Release ([RN-511](business-rules/infra.md#rn-511),
-[RN-526](business-rules/produto.md#rn-526)). No caminho, ele pergunta se liga o
+assinado da Release. No caminho, ele pergunta se liga o
 broker de container (pode responder não) e se liga o Ollama, e pede e-mail e
 senha da primeira conta. A senha não é gravada em lugar nenhum.
 
@@ -49,14 +48,13 @@ engine antes de dizer que instalou, e termina com uma linha `Web: http://localho
 
 - **Porta ocupada:** o instalador diz qual. Libere-a e rode de novo.
 - **Já havia uma instalação:** ele faz backup, prova que o backup restaura e só então migra.
-- A forma do instalador está no [ADR 0150](adr/0150-instalador-de-uma-linha.md).
 
 </details>
 
 ## 2. Entrar
 
 Abra <http://localhost:8088> e entre com o e-mail e a senha que você digitou no
-instalador. O login é da própria api ([ADR 0032](adr/0032-corte-do-keycloak-e-sessao-em-cookie.md)).
+instalador. O login é da própria api.
 
 **Como saber que deu certo:** você cai no dashboard do seu workspace.
 
@@ -64,8 +62,8 @@ instalador. O login é da própria api ([ADR 0032](adr/0032-corte-do-keycloak-e-
 <summary>Se der errado</summary>
 
 O login devolve **401** com a senha certa? A resposta é a mesma para senha
-errada, e-mail inexistente e conta bloqueada, de propósito
-([RN-032](business-rules/api.md#rn-032)). Confira o e-mail e tente de novo; se
+errada, e-mail inexistente e conta bloqueada, de propósito.
+Confira o e-mail e tente de novo; se
 a conta nunca foi criada, rode o instalador outra vez.
 
 </details>
@@ -81,7 +79,7 @@ Escolha um dos dois:
   chave é cifrada com envelope encryption antes de tocar o banco.
 
 O modelo é resolvido em cascata, **sessão > agente > projeto > workspace**, e o
-primeiro que existir vale ([RN-020](business-rules/api.md#rn-020)). Dá para
+primeiro que existir vale. Dá para
 deixar o local no geral e pôr um modelo de API só no QA, que é o papel que menos
 cabe num modelo pequeno.
 
@@ -115,7 +113,7 @@ Ao confirmar, roda o **bootstrap de Gitflow**: cinco passos que criam `dev`,
 <summary>Se der errado</summary>
 
 - **`skipped`** (já estava feito) e **`degraded`** (concluiu sem uma capability) são sucesso. Com o provider Local, a proteção de branch sempre sai `degraded`: não há plataforma para aplicá-la, e quem impede o merge indevido é o [teto no domínio](reference/permissions.md#caps).
-- Se um passo **falhar**, corrija a causa e mande retomar: o bootstrap continua de onde parou ([RN-029](business-rules/api.md#rn-029)).
+- Se um passo **falhar**, corrija a causa e mande retomar: o bootstrap continua de onde parou.
 
 </details>
 
@@ -182,3 +180,8 @@ Veja [a pasta dos workspaces](how-to/desenvolver-o-brabo.md#pasta-dos-workspaces
 - [Arquitetura](architecture.md): como as peças se encaixam
 - [Regras de negócio](business-rules.md): o que o sistema garante, e onde isso vive no código
 - [Runbook](runbook.md): operar, restaurar, rotacionar chave
+
+## Para saber mais
+
+- A forma do instalador: [ADR 0150](adr/0150-instalador-de-uma-linha.md); o login da api: [ADR 0032](adr/0032-corte-do-keycloak-e-sessao-em-cookie.md).
+- Regras: [RN-511](business-rules/infra.md#rn-511) e [RN-526](business-rules/produto.md#rn-526) (instalador), [RN-032](business-rules/api.md#rn-032) (login), [RN-020](business-rules/api.md#rn-020) (modelo em cascata), [RN-029](business-rules/api.md#rn-029) (retomar o bootstrap).
