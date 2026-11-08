@@ -1855,7 +1855,7 @@ spec и есть код, читающий окружение, а не модул
 <blockquote>
 <p>⚠️ Блок сгенерирован <code>pnpm docs:generate</code>. Не редактируйте вручную — следующая сборка его перезапишет.</p>
 </blockquote>
-<p>Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — <strong>187</strong>. У всех есть описание в таблицах выше.</p>
+<p>Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — <strong>189</strong>. У всех есть описание в таблицах выше.</p>
 <p>Каждый источник помечен как <strong>продукт</strong> — то, что оператор установки задаёт в <code>.env</code> развёртывания, — или <strong>инструменты</strong>: их читают только CI и разработчики продукта. Переменной инструментов не место в <code>.env</code> оператора.</p>
 <p><strong>api</strong> — переменных: 68 · продукт</p>
 <ul>
@@ -2032,14 +2032,15 @@ spec и есть код, читающий окружение, а не модул
 <li><code>OLLAMA_HOST</code> <sub>(apps/api/scripts/demo-psicologo.ts)</sub></li>
 <li><code>RATE_LIMIT_WINDOW_MS</code> <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub></li>
 </ul>
-<p><strong>e2e</strong> — переменных: 4 · инструменты</p>
+<p><strong>e2e</strong> — переменных: 5 · инструменты</p>
 <ul>
 <li><code>E2E_API_URL</code> <sub>(e2e/suporte/api.ts)</sub></li>
 <li><code>E2E_PASSWORD</code> <sub>(e2e/suporte/api.ts)</sub></li>
+<li><code>E2E_SERVICE_TOKEN</code> <sub>(e2e/suporte/interno.ts)</sub></li>
 <li><code>E2E_USER</code> <sub>(e2e/suporte/api.ts)</sub></li>
 <li><code>E2E_WEB_URL</code> <sub>(e2e/playwright.config.ts)</sub></li>
 </ul>
-<p><strong>deploy/k8s</strong> — переменных: 23 · инструменты</p>
+<p><strong>deploy/k8s</strong> — переменных: 24 · инструменты</p>
 <ul>
 <li><code>API_URL</code> <sub>(deploy/k8s/rollout-test.sh)</sub></li>
 <li><code>BRABO_CLUSTER_NAME</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
@@ -2055,6 +2056,7 @@ spec и есть код, читающий окружение, а не модул
 <li><code>HPA_JOBS</code> <sub>(deploy/k8s/hpa-test.sh)</sub></li>
 <li><code>HPA_TIMEOUT</code> <sub>(deploy/k8s/hpa-test.sh)</sub></li>
 <li><code>KUBE_VERSION</code> <sub>(deploy/k8s/validate.sh)</sub></li>
+<li><code>NPMRC</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
 <li><code>PROJECT_WORKSPACES_ROOT_NO_POD</code> <sub>(deploy/k8s/test-reprojecao-artefatos.sh)</sub></li>
 <li><code>RESTORE_KEEP_JOB</code> <sub>(deploy/k8s/test-restore.sh)</sub></li>
 <li><code>RESTORE_MUTACAO</code> <sub>(deploy/k8s/test-restore.sh)</sub></li>
@@ -2076,7 +2078,7 @@ spec и есть код, читающий окружение, а не модул
 </blockquote>
 <nav class="site-pager"><a href="../business-rules/web.html"></a><a href="../reference/events.html">Eventos</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Редактировать страницу</a><span>Обновлено 2026-11-08T12:11:17-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Редактировать страницу</a><span>Обновлено 2026-11-08T15:27:14Z · viralabs-dev-brabo[bot]</span></footer>
 </main>
 <aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#compose-установки-docker-composeinstallyml">Compose установки (docker-compose.install.yml)</a></li><li class="n2"><a href="#api">api</a></li><li class="n3"><a href="#основные">Основные</a></li><li class="n3"><a href="#безопасность-">Безопасность 🔒</a></li><li class="n3"><a href="#auth-first-party">Auth first-party</a></li><li class="n3"><a href="#настоящий-smtp-mailsender">Настоящий SMTP (MailSender)</a></li><li class="n3"><a href="#recuperar-a-senha-sem-smtp">Восстановление пароля без SMTP</a></li><li class="n3"><a href="#seed-для-разработки">Seed для разработки</a></li><li class="n3"><a href="#rate-limit">Rate limit</a></li><li class="n3"><a href="#внутренний-трафик-">Внутренний трафик 🔒</a></li><li class="n3"><a href="#git">Git</a></li><li class="n3"><a href="#llm">LLM</a></li><li class="n3"><a href="#граф-знаний-adr-0099">Граф знаний (ADR 0099)</a></li><li class="n3"><a href="#наблюдаемость">Наблюдаемость</a></li><li class="n2"><a href="#engine">engine</a></li><li class="n3"><a href="#основные-1">Основные</a></li><li class="n3"><a href="#кластер-и-остановка">Кластер и остановка</a></li><li class="n3"><a href="#harness">Harness</a></li><li class="n3"><a href="#психолог">Психолог</a></li><li class="n3"><a href="#анамнез">Анамнез</a></li><li class="n3"><a href="#ограничители-нагрузки">Ограничители нагрузки</a></li><li class="n3"><a href="#внутренний-трафик-и-наблюдаемость">Внутренний трафик и наблюдаемость</a></li><li class="n2"><a href="#web">web</a></li><li class="n3"><a href="#почему-версия-не-идёт-через-configjs">Почему версия не идёт через /config.js</a></li><li class="n2"><a href="#резервное-копирование">Резервное копирование</a></li><li class="n2"><a href="#локальный-инференс-контейнеры">Локальный инференс (контейнеры)</a></li><li class="n2"><a href="#локальная-наблюдаемость-контейнеры">Локальная наблюдаемость (контейнеры)</a></li><li class="n2"><a href="#брокер-контейнеров">Брокер контейнеров</a></li><li class="n2"><a href="#dev-container-user-build-time">Пользователь контейнеров dev (сборка)</a></li><li class="n2"><a href="#переменные-инструментов-не-продукта">Переменные инструментов (не продукта)</a></li><li class="n3"><a href="#демонстрационные-скрипты-и-seed--appsapiscripts">Демонстрационные скрипты и seed — apps/api/scripts/</a></li><li class="n3"><a href="#браузерный-e2e--e2e">Браузерный E2E — e2e/</a></li><li class="n3"><a href="#локальный-кластер-и-плановые-проверки--deployk8s">Локальный кластер и плановые проверки — deploy/k8s/</a></li><li class="n2"><a href="#полный-инвентарь">Полный инвентарь</a></li></ul></aside>
 </div>

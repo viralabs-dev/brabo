@@ -871,7 +871,7 @@ o <code>case</code> do instalador e a do navegador divergem.</p>
 <ul>
 <li><strong>Código:</strong> <code>.github/workflows/build-runner-binaries.yml:283</code> (o job, agora
 sem <code>needs:</code>), <code>:318</code> (<code>timeout-minutes: 40</code>, que cabe as duas esperas),
-<code>:358</code> (<code>ALVOS_ESPERADOS</code> no JOB, para os dois passos lerem a mesma lista),
+<code>:370</code> (<code>ALVOS_ESPERADOS</code> no JOB, para os dois passos lerem a mesma lista),
 <code>:397</code> (o passo que espera), <code>:401</code>/<code>:402</code> (os dois tetos), <code>:410</code> (a Release
 ausente, que é erro), <code>:433</code> (o teto dos binários, que é <code>notice</code>), <code>:499</code> (o
 manifesto nomeando o que não cobre)</li>
@@ -945,8 +945,8 @@ e a subida de TAG do contracts cai aqui; (3) caminho que nenhum glob casa roda o
 smoke <code>instalacao</code> + <code>autenticacao</code> e o resumo o lista como &quot;sem dono no mapa&quot;,
 para o mapa ser corrigido. O <code>brabo-contracts</code> não tem regressivo na própria PR.</p>
 <ul>
-<li><strong>Código:</strong> <code>scripts/ci/qa-regressivo-selecao.ts:60</code> (<code>selecionar</code>),
-<code>scripts/ci/qa-regressivo-selecao.ts:36</code> (<code>SMOKE</code>)</li>
+<li><strong>Código:</strong> <code>scripts/ci/qa-regressivo-selecao.ts:67</code> (<code>selecionar</code>),
+<code>scripts/ci/qa-regressivo-selecao.ts:43</code> (<code>SMOKE</code>)</li>
 <li><strong>Teste:</strong> <code>scripts/ci/qa-regressivo-selecao.spec.ts:41</code> (regra 1),
 <code>:55</code> (regra 2 por repositório), <code>:58</code> (regra 3)</li>
 <li><strong>ADR:</strong> <a href="../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
@@ -997,7 +997,7 @@ SHAs do <code>.git/irmaos-sha.lst</code> que o <code>montar-layout.sh</code> gra
 <code>release.yml</code> passa o <code>infra</code> por caminho.</p>
 <ul>
 <li><strong>Código:</strong> <code>scripts/ci/vinculos.ts:57</code> (<code>montar</code>), <code>.github/actions/vinculos/action.yml:31</code>
-(o <code>continue-on-error</code>), <code>scripts/ci/validar-payload.ts:85</code> (<code>validarOrigem</code>),
+(o <code>continue-on-error</code>), <code>scripts/ci/validar-payload.ts:112</code> (<code>validarOrigem</code>),
 <code>.github/workflows/docs-check.yml:89</code> (o <code>brabo</code> repassa os irmãos)</li>
 <li><strong>Teste:</strong> <code>scripts/ci/vinculos.spec.ts</code> (fixtures, valor malicioso, origem
 vazia) e <code>scripts/ci/validar-payload.spec.ts</code></li>
@@ -1122,7 +1122,7 @@ funcionalidade&quot;, vira <strong>aceitar com justificativa</strong> (<code>/qa
 <code>sem-resposta</code> vira <strong>rodar de novo</strong>, e se repetir, <strong>aceitar com justificativa</strong>.
 No modo <code>dev</code> o mesmo rótulo sai com o prefixo &quot;atestado (não bloqueia)&quot;.</p>
 <ul>
-<li><strong>Código:</strong> <code>scripts/ci/qa-e2e-resumo.ts:66</code> (<code>montarCheck</code>, que hoje monta o
+<li><strong>Código:</strong> <code>scripts/ci/qa-e2e-resumo.ts:292</code> (<code>montarCheck</code>, que hoje monta o
 check a partir do resultado); o <code>relatorio.ts</code> do <code>brabo-qa</code> e o JSON v1 ainda não
 existem na <code>dev</code> (AT-791, lanes L1 e L2)</li>
 <li><strong>Teste:</strong> <code>scripts/ci/qa-e2e-resumo.spec.ts</code> (o check por modo); a regra de
@@ -1160,7 +1160,7 @@ de <a href="#rn-1051">RN-1051</a>. O <code>setup</code> de login
 parecer um teste de funcionalidade. Sem o balde, a tabela mostraria tudo &quot;sem
 cobertura&quot; com um vermelho de spec, que é o achado da qa#28.</p>
 <ul>
-<li><strong>Código:</strong> <code>scripts/ci/qa-regressivo-selecao.ts:86</code> (<code>semDono.push</code>); o balde
+<li><strong>Código:</strong> <code>scripts/ci/qa-regressivo-selecao.ts:76</code> (<code>semDono.push</code>); o balde
 &quot;sem funcionalidade&quot; no relatório ainda não existe (AT-791, lanes L1 e L2)</li>
 <li><strong>Teste:</strong> <code>scripts/ci/qa-regressivo-selecao.spec.ts</code> (a seleção por mapa e o
 <code>semDono</code>); o balde no relatório ganha o teste na L2</li>
@@ -1169,7 +1169,7 @@ cobertura&quot; com um vermelho de spec, que é o achado da qa#28.</p>
 </ul>
 <nav class="site-pager"><a href="../business-rules/broker.html"></a><a href="../business-rules/contracts.html"></a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/scripts/ci/docs/business-rules/ci.md">Editar esta página</a><span>Atualizado em 2026-11-08T11:17:43-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/scripts/ci/docs/business-rules/ci.md">Editar esta página</a><span>Atualizado em 2026-11-08T12:28:01-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#pr-gates">PR Gates</a></li><li class="n3"><a href="#rn-037">RN-037 — Infra becomes an area: Workflows generates CI per provider, Lead consolidates into a single PR</a></li><li class="n2"><a href="#o-papel-dbre-vira-dois-scripts-mecânicos-rn-400403-adr-0093">O papel dbre vira dois scripts mecânicos (RN-400..403, ADR 0093)</a></li><li class="n3"><a href="#rn-401">RN-401 — O linter não é gate de CI: varre o repositório inteiro, não o diff da PR</a></li><li class="n2"><a href="#n-agentes-online-no-dashboard--status-ao-vivo-nunca-presença-histórica-rn-409-adr-0097">&quot;N agentes online&quot; no dashboard — status AO VIVO, nunca presença histórica (RN-409, ADR 0097)</a></li><li class="n3"><a href="#rn-411">RN-411 — O quarto sinal de trabalho pendente: dev agents falam dev.*, não agent.status</a></li><li class="n2"><a href="#a-busca-do-rag-deixa-rastro-e-o-rastro-congela-os-pesos-rn-479481">A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)</a></li><li class="n3"><a href="#rn-498">RN-498 — O golden-set do RAG roda em CI de verdade, AGENDADO — e o gate continua warn</a></li><li class="n2"><a href="#fase-29--a-instalação-de-uma-linha-assinar-o-que-se-publica">FASE 29 — a instalação de uma linha: assinar o que se publica</a></li><li class="n2"><a href="#quando-dá-errado">Quando dá errado</a></li><li class="n3"><a href="#rn-524">RN-524 — Artefato publicado é assinado por identidade de workflow, verificado no mesmo run, e a verificação recusa em vez de avisar</a></li><li class="n2"><a href="#o-installsh-fecha-a-instalação-rn-547-fase-30">O install.sh fecha a instalação (RN-547, FASE 30)</a></li><li class="n3"><a href="#rn-549">RN-549 — O E2E em máquina limpa prova a instalação INTEIRA: os cinco elos, o agente de pé esperando, e o primeiro projeto pego sem ninguém voltar ao terminal</a></li><li class="n2"><a href="#a-chave-de-dispositivo-ganha-tela-e-a-tela-diz-o-alcance-de-revogar-rn-561">A chave de dispositivo ganha tela, e a tela diz o alcance de revogar (RN-561)</a></li><li class="n3"><a href="#rn-565">RN-565 — O manifesto assinado sai com o que a Release TEM, e não espera a plataforma que nunca constrói</a></li><li class="n2"><a href="#o-regressivo-por-funcionalidade-e-os-vínculos-dos-runs-rn-10311035-rn-10431045">O regressivo por funcionalidade e os vínculos dos runs (RN-1031..1035, RN-1043..1045)</a></li><li class="n3"><a href="#rn-1031">RN-1031 — O catálogo de funcionalidades e o mapa caminho → funcionalidade moram num arquivo só, e a spec se liga por tag</a></li><li class="n3"><a href="#rn-1032">RN-1032 — A PR para a dev roda o regressivo só das funcionalidades que tocou, sob o check Regressivo do brabo-qa, que NUNCA é exigido</a></li><li class="n3"><a href="#rn-1033">RN-1033 — Três regras de arquivo transversal valem antes do mapa: nada, catálogo inteiro e sem dono</a></li><li class="n3"><a href="#rn-1034">RN-1034 — A PR para a main roda o catálogo inteiro no E2E do brabo-qa, e funcionalidade sem spec aparece como &quot;sem cobertura&quot; sem reprovar</a></li><li class="n3"><a href="#rn-1035">RN-1035 — A PR para a dev publica a imagem sha-&lt;12&gt; assinada, só do próprio repositório, e a limpeza apaga as órfãs</a></li><li class="n3"><a href="#rn-1043">RN-1043 — Todo run que lê outro repositório publica ## Vínculos no topo do Summary, e o helper nunca reprova o job</a></li><li class="n3"><a href="#rn-1044">RN-1044 — O run de destino de um dispatch ou de uma tag tem run-name com a origem, e a correlação do dispatch vai no nome como c=&lt;run_id&gt;-&lt;attempt&gt;</a></li><li class="n3"><a href="#rn-1045">RN-1045 — O check do App aponta para o run do brabo-qa desde o início, e o run de origem registra o link do run disparado</a></li><li class="n2"><a href="#dependência-de-merge-entre-repositórios-rn-10471050">Dependência de merge entre repositórios (RN-1047..1050)</a></li><li class="n3"><a href="#rn-1047">RN-1047 — A PR declara a dependência com Depende-de: viralabs-dev/&lt;repo&gt;#&lt;n&gt;, e a linha malformada reprova em vez de passar calada</a></li><li class="n3"><a href="#rn-1048">RN-1048 — O check Dependências de merge tem quatro estados, nunca neutral, e a espera é amarela</a></li><li class="n3"><a href="#rn-1049">RN-1049 — O merge da dependência atualiza o check das PRs que a citam, e o cron horário é só rede</a></li><li class="n3"><a href="#rn-1050">RN-1050 — O ciclo de dependências reprova com o caminho inteiro, até a profundidade 5</a></li><li class="n2"><a href="#o-relatório-de-decisão-do-regressivo-rn-10511053">O relatório de decisão do regressivo (RN-1051..1053)</a></li><li class="n3"><a href="#rn-1051">RN-1051 — O relatório do regressivo sai de um JSON único, e a recomendação segue uma regra fixa de seis linhas</a></li><li class="n3"><a href="#rn-1052">RN-1052 — O /qa-aceitar preserva o relatório do vermelho e registra o aceite contra a recomendação</a></li><li class="n3"><a href="#rn-1053">RN-1053 — A spec sem tag @f-* aparece como &quot;sem funcionalidade&quot; e nunca some do relatório</a></li></ul></aside>
 </div>

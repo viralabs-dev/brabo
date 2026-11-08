@@ -1878,7 +1878,7 @@ ninguém perceba.</p>
 <blockquote>
 <p>⚠️ Bloco gerado por <code>pnpm docs:generate</code>. Não edite à mão — o próximo build o sobrescreve.</p>
 </blockquote>
-<p>Inventário extraído do código: <strong>187 variáveis</strong> lidas em tempo de execução. Todas têm descrição nas tabelas acima.</p>
+<p>Inventário extraído do código: <strong>189 variáveis</strong> lidas em tempo de execução. Todas têm descrição nas tabelas acima.</p>
 <p>Cada fonte é marcada <strong>produto</strong> — o que quem opera a instalação configura no <code>.env</code> do deploy — ou <strong>ferramenta</strong>, lida só pelo CI e por quem desenvolve o produto. Variável de ferramenta nunca pertence ao <code>.env</code> de um operador.</p>
 <p><strong>api</strong> — 68 variáveis · produto</p>
 <ul>
@@ -2055,14 +2055,15 @@ ninguém perceba.</p>
 <li><code>OLLAMA_HOST</code> <sub>(apps/api/scripts/demo-psicologo.ts)</sub></li>
 <li><code>RATE_LIMIT_WINDOW_MS</code> <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub></li>
 </ul>
-<p><strong>e2e</strong> — 4 variáveis · ferramenta</p>
+<p><strong>e2e</strong> — 5 variáveis · ferramenta</p>
 <ul>
 <li><code>E2E_API_URL</code> <sub>(e2e/suporte/api.ts)</sub></li>
 <li><code>E2E_PASSWORD</code> <sub>(e2e/suporte/api.ts)</sub></li>
+<li><code>E2E_SERVICE_TOKEN</code> <sub>(e2e/suporte/interno.ts)</sub></li>
 <li><code>E2E_USER</code> <sub>(e2e/suporte/api.ts)</sub></li>
 <li><code>E2E_WEB_URL</code> <sub>(e2e/playwright.config.ts)</sub></li>
 </ul>
-<p><strong>deploy/k8s</strong> — 23 variáveis · ferramenta</p>
+<p><strong>deploy/k8s</strong> — 24 variáveis · ferramenta</p>
 <ul>
 <li><code>API_URL</code> <sub>(deploy/k8s/rollout-test.sh)</sub></li>
 <li><code>BRABO_CLUSTER_NAME</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
@@ -2078,6 +2079,7 @@ ninguém perceba.</p>
 <li><code>HPA_JOBS</code> <sub>(deploy/k8s/hpa-test.sh)</sub></li>
 <li><code>HPA_TIMEOUT</code> <sub>(deploy/k8s/hpa-test.sh)</sub></li>
 <li><code>KUBE_VERSION</code> <sub>(deploy/k8s/validate.sh)</sub></li>
+<li><code>NPMRC</code> <sub>(deploy/k8s/bootstrap.sh)</sub></li>
 <li><code>PROJECT_WORKSPACES_ROOT_NO_POD</code> <sub>(deploy/k8s/test-reprojecao-artefatos.sh)</sub></li>
 <li><code>RESTORE_KEEP_JOB</code> <sub>(deploy/k8s/test-restore.sh)</sub></li>
 <li><code>RESTORE_MUTACAO</code> <sub>(deploy/k8s/test-restore.sh)</sub></li>
@@ -2099,7 +2101,7 @@ marcadas com 🔒, que falham explicitamente em produção.</p>
 </blockquote>
 <nav class="site-pager"><a href="../business-rules/web.html"></a><a href="../reference/events.html">Eventos</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Editar esta página</a><span>Atualizado em 2026-11-08T12:11:17-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Editar esta página</a><span>Atualizado em 2026-11-08T15:27:14Z · viralabs-dev-brabo[bot]</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#compose-de-instalação-docker-composeinstallyml">Compose de instalação (docker-compose.install.yml)</a></li><li class="n2"><a href="#api">api</a></li><li class="n3"><a href="#essenciais">Essenciais</a></li><li class="n3"><a href="#segurança-">Segurança 🔒</a></li><li class="n3"><a href="#auth-first-party">Auth first-party</a></li><li class="n3"><a href="#smtp-real-mailsender">SMTP real (MailSender)</a></li><li class="n3"><a href="#recuperar-a-senha-sem-smtp">Recuperar a senha sem SMTP</a></li><li class="n3"><a href="#seed-de-desenvolvimento">Seed de desenvolvimento</a></li><li class="n3"><a href="#rate-limit">Rate limit</a></li><li class="n3"><a href="#tráfego-interno-">Tráfego interno 🔒</a></li><li class="n3"><a href="#git">Git</a></li><li class="n3"><a href="#llm">LLM</a></li><li class="n3"><a href="#grafo-de-conhecimento-adr-0099">Grafo de conhecimento (ADR 0099)</a></li><li class="n3"><a href="#observabilidade">Observabilidade</a></li><li class="n2"><a href="#engine">engine</a></li><li class="n3"><a href="#essenciais-1">Essenciais</a></li><li class="n3"><a href="#cluster-e-desligamento">Cluster e desligamento</a></li><li class="n3"><a href="#harness">Harness</a></li><li class="n3"><a href="#psicólogo">Psicólogo</a></li><li class="n3"><a href="#anamnese">Anamnese</a></li><li class="n3"><a href="#guardas-de-carga">Guardas de carga</a></li><li class="n3"><a href="#tráfego-interno-e-observabilidade">Tráfego interno e observabilidade</a></li><li class="n2"><a href="#web">web</a></li><li class="n3"><a href="#por-que-a-versão-não-passa-pelo-configjs">Por que a versão não passa pelo /config.js</a></li><li class="n2"><a href="#backup">Backup</a></li><li class="n2"><a href="#inferência-local-containers">Inferência local (containers)</a></li><li class="n2"><a href="#observabilidade-local-containers">Observabilidade local (containers)</a></li><li class="n2"><a href="#broker-de-containers">Broker de containers</a></li><li class="n2"><a href="#dev-container-user-build-time">Usuário dos containers de dev (build)</a></li><li class="n2"><a href="#variáveis-de-ferramenta-não-do-produto">Variáveis de ferramenta (não do produto)</a></li><li class="n3"><a href="#scripts-de-demonstração-e-seed--appsapiscripts">Scripts de demonstração e seed — apps/api/scripts/</a></li><li class="n3"><a href="#e2e-de-navegador--e2e">E2E de navegador — e2e/</a></li><li class="n3"><a href="#cluster-local-e-provas-agendadas--deployk8s">Cluster local e provas agendadas — deploy/k8s/</a></li><li class="n2"><a href="#inventário-completo">Inventário completo</a></li></ul></aside>
 </div>

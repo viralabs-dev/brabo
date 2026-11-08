@@ -1164,7 +1164,9 @@ nesta máquina, nunca nas das Actions. Para a instalação local do TP-01
 <code>docker build</code> com <code>--build-arg BRABO_AMBIENTE=local</code> na api e
 <code>--build-arg VITE_BRABO_AMBIENTE=local</code> no web).</li>
 <li>No <code>.env</code> da instalação: <code>BRABO_AMBIENTE=local</code> e <code>BRABO_BIND=127.0.0.1</code>
-(sem o bind, a porta fica aberta na rede e qualquer um entra como owner).</li>
+(sem o bind, a porta fica aberta na rede e qualquer um entra como owner).
+O bind prende a api, o web e o engine; o Ollama e o neo4j ficam sempre em
+<code>127.0.0.1</code> (AT-811, RN-1057).</li>
 <li>Copie o <code>docker/docker-compose.install.yml</code> novo para a pasta da
 instalação (o de lá é cópia).</li>
 <li><code>docker compose up -d</code>. A tela de login mostra o botão &quot;Acesso rápido&quot;; as
@@ -2711,6 +2713,7 @@ outro alvo.</p>
 </tbody>
 </table></div>
 <h3 id="provas-de-propriedade-agendadas">Provas de propriedade agendadas</h3>
+<p>Desde a AT-773, cada run mostra no título quem o disparou (<code>Provas de propriedade · agendado</code>, ou <code>manual · &lt;ator&gt;</code>) e, no Summary, o bloco <code>## Vínculos</code>: a origem, os irmãos lidos com o SHA de cada um (<code>brabo-api</code>, <code>brabo-engine</code>, <code>brabo-web</code>) e o destino do resultado. O helper nunca reprova o job; sem a tabela a prova segue. A issue de alarme recebe o mesmo bloco no corpo.</p>
 <p><code>make test-restore</code>, <code>make rollout-test</code> e <code>make hpa-test</code> provam
 <strong>propriedades</strong>, não configuração — um backup que roda toda noite e não
 restaura passa nos cinco alertas de <code>brabo-alerts.yaml</code>. Até o BRB-009 eles rodavam

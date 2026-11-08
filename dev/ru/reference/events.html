@@ -958,7 +958,7 @@ Postgres. Именно это предотвращает «событие зап
 <blockquote>
 <p>⚠️ Блок сгенерирован <code>pnpm docs:generate</code>. Не редактируйте вручную — следующая сборка его перезапишет.</p>
 </blockquote>
-<p>Извлечено из точек генерации идентификаторов: <strong>118</strong>, из них не описаны выше: <strong>6</strong>.</p>
+<p>Извлечено из точек генерации идентификаторов: <strong>119</strong>, из них не описаны выше: <strong>7</strong>.</p>
 <ul>
 <li><code>action.failed</code> <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub></li>
 <li><code>agent.activated</code> <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub></li>
@@ -1036,6 +1036,7 @@ Postgres. Именно это предотвращает «событие зап
 <li><code>execution.activated</code> <sub>(apps/api/src/application/use-cases/execution/activate-execution.use-case.ts)</sub></li>
 <li><code>execution.parallelization_accepted</code> <sub>(apps/api/src/application/use-cases/execution/accept-parallelization.use-case.ts)</sub></li>
 <li><code>execution.parallelization_suggested</code> <sub>(apps/api/src/application/use-cases/execution/activate-execution.use-case.ts)</sub></li>
+<li><code>execution.stalled</code> — ⚠️ <strong>не описан выше</strong> <sub>(apps/engine/lib/engine/workers/execucao_parada_worker.ex)</sub></li>
 <li><code>gate.interrupted</code> <sub>(apps/engine/lib/engine/gates/gate_rescuer.ex)</sub></li>
 <li><code>gate.rescue_parked</code> <sub>(apps/engine/lib/engine/gates/gate_rescuer.ex)</sub></li>
 <li><code>gate.scanner</code> <sub>(apps/engine/lib/engine/gates/scanner.ex)</sub></li>
@@ -1092,7 +1093,7 @@ Postgres. Именно это предотвращает «событие зап
 </blockquote>
 <nav class="site-pager"><a href="../reference/configuration.html">Configuração</a><a href="../reference/permissions.html">Permissões</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/events.md">Редактировать страницу</a><span>Обновлено 2026-11-06T12:36:46-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/events.md">Редактировать страницу</a><span>Обновлено 2026-11-08T15:27:14Z · viralabs-dev-brabo[bot]</span></footer>
 </main>
 <aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#доменное-событие">Доменное событие</a></li><li class="n3"><a href="#сессия">Сессия</a></li><li class="n3"><a href="#чат-и-агенты">Чат и агенты</a></li><li class="n3"><a href="#предлагаемые-действия">Предлагаемые действия</a></li><li class="n3"><a href="#backlog">Backlog</a></li><li class="n3"><a href="#выполнение-и-gates">Выполнение и gates</a></li><li class="n3"><a href="#делегирование-фаза-8b-adr-0038">Делегирование (Фаза 8b, ADR 0038)</a></li><li class="n3"><a href="#цикл-инструментов">Цикл инструментов</a></li><li class="n3"><a href="#артефакты">Артефакты</a></li><li class="n3"><a href="#архитектура-и-готовность">Архитектура и готовность</a></li><li class="n3"><a href="#git-и-bootstrap">Git и bootstrap</a></li><li class="n3"><a href="#стоимость">Стоимость</a></li><li class="n3"><a href="#телеметрия-rag-rn-479480481">Телеметрия RAG (RN-479/480/481)</a></li><li class="n3"><a href="#локальный-runner-adr-01030104">Локальный runner (ADR 0103/0104)</a></li><li class="n3"><a href="#психолог">Психолог</a></li><li class="n3"><a href="#анамнез-и-инструкции">Анамнез и инструкции</a></li><li class="n2"><a href="#broadcast">Broadcast</a></li><li class="n3"><a href="#кто-может-слушать-rn-108">Кто может слушать (RN-108)</a></li><li class="n2"><a href="#span">Span</a></li><li class="n3"><a href="#доменные-имена">Доменные имена</a></li><li class="n3"><a href="#имена-производные-от-кода">Имена, производные от кода</a></li><li class="n2"><a href="#как-событие-доходит-до-engine">Как событие доходит до engine</a></li><li class="n2"><a href="#полный-инвентарь">Полный инвентарь</a></li></ul></aside>
 </div>

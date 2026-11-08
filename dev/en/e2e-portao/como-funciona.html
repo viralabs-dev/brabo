@@ -55,7 +55,7 @@ nas demais, as da <code>dev</code>.</p>
 </li>
 <li>
 <p>O <code>fechar-check</code> fecha o check na PR de origem com a tabela <code>serviço | digest esperado | digest em execução | assinatura</code>.
-Os relatórios do Playwright, <code>digests.json</code> e os logs dos containers ficam como artefato do run.</p>
+O relatório de decisão (AT-791) vai ao Summary, ao <code>text</code> do check e, se vermelho, a um comentário fixo na PR; o HTML do Playwright é o artefato <code>relatorio-html-&lt;run&gt;</code>, o relatório é <code>relatorio-regressivo-&lt;run&gt;</code>, e <code>digests.json</code> e os logs dos containers ficam no <code>e2e-&lt;run&gt;</code>. Detalhes em <code>docs/regressivo/como-funciona.md</code>.</p>
 <!-- print P5 -->
 </li>
 </ol>
@@ -102,15 +102,18 @@ vermelho por <code>spec</code>, <code>ambiente</code> ou <code>sem-resposta</cod
 <code>qa-aceito-com-justificativa</code> e o resumo registra a justificativa, quem aceitou, quando e o link do run vermelho.
 Comentário editado, comentário de review e segundo <code>/qa-aceitar</code> no mesmo head são ignorados ou recusados.</p>
 <!-- print P6 -->
+<p>O resumo e o <code>text</code> do check do vermelho são preservados pelo <code>/qa-aceitar</code> (brabo-ci), que acrescenta o bloco do aceite e a recomendação que o relatório dava; o aceite contra a recomendação <code>bloquear</code> vale (a decisão é do dono) e fica registrado.</p>
 <h2 id="ensaio-manual">Ensaio manual</h2>
 <p><code>workflow_dispatch</code> do <code>e2e-pr.yml</code> com os mesmos campos do payload (<code>repo</code>, <code>pr</code>, <code>head_sha</code>, <code>check_run_id</code>, <code>compose_ref</code>, <code>imagens</code>).</p>
 <h2 id="origem-e-vínculos-at-773">Origem e vínculos (AT-773)</h2>
 <p>O payload do <code>e2e-pr</code> pode trazer <code>origem</code> (<code>run_id</code>, <code>run_attempt</code>, <code>ator</code>, <code>sha_curto</code>, <code>correlacao</code> = <code>&lt;run_id&gt;-&lt;attempt&gt;</code>). O <code>validar-payload.ts</code> a valida por regex (uma <code>origem</code> malformada é descartada inteira com <code>::warning::</code>, sem exportar nada e sem reprovar o payload; campos extras são aceitos) e exporta <code>ORIGEM_RUN_ID</code>, <code>ORIGEM_ATOR</code>, <code>ORIGEM_CORRELACAO</code> e <code>ORIGEM_JSON</code> para os passos seguintes; sem <code>origem</code>, nada é exportado. O <code>fechar-check.ts</code> anexa ao resumo do check o <code>vinculos.md</code> gerado pela action <code>vinculos</code> do brabo-ci (variável <code>VINCULOS_MD</code>), e nunca deixa a ausência dele impedir o fechamento. Na Rodada B (AT-773) o YAML consome isso: <code>run-name</code> com a origem e <code>c=&lt;correlacao&gt;</code>, job <code>anunciar</code> (aponta o check para o run do brabo-qa assim que ele começa) e a action <code>vinculos</code> nos jobs <code>e2e</code>, <code>anunciar</code> e <code>fechar</code>. A tabela por funcionalidade e o <code>modo</code> (AT-769) estão em <code>docs/regressivo/como-funciona.md</code>.</p>
+<h2 id="rodar-de-novo-at-790-rn-1067">Rodar de novo (AT-790, RN-1067)</h2>
+<p>Rodar de novo os jobs que falharam de um run do <code>e2e-pr</code> não deixa a PR vermelha: o <code>fechar-check.ts</code> vê o check já <code>completed</code>, cria um check novo (mesmo nome e <code>head_sha</code>) com o resultado atual e cita o anterior no Summary, sem alterá-lo. Mantém as defesas de nome, head e App. Regra completa: RN-1067 em <code>docs/regressivo/como-funciona.md</code>.</p>
 <nav class="site-pager"></nav>
 </article>
 <footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/e2e-portao/como-funciona.md">Edit this page</a></footer>
 </main>
-<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#o-fluxo">O fluxo</a></li><li class="n2"><a href="#causas-de-vermelho">Causas de vermelho</a></li><li class="n2"><a href="#aceitar-com-justificativa">Aceitar com justificativa</a></li><li class="n2"><a href="#ensaio-manual">Ensaio manual</a></li><li class="n2"><a href="#origem-e-vínculos-at-773">Origem e vínculos (AT-773)</a></li></ul></aside>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#o-fluxo">O fluxo</a></li><li class="n2"><a href="#causas-de-vermelho">Causas de vermelho</a></li><li class="n2"><a href="#aceitar-com-justificativa">Aceitar com justificativa</a></li><li class="n2"><a href="#ensaio-manual">Ensaio manual</a></li><li class="n2"><a href="#origem-e-vínculos-at-773">Origem e vínculos (AT-773)</a></li><li class="n2"><a href="#rodar-de-novo-at-790-rn-1067">Rodar de novo (AT-790, RN-1067)</a></li></ul></aside>
 </div>
 <script src="../../assets/site.js"></script>
 <script defer src="../assets/busca.js" data-indice="../assets/busca-en.json" data-base="../"></script></body>

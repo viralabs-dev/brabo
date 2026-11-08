@@ -133,11 +133,38 @@ roteador fechado (<code>/containers/:id/app/restart</code> é o único caminho c
 <p><strong>Decisão arquitetural:</strong> ADR 0264</p>
 </li>
 </ul>
+<h2 id="o-token-do-registry-só-entra-como-secret-do-buildkit-rn-1039">O token do registry só entra como secret do BuildKit (RN-1039)</h2>
+<h3 id="rn-1039">RN-1039 — O token do GitHub Packages nunca vai para camada, <code>ARG</code> ou <code>ENV</code></h3>
+<p>O <code>@brabo/docker-port</code> é instalado do GitHub Packages (<code>@viralabs-dev/brabo-docker-port</code>,
+AT-770), e o registry exige token até para pacote público. O token só existe durante o
+<code>RUN</code> que instala, como secret do BuildKit.</p>
+<ul>
+<li>
+<p><strong>Dockerfile:</strong> todo <code>pnpm install</code> é <code>RUN --mount=type=secret,id=npmrc,target=/root/.npmrc</code>.
+Nenhum <code>ARG</code>/<code>ENV</code> leva token, e o <code>~/.npmrc</code> nunca é copiado para a imagem.</p>
+</li>
+<li>
+<p><strong>Repo:</strong> o <code>.npmrc</code> versionado tem só <code>@viralabs-dev:registry=https://npm.pkg.github.com</code>.</p>
+</li>
+<li>
+<p><strong>CI:</strong> o <code>GITHUB_TOKEN</code> vira um arquivo temporário, entregue por <code>secret-files</code> (ou
+<code>docker build --secret</code>), nunca por <code>build-args</code>.</p>
+</li>
+<li>
+<p><strong>Onde:</strong> <code>Dockerfile</code>, <code>Dockerfile.dev</code>, <code>.github/workflows/ci.yml</code>, <code>.github/workflows/release.yml</code></p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>src/token-do-registry.spec.ts:23</code> (<code>describe</code>)</p>
+</li>
+<li>
+<p><strong>Decisão arquitetural:</strong> ADR 0270</p>
+</li>
+</ul>
 <nav class="site-pager"><a href="../business-rules/api.html"></a><a href="../business-rules/ci.html"></a></nav>
 </article>
 <footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-broker/blob/dev/docs/business-rules/broker.md">Editar esta página</a></footer>
 </main>
-<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#a-busca-do-rag-deixa-rastro-e-o-rastro-congela-os-pesos-rn-479481">A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)</a></li><li class="n3"><a href="#rn-494">RN-494 — O portão da imagem (RN-105) vale nos TRÊS modos de execução</a></li><li class="n2"><a href="#o-broker-reinicia-só-o-processo-do-app-rn-1025">O broker reinicia só o processo do app (RN-1025)</a></li><li class="n3"><a href="#rn-1025">RN-1025 — POST /containers/:projectId/app/restart reinicia o processo do app no lugar</a></li></ul></aside>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#a-busca-do-rag-deixa-rastro-e-o-rastro-congela-os-pesos-rn-479481">A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)</a></li><li class="n3"><a href="#rn-494">RN-494 — O portão da imagem (RN-105) vale nos TRÊS modos de execução</a></li><li class="n2"><a href="#o-broker-reinicia-só-o-processo-do-app-rn-1025">O broker reinicia só o processo do app (RN-1025)</a></li><li class="n3"><a href="#rn-1025">RN-1025 — POST /containers/:projectId/app/restart reinicia o processo do app no lugar</a></li><li class="n2"><a href="#o-token-do-registry-só-entra-como-secret-do-buildkit-rn-1039">O token do registry só entra como secret do BuildKit (RN-1039)</a></li><li class="n3"><a href="#rn-1039">RN-1039 — O token do GitHub Packages nunca vai para camada, ARG ou ENV</a></li></ul></aside>
 </div>
 <script src="../assets/site.js"></script>
 <script defer src="../assets/busca.js" data-indice="../assets/busca-pt-BR.json" data-base="../"></script></body>
