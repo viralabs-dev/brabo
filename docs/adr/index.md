@@ -383,6 +383,7 @@ O pipeline, as imagens publicadas, a assinatura, a varredura, o pin, as camadas 
 | [0277](0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.md) | O regressivo roda num compose só; o grafo mostra cada funcionalidade por uma matrix de exibição (job leve, sem compose), e o relatório em JSON é a fonte da decisão de aprovar ou não
 | [0278](0278-a-mudanca-e-vista-num-painel-do-brabo-ci.md) | A mudança é vista num painel do brabo-ci (run `Painel da mudança`, Summary com tabela e Mermaid), sem check nas PRs: o link fica nas runs de origem pelos Vínculos |
 | [0280](0280-o-pin-do-brabo-ci-aponta-para-uma-tag.md) | O pin do `brabo-ci` nos consumidores aponta para uma tag (`vX.Y.Z` ou `vX.Y.Z-dev.N`, com o SHA da tag): `-dev.N` só na `dev`, release final na `main`, e a promoção troca o pin; a regra é o job informativo `pins-do-brabo-ci` do `cadeia.yml` |
+| [0281](0281-o-mapa-dos-repos-tem-uma-fonte-so.md) | O mapa dos 11 repos tem uma fonte só, o `repos.yml` do `brabo` (propósito, uso e dependências com tipo e prova); o bloco "Onde se encaixa" dos READMEs é gerado dele pelo `brabo-ci` e o `mapa-alinhado` reprova o que divergir |
 | [0282](0282-a-pin-dos-componentes-segue-a-release-final.md) | A pin do `componentes.json` segue a última Release final: o `regenera-gerados` sobe a pin (e o `RUNNER_TAG`) na PR fixa, e a trava `pins-dos-componentes` reprova a PR para a `main` e a tag do produto se a pin estiver atrás |
 
 ## Documentação {#tema-docs}
