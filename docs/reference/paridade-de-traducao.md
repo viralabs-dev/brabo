@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 306 de 326 (93.9%) | 98.2% de 3.874.464 | 292 | 13 | 1 | 20 | 0 |
-| `ru` | 306 de 326 (93.9%) | 98.2% de 3.874.464 | 292 | 13 | 1 | 20 | 0 |
-| `zh-Hans` | 306 de 326 (93.9%) | 98.2% de 3.874.464 | 292 | 13 | 1 | 20 | 0 |
+| `en` | 302 de 322 (93.8%) | 98.1% de 3.667.434 | 291 | 10 | 1 | 20 | 4 |
+| `ru` | 302 de 322 (93.8%) | 98.1% de 3.667.434 | 291 | 10 | 1 | 20 | 4 |
+| `zh-Hans` | 302 de 322 (93.8%) | 98.1% de 3.667.434 | 291 | 10 | 1 | 20 | 4 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -24,8 +24,6 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
-- `business-rules/ci.md` (tradução de 2026-11-06)
-- `explanation/branching-policy.md` (tradução de 2026-11-06)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `explanation/release-do-produto.md` (tradução de 2026-11-05)
@@ -33,15 +31,12 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `intro.md` (tradução de 2026-11-04)
 - `reference/configuration.md` (tradução de 2026-11-05)
 - `reference/events.md` (tradução de 2026-11-06)
-- `reference/rulesets.md` (tradução de 2026-11-06)
 
 ### Defasadas em `ru`
 
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
-- `business-rules/ci.md` (tradução de 2026-11-06)
-- `explanation/branching-policy.md` (tradução de 2026-11-06)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `explanation/release-do-produto.md` (tradução de 2026-11-05)
@@ -49,15 +44,12 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `intro.md` (tradução de 2026-11-04)
 - `reference/configuration.md` (tradução de 2026-11-05)
 - `reference/events.md` (tradução de 2026-11-06)
-- `reference/rulesets.md` (tradução de 2026-11-06)
 
 ### Defasadas em `zh-Hans`
 
 - `adr/index.md` (tradução de 2026-11-06)
 - `architecture.md` (tradução de 2026-11-06)
 - `business-rules.md` (tradução de 2026-11-06)
-- `business-rules/ci.md` (tradução de 2026-11-06)
-- `explanation/branching-policy.md` (tradução de 2026-11-06)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-05)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `explanation/release-do-produto.md` (tradução de 2026-11-05)
@@ -65,5 +57,4 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `intro.md` (tradução de 2026-11-04)
 - `reference/configuration.md` (tradução de 2026-11-05)
 - `reference/events.md` (tradução de 2026-11-06)
-- `reference/rulesets.md` (tradução de 2026-11-06)
 
