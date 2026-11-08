@@ -28,3 +28,9 @@
 - A promoção ganha um passo, e a regra o cobra.
 - O Dependabot subir um `-dev.N` para o próximo ainda não foi medido. O `ci_ref` continua à mão.
 - A regra nasce informativa e vira obrigatória depois do repin dos 11 repos.
+
+## Adendo (08/11/2026, AT-788) — Isenção do próprio brabo-ci
+
+- **Regra:** o `pins-do-brabo-ci` não cobra o pin do `brabo-ci` quando o repo chamador é `viralabs-dev/brabo-ci`.
+- **Motivo:** ele roda o próprio código de qualquer forma, e a tag final só nasce no merge da promoção dele. Sem a isenção, a regra nunca ficaria verde ali.
+- **Alcance:** só esse repo. Os outros 10 consumidores seguem a decisão acima sem mudança.

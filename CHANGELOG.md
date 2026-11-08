@@ -10,7 +10,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 - **docs**: ADR 0270 (AT-770): o `brabo-contracts` é publicado no GitHub Packages (`@viralabs-dev/brabo-shared` e `brabo-docker-port`, públicos, mesma versão da TAG), o `shared` segue só de tipos e o token entra por ponto de instalação, nunca em camada. Revê o item 2 do ADR 0252.
 
-- **docs**: ADR 0284 (AT-788): a promoção `dev → main` espera as promoções abertas das camadas de baixo (ci, contracts e workspace, componentes, infra, qa, brabo). O check infere a dependência, o `promote` também escreve a linha `Depende-de`, a `dev` à frente sem promoção deixa o check amarelo e o `pins-do-brabo-ci` isenta o próprio `brabo-ci` (revê a decisão 7 do ADR 0276 e a regra do ADR 0280).
+- **docs**: ADR 0284 (AT-788): a promoção infere as dependências pela ordem dos repos (camadas ci; contracts e workspace; api, engine, web, runner e broker; infra; qa; brabo). O check soma as promoções abertas das camadas anteriores, o `promote` também escreve a linha `Depende-de` e a camada com a `dev` à frente fica amarela. Revê a decisão 7 do ADR 0276; adendo ao ADR 0280 isenta o `brabo-ci` do próprio pin.
 
 - **docs**: AT-823. A doc da área ci (`scripts/ci/docs/**`) sai do `brabo` e passa a vir do `brabo-ci` pela trava (`irmaos.lock`, brabo-ci#41). O `repo-dono.mjs` aponta o "editar esta página" para o `brabo-ci`; o menu ganha `politica-em-10-minutos`, `licoes-do-ci`, `codigos-de-violacao`, `glossario-da-politica` e `reference/workflows/`; o `docs-deploy.yml` deixa de vigiar `scripts/ci/docs/**` (a subida da trava já republica); o `GOVERNANCE.md` corrige as âncoras do `branching-policy.md`; o `glossary.md` aponta para o glossário da política.
 
