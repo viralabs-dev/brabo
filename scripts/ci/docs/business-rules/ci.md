@@ -668,7 +668,7 @@ pode depender dela — é justamente por depender dela que ele não saía.
 
 - **Código:** `.github/workflows/build-runner-binaries.yml:283` (o job, agora
   sem `needs:`), `:318` (`timeout-minutes: 40`, que cabe as duas esperas),
-  `:358` (`ALVOS_ESPERADOS` no JOB, para os dois passos lerem a mesma lista),
+  `:370` (`ALVOS_ESPERADOS` no JOB, para os dois passos lerem a mesma lista),
   `:397` (o passo que espera), `:401`/`:402` (os dois tetos), `:410` (a Release
   ausente, que é erro), `:433` (o teto dos binários, que é `notice`), `:499` (o
   manifesto nomeando o que não cobre)
@@ -747,8 +747,8 @@ e a subida de TAG do contracts cai aqui; (3) caminho que nenhum glob casa roda o
 smoke `instalacao` + `autenticacao` e o resumo o lista como "sem dono no mapa",
 para o mapa ser corrigido. O `brabo-contracts` não tem regressivo na própria PR.
 
-- **Código:** `scripts/ci/qa-regressivo-selecao.ts:60` (`selecionar`),
-  `scripts/ci/qa-regressivo-selecao.ts:36` (`SMOKE`)
+- **Código:** `scripts/ci/qa-regressivo-selecao.ts:67` (`selecionar`),
+  `scripts/ci/qa-regressivo-selecao.ts:43` (`SMOKE`)
 - **Teste:** `scripts/ci/qa-regressivo-selecao.spec.ts:41` (regra 1),
   `:55` (regra 2 por repositório), `:58` (regra 3)
 - **ADR:** [0268](../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.md)
@@ -802,7 +802,7 @@ SHAs do `.git/irmaos-sha.lst` que o `montar-layout.sh` grava
 `release.yml` passa o `infra` por caminho.
 
 - **Código:** `scripts/ci/vinculos.ts:57` (`montar`), `.github/actions/vinculos/action.yml:31`
-  (o `continue-on-error`), `scripts/ci/validar-payload.ts:85` (`validarOrigem`),
+  (o `continue-on-error`), `scripts/ci/validar-payload.ts:112` (`validarOrigem`),
   `.github/workflows/docs-check.yml:89` (o `brabo` repassa os irmãos)
 - **Teste:** `scripts/ci/vinculos.spec.ts` (fixtures, valor malicioso, origem
   vazia) e `scripts/ci/validar-payload.spec.ts`
@@ -938,7 +938,7 @@ funcionalidade", vira **aceitar com justificativa** (`/qa-aceitar`); `ambiente` 
 `sem-resposta` vira **rodar de novo**, e se repetir, **aceitar com justificativa**.
 No modo `dev` o mesmo rótulo sai com o prefixo "atestado (não bloqueia)".
 
-- **Código:** `scripts/ci/qa-e2e-resumo.ts:66` (`montarCheck`, que hoje monta o
+- **Código:** `scripts/ci/qa-e2e-resumo.ts:292` (`montarCheck`, que hoje monta o
   check a partir do resultado); o `relatorio.ts` do `brabo-qa` e o JSON v1 ainda não
   existem na `dev` (AT-791, lanes L1 e L2)
 - **Teste:** `scripts/ci/qa-e2e-resumo.spec.ts` (o check por modo); a regra de
@@ -978,7 +978,7 @@ de [RN-1051](#rn-1051). O `setup` de login
 parecer um teste de funcionalidade. Sem o balde, a tabela mostraria tudo "sem
 cobertura" com um vermelho de spec, que é o achado da qa#28.
 
-- **Código:** `scripts/ci/qa-regressivo-selecao.ts:86` (`semDono.push`); o balde
+- **Código:** `scripts/ci/qa-regressivo-selecao.ts:76` (`semDono.push`); o balde
   "sem funcionalidade" no relatório ainda não existe (AT-791, lanes L1 e L2)
 - **Teste:** `scripts/ci/qa-regressivo-selecao.spec.ts` (a seleção por mapa e o
   `semDono`); o balde no relatório ganha o teste na L2
@@ -1007,8 +1007,50 @@ repo do evento; as dos outros serviços já estão carimbadas e assinadas.
 
 - **Código:** `scripts/ci/qa-e2e-espera.ts:51` (`esperarImagemAssinada`, a espera da
   imagem e da assinatura); `scripts/ci/qa-e2e-espera.ts:33` (`repetirAte`, a repetição
-  até o teto); `scripts/ci/qa-e2e-disparar.ts:145` (o resolver das tags repetido até o
-  teto) e `scripts/ci/qa-e2e-disparar.ts:150` (a espera só da imagem do repo do evento)
+  até o teto); `scripts/ci/qa-e2e-disparar.ts:151` (o resolver das tags repetido até o
+  teto) e `scripts/ci/qa-e2e-disparar.ts:157` (a espera só da imagem do repo do evento)
 - **Teste:** `scripts/ci/qa-e2e-espera.spec.ts` (a repetição até o teto, a causa
   `ambiente` e a causa `assinatura`)
 - **Origem:** AT-790 (EP-033), brabo-ci#31
+
+## O painel da mudança (RN-1054..1056, ADR 0278)
+
+### RN-1054 — Toda mudança tem um painel que compõe as runs {#rn-1054}
+
+Cada mudança (um componente do `Depende-de`, uma PR solta ou uma tag) tem um run
+`Painel da mudança` no `brabo-ci`. Ele junta as runs da mudança por head SHA, merge SHA,
+tag e `c=` do E2E. Acompanha a cada 60 s, com ETag; se restarem menos de 500
+requisições, o intervalo passa a 5 min. Para quando tudo terminou e há 3 min de
+quietude, ou no teto de 45 min. Run ainda em andamento no teto sai como "em andamento
+há N min". O painel **nunca reprova**.
+
+- **Código:** `scripts/ci/painel.ts:235` (`terminou`, a régua de parada)
+- **Teste:** `scripts/ci/painel.spec.ts`
+- **ADR:** [0278](../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.md)
+- **Origem:** AT-792 (EP-033)
+
+### RN-1055 — O painel não publica check nas PRs; o link fica nas runs de origem {#rn-1055}
+
+O helper de Vínculos, no modo auto com PR, escreve a linha `Disparado | Painel da
+mudança`. Ela aponta para `…/brabo-ci/actions/workflows/painel.yml?query=<repo>%23<n>`.
+O token do App do painel só lê (`actions`, `pull-requests` e `contents`). O único token
+com escrita é o do dispatch (`contents: write`, restrito ao `brabo-ci`). Por isso não
+é preciso `checks: write`.
+
+- **Código:** `scripts/ci/vinculos.ts:164` (`linhaDoPainel`, a linha do Vínculo)
+- **Teste:** `scripts/ci/vinculos.spec.ts`
+- **ADR:** [0278](../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.md)
+- **Origem:** AT-792 (EP-033)
+
+### RN-1056 — Um painel por componente {#rn-1056}
+
+O remetente (job `avisar-painel`) não dispara se já existe um painel `queued` ou
+`in_progress` com `<repo>#<n>` no título, casando o token inteiro. Quando o componente
+cresce (chave `m=<hash>`), o painel em curso escreve "superado" e sai, e o remetente
+dispara o novo.
+
+- **Código:** `scripts/ci/painel.ts:247` (`jaTemPainel`); `scripts/ci/painel.ts:90`
+  (`superado`, que o painel em curso consulta)
+- **Teste:** `scripts/ci/painel.spec.ts`
+- **ADR:** [0278](../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.md)
+- **Origem:** AT-792 (EP-033)

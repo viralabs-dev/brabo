@@ -876,7 +876,7 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 > ⚠️ Блок сгенерирован `pnpm docs:generate`. Не редактируйте вручную — следующая сборка его перезапишет.
 
-Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **187**. У всех есть описание в таблицах выше.
+Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **189**. У всех есть описание в таблицах выше.
 
 Каждый источник помечен как **продукт** — то, что оператор установки задаёт в `.env` развёртывания, — или **инструменты**: их читают только CI и разработчики продукта. Переменной инструментов не место в `.env` оператора.
 
@@ -1055,14 +1055,15 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 - `OLLAMA_HOST` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
 - `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub>
 
-**e2e** — переменных: 4 · инструменты
+**e2e** — переменных: 5 · инструменты
 
 - `E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
+- `E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
 - `E2E_USER` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_WEB_URL` <sub>(e2e/playwright.config.ts)</sub>
 
-**deploy/k8s** — переменных: 23 · инструменты
+**deploy/k8s** — переменных: 24 · инструменты
 
 - `API_URL` <sub>(deploy/k8s/rollout-test.sh)</sub>
 - `BRABO_CLUSTER_NAME` <sub>(deploy/k8s/bootstrap.sh)</sub>
@@ -1078,6 +1079,7 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 - `HPA_JOBS` <sub>(deploy/k8s/hpa-test.sh)</sub>
 - `HPA_TIMEOUT` <sub>(deploy/k8s/hpa-test.sh)</sub>
 - `KUBE_VERSION` <sub>(deploy/k8s/validate.sh)</sub>
+- `NPMRC` <sub>(deploy/k8s/bootstrap.sh)</sub>
 - `PROJECT_WORKSPACES_ROOT_NO_POD` <sub>(deploy/k8s/test-reprojecao-artefatos.sh)</sub>
 - `RESTORE_KEEP_JOB` <sub>(deploy/k8s/test-restore.sh)</sub>
 - `RESTORE_MUTACAO` <sub>(deploy/k8s/test-restore.sh)</sub>

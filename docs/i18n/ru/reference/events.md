@@ -417,7 +417,7 @@ sequenceDiagram
 
 > ⚠️ Блок сгенерирован `pnpm docs:generate`. Не редактируйте вручную — следующая сборка его перезапишет.
 
-Извлечено из точек генерации идентификаторов: **118**, из них не описаны выше: **6**.
+Извлечено из точек генерации идентификаторов: **119**, из них не описаны выше: **7**.
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
@@ -495,6 +495,7 @@ sequenceDiagram
 - `execution.activated` <sub>(apps/api/src/application/use-cases/execution/activate-execution.use-case.ts)</sub>
 - `execution.parallelization_accepted` <sub>(apps/api/src/application/use-cases/execution/accept-parallelization.use-case.ts)</sub>
 - `execution.parallelization_suggested` <sub>(apps/api/src/application/use-cases/execution/activate-execution.use-case.ts)</sub>
+- `execution.stalled` — ⚠️ **не описан выше** <sub>(apps/engine/lib/engine/workers/execucao_parada_worker.ex)</sub>
 - `gate.interrupted` <sub>(apps/engine/lib/engine/gates/gate_rescuer.ex)</sub>
 - `gate.rescue_parked` <sub>(apps/engine/lib/engine/gates/gate_rescuer.ex)</sub>
 - `gate.scanner` <sub>(apps/engine/lib/engine/gates/scanner.ex)</sub>
