@@ -885,6 +885,7 @@ test.
 - <a id="rn-1039"></a>[RN-1039](business-rules/broker.md#rn-1039) — O token do GitHub Packages nunca vai para camada, `ARG` ou `ENV`
 - <a id="rn-1040"></a>[RN-1040](business-rules/runner.md#rn-1040) — O runner publicado não declara `@viralabs-dev/*` em `dependencies`
 - <a id="rn-1041"></a>[RN-1041](business-rules/contracts.md#rn-1041) — O `docker-cli.json` é o espelho das constantes de controle do `docker-cli.ts`
+- <a id="rn-1042"></a>[RN-1042](business-rules/ci.md#rn-1042) — O pacote só sai pela tag, com o dist-tag da versão e a mesma versão em todos os pacotes
 - <a id="rn-1043"></a>[RN-1043](business-rules/ci.md#rn-1043) — Todo run que lê outro repositório publica `## Vínculos` no topo do Summary, e o helper nunca reprova o job
 - <a id="rn-1044"></a>[RN-1044](business-rules/ci.md#rn-1044) — O run de destino de um dispatch ou de uma tag tem `run-name` com a origem, e a correlação do dispatch vai no nome como `c=<run_id>-<attempt>`
 - <a id="rn-1045"></a>[RN-1045](business-rules/ci.md#rn-1045) — O check do App aponta para o run do `brabo-qa` desde o início, e o run de origem registra o link do run disparado

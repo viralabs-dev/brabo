@@ -871,13 +871,32 @@ traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 - <a id="rn-1028"></a>[RN-1028](business-rules/engine.md#rn-1028) — Depois que a pasta do projeto avança, o processo do app é reiniciado no lugar, uma vez por rajada de merges
 - <a id="rn-1029"></a>[RN-1029](business-rules/api.md#rn-1029) — Depois do merge da PR de infra que declara `run.app`, a api propõe `container_recreate` com a porta do app, uma vez
 - <a id="rn-1030"></a>[RN-1030](business-rules/api.md#rn-1030) — Todo nó do grafo gravado por `MERGE` numa chave natural tem restrição de unicidade, e a subida funde as duplicatas preexistentes antes de criá-la
+- <a id="rn-1031"></a>[RN-1031](business-rules/ci.md#rn-1031) — 功能目录与「路径 → 功能」映射放在同一个文件里，spec 通过标签与之绑定
+- <a id="rn-1032"></a>[RN-1032](business-rules/ci.md#rn-1032) — 面向 `dev` 的 PR 只运行它触及的功能的回归测试，使用「绝不」被要求的 `Regressivo do brabo-qa` 检查
+- <a id="rn-1033"></a>[RN-1033](business-rules/ci.md#rn-1033) — 三条跨领域的文件规则先于映射生效：无、整个目录、无归属
+- <a id="rn-1034"></a>[RN-1034](business-rules/ci.md#rn-1034) — 面向 `main` 的 PR 在 `E2E do brabo-qa` 中运行整个目录，没有 spec 的功能显示为「无覆盖」但不会失败
+- <a id="rn-1035"></a>[RN-1035](business-rules/ci.md#rn-1035) — 面向 `dev` 的 PR 只为自己的仓库发布已签名的 `sha-<12>` 镜像，清理任务删除孤儿镜像
 - <a id="rn-1036"></a>[RN-1036](business-rules/api.md#rn-1036) — A indexação de docs nunca descarta em silêncio o conteúdo de um arquivo
 - <a id="rn-1037"></a>[RN-1037](business-rules/contracts.md#rn-1037) — O `dist` do `shared` não exporta nenhum valor
 - <a id="rn-1038"></a>[RN-1038](business-rules/web.md#rn-1038) — No web, a versão do brabo-contracts é a mesma no alias do `package.json`, no lock e em `scripts/baixar-areas.mjs`
 - <a id="rn-1039"></a>[RN-1039](business-rules/broker.md#rn-1039) — O token do GitHub Packages nunca vai para camada, `ARG` ou `ENV`
 - <a id="rn-1040"></a>[RN-1040](business-rules/runner.md#rn-1040) — O runner publicado não declara `@viralabs-dev/*` em `dependencies`
 - <a id="rn-1041"></a>[RN-1041](business-rules/contracts.md#rn-1041) — O `docker-cli.json` é o espelho das constantes de controle do `docker-cli.ts`
+- <a id="rn-1042"></a>[RN-1042](business-rules/ci.md#rn-1042) — 包只通过 tag 发出，使用该版本的 dist-tag，且所有包使用同一个版本
+- <a id="rn-1043"></a>[RN-1043](business-rules/ci.md#rn-1043) — 每个读取其他仓库的运行都在 Summary 顶部发布 `## Vínculos`，且该辅助程序绝不让作业失败
+- <a id="rn-1044"></a>[RN-1044](business-rules/ci.md#rn-1044) — dispatch 或 tag 的目标运行带有含来源的 `run-name`，dispatch 的关联以 `c=<run_id>-<attempt>` 的形式写在名称里
+- <a id="rn-1045"></a>[RN-1045](business-rules/ci.md#rn-1045) — App 的检查从一开始就指向 `brabo-qa` 的运行，来源运行记录被触发运行的链接
 - <a id="rn-1046"></a>[RN-1046](business-rules/api.md#rn-1046) — A busca híbrida devolve no máximo N trechos do mesmo arquivo
+- <a id="rn-1047"></a>[RN-1047](business-rules/ci.md#rn-1047) — PR 用 `Depende-de: viralabs-dev/<repo>#<n>` 声明依赖，格式错误的行会失败而不是悄悄通过
+- <a id="rn-1048"></a>[RN-1048](business-rules/ci.md#rn-1048) — `Dependências de merge` 检查有四种状态，绝不使用 `neutral`，等待显示为黄色
+- <a id="rn-1049"></a>[RN-1049](business-rules/ci.md#rn-1049) — 依赖的合并会更新引用它的 PR 的检查，每小时的 cron 只是兜底
+- <a id="rn-1050"></a>[RN-1050](business-rules/ci.md#rn-1050) — 依赖循环会连同完整路径一起失败，深度最多为 5
+- <a id="rn-1051"></a>[RN-1051](business-rules/ci.md#rn-1051) — 回归报告来自唯一的 JSON，建议遵循固定的六行规则
+- <a id="rn-1052"></a>[RN-1052](business-rules/ci.md#rn-1052) — `/qa-aceitar` 保留红色的报告，并记录与建议相悖的接受
+- <a id="rn-1053"></a>[RN-1053](business-rules/ci.md#rn-1053) — 没有 `@f-*` 标签的 spec 显示为「无功能」，且绝不会从报告中消失
+- <a id="rn-1054"></a>[RN-1054](business-rules/ci.md#rn-1054) — 每个变更都有一个汇总各次运行的面板
+- <a id="rn-1055"></a>[RN-1055](business-rules/ci.md#rn-1055) — 面板不在 PR 上发布检查；链接留在来源运行中
+- <a id="rn-1056"></a>[RN-1056](business-rules/ci.md#rn-1056) — 每个组件一个面板
 - <a id="rn-1058"></a>[RN-1058](business-rules/engine.md#rn-1058) — As perguntas abertas têm precedência no texto do turno, nunca somem caladas, e os perguntadores as listam com `list_open_questions`
 - <a id="rn-1059"></a>[RN-1059](business-rules/engine.md#rn-1059) — A execução com todos os dev agents parados e tarefa pendente atrás de bloqueio ou de agente travado grava `execution.stalled` e acorda o Dev Lead
 - <a id="rn-1060"></a>[RN-1060](business-rules/web.md#rn-1060) — Aberta por um loopback diferente do da api, a web vai para o loopback da api antes de montar
@@ -885,8 +904,11 @@ traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 - <a id="rn-1062"></a>[RN-1062](business-rules/web.md#rn-1062) — O cartão do plano mostra o teto do projeto e das áreas dev/qa, avisa quando a estimativa passa do que resta e ajusta o teto da área dev ali
 - <a id="rn-1063"></a>[RN-1063](business-rules/web.md#rn-1063) — PR que entra na fila de prontas avisa na borda do fio e no título da aba, com Mergear e o tempo de espera, e se dispensa
 - <a id="rn-1065"></a>[RN-1065](business-rules/api.md#rn-1065) — O provider de LLM dublê do regressivo só carrega com `LLM_DUBLE=1` e com a imagem sem a marca `prd`; o custo dele é 0 e o modelo sai como `duble-llm`
+- <a id="rn-1066"></a>[RN-1066](business-rules/ci.md#rn-1066) — 触发器在因环境或签名而失败之前，先等待印章和签名
 - <a id="rn-1068"></a>[RN-1068](business-rules/api.md#rn-1068) — O PO e o Dev Lead corrigem o texto de uma tarefa `todo`, com a régua da história
 - <a id="rn-1069"></a>[RN-1069](business-rules/api.md#rn-1069) — A ADR proposta declara qual ADR substitui (`supersedes`), e a api confere
 - <a id="rn-1070"></a>[RN-1070](business-rules/engine.md#rn-1070) — O Dev Lead lê o estado de ADR, PR e tarefa antes de afirmá-lo, e cita tarefa pelo título no `porque`
+- <a id="rn-1071"></a>[RN-1071](business-rules/ci.md#rn-1071) — 晋升 PR 依赖前面各层未关闭的晋升，顺序是一个经过测试的列表
+- <a id="rn-1072"></a>[RN-1072](business-rules/ci.md#rn-1072) — 晋升的合并和 cron 会重新评估后面各层的晋升
 - <a id="rn-1074"></a>[RN-1074](business-rules/infra.md#rn-1074) — O compose de instalação repassa os tetos de rate limit e de lockout da api, com o padrão da própria api, e só o compose de teste sobe esses valores
 <!-- END:GENERATED:indice-de-rn -->

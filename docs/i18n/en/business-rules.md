@@ -875,13 +875,32 @@ test.
 - <a id="rn-1028"></a>[RN-1028](business-rules/engine.md#rn-1028) — Depois que a pasta do projeto avança, o processo do app é reiniciado no lugar, uma vez por rajada de merges
 - <a id="rn-1029"></a>[RN-1029](business-rules/api.md#rn-1029) — Depois do merge da PR de infra que declara `run.app`, a api propõe `container_recreate` com a porta do app, uma vez
 - <a id="rn-1030"></a>[RN-1030](business-rules/api.md#rn-1030) — Todo nó do grafo gravado por `MERGE` numa chave natural tem restrição de unicidade, e a subida funde as duplicatas preexistentes antes de criá-la
+- <a id="rn-1031"></a>[RN-1031](business-rules/ci.md#rn-1031) — The feature catalog and the path → feature map live in a single file, and the spec binds to it by tag
+- <a id="rn-1032"></a>[RN-1032](business-rules/ci.md#rn-1032) — The PR to `dev` runs the regression only for the features it touched, under the `Regressivo do brabo-qa` check, which is NEVER required
+- <a id="rn-1033"></a>[RN-1033](business-rules/ci.md#rn-1033) — Three cross-cutting file rules apply before the map: nothing, whole catalog and no owner
+- <a id="rn-1034"></a>[RN-1034](business-rules/ci.md#rn-1034) — The PR to `main` runs the whole catalog in `E2E do brabo-qa`, and a feature without a spec shows up as "no coverage" without failing
+- <a id="rn-1035"></a>[RN-1035](business-rules/ci.md#rn-1035) — The PR to `dev` publishes the signed `sha-<12>` image, only for its own repository, and the cleanup deletes the orphans
 - <a id="rn-1036"></a>[RN-1036](business-rules/api.md#rn-1036) — A indexação de docs nunca descarta em silêncio o conteúdo de um arquivo
 - <a id="rn-1037"></a>[RN-1037](business-rules/contracts.md#rn-1037) — O `dist` do `shared` não exporta nenhum valor
 - <a id="rn-1038"></a>[RN-1038](business-rules/web.md#rn-1038) — No web, a versão do brabo-contracts é a mesma no alias do `package.json`, no lock e em `scripts/baixar-areas.mjs`
 - <a id="rn-1039"></a>[RN-1039](business-rules/broker.md#rn-1039) — O token do GitHub Packages nunca vai para camada, `ARG` ou `ENV`
 - <a id="rn-1040"></a>[RN-1040](business-rules/runner.md#rn-1040) — O runner publicado não declara `@viralabs-dev/*` em `dependencies`
 - <a id="rn-1041"></a>[RN-1041](business-rules/contracts.md#rn-1041) — O `docker-cli.json` é o espelho das constantes de controle do `docker-cli.ts`
+- <a id="rn-1042"></a>[RN-1042](business-rules/ci.md#rn-1042) — The package only goes out through the tag, with the version's dist-tag and the same version in every package
+- <a id="rn-1043"></a>[RN-1043](business-rules/ci.md#rn-1043) — Every run that reads another repository publishes `## Vínculos` at the top of the Summary, and the helper never fails the job
+- <a id="rn-1044"></a>[RN-1044](business-rules/ci.md#rn-1044) — The destination run of a dispatch or a tag has a `run-name` with the origin, and the dispatch correlation goes in the name as `c=<run_id>-<attempt>`
+- <a id="rn-1045"></a>[RN-1045](business-rules/ci.md#rn-1045) — The App's check points to the `brabo-qa` run from the start, and the origin run records the link of the dispatched run
 - <a id="rn-1046"></a>[RN-1046](business-rules/api.md#rn-1046) — A busca híbrida devolve no máximo N trechos do mesmo arquivo
+- <a id="rn-1047"></a>[RN-1047](business-rules/ci.md#rn-1047) — The PR declares the dependency with `Depende-de: viralabs-dev/<repo>#<n>`, and a malformed line fails instead of passing silently
+- <a id="rn-1048"></a>[RN-1048](business-rules/ci.md#rn-1048) — The `Dependências de merge` check has four states, never `neutral`, and waiting is yellow
+- <a id="rn-1049"></a>[RN-1049](business-rules/ci.md#rn-1049) — The dependency's merge updates the check of the PRs that cite it, and the hourly cron is only a safety net
+- <a id="rn-1050"></a>[RN-1050](business-rules/ci.md#rn-1050) — A dependency cycle fails with the whole path, up to depth 5
+- <a id="rn-1051"></a>[RN-1051](business-rules/ci.md#rn-1051) — The regression report comes from a single JSON, and the recommendation follows a fixed six-line rule
+- <a id="rn-1052"></a>[RN-1052](business-rules/ci.md#rn-1052) — `/qa-aceitar` preserves the red report and records the acceptance against the recommendation
+- <a id="rn-1053"></a>[RN-1053](business-rules/ci.md#rn-1053) — A spec without an `@f-*` tag shows up as "no feature" and never disappears from the report
+- <a id="rn-1054"></a>[RN-1054](business-rules/ci.md#rn-1054) — Every change has a panel that composes the runs
+- <a id="rn-1055"></a>[RN-1055](business-rules/ci.md#rn-1055) — The panel publishes no check on PRs; the link stays in the origin runs
+- <a id="rn-1056"></a>[RN-1056](business-rules/ci.md#rn-1056) — One panel per component
 - <a id="rn-1058"></a>[RN-1058](business-rules/engine.md#rn-1058) — As perguntas abertas têm precedência no texto do turno, nunca somem caladas, e os perguntadores as listam com `list_open_questions`
 - <a id="rn-1059"></a>[RN-1059](business-rules/engine.md#rn-1059) — A execução com todos os dev agents parados e tarefa pendente atrás de bloqueio ou de agente travado grava `execution.stalled` e acorda o Dev Lead
 - <a id="rn-1060"></a>[RN-1060](business-rules/web.md#rn-1060) — Aberta por um loopback diferente do da api, a web vai para o loopback da api antes de montar
@@ -889,8 +908,11 @@ test.
 - <a id="rn-1062"></a>[RN-1062](business-rules/web.md#rn-1062) — O cartão do plano mostra o teto do projeto e das áreas dev/qa, avisa quando a estimativa passa do que resta e ajusta o teto da área dev ali
 - <a id="rn-1063"></a>[RN-1063](business-rules/web.md#rn-1063) — PR que entra na fila de prontas avisa na borda do fio e no título da aba, com Mergear e o tempo de espera, e se dispensa
 - <a id="rn-1065"></a>[RN-1065](business-rules/api.md#rn-1065) — O provider de LLM dublê do regressivo só carrega com `LLM_DUBLE=1` e com a imagem sem a marca `prd`; o custo dele é 0 e o modelo sai como `duble-llm`
+- <a id="rn-1066"></a>[RN-1066](business-rules/ci.md#rn-1066) — The trigger waits for the stamp and the signature before failing on environment or signature
 - <a id="rn-1068"></a>[RN-1068](business-rules/api.md#rn-1068) — O PO e o Dev Lead corrigem o texto de uma tarefa `todo`, com a régua da história
 - <a id="rn-1069"></a>[RN-1069](business-rules/api.md#rn-1069) — A ADR proposta declara qual ADR substitui (`supersedes`), e a api confere
 - <a id="rn-1070"></a>[RN-1070](business-rules/engine.md#rn-1070) — O Dev Lead lê o estado de ADR, PR e tarefa antes de afirmá-lo, e cita tarefa pelo título no `porque`
+- <a id="rn-1071"></a>[RN-1071](business-rules/ci.md#rn-1071) — The promotion PR depends on the open promotions of the earlier layers, and the order is a tested list
+- <a id="rn-1072"></a>[RN-1072](business-rules/ci.md#rn-1072) — The merge of a promotion and the cron reevaluate the promotions of the following layers
 - <a id="rn-1074"></a>[RN-1074](business-rules/infra.md#rn-1074) — O compose de instalação repassa os tetos de rate limit e de lockout da api, com o padrão da própria api, e só o compose de teste sobe esses valores
 <!-- END:GENERATED:indice-de-rn -->
