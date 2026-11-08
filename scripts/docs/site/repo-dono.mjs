@@ -1,5 +1,7 @@
 // De qual repositório e de qual caminho é cada página (AT-702): o site junta as
 // `docs/` de vários repos, e "editar esta página" aponta para o dono dela.
+import { posix } from 'node:path';
+
 const DONOS = {
   docs: ['brabo', 'docs'],
   'scripts/ci/docs': ['brabo-ci', 'scripts/ci/docs'],
@@ -16,5 +18,5 @@ const DONOS = {
 export function urlDeEdicao(repo, raiz, relativo) {
   const dono = DONOS[raiz];
   if (!dono) throw new Error(`raiz de doc sem repositório dono: ${raiz}`);
-  return `https://github.com/${repo.split('/')[0]}/${dono[0]}/blob/dev/${dono[1]}/${relativo}`;
+  return `https://github.com/${repo.split('/')[0]}/${dono[0]}/blob/dev/${posix.join(dono[1], relativo)}`;
 }
