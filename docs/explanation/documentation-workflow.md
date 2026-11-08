@@ -1063,6 +1063,7 @@ flowchart LR
   E["apps/engine/docs"] --> U
   R["apps/runner/docs · broker · packages"] --> U
   I["deploy/docs · brabo-ci (scripts/ci/docs)"] --> U
+  Q["qa/docs · brabo-qa (docs/ do irmão em ., AT-846)"] --> U
   P["docs/ (agregador)"] --> U
   U(("união")) --> S["site: mesmas URLs"]
 ```

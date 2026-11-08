@@ -12,6 +12,7 @@ const DONOS = {
   'apps/broker/docs': ['brabo-broker', 'docs'],
   'packages/docs': ['brabo-contracts', 'packages/docs'],
   'deploy/docs': ['brabo-infra', 'deploy/docs'],
+  'qa/docs': ['brabo-qa', 'docs'],
 };
 
 /** URL de edição no GitHub; `repo` é `dono/nome` do repositório que publica (só o dono da org importa). */
