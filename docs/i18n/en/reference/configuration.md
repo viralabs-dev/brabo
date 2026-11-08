@@ -266,6 +266,8 @@ Sliding window in Postgres — there's no Redis
 | `RATE_LIMIT_USER` | `300` | requests per user per window |
 | `RATE_LIMIT_IP` | `600` | requests per IP per window |
 
+> **On install.** `RATE_LIMIT_ENABLED` (`true`), `RATE_LIMIT_WINDOW_MS` (`60000`), `RATE_LIMIT_USER` (`300`), `RATE_LIMIT_IP` (`600`) and `AUTH_LOCKOUT_IP_THRESHOLDS` (`20:30,30:120`) use the api defaults, and the install compose passes them through since `brabo-infra#38` (RN-1074). Only the `brabo-qa` test compose raises these values.
+
 > If the rate limit table is unavailable, the request **goes through**. The
 > guard protects against abuse, not unauthorized access — that's the job of
 > the authentication guard, which runs first.

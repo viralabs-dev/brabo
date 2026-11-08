@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: AT-840. `docs/reference/configuration.md` (e as três traduções) diz que `RATE_LIMIT_ENABLED`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_USER`, `RATE_LIMIT_IP` e `AUTH_LOCKOUT_IP_THRESHOLDS` valem os padrões da api na instalação e que o compose de instalação os repassa desde o `brabo-infra#38` (RN-1074); só o compose de teste do `brabo-qa` sobe esses valores.
+
 - **docs**: AT-826. O `README.md` segue o esqueleto didático de 8 seções do `brabo-ci` (`README.modelo.md`): a vitrine fica no topo e termina em `<!-- vitrine:fim -->`; embaixo vêm "Para que existe", "Onde se encaixa" (com o bloco do mapa gerado), "Como é usado", "Como desenvolver", "O que o CI garante", "Documentação", "Como replicar no seu projeto", "Apoie" e "Licença". As três traduções (`README.en.md`, `README.ru.md`, `README.zh-Hans.md`) ganham a mesma estrutura com os títulos traduzidos; o check lê só o pt-BR. O novo `.github/workflows/readme.yml` chama `readme-esqueleto` e `mapa-alinhado` do `brabo-ci` (pin `v1.4.0-dev.13`), informativos.
 
 - **docs**: ADR 0283 (AT-806): a ADR proposta declara qual substitui (`supersedes`); a api valida a ADR citada, o engine escreve `Substitui:` e a ADR substituída não é alterada (RN-1069).

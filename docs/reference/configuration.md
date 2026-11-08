@@ -272,6 +272,8 @@ Janela deslizante no Postgres — não há Redis
 | `RATE_LIMIT_USER` | `300` | requisições por usuário por janela |
 | `RATE_LIMIT_IP` | `600` | requisições por IP por janela |
 
+> **Na instalação.** `RATE_LIMIT_ENABLED` (`true`), `RATE_LIMIT_WINDOW_MS` (`60000`), `RATE_LIMIT_USER` (`300`), `RATE_LIMIT_IP` (`600`) e `AUTH_LOCKOUT_IP_THRESHOLDS` (`20:30,30:120`) valem os padrões da api, e o compose de instalação os repassa desde o `brabo-infra#38` (RN-1074). Só o compose de teste do `brabo-qa` sobe esses valores.
+
 > Se a tabela do rate limit está indisponível, a requisição **passa**. O guard
 > protege contra abuso, não contra acesso não autorizado — esse é o trabalho do
 > guard de autenticação, que roda antes.
