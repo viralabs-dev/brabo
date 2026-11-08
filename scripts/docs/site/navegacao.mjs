@@ -61,6 +61,17 @@ export function slugsDeRegras(raiz, raizesDeDoc) {
   return ['business-rules', ...[...fixos.filter((n) => nomes.has(n)), ...resto].map((n) => `business-rules/${n}`)];
 }
 
+/** Uma página por `reference/workflows/<x>.md` de cada raiz (hoje só as do brabo-ci), alfabético. */
+export function slugsDeWorkflows(raiz, raizesDeDoc) {
+  const nomes = new Set();
+  for (const rd of raizesExistentes(raiz, raizesDeDoc)) {
+    try {
+      for (const f of readdirSync(path.join(raiz, rd, 'reference/workflows'))) if (f.endsWith('.md')) nomes.add(f.slice(0, -3));
+    } catch { /* raiz sem workflows */ }
+  }
+  return [...nomes].sort().map((n) => `reference/workflows/${n}`);
+}
+
 export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
   const t = (r) => rotulos[r] ?? r;
   const cat = (rotulo, itens, extra = {}) => ({ tipo: 'categoria', rotulo: t(rotulo), colapsada: false, itens, ...extra });
@@ -78,12 +89,14 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
       pg('reference/configuration', 'Configuração'), pg('reference/events', 'Eventos'), pg('reference/permissions', 'Permissões'),
       pg('reference/artifacts', 'Artefatos'), pg('reference/git-providers', 'Provedores de git'), pg('reference/internal-api', 'API interna'),
       pg('reference/scripts', 'Scripts e comandos'), pg('reference/rulesets', 'Rulesets do repositório'),
+      pg('reference/codigos-de-violacao', 'Códigos de violação'), pg('reference/glossario-da-politica', 'Glossário da política'),
+      cat('Workflows do brabo-ci', pgs(...slugsDeWorkflows(raiz, raizesDeDoc)), { colapsada: true }),
       pg('reference/paridade-de-traducao', 'Paridade de tradução'), pg('reference/brb', 'Registro BRB'),
       pg('security-surface'),
       { tipo: 'rota', slug: 'reference/api', rotulo: t('Referência da API') },
     ]),
     cat('💡 Explicação', [
-      cat('Processo e esteira', pgs('explanation/documentation-workflow', 'explanation/painel-da-mudanca', 'explanation/branching-policy', 'explanation/cadeia-de-suprimentos-do-ci', 'explanation/release-do-produto', 'explanation/gates', 'explanation/regressivo-por-funcionalidade', 'explanation/observability', 'explanation/modelo-de-time')),
+      cat('Processo e esteira', pgs('explanation/documentation-workflow', 'explanation/painel-da-mudanca', 'explanation/politica-em-10-minutos', 'explanation/branching-policy', 'explanation/licoes-do-ci', 'explanation/cadeia-de-suprimentos-do-ci', 'explanation/release-do-produto', 'explanation/gates', 'explanation/regressivo-por-funcionalidade', 'explanation/observability', 'explanation/modelo-de-time')),
       cat('Validações e medições', pgs('explanation/primeiro-dogfooding', 'explanation/execucao-real-hello-world', 'explanation/achados-execucao-real', 'explanation/validacao-fase-12', 'explanation/validacao-real', 'explanation/aceite-providers', 'explanation/medicao-do-idioma', 'explanation/medicao-do-jev', 'explanation/auditoria-fluxo-vs-codigo', 'explanation/auditoria-visual-rodada-29'), { colapsada: true }),
       cat('História das fases', pgs('explanation/historico-de-fases', 'explanation/fase-28-pasta-do-usuario', 'explanation/fase-29-instalacao-de-uma-linha', 'explanation/fase-30-runner-por-maquina', 'explanation/backlog'), { colapsada: true }),
       cat('Localização', pgs('explanation/localizacao', 'explanation/localizacao-en', 'explanation/localizacao-ru', 'explanation/localizacao-zh-hans'), { colapsada: true }),
