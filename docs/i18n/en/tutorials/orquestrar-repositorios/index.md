@@ -1,5 +1,5 @@
 ---
-traducao_de: 23e2f214c5dfa908580e5bb65ad5c7ecf7e0e64c
+traducao_de: f9981957e3564e59e86f24d25dde64cac77ab183
 title: Orchestrating a product across many repositories
 description: A seven-page path for anyone who is about to split, or has already split, a product into several repositories. It uses Brabo's 11 repositories as a real example, with the map, the consumption modes, the life of a change and a checklist to build your own.
 ---
@@ -37,7 +37,11 @@ Brabo is a platform that orchestrates engineering agents. It lives in **11 publi
 - Already split and want to organize: read 2, 3 and 4.
 - Want to get hands-on: go straight to 5, which points to the others when needed.
 
-Each page says, at the start, who it is for and what you can do after it. Where the path has no evidence to state something, it writes `TODO(humano)` instead of inventing.
+Each page says, at the start, who it is for and what you can do after it.
+
+:::nota[Where evidence is missing]
+Where the path has no evidence to state something, it writes `TODO(humano)` instead of inventing.
+:::
 
 ## The repositories, with each one's README
 

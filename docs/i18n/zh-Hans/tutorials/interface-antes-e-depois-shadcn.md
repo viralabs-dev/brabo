@@ -1,7 +1,8 @@
 ---
 title: shadcn 前后的界面（2026 年 10 月 31 日）
 description: 将基础组件迁移到 shadcn/ui（ADR 0232）以及修正 9Router 中工具（RN-950）前后，各界面和一次 Criativo 会话的录像。
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # shadcn 前后的界面（2026 年 10 月 31 日）

@@ -5,10 +5,13 @@ sidebar_label: Docs sync
 sidebar_position: 1
 description: The mechanism that keeps documentation from rotting — what each piece does, why it exists, and what to do when the check complains unfairly.
 keywords: [documentation, drift, docmap, CI, generation]
-traducao_de: 2d508b95c379df9edb51cc94523fd3f05edd83b2
+tipo: referencia
+traducao_de: 3cb8d867681554d54e45048cb40b2c9eb24c32d9
 ---
 
 # How documentation stays alive
+
+> To **write** a page, read [How we write the documentation](../contribuir/como-escrevemos.md). This page describes the **mechanism** that keeps the docs up to date.
 
 Documentation doesn't die from a lack of initial writing. It dies from
 **drift**: the code changes, the doc stays, and one day someone
@@ -302,6 +305,8 @@ them wrong on 2026-10-01), and the translation is behind the English
 source anyway; checking a copy nobody keeps in step would fail every PR
 over the translation's lag.
 
+**In the sibling.** Since [ADR 0275](../adr/0275-cada-irmao-confere-as-proprias-refs-com-simbolo.md), each sibling checks its own refs with a symbol in CI, through the reusable `refs-com-simbolo.yml` of `brabo-ci`, with no layout and no generator (the check uses the same core, `refs-com-simbolo.ts`, with the same window and the same `CEGO`). A ref to another sibling's code is only listed in the summary: whoever checks it is the lock bump (ADR 0274), which names the owning repo. When the sibling's own ref fails, the job uploads the re-anchoring patch as the `refs-patch` artifact, without commenting on the PR. The check is not among the required ones: whatever slips through lands on the lock.
+
 ### Every RN heading carries its anchor
 
 The `{#rn-NNN}` anchor on an RN heading is the contract for links from
@@ -579,6 +584,10 @@ harder to notice. It reports:
 Always in the **same** issue, updated in place. A new issue every
 month becomes spam, and spam gets turned off.
 
+### `estilo.mjs` — enforces the writing guide {#estilo-mjs}
+
+`scripts/docs/estilo.mjs` measures each page that declares `tipo:` in the frontmatter. It counts the words of prose (excluding frontmatter, code, tables, headings and the "Para saber mais" section) and fails whatever exceeds the type's limit: tutorial 1,500, guide 800, concept 1,200. Reference has no limit. It also flags internal IDs (ADR, RN, AT, EP, HS, Fase, Rodada) outside "Para saber mais". The CLI only warns and exits 0. The enforcement is the `PENDENTES` ratchet in `estilo.spec.ts`, which runs in `pnpm test:scripts` and only shrinks: a new page that overshoots fails, and a page on the list that already passes also fails ("take it off the list"). The writing rules are in [How we write the documentation](../contribuir/como-escrevemos.md).
+
 ### The site build
 
 `onBrokenLinks`, `onBrokenAnchors` and `onBrokenMarkdownLinks` are set
@@ -687,17 +696,14 @@ What holds the lag back is measurement, not the docmap.
 to it) runs inside `pnpm docs:generate` and writes two files:
 `docs/reference/paridade-de-traducao.md` (`generated: true`) and
 `website/src/data/traducao.json`. Per locale it counts pages and characters
-translated over the source (all of `docs/`, `reference/` included since ADR 0219, minus the report itself and `openapi.json`), and splits the
+translated over the source (the `docs/` of `brabo` itself, `reference/` included since ADR 0219, minus the report itself, `openapi.json` and `i18n/`; the siblings' docs stay out, ADR 0273), and splits the
 translated pages into **up to date**, **stale** and **without provenance**.
 Provenance is the `traducao_de: <SHA>` in the translated page's frontmatter,
 the last source commit it translates. A page is stale when the source has a
 commit with a later COMMIT DATE than that SHA, when the source has
 uncommitted changes, or when the SHA does not exist. It never uses the clock,
 so `--check` gives the same answer before and after the commit that touches
-the source. For the UI it compares the keys of each namespace in
-`apps/web/src/locales/<l>/` with pt-BR, and requires every plural form that
-`Intl.PluralRules` gives that locale. `--check` fails when either file is out
-of date.
+the source. A path belongs to `brabo` when it is in `HEAD` or absent from the manifest `.git/layout-irmaos.lst`; that is why a doc merge in a sibling no longer changes the parity. The UI is not measured here: the key and plural gate is `src/lib/i18n-paridade.test.ts` in `brabo-web`, and the API texts only warn in the `docs:generate` log. `--check` fails when either file is out of date.
 
 The banner is a wrap swizzle of `@theme/DocItem/Content`
 (`website/src/theme/DocItem/Content/index.tsx`). Outside pt-BR, a page whose
@@ -712,7 +718,7 @@ while the same page at the root and a page translated to `en` that is not stale
 do not. The rules for translators are in
 [Localização](localizacao.md).
 
-**The documentation of the code repos is English-only (AT-745, ADR 0260).** A page with `idioma_original: en` is not part of the parity (`ehFonteTraduzivel`), is served without a banner on `/en/` and with the banner "this page only exists in English" in the other locales (`paginas.mjs` sets `somenteIngles`; `faixa-de-traducao-check.mjs` checks the HTML). Each locale's RN index uses the translation when it exists and the source when it does not (`rnsDoLocale`), the generated block in an English source is emitted with English texts (`textosDaFonte`), and the sentences anchored in sibling prose (`contagens-do-codigo.mjs`, the runbook) accept pt-BR or English (`padraoEn`). The `openapi-textos.json` catalogs live in `brabo`, under `docs/i18n/<locale>/`.
+**The documentation of all repos is in pt-BR by default (AT-766, ADR 0266, which replaces 0260).** Siblings may have `<raiz>/docs/i18n/`, measured in the owning repository (`brabo`'s parity does not count them, ADR 0273). A sibling page that is still in English (mixed state, until retranslation) is still accepted: with `idioma_original: en` it is not part of the parity (`ehFonteTraduzivel`), is served without a banner on `/en/` and with the banner "this page only exists in English" in the other locales (`paginas.mjs` sets `somenteIngles`; `faixa-de-traducao-check.mjs` checks the HTML). Each locale's RN index uses the translation when it exists and the source when it does not (`rnsDoLocale`), the generated block in an English source is emitted with English texts (`textosDaFonte`), and the sentences anchored in sibling prose (`contagens-do-codigo.mjs`, the runbook) accept pt-BR or English (`padraoEn`). The `openapi-textos.json` catalogs live in `brabo`, under `docs/i18n/<locale>/`.
 
 ### The API page is translated by catalog (ADR 0220) {#the-api-page-is-translated-by-catalog-adr-0220}
 
@@ -899,6 +905,8 @@ the values, in both themes through the system preference. The copy is tied by
 `scripts/docs/landing.spec.ts`, which resolves the tokens and fails the value
 that diverges — it already turned petrol once after ADR 0181.
 
+Each page declares its type (`tutorial|guia|conceito|referencia|decisao|historico`) in `tipo:` in the frontmatter, or gets it from its folder (`tutorials/`, `how-to/`, `explanation/`, `reference/`, `adr/`, `business-rules`). The menu has 7 top-level groups, and `scripts/docs/site/tipos.mjs` fails a page with no type, in the wrong group, or outside the menu.
+
 ## Running it on your machine
 
 `website/` has its own `pnpm-lock.yaml` since [ADR 0117](../adr/0117-lockfile-proprio-para-o-website.md) —
@@ -911,8 +919,9 @@ cd website && pnpm install && cd ..  # only the first time, or when website/pnpm
 pnpm docs:check      # validates the map + checks generated content is up to date
 pnpm docs:generate   # regenerates
 pnpm docs:drift      # simulates the PR check (origin/dev...HEAD)
-pnpm docs:build      # the build CI runs — pnpm --dir website build under the hood
-pnpm docs:start      # local server, with hot reload
+pnpm docs:build      # the build CI runs — generates build/docs-site and checks links
+pnpm docs:start      # builds and serves on http://localhost:3000
+node scripts/docs/estilo.mjs  # style check: word budget per page type
 
 # does the API reference render? needs the build above, and isn't part
 # of docs:check because that one doesn't build the site
@@ -1007,3 +1016,25 @@ what CI demands is how the two sentences about
 `OTEL_EXPORTER_OTLP_ENDPOINT` stayed wrong for months. When you change
 code, sweep `docs/` looking for what the change made false — including
 what nobody asked you to look at.
+
+## Doc roots per area {#raizes-de-doc-por-area}
+
+Since [ADR 0254](../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.md) each area's doc lives in `<raiz>/docs/` (the list is in `scripts/docs/raizes-de-doc.mjs`, the name→folder map in `scripts/docs/fontes.yml` or in the `BRABO_FONTES` file), and `docs/` remains the aggregator. The site is the **union tree**: the file keeps the relative path it had, the public URL does not change, and links between pages use the site's coordinates, not the disk's.
+
+```mermaid
+flowchart LR
+  A["apps/api/docs"] --> U
+  W["apps/web/docs"] --> U
+  E["apps/engine/docs"] --> U
+  R["apps/runner/docs · broker · packages"] --> U
+  I["deploy/docs · brabo-ci (scripts/ci/docs)"] --> U
+  Q["qa/docs · brabo-qa (docs/ do irmão em ., AT-846)"] --> U
+  P["docs/ (agregador)"] --> U
+  U(("união")) --> S["site: mesmas URLs"]
+```
+
+- **A new RN** goes in `<raiz>/docs/business-rules/<raiz>.md`, in the root that hosts the first `caminho:N` ref. Numbering is global and the `{#rn-NNN}` anchor does not change; `docs/business-rules.md` is a generated index and `custo.md`/`autenticacao.md` are frozen stubs.
+- **Siblings come in through the lock.** `irmaos.lock` (one SHA per sibling) is what `montar-layout.sh` uses in `docs-check`, `docs-audit` and the `dev` rung of the deploy; `BRABO_REF` beats the lock (the `main` rung uses `BRABO_REF=main`). Only `regenera-gerados.yml` bumps the lock, together with the generated files (ADR 0274). So `scripts.md`, the RN index, the counts and the refs with a symbol only change on the bump, and an ordinary PR does not go red because of a merge in a sibling.
+- **`docs:check`** sums all the roots and fails a duplicate RN across them. With `--raiz <name>` it runs per root what depends only on it (anchors, internal refs, docmap glob, drift) and leaves to the aggregator what crosses roots (counts, RN index, parity, links between languages). *Today `--raiz` only restricts the refs with a symbol; the other generators run whole. That is why the sibling does not use it: its refs are checked in its own CI (ADR 0275).*
+- **Translations** live in `<raiz>/docs/i18n/<locale>/`, with a single `traducao.json`. Moving files takes two commits: the change and then the re-stamping of `traducao_de`.
+- **Price:** a link between roots gives 404 in GitHub's view; on the site it works.

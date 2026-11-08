@@ -5,7 +5,8 @@ sidebar_label: 第一次 dogfooding
 sidebar_position: 4
 description: Fase 10 的收获——Brabo 第一次构建 Brabo 自身时的十七项发现，哪些被度量了，哪些因为没有记录而丢失了。
 keywords: [dogfooding, 收获, Fase 10, 发现, 可操作性]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # 第一次 dogfooding 教会了什么

@@ -17,11 +17,25 @@ infraestrutura, mergeadas na branch `dev` do projeto, e um entregável cuja
 suíte de testes passa **102/102** num clone limpo e que sobe com
 `docker compose up`.
 
+:::dica[Tudo pelo chat do Criativo]
 A execução inteira foi conduzida de **um lugar só, o chat da sessão do
 Criativo**: perguntas abertas, a confirmação da arquitetura e cada merge foram
-decididos ali, sem recarregar a página nem abrir outra aba. Cada passo abaixo
-diz o que você faz e o que os agentes devolvem. As gravações são a tela real
-do Brabo; o caminho da pasta montada está borrado no passo 1.
+decididos ali, sem recarregar a página nem abrir outra aba.
+:::
+
+O caminho, em seis passos:
+
+:::passos
+1. **Criar o projeto** e escolher onde o código mora.
+2. **Dar um modelo ao time**, em uma ação só.
+3. **Descrever a ideia** e responder as perguntas abertas dos agentes.
+4. **Conferir o PO, o Arquiteto e o ADR**, e confirmar a arquitetura.
+5. **Aprovar o plano** de execução e ligar o modo automático.
+6. **Mergear pelo chat** cada pull request que passar nos gates.
+:::
+
+Cada passo abaixo diz o que você faz e o que os agentes devolvem. As gravações
+são a tela real do Brabo; o caminho da pasta montada está borrado no passo 1.
 
 ## 1. Criar o projeto
 
@@ -106,3 +120,9 @@ cliques; `npm run user:create` recusa senha com menos de 12 caracteres; e
 `/docs` serve a referência da API. O preflight de CORS a partir de
 `127.0.0.1:8080` e de `localhost:8080` recebe cada um o seu
 `Access-Control-Allow-Origin`, e uma origem estranha não recebe nenhum.
+
+## Próximo passo
+
+:::cartoes
+- [Orquestrar um produto em vários repositórios](orquestrar-repositorios/index.md): a trilha para dividir um produto como o Brabo foi dividido.
+:::

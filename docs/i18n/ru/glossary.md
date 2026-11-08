@@ -5,7 +5,8 @@ sidebar_label: Глоссарий
 sidebar_position: 9
 description: Единый язык Brabo — термины, которые встречаются в коде, на экранах и в ADR, со значением, которое они имеют здесь.
 keywords: [glossary, ubiquitous language, harness, gate, handoff, DEK, outbox]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: referencia
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # Глоссарий {#glossary}
@@ -453,3 +454,5 @@ Anamnese, по каждой компетенции. Шесть процессн�
 **Слой** — в пути выше, метка границы: `interfaces`, `application`, `domain`
 или `infrastructure`. Соответствует каталогам под `apps/api/src/` и правилу
 зависимостей между ними.
+
+**Политика PR и CI** — термины конвейера (лестница, промоушен, rulesets, коды нарушений) собраны в [глоссарии политики](reference/glossario-da-politica.md), который находится в `brabo-ci`.

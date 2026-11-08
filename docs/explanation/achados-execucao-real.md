@@ -1,3 +1,8 @@
+---
+title: Achados da execução real da esteira
+tipo: historico
+---
+
 # Achados da execução real da esteira
 
 > Levantado numa sessão de execução conduzida pelo navegador em **2026-08-05**,

@@ -36,7 +36,11 @@ O Brabo é uma plataforma que orquestra agentes de engenharia. Ele vive em **11 
 - Já dividiu e quer organizar: leia a 2, a 3 e a 4.
 - Quer pôr a mão na massa: vá direto à 5, que aponta para as outras quando precisa.
 
-Cada página diz, no começo, para quem é e o que você consegue depois dela. Onde a trilha não tem evidência para afirmar algo, ela escreve `TODO(humano)` em vez de inventar.
+Cada página diz, no começo, para quem é e o que você consegue depois dela.
+
+:::nota[Onde falta evidência]
+Onde a trilha não tem evidência para afirmar algo, ela escreve `TODO(humano)` em vez de inventar.
+:::
 
 ## Os repositórios, com o README de cada um
 

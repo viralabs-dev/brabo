@@ -1,5 +1,6 @@
 ---
 sidebar_position: 13
+tipo: historico
 ---
 
 # Auditoria: fluxo.yml × código (v3, ADR 0085) {#audit-fluxoyml--code-v3-adr-0085}

@@ -4,7 +4,8 @@ title: 真实执行——hello world
 sidebar_label: 真实执行（hello world）
 description: Brabo 第一次用 API 模型端到端执行、它产生的十六个发现，以及仍未被证明的内容。
 keywords: [dogfooding, 真实执行, 发现, fase 13]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # 真实执行——hello world

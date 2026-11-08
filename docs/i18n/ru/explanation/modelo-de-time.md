@@ -1,5 +1,7 @@
 ---
-traducao_de: 30ccc6978b8dbd50cc8a2f195d60a9bb3c0a71a6
+title: Модель команды и поток результатов
+tipo: conceito
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # Модель команды и поток результатов {#team-model-and-deliverable-flow}

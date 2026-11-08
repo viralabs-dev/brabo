@@ -5,6 +5,7 @@ sidebar_label: Primeiro dogfooding
 sidebar_position: 4
 description: A colheita da Fase 10 — os dezessete achados da primeira vez em que o Brabo construiu o próprio Brabo, o que ficou medido e o que se perdeu por não ter sido anotado.
 keywords: [dogfooding, colheita, Fase 10, achados, operabilidade]
+tipo: historico
 ---
 
 # O que o primeiro dogfooding ensinou

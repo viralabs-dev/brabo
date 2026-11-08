@@ -10,6 +10,18 @@
   --site-link: var(--accent);
   --site-codigo-fundo: var(--code-bg);
   --site-codigo-texto: var(--syntax-text);
+  /* Componentes da doc (AT-857): fundo do aviso (color-mix, medido pelo spec) e cor do título sobre ele. No corpo, só --site-texto e --site-texto-2. */
+  --site-aviso-nota-fundo: var(--accent-panel);
+  --site-aviso-nota-titulo: var(--accent);
+  --site-aviso-dica-fundo: var(--success-panel);
+  --site-aviso-dica-titulo: var(--success);
+  --site-aviso-cuidado-fundo: var(--warning-panel);
+  --site-aviso-cuidado-titulo: var(--warning);
+  --site-aviso-perigo-fundo: var(--danger-panel);
+  --site-aviso-perigo-titulo: var(--danger);
+  --site-historico-fundo: var(--surface-2);
+  --site-passo-fundo: var(--accent);
+  --site-passo-texto: var(--on-accent);
 }
 
 * { box-sizing: border-box; }
@@ -35,6 +47,9 @@ th, td { border: 1px solid var(--border); padding: 6px 12px; text-align: left; }
 th { background: var(--surface-2); }
 blockquote { margin: 1em 0; padding: 0.2em 1em; border-left: 3px solid var(--border-strong); color: var(--site-texto-2); }
 img, svg { max-width: 100%; height: auto; }
+/* Largura de leitura (~72ch); tabela, código, figura e Mermaid ficam na largura toda. */
+article.doc > :is(p, ul, ol, blockquote, h1, h2, h3, h4, .admonicao, .historico, .passos, .abas, .cartoes) { max-width: 72ch; }
+article.doc > :is(.cartoes) { max-width: none; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .site-aviso, .site-faixa { padding: var(--space-2) var(--space-3); font-size: var(--fs-sm); background: var(--warning-panel); border-bottom: 1px solid var(--warning-panel-border); color: var(--site-texto); }
@@ -91,3 +106,37 @@ main :has(> [data-testid='middle-panel']) { display: flex !important; flex-direc
 main, #api-content { max-width: 100%; overflow-wrap: anywhere; }
 main pre, main table { max-width: 100%; overflow-x: auto; }
 @media (max-width: 760px) { .site-nav { gap: var(--space-1); padding: 0 var(--space-2); } .site-nav input { min-width: 0; flex: 1 1 60px; width: 60px; } .site-nav select { min-width: 0; max-width: 84px; } }
+
+/* Componentes da doc (AT-857). A página de exemplo é reference/componentes-da-doc. */
+.admonicao { --aviso-fundo: var(--site-aviso-nota-fundo); --aviso-titulo: var(--site-aviso-nota-titulo); --aviso-borda: var(--accent-panel-border); margin: var(--space-3) 0; padding: var(--space-2) var(--space-3); background: var(--aviso-fundo); border: 1px solid var(--aviso-borda); border-left: 4px solid var(--aviso-titulo); border-radius: var(--r-md); color: var(--site-texto); }
+.admonicao-dica { --aviso-fundo: var(--site-aviso-dica-fundo); --aviso-titulo: var(--site-aviso-dica-titulo); --aviso-borda: var(--success-panel-border); }
+.admonicao-cuidado { --aviso-fundo: var(--site-aviso-cuidado-fundo); --aviso-titulo: var(--site-aviso-cuidado-titulo); --aviso-borda: var(--warning-panel-border); }
+.admonicao-perigo { --aviso-fundo: var(--site-aviso-perigo-fundo); --aviso-titulo: var(--site-aviso-perigo-titulo); --aviso-borda: var(--danger-panel-border); }
+.admonicao-titulo { margin: 0 0 var(--space-1); font: 700 var(--fs-label) var(--font-heading); letter-spacing: 0.06em; text-transform: uppercase; color: var(--aviso-titulo); }
+.admonicao > :last-child { margin-bottom: 0; }
+.admonicao > :nth-child(2) { margin-top: 0; }
+.historico { margin: var(--space-3) 0; background: var(--site-historico-fundo); border: 1px solid var(--border-strong); border-radius: var(--r-md); overflow: hidden; }
+.historico-faixa { margin: 0; padding: var(--space-1) var(--space-3); border-bottom: 1px solid var(--border-strong); font-size: var(--fs-sm); font-style: italic; color: var(--site-texto-2); }
+.historico > :not(.historico-faixa) { margin-left: var(--space-3); margin-right: var(--space-3); }
+.passos > ol { list-style: none; counter-reset: passo; margin: var(--space-3) 0; padding: 0; }
+.passos > ol > li { counter-increment: passo; position: relative; padding: 0 0 var(--space-3) 44px; }
+.passos > ol > li::before { content: counter(passo); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--site-passo-fundo); color: var(--site-passo-texto); font: 700 var(--fs-sm)/28px var(--font-heading); text-align: center; }
+.passos > ol > li::after { content: ''; position: absolute; left: 13px; top: 32px; bottom: 4px; width: 2px; background: var(--border); }
+.passos > ol > li:last-child::after { display: none; }
+.cartoes > ul { list-style: none; margin: var(--space-3) 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-3); }
+.cartoes li { position: relative; display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-3); background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--r-lg); color: var(--site-texto-2); }
+.cartoes li:hover, .cartoes li:focus-within { border-color: var(--accent); }
+.cartoes li a { font: 600 16px var(--font-heading); text-decoration: none; }
+.cartoes li a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-lg); }
+.cartoes li a:focus-visible { outline: none; }
+.cartoes li:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.abas { margin: var(--space-3) 0; }
+.aba-rotulo { margin: 0 0 var(--space-1); font-weight: 700; color: var(--site-texto-2); }
+.abas-js .aba-rotulo { display: none; }
+.abas-lista { display: flex; gap: var(--space-1); border-bottom: 1px solid var(--border); }
+.abas-lista button { background: none; color: var(--site-texto-2); border: 0; border-bottom: 2px solid transparent; padding: 6px 12px; font: 600 var(--fs-sm) var(--font-body); cursor: pointer; }
+.abas-lista button[aria-selected='true'] { color: var(--site-texto); border-bottom-color: var(--accent); }
+.abas-js .aba[hidden] { display: none; }
+figure.figura { margin: var(--space-4) 0; }
+figure.figura img { display: block; border: 1px solid var(--border); border-radius: var(--r-lg); }
+figure.figura figcaption { margin-top: var(--space-1); font-size: var(--fs-sm); color: var(--site-texto-2); max-width: 72ch; }

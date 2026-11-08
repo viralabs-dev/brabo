@@ -4,7 +4,7 @@
  *   construirNavegacao({ raiz, repo, rotulos }) -> Item[]
  *   listaPlana(itens) -> [{ slug, rotulo }]    -- ordem de leitura (anterior/próximo)
  *
- *   Item = { tipo: 'categoria', rotulo, colapsada, slug?, itens }   -- `slug` = página que a categoria abre
+ *   Item = { tipo: 'categoria', rotulo, colapsada, slug?, espera?, itens }   -- `slug` = página que a categoria abre; `espera` = tipos aceitos (grupo de topo, AT-854)
  *        | { tipo: 'pagina',    slug, rotulo? }                      -- sem `rotulo`, vale o da página
  *        | { tipo: 'rota',      slug, rotulo }                       -- página gerada fora do Markdown (a da API, A3)
  *        | { tipo: 'link',      rotulo, href }                       -- URL externa
@@ -78,38 +78,43 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
   const pg = (slug, rotulo) => (rotulo ? { tipo: 'pagina', slug, rotulo: t(rotulo) } : { tipo: 'pagina', slug });
   const pgs = (...slugs) => slugs.map((s) => pg(s));
   const link = (rotulo, arq) => ({ tipo: 'link', rotulo: t(rotulo), href: `https://github.com/${repo}/blob/dev/${arq}` });
+  // `espera` (AT-854): os tipos de página que o grupo de topo aceita; `tipos.mjs` reprova o resto.
+  const orquestrar = ['por-que-separar', 'o-mapa', 'como-cada-repo-e-consumido', 'vida-de-uma-mudanca', 'monte-o-seu', 'erros-que-ja-cometemos'].map((s) => `tutorials/orquestrar-repositorios/${s}`);
   return [
-    cat('🚀 Comece aqui', [
-      ...pgs('', 'getting-started', 'tutorials/from-zero-to-deliverable', 'tutorials/interface-antes-e-depois-shadcn'),
-      cat('Orquestrar repositórios', pgs(...['por-que-separar', 'o-mapa', 'como-cada-repo-e-consumido', 'vida-de-uma-mudanca', 'monte-o-seu', 'erros-que-ja-cometemos'].map((s) => `tutorials/orquestrar-repositorios/${s}`)), { slug: 'tutorials/orquestrar-repositorios', colapsada: true }),
-    ]),
-    cat('🏗️ Arquitetura', [
-      pg('architecture'),
-      cat('Decisões (ADR)', adrsPorTema(raiz).map((c) => ({ tipo: 'categoria', rotulo: c.rotulo, colapsada: true, itens: c.itens.map((s) => pg(s)) })), { slug: 'adr' }),
-    ]),
-    cat('📐 Regras', pgs(...slugsDeRegras(raiz, raizesDeDoc))),
+    cat('🚀 Comece aqui', pgs('', 'getting-started'), { espera: ['conceito', 'tutorial', 'guia', 'referencia'] }),
+    cat('🎓 Tutoriais', [
+      pg('tutorials/from-zero-to-deliverable'),
+      cat('Orquestrar repositórios', pgs(...orquestrar), { slug: 'tutorials/orquestrar-repositorios', colapsada: true }),
+    ], { espera: ['tutorial'] }),
+    cat('🧭 Guias práticos', [
+      ...pgs('how-to/desenvolver-o-brabo', 'how-to/usar-o-runner', 'how-to/token-do-github-packages', 'runbook', 'tutorials/adotar', 'explanation/usar-em-outra-org', 'rodadas-manuais'),
+      cat('Contribuir', [pg('contribuir/como-escrevemos', 'Como escrevemos'), link('Como contribuir', 'CONTRIBUTING.md'), link('Onde pedir ajuda', 'SUPPORT.md'), link('Reportar vulnerabilidade', 'SECURITY.md')]),
+    ], { espera: ['guia'] }),
+    cat('💡 Conceitos', [
+      ...pgs('architecture', 'explanation/gates', 'explanation/modelo-de-time', 'explanation/regressivo-por-funcionalidade', 'e2e-portao/como-funciona', 'regressivo/como-funciona', 'explanation/observability'),
+      cat('Processo e esteira', pgs('explanation/painel-da-mudanca', 'explanation/politica-em-10-minutos', 'explanation/branching-policy', 'explanation/ordem-da-promocao', 'explanation/reutilizaveis-sem-chamador', 'explanation/cadeia-de-suprimentos-do-ci', 'explanation/release-do-produto', 'explanation/licoes-do-ci')),
+      cat('Localização', pgs('explanation/localizacao', 'explanation/localizacao-en', 'explanation/localizacao-ru', 'explanation/localizacao-zh-hans'), { colapsada: true }),
+      cat('Notas técnicas', pgs('explanation/tanstack-ai'), { colapsada: true }),
+    ], { espera: ['conceito'] }),
     cat('📖 Referência', [
+      pg('glossary'), pg('reference/componentes-da-doc', 'Componentes da doc'), pg('explanation/documentation-workflow'),
       pg('reference/configuration', 'Configuração'), pg('reference/events', 'Eventos'), pg('reference/permissions', 'Permissões'),
-      pg('reference/artifacts', 'Artefatos'), pg('reference/git-providers', 'Provedores de git'), pg('reference/internal-api', 'API interna'),
+      pg('reference/artifacts', 'Artefatos'), pg('reference/git-providers', 'Provedores de git'), pg('reference/llm-providers', 'Provedores de LLM'),
+      pg('reference/internal-api', 'API interna'), pg('reference/internal-open-questions-api', 'Perguntas em aberto da API interna'),
       pg('reference/scripts', 'Scripts e comandos'), pg('reference/rulesets', 'Rulesets do repositório'),
       pg('reference/codigos-de-violacao', 'Códigos de violação'), pg('reference/glossario-da-politica', 'Glossário da política'),
       cat('Workflows do brabo-ci', pgs(...slugsDeWorkflows(raiz, raizesDeDoc)), { colapsada: true }),
       pg('reference/paridade-de-traducao', 'Paridade de tradução'), pg('reference/brb', 'Registro BRB'),
-      pg('security-surface'),
-      pg('how-to/usar-o-runner', 'Usar o runner'), pg('how-to/token-do-github-packages', 'Token do GitHub Packages'), pg('dependencias-e-imagens', 'Dependências e imagens do broker'),
-      pg('reference/contratos-e-imagem', 'Contratos e imagem da api'), pg('rodadas-manuais', 'Rodadas manuais do QA'), pg('e2e-portao/como-funciona', 'Portão E2E: como funciona'), pg('regressivo/como-funciona', 'Regressivo: como funciona'),
+      pg('security-surface'), pg('dependencias-e-imagens', 'Dependências e imagens do broker'), pg('reference/contratos-e-imagem', 'Contratos e imagem da api'),
+      cat('Regras de negócio', pgs(...slugsDeRegras(raiz, raizesDeDoc).slice(1)), { slug: 'business-rules', colapsada: true }),
       { tipo: 'rota', slug: 'reference/api', rotulo: t('Referência da API') },
-    ]),
-    cat('💡 Explicação', [
-      cat('Processo e esteira', pgs('explanation/documentation-workflow', 'explanation/painel-da-mudanca', 'explanation/politica-em-10-minutos', 'explanation/branching-policy', 'explanation/licoes-do-ci', 'explanation/cadeia-de-suprimentos-do-ci', 'explanation/release-do-produto', 'explanation/gates', 'explanation/regressivo-por-funcionalidade', 'explanation/observability', 'explanation/modelo-de-time')),
+    ], { espera: ['referencia'] }),
+    cat('🏛️ Decisões (ADR)', adrsPorTema(raiz).map((c) => ({ tipo: 'categoria', rotulo: c.rotulo, colapsada: true, itens: c.itens.map((s) => pg(s)) })), { slug: 'adr', colapsada: true, espera: ['decisao'] }),
+    // sempre o ÚLTIMO grupo
+    cat('🗂️ Histórico do projeto', [
+      ...pgs('tutorials/interface-antes-e-depois-shadcn', 'explanation/historico-de-fases', 'explanation/fase-28-pasta-do-usuario', 'explanation/fase-29-instalacao-de-uma-linha', 'explanation/fase-30-runner-por-maquina', 'explanation/backlog'),
       cat('Validações e medições', pgs('explanation/primeiro-dogfooding', 'explanation/execucao-real-hello-world', 'explanation/achados-execucao-real', 'explanation/validacao-fase-12', 'explanation/validacao-real', 'explanation/aceite-providers', 'explanation/medicao-do-idioma', 'explanation/medicao-do-jev', 'explanation/auditoria-fluxo-vs-codigo', 'explanation/auditoria-visual-rodada-29'), { colapsada: true }),
-      cat('História das fases', pgs('explanation/historico-de-fases', 'explanation/fase-28-pasta-do-usuario', 'explanation/fase-29-instalacao-de-uma-linha', 'explanation/fase-30-runner-por-maquina', 'explanation/backlog'), { colapsada: true }),
-      cat('Localização', pgs('explanation/localizacao', 'explanation/localizacao-en', 'explanation/localizacao-ru', 'explanation/localizacao-zh-hans'), { colapsada: true }),
-      cat('Notas técnicas', pgs('explanation/tanstack-ai'), { colapsada: true }),
-    ]),
-    cat('🛠️ Operação', pgs('runbook')),
-    cat('📚 Vocabulário', pgs('glossary')),
-    cat('🤝 Contribuir', [link('Como contribuir', 'CONTRIBUTING.md'), link('Onde pedir ajuda', 'SUPPORT.md'), link('Reportar vulnerabilidade', 'SECURITY.md')]),
+    ], { colapsada: true, espera: ['historico'] }),
   ];
 }
 

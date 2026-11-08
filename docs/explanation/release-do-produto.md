@@ -1,3 +1,8 @@
+---
+title: Release do produto
+tipo: conceito
+---
+
 # Release do produto {#product-release}
 
 > Como o Brabo, que vive em vários repositórios `viralabs-dev/brabo*`, publica **uma** versão do

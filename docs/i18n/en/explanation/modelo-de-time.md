@@ -1,5 +1,7 @@
 ---
-traducao_de: 30ccc6978b8dbd50cc8a2f195d60a9bb3c0a71a6
+title: Team model and deliverable flow
+tipo: conceito
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # Team model and deliverable flow {#team-model-and-deliverable-flow}

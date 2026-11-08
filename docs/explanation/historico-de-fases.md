@@ -5,6 +5,7 @@ sidebar_label: Histórico de fases
 sidebar_position: 14
 description: Registro imutável das fases concluídas do Brabo — o que cada uma entregou, cortou e achou, e por quê.
 keywords: [histórico, fases, ADR, RN, changelog]
+tipo: historico
 ---
 
 # Histórico de fases

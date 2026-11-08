@@ -2,7 +2,8 @@
 id: medicao-do-idioma
 title: Measuring the language heuristic
 description: The instrument that measures the AT-080 language-detection heuristic against a labeled corpus, the numbers it produced on the synthetic corpus, and the paid validation of the language orientation and its cost (AT-167, 2026-09-29).
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # Measuring the language heuristic

@@ -2,7 +2,8 @@
 id: medicao-do-idioma
 title: Измерение эвристики языка
 description: Инструмент, измеряющий эвристику определения языка из AT-080 на размеченном корпусе, числа, полученные им на синтетическом корпусе, и платная проверка языковой ориентации и её стоимости (AT-167, 2026-09-29).
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # Измерение эвристики языка {#measuring-the-language-heuristic}

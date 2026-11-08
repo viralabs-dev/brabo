@@ -5,6 +5,7 @@ sidebar_label: Validação da Fase 12
 sidebar_position: 5
 description: O roteiro auditável que exercita adoção, promoção manual e reagendamento numa execução só — com os event ids extraídos do banco, e o que a validação deliberadamente não prova.
 keywords: [validação, Fase 12, dogfooding, adoção, reagendamento, promoção]
+tipo: historico
 ---
 
 # A validação de que os três achados morreram

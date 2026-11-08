@@ -1,6 +1,7 @@
 ---
 title: Interface antes e depois do shadcn (31/10/2026)
 description: Gravação das telas e de uma sessão do Criativo antes e depois da migração das primitivas para shadcn/ui (ADR 0232) e da correção das ferramentas no 9Router (RN-950).
+tipo: historico
 ---
 
 # Interface antes e depois do shadcn (31/10/2026)

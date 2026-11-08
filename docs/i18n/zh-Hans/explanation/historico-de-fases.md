@@ -5,7 +5,8 @@ sidebar_label: 阶段历史
 sidebar_position: 14
 description: Brabo 已完成阶段的不可变记录——每个阶段交付了什么、砍掉了什么、发现了什么，以及原因。
 keywords: [历史, 阶段, ADR, RN, changelog]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # 阶段历史
