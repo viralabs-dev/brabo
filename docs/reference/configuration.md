@@ -840,6 +840,7 @@ teste unitário ao lado dele (AT-124).
 | `E2E_WEB_URL` | `http://localhost:8088` | o `baseURL` que o Playwright abre, e a origem de que depende a asserção de CSRF |
 | `E2E_USER` | `owner@brabo.dev` | a conta com que a suíte entra |
 | `E2E_PASSWORD` | a senha do seed fixa em `e2e/suporte/api.ts` | a senha dessa conta. É a senha de um **seed local**, nunca uma real — não é repetida aqui para que a única cópia continue sendo a do código |
+| `E2E_SERVICE_TOKEN` | não definida | o token de serviço que as specs usam para semear dados pelas rotas internas da api (`e2e/suporte/interno.ts`, RN-1064). No CI, o job o lê do `.env` que ele mesmo gerou, mascara com `::add-mask::` e o entrega só ao passo das specs (`scripts/ci/com-token-de-servico.sh`); localmente, é o `BRABO_SERVICE_TOKEN` do `.env` do compose. Nunca é impresso |
 
 
 ### Cluster local e provas agendadas — `deploy/k8s/`
@@ -873,6 +874,7 @@ varre todo `deploy/k8s/*.sh` e casa só a expansão com default (`${X:-…}`), q
 | `RESTORE_KEEP_JOB` | não definida | `1` mantém os Jobs de backup/restauração depois do `make test-restore`, para inspeção |
 | `PROJECT_WORKSPACES_ROOT_NO_POD` | `/data/project-workspaces` | onde o `make test-reprojecao-artefatos-k8s` procura a pasta de artefatos dentro do pod da api |
 | `KUBE_VERSION` | `1.31.0` | a versão do Kubernetes contra a qual o `make k8s-validate` valida os overlays renderizados |
+| `NPMRC` | `~/.npmrc` | o arquivo `.npmrc` com o token `read:packages` do GitHub Packages, que o bootstrap passa ao build da api e do web como secret do BuildKit (`--secret id=npmrc`, RN-1039). No CI aponta para o arquivo que o job escreve; o token nunca entra em `ARG`, `ENV` nem camada |
 
 ---
 
