@@ -109,6 +109,20 @@ jobs:
         with:
           node-version: '26.10.0'
 
+      # AT-796, ADR 0282: pin atrás da Latest, sem Release final ou sem asset. Na tag reprova;
+      # no ensaio só avisa. Se reprovar: mergear a PR `chore/regenera-gerados` e promover um patch.
+      - name: Conferir as pins dos componentes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ENSAIO: ${{ steps.alvo.outputs.tag == '' }}
+        run: |
+          set -euo pipefail
+          if [ "$ENSAIO" = 'true' ]; then
+            node scripts/ci/pins-dos-componentes.ts --conferir componentes.json install.sh --aviso
+          else
+            node scripts/ci/pins-dos-componentes.ts --conferir componentes.json install.sh
+          fi
+
       - name: Baixar o imagem.json de cada componente
         id: imagens
         env:

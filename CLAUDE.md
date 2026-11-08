@@ -34,10 +34,11 @@ código" não vale entre repos: o drift só enxerga o diff deste repo.
 O script grava o que trouxe em `.git/layout-irmaos.lst` e, na rodada seguinte,
 remove o que já não está em `HEAD` (senão o `--update=none` esconde diff).
 `.github/workflows/regenera-gerados.yml` (a cada 6 h e por `workflow_dispatch`)
-sobe a trava e regenera os gerados que dependem dos irmãos no mesmo commit, e
+sobe a trava, sobe as pins do `componentes.json` (e o `RUNNER_TAG` do `install.sh`) até a última Release final de cada componente (`scripts/ci/pins-dos-componentes.ts --subir`, AT-796, ADR 0282) e regenera os gerados que dependem dos irmãos no mesmo commit, e
 abre/atualiza a PR fixa `chore/regenera-gerados` na `dev` (dispensa a escada,
 ADR 0255; o merge é humano); pendência em arquivo
 de irmão deixa o job vermelho nomeando o repo dono (AT-726).
+A trava `--conferir` do mesmo script roda no check `Pins dos componentes` (PR para a `main`) e no `release.yml` (reprova na tag, avisa no ensaio).
 O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mjs`).
 
 ## Convenções do repositório

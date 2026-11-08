@@ -67,6 +67,17 @@ jobs:
           } > "$RUNNER_TEMP/irmaos.lock"
           mv "$RUNNER_TEMP/irmaos.lock" irmaos.lock
 
+      # AT-796, ADR 0282: a pin de cada componente segue a última Release final (só sobe,
+      # nunca desce). O `RUNNER_TAG` do install.sh anda junto. Cai na mesma PR fixa.
+      - name: Subir as pins dos componentes
+        id: pins
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          set -euo pipefail
+          node scripts/ci/pins-dos-componentes.ts --subir componentes.json install.sh | tee "$RUNNER_TEMP/pins.txt"
+          { echo 'lista<<PINS_FIM'; grep -- ' → ' "$RUNNER_TEMP/pins.txt" || true; echo PINS_FIM; } >> "$GITHUB_OUTPUT"
+
       - name: Reconstruir o layout dos irmãos (trava nova)
         run: bash scripts/docs/montar-layout.sh
 
@@ -104,6 +115,7 @@ jobs:
           GH_TOKEN: ${{ steps.app.outputs.token }}
           REPO: ${{ github.repository }}
           MEUS: ${{ steps.diff.outputs.meus }}
+          PINS: ${{ steps.pins.outputs.lista }}
         run: |
           set -euo pipefail
           aberta=$(gh pr list -R "$REPO" --head "$BRANCH" --base dev --state open --json number --jq '.[0].number // empty')
@@ -115,7 +127,7 @@ jobs:
             git reset -q
             xargs -d '\n' -a "$RUNNER_TEMP/meus.lst" git add --
             git -c user.name='viralabs-dev-brabo[bot]' -c user.email='noreply@github.com' \
-              commit -q -m 'docs: regenera os gerados que dependem dos irmãos' -m 'Gerado por regenera-gerados.yml (AT-726).'
+              commit -q -m 'docs: regenera os gerados e sobe as pins dos componentes' -m 'Gerado por regenera-gerados.yml (AT-726, AT-796).'
             # mesma árvore que a PR aberta já tem: não reempurra (re-rodaria o CI e derrubaria a aprovação)
             if git fetch -q origin "$BRANCH" 2>/dev/null && [ "$(git rev-parse 'HEAD^{tree}')" = "$(git rev-parse 'FETCH_HEAD^{tree}')" ]; then
               echo "A PR já tem estes gerados; nada a empurrar."
@@ -124,8 +136,8 @@ jobs:
             fi
             if [ -z "$aberta" ]; then
               gh pr create -R "$REPO" --base dev --head "$BRANCH" \
-                --title 'docs: regenera os gerados que dependem dos irmãos' \
-                --body 'Aberta por `regenera-gerados.yml` (AT-726): os gerados do brabo ficaram velhos depois de mudança num repositório irmão. A PR dispensa a escada (ADR 0255); o merge é humano.'
+                --title 'docs: regenera os gerados e sobe as pins dos componentes' \
+                --body "$(printf '%s\n\n%s\n%s' 'Aberta por `regenera-gerados.yml` (AT-726, AT-796): gerados velhos depois de mudança num irmão e/ou Release nova de componente. A PR dispensa a escada (ADR 0255, 0282); o merge é humano.' 'Pins subidas:' "${PINS:-nenhuma}")"
             fi
           fi
           if [ -s "$RUNNER_TEMP/irmaos.lst" ]; then

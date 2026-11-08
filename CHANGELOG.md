@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **feature**: AT-796. A pin do `componentes.json` segue a última Release final de cada componente. O `regenera-gerados` sobe as pins (e o `RUNNER_TAG` do `install.sh`) na PR `chore/regenera-gerados`, e a trava `scripts/ci/pins-dos-componentes.ts --conferir` reprova a PR para a `main` (check `Pins dos componentes`) e a tag do `release.yml` quando a pin está atrás, sem Release final ou sem asset (ensaio só avisa). Pins subidas: web v1.2.1 e runner v1.1.1. ADR 0282; `release-do-produto.md` nos quatro idiomas ganha o caso "tag sem Release por pin atrás". TODO(humano): tornar o check obrigatório no ruleset da `main`.
+
 - **docs**: AT-792. As RN-1054 a RN-1056 (`scripts/ci/docs/business-rules/ci.md`) e o ADR 0278 registram o painel da mudança do `brabo-ci` (um run por componente, sem check nas PRs, link pelos Vínculos). A página `docs/explanation/painel-da-mudanca.md` descreve o painel. Refs no `brabo-ci` de `d122b836`.
 
 - **docs**: AT-790 (Rodada 255, lane L2). A RN-1066 (`scripts/ci/docs/business-rules/ci.md`) registra que o gatilho do `brabo-qa` espera a tag `-dev`, a imagem e a assinatura (`QA_ESPERA_MINUTOS`, padrão 10 min) antes de dar vermelho por ambiente ou assinatura; assinatura inválida nunca é aceita por `/qa-aceitar`. O índice de RNs e a contagem do README vão junto.

@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 273 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 274 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -382,6 +382,7 @@ O pipeline, as imagens publicadas, a assinatura, a varredura, o pin, as camadas 
 | [0271](0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.md) | Cada run do Actions mostra os vínculos entre os repositórios: a action `vinculos` do `brabo-ci` (tabela e Mermaid no Summary, nunca reprova), o `run-name` com a origem, a correlação `c=<run_id>-<attempt>`, o job `anunciar` e a linha `Carimbo:` na tag (AT-773, RN-1043 a RN-1045). |
 | [0277](0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.md) | O regressivo roda num compose só; o grafo mostra cada funcionalidade por uma matrix de exibição (job leve, sem compose), e o relatório em JSON é a fonte da decisão de aprovar ou não
 | [0278](0278-a-mudanca-e-vista-num-painel-do-brabo-ci.md) | A mudança é vista num painel do brabo-ci (run `Painel da mudança`, Summary com tabela e Mermaid), sem check nas PRs: o link fica nas runs de origem pelos Vínculos |
+| [0282](0282-a-pin-dos-componentes-segue-a-release-final.md) | A pin do `componentes.json` segue a última Release final: o `regenera-gerados` sobe a pin (e o `RUNNER_TAG`) na PR fixa, e a trava `pins-dos-componentes` reprova a PR para a `main` e a tag do produto se a pin estiver atrás |
 
 ## Documentação {#tema-docs}
 
@@ -414,7 +415,7 @@ Como a documentação é gerada, verificada e publicada.
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0280**.
+  é substituído — o próximo é **0283**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml` e a linha do índice sob a seção desse
   tema, em ordem numérica. Quem revisa confirma. Um tema novo é uma
