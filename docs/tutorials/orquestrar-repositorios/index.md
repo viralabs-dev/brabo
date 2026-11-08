@@ -30,6 +30,10 @@ O Brabo é uma plataforma que orquestra agentes de engenharia. Ele vive em **11 
 | 5 | [Monte o seu](monte-o-seu.md) | Em que ordem eu replico isso? |
 | 6 | [Erros que já cometemos](erros-que-ja-cometemos.md) | O que posso evitar? |
 
+## E o jeito de trabalhar?
+
+Esta trilha é a **estrutura**. O método que a faz andar (quadro, atividades, rodadas com agentes, o teste de aceite permanente) está em [Como o Brabo é construído](../como-o-brabo-e-construido/index.md).
+
 ## Como ler
 
 - Vai decidir se divide: leia a 1 e a 6.
