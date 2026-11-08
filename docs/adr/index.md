@@ -279,6 +279,7 @@ O contrato de provider, o catálogo de modelos e a curadoria, os bindings de mod
 | [0233](0233-membro-ve-o-gasto-do-projeto-sem-credencial.md) | O **membro** vê o gasto do PROJETO (total e custo por agente/área, `GET /projects/:projectId/spend/team`) e o próprio consumo por projeto (`GET /workspaces/:workspaceId/spend/me`), nunca provider nem credencial. Revisa o [0063](0063-duas-audiencias-para-o-mesmo-gasto.md); o relatório do owner ganha `?projectId=` (404 entre workspaces) e a dimensão `session`, e a marca curada `billing` separa assinatura do US$ pago. |
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | Preço de lista da tabela ÚNICA do fabricante (RN-965) para provider que não informa preço (Anthropic), casado pelo ID sem sufixo de data; `manual_pricing` segue vencendo o sync e `supportsReasoning` vem do SDK (ADR 0042 intacto). |
 | [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | Na Anthropic direta o raciocínio desligado é POR MODELO (Haiku 5.5 `thinking: disabled`, Sonnet 5.5 `between_tools`, Opus 5.5 `effort: low`, que só REDUZ), o adaptativo ligado ganha folga no `max_tokens`, `aceitaRaciocinioDesligado` é declarado e `reasoning_tokens` vem do `message_delta`. Revisa o item 4 do [0223](0223-orcamento-de-raciocinio-por-modelo.md) só para a Anthropic. |
+| [0279](0279-provider-de-llm-duble-do-regressivo.md) | Provider de LLM dublê do regressivo, dentro da api: ocupa o lugar do `ollama`, só carrega com `LLM_DUBLE=1` fora da imagem `prd`, responde por roteiro JSON com custo 0
 
 ## RAG, grafo de conhecimento e artefatos {#tema-conhecimento}
 
@@ -379,6 +380,7 @@ O pipeline, as imagens publicadas, a assinatura, a varredura, o pin, as camadas 
 | [0252](0252-o-brabo-vira-um-conjunto-de-repositorios.md) | O Brabo deixa de ser um monorepo e vira um conjunto de repositórios `brabo-*` em `viralabs-dev`, todos públicos, com a porta de entrada em `viralabs-dev/brabo` (docs, instalador e release do produto), doc dentro de cada repositório, versões próprias recomeçando em 1.0.0 e histórico preservado. Estado: decidido, em migração (onda A). |
 | [0268](0268-o-brabo-qa-tem-regressivo-por-funcionalidade.md) | O `brabo-qa` tem regressivo por funcionalidade (`funcionalidades.yml`, tag `@f-<id>`): a PR para a `dev` roda só o que tocou, pelo check `Regressivo do brabo-qa`, que NUNCA é exigido, com imagem `sha-<12>`; a PR para a `main` roda o catálogo inteiro e funcionalidade sem spec é "sem cobertura", sem reprovar (AT-769, RN-1031 a RN-1035). |
 | [0271](0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.md) | Cada run do Actions mostra os vínculos entre os repositórios: a action `vinculos` do `brabo-ci` (tabela e Mermaid no Summary, nunca reprova), o `run-name` com a origem, a correlação `c=<run_id>-<attempt>`, o job `anunciar` e a linha `Carimbo:` na tag (AT-773, RN-1043 a RN-1045). |
+| [0277](0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.md) | O regressivo roda num compose só; o grafo mostra cada funcionalidade por uma matrix de exibição (job leve, sem compose), e o relatório em JSON é a fonte da decisão de aprovar ou não
 
 ## Documentação {#tema-docs}
 

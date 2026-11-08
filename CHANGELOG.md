@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: AT-791 (Rodada 253, lane L3). O regressivo do `brabo-qa` ganha as RN-1051 a RN-1053 (`scripts/ci/docs/business-rules/ci.md`): o relatório sai de um JSON único com recomendação pela regra fixa, o `/qa-aceitar` preserva o resumo do vermelho e a spec sem `@f-*` vira "sem funcionalidade". O ADR 0277 registra o compose só com matrix de exibição, e as opções de compose por funcionalidade ficam descartadas. O ADR 0279 registra o provider de LLM dublê do regressivo (AT-815). `regressivo-por-funcionalidade.md` e `configuration.md` descrevem o relatório e o `BRABO_BIND`: a api, o web e o engine seguem o `BRABO_BIND`, e o Ollama e o neo4j ficam sempre em `127.0.0.1` (RN-1057, brabo-infra#33, AT-811).
+
 - **docs**: `configuration.md` ganha "Recuperar a senha sem SMTP" (override temporário com `AUTH_MAIL_LOG_TOKENS=true`, link no `docker compose logs api`, desfazer depois) e a linha do `BRABO_AMBIENTE` diz que as contas `<papel>@brabo.dev` e o workspace de acesso rápido criados em `local` ficam no banco; o TP-01 contra a `main` usa a conta do titular (AT-802).
 
 - **ci**: o E2E do instalador roda o job de macOS em `macos-15`. O `macos-14` deixou de ser suportado pelo GitHub ("The configuration 'macos-14-arm64-us-default' is not supported"), e o job era cancelado em 1 s: o E2E da v2.1.2 saiu `cancelled` (mesma causa da AT-794 no runner).
