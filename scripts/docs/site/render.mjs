@@ -22,6 +22,7 @@ import MarkdownIt from 'markdown-it';
 import { createCssVariablesTheme, createHighlighter } from 'shiki';
 import path from 'node:path';
 import { urlRelativa } from './paginas.mjs';
+import { urlDeEdicao } from './repo-dono.mjs';
 
 const LINGUAGENS = ['bash', 'json', 'sql', 'elixir', 'yaml', 'typescript', 'tsx', 'javascript', 'diff', 'dockerfile', 'markdown', 'html', 'css', 'toml', 'ini'];
 const ADMONICOES = new Set(['note', 'tip', 'info', 'warning', 'caution', 'danger']);
@@ -93,7 +94,7 @@ function regraDeTitulos(state) {
   }
 }
 
-function resolverLink(href, pagina, porRelativo) {
+function resolverLink(href, pagina, porRelativo, repo) {
   if (!href || /^(?:[a-z][a-z0-9+.-]*:|#|\/\/)/i.test(href)) return href;
   const [alvo, frag = ''] = href.split('#');
   const ancora = frag ? `#${frag}` : '';
@@ -104,10 +105,13 @@ function resolverLink(href, pagina, porRelativo) {
   if (!alvo.endsWith('.md')) return href;
   const rel = path.posix.normalize(path.posix.join(path.posix.dirname(pagina.relativo), alvo));
   const destino = porRelativo.get(rel);
-  return destino ? urlRelativa(pagina.url, destino.url) + ancora : href; // quebrado: o checador (A5) reprova
+  if (destino) return urlRelativa(pagina.url, destino.url) + ancora;
+  // `../README.md` de uma página de repo irmão sai da `docs/` do site: vira o arquivo no GitHub do repo dono (AT-826).
+  if (rel.startsWith('../')) return urlDeEdicao(repo, pagina.raiz, rel) + ancora;
+  return href; // quebrado: o checador (A5) reprova
 }
 
-export async function criarRenderizador({ paginas }) {
+export async function criarRenderizador({ paginas, repo = 'viralabs-dev/brabo' }) {
   const porRelativo = new Map(paginas.map((p) => [p.relativo, p]));
   const realce = await createHighlighter({ themes: [createCssVariablesTheme({ name: 'brabo', variablePrefix: '--shiki-' })], langs: LINGUAGENS });
   const md = new MarkdownIt({ html: true, linkify: false });
@@ -127,7 +131,7 @@ export async function criarRenderizador({ paginas }) {
   const linkAberto = md.renderer.rules.link_open ?? ((t, i, o, _e, s) => s.renderToken(t, i, o));
   md.renderer.rules.link_open = (t, i, o, env, self) => {
     const h = t[i].attrGet('href');
-    if (h != null) t[i].attrSet('href', resolverLink(h, env.pagina, porRelativo));
+    if (h != null) t[i].attrSet('href', resolverLink(h, env.pagina, porRelativo, repo));
     return linkAberto(t, i, o, env, self);
   };
 
