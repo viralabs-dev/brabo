@@ -524,11 +524,237 @@ as imagens publicadas」，<code>permissions</code> 块中带 <code>id-token: wr
 <li><strong>ADR：</strong> <a href="../adr/0149-assinatura-dos-artefatos-publicados.html">0149</a></li>
 <li><strong>来源：</strong> AT-051（EP-009/HS-035）</li>
 </ul>
+<h2 id="按功能的回归测试与运行之间的关联rn-10311035rn-10431045">按功能的回归测试与运行之间的关联（RN-1031..1035，RN-1043..1045）</h2>
+<h3 id="rn-1031">RN-1031 — 功能目录与「路径 → 功能」映射放在同一个文件里，spec 通过标签与之绑定</h3>
+<p><code>brabo-qa/funcionalidades.yml</code> 是唯一来源：每个功能有 <code>id</code>（kebab-case，稳定，绝不改名；停用用 <code>status: aposentada</code>）、<code>nome</code>、<code>descricao</code>、<code>tema</code>（来自 ADR 的 <code>temas.yml</code>）、<code>status</code> 和 <code>caminhos: {&lt;repo&gt;: [globs]}</code>。它放在 <code>brabo-qa</code> 而不是 <code>brabo-contracts</code>，因为 contracts 按 TAG 消费，映射的每次调整都会变成一个 tag，并在六个消费方各做一次升级。Playwright 的 spec 通过测试自身的标签（<code>{ tag: '@f-&lt;id&gt;' }</code>）与功能绑定，过滤用 <code>--grep</code>：目录不保存文件列表。<code>brabo-qa</code> 的一个测试会拒绝重复的或不是 kebab-case 的 id、不在 <code>temas.yml</code> 中的主题、匹配不到兄弟仓库任何文件的 glob（映射腐烂），以及没有对应条目的 <code>@f-&lt;id&gt;</code> 标签；没有 spec 的功能只是被列出。</p>
+<ul>
+<li><strong>代码：</strong> <code>funcionalidades.yml:1</code>（目录与文件契约）、
+<code>scripts/ci/funcionalidades.ts:29</code>（<code>validarCatalogo</code>）</li>
+<li><strong>测试：</strong> <code>scripts/ci/funcionalidades.spec.ts</code>（校验器）和
+<code>scripts/ci/qa-regressivo-catalogo-real.spec.ts:12</code>（真实目录有 14 个
+活跃功能，且 glob 能匹配）</li>
+<li><strong>ADR：</strong> <a href="../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>来源：</strong> AT-769（EP-033）</li>
+</ul>
+<h3 id="rn-1032">RN-1032 — 面向 <code>dev</code> 的 PR 只运行它触及的功能的回归测试，使用「绝不」被要求的 <code>Regressivo do brabo-qa</code> 检查</h3>
+<p>在目标为 <code>dev</code> 的 PR 上，<code>qa-e2e-gatilho.yml</code> 的 <code>regressivo-dev</code> 作业把 PR 的文件与 <a href="#rn-1031">RN-1031</a> 的映射交叉比对，并带着被触及的功能触发 <code>brabo-qa</code>。结果以 <code>Regressivo do brabo-qa</code> 检查的形式返回，由 App 在 <code>head_sha</code> 上创建：<code>success</code>、<code>failure</code>（可见，但合并仍然自由）或 <code>neutral</code>（未触及任何内容、仅文档、fork 的 PR、没有 spec 的仓库）。名称有意与 <code>E2E do brabo-qa</code> 区分：「main 要求 E2E」的 ruleset 绑定的是那个上下文，而回归测试从不进入任何 ruleset（<code>rulesets.md</code> 记录了「不要求」这一行）。该作业带有 <code>continue-on-error</code>，<code>/qa-aceitar</code> 在 <code>dev</code> 上不适用；当映射显示功能被触及而没有任何 <code>@f-&lt;id&gt;</code> spec 变化时，App 会发一次提醒评论。</p>
+<ul>
+<li><strong>代码：</strong> <code>.github/workflows/qa-e2e-gatilho.yml:74</code>（作业
+<code>regressivo-dev</code>，带 <code>continue-on-error</code>）、<code>scripts/ci/qa-e2e-resumo.ts:22</code>
+（按模式的检查名称）</li>
+<li><strong>测试：</strong> <code>scripts/ci/qa-e2e-resumo.spec.ts</code>（按模式的名称）和
+<code>scripts/ci/qa-regressivo-selecao.spec.ts:33</code>（按映射选择）</li>
+<li><strong>ADR：</strong> <a href="../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>来源：</strong> AT-769（EP-033）</li>
+</ul>
+<h3 id="rn-1033">RN-1033 — 三条跨领域的文件规则先于映射生效：无、整个目录、无归属</h3>
+<p>依次为：(1) 文档、<code>*.md</code>、<code>CHANGELOG.md</code>、<code>.github/**</code>（<code>qa-e2e.yml</code> 本身除外）、仓库的测试和 <code>.claude/**</code> 不触及任何功能，检查结果为 <code>neutral</code>；(2) 锁文件和清单、<code>Dockerfile</code>、应用入口、schema 与迁移、web 客户端、engine 的 <code>config/**</code> 以及 <code>brabo-qa</code> 的套件（<code>e2e/suporte/**</code>、<code>playwright.config.ts</code>）运行整个目录，contracts 的 TAG 升级也归入这里；(3) 没有任何 glob 匹配的路径运行冒烟测试 <code>instalacao</code> + <code>autenticacao</code>，摘要把它列为「映射中无归属」，以便修正映射。<code>brabo-contracts</code> 在自己的 PR 上没有回归测试。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/qa-regressivo-selecao.ts:67</code>（<code>selecionar</code>）、
+<code>scripts/ci/qa-regressivo-selecao.ts:43</code>（<code>SMOKE</code>）</li>
+<li><strong>测试：</strong> <code>scripts/ci/qa-regressivo-selecao.spec.ts:41</code>（规则 1）、
+<code>:55</code>（按仓库的规则 2）、<code>:58</code>（规则 3）</li>
+<li><strong>ADR：</strong> <a href="../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>来源：</strong> AT-769（EP-033）</li>
+</ul>
+<h3 id="rn-1034">RN-1034 — 面向 <code>main</code> 的 PR 在 <code>E2E do brabo-qa</code> 中运行整个目录，没有 spec 的功能显示为「无覆盖」但不会失败</h3>
+<p><code>E2E do brabo-qa</code> 检查（<a href="../adr/0267-o-e2e-do-brabo-qa-e-portao-da-main.html">ADR 0267</a>）运行所有 spec，并生成 <code>funcionalidade | specs | resultado</code> 表。目录中没有 spec 的功能以 <code>sem cobertura</code> 进入，并且<strong>不会失败</strong>（负责人于 2026/11/06 的决定）：若规则相反，<code>main</code> 会连续数周保持红色，<code>/qa-aceitar</code> 也会变成例行公事。现有的测试无需改动即可通过；<code>spec</code> 或 <code>ambiente</code> 的红色仍可通过 <code>/qa-aceitar</code> 接受，<code>digest</code> 或 <code>assinatura</code> 的红色则永远不行。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/qa-e2e-resumo.ts:28</code>（表格行中的 <code>sem cobertura</code>
+结果）、<code>scripts/ci/qa-e2e-resumo.ts:22</code>（<code>main</code> 的检查名称）</li>
+<li><strong>测试：</strong> <code>scripts/ci/qa-e2e-resumo.spec.ts</code>（表格和无覆盖
+的行）</li>
+<li><strong>ADR：</strong> <a href="../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>来源：</strong> AT-769（EP-033）</li>
+</ul>
+<h3 id="rn-1035">RN-1035 — 面向 <code>dev</code> 的 PR 只为自己的仓库发布已签名的 <code>sha-&lt;12&gt;</code> 镜像，清理任务删除孤儿镜像</h3>
+<p>为了让回归测试有东西可运行，api、engine、web 和 broker 的 <code>ci.yml</code> 在基线为 <code>dev</code> 时也发布 <code>ghcr.io/viralabs-dev/brabo-&lt;app&gt;:sha-&lt;12 primeiros do head&gt;</code>，带 Trivy 和 keyless 的 <code>cosign sign</code>，与 <code>main</code> 相同。fork 的 PR 拿不到密钥：镜像被跳过，回归测试说明「不在 fork 的 PR 中运行」。触发器在 PR 所在仓库使用 <code>sha-&lt;12&gt;</code>，在其他仓库使用最新的 <code>-dev.N</code>。每次 <code>synchronize</code> 都会留下一个孤儿 <code>sha-*</code>，因此 <code>limpeza-ghcr.yml</code> 会删除所有已关闭 PR 的 <code>sha-*</code> 以及超过 7 天的。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/qa-e2e-imagens.ts:83</code>（为
+<code>dev</code> 和 <code>hotfix</code> 选择 <code>sha-&lt;12&gt;</code>）</li>
+<li><strong>测试：</strong> <code>scripts/ci/qa-e2e-imagens.spec.ts</code>（按基线的选择）</li>
+<li><strong>ADR：</strong> <a href="../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>来源：</strong> AT-769（EP-033）</li>
+</ul>
+<h3 id="rn-1043">RN-1043 — 每个读取其他仓库的运行都在 Summary 顶部发布 <code>## Vínculos</code>，且该辅助程序绝不让作业失败</h3>
+<p>通过 <code>brabo-ci</code> 的 action <code>vinculos</code>，每个关联仓库的作业的 Summary 都带有 <code>## Vínculos</code> 表（来源、带链接的兄弟仓库 <code>repo@SHA</code>、目标以及被触发的运行）和一张 Mermaid 图，紧跟在 checkout 之后。所有值在进入 Markdown 之前都要过正则：仓库 <code>viralabs-dev/brabo(-x)?</code>、40 位十六进制的 SHA、数字 PR、组织的 GitHub URL、操作者。不匹配的变成 <code>?</code> 并产生 <code>::warning::</code>。无效的 <code>origem</code> 只是被丢弃并给出警告。该步骤带有 <code>continue-on-error</code>：辅助程序绝不让作业失败。在 <code>brabo</code> 中，<code>docs-check</code>、<code>docs-deploy</code>、<code>docs-audit</code> 和 <code>regenera-gerados</code> 传入 <code>montar-layout.sh</code> 写下的 <code>.git/irmaos-sha.lst</code> 中的 SHA（<a href="../adr/0274-os-gerados-leem-os-irmaos-por-uma-trava-de-shas.html">ADR 0274</a>），而 <code>release.yml</code> 则按路径传入 <code>infra</code>。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/vinculos.ts:57</code>（<code>montar</code>）、<code>.github/actions/vinculos/action.yml:31</code>
+（<code>continue-on-error</code>）、<code>scripts/ci/validar-payload.ts:112</code>（<code>validarOrigem</code>）、
+<code>.github/workflows/docs-check.yml:89</code>（<code>brabo</code> 转交兄弟仓库）</li>
+<li><strong>测试：</strong> <code>scripts/ci/vinculos.spec.ts</code>（fixtures、恶意值、空
+来源）和 <code>scripts/ci/validar-payload.spec.ts</code></li>
+<li><strong>ADR：</strong> <a href="../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.html">0271</a></li>
+<li><strong>来源：</strong> AT-773（EP-033）</li>
+</ul>
+<h3 id="rn-1044">RN-1044 — dispatch 或 tag 的目标运行带有含来源的 <code>run-name</code>，dispatch 的关联以 <code>c=&lt;run_id&gt;-&lt;attempt&gt;</code> 的形式写在名称里</h3>
+<p>可复用工作流的 <code>run-name</code> 会被忽略：以调用方的为准。<code>brabo-qa</code> 的 <code>e2e-pr.yml</code> 命名为 <code>E2E ← &lt;repo&gt;#&lt;pr&gt; · &lt;sha7&gt; · &lt;ator&gt; · c=&lt;correlação&gt;</code>（dev 模式下为 <code>Regressivo ← …</code>）；由 tag 触发的运行，如 <code>brabo</code> 的 <code>release</code> 和 <code>install-e2e</code>，命名为 <code>release &lt;tag&gt; ← tag do carimbo</code>。<code>repository_dispatch</code> 返回 204 且没有 id，<code>client_payload</code> 也不会出现在 runs 的 API 中；只有 <code>display_title</code> 可以查询。因此触发器发送 <code>origem.correlacao = &lt;run_id&gt;-&lt;attempt&gt;</code>，它进入 <code>run-name</code>，而 <code>qa-e2e-disparar.ts</code> 每 5 秒查询一次 <code>brabo-qa</code> 的 runs，最多 60 秒，匹配 <code>c=</code>。<code>attempt</code> 使关联在每次 re-run 中都是唯一的。没有 <code>origem</code> 的旧 payload 会产生空字段而不会出错。由 tag 触发的运行的来源取自 <code>tag-release</code> 写入带注释 tag 消息中的 <code>Carimbo: &lt;url&gt;</code> 行。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/qa-e2e-imagens.ts:113</code>（payload 中的
+<code>origem.correlacao</code>）、<code>scripts/ci/qa-e2e-vinculos.ts:18</code>（<code>acharRun</code>）、
+<code>scripts/ci/qa-e2e-disparar.ts:133</code>（关联）、<code>scripts/ci/tag-release.ts:35</code>
+（<code>comCarimbo</code>）、<code>.github/workflows/release.yml:3</code>（tag 的 <code>run-name</code>）</li>
+<li><strong>测试：</strong> <code>scripts/ci/qa-e2e-vinculos.spec.ts</code>（<code>c=</code> 的匹配）和
+<code>scripts/ci/qa-e2e-imagens.spec.ts</code></li>
+<li><strong>ADR：</strong> <a href="../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.html">0271</a></li>
+<li><strong>来源：</strong> AT-773（EP-033）</li>
+</ul>
+<h3 id="rn-1045">RN-1045 — App 的检查从一开始就指向 <code>brabo-qa</code> 的运行，来源运行记录被触发运行的链接</h3>
+<p><code>e2e-pr.yml</code> 的 <code>anunciar</code> 作业没有 <code>needs</code>，与 <code>e2e</code> 并行，用 payload 的 <code>check_run_id</code> 更新检查，设置 <code>brabo-qa</code> 运行的 <code>details_url</code> 和 Vínculos，使用只有 <code>checks: write</code> 的 App 令牌以及干净的 <code>dev</code> checkout。<code>fechar</code> 在结尾保留 <code>details_url</code> 并附上 Vínculos。<code>anunciar</code> 失败只会警告。在来源运行中，触发器把它通过 <a href="#rn-1044">RN-1044</a> 的关联找到的 <code>brabo-qa</code> 运行写入 <code>disparados</code>；若 60 秒内没找到，则记录检查的链接（它已经指向 qa）和一条警告。<code>alarmar-prova.sh</code> 在文件存在时把 <code>vinculos.md</code> 附到 issue 正文。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/fechar-check.ts:39</code>（收尾时的 Vínculos）、
+<code>scripts/ci/qa-e2e-vinculos.ts:42</code>（<code>vinculosDoGatilho</code>）、
+<code>scripts/ci/qa-e2e-disparar.ts:154</code>（找不到运行时的警告）</li>
+<li><strong>测试：</strong> <code>scripts/ci/fechar-check.spec.ts</code> 和 <code>scripts/ci/qa-e2e-vinculos.spec.ts</code></li>
+<li><strong>ADR：</strong> <a href="../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.html">0271</a></li>
+<li><strong>来源：</strong> AT-773（EP-033）</li>
+</ul>
+<h2 id="npm-包的发布rn-1042">npm 包的发布（RN-1042）</h2>
+<h3 id="rn-1042">RN-1042 — 包只通过 tag 发出，使用该版本的 dist-tag，且所有包使用同一个版本</h3>
+<p><code>publish-npm.yml</code> 是可复用的，在调用方通过 tag 触发时运行（<code>on: push: tags: ['v*']</code>）。<code>scripts/ci/publish-npm.ts</code> 从 tag 中取出版本（去掉 <code>v</code>），只接受 <code>vX.Y.Z</code> 或 <code>vX.Y.Z-dev.N</code>；其他任何形式都会在发布前失败。<code>-dev.N</code> 进入 dist-tag <code>dev</code>；正式版进入 <code>latest</code>，孤立的预发布版本绝不会占用 <code>latest</code>。列表中的每个包在 <code>pnpm pack</code> 之前都得到同一个版本（<code>npm version --no-git-tag-version</code>），<code>actions/attest</code> 和 <code>npm publish</code> 使用同一个 <code>.tgz</code>，不带 <code>--provenance</code>。重新发布同一版本，只有在 registry 已保存同一个文件（相同的 <code>dist.integrity</code>）时才通过；完整性不同则失败。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/publish-npm.ts:17</code>（<code>versaoDaTag</code>）、<code>scripts/ci/publish-npm.ts:25</code>
+（<code>distTag</code>）、<code>.github/workflows/publish-npm.yml:90</code>（各包使用同一版本）、
+<code>.github/workflows/publish-npm.yml:100</code>（对同一个 <code>.tgz</code> 的 <code>npm publish</code>）</li>
+<li><strong>测试：</strong> <code>scripts/ci/publish-npm.spec.ts</code>（dist-tag <code>dev</code> 和 <code>latest</code>，去掉 <code>v</code>）</li>
+<li><strong>来源：</strong> AT-770（EP-033）</li>
+</ul>
+<h2 id="仓库之间的合并依赖rn-10471050">仓库之间的合并依赖（RN-1047..1050）</h2>
+<h3 id="rn-1047">RN-1047 — PR 用 <code>Depende-de: viralabs-dev/&lt;repo&gt;#&lt;n&gt;</code> 声明依赖，格式错误的行会失败而不是悄悄通过</h3>
+<p>PR 的每个合并依赖都是正文中的一行：<code>Depende-de:</code> 后跟 <code>viralabs-dev/&lt;repo&gt;#&lt;n&gt;</code>，可在文本任意位置，前面有无 <code>- </code> 均可。规则逐行匹配，区分大小写。仓库必须在母文件夹映射的 11 个 <code>brabo*</code> 仓库列表中，owner 必须是 <code>viralabs-dev</code>，PR 不能引用自己，被引用的 PR 必须存在（404 即失败）。以声明开头（<code>Depende-de</code> 或 <code>depende de</code>）但不符合规则的行会连同原因一起失败，这样一个拼写错误就不会让依赖消失。正文是第三方文本：通过环境变量传给脚本，绝不插值进 <code>run:</code>。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/dependencias-de-merge.ts</code>（规则与校验），将
+发布在 <code>brabo-ci</code>；在 <code>brabo</code> 的 <code>dev</code> 中尚不存在</li>
+<li><strong>测试：</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>，涵盖正则、allowlist、
+owner、自我引用和格式错误的行</li>
+<li><strong>ADR：</strong> <a href="../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>来源：</strong> AT-787（EP-033）</li>
+</ul>
+<h3 id="rn-1048">RN-1048 — <code>Dependências de merge</code> 检查有四种状态，绝不使用 <code>neutral</code>，等待显示为黄色</h3>
+<p>该检查由 App 发布在 PR 的 <code>head_sha</code> 上，名称为 <code>Dependências de merge</code>。没有 <code>Depende-de</code> 行时，结果为 <code>success</code>「Sem dependências declaradas」，并且它总是发布，以免残留旧的检查。只要有依赖处于 <code>OPEN</code>，结果为 <code>in_progress</code>（黄色），标题 <code>esperando viralabs-dev/&lt;repo&gt;#&lt;n&gt;</code> 列出尚缺的依赖。全部 <code>MERGED</code> 时，结果为 <code>success</code>「Dependências mergeadas」。遇到未合并就 <code>CLOSED</code> 的依赖、无效的行、循环或 404 时，结果为 <code>failure</code> 并附原因；未合并就关闭的依赖要求删掉该行或指向替代它的 PR，而不是永远等待。任何情况下都不使用 <code>neutral</code>，因为对 ruleset 来说它算绿色。作业本身使用 <code>continue-on-error</code>：失败的是检查，作业失败只会警告。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/dependencias-de-merge.ts</code>（纯评估函数）和
+<code>.github/workflows/dependencias-de-merge.yml</code>（可复用工作流），位于 <code>brabo-ci</code></li>
+<li><strong>测试：</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>，每种状态一个用例</li>
+<li><strong>ADR：</strong> <a href="../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>来源：</strong> AT-787（EP-033）</li>
+</ul>
+<h3 id="rn-1049">RN-1049 — 依赖的合并会更新引用它的 PR 的检查，每小时的 cron 只是兜底</h3>
+<p>当某个仓库的 PR 被合并时，在被合并 PR 所属仓库中的 <code>avisar-dependentes</code> 作业会查找组织中正文引用了该已合并 PR 的未关闭 PR，并重新评估每一个。搜索是模糊的，因此每个候选 PR 的正文都要在任何写入之前按 <a href="#rn-1047">RN-1047</a> 的规则重新解析。检查用 App 令牌更新，不会重新执行依赖方 PR 的工作流。<code>brabo-ci</code> 中每小时一次的 cron 对带 <code>Depende-de</code> 的未关闭 PR 重做同样的扫描，并在所属仓库的运行出错时补上丢失的合并。该 cron 只有在 <code>brabo-ci</code> 到达 <code>main</code> 后才会启用，因为 <code>schedule</code> 只在默认分支上运行。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/dependencias-de-merge.ts</code>（<code>avisar-dependentes</code> 模式）和
+<code>.github/workflows/dependencias-de-merge.yml</code>（作业和 cron），位于 <code>brabo-ci</code></li>
+<li><strong>测试：</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>，包含模拟的搜索和
+不再匹配的正文</li>
+<li><strong>ADR：</strong> <a href="../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>来源：</strong> AT-787（EP-033）</li>
+</ul>
+<h3 id="rn-1050">RN-1050 — 依赖循环会连同完整路径一起失败，深度最多为 5</h3>
+<p>评估会逐步沿着未关闭依赖的 <code>Depende-de</code> 行走，直到深度 5。如果链回到被评估的 PR，检查会连同完整路径（<code>A → B → A</code>）以及路径上每个 PR 的链接一起失败。深度大于 5 同样失败。走出循环的办法是编辑其中一个 PR 的正文，删掉闭合循环的那一行：PR 不需要 bypass。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/dependencias-de-merge.ts</code>（直到深度 5 的遍历），位于 <code>brabo-ci</code></li>
+<li><strong>测试：</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>，包含 A↔B 循环和超出的深度</li>
+<li><strong>ADR：</strong> <a href="../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>来源：</strong> AT-787（EP-033）</li>
+</ul>
+<h3 id="rn-1071">RN-1071 — 晋升 PR 依赖前面各层未关闭的晋升，顺序是一个经过测试的列表</h3>
+<p>在同一仓库中基线为 <code>main</code>、head 为 <code>dev</code> 的 PR 上，<code>Dependências de merge</code> 检查会在正文的 <code>Depende-de</code> 行之外，为前面各层仓库中每个未关闭的晋升 PR 加上一个依赖，即使没人写过。顺序是 <code>CAMADAS_DE_PROMOCAO</code>：0 brabo-ci；1 brabo-contracts 和 brabo-workspace；2 brabo-api、brabo-engine、brabo-web、brabo-runner 和 brabo-broker；3 brabo-infra；4 brabo-qa；5 brabo。只有消费方的 <code>main</code> 使用生产方最终制品的那条边才算数。标题显示 <code>esperando viralabs-dev/&lt;repo&gt;#&lt;n&gt;</code>。如果前面某层的仓库 <code>dev</code> 领先 <code>main</code> 而没有未关闭的晋升，检查保持 pending 并指出还需晋升哪个仓库（<code>esperando promoção de viralabs-dev/&lt;repo&gt; (a dev está à frente da main)</code>）。打开晋升（<code>abrir-pr-de-promocao.sh</code>）时也会尽力写入已打开晋升的 <code>Depende-de</code> 行。各层的并集就是 <code>REPOS</code> 列表，无重复，spec 对此做了保护。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/dependencias-de-merge.ts</code>（<code>CAMADAS_DE_PROMOCAO</code>、<code>predecessores</code>、<code>avaliar</code>、<code>linhas</code> 模式）和 <code>scripts/ci/abrir-pr-de-promocao.sh</code>，位于 <code>brabo-ci</code></li>
+<li><strong>测试：</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>（「promoção em camadas」块）</li>
+<li><strong>ADR：</strong> <a href="../adr/0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.html">0284</a>，它修订了 <a href="../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a> 的决定 7</li>
+<li><strong>来源：</strong> AT-788（EP-033）</li>
+</ul>
+<h3 id="rn-1072">RN-1072 — 晋升的合并和 cron 会重新评估后面各层的晋升</h3>
+<p>由于推断出的依赖没有写在正文里，<code>in:body</code> 搜索找不到它。因此被合并 PR 的 <code>avisar-dependentes</code> 也会重新评估后面各层仓库中未关闭的晋升（<code>base:main head:dev</code>），<code>varrer</code>（每小时的 cron）也包含同样的搜索。在下层之后才打开的晋升，会被它自己的事件或 cron 唤醒。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/dependencias-de-merge.ts</code>（<code>avisar-dependentes</code> 和 <code>varrer</code> 模式）</li>
+<li><strong>测试：</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>（<code>sucessores</code>）；搜索本身是 GitHub，在下一次晋升中验证</li>
+<li><strong>ADR：</strong> <a href="../adr/0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.html">0284</a></li>
+<li><strong>来源：</strong> AT-788（EP-033）</li>
+</ul>
+<h2 id="回归测试的决策报告rn-10511053">回归测试的决策报告（RN-1051..1053）</h2>
+<h3 id="rn-1051">RN-1051 — 回归报告来自唯一的 JSON，建议遵循固定的六行规则</h3>
+<p><code>brabo-qa</code> 的回归运行写出 <code>relatorio-regressivo.json</code>（版本 1），并由它派生 <code>relatorio-regressivo.md</code>。Summary、检查的文本和 PR 评论都是该 JSON 的呈现，绝不是独立的来源。建议不是手写的：它取自第一条匹配的行，顺序如下：绿色且无 flaky 为<strong>批准</strong>；绿色但有 flaky 为<strong>批准</strong>，并附警告和列表；<code>digest</code> 或 <code>assinatura</code> 为<strong>阻止</strong>，因为它永远不被接受（AT-765），E2E 会重新运行；<code>spec</code> 出现在 PR 按映射<strong>触及</strong>的功能上为<strong>阻止</strong>；<code>spec</code> 仅出现在 PR <strong>未</strong>触及的功能上，或出现在「无功能」上，为<strong>附理由接受</strong>（<code>/qa-aceitar</code>）；<code>ambiente</code> 或 <code>sem-resposta</code> 为<strong>重新运行</strong>，若重复出现，则<strong>附理由接受</strong>。在 <code>dev</code> 模式下，同一标签带有前缀「atestado (não bloqueia)」。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/qa-e2e-resumo.ts:292</code>（<code>montarCheck</code>，目前根据结果
+组装检查）；<code>brabo-qa</code> 的 <code>relatorio.ts</code> 和 JSON v1 在 <code>dev</code>
+中尚不存在（AT-791，lanes L1 和 L2）</li>
+<li><strong>测试：</strong> <code>scripts/ci/qa-e2e-resumo.spec.ts</code>（按模式的检查）；建议规则
+和 JSON v1 的测试在 L1 和 L2 中补上</li>
+<li><strong>ADR：</strong> <a href="../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.html">0277</a></li>
+<li><strong>来源：</strong> AT-791（EP-033）</li>
+</ul>
+<h3 id="rn-1052">RN-1052 — <code>/qa-aceitar</code> 保留红色的报告，并记录与建议相悖的接受</h3>
+<p>目前的接受会用 <code>linhas: []</code> 重新组装检查，因此抹掉了红色的 digest 表和功能表：事后查看的人看不到接受了什么。新规则：<code>/qa-aceitar</code> <strong>保留</strong>红色检查的 <code>summary</code> 和 <code>text</code>，在上方放上接受块（谁、何时、理由、红色运行的链接以及报告给出的建议），只把标题换成 <code>Aceito com justificativa</code>。当建议是因被触及功能的 spec 而<strong>阻止</strong>时，接受仍然有效，因为决定权在负责人，但检查和评论会记录「与建议相悖而接受」。在 <code>dev</code> 上接受不适用：报告只是证明。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/qa-e2e-aceitar.ts:53</code>（<code>montarCheck</code>，以
+<code>linhas: []</code> 调用，这正是要修复的缺陷）；<code>scripts/ci/qa-e2e-aceite.ts:21</code>
+（<code>avaliarAceite</code>，继续读取 <code>external_id</code> 的 <code>causa:*</code>）</li>
+<li><strong>测试：</strong> <code>scripts/ci/qa-e2e-aceite.spec.ts</code>（接受的裁决）；摘要的
+保留和「与建议相悖」的记录在 L1 中补上测试</li>
+<li><strong>ADR：</strong> <a href="../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.html">0277</a></li>
+<li><strong>来源：</strong> AT-791（EP-033）</li>
+</ul>
+<h3 id="rn-1053">RN-1053 — 没有 <code>@f-*</code> 标签的 spec 显示为「无功能」，且绝不会从报告中消失</h3>
+<p>回归的选择已经把映射中无归属的内容分开（<code>semDono</code>，<code>scripts/ci/qa-regressivo-selecao.ts:86</code>），但这些数据没有进入报告。新规则：没有任何 <code>@f-&lt;id&gt;</code> 标签的 spec 落入**「无功能」<strong>桶，出现在表格和失败列表中，绝不消失。该桶中红色的 spec 按 <a href="#rn-1051">RN-1051</a> 的规则变为</strong>附理由接受**，绝不阻止。登录的 <code>setup</code>（<code>entrar.setup.ts</code>）也落入该桶并被标记为准备工作，以免看起来像功能测试。没有这个桶，表格在出现 spec 红色时会把一切显示为「无覆盖」，这正是 qa#28 的发现。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/qa-regressivo-selecao.ts:76</code>（<code>semDono.push</code>）；报告中的
+「无功能」桶尚不存在（AT-791，lanes L1 和 L2）</li>
+<li><strong>测试：</strong> <code>scripts/ci/qa-regressivo-selecao.spec.ts</code>（按映射的选择和
+<code>semDono</code>）；报告中的桶在 L2 中补上测试</li>
+<li><strong>ADR：</strong> <a href="../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.html">0277</a></li>
+<li><strong>来源：</strong> AT-791（EP-033）</li>
+</ul>
+<h2 id="触发器在变红之前等待印章和签名rn-1066">触发器在变红之前等待印章和签名（RN-1066）</h2>
+<h3 id="rn-1066">RN-1066 — 触发器在因环境或签名而失败之前，先等待印章和签名</h3>
+<p>当面向 <code>main</code> 的 PR（关卡 <code>E2E do brabo-qa</code>）或面向 <code>dev</code> 的 PR（检查 <code>Regressivo do brabo-qa</code>）触发该触发器时，事件所在仓库 head 的镜像可能仍在盖章或签名：合并进 <code>dev</code> 会移动晋升的 head，而印章（tag <code>-dev</code>、镜像）和镜像签名需要 3 到 8 分钟。因此触发器把三项查询重复到一个可配置的上限（<code>QA_ESPERA_MINUTOS</code>，默认 10 分钟，间隔 15 秒）：</p>
+<ul>
+<li>head 的 tag <code>-dev</code>（在 <code>main</code> 上）；</li>
+<li>镜像是否存在（<code>main</code> 上 head 的 <code>-dev</code>，<code>dev</code> 上的 <code>sha-&lt;12&gt;</code>）；</li>
+<li>签名校验 <code>cosign verify</code>，使用 brabo-qa 的 <code>e2e-pr</code> 的身份。</li>
+</ul>
+<p>只有过了上限，检查才以红色关闭，消息会说明缺了什么：head 的 tag <code>-dev</code> 或镜像（原因 <code>ambiente</code>），或签名（原因 <code>assinatura</code>）。无效的签名绝不会被 <code>/qa-aceitar</code> 接受（RN-1052）。等待只针对事件所在仓库的镜像；其他服务的镜像已经盖章并签名。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/qa-e2e-espera.ts:51</code>（<code>esperarImagemAssinada</code>，对
+镜像和签名的等待）；<code>scripts/ci/qa-e2e-espera.ts:33</code>（<code>repetirAte</code>，重复
+直到上限）；<code>scripts/ci/qa-e2e-disparar.ts:151</code>（重复到
+上限的 tag 解析器）和 <code>scripts/ci/qa-e2e-disparar.ts:157</code>（只等待事件仓库的镜像）</li>
+<li><strong>测试：</strong> <code>scripts/ci/qa-e2e-espera.spec.ts</code>（重复到上限、原因
+<code>ambiente</code> 和原因 <code>assinatura</code>）</li>
+<li><strong>来源：</strong> AT-790（EP-033），brabo-ci#31</li>
+</ul>
+<h2 id="变更面板rn-10541056adr-0278">变更面板（RN-1054..1056，ADR 0278）</h2>
+<h3 id="rn-1054">RN-1054 — 每个变更都有一个汇总各次运行的面板</h3>
+<p>每个变更（一个 <code>Depende-de</code> 组件、一个独立的 PR 或一个 tag）在 <code>brabo-ci</code> 中都有一个 <code>Painel da mudança</code> 运行。它按 head SHA、merge SHA、tag 和 E2E 的 <code>c=</code> 汇总该变更的运行。每 60 秒跟踪一次，使用 ETag；若剩余请求少于 500，间隔变为 5 分钟。当一切结束且安静 3 分钟时停止，或在 45 分钟的上限处停止。到达上限时仍在进行的运行显示为「em andamento há N min」。面板<strong>绝不失败</strong>。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/painel.ts:235</code>（<code>terminou</code>，停止的标尺）</li>
+<li><strong>测试：</strong> <code>scripts/ci/painel.spec.ts</code></li>
+<li><strong>ADR：</strong> <a href="../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.html">0278</a></li>
+<li><strong>来源：</strong> AT-792（EP-033）</li>
+</ul>
+<h3 id="rn-1055">RN-1055 — 面板不在 PR 上发布检查；链接留在来源运行中</h3>
+<p>Vínculos 辅助程序在带 PR 的 auto 模式下写入 <code>Disparado | Painel da mudança</code> 这一行。它指向 <code>…/brabo-ci/actions/workflows/painel.yml?query=&lt;repo&gt;%23&lt;n&gt;</code>。面板的 App 令牌只读（<code>actions</code>、<code>pull-requests</code> 和 <code>contents</code>）。唯一有写权限的令牌是 dispatch 的（<code>contents: write</code>，限定于 <code>brabo-ci</code>）。因此不需要 <code>checks: write</code>。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/vinculos.ts:164</code>（<code>linhaDoPainel</code>，Vínculo 行）</li>
+<li><strong>测试：</strong> <code>scripts/ci/vinculos.spec.ts</code></li>
+<li><strong>ADR：</strong> <a href="../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.html">0278</a></li>
+<li><strong>来源：</strong> AT-792（EP-033）</li>
+</ul>
+<h3 id="rn-1056">RN-1056 — 每个组件一个面板</h3>
+<p>如果已存在标题含 <code>&lt;repo&gt;#&lt;n&gt;</code>（整个 token 匹配）且状态为 <code>queued</code> 或 <code>in_progress</code> 的面板，发送方（作业 <code>avisar-painel</code>）就不再触发。当组件增长（键 <code>m=&lt;hash&gt;</code>）时，进行中的面板写下「superado」并退出，发送方触发新的面板。</p>
+<ul>
+<li><strong>代码：</strong> <code>scripts/ci/painel.ts:247</code>（<code>jaTemPainel</code>）；<code>scripts/ci/painel.ts:90</code>
+（<code>superado</code>，进行中的面板会查询它）</li>
+<li><strong>测试：</strong> <code>scripts/ci/painel.spec.ts</code></li>
+<li><strong>ADR：</strong> <a href="../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.html">0278</a></li>
+<li><strong>来源：</strong> AT-792（EP-033）</li>
+</ul>
 <nav class="site-pager"><a href="../business-rules/broker.html"></a><a href="../business-rules/contracts.html"></a></nav>
 </article>
 <footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/business-rules/ci.md">编辑此页</a><span>更新于 2026-11-08T14:02:27-03:00 · Daniel Souza</span></footer>
 </main>
-<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#pr-gates">PR Gates</a></li><li class="n3"><a href="#rn-037">RN-037 — Infra 成为一个领域：Workflows 按提供方生成 CI，Lead 整合为单个 PR</a></li><li class="n2"><a href="#dbre-角色变成两个机械脚本rn-400403adr-0093">dbre 角色变成两个机械脚本（RN-400..403，ADR 0093）</a></li><li class="n3"><a href="#rn-401">RN-401 — linter 不是 CI gate：它扫描整个仓库，而不是 PR 的 diff</a></li><li class="n2"><a href="#仪表盘上的n-个智能体在线实时状态从不是历史在场rn-409adr-0097">仪表盘上的“N 个智能体在线”——实时状态，从不是历史在场（RN-409，ADR 0097）</a></li><li class="n3"><a href="#rn-411">RN-411 — 第四个待处理工作信号：dev agent 说的是 dev.*，而不是 agent.status</a></li><li class="n2"><a href="#rag-检索留下痕迹痕迹冻结权重rn-479481">RAG 检索留下痕迹，痕迹冻结权重（RN-479..481）</a></li><li class="n3"><a href="#rn-498">RN-498 — RAG 的 golden-set 在 CI 中真正运行，定时——gate 仍然是 warn</a></li><li class="n2"><a href="#fase-29--一行安装为所发布的东西签名">FASE 29 — 一行安装：为所发布的东西签名</a></li><li class="n2"><a href="#出错时">出错时</a></li><li class="n3"><a href="#rn-524">RN-524 — 发布的产物由工作流身份签名，在同一次运行中校验，校验失败时拒绝而不是警告</a></li><li class="n2"><a href="#installsh-完成安装rn-547fase-30">install.sh 完成安装（RN-547，FASE 30）</a></li><li class="n3"><a href="#rn-549">RN-549 — 干净机器上的 E2E 证明「整个」安装：五个环节、在运行中等待的代理，以及无人回到终端即被接手的第一个项目</a></li><li class="n2"><a href="#设备密钥获得界面界面说明吊销的范围rn-561">设备密钥获得界面，界面说明吊销的范围（RN-561）</a></li><li class="n3"><a href="#rn-565">RN-565 — 已签名的清单随 Release「已有」的东西发出，不等待永远构建不出来的平台</a></li></ul></aside>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#pr-gates">PR Gates</a></li><li class="n3"><a href="#rn-037">RN-037 — Infra 成为一个领域：Workflows 按提供方生成 CI，Lead 整合为单个 PR</a></li><li class="n2"><a href="#dbre-角色变成两个机械脚本rn-400403adr-0093">dbre 角色变成两个机械脚本（RN-400..403，ADR 0093）</a></li><li class="n3"><a href="#rn-401">RN-401 — linter 不是 CI gate：它扫描整个仓库，而不是 PR 的 diff</a></li><li class="n2"><a href="#仪表盘上的n-个智能体在线实时状态从不是历史在场rn-409adr-0097">仪表盘上的“N 个智能体在线”——实时状态，从不是历史在场（RN-409，ADR 0097）</a></li><li class="n3"><a href="#rn-411">RN-411 — 第四个待处理工作信号：dev agent 说的是 dev.*，而不是 agent.status</a></li><li class="n2"><a href="#rag-检索留下痕迹痕迹冻结权重rn-479481">RAG 检索留下痕迹，痕迹冻结权重（RN-479..481）</a></li><li class="n3"><a href="#rn-498">RN-498 — RAG 的 golden-set 在 CI 中真正运行，定时——gate 仍然是 warn</a></li><li class="n2"><a href="#fase-29--一行安装为所发布的东西签名">FASE 29 — 一行安装：为所发布的东西签名</a></li><li class="n2"><a href="#出错时">出错时</a></li><li class="n3"><a href="#rn-524">RN-524 — 发布的产物由工作流身份签名，在同一次运行中校验，校验失败时拒绝而不是警告</a></li><li class="n2"><a href="#installsh-完成安装rn-547fase-30">install.sh 完成安装（RN-547，FASE 30）</a></li><li class="n3"><a href="#rn-549">RN-549 — 干净机器上的 E2E 证明「整个」安装：五个环节、在运行中等待的代理，以及无人回到终端即被接手的第一个项目</a></li><li class="n2"><a href="#设备密钥获得界面界面说明吊销的范围rn-561">设备密钥获得界面，界面说明吊销的范围（RN-561）</a></li><li class="n3"><a href="#rn-565">RN-565 — 已签名的清单随 Release「已有」的东西发出，不等待永远构建不出来的平台</a></li><li class="n2"><a href="#按功能的回归测试与运行之间的关联rn-10311035rn-10431045">按功能的回归测试与运行之间的关联（RN-1031..1035，RN-1043..1045）</a></li><li class="n3"><a href="#rn-1031">RN-1031 — 功能目录与「路径 → 功能」映射放在同一个文件里，spec 通过标签与之绑定</a></li><li class="n3"><a href="#rn-1032">RN-1032 — 面向 dev 的 PR 只运行它触及的功能的回归测试，使用「绝不」被要求的 Regressivo do brabo-qa 检查</a></li><li class="n3"><a href="#rn-1033">RN-1033 — 三条跨领域的文件规则先于映射生效：无、整个目录、无归属</a></li><li class="n3"><a href="#rn-1034">RN-1034 — 面向 main 的 PR 在 E2E do brabo-qa 中运行整个目录，没有 spec 的功能显示为「无覆盖」但不会失败</a></li><li class="n3"><a href="#rn-1035">RN-1035 — 面向 dev 的 PR 只为自己的仓库发布已签名的 sha-&lt;12&gt; 镜像，清理任务删除孤儿镜像</a></li><li class="n3"><a href="#rn-1043">RN-1043 — 每个读取其他仓库的运行都在 Summary 顶部发布 ## Vínculos，且该辅助程序绝不让作业失败</a></li><li class="n3"><a href="#rn-1044">RN-1044 — dispatch 或 tag 的目标运行带有含来源的 run-name，dispatch 的关联以 c=&lt;run_id&gt;-&lt;attempt&gt; 的形式写在名称里</a></li><li class="n3"><a href="#rn-1045">RN-1045 — App 的检查从一开始就指向 brabo-qa 的运行，来源运行记录被触发运行的链接</a></li><li class="n2"><a href="#npm-包的发布rn-1042">npm 包的发布（RN-1042）</a></li><li class="n3"><a href="#rn-1042">RN-1042 — 包只通过 tag 发出，使用该版本的 dist-tag，且所有包使用同一个版本</a></li><li class="n2"><a href="#仓库之间的合并依赖rn-10471050">仓库之间的合并依赖（RN-1047..1050）</a></li><li class="n3"><a href="#rn-1047">RN-1047 — PR 用 Depende-de: viralabs-dev/&lt;repo&gt;#&lt;n&gt; 声明依赖，格式错误的行会失败而不是悄悄通过</a></li><li class="n3"><a href="#rn-1048">RN-1048 — Dependências de merge 检查有四种状态，绝不使用 neutral，等待显示为黄色</a></li><li class="n3"><a href="#rn-1049">RN-1049 — 依赖的合并会更新引用它的 PR 的检查，每小时的 cron 只是兜底</a></li><li class="n3"><a href="#rn-1050">RN-1050 — 依赖循环会连同完整路径一起失败，深度最多为 5</a></li><li class="n3"><a href="#rn-1071">RN-1071 — 晋升 PR 依赖前面各层未关闭的晋升，顺序是一个经过测试的列表</a></li><li class="n3"><a href="#rn-1072">RN-1072 — 晋升的合并和 cron 会重新评估后面各层的晋升</a></li><li class="n2"><a href="#回归测试的决策报告rn-10511053">回归测试的决策报告（RN-1051..1053）</a></li><li class="n3"><a href="#rn-1051">RN-1051 — 回归报告来自唯一的 JSON，建议遵循固定的六行规则</a></li><li class="n3"><a href="#rn-1052">RN-1052 — /qa-aceitar 保留红色的报告，并记录与建议相悖的接受</a></li><li class="n3"><a href="#rn-1053">RN-1053 — 没有 @f-* 标签的 spec 显示为「无功能」，且绝不会从报告中消失</a></li><li class="n2"><a href="#触发器在变红之前等待印章和签名rn-1066">触发器在变红之前等待印章和签名（RN-1066）</a></li><li class="n3"><a href="#rn-1066">RN-1066 — 触发器在因环境或签名而失败之前，先等待印章和签名</a></li><li class="n2"><a href="#变更面板rn-10541056adr-0278">变更面板（RN-1054..1056，ADR 0278）</a></li><li class="n3"><a href="#rn-1054">RN-1054 — 每个变更都有一个汇总各次运行的面板</a></li><li class="n3"><a href="#rn-1055">RN-1055 — 面板不在 PR 上发布检查；链接留在来源运行中</a></li><li class="n3"><a href="#rn-1056">RN-1056 — 每个组件一个面板</a></li></ul></aside>
 </div>
 <script src="../../assets/site.js"></script>
 <script defer src="../assets/busca.js" data-indice="../assets/busca-zh-Hans.json" data-base="../"></script></body>
