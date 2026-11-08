@@ -1,0 +1,32 @@
+name: Pins dos componentes
+
+run-name: ${{ format('Pins dos componentes · {0}', github.event_name == 'pull_request' && format('PR #{0}', github.event.number) || format('manual · {0}', github.actor)) }}
+
+# AT-796, ADR 0282: a promoção `dev → main` reprova se alguma pin do `componentes.json`
+# (ou o `RUNNER_TAG` do install.sh) estiver atrás da última Release final do componente, sem
+# Release final ou sem o asset que o produto consome. Só na `main`: numa PR para a `dev`, toda
+# feature ficaria vermelha quando um componente soltasse release.
+# Saída: mergear a PR `chore/regenera-gerados` (o bot sobe as pins) e rebasear a promoção.
+# TODO(humano): tornar `Pins dos componentes` check obrigatório no ruleset da `main`.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pins:
+    name: Pins dos componentes
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
+        with:
+          node-version: 26.10.0
+      - name: Conferir as pins
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/ci/pins-dos-componentes.ts --conferir componentes.json install.sh
