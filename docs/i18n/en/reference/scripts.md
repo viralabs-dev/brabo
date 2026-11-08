@@ -96,7 +96,7 @@ Source: each package's `package.json` and the root `Makefile`.
 
 | command | runs |
 |---|---|
-| `pnpm --filter @brabo/runner start` | `node --import ./scripts/strip-node-modules.mjs src/index.ts` |
+| `pnpm --filter @brabo/runner start` | `node src/index.ts` |
 | `pnpm --filter @brabo/runner build` | `tsup` |
 | `pnpm --filter @brabo/runner build:bin` | `node scripts/build-bin.mjs` |
 | `pnpm --filter @brabo/runner smoke` | `node scripts/smoke-dist.mjs` |

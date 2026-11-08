@@ -416,7 +416,7 @@ ele.
 
 > ⚠️ Bloco gerado por `pnpm docs:generate`. Não edite à mão — o próximo build o sobrescreve.
 
-Extraídos dos pontos de emissão: **118 identificadores**, dos quais **6** não estão descritos acima.
+Extraídos dos pontos de emissão: **119 identificadores**, dos quais **7** não estão descritos acima.
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
@@ -494,6 +494,7 @@ Extraídos dos pontos de emissão: **118 identificadores**, dos quais **6** não
 - `execution.activated` <sub>(apps/api/src/application/use-cases/execution/activate-execution.use-case.ts)</sub>
 - `execution.parallelization_accepted` <sub>(apps/api/src/application/use-cases/execution/accept-parallelization.use-case.ts)</sub>
 - `execution.parallelization_suggested` <sub>(apps/api/src/application/use-cases/execution/activate-execution.use-case.ts)</sub>
+- `execution.stalled` — ⚠️ **não descrito acima** <sub>(apps/engine/lib/engine/workers/execucao_parada_worker.ex)</sub>
 - `gate.interrupted` <sub>(apps/engine/lib/engine/gates/gate_rescuer.ex)</sub>
 - `gate.rescue_parked` <sub>(apps/engine/lib/engine/gates/gate_rescuer.ex)</sub>
 - `gate.scanner` <sub>(apps/engine/lib/engine/gates/scanner.ex)</sub>

@@ -668,7 +668,7 @@ pode depender dela — é justamente por depender dela que ele não saía.
 
 - **Código:** `.github/workflows/build-runner-binaries.yml:283` (o job, agora
   sem `needs:`), `:318` (`timeout-minutes: 40`, que cabe as duas esperas),
-  `:358` (`ALVOS_ESPERADOS` no JOB, para os dois passos lerem a mesma lista),
+  `:370` (`ALVOS_ESPERADOS` no JOB, para os dois passos lerem a mesma lista),
   `:397` (o passo que espera), `:401`/`:402` (os dois tetos), `:410` (a Release
   ausente, que é erro), `:433` (o teto dos binários, que é `notice`), `:499` (o
   manifesto nomeando o que não cobre)
@@ -747,8 +747,8 @@ e a subida de TAG do contracts cai aqui; (3) caminho que nenhum glob casa roda o
 smoke `instalacao` + `autenticacao` e o resumo o lista como "sem dono no mapa",
 para o mapa ser corrigido. O `brabo-contracts` não tem regressivo na própria PR.
 
-- **Código:** `scripts/ci/qa-regressivo-selecao.ts:60` (`selecionar`),
-  `scripts/ci/qa-regressivo-selecao.ts:36` (`SMOKE`)
+- **Código:** `scripts/ci/qa-regressivo-selecao.ts:67` (`selecionar`),
+  `scripts/ci/qa-regressivo-selecao.ts:43` (`SMOKE`)
 - **Teste:** `scripts/ci/qa-regressivo-selecao.spec.ts:41` (regra 1),
   `:55` (regra 2 por repositório), `:58` (regra 3)
 - **ADR:** [0268](../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.md)
@@ -802,7 +802,7 @@ SHAs do `.git/irmaos-sha.lst` que o `montar-layout.sh` grava
 `release.yml` passa o `infra` por caminho.
 
 - **Código:** `scripts/ci/vinculos.ts:57` (`montar`), `.github/actions/vinculos/action.yml:31`
-  (o `continue-on-error`), `scripts/ci/validar-payload.ts:85` (`validarOrigem`),
+  (o `continue-on-error`), `scripts/ci/validar-payload.ts:112` (`validarOrigem`),
   `.github/workflows/docs-check.yml:89` (o `brabo` repassa os irmãos)
 - **Teste:** `scripts/ci/vinculos.spec.ts` (fixtures, valor malicioso, origem
   vazia) e `scripts/ci/validar-payload.spec.ts`
@@ -978,7 +978,7 @@ de [RN-1051](#rn-1051). O `setup` de login
 parecer um teste de funcionalidade. Sem o balde, a tabela mostraria tudo "sem
 cobertura" com um vermelho de spec, que é o achado da qa#28.
 
-- **Código:** `scripts/ci/qa-regressivo-selecao.ts:86` (`semDono.push`); o balde
+- **Código:** `scripts/ci/qa-regressivo-selecao.ts:76` (`semDono.push`); o balde
   "sem funcionalidade" no relatório ainda não existe (AT-791, lanes L1 e L2)
 - **Teste:** `scripts/ci/qa-regressivo-selecao.spec.ts` (a seleção por mapa e o
   `semDono`); o balde no relatório ganha o teste na L2

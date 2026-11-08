@@ -889,7 +889,7 @@ ninguém perceba.
 
 > ⚠️ Bloco gerado por `pnpm docs:generate`. Não edite à mão — o próximo build o sobrescreve.
 
-Inventário extraído do código: **187 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
+Inventário extraído do código: **189 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
 
 Cada fonte é marcada **produto** — o que quem opera a instalação configura no `.env` do deploy — ou **ferramenta**, lida só pelo CI e por quem desenvolve o produto. Variável de ferramenta nunca pertence ao `.env` de um operador.
 
@@ -1068,14 +1068,15 @@ Cada fonte é marcada **produto** — o que quem opera a instalação configura 
 - `OLLAMA_HOST` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
 - `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub>
 
-**e2e** — 4 variáveis · ferramenta
+**e2e** — 5 variáveis · ferramenta
 
 - `E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
+- `E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
 - `E2E_USER` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_WEB_URL` <sub>(e2e/playwright.config.ts)</sub>
 
-**deploy/k8s** — 23 variáveis · ferramenta
+**deploy/k8s** — 24 variáveis · ferramenta
 
 - `API_URL` <sub>(deploy/k8s/rollout-test.sh)</sub>
 - `BRABO_CLUSTER_NAME` <sub>(deploy/k8s/bootstrap.sh)</sub>
@@ -1091,6 +1092,7 @@ Cada fonte é marcada **produto** — o que quem opera a instalação configura 
 - `HPA_JOBS` <sub>(deploy/k8s/hpa-test.sh)</sub>
 - `HPA_TIMEOUT` <sub>(deploy/k8s/hpa-test.sh)</sub>
 - `KUBE_VERSION` <sub>(deploy/k8s/validate.sh)</sub>
+- `NPMRC` <sub>(deploy/k8s/bootstrap.sh)</sub>
 - `PROJECT_WORKSPACES_ROOT_NO_POD` <sub>(deploy/k8s/test-reprojecao-artefatos.sh)</sub>
 - `RESTORE_KEEP_JOB` <sub>(deploy/k8s/test-restore.sh)</sub>
 - `RESTORE_MUTACAO` <sub>(deploy/k8s/test-restore.sh)</sub>

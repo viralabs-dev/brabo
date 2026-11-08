@@ -877,6 +877,16 @@ traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 - <a id="rn-1030"></a>[RN-1030](business-rules/api.md#rn-1030) — Todo nó do grafo gravado por `MERGE` numa chave natural tem restrição de unicidade, e a subida funde as duplicatas preexistentes antes de criá-la
 - <a id="rn-1036"></a>[RN-1036](business-rules/api.md#rn-1036) — A indexação de docs nunca descarta em silêncio o conteúdo de um arquivo
 - <a id="rn-1037"></a>[RN-1037](business-rules/contracts.md#rn-1037) — O `dist` do `shared` não exporta nenhum valor
+- <a id="rn-1038"></a>[RN-1038](business-rules/web.md#rn-1038) — No web, a versão do brabo-contracts é a mesma no alias do `package.json`, no lock e em `scripts/baixar-areas.mjs`
+- <a id="rn-1039"></a>[RN-1039](business-rules/broker.md#rn-1039) — O token do GitHub Packages nunca vai para camada, `ARG` ou `ENV`
+- <a id="rn-1040"></a>[RN-1040](business-rules/runner.md#rn-1040) — O runner publicado não declara `@viralabs-dev/*` em `dependencies`
 - <a id="rn-1041"></a>[RN-1041](business-rules/contracts.md#rn-1041) — O `docker-cli.json` é o espelho das constantes de controle do `docker-cli.ts`
 - <a id="rn-1046"></a>[RN-1046](business-rules/api.md#rn-1046) — A busca híbrida devolve no máximo N trechos do mesmo arquivo
+- <a id="rn-1058"></a>[RN-1058](business-rules/engine.md#rn-1058) — As perguntas abertas têm precedência no texto do turno, nunca somem caladas, e os perguntadores as listam com `list_open_questions`
+- <a id="rn-1059"></a>[RN-1059](business-rules/engine.md#rn-1059) — A execução com todos os dev agents parados e tarefa pendente atrás de bloqueio ou de agente travado grava `execution.stalled` e acorda o Dev Lead
+- <a id="rn-1060"></a>[RN-1060](business-rules/web.md#rn-1060) — Aberta por um loopback diferente do da api, a web vai para o loopback da api antes de montar
+- <a id="rn-1061"></a>[RN-1061](business-rules/web.md#rn-1061) — O aviso de execução parada, no feed, no fio e em Executores, oferece Rearmar e Desbloquear
+- <a id="rn-1062"></a>[RN-1062](business-rules/web.md#rn-1062) — O cartão do plano mostra o teto do projeto e das áreas dev/qa, avisa quando a estimativa passa do que resta e ajusta o teto da área dev ali
+- <a id="rn-1063"></a>[RN-1063](business-rules/web.md#rn-1063) — PR que entra na fila de prontas avisa na borda do fio e no título da aba, com Mergear e o tempo de espera, e se dispensa
+- <a id="rn-1065"></a>[RN-1065](business-rules/api.md#rn-1065) — O provider de LLM dublê do regressivo só carrega com `LLM_DUBLE=1` e com a imagem sem a marca `prd`; o custo dele é 0 e o modelo sai como `duble-llm`
 <!-- END:GENERATED:indice-de-rn -->
