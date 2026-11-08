@@ -984,3 +984,73 @@ cobertura" com um vermelho de spec, que é o achado da qa#28.
   `semDono`); o balde no relatório ganha o teste na L2
 - **ADR:** [0277](../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.md)
 - **Origem:** AT-791 (EP-033)
+
+## O gatilho espera o carimbo e a assinatura antes do vermelho (RN-1066)
+
+### RN-1066 — O gatilho espera o carimbo e a assinatura antes de reprovar por ambiente ou assinatura {#rn-1066}
+
+Quando uma PR para a `main` (portão `E2E do brabo-qa`) ou para a `dev` (check
+`Regressivo do brabo-qa`) dispara o gatilho, a imagem do head do repo do evento pode
+ainda estar sendo carimbada ou assinada: o merge na `dev` move o head da promoção, e
+o carimbo (tag `-dev`, imagem) e a assinatura da imagem levam de 3 a 8 min. Por isso o
+gatilho repete três buscas até um teto configurável (`QA_ESPERA_MINUTOS`, padrão 10
+min, intervalo de 15 s):
+
+- a tag `-dev` do head (na `main`);
+- a existência da imagem (a `-dev` do head na `main`, a `sha-<12>` na `dev`);
+- a verificação de assinatura `cosign verify`, com a identidade do `e2e-pr` do brabo-qa.
+
+Só depois do teto o check fecha vermelho, e a mensagem diz o que faltou: a tag `-dev`
+do head ou a imagem (causa `ambiente`), ou a assinatura (causa `assinatura`). Assinatura
+inválida nunca é aceita por `/qa-aceitar` (RN-1052). A espera vale só para a imagem do
+repo do evento; as dos outros serviços já estão carimbadas e assinadas.
+
+- **Código:** `scripts/ci/qa-e2e-espera.ts:51` (`esperarImagemAssinada`, a espera da
+  imagem e da assinatura); `scripts/ci/qa-e2e-espera.ts:33` (`repetirAte`, a repetição
+  até o teto); `scripts/ci/qa-e2e-disparar.ts:151` (o resolver das tags repetido até o
+  teto) e `scripts/ci/qa-e2e-disparar.ts:157` (a espera só da imagem do repo do evento)
+- **Teste:** `scripts/ci/qa-e2e-espera.spec.ts` (a repetição até o teto, a causa
+  `ambiente` e a causa `assinatura`)
+- **Origem:** AT-790 (EP-033), brabo-ci#31
+
+## O painel da mudança (RN-1054..1056, ADR 0278)
+
+### RN-1054 — Toda mudança tem um painel que compõe as runs {#rn-1054}
+
+Cada mudança (um componente do `Depende-de`, uma PR solta ou uma tag) tem um run
+`Painel da mudança` no `brabo-ci`. Ele junta as runs da mudança por head SHA, merge SHA,
+tag e `c=` do E2E. Acompanha a cada 60 s, com ETag; se restarem menos de 500
+requisições, o intervalo passa a 5 min. Para quando tudo terminou e há 3 min de
+quietude, ou no teto de 45 min. Run ainda em andamento no teto sai como "em andamento
+há N min". O painel **nunca reprova**.
+
+- **Código:** `scripts/ci/painel.ts:235` (`terminou`, a régua de parada)
+- **Teste:** `scripts/ci/painel.spec.ts`
+- **ADR:** [0278](../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.md)
+- **Origem:** AT-792 (EP-033)
+
+### RN-1055 — O painel não publica check nas PRs; o link fica nas runs de origem {#rn-1055}
+
+O helper de Vínculos, no modo auto com PR, escreve a linha `Disparado | Painel da
+mudança`. Ela aponta para `…/brabo-ci/actions/workflows/painel.yml?query=<repo>%23<n>`.
+O token do App do painel só lê (`actions`, `pull-requests` e `contents`). O único token
+com escrita é o do dispatch (`contents: write`, restrito ao `brabo-ci`). Por isso não
+é preciso `checks: write`.
+
+- **Código:** `scripts/ci/vinculos.ts:164` (`linhaDoPainel`, a linha do Vínculo)
+- **Teste:** `scripts/ci/vinculos.spec.ts`
+- **ADR:** [0278](../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.md)
+- **Origem:** AT-792 (EP-033)
+
+### RN-1056 — Um painel por componente {#rn-1056}
+
+O remetente (job `avisar-painel`) não dispara se já existe um painel `queued` ou
+`in_progress` com `<repo>#<n>` no título, casando o token inteiro. Quando o componente
+cresce (chave `m=<hash>`), o painel em curso escreve "superado" e sai, e o remetente
+dispara o novo.
+
+- **Código:** `scripts/ci/painel.ts:247` (`jaTemPainel`); `scripts/ci/painel.ts:90`
+  (`superado`, que o painel em curso consulta)
+- **Teste:** `scripts/ci/painel.spec.ts`
+- **ADR:** [0278](../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.md)
+- **Origem:** AT-792 (EP-033)

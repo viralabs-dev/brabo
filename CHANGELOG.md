@@ -4,6 +4,9 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: AT-792. As RN-1054 a RN-1056 (`scripts/ci/docs/business-rules/ci.md`) e o ADR 0278 registram o painel da mudança do `brabo-ci` (um run por componente, sem check nas PRs, link pelos Vínculos). A página `docs/explanation/painel-da-mudanca.md` descreve o painel. Refs no `brabo-ci` de `d122b836`.
+
+- **docs**: AT-790 (Rodada 255, lane L2). A RN-1066 (`scripts/ci/docs/business-rules/ci.md`) registra que o gatilho do `brabo-qa` espera a tag `-dev`, a imagem e a assinatura (`QA_ESPERA_MINUTOS`, padrão 10 min) antes de dar vermelho por ambiente ou assinatura; assinatura inválida nunca é aceita por `/qa-aceitar`. O índice de RNs e a contagem do README vão junto.
 - **docs**: `configuration.md` descreve as variáveis de ferramenta `E2E_SERVICE_TOKEN` (token de serviço das specs, mascarado no CI, RN-1064) e `NPMRC` (o `.npmrc` do build no `deploy/k8s`, RN-1039). Sem elas, o teste do inventário de env reprovava a subida da trava (brabo#61).
 
 - **docs**: AT-791 (Rodada 253, lane L3). O regressivo do `brabo-qa` ganha as RN-1051 a RN-1053 (`scripts/ci/docs/business-rules/ci.md`): o relatório sai de um JSON único com recomendação pela regra fixa, o `/qa-aceitar` preserva o resumo do vermelho e a spec sem `@f-*` vira "sem funcionalidade". O ADR 0277 registra o compose só com matrix de exibição, e as opções de compose por funcionalidade ficam descartadas. O ADR 0279 registra o provider de LLM dublê do regressivo (AT-815). `regressivo-por-funcionalidade.md` e `configuration.md` descrevem o relatório e o `BRABO_BIND`: a api, o web e o engine seguem o `BRABO_BIND`, e o Ollama e o neo4j ficam sempre em `127.0.0.1` (RN-1057, brabo-infra#33, AT-811).

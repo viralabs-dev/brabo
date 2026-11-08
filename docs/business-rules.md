@@ -896,6 +896,9 @@ test.
 - <a id="rn-1051"></a>[RN-1051](business-rules/ci.md#rn-1051) — O relatório do regressivo sai de um JSON único, e a recomendação segue uma regra fixa de seis linhas
 - <a id="rn-1052"></a>[RN-1052](business-rules/ci.md#rn-1052) — O `/qa-aceitar` preserva o relatório do vermelho e registra o aceite contra a recomendação
 - <a id="rn-1053"></a>[RN-1053](business-rules/ci.md#rn-1053) — A spec sem tag `@f-*` aparece como "sem funcionalidade" e nunca some do relatório
+- <a id="rn-1054"></a>[RN-1054](business-rules/ci.md#rn-1054) — Toda mudança tem um painel que compõe as runs
+- <a id="rn-1055"></a>[RN-1055](business-rules/ci.md#rn-1055) — O painel não publica check nas PRs; o link fica nas runs de origem
+- <a id="rn-1056"></a>[RN-1056](business-rules/ci.md#rn-1056) — Um painel por componente
 - <a id="rn-1058"></a>[RN-1058](business-rules/engine.md#rn-1058) — As perguntas abertas têm precedência no texto do turno, nunca somem caladas, e os perguntadores as listam com `list_open_questions`
 - <a id="rn-1059"></a>[RN-1059](business-rules/engine.md#rn-1059) — A execução com todos os dev agents parados e tarefa pendente atrás de bloqueio ou de agente travado grava `execution.stalled` e acorda o Dev Lead
 - <a id="rn-1060"></a>[RN-1060](business-rules/web.md#rn-1060) — Aberta por um loopback diferente do da api, a web vai para o loopback da api antes de montar
@@ -903,4 +906,5 @@ test.
 - <a id="rn-1062"></a>[RN-1062](business-rules/web.md#rn-1062) — O cartão do plano mostra o teto do projeto e das áreas dev/qa, avisa quando a estimativa passa do que resta e ajusta o teto da área dev ali
 - <a id="rn-1063"></a>[RN-1063](business-rules/web.md#rn-1063) — PR que entra na fila de prontas avisa na borda do fio e no título da aba, com Mergear e o tempo de espera, e se dispensa
 - <a id="rn-1065"></a>[RN-1065](business-rules/api.md#rn-1065) — O provider de LLM dublê do regressivo só carrega com `LLM_DUBLE=1` e com a imagem sem a marca `prd`; o custo dele é 0 e o modelo sai como `duble-llm`
+- <a id="rn-1066"></a>[RN-1066](business-rules/ci.md#rn-1066) — O gatilho espera o carimbo e a assinatura antes de reprovar por ambiente ou assinatura
 <!-- END:GENERATED:indice-de-rn -->

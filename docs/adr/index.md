@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 272 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 273 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -381,6 +381,7 @@ O pipeline, as imagens publicadas, a assinatura, a varredura, o pin, as camadas 
 | [0268](0268-o-brabo-qa-tem-regressivo-por-funcionalidade.md) | O `brabo-qa` tem regressivo por funcionalidade (`funcionalidades.yml`, tag `@f-<id>`): a PR para a `dev` roda só o que tocou, pelo check `Regressivo do brabo-qa`, que NUNCA é exigido, com imagem `sha-<12>`; a PR para a `main` roda o catálogo inteiro e funcionalidade sem spec é "sem cobertura", sem reprovar (AT-769, RN-1031 a RN-1035). |
 | [0271](0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.md) | Cada run do Actions mostra os vínculos entre os repositórios: a action `vinculos` do `brabo-ci` (tabela e Mermaid no Summary, nunca reprova), o `run-name` com a origem, a correlação `c=<run_id>-<attempt>`, o job `anunciar` e a linha `Carimbo:` na tag (AT-773, RN-1043 a RN-1045). |
 | [0277](0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.md) | O regressivo roda num compose só; o grafo mostra cada funcionalidade por uma matrix de exibição (job leve, sem compose), e o relatório em JSON é a fonte da decisão de aprovar ou não
+| [0278](0278-a-mudanca-e-vista-num-painel-do-brabo-ci.md) | A mudança é vista num painel do brabo-ci (run `Painel da mudança`, Summary com tabela e Mermaid), sem check nas PRs: o link fica nas runs de origem pelos Vínculos |
 
 ## Documentação {#tema-docs}
 
