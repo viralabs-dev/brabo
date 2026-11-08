@@ -3,6 +3,7 @@ id: documentation-workflow
 title: Como a documentação se mantém viva
 sidebar_label: Sincronia da doc
 sidebar_position: 1
+tipo: referencia
 description: O mecanismo que impede a documentação de apodrecer — o que cada peça faz, por que existe e o que fazer quando a checagem reclama injustamente.
 keywords: [documentation, drift, docmap, CI, generation]
 ---
@@ -944,6 +945,8 @@ admonições, Mermaid, realce com shiki, link `.md` para URL relativa),
 referência da API. O caminho das traduções é uma constante só
 (`CAMINHO_DAS_TRADUCOES`, `docs/i18n/<locale>/`). `website/` guarda só a árvore
 isolada do Redoc.
+
+Cada página declara o tipo (`tutorial|guia|conceito|referencia|decisao|historico`) em `tipo:` no frontmatter, ou o recebe da pasta (`tutorials/`, `how-to/`, `explanation/`, `reference/`, `adr/`, `business-rules`). O menu tem 7 grupos de topo, e `scripts/docs/site/tipos.mjs` reprova página sem tipo, no grupo errado ou fora do menu.
 
 ## Rodando na sua máquina {#running-it-on-your-machine}
 
