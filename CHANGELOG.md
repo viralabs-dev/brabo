@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **chore**: AT-787. `.github/workflows/dependencias.yml` chama o check `Dependências de merge` do `brabo-ci` (pin `v1.4.0-dev.11`), como nos outros repos. ADR 0276.
+
 - **chore**: AT-770 R2b. O `componentes.json` ganha a chave `contracts` (`v1.2.0`), a versão vigente do `brabo-contracts`; o aviso do `contracts-alinhado` do `brabo-ci` passa a disparar. A trava `pins-dos-componentes` não a cobre: o contracts não tem Release, só TAG (ADR 0270).
 
 - **docs**: ADR 0270 (AT-770): o `brabo-contracts` é publicado no GitHub Packages (`@viralabs-dev/brabo-shared` e `brabo-docker-port`, públicos, mesma versão da TAG), o `shared` segue só de tipos e o token entra por ponto de instalação, nunca em camada. Revê o item 2 do ADR 0252.
