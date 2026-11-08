@@ -59,6 +59,7 @@ jobs:
           set -euo pipefail
           {
             sed -n '/^#/p' irmaos.lock
+            # shellcheck disable=SC2013  # nomes de repo não têm espaço; a divisão por palavra é a intenção
             for r in $(awk '!/^[[:space:]]*(#|$)/ { print $1 }' irmaos.lock); do
               sha=$(git ls-remote "https://github.com/viralabs-dev/$r" refs/heads/dev | cut -f1)
               printf '%s' "$sha" | grep -Eq '^[0-9a-f]{40}$' || { echo "::error::$r: sem dev no remoto"; exit 1; }
@@ -86,7 +87,7 @@ jobs:
         id: irmaos
         run: |
           { echo 'lista<<IRMAOS_FIM'; cat "$(git rev-parse --git-dir)/irmaos-sha.lst"; echo IRMAOS_FIM; } >> "$GITHUB_OUTPUT"
-      - uses: viralabs-dev/brabo-ci/.github/actions/vinculos@13f3697aaf3e4a151637755babb58422a44db303  # brabo-ci dev, merge da ci#17
+      - uses: viralabs-dev/brabo-ci/.github/actions/vinculos@0a9eba831fb82b9a20a5ad03bc2273a3ede69796  # v1.4.0-dev.5
         with:
           irmaos: ${{ steps.irmaos.outputs.lista }}
 
@@ -121,6 +122,7 @@ jobs:
           aberta=$(gh pr list -R "$REPO" --head "$BRANCH" --base dev --state open --json number --jq '.[0].number // empty')
           if [ "$MEUS" = 0 ]; then
             if [ -n "$aberta" ]; then
+              # shellcheck disable=SC2016  # as crases são texto literal da mensagem
               gh pr close "$aberta" -R "$REPO" --delete-branch --comment 'A `dev` está em dia com os gerados; nada a regenerar.'
             fi
           else
@@ -135,6 +137,7 @@ jobs:
               git push -f origin "HEAD:refs/heads/$BRANCH"
             fi
             if [ -z "$aberta" ]; then
+                # shellcheck disable=SC2016  # as crases são texto literal do corpo da PR
               gh pr create -R "$REPO" --base dev --head "$BRANCH" \
                 --title 'docs: regenera os gerados e sobe as pins dos componentes' \
                 --body "$(printf '%s\n\n%s\n%s' 'Aberta por `regenera-gerados.yml` (AT-726, AT-796): gerados velhos depois de mudança num irmão e/ou Release nova de componente. A PR dispensa a escada (ADR 0255, 0282); o merge é humano.' 'Pins subidas:' "${PINS:-nenhuma}")"

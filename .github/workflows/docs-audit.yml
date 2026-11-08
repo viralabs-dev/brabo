@@ -42,7 +42,7 @@ jobs:
         id: irmaos
         run: |
           { echo 'lista<<IRMAOS_FIM'; cat "$(git rev-parse --git-dir)/irmaos-sha.lst"; echo IRMAOS_FIM; } >> "$GITHUB_OUTPUT"
-      - uses: viralabs-dev/brabo-ci/.github/actions/vinculos@13f3697aaf3e4a151637755babb58422a44db303  # brabo-ci dev, merge da ci#17
+      - uses: viralabs-dev/brabo-ci/.github/actions/vinculos@0a9eba831fb82b9a20a5ad03bc2273a3ede69796  # v1.4.0-dev.5
         with:
           irmaos: ${{ steps.irmaos.outputs.lista }}
 
