@@ -3,7 +3,7 @@
 - **Status:** aceito (decisão do dono de 08/11/2026, AT-788)
 - **Data:** 2026-11-08
 - **Tema:** `git`
-- **Referencia:** revê a decisão 7 do ADR [0276](0276-a-pr-declara-de-que-pr-depende-o-merge.md) (o `promote` escreveria o `Depende-de`), sem editá-lo, e usa o mapa dos repos do ADR [0281](0281-o-mapa-dos-repos-tem-uma-fonte-so.md). RN-1071 e RN-1072, em `scripts/ci/docs/business-rules/ci.md` do `brabo-ci`. A isenção do `brabo-ci` no pin é o adendo de 08/11/2026 ao ADR [0280](0280-o-pin-do-brabo-ci-aponta-para-uma-tag.md).
+- **Referencia:** revê a decisão 7 do ADR [0276](0276-a-pr-declara-de-que-pr-depende-o-merge.md) (o `promote` escreveria o `Depende-de`), sem editá-lo, e usa o mapa dos repos do ADR [0281](0281-o-mapa-dos-repos-tem-uma-fonte-so.md). RN-1071 e RN-1072, em `scripts/ci/docs/business-rules/ci.md` do `brabo-ci`. A isenção do `brabo-ci` no pin (decisão 7) complementa o ADR [0280](0280-o-pin-do-brabo-ci-aponta-para-uma-tag.md) sem editá-lo.
 
 ## Contexto
 
@@ -27,6 +27,7 @@ O ADR 0276 previa que o `promote` escrevesse o `Depende-de` na PR de promoção.
 
 5. **A ordem vive na constante `CAMADAS_DE_PROMOCAO` do `brabo-ci`,** testada contra o `REPOS`. Quando houver teste com o `repos.yml` (ADR 0281), ele confere as duas listas.
 6. **O merge de uma promoção e o cron horário reavaliam as camadas seguintes.**
+7. **O `pins-do-brabo-ci` não cobra o pin do brabo-ci quando o repo chamador é o próprio `viralabs-dev/brabo-ci`;** isso complementa o ADR 0280 sem editá-lo. Ele roda o próprio código de qualquer forma, e a tag final só nasce no merge da promoção dele. Só esse repo é isento.
 
 ## Consequências
 
