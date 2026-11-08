@@ -225,6 +225,26 @@ inclusive em produção: mandar email é opção do operador. Decisão no
 > carrega estrutura para corpo rico, e um motor de template seria superfície de
 > injeção sem ganho. O link usa `WEB_ORIGIN` (acima).
 
+### Recuperar a senha sem SMTP {#recuperar-a-senha-sem-smtp}
+
+Na instalação, `MAIL_TRANSPORT=log` é o default e o `install.sh` não liga SMTP:
+o e-mail de redefinição não sai. Isso vale para **qualquer** conta, inclusive a
+do titular criada pelo `first-account`. Sem SMTP, o caminho é pelo log da api:
+
+1. Num override **temporário** do compose de instalação, ponha
+   `AUTH_MAIL_LOG_TOKENS=true` no ambiente do serviço `api` e recrie só a `api`.
+2. Na tela de login, peça "esqueci a senha" para o e-mail da conta.
+3. Pegue o link de redefinição, com o token, em `docker compose logs api` e
+   defina a senha nova pela tela.
+4. **Desfaça o override** e recrie a `api`: token em log de aplicação é
+   credencial em texto claro ([ADR 0032](../adr/0032-corte-do-keycloak-e-sessao-em-cookie.md)).
+
+Para um fluxo sem esse passo, configure SMTP real (seção acima).
+
+> **TP-01 contra a `main`.** O TP-01 entra com a conta do **titular**
+> (`first-account`), nunca com `owner@brabo.dev`: o acesso rápido por papel só
+> existe no `local` (RN-984). O roteiro do TP-01 mora no Vault, fora deste repo.
+
 ### Seed de desenvolvimento
 
 Consumidas por `pnpm --filter api seed`, não pela api em execução. Sem IdP
@@ -233,7 +253,7 @@ externo, é daqui que vem a credencial para entrar no web local e no smoke.
 | variável | default | o que faz |
 |---|---|---|
 | `BRABO_SEED_PASSWORD` | `brabo12345678` | senha dos usuários semeados (`owner@brabo.dev`, `maintainer@brabo.dev`, `developer@brabo.dev`, `viewer@brabo.dev`), criados com o email **já verificado** |
-| `BRABO_AMBIENTE` | — | `dev`, `prd` ou `local` (ADR 0245, RN-984). Só `local` registra `GET`/`POST /auth/dev-login`, o acesso rápido por papel; ausente, vazio ou outro valor, a rota não existe. A imagem das Actions é marcada `dev`/`prd` no build (`AMBIENTE` do `docker-bake.hcl`, arquivo `/app/AMBIENTE_DA_IMAGEM`) e vence a variável. O compose de DEV a põe em `local`; o de instalação a deixa vazia |
+| `BRABO_AMBIENTE` | — | `dev`, `prd` ou `local` (ADR 0245, RN-984). Só `local` registra `GET`/`POST /auth/dev-login`, o acesso rápido por papel; ausente, vazio ou outro valor, a rota não existe. A imagem das Actions é marcada `dev`/`prd` no build (`AMBIENTE` do `docker-bake.hcl`, arquivo `/app/AMBIENTE_DA_IMAGEM`) e vence a variável. O compose de DEV a põe em `local`; o de instalação a deixa vazia. Se a instalação já foi `local`, as contas `<papel>@brabo.dev` e o workspace `acesso-rapido-local` criados então **ficam no banco** quando ela passa a rodar com a variável vazia: a rota some, as contas não somem e nenhuma tem senha utilizável (nascem com senha aleatória descartada). Instalação de release nova não tem essas contas; ver [Recuperar a senha sem SMTP](#recuperar-a-senha-sem-smtp) |
 | `BRABO_BIND` | `0.0.0.0` | endereço em que o compose de instalação publica as portas da api e do web. Com `BRABO_AMBIENTE=local`, ponha `127.0.0.1`: senão quem está na rede entra como qualquer papel |
 | `BRABO_FORCE_SEED` | — | destrava o seed com `NODE_ENV=production`, onde por padrão ele **recusa rodar**. Não a defina num ambiente real: a conta nasce com senha conhecida e verificada |
 
