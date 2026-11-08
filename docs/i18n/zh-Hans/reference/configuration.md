@@ -167,6 +167,8 @@ traducao_de: 3016564b5bb5b0752711c07b9babefd252829a8d
 | `RATE_LIMIT_USER` | `300` | 每个用户每个窗口的请求数 |
 | `RATE_LIMIT_IP` | `600` | 每个 IP 每个窗口的请求数 |
 
+> **安装时。** `RATE_LIMIT_ENABLED`（`true`）、`RATE_LIMIT_WINDOW_MS`（`60000`）、`RATE_LIMIT_USER`（`300`）、`RATE_LIMIT_IP`（`600`）和 `AUTH_LOCKOUT_IP_THRESHOLDS`（`20:30,30:120`）取 api 的默认值，安装用 compose 自 `brabo-infra#38` 起透传它们（RN-1074）。只有 `brabo-qa` 的测试 compose 会调高这些值。
+
 > 如果速率限制表不可用，请求会**放行**。这个 guard 防范的是滥用，而不是未授权访问——那是认证 guard 的工作，它在前面运行。
 
 ### 内部流量 🔒
