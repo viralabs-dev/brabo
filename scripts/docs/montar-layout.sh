@@ -102,6 +102,11 @@ for par in "${DESTINOS[@]}"; do
   # os workflows de CI do QA têm imagens literais que o `imagens-pinadas` do infra reprova; são conferidos no CI do próprio brabo-qa
   [ "$repo" = "brabo-qa" ] && rm -rf "$fonte/.github"
   mkdir -p "$destino"
+  # a docs/ de irmão posto em "." não pode cair na docs/ daqui: vai para <nome>/docs (AT-846)
+  if [ "$destino" = "." ] && [ -d "$fonte/docs" ]; then
+    mkdir -p "${repo#brabo-}/docs"
+    cp -a --update=none "$fonte/docs/." "${repo#brabo-}/docs/" && rm -rf "$fonte/docs"
+  fi
   # -n: nunca sobrescreve; README/LICENSE/CHANGELOG/workflows daqui vencem
   cp -a --update=none "$fonte/." "$destino/"
   echo "layout: $repo@$rotulo -> $destino"

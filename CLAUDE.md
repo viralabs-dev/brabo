@@ -40,6 +40,7 @@ ADR 0255; o merge é humano); pendência em arquivo
 de irmão deixa o job vermelho nomeando o repo dono (AT-726).
 A trava `--conferir` do mesmo script roda no check `Pins dos componentes` (PR para a `main`) e no `release.yml` (reprova na tag, avisa no ensaio).
 O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mjs`).
+A `docs/` de irmão posto em `.` (hoje o `brabo-qa`) vai para `<nome>/docs` (`qa/docs`), não para a `docs/` daqui (AT-846); irmão novo nessa situação precisa de raiz e dono.
 
 ## Convenções do repositório
 - Branches permanentes `dev` e `main`; trabalho nasce de `dev` com a taxonomia

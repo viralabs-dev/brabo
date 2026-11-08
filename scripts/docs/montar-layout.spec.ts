@@ -71,6 +71,16 @@ describe('montar-layout.sh', () => {
     expect(readFileSync(join(brabo, '.git/layout-irmaos.lst'), 'utf8')).toContain('apps/api/api.txt');
   });
 
+  it('a docs/ de irmão posto em "." vai para <nome>/docs e não cai na docs/ daqui (AT-846; sem o desvio reprova)', () => {
+    mkdirSync(join(irmaos, 'brabo-qa', 'docs'), { recursive: true });
+    writeFileSync(join(irmaos, 'brabo-qa', 'docs', 'x.md'), 'qa');
+    commit('qa');
+    montar();
+    expect(readFileSync(join(brabo, 'qa/docs/x.md'), 'utf8')).toBe('qa');
+    expect(existsSync(join(brabo, 'docs/x.md'))).toBe(false);
+    expect(git(brabo, 'ls-files', 'qa/docs')).toContain('qa/docs/x.md');
+  });
+
   it('arquivo que saiu do irmão some na rodada seguinte; o que é daqui fica', () => {
     git(join(irmaos, 'brabo-api'), 'rm', '-q', 'api.txt');
     commit('api');
