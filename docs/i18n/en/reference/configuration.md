@@ -836,6 +836,7 @@ environment, not a unit test beside it (AT-124).
 | `E2E_WEB_URL` | `http://localhost:8088` | the `baseURL` Playwright opens, and the origin the CSRF assertion depends on |
 | `E2E_USER` | `owner@brabo.dev` | the account the suite logs in with |
 | `E2E_PASSWORD` | the seed password hardcoded in `e2e/suporte/api.ts` | that account's password. It's the password of a **local seed**, never a real one — it isn't repeated here so that the only copy stays the one in the code |
+| `E2E_ENGINE_URL` | `http://localhost:4000` | where the `instalacao` spec (installation smoke) hits the engine `/health` |
 
 
 ### Local cluster and scheduled proofs — `deploy/k8s/`
