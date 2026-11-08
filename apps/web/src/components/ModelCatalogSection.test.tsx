@@ -1,0 +1,757 @@
+import { describe, expect, it, vi, beforeEach, afterAll } from 'vitest';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { ModelCatalogSection } from './ModelCatalogSection';
+import { ToastProvider } from './ui/ToastProvider';
+// A instância REAL do app: o componente usa `useTranslation('models')` sem
+// `I18nextProvider` próprio — mesmo padrão de `ProjectExecutorsTab.test.tsx`.
+import i18n from '../lib/i18n';
+import type {
+  CatalogoPorCategoria,
+  ModelComCuradoria,
+} from '../lib/api-types';
+
+const listModelCatalog = vi.fn();
+const setModelsActive = vi.fn();
+const syncModelCatalog = vi.fn();
+const listCredentials = vi.fn();
+const setModelUses = vi.fn();
+const listCredentialedProviders = vi.fn();
+const listWorkspaces = vi.fn();
+const updateModelPricing = vi.fn();
+const updateModelBilling = vi.fn();
+const listModelPriceChanges = vi.fn();
+
+vi.mock('../lib/api-client', () => ({
+  listModelCatalog: (...args: unknown[]) => listModelCatalog(...args),
+  setModelsActive: (...args: unknown[]) => setModelsActive(...args),
+  syncModelCatalog: (...args: unknown[]) => syncModelCatalog(...args),
+  listCredentials: (...args: unknown[]) => listCredentials(...args),
+  setModelUses: (...args: unknown[]) => setModelUses(...args),
+  listCredentialedProviders: (...args: unknown[]) => listCredentialedProviders(...args),
+  setAgentModelBinding: vi.fn(),
+  listWorkspaces: (...a: unknown[]) => listWorkspaces(...a),
+  updateModelPricing: (...a: unknown[]) => updateModelPricing(...a),
+  updateModelBilling: (...a: unknown[]) => updateModelBilling(...a),
+  listModelPriceChanges: (...a: unknown[]) => listModelPriceChanges(...a),
+  mensagemDaApi: (_e: unknown, f?: string) => f ?? 'erro',
+}));
+
+function model(
+  over: Partial<ModelComCuradoria> = {},
+): ModelComCuradoria {
+  return {
+    id: 'm-1',
+    provider: 'openai',
+    name: 'gpt-4o-mini',
+    displayName: 'GPT-4o mini',
+    inputPricePerMillionMicros: 150_000,
+    outputPricePerMillionMicros: 600_000,
+    contextWindow: 128_000,
+    supportsToolCalling: true,
+    supportsStreaming: true,
+    supportsVision: false,
+    supportsReasoning: false,
+    generatesImage: false,
+    manualPricing: true,
+    isActive: false,
+    uses: [],
+    freeRoutingAlias: false,
+    availability: 'available',
+    lastSeenAt: '2026-08-01T00:00:00.000Z',
+    ...over,
+  };
+}
+
+function catalogo(modelos: ModelComCuradoria[]): CatalogoPorCategoria {
+  return { local: {}, cloud: { openai: modelos } } as CatalogoPorCategoria;
+}
+
+function montar() {
+  const client = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return render(
+    <QueryClientProvider client={client}>
+      <ToastProvider>
+        <ModelCatalogSection workspaceId="ws-1" />
+      </ToastProvider>
+    </QueryClientProvider>,
+  );
+}
+
+beforeEach(async () => {
+  vi.clearAllMocks();
+  await i18n.changeLanguage('pt-BR');
+  listModelCatalog.mockResolvedValue(catalogo([model()]));
+  setModelsActive.mockResolvedValue([]);
+  setModelUses.mockResolvedValue([]);
+  syncModelCatalog.mockResolvedValue({ porProvider: [] });
+  listCredentials.mockResolvedValue([]);
+  listWorkspaces.mockResolvedValue([]);
+  updateModelPricing.mockResolvedValue({});
+  updateModelBilling.mockResolvedValue({});
+  listModelPriceChanges.mockResolvedValue([]);
+  // Sem resposta do titular = "não sei": todos os providers aparecem.
+  listCredentialedProviders.mockRejectedValue(new Error('indisponível'));
+});
+
+afterAll(() => {
+  void i18n.changeLanguage('en');
+});
+
+function credencial(provider: string) {
+  return {
+    id: `cred-${provider}`,
+    provider,
+    createdAt: '2026-08-01T00:00:00.000Z',
+    updatedAt: '2026-08-01T00:00:00.000Z',
+  };
+}
+
+describe('ModelCatalogSection', () => {
+  it('mostra o modelo descoberto como DESATIVADO — ativar é do owner (RN-043)', async () => {
+    montar();
+
+    expect(await screen.findByText('GPT-4o mini')).toBeTruthy();
+    expect(screen.getByText('desativado')).toBeTruthy();
+  });
+
+  it('ativa em lote o que foi marcado', async () => {
+    montar();
+    await screen.findByText('GPT-4o mini');
+
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
+    fireEvent.click(screen.getByRole('button', { name: 'Ativar' }));
+
+    await waitFor(() =>
+      expect(setModelsActive).toHaveBeenCalledWith('ws-1', {
+        modelIds: ['m-1'],
+        isActive: true,
+      }),
+    );
+  });
+
+  /** AT-271, RN-679: o alias `~` aparece, marcado, com o motivo em texto. */
+  it('alias de roteamento livre já curado aparece ativo, marcado e com o motivo', async () => {
+    listModelCatalog.mockResolvedValue(
+      catalogo([
+        model({
+          name: '~deepseek/deepseek-flash-latest',
+          displayName: 'DeepSeek Flash (latest)',
+          isActive: true,
+          freeRoutingAlias: true,
+        }),
+      ]),
+    );
+    montar();
+
+    expect(await screen.findByText('DeepSeek Flash (latest)')).toBeTruthy();
+    expect(screen.getByText('alias de roteamento livre')).toBeTruthy();
+    expect(screen.getByText(/Preço de vitrine/)).toBeTruthy();
+    // Não some nem é desligado pela tela: segue ativo.
+    expect(screen.getByText('ativo')).toBeTruthy();
+  });
+
+  it('modelo de upstream fixo não ganha a marca nem o motivo', async () => {
+    montar();
+    await screen.findByText('GPT-4o mini');
+
+    expect(screen.queryByText('alias de roteamento livre')).toBeNull();
+    expect(screen.queryByText(/Preço de vitrine/)).toBeNull();
+  });
+
+  it('falha: a recusa do alias na ativação mostra o título próprio e a frase da api', async () => {
+    setModelsActive.mockRejectedValue(
+      Object.assign(new Error('api error 422'), {
+        status: 422,
+        body: {
+          statusCode: 422,
+          code: 'alias_de_roteamento_livre',
+          message:
+            'Alias de roteamento livre não entra na curadoria: ~deepseek/deepseek-flash-latest.',
+          modelIds: ['m-1'],
+        },
+      }),
+    );
+    montar();
+    await screen.findByText('GPT-4o mini');
+
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
+    fireEvent.click(screen.getByRole('button', { name: 'Ativar' }));
+
+    expect(
+      await screen.findByText('Alias de roteamento livre não entra na curadoria'),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(/~deepseek\/deepseek-flash-latest\./),
+    ).toBeTruthy();
+  });
+
+  it('falha de outro tipo na ativação segue com o toast genérico', async () => {
+    setModelsActive.mockRejectedValue(new Error('rede'));
+    montar();
+    await screen.findByText('GPT-4o mini');
+
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
+    fireEvent.click(screen.getByRole('button', { name: 'Ativar' }));
+
+    expect(await screen.findByText('Não foi possível salvar')).toBeTruthy();
+  });
+
+  it('modelo indisponível continua listado, marcado', async () => {
+    listModelCatalog.mockResolvedValue(
+      catalogo([model({ availability: 'unavailable', isActive: true })]),
+    );
+    montar();
+
+    expect(await screen.findByText('GPT-4o mini')).toBeTruthy();
+    expect(screen.getByText('indisponível no provider')).toBeTruthy();
+    // Continua ativo: os dois eixos são independentes.
+    expect(screen.getByText('ativo')).toBeTruthy();
+  });
+
+  it('o relatório do sync mostra TODO provider, inclusive o pulado, com a origem', async () => {
+    syncModelCatalog.mockResolvedValue({
+      porProvider: [
+        {
+          provider: 'openai',
+          descobertos: 2,
+          reencontrados: 0,
+          indisponibilizados: 1,
+        },
+        {
+          provider: 'anthropic',
+          descobertos: 0,
+          reencontrados: 0,
+          indisponibilizados: 0,
+          pulado: 'sem_capability',
+        },
+        {
+          provider: 'ollama',
+          descobertos: 0,
+          reencontrados: 0,
+          indisponibilizados: 0,
+          pulado: 'falha',
+          origemDaFalha: 'infra',
+        },
+      ],
+    });
+    montar();
+    await screen.findByText('GPT-4o mini');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Atualizar catálogo' }));
+
+    expect(await screen.findByText(/2 novos · /)).toBeTruthy();
+    expect(screen.getByText('sem listagem de catálogo')).toBeTruthy();
+    // "Falhou" sem a origem seria diagnóstico por eliminação (ADR 0020).
+    expect(screen.getByText('falhou · origem infra')).toBeTruthy();
+  });
+
+  it('catálogo vazio explica o que fazer em vez de mostrar nada', async () => {
+    listModelCatalog.mockResolvedValue(catalogo([]));
+    montar();
+
+    expect(
+      await screen.findByText(/Cadastre uma credencial de provider/),
+    ).toBeTruthy();
+  });
+  /**
+   * O passo que faltava estar dito na tela. Cadastrar a chave não descobre
+   * modelo nenhum — quem descobre é o sync —, e nada ligava as duas coisas: o
+   * caso real foi uma chave de OpenRouter válida e testada, com o seletor de
+   * modelos oferecendo só os locais.
+   */
+  describe('aviso de provider com credencial e catálogo vazio', () => {
+    it('nomeia o provider e aponta a ação', async () => {
+      listCredentials.mockResolvedValue([credencial('openrouter')]);
+      montar();
+
+      const aviso = (await screen.findByText(/OpenRouter/)).closest(
+        '[data-slot="alert"]',
+      );
+      expect(aviso).toBeTruthy();
+      // O aviso precisa dizer o que fazer, não só que algo falta.
+      expect(aviso!.textContent).toContain('Atualizar catálogo');
+      expect(aviso!.textContent).toContain('nenhum modelo dele no');
+    });
+
+    it('some quando o provider já tem modelo no catálogo', async () => {
+      listCredentials.mockResolvedValue([credencial('openai')]);
+      montar();
+
+      await screen.findByText('GPT-4o mini');
+      expect(screen.queryByText(/nenhum modelo dele no/)).toBeNull();
+    });
+
+    it('token de git não gera aviso — não existe modelo de github', async () => {
+      listCredentials.mockResolvedValue([credencial('github')]);
+      montar();
+
+      await screen.findByText('GPT-4o mini');
+      expect(screen.queryByText(/nenhum modelo dele no/)).toBeNull();
+    });
+
+    it('sem credencial nenhuma, sem aviso', async () => {
+      montar();
+
+      await screen.findByText('GPT-4o mini');
+      expect(screen.queryByText(/nenhum modelo dele no/)).toBeNull();
+    });
+  });
+});
+
+/**
+ * Com 58 fabricantes no OpenRouter, abrir todos de saída devolve a lista de 338
+ * linhas que o agrupamento existe para evitar. Fechados, os cabeçalhos com
+ * contagem viram um índice navegável.
+ */
+describe('subgrupos colapsáveis', () => {
+  function catalogoDeHub() {
+    return {
+      local: {},
+      cloud: {
+        openrouter: [
+          model({ id: 'or-1', provider: 'openrouter', name: 'openai/gpt-4o', displayName: 'GPT-4o' }),
+          model({ id: 'or-2', provider: 'openrouter', name: 'openai/gpt-4o-mini', displayName: 'GPT-4o mini' }),
+          model({ id: 'or-3', provider: 'openrouter', name: 'anthropic/claude', displayName: 'Claude' }),
+        ],
+      },
+    } as CatalogoPorCategoria;
+  }
+
+  it('começam FECHADOS: mostra o fabricante e a contagem, não os modelos', async () => {
+    listModelCatalog.mockResolvedValue(catalogoDeHub());
+    montar();
+
+    expect(await screen.findByRole('button', { name: /OpenAI/ })).toBeTruthy();
+    expect(screen.queryByText('GPT-4o')).toBeNull();
+  });
+
+  it('clicar abre e clicar de novo fecha', async () => {
+    listModelCatalog.mockResolvedValue(catalogoDeHub());
+    montar();
+
+    const cabecalho = await screen.findByRole('button', { name: /OpenAI/ });
+    expect(cabecalho.getAttribute('aria-expanded')).toBe('false');
+
+    fireEvent.click(cabecalho);
+    expect(cabecalho.getAttribute('aria-expanded')).toBe('true');
+    expect(screen.getByText('GPT-4o')).toBeTruthy();
+
+    fireEvent.click(cabecalho);
+    expect(screen.queryByText('GPT-4o')).toBeNull();
+  });
+
+  it('abrir um fabricante não abre os outros', async () => {
+    listModelCatalog.mockResolvedValue(catalogoDeHub());
+    montar();
+
+    fireEvent.click(await screen.findByRole('button', { name: /OpenAI/ }));
+
+    expect(screen.getByText('GPT-4o')).toBeTruthy();
+    expect(screen.queryByText('Claude')).toBeNull();
+  });
+
+  /**
+   * O risco de esconder: a barra de lote conta o total e você ativaria sem ver
+   * o quê. O selo no cabeçalho fechado é o que impede isso.
+   */
+  it('fechado com item marcado, o cabeçalho avisa', async () => {
+    listModelCatalog.mockResolvedValue(catalogoDeHub());
+    montar();
+
+    const openai = await screen.findByRole('button', { name: /OpenAI/ });
+    fireEvent.click(openai);
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
+    fireEvent.click(openai);
+
+    expect(screen.getByText(/1 marcado/)).toBeTruthy();
+  });
+});
+
+describe('abas por provider com chave do titular (AT-607)', () => {
+  function catalogoMisto() {
+    return {
+      local: { ollama: [model({ id: 'l-1', provider: 'ollama', name: 'llama3.2:1b', displayName: 'Llama 3.2 1B' })] },
+      cloud: {
+        openai: [model({ id: 'd-1', provider: 'openai', name: 'gpt-4o', displayName: 'GPT-4o direto' })],
+        anthropic: [model({ id: 'a-1', provider: 'anthropic', name: 'claude-x', displayName: 'Claude direto', isActive: false })],
+        openrouter: [model({ id: 'h-1', provider: 'openrouter', name: 'openai/gpt-4o', displayName: 'GPT-4o via hub' })],
+      },
+    } as CatalogoPorCategoria;
+  }
+
+  it('sem resposta do titular mostra uma aba por provider e só o modelo da aba ativa', async () => {
+    listModelCatalog.mockResolvedValue(catalogoMisto());
+    montar();
+
+    expect(await screen.findByText('Llama 3.2 1B')).toBeTruthy();
+    expect(screen.getAllByRole('tab')).toHaveLength(4);
+    expect(screen.queryByText('GPT-4o direto')).toBeNull();
+
+    fireEvent.click(screen.getByRole('tab', { name: /OpenAI/ }));
+    expect(screen.getByText('GPT-4o direto')).toBeTruthy();
+    expect(screen.queryByText('Llama 3.2 1B')).toBeNull();
+  });
+
+  it('só os providers com chave do titular viram aba; o resto entra na linha "de fora"', async () => {
+    listModelCatalog.mockResolvedValue(catalogoMisto());
+    listCredentialedProviders.mockResolvedValue({ providers: ['openai'] });
+    montar();
+
+    await screen.findByText('Llama 3.2 1B');
+    await waitFor(() => expect(screen.getAllByRole('tab')).toHaveLength(2));
+    expect(screen.getByRole('tab', { name: /Ollama/ })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: /OpenAI/ })).toBeTruthy();
+    expect(screen.getByText(/2 de fora, sem chave do titular: Anthropic, OpenRouter/)).toBeTruthy();
+  });
+
+  it('provider sem chave com modelo ATIVO vira aba marcada, para dar para desativar (RN-043)', async () => {
+    const cat = catalogoMisto();
+    cat.cloud.anthropic = [model({ id: 'a-1', provider: 'anthropic', name: 'claude-x', displayName: 'Claude direto', isActive: true })];
+    listModelCatalog.mockResolvedValue(cat);
+    listCredentialedProviders.mockResolvedValue({ providers: ['openai'] });
+    montar();
+
+    const aba = await screen.findByRole('tab', { name: /Anthropic · sem chave do titular/ });
+    fireEvent.click(aba);
+    expect(screen.getByText('Claude direto')).toBeTruthy();
+    expect(screen.getByText(/ainda tem modelo ativo/)).toBeTruthy();
+  });
+
+  it('a seleção sobrevive à troca de aba e a busca sem resultado na aba nomeia as que casam', async () => {
+    listModelCatalog.mockResolvedValue(catalogoMisto());
+    montar();
+    await screen.findByText('Llama 3.2 1B');
+
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
+    fireEvent.click(screen.getByRole('tab', { name: /OpenAI/ }));
+    expect(screen.getByText(/1 selecionado/)).toBeTruthy();
+
+    fireEvent.change(screen.getByLabelText('Buscar modelo no catálogo'), {
+      target: { value: 'llama' },
+    });
+    expect(await screen.findByText(/Nenhum modelo de OpenAI casa com a busca.*Casam em: Ollama/)).toBeTruthy();
+  });
+
+  it('o hub continua repartido por fabricante; "expandir tudo" abre os subgrupos da aba', async () => {
+    listModelCatalog.mockResolvedValue(catalogoMisto());
+    montar();
+    await screen.findByText('Llama 3.2 1B');
+
+    fireEvent.click(screen.getByRole('tab', { name: /OpenRouter/ }));
+    expect(screen.getByRole('button', { name: /OpenAI/ })).toBeTruthy();
+    expect(screen.queryByText('GPT-4o via hub')).toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Expandir tudo' }));
+    expect(screen.getByText('GPT-4o via hub')).toBeTruthy();
+  });
+});
+
+/**
+ * Facetas de capability (ADR 0051).
+ *
+ * Um catálogo de 338 linhas não se navega por rolagem: a pergunta real é "qual
+ * modelo serve para ESTA tarefa". As facetas respondem isso com o que o
+ * provider PROVA — e nada além disso.
+ */
+describe('filtro por faceta', () => {
+  const catalogoRico = {
+    local: {},
+    cloud: {
+      openai: [
+        model({ id: 'm-ve', name: 've', displayName: 'Vê imagem', supportsVision: true }),
+        model({
+          id: 'm-pensa',
+          name: 'pensa',
+          displayName: 'Pensa',
+          supportsReasoning: true,
+        }),
+        model({
+          id: 'm-ambos',
+          name: 'ambos',
+          displayName: 'Vê e pensa',
+          supportsVision: true,
+          supportsReasoning: true,
+        }),
+      ],
+    },
+  } as CatalogoPorCategoria;
+
+  it('nasce sem filtro — o catálogo inteiro é o default', async () => {
+    listModelCatalog.mockResolvedValue(catalogoRico);
+    montar();
+
+    expect(await screen.findByText('Vê imagem')).toBeTruthy();
+    expect(screen.getByText('Pensa')).toBeTruthy();
+  });
+
+  it('marcar duas facetas exige AS DUAS, não uma ou outra', async () => {
+    listModelCatalog.mockResolvedValue(catalogoRico);
+    montar();
+    await screen.findByText('Vê imagem');
+
+    fireEvent.click(screen.getByRole('button', { name: 'lê imagem' }));
+    fireEvent.click(screen.getByRole('button', { name: 'thinking' }));
+
+    expect(screen.getByText('Vê e pensa')).toBeTruthy();
+    expect(screen.queryByText('Vê imagem')).toBeNull();
+    expect(screen.queryByText('Pensa')).toBeNull();
+  });
+
+  /** Filtro que zera a lista tem de ser distinguível de catálogo vazio. */
+  it('quando nada sobra, explica que foi o filtro e como sair', async () => {
+    listModelCatalog.mockResolvedValue(catalogoRico);
+    montar();
+    await screen.findByText('Vê imagem');
+
+    fireEvent.click(screen.getByRole('button', { name: 'gera imagem' }));
+
+    expect(screen.getByText(/desligue um filtro/i)).toBeTruthy();
+    expect(screen.queryByText(/Nenhum modelo no catálogo\./)).toBeNull();
+  });
+
+  it('o selo só afirma o que é verdade — nunca a ausência', async () => {
+    listModelCatalog.mockResolvedValue(
+      catalogo([model({ supportsVision: true })]),
+    );
+    montar();
+    await screen.findByText('GPT-4o mini');
+
+    // O selo existe uma vez só na linha; o chip de filtro tem o mesmo texto,
+    // então a busca é por papel para não confundir os dois.
+    expect(screen.getAllByText('lê imagem').length).toBeGreaterThan(0);
+    expect(screen.queryByText(/não lê imagem|não gera imagem/)).toBeNull();
+  });
+});
+
+/**
+ * Curadoria por USO (ADR 0051) — o eixo que o time decide, ao lado do que o
+ * provider prova.
+ */
+describe('curadoria por uso', () => {
+  it('o selo mostra o uso que o workspace marcou', async () => {
+    listModelCatalog.mockResolvedValue(catalogo([model({ uses: ['codigo'] })]));
+    montar();
+    await screen.findByText('GPT-4o mini');
+
+    // Duas ocorrências: o chip de filtro e o selo da linha — a lista tem uma só.
+    expect(screen.getAllByText('código')).toHaveLength(2);
+  });
+
+  it('marcar em lote SUBSTITUI os usos dos modelos selecionados', async () => {
+    montar();
+    await screen.findByText('GPT-4o mini');
+
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
+    // O chip da barra de lote, não o do filtro: ambos existem, e o de lote só
+    // aparece depois de marcar uma linha.
+    const chips = screen.getAllByRole('button', { name: 'análise' });
+    fireEvent.click(chips[chips.length - 1]);
+    fireEvent.click(screen.getByRole('button', { name: 'Aplicar usos' }));
+
+    await waitFor(() =>
+      expect(setModelUses).toHaveBeenCalledWith('ws-1', {
+        modelIds: ['m-1'],
+        uses: ['analise'],
+      }),
+    );
+  });
+
+  /** Sem uso escolhido, a mesma rota LIMPA — é como se desmarca tudo. */
+  it('sem uso escolhido o botão diz que vai limpar, e limpa', async () => {
+    listModelCatalog.mockResolvedValue(catalogo([model({ uses: ['codigo'] })]));
+    montar();
+    await screen.findByText('GPT-4o mini');
+
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
+    fireEvent.click(screen.getByRole('button', { name: 'Limpar usos' }));
+
+    await waitFor(() =>
+      expect(setModelUses).toHaveBeenCalledWith('ws-1', {
+        modelIds: ['m-1'],
+        uses: [],
+      }),
+    );
+  });
+
+  it('filtrar por uso esconde quem não foi marcado', async () => {
+    listModelCatalog.mockResolvedValue({
+      local: {},
+      cloud: {
+        openai: [
+          model({ id: 'm-cod', name: 'cod', displayName: 'O de código', uses: ['codigo'] }),
+          model({ id: 'm-nada', name: 'nada', displayName: 'Sem opinião' }),
+        ],
+      },
+    } as CatalogoPorCategoria);
+    montar();
+    await screen.findByText('O de código');
+
+    fireEvent.click(screen.getByRole('button', { name: 'código' }));
+
+    expect(screen.getByText('O de código')).toBeTruthy();
+    expect(screen.queryByText('Sem opinião')).toBeNull();
+  });
+
+  describe('preço e cobrança', () => {
+    const comPapel = (role: string) =>
+      listWorkspaces.mockResolvedValue([{ id: 'ws-1', role }]);
+
+    it('owner edita preço em micros e troca a cobrança; histórico listado', async () => {
+      comPapel('owner');
+      listModelPriceChanges.mockResolvedValue([
+        {
+          id: 'h1',
+          modelId: 'm-1',
+          inputBeforeMicros: 0,
+          inputAfterMicros: 1_000_000,
+          outputBeforeMicros: 0,
+          outputAfterMicros: 5_000_000,
+          source: 'manual',
+          changedBy: 'u',
+          createdAt: '2026-10-31T10:00:00.000Z',
+        },
+      ]);
+      montar();
+      await screen.findByText('GPT-4o mini');
+      fireEvent.click(screen.getByRole('button', { name: /Preço e cobrança/ }));
+      expect(await screen.findByText(/manual ·/)).toBeTruthy();
+      fireEvent.change(screen.getByLabelText('Entrada (US$ por 1M)'), {
+        target: { value: '1' },
+      });
+      fireEvent.change(screen.getByLabelText('Saída (US$ por 1M)'), {
+        target: { value: '5' },
+      });
+      await waitFor(() =>
+        expect(
+          (screen.getByRole('button', { name: 'Salvar preço' }) as HTMLButtonElement)
+            .disabled,
+        ).toBe(false),
+      );
+      fireEvent.click(screen.getByRole('button', { name: 'Salvar preço' }));
+      await waitFor(() =>
+        expect(updateModelPricing).toHaveBeenCalledWith('ws-1', 'm-1', {
+          inputPricePerMillionMicros: 1_000_000,
+          outputPricePerMillionMicros: 5_000_000,
+        }),
+      );
+      fireEvent.change(screen.getByLabelText('Cobrança'), {
+        target: { value: 'subscription' },
+      });
+      await waitFor(() =>
+        expect(updateModelBilling).toHaveBeenCalledWith('ws-1', 'm-1', 'subscription'),
+      );
+    });
+
+    const sugestao = {
+      cobranca: 'api' as const,
+      preco: {
+        fabricante: 'Anthropic',
+        entradaMicros: 100_000,
+        saidaMicros: 500_000,
+        fonte: 'https://docs.claude.com/pricing.md',
+        conferidoEm: '2026-11-01',
+        observacao: 'Prompt até 100 000 tokens.',
+      },
+    };
+    const abrirComSugestao = async (role: string, over = {}) => {
+      comPapel(role);
+      listModelCatalog.mockResolvedValue(catalogo([model({ sugestao, ...over })]));
+      montar();
+      await screen.findByText('GPT-4o mini');
+      fireEvent.click(screen.getByRole('button', { name: /Preço e cobrança/ }));
+    };
+
+    it('owner aplica o sugerido: preço e cobrança em série', async () => {
+      await abrirComSugestao('owner', { billing: 'subscription' });
+      expect(await screen.findByText(/Anthropic, conferido em 2026-11-01/)).toBeTruthy();
+      expect(screen.getByText(/Prompt até 100 000 tokens/)).toBeTruthy();
+      fireEvent.click(await screen.findByRole('button', { name: 'Aplicar sugerido' }));
+      await waitFor(() =>
+        expect(updateModelBilling).toHaveBeenCalledWith('ws-1', 'm-1', 'api'),
+      );
+      expect(updateModelPricing).toHaveBeenCalledWith('ws-1', 'm-1', {
+        inputPricePerMillionMicros: 100_000,
+        outputPricePerMillionMicros: 500_000,
+      });
+    });
+
+    it('falha no 2º passo diz quantos passaram', async () => {
+      updateModelBilling.mockRejectedValueOnce(new Error('x'));
+      await abrirComSugestao('owner', { billing: 'subscription' });
+      fireEvent.click(await screen.findByRole('button', { name: 'Aplicar sugerido' }));
+      expect(await screen.findByText(/Aplicou 1 de 2 passos/)).toBeTruthy();
+    });
+
+    it('maintainer vê a sugestão com o botão inerte; igual ao vigente some o botão', async () => {
+      await abrirComSugestao('maintainer');
+      expect(
+        (screen.getByRole('button', { name: 'Aplicar sugerido' }) as HTMLButtonElement)
+          .disabled,
+      ).toBe(true);
+    });
+
+    it('sugestão igual ao vigente mostra "já aplicado"', async () => {
+      await abrirComSugestao('owner', {
+        billing: 'api',
+        inputPricePerMillionMicros: 100_000,
+        outputPricePerMillionMicros: 500_000,
+      });
+      expect(await screen.findByText(/já está aplicado/)).toBeTruthy();
+      expect(screen.queryByRole('button', { name: 'Aplicar sugerido' })).toBeNull();
+    });
+
+    it('negativo é recusado no cliente', async () => {
+      comPapel('owner');
+      montar();
+      await screen.findByText('GPT-4o mini');
+      fireEvent.click(screen.getByRole('button', { name: /Preço e cobrança/ }));
+      fireEvent.change(screen.getByLabelText('Entrada (US$ por 1M)'), {
+        target: { value: '-1' },
+      });
+      await waitFor(() =>
+        expect(
+          (screen.getByRole('button', { name: 'Salvar preço' }) as HTMLButtonElement)
+            .disabled,
+        ).toBe(false),
+      );
+      fireEvent.click(screen.getByRole('button', { name: 'Salvar preço' }));
+      expect(await screen.findByText(/zero ou maiores/)).toBeTruthy();
+      expect(updateModelPricing).not.toHaveBeenCalled();
+    });
+
+    it('maintainer vê tudo inerte, com o motivo em texto', async () => {
+      comPapel('maintainer');
+      montar();
+      await screen.findByText('GPT-4o mini');
+      fireEvent.click(screen.getByRole('button', { name: /Preço e cobrança/ }));
+      expect(await screen.findByText(/Só o owner edita/)).toBeTruthy();
+      expect(
+        (screen.getByRole('button', { name: 'Salvar preço' }) as HTMLButtonElement)
+          .disabled,
+      ).toBe(true);
+      expect((screen.getByLabelText('Cobrança') as HTMLSelectElement).disabled).toBe(
+        true,
+      );
+    });
+
+    it('preço zero nunca aparece como $0.00 nas três cobranças', async () => {
+      const zero = { inputPricePerMillionMicros: 0, outputPricePerMillionMicros: 0 };
+      listModelCatalog.mockResolvedValue(
+        catalogo([
+          model({ id: 'a', displayName: 'A', billing: 'api', ...zero }),
+          model({ id: 'b', displayName: 'B', billing: 'subscription', ...zero }),
+          model({ id: 'c', displayName: 'C', billing: 'free', ...zero }),
+        ]),
+      );
+      montar();
+      await screen.findByText('A');
+      expect(screen.getByText('sem preço registrado')).toBeTruthy();
+      expect(screen.getByText('assinatura — sem preço registrado')).toBeTruthy();
+      expect(screen.getByText('grátis')).toBeTruthy();
+      expect(screen.queryByText(/\$0\.00/)).toBeNull();
+    });
+  });
+});

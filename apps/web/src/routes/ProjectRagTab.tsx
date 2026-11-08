@@ -1,0 +1,250 @@
+import { Shimmer } from '../components/ui/Shimmer';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getRagCoverage, mensagemDaApi, reindexRag, searchRag } from '../lib/api-client';
+import { useCurrentWorkspaceWithRole } from '../lib/hooks';
+import type { RagChunkScope } from '../lib/api-types';
+import { ErroDeCarregamento } from '../components/ErroDeCarregamento';
+import { RagCitationCard } from '../components/rag/RagCitationCard';
+import { RagCoveragePanel } from '../components/rag/RagCoveragePanel';
+import { AttachLocalFolderModal } from '../components/rag/AttachLocalFolderModal';
+import { Button } from '../components/ui/Button';
+import { Ajuda } from '../components/ui/Ajuda';
+import { RefreshCw } from 'lucide-react';
+import { Chip } from '../components/ui/Chip';
+import { Alert } from '../components/ui/Alert';
+import { Input } from '../components/ui/Input';
+import { useToast } from '../components/ui/ToastProvider.helpers';
+import { FolderIcon, SearchIcon } from '../components/ui/icons';
+import styles from './ProjectRagTab.module.css';
+
+const ORDEM_DOS_ESCOPOS: RagChunkScope[] = ['docs', 'adr', 'session', 'local'];
+
+const CHAVE_DO_ESCOPO: Record<RagChunkScope, string> = {
+  docs: 'rag.scopes.docs',
+  adr: 'rag.scopes.adr',
+  session: 'rag.scopes.session',
+  local: 'rag.scopes.local',
+};
+
+/**
+ * A tela do Chat RAG (PROGRAMA 28, Onda 5, frente G3) — busca híbrida sobre o
+ * índice de `docs/`, `docs/adr/` e conversas registradas (RN-231..238,
+ * ADR 0080).
+ *
+ * ## Degradação honesta (RN-252)
+ *
+ * Duas peças do backend já degradam sem fingir: `vectorAvailable: false` na
+ * busca (RN-233 — o provider de embedding não respondeu, e a busca rodou só
+ * com o sinal léxico) e a cobertura sem NENHUM "reindexado há Xmin" (RN-237 —
+ * não existe essa coluna, e um número chutado mentiria). Esta tela é onde as
+ * duas viram texto visível: um aviso acima dos resultados quando o vetor
+ * faltou, e um painel de cobertura que só mostra contagem real.
+ *
+ * ## O que NÃO é esta tela
+ *
+ * Não é a aba `sessions` ("Chat") — aquela é conversa com um agente ativado;
+ * esta é busca sobre o que já foi indexado, sem agente nenhum no meio
+ * (RN-202/ADR 0078 continuam valendo para a outra aba).
+ */
+export function ProjectRagTab({ projectId }: { projectId: string }) {
+  const { t } = useTranslation('sessions');
+  const queryClient = useQueryClient();
+  const { showToast } = useToast();
+  const { data: comPapel } = useCurrentWorkspaceWithRole();
+  const podeReindexar = comPapel?.role === 'owner' || comPapel?.role === 'maintainer';
+
+  const [termo, setTermo] = useState('');
+  const [buscado, setBuscado] = useState<string | null>(null);
+  const [escopos, setEscopos] = useState<Set<RagChunkScope>>(new Set());
+  const [anexandoPasta, setAnexandoPasta] = useState(false);
+
+  const coverageQuery = useQuery({
+    queryKey: ['rag-coverage', projectId],
+    queryFn: () => getRagCoverage(projectId),
+  });
+
+  const searchQuery = useQuery({
+    queryKey: ['rag-search', projectId, buscado, [...escopos].sort().join(',')],
+    queryFn: () =>
+      searchRag(projectId, {
+        query: buscado!,
+        scopes: escopos.size > 0 ? [...escopos] : undefined,
+      }),
+    enabled: Boolean(buscado),
+  });
+
+  const reindexMutation = useMutation({
+    mutationFn: () => reindexRag(projectId),
+    onSuccess: (relatorio) => {
+      void queryClient.invalidateQueries({ queryKey: ['rag-coverage', projectId] });
+      void queryClient.invalidateQueries({ queryKey: ['rag-search', projectId] });
+      showToast({
+        title: t('rag.reindexSuccessTitle'),
+        message: t('rag.reindexSuccessMessage', {
+          chunks: t('rag.reindexChunks', {
+            count: relatorio.docs.docsChunks + relatorio.docs.adrChunks,
+          }),
+          sessions: t('rag.reindexSessions', {
+            indexed: relatorio.sessions.indexed,
+            count: relatorio.sessions.total,
+          }),
+          embeddingSuffix: relatorio.embeddingAvailable
+            ? ''
+            : t('rag.embeddingUnavailableSuffix'),
+          cutSuffix: relatorio.docs.cutFiles.length
+            ? t('rag.cutFilesSuffix', { count: relatorio.docs.cutFiles.length })
+            : '',
+        }),
+        tone: relatorio.embeddingAvailable && relatorio.docs.cutFiles.length === 0 ? 'success' : 'warning',
+      });
+    },
+    onError: (erro) =>
+      showToast({
+        title: t('rag.reindexErrorTitle'),
+        message: mensagemDaApi(erro, t('rag.reindexErrorDefaultMessage')),
+        tone: 'danger',
+      }),
+  });
+
+  function submeter(e: React.FormEvent) {
+    e.preventDefault();
+    const limpo = termo.trim();
+    if (limpo.length >= 2) setBuscado(limpo);
+  }
+
+  function alternarEscopo(chave: RagChunkScope) {
+    setEscopos((atual) => {
+      const proximo = new Set(atual);
+      if (!proximo.delete(chave)) proximo.add(chave);
+      return proximo;
+    });
+  }
+
+  return (
+    <div className={styles.pagina}>
+      <div className={styles.cabecalho}>
+        <div>
+          <h2 className={styles.titulo}>
+            {t('rag.title')}
+            <Ajuda assunto={t('rag.title')}>{t('rag.subtitle')}</Ajuda>
+          </h2>
+        </div>
+        {podeReindexar && (
+          <div className={styles.acoesCabecalho}>
+            <Button
+              variant="secondary"
+              legenda={t('rag.attachLocalFolder.button')}
+              onClick={() => setAnexandoPasta(true)}
+            >
+              <FolderIcon size={14} aria-hidden="true" />
+            </Button>
+            <Button
+              variant="secondary"
+              legenda={reindexMutation.isPending ? t('rag.reindexButton.loading') : t('rag.reindexButton.idle')}
+              onClick={() => reindexMutation.mutate()}
+              loading={reindexMutation.isPending}
+            >
+              <RefreshCw aria-hidden="true" />
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {anexandoPasta && (
+        <AttachLocalFolderModal
+          projectId={projectId}
+          onClose={() => setAnexandoPasta(false)}
+          onAttached={() => {
+            setAnexandoPasta(false);
+            void queryClient.invalidateQueries({ queryKey: ['rag-coverage', projectId] });
+            void queryClient.invalidateQueries({ queryKey: ['rag-search', projectId] });
+          }}
+        />
+      )}
+
+      {coverageQuery.isError && (
+        <ErroDeCarregamento
+          titulo={t('rag.coverageError')}
+          erro={coverageQuery.error}
+          onTentarDeNovo={() => void coverageQuery.refetch()}
+        />
+      )}
+      {coverageQuery.isLoading && <div className={styles.estado}><Shimmer>{t('rag.loadingCoverage')}</Shimmer></div>}
+      {coverageQuery.data && <RagCoveragePanel coverage={coverageQuery.data} />}
+
+      <form className={styles.formulario} onSubmit={submeter}>
+        <div className={styles.linhaBusca}>
+          <Input
+            className={styles.input}
+            value={termo}
+            onChange={(e) => setTermo(e.target.value)}
+            placeholder={t('rag.searchPlaceholder')}
+            aria-label={t('rag.searchAriaLabel')}
+          />
+          <Button type="submit" legenda={t('rag.searchButton')} disabled={termo.trim().length < 2}>
+            <SearchIcon size={14} aria-hidden="true" />
+          </Button>
+        </div>
+        <div className={styles.escoposFiltro} role="group" aria-label={t('rag.scopeFilterAriaLabel')}>
+          {ORDEM_DOS_ESCOPOS.map((chave) => (
+            <Chip
+              key={chave}
+              tone="violet"
+              pressed={escopos.has(chave)}
+              onClick={() => alternarEscopo(chave)}
+            >
+              {t(CHAVE_DO_ESCOPO[chave])}
+            </Chip>
+          ))}
+          <span className={styles.escoposNota}>
+            {escopos.size === 0
+              ? t('rag.allScopes')
+              : t('rag.scopesMarked', { count: escopos.size })}
+          </span>
+        </div>
+      </form>
+
+      <div className={styles.resultados}>
+        {!buscado && <div className={styles.estado}>{t('rag.emptyPrompt')}</div>}
+
+        {buscado && searchQuery.isLoading && <div className={styles.estado}><Shimmer>{t('rag.searching')}</Shimmer></div>}
+
+        {buscado && searchQuery.isError && (
+          <ErroDeCarregamento
+            titulo={t('rag.searchError')}
+            erro={searchQuery.error}
+            onTentarDeNovo={() => void searchQuery.refetch()}
+          />
+        )}
+
+        {buscado && searchQuery.data && (
+          <>
+            {!searchQuery.data.vectorAvailable && (
+              <Alert tone="warning" role="status">
+                {t('rag.vectorUnavailable')}
+                {searchQuery.data.vectorUnavailableReason && `: ${searchQuery.data.vectorUnavailableReason}`}
+              </Alert>
+            )}
+
+            {searchQuery.data.hits.length === 0 ? (
+              <div className={styles.estado}>{t('rag.noResults', { query: searchQuery.data.query })}</div>
+            ) : (
+              <div className={styles.listaResultados}>
+                {searchQuery.data.hits.map((hit) => (
+                  <RagCitationCard
+                    key={hit.chunkId}
+                    hit={hit}
+                    projectId={projectId}
+                    searchId={searchQuery.data.searchId}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

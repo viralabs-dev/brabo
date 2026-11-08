@@ -1,0 +1,143 @@
+defmodule Engine.Harness.Tools.CreateStory do
+  @moduledoc """
+  Ferramenta do PO: cria uma história do backlog via a api. A api valida que
+  cada `business_rule_id` referencia uma regra de negócio existente e promove a
+  story pra `ready` se estiver completa (DoD/DoR/RF/regra). `:direct`, fora do
+  `@registry` global.
+  """
+
+  @behaviour Engine.Harness.Tool
+
+  alias Engine.Sessions.EngineApiClient
+
+  @impl true
+  def spec do
+    %{
+      name: "create_story",
+      description:
+        "Cria uma história sob um épico, justificada pelas regras de negócio que a originaram. " <>
+          "Preencha DoD, DoR, ao menos 1 RF e ao menos 1 business_rule_id para ela virar 'ready'.",
+      parameters: %{
+        "type" => "object",
+        "properties" => %{
+          "epic_id" => %{"type" => "string"},
+          "title" => %{"type" => "string"},
+          "description" => %{"type" => "string"},
+          "rf" => %{"type" => "array", "items" => %{"type" => "string"}},
+          "rnf" => %{"type" => "array", "items" => %{"type" => "string"}},
+          "dod" => %{"type" => "array", "items" => %{"type" => "string"}},
+          "dor" => %{"type" => "array", "items" => %{"type" => "string"}},
+          "business_rule_ids" => %{"type" => "array", "items" => %{"type" => "string"}}
+        },
+        "required" => ["epic_id", "title", "business_rule_ids"]
+      }
+    }
+  end
+
+  @impl true
+  def category, do: :direct
+
+  @impl true
+  def run(%{"epic_id" => epic_id, "title" => title} = args, ctx) do
+    with :ok <- epico_valido(epic_id, Map.get(ctx, :epicos_conhecidos, %{}), ctx.project_id) do
+      criar(epic_id, title, args, ctx)
+    end
+  end
+
+  def run(_args, _ctx),
+    do: {:error, "create_story exige `epic_id`, `title` e `business_rule_ids`"}
+
+  # RN-896 (AT-584): recusa ANTES da api, que responderia "epicId must be a
+  # UUID" (nome do DTO). Pertencimento: fora de `epicos_conhecidos` (os que o PO
+  # criou neste processo) relê o backlog UMA vez; só recusa se o id também não
+  # está lá. Mapa vazio ou leitura que falha = "não sei", a api decide.
+  @uuid ~r/\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/i
+  @teto_de_epicos 20
+
+  defp epico_valido(epic_id, conhecidos, project_id) do
+    cond do
+      not (is_binary(epic_id) and Regex.match?(@uuid, epic_id)) ->
+        {:error, "epic_id inválido; use o id (UUID) devolvido por create_epic"}
+
+      map_size(conhecidos) == 0 or Map.has_key?(conhecidos, epic_id) ->
+        :ok
+
+      true ->
+        case EngineApiClient.list_backlog(project_id) do
+          {:ok, epicos} when is_list(epicos) ->
+            if Enum.any?(epicos, &(Map.get(&1, "id") == epic_id)),
+              do: :ok,
+              else: {:error, "epic_id desconhecido; " <> lista_de_epicos(epicos)}
+
+          _ ->
+            :ok
+        end
+    end
+  end
+
+  defp lista_de_epicos(epicos) do
+    linhas =
+      epicos
+      |> Enum.take(@teto_de_epicos)
+      |> Enum.map_join(", ", &"#{Map.get(&1, "id")}=#{Map.get(&1, "title")}")
+
+    "épicos do projeto: #{linhas}" <>
+      if(length(epicos) > @teto_de_epicos,
+        do: " (mostrando #{@teto_de_epicos} de #{length(epicos)})",
+        else: ""
+      )
+  end
+
+  defp criar(epic_id, title, args, ctx) do
+    fields = %{
+      epicId: epic_id,
+      title: title,
+      description: Map.get(args, "description", ""),
+      rf: list(args, "rf"),
+      rnf: list(args, "rnf"),
+      dod: list(args, "dod"),
+      dor: list(args, "dor"),
+      businessRuleIds: list(args, "business_rule_ids")
+    }
+
+    case EngineApiClient.create_story(ctx.project_id, ctx.session_id, fields) do
+      {:ok, %{"id" => id} = story} ->
+        {:ok, "história criada: id=#{id}, #{desfecho(story)}" <> aviso_semantico(story)}
+
+      {:error, reason} ->
+        {:error, "falha ao criar história: #{inspect(reason)}"}
+    end
+  end
+
+  # O que dizer ao modelo sobre o que aconteceu com a história (Fase 12c).
+  #
+  # Em projeto no modo `manual` a história NÃO vira `ready` sozinha — ela
+  # fica proposta, aguardando o usuário. Se o retorno continuasse dizendo só
+  # `status=draft`, o PO concluiria que falhou e tentaria "consertar" uma
+  # história que está correta; e se dissesse `ready` estaria mentindo. Daí a
+  # frase explícita.
+  defp desfecho(%{"proposedReady" => true}),
+    do: "está COMPLETA e aguardando a promoção do usuário (o projeto exige aprovação manual)."
+
+  defp desfecho(%{"status" => "ready"}), do: "status=ready."
+
+  defp desfecho(%{"status" => status}),
+    do: "status=#{status} — faltam RF, DoD, DoR ou business_rule_ids para ficar completa."
+
+  # RN-681 (ADR 0198): a api checou a duplicata SEMÂNTICA dentro da criação e
+  # devolveu a frase pronta. Aviso, não recusa — a história já existe —, e a
+  # checagem PULADA também é dita, para o modelo não ler silêncio como "não é
+  # duplicata". Corpo sem o campo (api anterior) não diz nada.
+  defp aviso_semantico(%{"semanticDuplicate" => %{"message" => mensagem}})
+       when is_binary(mensagem) and mensagem != "",
+       do: "\n" <> mensagem
+
+  defp aviso_semantico(_story), do: ""
+
+  defp list(args, key) do
+    case Map.get(args, key) do
+      l when is_list(l) -> l
+      _ -> []
+    end
+  end
+end

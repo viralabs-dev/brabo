@@ -53,6 +53,9 @@ node -e 'const s=require(process.argv[1]);const n=process.argv[2].split("/").pop
   return { ...r, urls: ler('urls.txt'), cosign: ler('cosign.txt'), instalado: fs.existsSync(path.join(home, '.local/bin/brabo-runner')) };
 }
 
+// a tag sobe com o bot (AT-796): o spec lê a que o componentes.json fixa, sem repetir o literal
+const tagDoRunner = JSON.parse(fs.readFileSync(path.join(RAIZ, 'componentes.json'), 'utf8')).runner.tag;
+
 describe('install.sh — o runner vem do brabo-runner', () => {
   it('a tag do instalador é a que o componentes.json fixa', () => {
     const c = JSON.parse(fs.readFileSync(path.join(RAIZ, 'componentes.json'), 'utf8'));
@@ -65,7 +68,7 @@ describe('install.sh — o runner vem do brabo-runner', () => {
     const r = rodar({ binario: 'binario', hashNoManifesto: sha('binario'), cosignOk: true });
     expect(r.stdout).toContain('binário do runner verificado');
     expect(r.instalado).toBe(true);
-    expect(r.urls).toContain('https://github.com/viralabs-dev/brabo-runner/releases/download/v1.0.0/brabo-runner-linux-x64');
+    expect(r.urls).toContain(`https://github.com/viralabs-dev/brabo-runner/releases/download/${tagDoRunner}/brabo-runner-linux-x64`);
     expect(r.urls).not.toContain('viralabs-dev/brabo/releases');
     expect(r.cosign).toContain('viralabs-dev/brabo-runner/\\.github/workflows/build-runner-binaries\\.yml@');
   });

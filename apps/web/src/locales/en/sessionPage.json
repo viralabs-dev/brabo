@@ -1,0 +1,522 @@
+{
+  "status": {
+    "created": "not activated yet",
+    "active": "active",
+    "closing": "closing",
+    "closed": "closed",
+    "closedAbnormally": "closed abnormally",
+    "loading": "loading",
+    "ariaLabel": "Session {{status}}"
+  },
+  "compartilhado": {
+    "semTitulo": "(no title)",
+    "verNoBacklog": "View in Backlog",
+    "voce": "You",
+    "agenteGenerico": "agent",
+    "outroMembro": "Another member",
+    "autorDesconhecido": "Unknown author"
+  },
+  "topbar": {
+    "iniciadaAs": "started at {{hora}}",
+    "voltarAoProjeto": "Back to project",
+    "nomeDaSessao": "Session name",
+    "semNomeFicaHashtag": "No name — the session stays {{hashtag}}",
+    "tituloRenomear": "Session {{rotulo}} — click to rename",
+    "tituloSessao": "Session {{rotulo}}",
+    "trazCriativo": "brings the Creative into the conversation",
+    "iniciarIdeacao": "Start ideation",
+    "iniciarIdeacaoTitulo": "Brings the Creative in to lead this session's ideation — it hasn't joined yet",
+    "encerrar": "Close",
+    "recolherPainel": "Collapse context",
+    "abrirPainel": "Open context",
+    "fecharPainel": "Close context panel",
+    "ajustes": "Model and language",
+    "ajustesAria": "Model, response language and budget for this session",
+    "perguntaDeIdiomaPendente": "there is a question about the response language",
+    "encerrarSessao": "Close the session"
+  },
+  "convite": {
+    "criativa": {
+      "titulo": "It's your turn",
+      "texto": "This is a <b>creative</b> session. The <b>Creative</b> leads the ideation: it asks questions about the product and records the <b>business rules</b> that come out of the conversation. It doesn't decide on technology or write code — that's for the Architect and the devs, later on.",
+      "iniciarIdeacao": "Start ideation",
+      "iniciarIdeacaoNota": "It hasn't joined yet — this click is what brings it in.",
+      "exemploIntro": "Start by telling us what you want to build and for whom. For example:",
+      "exemplo": "I want an API that responds with a greeting to whoever calls it. It's for me to validate the end-to-end flow.",
+      "rodape": "When the rules are complete, use <b>I'm ready to build</b> — that's what generates the brief and hands the ball to the PO.",
+      "curto": "Creative session: the Creative agent leads ideation and records the business rules."
+    },
+    "consultiva": {
+      "titulo": "Advisory session",
+      "texto": "Here you talk to an agent you choose: ask questions, get context, clear up doubts. <b>No agent joins on its own</b> — choose who answers in the field below the conversation. The Creative doesn't join, and this session won't go to execution.",
+      "rodape": "When it's time to <b>build</b>, open a <b>creative</b> session in the project's Sessions tab — the type is chosen at creation and doesn't change afterward.",
+      "curto": "No agent joins on its own: pick who answers in the field below."
+    }
+  },
+  "anexos": {
+    "anexar": "Attach file",
+    "remover": "Remove {{nome}}",
+    "baixar": "Download",
+    "erro": {
+      "tipo": "Unsupported type: use an image (png, jpeg, webp, gif) or text/code.",
+      "tamanho": "File over the limit (image 5 MB, text 512 KB).",
+      "maximo": "At most 4 attachments per message.",
+      "leitura": "Could not read the file.",
+      "upload": "Attachment upload failed; the message was not sent."
+    }
+  },
+  "composer": {
+    "placeholder": "Write a message… (Enter sends, Shift+Enter for a new line)",
+    "enviar": "Send",
+    "parar": "Stop",
+    "prontoParaProduzir": "I'm ready — the need is validated",
+    "prontoParaProduzirExplica": "Closes readiness and the need validation, and calls the PO: it joins on its own once the Creative finishes the product brief",
+    "prontoParaProduzirDesabilitado": "Capture at least one business rule with the Creative before confirming readiness",
+    "confirmarArquitetura": "Confirm architecture ready",
+    "confirmarArquiteturaDesabilitado": "Promote at least one story in the Backlog before confirming the architecture",
+    "confirmarArquiteturaExplica": "Declares the architecture ready and offers the handoff to the Infra, which brings up the project's container.",
+    "confirmarArquiteturaProximoPasso": "Is the architecture ready? Confirm it so the system offers the Infra, which brings up the project's container.",
+    "destinatarioLabel": "To",
+    "destinatarioPlaceholder": "Choose the agent…",
+    "destinatarioPrecisaEscolher": "There is more than one agent in this session: choose who the message goes to.",
+    "semAgente": "This session has no agent yet: choose one and click Call. The offer shows up in the conversation, and the message can only be sent after you accept it.",
+    "chamarAgente": "Call",
+    "enfileirar": "Queue",
+    "perguntasEmAberto_one": "{{count}} open question",
+    "perguntasEmAberto_other": "{{count}} open questions",
+    "responderPerguntas": "Answer them",
+    "sugestaoExigeDeveloper": "This action requires the developer role in this workspace.",
+    "menu": {
+      "agentes": "Session agents",
+      "comandos": "Commands",
+      "vazio": "Nothing found",
+      "removerDestinatario": "Remove {{agente}} from the recipients",
+      "fecharAjuda": "Close help",
+      "erroEnviarVarios": "Could not send the message to the recipients. The text is back in the field."
+    },
+    "comandos": {
+      "indisponivel": "Unavailable right now",
+      "pronto": {
+        "nome": "ready",
+        "descricao": "Confirms readiness and calls the PO"
+      },
+      "arquitetura": {
+        "nome": "architecture",
+        "descricao": "Confirms the architecture"
+      },
+      "handoff": {
+        "nome": "handoff",
+        "descricao": "Opens the manual handoff"
+      },
+      "perguntas": {
+        "nome": "questions",
+        "descricao": "Goes to the open questions"
+      },
+      "parar": {
+        "nome": "stop",
+        "descricao": "Stops the running turn"
+      },
+      "aprovar": {
+        "nome": "approve",
+        "descricao": "You are deciding through this command. The same limits as the approval card apply.",
+        "confirmar": "Approve: {{acao}}",
+        "cancelar": "Cancel",
+        "aprovar": "Approve",
+        "nenhuma": "No action is waiting for your decision.",
+        "soNoCard": "There is more than one pending action, or it can only be decided on its card: decide there.",
+        "erro": "Could not approve. Decide on the card."
+      },
+      "ajuda": {
+        "nome": "help",
+        "descricao": "Lists the commands"
+      },
+      "resumo": {
+        "nome": "summary",
+        "descricao": "Inserts a summary request in the field",
+        "texto": "Summarize in bullet points what we decided so far and what is left."
+      },
+      "plano": {
+        "nome": "plan",
+        "descricao": "Inserts a request for the current plan in the field",
+        "texto": "Show your current plan."
+      },
+      "skills": {
+        "nome": "skills",
+        "descricao": "Lists the agent's tools and instruction",
+        "titulo_one": "{{agente}}: {{count}} tool",
+        "titulo_other": "{{agente}}: {{count}} tools",
+        "naoSei": "I don't know {{agente}}'s tools right now: the engine did not answer.",
+        "semAgente": "{{agente}} is not in the catalog.",
+        "instrucao": "Current instruction (v{{versao}})",
+        "erro": "Could not read the catalog: {{motivo}}"
+      },
+      "buscar": {
+        "nome": "search",
+        "descricao": "Searches the project base for the field text",
+        "semConsulta": "Type what to search in the field and use /search.",
+        "titulo_one": "Search \"{{consulta}}\": {{count}} passage",
+        "titulo_other": "Search \"{{consulta}}\": {{count}} passages",
+        "erro": "The search failed: {{motivo}}"
+      }
+    }
+  },
+  "ativacao": {
+    "encerradaTitulo": "Session closed",
+    "mensagemNaoEnviada": "Your unsent message",
+    "naoAtivada": "Session not activated yet.",
+    "ativarSessao": "Activate session",
+    "statusGenerico": "Session {{status}} — can't send messages.",
+    "reabrir": "Reopen session",
+    "reabrirExplicacao": "Reopening brings the session back to active with everything it already had: the conversation, the business rules, the answered questions and the offers between agents. The previous closing stays on record.",
+    "reabrirExigeDeveloper": "Reopening the session requires the developer role in this workspace."
+  },
+  "mensagens": {
+    "copiar": "Copy response",
+    "copiado": "Copied",
+    "reunindoInformacoes": "Gathering information...",
+    "respostaVazia": "Empty response — event from an older version, when turn failures were recorded as a blank response. The real reason wasn't recorded.",
+    "modeloGerador": "Model that generated this response: {{modelName}}",
+    "modeloNaoGravado": "This response was recorded without the model's name",
+    "modeloNaoRegistrado": "model not recorded",
+    "continuarCortada": "Continue where it stopped",
+    "continuarCortadaTexto": "Continue where you stopped.",
+    "falhaOrigem": "failure · origin {{origem}}",
+    "falhaProximoPasso": "The {{agente}} turn stopped because of this failure (origin {{origem}}). Send {{agente}} a message to continue.",
+    "regrasSemHistoria_one": "{{count}} business rule is still without a story.",
+    "regrasSemHistoria_other": "{{count}} business rules are still without a story.",
+    "tetoDeIteracoes": "Stopped before finishing: each trip to the model counts as a step, and the limit for one turn is {{max}}.",
+    "naoEnviada": "not sent",
+    "tentarDeNovo": "Try again"
+  },
+  "historia": {
+    "pendente": "story \"{{titulo}}\" ready, awaiting your promotion",
+    "estevePendente": "story \"{{titulo}}\" was awaiting your promotion",
+    "promover": "Promote",
+    "devolver": "Return",
+    "aprovarTodas": "Approve all",
+    "aguardandoPromocao_one": "{{count}} story awaiting promotion",
+    "aguardandoPromocao_other": "{{count}} stories awaiting promotion",
+    "devolveuAoPo": "returned to the PO",
+    "tituloFallback": "a story",
+    "semMotivo": "no reason given"
+  },
+  "handoff": {
+    "aceiteAutomatico": "Accepted automatically: the backlog covers all {{regras}} business rules and the repository is local, so {{agente}} joined without a click.",
+    "aceiteAutomaticoFalhou": "The automatic accept of the handoff to {{agente}} failed: {{erro}}. Accept it from the offer card.",
+    "passouOBastaoAo": "handed off to",
+    "aceitarEPassar": "Accept and hand over to {{agente}}",
+    "ativarExecucao": "Activate execution",
+    "ativarSemPlanoAviso": "No plan: the devs take the tasks as they are.",
+    "semRepositorio": "No repository yet: accepting this handoff provisions it, and only then can execution be activated.",
+    "acompanheExecucao": "Follow the execution in Executors",
+    "infraTitulo": "{{de}} handed off to Infra",
+    "infraDetalhe": "Accepting activates the Infra Lead and already authorizes starting the container: in a Container or Mounted folder project with the Architect's routing ready, it picks the image and starts the container without another click. Starting it in a Local runner project and merging the infra PR still wait for your decision.",
+    "infraBotao": "Accept the Infra handoff",
+    "manualAbrir": "Address handoff to another agent…",
+    "manualLabel": "Address handoff to another agent",
+    "manualPlaceholder": "Choose agent...",
+    "manualBotao": "Address handoff",
+    "manualOrigem": "Manual handoff",
+    "foraDaJanelaTitulo": "{{de}} handed off to {{para}}",
+    "foraDaJanelaDetalhe": "This offer's event has already left the last 200 in the thread, so its button lives here.",
+    "infraDetalheCurto": "Accepting already authorizes starting the container, with no further click."
+  },
+  "backlog": {
+    "criouEpico": "created the epic",
+    "criouHistoria": "created the story"
+  },
+  "perguntas": {
+    "respondidas": "questions from {{agente}} — answered",
+    "titulo": "questions from {{agente}}",
+    "anterior": "Previous",
+    "proxima": "Next",
+    "progresso": "Question {{atual}} of {{total}}",
+    "progressoRotulo": "Questions progress",
+    "suaResposta": "Your answer — {{pergunta}}",
+    "enviarRespostas": "Send answers",
+    "respostasEnviadas": "Answers sent",
+    "erroEnviar": "Could not send the answers"
+  },
+  "toasts": {
+    "sessaoEncerrada": "This session was closed and no longer accepts messages. Start a new session to continue.",
+    "erro": "Error",
+    "erroAtivarSessao": "Could not activate the session",
+    "erroRenomear": "Could not rename the session",
+    "erroIniciarIdeacao": "Could not start the ideation",
+    "erroConfirmarProntidao": "Could not confirm readiness",
+    "erroConfirmarArquitetura": "Could not confirm the architecture",
+    "prontoRegistrado": "Need validated. The PO joins once the product brief is ready",
+    "erroAceitarHandoff": "Could not accept the handoff",
+    "handoffManualEnviado": "Handoff sent",
+    "erroHandoffManual": "Could not send the handoff",
+    "execucaoAtivada": "Execution activated",
+    "erroAtivarExecucao": "Could not activate the execution",
+    "modoAutomaticoLigado": "Automatic mode turned on",
+    "erroModoAutomatico": "Could not turn on automatic mode",
+    "erroPromover": "Could not promote",
+    "historiaPromovida": "Story promoted",
+    "historiasPromovidas_one": "Story promoted",
+    "historiasPromovidas_other": "{{count}} stories promoted",
+    "promovidasParcial": "{{promovidas}} of {{total}} promoted",
+    "erroPromoverHistoria": "Could not promote the story",
+    "erroPromoverHistorias": "Could not promote the stories",
+    "historiaDevolvida": "Story returned to the PO",
+    "erroDevolverHistoria": "Could not return the story",
+    "erroEnviarMensagem": "Could not send the message",
+    "erroCancelarTurno": "Could not cancel the turn",
+    "erroNoChat": "Chat error",
+    "aviso": "Warning",
+    "levandoAExecucao": "Taking you to the execution session.",
+    "erroReabrirSessao": "Could not reopen the session"
+  },
+  "modal": {
+    "devolverTitulo": "Return \"{{titulo}}\" to the PO?",
+    "motivo": "Reason",
+    "motivoDica": "Goes as a pinned message in the PO's session. Say what's missing — that's what it uses to rewrite the story.",
+    "motivoPlaceholder": "E.g.: the acceptance criteria don't cover payment refusal.",
+    "devolverAoPo": "Return to the PO",
+    "cancelar": "Cancel"
+  },
+  "artefatos": {
+    "pullRequest": "Pull request",
+    "adr": "ADR",
+    "historias": "stories",
+    "tarefas": "tasks",
+    "itens": "items",
+    "mensagensCount_one": "{{count}} message",
+    "mensagensCount_other": "{{count}} messages"
+  },
+  "aside": {
+    "titulo": "Session context",
+    "teto": "This panel reads the <b>{{lidos}}</b> events already loaded for this session. There are <b>{{anteriores}}</b> older ones — “Load older”, in the Event log, brings more, and the other sections grow along with it.",
+    "regrasDeNegocio": "Business rules",
+    "nadaAinda": "Nothing yet.",
+    "nadaNaJanela": "None in the loaded events — there may be some in the earlier ones.",
+    "contagemNaJanela_one": "{{count}} in view · more before",
+    "contagemNaJanela_other": "{{count}} in view · more before",
+    "origemRefs_one": "origin: {{count}} ref",
+    "origemRefs_other": "origin: {{count}} refs",
+    "paginaAnterior": "Previous page of business rules",
+    "proximaPagina": "Next page of business rules",
+    "paginaDe": "{{atual}} of {{total}}",
+    "artefatosGerados": "Artifacts generated",
+    "artefatosVazio": "No PR or backlog item in this session yet.",
+    "arquivosTocados": "Files touched",
+    "logDeEventos": "Event log",
+    "eventoCitado": "Cited event",
+    "eventoCitadoNaoEncontrado": "The cited event wasn't found in this session.",
+    "erroCarregarLog": "Could not load the event log.",
+    "decisoes": "Recorded decisions",
+    "decisoesNadaNaJanela": "None in the loaded events — there may be decisions in earlier ones.",
+    "decisoesVazio": "No decision recorded in this session.",
+    "decisaoSemEscolha": "Decision with no recorded choice",
+    "todasAntesDaJanela": "There are {{total}} in this session, all before the loaded events — “Load older”, in the Event log, brings the detail.",
+    "recorte": "Showing {{mostradas}} of {{total}} — the rest are before what was loaded.",
+    "arquivosNaoLidos": "I haven't read the whole session's files yet.",
+    "recorteMaisRecentes": "Showing the {{mostradas}} most recent of {{total}}.",
+    "arquivosVazio": "No files in the PRs or commits of this session or of the execution session linked to it.",
+    "prsNaoLidas_one": "{{count}} PR was left out of this list (past the read limit, or its diff could not be read) — the PRs tab shows them all.",
+    "prsNaoLidas_other": "{{count}} PRs were left out of this list (past the read limit, or their diff could not be read) — the PRs tab shows them all."
+  },
+  "turno": {
+    "artefato": {
+      "epico": "Epic created",
+      "historia": "Story created",
+      "decisao": "Decision recorded",
+      "mapaDeModulos": "Module map",
+      "c4": "C4 diagram",
+      "imagem": "Project image",
+      "parecerQa": "QA verdict",
+      "parecerSecops": "SecOps verdict",
+      "ver": "View in tab",
+      "veredito": {
+        "approved": "approved",
+        "changes_requested": "changes requested"
+      }
+    },
+    "pensando": "Thinking…",
+    "ferramentaFalhou": "The tool failed.",
+    "resultadoCortado": "Result cut at the 2,000-character limit.",
+    "raciocinio": "Reasoning",
+    "raciocinando": "Reasoning…",
+    "raciocinioChars_one": "{{count}} character",
+    "raciocinioChars_other": "{{count}} characters",
+    "passosDoTurno": "Turn steps",
+    "consultado": "Consulted this turn",
+    "fonteN": "Source {{n}}: {{rotulo}}",
+    "consultadoCorte": "showing {{shown}} of {{total}}",
+    "passosCount_one": "{{count}} step",
+    "passosCount_other": "{{count}} steps"
+  },
+  "pendencias": {
+    "referenciaNoFio": "Merge proposed — decide it in the \"PRs ready to merge\" queue above.",
+    "titulo": "Pending decisions from other sessions in this project",
+    "tituloDoProjeto": "Pending decisions in this project",
+    "nota": "A shortcut to the decision: the same cards and endpoints as the Approvals tab. No ceiling changes — merging into a protected branch stays your own gesture (Merge asks for your confirmation).",
+    "filas": {
+      "aprovacoes": "Approvals",
+      "merges": "PR merges",
+      "prontas": "PRs ready to merge",
+      "bloqueadas": "Blocked tasks",
+      "perguntas": "Open questions",
+      "travados": "Stuck agents"
+    },
+    "origem_one": "Proposed in session {{hashtag}} · {{tempo}}",
+    "origem_other": "{{count}} proposed in session {{hashtag}} · oldest {{tempo}}",
+    "abas": "Pending queues",
+    "paginacao": {
+      "anterior": "Previous page of {{fila}}",
+      "proxima": "Next page of {{fila}}",
+      "faixa": "{{inicio}}–{{fim}} of {{total}}"
+    },
+    "semPapel": "Deciding here needs the developer role on the project. You can see the item, but someone else decides.",
+    "motivoNaoLido": {
+      "todas_one": "The policy reason for this card could not be read: reading the log of the session that proposed the action failed.",
+      "todas_other": "The policy reason for these {{count}} cards could not be read: reading the log of the session that proposed the actions failed.",
+      "algumas_one": "The policy reason for {{count}} of the {{total}} cards below could not be read: reading the log of the session that proposed the action failed.",
+      "algumas_other": "The policy reason for {{count}} of the {{total}} cards below could not be read: reading the log of the session that proposed the actions failed."
+    },
+    "bloqueadas": {
+      "botao": "Unblock (back to the dev queue)",
+      "ok": "Task unblocked: it goes back to the module's dev agent queue.",
+      "erro": "Could not unblock the task.",
+      "semMotivo": "No reason recorded.",
+      "semPapel": "Unblocking requires the developer role on the project.",
+      "diagnostico": "Diagnosis",
+      "agenteTravado": "{{agente}} is stuck: re-arm it before unblocking."
+    },
+    "perguntas": {
+      "origem": "{{agente}} asked · {{tempo}}",
+      "afeta": "Affects:",
+      "afetaRegras_one": "{{count}} rule",
+      "afetaRegras_other": "{{count}} rules",
+      "afetaHistorias_one": "{{count}} story",
+      "afetaHistorias_other": "{{count}} stories",
+      "afetaTarefas_one": "{{count}} task",
+      "afetaTarefas_other": "{{count}} tasks",
+      "esperando": "The task \"{{tarefa}}\" is waiting for your answer.",
+      "sugestao": "Suggestion:",
+      "aceitar": "Accept suggestion",
+      "campo": "Your answer",
+      "responder": "Answer",
+      "soOAutor": "Only the person who created the session where the question was asked can answer it.",
+      "erro": "The answer could not be saved.",
+      "recorte": "Showing {{mostradas}} of {{total}} questions.",
+      "respondida": "Answered. The answer was saved as a decision.",
+      "corrigir": "Fix the story",
+      "corrigirHistoria": "Affected story: {{titulo}}",
+      "dispensar": "Dismiss"
+    },
+    "verOCartao": "See the card",
+    "saidas": {
+      "aviso": "Left the queue: {{lista}}",
+      "dispensar": "Dismiss",
+      "perguntas_one": "{{count}} question",
+      "perguntas_other": "{{count}} questions",
+      "aprovacoes_one": "{{count}} approval",
+      "aprovacoes_other": "{{count}} approvals",
+      "merges_one": "{{count}} PR merge",
+      "merges_other": "{{count}} PR merges",
+      "prontas_one": "{{count}} ready PR",
+      "prontas_other": "{{count}} ready PRs",
+      "bloqueadas_one": "{{count}} blocked task",
+      "bloqueadas_other": "{{count}} blocked tasks"
+    },
+    "travados": {
+      "botao": "Re-arm",
+      "ok": "Agent re-armed: it picks up tasks again.",
+      "erro": "Could not re-arm the agent.",
+      "semPapel": "Re-arming requires the developer role on the project."
+    }
+  },
+  "mergearNoChat": {
+    "botao": "Merge",
+    "propondo": "Proposing…",
+    "semPapel": "Merging here needs the developer role on the project.",
+    "nota": "Asks for confirmation right here; Confirm proposes and approves the merge, and the approval stays on record.",
+    "erroTitulo": "Could not propose the merge",
+    "gatePendente": "The {{gate}} gate is still pending for this PR. Merging stays available — the decision is yours.",
+    "confirmacao": "Merge {{pr}} into {{alvo}}?",
+    "confirmar": "Confirm",
+    "cancelar": "Cancel",
+    "mergeada": "Merged",
+    "falhou": "The merge failed."
+  },
+  "fio": {
+    "carregando": "Loading session…",
+    "historico": {
+      "titulo_one": "Before the last message",
+      "titulo_other": "Before the last {{count}} messages",
+      "outrasCount_one": "{{count}} other entry",
+      "outrasCount_other": "{{count}} other entries",
+      "conteudoComOutras": "{{mensagens}} · {{outras}}"
+    },
+    "rotuloDoFio": "Session conversation",
+    "irAoFim": "Go to end"
+  },
+  "fila": {
+    "painel": "Queued messages",
+    "cancelar": "Cancel",
+    "cancelarSoAutor": "Only the person who sent the message can cancel it.",
+    "erroCancelar": "Could not cancel the message.",
+    "enfileirada": "{{agente}} is mid-turn: the message joined its queue (position {{posicao}}) and will be read when the turn ends."
+  },
+  "gateInterrompido": {
+    "aviso": "The engine restart interrupted the {{gate}} gate cycle for task {{taskId}}; it was restarted from the beginning at {{hora}}."
+  },
+  "gateEstacionado": {
+    "aviso": "The {{gate}} gate cycle for task {{taskId}} stalled for more than 2 h and was parked: it does not restart on its own.",
+    "avisoPergunta": "The {{gate}} gate cycle for task {{taskId}} is parked waiting for your answer to an open question: answer it in the \"Open questions\" card and the gate restarts.",
+    "botao": "Resume gate",
+    "nota": "Dispatches the {{gate}} gate again for this task.",
+    "semPapel": "Resuming the gate requires the developer role on the project.",
+    "retomado": "Gate resumed — progress shows up in this thread.",
+    "erroTitulo": "Could not resume the gate"
+  },
+  "encerrar": {
+    "titulo": "End the execution session?",
+    "oQuePara": "Ending stops the agents of this session right away: a command in progress (an npm install, a test run) is cut off, and the turn in progress is not saved.",
+    "agentes": "Working here: {{agentes}}.",
+    "semReabrir": "A session with execution cannot be reopened afterwards.",
+    "cancelar": "Keep running",
+    "confirmar": "End session"
+  },
+  "turnoInterrompido": {
+    "botao": "Resume",
+    "nota": "Continues the turn from where it stopped, once per click.",
+    "semPapel": "Resuming the turn requires the developer role in the project.",
+    "retomado": "Resume requested — progress shows up in this thread.",
+    "erroTitulo": "Could not resume the turn",
+    "automatica": "{{agente}} was resumed automatically after the restart.",
+    "objetivo": "Goal: {{objetivo}}",
+    "pareiEm": "Stopped at: {{passo}}",
+    "estado": {
+      "pendente": "pending",
+      "em_curso": "in progress",
+      "feito": "done",
+      "descartado": "dropped"
+    }
+  },
+  "execucaoParada": {
+    "aviso_one": "The run has stopped: {{count}} pending task and no agent can pick it up. Held behind: {{atras}}.",
+    "aviso_other": "The run has stopped: {{count}} pending tasks and no agent can pick them up. Held behind: {{atras}}.",
+    "tarefa": "blocked task \"{{titulo}}\"",
+    "agente": "tripped agent {{agente}}",
+    "rearmar": "Rearm {{agente}}",
+    "desbloquear": "Unblock \"{{titulo}}\"",
+    "nota": "Rearming takes the agent out of the circuit breaker; unblocking puts the task back in the queue.",
+    "semPapel": "Rearming and unblocking require the developer role on the project.",
+    "feito": "Done — progress shows up in this thread.",
+    "erroTitulo": "Could not unstick the run"
+  },
+  "avisoDePrPronta": {
+    "uma": "PR #{{numero}} \"{{titulo}}\" is ready for you to merge: the gates passed.",
+    "varias_one": "{{count}} PR ready for you to merge.",
+    "varias_other": "{{count}} PRs ready for you to merge.",
+    "espera": "Ready {{quando}}.",
+    "ver": "View the PR",
+    "verAs_one": "View {{count}}",
+    "verAs_other": "View all {{count}}",
+    "agoraNao": "Not now"
+  }
+}

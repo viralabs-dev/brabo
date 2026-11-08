@@ -1,0 +1,73 @@
+name: backmerge-gate
+
+# REUTILIZÁVEL (workflow_call) — brabo-ci. O chamador declara os gatilhos; veja o README.
+# Comentários abaixo vêm do monorepo de origem (daneiel/brabo) e falam dos gatilhos do chamador.
+
+# Check required em TODO PR: o destino está travado aguardando retropropagação?
+# Fonte da política: docs/explanation/branching-policy.md
+#
+# `hotfix/` entra direto em `main` porque incidente não espera a escada. Isso
+# deixa `dev` sem a correção — e o próximo release a DESFAZ, em silêncio.
+# Este check impede que qualquer coisa suba enquanto a correção não descer.
+on:
+  workflow_call:
+    inputs:
+      ci_ref:
+        description: 'Ref do brabo-ci de onde vêm os scripts (use o MESMO SHA ou tag do `uses:` do chamador)'
+        required: false
+        type: string
+        default: 'v1.0.0'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backmerge-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  conferir:
+    name: Backmerge gate
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    steps:
+      # Sem `if:` no job — check required indexado por sha que não roda deixa
+      # veredito velho colado, e aqui isso liberaria merge durante trava.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          # Histórico completo: a higiene do gate usa `merge-base --is-ancestor`
+          # para perguntar se o hotfix JÁ desceu, e essa pergunta não tem
+          # resposta confiável num clone raso.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Buscar as permanentes
+        run: |
+          set -euo pipefail
+          # O gate é lido SEMPRE da `main`, nunca da branch do PR: ler a cópia
+          # que veio junto num backmerge daria estado velho, justamente durante
+          # a cadeia em que ele muda a cada merge.
+          #
+          # `dev` vem junto porque a trava é CONFERIDA contra ela: um
+          # registro velho que sobreviveu a uma promoção não pode travar o
+          # repositório para sempre.
+          git fetch --no-tags --quiet origin \
+            '+refs/heads/main:refs/remotes/origin/main' \
+            '+refs/heads/dev:refs/remotes/origin/dev'
+
+      # Os scripts da política moram no brabo-ci, não no repositório que chama.
+      - name: Scripts do brabo-ci
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          repository: viralabs-dev/brabo-ci
+          ref: ${{ inputs.ci_ref }}
+          path: .brabo-ci
+          persist-credentials: false
+
+      - name: Consultar o gate
+        env:
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
+          PR_MESMO_REPO: ${{ github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node .brabo-ci/scripts/ci/backmerge-gate.ts

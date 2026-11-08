@@ -1,0 +1,732 @@
+import { describe, it, expect, beforeEach, afterAll } from 'vitest';
+import { eq } from 'drizzle-orm';
+import { createTestDb, truncateAll } from '../../../support/test-db';
+import {
+  modelBindings,
+  models,
+  projects,
+  sessionEvents,
+  sessions,
+  tokenUsage,
+  users,
+  workspaces,
+} from '../../../../src/db/schema';
+import { DrizzleUnitOfWork } from '../../../../src/infrastructure/persistence/drizzle/drizzle-unit-of-work';
+import { DrizzleOutboxRepository } from '../../../../src/infrastructure/persistence/drizzle/outbox.repository';
+import { DrizzleModelRepository } from '../../../../src/infrastructure/persistence/drizzle/model.repository';
+import { DrizzleModelBindingRepository } from '../../../../src/infrastructure/persistence/drizzle/model-binding.repository';
+import { DrizzleUserCredentialRepository } from '../../../../src/infrastructure/persistence/drizzle/user-credential.repository';
+import { DrizzleProjectRepository } from '../../../../src/infrastructure/persistence/drizzle/project.repository';
+import { DrizzleBudgetRepository } from '../../../../src/infrastructure/persistence/drizzle/budget.repository';
+import { DrizzleAgentAreaRepository } from '../../../../src/infrastructure/persistence/drizzle/agent-area.repository';
+import { DrizzleTokenUsageRepository } from '../../../../src/infrastructure/persistence/drizzle/token-usage.repository';
+import { EnvelopeEncryptionService } from '../../../../src/infrastructure/security/envelope-encryption.service';
+import { GptTokenizerEstimator } from '../../../../src/infrastructure/tokenization/gpt-tokenizer-estimator';
+import { ResolveModelBindingUseCase } from '../../../../src/application/use-cases/llm/resolve-model-binding.use-case';
+import { CheckBudgetGateUseCase } from '../../../../src/application/use-cases/llm/check-budget-gate.use-case';
+import { ResolveCredentialOwnerUseCase } from '../../../../src/application/use-cases/llm/resolve-credential-owner.use-case';
+import { DrizzleWorkspaceRepository } from '../../../../src/infrastructure/persistence/drizzle/workspace.repository';
+import { DecidirFerramentaDoPassoUseCase } from '../../../../src/application/use-cases/llm/decidir-ferramenta-do-passo.use-case';
+import { RecordLlmUsageUseCase } from '../../../../src/application/use-cases/llm/record-llm-usage.use-case';
+import { AnthropicProvider } from '../../../../src/infrastructure/llm/anthropic-provider';
+import { RunLlmTurnUseCase } from '../../../../src/application/use-cases/llm/run-llm-turn.use-case';
+import type { LLMProvider } from '../../../../src/application/ports/llm-provider.port';
+import type { LLMProviderRegistry } from '../../../../src/application/ports/llm-provider-registry.port';
+import type {
+  ChatOptions,
+  ChatStreamChunk,
+  LLMProviderName,
+} from '@brabo/shared';
+import { OpenRouterProvider } from '../../../../src/infrastructure/llm/openrouter-provider';
+import { subirServidorFalso } from '../../../support/llm/fake-llm-server';
+import { BraboMetrics } from '../../../../src/infrastructure/observability/brabo-metrics';
+
+const { db, pool } = createTestDb();
+
+const unitOfWork = new DrizzleUnitOfWork(db);
+const outboxRepo = new DrizzleOutboxRepository(db);
+const modelRepo = new DrizzleModelRepository(db);
+const bindingRepo = new DrizzleModelBindingRepository(db);
+const credentialRepo = new DrizzleUserCredentialRepository(db);
+const projectRepo = new DrizzleProjectRepository(db);
+const budgetRepo = new DrizzleBudgetRepository(db);
+const areaRepo = new DrizzleAgentAreaRepository(db);
+const tokenUsageRepo = new DrizzleTokenUsageRepository(db);
+const encryption = new EnvelopeEncryptionService();
+const tokenEstimator = new GptTokenizerEstimator();
+
+const resolveModelBinding = new ResolveModelBindingUseCase(
+  bindingRepo,
+  projectRepo,
+);
+const checkBudgetGate = new CheckBudgetGateUseCase(budgetRepo, areaRepo);
+const resolveCredentialOwner = new ResolveCredentialOwnerUseCase(
+  projectRepo,
+  new DrizzleWorkspaceRepository(db),
+);
+const recordLlmUsage = new RecordLlmUsageUseCase(
+  tokenUsageRepo,
+  budgetRepo,
+  areaRepo,
+  outboxRepo,
+  // Registry próprio por spec: prom-client é global por default e
+  // contadores vazados entre arquivos tornariam as asserções dependentes
+  // da ordem de execução.
+  new BraboMetrics(),
+);
+
+// Provider `ollama` nestes specs: o roteador nunca é consultado (só com
+// OpenRouter, ADR 0179). Se fosse, o Jev de mentira derrubaria o teste.
+const decidirFerramenta = new DecidirFerramentaDoPassoUseCase(
+  projectRepo,
+  new DrizzleWorkspaceRepository(db),
+  {
+    decidir: () => {
+      throw new Error('o Jev não deve ser chamado com provider != openrouter');
+    },
+  },
+  tokenEstimator,
+  unitOfWork,
+  recordLlmUsage,
+);
+
+class FakeProvider implements LLMProvider {
+  name: LLMProviderName = 'ollama';
+  readonly capabilities = {
+    streaming: true,
+    toolCalling: true,
+    listModels: false,
+    embeddings: false,
+    reasoningText: false,
+    routingPreference: false,
+    stickySession: false,
+    priceCeiling: false,
+    promptCaching: false,
+    vision: false,
+  };
+  constructor(private readonly script: ChatStreamChunk[]) {}
+  async *chat(): AsyncGenerator<ChatStreamChunk> {
+    await Promise.resolve();
+    for (const chunk of this.script) yield chunk;
+  }
+}
+
+class ThrowingProvider implements LLMProvider {
+  name: LLMProviderName = 'ollama';
+  readonly capabilities = {
+    streaming: true,
+    toolCalling: true,
+    listModels: false,
+    embeddings: false,
+    reasoningText: false,
+    routingPreference: false,
+    stickySession: false,
+    priceCeiling: false,
+    promptCaching: false,
+    vision: false,
+  };
+  async *chat(): AsyncGenerator<ChatStreamChunk> {
+    await Promise.resolve();
+    yield { type: 'text_delta', text: 'parcial' };
+    throw new Error('provider caiu');
+  }
+}
+
+function registryWith(provider: LLMProvider): LLMProviderRegistry {
+  return { get: () => provider };
+}
+
+function buildUseCase(provider: LLMProvider) {
+  return new RunLlmTurnUseCase(
+    unitOfWork,
+    modelRepo,
+    credentialRepo,
+    encryption,
+    registryWith(provider),
+    tokenEstimator,
+    resolveModelBinding,
+    checkBudgetGate,
+    recordLlmUsage,
+    resolveCredentialOwner,
+    decidirFerramenta,
+    { find: () => Promise.resolve(null) } as never,
+  );
+}
+
+async function setup() {
+  const [owner] = await db
+    .insert(users)
+    .values({ keycloakSub: 'sub-turn', email: 'turn@brabo.dev' })
+    .returning();
+  const [workspace] = await db
+    .insert(workspaces)
+    .values({ name: 'acme', slug: 'acme', createdBy: owner.id })
+    .returning();
+  const [project] = await db
+    .insert(projects)
+    .values({
+      workspaceId: workspace.id,
+      name: 'core',
+      slug: 'core',
+      createdBy: owner.id,
+    })
+    .returning();
+  const [session] = await db
+    .insert(sessions)
+    .values({ projectId: project.id, createdBy: owner.id })
+    .returning();
+  const [model] = await db
+    .insert(models)
+    .values({
+      provider: 'ollama',
+      name: 'llama3.2:3b',
+      displayName: 'Llama 3.2 3B',
+      inputPricePerMillionMicros: 0,
+      outputPricePerMillionMicros: 0,
+      // Os turnos daqui mandam `tools`, e desde a Fase 9c a cascata recusa
+      // candidato sem tool calling quando o turno pede ferramentas.
+      supportsToolCalling: true,
+    })
+    .returning();
+  await bindingRepo.upsert({
+    scope: 'workspace',
+    scopeId: workspace.id,
+    modelId: model.id,
+    createdBy: owner.id,
+  });
+  return { owner, workspace, project, session, model };
+}
+
+beforeEach(async () => {
+  await truncateAll(db);
+});
+
+afterAll(async () => {
+  await pool.end();
+});
+
+describe('RunLlmTurnUseCase', () => {
+  it('caminho feliz: retorna tool_calls, grava token_usage e NÃO grava session_events', async () => {
+    const { project, session } = await setup();
+    const provider = new FakeProvider([
+      { type: 'text_delta', text: 'vou ler ' },
+      { type: 'text_delta', text: 'o arquivo' },
+      {
+        type: 'tool_calls',
+        toolCalls: [
+          { id: 'tc1', name: 'read_file', arguments: { path: 'README.md' } },
+        ],
+      },
+      { type: 'usage', inputTokens: 12, outputTokens: 4, estimated: false },
+    ]);
+
+    const result = await buildUseCase(provider).execute({
+      projectId: project.id,
+      sessionId: session.id,
+      agentId: 'echo',
+      messages: [{ role: 'user', content: 'leia o README' }],
+      tools: [{ name: 'read_file', description: 'lê arquivo', parameters: {} }],
+    });
+
+    expect(result.error).toBeNull();
+    expect(result.message.content).toBe('vou ler o arquivo');
+    expect(result.message.toolCalls).toEqual([
+      { id: 'tc1', name: 'read_file', arguments: { path: 'README.md' } },
+    ]);
+    expect(result.usage).toMatchObject({
+      inputTokens: 12,
+      outputTokens: 4,
+      estimated: false,
+    });
+    // Achado do problema 2 (RN-146): o nome do modelo viaja no resultado —
+    // antes só existia em `token_usage`, sem vínculo com o turno específico.
+    expect(result.modelName).toBe('llama3.2:3b');
+
+    // Metering gravado.
+    const usageRows = await db
+      .select()
+      .from(tokenUsage)
+      .where(eq(tokenUsage.sessionId, session.id));
+    expect(usageRows).toHaveLength(1);
+    expect(usageRows[0]).toMatchObject({
+      actorKind: 'agent',
+      actorId: 'echo',
+      inputTokens: 12,
+      outputTokens: 4,
+    });
+
+    // NÃO grava session_events (o engine narra o event log).
+    const events = await db
+      .select()
+      .from(sessionEvents)
+      .where(eq(sessionEvents.sessionId, session.id));
+    expect(events).toHaveLength(0);
+  });
+
+  it('erro do provider: ainda grava metering estimado e retorna o erro no campo', async () => {
+    const { project, session } = await setup();
+
+    const result = await buildUseCase(new ThrowingProvider()).execute({
+      projectId: project.id,
+      sessionId: session.id,
+      agentId: 'echo',
+      messages: [{ role: 'user', content: 'oi' }],
+    });
+
+    expect(result.error).toContain('provider caiu');
+    // Sem usage do provider -> estimativa marcada.
+    expect(result.usage.estimated).toBe(true);
+    // O modelo já tinha sido resolvido ANTES do provider falhar — o nome
+    // viaja mesmo no caminho de erro (RN-146).
+    expect(result.modelName).toBe('llama3.2:3b');
+    const usageRows = await db
+      .select()
+      .from(tokenUsage)
+      .where(eq(tokenUsage.sessionId, session.id));
+    expect(usageRows).toHaveLength(1);
+    expect(usageRows[0].estimated).toBe(true);
+  });
+
+  it('sem binding de modelo: retorna erro, sem gravar metering', async () => {
+    const { project, session } = await setup();
+    // Remove o binding pra forçar o erro.
+    await db.delete(modelBindings);
+
+    const result = await buildUseCase(new FakeProvider([])).execute({
+      projectId: project.id,
+      sessionId: session.id,
+      messages: [{ role: 'user', content: 'oi' }],
+    });
+
+    expect(result.error).toMatch(/modelo vinculado/i);
+    // Borda (RN-146): sem binding, nenhum modelo foi resolvido — `modelName`
+    // é `null`, nunca undefined nem o nome de um modelo que não existiu.
+    expect(result.modelName).toBeNull();
+    const usageRows = await db
+      .select()
+      .from(tokenUsage)
+      .where(eq(tokenUsage.sessionId, session.id));
+    expect(usageRows).toHaveLength(0);
+  });
+});
+
+describe('RunLlmTurnUseCase — o custo real vira o número (ADR 0188, RN-665)', () => {
+  // Preço de catálogo do uso real de 29/09: 20 000 / 600 000 micros por milhão.
+  async function comPrecoDeCatalogo(modelId: string) {
+    await db
+      .update(models)
+      .set({
+        inputPricePerMillionMicros: 20_000,
+        outputPricePerMillionMicros: 600_000,
+      })
+      .where(eq(models.id, modelId));
+  }
+
+  it('com `costMicros` na resposta: grava e devolve o custo REAL, o preço implícito, o do catálogo ao lado, o modelo resolvido e o id', async () => {
+    const { project, session, model } = await setup();
+    await comPrecoDeCatalogo(model.id);
+    const provider = new FakeProvider([
+      { type: 'text_delta', text: 'ok' },
+      {
+        type: 'usage',
+        inputTokens: 10_000,
+        outputTokens: 500,
+        estimated: false,
+        costMicros: 1_850,
+        resolvedModel: 'deepseek/deepseek-v3.2-exp',
+        generationId: 'gen-1790000000-abc',
+        upstreamProvider: 'DeepInfra',
+        cachedInputTokens: 9_000,
+        reasoningTokens: 120,
+      },
+    ]);
+
+    const result = await buildUseCase(provider).execute({
+      projectId: project.id,
+      sessionId: session.id,
+      agentId: 'echo',
+      messages: [{ role: 'user', content: 'oi' }],
+    });
+
+    // O número que o engine soma ao orçamento local do laço é o REAL.
+    expect(result.usage).toMatchObject({ costMicros: 1_850, estimated: false });
+
+    const [linha] = await db
+      .select()
+      .from(tokenUsage)
+      .where(eq(tokenUsage.sessionId, session.id));
+    expect(linha).toMatchObject({
+      costMicros: 1_850,
+      estimated: false,
+      priceImplicit: true,
+      // 10 000 × 20 000 / 1e6 + 500 × 600 000 / 1e6 = 200 + 300
+      catalogCostMicros: 500,
+      // 1 850 ÷ 10 500 tokens, por milhão
+      inputPricePerMillionMicros: 176_190,
+      outputPricePerMillionMicros: 176_190,
+      // O catálogo continua sendo a dimensão dos relatórios; o resolvido vai ao lado.
+      modelName: 'llama3.2:3b',
+      resolvedModelName: 'deepseek/deepseek-v3.2-exp',
+      generationId: 'gen-1790000000-abc',
+      upstreamProvider: 'DeepInfra',
+      // RN-666: partes da entrada/saída, sem mexer nos totais.
+      inputTokens: 10_000,
+      outputTokens: 500,
+      cachedInputTokens: 9_000,
+      reasoningTokens: 120,
+    });
+  });
+
+  it('sem `costMicros`: o preço do catálogo continua sendo o número, sem marca de implícito (ADR 0042)', async () => {
+    const { project, session, model } = await setup();
+    await comPrecoDeCatalogo(model.id);
+    const provider = new FakeProvider([
+      { type: 'text_delta', text: 'ok' },
+      {
+        type: 'usage',
+        inputTokens: 10_000,
+        outputTokens: 500,
+        estimated: false,
+      },
+    ]);
+
+    const result = await buildUseCase(provider).execute({
+      projectId: project.id,
+      sessionId: session.id,
+      agentId: 'echo',
+      messages: [{ role: 'user', content: 'oi' }],
+    });
+
+    expect(result.usage.costMicros).toBe(500);
+    const [linha] = await db
+      .select()
+      .from(tokenUsage)
+      .where(eq(tokenUsage.sessionId, session.id));
+    expect(linha).toMatchObject({
+      costMicros: 500,
+      priceImplicit: false,
+      catalogCostMicros: null,
+      inputPricePerMillionMicros: 20_000,
+      outputPricePerMillionMicros: 600_000,
+      resolvedModelName: null,
+      generationId: null,
+      cachedInputTokens: null,
+      reasoningTokens: null,
+    });
+  });
+});
+
+describe('RunLlmTurnUseCase — preferência de roteamento (ADR 0166, RN-583)', () => {
+  /** Guarda as `ChatOptions` recebidas: é o que o adapter põe no fio. */
+  class ProviderQueAnota implements LLMProvider {
+    name: LLMProviderName = 'ollama';
+    recebidas: ChatOptions[] = [];
+    readonly capabilities;
+    constructor(aceitaRoteamento: boolean) {
+      this.capabilities = {
+        streaming: true,
+        toolCalling: true,
+        listModels: false,
+        embeddings: false,
+        reasoningText: false,
+        routingPreference: aceitaRoteamento,
+        stickySession: false,
+        priceCeiling: false,
+      };
+    }
+    async *chat(
+      _messages: unknown,
+      options: ChatOptions,
+    ): AsyncGenerator<ChatStreamChunk> {
+      await Promise.resolve();
+      this.recebidas.push(options);
+      yield { type: 'text_delta', text: 'ok' };
+      yield {
+        type: 'usage',
+        inputTokens: 5,
+        outputTokens: 2,
+        estimated: false,
+        upstreamProvider: 'Baidu',
+      };
+    }
+  }
+
+  async function comPreferencia() {
+    const base = await setup();
+    await bindingRepo.upsert({
+      scope: 'workspace',
+      scopeId: base.workspace.id,
+      modelId: base.model.id,
+      routingPreference: 'throughput',
+      createdBy: base.owner.id,
+    });
+    return base;
+  }
+
+  it('caminho feliz: o critério do binding vencedor vai ao provider e congela em token_usage, ao lado do upstream', async () => {
+    const { project, session } = await comPreferencia();
+    const provider = new ProviderQueAnota(true);
+
+    await buildUseCase(provider).execute({
+      projectId: project.id,
+      sessionId: session.id,
+      agentId: 'echo',
+      messages: [{ role: 'user', content: 'oi' }],
+    });
+
+    expect(provider.recebidas[0]?.routingPreference).toBe('throughput');
+    expect(provider.recebidas[0]?.sessionKey).toBe(`brabo:${session.id}:echo`);
+    const [linha] = await db
+      .select()
+      .from(tokenUsage)
+      .where(eq(tokenUsage.sessionId, session.id));
+    expect(linha).toMatchObject({
+      routingPreference: 'throughput',
+      upstreamProvider: 'Baidu',
+    });
+  });
+
+  it('provider sem a capability: nada vai ao fio e a linha registra null — o que não foi enviado não é procedência', async () => {
+    const { project, session } = await comPreferencia();
+    const provider = new ProviderQueAnota(false);
+
+    await buildUseCase(provider).execute({
+      projectId: project.id,
+      sessionId: session.id,
+      agentId: 'echo',
+      messages: [{ role: 'user', content: 'oi' }],
+    });
+
+    expect(provider.recebidas[0]).not.toHaveProperty('routingPreference');
+    const [linha] = await db
+      .select()
+      .from(tokenUsage)
+      .where(eq(tokenUsage.sessionId, session.id));
+    expect(linha.routingPreference).toBeNull();
+  });
+});
+
+describe('RunLlmTurnUseCase — retentativa sem raciocínio (AT-587, RN-916)', () => {
+  class ProviderPorChamada extends FakeProvider {
+    readonly opcoesRecebidas: ChatOptions[] = [];
+    // AT-757: a capacidade vem do AnthropicProvider real, não de um literal.
+    readonly aceitaRaciocinioDesligado = new AnthropicProvider()
+      .aceitaRaciocinioDesligado;
+    constructor(private readonly chamadas: ChatStreamChunk[][]) {
+      super([]);
+    }
+    async *chat(_m: unknown, options: ChatOptions) {
+      await Promise.resolve();
+      const roteiro = this.chamadas[this.opcoesRecebidas.length];
+      this.opcoesRecebidas.push(options);
+      for (const chunk of roteiro ?? []) yield chunk;
+    }
+  }
+  const cortada = (): ChatStreamChunk[] => [
+    { type: 'truncated' },
+    {
+      type: 'usage',
+      inputTokens: 100,
+      outputTokens: 4096,
+      estimated: false,
+      reasoningTokens: 4096,
+    },
+  ];
+  const rodar = async (chamadas: ChatStreamChunk[][]) => {
+    const { project, session, model } = await setup();
+    await db
+      .update(models)
+      .set({ supportsReasoning: true })
+      .where(eq(models.id, model.id));
+    const provider = new ProviderPorChamada(chamadas);
+    const result = await buildUseCase(provider).execute({
+      projectId: project.id,
+      sessionId: session.id,
+      agentId: 'po',
+      messages: [{ role: 'user', content: 'oi' }],
+    });
+    const linhas = await db
+      .select()
+      .from(tokenUsage)
+      .where(eq(tokenUsage.sessionId, session.id));
+    return { provider, result, linhas };
+  };
+
+  it('truncada por raciocínio: retenta UMA vez com reasoningOff e grava as DUAS chamadas', async () => {
+    const { provider, result, linhas } = await rodar([
+      cortada(),
+      [
+        { type: 'text_delta', text: 'pronto' },
+        { type: 'usage', inputTokens: 100, outputTokens: 50, estimated: false },
+      ],
+    ]);
+    expect(provider.opcoesRecebidas).toHaveLength(2);
+    expect(provider.opcoesRecebidas[0].reasoningOff).toBeUndefined();
+    expect(provider.opcoesRecebidas[1].reasoningOff).toBe(true);
+    expect(result.message.content).toBe('pronto');
+    expect(result.truncated).toBeUndefined();
+    expect(linhas).toHaveLength(2);
+  });
+
+  it('falha: se a segunda também trunca, nunca há terceira e o desfecho é o de hoje', async () => {
+    const { provider, result, linhas } = await rodar([
+      cortada(),
+      cortada(),
+      cortada(),
+    ]);
+    expect(provider.opcoesRecebidas).toHaveLength(2);
+    expect(result.truncated).toBe(true);
+    expect(linhas).toHaveLength(2);
+  });
+
+  it('falha: truncada COM texto não retenta', async () => {
+    const { provider, linhas } = await rodar([
+      [{ type: 'text_delta', text: 'parcial' }, ...cortada()],
+    ]);
+    expect(provider.opcoesRecebidas).toHaveLength(1);
+    expect(linhas).toHaveLength(1);
+  });
+
+  describe('chamada escrita como texto (AT-633, RN-949)', () => {
+    const XML =
+      'Registrei.\n<invoke name="read_file">\n<parameter name="path">a</parameter>\n</invoke>';
+    const ferramentas = [
+      { name: 'read_file', description: 'lê', parameters: {} },
+    ];
+    const usage: ChatStreamChunk = {
+      type: 'usage',
+      inputTokens: 5,
+      outputTokens: 2,
+      estimated: false,
+    };
+    function comRoteiros(roteiros: ChatStreamChunk[][]) {
+      const provider = new FakeProvider([]);
+      let n = 0;
+      provider.chat = async function* () {
+        await Promise.resolve();
+        for (const c of roteiros[n++]) yield c;
+      };
+      return { provider, chamadas: () => n };
+    }
+
+    it('duas vezes: erro tool_call_as_text, content vazio, 2 linhas de uso, nenhum <invoke> sai', async () => {
+      const { project, session } = await setup();
+      const { provider, chamadas } = comRoteiros([
+        [{ type: 'text_delta', text: XML }, usage],
+        [{ type: 'text_delta', text: XML }, usage],
+      ]);
+      const r = await buildUseCase(provider).execute({
+        projectId: project.id,
+        sessionId: session.id,
+        agentId: 'po',
+        messages: [{ role: 'user', content: 'oi' }],
+        tools: ferramentas,
+      });
+      expect(r.errorCode).toBe('tool_call_as_text');
+      expect(r.message.content).toBe('');
+      expect(r.error).toContain('llama3.2:3b');
+      const linhas = await db
+        .select()
+        .from(tokenUsage)
+        .where(eq(tokenUsage.sessionId, session.id));
+      expect(linhas).toHaveLength(2);
+      expect(chamadas()).toBe(2);
+    });
+
+    it('segunda resposta limpa: resposta normal e 2 linhas de uso', async () => {
+      const { project, session } = await setup();
+      const { provider } = comRoteiros([
+        [{ type: 'text_delta', text: XML }, usage],
+        [{ type: 'text_delta', text: 'pronto' }, usage],
+      ]);
+      const r = await buildUseCase(provider).execute({
+        projectId: project.id,
+        sessionId: session.id,
+        agentId: 'po',
+        messages: [{ role: 'user', content: 'oi' }],
+        tools: ferramentas,
+      });
+      expect(r.error).toBeNull();
+      expect(r.message.content).toBe('pronto');
+      const linhas = await db
+        .select()
+        .from(tokenUsage)
+        .where(eq(tokenUsage.sessionId, session.id));
+      expect(linhas).toHaveLength(2);
+    });
+  });
+});
+
+// AT-618 parte 2: o caso medido no TP-01 (21ª/22ª) — `qa-estrategia` pelo
+// OpenRouter REAL (fake só no HTTP), só raciocínio, `finish_reason: "length"`.
+describe('RunLlmTurnUseCase — RN-916 com o stream do OpenRouter (AT-618)', () => {
+  const sse = (res: import('node:http').ServerResponse, frames: object[]) => {
+    res.writeHead(200, { 'Content-Type': 'text/event-stream' });
+    for (const f of frames) res.write(`data: ${JSON.stringify(f)}\n\n`);
+    res.write('data: [DONE]\n\n');
+    res.end();
+  };
+
+  it('qa-estrategia: resposta só de raciocínio cortada por length retenta UMA vez com o raciocínio desligado', async () => {
+    let chamadas = 0;
+    const servidor = await subirServidorFalso((_c, res) => {
+      chamadas += 1;
+      if (chamadas > 1) {
+        sse(res, [
+          { choices: [{ delta: { content: 'plano' } }] },
+          {
+            choices: [{ delta: {}, finish_reason: 'stop' }],
+            usage: { prompt_tokens: 100, completion_tokens: 50 },
+          },
+        ]);
+        return;
+      }
+      sse(res, [
+        { choices: [{ delta: { reasoning: 'pensando...' } }] },
+        { choices: [{ delta: {}, finish_reason: 'length' }] },
+        {
+          choices: [],
+          usage: {
+            prompt_tokens: 100,
+            completion_tokens: 8192,
+            completion_tokens_details: { reasoning_tokens: 8192 },
+          },
+        },
+      ]);
+    });
+    try {
+      const { owner, project, session, model } = await setup();
+      await db
+        .update(models)
+        .set({
+          provider: 'openrouter',
+          name: 'anthropic/claude-haiku-5.5',
+          supportsReasoning: true,
+        })
+        .where(eq(models.id, model.id));
+      await credentialRepo.upsert(
+        owner.id,
+        'openrouter',
+        encryption.encrypt('sk-teste'),
+      );
+      const provider = new OpenRouterProvider(tokenEstimator);
+      (provider as unknown as { config: { baseUrl: string } }).config = {
+        ...(provider as unknown as { config: object }).config,
+        baseUrl: servidor.baseUrl,
+      };
+
+      const result = await buildUseCase(provider).execute({
+        projectId: project.id,
+        sessionId: session.id,
+        agentId: 'qa-estrategia',
+        messages: [{ role: 'user', content: 'plano' }],
+      });
+
+      // AT-618: se isto falha, a retentativa não disparou (causa em aberto).
+      expect(chamadas).toBe(2);
+      expect(result.message.content).toBe('plano');
+    } finally {
+      await servidor.fechar();
+    }
+  });
+});

@@ -1,0 +1,252 @@
+import { describe, it, expect } from 'vitest';
+import { deriveExecutionProgress, estadoDaTarefa, execucaoParadaDe, execucaoParadaVigente, formatMicros } from './execution';
+import type { SessionEvent } from './api-types';
+
+let seq = 0;
+function ev(
+  type: string,
+  actorId: string,
+  payload: Record<string, unknown>,
+): SessionEvent {
+  seq += 1;
+  return {
+    id: `e-${seq}`,
+    sessionId: 'sess-1',
+    seq,
+    type,
+    actor: { kind: 'agent', id: actorId },
+    payload,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+describe('deriveExecutionProgress', () => {
+  it('monta módulo, branch, task e título a partir de dev.started/dev.working', () => {
+    const agents = deriveExecutionProgress([
+      ev('dev.started', 'dev-api', { agentId: 'dev-api', module: 'api' }),
+      ev('dev.working', 'dev-api', {
+        agentId: 'dev-api',
+        taskId: 't-1',
+        taskTitle: 'Endpoint de cadastro',
+        branch: 'feature/task-abc',
+      }),
+    ]);
+
+    expect(agents.get('dev-api')).toEqual({
+      module: 'api',
+      branch: 'feature/task-abc',
+      taskId: 't-1',
+      taskTitle: 'Endpoint de cadastro',
+    });
+  });
+
+  it('o título da task é o que o painel mostra — sem ele só sobra a branch opaca', () => {
+    const agents = deriveExecutionProgress([
+      ev('dev.started', 'dev-api', { agentId: 'dev-api', module: 'api' }),
+      ev('dev.working', 'dev-api', {
+        agentId: 'dev-api',
+        taskId: '9f1c2d3e-aaaa-4bbb-8ccc-dddddddddddd',
+        taskTitle: 'Validação de e-mail',
+        branch: 'feature/task-9f1c2d3e',
+      }),
+    ]);
+
+    expect(agents.get('dev-api')?.taskTitle).toBe('Validação de e-mail');
+  });
+
+  it('iteração e custo vêm do ÚLTIMO agent.response do agente', () => {
+    const agents = deriveExecutionProgress([
+      ev('dev.started', 'dev-api', { agentId: 'dev-api', module: 'api' }),
+      ev('agent.response', 'dev-api', { iteration: 1, tokensSpentMicros: 1200 }),
+      ev('agent.response', 'dev-api', { iteration: 4, tokensSpentMicros: 9800 }),
+    ]);
+
+    expect(agents.get('dev-api')?.iteration).toBe(4);
+    expect(agents.get('dev-api')?.tokensSpentMicros).toBe(9800);
+  });
+
+  it('ignora agent.response de agente que não é dev (criativo/po/arquiteto)', () => {
+    const agents = deriveExecutionProgress([
+      ev('agent.response', 'criativo', { iteration: 3, tokensSpentMicros: 500 }),
+    ]);
+
+    expect(agents.has('criativo')).toBe(false);
+  });
+
+  it('a task mais recente sobrescreve a anterior do mesmo agente', () => {
+    const agents = deriveExecutionProgress([
+      ev('dev.started', 'dev-api', { agentId: 'dev-api', module: 'api' }),
+      ev('dev.working', 'dev-api', {
+        agentId: 'dev-api',
+        taskId: 't-1',
+        taskTitle: 'Primeira',
+        branch: 'feature/task-1',
+      }),
+      ev('dev.working', 'dev-api', {
+        agentId: 'dev-api',
+        taskId: 't-2',
+        taskTitle: 'Segunda',
+        branch: 'feature/task-2',
+      }),
+    ]);
+
+    expect(agents.get('dev-api')?.taskTitle).toBe('Segunda');
+    expect(agents.get('dev-api')?.branch).toBe('feature/task-2');
+  });
+
+  it('vários agentes em paralelo não se misturam', () => {
+    const agents = deriveExecutionProgress([
+      ev('dev.started', 'dev-api', { agentId: 'dev-api', module: 'api' }),
+      ev('dev.started', 'dev-web', { agentId: 'dev-web', module: 'web' }),
+      ev('dev.started', 'dev-api-2', { agentId: 'dev-api-2', module: 'api' }),
+      ev('dev.working', 'dev-api', {
+        agentId: 'dev-api',
+        taskId: 't-1',
+        taskTitle: 'A',
+        branch: 'feature/task-1',
+      }),
+      ev('dev.working', 'dev-web', {
+        agentId: 'dev-web',
+        taskId: 't-2',
+        taskTitle: 'B',
+        branch: 'feature/task-2',
+      }),
+      ev('agent.response', 'dev-api', { iteration: 2, tokensSpentMicros: 100 }),
+    ]);
+
+    expect(agents.size).toBe(3);
+    expect(agents.get('dev-api')?.taskTitle).toBe('A');
+    expect(agents.get('dev-web')?.taskTitle).toBe('B');
+    expect(agents.get('dev-web')?.iteration).toBeUndefined();
+    expect(agents.get('dev-api-2')?.module).toBe('api');
+  });
+
+  it('dev.working sem dev.started prévio ainda registra o agente', () => {
+    // Rehydration: o agente volta vivo sem reemitir dev.started.
+    const agents = deriveExecutionProgress([
+      ev('dev.working', 'dev-api', {
+        agentId: 'dev-api',
+        taskId: 't-1',
+        taskTitle: 'A',
+        branch: 'feature/task-1',
+      }),
+    ]);
+
+    expect(agents.get('dev-api')?.module).toBe('');
+    expect(agents.get('dev-api')?.taskTitle).toBe('A');
+  });
+
+  it('event log vazio devolve mapa vazio', () => {
+    expect(deriveExecutionProgress([]).size).toBe(0);
+  });
+
+  describe('Fase 12b — dev.idle limpa a task/branch anterior', () => {
+    it('dev.idle depois de dev.working: task/branch somem, módulo fica', () => {
+      const agents = deriveExecutionProgress([
+        ev('dev.started', 'dev-api', { agentId: 'dev-api', module: 'api' }),
+        ev('dev.working', 'dev-api', {
+          agentId: 'dev-api',
+          taskId: 't-1',
+          taskTitle: 'Endpoint de cadastro',
+          branch: 'feature/task-1',
+        }),
+        ev('dev.idle', 'dev-api', { agentId: 'dev-api', reason: 'sem task pegável' }),
+      ]);
+
+      expect(agents.get('dev-api')).toEqual({ module: 'api' });
+    });
+
+    it('dev.idle_tripped também limpa — o breaker parou o agente, não há task dele mais', () => {
+      const agents = deriveExecutionProgress([
+        ev('dev.working', 'dev-api', {
+          agentId: 'dev-api',
+          taskId: 't-1',
+          taskTitle: 'Endpoint de cadastro',
+          branch: 'feature/task-1',
+        }),
+        ev('dev.idle_tripped', 'dev-api', { agentId: 'dev-api', consecutiveBlocked: 3 }),
+      ]);
+
+      expect(agents.get('dev-api')?.taskTitle).toBeUndefined();
+      expect(agents.get('dev-api')?.branch).toBeUndefined();
+    });
+
+    it('dev.awaiting_gate NÃO limpa — a mesma task segue em aberto, só esperando o gate', () => {
+      const agents = deriveExecutionProgress([
+        ev('dev.working', 'dev-api', {
+          agentId: 'dev-api',
+          taskId: 't-1',
+          taskTitle: 'Endpoint de cadastro',
+          branch: 'feature/task-1',
+        }),
+        ev('dev.awaiting_gate', 'dev-api', { agentId: 'dev-api', taskId: 't-1', gate: 'qa' }),
+      ]);
+
+      expect(agents.get('dev-api')?.taskTitle).toBe('Endpoint de cadastro');
+      expect(agents.get('dev-api')?.branch).toBe('feature/task-1');
+    });
+
+    it('claim seguinte depois de idle repõe a task nova normalmente', () => {
+      const agents = deriveExecutionProgress([
+        ev('dev.working', 'dev-api', {
+          agentId: 'dev-api',
+          taskId: 't-1',
+          taskTitle: 'Primeira',
+          branch: 'feature/task-1',
+        }),
+        ev('dev.idle', 'dev-api', { agentId: 'dev-api', reason: 'sem task pegável' }),
+        ev('dev.working', 'dev-api', {
+          agentId: 'dev-api',
+          taskId: 't-2',
+          taskTitle: 'Segunda',
+          branch: 'feature/task-2',
+        }),
+      ]);
+
+      expect(agents.get('dev-api')?.taskTitle).toBe('Segunda');
+      expect(agents.get('dev-api')?.branch).toBe('feature/task-2');
+    });
+  });
+});
+
+describe('formatMicros', () => {
+  it('formata micro-USD em US$ com 4 casas', () => {
+    expect(formatMicros(0)).toBe('US$ 0.0000');
+    expect(formatMicros(1_000_000)).toBe('US$ 1.0000');
+    expect(formatMicros(12_345)).toBe('US$ 0.0123');
+  });
+});
+
+describe('estadoDaTarefa (RN-887)', () => {
+  it('blocked vence o status', () => {
+    expect(estadoDaTarefa({ status: 'todo', blocked: true })).toBe('blocked');
+  });
+  it('sem bloqueio, o status', () => {
+    expect(estadoDaTarefa({ status: 'todo', blocked: false })).toBe('todo');
+  });
+});
+
+describe('execucaoParadaVigente (RN-1061)', () => {
+  const parada = () =>
+    ev('execution.stalled', 'execucao', {
+      agentesTravados: [{ agentId: 'dev-catalogo', module: 'catalogo' }],
+      tarefasBloqueadas: [{ taskId: 't1', title: 'Fundação', reason: 'conflito' }],
+      tarefasPendentes: 10,
+    });
+
+  it('o stalled por último é vigente e traz o payload', () => {
+    const p = execucaoParadaDe([ev('dev.idle', 'dev-auth', {}), parada()]);
+    expect(p?.tarefasPendentes).toBe(10);
+    expect(p?.agentesTravados[0]?.agentId).toBe('dev-catalogo');
+    expect(execucaoParadaVigente([parada()])).toBe(true);
+  });
+
+  it.each(['dev.working', 'dev.rearmed', 'backlog.task_unblocked'])('%s depois do stalled encerra a parada', (tipo) => {
+    expect(execucaoParadaVigente([parada(), ev(tipo, 'dev-catalogo', {})])).toBe(false);
+  });
+
+  it('um novo stalled depois do destrave volta a valer; sem stalled é falso', () => {
+    expect(execucaoParadaVigente([parada(), ev('dev.rearmed', 'x', {}), parada()])).toBe(true);
+    expect(execucaoParadaVigente([ev('dev.idle', 'dev-auth', {})])).toBe(false);
+  });
+});

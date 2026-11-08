@@ -1,0 +1,196 @@
+import { describe, expect, it, vi, beforeEach, afterAll } from 'vitest';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { render, screen } from '@testing-library/react';
+import { I18nextProvider } from 'react-i18next';
+// A instância REAL (não uma isolada): `ErroDeCarregamento` (namespace `ui`)
+// é filho de `ProjectPage` e usa `useTranslation('ui')` — sem uma instância
+// de i18next inicializada no módulo, o hook nem renderiza (mesmo padrão de
+// `project-tabs.test.tsx`).
+import i18n from '../lib/i18n';
+import { ProjectPage } from './ProjectPage';
+import { ApiError } from '../lib/api-client';
+import type { Project } from '../lib/api-types';
+
+const getProject = vi.fn();
+const getRepository = vi.fn();
+const getProjectBudget = vi.fn();
+
+vi.mock('../lib/api-client', async () => {
+  // `ApiError` e `mensagemDaApi` reais: o que este teste prova é justamente
+  // que a FRASE da api chega à tela, e um dublê de `mensagemDaApi` provaria
+  // apenas que o componente chama uma função.
+  const real =
+    await vi.importActual<typeof import('../lib/api-client')>('../lib/api-client');
+  return {
+    // O controle de roteamento (ADR 0166) renderiza dentro de Configurações:
+    // nenhum provider com a capability, o estado de produção hoje.
+    listProviderCapabilities: () => Promise.resolve([]),
+    ApiError: real.ApiError,
+    mensagemDaApi: real.mensagemDaApi,
+    getProject: (...args: unknown[]) => getProject(...args),
+    getRepository: (...args: unknown[]) => getRepository(...args),
+    getProjectBudget: (...args: unknown[]) => getProjectBudget(...args),
+  };
+});
+
+vi.mock('../lib/hooks', () => ({
+  useArchitecture: () => ({ data: undefined }),
+  useBacklog: () => ({ data: [] }),
+  useHypotheses: () => ({ data: [] }),
+  useLatestSession: () => ({ latest: undefined }),
+  usePendingActions: () => ({ data: undefined }),
+  useProjectPendingActions: () => ({ data: undefined }),
+}));
+
+// As abas são inteiras demais para montar aqui, e nenhuma delas é o assunto:
+// o defeito estava na moldura, antes de qualquer aba renderizar.
+vi.mock('./ProjectOverviewTab', () => ({ ProjectOverviewTab: () => <div>aba visão geral</div> }));
+vi.mock('./ProjectSessionsTab', () => ({
+  ProjectCriativoTab: () => null,
+  ProjectChatTab: () => null,
+}));
+vi.mock('./ProjectApprovalsTab', () => ({ ProjectApprovalsTab: () => null }));
+vi.mock('./ProjectBacklogTab', () => ({
+  ProjectBacklogTab: () => null,
+  aguardandoPromocao: () => [],
+}));
+vi.mock('./ProjectInsightsTab', () => ({ ProjectInsightsTab: () => null }));
+vi.mock('./ProjectSettingsTab', () => ({ ProjectSettingsTab: () => null }));
+
+const PROJETO: Project = {
+  id: 'proj-1',
+  workspaceId: 'ws-1',
+  name: 'Checkout',
+  slug: 'checkout',
+  createdBy: 'user-1',
+  maxConsecutiveBlocked: null,
+  storyPromotion: 'manual',
+  executionMode: 'container',
+  workspacePath: null,
+  workspaceVerifiedAt: null,
+  mirrorPath: null,
+  language: 'pt-BR',
+  createdAt: '2026-08-01T10:00:00.000Z',
+  updatedAt: '2026-08-01T10:00:00.000Z',
+};
+
+function montar() {
+  const client = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return render(
+    <I18nextProvider i18n={i18n}>
+      <QueryClientProvider client={client}>
+        <ProjectPage projectId="proj-1" />
+      </QueryClientProvider>
+    </I18nextProvider>,
+  );
+}
+
+beforeEach(async () => {
+  vi.clearAllMocks();
+  await i18n.changeLanguage('pt-BR');
+  getRepository.mockResolvedValue(null);
+  getProjectBudget.mockResolvedValue(null);
+});
+
+// Restaura o default do app: o singleton é compartilhado entre arquivos de
+// teste no mesmo worker do vitest.
+afterAll(() => {
+  void i18n.changeLanguage('en');
+});
+
+/**
+ * O defeito: abrir `/projects/:id` com a api limitando devolvia a área
+ * principal COMPLETAMENTE em branco — sem mensagem, sem estado de erro, sem
+ * esqueleto — porque `if (!project) return null` tratava "a api recusou" e
+ * "ainda não chegou" como a mesma coisa. O motivo existia só no console, em
+ * 1128 linhas de 429 (RN-088).
+ */
+describe('ProjectPage — falha de carga não vira tela branca', () => {
+  it('429 vira mensagem na tela, com a frase que a api mandou', async () => {
+    getProject.mockRejectedValue(
+      new ApiError(
+        429,
+        {
+          statusCode: 429,
+          message: 'Limite de requisições excedido. Tente novamente em instantes.',
+          error: 'Too Many Requests',
+        },
+        'trace-abc123',
+      ),
+    );
+
+    montar();
+
+    const alerta = await screen.findByRole('alert');
+    expect(alerta).toHaveTextContent('Não foi possível abrir este projeto.');
+    // A frase da API, e não um texto genérico nosso: é ela que diz se adianta
+    // esperar.
+    expect(alerta).toHaveTextContent(
+      'Limite de requisições excedido. Tente novamente em instantes.',
+    );
+    // O trace_id leva desta tela ao span de servidor (ADR 0035).
+    expect(alerta).toHaveTextContent('trace-abc123');
+    expect(
+      screen.getByRole('button', { name: 'Tentar de novo' }),
+    ).toBeInTheDocument();
+  });
+
+  it('403 mostra o motivo do 403 — a tela não inventa uma causa só', async () => {
+    getProject.mockRejectedValue(
+      new ApiError(403, { statusCode: 403, message: 'Acesso negado ao projeto.' }),
+    );
+
+    montar();
+
+    const alerta = await screen.findByRole('alert');
+    expect(alerta).toHaveTextContent('Acesso negado ao projeto.');
+    expect(alerta).not.toHaveTextContent('Limite de requisições');
+  });
+
+  it('carregando não é erro: mostra esqueleto e nenhum alerta', () => {
+    getProject.mockReturnValue(new Promise(() => {}));
+
+    montar();
+
+    expect(screen.getByTestId('skeleton')).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('caminho feliz: o projeto abre e as abas aparecem', async () => {
+    getProject.mockResolvedValue(PROJETO);
+
+    montar();
+
+    expect(await screen.findByText('Checkout')).toBeInTheDocument();
+    // O painel é um chunk sob demanda (AT-300): chega depois do cabeçalho.
+    expect(await screen.findByText('aba visão geral')).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  // jsdom não mede layout: prova-se a ESTRUTURA. Quem rola (`.body`) contém o
+  // elemento de largura máxima (`.coluna`), que contém o painel.
+  it('a coluna de leitura é filha do contêiner que rola, sem largura máxima (ADR 0248)', async () => {
+    getProject.mockResolvedValue(PROJETO);
+    montar();
+    const painel = await screen.findByText('aba visão geral');
+    const coluna = painel.closest('[class*="coluna"]') as HTMLElement;
+    expect(coluna).not.toBeNull();
+    const body = coluna.parentElement as HTMLElement;
+    expect(body.className).toMatch(/body/);
+    expect(body.className).not.toMatch(/coluna/);
+    const css = readFileSync(resolve(__dirname, 'ProjectPage.module.css'), 'utf8');
+    expect(css).not.toMatch(/^\.coluna\s*\{[^}]*max-width/m);
+    const conta = readFileSync(resolve(__dirname, 'AccountPage.module.css'), 'utf8');
+    expect(conta).not.toMatch(/\.page\s*\{[^}]*max-width/m);
+    expect(css).not.toMatch(/\.body\s*\{[^}]*max-width/m);
+  });
+
+  it('a utilidade no-scrollbar existe no CSS do shadcn', () => {
+    const css = readFileSync(resolve(__dirname, '../shadcn.css'), 'utf8');
+    expect(css).toMatch(/@utility no-scrollbar[\s\S]*scrollbar-width:\s*none/);
+  });
+});

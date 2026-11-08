@@ -1,0 +1,427 @@
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { ModuleMapRepository } from '../../ports/module-map-repository.port';
+import { SessionRepository } from '../../ports/session-repository.port';
+import { TaskRepository } from '../../ports/backlog-repository.port';
+import { AgentAutonomyRepository } from '../../ports/agent-autonomy-repository.port';
+import { ApiToEngineClient } from '../../ports/api-to-engine-client.port';
+import { ProjectRepository } from '../../ports/project-repository.port';
+import { PermissionsFileStore } from '../../ports/permissions-file-store.port';
+import { ProvisionedRepositoryRepository } from '../../ports/provisioned-repository-repository.port';
+import { HandoffRepository } from '../../ports/handoff-repository.port';
+import { ContainerRepository } from '../../ports/container-repository.port';
+import { isTerminal } from '../../../domain/sessions/session-state-machine';
+import {
+  motivoDeExecucaoSemRepositorio,
+  type HandoffDaAtivacao,
+} from '../../../domain/execution/repositorio-para-executar';
+import { DEV_TERMINAL_ALLOW_PATTERNS } from '../../../domain/actions/dev-terminal-patterns';
+import { TransitionSessionUseCase } from '../sessions/transition-session.use-case';
+import { CreateSessionUseCase } from '../sessions/create-session.use-case';
+import { AppendSessionEventUseCase } from '../sessions/append-session-event.use-case';
+import { GetSessionPendingWorkUseCase } from '../sessions/get-session-pending-work.use-case';
+import { UpsertAgentInstructionUseCase } from '../agents/upsert-agent-instruction.use-case';
+import { SeedAgentAreasUseCase } from '../agents/seed-agent-areas.use-case';
+import { CicloDeVidaDoHandoff } from '../agents/ciclo-de-vida-do-handoff.service';
+import { DEFAULT_MAX_GATE_CORRECTIONS } from './record-gate-verdict.use-case';
+import {
+  DEFAULT_DEV_AGENT_IMPL,
+  type DevAgentImpl,
+} from '../../../domain/execution/dev-agent-impl';
+import { LocalizacaoDeProjetoInvalidaError } from '../../../infrastructure/filesystem/project-workspaces-root';
+
+// agent_id/branch slug a partir do nome do módulo.
+export function devAgentId(moduleName: string): string {
+  return `dev-${moduleName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')}`;
+}
+
+// agent_id do subagente extra do mesmo módulo (paralelização). PRECISA bater
+// com `Engine.Dev.Naming.extra_agent_id/1` no engine — o agent_id liga a
+// autonomia seedada aqui ao processo que sobe lá.
+export function extraDevAgentId(moduleName: string): string {
+  return `${devAgentId(moduleName)}-2`;
+}
+
+// Instrução seedada pro dev de um módulo. Compartilhada com o aceite da
+// paralelização, que precisa seedar o subagente extra do mesmo jeito.
+export function devAgentInstruction(
+  agentId: string,
+  m: { name: string; stack: string; responsibility: string },
+): string {
+  return (
+    `Você é o ${agentId}: implementa as tasks do módulo "${m.name}" (${m.stack}). ` +
+    `Responsabilidade: ${m.responsibility}. Trabalha no seu worktree, commita com sua ` +
+    `identidade e abre PR referenciando a story.`
+  );
+}
+
+// Ações git que o dev auto-aprova. Só o commit, que fica na máquina: desde a
+// RN-689 (AT-347) `git_push` e `pr_open` estão no teto de efeito externo da
+// RN-418 (`decide.ts`), e semeá-las em `auto_approve` gravaria uma autonomia
+// que nunca vale — a PR do dev agent passa pela decisão do usuário, e o agente
+// espera em `awaiting_approval` até o `task.pr_settled` (Fase 12e). `git_merge`
+// NUNCA entrou aqui — a trava de merge o mantém manual.
+export const DEV_AUTO_GIT_ACTIONS = ['git_commit'];
+
+// Orçamento de tokens por task (Fase 4a) quando não configurado na ativação
+// — US$0,50 em micro-USD. "Configurável por projeto" é satisfeito no
+// próprio ato de ativar (ver `execute`); sem tabela nova.
+export const DEFAULT_TASK_BUDGET_MICROS = 500_000;
+
+// RN-774/RN-802 (AT-473): a primeira tarefa de cada módulo vale este múltiplo
+// do teto por tarefa. Quem APLICA é o engine (`Engine.Dev.TetoDaTarefa`,
+// `@multiplicador_da_primeira`); este espelho existe só para a api levar o
+// número no payload do plano e a tela não copiar a constante. Cópia declarada:
+// mudar um exige mudar o outro (o teste do engine e o desta api fixam 2).
+export const MULTIPLICADOR_DA_PRIMEIRA_TAREFA_DO_MODULO = 2;
+
+// Circuit breaker por dev agent (Fase 12b — RN-047): tasks consecutivas
+// terminando blocked até o agente parar em idle_tripped. Mesmo espírito do
+// teto acima — conservador por padrão, configurável por projeto.
+export const DEFAULT_MAX_CONSECUTIVE_BLOCKED = 3;
+
+/**
+ * Ativa a fase de execução de um projeto (Fase 4a): exige module_map vigente
+ * e repositório provisionado (RN-582 — sem ele, 409 nomeando o handoff que
+ * falta aceitar);
+ * usa a sessão de execução vigente — ou cria e ativa uma, se não houver;
+ * seeda as instruções + a autonomia (auto_approve nos git ops) de um dev por
+ * módulo; e manda o engine subir os DevAgentServers.
+ *
+ * É IDEMPOTENTE em sessão: chamar de novo num projeto que já está executando
+ * reativa dentro da mesma sessão. Ver o comentário no ponto da decisão.
+ */
+@Injectable()
+export class ActivateExecutionUseCase {
+  constructor(
+    private readonly moduleMaps: ModuleMapRepository,
+    private readonly sessions: SessionRepository,
+    private readonly taskRepo: TaskRepository,
+    private readonly agentAutonomy: AgentAutonomyRepository,
+    private readonly engineClient: ApiToEngineClient,
+    private readonly transitionSession: TransitionSessionUseCase,
+    private readonly createSession: CreateSessionUseCase,
+    private readonly appendEvent: AppendSessionEventUseCase,
+    private readonly upsertInstruction: UpsertAgentInstructionUseCase,
+    private readonly projects: ProjectRepository,
+    private readonly permissionsFile: PermissionsFileStore,
+    private readonly seedAreas: SeedAgentAreasUseCase,
+    private readonly getSessionPendingWork: GetSessionPendingWorkUseCase,
+    private readonly repositories: ProvisionedRepositoryRepository,
+    private readonly handoffs: HandoffRepository,
+    private readonly containers: ContainerRepository,
+    private readonly ciclo: CicloDeVidaDoHandoff,
+  ) {}
+
+  async execute(
+    projectId: string,
+    userId: string,
+    taskBudgetMicros?: number,
+    maxGateCorrections?: number,
+    devAgentImpl?: DevAgentImpl,
+    terminalAllowPatterns?: readonly string[],
+    maxConsecutiveBlocked?: number,
+    // Id da sessão de CHAT (criativa/consultiva) de onde partiu o clique em
+    // "ativar execução" — RN-135. Omitido (chamador antigo, ex. ativação pela
+    // Visão Geral) não fecha sessão nenhuma: o comportamento sem este
+    // parâmetro é IDÊNTICO ao de antes dele existir.
+    originSessionId?: string,
+    // Os módulos que o plano aprovado cobre com ≥ 1 tarefa (AT-381, RN-709).
+    // Omitido (o botão "Ativar execução"), sobe um agente por módulo do
+    // `module_map`, como sempre; passado, módulo sem tarefa NÃO ganha agente.
+    modulosDoPlano?: readonly string[],
+  ) {
+    const maxCorrections = maxGateCorrections ?? DEFAULT_MAX_GATE_CORRECTIONS;
+    const impl = devAgentImpl ?? DEFAULT_DEV_AGENT_IMPL;
+    const mapaVigente = await this.moduleMaps.findCurrent(projectId);
+    if (!mapaVigente || mapaVigente.modules.length === 0) {
+      throw new BadRequestException(
+        'Projeto sem module_map vigente — o Arquiteto precisa definir os módulos antes de executar',
+      );
+    }
+    const moduleMap = modulosDoPlano
+      ? {
+          ...mapaVigente,
+          modules: mapaVigente.modules.filter((m) =>
+            modulosDoPlano.includes(m.name),
+          ),
+        }
+      : mapaVigente;
+    if (moduleMap.modules.length === 0) {
+      throw new BadRequestException(
+        'O plano não tem tarefa em nenhum módulo do module_map vigente — nenhum dev agent subiria',
+      );
+    }
+
+    // Sem repositório, NADA começa (RN-582, ADR 0165). Os dev agents
+    // trabalham em worktrees do repositório do projeto; ativar sem ele dava
+    // 201 e deixava a execução "ativa" sem onde trabalhar, para sempre
+    // (AT-092: as três tabelas de git vazias depois de um 201). A checagem
+    // vem ANTES de qualquer efeito — persistir orçamento, semear o
+    // `permissions.json`, criar sessão —, para a recusa não deixar rastro.
+    //
+    // Recusa e não provisiona: provisionar aqui esconderia um efeito de git
+    // dentro da ativação, e os agentes ANTERIORES a ela (Arquiteto, Infra)
+    // continuariam sem repositório. Quem provisiona é o aceite do handoff ao
+    // Arquiteto, com o do Dev Lead como segunda porta — e a frase diz qual
+    // falta, lida do estado dos handoffs do projeto. Repositório ADOTADO conta.
+    const repositorio = await this.repositories.findByProjectId(projectId);
+    if (!repositorio) {
+      throw new ConflictException(
+        motivoDeExecucaoSemRepositorio(
+          projectId,
+          await this.handoffsComEstadoDaSessao(projectId),
+        ),
+      );
+    }
+
+    // Orçamento por task e teto do circuit breaker: parâmetro → setting do
+    // projeto → default. Quando vem no parâmetro, PERSISTE — senão o valor
+    // escolhido se perderia na próxima ativação (o engine é quem os
+    // guardava, por linha de dev agent).
+    const project = await this.projects.findById(projectId);
+    // O module_map vigente encontrado acima só existe se o projeto existir
+    // (FK) — este guard é defensivo, não um caminho alcançável na prática, mas
+    // sem ele o workspaceDirName abaixo seria lido de `null`.
+    if (!project) throw new NotFoundException('Projeto não encontrado');
+    const budget =
+      taskBudgetMicros ??
+      project?.taskBudgetMicros ??
+      DEFAULT_TASK_BUDGET_MICROS;
+    const breakerThreshold =
+      maxConsecutiveBlocked ??
+      project?.maxConsecutiveBlocked ??
+      DEFAULT_MAX_CONSECUTIVE_BLOCKED;
+
+    const diverges: Partial<{
+      taskBudgetMicros: number;
+      maxConsecutiveBlocked: number;
+    }> = {};
+    if (
+      taskBudgetMicros !== undefined &&
+      taskBudgetMicros !== project?.taskBudgetMicros
+    ) {
+      diverges.taskBudgetMicros = taskBudgetMicros;
+    }
+    if (
+      maxConsecutiveBlocked !== undefined &&
+      maxConsecutiveBlocked !== project?.maxConsecutiveBlocked
+    ) {
+      diverges.maxConsecutiveBlocked = maxConsecutiveBlocked;
+    }
+    if (Object.keys(diverges).length > 0) {
+      await this.projects.update(projectId, diverges);
+    }
+
+    // Sem regra no permissions.json, `decide()` cai em require_approval e TODO
+    // `terminal` do dev nasce pendente — e como o ReportDone exige um terminal
+    // com exit 0, a suite verde ficaria inalcançável e a task sempre acabaria
+    // bloqueada por limite de iterações. Padrões ESTREITOS (comandos de
+    // teste/build), no arquivo e não em agent_autonomy, pra que `deny`
+    // continue vencendo.
+    //
+    // O `try` é sobre a LINHA do projeto, não sobre disco: uma localização
+    // incoerente (par (modo, caminho) gravado por fora da criação) faz a
+    // derivação do caminho recusar, e sem isto a recusa saía como 500 sem
+    // corpo — a tela dizia "não foi possível ativar" e ninguém tinha o quê.
+    // 400 com o `motivo`, que já vem em pt-BR e diz o que corrigir (RN-478).
+    try {
+      for (const pattern of terminalAllowPatterns ??
+        DEV_TERMINAL_ALLOW_PATTERNS) {
+        await this.permissionsFile.addPattern(project, 'allow', pattern);
+      }
+    } catch (erro) {
+      if (erro instanceof LocalizacaoDeProjetoInvalidaError) {
+        throw new BadRequestException(erro.motivo);
+      }
+      throw erro;
+    }
+
+    // REATIVAR cai na sessão de execução que já existe, em vez de abrir uma
+    // nova (achado #11 do primeiro dogfooding). O `create` era incondicional,
+    // e o engine descarta o `session_id` novo quando o agente já está vivo:
+    // a sessão nascia `active`, recebia o `execution.activated`, e nunca mais
+    // recebia coisa nenhuma — os eventos dos agentes continuavam indo para a
+    // sessão da ativação anterior. Uma sessão órfã por clique de reativação.
+    //
+    // A sessão nova sai pelo `CreateSessionUseCase` e não pelo repositório: é
+    // ele que emite `session.created` no outbox, e é esse evento que faz o
+    // engine subir o SessionServer (RN-067). Pelo caminho direto a sessão dos
+    // DEV AGENTS nascia sem processo nenhum — canal recusado, sem heartbeat,
+    // e `active` para sempre.
+    const vigente = await this.sessions.findActiveExecutionSession(projectId);
+    const session =
+      vigente ??
+      // `criativa` é obrigatório aqui, e não uma escolha: a próxima coisa que
+      // esta sessão recebe é o `execution.activated` do fim deste método, que
+      // uma sessão consultiva recusa (RN-097).
+      (await this.createSession.execute(projectId, userId, {
+        kind: 'criativa',
+      }));
+    if (!vigente) {
+      await this.transitionSession.execute(projectId, session.id, 'active');
+    }
+
+    const modules = moduleMap.modules.map((m) => m.name);
+
+    // As áreas já nasceram com o projeto (RN-094); o que a ativação acrescenta
+    // é QUEM são os membros da área de dev — um `dev-<modulo>` por módulo do
+    // `module_map`, que não existia na criação. `upsert` SUBSTITUI a lista, e é
+    // isso que faz um `module_map` novo não deixar agente fantasma na área.
+    await this.seedAreas.execute(projectId, modules.map(devAgentId));
+
+    for (const m of moduleMap.modules) {
+      const agentId = devAgentId(m.name);
+      await this.upsertInstruction.execute(
+        projectId,
+        agentId,
+        devAgentInstruction(agentId, m),
+      );
+      for (const type of DEV_AUTO_GIT_ACTIONS) {
+        await this.agentAutonomy.upsert(
+          projectId,
+          agentId,
+          type,
+          'auto_approve',
+        );
+      }
+    }
+
+    // AT-612 (RN-936): o QA de automação sobe a própria instância sem clique.
+    await this.agentAutonomy.upsert(
+      projectId,
+      'qa-automacao',
+      'qa_environment_start',
+      'auto_approve',
+    );
+
+    await this.engineClient.startExecution(
+      projectId,
+      session.id,
+      modules,
+      budget,
+      maxCorrections,
+      impl,
+      breakerThreshold,
+    );
+
+    await this.appendEvent.execute(projectId, session.id, {
+      type: 'execution.activated',
+      actor: { kind: 'user', id: userId },
+      payload: { modules, devAgentImpl: impl, taskBudgetMicros: budget },
+    });
+
+    // ADR 0182 (RN-635): a ativação da execução é o terceiro caminho que ATIVA
+    // agente, e ele passa pela mesma régua — oferta pendente a um `dev-<modulo>`
+    // recém-ativado deixa de ser acionável. Hoje nenhuma nasce (subagente não
+    // recebe handoff externo, ADR 0038), e a chamada existe para a regra
+    // continuar valendo no dia em que a hierarquia mudar.
+    for (const m of moduleMap.modules) {
+      await this.ciclo.substituirOfertasAoAtivar(projectId, devAgentId(m.name));
+    }
+
+    // Sugestão de paralelização: módulos com ≥2 tasks pegáveis têm ramos
+    // independentes disponíveis — sugere um subagente extra (aceite 1-clique).
+    //
+    // Só quando o projeto TEM container `running` registrado (AT-104). Sem ele
+    // o dev agent não reivindica task nenhuma (`dev.blocked_by_container`,
+    // RN-502) — a mesma leitura que o engine faz —, e "há tasks pegáveis" é
+    // verdade que não vira capacidade: um agente extra num módulo cujo agente
+    // nem começa só multiplica os bloqueados (v6.1.0: três `parallelize`
+    // aprovados sobre três agentes parados). O bloqueio é do PROJETO e não do
+    // módulo, então a guarda é uma só. Custo declarado: a sugestão é emitida
+    // na ativação e não é refeita quando o container sobe depois. O teto do
+    // pedido (RN-154, `RequestParallelizationUseCase`) não é tocado.
+    if (await this.containerRodando(projectId)) {
+      for (const m of moduleMap.modules) {
+        const claimable = await this.taskRepo.countClaimableByModule(
+          projectId,
+          m.name,
+        );
+        if (claimable >= 2) {
+          await this.appendEvent.execute(projectId, session.id, {
+            type: 'execution.parallelization_suggested',
+            actor: { kind: 'system', id: 'parallelization' },
+            payload: { module: m.name, availableTasks: claimable },
+          });
+        }
+      }
+    }
+
+    // Fecha a sessão de CHAT que originou o pedido (RN-135) — sem isto ela
+    // ficava `active` para sempre, aparecendo como conversa em aberto mesmo
+    // depois de a execução (numa sessão SEPARADA) já ter avançado sozinha.
+    // Nunca a sessão de execução: fechá-la destruiria o processo que acabou
+    // de subir para os dev agents.
+    if (originSessionId && originSessionId !== session.id) {
+      await this.closeOriginSession(projectId, originSessionId);
+    }
+
+    return { sessionId: session.id, modules };
+  }
+
+  /**
+   * Os handoffs do projeto + se a sessão de cada `offered` já está encerrada
+   * (AT-131). Só os `offered` são consultados — são os únicos para os quais a
+   * frase pode mandar aceitar —, uma leitura por sessão distinta. Sessão que
+   * não se acha fica sem marca (não sei = aberta).
+   */
+  private async handoffsComEstadoDaSessao(
+    projectId: string,
+  ): Promise<HandoffDaAtivacao[]> {
+    const todos = await this.handoffs.findByProject(projectId);
+    const encerrada = new Map<string, boolean>();
+    for (const h of todos) {
+      if (h.status !== 'offered' || encerrada.has(h.sessionId)) continue;
+      const sessao = await this.sessions.findInProject(projectId, h.sessionId);
+      encerrada.set(h.sessionId, sessao ? isTerminal(sessao.status) : false);
+    }
+    return todos.map((h) => ({
+      toAgent: h.toAgent,
+      status: h.status,
+      sessaoEncerrada: encerrada.get(h.sessionId) ?? false,
+    }));
+  }
+
+  /** Mesmo predicado do engine (`ProjectContainerLifecycle.running?/1`): linha registrada `running`. */
+  private async containerRodando(projectId: string): Promise<boolean> {
+    const linha = await this.containers.findByProject(projectId);
+    return linha?.status === 'running';
+  }
+
+  /**
+   * Fecha a sessão de origem só quando ela está `active` (mesma cautela de
+   * `decide-bootstrap-plan.use-case.ts#fecharSessao` — nada a fazer se já
+   * não existir ou já não estiver aberta) E não tem trabalho pendurado: o
+   * mesmo `GetSessionPendingWorkUseCase` que segura o fechamento por
+   * heartbeat de inatividade, reusado aqui para não fechar uma sessão com
+   * handoff `offered`, ação `pending` ou agente `working` sem `idle`
+   * posterior. Falha ou pendência aqui NUNCA propaga — a ativação da
+   * execução já aconteceu, e fechar o chat de origem é um efeito colateral
+   * best-effort, não uma condição da ativação.
+   */
+  private async closeOriginSession(
+    projectId: string,
+    originSessionId: string,
+  ): Promise<void> {
+    const origin = await this.sessions.findInProject(
+      projectId,
+      originSessionId,
+    );
+    if (origin?.status !== 'active') return;
+
+    const { pending } =
+      await this.getSessionPendingWork.execute(originSessionId);
+    if (pending) return;
+
+    await this.transitionSession.execute(projectId, originSessionId, 'closing');
+    await this.transitionSession.execute(projectId, originSessionId, 'closed');
+  }
+}

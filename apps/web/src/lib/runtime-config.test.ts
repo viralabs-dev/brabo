@@ -1,0 +1,95 @@
+import { describe, it, expect } from 'vitest';
+import { enderecoNoLoopbackDaApi, readRuntimeConfig } from './runtime-config';
+
+/**
+ * A precedência é o contrato entre três coisas que não se enxergam: o
+ * entrypoint do nginx (que escreve /config.js), o build do Vite (que inlina as
+ * VITE_*) e o overlay do Kubernetes (que define as variáveis do container).
+ *
+ * O caso que mais importa é o da string vazia: `envsubst`/`printf` escrevem
+ * `""` para variável não definida, e `'' ?? default` é `''` em JavaScript. Sem
+ * o tratamento, um ConfigMap com uma chave faltando faz a app apontar para a
+ * origem vazia e falhar com erro de CORS — que não diz nada sobre a causa real.
+ */
+describe('readRuntimeConfig', () => {
+  it('usa o valor de runtime quando presente', () => {
+    const config = readRuntimeConfig({
+      apiUrl: 'https://api.brabo.example',
+      engineUrl: 'https://engine.brabo.example',
+      logLevel: 'warn',
+      version: '1.1.2',
+    });
+
+    expect(config).toEqual({
+      apiUrl: 'https://api.brabo.example',
+      engineUrl: 'https://engine.brabo.example',
+      logLevel: 'warn',
+      version: '1.1.2',
+    });
+  });
+
+  it('cai no default quando não há config de runtime — é o `pnpm dev:web`', () => {
+    const config = readRuntimeConfig({});
+
+    expect(config.apiUrl).toBe('http://localhost:3000');
+    expect(config.engineUrl).toBe('http://localhost:4000');
+    expect(config.logLevel).toBe('info');
+    expect(config.version).toBe('dev');
+  });
+
+  it('`version` cai em `dev` fora do release, e é assim que se lê o rodapé', () => {
+    // O rodapé das telas de auth mostra este valor cru. "dev" ali não é bug: é o
+    // artefato dizendo que não nasceu de uma tag. Só o `Dockerfile.prod` de
+    // release inlina outra coisa (ADR 0036).
+    expect(readRuntimeConfig({}).version).toBe('dev');
+    expect(readRuntimeConfig({ version: '' }).version).toBe('dev');
+  });
+
+  it('trata string vazia como ausente, não como valor', () => {
+    const config = readRuntimeConfig({ apiUrl: '', engineUrl: '   ' });
+
+    expect(config.apiUrl).toBe('http://localhost:3000');
+  });
+
+  it('resolve cada chave de forma independente', () => {
+    const config = readRuntimeConfig({ apiUrl: 'https://api.brabo.example' });
+
+    expect(config.apiUrl).toBe('https://api.brabo.example');
+    expect(config.engineUrl).toBe('http://localhost:4000');
+  });
+});
+
+describe('enderecoNoLoopbackDaApi (RN-1060)', () => {
+  const api = 'http://localhost:3000';
+
+  it('127.0.0.1 vai para o host da api, com porta, caminho, query e hash', () => {
+    expect(enderecoNoLoopbackDaApi('http://127.0.0.1:8088/login?x=1#h', api)).toBe(
+      'http://localhost:8088/login?x=1#h',
+    );
+  });
+
+  it('o inverso: localhost vai para 127.0.0.1 quando a api está lá', () => {
+    expect(enderecoNoLoopbackDaApi('http://localhost:8088/', 'http://127.0.0.1:3000')).toBe(
+      'http://127.0.0.1:8088/',
+    );
+  });
+
+  it('[::1] é loopback', () => {
+    expect(enderecoNoLoopbackDaApi('http://[::1]:8088/a', api)).toBe('http://localhost:8088/a');
+  });
+
+  it('mesmo host: nada muda', () => {
+    expect(enderecoNoLoopbackDaApi('http://localhost:8088/', api)).toBeNull();
+  });
+
+  it('domínio público e IP de rede: nada muda', () => {
+    expect(enderecoNoLoopbackDaApi('https://brabo.example/', 'https://api.brabo.example')).toBeNull();
+    expect(enderecoNoLoopbackDaApi('http://192.168.0.10:8088/', api)).toBeNull();
+    expect(enderecoNoLoopbackDaApi('http://127.0.0.1:8088/', 'https://api.brabo.example')).toBeNull();
+  });
+
+  it('apiUrl vazia ou inválida: nada muda', () => {
+    expect(enderecoNoLoopbackDaApi('http://127.0.0.1:8088/', '')).toBeNull();
+    expect(enderecoNoLoopbackDaApi('http://127.0.0.1:8088/', 'não é url')).toBeNull();
+  });
+});

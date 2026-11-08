@@ -1,0 +1,165 @@
+{
+  "architectureTab": {
+    "title": "Architecture",
+    "emptyTitle": "No architecture yet",
+    "emptyState": "No architecture yet — the Architect generates the module_map and ADRs.",
+    "modulesLabel": "Modules",
+    "modulesLabelVersioned": "Modules · v{{version}}",
+    "noModules": "No modules yet.",
+    "c4Label": "C4 diagram",
+    "c4LabelVersioned": "C4 diagram · v{{version}}",
+    "c4Empty": "No diagram yet — the Architect generates Context + Container from the module_map (create_c4_diagram).",
+    "adrsLabel": "ADRs",
+    "noAdrs": "No ADR proposed yet.",
+    "pendenciesLabel": "Cross-validation pendencies",
+    "reasonNoModule": "no module linked",
+    "reasonMissingModule": "missing module: {{missing}}"
+  },
+  "c4": {
+    "titleContext": "Context",
+    "titleContainer": "Container",
+    "expandLabel": "Expand {{titulo}} diagram",
+    "expandTitle": "Expand",
+    "renderErrorTitle": "Could not render this diagram.",
+    "viewRawSyntax": "View Mermaid syntax",
+    "emptyDiagram": "Empty diagram.",
+    "invalidSyntax": "Invalid Mermaid syntax."
+  },
+  "team": {
+    "title": "Agent team",
+    "summary_one": "{{count}} agent · {{working}} working · {{waiting}} waiting",
+    "summary_other": "{{count}} agents · {{working}} working · {{waiting}} waiting",
+    "autonomyErrorTitle": "Could not change autonomy",
+    "rearmSuccess": "Agent rearmed",
+    "rearmErrorTitle": "Could not rearm the agent"
+  },
+  "timeline": {
+    "title": "Team timeline",
+    "lendoExecucao": "Reading the execution session, not the most recent one.",
+    "description": "One branch per agent, from the first milestone to what it's doing right now. Whoever is active, or among the 5 most recent, opens on its own — the rest is one click away, with a count of new milestones in the header."
+  },
+  "ambiente": {
+    "title": "Environment",
+    "carregando": "checking…",
+    "codigo": "code",
+    "modos": {
+      "container": "managed container",
+      "mounted": "mounted folder",
+      "runner": "folder on your machine"
+    },
+    "runner": "runner",
+    "runnerConfirmado": "folder confirmed on {{data}}",
+    "runnerNuncaConfirmado": "folder not confirmed yet",
+    "runnerRessalva": "This is the record of that confirmation, not a sign that the runner is running right now — the terminal on the Code tab is what knows about now.",
+    "runnerRessalvaNunca": "No runner has connected to this project yet. Install and run `brabo-runner` from the Code tab.",
+    "espelho": "mirror",
+    "espelhoNunca": "never synced",
+    "espelhoValor_one": "{{count}} file copied on {{data}}",
+    "espelhoValor_other": "{{count}} files copied on {{data}}",
+    "espelhoSemNovidade": "synced on {{data}} — nothing to copy",
+    "espelhoFalhou": "last round failed",
+    "espelhoFalhouComUltima": "last round failed — last good copy on {{data}}",
+    "espelhoRessalva": "It records the last round, not that the folder is in sync with what changed since: the mirror runs at named moments (a commit), never continuously. It only copies — it never deletes anything on your side.",
+    "espelhoRessalvaNunca": "No round has been reported for this project yet. The mirror runs when the local agent is connected and a commit lands.",
+    "espelhoRessalvaErro": "The local agent reported: {{erro}}",
+    "espelhoDestinoTrocado": "The destination changed after this round: it wrote to {{destino}}. Reconnect brabo-runner so the new one takes effect.",
+    "modelosLocais": "local models",
+    "modelosLocaisNenhum": "no Ollama chat model active in the workspace",
+    "modelosLocaisValor_one": "{{count}} Ollama chat model, active in the workspace",
+    "modelosLocaisValor_other": "{{count}} Ollama chat models, active in the workspace",
+    "modelosLocaisEmbedding_one": "{{count}} embedding model (search only, does not chat)",
+    "modelosLocaisEmbedding_other": "{{count}} embedding models (search only, do not chat)"
+  },
+  "activity": {
+    "title": "Activity",
+    "count_one": "{{count}} event",
+    "count_other": "{{count}} events",
+    "loadErrorTitle": "Could not load the activity.",
+    "emptyNoSession": "No activity yet: it starts with the project's first session."
+  },
+  "executionSection": {
+    "title": "Execution",
+    "activationErrorTitle": "Could not tell if execution was already activated.",
+    "introReady": "Activate execution for the dev agents to implement the backlog in parallel.",
+    "introNeedsModuleMap": "Nothing to activate yet: the Architect has to define the project's modules first.",
+    "introNeedsRepository": "This project has no repository yet, and without one the dev agents have nowhere to work. It is created when you accept the handoff to the Architect — or, if that one was already accepted, the handoff to the Dev Lead.",
+    "provisionNow": "Provision the repository now",
+    "activate": "Activate execution",
+    "devAgentsLabel": "Dev agents",
+    "spinningUp": "Spinning up the agents…",
+    "devAgentModule": "module: {{module}}",
+    "devAgentTask": "task: {{task}}",
+    "devAgentProgress": "iteration {{iteration}} · cost {{cost}}",
+    "blockedTasksLabel": "Blocked tasks",
+    "noDiagnosis": "no diagnosis",
+    "unblock": "Unblock",
+    "suggestionBefore": "There are independent tasks in ",
+    "suggestionAfter": " — spin up an extra dev?",
+    "accept": "Accept",
+    "pullRequestsLabel": "Pull requests",
+    "noPullRequests": "No PR open yet.",
+    "pullRequestFallback": "PR",
+    "errorTitle": "Error",
+    "activateError": "Could not activate execution",
+    "unblockError": "Could not unblock the task",
+    "unblockedTitle": "Task unblocked",
+    "unblockedWithoutExecution": "No execution is running: the task only runs when you restart the execution, here in this section.",
+    "authorizationNeededTitle": "Needs your authorization",
+    "authorizationNeededMessage_one": "The session already has {{count}} agent, the lead's cap is {{max}}. The request is in Approvals.",
+    "authorizationNeededMessage_other": "The session already has {{count}} agents, the lead's cap is {{max}}. The request is in Approvals.",
+    "requestDeniedTitle": "Request denied",
+    "requestError": "Could not request",
+    "unblocking": "Unblocking…",
+    "unblockNeedsSession": "The session is still loading: unblocking needs it."
+  },
+  "architectureSummary": {
+    "title": "Architecture",
+    "emptyState": "No architecture yet — the Architect generates the module_map and ADRs.",
+    "summary_one": "{{count}} module mapped, C4 diagram {{status}}.",
+    "summary_other": "{{count}} modules mapped, C4 diagram {{status}}.",
+    "statusGenerated": "generated",
+    "statusPending": "pending",
+    "link": "View full architecture →"
+  },
+  "primeirosPassos": {
+    "title": "First steps",
+    "progresso": "{{feitos}} of {{total}} done",
+    "feito": "Done",
+    "credencial": {
+      "titulo": "Add a model provider key",
+      "pendente": "Without a key, the agents have nothing to talk with.",
+      "link": "Add the key →"
+    },
+    "modelo": {
+      "titulo": "Activate a model and apply it to the team",
+      "pendente": "No agent has a model yet: activate one in Providers and pick it here.",
+      "link": "Pick the model →"
+    },
+    "ideacao": {
+      "titulo": "Start the first ideation",
+      "pendente": "Tell the Creative agent your idea — that is where the stories come from.",
+      "link": "Open the Creative agent →"
+    }
+  },
+  "rodarNaSuaMaquina": {
+    "title": "Run it on your machine",
+    "envExample": "First copy the example environment file: cp .env.example .env",
+    "copiar": "Copy",
+    "copiado": "Copied",
+    "urlRecusada": "(address outside your machine, not shown as a link)",
+    "notaAntes": "Declared by Infra in the",
+    "pr": "pull request",
+    "notaDepois": ", not verified on your machine."
+  },
+  "grafo": {
+    "carregando": "Loading the graph…",
+    "vazio": "No modules to draw the graph."
+  },
+  "entregavel": {
+    "recarregar": "Reload",
+    "endereco": "Address",
+    "abrir": "Open in new tab",
+    "titulo": "Deliverable",
+    "vazio": "There is no published deliverable to preview."
+  }
+}
