@@ -83,6 +83,10 @@ o aceite contra a recomendação (RN-1052).
 
 Na `main` o relatório é o portão. Na `dev` ele é só o atestado, e nada bloqueia.
 
+## O que o regressivo não cobre
+
+O `brabo-runner` não tem regressivo no catálogo: a PR dele se atesta pelo próprio CI (o binário linux-x64 entra na PR, runner#28), e o contrato runner ↔ engine só é provado no TP-01 ([RN-1075](https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/business-rules/ci.md), no `brabo-ci`).
+
 ## O que isto custa
 
 Uma PR para a `dev` gasta de 8 a 12 minutos assíncronos de CI no `brabo-qa` e de 3
