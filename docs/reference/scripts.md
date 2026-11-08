@@ -22,7 +22,7 @@ Fonte: o `package.json` de cada pacote e o `Makefile` da raiz.
 | `pnpm docs:serve` | `python3 -m http.server 3000 -d build/docs-site` |
 | `pnpm docs:clear` | `rm -rf build/docs-site` |
 | `pnpm docs:site` | `node scripts/docs/site/build.mjs` |
-| `pnpm docs:site:check` | `node scripts/docs/site/links.mjs && node scripts/docs/links-do-locale.mjs build/docs-site && node scripts/docs/faixa-de-traducao-check.mjs build/docs-site && node scripts/docs/site/tipos.mjs` |
+| `pnpm docs:site:check` | `node scripts/docs/site/links.mjs && node scripts/docs/links-do-locale.mjs build/docs-site && node scripts/docs/faixa-de-traducao-check.mjs build/docs-site && node scripts/docs/site/tipos.mjs && node scripts/docs/site/orcamento.mjs` |
 | `pnpm docs:generate` | `node scripts/docs/generate.mjs` |
 | `pnpm docs:openapi-textos` | `node scripts/docs/openapi-textos.mjs` |
 | `pnpm docs:landing` | `node scripts/docs/landing.mjs` |
