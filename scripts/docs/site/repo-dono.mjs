@@ -2,7 +2,7 @@
 // `docs/` de vários repos, e "editar esta página" aponta para o dono dela.
 const DONOS = {
   docs: ['brabo', 'docs'],
-  'scripts/ci/docs': ['brabo', 'scripts/ci/docs'],
+  'scripts/ci/docs': ['brabo-ci', 'scripts/ci/docs'],
   'apps/api/docs': ['brabo-api', 'docs'],
   'apps/engine/docs': ['brabo-engine', 'docs'],
   'apps/web/docs': ['brabo-web', 'docs'],

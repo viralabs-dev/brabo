@@ -7,7 +7,7 @@ orquestrada por agentes). Quem instala ou lê só precisa conhecer este repo
 - `docs/` — o AGREGADOR: intro, getting-started, ADRs, explicações, o ÍNDICE de
   RN (`docs/business-rules.md`), traduções em `docs/i18n/` e `docs/assets/`;
 - `scripts/docs/` — o gerador do site, os checks e o mapa `fontes.yml`;
-- `scripts/ci/docs/` — a doc da área ci (AT-693); `website/` — só a árvore do Redoc;
+- `scripts/ci/docs/` — NÃO mora aqui: a doc da área ci é do `brabo-ci` e entra no layout pela trava (AT-823); `website/` — só a árvore do Redoc;
 - `CHANGELOG.md` (o do PRODUTO), `README.*`, `THIRD_PARTY_NOTICES.md` e os
   arquivos de comunidade;
 - `install.sh` (+ `scripts/dev/install-*.spec.ts`, `scripts/ci/assets-do-instalador.ts`);

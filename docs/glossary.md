@@ -434,3 +434,5 @@ de um `AsyncLocalStorage` alimentado pelo decorator `@Traced`, não de um span
 **Camada** — no caminho acima, o rótulo da fronteira: `interfaces`,
 `application`, `domain` ou `infrastructure`. Corresponde aos diretórios sob
 `apps/api/src/` e à regra de dependência entre eles.
+
+**Política de PR e do CI** — os termos da esteira (escada, promoção, rulesets, códigos de violação) estão em [glossário da política](reference/glossario-da-politica.md), que mora no `brabo-ci`.
