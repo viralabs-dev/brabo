@@ -6,7 +6,7 @@ sidebar_position: 1
 description: Платформа, которая оркестрирует ИИ-агентов, ведущих полный жизненный цикл приложения, оставляя последнее слово за человеком.
 keywords: [brabo, агенты ИИ, инженерия, оркестрация, одобрение]
 tipo: conceito
-traducao_de: c724b4226dc3d2dc6876c186a74cdb5db4192ba8
+traducao_de: 36bc8448738f1d92cc93cab3a95fd2bde710a923
 ---
 
 # Что такое Brabo {#o-que-é-o-brabo}

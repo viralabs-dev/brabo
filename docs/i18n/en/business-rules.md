@@ -5,7 +5,7 @@ sidebar_label: Business rules
 sidebar_position: 3
 description: Brabo's domain rules, numbered, with where they live in the code and the test that covers each one.
 keywords: [business rules, domain, state machine, approval, RBAC]
-traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
+traducao_de: d7d790431657e61a049b452214cfd432da2199df
 ---
 
 # Business rules
@@ -16,9 +16,7 @@ change — that's what
 [`.docmap.yml`](https://github.com/daneiel/brabo/blob/dev/docs/.docmap.yml)
 requires with `block` severity.
 
-They all live in `apps/api/src/domain/`, which is **pure**: no IO, no
-framework, no database. That's why each one has a fast, deterministic unit
-test.
+The rules live on the page of the **owning area** (`business-rules/<area>.md`), in the repository that implements them: the api, the engine, the web, the runner, the ci and the others. This page is only the **index**: one line per area, with the count, and below it the grid of numbers. Each number is an anchor (`#rn-NNN`) that leads to the page, or the part of the page, where the RN lives. The old links remain valid.
 
 <!-- BEGIN:GENERATED:indice-de-rn -->
 - [api](business-rules/api.md) — 368 RN

@@ -1,10 +1,14 @@
 ---
 sidebar_position: 8
 tipo: historico
-traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # Triaged backlog
+
+:::historico 2026-09-12
+Backlog triage born from Phase 13c, with the findings of the real execution and the old items scattered across ADRs. It classifies by priority (P1 to P3), cost and risk of waiting, in phases A to H. It later accumulated the backlogs of the runner (ADR 0104), of the team model and of the external review of 28/08. The live backlog today lives in the project Kanban.
+:::
 
 Output of **FASE 13c**. Gathers the open findings from real execution
 ([achados-execucao-real.md](achados-execucao-real.md)) and the older items

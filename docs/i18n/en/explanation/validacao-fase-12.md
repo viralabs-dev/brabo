@@ -1,6 +1,6 @@
 ---
 tipo: historico
-traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 id: validacao-fase-12
 title: The validation that the three findings died
 sidebar_label: Phase 12 validation
@@ -10,6 +10,10 @@ keywords: [validation, Phase 12, dogfooding, adoption, rescheduling, promotion]
 ---
 
 # The validation that the three findings died
+
+:::historico 2026-08-07
+Proof that the three P1 findings of the first dogfooding died in the same run, by a script that exits with a non-zero code if the criterion does not close. It starts with what the validation does not prove (local provider, noop dev agent) and brings the evidence read from the database.
+:::
 
 The [first dogfooding harvest](./primeiro-dogfooding.md) left three P1
 operability findings. Phase 12 addressed them one by one; this document is

@@ -3,9 +3,9 @@ id: adr-index
 title: Architectural decisions (ADR)
 sidebar_label: ADR index
 sidebar_position: 0
-description: Brabo's 257 architectural decision records, grouped by theme, with what each one decided.
+description: Brabo's 282 architectural decision records, grouped by theme, with what each one decided.
 keywords: [ADR, architectural decision, architecture, history]
-traducao_de: 9dbb82539548937b3d2f8bc0c7ecc2d1503061d6
+traducao_de: d7d790431657e61a049b452214cfd432da2199df
 ---
 
 # Architectural decisions
@@ -21,9 +21,9 @@ current.** For the current state, use [Business rules](../business-rules.md),
 [Architecture](../architecture.md) and the [Runbook](../runbook.md). For the
 reasoning, come here.
 
-Of the 61, all are **accepted** except those still waiting for implementation — today [0053](0053-dev-lead-e-paralelismo-autorizado.md), [0054](0054-gates-como-registro-declarativo.md) and [0056](0056-o-engine-trabalha-em-repositorio-remoto.md), marked **proposed** in the file itself. [0055](0055-escopo-de-caminho-na-politica-de-terminal.md) was accepted once it was implemented in Phase F. [0154](0154-chave-de-dispositivo-de-maquina.md) and [0155](0155-a-primeira-conta-nasce-no-terminal.md) took the same path: accepted on 2026-09-27, after Phase 30 exercised them, with an "acceptance notes" section naming where the text and the code diverge. No check verifies this sentence: it aged saying 48 when there were already 54, and again 58 when there were already 59, and it's the argument of ADR 0029 (`gerar > verificar > lembrar`) confirming itself against itself.
+The table below is **generated** (`pnpm docs:generate`, [ADR 0287](0287-o-indice-de-adr-e-gerado-e-as-referencias-grandes-viram-indice-mais-partes.md)): number, title and status of each ADR, under a single theme. Use the filter by theme and status, or the site search. The full text of each decision is in the ADR itself.
 
-The decisions are grouped by **theme** — the product front they decide about — and each ADR appears once, under its main theme. The theme lives in `docs/adr/temas.yml`, next to this page, and not in the ADR, because an accepted ADR is never edited ([ADR 0202](0202-o-indice-de-adr-por-tema.md)); `pnpm docs:check` fails an ADR without a theme or a row under the wrong section. The phase-by-phase story is in the [phase history](../explanation/historico-de-fases.md).
+The status comes from the `## Status` section of the ADR; without it, **accepted** applies. The theme lives in `docs/adr/temas.yml`, next to this page, and not in the ADR, because an accepted ADR is never edited ([ADR 0202](0202-o-indice-de-adr-por-tema.md)); `pnpm docs:check` fails an ADR without a theme.
 
 <!-- BEGIN:GENERATED:indice-de-adr -->
 **Themes:** [Git, repository and branch policy](#tema-git) · [Agent harness, turns and sessions](#tema-agentes) · [The agent team — roles, areas and handoffs](#tema-time) · [Gates, QA and security review](#tema-gates) · [Execution, terminal policy and approvals](#tema-execucao) · [Where the code lives — execution modes](#tema-modos) · [Project container and broker](#tema-container) · [The local runner](#tema-runner) · [Auth, access and secrets](#tema-iam) · [LLM providers, models and spend](#tema-llm) · [RAG, knowledge graph and artifacts](#tema-conhecimento) · [Web UI and design system](#tema-web) · [Operation, deploy and installation](#tema-operacao) · [CI, release and supply chain](#tema-engenharia) · [Documentation](#tema-docs)

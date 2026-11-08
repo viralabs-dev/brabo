@@ -4,7 +4,7 @@ title: Configuration
 sidebar_position: 1
 description: All environment variables for the api, engine and web, with defaults and what breaks when they're wrong.
 keywords: [configuration, environment variables, env, deploy]
-traducao_de: 3016564b5bb5b0752711c07b9babefd252829a8d
+traducao_de: d7d790431657e61a049b452214cfd432da2199df
 ---
 
 # Configuration

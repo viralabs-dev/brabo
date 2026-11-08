@@ -5,7 +5,7 @@ sidebar_label: 业务规则
 sidebar_position: 3
 description: Brabo 的领域规则，带编号，注明它们在代码中的位置以及覆盖每一条的测试。
 keywords: [业务规则, 领域, 状态机, 审批, RBAC]
-traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
+traducao_de: d7d790431657e61a049b452214cfd432da2199df
 ---
 
 # 业务规则
@@ -14,7 +14,7 @@ traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 [`.docmap.yml`](https://github.com/daneiel/brabo/blob/dev/docs/.docmap.yml)
 以 `block` 级别所要求的。
 
-它们都位于 `apps/api/src/domain/`，该目录是**纯的**：没有 IO，没有框架，没有数据库。因此每一条都有快速、确定性的单元测试。
+规则位于**所属区域**的页面（`business-rules/<区域>.md`）中，即实现它们的仓库：api、engine、web、runner、ci 等。本页只是**索引**：每个区域一行，附带数量，下方是编号网格。每个编号都是一个锚点（`#rn-NNN`），指向 RN 所在的页面或页面中的某一部分。旧链接仍然有效。
 
 <!-- BEGIN:GENERATED:indice-de-rn -->
 - [api](business-rules/api.md) — 368 RN

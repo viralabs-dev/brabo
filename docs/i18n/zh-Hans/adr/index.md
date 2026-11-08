@@ -3,9 +3,9 @@ id: adr-index
 title: 架构决策（ADR）
 sidebar_label: ADR 索引
 sidebar_position: 0
-description: Brabo 的 257 条架构决策记录，按主题分组，并附上每条决策的内容。
+description: Brabo 的 282 条架构决策记录，按主题分组，并附上每条决策的内容。
 keywords: [ADR, 架构决策, 架构, 历史]
-traducao_de: 9dbb82539548937b3d2f8bc0c7ecc2d1503061d6
+traducao_de: d7d790431657e61a049b452214cfd432da2199df
 ---
 
 # 架构决策
@@ -21,9 +21,9 @@ ADR 记录的是某件事在被决定的那一刻**为什么**这样决定。
 [架构](../architecture.md)和[运维手册](../runbook.md)。要了解
 推理过程，请来这里。
 
-在这 61 份中，除了仍在等待实现的之外都已**接受**——目前是 [0053](0053-dev-lead-e-paralelismo-autorizado.md)、[0054](0054-gates-como-registro-declarativo.md) 和 [0056](0056-o-engine-trabalha-em-repositorio-remoto.md)，它们在各自文件中标为**提议**。[0055](0055-escopo-de-caminho-na-politica-de-terminal.md) 在 Fase F 实现时被接受。[0154](0154-chave-de-dispositivo-de-maquina.md) 和 [0155](0155-a-primeira-conta-nasce-no-terminal.md) 走了同样的路：在 Fase 30 实际运行过它们之后，于 2026-09-27 被接受，并附有一节"接受说明"，指出文本与代码在哪些地方不一致。没有任何检查会核对这句话：它在已经是 54 份时还说着 48，在已经是 59 份时又说着 58，这正是 ADR 0029（`gerar > verificar > lembrar`）的论点在反驳自身时得到印证。
+下面的表格是**生成的**（`pnpm docs:generate`，[ADR 0287](0287-o-indice-de-adr-e-gerado-e-as-referencias-grandes-viram-indice-mais-partes.md)）：每份 ADR 的编号、标题和状态，归在唯一一个主题之下。可使用按主题和状态的过滤器，或站点搜索。每项决策的完整文本在 ADR 本身中。
 
-决策按**主题**分组——即它所决定的产品前线——每份 ADR 只出现一次，位于其主要主题之下。主题存放在 `docs/adr/temas.yml` 中，与本页并列，而不放在 ADR 里，因为已接受的 ADR 永远不会被编辑（[ADR 0202](0202-o-indice-de-adr-por-tema.md)）；`pnpm docs:check` 会拒绝没有主题的 ADR 或放错章节的行。逐阶段的历史见[阶段历史](../explanation/historico-de-fases.md)。
+状态来自 ADR 的 `## Status` 一节；没有该节则视为**已接受**。主题存放在 `docs/adr/temas.yml` 中，与本页并列，而不放在 ADR 里，因为已接受的 ADR 永远不会被编辑（[ADR 0202](0202-o-indice-de-adr-por-tema.md)）；`pnpm docs:check` 会拒绝没有主题的 ADR。
 
 <!-- BEGIN:GENERATED:indice-de-adr -->
 **主题:** [Git、仓库与分支策略](#tema-git) · [智能体的 harness、回合与会话](#tema-agentes) · [智能体团队——角色、领域与 handoffs](#tema-time) · [Gates、QA 与安全审查](#tema-gates) · [执行、终端策略与审批](#tema-execucao) · [代码住在哪里——执行模式](#tema-modos) · [项目容器与 broker](#tema-container) · [本地 runner](#tema-runner) · [认证、访问与秘密](#tema-iam) · [LLM providers、模型与开销](#tema-llm) · [RAG、知识图谱与工件](#tema-conhecimento) · [Web 界面与设计系统](#tema-web) · [运维、部署与安装](#tema-operacao) · [CI、发布与供应链](#tema-engenharia) · [文档](#tema-docs)

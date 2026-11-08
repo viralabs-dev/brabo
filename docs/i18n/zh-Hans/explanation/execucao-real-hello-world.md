@@ -5,10 +5,14 @@ sidebar_label: 真实执行（hello world）
 description: Brabo 第一次用 API 模型端到端执行、它产生的十六个发现，以及仍未被证明的内容。
 keywords: [dogfooding, 真实执行, 发现, fase 13]
 tipo: historico
-traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # 真实执行——hello world
+
+:::historico 2026-08-05
+智能体链第一次使用 API 模型端到端运行，在一个带有真实 GitHub 仓库的新项目中。目标是找出真实使用中什么会坏。这不是第 13b 阶段的正式度量，因为中途 engine 被重启了多次。
+:::
 
 agent 链第一次以 **API 模型**端到端运行，代替本地的 Ollama。新项目（`Hello API`），GitHub 上的真实仓库，provider OpenRouter，模型 `~deepseek/deepseek-v4-flash-latest`。
 

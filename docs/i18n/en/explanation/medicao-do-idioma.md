@@ -3,10 +3,14 @@ id: medicao-do-idioma
 title: Measuring the language heuristic
 description: The instrument that measures the AT-080 language-detection heuristic against a labeled corpus, the numbers it produced on the synthetic corpus, and the paid validation of the language orientation and its cost (AT-167, 2026-09-29).
 tipo: historico
-traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # Measuring the language heuristic
+
+:::historico 2026-09-29
+Measurement of the language heuristic of AT-160: a list of markers and regular expressions, with no new dependency. It brings the numbers on the corpora, the provisional thresholds the product uses and the paid validation with Haiku (AT-167). Since AT-163 the product runs this heuristic and asks before changing anything.
+:::
 
 > AT-160 (EP-028, HS-053). The heuristic being measured is the one the AT-080
 > specification proposed ("A — own heuristic, no dependency"). Since AT-163

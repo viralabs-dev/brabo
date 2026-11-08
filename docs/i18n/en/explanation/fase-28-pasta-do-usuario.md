@@ -6,10 +6,14 @@ sidebar_position: 15
 description: The scope of FASE 28 — a base consented to in the bootstrap, mounted as the local default, and a local agent that declares capabilities. The decisions are in ADRs 0146 and 0147.
 keywords: [fase 28, user folder, projects base, runner, mirror, capabilities]
 tipo: historico
-traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # FASE 28 — the user's folder
+
+:::historico 2026-09-06
+A slice of Phase 28: give the user a folder of their own where the work happens, with a base consented to at bootstrap, `mounted` as the local default and a local agent that declares capabilities. It says what the phase pursues, what it refuses and in what order. The decisions live in ADRs 0146 and 0147.
+:::
 
 > This document is the phase's **scope**: what it pursues, what it refuses,
 > and in what order. The **decisions** live in [ADR 0146](../adr/0146-base-consentida-no-bootstrap.md)

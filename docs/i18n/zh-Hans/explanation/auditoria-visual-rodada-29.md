@@ -1,12 +1,16 @@
 ---
 tipo: historico
-traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 id: auditoria-visual-rodada-29
 title: 视觉审计：Rodada 29 之前与之后
 description: AT-290 的界面审计——主要路由在两种主题下以 1440 px 和 390 px 截图，在每个界面上运行布局检查器，以及 Rodada 29 修复了什么、什么仍然存在、什么是新的，于 2026-09-30 针对 dev 的 79e6b1209f 测量。
 ---
 
 # 视觉审计：Rodada 29 之前与之后 {#visual-audit-before-and-after-rodada-29}
+
+:::historico 2026-09-30
+这是度量，而不是变更：第 29 轮前后的界面，在同一天的两个提交上针对 `dev` 截取。它记录了验证器测到了什么，以及什么改善了、什么没有。截图不在仓库中；每条发现都标注了文件名。
+:::
 
 > AT-290（EP-031，HS-074）。这是一次**测量，而不是变更**：为了写这一页，`apps/`
 > 中没有任何改动。“之前”的截图于 2026-09-30 针对 `dev` 的 `de18e6a6e2` 进行；
