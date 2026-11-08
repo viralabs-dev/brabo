@@ -1,0 +1,17 @@
+name: arestas-alinhadas
+
+# AT-848, ADR 0285: roda toda segunda-feira a prova de que cada aresta do `repos.yml` existe no código
+# (arquivo + trecho literal) e de que REPOS, irmaos.lock e componentes.json batem com o mapa. Informativo: não é check obrigatório.
+on:
+  schedule:
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  arestas:
+    uses: viralabs-dev/brabo-ci/.github/workflows/arestas-alinhadas.yml@6390ef56b6c405db9a24956bf41c55a7ea601612  # v1.4.0-dev.17
+    with:
+      ci_ref: 6390ef56b6c405db9a24956bf41c55a7ea601612  # v1.4.0-dev.17

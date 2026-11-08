@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 310 de 333 (93.1%) | 97.8% de 3.715.783 | 297 | 11 | 2 | 23 | 4 |
-| `ru` | 310 de 333 (93.1%) | 97.8% de 3.715.783 | 297 | 11 | 2 | 23 | 4 |
-| `zh-Hans` | 310 de 333 (93.1%) | 97.8% de 3.715.783 | 297 | 11 | 2 | 23 | 4 |
+| `en` | 310 de 334 (92.8%) | 97.7% de 3.719.292 | 296 | 12 | 2 | 24 | 4 |
+| `ru` | 310 de 334 (92.8%) | 97.7% de 3.719.292 | 296 | 12 | 2 | 24 | 4 |
+| `zh-Hans` | 310 de 334 (92.8%) | 97.7% de 3.719.292 | 296 | 12 | 2 | 24 | 4 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -32,6 +32,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `intro.md` (tradução de 2026-11-04)
 - `reference/configuration.md` (tradução de 2026-11-05)
 - `reference/events.md` (tradução de 2026-11-06)
+- `tutorials/orquestrar-repositorios/o-mapa.md` (tradução de 2026-11-08)
 
 ### Defasadas em `ru`
 
@@ -46,6 +47,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `intro.md` (tradução de 2026-11-04)
 - `reference/configuration.md` (tradução de 2026-11-05)
 - `reference/events.md` (tradução de 2026-11-06)
+- `tutorials/orquestrar-repositorios/o-mapa.md` (tradução de 2026-11-08)
 
 ### Defasadas em `zh-Hans`
 
@@ -60,4 +62,5 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `intro.md` (tradução de 2026-11-04)
 - `reference/configuration.md` (tradução de 2026-11-05)
 - `reference/events.md` (tradução de 2026-11-06)
+- `tutorials/orquestrar-repositorios/o-mapa.md` (tradução de 2026-11-08)
 

@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **feat(ci)**: AT-848, ADR 0285. A `prova` de cada aresta do `repos.yml` passa de `arquivo:linha` para `{ arquivo, trecho }` (trecho literal de uma linha que cita o destino, fora do bloco gerado `mapa:`), e a aresta `brabo → brabo-contracts` (`contrato`) entra no mapa: o número da linha deixa de derivar a cada commit. Os blocos "Onde se encaixa" dos READMEs são regenerados. O `.github/workflows/arestas-alinhadas.yml` chama a prova do `brabo-ci` toda segunda-feira e por `workflow_dispatch`. Todos os `uses:` e `ci_ref` do brabo-ci repinam em `6390ef5` (`v1.4.0-dev.17`).
+
 - **docs**: AT-847 (passo 2). A página do painel da mudança sai do `brabo` (`docs/explanation/painel-da-mudanca.md`); quem serve o slug `explanation/painel-da-mudanca` é a página unificada do `brabo-ci`, pela trava (`brabo-ci#54`). A URL não muda, e o "editar esta página" aponta para o `brabo-ci`.
 
 - **feat(install)**: AT-849. `install.sh --source=local` confere, antes do `docker buildx bake`, que `${NPMRC:-$HOME/.npmrc}` tem a linha `//npm.pkg.github.com/:_authToken=` e recusa com o passo a passo do PAT classic só com `read:packages` (RN-1039); nunca imprime o valor. O `--source=ghcr` não muda. Página nova `docs/how-to/token-do-github-packages.md`, nos quatro idiomas.
