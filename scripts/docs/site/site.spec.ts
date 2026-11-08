@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { construir } from './build.mjs';
 import { adrsPorTema, construirNavegacao, listaPlana } from './navegacao.mjs';
 import { descobrirPaginas, lerFrontmatter, slugDe, urlDe, urlRelativa } from './paginas.mjs';
-import { criarRenderizador, slugDeTitulo } from './render.mjs';
+import { COMPONENTES, criarRenderizador, slugDeTitulo } from './render.mjs';
 
 /** Repositório de mentira: duas páginas, uma tradução, um ADR com tema. */
 function repo() {
@@ -75,6 +75,55 @@ describe('render', () => {
     expect(render(adr).html).toContain('href="../index.html"');
     const sumido = { ...adr, corpo: '[x](nao-existe.md)' };
     expect(render(sumido).html).toContain('href="nao-existe.md"');
+  });
+});
+
+describe('componentes da doc (AT-857)', () => {
+  const pag = (locale: string, corpo: string, extra = {}) => ({ locale, url: locale === 'pt-BR' ? 'a/b.html' : `${locale}/a/b.html`, relativo: 'a/b.md', slug: 'a/b', corpo, ...extra });
+  const render = async (locale: string, corpo: string) => {
+    const r = await criarRenderizador({ paginas: [pag(locale, '') as never, { ...pag(locale, ''), relativo: 'a/c.md', url: 'a/c.html' } as never] });
+    return r(pag(locale, corpo) as never).html;
+  };
+
+  it('aviso: nomes novos com título por locale, sinônimos em inglês e título explícito', async () => {
+    expect(await render('pt-BR', ':::dica\nx\n:::')).toMatch(/admonicao-dica[^>]*><p class="admonicao-titulo">Dica</);
+    expect(await render('en', ':::perigo\nx\n:::')).toContain('>Danger<');
+    expect(await render('ru', ':::nota\nx\n:::')).toContain('>Примечание<');
+    expect(await render('zh-Hans', ':::cuidado\nx\n:::')).toContain('>小心<');
+    const velho = await render('pt-BR', ':::warning\nx\n:::');
+    expect(velho).toContain('admonicao-warning');
+    expect(velho).toContain('admonicao-cuidado');
+    expect(velho).toContain('>Atenção<');
+    expect(await render('pt-BR', ':::nota[Meu título]\nx\n:::')).toContain('>Meu título<');
+  });
+
+  it('historico: faixa com a data por locale; sem data ou data inválida reprova o build', async () => {
+    expect(await render('pt-BR', ':::historico 2026-10-31\ncorpo\n:::')).toContain('Registro de 31/10/2026');
+    expect(await render('en', ':::historico 2026-10-31\ncorpo\n:::')).toContain('Record from October 31, 2026');
+    await expect(render('pt-BR', ':::historico\ncorpo\n:::')).rejects.toThrow(/data ISO/);
+    await expect(render('pt-BR', ':::historico 2026-02-31\ncorpo\n:::')).rejects.toThrow(/data ISO/);
+  });
+
+  it('passos, cartoes (link .md resolvido) e abas', async () => {
+    expect(await render('pt-BR', ':::passos\n1. um\n2. dois\n:::')).toMatch(/<div class="passos">\s*<ol>/);
+    const c = await render('pt-BR', ':::cartoes\n- [Título](c.md): uma frase\n:::');
+    expect(c).toContain('<div class="cartoes">');
+    expect(c).toContain('href="c.html"');
+    expect(c).not.toContain('</a>: ');
+    const a = await render('pt-BR', ':::abas\n=== Linux\num\n=== macOS\ndois\n:::');
+    expect(a).toContain('data-abas');
+    expect(a.match(/<section class="aba"/g)).toHaveLength(2);
+    expect(a).toContain('data-aba="macOS"');
+    await expect(render('pt-BR', ':::abas\nsem rótulo\n:::')).rejects.toThrow(/===/);
+  });
+
+  it('imagem com título sozinha vira figure; sem título segue parágrafo', async () => {
+    expect(await render('pt-BR', '![alt](x.png "Legenda")')).toContain('<figure class="figura"><img src="x.png" alt="alt"><figcaption>Legenda</figcaption></figure>');
+    expect(await render('pt-BR', '![alt](x.png)')).toContain('<p><img');
+  });
+
+  it('COMPONENTES lista os nomes canônicos (contrato com o linter)', () => {
+    expect(COMPONENTES).toEqual(['nota', 'dica', 'cuidado', 'perigo', 'historico', 'passos', 'cartoes', 'abas']);
   });
 });
 
