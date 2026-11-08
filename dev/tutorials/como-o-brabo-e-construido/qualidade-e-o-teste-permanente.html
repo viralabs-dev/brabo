@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qualidade e o teste de aceite permanente | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../../tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html" selected>pt-BR</option><option value="../../en/tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html">en</option><option value="../../ru/tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html">ru</option><option value="../../zh-Hans/tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../../dev/tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html" selected>dev</option><option value="../../../prd/tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../../index.html">Início</a></li><li><a href="../../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><details open><summary><span>Como o Brabo é construído</span></summary><ul><li><a href="../../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/do-pedido-a-atividade.html">Do pedido à atividade</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/a-rodada.html">A rodada</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/a-regra-vira-codigo.html">A regra vira código, e a doc vai junto</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html" aria-current="page">Qualidade e o teste de aceite permanente</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/copie-o-metodo.html">Copie o método</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Arquitetura</a></li><li><a href="../../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Política de branches</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../../explanation/localizacao.html">Localização</a></li><li><a href="../../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../../glossary.html">Glossário</a></li><li><a href="../../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../../business-rules.html">Regras de negócio</a></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="qualidade-e-o-teste-de-aceite-permanente">Qualidade e o teste de aceite permanente</h1>
+<p><strong>Para quem é:</strong> quem tem testes verdes e mesmo assim encontra defeitos quando alguém usa o produto de ponta a ponta.</p>
+<p><strong>Depois de ler, você consegue:</strong> montar três camadas de teste com papéis diferentes e explicar por que a última nunca termina.</p>
+<h2 id="três-camadas">Três camadas</h2>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>Camada</th>
+<th>Quando roda</th>
+<th>O que prova</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Regressivo por funcionalidade</strong></td>
+<td>Na PR</td>
+<td>A funcionalidade que você tocou continua certa</td>
+</tr>
+<tr>
+<td><strong>Portão de ponta a ponta</strong></td>
+<td>Na promoção para a branch principal</td>
+<td>O conjunto inteiro funciona e bloqueia o merge se quebrar</td>
+</tr>
+<tr>
+<td><strong>Teste de aceite permanente</strong></td>
+<td>Continuamente, a cada rodada</td>
+<td>Um usuário consegue ir da ideia ao resultado, no produto de verdade</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="regressivo-por-funcionalidade">Regressivo por funcionalidade</h2>
+<p>O produto tem um catálogo de funcionalidades. Cada uma lista os caminhos de código que a compõem e tem seus testes de navegador. Quando a sua PR toca um desses caminhos, <strong>aquela</strong> funcionalidade é testada, não o produto todo. Se ela não tem teste ainda, aparece como &quot;sem cobertura&quot; e não reprova.</p>
+<p>Na PR para a <code>dev</code> esse check só <strong>atesta</strong>: ele nunca é exigido. A regra é de honestidade: ajuste o regressivo da funcionalidade que você mudou, ou escreva no card por que não precisa.</p>
+<p>Detalhes em <a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a>.</p>
+<h2 id="portão-de-ponta-a-ponta">Portão de ponta a ponta</h2>
+<p>Na promoção para a <code>main</code>, o catálogo <strong>inteiro</strong> roda e bloqueia o merge. É o único ponto em que o custo de rodar tudo vale a pena: acontece pouco e protege o que o usuário instala. Existe uma saída explícita para aceitar uma falha conhecida, que deixa registro de quem aceitou.</p>
+<p>Como funciona: <a href="../../e2e-portao/como-funciona.html">O portão E2E</a>.</p>
+<h2 id="o-teste-de-aceite-permanente">O teste de aceite permanente</h2>
+<p>Os dois primeiros testam o que alguém <strong>previu</strong>. O terceiro procura o que ninguém previu.</p>
+<p>Ele é um roteiro fixo que usa o produto como um cliente usaria: cria um projeto, pede uma entrega, aprova, faz o merge e recebe o resultado. Roda <strong>sempre contra a versão que o usuário instala</strong>, a cada rodada de trabalho, e nunca é &quot;terminado&quot;.</p>
+<h3 id="o-que-ele-devolve">O que ele devolve</h3>
+<ul>
+<li><strong>Achados:</strong> cada falha ou atrito vira uma <a href="do-pedido-a-atividade.html">atividade</a> com card, como qualquer pedido.</li>
+<li><strong>Uma nota por rodada:</strong> qualidade da entrega, do que os agentes produziram e do tempo da ideia até o merge. Medir só a interação, sem contar pausas do condutor, mantém a série comparável.</li>
+<li><strong>Comparação:</strong> a nota da rodada é lida contra as anteriores. Uma queda é um sinal antes de ser um incidente.</li>
+</ul>
+<div class="admonicao admonicao-nota" data-admonicao="nota"><p class="admonicao-titulo">Por que contra a versão instalada</p>
+<p>Testar na branch de desenvolvimento só prova que a próxima versão funciona. O teste permanente existe para provar que a versão que <strong>já está</strong> nas mãos do usuário funciona.</p>
+</div>
+<h2 id="como-o-resultado-volta-ao-método">Como o resultado volta ao método</h2>
+<p>Fecha-se um ciclo: o teste permanente acha, o achado vira atividade, a atividade é explorada, entra numa <a href="a-rodada.html">rodada</a>, vira PR e o teste roda de novo. Quando um achado se repete, ele ganha um teste no regressivo, e a camada de baixo passa a pegá-lo mais cedo.</p>
+<h2 id="o-que-copiar">O que copiar</h2>
+<p>Comece pequeno: um roteiro de <strong>dez passos</strong> que percorre o caminho principal do seu produto, executado à mão toda semana. Escreva o que doeu. Só depois automatize, e só os passos que dói repetir.</p>
+<h2 id="para-saber-mais">Para saber mais</h2>
+<ul>
+<li><a href="../orquestrar-repositorios/vida-de-uma-mudanca.html">A vida de uma mudança</a>, seções do regressivo e do portão.</li>
+</ul>
+<nav class="site-pager"><a href="../../tutorials/como-o-brabo-e-construido/a-regra-vira-codigo.html">A regra vira código, e a doc vai junto</a><a href="../../tutorials/como-o-brabo-e-construido/copie-o-metodo.html">Copie o método</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.md">Editar esta página</a><span>Atualizado em 2026-11-08T20:11:19-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#três-camadas">Três camadas</a></li><li class="n2"><a href="#regressivo-por-funcionalidade">Regressivo por funcionalidade</a></li><li class="n2"><a href="#portão-de-ponta-a-ponta">Portão de ponta a ponta</a></li><li class="n2"><a href="#o-teste-de-aceite-permanente">O teste de aceite permanente</a></li><li class="n3"><a href="#o-que-ele-devolve">O que ele devolve</a></li><li class="n2"><a href="#como-o-resultado-volta-ao-método">Como o resultado volta ao método</a></li><li class="n2"><a href="#o-que-copiar">O que copiar</a></li><li class="n2"><a href="#para-saber-mais">Para saber mais</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-pt-BR.json" data-base="../../"></script></body>
+</html>

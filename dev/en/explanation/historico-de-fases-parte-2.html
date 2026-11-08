@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase history, part 2: Program 16–26 and rounds | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../explanation/historico-de-fases-parte-2.html">pt-BR</option><option value="../../en/explanation/historico-de-fases-parte-2.html" selected>en</option><option value="../../ru/explanation/historico-de-fases-parte-2.html">ru</option><option value="../../zh-Hans/explanation/historico-de-fases-parte-2.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../dev/en/explanation/historico-de-fases-parte-2.html" selected>dev</option><option value="../../../prd/en/explanation/historico-de-fases-parte-2.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="../index.html">Home</a></li><li><a href="../getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><a href="../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html">Developing Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><a href="../runbook.html">Manual de operação</a></li><li><a href="../tutorials/adotar.html">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">Architecture</a></li><li><a href="../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">Branching policy</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../explanation/release-do-produto.html">Product release</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="../explanation/localizacao.html">Localization</a></li><li><a href="../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="../glossary.html">Glossary</a></li><li><a href="../reference/componentes-da-doc.html">Doc components</a></li><li><a href="../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">Business rules</a></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details open><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">Timeline</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="../explanation/historico-de-fases-parte-2.html" aria-current="page">Program 16–26 and rounds, part 2</a></li><li><a href="../explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="phase-history-part-2-program-1626-and-rounds">Phase history, part 2: Program 16–26 and rounds</h1>
+<div class="historico" data-historico="2026-09-11"><p class="historico-faixa">Record from September 11, 2026: describes Brabo as it was on that date</p>
+<p>Program 16–26 (what the first real navigation asked for), what use asked for afterwards and rounds exp003 and exp001.
+Text moved without rewriting from the <a href="historico-de-fases.html">Phase history</a>. What holds today lives in the RNs and the ADRs.</p>
+</div>
+<h2 id="programa-1626--o-que-a-navegação-pediu-em-execução">PROGRAMA 16–26 — what browsing asked for (in progress)</h2>
+<p>Eleven requests born from the FIRST real browsing of the app after the database
+reset. It's not a script: it's use. Three discoveries from the investigation defined the
+size and the ORDER of the program, and it's worth recording each one, because none
+was in the original request:</p>
+<ol>
+<li>There is a COMPLETE design handoff in <code>design_handoff_brabo/</code> — 8
+high-fidelity screens, tokens, typography and brand. The decision was to adopt it
+WHOLE and FIRST: that way the eleven requests are born in the new look instead of
+being done twice.</li>
+<li>The Code tab's terminal became an ARCHITECTURE decision. Each project now
+has its own container, and it is the ARQUITETO who decides the image. Inside it the
+agent is free; <code>git push</code>, PR and deploy remain human. This pays off the
+product's biggest open debt — today the agent runs in the SAME container
+as Brabo's monorepo, and ADR 0055 says of itself that it is policy, not
+isolation.</li>
+<li>Two real defects showed up along the way, and neither was requested:
+<code>agent_areas</code> is NEVER written (<code>upsert</code> without a caller, the API returns <code>[]</code>),
+and the bell drawer orders <code>seq ASC</code> in SQL — it shows the OLDEST.</li>
+</ol>
+<p>Execution ceiling: at most FOUR subagents in parallel. The phases were
+cut by CONTESTED FILE, not by theme — that is what makes parallelism
+possible. The backend's limiter is <code>apps/api/src/db/migrations/meta/_journal.json</code>
+and the drizzle snapshots: ONE migration per wave, because resolving a snapshot
+conflict by hand is a path to a divergent schema. RN ranges and ADR numbers
+are PRE-ALLOCATED before the wave starts: two parallel phases writing
+<code>RN-094</code> make one renumber at merge, and a renumbered RN breaks the
+<code>#rn-0xx</code> links that <code>pnpm docs:check</code> fails.</p>
+<h3 id="fase-16--concluída-fundações-destravar-o-paralelismo">FASE 16 — COMPLETED: foundations (unblock parallelism)</h3>
+<p>None of the eleven requests delivers here. The phase exists because three of them touch
+the SAME four points of <code>router.tsx</code>/<code>ProjectPage.tsx</code>, and another three
+run into the lack of a common piece. Without it, the waves collapse into serial
+execution.</p>
+<ol>
+<li><code>design/tokens.css</code> gets <code>--violet</code> (agents/AI) and whatever else the handoff
+defines. The fonts REMAIN self-hosted — following the handoff there would break the
+app under nginx's CSP (ADR 0036). The contrast test covers the new
+pairs, and the known debt of 4 pairs stays locked.</li>
+<li>The tab stops being a closed list in TWO places: a single registry from which
+<code>PROJECT_TABS</code>, <code>type TabKey</code>, the ruler and the render start to derive. A test
+that fails a key present in one place and absent in the other — that's the real defect.</li>
+<li><code>Disclosure</code> in the design system, with the semantics of the most
+complete implementation that already exists (<code>ModelCatalogSection</code>). COMPONENT ONLY: none of the
+six ad-hoc implementations migrates here, otherwise the phase would open the three
+most contested files of the program.</li>
+<li>The session label becomes a helper and the five inline <code>slice(0, 8)</code> migrate. It is
+this migration that keeps FASE 20 from colliding with 19.</li>
+<li><code>CLAUDE.md</code> enters the definition of done (see the Documentation section), with
+a <code>warn</code> rule in the docmap. DELIVERED: the rule is <code>claude-md</code> in
+docs/.docmap.yml, triggered by <code>package.json</code>, <code>pnpm-workspace.yaml</code>,
+<code>apps/*/package.json</code>, <code>apps/engine/mix.exs</code>, <code>docs/adr/*.md</code> and
+<code>docs/gates.yml</code> — the sentence &quot;today it has ZERO coverage&quot; that was here
+described the state BEFORE the phase and kept lying after it.</li>
+</ol>
+<h3 id="fase-17--concluída-as-8-telas-conforme-o-handoff">FASE 17 — COMPLETED: the 8 screens per the handoff</h3>
+<p>Visual fidelity BEFORE behavior, so as not to redo work. No
+business rule changes: if a screen needs data that doesn't exist, that becomes a
+declared pending item, not a hitchhiking feature.
+6. Login and App/project list.
+7. Project and Session, preserving the three states of RN-088 (error before empty).
+8. Approvals and Settings — Approvals is the visual base of FASE 19.
+9. Proof that fidelity happened: contrast measured on the tokens and
+layout verified by <code>scripts/dev/validacao-visual.js</code> on ALL the screens
+touched. The <code>.dc.html</code> is a reference, NOT code to copy — the handoff's own
+README says so.</p>
+<h3 id="fase-18--concluída-a-área-existe-no-banco-defeito-corrigido-antes">FASE 18 — COMPLETED: the area exists in the database (a defect, fixed first)</h3>
+<ol start="10">
+<li><code>AgentAreaRepository.upsert</code> has NO caller at all, so four use
+cases operate on an empty table. Provision on project creation +
+backfill, with a test that proves a freshly created project HAS areas — it's the
+same failure as FASE 14d: testing the piece is not testing the path to it.</li>
+<li>Collapse the THREE copies of the areas list (api, web, engine) into one source.</li>
+</ol>
+<h3 id="fase-19--concluída-aprovação-que-se-lê">FASE 19 — COMPLETED: an approval you can read</h3>
+<ol start="12">
+<li>Kill the generic fallback of <code>ApprovalCard</code>, which dumps
+<code>chave: JSON.stringify(valor)</code> — the likely cause of &quot;hard to read&quot;.
+Every type gets a SENTENCE in pt-BR; a type without a sentence shows verb + &quot;see
+details&quot; and the raw payload is born COLLAPSED, never dumped.</li>
+<li>Collapse in THREE places: Approvals, Insights and the card in the chat, with verb
+and sentence coming from ONE module.</li>
+<li>Project constraint: the collapse does NOT introduce a new required prop in
+<code>ApprovalCard</code>. That is what keeps <code>SessionPage.tsx</code> untouched and removes the
+edge with FASE 20.</li>
+</ol>
+<h3 id="fase-20--concluída-a-sessão-ganha-identidade">FASE 20 — COMPLETED: the session gets an identity</h3>
+<ol start="15">
+<li><code>sessions</code> gets <code>kind</code> and <code>name</code> in the SAME migration — two migrations
+on the same table collide in the journal and the snapshots.</li>
+<li>Reconcile with the event-based derivation: <code>kind</code> classifies the creation
+INTENT, <code>execution.activated</code> keeps classifying execution STATE,
+and neither rewrites the other. <code>execution.activated</code> in a consultative session is an
+explicit error, not a silent conversion.</li>
+<li>Rename preserving the hashtag; without a name, it degrades to the hashtag alone.</li>
+<li>A back-to-dashboard button — today <code>SessionPage.tsx</code> imports neither <code>Link</code>
+nor <code>useNavigate</code>, and NO navigation leaves the screen. Destination revised in a
+later round: the button goes back to the session's PROJECT
+(<code>/projects/:projectId</code>), no longer to the root dashboard — a session is always
+born inside a project.</li>
+</ol>
+<h3 id="fase-21--concluída-o-volume-de-eventos-rn-099100">FASE 21 — COMPLETED: the volume of events (RN-099/100)</h3>
+<ol start="19">
+<li><code>useSessionEvents</code> remains the CURRENT STATE (<code>latest</code>, four
+consumers: roster, tree, execution, Approvals). The HISTORY became
+<code>useSessionEventHistory</code>, only for Activities, with the <code>afterSeq</code> the
+endpoint already returned. No new route, no new parameter.
+The anchor is the TAIL, not the start of the session: the endpoint pages
+forward and there is no <code>beforeSeq</code>, but opening the feed on event #1 of a
+session with thousands delivers the wrong screen. So the first page is the
+same <code>latest</code> read (SAME <code>queryKey</code>, deduplicated) and each click goes down
+a fixed window backwards.</li>
+<li>The bell orders <code>DESC</code> in SQL. The &quot;read&quot; cutoff did NOT change semantics, and
+that's why there's no ADR: a cutoff by <code>seq</code> marks a PREFIX and the drawer shows
+a SUFFIX, so &quot;mark the 50 shown&quot; is inexpressible without a per-event read
+table. What changed is the drawer no longer hiding what the advance
+swallows — total per project, <code>+ N older</code>, and the button saying how many
+it marks. The missing number comes from SUBTRACTION (<code>latestSeq</code> minus the cutoff),
+not from a request.</li>
+<li>The RN-090/091 savings didn't regress: one request per cycle, and the
+first &quot;load older&quot; costs ZERO — the <code>latest</code> read brings 200
+and the window shows 100. An old page has <code>staleTime: Infinity</code> and no
+<code>refetchInterval</code>: a closed <code>seq</code> window over an immutable event doesn't change.</li>
+</ol>
+<h3 id="fase-22--concluída-em-2026-08-09-gasto-com-duas-audiências">FASE 22 — COMPLETED on 2026-08-09 (spend with two audiences)</h3>
+<p>Delivered as the <strong>Spend</strong> tab (ADR 0063, RN-101).
+22. The missing AGGREGATIONS came into a single method —
+<code>sumGroupedBy(dimensao, escopo)</code> with <code>model</code>, <code>project</code>, <code>actor</code>,
+<code>session</code> and <code>day</code>. <code>provider</code> is NOT one of its dimensions, and the absence is
+structural: breaking down by provider is breaking down by CREDENTIAL, and that is
+what keeps the member's view from gaining the axis by carelessness — there is no
+argument to pass.
+23. No charting library: daily bars and a ranking in inline SVG. The daily
+series comes DENSE from the api (a day without spend comes in with zero), otherwise three
+calls in three weeks become three bars stuck together.
+24. The collision was resolved by separating the QUESTIONS, not the filters. The
+per-CREDENTIAL report stays exclusive to the owner (RN-060) and gained
+alongside it the workspace breakdown by model/project/actor/day, also
+<code>owner</code>. The member's view is by ACTOR, in tokens and estimated cost,
+without provider and without credential — and the actor comes from the authenticated
+TOKEN, with no parameter where one could write another person's id. An agent doesn't count in the
+member's account: <code>token_usage</code> records who spent, not who ordered the
+spending.</p>
+<p>No migration, but WITH measurement: at 525 thousand rows the queries take
+55 ms and 38 ms by seq scan, and an index on <code>token_usage(created_at)</code> would
+bring them to 32 ms and 19 ms. The number is in the ADR; the index comes in the wave that
+has the slot.</p>
+<h3 id="fase-23--concluída-em-2026-08-09-modelo-herdável-por-área">FASE 23 — COMPLETED on 2026-08-09 (model inheritable per area)</h3>
+<ol start="25">
+<li>The <code>area</code> scope entered the cascade (<code>session &gt; agent &gt; area &gt; project &gt; workspace</code>), BETWEEN agent and project: it is the default that lead and subagents
+share, and the agent diverges by overriding it (ADR 0064, RN-102).</li>
+<li>The incoherence resolved BEFORE coding: the agent binding was GLOBAL
+(<code>scope_id</code> = plain slug, the route's <code>:projectId</code> ignored since Fase 9a) and
+area is per project since ADR 0053. A per-project scope above a global
+scope would make the same agent resolve different models only where there was an
+area. Decision: the agent binding became per project too —
+the <code>scope_id</code> of <code>agent</code>/<code>area</code> became composite, <code>&lt;projectId&gt;:&lt;slug|chave&gt;</code>
+(RN-103) — and not the area below the agent, which would contradict &quot;inheritable
+default&quot; (almost every binding today is an agent's).</li>
+<li>The UI shows who INHERITS and who DIVERGED (<code>AreaModelsSection</code> and the
+Origin column of <code>ModelsSection</code>, in <code>ProjectSettingsTab.tsx</code>); &quot;go back to
+inheriting&quot; is a <code>DELETE</code> on the agent/area binding, never writes into it the model
+of the level below — copying would become a copy that diverges on its own at the area's next
+change. The <code>maintainer</code> role to change the area's model (same
+rule as the parallelism ceiling, RN-083); the agent's stays <code>developer</code>.</li>
+</ol>
+<h3 id="fase-24--concluída-chat-e-criativo-como-lugares-rn-104">FASE 24 — COMPLETED: Chat and Criativo as places (RN-104)</h3>
+<ol start="28">
+<li>Two tabs on the PROJECT screen, each listing the sessions of its <code>kind</code> and
+creating in that <code>kind</code> without asking again. The Session remains its own
+screen — the tab did not become a chat container.</li>
+<li>The collision was resolved with &quot;Sessions&quot; LEAVING the ruler. What remained of it is
+the deep-link KEY: Chat carries <code>key: 'sessions'</code>, and that is what makes an
+old <code>?tab=sessions</code> open on Chat with the tab MARKED. An alias resolved only
+in the panel would open the right panel and leave the ruler without a selection, because
+<code>Tabs</code> compares <code>active</code> with <code>key</code> and whoever writes <code>active</code> is
+<code>ProjectPage</code> — one of the two files the wave kept closed.</li>
+<li><strong>Verdict on &quot;Start ideation&quot;</strong>: it STAYS. Half the problem had already
+closed in FASE 20 (the button vanished from the consultative session, RN-097), and the other
+half wasn't redundancy: it is what brings the Criativo, and from there on
+the owner's key is spent (RN-058). What was wrong was the PLACE — the
+invitation spent a paragraph pointing at the topbar. Now the action lives
+INSIDE the invitation while it is on screen, and goes back to the topbar when it
+isn't; <code>conviteVisivel</code> is the only question the two share, so
+that it neither shows up twice nor disappears.</li>
+</ol>
+<h3 id="fase-25--concluída-com-corte-container-por-projeto-a-fronteira-deixa-de-ser-só-política">FASE 25 — COMPLETED WITH A CUT: Container per project (the boundary stops being just policy)</h3>
+<p>The biggest architectural change of the program, and the one that pays the debt Phases B
+and F already pointed at separately. Delivered 25a (the Arquiteto's decision and the
+gate) and 25c (the external-effect boundary); 25b (the container's
+lifecycle) was CUT and declared — not half-implemented (ADR 0065, RN-105
+and RN-106).
+30. COMPLETED: the ARQUITETO decides which image comes up for the project, as
+its artifact (<code>artifact.project_image</code> in the event log, versioned, without a
+table) — auditable, not hidden configuration. Until it
+decides, the Code tab answers 409 and doesn't unlock (RN-105).
+31. NOT DELIVERED AT THE TIME, declared: per-project lifecycle (provision,
+recycle, clean, resource ceiling actually applied), with the agent's
+worktree living inside the container. Container state is MUTABLE and
+asked for its own table — improvising it in the event log just so as not to wait for the
+migration slot would produce the fix right after.
+PARTIALLY REVOKED by Wave 4/front F1 of PROGRAMA 28: the state
+TABLE (<code>project_containers</code>, ADR 0081) arrived. What is still missing,
+without softening, is the half that made the table worth anything: no
+real orchestrator calls Docker yet, and the agent's worktree remains outside
+the container. The &quot;inside, the agent is free&quot; half of the terminal policy
+has NOT CHANGED YET — ADR 0055 keeps holding as it is until the container
+actually comes up.
+32. COMPLETED AT THE TIME, REVISED by the local runner (ADR 0102/0103, RN-418):
+the external-effect boundary. <code>git push</code>, PR and deploy don't go out through the
+terminal — not even inside the project scope —, and the rule WAS <code>deny</code>
+(not <code>require_approval</code>, because of &quot;always allow&quot;), with the
+message redirecting to the TYPED action (<code>git_push</code>/<code>git_merge</code>/
+<code>pr_open</code>), which is born a <code>proposed_action</code> (RN-106, revised). The <code>deny</code>
+became an ABSOLUTE CEILING (unconditional <code>require_approval</code>, never
+auto-approvable) — the product owner's decision, &quot;always allow&quot; closed
+at the source so it wouldn't become decorative (see the local runner section). Merge into a protected branch
+remains manual (RN-014), untouched. Network and spend have their own verdict in the
+image ARTIFACT (<code>network: none</code>/<code>egress</code>, a cpus/memory/pids ceiling
+that refuses instead of silently downgrading) — decided ONCE, not
+command by command, for the same reason Z and AD proved that a verb
+allowlist doesn't converge. Closing Z and AD itself depends on 25b (the
+physical wall), which hasn't come up yet.</p>
+<h3 id="fase-26--concluída-code-só-leitura">FASE 26 — COMPLETED: Code, read-only</h3>
+<ol start="33">
+<li>
+<p>COMPLETED (26a): <code>GitProviderContract</code> gained <code>listTree</code> and PR diff
+(11th/12th operation), capability declared ONLY when proven by the suite.</p>
+</li>
+<li>
+<p>COMPLETED (26b): the four routes of <code>code.controller.ts</code> — tree,
+file, search and diff — behind the CENTRALIZED check of RN-092/095, with
+a ceiling and cache on the search (which is COMPOSITE, not a contract operation).</p>
+</li>
+<li>
+<p>COMPLETED: the screen (<code>ProjectCodeTab</code>/<code>code/*</code>), registered in
+<code>project-tabs.ts</code> without touching <code>router.tsx</code>/<code>ProjectPage.tsx</code>. Rail
+(Explorer/Search — the only ones with real data), explorer loaded by
+DIRECTORY, editor tabs with breadcrumb, real search with
+<code>filesScanned</code>/<code>truncated</code>, PR diff by known id (with
+<code>patch: null</code> treated as &quot;no text&quot;, never &quot;no change&quot;). Syntax
+highlighting is its OWN regex tokenizer (<code>code/highlight.ts</code>) — ZERO
+new dependency, against the 15-90 KB of Prism/highlight.js/Shiki for
+what the tab needs; three new color tokens (<code>--syntax-function/ -comment/-operator</code>) calibrated at 4.5:1 against <code>--code-bg</code> in BOTH
+themes. The fourth state of RN-088 — blocked by the Arquiteto's pending
+decision (RN-105) — became RN-107, asked BEFORE trying to read
+code, with its own re-query every 15s while blocked.</p>
+<p>Pending items DECLARED, with no real data behind them: interactive terminal
+(FASE 25b, which remains cut — an honest empty state in the tab), blame,
+list of PRs inside the tab (the diff is only reachable by known
+id, coming from Approvals) and a Problems/lint/tests panel.
+Line virtualization was also left out at the time — the handoff itself
+calls the code tab &quot;the most costly of the program&quot;; the 512 KB per
+file ceiling (<code>GIT_BLOB_MAX_BYTES</code>) limited the worst case until then. CLOSED
+by Wave 4/front E2 of PROGRAMA 28 (RN-239..242): only the visible window
+becomes a DOM node, and the minimap reuses the same tokenization without a second
+pass.</p>
+</li>
+</ol>
+<h3 id="fase-26b--concluída-fundação-de-blame-prs-navegáveis-e-branch-rica">FASE 26b — COMPLETED: blame foundation, navigable PRs and a rich branch</h3>
+<p>The phase started as ONLY the API layer, and the sentence &quot;no UI&quot; that stayed here
+described the state of the FIRST batch — it aged and started teaching wrong. The
+THREE UIs exist: the rich branch dropdown (item 38, <code>CodeBranchPicker.tsx</code>),
+the on-demand blame toggle (<code>CodeEditor.tsx</code>, RN-113) and the list of PRs inside
+the tab (<code>CodeDiffPanel.tsx</code>), the last two delivered in v3.0.0. The three
+declared pending items of blame,
+rich branch dropdown and PR list would touch the SAME files
+(contract, the three providers, the use case, the controller, the contract
+suite) if attacked separately by agents in parallel; the decision was to
+deliver all three together, at once, and leave the UI of each to three
+following agents with no risk of collision.
+36. <code>GitProviderContract</code> gained <code>blame</code>, <code>listPullRequests</code> and
+<code>listBranchesDetailed</code> (13th, 14th and 15th operation — RN-110/111/112),
+capability declared only when proven by the contract suite against the
+three providers (<code>local</code> against real git; <code>github</code>/<code>gitlab</code>
+mocked — the real smokes remain skipped without
+<code>GITHUB_TEST_TOKEN</code>/<code>GITLAB_TEST_TOKEN</code> in the environment, same situation as
+FASE 13a). <code>listBranchesDetailed</code> is its OWN operation, not an extension of
+<code>listBranches</code> (RN-112) — enriching costs an extra call to the provider
+PER BRANCH, and <code>listBranches</code> remains the Gitflow bootstrap's,
+which doesn't pay that cost.
+37. Three new routes in <code>code.controller.ts</code> (<code>GET .../code/blame</code>,
+<code>GET .../code/pull-requests</code>, <code>GET .../code/branches</code>), same <code>role:     viewer</code> and the same central path check (RN-095) as the four
+earlier ones. <code>apps/web/src/lib/api-client.ts</code>/<code>api-types.ts</code> gained the
+corresponding functions and types (<code>getCodeBlame</code>, <code>getCodePullRequests</code>,
+<code>getCodeBranches</code>) for the next wave to consume — <code>CodeShell.tsx</code> and
+<code>CodeDiffPanel.tsx</code> were NOT touched beyond the comment documenting
+that the foundation already exists.
+38. COMPLETED: the rich branch dropdown (RN-112) — <code>CodeBranchPicker.tsx</code>,
+opened from <code>CodeShell.tsx</code>, replaces the plain text field with a
+selector listing each branch with <code>ahead</code>/<code>behind</code> relative to the default and the
+associated PR, when there is one (<code>aberta</code>/<code>mesclada</code>/<code>fechada</code>). A ref outside the
+list (tag or sha) remains reachable — <code>listBranchesDetailed</code> doesn't
+enumerate those two, so the dropdown's footer has a manual field.</p>
+<p><strong>The program's freeze:</strong> each phase declares what it doesn't do, and the hardest is
+26's — code READ-ONLY, no saving through the tab. Editing is the next
+phase, and when it comes, writing is an external effect: it is born a <code>proposed_action</code>.</p>
+<h2 id="pós-programa-1626--o-que-o-uso-pediu-depois-rn-148">POST-PROGRAMA 16–26 — what use asked for afterwards (RN-148)</h2>
+<p>Same spirit as POST-FASE 15: not a planned phase, it is what USE asked for.
+Stories with pending promotion at the same time (RN-048/RN-126) became N
+loose cards in the PO session's timeline when it produced several in one
+batch. <code>Carousel</code> (<code>apps/web/src/components/ui/Carousel.tsx</code>) is the design system's first
+item-by-item navigation component — 2+ pending
+become ONE navigable carousel (arrows, dots, keyboard), with &quot;Approve all&quot;
+promoting the whole batch in a single call (<code>promoteStories</code> was already a batch,
+no contract change); 1 pending remains the usual simple card. The
+decision of when a &quot;batch&quot; forms is re-evaluated on each render — the
+set of promotions STILL PENDING in the session, not &quot;created in sequence
+without interruption&quot; — so that resolving a story in the middle of the carousel
+recomputes the batch on its own, with no state of its own to synchronize.</p>
+<p><strong>Local or Container project (RN-169/RN-170, ADR 0072).</strong> The product
+owner's request: &quot;cross the boundary of only writing code in the container and be able to
+write code from a user folder&quot;, with the <strong>freely typed path</strong>
+variant chosen by him, aware that it only works mounted in the
+container. <code>projects</code> gets (<code>workspace_mode</code>, <code>workspace_path</code>) in migration
+<code>0043</code>, with <code>container</code> as the default — nothing changes for whoever doesn't choose. ADR
+0072 REVISES part of 0065 and touches the ground of 0055, which decided the
+opposite direction (the container wall), and so the consequence is written without
+softening: the STRUCTURAL containment of <code>join(env, coluna)</code> — no
+corrupted column leaving the managed root — ceases to exist for a Local project, and
+what remains is the creation guard plus the lexical revalidation on read.
+FASE 25b remains cut: a Local project runs in the SAME container as today, only
+the folder changed.</p>
+<p><strong>The Arquiteto's C4 diagram (RN-149, ADR 0068).</strong> New deliverable:
+<code>create_c4_diagram</code> generates Context + Container (Simon Brown) in Mermaid,
+rendered in the Overview. The Container level is DERIVED from the current
+<code>module_map</code> by the use case — never retyped by the model — so as not to open
+a second source that diverges from the first; only the Context (system name and
+external actors) comes from the tool call. <code>artifact.c4_diagram</code> is an artifact without a
+table, versioned in the event log, same design as <code>artifact.project_image</code>
+(ADR 0065). <code>mermaid</code> came in as a new RUNTIME dependency of
+<code>apps/web</code> — the first of its kind (the docs site already uses Mermaid, but at
+build time) — isolated behind <code>apps/web/src/lib/mermaid-render.ts</code> with dynamic
+<code>import()</code>; <code>vite build</code> confirmed that only the entrypoint loads
+eagerly and Mermaid's heavy chunks stay on demand, and none of them uses
+<code>eval</code>/<code>new Function</code> — the closed CSP of ADR 0058 stayed intact, with no
+configuration change.</p>
+<h2 id="rodada-exp003--concluída-rn-150162-prs-278293">RODADA exp003 — COMPLETED (RN-150..162, PRs #278–#293)</h2>
+<p>Not a phase: it is 17 points USE found in a live test session
+on the <code>exp003</code> project, fixed in five waves sequenced by
+CONTESTED FILE — four of them converging on <code>SessionPage.tsx</code>, which
+forced serialization. The origin matters: none of these was found by a test.</p>
+<p><strong>What the round taught, worth more than the list</strong>: the biggest fix
+(RN-155) was invisible to any suite because the defect was in comparing
+two DIFFERENT numeric spaces that happen to both be <code>number</code> — the
+<code>event.seq</code> (gapless, per SESSION) against the <code>action.seq</code>
+(<code>proposed_actions.seq</code>, a global <code>bigserial</code> of the WHOLE table, shared
+by every project and every session in the system, and documented in the schema as a
+deliberate contrast). The order only seemed right while the table was
+small. The fix didn't invent a field: it used the
+<code>proposed_action.created</code> event that <code>ProposeActionUseCase</code> already writes in the SAME
+transaction, with <code>payload.actionId</code> pointing back.</p>
+<p><strong>Engine and contained reading (RN-150)</strong> — <code>search_workspace</code> returned ALL
+the hits, without a ceiling: the second real cause of the <code>413</code> in PR review, after
+the <code>read_file</code> fix. Two INDEPENDENT ceilings, because the search
+blows up in two ways — number of hits (<code>SEARCH_WORKSPACE_MAX_HITS</code>,
+500, over a <code>Stream</code> that STOPS scanning at <code>max_hits + 1</code>) and bytes of the
+final text (<code>SEARCH_WORKSPACE_MAX_BYTES</code>, 32,768). Their own variables, not
+reused from the other two: same class of overflow, diverging one shouldn't
+require touching the others. The truncation mark is addressed to the MODEL
+(it tells it to refine the term) and never invents a total, because counting the total
+would pay again the I/O the ceiling exists to avoid.</p>
+<p><strong>Numbers that lie (RN-151)</strong> — the project badge in the sidebar counted
+ANY unread event: <code>exp003</code> showed 392 while the Approvals tab
+of the same project showed 8. A number that doesn't correspond to anything actionable
+when clicked is worse than none. It became <code>pendingApprovalsCount</code> in the read model
+that already existed (RN-090), in one more aggregation in the <code>Promise.all</code> — never
+N+1.</p>
+<p><strong>Traceability of what the agent produced (RN-152)</strong> — the
+<code>feature/task-XXXXXXXX</code> branch in the Code tab's dropdown now says which dev
+agent and module it belongs to. The module comes from the current <code>module_map</code> through the SAME
+functions that generated it, never by reverse regex on the name; without a link,
+it degrades to <code>null</code> instead of guessing.</p>
+<p><strong>Auto mode (RN-153/154, see Conventions)</strong> — the <code>actionType: &quot;*&quot;</code> wildcard.
+What matters is where it lives: resolution is the REPOSITORY's (<code>findMode</code>),
+and <code>decide.ts</code> didn't gain a line — that is what makes the three absolute
+ceilings true by CONSTRUCTION, and not by one more <code>if</code> that one day
+someone forgets.</p>
+<p><strong>The session thread you can read (RN-155..159)</strong> — ordering (above); the
+5s indicator with the fixed text &quot;Gathering information...&quot; instead of
+interpolating the agent, which already appears in the header (RN-156); the PO's
+epic/story creation becoming a compact notice instead of a bubble with the same
+visual weight as a real reply (RN-157); light Markdown with highlighting
+in the chat by its OWN regex parser, zero new dependency and no
+<code>dangerouslySetInnerHTML</code>, and only the agent's OUTPUT is rendered — what the
+human types stays literal (RN-158); and &quot;Generated artifacts&quot; grouped by
+agent with the <code>Disclosure</code> of RN-138, each artifact navigating to where it
+lives (RN-159). The module_map/C4 stayed OUT by recorded decision: it is the project's
+CURRENT state, not a session-dated artifact.</p>
+<p><strong>Order of authority (RN-160/161, ADR 0069)</strong> — &quot;Confirm architecture
+ready&quot; only enables with at least 1 PROMOTED story (having a captured rule
+isn't enough); and accepting the handoff to the Dev Lead chains the activation of
+execution when the effective role of whoever accepts already authorizes it. The fusion is only on the
+client: the backend still requires <code>maintainer</code> (RN-137), so it avoids
+a redundant click without moving the authorization boundary.</p>
+<p><strong>Structured input (RN-162)</strong> — <code>ask_structured_questions</code>, the Criativo's:
+the model declares the questions in a schema, the form is rendered by
+<code>StructuredQuestionCard</code>, and the answer REUSES <code>SendAgentMessageUseCase</code> instead
+of opening a second message path. Answering is a single act —
+resending is 409, not an overwrite.</p>
+<h2 id="rodada-exp001--o-criativo-cumpre-a-promessa-rn-163">RODADA exp001 — the Criativo keeps its promise (RN-163)</h2>
+<p>Same spirit as the other rounds: it came from USE, not from a script. The report was
+&quot;the Criativo didn't reply after saying it would fix it and try again&quot;,
+and the sentence was literal in the code — <code>run_turn_capturing/1</code> called the model ONCE,
+dispatched the tools and returned. The tool's result went into the
+in-memory history and nobody read it again, so the promised fix only
+happened if the user sent another message.</p>
+<p>The Criativo was the only conversational one without a tool-use loop; it got the same as the
+PO, with its own ceiling of 12. What matters beyond the fix: <strong>whoever decides what is
+announced became the ceiling</strong>, and not a fixed text — the retry promise
+only enters the sentence when there is still a round to keep it. An exhausted ceiling became
+a narrated <code>agent.error</code> (<code>po_server</code> ended silently in that case, and that was the
+next obvious debt — closed just below by RN-166), and the tool
+failure stopped being an <code>agent.response</code>
+— in the event log it was indistinguishable from a normal reply and stated no
+origin at all, exactly what RN-059 closed for turn failure.</p>
+<h2 id="rodada-exp001--o-po-lê-o-que-já-existe-e-é-cobrado-rn-164166">RODADA exp001 — the PO reads what already exists and is held to account (RN-164..166)</h2>
+<p>Not a phase: it is a defect found by real USE, and the origin matters because
+no suite would catch it. The backlog came out with an epic and <strong>no story</strong> — hence
+no task, hence execution stuck <strong>with no error at all</strong>. The investigation found
+four stacked causes, and the first three are the same: the PO had no way to
+know and no way to warn.</p>
+<ol>
+<li><strong>The PO had four tools, all of them WRITE tools.</strong> The context was
+built ONCE, at kickoff, from the last 200 events of the SESSION —
+from then on it never re-read anything: it didn't know which rules existed,
+which it had already covered, nor what it had itself already created. In came
+<code>listar_regras_de_negocio</code> and <code>listar_backlog</code> (RN-164), served by two
+internal routes scoped to the PROJECT — and the scope is the point: reading per
+session was exactly what hid the rule captured earlier. They reuse the
+plumbing that already existed (<code>listByTypeForProject</code>, <code>ListBacklogUseCase</code>,
+<code>computeCoverage</code>); what was missing was the route, the client method and the tool.</li>
+<li><strong>Nothing demanded the story after the epic</strong> and <strong>the loop ended silently</strong>.
+An epic without a story became an EXPLICIT outcome — <code>backlog.epic_without_story</code>,
+durable, in the pattern of RN-059 (RN-165) — and the <code>PoServer</code>'s iteration ceiling
+started emitting <code>toolloop.limit_reached</code>, the SAME type as the <code>ToolLoop</code>, which
+the conversational agents never emitted because they have their own loop (RN-166).</li>
+<li><strong>The kickoff instruction didn't say a word about what to do when
+information is missing</strong> — and faced with a gap without instruction a model chooses
+between inventing and stopping. Stopping is what it did. The third way out came to
+be written, with the tool to exercise it: <code>ask_structured_questions</code>,
+the SAME one as the Criativo's (RN-162), now advertised to the PO too.</li>
+</ol>
+<p>Two design decisions that hold beyond this case: only a <code>create_story</code> that
+<strong>succeeded</strong> discharges the epic's obligation (a story refused by the api
+covered nothing, and treating it as if it had is trading one silence for another); and the
+demand is per OCCURRENCE, reported once, never an alarm that repeats every
+turn until someone learns to ignore it.</p>
+<h2 id="rodada-exp001--o-fio-se-lê-como-o-turno-acontece-rn-172173">RODADA exp001 — the thread reads as the turn happens (RN-172/173)</h2>
+<p>Same origin as the others: USE, not a script. Four complaints about the
+Session screen — the PO's handoff appearing ABOVE its last line, the approval
+going up into the middle of the Arquiteto's reply and only coming down when it
+finished, the approval card &quot;badly laid out&quot; and the scroll that didn't follow the
+conversation.</p>
+<p><strong>The investigation found that the ordering was RIGHT</strong>, and that is the round's
+lesson. RN-155 is faithful to the event log; what the log says is that
+<code>po_server.ex#run_turn/2</code> emits, in the SAME iteration, the <code>agent.response</code>, THEN
+the <code>offer_handoff</code> <code>tool.call</code> and ONLY THEN recurses into the closing line
+— so the handoff's <code>seq</code> is honestly SMALLER than the last line's. The same
+for <code>proposed_action.created</code>. The fix, therefore, isn't about ordering: it is
+a declared PRESENTATION rule (RN-172), in a separate pass
+(<code>afundarDesfechos</code>) AFTER the <code>sort</code> by <code>seq</code> — not a comparator with three
+terms nobody would be able to justify a year later.</p>
+<p>What keeps turns from mixing are three barriers, and each one exists
+because of a real case: <strong>turn</strong> (the boundary between two turns may have no
+VISIBLE entry — <code>agent.activated</code> opens a turn and doesn't become a thread item),
+<strong>author</strong> (in an execution session several agents write without the user speaking
+even once, and they all stay in the same turn) and <strong>non-outcome</strong> (two outcomes
+in a row preserve the order between them — Infra before the Dev Lead).</p>
+<p>RN-173 closes the other two complaints, and they were the same: the scroll
+effect depended only on <code>[events.length, streamingText]</code>, and <code>actions</code> is a
+SEPARATE query — a card arriving pushed the conversation off screen without
+scrolling anything. Dependency fixed, plus a <code>ResizeObserver</code> on the content
+for what NO dependency list reaches (<code>Disclosure</code> collapse,
+Markdown reflowing). The guard of 120px from the end stays intact, on
+purpose: the thread follows the conversation, it doesn't hijack the reading of whoever scrolled up.</p>
+<h2 id="rodada-exp001--o-fio-diz-quem-fala-com-qual-modelo-e-o-que-pergunta-rn-171174175176">RODADA exp001 — the thread says who speaks, with which model and what it asks (RN-171/174/175/176)</h2>
+<p>Same origin: USE. Four complaints about the Session screen, and three of them
+share the same lesson — <strong>the product knew the information and didn't
+show it</strong>.</p>
+<p><strong>The question at the center, and with a way out (RN-171).</strong> The report was literal: &quot;always
+give the user the input option when they select Write&quot;. The model
+offered a &quot;Write it yourself&quot; kind of option and the form had nowhere to
+write — the <code>ask_structured_questions</code> schema couldn't express &quot;besides
+these, whatever you want&quot;. <code>allowOther</code> came into <code>select</code> with <strong>default
+<code>true</code></strong>, and the asymmetry is the argument: a list closed by FORGETFULNESS locks the
+conversation and the user can't unlock it from outside; a list opened by mistake offers one
+more field. The interface sentinel never travels to the backend, and the submit
+button still requires everything filled in (the backend refuses with 400 either
+way). The box also became centered with the 560px ceiling of
+<code>ApprovalCard</code> and got an avatar: it was the only thread item aligned to nothing.</p>
+<p><strong>An action that triggers a turn arms the indicator (RN-174).</strong> The &quot;thinking&quot; animation
+already existed — what was missing was COVERAGE. Two actions on the screen trigger a
+synchronous turn in the engine and armed nothing: answering the form
+(<code>AnswerStructuredQuestionUseCase</code> reuses <code>SendAgentMessageUseCase</code>) and returning a
+story to the PO (<code>ReturnStoryUseCase</code> calls <code>reviseStory</code>, which is
+<code>handle_call({:revise, …})</code>). The Phoenix channel doesn't cover the hole: with the join
+still in progress (RN-108) the &quot;working&quot; <code>agent.status</code> has no listener and gets lost.</p>
+<p><strong>The model, for EVERYONE (RN-175).</strong> The premise that the defect was the PO's didn't
+hold: the four conversational ones have written <code>modelName</code> since RN-146, with a
+green test. Whoever never wrote it was the <strong><code>ToolLoop</code></strong> — the path of every execution
+and gate agent — and the chat without an active agent in the api. No new
+call: <code>RunLlmTurnUseCase</code> already returned the field in the body. The screen stopped
+writing the loose word &quot;model&quot; (which reads as if the model were called
+that) and became a readable chip; without the data, it SAYS it wasn't recorded —
+guessing from the current binding would attribute to an old reply a model that
+maybe didn't even exist, the same error RN-044's frozen price avoids.</p>
+<p><strong>A Markdown table becomes a table (RN-176).</strong> Two ways out were possible, and the
+chosen one was to support tables in the chat's Markdown, with the design
+system's <code>Table</code>. Rendering <code>artifact.module_map</code> in the thread was REFUSED by a decision
+already recorded: it is the project's CURRENT state, not a session-dated
+artifact (RN-159), and it lives in the Overview. Besides, the request was about the
+table <strong>inside the message</strong> — and the fix serves any agent that
+writes one, not just the Module Map. The separator line remains
+mandatory (GFM), so prose with <code>|</code> never becomes a table by mistake.</p>
+<h2 id="rodada-exp001--o-painel-agrupa-ordena-e-diz-o-que-não-mostra-rn-177181">RODADA exp001 — the panel groups, orders and says what it doesn't show (RN-177..181)</h2>
+<p>Same origin as the others: USE, not a script. Five complaints about the
+context panel and the Session log, and the round's lesson is a single one — <strong>the panel showed
+a slice as if it were the whole, in three different dimensions at once</strong>:
+it hid six event types without offering an alternative, read from oldest to
+newest, and cut the session at 200 events without saying so.</p>
+<p><strong>Origin as a new classification (RN-177).</strong> <code>ActivityKind</code> answers &quot;what
+SUBJECT the event is about&quot; and decides icon and color; <code>origem</code> answers &quot;what LAYER
+it came from&quot;, and it is what makes the history readable — <code>eventos</code>, <code>sistema</code>, <code>llm</code>,
+<code>harness</code>, <code>agente</code>, <code>usuario</code>, derived from the data that EXISTS (<code>actor.kind</code> and the
+<code>type</code> prefix). The precedence is what makes it predictable and is in the order
+of the <code>if</code>s: mechanism beats actor (a <code>tool.call</code> belongs to the harness whoever it is), and
+actor beats agent prefix (<code>chat.message</code> exists on both sides). The 5 most
+recent stay open and the rest collapse by origin, <strong>in both places</strong> —
+in the log panel and in the thread, where the axis is inverted (the thread is ascending, so the
+history stays at the TOP). The machine-noise filter <strong>stays on by
+default</strong>: its reason didn't change (116 of 193 real events), what changed is that it
+became a CHOICE instead of a done deal.</p>
+<p><strong>Order and pagination (RN-178).</strong> The four sections became descending, and the
+&quot;Load older&quot; button switched sides as a consequence — the argument from
+before, with the sign flipped. Business rules above 5 paginate, with the page
+resolved by <em>clamp</em> and not by a synchronization effect.</p>
+<p><strong>The PO's tree (RN-179).</strong> <code>backlog.task_created</code> never entered the panel;
+now epic → story → task form a tree, through the LINK the event already
+carries (<code>epicId</code>/<code>storyId</code>), never by proximity in the log — a node without a loaded
+parent goes up to the root instead of being hung by guesswork.</p>
+<p><strong>The ceiling that started showing (RN-180), and it is the item worth most.</strong> The panel
+read 200 events by prop and had no way to say there were more. It started reading the
+paginated history of RN-099 (same <code>queryKey</code> as the tail, ZERO extra requests
+— RN-090/091), got the pager <code>ActivityFeed</code> always had and no call
+site passed, and the note counts how many are missing by SUBTRACTION on the <code>seq</code>, like
+the bell of RN-100. The derived sections read <code>baixados</code> (everything already fetched) and not the
+feed's window, otherwise they would start showing LESS than they showed before.</p>
+<p><strong>Delegation in the thread (RN-181).</strong> <code>delegation.completed|failed|dispensed</code> only
+existed in the log panel: the gate opened and closed with no sign at all that there was
+a second attempt underneath. They became a compact notice in the RN-157 format,
+with the sentence coming from <code>classifyEvent</code> — the same as the panel's. The area's external
+contract doesn't change (ADR 0038): the thread narrates what the lead recorded, it doesn't start
+addressing a subagent.</p>
+<nav class="site-pager"><a href="../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a><a href="../explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/historico-de-fases-parte-2.md">Edit this page</a><span>Updated 2026-11-08T20:15:18-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#programa-1626--o-que-a-navegação-pediu-em-execução">PROGRAMA 16–26 — what browsing asked for (in progress)</a></li><li class="n3"><a href="#fase-16--concluída-fundações-destravar-o-paralelismo">FASE 16 — COMPLETED: foundations (unblock parallelism)</a></li><li class="n3"><a href="#fase-17--concluída-as-8-telas-conforme-o-handoff">FASE 17 — COMPLETED: the 8 screens per the handoff</a></li><li class="n3"><a href="#fase-18--concluída-a-área-existe-no-banco-defeito-corrigido-antes">FASE 18 — COMPLETED: the area exists in the database (a defect, fixed first)</a></li><li class="n3"><a href="#fase-19--concluída-aprovação-que-se-lê">FASE 19 — COMPLETED: an approval you can read</a></li><li class="n3"><a href="#fase-20--concluída-a-sessão-ganha-identidade">FASE 20 — COMPLETED: the session gets an identity</a></li><li class="n3"><a href="#fase-21--concluída-o-volume-de-eventos-rn-099100">FASE 21 — COMPLETED: the volume of events (RN-099/100)</a></li><li class="n3"><a href="#fase-22--concluída-em-2026-08-09-gasto-com-duas-audiências">FASE 22 — COMPLETED on 2026-08-09 (spend with two audiences)</a></li><li class="n3"><a href="#fase-23--concluída-em-2026-08-09-modelo-herdável-por-área">FASE 23 — COMPLETED on 2026-08-09 (model inheritable per area)</a></li><li class="n3"><a href="#fase-24--concluída-chat-e-criativo-como-lugares-rn-104">FASE 24 — COMPLETED: Chat and Criativo as places (RN-104)</a></li><li class="n3"><a href="#fase-25--concluída-com-corte-container-por-projeto-a-fronteira-deixa-de-ser-só-política">FASE 25 — COMPLETED WITH A CUT: Container per project (the boundary stops being just policy)</a></li><li class="n3"><a href="#fase-26--concluída-code-só-leitura">FASE 26 — COMPLETED: Code, read-only</a></li><li class="n3"><a href="#fase-26b--concluída-fundação-de-blame-prs-navegáveis-e-branch-rica">FASE 26b — COMPLETED: blame foundation, navigable PRs and a rich branch</a></li><li class="n2"><a href="#pós-programa-1626--o-que-o-uso-pediu-depois-rn-148">POST-PROGRAMA 16–26 — what use asked for afterwards (RN-148)</a></li><li class="n2"><a href="#rodada-exp003--concluída-rn-150162-prs-278293">RODADA exp003 — COMPLETED (RN-150..162, PRs #278–#293)</a></li><li class="n2"><a href="#rodada-exp001--o-criativo-cumpre-a-promessa-rn-163">RODADA exp001 — the Criativo keeps its promise (RN-163)</a></li><li class="n2"><a href="#rodada-exp001--o-po-lê-o-que-já-existe-e-é-cobrado-rn-164166">RODADA exp001 — the PO reads what already exists and is held to account (RN-164..166)</a></li><li class="n2"><a href="#rodada-exp001--o-fio-se-lê-como-o-turno-acontece-rn-172173">RODADA exp001 — the thread reads as the turn happens (RN-172/173)</a></li><li class="n2"><a href="#rodada-exp001--o-fio-diz-quem-fala-com-qual-modelo-e-o-que-pergunta-rn-171174175176">RODADA exp001 — the thread says who speaks, with which model and what it asks (RN-171/174/175/176)</a></li><li class="n2"><a href="#rodada-exp001--o-painel-agrupa-ordena-e-diz-o-que-não-mostra-rn-177181">RODADA exp001 — the panel groups, orders and says what it doesn't show (RN-177..181)</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-en.json" data-base="../"></script></body>
+</html>

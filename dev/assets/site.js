@@ -70,5 +70,30 @@
     grupo.classList.add('abas-js');
     abrir(0);
   });
+  // RN que mudou de página (ADR 0287): a âncora antiga é um <a id> vazio colado ao link da parte, com o mesmo #hash. Vai direto.
+  var h = location.hash.slice(1), ra = h && d.getElementById(h), rl = ra && (ra.href ? ra : ra.nextElementSibling);
+  if (rl && rl.tagName === 'A' && rl.hash === '#' + h && rl.pathname !== location.pathname) location.replace(rl.href);
+  // Índice de ADR (ADR 0287): filtro por tema e por status. Sem JS os seletores ficam escondidos e valem os links de tema.
+  var fa = d.querySelector('[data-adr-filtro]');
+  if (fa) {
+    var st = fa.querySelector('[data-adr-status]'), tm = fa.querySelector('[data-adr-tema]');
+    var filtrar = function () {
+      d.querySelectorAll('.doc h2[id^="tema-"]').forEach(function (h2) {
+        var els = [h2], n = 0;
+        for (var e = h2.nextElementSibling; e && e.tagName !== 'H2'; e = e.nextElementSibling) {
+          els.push(e);
+          e.querySelectorAll('tbody tr').forEach(function (tr) {
+            tr.hidden = !!st.value && tr.lastElementChild.textContent.trim() !== st.value;
+            if (!tr.hidden) n++;
+          });
+        }
+        var mostra = (!tm.value || tm.value === h2.id) && n > 0;
+        els.forEach(function (x) { x.hidden = !mostra; });
+      });
+    };
+    st.addEventListener('change', filtrar);
+    tm.addEventListener('change', filtrar);
+    fa.hidden = false;
+  }
   mermaidTema();
 })();

@@ -26,7 +26,7 @@
     if (!indice) return;
     buscar(indice, campo.value).forEach(function (p) {
       var li = document.createElement('li'), a = document.createElement('a');
-      a.href = s.dataset.base + p.u + '.html';
+      a.href = s.dataset.base + p.u + '.html' + (p.h ? '#' + p.h : '');
       a.textContent = p.t;
       li.appendChild(a);
       lista.appendChild(li);

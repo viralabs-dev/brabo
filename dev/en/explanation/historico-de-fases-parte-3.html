@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase history, part 3: Program 28 and audits | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../explanation/historico-de-fases-parte-3.html">pt-BR</option><option value="../../en/explanation/historico-de-fases-parte-3.html" selected>en</option><option value="../../ru/explanation/historico-de-fases-parte-3.html">ru</option><option value="../../zh-Hans/explanation/historico-de-fases-parte-3.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../dev/en/explanation/historico-de-fases-parte-3.html" selected>dev</option><option value="../../../prd/en/explanation/historico-de-fases-parte-3.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="../index.html">Home</a></li><li><a href="../getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><a href="../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html">Developing Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><a href="../runbook.html">Manual de operação</a></li><li><a href="../tutorials/adotar.html">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">Architecture</a></li><li><a href="../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">Branching policy</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../explanation/release-do-produto.html">Product release</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="../explanation/localizacao.html">Localization</a></li><li><a href="../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="../glossary.html">Glossary</a></li><li><a href="../reference/componentes-da-doc.html">Doc components</a></li><li><a href="../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">Business rules</a></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details open><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">Timeline</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="../explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a></li><li><a href="../explanation/historico-de-fases-parte-3.html" aria-current="page">Program 28 and audits, part 3</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="phase-history-part-3-program-28-and-audits">Phase history, part 3: Program 28 and audits</h1>
+<div class="historico" data-historico="2026-09-11"><p class="historico-faixa">Record from September 11, 2026: describes Brabo as it was on that date</p>
+<p>Program 28 (wave by wave), the fluxo.yml × code audit, the team's new agents and the knowledge graph.
+Text moved without rewriting from the <a href="historico-de-fases.html">Phase history</a>. What holds today lives in the RNs and the ADRs.</p>
+</div>
+<h2 id="programa-28--onda-1-frente-a-o-tema-deixa-de-ser-inalcançável-rn-182185">PROGRAMA 28 — Wave 1, front A: the theme stops being unreachable (RN-182..185)</h2>
+<p>The light theme existed in <code>design/tokens.css</code>, had a parity test and was
+described in <code>design/README.md</code> as if it were a screen — and <strong>nothing in <code>apps/web</code>
+wrote <code>data-theme</code></strong>. The only way to see it was to type the attribute in
+DevTools. The two contrast tests knew and said so: one asserted by <code>expect</code>
+that THREE light pairs fail, &quot;a record of what is inherited, not a guarantee of what
+is rendered&quot;. While it lasted, the argument was honest — measuring a screen
+nobody can open is measuring an intention. With the theme button arriving, it
+flips sign.</p>
+<p><strong>The boot is a FILE</strong> (<code>apps/web/public/theme-boot.js</code>), synchronous in <code>&lt;head&gt;</code>,
+before the bundle. The handoff says to use an INLINE script; the image serves under
+<code>script-src 'self'</code> (ADR 0058), so inline would work in <code>pnpm dev:web</code> and
+be blocked in production — ADR 0036's failure with another subject. <code>tema.ts</code>
+is the API the shell consumes; the button doesn't live in it. A <code>localStorage</code> that throws
+degrades to &quot;paints and doesn't persist&quot;, and an unknown value falls to the default.</p>
+<p><strong>Six light-theme tokens changed value</strong> (ADR 0074), because the light theme's most
+demanding background is the paper <code>--code-bg</code>: accent 3.56 → 4.81, warning
+3.15 → 4.98, success 3.89 → 5.12, violet 4.16 → 4.95, text-muted 2.76 → 5.17,
+plus accent-hover one step below. The DARK didn't change any, and its debt
+stays locked at the same five numbers. Two side effects recorded: the
+five pairs that are debt in the dark PASS in the light, and the &quot;known exception of the
+design system&quot; (<code>--on-accent</code> over <code>--accent</code>, 3.20:1) disappears in the light — the
+fix the test's comment described, darkening down to <code>--terracota-500</code>, is
+what the light theme now does.</p>
+<p><strong>Five of the handoff's eight <code>--syn-*</code> values were REFUSED by measurement</strong> (the
+worst, <code>--syn-cm</code>, gives 2.32:1 in the light). Where the handoff fails, the measured
+number holds: it's the same rule as the fonts. The eight roles now exist with the prefix
+<code>--syntax-*</code>; the five semantic ones that still paint are measured alongside them.</p>
+<h2 id="programa-28--onda-1-frente-d0-gasto-por-provider-rn-186188">PROGRAMA 28 — Wave 1, front D0: spend by provider (RN-186..188)</h2>
+<p><strong>The containment changed nature, and that is what matters — not the new axis.</strong>
+<code>provider</code> became a dimension of <code>sumGroupedBy</code> again, revising ADR 0063 by
+the product owner's decision. Before, the member couldn't reach the breakdown by
+CREDENTIAL because it didn't exist — ADR 0063 wrote &quot;there is no argument to
+pass&quot;. Now it exists, and whoever contains it is the TYPE: two overloads, and the scope that
+carries <code>actor</code> (the only one of the member's view) only accepts
+<code>Exclude&lt;SpendDimension, 'provider'&gt;</code>. The guarantee went from &quot;impossible to
+express&quot; to &quot;impossible to compile&quot;, which is weaker — and that is why the
+barriers are TWO and independent: the member's route also has no dimension
+parameter at all. No <code>if</code> on the combination, on purpose (same lesson as
+RN-153/154), and the proof was by INVERSION: without the <code>@ts-expect-error</code>, <code>tsc</code> flags
+<code>TS2769</code> on the exact line.</p>
+<p><code>porOwner</code>/<code>porAgente</code> are a partition of <code>porAtor</code> by <code>actor_kind</code>, with no extra
+query; <code>system</code> stays out of both and remains in the total. The index on
+<code>token_usage(created_at)</code> that ADR 0063 measured and postponed came in in migration <code>0044</code>.
+The SCREEN didn't change — that's a later wave.</p>
+<h2 id="programa-28--onda-2-frente-h2-ranking-de-modelos-sem-nota-inventada-rn-210-adr-0077">PROGRAMA 28 — Wave 2, front H2: model ranking without an invented score (RN-210, ADR 0077)</h2>
+<p>The handoff asked for two things that depended on the SAME data the product doesn't
+have: a quality score per capability (mock: &quot;code → claude-sonnet-4 /
+qwen2.5-coder:14b (9.4)&quot;) and an &quot;ideal&quot; badge in <code>ModelPicker</code> when the
+model covers &quot;all the capabilities required by the agent&quot;. The investigation
+confirmed twice that this second data doesn't exist: <code>ModelsSection</code> itself
+had already renamed the &quot;Agent · capabilities&quot; column to just
+&quot;Agent&quot; for that reason, and the agent-binding <code>ModelPicker</code> reads
+<code>GET /projects/:id/models</code> (role <code>viewer</code>) — the curation (<code>uses</code>, ADR 0051)
+only exists in <code>ModelComCuradoria</code>, from a <code>maintainer</code>-only route. The badge was NOT
+built; the &quot;Best models per capability&quot; table WAS, with two
+real signals: how many of the project's agents already resolve, through the cascade, to
+each curated model, and the catalog cost as a tiebreaker — never a
+calculated score.</p>
+<h2 id="programa-28--onda-2-frente-b-sidebar-recolhe-rn-195201">PROGRAMA 28 — Wave 2, front B: the sidebar collapses (RN-195..201)</h2>
+<p>264px/62px with an icon track when collapsed; expandable projects revealing the
+tabs (read from <code>project-tabs.ts</code>, never hardcoded); the Activities section grouped
+by REAL base agent/instance — the <code>-2</code> suffix of <code>extraDevAgentId</code>, never an
+invented <code>-01/-02</code> counter (finding of Wave 1/front B0) —, scoped to the
+current route's project, not all of them, so as not to open N+1 event reads. Theme button
+in the footer; the two inert global items go, only Projects and Activities
+are global; auto-collapse of the Code tab via <code>AutoCollapseContext</code>
+(<code>sidebar-state.ts</code>), without saving a preference. Persistence centralized in
+<code>sidebar-state.ts</code>, the handoff's six <code>brabo.*</code> keys.</p>
+<p>Two divergences from the handoff documented and NOT resolved (RN-197): the project
+badge remains <code>pendingApprovalsCount</code> (RN-151 wins, it's more recent) and the
+handoff's identity color only appears on the collapsed track — the expanded
+line keeps only the existing status dot (RN-039), two dots would be noise.</p>
+<h2 id="programa-28--onda-2-frente-c-moldura-de-tela-rn-202203-adr-0078">PROGRAMA 28 — Wave 2, front C: screen frame (RN-202/203, ADR 0078)</h2>
+<p>The four literal fixes of the handoff's &quot;screen frame&quot; checklist:
+<code>.headerTop</code> got <code>min-height: var(--header-h)</code> — a FLOOR, not a ceiling, because the
+project header (identity + compact <code>TokenMeter</code>) is richer than the
+generic header of the handoff's 6 internal screens, and forcing 60px would cut the
+budget alert, the same class of error RN-088 forbids; the active tab with
+<code>box-shadow: inset 0 -2px 0 var(--accent)</code> instead of <code>border-bottom</code>; horizontal
+scrolling on the ruler; a content container with <code>max-width: 1040px</code> on the
+document-shaped tabs (not on the <code>semRespiro</code> ones). The ruler's spacing values
+that lived as a descendant CSS override in <code>ProjectPage.module.css</code>
+since FASE 16 migrated to <code>Tabs.module.css</code>, now with the same owner.</p>
+<p>The part that required a decision, not just CSS: the handoff lists 7 project tabs and the
+registry (<code>project-tabs.ts</code>) has 10. <code>executores</code> (RN-121), <code>backlog</code>
+(RN-048) and <code>insights</code> (Psicólogo hypotheses) were born AFTER the handoff, with
+real data and their own RN, and they STAY — the handoff is a VISUAL fidelity reference,
+not a ceiling on how many tabs the product has (RN-203, ADR 0078). And the
+<code>sessions</code> key remains labeled &quot;Chat&quot;, never &quot;Chat RAG&quot; as the handoff's most
+recent version asks (RN-202): &quot;Chat RAG&quot; would describe a feature that doesn't
+exist — the embeddings contract is ready (ADR 0075) but nothing consumes it yet,
+with no indexing pipeline and no citation UI — and renaming the tab
+today would be the same error ADR 0042 already refuses for a catalog model:
+announcing a capability before it exists. No export SHAPE changed
+(<code>AbaDoProjeto</code>, <code>ABAS_DO_PROJETO</code>); only the <code>code</code> label went from &quot;Code&quot; to
+&quot;Código&quot;.</p>
+<h2 id="programa-28--onda-2-frente-h1-foco-visível-adr-0036">PROGRAMA 28 — Wave 2, front H1: visible focus (ADR 0036)</h2>
+<p><code>Select</code>, <code>Modal</code> (close button) and <code>ProjectCard</code> got <code>:focus-visible</code>
+with the same calibrated treatment as <code>Input.module.css</code>, including the
+<code>forced-colors</code> block: none of the three had a focus indication reachable by
+keyboard alone. The <code>Modal</code> close button went up from 30px to 32px, the desktop
+touch-target floor. <code>Table</code> and <code>Badge</code> were audited and did NOT need
+change — neither exposes an interactive affordance of its own: a
+<code>Table</code> row is pure presentation (whoever needs a clickable row already uses
+<code>&lt;button&gt;</code>/<code>&lt;a&gt;</code> inside the cell, via <code>render</code>) and <code>Badge</code> is not used with
+<code>onClick</code> anywhere in the product.</p>
+<h2 id="programa-28--onda-3-frente-h3-a-aba-criativo-ganha-kpis-sem-fingir-dado-que-não-existe-rn-227230">PROGRAMA 28 — Wave 3, front H3: the Criativo tab gets KPIs without faking data that doesn't exist (RN-227..230)</h2>
+<p>The handoff asks for 4 status seals for the session's 5 real states
+(<code>created/active/closing/closed/closed_abnormally</code>). <code>closed_abnormally</code>→
+aborted and <code>created</code>→waiting are direct; <code>closing</code> was NOT merged with
+&quot;closed&quot; — it gets its own seal (&quot;closing&quot;, <code>accent</code> tone, pulsing),
+because in <code>closing</code> the outcome isn't known yet and calling it &quot;closed&quot; would
+lie about that. The pill filters (only 4, for the same reason) group
+<code>created</code> and <code>closing</code> by TRAJECTORY, not appearance: <code>created</code> falls in
+&quot;Active&quot; (still in play), <code>closing</code> falls in &quot;Closed&quot; (on the way to closing
+without error) — the row's seal is never rewritten by the filter, only the grouping
+changes. Of the 4 KPIs, two are honest about missing data: &quot;cost this month&quot;
+REUSES <code>getMySpend</code> (same <code>queryKey</code> as the Spend tab, the
+member's view/RN-101) and never shows the project total — which is the owner's data
+(<code>porProjeto</code>), and the Criativo tab is seen by any member; &quot;ideation
+→ commit rate&quot; is DECLARED absent (shows &quot;—&quot;), because there is no link between
+session and commit in the product today — inventing the calculation would be the same class
+of error ADR 0042 already refuses for a model score.</p>
+<h2 id="programa-28--onda-4-frente-g2-o-chat-rag-ganha-pipeline-de-indexação-e-busca-híbrida-rn-231238-adr-0080">PROGRAMA 28 — Wave 4, front G2: the RAG Chat gets an indexing pipeline and hybrid search (RN-231..238, ADR 0080)</h2>
+<p>On top of the <code>chunks</code> table from Wave 3 (ADR 0079): MANUAL indexing (no
+watcher, <code>POST .../rag/reindex</code>, idempotent full rebuild — deletes the
+scope/session before recreating) of the three honest scopes — <code>docs</code>/<code>adr</code>
+via <code>ReadProjectCodeUseCase</code> (same credential/gate/path check
+as the Code tab) and <code>session</code> only from <code>chat.message</code>/<code>agent.response</code>. Chunking
+by heading/paragraph, 1200 characters with 150 of overlap —
+documented as a starting point, not a calibration against real data (there
+isn't, yet, a body of questions run against the index). Hybrid search
+is TWO independent queries (vector via HNSW, lexical via GIN),
+fused by a weighted sum (0.6/0.4) and cut at a threshold (0.2) —
+numbers that are also a starting point. When the embedding provider (fixed:
+<code>ollama</code>) doesn't answer, the pipeline writes the chunks WITHOUT a vector and declares the
+gap in the report — it never fakes complete indexing, and the search degrades
+to lexical-only with a warning. The screen (RAG Chat as its own tab) belongs to Wave
+5; this front is just the backend.</p>
+<h2 id="programa-28--onda-4-frente-f1-ciclo-de-vida-do-container-vira-tabela-sem-orquestrador-rn-243248-adr-0081">PROGRAMA 28 — Wave 4, front F1: the container lifecycle becomes a table, without an orchestrator (RN-243..248, ADR 0081)</h2>
+<p>See item 31 of FASE 25 (PARTIALLY REVOKED): <code>project_containers</code>
+(migration <code>0046</code>) writes the mutable STATE — <code>provisioning → running ⇄ stopped</code>, <code>failed</code> reachable from all three, <code>removed</code> only leaves by reprovisioning
+— distinct from <code>artifact.project_image</code> (the Arquiteto's immutable
+DECISION). Confirmed by investigation (grep, zero occurrences):
+NO service of the product mounts <code>/var/run/docker.sock</code> nor runs
+<code>privileged</code> — both use cases only WRITE and READ, no real call
+to Docker. The first transition requires the image already decided (RN-105)
+and FREEZES version/resources in the row; a <code>local</code> project (ADR 0072) is
+refused, because it doesn't bring up its own container. The resource ceiling
+(<code>cpus</code>/<code>memory_mb</code>/<code>pids_limit</code>) is DECLARED, not applied — no
+screen asserts &quot;the container is limited to X&quot;, only &quot;the recorded intention
+was X&quot;. No new HTTP route at the time: without a real consumer yet, exposing
+one would be guessing a contract — closed by Wave 5/front F2 just below.</p>
+<h2 id="programa-28--onda-5-frente-g3-o-chat-rag-ganha-aba-própria-rn-252254-adr-0082">PROGRAMA 28 — Wave 5, front G3: the RAG Chat gets its own tab (RN-252..254, ADR 0082)</h2>
+<p>The screen that RN-202 (Wave 2/C) had postponed — &quot;Chat RAG&quot; would describe a
+capability that didn't exist yet — arrives together with the backend of Wave
+4/G2: <code>key: 'rag'</code>, a NEW tab (<code>ordem: 28</code>, between Code and Backlog),
+NEVER renaming <code>sessions</code>. The distinction stays the same, only the reason
+changed: <code>sessions</code> is a conversation with an ACTIVATED agent (spends the owner's key
+per turn, RN-058); <code>rag</code> is a search over an already built index, with no
+agent at all in between, read-only by nature. The screen consumes the three
+contracts of ADR 0080 without guessing shape and shows the two honest
+degradations the backend already declared and no screen read — <code>vectorAvailable: false</code> becomes a visible warning, and the coverage never invents &quot;reindexed
+Xmin ago&quot;. A citation with <code>session</code> origin navigates to the exact EVENT, reusing the
+mechanism the Psicólogo's evidence chips already use; <code>file</code> origin
+shows path/heading as text, without a link — the Code tab has no
+deep link by path today, out of scope here.</p>
+<h2 id="programa-28--onda-5-frente-f2-o-consumidor-real-do-ciclo-de-vida-do-container-não-o-terminal-rn-267268-adr-0083">PROGRAMA 28 — Wave 5, front F2: the real consumer of the container lifecycle (not the terminal) (RN-267/268, ADR 0083)</h2>
+<p>The original plan for this front was the complete interactive terminal. The
+investigation confirmed that FASE 25b remains cut: no service
+mounts <code>/var/run/docker.sock</code>, and even after ADR 0081 nothing in
+production transitions <code>project_containers</code> — there is no real container
+to open a terminal INSIDE it. Implementing a faked terminal, or one
+running in the same container as Brabo's monorepo (the debt ADR 0055
+already describes as policy, not isolation), would invent capability — the
+same error ADRs 0041/0042 refuse for an LLM provider and a catalog
+model. The real delivery: <code>GET /projects/:projectId/container/lifecycle</code>
+(role:viewer), the first HTTP exposure of the lifecycle (revises ADR
+0081, which had postponed the route for lack of a consumer), and the Terminal tab
+showing that state — translated badge, failure reason — UNDER the
+explanatory text that already existed, never in its place, fetched only while the
+tab is open. <code>null</code> (never provisioned) is the honest and
+most common result today.</p>
+<h2 id="programa-28--onda-5-frente-i-login-social-revoga-a-proibição-do-backlog-do-adr-0031-rn-272283-adr-0084">PROGRAMA 28 — Wave 5, front I: social login revokes the prohibition from the ADR 0031 backlog (RN-272..283, ADR 0084)</h2>
+<p>Explicit request from the product owner, aware of the security
+consequences — the prohibition goes away only for GitHub/GitLab; MFA, OIDC provider and
+generic federation remain out of scope (see &quot;What NOT to do&quot;).
+<code>SocialLoginCallbackUseCase</code> ends in the SAME <code>EmitirSessaoUseCase</code> as the
+password login — no second session format. It reuses the existing OAuth
+client, but the <code>state</code> has its OWN purpose
+(<code>purpose: 'social_login'</code>, checked BEFORE any other field):
+it never accepts the <code>state</code> of the git CONNECTION flow to a project, which
+would be privilege escalation. New table <code>social_identities</code> (migration
+<code>0047</code>), key <code>(provider, provider_user_id)</code> — never email/login.
+A three-step decision: known identity → login; email matches an
+existing account AND verified by the provider → links (and verifies the
+account's email if it wasn't yet); email matches but NOT verified →
+refuses — a typed email isn't proof of ownership, accepting it would open
+account takeover; no matching account → provisions a new account without
+a password, same &quot;pending&quot; state as the Keycloak migration. It reuses the SAME
+OAuth app as the git connection — zero new environment variables, only
+different <code>redirect_uri</code>/<code>scope</code> per flow; the OPERATOR's action of
+registering the second callback in the provider is what justifies the
+<code>breaking/</code> branch.</p>
+<h2 id="auditoria-fluxoyml--código--o-plano-do-dev-lead-vira-aprovação-de-verdade-rn-284-adr-0086">fluxo.yml × code audit — the Dev Lead's plan becomes a real approval (RN-284, ADR 0086)</h2>
+<p>Not a planned phase: it closes the divergence a read-only audit of
+<code>docs/fluxo.yml</code> × code found (finding A2,
+<code>docs/explanation/auditoria-fluxo-vs-codigo.md</code>) — the flow already declared the
+<code>dev-lead</code>'s <code>plano-de-paralelismo</code> output as <code>via: proposed_action</code>
+since ADR 0085, and the code was never adjusted to match. The product
+owner decided the code was wrong.</p>
+<p><code>propose_execution_plan</code> entered <code>decide.ts</code> (minimum role
+<code>maintainer</code>), DELIBERATELY outside the absolute ceilings block — it can be
+configured to auto-approve, unlike
+<code>parallelize</code>/<code>raise_max_parallel</code>. The Dev Lead is the FIRST conversational
+agent (they all run a synchronous turn via <code>GenServer.call</code> of up to
+180s) to suspend waiting for a human decision — the pattern already existed for
+the dev agent (ADR 0052) and the QA/Infra gates (ADR 0057), but those two are
+triggered by <code>cast</code> and never had to deal with a pending synchronous <code>from</code>.
+<code>TurnoAssincrono.tratar_resultado/2</code> gained a branch: when the
+<code>:aguardando_aprovacao</code> key is present (checked by VALUE, not by presence —
+the Dev Lead carries it as <code>nil</code> since <code>init/1</code>), it replies to <code>from</code> the same
+way and at the same time as always, but emits only <code>agent.status: awaiting_approval</code> instead of <code>agent.done</code> — the turn hasn't ended.
+<code>LiveBroadcast.agent_status/4</code> got the new status in its guard. The resumption
+uses the SAME <code>Engine.Dev.Wake</code> that <code>QaLeadServer</code> already reuses for the
+QA subagents (delivery is per AGENT, not per type).</p>
+<p><strong>Accepted gap, declared</strong>: without its own state table, an engine restart
+while the Dev Lead is suspended loses the subscription — the decision
+remains recorded and visible in Approvals, but it doesn't narrate the outcome
+on its own. Closing this would require the same persistence mechanism as ADR
+0052; out of scope for this fix, which only aligns the behavior with what
+<code>docs/fluxo.yml</code> already declared.</p>
+<h2 id="ux-designer--o-quinto-agente-conversacional-antecipado-rn-285287-adr-0087">UX Designer — the fifth conversational agent, brought forward (RN-285..287, ADR 0087)</h2>
+<p>It's not a triggered separation trigger — <code>docs/fluxo.yml</code> always declared
+&quot;when the MANAGED project has its own interface to design&quot; as the
+criterion, and it didn't fire: the design system remains static input.
+A CONSCIOUS decision by the product owner to bring the role forward anyway.</p>
+<p><code>Engine.Agents.UxDesignerServer</code> mirrors <code>DevLeadServer</code> — a GenServer per
+session, ceiling of 14 iterations, activated by an <code>accepted</code> handoff addressed to
+&quot;ux-designer&quot; through the already existing GENERIC mechanism (no line changed in
+<code>ActivateAgentUseCase</code>). SOLO: no area, no subagents. The kickoff reads the
+most recent <code>artifact.product_brief</code> — the SAME &quot;business need&quot;
+the Criativo produces, without a new artifact — and the design system
+(<code>design/tokens.css</code>, <code>design/COMPONENTS.md</code>) is DESCRIBED in the
+agent's identity (<code>Engine.Harness.Agents</code>), static text: the conversational agents
+have no tool to read repository files.</p>
+<p><code>propose_prototype</code> is the ONLY tool (<code>personas</code>, <code>jornadas</code>,
+<code>prototipo</code> with <code>telas</code>/<code>anotacoes</code>, <code>resumo</code>). It writes
+<code>artifact.prototipo_navegavel</code> <strong>without a dedicated use case in the api</strong> —
+unlike <code>choose_project_image</code>/<code>create_c4_diagram</code>, which need one
+because they have content DERIVED from another artifact or a shared domain
+refusal; neither reason holds here, so the shape validation
+lives in the engine (<code>ArtifactSchemas</code>) and the write uses the generic
+<code>append_event_returning</code> the api already exposes, the same path as <code>artifact.product_brief</code>. One
+single artifact, two handoffs about it — to &quot;po&quot; and to &quot;dev-lead&quot; — never
+a second artifact for &quot;spec-visual&quot;: the prototype (screens + annotations) IS the
+visual spec, and duplicating it would risk the two copies diverging later. It reuses
+the half of ADR 0086's design that survives without its suspension:
+a successful <code>propose_prototype</code> ends the turn, so the model doesn't propose
+again and duplicate the artifact — without the &quot;aguardando_aprovacao&quot;, because proposing
+a prototype has no external effect.</p>
+<p><code>apps/web/src/lib/agents.ts</code> got the entry (<code>color: var(--accent)</code>, the
+least reused semantic token of the roster; <code>icon: PencilIcon</code>).
+<code>uxDesignerActive</code> entered the roster in BOTH sources RN-090 requires in
+sync — the team panel (<code>agent-status.ts</code>) and the dashboard card
+(<code>projects-summary.repository.ts</code>, the same <code>infraActive</code> query
+widened, no new query).</p>
+<p><strong>Out of reach, declared</strong>: <code>teste-de-usabilidade</code> requires a real human
+user — no agent replaces that. <code>metricas-de-uso</code> remains a gap even
+with <code>analytics</code> <code>active</code> (ADR 0089): the funnel report measures
+session→commit→PR→merge, not feature adoption by the FINAL users of the
+project Brabo builds — &quot;evidence of adoption per feature&quot; is
+DECLARED as a metric with no path to exist today, not a pending item to
+close next round.</p>
+<h2 id="staff--código-pronto-dormente-para-disparo-automático-rn-305306-adr-0088">Staff — code ready, dormant for automatic triggering (RN-305/306, ADR 0088)</h2>
+<p>Not a planned phase: <code>docs/fluxo.yml</code> declares the Staff/Principal Engineer
+as <code>status: planned</code> since ADR 0085 (&quot;contract ready, activation
+decided, waiting for a trigger&quot;). A CONSCIOUS decision by the product owner:
+bring the CODE forward knowing the AUTOMATIC trigger (the Anamnese
+noticing a RECURRING systemic problem) won't fire — the Anamnese
+is paused (<code>ANAMNESE_ENABLED=false</code>, decision of 2026-08-10). Dormant
+for automatic triggering, not for MANUAL invocation.</p>
+<p>The sixth solo conversational agent (<code>Engine.Agents.StaffServer</code>), alongside
+Criativo/PO/Arquiteto/Dev Lead/UX Designer, mirroring the Arquiteto (bounded
+loop, ceiling 14) with two differences: NO <code>kickoff/1</code> (there is no session
+artifact to summarize — it comes up and stays idle until the first <code>user_message</code>,
+which is how whoever addressed the handoff explains the problem) and activated by the
+GENERIC path of <code>canActivateAgent</code> (an <code>accepted</code> handoff addressed to
+&quot;staff&quot;), without entering <code>USER_STARTED_AGENTS</code> — investigation confirmed that
+no domain change in the api was necessary, because
+<code>assertHandoffTargetAllowed</code> only refuses an area subagent and the Staff has no
+area. The only tool, <code>propose_rfc</code> (problem, options with trade-offs,
+recommendation, disposable PoC), writes <code>artifact.rfc_staff</code> DIRECTLY via
+<code>append_event_returning</code> — the same tableless pattern as <code>emit_insight</code>, and
+not that of <code>artifact.c4_diagram</code> (which derives the Container level from the
+module_map in the api) — and returns the handoff to the Arquiteto in the SAME tool call,
+without a <code>proposed_action</code> (recording a document is not an external effect).</p>
+<p><code>staffActive</code> entered the team panel roster and the dashboard card
+(<code>ProjectCardSummary.roster</code>), same criterion as <code>infraActive</code>, so as not to
+open the divergence the <code>RosterFacts</code> comment already warned about.
+<strong>Declared, not hidden</strong>: <code>SessionPage.tsx</code>/<code>AGENTES_DE_CHAT</code> were not
+touched — the same pattern already accepted for <code>infra</code> (a REAL and ACTIVE lead
+also outside that list). The end-to-end usage path today is the internal
+route (<code>POST .../agent/message</code>, <code>agent: &quot;staff&quot;</code>), not the Session
+screen; the generic &quot;manual handoff to an agent of choice&quot; UI remains in the
+backlog.</p>
+<h2 id="o-gate-implementavel-ativo--qa-estratégia-como-segundo-momento-do-qa-lead-adr-0090">The <code>implementavel</code> gate active — QA strategy as the qa-lead's second moment (ADR 0090)</h2>
+<p>A conscious decision by the product owner to bring forward the trigger
+<code>docs/fluxo.yml</code> already foresaw (&quot;when the implementavel gate activates&quot;) — the
+trigger HERE is the very work of building the mechanism, not a usage symptom
+waiting to happen. <code>docs/gates.yml</code>, <code>implementavel</code>:
+<code>status: planned</code> → <code>active</code> (owner <code>dev-lead</code>, <code>severidade: warn</code>
+untouched — the registry already said &quot;it's born warn even when it activates&quot;).</p>
+<p><strong>QA strategy stops being a <code>proposto</code> role</strong>: it is the <code>qa-lead</code> ITSELF, in a
+second MOMENT — same process, a deliverable separate from the PR verdict,
+exactly as <code>docs/fluxo.yml</code> already declared (&quot;it may be the qa-lead itself
+in a second MOMENT, not necessarily a new agent: the separation is by
+deliverable&quot;). <code>Engine.Gates.QaLeadServer.run_design/3</code> is a NEW and ADDITIVE entry
+point (without touching <code>run/2</code>, the usual path, tied to
+<code>DevAgentState.find_by_task_id</code>), triggered by
+<code>Engine.Gates.Dispatcher.run_qa_estrategia/3</code> (the same test-swappable indirection
+<code>run_qa/2</code>/<code>run_secops/2</code> already use).</p>
+<p><code>Engine.Gates.QaEstrategiaAgent</code> is a STATELESS module (not a <code>GenServer</code>),
+the same shape as <code>QaPerformanceSegurancaAgent</code> — a registry without <code>Terminal</code>
+(<code>ReadFile</code>, <code>SearchWorkspace</code>, <code>EmitPlanoDeTeste</code>) —, but the CONTEXT is
+different: <code>Engine.Gates.QaEstrategiaContext.fetch/3</code> fetches ONLY the story (from
+<code>list_backlog</code>) and the current <code>module_map</code> (from <code>get_infra_context</code>, reused only
+for the <code>moduleMap</code> field — zero new route), without <code>dev_state</code> or
+<code>worktree_path</code>, because the gate runs PRE-DEV: there is no dev agent, worktree
+or <code>task_id</code> yet. None of the three tools goes through the
+<code>ActionPipeline</code> (only <code>terminal</code>/<code>write_file</code> do), so this agent
+NEVER suspends — <code>run_design/3</code> runs synchronously inside its own
+<code>handle_cast</code>. The iteration ceiling stays at 8 (conversational), not 60
+(gate) — ON PURPOSE: with no <code>token_budget_micros</code> underneath (there is no task,
+PRE-DEV), the same reason <code>infra-workflows</code> stays at 8 even while using a
+tool (RN-085). The deliverable (<code>emit_plano_de_teste</code>: synthesis,
+executable criteria, a GENERIC automation strategy with no framework)
+becomes <code>artifact.plano_de_teste</code> in the event log of the calling session.</p>
+<p><code>assess_implementability</code>, a new Dev Lead tool, reads the most recent
+<code>artifact.plano_de_teste</code> of the story in its OWN session's
+history: with no plan yet, it triggers the assessment and returns an error asking for a
+retry (a tool error is loop INPUT, not the end of the line —
+RN-163); with a plan, it proposes the opinion (<code>implementavel</code>/<code>inviavel</code> +
+justification, plan embedded in the payload) as a <code>proposed_action</code>, the SAME
+three-outcome pattern as <code>propose_execution_plan</code> (ADR 0086) —
+<code>maintainer</code>, DELIBERATELY outside the absolute ceilings block of
+<code>decide.ts</code>.</p>
+<p><strong><code>appsec</code> stops being <code>proposto</code></strong> — the SecOps second moment comes in the
+next section.</p>
+<h2 id="o-appsec-ganha-o-segundo-momento-do-secops-rn-360361-adr-0090">appsec gets the secops second moment (RN-360/361, ADR 0090)</h2>
+<p><code>docs/fluxo.yml</code> (<code>id: appsec</code>, camada_seguranca) declared in advance
+&quot;same pattern as QA: two MOMENTS, not two agents for now&quot; — a
+conscious decision by the product owner to bring the activation forward, without waiting for the
+<code>implementavel</code> gate (front <code>qa-estrategia</code>, same conceptual ADR 0090) that the
+registry itself cited as the trigger.</p>
+<p><code>Engine.Gates.SecOpsAgentServer.run_design/2</code> runs in the SAME process as the
+PR secops (same <code>Registry</code> key), without any <code>Diff</code>/<code>Scanner</code>/
+<code>DevAgentState</code>: it fetches the story from the backlog + the current <code>module_map</code>
+(<code>Engine.Gates.AppSecContextBuilder</code>, without <code>dev_state</code>/<code>worktree_path</code>) and
+calls <code>Engine.Gates.AppSecAgent.run/3</code> — a STATELESS module (not a GenServer,
+the same shape as <code>QaPerformanceSegurancaAgent</code>), a tool registry WITHOUT
+<code>Terminal</code>, running a STRIDE-lite checklist via <code>ToolLoop.run/1</code> over the
+story's DESIGN, never over code. It ends by emitting <code>artifact.threat_model</code>
+and creating a handoff to the three declared leads (arquiteto, dev-lead,
+<code>infra</code> — the addressable AGENT of the id <code>area-infra</code>, RN-361).</p>
+<p><strong>Declared gap, not a bug</strong>: <code>run_design/2</code> is INVOKABLE, but nothing invokes it
+on its own yet — the natural trigger is the Dev Lead's <code>assess_implementability</code>
+(front <code>qa-estrategia</code>), out of scope for this delivery, which was kept
+self-contained (<code>decide.ts</code>/<code>docs/gates.yml</code>/<code>dev_lead_tools.ex</code> untouched).</p>
+<h2 id="analyticsdelivery-metricas-viram-relatório-rn-320322-adr-0089"><code>analytics</code>/<code>delivery-metricas</code> become a report (RN-320..322, ADR 0089)</h2>
+<p>A conscious decision by the product owner to BRING FORWARD two roles of the
+target model (<code>docs/fluxo.yml</code>, <code>status: proposto</code>) without waiting for the
+organic trigger each one already declared. The shape is the one the flow itself
+prescribed: <code>analytics</code> &quot;absorbed by <code>medicao</code>&quot; until a PRODUCT metric
+becomes mandatory PO input, <code>delivery-metricas</code> &quot;never becomes an agent —
+it becomes a REPORT of <code>medicao</code>&quot;. Both become a single SCRIPT —
+<code>apps/api/scripts/analise-funil.ts</code> (<code>pnpm --filter api analise:funil -- --projeto &lt;uuid&gt; [--json]</code>), in the SAME format as <code>medir-execucao.ts</code>
+(Fase 13b): a pure read via Drizzle, zero writes, no GenServer, no
+LLM agent.</p>
+<p>It measures FOR REAL, over <code>proposed_actions.execution_result</code> of the dev agent's three git
+actions (<code>git_commit</code>/<code>pr_open</code>/<code>git_merge</code>, only <code>status: 'executed'</code>): a real funnel (how many sessions produced a commit / opened PR /
+merged PR, and the conversion between stages — it counts SESSIONS, not actions), real lead
+time (first commit to the session's first merge, by the EXECUTION's
+<code>updated_at</code>, not the proposal's) and real deployment frequency (merge into a
+<code>PROTECTED_BRANCHES</code> branch, per day, cross-referencing the
+<code>backmerge</code> gate of <code>docs/gates.yml</code> — whose evidence is CI, out of reach of
+a script that only reads the database).</p>
+<p>Three metrics stay in a &quot;Not measured, on purpose&quot; section — a
+PERMANENT declaration, not a gap to close next round: <strong>the complete product
+funnel ideation → commit</strong> (<code>sessions</code> without <code>storyId</code>, RN-230, would require
+a new schema — no migration in this front); <strong>evidence of adoption per
+feature</strong> (it's not data that is missing collection — Brabo doesn't instrument the
+projects it BUILDS, with no path at all for that telemetry to
+exist today); <strong>MTTR and change failure rate</strong> (they require a real production
+INCIDENT signal, the same dependency as <code>secops-runtime</code>/<code>platform</code> —
+another front).</p>
+<h2 id="secops-runtime-como-script-de-relatório-rn-375377-adr-0091"><code>secops-runtime</code> as a report script (RN-375..377, ADR 0091)</h2>
+<p>A decided bringing-forward by the product owner of the <code>secops-runtime</code> role
+(<code>docs/fluxo.yml</code>, <code>camada_seguranca</code>, previously <code>proposto</code>), without waiting for the
+declared trigger (&quot;production with real traffic, after <code>DEPLOY_ENABLED</code> +
+<code>platform</code> active&quot;). Only what the trigger does NOT require comes in: <code>pnpm --filter api relatorio:seguranca-runtime</code> reads <code>rate_limit_hits</code> — the data that the
+ADR 0027 <code>RateLimitGuard</code> already writes, including under dev/CI traffic — and
+produces a ranking of buckets (<code>user:&lt;uuid&gt;</code>/<code>ip:&lt;endereço&gt;</code>, the only two
+formats written; no route or reason, which the table never stored) and a
+temporal distribution in fixed slices. It's a SCRIPT, not an LLM agent nor a
+<code>GenServer</code>: there's no decision to make about the data, only aggregation.</p>
+<p>Automatic incident detection, incident response and security
+postmortem remain OUT — they depend on the same trigger that didn't fire — and
+the report lists them in a PERMANENT &quot;not measured&quot; section, without simulating an
+example incident nor inventing a number (same principle as ADRs
+0041/0042/0077). The retained window is short by design
+(<code>DomainGaugesCollector.pruneRateLimit</code> deletes hits older than
+<code>2 × RATE_LIMIT_WINDOW_MS</code>, 240s by default), and the report declares both
+windows — CONFIGURED and OBSERVED — never letting the second pass for a
+longer history than it is.</p>
+<h2 id="platform-ganha-uma-primeira-entrega-relatório-de-telemetria-sob-demanda-rn-385386-adr-0092"><code>platform</code> gets a first delivery: an on-demand telemetry report (RN-385/386, ADR 0092)</h2>
+<p>A conscious decision by the product owner to bring forward part of the <code>platform</code> role
+(<code>docs/fluxo.yml</code>, <code>camada_plataforma</code>) — whose <code>status</code> remains <code>planned</code> and
+whose <code>ativacao</code> remains synchronized with <code>DEPLOY_ENABLED</code>, which doesn't exist.
+<code>pnpm --filter api relatorio:telemetria [--projeto &lt;uuid&gt;] [--json]</code> is a
+SCRIPT (not an LLM agent, not a <code>GenServer</code>) that reads, on demand, the SAME
+questions <code>DomainGaugesCollector</code> already collects for the
+Prometheus scrape — active/closing sessions per project, blocked tasks per
+project, state of the last backup (always GLOBAL, never per project, because the
+product backs up the whole database) — and ends after printing. The
+SQL queries are REPLICATED, not imported from the collector: its methods are
+private and end by writing to a Prometheus gauge, with no pure &quot;just
+the query&quot; half to reuse without coupling a CLI script to the lifecycle of an
+<code>@Injectable</code>.</p>
+<p>The output always includes &quot;where to see more&quot; (the versioned dashboards in
+<code>deploy/k8s/observability/dashboards/*.json</code>, the alerts in
+<code>deploy/k8s/observability/alerts/brabo-alerts.yaml</code>, <code>docs/runbook.md #observabilidade</code>, <code>pnpm dev:obs</code> for local observability) — a link, never
+duplication — and a &quot;not measured&quot; section that DECLARES, without inventing: no
+numeric SLO is defined in the product, a postmortem depends on a real incident that
+didn't happen, and telemetry back into the product in a closed loop is what
+would make <code>platform</code> <code>active</code> — the trigger (<code>DEPLOY_ENABLED</code>) remains absent. The
+role's <code>gate_saida: { id: operavel, status: planned }</code> doesn't change;
+<code>docs/fluxo.yml</code> only gets a <code>nota</code> on the <code>telemetria-consolidada</code> output
+saying the manual/on-demand version is already real.</p>
+<h2 id="dbre-vira-dois-scripts-mecânicos-rn-400403-adr-0093">dbre becomes two mechanical scripts (RN-400..403, ADR 0093)</h2>
+<p>Of the fluxo.yml <code>dbre</code> role, only two of the four deliverables depend on
+real data volume (<code>plano-de-capacidade</code>, <code>tuning</code> — they remain a gap,
+with no deadline). The other two don't need a real load: <code>parecer-de- migracao</code> is pattern recognition in SQL text
+(<code>apps/api/scripts/lint-migracao.ts</code>, scans <code>apps/api/src/db/migrations/ *.sql</code>, flags <code>DROP TABLE</code>/<code>TRUNCATE</code>/<code>DROP COLUMN</code>/<code>ALTER COLUMN ... TYPE</code>/<code>ADD COLUMN ... NOT NULL</code> without <code>DEFAULT</code>, <code>!= 0</code> if it finds something — today
+it finds 3 occurrences in migrations already merged and accepted, informative, not
+fixed in passing); <code>backup-restore-testado</code> was already real since
+Fase 5 (CronJob + <code>backup_runs</code> + <code>make test-restore</code> executed, RTO
+~40s) — all that was missing was an on-demand report (<code>relatorio:backup</code>, the same
+read as <code>DomainGaugesCollector.collectBackup()</code>). Neither of the two
+goes into CI yet: the linter scans the whole repository, not the diff of
+a PR, and would become a gate that fails a PR for a finding that isn't its own — see
+ADR 0093 for the scoping technique (<code>pr-police.ts</code>) when that changes. The
+&quot;one migration per wave&quot; rule (<code>meta/_journal.json</code>) stopped being
+called the &quot;mechanized version&quot; of this role: it avoids snapshot
+conflicts between agents in parallel, a concern orthogonal to &quot;this SQL
+has a risky pattern&quot;.</p>
+<h2 id="auditoria-fluxoyml--código--onda-1-fluxoymlgatesyml-em-dia">fluxo.yml × code audit — Wave 1: fluxo.yml/gates.yml up to date</h2>
+<p>The first of the six waves of the audit plan (section D,
+<code>docs/explanation/auditoria-fluxo-vs-codigo.md</code>) to close — Waves 3, 4 and
+5 had already been brought forward out of order (analytics/DORA, the
+<code>implementavel</code> gate, QA strategy/appsec); this one is only metadata, no ADR, no
+line of production code.</p>
+<p><code>docs/gates.yml</code> (<code>paralelismo-autorizado</code>): <code>status: planned</code> → <code>active</code>,
+with <code>evidencia</code> in the SAME format as the neighboring <code>implementavel</code> gate —
+<code>event_types: [proposed_action.created/approved/denied]</code>, <code>filtro: { actionType: parallelize }</code>, <code>onde: request-parallelization.use-case.ts</code> (finding A1/B5 — <code>fluxo.yml</code> already
+said <code>ativo</code> since ADR 0053/FASE 14d, only <code>gates.yml</code> lagged behind).
+<code>docs/fluxo.yml</code> got three more fixes from the audit, all of citation
+or label, none of behavior: the <code>dev</code>'s state machine went
+from 4 to 5 states (<code>awaiting_approval</code> came in, Fase 12e/ADR 0052 — A3); the
+RN-160 citation left the Arquiteto's <code>backlog-promovido</code> input and went
+to where it really applies, the <code>handoff-duplo</code> output (the
+&quot;Confirm architecture ready&quot; button it locks — A4); the RN-161 citation
+left <code>handoff-duplo</code> and became a note on the Dev Lead's input (it is the step of
+ACCEPTING the handoff that chains execution activation, not the double handoff
+itself — A5); and the origin of the <code>dev</code>'s <code>worktree-por-agente</code> stopped saying
+<code>harness</code> (<code>Engine.Dev.WorktreeManager</code> is not one of the 4 components of the
+<code>harness</code> role — A8). <code>docs/explanation/backlog.md</code> was also
+updated: the line about the outdated <code>gates.yml</code> left the table of
+pending items (closed here), together with the <code>implementavel</code> gate (B3, already
+closed by ADR 0090 before this wave, without anyone having removed it from the table)
+and the part of B7 (deployment frequency/lead time) that <code>analise:funil</code>
+(ADR 0089) already actually delivers — MTTR/change failure rate remain
+out, but as a PERMANENT gap already declared in <code>fluxo.yml</code>, not an
+engineering pending item.</p>
+<p>Verification: <code>pnpm --filter api validacao:gates -- --sem-banco</code> (valid
+registry, no <code>ativo-sem-evidencia</code>) and <code>pnpm docs:check</code> green. Phase 3 of the
+script (real evidence in the event log) requires <code>--projeto &lt;uuid&gt;</code> against a
+database with data — out of reach of this fix, which is metadata only.</p>
+<p><strong>Pending items of the same plan, not of this wave</strong>: Wave 2 (Dev Lead →
+dev delegation, RN-160 revalidated in the backend) and Wave 6 (the <code>necessidade-validada</code> gate,
+which requires an ADR and a product decision before coding).</p>
+<h2 id="auditoria-fluxoyml--código--onda-2-rn-160-no-backend-e-delegação-dev-lead--dev-rn-404405-adr-0094">fluxo.yml × code audit — Wave 2: RN-160 in the backend and Dev Lead → dev delegation (RN-404/405, ADR 0094)</h2>
+<p>The second of the six waves of the audit plan (section D), the TWO items of
+largest scope after Wave 1 — the other four (3, 4, 5 brought forward out
+of order; 6 still pending, requires an ADR and a product decision). Both live
+exclusively in <code>apps/api</code>; no change in <code>engine</code>/<code>web</code> was
+necessary.</p>
+<p><strong>B6 — RN-160 revalidated in the backend.</strong> The rule (&quot;Confirm architecture
+ready&quot; requires at least 1 promoted story) was only guaranteed on the CLIENT
+(<code>SessionPage.tsx</code>, <code>hasPromotedStory</code>) — a direct HTTP call to
+<code>POST /agents/arquiteto/handoff-infra</code> ignored the rule entirely.
+<code>OfferInfraHandoffUseCase.execute</code> now queries
+<code>StoryRepository.findByProject</code> and refuses with <code>BadRequestException</code> BEFORE
+writing the event or calling the engine, when no story has
+<code>status !== 'draft'</code>.</p>
+<p><strong>B1 — the Dev Lead → dev delegation becomes data.</strong> ADR 0053 (item 5) already
+foresaw this and declared it out of scope at the time — CLAUDE.md listed it as a
+reversible cut. Closed here: <code>AcceptParallelizationUseCase.execute</code>
+(API side, covers both the direct AND the approved-for-free paths, because both already
+converge on it) writes <code>delegations</code> with <code>area: 'dev'</code>, <code>leadAgent: 'dev-lead'</code>, <code>subagent</code> = the id of the freshly activated <code>dev-&lt;modulo&gt;</code>. Unlike
+QA/Infra (which write on the ENGINE side, because that's where the subagent produces
+an opinion), <code>status: 'completed'</code> was REDEFINED for this area: it means
+&quot;the delegation was CARRIED OUT&quot; (the agent came up), not &quot;opinion issued&quot; — and
+<code>parecerArtifactId</code> points to the project's most recent <code>artifact.module_map</code>
+(via <code>SessionEventRepository.listByTypeForProject</code>, an already
+existing method, no new query). Without a module_map in the project — it shouldn't
+happen —, the delegation isn't written with a fake id: it only logs the
+unexpected state and moves on, because the dev agent's activation is already a success when that
+write is attempted; a failure in <code>RecordDelegationUseCase</code> also doesn't bring down the
+activation, for the same reason. Decision recorded in ADR 0094, which also
+revokes the cut of ADR 0053 item 5.</p>
+<p><code>docs/fluxo.yml</code> (<code>dev-lead</code>, output <code>delegacao</code>): <code>status: lacuna</code> →
+<code>status: ativo, regra: RN-405</code>.</p>
+<h2 id="auditoria-fluxoyml--código--onda-6-última-o-gate-necessidade-validada-rn-406-adr-0095">fluxo.yml × code audit — Wave 6 (last): the <code>necessidade-validada</code> gate (RN-406, ADR 0095)</h2>
+<p>It closes the LAST of the six waves of the audit plan (section D,
+<code>docs/explanation/auditoria-fluxo-vs-codigo.md</code>) — all six closed: 3,
+4 and 5 had been brought forward out of order (analytics/DORA, the
+<code>implementavel</code> gate, QA strategy/appsec, ADRs 0089/0090); 1 and 2
+closed in the previous PRs (fluxo.yml/gates.yml up to date; RN-160 in the
+backend + Dev Lead → dev delegation). This is the 6th: the
+<code>necessidade-validada</code> gate (Criativo → PO), declared <code>proposto</code> since ADR
+0085 with no mechanism at all behind it.</p>
+<p><code>modelo-de-time.md</code> already recorded why it stood still: the Criativo (the
+model) deciding on its own that the need it produced itself is
+validated would be self-validation, not a real gate. The product owner's
+decision was a SEPARATE human confirmation — a third button in
+<code>SessionPage.tsx</code>, &quot;Confirm need validated&quot;, in the SAME pattern as
+&quot;Confirm architecture ready&quot; (RN-160): a dedicated route
+(<code>POST .../agents/criativo/validate-necessity</code>), a dedicated use case
+(<code>ValidateNecessityUseCase</code>), its own event (<code>necessity.validated</code>).
+It never reused <code>confirm_readiness</code>/RN-142 (which remains just the
+structural floor, &quot;≥1 captured rule&quot;) nor the PO's acceptance of the handoff
+(<code>AcceptHandoffUseCase</code>, structural, without judgment of content).</p>
+<p>The chaining chosen: the button only enables AFTER <code>confirm_readiness</code>
+has consolidated the <code>artifact.product_brief</code> (<code>hasProductBrief</code>) — it makes no
+sense to &quot;validate&quot; a summary that doesn't exist yet, and it is the most
+consistent reading of <code>docs/fluxo.yml</code> (the gate is the Criativo's OUTPUT, the
+moment its work has already delivered a concrete artifact).
+Unlike <code>OfferInfraHandoffUseCase</code>, this confirmation does NOT signal the
+engine — the Criativo→PO handoff already happened inside
+<code>confirm_readiness</code> itself, so the new event is only the record of MERIT, with no
+trigger at all waiting for it.</p>
+<p><code>docs/gates.yml</code> gets the <code>necessidade-validada</code> gate: <code>active</code>,
+<code>aprovacao_humana: true</code>, but <code>severidade: warn</code> — nothing in the product today
+CHECKS the passing of this gate before letting the PO proceed, unlike the
+<code>block</code> ones of <code>story-promovida</code>/<code>plano-de-adocao</code>, which have a real code
+lock behind them. <code>docs/fluxo.yml</code> (<code>criativo</code>, <code>gate_saida</code>): <code>status: proposto</code> → <code>status: ativo, regra: RN-406</code>.</p>
+<h2 id="auditoria-fluxoyml--código--b4-a-última-pendência-o-po-lê-métricas-de-produto-rn-407">fluxo.yml × code audit — B4 (the LAST pending item): the PO reads product metrics (RN-407)</h2>
+<p>It closes item B4 — the last line of the table &quot;Team model backlog
+(ADR 0085)&quot; in <code>docs/explanation/backlog.md</code>; the table is EMPTY after
+this fix, and the fluxo.yml × code audit ends here. No new
+ADR: it follows the same pattern already established by RN-164 (agent read
+scoped to the project, no external effect, no <code>proposed_action</code>), just with
+a new RN. <code>docs/fluxo.yml</code> (role <code>po</code>, input <code>metricas-de-produto</code>):
+<code>status: lacuna</code> → <code>regra: RN-407</code>.</p>
+<p>The DATA already existed since ADR 0089 (<code>analise:funil</code> — real funnel
+session → commit → PR → merge, real lead time, real deployment frequency);
+all that was missing was for the PO to be able to READ that report within the turn. The PO's third
+read tool, <code>listar_metricas_de_produto</code>
+(<code>GET .../product-metrics</code>), the exact same design as the two siblings of
+RN-164 — <code>:direct</code>, no parameter, scope closed to the project. The pure
+CALCULATION functions and the query (<code>calcularFunil</code>/<code>calcularLeadTimes</code>/
+<code>leadTimeMedioMs</code>/<code>deploymentFrequencyPorDia</code>/<code>buscarAcoesGitDoFunil</code>)
+migrated from <code>apps/api/scripts/analise-funil.ts</code> to
+<code>apps/api/src/application/services/funil-metrics.ts</code> — a MECHANICAL and
+necessary refactoring (<code>scripts/</code> can't live in <code>src/</code>, and <code>src/</code> doesn't
+import from <code>scripts/</code>): the script started to RE-EXPORT from there, without changing
+signature or behavior, and the script's regression test stays
+green without being touched. The JSON body has no field for the three permanent
+absences the script already declared only in text (complete product funnel
+ideation → commit, evidence of adoption per feature, MTTR/change
+failure rate) — the PO's tool cites them by name in the TEXT it returns
+to the model, always, so it never concludes from the omission of the numbers that
+there is no gap.</p>
+<h2 id="governancemd--o-critério-do-modo-community-não-o-mecanismo-dele">GOVERNANCE.md — the criterion of the <code>community</code> mode, not its mechanism</h2>
+<p>An item of the previous backlog (&quot;Community mode of approval-ladder&quot;) became a
+record correction, not an implementation: investigation confirmed that the <code>community</code> mode
+already exists in code since FASE 6 (<code>scripts/ci/approval-ladder.ts</code>), tested
+on both sides, only turned off by <code>APPROVAL_MODE=solo</code> (default). The backlog's
+sentence (&quot;it becomes a change of <code>aprovacao_humana</code> in the gates registry&quot;) came from
+a SPECULATIVE line of ADR 0054 — not edited, by rule, but the imprecision
+is recorded in <code>docs/explanation/backlog.md</code>: the <code>aprovacao_humana</code> of the
+<code>aprovacoes-da-escada</code> gate is already a fixed <code>true</code> in both modes, with no field at all in
+the <code>Gate</code> schema that reacts to <code>APPROVAL_MODE</code>.</p>
+<p>What was really missing was another <code>TODO(humano)</code>, in
+<code>docs/explanation/branching-policy.md</code>: the criterion for who goes into each
+approvers list (<code>devs</code>/<code>po</code>/<code>gestão</code>) — who comes in, who leaves, based
+on what. <code>GOVERNANCE.md</code> (repo root, new) closes that: the MECHANISM stays
+in <code>branching-policy.md</code> (the ladder, distinct people, the step by step of the
+variable switch), the CRITERION now lives in <code>GOVERNANCE.md</code>. It's a proposal,
+not a functioning committee — the project still has a single maintainer, and the
+document is explicit about it: most of it describes what comes into
+force WHEN there are more people, not a structure already active. A new <code>warn</code> rule
+in the docmap (<code>governanca</code>) demands a review when <code>approval-ladder.ts</code>/
+<code>branching-policy.md</code> change — separate from the existing <code>block</code> rule
+(<code>politica-de-branches</code>) for the same reason <code>checks-e-rulesets</code> is separate
+from it: MECHANISM follows from the code, CRITERION is a human decision.</p>
+<h2 id="smtp-real-no-mailsender-rn-408-adr-0096">Real SMTP in MailSender (RN-408, ADR 0096)</h2>
+<p>It closes the backlog item open since the Keycloak cutover (ADR 0032, &quot;real SMTP
+remains future config&quot;). <code>nodemailer</code> over pure SMTP transport
+(a LINE protocol with state/MIME/STARTTLS/AUTH, unlike the HTTP
+JSON APIs the rest of the product integrates), behind <code>MAIL_TRANSPORT</code> — <code>log</code>
+(default, INCLUDING in production: sending real email is the operator's
+opt-in) or <code>smtp</code>, selected by <code>useFactory</code> in <code>AuthUseCasesModule</code>
+without touching any use case (<code>RegisterUseCase</code>,
+<code>RequestPasswordResetUseCase</code>, <code>LoginUseCase</code>, the
+<code>migrate-keycloak-users.ts</code> script keep just injecting <code>MailSender</code>).
+<code>SMTP_HOST</code>/<code>SMTP_USER</code>/<code>SMTP_PASSWORD</code>/<code>SMTP_FROM</code> follow the RN-114 pattern
+in production when the mode is <code>smtp</code> — but WITHOUT the public default the
+four original RN-114 ones have, so the rule only kicks in when the operator opted
+for <code>smtp</code>; the validation runs in the constructor of <code>SmtpMailSender</code>, exercised
+by the <code>useFactory</code> when the provider graph is assembled (the same design as
+<code>CREDENTIALS_MASTER_KEY</code>), not by an eager call in <code>main.ts</code>. Body in
+PLAIN TEXT, never HTML — the port carries no structure for a rich body, and
+a template engine would be injection surface with no gain at all.</p>
+<p>Investigation found a real gap before coding: <code>email_verification</code> had
+no web route at all — <code>verificarEmail</code> existed in
+<code>apps/web/src/lib/auth.ts</code> since Fase 7a with NO caller, so the
+verification email's link would lead nowhere as soon as SMTP
+started sending real email. <code>/verificar-email</code>
+(<code>VerifyEmailPage.tsx</code>) closes that, mirroring <code>SetPasswordPage.tsx</code> — the same
+<code>validateSearch</code> pattern in <code>router.tsx</code>, the same single response for a
+nonexistent/expired/already used link — with one difference: no form, the
+confirmation fires on its own on mount, so the screen needs the three
+states of RN-088 (loading/error/success), not just two.</p>
+<h2 id="n-agentes-online-no-dashboard--status-ao-vivo-nunca-presença-histórica-rn-409-adr-0097">&quot;N agents online&quot; on the dashboard — LIVE status, never historical presence (RN-409, ADR 0097)</h2>
+<p>An item of the previous backlog closed. Prior investigation confirmed there
+was no liveness aggregate at all, neither per project nor per workspace — only
+HISTORICAL presence (<code>RosterFacts</code>, &quot;has appeared at some point&quot;) and real
+live status only on the client, derived from the event log, only when a project
+is OPEN. <code>ProjectCardSummary.onlineAgentCount</code> adds two mechanisms by the
+SAME rule (&quot;not idle, not stuck&quot;): dev agents
+(<code>engine.dev_agent_states.status NOT IN ('idle', 'idle_tripped')</code>,
+aggregated in batch in the engine) and conversational agents (the last <code>agent.status</code>
+of the most recent session with <code>status !== 'idle'</code>, a <code>payload</code> that only accepts
+<code>working</code>/<code>idle</code>/<code>awaiting_approval</code>). QA/SecOps never count — they don't emit
+<code>agent.status</code>, a single verdict per invocation, with no notion of &quot;idle&quot; between
+calls.</p>
+<p>The architecture decision worth recording: the query reads
+<code>engine.dev_agent_states</code> DIRECTLY, via raw SQL batched by workspace, inside
+the SAME <code>Promise.all</code> that already adds up eleven queries of the RN-090 read model
+(TWELVE → FOURTEEN, still CONSTANT) — instead of opening a new internal HTTP route
+in the engine. <code>api</code> and <code>engine</code> share the SAME physical database,
+separated only by Postgres schema, and there was already a precedent
+(<code>apps/api/scripts/medir-execucao.ts</code> already reads <code>engine.oban_peers</code>); this
+decision raises the pattern from a manual script to TESTED production code
+(a minimal, declared fixture of the engine table in
+<code>test/support/global-setup.ts</code>). Consequence accepted and declared in ADR
+0097: the query assumes whoever operates the product migrates both sides
+together (<code>db:migrate</code> AND <code>engine:migrate</code>), and fails loudly/visibly if only the api
+migrated — no try/catch hiding the error.</p>
+<h2 id="sessão-de-execução-não-fecha-mais-com-dev-agent-pendente-rn-411">An execution session no longer closes with a pending dev agent (RN-411)</h2>
+<p>A fix for a defect found in a REAL execution session, not a script
+item: five dev agents came up, became <code>idle_tripped</code> (RN-047, the
+circuit breaker) stuck waiting for the user to unblock task by
+task, and the session's 30s heartbeat (<code>Engine.Sessions.SessionServer</code>)
+closed the session underneath while the manual unblocking went on. The
+third signal of <code>GetSessionPendingWorkUseCase</code> (RN-064) only reads
+<code>agent.status</code>, the conversational agents' vocabulary — dev agents
+speak <code>dev.*</code> (<code>Engine.Dev.AgentIo</code>) and never emit <code>agent.status</code>, so
+no dev agent ever held the session through that signal. The fourth signal
+reads the last <code>dev.*</code> event of each <code>dev-&lt;modulo&gt;</code>/<code>dev-&lt;modulo&gt;-2</code> in the
+session: <code>dev.working</code>/<code>dev.blocked</code>/<code>dev.idle_tripped</code> hold the session
+(stuck waiting for a human decision IS pending work); only <code>dev.idle</code>
+(truly drained) doesn't hold it. <code>dev.awaiting_gate</code>/<code>dev.awaiting_approval</code>
+ENTERED the rule through RN-412 — see below; the residual gap this
+paragraph described was closed.</p>
+<h2 id="workspace-pessoal-automático-no-cadastro-rn-410">Automatic personal workspace on sign-up (RN-410)</h2>
+<p>Found while browsing: the dashboard's &quot;New project&quot; button did NOTHING, with no
+error. Root cause: <code>RegisterUseCase</code> and <code>SocialLoginCallbackUseCase</code> (in the branch
+that provisions a new account) created a user and a credential but NEVER a
+workspace — EVERY new sign-up hit that wall, and it only didn't show before
+because <code>seed.ts</code> always creates a workspace along with the demo data.
+Both points now create the workspace and add the user as <code>owner</code>
+in the SAME transaction that already creates the account. Name/slug come from a single pure
+function, <code>nomeESlugDoWorkspacePessoal</code> (<code>domain/auth/personal-workspace.ts</code>),
+so the rule doesn't diverge across two files; the slug is always suffixed with
+<code>userId.slice(0, 8)</code> (the same pattern as <code>extraDevAgentId</code>) to be unique
+without a round trip to the database (RN-410).</p>
+<h2 id="413-nas-prs-e-executores-sem-execução--as-duas-pontas-e-o-encadeamento-rn-412-adr-0098">413 on PRs and Executors &quot;without execution&quot; — the two ends and the chain (RN-412, ADR 0098)</h2>
+<p>Not a planned phase: a fix requested by real USE (&quot;on PRs it's always
+blowing up with entity too large&quot;) plus the sibling defect of the Executors tab
+showing up empty with real work going on. Investigation found the two
+chained: the gate dies with <code>413</code> → devs get stuck in
+<code>dev.awaiting_gate</code> → that state didn't hold the session (the gap of
+RN-411) → the 30s heartbeat closes the session underneath → the tab requires an
+active session and vanishes with the whole roster.</p>
+<p><strong>The cause of the 413 was Brabo's API, not the LLM provider</strong> — the
+comments that attributed the error to the provider (<code>runtime.exs</code>,
+<code>terminal_executor.ex</code>, <code>docker-compose.yml</code>) were wrong;
+<code>FalhaDeTurno.origem({413, _})</code> already classified it as <code>&quot;codigo&quot;</code>, and
+was right. <code>apps/api/src/main.ts</code> never configured Express's body
+limit — the 100 KB default applied, far below the 8 MB that
+Phoenix accepts, in the transport's heaviest direction (engine → api,
+<code>POST /internal/sessions/:sessionId/llm-turn</code>, which resends the WHOLE
+history on each ToolLoop iteration). <code>API_JSON_BODY_LIMIT</code> (default
+10 MB) closes the transport end.</p>
+<p>The second end, without which raising the limit would only postpone the overflow: the
+engine's <code>ContextManager</code> (ADR 0098) had TWO defects that
+kept compaction unreachable before the body overflowed —
+<code>estimate/1</code> counted only <code>content</code>, so <code>assistant</code> messages
+full of <code>toolCalls</code> cost ~zero tokens in the estimate; and the compaction
+window used only <code>context_window</code> (128,000 tokens in the gate
+agents), which gave ~350 KB before compacting — well after
+any reasonable transport ceiling. The EFFECTIVE window is now
+<code>min(context_window, teto_de_transporte)</code>, with the cut always on a
+ToolLoop ITERATION BOUNDARY (never separating an <code>assistant</code> with
+<code>toolCalls</code> from the <code>role: &quot;tool&quot;</code> ones that answer it — it would break the provider's
+tool-use protocol).</p>
+<p><strong>RN-412</strong> extends RN-411: <code>DEV_PENDING_TYPES</code> gained
+<code>dev.awaiting_gate</code> (the original argument — a gate can die and lock
+the dev agent in that state indefinitely) and also
+<code>dev.awaiting_approval</code>, by a new argument found in the investigation:
+the approval decision writes <code>proposed_actions.status</code>
+SYNCHRONOUSLY, but the dev agent's resumption via outbox/Oban is ASYNCHRONOUS —
+in the window between the two, nothing held the session, the same defect as
+RN-411 one level deeper.</p>
+<p><strong>The Executors/Overview tab</strong> had the sibling defect on the web side:
+<code>executionActivated</code> was derived from <code>events.some(...)</code> over the window
+of only 200 events of <code>useSessionEvents</code> — <code>execution.activated</code> is among the
+FIRST events of a session and left the window in any real
+execution, erasing the whole roster. The correct value already existed, aggregated
+over ALL the events, in the workspace summary (RN-090,
+<code>projects-summary.repository.ts</code>) — the two screens started consuming
+that value. A bonus finding along the way: <code>ExecutionSection</code> (Overview)
+recomputed <code>activated</code> again, independently, over the
+same window — a long execution went back to offering &quot;Activate execution&quot;
+as if it had never started; fixed along with it. <code>gatesEverOpened</code>
+suffers from the SAME class of defect and was DECLARED as a known
+limitation, not fixed here — fixing it would require changing the signature
+of <code>deriveAgentRoster</code>/<code>rosterFactsFromEvents</code>, out of scope for this
+targeted fix.</p>
+<h2 id="neo4j-como-grafo-de-conhecimento--a-fundação-rn-413414415-adr-00990100">Neo4j as a knowledge graph — the foundation (RN-413/414/415, ADR 0099/0100)</h2>
+<p>The product owner's request: Neo4j + <code>ollama-model-loader</code> (gemma:1b,
+yi-coder:1.5b, nomic-embed-text), explicitly inspired by the repository
+<a href="https://github.com/ErickWendel/neo4j-ai-experiments">ErickWendel/neo4j-ai-experiments</a>
+— acknowledgment recorded in ADR 0099 and in <code>prompts/README.md</code>, for the
+concrete inspiration of the &quot;prompt as a versioned file, not a string
+stuck in the code&quot; pattern and of the graph as agent memory.</p>
+<p>Two responsibilities, one foundation: <strong>versioned prompt templates</strong>
+(<code>PromptTemplate</code>/<code>PromptVersion</code>, idempotent by hash — RN-413) and
+<strong>relational memory</strong> (interactions, Psicólogo hypotheses with evidence,
+Anamnese profiles, handoffs — real consumption is a future wave, this delivery
+only builds the mechanism). The graph is DERIVED memory, never a source of
+truth; pgvector remains the chunks' vector index, without
+duplicating embeddings in two databases. The <code>neo4j-driver</code> driver in the api (not in the
+engine) — the api already owns all persistence and the RAG, the engine
+consumes through internal HTTP with a service token, as always.</p>
+<p><code>rag_search</code> (RN-414) closes the biggest gap of the existing RAG: no agent
+queried it, only the web &quot;Chat RAG&quot; tab. A new tool in the engine, its own ceilings
+(RN-150), degradation always visible at the start of the text to the model.
+<code>ollama-model-loader</code> (RN-415) closes a separate real bug: <code>nomic-embed-text</code>
+was never pulled automatically and the RAG degraded to lexical-only
+silently in any clean environment.</p>
+<p>First batch of templates extracted to <code>prompts/*.md</code> (ux-designer,
+Psicólogo, Anamnese, <code>ContextManager</code> summarization).</p>
+<h2 id="consumo-do-grafo--templates-sem-tocar-genservers-relevância-sem-substituir-recência-rn-416417-adr-0101">Graph consumption — templates without touching GenServers, relevance without replacing recency (RN-416/417, ADR 0101)</h2>
+<p><code>InstructionFiles</code> gained a <code>:graph</code> source (<code>db &gt; graph &gt; dir &gt; root</code> —
+the user's <code>instruction_patch</code> still beats everything), and THREE agents
+started TRYING to resolve the template from the graph before the inline text, which
+became a mandatory fallback: ux-designer (<code>graph_instruction_templates_enabled?</code>),
+Psicólogo and Anamnese (<code>graph_templates_enabled?</code>, the same key for the
+two). Two flags, not one — they would collide with OPPOSITE defaults between
+parallel fronts if they shared the key; both defaults are <code>false</code>.
+Only <code>context-manager-summarize</code> (of the four templates in the batch) was left without a
+consumer at the time — a gap ADR 0101 declared open and that closed
+later, through the FOURTH consumer of the SAME <code>graph_templates_enabled?</code>: the
+<code>ContextManager</code>'s summarization prompt (<code>prompt/1</code>, see RN-417).</p>
+<p><code>Psychologist.ContextBuilder</code>/<code>Anamnese.ContextBuilder</code> gained a
+SECOND context source — <code>rag_search</code>, with a query derived from the analysis
+trigger — in COMPOSITION with the usual recent/time-window
+read, never as a replacement: with no hit, the behavior is identical to
+before. The excerpts go into the EXISTING <code>Triage</code> budget, and
+the RAG's <code>degraded: true</code> is always visible in the context, never hidden.</p>
+<p>The graph writes itself: <code>GraphProjector</code> (api) drains a SECOND
+outbox line (<code>aggregateType: 'graph_projection'</code>, same transaction,
+a value the engine's filter — <code>IN ('session', 'task')</code> — never matches,
+avoiding the race with <code>Engine.Outbox.Drain</code>, which already drains <code>'session'</code>
+in ~2s) and calls the already existing write use cases. The engine
+NEVER writes to the graph directly — it preserves the event log as the single source of
+truth; the graph can be rebuilt by replay.</p>
+<p><strong>A real finding during verification, recorded because it teaches</strong>: the
+body limit test of RN-412 (<code>apps/api/test/main.spec.ts</code>) had a
+LATENT bug — <code>AppModule</code> imported STATICALLY at the top of the file evaluates
+<code>DrizzleModule</code> (which creates its connection pool at MODULE scope, not
+in a Nest factory) BEFORE <code>beforeAll</code> can point
+<code>DATABASE_URL</code> to the test database. It stayed masked while the local dev
+database was also migrated (same table, so the query &quot;found&quot; it even
+pointing at the wrong place); it got unstuck as soon as the dev database was
+recreated empty (by this very wave's real smoke test against
+Neo4j+Postgres). Fixed with a DYNAMIC <code>await import(...)</code> inside
+<code>beforeAll</code>, after <code>DATABASE_URL</code> is already set — it is the pattern to follow
+whenever a test needs to redirect <code>DATABASE_URL</code> to a real
+<code>AppModule</code>.</p>
+<nav class="site-pager"><a href="../explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a><a href="../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/historico-de-fases-parte-3.md">Edit this page</a><span>Updated 2026-11-08T20:15:18-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#programa-28--onda-1-frente-a-o-tema-deixa-de-ser-inalcançável-rn-182185">PROGRAMA 28 — Wave 1, front A: the theme stops being unreachable (RN-182..185)</a></li><li class="n2"><a href="#programa-28--onda-1-frente-d0-gasto-por-provider-rn-186188">PROGRAMA 28 — Wave 1, front D0: spend by provider (RN-186..188)</a></li><li class="n2"><a href="#programa-28--onda-2-frente-h2-ranking-de-modelos-sem-nota-inventada-rn-210-adr-0077">PROGRAMA 28 — Wave 2, front H2: model ranking without an invented score (RN-210, ADR 0077)</a></li><li class="n2"><a href="#programa-28--onda-2-frente-b-sidebar-recolhe-rn-195201">PROGRAMA 28 — Wave 2, front B: the sidebar collapses (RN-195..201)</a></li><li class="n2"><a href="#programa-28--onda-2-frente-c-moldura-de-tela-rn-202203-adr-0078">PROGRAMA 28 — Wave 2, front C: screen frame (RN-202/203, ADR 0078)</a></li><li class="n2"><a href="#programa-28--onda-2-frente-h1-foco-visível-adr-0036">PROGRAMA 28 — Wave 2, front H1: visible focus (ADR 0036)</a></li><li class="n2"><a href="#programa-28--onda-3-frente-h3-a-aba-criativo-ganha-kpis-sem-fingir-dado-que-não-existe-rn-227230">PROGRAMA 28 — Wave 3, front H3: the Criativo tab gets KPIs without faking data that doesn't exist (RN-227..230)</a></li><li class="n2"><a href="#programa-28--onda-4-frente-g2-o-chat-rag-ganha-pipeline-de-indexação-e-busca-híbrida-rn-231238-adr-0080">PROGRAMA 28 — Wave 4, front G2: the RAG Chat gets an indexing pipeline and hybrid search (RN-231..238, ADR 0080)</a></li><li class="n2"><a href="#programa-28--onda-4-frente-f1-ciclo-de-vida-do-container-vira-tabela-sem-orquestrador-rn-243248-adr-0081">PROGRAMA 28 — Wave 4, front F1: the container lifecycle becomes a table, without an orchestrator (RN-243..248, ADR 0081)</a></li><li class="n2"><a href="#programa-28--onda-5-frente-g3-o-chat-rag-ganha-aba-própria-rn-252254-adr-0082">PROGRAMA 28 — Wave 5, front G3: the RAG Chat gets its own tab (RN-252..254, ADR 0082)</a></li><li class="n2"><a href="#programa-28--onda-5-frente-f2-o-consumidor-real-do-ciclo-de-vida-do-container-não-o-terminal-rn-267268-adr-0083">PROGRAMA 28 — Wave 5, front F2: the real consumer of the container lifecycle (not the terminal) (RN-267/268, ADR 0083)</a></li><li class="n2"><a href="#programa-28--onda-5-frente-i-login-social-revoga-a-proibição-do-backlog-do-adr-0031-rn-272283-adr-0084">PROGRAMA 28 — Wave 5, front I: social login revokes the prohibition from the ADR 0031 backlog (RN-272..283, ADR 0084)</a></li><li class="n2"><a href="#auditoria-fluxoyml--código--o-plano-do-dev-lead-vira-aprovação-de-verdade-rn-284-adr-0086">fluxo.yml × code audit — the Dev Lead's plan becomes a real approval (RN-284, ADR 0086)</a></li><li class="n2"><a href="#ux-designer--o-quinto-agente-conversacional-antecipado-rn-285287-adr-0087">UX Designer — the fifth conversational agent, brought forward (RN-285..287, ADR 0087)</a></li><li class="n2"><a href="#staff--código-pronto-dormente-para-disparo-automático-rn-305306-adr-0088">Staff — code ready, dormant for automatic triggering (RN-305/306, ADR 0088)</a></li><li class="n2"><a href="#o-gate-implementavel-ativo--qa-estratégia-como-segundo-momento-do-qa-lead-adr-0090">The implementavel gate active — QA strategy as the qa-lead's second moment (ADR 0090)</a></li><li class="n2"><a href="#o-appsec-ganha-o-segundo-momento-do-secops-rn-360361-adr-0090">appsec gets the secops second moment (RN-360/361, ADR 0090)</a></li><li class="n2"><a href="#analyticsdelivery-metricas-viram-relatório-rn-320322-adr-0089">analytics/delivery-metricas become a report (RN-320..322, ADR 0089)</a></li><li class="n2"><a href="#secops-runtime-como-script-de-relatório-rn-375377-adr-0091">secops-runtime as a report script (RN-375..377, ADR 0091)</a></li><li class="n2"><a href="#platform-ganha-uma-primeira-entrega-relatório-de-telemetria-sob-demanda-rn-385386-adr-0092">platform gets a first delivery: an on-demand telemetry report (RN-385/386, ADR 0092)</a></li><li class="n2"><a href="#dbre-vira-dois-scripts-mecânicos-rn-400403-adr-0093">dbre becomes two mechanical scripts (RN-400..403, ADR 0093)</a></li><li class="n2"><a href="#auditoria-fluxoyml--código--onda-1-fluxoymlgatesyml-em-dia">fluxo.yml × code audit — Wave 1: fluxo.yml/gates.yml up to date</a></li><li class="n2"><a href="#auditoria-fluxoyml--código--onda-2-rn-160-no-backend-e-delegação-dev-lead--dev-rn-404405-adr-0094">fluxo.yml × code audit — Wave 2: RN-160 in the backend and Dev Lead → dev delegation (RN-404/405, ADR 0094)</a></li><li class="n2"><a href="#auditoria-fluxoyml--código--onda-6-última-o-gate-necessidade-validada-rn-406-adr-0095">fluxo.yml × code audit — Wave 6 (last): the necessidade-validada gate (RN-406, ADR 0095)</a></li><li class="n2"><a href="#auditoria-fluxoyml--código--b4-a-última-pendência-o-po-lê-métricas-de-produto-rn-407">fluxo.yml × code audit — B4 (the LAST pending item): the PO reads product metrics (RN-407)</a></li><li class="n2"><a href="#governancemd--o-critério-do-modo-community-não-o-mecanismo-dele">GOVERNANCE.md — the criterion of the community mode, not its mechanism</a></li><li class="n2"><a href="#smtp-real-no-mailsender-rn-408-adr-0096">Real SMTP in MailSender (RN-408, ADR 0096)</a></li><li class="n2"><a href="#n-agentes-online-no-dashboard--status-ao-vivo-nunca-presença-histórica-rn-409-adr-0097">&quot;N agents online&quot; on the dashboard — LIVE status, never historical presence (RN-409, ADR 0097)</a></li><li class="n2"><a href="#sessão-de-execução-não-fecha-mais-com-dev-agent-pendente-rn-411">An execution session no longer closes with a pending dev agent (RN-411)</a></li><li class="n2"><a href="#workspace-pessoal-automático-no-cadastro-rn-410">Automatic personal workspace on sign-up (RN-410)</a></li><li class="n2"><a href="#413-nas-prs-e-executores-sem-execução--as-duas-pontas-e-o-encadeamento-rn-412-adr-0098">413 on PRs and Executors &quot;without execution&quot; — the two ends and the chain (RN-412, ADR 0098)</a></li><li class="n2"><a href="#neo4j-como-grafo-de-conhecimento--a-fundação-rn-413414415-adr-00990100">Neo4j as a knowledge graph — the foundation (RN-413/414/415, ADR 0099/0100)</a></li><li class="n2"><a href="#consumo-do-grafo--templates-sem-tocar-genservers-relevância-sem-substituir-recência-rn-416417-adr-0101">Graph consumption — templates without touching GenServers, relevance without replacing recency (RN-416/417, ADR 0101)</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-en.json" data-base="../"></script></body>
+</html>

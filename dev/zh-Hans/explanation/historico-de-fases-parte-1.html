@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-Hans" data-locale="zh-Hans" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>阶段历史，第 1 部分：第 1 至 15 阶段 | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="菜单">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="搜索" aria-label="搜索" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="语言"><option value="../../explanation/historico-de-fases-parte-1.html">pt-BR</option><option value="../../en/explanation/historico-de-fases-parte-1.html">en</option><option value="../../ru/explanation/historico-de-fases-parte-1.html">ru</option><option value="../../zh-Hans/explanation/historico-de-fases-parte-1.html" selected>zh-Hans</option></select>
+<select data-seletor aria-label="环境"><option value="../../../dev/zh-Hans/explanation/historico-de-fases-parte-1.html" selected>dev</option><option value="../../../prd/zh-Hans/explanation/historico-de-fases-parte-1.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="切换主题">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 从这里开始</h2></summary><ul><li><a href="../index.html">首页</a></li><li><a href="../getting-started.html">快速开始</a></li></ul></details></section><section><details open><summary><h2>🎓 教程</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><a href="../tutorials/orquestrar-repositorios.html">编排多个仓库</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">Brabo 是如何构建的</a></li></ul></details></section><section><details open><summary><h2>🧭 实用指南</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html">开发 Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">GitHub Packages 令牌</a></li><li><a href="../runbook.html">Manual de operação</a></li><li><a href="../tutorials/adotar.html">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>参与贡献</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">我们如何撰写</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 概念</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">架构</a></li><li><a href="../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../explanation/modelo-de-time.html">团队模型与交付物流程</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>流程与流水线</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">分支策略</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../explanation/release-do-produto.html">产品发布</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>本地化</span></summary><ul><li><a href="../explanation/localizacao.html">本地化</a></li><li><a href="../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></details></li><li><details><summary><span>技术笔记</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 参考</h2></summary><ul><li><a href="../glossary.html">术语表</a></li><li><a href="../reference/componentes-da-doc.html">文档组件</a></li><li><a href="../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">业务规则</a></li><li><span>API 参考</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ 决策（ADR）</a></h2></section><section><details open><summary><h2>🗂️ 项目历史</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">时间线</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">shadcn 前后的界面（2026 年 10 月 31 日）</a></li><li><a href="../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../explanation/historico-de-fases-parte-1.html" aria-current="page">第 1 至 15 阶段，第 1 部分</a></li><li><a href="../explanation/historico-de-fases-parte-2.html">16–26 计划与轮次，第 2 部分</a></li><li><a href="../explanation/historico-de-fases-parte-3.html">28 计划与审计，第 3 部分</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">从本地 runner 起，第 4 部分</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../explanation/backlog.html">已分类的 backlog</a></li><li><details><summary><span>验证与测量</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../explanation/medicao-do-jev.html">Jev 工具路由器的测量</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="阶段历史第-1-部分第-1-至-15-阶段">阶段历史，第 1 部分：第 1 至 15 阶段</h1>
+<div class="historico" data-historico="2026-08-08"><p class="historico-faixa">2026年8月8日 的记录：描述当时的 Brabo</p>
+<p>从第 1 至 12 阶段，经过第 13 阶段（证明与分诊）、第 14 阶段（真实执行所要求的）和第 15 阶段（gate 作为数据），直到第 15 阶段之后（v2.5.0 和 v2.5.1）。
+文本原样移自<a href="historico-de-fases.html">阶段历史</a>，未作改写。今天有效的内容位于 RN 和 ADR 中。</p>
+</div>
+<h2 id="status">状态</h2>
+<ul>
+<li>第 1 阶段（MVP）——已完成：IAM/RBAC、带不可变 event log 的会话、带 LLM 路由器的聊天（Ollama + API）、token 的计量/预算、proposed_actions 管道 + permissions.json、带监督和终止事件的 Elixir/OTP 引擎。</li>
+<li>第 2 阶段——已完成：带契约测试套件和 capabilities 的 GitProvider（Local/GitHub/GitLab）、加密凭据、通过管道实现的幂等且可恢复的 Gitflow bootstrap、带实时进度的向导。</li>
+<li>第 3 阶段——已完成：Harness（PromptAssembler、ToolLoop、ContextManager、InstructionFiles、Hooks）、显式 handoff、带产物和领域校验的 Criativo、PO 和 Arquiteto agent。</li>
+<li>第 4 阶段——已完成：执行型 agent（在隔离 worktree 中按模块动态生成的 dev、作为 PR gate 的 QA 和 SecOps、提议式的 Infra）、受保护的合并锁、实时团队面板；真正的 Psicólogo 和闭环的 Anamnese。gate 经真实执行验证（ADR 0020）。</li>
+<li>第 5 阶段——已完成：非 root 生产镜像和 CI（ADR 0024），带 Kustomize 的 Kubernetes、按 Oban 队列的 HPA、NetworkPolicy 和 ESO（ADR 0025），graceful shutdown + OpenTelemetry + 仪表盘（ADR 0026），经测试可恢复的备份、运维手册和加固（ADR 0027）。</li>
+<li>DOC 阶段——已完成：docs/ 作为采用 Diátaxis 的唯一来源，website/ 中读取 docs/ 的 Docusaurus 站点，生成的参考文档，docs/.docmap.yml + CI 中的漂移检查（docs:check），社区层，已核实的 MIT，机制记录在 docs/explanation/documentation-workflow.md 中。</li>
+<li>第 6 阶段——已完成：机械化的分支策略（ADR 0030）——pr-police、带两种模式的 approval-ladder、带计算版本和按目录树锚定的 promote/tag-release、带自动反向传播的 backmerge gate、版本化的 ruleset。流水线端到端演练（v0.1.0 → v0.2.0），hotfix 链路经真实执行验证。</li>
+<li>第 7 阶段——已完成：取代 Keycloak 的 first-party auth——argon2id、Ed25519 access、带家族吊销的 refresh 轮换、渐进式 lockout、账号 token 和仅记日志的 MailSender（ADR 0031，RN-030..033）；以自有签发者进行原子切换，RBAC 不变，/internal/* 使用 service token，httpOnly cookie + CSRF，用户迁移并彻底移除 Keycloak（ADR 0032，RN-034/035）；23 个 controller 上的 OpenAPI，DTO 按类型锁定，表格测试要求元数据，生成带哈希清单的 docs/reference/api/（ADR 0033）。</li>
+<li>第 8 阶段——带裁剪地完成：agent 层级——以唯一 lead 作为对外联系人的领域、私有的内部委派（<code>delegations</code> 表，<code>area</code> 为 TEXT）、可追溯的合并结论、带来源的失败；QA 作为领域（Lead + 自动化 + 性能/安全，gate 的外部契约不变——第 4 阶段的测试套件无需修改即为绿色）；Infra 作为领域，带有按 provider 生成 CI 的 Workflows 子 agent；按领域划分的团队面板，以及以子 agent 为目标的 Psicólogo/Anamnese（ADR 0038）。
+当时的范围裁剪，已被第 14d 阶段撤销：
+<code>agent_areas</code>/<code>agent_area_members</code> 自那以后按项目存在，<code>max_parallel</code> 可配置——迫使这一点的是 dev 领域，第一个<strong>动态</strong>领域。仍被裁剪的只有<strong>按领域的预算</strong>（真正的预算上限仍然是项目、会话和任务）。
+<code>apps/web/src/lib/agents.ts</code> 中的列表保留了颜色、图标和寻址<strong>规则</strong>；dev 的成员来自表。</li>
+<li>第 9 阶段——已完成：针对现有 provider 运行的 LLMProvider 契约测试套件，基于 node:http、带<strong>空闲</strong>超时的 OpenAICompatibleProvider 基础，按 <code>code</code> 规范化的错误，两层 capabilities（ADR 0041）；目录同步——新发现的模型以禁用状态进入，消失的模型被标记而不是删除，价格冻结在 <code>token_usage</code> 中并带有仅追加的审计（ADR 0042）；按来源重新分组并带策展的 ModelPicker。
+第 9b 的六个 provider 由第 11 阶段引入（ADR 0043）。</li>
+<li>第 10 阶段——已完成：Bitbucket + GenericGitProvider <strong>通过</strong> dogfooding 交付（Brabo 第一次真实地构建 Brabo 自身，在一个手工 seed 的 fork 中，分批进行、任务之间重启，Criativo 在链路中为必需）。收获写在第 12d 阶段的 docs/explanation/primeiro-dogfooding.md 中——带有 arquivo:linha 的 17 个发现是真实的；<strong>定量</strong>的那一半（重启、干预、成本）仍是 <code>não medido</code>，因为观察表从未填写。三个可运维性 P1 由第 12 阶段关闭。其余 14 个仍然开放并列在收获中——不要顺手修复。</li>
+<li>第 11 阶段——已完成：第 9b 阶段的六个 provider 作为基础之上的配置，每个都对照官方文档从零调研（禁止继承怪癖）；LLM_PROVIDER_NAMES 从 3 个增加到 9 个；凭据 DTO 和连接测试器派生自单一列表；capability 只在经证明时才声明，现场有两次回退（DeepInfra 和 Vultr）；基础中唯一的新 hook（<code>parseErrorFrame</code>，+31 行）由 OpenRouter 证明为必要（ADR 0043）。
+使用真实凭据的 smoke 待办：由第 13 阶段吸收。</li>
+<li>第 12 阶段——已完成：dogfooding 之后的可运维性，三个 P1 发现在一次执行中关闭并证明（ADR 0047）。
+12a——采纳已有仓库：独立路由、<code>getRepo</code> 在写入前校验访问权限、两张表中的 <code>origin</code>（created|adopted），以及作为闸门的<strong>计划</strong>——描述差异、在决定为空期间不做任何更改的 dry-run；重新采纳会收敛（ADR 0044，RN-045/046）。
+12b——按事件重新调度 dev agent：持久化的状态机（working|awaiting_gate|idle|idle_tripped）对现有 outbox 的两个事件作出反应，<code>awaiting_gate</code> 保留 worktree（它是按 <strong>agent</strong> 而不是按任务的）直到 gate 结束，并带有显式 rearm 的断路器（ADR 0045，RN-047）。
+12c——以用户权威推进故事：按项目的 <code>story_promotion</code>，以 <code>manual</code> 作为<strong>新的默认值</strong>（定向回填把已有项目设为 <code>auto</code>），<code>proposed_ready</code> 作为提议而非状态，推进复用 TransitionStoryUseCase（发现 #13 的死代码），拒绝会把原因固定在 PO 的会话中退回给他（ADR 0046，RN-048）。
+12d——Noop 进入了 12b 的状态机；脚本
+<code>pnpm --filter api validacao:fase-12</code> 在标准不满足时以非 0 退出，并从数据库提取证据；第 10 阶段的收获已写成；docmap 覆盖 engine/dev 和 engine/agents。
+待办（执行验证；声明的 Local/Noop 限制）：由第 13 阶段吸收。</li>
+<li>未经明确请求，不要重构已完成的东西。</li>
+</ul>
+<h2 id="fase-13--concluída-em-2026-08-07-provar-de-verdade-e-triar">第 13 阶段——2026-08-07 完成（真正地证明并分诊）</h2>
+<p>没有新功能。该阶段关闭已声明的待办，证明 Local/Noop 验证明确无法证明的内容，并把 19 个开放的发现变成有优先级的计划。吸取的教训：第 10 阶段的手工表从未被填写——在这个阶段，<strong>所有</strong>指标都由脚本从 event log/token_usage 中提取，从不手工记录。</p>
+<h3 id="13a--fechar-as-pendências-declaradas">13a——关闭已声明的待办</h3>
+<ol>
+<li>2026-08-07 完成：<code>pnpm --filter api validacao:fase-12</code> 以 <code>0</code> 退出，event id 表在 docs/explanation/validacao-fase-12.md 中（TODO(humano) 已移除）。代价是四项修复——三项属于<strong>工具</strong>（实验对象诞生在 /tmp，engine 看不到；Noop 不打开 gate；Noop 死在 <code>pr_settled</code>），一项属于<strong>产品</strong>（发现 W：队列清空时 dev agent 会死掉）。</li>
+<li>2026-08-07 部分完成：<strong>OpenRouter</strong> 的 smoke 以真实凭据运行并通过（真实成本 US$ 0,000005，从 <code>token_usage</code> 读取）。其他五个仍被跳过——环境中没有它们的密钥。该 smoke 相对于 ADR 0049 已经腐坏，从未运行过；一并修正。带日期的结果在 docs/explanation/aceite-providers.md 中。</li>
+</ol>
+<h3 id="13b--concluída-em-2026-08-07-v240">13b——2026-08-07 完成（v2.4.0）</h3>
+<p>整条链路针对<strong>真实</strong> GitHub（<code>daneiel/test</code>）在十次执行中得到证明：远程采纳 → 带用户决定的计划 → 手动推进<strong>一个</strong>故事 → 真实的 dev agent 编写代码 → 提交、推送和<strong>远程</strong> PR → gate 打开 → 领域委派并附理由豁免 → 子 agent 在审批处<strong>挂起</strong> → 用户的拒绝<strong>恢复</strong>循环 → 由 LLM 给出 <code>changes_requested</code> 结论。engine 零重启。合并按设计排除在外（RN-014）。
+3. 脚本是 <code>pnpm --filter api validacao:real</code>，按<strong>成本</strong>分阶段（<code>--ate adocao|backlog|execucao</code>）——便宜的先单独跑，配置错误就是这样在花钱之前暴露出来的。需要<strong>在 api 容器内部</strong>执行：策略是共享卷中的文件，从主机执行时它会诞生在 engine 看不到的文件系统中。
+4. <code>pnpm --filter api medir:execucao</code> 是测量工具，并且已经<strong>证明</strong>：它独立复现了上一次 dogfooding 手工记录的数字（18 次调用，292.211 个 token，约 US$ 0,03）。
+5. 结果在 docs/explanation/validacao-real.md 中，包含十次执行以及每一次的教训。</p>
+<p>途中关闭了<strong>七个</strong> P1，全部由<strong>执行</strong>而非测试发现：W（队列为空时 dev agent 会死掉）、Y（搜索无法区分为空与未找到）、AA（git 凭据由点击者而不是付费者解析——RN-082）、AB（gate 把待决事项称作基础设施失败——ADR 0057）、AC（重定向让任何命令都无法批准）、路径范围中的 ReDoS（CodeQL HIGH），以及 postgrex 的 CVE。</p>
+<p>在该阶段打开的发现中，X 后来关闭了（第 14d 阶段，RN-085——迭代上限改为按 agent <strong>类型</strong>）。<strong>两个</strong>仍然开放，它们的论证比数字更有价值：Z 和 AD（动词 allowlist <strong>不</strong>收敛：动词、形式和调用是不同的空间，第 6/7/8 次执行各卡在其中一个），以及 AE（QA agent 试图修复它所评判的代码，违背了自己的 prompt——由两道独立的屏障约束：allowlist 和范围）。两者都不是要修复的 bug：它们是产品决定，记录在 docs/explanation/achados-execucao-real.md 中。</p>
+<p>该阶段交付的、比 PR 更重要的结论：通往自主的道路<strong>不</strong>经过放松策略。它经过让 agent <strong>等待</strong>决定而不是死掉——ADR 0057 为 gate 做到了这一点，扩展了 0052。</p>
+<h3 id="13c--concluída-a-triagem-virou-docsexplanationbacklogmd">13c——完成：分诊变成了 docs/explanation/backlog.md</h3>
+<p>19 个发现都已关闭（19 个中的 19 个）。该文档仍然是活的，并接收了 13b 的新发现。
+6. 分诊会议：阅读 docs/explanation/primeiro-dogfooding.md，把 19 个发现分为 P1/P2/P3，并提出按内聚阶段分组的建议（按主题及其相互依赖）、估计的相对成本（P/M/G）以及等待的风险。产出是<strong>提议</strong>——优先级的决定属于用户。
+7. 把完整的 backlog 整合到一份活文档中（docs/explanation/backlog.md 或等效文档）：已分诊的发现 + 旧条目——按领域的预算（ADR 0038；领域机制和 Dev Lead 随 ADR 0053 离开了 backlog，由第 14d 阶段实现）、手动 handoff 给所选 agent、MFA/社交/OIDC/联合（ADR 0031）、MailSender 中的真实 SMTP、部署（DEPLOY_ENABLED + Environments）、rc/rcfix 的回归（ADR 0030）、approval-ladder 的 community 模式、仪表盘上的“N 个 agent 在线”、带手动汇率的货币偏好。</p>
+<h2 id="fase-14--concluída-em-2026-08-07-o-que-a-execução-real-exigiu">第 14 阶段——2026-08-07 完成（真实执行所要求的）</h2>
+<p>hello world 的执行没有越过第一个回合，暴露了任何测试套件都没有捕获的缺陷，因为之前的一切都用<strong>本地</strong>模型运行。修复已经合入；剩下的是用户在执行期间决定的功能。</p>
+<h3 id="14a--operabilidade-dos-agentes-concluída">14a——agent 的可运维性（已完成）</h3>
+<ul>
+<li>回合失败变成了带来源的<strong>持久</strong> <code>agent.error</code>，agent 会在消息流中<strong>说话</strong>；四个对话型 agent 不再记录空的 <code>agent.response</code>（RN-059）。在最终帧中叙述、却不发出任何事件的错误路径也关闭了。</li>
+<li>Criativo 的聊天以邀请而不是空白开场：它被激活后等待用户先开口，界面现在会说明这一点——包括技术和代码<strong>不</strong>归它管。</li>
+<li>agent 消耗的密钥是 workspace <strong>owner</strong> 的（RN-058）。之前回合在一个 UUID 列中按 agent 的 <strong>SLUG</strong> 查找凭据：没有任何 agent 用过带凭据的 provider，只有 <code>ollama</code> 能工作。</li>
+<li>密钥花费报告，仅限 owner，agent 与人分开（RN-060）。</li>
+<li>GitHub 上的 Gitflow bootstrap：新建的仓库在整个 Git Data API 上返回 409，第一次提交改走 Contents API。测试中的伪造后端撒了谎（在 GitHub 返回 409 的地方返回 404）——一并修正，正是它让测试套件在产品坏掉时仍然是绿色。</li>
+</ul>
+<h3 id="14b--linha-do-tempo-em-árvore-concluída">14b——树状时间线（已完成）</h3>
+<p>每个 agent 一个分支，从第一个里程碑到它<strong>此刻</strong>正在做的事，100% 派生自界面已经获取的 event log。按时间排序的动态仍保留在活动列中：它回答“发生了什么”，树回答“谁在做什么”。</p>
+<p>在第 26 阶段之后重新审视（没有新阶段，与 12d/第 15 阶段之后同样的定点修正精神）：默认展开标准从仅“活跃/停止”改为活动<strong>最近</strong>的 5 个 agent——活跃的仍然优先（RN-118）；每个折叠的分支都有了自己的<strong>新内容</strong>计数器，在 <code>read-state.ts</code> 中按 agent 记录“最后查看”（与铃铛相同的机制，现在更细粒度）；<code>tool.call</code>/<code>tool.result</code>/<code>agent.response</code> 改为<strong>逐个</strong>展开（参数、结果、迭代），按 ToolLoop 的迭代边界分组。</p>
+<h3 id="14c--validação-automática-de-ui-concluída">14c——UI 的自动验证（已完成）</h3>
+<p>对比度变成了针对 <code>design/tokens.css</code> 的测试，已知的欠账被测量并锁定；布局（被截断的文本、视口外的菜单、被祖先裁切的下拉框、&lt; 24px 的目标）变成了 <code>scripts/dev/validacao-visual.js</code> 中的浏览器检查器。没有新依赖。</p>
+<h3 id="14d--concluída-paralelismo-decidido-pelo-lead-autorizado-por-você">14d——完成：并行度由 LEAD 决定，由你授权</h3>
+<p>分四个 PR 交付（#181、#182、#183、#184）。ADR 0053 变为<strong>已接受</strong>，彻底撤销了三项裁剪（Dev Lead、通过 module_map 的动态领域，以及通用的领域机制）。</p>
+<ol>
+<li><strong>领域变成了数据</strong>：按项目的 <code>agent_areas</code>/<code>agent_area_members</code>，<code>max_parallel</code> 默认 2。迫使这一点的是 <strong>dev</strong> 领域——第一个<strong>动态</strong>领域，其成员是 module_map 中每个模块各一个。无法在代码中枚举的东西必须是数据。</li>
+<li><strong>上限属于会话，而不属于模块</strong>（RN-083）。按模块计数会允许 N 个模块 × 2 而无需任何授权——换了个名字的旧漏洞。超过上限就变成 <code>proposed_action</code>。</li>
+<li><strong>可在配置中按领域配置</strong>，需要 <code>maintainer</code>，理由与激活执行相同：修改上限就是在不询问的情况下决定产品花多少钱。</li>
+<li><strong>当授权变成例行公事时，Anamnese 会提议调高</strong>——三次批准且<strong>没有</strong>拒绝（RN-086）。一次拒绝就会撤销这个信号：如果你曾经拒绝过，说明上限在发挥作用。</li>
+<li><strong>Dev Lead 存在了</strong>（RN-087），对话型，在已经交付给 Infra 的同一次确认中接收 Arquiteto 的 handoff，并提出计划：每个模块几个 agent 以及原因。<code>dev-&lt;modulo&gt;</code> 不再能通过 handoff 寻址——ADR 0038 的规则开始对 dev 生效，就像它早已对 QA 和 Infra 生效一样。</li>
+</ol>
+<p><strong>发现 X</strong> 在这里关闭（RN-085）：<code>TOOL_LOOP_MAX_ITERATIONS</code> 变成了按<strong>类型</strong>的上限——对话型 8，执行和 gate 60。谁能调高的标准<strong>不是</strong>“谁干得多”：而是谁底下有 <code>token_budget_micros</code> 在控制花费。<code>infra-workflows</code> 使用重型工具却保持在 8，因为它在没有预算的情况下运行。</p>
+<p><strong>该阶段自身的三个缺口，是我在写下一个切片时发现的，而且全是同一种失败</strong>：上限规则带着绿色测试合入，但产品并不演练它——没有任何路由调用该用例，批准动作并不执行任何东西，而该类型可以被 permissions.json 自动批准（由 RN-086 关闭）。测试零件不等于测试通往它的路径。</p>
+<p><strong>按声明的决定不在范围内</strong>（ADR 0053 第 5 项）：“Ativar execução”按钮更换所有者。同一项也声明过的、经由 <code>delegations</code> 表以 <code>area = &quot;dev&quot;</code> 进行的 Dev Lead → <code>dev-&lt;modulo&gt;</code> 委派，<strong>已不再</strong>超出范围——由 ADR 0094 关闭（fluxo.yml × 代码审计，第 2 波，RN-405）。按钮仍可撤销；执行仍走当前路径，gate 之后的修正仍直接交给打开 PR 的 dev。</p>
+<h2 id="fase-15--concluída-em-2026-08-07-gates-como-dado">第 15 阶段——2026-08-07 完成（gate 作为数据）</h2>
+<p>没有<strong>新的</strong> gate。该阶段把产品中<strong>已经</strong>隐式存在的 gate 提取到 docs/gates.yml 中，附带脚本验证和严重程度，与 docs/.docmap.yml 的精神相同。尚不存在的 agent gate（dev-lead、platform）以引用 backlog 的 <code>status: planned</code> 进入——从不是 active。gate 的外部契约<strong>不</strong>变。</p>
+<h3 id="15a--concluída-registro-declarativo">15a——完成：声明式注册表</h3>
+<ol>
+<li>包含现有 gate 的 docs/gates.yml（参见扩展了 ADR 0048 的 ADR 0054——event log 中的决定正是让 gate 的通过变得可测量的东西），schema 由测试校验。</li>
+<li>api 中读取注册表的加载器；内部读取 endpoint。</li>
+<li>脚本 <code>pnpm --filter api validacao:gates</code>，从 event log 中提取每个 active gate 的最后一次通过，如果某个 <code>block</code> gate 没有脚本验证的证据就以非 0 退出。</li>
+</ol>
+<p>并非每个 gate 在 event log 中都有证明，注册表会说明证明在哪里：<code>merge-protegida</code> 由<strong>测试</strong>保证（decide.ts 中的锁不发出自己的事件），<code>backmerge</code> 是 CI，状态在 .release/gate.json 中。因此每个 gate 都声明 <code>evidencia: event_log | teste | ci</code> 及其定位器——把它们降级为 <code>warn</code> 就是在产品最硬的锁上撒谎。</p>
+<h3 id="15b--concluída-consumo">15b——完成：消费</h3>
+<ol start="4">
+<li>团队面板显示每个故事/PR 正在等待的 gate，派生自注册表（而非硬编码）。</li>
+<li>docs/explanation/gates.md 解释该机制，纳入 docmap。</li>
+</ol>
+<h2 id="pós-fase-15--concluído-em-2026-08-08-v250-e-v251">第 15 阶段之后——2026-08-08 完成（v2.5.0 和 v2.5.1）</h2>
+<p>这不是计划中的阶段：它是第 15 阶段之后<strong>使用</strong>中发现的东西，之所以放在这里，是因为每一项的来源很重要。这些都不是来自脚本——而是来自在 Chrome 中浏览应用、阅读安全面板。</p>
+<p><strong>UI 缺陷，浏览时发现</strong>（RN-088..091）：</p>
+<ul>
+<li><code>429</code> 会变成<strong>白屏</strong>，而应用以更多流量回应。规则变成了通用的：每个界面都区分<strong>三种</strong>状态——加载中、错误（带 <code>trace_id</code> 和按钮）和空。<code>if (!dado) return null</code> 会把三者合而为一。</li>
+<li>仪表盘为每个项目发一次请求：<strong>3.824 → 12 req/min</strong>，借助
+<code>GET /workspaces/:id/projects-summary</code>。铃铛是缺失的另一半：每个周期 <strong>289 → 一次</strong>请求（RN-090/091）。</li>
+</ul>
+<p><strong>安全加固，两个面板都清零</strong>：</p>
+<ul>
+<li>ADR 0058——api 上封闭的 CSP（<code>default-src 'none'</code>），修订了 ADR 0027 的第 7 项；以及被限制在根目录内的 <code>projectId</code>（RN-092），它影响的不只是 <code>permissions.json</code>，还有<strong>授权</strong>终端的范围。</li>
+<li>ADR 0059——生产中没有默认值的 <code>GIT_OAUTH_STATE_SECRET</code>（RN-093）。默认值是<strong>公开</strong>的（<code>.env.example</code>），生产 compose 把它作为回退值提供：要求“非空”什么也抓不到，因为在真实的出错路径上该变量是<strong>已定义</strong>的。</li>
+<li>站不住脚的告警被附上书面理由<strong>驳回</strong>，从不静默——而驳回是用户的决定，不是 agent 的。</li>
+</ul>
+<p><strong>三条耗费了 CI 周期、值得作为规则的运维教训：</strong></p>
+<ol>
+<li><strong>PR 上的 CodeQL 绿色不能证明旧告警已关闭</strong>——PR 检查报告的是<strong>新</strong>告警。告警在<strong>默认</strong>分支的扫描中关闭，也就是说，只有在修复到达 <code>main</code> 之后。</li>
+<li><strong>Gitleaks 扫描的是 <code>refs/heads/*</code> 可达的提交，而不是目录树。</strong> 一个高熵值只要提交过一次，就会让那个分支的 CI 永远失败；在其上修正<strong>不能</strong>清除它。出路是让该提交变得不可达（从 <code>dev</code> 重建，并在打开新 PR <strong>之前删除</strong>旧分支）——绝不用 allowlist，那会让扫描器在那个路径上对所有提交失明。PR 的 ref 不在范围内。代表机密的 fixture 从一开始就<strong>不带</strong>熵。</li>
+<li><strong>位于另一个函数中的屏障，CodeQL 看不到</strong>——这就是三个 <code>js/path-injection</code> 在修复后仍然存在的原因。保留了集中检查（RN-092），在面板上付出代价：在每个调用方重复它，就会成为某天出现分歧的检查。</li>
+</ol>
+<nav class="site-pager"><a href="../explanation/historico-de-fases.html">阶段历史</a><a href="../explanation/historico-de-fases-parte-2.html">16–26 计划与轮次，第 2 部分</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/historico-de-fases-parte-1.md">编辑此页</a><span>更新于 2026-11-08T20:15:18-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#status">状态</a></li><li class="n2"><a href="#fase-13--concluída-em-2026-08-07-provar-de-verdade-e-triar">第 13 阶段——2026-08-07 完成（真正地证明并分诊）</a></li><li class="n3"><a href="#13a--fechar-as-pendências-declaradas">13a——关闭已声明的待办</a></li><li class="n3"><a href="#13b--concluída-em-2026-08-07-v240">13b——2026-08-07 完成（v2.4.0）</a></li><li class="n3"><a href="#13c--concluída-a-triagem-virou-docsexplanationbacklogmd">13c——完成：分诊变成了 docs/explanation/backlog.md</a></li><li class="n2"><a href="#fase-14--concluída-em-2026-08-07-o-que-a-execução-real-exigiu">第 14 阶段——2026-08-07 完成（真实执行所要求的）</a></li><li class="n3"><a href="#14a--operabilidade-dos-agentes-concluída">14a——agent 的可运维性（已完成）</a></li><li class="n3"><a href="#14b--linha-do-tempo-em-árvore-concluída">14b——树状时间线（已完成）</a></li><li class="n3"><a href="#14c--validação-automática-de-ui-concluída">14c——UI 的自动验证（已完成）</a></li><li class="n3"><a href="#14d--concluída-paralelismo-decidido-pelo-lead-autorizado-por-você">14d——完成：并行度由 LEAD 决定，由你授权</a></li><li class="n2"><a href="#fase-15--concluída-em-2026-08-07-gates-como-dado">第 15 阶段——2026-08-07 完成（gate 作为数据）</a></li><li class="n3"><a href="#15a--concluída-registro-declarativo">15a——完成：声明式注册表</a></li><li class="n3"><a href="#15b--concluída-consumo">15b——完成：消费</a></li><li class="n2"><a href="#pós-fase-15--concluído-em-2026-08-08-v250-e-v251">第 15 阶段之后——2026-08-08 完成（v2.5.0 和 v2.5.1）</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-zh-Hans.json" data-base="../"></script></body>
+</html>

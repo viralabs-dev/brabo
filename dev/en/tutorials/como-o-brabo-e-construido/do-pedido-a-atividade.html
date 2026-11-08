@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From request to task | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../../tutorials/como-o-brabo-e-construido/do-pedido-a-atividade.html">pt-BR</option><option value="../../../en/tutorials/como-o-brabo-e-construido/do-pedido-a-atividade.html" selected>en</option><option value="../../../ru/tutorials/como-o-brabo-e-construido/do-pedido-a-atividade.html">ru</option><option value="../../../zh-Hans/tutorials/como-o-brabo-e-construido/do-pedido-a-atividade.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../../dev/en/tutorials/como-o-brabo-e-construido/do-pedido-a-atividade.html" selected>dev</option><option value="../../../../prd/en/tutorials/como-o-brabo-e-construido/do-pedido-a-atividade.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="../../index.html">Home</a></li><li><a href="../../getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><details open><summary><span>How Brabo is built</span></summary><ul><li><a href="../../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/do-pedido-a-atividade.html" aria-current="page">From request to task</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/a-rodada.html">The round</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/a-regra-vira-codigo.html">The rule becomes code, and the docs go with it</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html">Quality and the permanent acceptance test</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/copie-o-metodo.html">Copy the method</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Developing Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Architecture</a></li><li><a href="../../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../../explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Branching policy</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../../explanation/release-do-produto.html">Product release</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="../../explanation/localizacao.html">Localization</a></li><li><a href="../../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="../../glossary.html">Glossary</a></li><li><a href="../../reference/componentes-da-doc.html">Doc components</a></li><li><a href="../../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../../business-rules.html">Business rules</a></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Timeline</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../../explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="from-request-to-task">From request to task</h1>
+<p><strong>Who it's for:</strong> anyone who receives loose requests (from an owner, a customer, a test finding) and wants to turn them into work that can start without a meeting.</p>
+<p><strong>After reading, you can:</strong> write a task that someone else, or an agent, can carry out without asking anything, and decide when it is ready to enter a round.</p>
+<h2 id="three-levels-each-with-a-role">Three levels, each with a role</h2>
+<ul>
+<li><strong>Epic:</strong> a goal that lasts weeks. Example: &quot;Corporate login&quot;.</li>
+<li><strong>Task:</strong> the smallest piece that ships on its own and can be verified. Example: &quot;ATV-001: login accepts SSO&quot;.</li>
+<li><strong>Card:</strong> the task as it appears on the Kanban board, with a one-line summary and a link to the note.</li>
+</ul>
+<p>The card is short on purpose. Everything that matters lives in the task's <strong>note</strong>, because the board changes every day and the note is the record.</p>
+<h2 id="the-board">The board</h2>
+<p>A simple board has the columns <strong>To do</strong>, <strong>In progress</strong>, <strong>Blocked</strong> and <strong>Done</strong>. Two rules keep it honest:</p>
+<ol>
+<li><strong>In progress is only what someone is working on right now.</strong> A stalled card goes to To do or Blocked.</li>
+<li><strong>The board is updated in the same step as the change.</strong> Started, finished, blocked: the card changes at that instant, with a date and evidence.</li>
+</ol>
+<h2 id="the-task-note">The task note</h2>
+<p>Every note has the same sections. They answer the questions an executor would ask:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The problem</td>
+<td>Why does this exist?</td>
+</tr>
+<tr>
+<td>What to do</td>
+<td>What changes, concretely?</td>
+</tr>
+<tr>
+<td>Where</td>
+<td>Which files or areas?</td>
+</tr>
+<tr>
+<td>Linked rules</td>
+<td>Which decisions and rules apply here?</td>
+</tr>
+<tr>
+<td>Acceptance</td>
+<td>How do we know it's finished?</td>
+</tr>
+<tr>
+<td>Questions</td>
+<td>What still depends on a human decision?</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <a href="copie-o-metodo.html">task template</a> comes with this structure ready.</p>
+<h2 id="what-explored-means">What &quot;explored&quot; means</h2>
+<p>A task only <strong>starts</strong> when it is <strong>explored</strong>: the note already has every requirement gathered and <strong>no open question</strong> for the owner. The card gets the <code>#explorada</code> tag at that moment.</p>
+<p>This avoids the most common waste: someone starts, finds out halfway that a decision was missing, and stops.</p>
+<div class="admonicao admonicao-nota" data-admonicao="nota"><p class="admonicao-titulo">An open question blocks</p>
+<p>If the note still has an unanswered question, the task does <strong>not</strong> go to execution. It goes to a <strong>discovery</strong>, in which someone reads the code and the docs, writes down what is missing and phrases the question with options and a recommendation. Only when the answer arrives does the tag go on.</p>
+</div>
+<h2 id="a-short-example">A short example</h2>
+<p>Request: &quot;I want login to accept SSO&quot;.</p>
+<ol>
+<li>The request becomes the epic &quot;Corporate login&quot; and the task ATV-001.</li>
+<li>Without the tag, ATV-001 goes through discovery. The person doing it finds two things: the login file and a doubt (&quot;which provider?&quot;).</li>
+<li>They write both in the note, with options A, B and C and a recommendation.</li>
+<li>The owner answers &quot;B&quot;. The answer goes into the note and the card gets <code>#explorada</code>.</li>
+<li>Only now can ATV-001 enter a <a href="a-rodada.html">round</a>.</li>
+</ol>
+<h2 id="when-a-finding-becomes-a-task">When a finding becomes a task</h2>
+<p>Every test finding, open issue or error seen in production follows the same path: it becomes a task with a card, and never stays only in a conversation. That way nothing is lost, and the board is the single list of what is missing.</p>
+<h2 id="learn-more">Learn more</h2>
+<ul>
+<li><a href="../orquestrar-repositorios/vida-de-uma-mudanca.html">The life of a change</a>, for what happens after the work starts.</li>
+<li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">How to contribute</a>, with the PR flow.</li>
+</ul>
+<nav class="site-pager"><a href="../../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a><a href="../../tutorials/como-o-brabo-e-construido/a-rodada.html">The round</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/como-o-brabo-e-construido/do-pedido-a-atividade.md">Edit this page</a><span>Updated 2026-11-08T20:11:19-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#three-levels-each-with-a-role">Three levels, each with a role</a></li><li class="n2"><a href="#the-board">The board</a></li><li class="n2"><a href="#the-task-note">The task note</a></li><li class="n2"><a href="#what-explored-means">What &quot;explored&quot; means</a></li><li class="n2"><a href="#a-short-example">A short example</a></li><li class="n2"><a href="#when-a-finding-becomes-a-task">When a finding becomes a task</a></li><li class="n2"><a href="#learn-more">Learn more</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-en.json" data-base="../../"></script></body>
+</html>
