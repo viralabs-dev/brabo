@@ -109,6 +109,7 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
     cat('🎓 Tutoriais', [
       pg('tutorials/from-zero-to-deliverable'),
       cat('Orquestrar repositórios', pgs(...orquestrar), { slug: 'tutorials/orquestrar-repositorios', colapsada: true }),
+      cat('Como o Brabo é construído', pgs(...['do-pedido-a-atividade', 'a-rodada', 'a-regra-vira-codigo', 'qualidade-e-o-teste-permanente', 'copie-o-metodo'].map((s) => `tutorials/como-o-brabo-e-construido/${s}`)), { slug: 'tutorials/como-o-brabo-e-construido', colapsada: true }),
     ], { espera: ['tutorial'] }),
     cat('🧭 Guias práticos', [
       ...pgs('how-to/desenvolver-o-brabo', 'how-to/usar-o-runner', 'how-to/token-do-github-packages', 'runbook', 'tutorials/adotar', 'explanation/usar-em-outra-org', 'rodadas-manuais'),
@@ -137,7 +138,7 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
     cat('🏛️ Decisões (ADR)', adrsPorTema(raiz).map((c) => ({ tipo: 'categoria', rotulo: c.rotulo, colapsada: true, itens: c.itens.map((s) => pg(s)) })), { slug: 'adr', colapsada: true, espera: ['decisao'] }),
     // sempre o ÚLTIMO grupo
     cat('🗂️ Histórico do projeto', [
-      ...pgs('tutorials/interface-antes-e-depois-shadcn', 'explanation/historico-de-fases', 'explanation/fase-28-pasta-do-usuario', 'explanation/fase-29-instalacao-de-uma-linha', 'explanation/fase-30-runner-por-maquina', 'explanation/backlog'),
+      ...pgs('historico/linha-do-tempo', 'tutorials/interface-antes-e-depois-shadcn', 'explanation/historico-de-fases', 'explanation/historico-de-fases-parte-1', 'explanation/historico-de-fases-parte-2', 'explanation/historico-de-fases-parte-3', 'explanation/historico-de-fases-parte-4', 'explanation/fase-28-pasta-do-usuario', 'explanation/fase-29-instalacao-de-uma-linha', 'explanation/fase-30-runner-por-maquina', 'explanation/backlog'),
       cat('Validações e medições', pgs('explanation/primeiro-dogfooding', 'explanation/execucao-real-hello-world', 'explanation/achados-execucao-real', 'explanation/validacao-fase-12', 'explanation/validacao-real', 'explanation/aceite-providers', 'explanation/medicao-do-idioma', 'explanation/medicao-do-jev', 'explanation/auditoria-fluxo-vs-codigo', 'explanation/auditoria-visual-rodada-29'), { colapsada: true }),
     ], { colapsada: true, espera: ['historico'] }),
   ];
