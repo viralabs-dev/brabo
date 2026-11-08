@@ -140,3 +140,7 @@ main pre, main table { max-width: 100%; overflow-x: auto; }
 figure.figura { margin: var(--space-4) 0; }
 figure.figura img { display: block; border: 1px solid var(--border); border-radius: var(--r-lg); }
 figure.figura figcaption { margin-top: var(--space-1); font-size: var(--fs-sm); color: var(--site-texto-2); max-width: 72ch; }
+.adr-filtro { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-3) 0; }
+.adr-filtro[hidden], .doc [hidden] { display: none; }
+.adr-filtro label { display: flex; align-items: center; gap: var(--space-1); font-size: var(--fs-sm); color: var(--site-texto-2); }
+.adr-filtro select { background: var(--surface-2); color: var(--site-texto); border: 1px solid var(--border); border-radius: var(--r-md, 6px); padding: 4px 8px; font: inherit; max-width: 100%; }

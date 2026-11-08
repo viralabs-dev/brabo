@@ -694,7 +694,7 @@ NÃO trata essa pasta como página da fonte pt-BR), com os rótulos da barra lat
 em `docs/i18n/<locale>/current.json` e os textos da moldura no próprio gerador
 (`scripts/docs/site/layout.mjs`). Uma página sem tradução num locale é servida a
 partir da fonte pt-BR no mesmo slug. A busca é por substring, com um índice por
-idioma carregado só quando a pessoa busca. Páginas cuja cópia pt-BR antiga estava
+idioma carregado só quando a pessoa busca; ele traz também os títulos de seção e as âncoras de variável (`#env-NOME`), então RN e variável se acham pelo nome. Páginas cuja cópia pt-BR antiga estava
 desatualizada ficam em `docs/` no idioma em que estão até o lote delas.
 
 O site em inglês saiu da raiz para `/brabo/<environment>/en/…`, e links
@@ -936,7 +936,7 @@ O [ADR 0253](../adr/0253-o-site-de-docs-deixa-o-docusaurus.md) tirou o site do
 Docusaurus. `pnpm docs:build` roda `docs:site` (escreve `build/docs-site/`,
 ignorado pelo git, com as mesmas URLs e âncoras do site anterior) e
 `docs:site:check` (checador de links e âncoras, locale duplicado e faixa de
-tradução). O núcleo mora em `scripts/docs/site/`: `paginas.mjs` descobre as
+tradução, mais o orçamento de peso: nenhuma página gerada passa de 150 KB de HTML em nenhum dos 4 idiomas; `scripts/docs/site/orcamento.mjs`, ADR 0287; a página de RN de um irmão acima do teto só avisa até ser partida). O núcleo mora em `scripts/docs/site/`: `paginas.mjs` descobre as
 páginas de cada idioma (a tradução onde existe, a fonte pt-BR no resto, então o
 link nunca sai do idioma), `render.mjs` converte o Markdown (âncora `{#id}`,
 admonições, Mermaid, realce com shiki, link `.md` para URL relativa),
@@ -1078,7 +1078,7 @@ flowchart LR
   U(("união")) --> S["site: mesmas URLs"]
 ```
 
-- **RN nova** vai em `<raiz>/docs/business-rules/<raiz>.md`, na raiz que hospeda a primeira ref `caminho:N`. A numeração é global e a âncora `{#rn-NNN}` não muda; `docs/business-rules.md` é índice gerado e `custo.md`/`autenticacao.md` são stubs congelados.
+- **RN nova** vai em `<raiz>/docs/business-rules/<raiz>.md`, na raiz que hospeda a primeira ref `caminho:N`; quando a área foi partida (ADR 0287), vai na ÚLTIMA `business-rules/<raiz>/parte-NN.md`, e o `<raiz>.md` é o índice com a grade congelada de âncoras. Parte que passa de 90 KB de Markdown: `node scripts/docs/partir-rn.mjs --repo <raiz>` (ou abra a `parte-NN+1.md`). A numeração é global e a âncora `{#rn-NNN}` não muda; `docs/business-rules.md` é índice gerado e `custo.md`/`autenticacao.md` são stubs congelados.
 - **Os irmãos entram pela trava.** `irmaos.lock` (um SHA por irmão) é o que o `montar-layout.sh` usa no `docs-check`, no `docs-audit` e no degrau `dev` do deploy; `BRABO_REF` vence a trava (o degrau `main` usa `BRABO_REF=main`). Só o `regenera-gerados.yml` sobe a trava, junto com os gerados (ADR 0274). Assim, `scripts.md`, o índice de RN, as contagens e as refs com símbolo só mudam na subida, e a PR comum não fica vermelha por merge num irmão.
 - **`docs:check`** soma todas as raízes e reprova RN duplicada entre elas. Com `--raiz <nome>` roda por raiz o que só depende dela (âncoras, refs internas, glob do docmap, drift) e deixa para o agregador o que cruza raízes (contagens, índice de RN, paridade, links entre idiomas). *Hoje o `--raiz` só restringe as refs com símbolo; os demais geradores rodam inteiros. Por isso o irmão não o usa: as refs dele são conferidas no próprio CI (ADR 0275).*
 - **Traduções** ficam em `<raiz>/docs/i18n/<locale>/`, com um só `traducao.json`. Mover arquivos exige dois commits: a mudança e depois o recarimbo de `traducao_de`.

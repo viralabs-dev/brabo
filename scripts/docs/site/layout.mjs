@@ -41,6 +41,12 @@ const esc = (s) =>
 
 const contem = (i, atual) => i.href === atual || !!i.itens?.some((f) => contem(f, atual));
 
+// Menu enxuto (AT-862): categoria recolhida COM `slug` e sem a página atual por dentro sai só como link, sem os filhos
+// (`<details>` fechado ainda pesa no HTML: a árvore de ADR sozinha eram 44 KB em toda página).
+const dentro = (i, atual) => !!i.itens?.some((f) => contem(f, atual));
+const enxuta = (i, atual) => !!(i.colapsada && i.href && i.itens?.length && !dentro(i, atual));
+const elo = (i, atual, pre) => `<a href="${pre}${esc(i.href)}"${i.href === atual ? ' aria-current="page"' : ''}>${esc(i.rotulo)}</a>`;
+
 // Categoria = <details> nativo (sem JS): aberta se não recolhida ou se contém a página atual.
 // O link da própria categoria (ex.: "Decisões (ADR)") vira o 1º item, fora do <summary>.
 function categoria(i, atual, pre, rotuloHtml) {
@@ -52,6 +58,7 @@ function categoria(i, atual, pre, rotuloHtml) {
 function lista(itens, atual, pre) {
   return `<ul>${itens
     .map((i) => {
+      if (enxuta(i, atual)) return `<li>${elo(i, atual, pre)}</li>`;
       if (i.itens?.length) return `<li>${categoria(i, atual, pre, `<span>${esc(i.rotulo)}</span>`)}</li>`;
       const ativo = i.href === atual ? ' aria-current="page"' : '';
       return `<li>${i.href ? `<a href="${/^https?:/.test(i.href) ? '' : pre}${esc(i.href)}"${ativo}>${esc(i.rotulo)}</a>` : `<span>${esc(i.rotulo)}</span>`}</li>`;
@@ -75,7 +82,7 @@ export function layout(p) {
     )
     .join('');
   const side = (p.nav ?? [])
-    .map((g) => `<section>${g.rotulo ? categoria(g, p.slug, pre, `<h2>${esc(g.rotulo)}</h2>`) : lista(g.itens, p.slug, pre)}</section>`)
+    .map((g) => `<section>${enxuta(g, p.slug) ? `<h2>${elo(g, p.slug, pre)}</h2>` : g.rotulo ? categoria(g, p.slug, pre, `<h2>${esc(g.rotulo)}</h2>`) : lista(g.itens, p.slug, pre)}</section>`)
     .join('');
   const toc = (p.toc ?? []).length
     ? `<aside class="site-toc"><h2>${esc(t.nestaPagina)}</h2><ul>${p.toc

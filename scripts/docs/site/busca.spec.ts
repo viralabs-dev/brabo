@@ -45,3 +45,23 @@ describe('busca', () => {
     expect(tagDeBusca({ locale: 'ru', base: '../' })).toContain('data-indice="../assets/busca-ru.json"');
   });
 });
+
+describe('busca: títulos de seção e âncoras (AT-862)', () => {
+  const pagina = {
+    slug: 'reference/configuration',
+    titulo: 'Configuração',
+    texto: 'x'.repeat(TETO_DE_TEXTO * 2) + ' ENGINE_PUBLIC_URL',
+    secoes: [{ id: 'api', texto: 'api' }, { id: 'env-ENGINE_PUBLIC_URL', texto: 'ENGINE_PUBLIC_URL' }, { id: 'configuracao', texto: 'Configuração' }],
+  };
+  const rn = { slug: 'business-rules/api/parte-09', titulo: 'API — parte 9', texto: 'x', secoes: [{ id: 'rn-497', texto: 'RN-497 — Um nome de regra' }] };
+  const idx = JSON.parse(indiceDoLocale([pagina, rn]).json);
+
+  it('acha a variável e a RN pelo nome, mesmo fora dos 4 000 caracteres, com o fragmento', () => {
+    expect(cliente.buscar(idx, 'engine_public_url')).toMatchObject([{ u: 'reference/configuration', h: 'env-ENGINE_PUBLIC_URL' }]);
+    expect(cliente.buscar(idx, 'RN-497')).toMatchObject([{ u: 'business-rules/api/parte-09', h: 'rn-497' }]);
+  });
+
+  it('seção com o mesmo título da página não duplica o resultado', () => {
+    expect(idx.filter((i: any) => i.t === 'Configuração')).toHaveLength(1);
+  });
+});

@@ -60,10 +60,29 @@ describe('layout do site', () => {
     expect(h).not.toMatch(/<script>/);
   });
 
-  it('categoria com href próprio sai aberta quando a página atual é o href dela', () => {
-    const nav = [{ rotulo: 'G', itens: [{ rotulo: 'ADR', href: 'adr.html', colapsada: true, itens: [{ rotulo: 'T', href: 't.html' }] }] }];
-    const h: string = layout({ ...base, slug: 'adr.html', nav });
-    expect((h.match(/<details[^>]*>/g) ?? []).map((d) => d.includes(' open'))).toEqual([true, true]);
+  it('menu enxuto (AT-862): categoria recolhida com href e sem a página atual por dentro sai só como link, sem os filhos', () => {
+    const nav = [
+      {
+        rotulo: 'Dec',
+        href: 'adr.html',
+        colapsada: true,
+        itens: [{ rotulo: 'Git', colapsada: true, itens: [{ rotulo: 'A1', href: 'adr/a1.html' }] }],
+      },
+      { rotulo: 'G', itens: [{ rotulo: 'Reg', href: 'br.html', colapsada: true, itens: [{ rotulo: 'P1', href: 'br/p1.html' }] }] },
+    ];
+    const fora: string = layout({ ...base, slug: 'z.html', nav });
+    expect(fora).toContain('<h2><a href="adr.html">Dec</a></h2>');
+    expect(fora).toContain('<li><a href="br.html">Reg</a></li>');
+    expect(fora).not.toContain('A1');
+    expect(fora).not.toContain('<summary><h2>Dec');
+    // na própria página da categoria também sai só o link (o índice de ADR não carrega a árvore de 280 folhas)
+    const propria: string = layout({ ...base, slug: 'adr.html', nav });
+    expect(propria).toContain('<h2><a href="adr.html" aria-current="page">Dec</a></h2>');
+    expect(propria).not.toContain('A1');
+    // dentro dela a árvore segue aberta
+    const dentro: string = layout({ ...base, slug: 'adr/a1.html', nav });
+    expect(dentro).toContain('A1');
+    expect(dentro).toContain('<details open><summary><h2>Dec</h2>');
   });
 
   it('renderizarPagina repassa colapsada da navegação ao menu', () => {
