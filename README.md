@@ -200,7 +200,7 @@ estado mais recente, use o `/dev/`.
 | [Introdução](https://viralabs-dev.github.io/brabo/prd/) | o panorama |
 | [Primeiros passos](https://viralabs-dev.github.io/brabo/prd/getting-started) | da instalação ao primeiro turno de agente |
 | [Arquitetura](https://viralabs-dev.github.io/brabo/prd/architecture) | code map, fronteiras, invariantes, dívida técnica |
-| [Regras de negócio](https://viralabs-dev.github.io/brabo/prd/business-rules) | as 883 RNs, cada uma com `arquivo:linha` e o teste que a cobre |
+| [Regras de negócio](https://viralabs-dev.github.io/brabo/prd/business-rules) | as 887 RNs, cada uma com `arquivo:linha` e o teste que a cobre |
 | [Runbook](https://viralabs-dev.github.io/brabo/prd/runbook) | deploy, rollout, restore, rotação de chave, incidente de custo |
 | [Glossário](https://viralabs-dev.github.io/brabo/prd/glossary) | harness, gate, handoff, DEK, outbox, ciclo K |
 | [Observabilidade](https://viralabs-dev.github.io/brabo/prd/explanation/observability) | como se segue uma ação pelos três processos: trace, log e o caminho entre camadas |
