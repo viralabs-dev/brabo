@@ -532,6 +532,7 @@ engine 镜像运行于 Alpine 3.24 上的 **Elixir 1.20.4 / OTP 29.1.1**（build
 | `E2E_WEB_URL` | `http://localhost:8088` | Playwright 打开的 `baseURL`，也是 CSRF 断言所依赖的源 |
 | `E2E_USER` | `owner@brabo.dev` | 套件登录用的账户 |
 | `E2E_PASSWORD` | 固定在 `e2e/suporte/api.ts` 中的种子密码 | 该账户的密码。它是**本地种子**的密码，绝不是真实密码——这里不重复写出，以便唯一的副本仍是代码中的那一份 |
+| `E2E_ENGINE_URL` | `http://localhost:4000` | `instalacao` spec（安装冒烟测试）访问 engine `/health` 的地址 |
 
 
 ### 本地集群与定期证明——`deploy/k8s/`
