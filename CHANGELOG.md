@@ -4,6 +4,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **feat(docs)**: AT-857. O site ganha os componentes de uma doc didática: avisos `:::nota|dica|cuidado|perigo` (nomes em inglês seguem aceitos, título por idioma), `:::historico AAAA-MM-DD` (data obrigatória), `:::passos`, `:::cartoes`, `:::abas` e `figure` para imagem com legenda; coluna de ~72ch; Mermaid com o tema completo dos tokens; `render.mjs` exporta `COMPONENTES`; o spec de contraste passa a medir `color-mix` e os fundos de aviso. Página `reference/componentes-da-doc` e usos em `from-zero-to-deliverable` e `orquestrar-repositorios`.
 - **docs(regressivo)**: AT-853. A página de regressivo diz que o `brabo-runner` não tem regressivo no catálogo: a PR dele se atesta pelo próprio CI (binário linux-x64 na PR, runner#28), e o contrato runner ↔ engine só é provado no TP-01 (RN-1075, `brabo-ci`).
 - **fix(docs)**: AT-846. A `docs/` do `brabo-qa` (e a de todo irmão posto em `.`) passa para `qa/docs` no layout, com raiz `qa` e dono `brabo-qa`: o "editar esta página" e o `../README.md` de `rodadas-manuais`, `e2e-portao/como-funciona` e `regressivo/como-funciona` deixam de apontar para o `brabo`. As URLs não mudam. As duas páginas órfãs entram no menu.
 

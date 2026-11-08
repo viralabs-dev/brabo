@@ -9,7 +9,9 @@ description: Checklist em ordem para replicar o padrão do Brabo em outro produt
 
 **Depois de ler, você consegue:** listar os repositórios que vai criar, na ordem, e dizer em cada um o que copia do Brabo e o que adapta.
 
-A ordem importa: cada passo só depende dos anteriores. Faça um de cada vez e **só avance quando a PR de exemplo do passo estiver verde**.
+:::dica[A ordem importa]
+Cada passo só depende dos anteriores. Faça um de cada vez e **só avance quando a PR de exemplo do passo estiver verde**.
+:::
 
 ## 0. Antes de tudo: o mapa
 
@@ -66,6 +68,10 @@ Faça este **primeiro entre os de código**, porque todos os outros o chamam.
 
 ## Depois que estiver de pé
 
-Gere o bloco "Onde se encaixa" de cada README a partir do `repos.yml`, ligue os checks de ordem de merge e de pin, e leia os [erros que já cometemos](erros-que-ja-cometemos.md) antes de achar que está tudo certo.
+:::passos
+1. Gere o bloco "Onde se encaixa" de cada README a partir do `repos.yml`.
+2. Ligue os checks de ordem de merge e de pin.
+3. Leia os [erros que já cometemos](erros-que-ja-cometemos.md) antes de achar que está tudo certo.
+:::
 
 > **TODO(humano):** esta trilha ainda não foi validada por uma pessoa de fora do projeto. A prova combinada é que alguém do time da SmartSky, lendo só a trilha, desenhe o mapa e narre o caminho de uma mudança até a release; o resultado e as divergências precisam ser registrados aqui.
