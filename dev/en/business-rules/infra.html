@@ -185,7 +185,12 @@ errado, e o browser tentava abrir um WebSocket contra um hostname que
 ele nunca resolve. <code>docker/docker-compose.yml</code> ganhou
 <code>ENGINE_PUBLIC_URL: ${ENGINE_PUBLIC_URL:-http://localhost:4000}</code> no
 serviço <code>api</code> — o MESMO default que <code>VITE_ENGINE_URL</code> já usa no
-serviço <code>web</code>, pelo mesmo motivo.</li>
+serviço <code>web</code>, pelo mesmo motivo. A AT-813 estendeu o item aos outros
+dois destinos: <code>docker-compose.install.yml</code> e <code>docker-compose.prod.yml</code>
+definem <code>ENGINE_PUBLIC_URL: ${ENGINE_PUBLIC_URL:-${VITE_ENGINE_URL:-http://localhost:4000}}</code>
+(navegador e runner no mesmo endereço) e o <code>deploy/k8s/base/api/deployment.yaml</code>
+lê <code>PUBLIC_ENGINE_URL</code> do <code>brabo-config</code>. Spec:
+<code>scripts/dev/composes-em-conformidade.spec.ts</code> (<code>a api diz ao runner o endereço público do engine</code>).</li>
 <li>Mesmo com a URL certa, um transporte que NUNCA abre (engine fora do ar,
 firewall, reconfiguração futura errada) não tinha teto nenhum:
 <code>apps/web/src/lib/terminal-channel.ts</code> nunca passava <code>reconnectAfterMs</code>
@@ -704,29 +709,23 @@ o engine e o ollama seguiam em todas as interfaces e expostos na rede local
 <p><strong>Regra.</strong> Toda porta publicada pelo <code>docker-compose.install.yml</code> começa com
 <code>${BRABO_BIND:-0.0.0.0}:</code> ou com <code>127.0.0.1:</code>:</p>
 <ul>
-<li>
-<p><strong>api, web e engine</strong> seguem o <code>BRABO_BIND</code>, com o mesmo default <code>0.0.0.0</code>
+<li><strong>api, web e engine</strong> seguem o <code>BRABO_BIND</code>, com o mesmo default <code>0.0.0.0</code>
 (o default da instalação não muda). O engine fica publicado porque o navegador
-(socket do Phoenix) e o <code>brabo-runner</code> o alcançam onde alcançam a api.</p>
-</li>
-<li>
-<p><strong>ollama e neo4j</strong> ficam sempre em <code>127.0.0.1</code>, qualquer que seja o bind: só
-a rede interna os usa, e o ollama não tem autenticação.</p>
-</li>
-<li>
-<p>O broker não publica porta nenhuma.</p>
-</li>
-<li>
-<p><strong>Código:</strong> <code>docker/docker-compose.install.yml:</code> (engine),
-<code>:</code> (ollama), <code>:102</code> (neo4j)</p>
-</li>
-<li>
-<p><strong>Teste:</strong> <code>scripts/dev/composes-em-conformidade.spec.ts:171</code> (o describe: toda
-porta, api/web/engine no bind, ollama/neo4j no loopback)</p>
-</li>
-<li>
-<p><strong>Origem:</strong> AT-811 — achado lateral da AT-801 (Rodada 249, 2026-11-07)</p>
-</li>
+(socket do Phoenix) e o <code>brabo-runner</code> o alcançam onde alcançam a api.</li>
+<li><strong>ollama e neo4j</strong> ficam sempre em <code>127.0.0.1</code>, qualquer que seja o bind: só
+a rede interna os usa, e o ollama não tem autenticação.</li>
+<li>O broker não publica porta nenhuma.</li>
+</ul>
+<p><strong>Dev (AT-814).</strong> O <code>docker/docker-compose.yml</code> e o
+<code>docker/docker-compose.observability.yml</code> seguem a mesma régua, com default
+<code>127.0.0.1</code>: api, web e engine em <code>${BRABO_BIND:-127.0.0.1}:</code>; postgres, neo4j,
+ollama, loki, prometheus e grafana sempre em <code>127.0.0.1:</code>. Spec: <code>describe('o dev não publica porta fora do bind')</code>. O <code>docker-compose.prod.yml</code> fica fora.</p>
+<ul>
+<li><strong>Código:</strong> <code>docker/docker-compose.install.yml:</code> (engine),
+<code>:</code> (ollama), <code>:102</code> (neo4j)</li>
+<li><strong>Teste:</strong> <code>scripts/dev/composes-em-conformidade.spec.ts:171</code> (o describe: toda
+porta, api/web/engine no bind, ollama/neo4j no loopback)</li>
+<li><strong>Origem:</strong> AT-811 — achado lateral da AT-801 (Rodada 249, 2026-11-07)</li>
 </ul>
 <nav class="site-pager"><a href="../business-rules/engine.html"></a><a href="../business-rules/produto.html"></a></nav>
 </article>

@@ -1514,7 +1514,9 @@ ticket que a api entrega ao navegador (<code>POST .../terminal-ticket</code>) le
 rede do compose. <code>docker/docker-compose.yml</code> agora define
 <code>ENGINE_PUBLIC_URL: ${ENGINE_PUBLIC_URL:-http://localhost:4000}</code> no
 serviço <code>api</code> (o mesmo default que <code>VITE_ENGINE_URL</code> já usa para o <code>web</code>).
-Confirme de dentro do container:</p>
+A instalação e o prod têm a mesma variável, com <code>VITE_ENGINE_URL</code> como
+default (<code>docker exec brabo-api-1 printenv ENGINE_PUBLIC_URL</code>). Confirme de
+dentro do container:</p>
 <pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> brabo-dev-api-1</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string-expression)"> 'echo $ENGINE_PUBLIC_URL'</span></span>
 <span class="line"><span style="color:var(--shiki-token-comment)"># esperado: http://localhost:4000 (ou o endereço público real do seu engine)</span></span>
 <span class="line"></span></code></pre>
