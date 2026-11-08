@@ -226,6 +226,17 @@ including in production: sending email is the operator's opt-in. Decision in
 > carry structure for rich bodies, and a template engine would be an
 > injection surface with no upside. The link uses `WEB_ORIGIN` (above).
 
+### Recovering a password without SMTP {#recuperar-a-senha-sem-smtp}
+
+On an installation `MAIL_TRANSPORT=log` is the default and `install.sh` does not enable SMTP, so the reset e-mail is never sent, for **any** account, the owner's included. Without SMTP, go through the api log:
+
+1. In a **temporary** override of the install compose, set `AUTH_MAIL_LOG_TOKENS=true` on the `api` service and recreate only `api`.
+2. On the login screen, ask to reset the password for the account's e-mail.
+3. Take the reset link, token included, from `docker compose logs api` and set the new password in the UI.
+4. **Remove the override** and recreate `api`: a token in an application log is a plaintext credential ([ADR 0032](../adr/0032-corte-do-keycloak-e-sessao-em-cookie.md)).
+
+> **TP-01 against `main`.** TP-01 signs in with the **owner's** account (`first-account`), never `owner@brabo.dev`: role quick access exists only in `local` (RN-984).
+
 ### Development seed
 
 Consumed by `pnpm --filter api seed`, not by the running api. Without an
@@ -235,7 +246,7 @@ smoke test comes from.
 | variable | default | what it does |
 |---|---|---|
 | `BRABO_SEED_PASSWORD` | `brabo12345678` | password of the seeded users (`owner@brabo.dev`, `maintainer@brabo.dev`, `developer@brabo.dev`, `viewer@brabo.dev`), created with email **already verified** |
-| `BRABO_AMBIENTE` | — | `dev`, `prd` or `local` (ADR 0245, RN-984). Only `local` registers `GET`/`POST /auth/dev-login`, the quick access by role; absent, empty or any other value, the route does not exist. The Actions image is marked `dev`/`prd` at build (`AMBIENTE` in `docker-bake.hcl`, file `/app/AMBIENTE_DA_IMAGEM`) and wins over the variable. The DEV compose sets it to `local`; the install one leaves it empty |
+| `BRABO_AMBIENTE` | — | `dev`, `prd` or `local` (ADR 0245, RN-984). Only `local` registers `GET`/`POST /auth/dev-login`, the quick access by role; absent, empty or any other value, the route does not exist. The Actions image is marked `dev`/`prd` at build (`AMBIENTE` in `docker-bake.hcl`, file `/app/AMBIENTE_DA_IMAGEM`) and wins over the variable. The DEV compose sets it to `local`; the install one leaves it empty. If the installation was ever `local`, the `<role>@brabo.dev` accounts and the `acesso-rapido-local` workspace created then **stay in the database** once it runs with the variable empty: the route disappears, the accounts do not, and none has a usable password (random, discarded at creation). A fresh release installation has no such accounts; see [Recovering a password without SMTP](#recuperar-a-senha-sem-smtp) |
 | `BRABO_BIND` | `0.0.0.0` | address on which the install compose publishes the api and web ports. With `BRABO_AMBIENTE=local`, set `127.0.0.1`: otherwise anyone on the network gets in as any role |
 | `BRABO_FORCE_SEED` | — | unlocks the seed with `NODE_ENV=production`, where it **refuses to run** by default. Do not set it in a real environment: the account is born with a known, verified password |
 

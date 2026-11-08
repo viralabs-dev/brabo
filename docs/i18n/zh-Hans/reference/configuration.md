@@ -132,6 +132,17 @@ traducao_de: 3016564b5bb5b0752711c07b9babefd252829a8d
 
 > 邮件正文是**纯文本**，没有 HTML——`MailSender` 端口不携带富文本正文的结构，而模板引擎会是一个毫无收益的注入面。链接使用 `WEB_ORIGIN`（见上文）。
 
+### 无 SMTP 时找回密码 {#recuperar-a-senha-sem-smtp}
+
+安装默认 `MAIL_TRANSPORT=log`，`install.sh` 不会启用 SMTP，因此**任何**账户（包括所有者）都收不到重置邮件。没有 SMTP 时，经由 api 日志：
+
+1. 在安装 compose 的**临时** override 中，为 `api` 服务设置 `AUTH_MAIL_LOG_TOKENS=true`，只重建 `api`。
+2. 在登录页为该账户的邮箱申请重置密码。
+3. 从 `docker compose logs api` 取得带令牌的重置链接，在界面中设置新密码。
+4. **撤销 override** 并重建 `api`：应用日志中的令牌就是明文凭据（[ADR 0032](../adr/0032-corte-do-keycloak-e-sessao-em-cookie.md)）。
+
+> **针对 `main` 的 TP-01。** TP-01 使用**所有者**账户（`first-account`）登录，而非 `owner@brabo.dev`：按角色快速访问只存在于 `local`（RN-984）。
+
 ### 开发种子数据
 
 由 `pnpm --filter api seed` 使用，而不是运行中的 api。没有外部 IdP，登录本地 web 和 smoke 所需的凭据就来自这里。
@@ -139,7 +150,7 @@ traducao_de: 3016564b5bb5b0752711c07b9babefd252829a8d
 | 变量 | 默认值 | 作用 |
 |---|---|---|
 | `BRABO_SEED_PASSWORD` | `brabo12345678` | 种子用户（`owner@brabo.dev`、`maintainer@brabo.dev`、`developer@brabo.dev`、`viewer@brabo.dev`）的密码，创建时邮箱**已验证** |
-| `BRABO_AMBIENTE` | — | `dev`、`prd` 或 `local`（ADR 0245，RN-984）。只有 `local` 会注册 `GET`/`POST /auth/dev-login`，即按角色的快速访问；缺失、为空或其他值时，该路由不存在。Actions 的镜像在构建时被标记为 `dev`/`prd`（`docker-bake.hcl` 的 `AMBIENTE`，文件 `/app/AMBIENTE_DA_IMAGEM`），并优先于该变量。DEV 的 compose 将它设为 `local`；安装用的 compose 将它留空 |
+| `BRABO_AMBIENTE` | — | `dev`、`prd` 或 `local`（ADR 0245，RN-984）。只有 `local` 会注册 `GET`/`POST /auth/dev-login`，即按角色的快速访问；缺失、为空或其他值时，该路由不存在。Actions 的镜像在构建时被标记为 `dev`/`prd`（`docker-bake.hcl` 的 `AMBIENTE`，文件 `/app/AMBIENTE_DA_IMAGEM`），并优先于该变量。DEV 的 compose 将它设为 `local`；安装用的 compose 将它留空。若该安装曾经是 `local`，当时创建的 `<角色>@brabo.dev` 账户和 `acesso-rapido-local` 工作区在变量置空后**仍留在数据库中**：路由消失，账户不会消失，且都没有可用密码（创建时为随机并丢弃）。全新的发布版安装没有这些账户；见[无 SMTP 时找回密码](#recuperar-a-senha-sem-smtp) |
 | `BRABO_BIND` | `0.0.0.0` | 安装用 compose 发布 api 和 web 端口所用的地址。当 `BRABO_AMBIENTE=local` 时，请设为 `127.0.0.1`：否则网络上的任何人都能以任意角色进入 |
 | `BRABO_FORCE_SEED` | — | 在 `NODE_ENV=production` 下解锁种子，默认情况下种子在那里**拒绝运行**。不要在真实环境中定义它：账户会带着已知且已验证的密码被创建 |
 

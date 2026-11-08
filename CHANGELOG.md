@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: `configuration.md` ganha "Recuperar a senha sem SMTP" (override temporário com `AUTH_MAIL_LOG_TOKENS=true`, link no `docker compose logs api`, desfazer depois) e a linha do `BRABO_AMBIENTE` diz que as contas `<papel>@brabo.dev` e o workspace de acesso rápido criados em `local` ficam no banco; o TP-01 contra a `main` usa a conta do titular (AT-802).
+
 - **ci**: o E2E do instalador roda o job de macOS em `macos-15`. O `macos-14` deixou de ser suportado pelo GitHub ("The configuration 'macos-14-arm64-us-default' is not supported"), e o job era cancelado em 1 s: o E2E da v2.1.2 saiu `cancelled` (mesma causa da AT-794 no runner).
 
 - **release**: o `componentes.json` volta a apontar para as releases atuais (api v2.1.0, engine v2.1.0, web v1.2.0, broker v1.2.0, backup e `infra` v1.3.0). A pin ficou em v1.0.x e o Trivy do `Release` reprovava o broker v1.0.0 (docker-cli 29.9.2: CVE-2026-116587 e CVE-2026-116591, corrigidos em 29.9.3); os cinco digests atuais passam no Trivy com as flags do workflow, sem allowlist (AT-793).
