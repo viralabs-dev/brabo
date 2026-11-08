@@ -570,7 +570,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从代码中提取的清单：运行时读取 **187 个变量**。全部都在上方表格中有描述。
+从代码中提取的清单：运行时读取 **189 个变量**。全部都在上方表格中有描述。
 
 每个来源都标记为 **产品**——运维安装的人在部署 `.env` 中设置的内容——或 **工具**，仅由 CI 和开发产品的人读取。工具变量绝不应出现在运维人员的 `.env` 中。
 
@@ -749,14 +749,15 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 - `OLLAMA_HOST` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
 - `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub>
 
-**e2e** — 4 个变量 · 工具
+**e2e** — 5 个变量 · 工具
 
 - `E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
+- `E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
 - `E2E_USER` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_WEB_URL` <sub>(e2e/playwright.config.ts)</sub>
 
-**deploy/k8s** — 23 个变量 · 工具
+**deploy/k8s** — 24 个变量 · 工具
 
 - `API_URL` <sub>(deploy/k8s/rollout-test.sh)</sub>
 - `BRABO_CLUSTER_NAME` <sub>(deploy/k8s/bootstrap.sh)</sub>
@@ -772,6 +773,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 - `HPA_JOBS` <sub>(deploy/k8s/hpa-test.sh)</sub>
 - `HPA_TIMEOUT` <sub>(deploy/k8s/hpa-test.sh)</sub>
 - `KUBE_VERSION` <sub>(deploy/k8s/validate.sh)</sub>
+- `NPMRC` <sub>(deploy/k8s/bootstrap.sh)</sub>
 - `PROJECT_WORKSPACES_ROOT_NO_POD` <sub>(deploy/k8s/test-reprojecao-artefatos.sh)</sub>
 - `RESTORE_KEEP_JOB` <sub>(deploy/k8s/test-restore.sh)</sub>
 - `RESTORE_MUTACAO` <sub>(deploy/k8s/test-restore.sh)</sub>
