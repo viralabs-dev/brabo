@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs(readme)**: AT-867. A linha de badges do README separa o CI e a versão da `dev` e da `main`: CI pelo `ci.yml` (o `docs-check` roda só em PR, então o badge da `main` vem do `ci.yml`), versão pela última tag `-dev` e pela release final. Licença, documentação e Ko-fi continuam; as três traduções ganham a mesma linha.
+
 - **docs(regressivo)**: AT-853. A página de regressivo diz que o `brabo-runner` não tem regressivo no catálogo: a PR dele se atesta pelo próprio CI (binário linux-x64 na PR, runner#28), e o contrato runner ↔ engine só é provado no TP-01 (RN-1075, `brabo-ci`).
 - **fix(docs)**: AT-846. A `docs/` do `brabo-qa` (e a de todo irmão posto em `.`) passa para `qa/docs` no layout, com raiz `qa` e dono `brabo-qa`: o "editar esta página" e o `../README.md` de `rodadas-manuais`, `e2e-portao/como-funciona` e `regressivo/como-funciona` deixam de apontar para o `brabo`. As URLs não mudam. As duas páginas órfãs entram no menu.
 
