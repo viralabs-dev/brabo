@@ -26,7 +26,7 @@
 
 <sub>Идея превращается в правила, а то, чего не хватает, — в вопрос: Креатив возвращает сомнения в чат.</sub>
 
-[Отличия](#отличия) · [Возможности](#возможности) · [Что это](#что-это) · [Начало](#начало) · [Репозитории](#репозитории-brabo) · [Релиз](#как-собирается-релиз) · [Документация](#документация) · [Лицензия](#лицензия)
+[Отличия](#отличия) · [Возможности](#возможности) · [Для чего он нужен](#для-чего-он-нужен) · [Как использовать](#как-использовать) · [Как разрабатывать](#как-разрабатывать) · [Документация](#документация) · [Лицензия](#лицензия)
 
 </div>
 
@@ -82,86 +82,27 @@ Pull request, прошедшие гейты, приходят в чат, и од
 
 ---
 
-## Что это
+<!-- vitrine:fim -->
 
-Brabo оркестрирует специализированных агентов — Креатив, PO, Архитектор,
-Dev Lead и разработчики по модулям, Infra, QA, SecOps, Психолог и Анамнез —
-работающих над настоящим git-репозиторием с автоматически настроенным Gitflow.
+## Для чего он нужен
 
-У областей (dev, QA, Infra) есть **lead** — единственный внешний адрес: кто
-передаёт handoff, говорит с lead, а делегирование субагентам — внутреннее дело
-области.
+Создание ПО с ИИ-агентами обычно означает доверие промптам. Brabo оркестрирует команду агентов (Креативный, PO,
+Архитектор, Dev Lead, разработчики модулей, Infra, QA и SecOps) над настоящим git-репозиторием, а всё, что имеет внешний
+эффект (команда, коммит, PR, расход токенов), рождается как предложение и проходит политику проекта. Слияние в защищённую
+ветку и изменение инструкции агента политика не разрешает вовсе: это решение владельца.
 
-Чем он отличается от ассистента для кода:
+Этот репозиторий — входная дверь: здесь документация, сайт, установщик и релиз. Код живёт в соседних репозиториях,
+разделённых по слоям ([почему](https://viralabs-dev.github.io/brabo/prd/ru/adr/0252-o-brabo-vira-um-conjunto-de-repositorios)).
 
-**Ничто с внешним эффектом не происходит само.** Команда терминала, commit,
-push, PR, merge, расход токенов — всё рождается как `proposed_action`, проходит
-политику проекта (`deny` всегда сильнее `allow`) и только потом выполняется.
-Два случая не может разрешить даже политика: **merge в защищённую ветку** и
-**изменение инструкции агента**. Это потолки, применяемые после всей политики,
-а не значения по умолчанию.
+## Где он вписывается
 
-**Агенту не доверяют по устройству, и система это учитывает.** Потолок
-итераций, потолок исправлений на задачу, бюджет, отклоняющий вызов, закрытый
-каталог того, что может профилировать Анамнез. Промпт не гарантия; код —
-гарантия.
-
-**Всё записано и неизменяемо.** Журнал событий — только на добавление, с
-плотной нумерацией в каждой сессии. Именно это делает доказательства Психолога
-отслеживаемыми, стоимость — проверяемой, а бэкап — проверяемым.
-
-**Команда становится лучше, а вы остаётесь в контуре.** Психолог предлагает
-гипотезы, опирающиеся на реальные события; Анамнез выводит ваш профиль
-квалификации и предлагает версионированные патчи инструкций. Каждый патч
-требует вашего согласия, а откат создаёт новую версию вместо удаления истории.
-
-## Начало
-
-### Установить Brabo
-
-```bash
-curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh && bash install.sh
-```
-
-Установщик — это скрипт на bash: скачайте файл и запустите его через `bash`,
-никогда не через `curl | sh`. Прежде чем использовать любой файл, он проверяет
-подпись `checksums.txt` релиза, поднимает стек с образами, закреплёнными по
-digest, создаёт первую учётную запись и включает runner на этой машине. Каждый
-шаг сообщает, что сделал, а то, что не удалось, названо в конце.
-`bash install.sh --print-plan` показывает, что он сделал бы, ничего не выполняя.
-Пошаговое описание — в [Первых шагах](https://viralabs-dev.github.io/brabo/prd/ru/getting-started).
-
-### Разрабатывать Brabo
-
-Код живёт в соседних репозиториях, которые
-[`brabo-workspace`](https://github.com/viralabs-dev/brabo-workspace) клонирует рядом друг с другом. Среду
-разработки поднимает [`brabo-infra`](https://github.com/viralabs-dev/brabo-infra), собирая каждый сервис
-из этих клонов:
-
-```bash
-git clone https://github.com/viralabs-dev/brabo-workspace.git ~/dev/brabo
-cd ~/dev/brabo && ./clonar-tudo.sh
-cd brabo-infra && make dev
-```
-
-`make dev` проверяет, что соседние репозитории на месте, и поднимает Docker
-Compose. Меню повседневных команд (Docker, Kubernetes, база данных и тесты)
-тоже живёт в `brabo-infra`: `bash scripts/dev/bootstrap.sh`. Подробности — в
-его README.
-
-Этот репозиторий хранит документацию, установщик и релиз. Чтобы работать с
-документацией: `pnpm install`, `bash scripts/docs/montar-layout.sh` (подтягивает
-документацию соседних репозиториев), `pnpm docs:check` и `pnpm docs:build`.
-
-## Репозитории Brabo
-
-Brabo разделён на репозитории по слоям ([ADR 0252](https://viralabs-dev.github.io/brabo/prd/ru/adr/0252-o-brabo-vira-um-conjunto-de-repositorios)).
-`brabo` — центр документации: сайт <https://viralabs-dev.github.io/brabo/prd/ru/> объединяет папки `docs/` соседних
-репозиториев в одно дерево.
+`brabo` — центр документации: сайт собирает папки `docs/` соседей в одно дерево. Для продукта он фиксирует версию каждого
+компонента в `componentes.json`. Если он меняется, меняются установка и сайт.
+Стек: NestJS и PostgreSQL с pgvector (api), Elixir, Phoenix и Oban (engine), React 19 (web), CLI `brabo-runner` на машине
+пользователя, Docker Compose и Kubernetes (infra); Ollama и Neo4j необязательны, Redis нет (очереди в Postgres).
 
 <!-- mapa:inicio -->
 <!-- Gerado do repos.yml do brabo por brabo-ci:scripts/ci/mapa-dos-repos.ts. Não edite à mão. -->
-### Onde se encaixa
 
 **brabo** — Porta de entrada do produto — documentação agregada, site, instalador e release. Quem instala usa o `install.sh` e as imagens e o binário das tags de `componentes.json`; o brabo-infra o clona nas aferições cruzadas.
 
@@ -196,110 +137,79 @@ flowchart LR
   brabo -->|código| brabo_infra
   brabo -->|doc| brabo_api & brabo_engine & brabo_web & brabo_runner & brabo_broker & brabo_contracts & brabo_infra & brabo_ci & brabo_qa
   brabo -->|workflow| brabo_ci
-  brabo_api -->|contrato| brabo_contracts
-  brabo_api -->|código| brabo_infra
-  brabo_api -->|workflow| brabo_qa & brabo_ci
-  brabo_engine -->|contrato| brabo_contracts
-  brabo_engine -->|código| brabo_api & brabo_runner
-  brabo_engine -->|workflow| brabo_qa & brabo_ci
-  brabo_web -->|contrato| brabo_contracts & brabo_api
-  brabo_web -->|workflow| brabo_qa & brabo_ci
-  brabo_runner -->|contrato| brabo_contracts
-  brabo_runner -->|workflow| brabo_ci
-  brabo_broker -->|contrato| brabo_contracts
-  brabo_broker -->|workflow| brabo_qa & brabo_ci
-  brabo_contracts -->|contrato| brabo_api
-  brabo_contracts -->|workflow| brabo_ci
-  brabo_ci -->|contrato| brabo_qa & brabo
-  brabo_ci -->|workflow| brabo_qa
-  brabo_infra -->|código| brabo_api & brabo_engine & brabo_web & brabo_broker & brabo_runner & brabo_contracts & brabo
-  brabo_infra -->|workflow| brabo_qa & brabo_ci
-  brabo_qa -->|código| brabo_api & brabo_engine & brabo_web & brabo_runner & brabo_broker & brabo_infra
-  brabo_qa -->|contrato| brabo_contracts
-  brabo_qa -->|workflow| brabo_ci
-  brabo_workspace -->|código| brabo & brabo_api & brabo_engine & brabo_web & brabo_runner & brabo_broker & brabo_contracts & brabo_ci & brabo_infra & brabo_qa
-  brabo_workspace -->|workflow| brabo_ci
+  brabo_ci -->|contrato| brabo
+  brabo_infra -->|código| brabo
+  brabo_workspace -->|código| brabo
   classDef atual fill:#fde68a,stroke:#b45309,color:#000
   class brabo atual
 ```
 <!-- mapa:fim -->
 
-## Как собирается релиз
+## Как использовать
 
-Релиз продукта рождается здесь, из тега `vX.Y.Z`, в workflow
-[`release.yml`](.github/workflows/release.yml):
+Установите релиз (установщик — bash-скрипт: скачайте и запустите через `bash`, без `curl | sh`). Он проверяет подпись
+`checksums.txt`, поднимает стек с образами, закреплёнными по digest, создаёт первую учётную запись и подключает раннер:
 
-1. **[`componentes.json`](componentes.json)** закрепляет версию каждого
-   компонента: ref `brabo-infra`, тег `brabo-runner` и тег каждого образа
-   (api, engine, web, broker и backup).
-2. **`imagem.json` каждого репозитория.** Релиз каждого тега приложения несёт
-   `imagem.json` с `imagem`, `tag` и `digest`. Workflow скачивает все пять и
-   собирает `images.json` продукта с образами, закреплёнными по digest.
-3. **Trivy по digest.** Каждый образ сканируется по digest, и уязвимость HIGH
-   или CRITICAL, у которой есть исправление, проваливает релиз до подписи.
-4. **Подписанный `checksums.txt`.** `install.sh`, ассеты `brabo-install-*` и
-   `images.json` попадают в один `checksums.txt`, подписанный cosign keyless
-   идентичностью workflow. Именно эту подпись проверяет `install.sh`.
+```bash
+curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh && bash install.sh
+```
 
-`workflow_dispatch` без тега — это репетиция: он собирает, сканирует и
-проверяет всё, но не подписывает и не публикует.
+`bash install.sh --print-plan` показывает, что он сделал бы, ничего не выполняя. Пошаговое описание — в
+[Первых шагах](https://viralabs-dev.github.io/brabo/prd/ru/getting-started).
+
+## Как разрабатывать
+
+Код живёт в соседних репозиториях, клонируемых рядом через
+[`brabo-workspace`](https://github.com/viralabs-dev/brabo-workspace); dev-среду поднимает
+[`brabo-infra`](https://github.com/viralabs-dev/brabo-infra):
+
+```bash
+git clone https://github.com/viralabs-dev/brabo-workspace.git ~/dev/brabo
+cd ~/dev/brabo && ./clonar-tudo.sh && cd brabo-infra && make dev
+```
+
+Чтобы править документацию этого репозитория: `pnpm install`, `bash scripts/docs/montar-layout.sh` (подтягивает соседей
+по SHA из `irmaos.lock`; `BRABO_REF=dev` берёт актуальную `dev`), `pnpm docs:check` и `pnpm docs:build`.
+Соглашения и процесс: [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Что гарантирует CI
+
+- **`docs-check`**: ссылки, счётчики (RN, ADR, версия) и паритет четырёх языков совпадают с кодом соседей.
+- **`politica` и `escada`** (обязательные): имя ветки, тело PR и лестница одобрения.
+- **`ci`** (цепочка): actionlint и pin'ы `brabo-ci`. **`readme-esqueleto` и `mapa-alinhado`**: информационные.
+- **Релиз** (`release.yml`, по тегу `vX.Y.Z`): `componentes.json` фиксирует каждый компонент, Trivy сканирует каждый образ
+  по digest, а `checksums.txt` подписывается cosign. Без тега это лишь репетиция.
+  Подробности: [Релиз продукта](https://viralabs-dev.github.io/brabo/prd/ru/explanation/release-do-produto).
 
 ## Документация
 
-**📖 [viralabs-dev.github.io/brabo](https://viralabs-dev.github.io/brabo/prd/ru/)** — документация с навигацией и
-поиском, на четырёх языках. Сайт объединяет папку `docs/` этого репозитория с
-папками соседних и публикует два окружения: [`/prd/`](https://viralabs-dev.github.io/brabo/prd/ru/) из `main` и
-[`/dev/`](https://viralabs-dev.github.io/brabo/dev/ru//) из `dev`. Для самого свежего состояния используйте `/dev/`.
+Сайт **[viralabs-dev.github.io/brabo](https://viralabs-dev.github.io/brabo/prd/ru/)** с поиском и на четырёх языках; `/prd/` собирается из `main`, а
+[`/dev/`](https://viralabs-dev.github.io/brabo/dev/ru/) — из `dev`. Текущая версия и число бизнес-правил указаны в [португальском README](README.md).
 
 | документ | для чего |
 |---|---|
-| [Введение](https://viralabs-dev.github.io/brabo/prd/ru/) | общая картина |
 | [Первые шаги](https://viralabs-dev.github.io/brabo/prd/ru/getting-started) | от установки до первого хода агента |
 | [Архитектура](https://viralabs-dev.github.io/brabo/prd/ru/architecture) | карта кода, границы, инварианты, технический долг |
-| [Бизнес-правила](https://viralabs-dev.github.io/brabo/prd/ru/business-rules) | RN, каждое с `файл:строка` и тестом, который его покрывает (количество — в [португальском README](README.md)) |
-| [Runbook](https://viralabs-dev.github.io/brabo/prd/ru/runbook) | deploy, rollout, восстановление, ротация ключа, инцидент расходов |
-| [Глоссарий](https://viralabs-dev.github.io/brabo/prd/ru/glossary) | harness, gate, handoff, DEK, outbox, цикл K |
-| [Наблюдаемость](https://viralabs-dev.github.io/brabo/prd/ru/explanation/observability) | как проследить действие через три процесса: trace, log и путь между слоями |
+| [Бизнес-правила](https://viralabs-dev.github.io/brabo/prd/ru/business-rules) | RN, каждое с `файл:строка` и покрывающим тестом |
+| [Runbook](https://viralabs-dev.github.io/brabo/prd/ru/runbook) | деплой, раскатка, восстановление, ротация ключа, инцидент затрат |
 | [Конфигурация](https://viralabs-dev.github.io/brabo/prd/ru/reference/configuration) | все переменные окружения |
-| [Скрипты](https://viralabs-dev.github.io/brabo/prd/ru/reference/scripts) | каждая команда `pnpm` и цель `Makefile`, извлечённые из исходников |
-| [События](https://viralabs-dev.github.io/brabo/prd/ru/reference/events) | типы event log, broadcasts и spans |
-| [Права](https://viralabs-dev.github.io/brabo/prd/ru/reference/permissions) | формат `permissions.json` и порядок принятия решения |
-| [Артефакты](https://viralabs-dev.github.io/brabo/prd/ru/reference/artifacts) | схемы и кто может выпускать каждую |
 | [Git-провайдеры](https://viralabs-dev.github.io/brabo/prd/ru/reference/git-providers) | контракт операций и capabilities |
-| [Внутренний API](https://viralabs-dev.github.io/brabo/prd/ru/reference/internal-api) | контракт api ↔ engine |
-| [Безопасность](SECURITY.md) | как сообщить об уязвимости |
-| [Участие](CONTRIBUTING.md) | процесс, Definition of Done, что принимается |
-| [Управление](GOVERNANCE.md) | модель сегодня (единственный мейнтейнер), три роли режима `community` и кто попадает в каждую |
-| [Где получить помощь](SUPPORT.md) | какой канал для какой темы |
-| [Кодекс поведения](CODE_OF_CONDUCT.md) | Contributor Covenant 2.1 |
+| [Артефакты](https://viralabs-dev.github.io/brabo/prd/ru/reference/artifacts) | схемы и кто может выпускать каждую |
 
-## Стек
+Ещё: [Безопасность](SECURITY.md) · [Управление](GOVERNANCE.md) · [Поддержка](SUPPORT.md) · [Кодекс поведения](CODE_OF_CONDUCT.md).
 
-- **api** — NestJS, Drizzle, PostgreSQL 16 с pgvector
-- **engine** — Elixir/OTP, Phoenix и Oban (очереди в Postgres)
-- **web** — React 19, Vite и TanStack
-- **runner** — CLI `brabo-runner` на машине пользователя, который выполняет одобренные команды
-- **broker** — единственный процесс с сокетом Docker, который поднимает контейнеры проектов
-- **Ollama** — локальные модели в собственном контейнере
-- **Neo4j** — необязательно: граф знаний, память, производная от event log
-- **deploy** — Docker Compose (разработка, production и установка) и Kubernetes с Kustomize, в `brabo-infra`
+## Как повторить в своём проекте
 
-Без Redis: очереди живут в Postgres через Oban, а rate limit — это скользящее
-окно в SQL.
+Что пригодится другому продукту: подписанный `install.sh` (bash 3.2, без Node), схема релиза с `componentes.json` и
+`imagem.json` по digest, а также генератор сайта, собирающий `docs/` нескольких репозиториев по фиксации `irmaos.lock`.
+Чтобы перенять политику PR, лестницу одобрения и переиспользуемые workflow, следуйте руководству
+[`brabo-ci:scripts/ci/docs/tutorials/adotar.md`](https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/tutorials/adotar.md).
+
+## Поддержка проекта
+
+Если проект вам помогает, можно [угостить кофе на Ko-fi](https://ko-fi.com/daneiel).
 
 ## Лицензия
 
-[MIT](LICENSE) © 2026 Daniel Souza — официальный текст, без дополнительных
-условий.
-
-Образ engine включает сторонние инструменты, от которых зависят gates
-(gitleaks, hadolint, semgrep, yamllint), **некоторые под GPL**. Запуск их
-отдельным процессом ничего не «заражает», но **публикация образа** в registry
-создаёт обязанность предоставить исходный код. Всё перечислено, с версией и
-лицензией каждого, в [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-Образ web включает три шрифта дизайн-системы, все под **OFL 1.1** — разрешающей
-лицензией, которая всё же требует распространять уведомление об авторских
-правах вместе с бинарником. Оно лежит в [`brabo-web`](https://github.com/viralabs-dev/brabo-web), в
-`public/fonts/LICENSE.txt`, отдаётся вместе с остальной статикой, а
-обязанность записана в том же файле уведомлений.
+[MIT](LICENSE) © 2026 Daniel Souza. Образ engine включает сторонние инструменты, часть под GPL, а образ web — шрифты
+OFL 1.1: версии и лицензии — в [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

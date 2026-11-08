@@ -26,7 +26,7 @@ A autoridade final continua sendo sua — por construção, não por convenção
 
 <sub>A ideia vira regras, e o que falta vira pergunta — o Criativo devolve as dúvidas no chat.</sub>
 
-[Diferenciais](#diferenciais) · [Recursos](#recursos) · [O que é](#o-que-é) · [Começar](#começar) · [Repositórios](#repositórios-do-brabo) · [Release](#como-a-release-é-montada) · [Documentação](#documentação) · [Licença](#licença)
+[Diferenciais](#diferenciais) · [Recursos](#recursos) · [Para que existe](#para-que-existe) · [Como é usado](#como-é-usado) · [Como desenvolver](#como-desenvolver) · [Documentação](#documentação) · [Licença](#licença)
 
 </div>
 
@@ -75,85 +75,27 @@ As PRs que passam pelos gates chegam ao chat, e um clique em Aprovar confirma.
 
 ---
 
-## O que é
+<!-- vitrine:fim -->
 
-O Brabo orquestra agentes especializados — Criativo, PO, Arquiteto, Dev Lead e
-devs por módulo, Infra, QA, SecOps, Psicólogo e Anamnese — trabalhando sobre um
-repositório git real, com Gitflow provisionado automaticamente.
+## Para que existe
 
-Áreas (dev, QA, Infra) têm um **lead** como único endereço externo: quem manda um
-handoff fala com o lead, e a delegação para os subagentes é assunto interno da
-área.
+Montar um software com agentes de IA costuma significar confiar em prompts. O Brabo orquestra um time de agentes
+(Criativo, PO, Arquiteto, Dev Lead, devs por módulo, Infra, QA e SecOps) sobre um repositório git real, e o que
+tem efeito externo (comando, commit, PR, gasto de token) nasce como proposta e passa pela política do projeto.
+Merge em branch protegida e mudança na instrução de um agente nem a política libera: são do dono.
 
-O que o separa de um assistente de código:
+Este repositório é a porta de entrada: guarda a documentação, o site, o instalador e a release. O código mora
+nos irmãos, divididos por camada ([por quê](https://viralabs-dev.github.io/brabo/prd/adr/0252-o-brabo-vira-um-conjunto-de-repositorios)).
 
-**Nada com efeito externo acontece sozinho.** Comando de terminal, commit,
-push, PR, merge, gasto de token — tudo nasce como `proposed_action`, passa pela
-política do projeto (`deny` sempre vence `allow`) e só então executa. Dois casos
-nem a política consegue liberar: **merge em branch protegida** e **mudança na
-instrução de um agente**. São tetos aplicados depois de toda a política, não
-defaults.
+## Onde se encaixa
 
-**O agente não é confiável por construção, e o sistema assume isso.** Teto de
-iterações, teto de correções por task, orçamento que recusa a chamada, catálogo
-fechado do que a Anamnese pode perfilar. Prompt não é garantia; código é.
-
-**Tudo é registrado e imutável.** O event log é append-only com numeração densa
-por sessão. É o que torna a evidência do Psicólogo rastreável, o custo auditável
-e o backup verificável.
-
-**O time melhora, com você no circuito.** O Psicólogo propõe hipóteses ancoradas
-em eventos reais; a Anamnese deriva seu perfil de proficiência e propõe patches
-de instrução versionados. Cada patch precisa do seu aval, e reverter cria versão
-nova em vez de apagar histórico.
-
-## Começar
-
-### Instalar o Brabo
-
-```bash
-curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh && bash install.sh
-```
-
-O instalador é um script de bash: baixe o arquivo e rode com `bash`, sem
-`curl | sh`. Ele confere a assinatura do `checksums.txt` da Release antes de
-usar qualquer arquivo, sobe a stack com as imagens fixadas por digest, cria a
-primeira conta e liga o runner nesta máquina. Cada passo diz o que fez, e o que
-não deu certo aparece nomeado no fim. `bash install.sh --print-plan` mostra o
-que ele faria sem executar nada. O passo a passo está em
-[Primeiros passos](https://viralabs-dev.github.io/brabo/prd/getting-started).
-
-### Desenvolver o Brabo
-
-O código mora em repositórios irmãos, clonados lado a lado pelo
-[`brabo-workspace`](https://github.com/viralabs-dev/brabo-workspace). Quem sobe o ambiente de dev é o
-[`brabo-infra`](https://github.com/viralabs-dev/brabo-infra), construindo cada serviço a partir desses
-clones:
-
-```bash
-git clone https://github.com/viralabs-dev/brabo-workspace.git ~/dev/brabo
-cd ~/dev/brabo && ./clonar-tudo.sh
-cd brabo-infra && make dev
-```
-
-O `make dev` confere que os irmãos estão no lugar e sobe o Docker Compose. O
-menu de comandos do dia a dia (Docker, Kubernetes, banco e testes) também mora
-no `brabo-infra`: `bash scripts/dev/bootstrap.sh`. Os detalhes estão no README
-dele.
-
-Este repositório guarda a documentação, o instalador e a release. Para mexer
-na doc: `pnpm install`, `bash scripts/docs/montar-layout.sh` (traz os
-irmãos pelo SHA de `irmaos.lock`; `BRABO_REF=dev` traz a `dev` de agora), `pnpm docs:check` e `pnpm docs:build`.
-
-## Repositórios do Brabo
-
-O Brabo é dividido em repositórios por camada ([ADR 0252](https://viralabs-dev.github.io/brabo/prd/adr/0252-o-brabo-vira-um-conjunto-de-repositorios)).
-O `brabo` é o centro da documentação: o site em
-<https://viralabs-dev.github.io/brabo/prd/> junta as pastas `docs/` dos irmãos numa árvore só.
+O `brabo` é o centro da documentação: o site junta a pasta `docs/` dos irmãos numa árvore só. Para o produto,
+ele fixa a versão de cada componente em `componentes.json`. Se ele mudar, a instalação e o site mudam.
+A stack: NestJS e PostgreSQL com pgvector (api), Elixir, Phoenix e Oban (engine), React 19 (web), CLI `brabo-runner`
+na máquina do usuário, Docker Compose e Kubernetes (infra); Ollama e Neo4j são opcionais, e não há Redis (filas no Postgres).
 
 <!-- mapa:inicio -->
 <!-- Gerado do repos.yml do brabo por brabo-ci:scripts/ci/mapa-dos-repos.ts. Não edite à mão. -->
-### Onde se encaixa
 
 **brabo** — Porta de entrada do produto — documentação agregada, site, instalador e release. Quem instala usa o `install.sh` e as imagens e o binário das tags de `componentes.json`; o brabo-infra o clona nas aferições cruzadas.
 
@@ -188,112 +130,80 @@ flowchart LR
   brabo -->|código| brabo_infra
   brabo -->|doc| brabo_api & brabo_engine & brabo_web & brabo_runner & brabo_broker & brabo_contracts & brabo_infra & brabo_ci & brabo_qa
   brabo -->|workflow| brabo_ci
-  brabo_api -->|contrato| brabo_contracts
-  brabo_api -->|código| brabo_infra
-  brabo_api -->|workflow| brabo_qa & brabo_ci
-  brabo_engine -->|contrato| brabo_contracts
-  brabo_engine -->|código| brabo_api & brabo_runner
-  brabo_engine -->|workflow| brabo_qa & brabo_ci
-  brabo_web -->|contrato| brabo_contracts & brabo_api
-  brabo_web -->|workflow| brabo_qa & brabo_ci
-  brabo_runner -->|contrato| brabo_contracts
-  brabo_runner -->|workflow| brabo_ci
-  brabo_broker -->|contrato| brabo_contracts
-  brabo_broker -->|workflow| brabo_qa & brabo_ci
-  brabo_contracts -->|contrato| brabo_api
-  brabo_contracts -->|workflow| brabo_ci
-  brabo_ci -->|contrato| brabo_qa & brabo
-  brabo_ci -->|workflow| brabo_qa
-  brabo_infra -->|código| brabo_api & brabo_engine & brabo_web & brabo_broker & brabo_runner & brabo_contracts & brabo
-  brabo_infra -->|workflow| brabo_qa & brabo_ci
-  brabo_qa -->|código| brabo_api & brabo_engine & brabo_web & brabo_runner & brabo_broker & brabo_infra
-  brabo_qa -->|contrato| brabo_contracts
-  brabo_qa -->|workflow| brabo_ci
-  brabo_workspace -->|código| brabo & brabo_api & brabo_engine & brabo_web & brabo_runner & brabo_broker & brabo_contracts & brabo_ci & brabo_infra & brabo_qa
-  brabo_workspace -->|workflow| brabo_ci
+  brabo_ci -->|contrato| brabo
+  brabo_infra -->|código| brabo
+  brabo_workspace -->|código| brabo
   classDef atual fill:#fde68a,stroke:#b45309,color:#000
   class brabo atual
 ```
 <!-- mapa:fim -->
 
-## Como a release é montada
+## Como é usado
 
-A release do produto nasce aqui, pelo workflow
-[`release.yml`](.github/workflows/release.yml), a partir de uma tag `vX.Y.Z`:
+Instale a release (o instalador é um script de bash: baixe e rode com `bash`, sem `curl | sh`). Ele confere a
+assinatura do `checksums.txt`, sobe a stack com imagens fixadas por digest, cria a primeira conta e liga o runner:
 
-1. **[`componentes.json`](componentes.json)** fixa a versão de cada componente:
-   a ref do `brabo-infra`, a tag do `brabo-runner` e a tag de cada imagem
-   (api, engine, web, broker e backup).
-2. **O `imagem.json` de cada repo.** A Release de cada tag de app traz um
-   `imagem.json` com `imagem`, `tag` e `digest`. O workflow baixa os cinco e
-   monta o `images.json` do produto, com as imagens fixadas por digest.
-3. **Trivy por digest.** Cada imagem é escaneada pelo digest, e vulnerabilidade
-   HIGH ou CRITICAL com correção reprova antes de assinar.
-4. **`checksums.txt` assinado.** O `install.sh`, os assets `brabo-install-*` e o
-   `images.json` entram num `checksums.txt`, assinado com cosign keyless pela
-   identidade do workflow. É essa assinatura que o `install.sh` confere.
+```bash
+curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh && bash install.sh
+```
 
-Um `workflow_dispatch` sem tag é o ensaio: monta, escaneia e confere tudo, mas
-não assina nem publica.
+`bash install.sh --print-plan` mostra o que ele faria sem executar nada. O passo a passo está em
+[Primeiros passos](https://viralabs-dev.github.io/brabo/prd/getting-started).
+
+## Como desenvolver
+
+O código mora em repositórios irmãos, clonados lado a lado pelo
+[`brabo-workspace`](https://github.com/viralabs-dev/brabo-workspace); quem sobe o dev é o
+[`brabo-infra`](https://github.com/viralabs-dev/brabo-infra):
+
+```bash
+git clone https://github.com/viralabs-dev/brabo-workspace.git ~/dev/brabo
+cd ~/dev/brabo && ./clonar-tudo.sh && cd brabo-infra && make dev
+```
+
+Para mexer na doc deste repo: `pnpm install`, `bash scripts/docs/montar-layout.sh` (traz os irmãos pelo SHA de
+`irmaos.lock`; `BRABO_REF=dev` traz a `dev` de agora), `pnpm docs:check` e `pnpm docs:build`.
+Convenções e fluxo: [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## O que o CI garante
+
+- **`docs-check`**: os links, as contagens (RNs, ADRs, versão) e a paridade das quatro línguas batem com o código dos irmãos.
+- **`politica` e `escada`** (obrigatórios): nome do branch, corpo da PR e a escada de aprovação.
+- **`ci`** (cadeia): actionlint e pins do `brabo-ci`. **`readme-esqueleto` e `mapa-alinhado`**: informativos.
+- **Release** (`release.yml`, a partir de uma tag `vX.Y.Z`): `componentes.json` fixa cada componente, o Trivy
+  varre cada imagem por digest e o `checksums.txt` sai assinado com cosign. Sem tag é só ensaio.
+  Detalhe em [Release do produto](https://viralabs-dev.github.io/brabo/prd/explanation/release-do-produto).
 
 ## Documentação
 
-Versão atual: versão **v2.0.0** ([CHANGELOG](CHANGELOG.md)).
-
-**📖 [viralabs-dev.github.io/brabo](https://viralabs-dev.github.io/brabo/prd/)** — a documentação navegável e com
-busca, em quatro idiomas. O site junta a pasta `docs/` deste repo e as dos
-irmãos e publica dois ambientes: [`/prd/`](https://viralabs-dev.github.io/brabo/prd/) a partir da `main` e
-[`/dev/`](https://viralabs-dev.github.io/brabo/dev/) a partir da `dev`. Para o
-estado mais recente, use o `/dev/`.
+Versão atual: versão **v2.0.0** ([CHANGELOG](CHANGELOG.md)). O site
+**[viralabs-dev.github.io/brabo](https://viralabs-dev.github.io/brabo/prd/)** tem busca e quatro idiomas;
+`/prd/` vem da `main` e [`/dev/`](https://viralabs-dev.github.io/brabo/dev/) da `dev`.
 
 | documento | para |
 |---|---|
-| [Introdução](https://viralabs-dev.github.io/brabo/prd/) | o panorama |
 | [Primeiros passos](https://viralabs-dev.github.io/brabo/prd/getting-started) | da instalação ao primeiro turno de agente |
 | [Arquitetura](https://viralabs-dev.github.io/brabo/prd/architecture) | code map, fronteiras, invariantes, dívida técnica |
 | [Regras de negócio](https://viralabs-dev.github.io/brabo/prd/business-rules) | as 887 RNs, cada uma com `arquivo:linha` e o teste que a cobre |
 | [Runbook](https://viralabs-dev.github.io/brabo/prd/runbook) | deploy, rollout, restore, rotação de chave, incidente de custo |
-| [Glossário](https://viralabs-dev.github.io/brabo/prd/glossary) | harness, gate, handoff, DEK, outbox, ciclo K |
-| [Observabilidade](https://viralabs-dev.github.io/brabo/prd/explanation/observability) | como se segue uma ação pelos três processos: trace, log e o caminho entre camadas |
 | [Configuração](https://viralabs-dev.github.io/brabo/prd/reference/configuration) | todas as variáveis de ambiente |
-| [Scripts](https://viralabs-dev.github.io/brabo/prd/reference/scripts) | todo comando `pnpm` e alvo do `Makefile`, extraídos da fonte |
-| [Eventos](https://viralabs-dev.github.io/brabo/prd/reference/events) | os tipos do event log, broadcasts e spans |
-| [Permissões](https://viralabs-dev.github.io/brabo/prd/reference/permissions) | o formato do `permissions.json` e a ordem da decisão |
-| [Artefatos](https://viralabs-dev.github.io/brabo/prd/reference/artifacts) | os doze schemas e quem pode emitir cada um |
 | [Providers de git](https://viralabs-dev.github.io/brabo/prd/reference/git-providers) | o contrato de quinze operações e as capabilities |
-| [API interna](https://viralabs-dev.github.io/brabo/prd/reference/internal-api) | o contrato api ↔ engine |
-| [Segurança](SECURITY.md) | como reportar uma vulnerabilidade |
-| [Como contribuir](CONTRIBUTING.md) | fluxo, Definition of Done, o que é aceito |
-| [Governança](GOVERNANCE.md) | modelo hoje (mantenedor único), os três papéis do modo `community` e o critério de quem entra em cada um |
-| [Onde pedir ajuda](SUPPORT.md) | qual canal para cada tipo de assunto |
-| [Código de conduta](CODE_OF_CONDUCT.md) | Contributor Covenant 2.1 |
+| [Artefatos](https://viralabs-dev.github.io/brabo/prd/reference/artifacts) | os doze schemas e quem pode emitir cada um |
 
-## Stack
+Mais: [Segurança](SECURITY.md) · [Governança](GOVERNANCE.md) · [Suporte](SUPPORT.md) · [Conduta](CODE_OF_CONDUCT.md).
 
-- **api** — NestJS, Drizzle, PostgreSQL 16 com pgvector
-- **engine** — Elixir/OTP, Phoenix e Oban (filas no Postgres)
-- **web** — React 19, Vite e TanStack
-- **runner** — CLI `brabo-runner` na máquina do usuário, que executa os comandos aprovados
-- **broker** — o único processo com o socket do Docker, que sobe os containers dos projetos
-- **Ollama** — modelos locais, servidos por um container próprio
-- **Neo4j** — opcional: o grafo de conhecimento, memória derivada do event log
-- **deploy** — Docker Compose (dev, produção e instalação) e Kubernetes com Kustomize, no `brabo-infra`
+## Como replicar no seu projeto
 
-Sem Redis: as filas moram no Postgres via Oban, e o rate limit é uma janela
-deslizante em SQL.
+Servem a outro produto: o `install.sh` assinado (bash 3.2, sem Node), o padrão de release com `componentes.json`
+e `imagem.json` por digest, e o gerador do site que junta a `docs/` de vários repos pela trava `irmaos.lock`.
+Para adotar a política de PR, a escada e os workflows reutilizáveis, siga o guia
+[`brabo-ci:scripts/ci/docs/tutorials/adotar.md`](https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/tutorials/adotar.md).
+
+## Apoie
+
+Se o projeto te ajuda, você pode [pagar um café no Ko-fi](https://ko-fi.com/daneiel).
 
 ## Licença
 
-[MIT](LICENSE) © 2026 Daniel Souza — texto oficial, sem cláusulas adicionais.
-
-A imagem do engine embute ferramentas de terceiros de que os gates dependem
-(gitleaks, hadolint, semgrep, yamllint), **algumas sob GPL**. Executá-las como
-processo separado não contamina nada, mas **publicar a imagem** num registry
-cria obrigação de disponibilizar fonte. Está tudo levantado, com versão e
-licença de cada uma, em [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-A imagem do web embute as três fontes do design system, todas **OFL 1.1** — uma
-licença permissiva, mas que exige distribuir o aviso de copyright junto do
-binário. Ele mora no [`brabo-web`](https://github.com/viralabs-dev/brabo-web), em
-`public/fonts/LICENSE.txt`, servido com o resto do estático, e a obrigação está
-registrada no mesmo arquivo de avisos.
+[MIT](LICENSE) © 2026 Daniel Souza. A imagem do engine embute ferramentas de terceiros, algumas sob GPL, e a do
+web, fontes OFL 1.1: versões e licenças em [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
