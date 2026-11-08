@@ -532,6 +532,7 @@ engine 镜像运行于 Alpine 3.24 上的 **Elixir 1.20.4 / OTP 29.1.1**（build
 | `E2E_WEB_URL` | `http://localhost:8088` | Playwright 打开的 `baseURL`，也是 CSRF 断言所依赖的源 |
 | `E2E_USER` | `owner@brabo.dev` | 套件登录用的账户 |
 | `E2E_PASSWORD` | 固定在 `e2e/suporte/api.ts` 中的种子密码 | 该账户的密码。它是**本地种子**的密码，绝不是真实密码——这里不重复写出，以便唯一的副本仍是代码中的那一份 |
+| `E2E_ENGINE_URL` | `http://localhost:4000` | `instalacao` spec（安装冒烟测试）访问 engine `/health` 的地址 |
 
 
 ### 本地集群与定期证明——`deploy/k8s/`
@@ -572,7 +573,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从代码中提取的清单：运行时读取 **189 个变量**。全部都在上方表格中有描述。
+从代码中提取的清单：运行时读取 **190 个变量**。全部都在上方表格中有描述。
 
 每个来源都标记为 **产品**——运维安装的人在部署 `.env` 中设置的内容——或 **工具**，仅由 CI 和开发产品的人读取。工具变量绝不应出现在运维人员的 `.env` 中。
 
@@ -751,9 +752,10 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 - `OLLAMA_HOST` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
 - `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub>
 
-**e2e** — 5 个变量 · 工具
+**e2e** — 6 个变量 · 工具
 
 - `E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
+- `E2E_ENGINE_URL` <sub>(e2e/testes/instalacao.spec.ts)</sub>
 - `E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
 - `E2E_USER` <sub>(e2e/suporte/api.ts)</sub>

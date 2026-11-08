@@ -831,6 +831,7 @@ spec и есть код, читающий окружение, а не модул
 | `E2E_WEB_URL` | `http://localhost:8088` | `baseURL`, который открывает Playwright, и origin, от которого зависит утверждение о CSRF |
 | `E2E_USER` | `owner@brabo.dev` | аккаунт, под которым входит набор |
 | `E2E_PASSWORD` | пароль seed, зафиксированный в `e2e/suporte/api.ts` | пароль этого аккаунта. Это пароль **локального seed**, никогда не реальный — здесь он не повторяется, чтобы единственной копией оставалась копия в коде |
+| `E2E_ENGINE_URL` | `http://localhost:4000` | куда spec `instalacao` (smoke установки) обращается к `/health` engine |
 
 
 ### Локальный кластер и плановые проверки — `deploy/k8s/`
@@ -878,7 +879,7 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 > ⚠️ Блок сгенерирован `pnpm docs:generate`. Не редактируйте вручную — следующая сборка его перезапишет.
 
-Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **189**. У всех есть описание в таблицах выше.
+Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **190**. У всех есть описание в таблицах выше.
 
 Каждый источник помечен как **продукт** — то, что оператор установки задаёт в `.env` развёртывания, — или **инструменты**: их читают только CI и разработчики продукта. Переменной инструментов не место в `.env` оператора.
 
@@ -1057,9 +1058,10 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 - `OLLAMA_HOST` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
 - `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub>
 
-**e2e** — переменных: 5 · инструменты
+**e2e** — переменных: 6 · инструменты
 
 - `E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
+- `E2E_ENGINE_URL` <sub>(e2e/testes/instalacao.spec.ts)</sub>
 - `E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
 - `E2E_USER` <sub>(e2e/suporte/api.ts)</sub>

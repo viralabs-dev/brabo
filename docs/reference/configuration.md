@@ -843,6 +843,7 @@ teste unitário ao lado dele (AT-124).
 | `E2E_USER` | `owner@brabo.dev` | a conta com que a suíte entra |
 | `E2E_PASSWORD` | a senha do seed fixa em `e2e/suporte/api.ts` | a senha dessa conta. É a senha de um **seed local**, nunca uma real — não é repetida aqui para que a única cópia continue sendo a do código |
 | `E2E_SERVICE_TOKEN` | não definida | o token de serviço que as specs usam para semear dados pelas rotas internas da api (`e2e/suporte/interno.ts`, RN-1064). No CI, o job o lê do `.env` que ele mesmo gerou, mascara com `::add-mask::` e o entrega só ao passo das specs (`scripts/ci/com-token-de-servico.sh`); localmente, é o `BRABO_SERVICE_TOKEN` do `.env` do compose. Nunca é impresso |
+| `E2E_ENGINE_URL` | `http://localhost:4000` | onde o spec `instalacao` (smoke da instalação) bate no `/health` do engine |
 
 
 ### Cluster local e provas agendadas — `deploy/k8s/`
@@ -891,7 +892,7 @@ ninguém perceba.
 
 > ⚠️ Bloco gerado por `pnpm docs:generate`. Não edite à mão — o próximo build o sobrescreve.
 
-Inventário extraído do código: **189 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
+Inventário extraído do código: **190 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
 
 Cada fonte é marcada **produto** — o que quem opera a instalação configura no `.env` do deploy — ou **ferramenta**, lida só pelo CI e por quem desenvolve o produto. Variável de ferramenta nunca pertence ao `.env` de um operador.
 
@@ -1070,9 +1071,10 @@ Cada fonte é marcada **produto** — o que quem opera a instalação configura 
 - `OLLAMA_HOST` <sub>(apps/api/scripts/demo-psicologo.ts)</sub>
 - `RATE_LIMIT_WINDOW_MS` <sub>(apps/api/scripts/relatorio-seguranca-runtime.ts)</sub>
 
-**e2e** — 5 variáveis · ferramenta
+**e2e** — 6 variáveis · ferramenta
 
 - `E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
+- `E2E_ENGINE_URL` <sub>(e2e/testes/instalacao.spec.ts)</sub>
 - `E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
 - `E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
 - `E2E_USER` <sub>(e2e/suporte/api.ts)</sub>
