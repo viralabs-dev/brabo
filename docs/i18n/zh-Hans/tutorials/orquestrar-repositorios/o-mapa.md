@@ -63,14 +63,14 @@ flowchart LR
 
 ## 地图只有一个来源
 
-这张表和这幅图不是手工维护的。唯一来源是 `brabo` 根目录下的 `repos.yml` 文件：对每个仓库记录角色、用途、使用方式和 `depende_de` 列表，其中**每条边**写明仓库、渠道类型和**证据**（代码使用该依赖的文件和行号）。
+这张表和这幅图不是手工维护的。唯一来源是 `brabo` 根目录下的 `repos.yml` 文件：对每个仓库记录角色、用途、使用方式和 `depende_de` 列表，其中**每条边**写明仓库、渠道类型和**证据**（代码使用该依赖的文件和一行原文片段；不记录行号，因为每次提交行号都会变）。
 
 ```yaml
 brabo-web:
   papel: código
   depende_de:
-    - { repo: brabo-contracts, tipo: contrato, prova: "package.json:20" }
-    - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/carimbo.yml:18" }
+    - { repo: brabo-contracts, tipo: contrato, prova: { arquivo: package.json, trecho: '"@brabo/shared": "npm:@viralabs-dev/brabo-shared@' } }
+    - { repo: brabo-ci, tipo: workflow, prova: { arquivo: .github/workflows/carimbo.yml, trecho: "brabo-ci/.github/workflows/tag-release.yml@" } }
 ```
 
 每个仓库 README 中的 "Onde se encaixa" 区块都由 `brabo-ci` 从该文件**生成**，检查会拒绝区块已经偏离的 README。这样，一个仓库的地图永远不会与另一个仓库的地图矛盾。修改依赖的人编辑 `repos.yml` 并重新生成各区块。延伸阅读：[ADR 0281](../../adr/0281-o-mapa-dos-repos-tem-uma-fonte-so.md) 和[架构](../../architecture.md)。

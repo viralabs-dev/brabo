@@ -63,14 +63,14 @@ Two useful readings of the drawing:
 
 ## One source for the map
 
-This table and this drawing are not maintained by hand. The single source is the `repos.yml` file at the root of `brabo`: for each repository, the role, the purpose, how it is used and the `depende_de` list, in which **each edge** states the repository, the channel type and the **proof** (the file and line where the code uses the dependency).
+This table and this drawing are not maintained by hand. The single source is the `repos.yml` file at the root of `brabo`: for each repository, the role, the purpose, how it is used and the `depende_de` list, in which **each edge** states the repository, the channel type and the **proof** (the file and a literal one-line excerpt where the code uses the dependency; the line number is not stored, because it changes with every commit).
 
 ```yaml
 brabo-web:
   papel: código
   depende_de:
-    - { repo: brabo-contracts, tipo: contrato, prova: "package.json:20" }
-    - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/carimbo.yml:18" }
+    - { repo: brabo-contracts, tipo: contrato, prova: { arquivo: package.json, trecho: '"@brabo/shared": "npm:@viralabs-dev/brabo-shared@' } }
+    - { repo: brabo-ci, tipo: workflow, prova: { arquivo: .github/workflows/carimbo.yml, trecho: "brabo-ci/.github/workflows/tag-release.yml@" } }
 ```
 
 Each repository's README block "Onde se encaixa" is **generated** from that file by `brabo-ci`, and a check fails the README whose block diverged. So one repository's map never disagrees with another's. Whoever changes a dependency edits `repos.yml` and regenerates the blocks. To learn more: [ADR 0281](../../adr/0281-o-mapa-dos-repos-tem-uma-fonte-so.md) and the [architecture](../../architecture.md).

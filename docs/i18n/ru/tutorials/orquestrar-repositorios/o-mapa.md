@@ -63,14 +63,14 @@ flowchart LR
 
 ## Единый источник карты
 
-Эта таблица и этот рисунок не ведутся вручную. Единый источник - файл `repos.yml` в корне `brabo`: для каждого репозитория роль, назначение, способ использования и список `depende_de`, где **каждое ребро** называет репозиторий, тип канала и **доказательство** (файл и строку, где код использует зависимость).
+Эта таблица и этот рисунок не ведутся вручную. Единый источник - файл `repos.yml` в корне `brabo`: для каждого репозитория роль, назначение, способ использования и список `depende_de`, где **каждое ребро** называет репозиторий, тип канала и **доказательство** (файл и дословный фрагмент в одну строку, где код использует зависимость; номер строки не хранится, потому что меняется с каждым коммитом).
 
 ```yaml
 brabo-web:
   papel: código
   depende_de:
-    - { repo: brabo-contracts, tipo: contrato, prova: "package.json:20" }
-    - { repo: brabo-ci, tipo: workflow, prova: ".github/workflows/carimbo.yml:18" }
+    - { repo: brabo-contracts, tipo: contrato, prova: { arquivo: package.json, trecho: '"@brabo/shared": "npm:@viralabs-dev/brabo-shared@' } }
+    - { repo: brabo-ci, tipo: workflow, prova: { arquivo: .github/workflows/carimbo.yml, trecho: "brabo-ci/.github/workflows/tag-release.yml@" } }
 ```
 
 Блок «Onde se encaixa» в README каждого репозитория **генерируется** из этого файла в `brabo-ci`, а проверка отклоняет README, блок которого разошёлся. Так карта одного репозитория никогда не противоречит карте другого. Кто меняет зависимость, правит `repos.yml` и заново генерирует блоки. Подробнее: [ADR 0281](../../adr/0281-o-mapa-dos-repos-tem-uma-fonte-so.md) и [архитектура](../../architecture.md).
