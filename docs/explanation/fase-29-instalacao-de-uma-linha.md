@@ -10,6 +10,10 @@ tipo: historico
 
 # FASE 29 — a instalação de uma linha
 
+:::historico 2026-09-08
+Recorte da Fase 29: juntar os três gestos soltos de instalação (subir os serviços, instalar o runner, escolher onde o código mora) num instalador de uma linha, agora com artefatos assinados. Diz o que a fase persegue, o que recusa e em que ordem. As decisões moram nos ADR 0149 a 0152.
+:::
+
 > Este documento é o **recorte** da fase: o que ela persegue, o que ela recusa,
 > e em que ordem. As **decisões** moram nos [ADR 0149](../adr/0149-assinatura-dos-artefatos-publicados.md),
 > [0150](../adr/0150-instalador-de-uma-linha.md), [0151](../adr/0151-base-consentida-no-runner.md)

@@ -10,6 +10,10 @@ tipo: historico
 
 # FASE 30 — o agente local da máquina
 
+:::historico 2026-09-11
+Recorte da Fase 30: instalar o Brabo numa linha e usar, com um agente local por máquina e a primeira conta nascendo no terminal. Inclui o que a medição mudou no recorte, as sessões, o que a fase não toca e as lacunas que ela encosta. Em desacordo, vale o ADR 0154 ou o 0155.
+:::
+
 > Este documento é o **recorte** da fase: o que ela persegue, o que ela recusa,
 > e em que ordem. As **decisões** moram no
 > [ADR 0154](../adr/0154-chave-de-dispositivo-de-maquina.md) e no

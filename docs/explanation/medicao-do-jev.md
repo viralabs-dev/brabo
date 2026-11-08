@@ -7,6 +7,10 @@ tipo: historico
 
 # Medição do roteador de ferramentas Jev {#measuring-the-jev-tool-router}
 
+:::historico 2026-10-01
+Medição fora do produto do roteador de ferramentas Jev (AT-237): concordância por agente, curva de confiança, latência e custo. Passa por três rodadas, até o menu de 2 opções, e fecha com a comparação ao vivo da AT-239. Mostra o que o replay não enxerga e como reproduzir.
+:::
+
 > AT-237 (EP-029, HS-063). Uma **medição fora do produto**: nada em
 > `apps/` importa este código, nada é gravado no banco, e nenhum ganho de
 > produto é afirmado aqui — isso é da AT-239, que compara turnos com e sem o

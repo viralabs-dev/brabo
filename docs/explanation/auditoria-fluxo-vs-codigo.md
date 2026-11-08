@@ -5,6 +5,10 @@ tipo: historico
 
 # Auditoria: fluxo.yml × código (v3, ADR 0085) {#audit-fluxoyml--code-v3-adr-0085}
 
+:::historico 2026-08-10
+Auditoria só de leitura que cruza o `fluxo.yml` (ADR 0085) com o código real. Lista as divergências, o que está escadeado atrás de cada gatilho de ativação e o que o código faz além do declarado. Nada foi corrigido de passagem: cada divergência virou achado. O fechamento está no Histórico de fases.
+:::
+
 Sessão de auditoria isolada — **só leitura**. Cruza `packages/contracts/fluxo.yml` (o
 modelo-alvo declarado pelo ADR 0085) com o código real, para responder duas
 perguntas: o que falta para o código honrar tudo que o fluxo declara como

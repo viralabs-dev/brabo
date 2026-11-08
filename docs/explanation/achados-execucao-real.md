@@ -5,6 +5,10 @@ tipo: historico
 
 # Achados da execução real da esteira
 
+:::historico 2026-08-05
+Achados de uma sessão de execução real, conduzida pelo navegador com modelo de API e provider de git de verdade. Cada item tem arquivo:linha ou evento que o comprova. Os que bloqueavam foram corrigidos na hora, com PR nomeada. Os demais alimentaram a triagem da Fase 13c.
+:::
+
 > Levantado numa sessão de execução conduzida pelo navegador em **2026-08-05**,
 > com modelo de API (não local) e provider de git de verdade. É o insumo da
 > triagem da FASE 13c: cada item tem arquivo:linha ou evento que o comprova, e

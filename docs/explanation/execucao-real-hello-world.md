@@ -9,6 +9,10 @@ tipo: historico
 
 # A execução real — o hello world
 
+:::historico 2026-08-05
+Primeira vez que a cadeia de agentes rodou ponta a ponta com modelo de API, num projeto novo com repositório real no GitHub. O objetivo era descobrir o que quebra no uso de verdade. Não é a medição oficial da Fase 13b, porque o engine foi reiniciado várias vezes no meio.
+:::
+
 Primeira vez que a cadeia de agentes rodou com **modelo de API** de ponta a
 ponta, no lugar do Ollama local. Projeto novo (`Hello API`), repositório real
 no GitHub, provider OpenRouter, modelo `~deepseek/deepseek-v4-flash-latest`.
