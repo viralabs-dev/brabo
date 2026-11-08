@@ -79,7 +79,10 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
   const pgs = (...slugs) => slugs.map((s) => pg(s));
   const link = (rotulo, arq) => ({ tipo: 'link', rotulo: t(rotulo), href: `https://github.com/${repo}/blob/dev/${arq}` });
   return [
-    cat('🚀 Comece aqui', pgs('', 'getting-started', 'tutorials/from-zero-to-deliverable', 'tutorials/interface-antes-e-depois-shadcn')),
+    cat('🚀 Comece aqui', [
+      ...pgs('', 'getting-started', 'tutorials/from-zero-to-deliverable', 'tutorials/interface-antes-e-depois-shadcn'),
+      cat('Orquestrar repositórios', pgs(...['por-que-separar', 'o-mapa', 'como-cada-repo-e-consumido', 'vida-de-uma-mudanca', 'monte-o-seu', 'erros-que-ja-cometemos'].map((s) => `tutorials/orquestrar-repositorios/${s}`)), { slug: 'tutorials/orquestrar-repositorios', colapsada: true }),
+    ]),
     cat('🏗️ Arquitetura', [
       pg('architecture'),
       cat('Decisões (ADR)', adrsPorTema(raiz).map((c) => ({ tipo: 'categoria', rotulo: c.rotulo, colapsada: true, itens: c.itens.map((s) => pg(s)) })), { slug: 'adr' }),

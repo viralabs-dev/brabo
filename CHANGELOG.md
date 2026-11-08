@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: AT-830. Nova trilha "Orquestrar um produto em vários repositórios" em `docs/tutorials/orquestrar-repositorios/` (índice e seis páginas: por que separar, o mapa, como cada repositório é consumido, a vida de uma mudança, monte o seu e erros que já cometemos), nos quatro idiomas e ligada em "Comece aqui" no `navegacao.mjs`. Reaproveita o `repos.yml`, o guia de adoção do `brabo-ci`, os pins e a promoção por camadas; o que falta de evidência fica como `TODO(humano)`. A doc do `BRABO_BIND` no `configuration.md` (AT-811) já estava na `dev`.
+
 - **docs**: AT-840. `docs/reference/configuration.md` (e as três traduções) diz que `RATE_LIMIT_ENABLED`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_USER`, `RATE_LIMIT_IP` e `AUTH_LOCKOUT_IP_THRESHOLDS` valem os padrões da api na instalação e que o compose de instalação os repassa desde o `brabo-infra#38` (RN-1074); só o compose de teste do `brabo-qa` sobe esses valores.
 
 - **docs**: AT-826. O `README.md` segue o esqueleto didático de 8 seções do `brabo-ci` (`README.modelo.md`): a vitrine fica no topo e termina em `<!-- vitrine:fim -->`; embaixo vêm "Para que existe", "Onde se encaixa" (com o bloco do mapa gerado), "Como é usado", "Como desenvolver", "O que o CI garante", "Documentação", "Como replicar no seu projeto", "Apoie" e "Licença". As três traduções (`README.en.md`, `README.ru.md`, `README.zh-Hans.md`) ganham a mesma estrutura com os títulos traduzidos; o check lê só o pt-BR. O novo `.github/workflows/readme.yml` chama `readme-esqueleto` e `mapa-alinhado` do `brabo-ci` (pin `v1.4.0-dev.13`), informativos.
