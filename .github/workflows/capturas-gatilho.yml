@@ -1,0 +1,57 @@
+name: Gatilho das capturas da doc
+
+run-name: ${{ format('Gatilho das capturas · {0}', github.event_name == 'push' && 'pin do web' || format('manual · {0}', github.actor)) }}
+
+# AT-878, ADR 0289 (estende a 0286): quando a pin do `web` muda na `dev` (o merge da PR do
+# `regenera-gerados` toca `componentes.json`), avisa o `brabo-qa` para recapturar sem
+# `workflow_dispatch` manual. O `decidir` do qa segue lendo a pin; aqui só se acorda o run.
+on:
+  push:
+    branches: [dev]
+    paths: [componentes.json]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: capturas-gatilho
+  cancel-in-progress: false
+
+jobs:
+  avisar:
+    name: Avisar o brabo-qa
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          fetch-depth: 2
+
+      # Só segue se a tag do web mudou em relação ao commit anterior; manual sempre segue.
+      - name: A tag do web mudou?
+        id: mudou
+        env:
+          EVENTO: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENTO" = workflow_dispatch ]; then echo 'segue=true' >> "$GITHUB_OUTPUT"; exit 0; fi
+          antes=$(git show HEAD~1:componentes.json | jq -r '.imagens.web.tag')
+          agora=$(jq -r '.imagens.web.tag' componentes.json)
+          echo "web: $antes -> $agora"
+          if [ "$antes" != "$agora" ]; then echo 'segue=true' >> "$GITHUB_OUTPUT"; else echo 'segue=false' >> "$GITHUB_OUTPUT"; fi
+
+      - id: app
+        if: steps.mudou.outputs.segue == 'true'
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510  # v3.3.0
+        with:
+          client-id: ${{ secrets.BRABO_APP_ID }}
+          private-key: ${{ secrets.BRABO_APP_PRIVATE_KEY }}
+          repositories: brabo-qa
+          permission-contents: write
+
+      - name: Disparar capturas-pin-mudou no brabo-qa
+        if: steps.mudou.outputs.segue == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: gh api repos/viralabs-dev/brabo-qa/dispatches -f event_type=capturas-pin-mudou
