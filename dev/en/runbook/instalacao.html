@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instalação e artefatos | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../runbook/instalacao.html">pt-BR</option><option value="../../en/runbook/instalacao.html" selected>en</option><option value="../../ru/runbook/instalacao.html">ru</option><option value="../../zh-Hans/runbook/instalacao.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../dev/en/runbook/instalacao.html" selected>dev</option><option value="../../../prd/en/runbook/instalacao.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="../index.html">Home</a></li><li><a href="../getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><a href="../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html">Developing Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><details open><summary><span>Operations manual</span></summary><ul><li><a href="../runbook.html">Operations manual</a></li><li><a href="../runbook/ambiente-local.html">Ambiente local e de dev</a></li><li><a href="../runbook/deploy.html">Deploy e rollout</a></li><li><a href="../runbook/instalacao.html" aria-current="page">Instalação e artefatos</a></li><li><a href="../runbook/operacao.html">Operação</a></li><li><a href="../runbook/restore.html">Restore</a></li><li><a href="../runbook/segredos.html">Rotação de segredos</a></li></ul></details></li><li><a href="../tutorials/adotar.html">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">Architecture</a></li><li><a href="../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">Branching policy</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../explanation/release-do-produto.html">Product release</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="../explanation/localizacao.html">Localization</a></li><li><a href="../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="../glossary.html">Glossary</a></li><li><a href="../reference/componentes-da-doc.html">Doc components</a></li><li><a href="../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">Business rules</a></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">Timeline</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="../explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a></li><li><a href="../explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">This page is not translated yet; showing the original in Portuguese.</div>
+<article class="doc">
+<h1 id="instalação-e-artefatos">Instalação e artefatos</h1>
+<p>Parte do <a href="../runbook.html">Runbook operacional</a>. Comece pela triagem do índice.</p>
+<h2 id="instalando">Instalando</h2>
+<pre class="codigo"><code class="language-sh">curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh &amp;&amp; bash install.sh
+</code></pre>
+<p><strong>Baixe um arquivo, depois rode-o com <code>bash</code>.</strong> As duas formas mais curtas que parecem
+equivalentes não são, e o script recusa as duas <strong>pelo nome</strong>, antes de
+baixar qualquer coisa, imprimindo a linha acima:</p>
+<ul>
+<li><strong>Nunca <code>curl … | sh</code>.</strong> O motivo é mecânico, não de estilo: com o
+script chegando pelo pipe, o <code>stdin</code> do processo <strong>é</strong> o download,
+então qualquer <code>read</code> lê bytes do próprio script ou bate em EOF. Um instalador que
+não consegue perguntar teria de escolher sozinho os locais das pastas na máquina de outra pessoa
+(<a href="../business-rules/produto.html#rn-526">RN-526</a>).</li>
+<li><strong>Nem <code>sh -c &quot;$(curl …)&quot;</code></strong> — esta foi a forma documentada até a
+AT-083, e nunca funcionou. O script confere <strong>o próprio hash</strong> contra o
+manifesto assinado, e sob <code>X -c &quot;…&quot;</code> não há arquivo para calcular hash: <code>$0</code> é o
+nome do shell. Com <code>dash</code> como <code>sh</code> (Debian, Ubuntu) ele morria ainda antes, no
+<code>set -o pipefail</code>. Não há chave para pular essa autoverificação, e não
+haverá (<a href="../adr/0150-instalador-de-uma-linha.html">ADR 0150</a>) — a correção é
+existir um arquivo. Rodá-lo sob um shell que não é bash também é uma recusa
+nomeada própria.</li>
+</ul>
+<p>O script verifica <strong>a própria origem</strong> antes de fazer qualquer coisa — a assinatura
+do <code>checksums.txt</code> da Release, e depois o próprio hash dentro desse
+manifesto verificado. Uma falha em qualquer passo é uma <strong>recusa nomeada</strong>, nunca um aviso.</p>
+<p>Ele precisa de <strong>um</strong> entre <code>sha256sum</code> (coreutils, Linux) ou <code>shasum -a 256</code> (vem
+com o macOS) para fazer qualquer disso, e resolve qual <strong>antes do primeiro
+download</strong> — não no meio de uma checagem. Faltar os dois é uma recusa <strong>própria</strong>,
+nomeando as duas ferramentas e dizendo que nada foi baixado; é uma dependência
+faltando do sistema operacional, e deliberadamente <em>não</em> é redigida como
+as recusas de hash abaixo. Essas duas são desfechos diferentes pedindo coisas
+diferentes — uma se corrige instalando, a outra <strong>parando</strong> — e a medição da AT-091
+é o que pôs a linha entre elas: <code>sha256sum: command not found</code>
+no macOS aparecia como <em>&quot;o cosign baixado NÃO bate com o hash pinado neste
+script. Isso não é um aviso: pare e investigue.&quot;</em>, o que tanto bloqueava toda
+instalação no macOS quanto ensinava o leitor a ignorar essa frase. O <code>--print-plan</code>
+não precisa de nenhuma das ferramentas e declara quais o script aceita
+(<code>conferir-hash</code>).</p>
+<p>A detecção tem <strong>teto de 5s</strong> na chamada ao Docker que faz (<code>docker compose ls</code>
+fala com o daemon, e um daemon lento ou parado atrás de um socket vivo
+travaria tudo <em>antes da primeira pergunta</em>). Bater no teto não é
+erro — é o mesmo desfecho de não ter Docker nenhum, e o resto
+dos sinais ainda é lido.</p>
+<p>Sem TTY ele <strong>informa e sai com 0</strong>: imprime o que achou e o
+comando a rodar num terminal. Isso é deliberado, e é a mesma forma
+que o <code>consentir-base.mjs</code> já tem.</p>
+<p><strong>O que ele nunca apaga:</strong> a sua base de projetos e a sua pasta de espelho. Volumes
+nomeados só vão com confirmação, listados um a um antes.</p>
+<p>Ele sobe a stack a partir do <strong>próprio compose</strong>
+(<code>docker/docker-compose.install.yml</code>), que pega as imagens de variáveis
+e não constrói nada — e ele <strong>baixa esse compose da Release</strong>
+(<a href="../business-rules/produto.html#rn-570">RN-570</a>,
+<a href="../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160</a>). Quatro arquivos
+viajam com o instalador como assets <code>brabo-install-*</code>, no <strong>mesmo</strong>
+<code>checksums.txt</code> assinado que cobre o binário do runner: o compose, o
+<code>postgres/init.sql</code> e o <code>ollama/pull-models.sh</code> de que ele faz bind-mount, e o
+<code>backup/test-restore-compose.sh</code> que a migração roda. Logo depois de verificar
+a si mesmo — antes de qualquer pergunta, antes de escrever qualquer coisa — o script baixa
+os quatro e confere cada hash contra esse manifesto. Três recusas nomeadas, todas
+numa máquina intocada:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>a mensagem começa com</th>
+<th>quer dizer</th>
+<th>faça</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>&quot;a Release não publica …&quot;</em></td>
+<td>a Release é anterior ao ADR 0160, ou o passo de publicação dela falhou no meio</td>
+<td>instale a partir de um checkout do repositório naquela tag, ou espere a próxima release</td>
+</tr>
+<tr>
+<td><em>&quot;o manifesto assinado não cobre …&quot;</em></td>
+<td>o manifesto existe mas não tem linha para aquele asset</td>
+<td>igual ao de cima — a Release está incompleta</td>
+</tr>
+<tr>
+<td><em>&quot;… NÃO bate com o manifesto assinado&quot;</em></td>
+<td>o arquivo baixado não é o que o manifesto assinado descreve</td>
+<td><strong>pare e trate como incidente</strong>; não tente contornar</td>
+</tr>
+</tbody>
+</table></div>
+<p>As cópias verificadas são escritas sob <code>docker/</code> na pasta de onde você rodou o
+script — a mesma pasta do <code>.env</code> — só quando são necessárias pela primeira vez.
+O que já estava lá (o compose da versão anterior, numa atualização) é
+<strong>substituído, nunca lido</strong>, e o script nomeia o que substituiu; de dentro de um
+checkout git noutro commit isso deixa o <code>git status</code> sujo.</p>
+<blockquote>
+<p><strong>Releases publicadas antes do ADR 0160 não levam esses assets.</strong> O
+instalador delas ainda usa o caminho relativo, e a linha única acima falha num
+diretório vazio com <em>&quot;no such file or directory&quot;</em> depois de escrever o <code>.env</code> (a
+lacuna que a <a href="../business-rules/ci.html#rn-549">RN-549</a> mediu). Para essas tags, rode o
+instalador a partir de um checkout do repositório na tag que você está instalando.</p>
+</blockquote>
+<blockquote>
+<p>No caminho de <em>migração</em> a prova de restauração (<code>test-restore-compose.sh</code>) recebe o
+<code>.env</code> da instalação por <code>BRABO_ENV_FILE</code> (passado ao Compose como
+<code>--env-file</code>), porque o Compose procura o <code>.env</code> ao lado do arquivo de compose — não
+no diretório de onde você roda. Se você rodar a prova à mão contra uma
+instalação, exporte <code>BRABO_ENV_FILE=/caminho/para/.env</code> antes; um caminho que não
+existe é recusado, nunca substituído por outro arquivo. Uma prova que falha ainda
+não apaga nada (<a href="../business-rules/infra.html#rn-530">RN-530</a>).</p>
+</blockquote>
+<p>Duas origens:</p>
+<pre class="codigo"><code class="language-sh">install.sh                  # --source=ghcr (default): por digest, assinatura verificada
+install.sh --source=local   # buildx bake; exige árvore limpa numa tag
+</code></pre>
+<p>Os segredos são gerados uma vez e persistidos no <code>.env</code> com modo <strong>600</strong> — o
+arquivo é criado vazio e trancado <em>antes</em> de receber conteúdo, porque uma janela
+em que os segredos são legíveis por todos é exatamente o que este arquivo não pode ter.</p>
+<p>Não há <strong>passo de migrate</strong>, e não deveria haver: o compose encadeia
+<code>api</code> → <code>migrate-api</code> com <code>service_completed_successfully</code>, então o <code>up --wait</code>
+espera as migrations. Um segundo lugar ordenando migrations seria uma segunda
+fonte da mesma verdade.</p>
+<p>Depois de a stack subir ele <strong>pergunta antes de afirmar</strong>: <code>/health</code> na api e no
+engine, e só então diz que instalou.</p>
+<p>Ele <strong>instala o agente local</strong> — o binário é verificado contra o
+manifesto assinado e posto com <code>install -m 0755</code>, então não há <code>chmod</code> manual
+(<a href="../business-rules/produto.html#rn-531">RN-531</a>) — e pergunta UMA base, escrevendo-a nos
+dois lados: <code>BRABO_PROJECTS_BASE</code> no <code>.env</code> e <code>base</code> no
+<code>runner.json</code> do runner. Uma Release sem binário para esta plataforma não interrompe
+a instalação: ela diz isso e aponta para abrir uma issue em
+<code>https://github.com/viralabs-dev/brabo-runner/issues</code> (o runner sai só como binário, AT-774).</p>
+<p>Sobre uma instalação existente ele <strong>migra ou para</strong> — um <code>up</code> em volumes
+de outra versão é dano que não avisa. A ordem é backup →
+<strong>PROVAR</strong> que restaura → perguntar → apagar → instalar → restaurar, e a prova no
+meio é o que dá ao instalador o direito de apagar
+(<a href="../business-rules/infra.html#rn-530">RN-530</a>).</p>
+<p>E ele sabe <strong>qual</strong> versão está substituindo (<a href="../business-rules/produto.html#rn-542">RN-542</a>).
+As imagens são resolvidas <strong>antes</strong> de a detecção rodar, então a pergunta nunca é
+cega: o marcador registra a <code>versao</code> instalada, o manifesto leva a que
+está para ser instalada, e a oferta é específica para a relação entre elas.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>relação</th>
+<th>o que oferece</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mais nova</td>
+<td><em>&quot;Atualizar 5.0.0 → 5.1.0?&quot;</em></td>
+<td><strong>sim</strong> — é o que você veio fazer, e o backup provado a torna reversível</td>
+</tr>
+<tr>
+<td>a mesma</td>
+<td><em>&quot;Já é a 5.0.0. Reinstalar do zero mesmo assim?&quot;</em></td>
+<td>não — não há ganho a oferecer</td>
+</tr>
+<tr>
+<td>mais velha</td>
+<td>a nomeia <strong>downgrade</strong>, avisando que migrations de banco não rodam para trás</td>
+<td>não — pode não ter volta</td>
+</tr>
+<tr>
+<td>desconhecida</td>
+<td>um marcador do schema 1 não tem versão; ele diz isso, e não adivinha</td>
+<td>não</td>
+</tr>
+</tbody>
+</table></div>
+<p>Qualquer que seja o ramo que você escolher, a instalação é <strong>apagada e recriada do
+zero</strong> em vez de iniciada por cima dos volumes antigos. Meia migração é
+pior que nenhuma.</p>
+<p>Um <code>install.sh</code> chamado pelo menu do <code>pnpm bootstrap</code> (<em>Docker › Instalar</em>)
+só <strong>informa</strong> o plano. Isso é mecânico, não preferência: um item de menu
+roda com stdin em <code>/dev/null</code> para o menu poder continuar lendo teclas do mesmo
+terminal, e este instalador é feito para <em>perguntar</em>. A nota no item leva
+o comando de uma linha que instala de verdade.</p>
+<blockquote>
+<p><strong>O que ele não faz:</strong> ligar o <strong>broker</strong> de containers sem perguntar —
+veja <a href="#broker-na-instalacao">o broker numa instalação</a> logo abaixo. O
+agente local ele <strong>pareia</strong>, desde a <a href="../business-rules/produto.html#rn-547">RN-547</a>: ele
+cria a primeira conta, gera a chave de dispositivo de máquina na máquina,
+registra a metade pública, carimba o <code>kid</code> e instala a unit de <strong>máquina</strong>
+(<a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155</a>) — e quando um
+elo falha ele nomeia o comando a repetir, veja
+<a href="ambiente-local.html#instalador-nao-fecha">Quando o instalador não fecha a instalação</a>.
+O que fica na tela do projeto é um pareamento <strong>preso a um projeto</strong>: essa chave de
+dispositivo e o <code>brabo-runner.config.json</code> ainda vêm de lá
+(<a href="../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118</a>).
+Inspecione tudo com <code>install.sh --print-plan</code>, que não toca em nada.</p>
+</blockquote>
+<p>Verificação: <code>.github/workflows/install-e2e.yml</code> roda a linha única acima numa
+máquina <strong>limpa</strong>, sob um pty de verdade, em toda tag final — o instalador, a
+stack, a primeira conta, a chave de máquina e o agente pegando o primeiro
+projeto. Em todo PR os specs <code>scripts/dev/install*.spec.ts</code> provam as peças
+que não precisam de Release: o plano e o estado (<code>install.spec.ts</code>), o
+<code>.env</code> pelo próprio parser do Compose (<code>install-env.spec.ts</code>), os passos de fechamento
+(<code>install-fechamento.spec.ts</code>), as invocações recusadas
+(<code>install-invocacao.spec.ts</code>), os arquivos baixados
+(<code>install-arquivos-da-instalacao.spec.ts</code>), a pergunta do broker
+(<code>install-broker.spec.ts</code>), e que o próprio E2E não apodreceu
+(<code>install-e2e.spec.ts</code>). O caminho de <strong>migração</strong> — backup, provar, apagar,
+instalar, restaurar — não tem execução de ponta a ponta: a máquina do E2E é limpa, então a
+pergunta nunca é feita, e só o repasse do <code>.env</code> da prova de restauração tem spec
+(<code>scripts/dev/prova-de-restauracao-env.spec.ts</code>).</p>
+<h3 id="broker-na-instalacao">O broker de containers numa instalação</h3>
+<p>Projetos nos modos <strong>Container</strong> e <strong>Pasta montada</strong> rodam dentro de um container, e
+quem sobe esse container é o <strong>broker</strong>
+(<a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144</a>). Sem ele nenhum dos modos
+jamais executa: <code>container_start</code> termina <code>failed</code> com <code>BrokerIndisponivelError</code>
+e os dev agents ficam em <code>dev.blocked_by_container</code>. O modo <strong>Runner</strong> não
+depende dele — ali o agente local usa o Docker da sua máquina.</p>
+<p>Desde o <a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a> o
+broker é a <strong>quinta imagem publicada</strong> (<code>ghcr.io/viralabs-dev/brabo-broker</code>, por
+digest, assinada como as outras quatro) e o compose de instalação tem o
+serviço — <strong>desligado por padrão</strong>, sob o mesmo profile <code>container-broker</code> do
+compose de validação. O instalador <strong>pergunta</strong> (<em>&quot;Ligar o broker de container?
+[s/N]&quot;</em>), logo depois da base de projetos, e diz em texto o que ligá-lo
+concede: o broker recebe <strong>o socket do Docker desta máquina</strong>, e quem
+comanda o broker comanda o seu Docker. O que o contém são as cinco camadas
+do <a href="../adr/0130-broker-de-container.html">ADR 0130</a>: nenhuma porta publicada, uma rede
+(<code>internal: true</code>, sem internet) que só a api alcança, o service token,
+cinco operações sobre o container de UM projeto, e uma spec que o broker compõe
+a partir do que o Arquiteto decidiu — não há requisição que ligue
+<code>privileged</code>, rede do host ou um <code>-v</code> livre.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>resposta</th>
+<th>o que acontece</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>s</code></strong> / <strong><code>sim</code></strong></td>
+<td>ele mede o grupo do socket <strong>de dentro de um container</strong> (a própria imagem do broker, sem rede, só leitura, o socket ligado com <code>--mount</code> para que um socket ausente seja erro em vez de uma pasta vazia criada no seu host), calcula onde o Docker guarda o volume da pasta gerenciada, e escreve <code>COMPOSE_PROFILES=container-broker</code>, <code>BROKER_URL=http://broker:8090</code>, <code>DOCKER_GID</code> e <code>PROJECT_WORKSPACES_HOST_ROOT</code> no <code>.env</code> — as quatro juntas</td>
+</tr>
+<tr>
+<td>Enter, <code>n</code>, qualquer outra coisa</td>
+<td>desligado. O <code>.env</code> não recebe nenhuma das quatro linhas, e o resumo final diz <em>&quot;Broker de container: DESLIGADO&quot;</em></td>
+</tr>
+<tr>
+<td>sem terminal</td>
+<td>desligado, e ele diz isso — nenhuma pergunta é feita onde ninguém pode responder</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Duas recusas e duas pendências, todas nomeadas:</strong></p>
+<ul>
+<li><em>&quot;não consegui medir o grupo do socket do Docker…&quot;</em> — a medição falhou
+(Docker rootless ou remoto: o socket não está em <code>/var/run/docker.sock</code>,
+que é o caminho que o compose monta). Nada foi escrito. Rode de novo e
+responda <strong>não</strong>, ou corrija o que a mensagem cita do Docker. Ele nunca escreve um
+<code>999</code> adivinhado no lugar.</li>
+<li><em>&quot;… não é um socket …&quot;</em> — mesmo desfecho, mesma correção.</li>
+<li>pendência <em>&quot;a raiz da pasta gerenciada…&quot;</em> — o
+<code>&lt;DockerRootDir&gt;/volumes/brabo_project_workspaces/_data</code> calculado não bateu com o
+<code>Mountpoint</code> real do volume depois de a stack subir (ou o <code>docker info</code> não
+disse onde os volumes moram). Projetos <strong>Pasta montada</strong> funcionam; projetos <strong>Container</strong>
+não, até você corrigir <code>PROJECT_WORKSPACES_HOST_ROOT</code> — a mensagem leva o
+valor que o daemon informou e o comando para recriar o broker.</li>
+<li>pendência <em>&quot;o broker de container: a api NÃO o alcançou…&quot;</em> — o serviço subiu
+saudável mas a api não o alcançou na rede interna. <code>docker compose -f docker/docker-compose.install.yml logs broker</code> diz por quê.</li>
+</ul>
+<p><code>COMPOSE_PROFILES</code> no <code>--env-file</code> é o que faz o <code>up -d --wait</code> subir o
+broker sem flag nenhuma na linha de comando — medido no Compose v5.5.1. A
+variável da imagem, <code>BRABO_BROKER_IMAGE</code>, é escrita <strong>ligando-o você ou
+não</strong>: o Compose interpola o arquivo inteiro antes de filtrar por profile, então uma
+variável obrigatória num serviço desligado ainda recusa o arquivo.</p>
+<p><strong>Ligando depois</strong> (mesma pasta do <code>.env</code>):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># 1. o grupo do socket COMO UM CONTAINER O VÊ — com a própria imagem do broker,</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">#    sem rede; é este o número de que o compose precisa</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> --network</span><span style="color:var(--shiki-token-string)"> none</span><span style="color:var(--shiki-token-string)"> --read-only</span><span style="color:var(--shiki-token-string)"> --entrypoint</span><span style="color:var(--shiki-token-string)"> stat</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --mount</span><span style="color:var(--shiki-token-string)"> type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">  "$(</span><span style="color:var(--shiki-token-function)">grep</span><span style="color:var(--shiki-token-string-expression)"> '^BRABO_BROKER_IMAGE=' </span><span style="color:var(--shiki-token-string)">.env</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> cut</span><span style="color:var(--shiki-token-string)"> -d=</span><span style="color:var(--shiki-token-string)"> -f2</span><span style="color:var(--shiki-token-string-expression)">)"</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string-expression)"> '%F %g'</span><span style="color:var(--shiki-token-string)"> /var/run/docker.sock</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># esperado: socket &#x3C;gid></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 2. onde o Docker guarda o volume da pasta gerenciada</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> volume</span><span style="color:var(--shiki-token-string)"> inspect</span><span style="color:var(--shiki-token-string)"> --format</span><span style="color:var(--shiki-token-string-expression)"> '{{.Mountpoint}}'</span><span style="color:var(--shiki-token-string)"> brabo_project_workspaces</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 3. acrescente ao .env (as quatro — nunca uma sem as outras)</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">#    COMPOSE_PROFILES=container-broker</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">#    BROKER_URL=http://broker:8090</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">#    DOCKER_GID=&#x3C;gid do passo 1></span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">#    PROJECT_WORKSPACES_HOST_ROOT=&#x3C;caminho do passo 2></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 4. recrie — a api também, para ela pegar o BROKER_URL</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.install.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-token-string)"> up</span><span style="color:var(--shiki-token-string)"> -d</span><span style="color:var(--shiki-token-string)"> --wait</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 5. pergunte antes de afirmar</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.install.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> -T</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  node</span><span style="color:var(--shiki-token-string)"> -e</span><span style="color:var(--shiki-token-string-expression)"> "fetch('http://broker:8090/health').then(r=>r.text()).then(console.log)"</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># esperado: {"status":"ok","servico":"broker"}</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Desligando:</strong> remova as quatro linhas do <code>.env</code>, depois remova o container do
+broker e recrie a api sem <code>BROKER_URL</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.install.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --profile</span><span style="color:var(--shiki-token-string)"> container-broker</span><span style="color:var(--shiki-token-string)"> rm</span><span style="color:var(--shiki-token-string)"> -sf</span><span style="color:var(--shiki-token-string)"> broker</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.install.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-token-string)"> up</span><span style="color:var(--shiki-token-string)"> -d</span><span style="color:var(--shiki-token-string)"> --wait</span></span>
+<span class="line"></span></code></pre>
+<p><code>up --remove-orphans</code> <strong>não</strong> faz o primeiro passo — medido: um serviço
+sob um profile desligado continua <em>definido</em> no arquivo, então o container dele
+não é órfão e continua rodando. Nada nos seus projetos é apagado; projetos Container
+e Pasta montada param de executar, e a tela do projeto deixa de oferecê-los
+(<a href="../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161</a>).</p>
+<p>Verificação: ligá-lo <strong>na instalação</strong> está provado — a pergunta e
+as recusas dela pelo <code>scripts/dev/install-broker.spec.ts</code> em todo PR, e o caminho
+inteiro pelo <code>.github/workflows/install-e2e.yml</code> em toda tag final, que responde
+<em>sim</em> e exige o broker ligado, a api o alcançando, e <code>COMPOSE_PROFILES</code> e
+<code>BROKER_URL</code> escritos no <code>.env</code>. Ligá-lo <strong>depois</strong> pelos cinco comandos acima, e desligá-lo,
+<strong>não têm verificação</strong>: nada os roda, e a ressalva do
+<code>up --remove-orphans</code> foi medida uma vez à mão.</p>
+<h3 id="modelos-locais-na-instalacao">Modelos locais numa instalação</h3>
+<p>Logo depois do broker, o <code>install.sh</code> pergunta <code>Ligar os modelos locais? [s/N]</code>
+(<a href="../business-rules/produto.html#rn-691">RN-691</a>). Ele diz o custo antes — disco para a
+imagem do Ollama e os modelos que o <code>ollama-model-loader</code> baixa ao iniciar, RAM enquanto um
+modelo está carregado — e o que se perde sem eles: a checagem de duplicata semântica
+de histórias e regras é pulada, e os agentes não têm modelo local. Só um
+&quot;s&quot; digitado os liga; sem terminal eles ficam desligados.</p>
+<p>Ligá-los mede a porta do host antes de escrever qualquer coisa: <code>11434</code>, ou a
+primeira livre até <code>11443</code> (um Ollama nativo costuma segurar a <code>11434</code>). A faixa
+inteira ocupada é uma recusa nomeada sem nada escrito. O <code>.env</code> recebe <code>OLLAMA_PORT</code>
+e <code>llm</code> na linha única de <code>COMPOSE_PROFILES</code>.</p>
+<p>Para ligá-los <strong>depois</strong>, na pasta da instalação: escolha uma porta livre, depois
+acrescente <code>OLLAMA_PORT=&lt;porta&gt;</code> ao <code>.env</code>, acrescente <code>llm</code> à linha existente de
+<code>COMPOSE_PROFILES</code> com uma vírgula (ou crie <code>COMPOSE_PROFILES=llm</code>), e rode
+<code>docker compose -f docker/docker-compose.install.yml --env-file .env up -d --wait</code>.</p>
+<p>Verificação: a pergunta, a medição da porta e as linhas do <code>.env</code> são
+provadas pelo <code>scripts/dev/install-llm.spec.ts</code> em todo PR. O E2E da instalação
+responde <em>não</em> (baixar modelos custaria GBs por tag), então subir com o
+profile <code>llm</code> <strong>não tem verificação de ponta a ponta</strong>.</p>
+<h3 id="reinstalar-do-zero">Reinstalando do zero</h3>
+<p>Quando uma instalação anterior é encontrada (só conta o projeto compose chamado exatamente
+<code>brabo</code> — o compose de dev <code>brabo-dev</code> não,
+<a href="../business-rules/produto.html#rn-692">RN-692</a>), a migração roda o backup, prova o
+restore, e então pergunta
+<code>Apagar os volumes e reinstalar? [s = restaurar / z = do zero / N = parar]</code>.
+<code>z</code> apaga e reinstala <strong>sem restaurar</strong> os dados antigos; o backup provado
+fica na pasta que ele nomeia, e restaurá-lo depois é o
+<a href="restore.html#restore">Restore</a>. Provado pelo <code>scripts/dev/install-llm.spec.ts</code>.</p>
+<hr>
+<h2 id="verificar-artefato-publicado">Verificando um artefato publicado</h2>
+<p>Toda tag final assina o que publica, com <code>cosign</code> <strong>keyless</strong> — a
+identidade que assina é o próprio workflow, e não há chave sob custódia
+em lugar nenhum (<a href="../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149</a>,
+<a href="../business-rules/ci.html#rn-524">RN-524</a>). É assim que <strong>você</strong> confere, fora do
+CI.</p>
+<p>Os dois comandos precisam das duas flags <code>--certificate-*</code>. Elas não são
+enfeite opcional: sem elas o <code>cosign</code> aceitaria uma assinatura válida <strong>de
+qualquer um</strong>, que é a falha que todo este mecanismo existe para evitar.</p>
+<h3 id="an-image-by-digest">Uma imagem, por digest</h3>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># O digest vem do .release/images.json, que é um asset da Release</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># — nunca de uma tag, que é um ponteiro móvel.</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">DIGEST</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-foreground)">$(</span><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> release</span><span style="color:var(--shiki-token-string)"> download</span><span style="color:var(--shiki-token-string)"> vX.Y.Z</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string)"> images.json</span><span style="color:var(--shiki-token-string)"> --output</span><span style="color:var(--shiki-token-string)"> -</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  |</span><span style="color:var(--shiki-token-function)"> jq</span><span style="color:var(--shiki-token-string)"> -r</span><span style="color:var(--shiki-token-string-expression)"> '.imagens[] | select(.alvo == "api") | .digest'</span><span style="color:var(--shiki-foreground)">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-function)">cosign</span><span style="color:var(--shiki-token-string)"> verify</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --certificate-identity-regexp</span><span style="color:var(--shiki-token-string-expression)"> '^https://github.com/viralabs-dev/brabo/\.github/workflows/release\.yml@'</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --certificate-oidc-issuer</span><span style="color:var(--shiki-token-string-expression)"> 'https://token.actions.githubusercontent.com'</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">  "ghcr.io/viralabs-dev/brabo-api@${DIGEST}"</span></span>
+<span class="line"></span></code></pre>
+<h3 id="the-runner-binaries">Os binários do runner</h3>
+<p>Um <code>checksums.txt</code> assinado cobre os quatro alvos (o Mac Intel não tem binário
+desde o <a href="../adr/0174-runner-sem-binario-darwin-x64.html">ADR 0174</a> — ele fica
+sem runner e pede suporte por issue no <code>brabo-runner</code>, AT-774), então a verificação tem dois
+passos: a assinatura do manifesto, depois o binário contra o manifesto.</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> release</span><span style="color:var(--shiki-token-string)"> download</span><span style="color:var(--shiki-token-string)"> vX.Y.Z</span><span style="color:var(--shiki-token-string)"> --repo</span><span style="color:var(--shiki-token-string)"> viralabs-dev/brabo-runner</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string-expression)"> 'checksums.txt*'</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string-expression)"> 'brabo-runner-*'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-function)">cosign</span><span style="color:var(--shiki-token-string)"> verify-blob</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --bundle</span><span style="color:var(--shiki-token-string)"> checksums.txt.bundle</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --certificate-identity-regexp</span><span style="color:var(--shiki-token-string-expression)"> '^https://github.com/viralabs-dev/brabo-runner/\.github/workflows/build-runner-binaries\.yml@'</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --certificate-oidc-issuer</span><span style="color:var(--shiki-token-string-expression)"> 'https://token.actions.githubusercontent.com'</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  checksums.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># Só depois de o manifesto ser provado autêntico é que conferir o binário quer</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># dizer alguma coisa — um checksums.txt que ninguém verificou é um arquivo que o</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># atacante também consegue escrever.</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">sha256sum</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string)"> checksums.txt</span><span style="color:var(--shiki-token-string)"> --ignore-missing</span></span>
+<span class="line"></span></code></pre>
+<h3 id="when-verification-fails">Quando a verificação falha</h3>
+<p><strong>Não instale.</strong> Uma assinatura que não verifica tem exatamente duas
+leituras — o artefato não é o que a esteira publicou, ou a esteira
+não o publicou — e nenhuma é motivo para continuar. Confira se a
+regex de identidade casa com o workflow que de fato publicou aquela tag (uma
+republicação por <code>workflow_dispatch</code> assina com a mesma identidade), e então
+trate como incidente e não como ruído.</p>
+<p><strong>O que isto NÃO cobre:</strong> assinatura de código do sistema operacional para os
+binários do runner — notarização do macOS e Authenticode do Windows. Essas exigem uma
+identidade de assinatura paga e são um item de backlog separado; o sistema ainda vai avisar
+na primeira execução.</p>
+<h3 id="oferta-de-fonte-na-imagem">A oferta escrita de fonte, dentro de todo artefato publicado</h3>
+<p>Assinar responde <em>&quot;isto é o que a esteira publicou?&quot;</em>. Uma segunda pergunta
+viaja com a mesma imagem e tem outra resposta: <strong>onde está a fonte
+do software GPL dentro dela?</strong></p>
+<p>A imagem do engine embute <code>git</code>, <code>busybox</code>, <code>libgcc</code>/<code>libstdc++</code> e outros 18 pacotes
+apk sob GPL, mais os quatro scanners que o engine chama por <code>exec</code>.
+Rodá-los como processos separados não contamina o Brabo, que continua
+MIT — mas <em>distribuir</em> a imagem exige que quem a recebe possa obter
+a fonte correspondente. Desde o <a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119</a>
+essa distribuição acontece em toda tag final.</p>
+<p>A oferta escrita é o <code>THIRD_PARTY_NOTICES.md</code>, e ele vai <strong>dentro</strong> da
+imagem, porque quem roda <code>docker pull</code> não tem o repositório:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> --entrypoint</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> ghcr.io/viralabs-dev/brabo-engine:vX.Y.Z</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  -c</span><span style="color:var(--shiki-token-string-expression)"> 'cat /usr/share/doc/brabo/THIRD_PARTY_NOTICES.md'</span></span>
+<span class="line"></span></code></pre>
+<p>Ele nomeia todo componente, a versão exata e a licença, que é o que
+permite a qualquer um chegar à release upstream de cada um.</p>
+<p>Desde a AT-120 o mesmo arquivo, no mesmo caminho e na mesma forma (dono root,
+<code>0644</code>, copiado antes do <code>USER</code>), vai dentro de <strong>toda</strong> imagem publicada —
+<code>brabo-api</code>, <code>brabo-web</code>, <code>brabo-broker</code> e <code>brabo-backup</code> além de
+<code>brabo-engine</code> — e ao lado dos binários do runner como o asset
+<code>THIRD_PARTY_NOTICES.md</code> da Release, coberto pelo mesmo
+<code>checksums.txt</code> assinado (RN-524). Essa foi a decisão do mantenedor, e é a
+conservadora: nenhum artefato é declarado isento. Troque <code>brabo-engine</code> por qualquer
+das outras quatro no comando acima. Antes da AT-120 esse comando falhava com
+&quot;Permission denied&quot; na imagem do engine: o BuildKit aplica <code>COPY --chmod=0644</code>
+também ao diretório que o <code>COPY</code> cria, então <code>/usr/share/doc/brabo</code> não tinha
+bit de execução e o usuário não-root da imagem não conseguia atravessá-lo. Cada
+Dockerfile agora cria o diretório <code>0755</code> antes. Para o runner:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> release</span><span style="color:var(--shiki-token-string)"> download</span><span style="color:var(--shiki-token-string)"> vX.Y.Z</span><span style="color:var(--shiki-token-string)"> --repo</span><span style="color:var(--shiki-token-string)"> viralabs-dev/brabo</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --pattern</span><span style="color:var(--shiki-token-string)"> THIRD_PARTY_NOTICES.md</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string)"> checksums.txt</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">sha256sum</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string)"> --ignore-missing</span><span style="color:var(--shiki-token-string)"> checksums.txt</span></span>
+<span class="line"></span></code></pre>
+<p>Se esse arquivo falta num artefato, o artefato não deveria ser
+distribuído. O <code>scripts/ci/oferta-de-fonte-na-imagem.spec.ts</code> impede que cada <code>COPY</code>
+e o asset da Release sejam removidos por acidente, e o passo
+<code>A oferta de fonte está dentro das cinco imagens</code> do <code>ci.yml</code> lê o
+arquivo de volta de cada imagem que constrói e o compara com o checkout — mas
+só uma tag de verdade prova o artefato publicado.</p>
+<p>O arquivo também registra o que <strong>não</strong> está resolvido: separar os scanners num
+sidecar próprio, deixando a imagem do engine livre de copyleft, segue aberto como
+escolha de <em>arquitetura</em> e não de conformidade.</p>
+<hr>
+<h2 id="subindo-imagem-de-terceiro">Subindo uma imagem de terceiro</h2>
+<p>Toda imagem de terceiro em <code>docker/</code> e <code>deploy/k8s/</code> é fixada <strong>por
+digest</strong>, com a tag de onde veio escrita <strong>dentro da referência</strong>, antes
+do digest (<a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159</a>,
+<a href="../adr/0178-tag-inline-na-imagem-de-terceiro.html">ADR 0178</a>). Os workflows em
+<code>.github/workflows/</code> <strong>não</strong> guardam literal de imagem: os <code>services:</code> deles leem a
+referência do compose de dev pelo <code>imagens-do-compose.yml</code>
+(<a href="../adr/0197-a-imagem-dos-workflows-vem-do-compose.html">ADR 0197</a>), então subir
+o compose sobe o CI também:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">image</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> neo4j:5.26-community@sha256:d9cfe82983d27f5a75b3aaae8f316d04f9a698a3b7f6103a508f7caf8362f255</span></span>
+<span class="line"></span></code></pre>
+<p>Um <strong>Dockerfile</strong> toma a mesma forma na linha <code>FROM</code> — nunca um comentário no
+fim dela: o parser do Docker só aceita <code>#</code> no começo da linha, e um
+no fim faz o build falhar com <em>&quot;FROM requires either one or three
+arguments&quot;</em>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">FROM</span><span style="color:var(--shiki-foreground)"> alpine:3.24@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6 </span><span style="color:var(--shiki-token-keyword)">AS</span><span style="color:var(--shiki-foreground)"> runtime</span></span>
+<span class="line"></span></code></pre>
+<p>Isso é um <strong>congelamento</strong>. Desde o ADR 0197 os ecossistemas <code>docker-compose</code> (os
+composes em <code>docker/</code>) e <code>docker</code> (as linhas <code>FROM</code> em <code>docker/*/</code> e os
+manifestos em <code>deploy/k8s/</code>) do Dependabot propõem a subida toda semana, uma PR agrupada
+por ecossistema, na <code>dev</code>. Revisar essa PR são os passos 1 e 4 deste procedimento.
+Dois casos ainda voltam para cá:</p>
+<ul>
+<li><strong><code>neo4j</code> e <code>ollama</code> moram num compose E em <code>deploy/k8s/base/</code></strong>, e os
+dois ecossistemas nunca dividem uma PR. Quando o registry republica a MESMA tag
+com outro digest, as duas PRs reprovam no lint (&quot;mesma tag inline, dois
+digests&quot;); junte as duas subidas numa PR só com o passo 3 abaixo.</li>
+<li>As duas imagens que nenhum ecossistema lê (abaixo).</li>
+</ul>
+<p>Para mover uma à mão — digamos, <code>neo4j</code> de <code>5.26-community</code> para <code>5.27-community</code>:</p>
+<pre class="codigo"><code class="language-sh"># 1. Confirme que a tag resolve para um ÍNDICE (uma manifest list). Se não,
+#    o pin perde o multi-arch e o linux/arm64 para de funcionar.
+docker manifest inspect neo4j:5.27-community | head -3
+#    → &quot;mediaType&quot;: &quot;application/vnd.oci.image.index.v1+json&quot;
+#      (ou …distribution.manifest.list.v2+json)
+
+# 2. Leia o digest do índice.
+docker buildx imagetools inspect neo4j:5.27-community --format '{{.Manifest.Digest}}'
+
+# 3. Escreva `neo4j:5.27-community@&lt;digest&gt;` EM TODO LUGAR onde a referência antiga aparece.
+#    Não em .github/workflows/: os workflows leem pgvector e ollama do
+#    compose de dev (ADR 0197), e o lint reprova um literal ali.
+grep -rn 'neo4j:5.26-community@sha256' docker/ deploy/k8s/
+
+# 4. O lint prova.
+node scripts/ci/imagens-pinadas.ts
+</code></pre>
+<p>Duas imagens são subidas por este mesmo procedimento, à mão, faça o Dependabot
+o que fizer: o <code>imageName</code> do CloudNativePG
+em <code>deploy/k8s/overlays/local/db/cluster.yaml</code> (nenhum ecossistema
+lê essa chave) e a imagem do caso de QA do golden-set,
+<code>IMAGEM_DO_GOLDEN_SET_QA</code> em <code>apps/api/scripts/golden-set-qa-container.ts</code>
+(uma constante TypeScript, lida pelo <code>golden-set-qa.yml</code>).</p>
+<p>O passo 3 não é burocracia opcional: a checagem recusa <strong>a mesma tag inline
+levando dois digests diferentes</strong>, porque o compose de dev e o cluster
+afirmando a mesma versão enquanto rodam bytes diferentes é como um CI verde deixa de
+querer dizer alguma coisa. Entre o compose de dev e o CI não há mais nada a alinhar:
+o CI lê o compose.</p>
+<p>Para dar a um workflow NOVO um serviço de terceiro, nunca escreva a referência no
+workflow: acrescente a imagem do serviço em <code>docker/docker-compose.yml</code>, uma linha em
+<code>IMAGENS_DOS_WORKFLOWS</code> em <code>scripts/ci/imagens-do-compose.ts</code>, a saída
+correspondente em <code>.github/workflows/imagens-do-compose.yml</code> (o spec dele reprova se os dois
+divergem), e no workflow um job <code>imagens:</code> com
+<code>uses: ./.github/workflows/imagens-do-compose.yml</code> mais
+<code>image: ${{ needs.imagens.outputs.&lt;nome&gt; }}</code>.</p>
+<p>O que a checagem <strong>não</strong> cobre, e por quê, está em
+<a href="../explanation/cadeia-de-suprimentos-do-ci.html#container-images-digest-with-the-tag-alongside">a cadeia de suprimentos do CI</a>:
+as cinco imagens que o produto publica já estão resolvidas por digest pelo
+<code>.release/images.json</code> e pelo <code>make imagens-do-release</code>
+(<a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119</a>) — nunca fixe
+essas à mão no overlay, que deliberadamente guarda o marcador.</p>
+<hr>
+<h2 id="adicionando-um-provider-compativel">Acrescentando um provider compatível</h2>
+<p>Vale para qualquer provider que fale o dialeto <code>/chat/completions</code> da OpenAI —
+que é o caso de praticamente todo hub e todo serviço de inferência
+gerenciado. A base já existe
+(<a href="../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041</a>);
+o que você escreve é <strong>configuração</strong>, não parsing.</p>
+<h3 id="1-read-the-official-doc-before-writing-the-first-line">1. Leia a doc oficial antes de escrever a primeira linha</h3>
+<p>Quatro coisas precisam vir da documentação do provider, não de palpite:
+<code>baseUrl</code>, o cabeçalho de auth, o formato do <code>usage</code> no stream, e as
+peculiaridades do streaming. Registre a URL consultada e a data no topo do
+arquivo de config — é o único jeito de saber, meses depois, se a config
+está velha.</p>
+<p>O que diverge do padrão da OpenAI vira uma <strong>flag na base</strong>,
+nunca um <code>if</code> espalhado. Se a divergência não cabe numa flag
+existente, acrescente uma — e só porque este provider real precisa.</p>
+<h3 id="2-write-the-config">2. Escreva a config</h3>
+<pre class="codigo"><code class="language-ts">// apps/api/src/infrastructure/llm/&lt;provider&gt;-provider.ts
+export function meuProviderConfig(baseUrl = BASE_URL): OpenAICompatibleConfig {
+  return {
+    name: 'meu-provider',
+    baseUrl,
+    capabilities: { streaming: true, toolCalling: true, listModels: true },
+    authHeaders: (apiKey) =&gt; ({ Authorization: `Bearer ${apiKey ?? ''}` }),
+    flags: { streamOptionsIncludeUsage: true, maxTokensField: 'max_tokens' },
+    // Só se o catálogo dele devolve mais que `{ data: [{ id }] }`:
+    // parseCatalogo: (corpo) =&gt; ...,
+    // Só se for um HUB (informa quem de fato serviu a requisição):
+    // extrairUpstreamProvider: (frame) =&gt; ...,
+  };
+}
+</code></pre>
+<p>Exporte a função de config, não só a classe: é para ela que a suíte de
+contrato aponta o servidor falso. Uma cópia da config escrita dentro do
+teste passaria verde mesmo se a de produção divergisse.</p>
+<h3 id="3-run-the-contract-suite-against-it">3. Rode a suíte de contrato contra ele</h3>
+<pre class="codigo"><code class="language-ts">runLLMProviderContract('meu-provider', () =&gt; ({
+  dialeto: dialetoOpenAI, // reaproveite o da base se o formato é o mesmo
+  criar: (baseUrl) =&gt;
+    new OpenAICompatibleProvider(meuProviderConfig(baseUrl), new GptTokenizerEstimator()),
+  usageFallback: 'estimated',
+  timeoutEnv: 'LLM_REQUEST_TIMEOUT_MS',
+  temFerramentasNoPedido: (body) =&gt; Array.isArray(body.tools),
+  modelo: 'algum-modelo',
+}));
+</code></pre>
+<p>Herdado de graça: streaming com frame partido, usage presente e
+ausente, tool calling, os quatro erros normalizados, o catálogo, e um
+servidor mudo.</p>
+<h3 id="4-register-the-provider-and-the-credential-kind">4. Registre o provider e o tipo de credencial</h3>
+<ol>
+<li><strong>dois lugares, de propósito</strong>: o tipo <code>LLMProviderName</code> em
+<code>packages/shared/src/index.ts</code> (o web o usa também) e a lista de
+runtime <code>LLM_PROVIDER_NAMES</code> em
+<code>apps/api/src/domain/llm/llm-provider-names.ts</code>. Eles não podem morar
+juntos: <code>packages/shared</code> é 100% tipos — um valor exportado de
+lá quebra a imagem de produção da api no boot com
+<code>ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING</code>, e
+<code>apps/api/test/packages-shared-so-tipos.spec.ts</code> reprova antes de
+chegar lá. Esquecer a lista não passa em silêncio: a checagem de
+exaustividade nos dois sentidos quebra o typecheck, assim como o <code>Record</code>
+exaustivo <code>ROTULO_DO_PROVIDER</code> do web quebra até o provider
+ganhar um rótulo;</li>
+<li>se for um hub, acrescente o nome a <code>HUBS</code> em <code>apps/web/src/lib/models.ts</code>
+para ele cair no grupo certo do seletor;</li>
+<li>o registro de providers da api (<code>llm-infrastructure.module.ts</code>);</li>
+<li>o <code>pgEnum</code> do provider no schema mais uma migration, se o nome é
+novo.</li>
+</ol>
+<h3 id="5-seed-the-models-with-the-price-from-the-docs">5. Semeie os modelos com o preço da doc</h3>
+<p>Um preço digitado vem com <code>manual_pricing: true</code>. Isso protege a linha
+da sincronização de preço: para um provider que não expõe preço no
+catálogo, o número manual é o único que existe.</p>
+<p>Se o provider expõe <code>GET /models</code>, <strong>não semeie o catálogo inteiro</strong> —
+deixe a sincronização descobri-lo. Ela escreve os modelos desabilitados, e
+o owner habilita o que importa pela tela de curadoria
+(<a href="../business-rules/api.html#rn-043">RN-043</a>).</p>
+<p>Se o catálogo do provider publica <strong>modalidade</strong> (aceita imagem, gera
+imagem) ou <code>reasoning</code>, emita-as no <code>parseCatalogo</code> dele — e só quando
+a doc oficial diz. Um campo que o provider não declara fica
+<strong>omitido</strong>, nunca <code>false</code>: <code>undefined</code> preserva o que já estava
+gravado, e <code>false</code> apagaria dado curado à mão
+(<a href="../business-rules/api.html#rn-056">RN-056</a>).</p>
+<h3 id="6-verify-with-a-real-credential">6. Verifique com uma credencial real</h3>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># na página Providers (rodapé do menu): cadastre a credencial, depois</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># "Atualizar catálogo" e confira o relatório por provider.</span></span>
+<span class="line"></span></code></pre>
+<p>O relatório mostra <strong>todo</strong> provider, inclusive os pulados, com o
+motivo e a origem da falha. <code>sem_credencial</code> quer dizer que a chave
+nunca chegou; <code>falha · origem infra</code> quer dizer que nem chegou ao
+provider; <code>falha · origem modelo</code> quer dizer que ele respondeu com uma recusa.</p>
+<p>Verificação: os passos 2–4 são provados em todo PR — a suíte de contrato
+(<code>apps/api/test/contract/llm-provider.contract.ts</code>, rodada pelo
+<code>*.contract.spec.ts</code> de cada provider) contra um servidor falso, e o typecheck que quebra quando
+falta um nome em qualquer das listas. O passo 6 é <strong>manual por natureza</strong>: ele precisa de uma
+credencial real com crédito, que o CI não tem. Os arquivos <code>*.smoke.spec.ts</code> por
+provider são a forma roteirizada dele, e pulam sem uma
+chave — o ambiente tem credencial só para o OpenRouter (veja o
+<code>TODO(humano)</code> sobre os smokes de LLM no <code>CLAUDE.md</code>).</p>
+<hr>
+<nav class="site-pager"><a href="../runbook/deploy.html">Deploy e rollout</a><a href="../runbook/operacao.html">Operação</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-infra/blob/dev/deploy/docs/runbook/instalacao.md">Edit this page</a></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#instalando">Instalando</a></li><li class="n3"><a href="#broker-na-instalacao">O broker de containers numa instalação</a></li><li class="n3"><a href="#modelos-locais-na-instalacao">Modelos locais numa instalação</a></li><li class="n3"><a href="#reinstalar-do-zero">Reinstalando do zero</a></li><li class="n2"><a href="#verificar-artefato-publicado">Verificando um artefato publicado</a></li><li class="n3"><a href="#an-image-by-digest">Uma imagem, por digest</a></li><li class="n3"><a href="#the-runner-binaries">Os binários do runner</a></li><li class="n3"><a href="#when-verification-fails">Quando a verificação falha</a></li><li class="n3"><a href="#oferta-de-fonte-na-imagem">A oferta escrita de fonte, dentro de todo artefato publicado</a></li><li class="n2"><a href="#subindo-imagem-de-terceiro">Subindo uma imagem de terceiro</a></li><li class="n2"><a href="#adicionando-um-provider-compativel">Acrescentando um provider compatível</a></li><li class="n3"><a href="#1-read-the-official-doc-before-writing-the-first-line">1. Leia a doc oficial antes de escrever a primeira linha</a></li><li class="n3"><a href="#2-write-the-config">2. Escreva a config</a></li><li class="n3"><a href="#3-run-the-contract-suite-against-it">3. Rode a suíte de contrato contra ele</a></li><li class="n3"><a href="#4-register-the-provider-and-the-credential-kind">4. Registre o provider e o tipo de credencial</a></li><li class="n3"><a href="#5-seed-the-models-with-the-price-from-the-docs">5. Semeie os modelos com o preço da doc</a></li><li class="n3"><a href="#6-verify-with-a-real-credential">6. Verifique com uma credencial real</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-en.json" data-base="../"></script></body>
+</html>

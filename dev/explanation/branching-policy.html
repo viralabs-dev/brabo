@@ -337,7 +337,7 @@ tocado. O <code>GITHUB_TOKEN</code> do workflow tem escopo neste repositório �
 tem nada que reescrever refs no de outra pessoa.</p>
 <p>A decisão em si — quais quatro nomes são excluídos, e a checagem de fork — é
 uma função pura testada
-(<a href="https://github.com/daneiel/brabo/blob/dev/scripts/ci/archive-branch.ts"><code>scripts/ci/archive-branch.ts</code></a>),
+(<a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/archive-branch.ts"><code>scripts/ci/archive-branch.ts</code></a>),
 não shell inline: é a parte deste mecanismo em que errar de fato justifica
 testes — e a elegibilidade também (<code>aptaParaArquivar</code>, mesmo
 arquivo). O mesmo script então chama a API do GitHub: cria a ref
@@ -390,7 +390,7 @@ GitHub sempre as abre contra a branch <strong>default</strong> (<code>main</code
 <code>target-branch</code>. O <code>.github/workflows/dependabot-para-dev.yml</code> pega cada PR
 aberto do Dependabot contra a <code>main</code> e faz uma de duas coisas, decidida por
 uma função pura testada
-(<a href="https://github.com/daneiel/brabo/blob/dev/scripts/ci/dependabot-para-dev.ts"><code>scripts/ci/dependabot-para-dev.ts</code></a>):
+(<a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/dependabot-para-dev.ts"><code>scripts/ci/dependabot-para-dev.ts</code></a>):
 <ul>
 <li><strong>fecha</strong> o PR com a justificativa, quando o lockfile da <code>dev</code> já resolve
 toda dependência do PR só em versões <code>&gt;=</code> o limiar;</li>
@@ -439,7 +439,7 @@ escrevendo <code>docs-not-needed:</code> no corpo.</p>
 <p>Desde a AT-094 <strong>o bot escreve essa linha</strong>, e só nessa classe de PR. Um
 passo do job <code>Drift, gerados e build</code> (<code>.github/workflows/docs-check.yml</code>),
 logo antes da deriva, chama
-<a href="https://github.com/daneiel/brabo/blob/dev/scripts/ci/dependabot-justifica-pin.ts"><code>scripts/ci/dependabot-justifica-pin.ts</code></a>
+<a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/dependabot-justifica-pin.ts"><code>scripts/ci/dependabot-justifica-pin.ts</code></a>
 sobre o mesmo intervalo que a deriva avalia. Ele escreve a linha quando <strong>as
 duas</strong> coisas valem:</p>
 <ul>

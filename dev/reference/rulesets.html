@@ -471,7 +471,7 @@ quantos jobs fosse dividido, por um ganho líquido de ~7s.</p>
 o mesmo que a da api — dividir três componentes de tamanho comparável, e não
 um grande mais caudas pequenas, é o que transforma &quot;≈150s contra 159s&quot; em
 &quot;177s contra 343s&quot;. A premissa 1 deixou de valer por um motivo ortogonal:
-<strong>nenhum ruleset está aplicado a este repositório ainda</strong> — <code>gh api repos/daneiel/brabo/branches/dev/protection</code> ainda devolve <code>404</code>, igual à
+<strong>nenhum ruleset está aplicado a este repositório ainda</strong> — <code>gh api repos/viralabs-dev/brabo-legacy/branches/dev/protection</code> ainda devolve <code>404</code>, igual à
 nota de &quot;Estado atual&quot; no topo desta página —, então não havia check
 obrigatório a apagar. A tabela de checks obrigatórios acima já reflete o
 novo nome. <strong>Se um ruleset for aplicado algum dia</strong>, liste <code>Testes TS (api)</code>,
@@ -895,8 +895,8 @@ essa verificação que impede publicar algo diferente do que foi validado.</p>
 <h2 id="como-aplicar">Como aplicar</h2>
 <p>Interface: <strong>Settings → Rules → Rulesets → New ruleset</strong>.</p>
 <p>Pela API, se preferir versionar o comando:</p>
-<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> -X</span><span style="color:var(--shiki-token-string)"> POST</span><span style="color:var(--shiki-token-string)"> repos/daneiel/brabo/rulesets</span><span style="color:var(--shiki-token-string)"> --input</span><span style="color:var(--shiki-token-string)"> ruleset-permanentes.json</span></span>
-<span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> repos/daneiel/brabo/rulesets</span><span style="color:var(--shiki-token-string)"> --jq</span><span style="color:var(--shiki-token-string-expression)"> '.[] | "\(.name): \(.enforcement)"'</span></span>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> -X</span><span style="color:var(--shiki-token-string)"> POST</span><span style="color:var(--shiki-token-string)"> repos/viralabs-dev/brabo/rulesets</span><span style="color:var(--shiki-token-string)"> --input</span><span style="color:var(--shiki-token-string)"> ruleset-permanentes.json</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> repos/viralabs-dev/brabo/rulesets</span><span style="color:var(--shiki-token-string)"> --jq</span><span style="color:var(--shiki-token-string-expression)"> '.[] | "\(.name): \(.enforcement)"'</span></span>
 <span class="line"></span></code></pre>
 <p>O Ruleset 3, em cada um dos seis repositórios (<code>&lt;repo&gt;</code>), com o id do App
 <code>viralabs-dev-brabo</code> em <code>&lt;id do App&gt;</code>:</p>
@@ -922,7 +922,7 @@ essa verificação que impede publicar algo diferente do que foi validado.</p>
 aqui porque a API de rulesets exige <code>repository_id</code> e ids de app que variam
 por instalação — um arquivo fixo seria copiado errado. Se quiser
 versioná-los, gere com
-<code>gh api repos/daneiel/brabo/rulesets/&lt;id&gt; &gt; docs/reference/...</code> depois de
+<code>gh api repos/viralabs-dev/brabo/rulesets/&lt;id&gt; &gt; docs/reference/...</code> depois de
 aplicar pela interface, e este documento passará a apontar para eles.</p>
 </blockquote>
 <h2 id="settings--pages-a-fonte-é-a-branch-gh-pages">Settings → Pages: a fonte é a branch <code>gh-pages</code></h2>
@@ -931,7 +931,7 @@ fonte, o GitHub recebe a aplicação.</p>
 <p><strong>Settings → Pages → Build and deployment → Source:
 <code>Deploy from a branch</code></strong>, com a branch <strong><code>gh-pages</code></strong> e a pasta
 <strong><code>/ (root)</code></strong>.</p>
-<p><strong>Já aplicado.</strong> <code>gh api repos/daneiel/brabo/pages</code> devolve
+<p><strong>Já aplicado.</strong> <code>gh api repos/viralabs-dev/brabo-legacy/pages</code> devolve
 <code>&quot;build_type&quot;: &quot;legacy&quot;</code> com <code>source.branch: &quot;gh-pages&quot;</code>, e os três degraus
 respondem no ar.</p>
 <p>O passo intermediário vale o registro, porque confunde: enquanto o
@@ -1021,7 +1021,7 @@ silêncio.</p>
 <p>Sem <code>|| true</code> de propósito: se o comando falhar, você precisa ver.</p>
 <h2 id="conferir-que-está-de-pé">Conferir que está de pé</h2>
 <pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># do the rulesets exist and are they active?</span></span>
-<span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> repos/daneiel/brabo/rulesets</span><span style="color:var(--shiki-token-string)"> --jq</span><span style="color:var(--shiki-token-string-expression)"> '.[] | "\(.name): \(.enforcement)"'</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> repos/viralabs-dev/brabo/rulesets</span><span style="color:var(--shiki-token-string)"> --jq</span><span style="color:var(--shiki-token-string-expression)"> '.[] | "\(.name): \(.enforcement)"'</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:var(--shiki-token-comment)"># does the protection respond? (should be REJECTED)</span></span>
 <span class="line"><span style="color:var(--shiki-token-function)">git</span><span style="color:var(--shiki-token-string)"> push</span><span style="color:var(--shiki-token-string)"> origin</span><span style="color:var(--shiki-token-string)"> HEAD:dev</span></span>

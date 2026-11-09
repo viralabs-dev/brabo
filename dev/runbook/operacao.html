@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operação | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../assets/tema.js"></script>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/fonts.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../runbook/operacao.html" selected>pt-BR</option><option value="../en/runbook/operacao.html">en</option><option value="../ru/runbook/operacao.html">ru</option><option value="../zh-Hans/runbook/operacao.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../dev/runbook/operacao.html" selected>dev</option><option value="../../prd/runbook/operacao.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../index.html">Início</a></li><li><a href="../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><details open><summary><span>Manual de operação</span></summary><ul><li><a href="../runbook.html">Manual de operação</a></li><li><a href="../runbook/ambiente-local.html">Ambiente local e de dev</a></li><li><a href="../runbook/deploy.html">Deploy e rollout</a></li><li><a href="../runbook/instalacao.html">Instalação e artefatos</a></li><li><a href="../runbook/operacao.html" aria-current="page">Operação</a></li><li><a href="../runbook/restore.html">Restore</a></li><li><a href="../runbook/segredos.html">Rotação de segredos</a></li></ul></details></li><li><a href="../tutorials/adotar.html">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">Arquitetura</a></li><li><a href="../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">Política de branches</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../explanation/localizacao.html">Localização</a></li><li><a href="../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../glossary.html">Glossário</a></li><li><a href="../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">Regras de negócio</a></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="operação">Operação</h1>
+<p>Parte do <a href="../runbook.html">Runbook operacional</a>. Comece pela triagem do índice.</p>
+<h2 id="incidente-de-custo">Incidente de custo</h2>
+<p>Agentes gastam tokens a cada turno, e um agente preso num laço gasta
+rápido. Esta seção é para o momento em que o custo por hora dispara e alguém
+precisa decidir o que cortar.</p>
+<h3 id="signal">Sinal</h3>
+<p>O alerta <em>Custo por hora acima do limite</em> dispara quando o gasto projetado passa
+de USD 5/hora em qualquer projeto:</p>
+<pre class="codigo"><code class="language-promql">max(sum by (project) (rate(brabo_llm_cost_micros_total[10m])) * 3600 / 1000000)
+</code></pre>
+<p>O alerta é um <strong>aviso</strong>, não um freio. O freio de verdade são os
+<code>budgets</code> do domínio, e eles agem por projeto/sessão, nunca globalmente
+(<a href="../business-rules/api.html#rn-019">RN-019</a>).</p>
+<h3 id="1-which-project-which-agent">1. Qual projeto, qual agente</h3>
+<p>Grafana → painel <strong>Brabo · visão executiva</strong> → painel de custo por projeto.
+Ou direto do banco, que também te dá o agente e o
+modelo:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">select</span><span style="color:var(--shiki-foreground)"> s.project_id,</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">       tu.actor_id                             </span><span style="color:var(--shiki-token-keyword)">as</span><span style="color:var(--shiki-foreground)"> agente,</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">       tu.model_name,</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">       count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">)                                </span><span style="color:var(--shiki-token-keyword)">as</span><span style="color:var(--shiki-foreground)"> chamadas,</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">       sum</span><span style="color:var(--shiki-foreground)">(tu.cost_micros) </span><span style="color:var(--shiki-token-keyword)">/</span><span style="color:var(--shiki-foreground)"> 1e6               </span><span style="color:var(--shiki-token-keyword)">as</span><span style="color:var(--shiki-foreground)"> usd,</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">       round</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-function)">avg</span><span style="color:var(--shiki-foreground)">(tu.latency_ms))               </span><span style="color:var(--shiki-token-keyword)">as</span><span style="color:var(--shiki-foreground)"> latencia_media_ms</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  from</span><span style="color:var(--shiki-foreground)"> token_usage tu</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  join</span><span style="color:var(--shiki-token-keyword)"> sessions</span><span style="color:var(--shiki-foreground)"> s </span><span style="color:var(--shiki-token-keyword)">on</span><span style="color:var(--shiki-foreground)"> s.id </span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-foreground)"> tu.session_id</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> where</span><span style="color:var(--shiki-foreground)"> tu.created_at </span><span style="color:var(--shiki-token-keyword)">></span><span style="color:var(--shiki-token-keyword)"> now</span><span style="color:var(--shiki-foreground)">() </span><span style="color:var(--shiki-token-keyword)">-</span><span style="color:var(--shiki-foreground)"> interval </span><span style="color:var(--shiki-token-string-expression)">'1 hour'</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> group by</span><span style="color:var(--shiki-token-constant)"> 1</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-constant)">2</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-constant)">3</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> order by</span><span style="color:var(--shiki-foreground)"> usd </span><span style="color:var(--shiki-token-keyword)">desc</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> limit</span><span style="color:var(--shiki-token-constant)"> 20</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span></code></pre>
+<p>Duas leituras mudam a ação:</p>
+<ul>
+<li><strong>Um agente dominando a lista</strong> com muitas chamadas curtas quer dizer laço:
+o ToolLoop repetindo a mesma ferramenta sem convergir.</li>
+<li><strong>Poucas chamadas e custo alto</strong> quer dizer modelo caro em trabalho barato —
+binding errado, não laço.</li>
+</ul>
+<h3 id="2-check-the-budget">2. Confira o orçamento</h3>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">select</span><span style="color:var(--shiki-foreground)"> b.project_id, b.session_id,</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">       b.limit_micros </span><span style="color:var(--shiki-token-keyword)">/</span><span style="color:var(--shiki-foreground)"> 1e6  </span><span style="color:var(--shiki-token-keyword)">as</span><span style="color:var(--shiki-foreground)"> limite_usd,</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">       b.spent_micros </span><span style="color:var(--shiki-token-keyword)">/</span><span style="color:var(--shiki-foreground)"> 1e6  </span><span style="color:var(--shiki-token-keyword)">as</span><span style="color:var(--shiki-foreground)"> gasto_usd,</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">       round</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-constant)">100</span><span style="color:var(--shiki-foreground)">.</span><span style="color:var(--shiki-token-constant)">0</span><span style="color:var(--shiki-token-keyword)"> *</span><span style="color:var(--shiki-foreground)"> b.spent_micros </span><span style="color:var(--shiki-token-keyword)">/</span><span style="color:var(--shiki-token-function)"> nullif</span><span style="color:var(--shiki-foreground)">(b.limit_micros, </span><span style="color:var(--shiki-token-constant)">0</span><span style="color:var(--shiki-foreground)">)) </span><span style="color:var(--shiki-token-keyword)">as</span><span style="color:var(--shiki-foreground)"> pct,</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">       b.policy</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  from</span><span style="color:var(--shiki-foreground)"> budgets b</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> order by</span><span style="color:var(--shiki-foreground)"> pct </span><span style="color:var(--shiki-token-keyword)">desc</span><span style="color:var(--shiki-token-keyword)"> nulls</span><span style="color:var(--shiki-token-keyword)"> last</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span></code></pre>
+<p>A <code>policy</code> decide o comportamento no teto:</p>
+<ul>
+<li><strong><code>block</code></strong> — a chamada é recusada. É o default e o que você
+quer em produção.</li>
+<li><strong><code>allow</code></strong> — o teto vira mero registro; o gasto continua. Um
+projeto em <code>allow</code> gastando muito <strong>não para sozinho</strong>. Confira
+isto antes de qualquer outra coisa: é a causa mais comum de &quot;o orçamento
+não segurou&quot;.</li>
+</ul>
+<h3 id="3-cut-the-spend">3. Corte o gasto</h3>
+<p>Em ordem de reversibilidade, do mais brando ao mais drástico.</p>
+<p><strong>a) Tire os agentes da autonomia automática.</strong> Eles param de agir
+sozinhos e voltam a exigir aprovação por ação, sem perder
+contexto:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">update</span><span style="color:var(--shiki-foreground)"> agent_autonomy</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">   set</span><span style="color:var(--shiki-foreground)"> mode </span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)"> 'require_approval'</span><span style="color:var(--shiki-foreground)">, updated_at </span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-keyword)"> now</span><span style="color:var(--shiki-foreground)">()</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> where</span><span style="color:var(--shiki-foreground)"> project_id </span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)"> '&#x3C;projeto>'</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">   and</span><span style="color:var(--shiki-foreground)"> mode </span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)"> 'auto_approve'</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span></code></pre>
+<p><code>agent_autonomy.mode</code> é o enum <code>permission_policy</code>
+(<code>auto_approve | require_approval | deny</code>) — não há valor <code>manual</code>,
+e uma versão anterior deste passo o usava e falhava na hora. O
+<code>and mode = 'auto_approve'</code> é deliberado: sem ele, o update
+transformaria toda linha <code>deny</code> do projeto em <code>require_approval</code>, afrouxando
+exatamente o que alguém tinha fechado. As linhas <code>&quot;*&quot;</code> (modo automático, RN-153) são
+cobertas pelo mesmo update.</p>
+<p>O que este passo <strong>não</strong> corta: um padrão em <code>allow</code> no
+<code>permissions.json</code> do projeto ainda auto-aprova o que casa — <code>decide()</code> lê
+o arquivo depois de <code>agent_autonomy</code>, e o arquivo pode subir a decisão de volta
+para <code>auto_approve</code> (<code>apps/api/src/domain/actions/decide.ts</code>, <code>decide</code>).
+Se o gasto vem de comandos que o arquivo permite, vá para (c).</p>
+<p>Os blocos SQL desta seção são rodados contra o schema migrado por
+<code>apps/api/test/runbook/sql-do-incidente-de-custo.spec.ts</code>, que também
+confere que (a) muda <code>auto_approve</code> e deixa <code>deny</code> em paz — um
+valor inválido ou uma coluna renomeada aqui reprova a suíte da api, não o
+incidente.</p>
+<p><strong>b) Troque o binding de modelo por um local.</strong> O Ollama custa zero; a qualidade
+cai, o gasto para na hora:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)">-- veja o binding vigente e o escopo que o resolve</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">select</span><span style="color:var(--shiki-foreground)"> scope, scope_id, model_id </span><span style="color:var(--shiki-token-keyword)">from</span><span style="color:var(--shiki-foreground)"> model_bindings </span><span style="color:var(--shiki-token-keyword)">where</span><span style="color:var(--shiki-foreground)"> scope_id </span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)"> '&#x3C;projeto>'</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span></code></pre>
+<p>Depois aponte o binding do projeto para um modelo <code>local</code> pela tela de
+configurações (o escopo mais específico vence: sessão &gt; agente &gt; projeto &gt;
+workspace — <a href="../business-rules/api.html#rn-020">RN-020</a>).</p>
+<p><strong>c) Baixe o teto e garanta que é <code>block</code>.</strong> Faz o próprio domínio
+recusar as próximas chamadas:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">update</span><span style="color:var(--shiki-foreground)"> budgets</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">   set</span><span style="color:var(--shiki-token-keyword)"> policy</span><span style="color:var(--shiki-token-keyword)"> =</span><span style="color:var(--shiki-token-string-expression)"> 'block'</span><span style="color:var(--shiki-foreground)">,</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">       limit_micros </span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-function)"> least</span><span style="color:var(--shiki-foreground)">(limit_micros, spent_micros </span><span style="color:var(--shiki-token-keyword)">+</span><span style="color:var(--shiki-token-constant)"> 1000000</span><span style="color:var(--shiki-foreground)">)  </span><span style="color:var(--shiki-token-comment)">-- +1 USD</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> where</span><span style="color:var(--shiki-foreground)"> project_id </span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)"> '&#x3C;projeto>'</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span></code></pre>
+<p><strong>d) Feche as sessões do projeto.</strong> Último recurso: interrompe trabalho em
+andamento. Use a transição normal (<code>closing</code>), nunca <code>kill</code> no pod
+— matar o pod não fecha uma sessão, só cria uma órfã
+(veja <a href="deploy.html#rollout-do-engine">Rollout do engine</a>).</p>
+<h3 id="4-afterward">4. Depois</h3>
+<ul>
+<li><strong>O Psicólogo já tem a evidência.</strong> Se a causa foi um laço de
+agente, a análise dele aponta o agente alvo e a Anamnese pode
+propor um patch de instrução. Corrigir a instrução é o que impede
+de acontecer de novo; mexer no orçamento só compra tempo.</li>
+<li><strong>Confira que o alerta chegou.</strong> As regras moram no Grafana, não no
+Prometheus: se o Grafana estava fora do ar, não houve aviso, e o silêncio
+não queria dizer saúde.</li>
+</ul>
+<h3 id="what-this-section-doesnt-fix">O que esta seção não conserta</h3>
+<p>Custo já incorrido. Metering é registro, não reembolso: o <code>token_usage</code>
+conta o que foi gasto, e nada aqui devolve dinheiro do
+provider. A única prevenção real é <code>policy = 'block'</code> com um
+teto sensato <strong>antes</strong> do incidente.</p>
+<hr>
+<h2 id="observabilidade">Observabilidade</h2>
+<p>Como acompanhar uma sessão, achar custo, e diagnosticar quando não há dados.
+Decisões no
+<a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026</a>.</p>
+<h3 id="observabilidade-local">Observabilidade local, sem cluster</h3>
+<p>Tudo abaixo desta subseção supõe o cluster de pé. Para métricas
+e logs sem subir Kubernetes, há um overlay de Compose
+(<a href="../adr/0070-observabilidade-no-compose-local.html">ADR 0070</a>):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">node</span><span style="color:var(--shiki-token-string)"> scripts/dev/preflight.mjs</span><span style="color:var(--shiki-token-punctuation)"> &#x26;&#x26;</span><span style="color:var(--shiki-token-function)"> docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.observability.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-token-string)"> up</span><span style="color:var(--shiki-token-string)"> -d</span><span style="color:var(--shiki-token-punctuation)"> &#x26;&#x26;</span><span style="color:var(--shiki-token-function)"> node</span><span style="color:var(--shiki-token-string)"> scripts/dev/observabilidade-pronta.mjs</span><span style="color:var(--shiki-token-comment)">   # sobe a stack de dev + Prometheus, Loki, Alloy e Grafana</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.observability.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-token-string)"> rm</span><span style="color:var(--shiki-token-string)"> -sf</span><span style="color:var(--shiki-token-string)"> loki</span><span style="color:var(--shiki-token-string)"> alloy</span><span style="color:var(--shiki-token-string)"> prometheus</span><span style="color:var(--shiki-token-string)"> grafana</span><span style="color:var(--shiki-token-comment)">   # derruba só os quatro, deixando os apps de pé</span></span>
+<span class="line"></span></code></pre>
+<p>O comando termina conferindo o que subiu — se diz <code>ok</code> em toda
+linha, o painel tem dados; se reclama, diz qual peça
+faltou.</p>
+<p>Verificação: essa checagem final é <code>scripts/dev/observabilidade-pronta.mjs</code>,
+e é uma <strong>autoverificação, não uma prova</strong> — ela só roda quando alguém sobe o
+overlay, e não tem spec nem workflow. Uma mudança que quebra o
+overlay aparece da próxima vez que alguém rodar o overlay de observabilidade (comando em <a href="#observabilidade-local">Observabilidade local</a>).</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>ferramenta</th>
+<th>endereço</th>
+<th>serve para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grafana</td>
+<td><a href="http://localhost:3001">http://localhost:3001</a></td>
+<td>painéis e logs, sem login</td>
+</tr>
+<tr>
+<td>Logs</td>
+<td><a href="http://localhost:3001/d/brabo-logs">http://localhost:3001/d/brabo-logs</a></td>
+<td>um serviço por vez, ou os três juntos</td>
+</tr>
+<tr>
+<td>Prometheus</td>
+<td><a href="http://localhost:9090">http://localhost:9090</a></td>
+<td>conferir um alvo e séries cruas</td>
+</tr>
+<tr>
+<td>Loki</td>
+<td><a href="http://localhost:3100">http://localhost:3100</a></td>
+<td>consulta direta (o caminho normal é o Grafana)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Os painéis são os MESMOS do cluster</strong> — o Compose monta
+<code>deploy/k8s/observability/dashboards/</code> direto, e os UIDs dos datasources
+(<code>brabo-prometheus</code>, <code>brabo-loki</code>) são os mesmos. Um painel novo vale
+nos dois ambientes sem cópia.</p>
+<p><strong>O que este overlay não faz:</strong> tracing. Sem um OpenTelemetry
+Collector no meio não há Tempo, e isso é decisão, não
+descuido (<a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026</a>,
+decisão 9). O <code>trace_id</code> ainda vai para o log e basta para
+cruzar api e engine à mão.</p>
+<p>Três coisas que confundem as pessoas, e vale saber antes de abrir uma
+issue:</p>
+<ol>
+<li><strong>Um painel de custo/tokens vazio é esperado num banco novo.</strong> Essas
+métricas têm rótulos (<code>project</code>, <code>provider</code>), e no <code>prom-client</code> uma
+métrica rotulada não existe antes da primeira observação. Uma chamada de
+LLM e a série aparece.</li>
+<li><strong>Só <code>api</code>, <code>engine</code> e <code>web</code> vão para o Loki.</strong> Postgres e Ollama ficam
+de fora por ruído; a própria stack de observabilidade fica de fora porque,
+no mesmo projeto Compose, ela ingeriria o próprio log em laço.</li>
+<li><strong>O nível <code>OUTRO</code></strong> é a linha de continuação de árvore do <code>pino-pretty</code>,
+que não tem nível próprio. Não é log perdido.</li>
+</ol>
+<h3 id="where-things-are">Onde as coisas estão</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>ferramenta</th>
+<th>endereço local</th>
+<th>serve para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grafana</td>
+<td><a href="http://localhost:3001">http://localhost:3001</a></td>
+<td>painéis, traces, logs, alertas</td>
+</tr>
+<tr>
+<td>Prometheus</td>
+<td><code>kubectl -n monitoring port-forward svc/prometheus-server 9090:80</code></td>
+<td>conferir um alvo e séries cruas</td>
+</tr>
+<tr>
+<td>Tempo</td>
+<td>datasource do Grafana</td>
+<td>traces</td>
+</tr>
+<tr>
+<td>Loki</td>
+<td>datasource do Grafana</td>
+<td>logs</td>
+</tr>
+</tbody>
+</table></div>
+<p>Dois painéis na pasta <strong>Brabo</strong>: <em>visão executiva</em> (custo/hora e
+tokens/min por projeto, sessões ativas, decisões de ação) e
+<em>visão operacional</em> (fila do Oban por estado, latência p50/p95 de LLM por provider,
+tarefas bloqueadas, sessões por réplica).</p>
+<h3 id="following-a-session-from-the-root-to-a-tool-call">Acompanhando uma sessão da raiz até uma chamada de ferramenta</h3>
+<ol>
+<li>
+<p>Pegue o <code>trace_id</code> da sessão. É o campo do meio do
+<code>traceparent</code> guardado em <code>sessions.trace_parent</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># 00-&#x3C;trace_id>-&#x3C;span_id>-01</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">curl</span><span style="color:var(--shiki-token-string)"> -sS</span><span style="color:var(--shiki-token-string)"> -H</span><span style="color:var(--shiki-token-string-expression)"> "Authorization: Bearer $TOKEN"</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  http://localhost:3000/projects/</span><span style="color:var(--shiki-foreground)">$PROJ</span><span style="color:var(--shiki-token-string)">/sessions/</span><span style="color:var(--shiki-foreground)">$SESS </span><span style="color:var(--shiki-token-keyword)">|</span><span style="color:var(--shiki-token-function)"> jq</span><span style="color:var(--shiki-token-string)"> -r</span><span style="color:var(--shiki-token-string)"> .traceParent</span></span>
+<span class="line"></span></code></pre>
+</li>
+<li>
+<p>No Grafana → <strong>Explore</strong> → datasource <strong>Tempo</strong> → aba <strong>TraceQL</strong>,
+cole o <code>trace_id</code>. A árvore volta com <code>session.create</code> (api)
+na raiz e, abaixo dele, <code>agent.turn</code> → <code>tool.call</code> / <code>llm.turn</code> /
+<code>gate.scanner</code> (engine).</p>
+</li>
+<li>
+<p>A partir de um span, o botão <strong>Logs for this span</strong> salta para as linhas do Loki
+com aquele <code>trace_id</code>. O caminho inverso — de uma linha de log para o trace
+— é o link <strong>TraceID</strong> que aparece no detalhe da linha.</p>
+</li>
+<li>
+<p>Custo daquela sessão: o painel <em>visão executiva</em> filtra por
+projeto. Para um valor exato por sessão, a fonte é o banco
+(<code>token_usage.cost_micros</code>), não a métrica — a métrica é agregada
+por projeto e provider de propósito, para não criar uma série por
+sessão.</p>
+</li>
+</ol>
+<h3 id="quando-nao-ha-trace-no-tempo">Quando não há trace no Tempo</h3>
+<p>O nome desta seção mudou junto com o comportamento (ADR 0035), e a
+distinção é o primeiro passo do diagnóstico: <strong>um span é sempre criado, em
+qualquer ambiente.</strong> O que <code>OTEL_EXPORTER_OTLP_ENDPOINT</code> controla é a
+EXPORTAÇÃO. Então &quot;não vejo trace no Grafana&quot; e &quot;não há trace&quot; são
+problemas diferentes.</p>
+<p>Antes de qualquer coisa, veja de que lado está a falha — o log responde
+sozinho:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> logs</span><span style="color:var(--shiki-token-string)"> -l</span><span style="color:var(--shiki-token-string)"> app.kubernetes.io/name=api</span><span style="color:var(--shiki-token-string)"> --tail=20</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string)"> -o</span><span style="color:var(--shiki-token-string-expression)"> '"trace_id":"[^"]*"'</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> head</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Há <code>trace_id</code> no log, nenhum trace no Tempo</strong> → o problema é a
+exportação: siga de 1 a 4 abaixo.</li>
+<li><strong>Nenhum <code>trace_id</code> no log</strong> → o problema é de contexto, e é mais raro:
+ou o <code>startTracing()</code> da api não rodou (veja
+<code>apps/api/src/tracing-boot.ts</code> — ele tem de ser o primeiro import do <code>main.ts</code>),
+ou o <code>Engine.Telemetry.Otel.setup/0</code> não foi chamado antes da árvore de
+supervisão.</li>
+</ul>
+<p>Em ordem, do mais ao menos provável:</p>
+<p><strong>1. A variável não está definida.</strong> Sem <code>OTEL_EXPORTER_OTLP_ENDPOINT</code> o
+span é criado e descartado no fim, então há <code>trace_id</code> no
+log e nada no Tempo. Em desenvolvimento isso é esperado (sem collector);
+num cluster, é defeito.</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/api</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> printenv</span><span style="color:var(--shiki-token-string)"> OTEL_EXPORTER_OTLP_ENDPOINT</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/engine</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> printenv</span><span style="color:var(--shiki-token-string)"> OTEL_EXPORTER_OTLP_ENDPOINT</span></span>
+<span class="line"></span></code></pre>
+<p><strong>2. A NetworkPolicy está bloqueando.</strong> Esta é a falha mais silenciosa
+de todas: os spans são criados, o envio falha, e todo o resto fica
+verde.</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> get</span><span style="color:var(--shiki-token-string)"> networkpolicy</span><span style="color:var(--shiki-token-string)"> allow-otlp-egress</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> logs</span><span style="color:var(--shiki-token-string)"> -l</span><span style="color:var(--shiki-token-string)"> app.kubernetes.io/name=engine</span><span style="color:var(--shiki-token-string)"> --tail=50</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string)"> -i</span><span style="color:var(--shiki-token-string-expression)"> "error exporting"</span></span>
+<span class="line"></span></code></pre>
+<p><strong>3. Protocolo errado.</strong> O exporter do Elixir fala <strong>HTTP/protobuf (4318)</strong>,
+não gRPC. Apontá-lo para a 4317 dá <code>socket_closed_remotely</code> em todo
+lote.</p>
+<p><strong>4. O Collector não está recebendo nada.</strong></p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> monitoring</span><span style="color:var(--shiki-token-string)"> logs</span><span style="color:var(--shiki-token-string)"> deploy/otel-collector-opentelemetry-collector</span><span style="color:var(--shiki-token-string)"> --tail=30</span></span>
+<span class="line"></span></code></pre>
+<h3 id="when-a-panel-is-empty">Quando um painel está vazio</h3>
+<p>Quase sempre um <strong>nome de métrica</strong>. Os nomes são referenciados por string em três
+lugares que não se enxergam: os painéis, as regras de alerta e
+este runbook. Confira contra o que o serviço de fato expõe:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">curl</span><span style="color:var(--shiki-token-string)"> -sS</span><span style="color:var(--shiki-token-string)"> http://localhost:3000/metrics</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string-expression)"> '^brabo_'</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> cut</span><span style="color:var(--shiki-token-string)"> -d</span><span style="color:var(--shiki-token-string-expression)">'{'</span><span style="color:var(--shiki-token-string)"> -f1</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> sort</span><span style="color:var(--shiki-token-string)"> -u</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/engine</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> wget</span><span style="color:var(--shiki-token-string)"> -qO-</span><span style="color:var(--shiki-token-string)"> http://127.0.0.1:4000/metrics</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string)"> -E</span><span style="color:var(--shiki-token-string-expression)"> '^(brabo|oban)_'</span></span>
+<span class="line"></span></code></pre>
+<p>E se o serviço a expõe mas o Prometheus não a tem, o
+problema é a coleta:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> monitoring</span><span style="color:var(--shiki-token-string)"> port-forward</span><span style="color:var(--shiki-token-string)"> svc/prometheus-server</span><span style="color:var(--shiki-token-string)"> 9090:80</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># depois: http://localhost:9090/targets — os jobs são `brabo-api` e `brabo-engine`</span></span>
+<span class="line"></span></code></pre>
+<h3 id="when-theres-no-log-in-loki">Quando não há log no Loki</h3>
+<p>O Alloy é um DaemonSet e lê <code>/var/log/pods</code> do nó, filtrando
+pelo namespace <code>brabo</code>.</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> monitoring</span><span style="color:var(--shiki-token-string)"> logs</span><span style="color:var(--shiki-token-string)"> -l</span><span style="color:var(--shiki-token-string)"> app.kubernetes.io/name=alloy</span><span style="color:var(--shiki-token-string)"> --tail=30</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string)"> -i</span><span style="color:var(--shiki-token-string)"> error</span></span>
+<span class="line"></span></code></pre>
+<p>Avisos de <code>tailer stopped ... pods not found</code> são normais depois de um
+rollout — o Alloy continua perseguindo pods que já foram removidos.</p>
+<p>Os apps <strong>não</strong> conseguem falar com o Loki direto, e isso é intencional:
+<code>allow-otlp-egress</code> só abre 4317/4318. Para consultar de fora:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> monitoring</span><span style="color:var(--shiki-token-string)"> port-forward</span><span style="color:var(--shiki-token-string)"> svc/loki</span><span style="color:var(--shiki-token-string)"> 3100:3100</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">curl</span><span style="color:var(--shiki-token-string)"> -sS</span><span style="color:var(--shiki-token-string)"> -G</span><span style="color:var(--shiki-token-string)"> http://localhost:3100/loki/api/v1/query_range</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --data-urlencode</span><span style="color:var(--shiki-token-string-expression)"> '{app="api"} | json | trace_id != ""'</span><span style="color:var(--shiki-token-string)"> --data</span><span style="color:var(--shiki-token-string-expression)"> 'limit=5'</span></span>
+<span class="line"></span></code></pre>
+<h3 id="alerts">Alertas</h3>
+<p>Provisionados e visíveis em <strong>Alerting → Alert rules</strong> (pasta Brabo), a partir de
+<code>deploy/k8s/observability/alerts/brabo-alerts.yaml</code>. As regras levam os
+títulos em português — é isso que você procura no Grafana:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>alerta (título no Grafana)</th>
+<th>severidade</th>
+<th>dispara depois de</th>
+<th>o que investigar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Fila do Oban crescendo sem consumo</em></td>
+<td><code>critical</code></td>
+<td>10 min</td>
+<td>nenhuma réplica do engine Ready; pool do Postgres esgotado; um worker preso num job</td>
+</tr>
+<tr>
+<td><em>Sessão presa em closing</em></td>
+<td><code>warning</code></td>
+<td>15 min</td>
+<td><a href="deploy.html#quando-a-sessao-escapa">o drain não terminou</a>, ou a transição para <code>closed</code> falhou</td>
+</tr>
+<tr>
+<td><em>Custo por hora acima do limite</em></td>
+<td><code>warning</code></td>
+<td>5 min</td>
+<td><a href="#incidente-de-custo">qual projeto e qual agente</a>; o orçamento do domínio continua sendo o controle duro</td>
+</tr>
+<tr>
+<td><em>Backup do Postgres atrasado</em> — último backup bom com mais de 26 h</td>
+<td><code>critical</code></td>
+<td>na hora</td>
+<td>o CronJob não rodou, ou rodou e falhou — <code>brabo_backup_last_status</code> distingue os dois; veja <a href="restore.html#restore">Restore</a>. &quot;Nunca teve backup&quot; (<code>-1</code>) <strong>não</strong> o dispara</td>
+</tr>
+<tr>
+<td><em>Última execução do backup falhou</em></td>
+<td><code>warning</code></td>
+<td>na hora</td>
+<td>um backup bom de ontem ainda pode existir, e é por isso que este passa despercebido por dias; a causa está em <code>backup_runs.error_message</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>São regras do <strong>Grafana</strong>, não do Prometheus (desvio registrado no ADR
+0026): elas deixam de ser avaliadas se o Grafana cair. Não há
+Alertmanager nem destino de notificação configurado.</p>
+<h3 id="known-limits">Limites conhecidos</h3>
+<ul>
+<li>Nenhum trace de agente <strong>real</strong> foi observado de ponta a ponta: verificar isso
+exige um LLM configurado (Ollama ou uma chave de API). O mecanismo foi
+validado emitindo spans direto no trace da sessão.</li>
+<li>O web não exporta spans próprios — ele <strong>gera</strong> o
+<code>traceparent</code> e o manda no cabeçalho, e a api o adota como
+pai. Os logs do navegador vão para o console, não para o Loki.</li>
+<li>Retenção curta: Tempo 24h, Loki 24h, Prometheus 2h. É um ambiente
+local.</li>
+</ul>
+<hr>
+<h2 id="registro-de-gates">Registro de gates</h2>
+<p>Os gates do fluxo são declarados em <code>apps/api/config/gates.yml</code>
+(<a href="../adr/0054-gates-como-registro-declarativo.html">ADR 0054</a>). Duas coisas
+operacionais valem saber.</p>
+<p><strong>O arquivo viaja dentro da imagem.</strong> O <code>docker/api/Dockerfile.prod</code> o copia
+nos dois estágios, do mesmo jeito que faz com as migrations, e o
+<code>.dockerignore</code> o reinclui explicitamente — toda a <code>docs/</code> é ignorada, e
+este é o único arquivo de lá que é dado de produção, não
+documentação. Em runtime ele fica em <code>/app/apps/api/config/gates.yml</code>; o loader
+sobe a partir de <code>__dirname</code> até achá-lo, sem variável de
+ambiente.</p>
+<p><strong>Um arquivo ilegível não derruba a api.</strong> O carregamento é preguiçoso:
+quem chama <code>GET /internal/gates</code> recebe o erro, e o resto do
+processo segue. Se a rota devolve erro, confira que o arquivo
+entrou:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/api</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> cat</span><span style="color:var(--shiki-token-string)"> /app/apps/api/config/gates.yml</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> head</span><span style="color:var(--shiki-token-string)"> -5</span></span>
+<span class="line"></span></code></pre>
+<p>Vazio ou ausente quer dizer que a imagem foi construída sem ele — provavelmente um
+<code>.dockerignore</code> mexido, ou um build a partir de um contexto sem <code>docs/</code>.</p>
+<p><strong>O registro viaja; o que ele aponta, não.</strong> Um gate <code>teste</code>/<code>ci</code>
+nomeia arquivos sob <code>apps/api/test/</code>, <code>scripts/ci/</code> e <code>.github/</code>, e nenhum
+deles está na imagem. Até isto ser separado, o loader exigia
+esses arquivos em runtime e a rota respondia <code>500</code> em toda instalação
+— medido na v6.1.0 como doze 5xx em cerca de 55 minutos, com
+<code>RegistroDeGatesInvalido</code> listando os onze alvos como &quot;não existe&quot;.
+Reproduza a falha antiga com:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-keyword)"> &#x3C;</span><span style="color:var(--shiki-token-string)">ap</span><span style="color:var(--shiki-foreground)">i</span><span style="color:var(--shiki-token-keyword)">></span><span style="color:var(--shiki-token-string)"> node</span><span style="color:var(--shiki-token-string)"> -e</span><span style="color:var(--shiki-token-string-expression)"> "require('/app/infrastructure/gates/gate-registry.loader').carregarRegistro()"</span></span>
+<span class="line"></span></code></pre>
+<p>Numa imagem corrigida isso não imprime nada. Se lança
+<code>RegistroDeGatesInvalido</code> nomeando um <code>.spec.ts</code> ou um workflow, a imagem é
+de antes da correção (<a href="../business-rules/api.html#rn-070">RN-070</a>); se
+lança nomeando o <em>conteúdo</em> de um gate (um gate <code>block</code> sem <code>script</code>, um
+gate <code>active</code> sem evidência), o próprio registro está errado e o
+repositório é onde corrigir.</p>
+<p>A tela não mostra esta falha: o <code>PrGateTimeline</code> cai para a
+esteira completa quando <code>GET /gates</code> falha (<a href="../business-rules/api.html#rn-084">RN-084</a>),
+então o único sinal era o log da api. O <code>docker/smoke.sh</code> agora chama as duas
+rotas que servem o registro contra a imagem de produção, <code>GET /gates</code>
+com o bearer do usuário e <code>GET /internal/gates</code> com o service token.
+Uma função confere o corpo das duas, e reprova no <code>500</code>, numa
+lista vazia e num registro sem <code>merge-protegida</code>. É isso que impede
+a falha de voltar em silêncio. O token chega ao <code>curl</code> pelo
+stdin (<code>--config -</code>), nunca pelo argv, então não aparece no <code>ps</code> nem no
+log do CI.</p>
+<p>Para ver o registro como a api o vê, já validado:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/api</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  curl</span><span style="color:var(--shiki-token-string)"> -sH</span><span style="color:var(--shiki-token-string-expression)"> "x-brabo-service-token: $BRABO_SERVICE_TOKEN"</span><span style="color:var(--shiki-token-string)"> localhost:3000/internal/gates</span></span>
+<span class="line"></span></code></pre>
+<p>A medição de passagem NÃO roda em produção: é
+<code>pnpm --filter api validacao:gates</code>, a partir do repositório, contra o
+banco. Veja
+<a href="../explanation/gates.html">docs/explanation/gates.md</a>.</p>
+<hr>
+<h2 id="ambiente-de-inferencia">Ambiente de inferência</h2>
+<p>Quando o agente responde vazio, truncado, extremamente devagar, ou &quot;esquece&quot;
+as próprias instruções, o problema quase nunca está no código de domínio —
+está aqui. As cinco primeiras causas foram achadas em nove execuções seguidas da
+demo de gates e estão registradas no
+<a href="../adr/0020-destravar-gates-qa-secops.html">ADR 0020</a>; todas as variáveis estão
+expostas no <code>docker-compose.yml</code>.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>variável</th>
+<th>sintoma quando errada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GPU</strong></td>
+<td>o serviço <code>ollama</code> sem dispositivo reservado deixa a GPU parada e roda 100% na CPU: um prompt de ~7.000 tokens leva ~50s só para a ingestão. O override é opcional (<code>docker-compose.gpu.yml</code>, <code>docker compose -f docker/docker-compose.yml -f docker/docker-compose.gpu.yml --env-file .env up</code>), mantido fora do compose principal porque sem <code>nvidia-container-toolkit</code> no host a reserva <strong>faz o serviço não subir</strong></td>
+</tr>
+<tr>
+<td><code>OLLAMA_CONTEXT_LENGTH</code></td>
+<td>o default de 4096 trunca <strong>em silêncio</strong> um prompt feito para 128k. O agente perde as próprias instruções e começa a imitar o schema das ferramentas, que é o que sobra no fim do contexto</td>
+</tr>
+<tr>
+<td><code>OLLAMA_MAX_LOADED_MODELS</code></td>
+<td>com <code>OLLAMA_KEEP_ALIVE</code> alto, os modelos se acumulam: 15,2 GB de pesos residentes numa máquina de 15 GB, e o agente responde vazio por falta de memória</td>
+</tr>
+<tr>
+<td><code>OLLAMA_REQUEST_TIMEOUT_MS</code></td>
+<td>timeout curto demais para um modelo grande num prompt longo</td>
+</tr>
+<tr>
+<td><code>OLLAMA_MODE</code> (bootstrap de dev, <a href="../business-rules/infra.html#rn-461">RN-461</a>, ADR 0114)</td>
+<td>preso em <code>host</code> depois que o Ollama nativo na máquina do desenvolvedor foi desinstalado ou parado — todo turno de LLM local falha com <code>ECONNREFUSED</code> contra <code>http://host.docker.internal:&lt;porta&gt;</code>, e o serviço <code>ollama</code> do compose nunca sobe para cobrir (ele fica atrás de <code>profiles: [&quot;local-llm&quot;]</code>, e é esta variável que mantém esse profile desligado). Correção: <code>Docker › Reconfigurar Ollama</code> no <code>pnpm bootstrap</code>, que limpa <code>OLLAMA_MODE</code>/<code>OLLAMA_HOST</code> do <code>.env</code> e força a detecção a perguntar de novo no próximo <code>Create</code>/<code>Reset total</code></td>
+</tr>
+<tr>
+<td><code>NINE_ROUTER_BASE_URL</code> (<a href="../business-rules/api.html#rn-909">RN-909</a>, ADR 0222)</td>
+<td>o provider <code>9router</code> falha com <code>ECONNREFUSED</code> (origem <code>infra</code>) e o teste de conexão da credencial recusa. O padrão <code>http://host.docker.internal:20128/v1</code> só resolve dentro do container: a api da instalação e a de produção alcançam o host pelo <code>extra_hosts: host.docker.internal:host-gateway</code>; rodando no host (smoke), aponte para <code>http://localhost:20128/v1</code>. Com o 9Router parado o erro é o mesmo, então confira primeiro se ele escuta na porta 20128</td>
+</tr>
+<tr>
+<td><code>START_OUTBOX_DRAIN</code> / <code>START_ANAMNESE</code></td>
+<td>o Psicólogo e a Anamnese consomem turnos de LLM em paralelo com os agentes de execução e derrubam a conexão do dev no meio do ciclo</td>
+</tr>
+<tr>
+<td><code>TOOL_LOOP_MAX_ITERATIONS*</code></td>
+<td>um teto BAIXO demais e o agente para sem entregar, com <code>iteration limit reached</code> e origem <code>model</code> — o que engana, porque o modelo não fez julgamento errado nenhum, nem chegou a julgar. O teto é por TIPO (<a href="../business-rules/engine.html#rn-085">RN-085</a>): <code>8</code> para agentes conversacionais, <code>60</code> para o dev agent e o QA. Antes de subi-lo, confira se o agente TEM <code>token_budget_micros</code>; sem ele o teto é a única guarda de custo que existe</td>
+</tr>
+<tr>
+<td><code>TERMINAL_OUTPUT_MAX_BYTES</code></td>
+<td>subi-lo demais traz de volta o modo de falha que o teto existe para evitar: a saída de cada comando fica no histórico do laço e viaja em TODO turno seguinte. Não é questão de janela de contexto: a maior chamada bem-sucedida da execução que revelou isto primeiro tinha só 28.993 tokens de entrada (<a href="../business-rules/engine.html#rn-074">RN-074</a>)</td>
+</tr>
+<tr>
+<td><code>API_JSON_BODY_LIMIT</code> (api) / <code>TRANSPORT_MAX_BODY_BYTES</code> (engine)</td>
+<td>o <code>413 request entity too large</code> no gate de QA/SecOps tinha a causa na própria api do Brabo, nunca no provider — o Express nunca teve limite de corpo configurado e valia o default de 100 KB, contra os 8 MB que o Phoenix aceita na perna engine→api mais pesada (<code>POST .../llm-turn</code>, que reenvia o histórico inteiro a cada iteração). <code>API_JSON_BODY_LIMIT</code> (default 10 MB) fecha essa ponta; <code>TRANSPORT_MAX_BODY_BYTES</code> (default 8 MiB) é o teto que a compactação de contexto do engine respeita POR CIMA da janela do modelo, para disparar antes de o corpo estourar o limite do HTTP (<a href="../business-rules/api.html#rn-412">RN-412</a>, <a href="../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Se o modelo do <code>9router</code> chama <code>Read</code> ou <code>Bash</code> (ferramentas que o Brabo não tem) na conta OAuth do Claude, a causa é a <strong>camuflagem do OAuth</strong> do 9Router (<a href="../business-rules/api.html#rn-966">RN-966</a>), não o agente: o 9Router renomeia as ferramentas e acrescenta falsas do Claude Code, e nenhuma configuração a desliga. Use API key do Claude ou outro provider.</p>
+<blockquote>
+<p><strong>Cuidado — a guarda não limpa a fila.</strong> <code>START_ANAMNESE=false</code>
+bloqueia enfileiramentos <strong>novos</strong>, não os antigos. Já houve 20
+<code>AnamneseWorker</code>s acumulados em <code>executing</code> de execuções anteriores, que rodam
+no próximo boot independentemente da guarda. A fila precisa ser
+<strong>expurgada</strong>, não só ter a guarda desligada.</p>
+</blockquote>
+<blockquote>
+<p><strong>Ligar a Anamnese ou o Psicólogo: duas variáveis, não
+uma.</strong> Os dois foram pausados em 2026-08-10 por decisão de produto, não por bug. O
+Psicólogo ainda está; a Anamnese foi religada pelo dono em
+2026-10-01 (<a href="../business-rules/engine.html#rn-680">RN-680</a>) — <code>ANAMNESE_ENABLED</code>
+volta ao default <code>true</code> no código e nos três composes, e uma rodada
+sem sujeito elegível não faz chamada de LLM e diz por quê no log do engine
+(<code>sem_sujeito_elegivel</code>). Pausá-la de novo é <code>ANAMNESE_ENABLED=false</code>. <code>ANAMNESE_ENABLED</code> / <code>PSYCHOLOGIST_ENABLED</code> são as
+flags de produto (uma rodada NOVA pode acontecer?); <code>START_ANAMNESE</code> é a chave
+de boot (o tick periódico é sequer agendado?). A Anamnese periódica precisa das duas
+em <code>true</code>; o Psicólogo não tem chave de boot, porque o gatilho automático dele
+é o fechamento de sessão.</p>
+<p>Até a <a href="../business-rules/engine.html#rn-540">RN-540</a> as duas flags <code>*_ENABLED</code>
+<strong>não estavam mapeadas</strong> no serviço <code>engine</code> de nenhum dos composes, e o <code>docker compose</code>
+não repassa o ambiente do host — então defini-las no <code>.env</code> não fazia
+nada, em silêncio, enquanto três lugares no código prometiam que a pausa
+era reversível. Agora estão mapeadas, com o default do próprio código (<code>false</code>
+nos dois arquivos na época; <code>ANAMNESE_ENABLED</code> é <code>true</code> desde a RN-680). O compose de <strong>instalação</strong>
+(<code>docker/docker-compose.install.yml</code>) era o terceiro arquivo e ficou fora
+dessa correção; desde a AT-202 ele mapeia as mesmas flags com os mesmos defaults, e
+<code>scripts/ci/flags-do-engine-no-compose.spec.ts</code> confere os <strong>três</strong> arquivos
+e reprova o build da próxima flag booleana que não estiver mapeada, ou que
+levar default diferente do código (<code>START_OUTBOX_DRAIN</code> e
+<code>START_ANAMNESE</code> são <code>false</code> no compose de produção de propósito, e o
+spec declara essa divergência pelo nome). O compose de instalação levava
+o mesmo <code>false</code> — copiado da produção junto com o motivo da produção
+(&quot;ele existe para validar as imagens&quot;) — e desde a AT-219 repete o
+<code>true</code> do código. Era um defeito da instalação, não uma escolha de custo:
+<code>START_OUTBOX_DRAIN</code> é a única coisa que drena a outbox da api para o
+engine, então numa instalação de uma máquina uma sessão fechada nunca parava os
+processos dela e um dev agent esperando uma aprovação, um gate ou o container
+nunca era acordado. Nenhuma das chaves gasta tokens com as flags de produto desligadas: com
+<code>ANAMNESE_ENABLED=false</code> o <code>kickoff/0</code> da Anamnese não agenda job nenhum,
+e o drain só enfileira o Psicólogo com <code>PSYCHOLOGIST_ENABLED=true</code>.
+Numa instalação, a Anamnese está, portanto, ligada ou desligada só por
+<code>ANAMNESE_ENABLED</code> (default <code>true</code> desde a RN-680). No Kubernetes não havia nada a corrigir — um
+Deployment/ConfigMap não intercepta nada, e o <code>brabo-config</code> nunca carregou
+estas variáveis. As duas flags são lidas no boot: mude-as e
+<code>docker compose up -d engine</code>.</p>
+</blockquote>
+<h3 id="a-semantic-gate-on-a-small-model">Um gate semântico num modelo pequeno</h3>
+<p>O QA é o papel que cabe pior num 7B local: o julgamento varia entre
+execuções, o que faz da demo um critério de aceite executável e <strong>não</strong>
+um teste de regressão. Para torná-la confiável, aponte <code>DEMO_QA_MODEL</code> para um
+modelo de API — o binding por agente (escopo <code>agent</code>, que vence <code>project</code>)
+existe exatamente para isso.</p>
+<p>A máquina de gates em si não varia: ordem imutável, retorno na mesma
+branch, teto de correções, vereditos como artefato e um terminal
+<code>awaiting_user</code> são todos verificados por ExUnit
+(<a href="../business-rules/api.html#rn-014">RN-014</a>, <a href="../business-rules/api.html#rn-015">RN-015</a>).</p>
+<hr>
+<nav class="site-pager"><a href="../runbook/instalacao.html">Instalação e artefatos</a><a href="../runbook/restore.html">Restore</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-infra/blob/dev/deploy/docs/runbook/operacao.md">Editar esta página</a></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#incidente-de-custo">Incidente de custo</a></li><li class="n3"><a href="#signal">Sinal</a></li><li class="n3"><a href="#1-which-project-which-agent">1. Qual projeto, qual agente</a></li><li class="n3"><a href="#2-check-the-budget">2. Confira o orçamento</a></li><li class="n3"><a href="#3-cut-the-spend">3. Corte o gasto</a></li><li class="n3"><a href="#4-afterward">4. Depois</a></li><li class="n3"><a href="#what-this-section-doesnt-fix">O que esta seção não conserta</a></li><li class="n2"><a href="#observabilidade">Observabilidade</a></li><li class="n3"><a href="#observabilidade-local">Observabilidade local, sem cluster</a></li><li class="n3"><a href="#where-things-are">Onde as coisas estão</a></li><li class="n3"><a href="#following-a-session-from-the-root-to-a-tool-call">Acompanhando uma sessão da raiz até uma chamada de ferramenta</a></li><li class="n3"><a href="#quando-nao-ha-trace-no-tempo">Quando não há trace no Tempo</a></li><li class="n3"><a href="#when-a-panel-is-empty">Quando um painel está vazio</a></li><li class="n3"><a href="#when-theres-no-log-in-loki">Quando não há log no Loki</a></li><li class="n3"><a href="#alerts">Alertas</a></li><li class="n3"><a href="#known-limits">Limites conhecidos</a></li><li class="n2"><a href="#registro-de-gates">Registro de gates</a></li><li class="n2"><a href="#ambiente-de-inferencia">Ambiente de inferência</a></li><li class="n3"><a href="#a-semantic-gate-on-a-small-model">Um gate semântico num modelo pequeno</a></li></ul></aside>
+</div>
+<script src="../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-pt-BR.json" data-base="../"></script></body>
+</html>
