@@ -123,4 +123,20 @@ describe('medirDoRepositorio: só a doc do brabo', () => {
     escrever('apps/api/docs/irma.md', '# irmã X\n');
     expect(relatorio(medirDoRepositorio(dir, ['docs', 'apps/api/docs']).docs, '> aviso')).toBe(antes);
   });
+  it('fonte suja conta igual no worktree e no índice, e rodar duas vezes dá o mesmo (1ª linha do status)', () => {
+    const { dir, escrever, git } = repo();
+    const sha = git('rev-parse', 'HEAD').trim();
+    escrever('docs/i18n/en/a.md', pagina(sha));
+    git('add', '-A');
+    git('commit', '-qm', 'tradução');
+    expect(medir(dir).defasadas).toEqual([]);
+    escrever('docs/a.md', '# A mudou\n'); // " M": a linha que o trim() mutilava
+    const rel = () => relatorio(medirDoRepositorio(dir, ['docs']).docs, '> aviso');
+    const solto = rel();
+    expect(medir(dir).defasadas).toEqual(['a.md']);
+    expect(rel()).toBe(solto);
+    git('add', 'docs/a.md'); // "M ": o estado que o layout produz
+    expect(medir(dir).defasadas).toEqual(['a.md']);
+    expect(rel()).toBe(solto);
+  });
 });
