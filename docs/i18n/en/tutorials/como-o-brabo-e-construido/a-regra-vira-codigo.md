@@ -70,5 +70,5 @@ Invented docs are worse than missing docs. The mark becomes a question on the bo
 
 ## Learn more
 
-- [Documentation workflow](https://github.com/viralabs-dev/brabo/blob/dev/docs/documentation-workflow.md), with the full mechanism.
+- [Documentation workflow](https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/documentation-workflow.md), with the full mechanism.
 - [How to contribute](https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md), section "Documentation is part of the PR".
