@@ -1734,6 +1734,26 @@ environment, not a unit test beside it (AT-124).</p>
 <td><code>http://localhost:4000</code></td>
 <td>where the <code>instalacao</code> spec (installation smoke) hits the engine <code>/health</code></td>
 </tr>
+<tr>
+<td><code>CAPTURAS_API</code></td>
+<td><code>desconhecida</code></td>
+<td>the tag of the api image that <code>capturas.json</code> records (the latest <code>-dev.N</code> of the api, passed by the <code>capturas-da-doc</code> workflow); outside it, the captures go out without the version</td>
+</tr>
+<tr>
+<td><code>CAPTURAS_ENGINE</code></td>
+<td><code>desconhecida</code></td>
+<td>the tag of the engine image that <code>capturas.json</code> records (the <code>componentes.json</code> pin, passed by the <code>capturas-da-doc</code> workflow)</td>
+</tr>
+<tr>
+<td><code>CAPTURAS_WEB</code></td>
+<td><code>desconhecida</code></td>
+<td>the tag of the web image that <code>capturas.json</code> records (the <code>componentes.json</code> pin, passed by the <code>capturas-da-doc</code> workflow)</td>
+</tr>
+<tr>
+<td><code>CAPTURAS_SAIDA</code></td>
+<td><code>e2e/capturas/saida</code></td>
+<td>the folder that receives the PNGs and <code>capturas.json</code> of the doc captures (<code>e2e/capturas/doc.captura.ts</code>)</td>
+</tr>
 </tbody>
 </table></div>
 <h3 id="local-cluster-and-scheduled-proofs--deployk8s">Local cluster and scheduled proofs — <code>deploy/k8s/</code></h3>
@@ -2101,7 +2121,7 @@ exceptions are the ones marked 🔒, which fail explicitly in production.</p>
 </blockquote>
 <nav class="site-pager"><a href="../explanation/documentation-workflow.html">Docs sync</a><a href="../reference/events.html">Eventos</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Edit this page</a><span>Updated 2026-11-08T20:30:03-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Edit this page</a><span>Updated 2026-11-08T21:19:06-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#installation-compose-docker-composeinstallyml">Installation compose (docker-compose.install.yml)</a></li><li class="n2"><a href="#api">api</a></li><li class="n3"><a href="#essentials">Essentials</a></li><li class="n3"><a href="#security-">Security 🔒</a></li><li class="n3"><a href="#first-party-auth">First-party auth</a></li><li class="n3"><a href="#real-smtp-mailsender">Real SMTP (MailSender)</a></li><li class="n3"><a href="#recuperar-a-senha-sem-smtp">Recovering a password without SMTP</a></li><li class="n3"><a href="#development-seed">Development seed</a></li><li class="n3"><a href="#rate-limit">Rate limit</a></li><li class="n3"><a href="#internal-traffic-">Internal traffic 🔒</a></li><li class="n3"><a href="#git">Git</a></li><li class="n3"><a href="#llm">LLM</a></li><li class="n3"><a href="#knowledge-graph-adr-0099">Knowledge graph (ADR 0099)</a></li><li class="n3"><a href="#observability">Observability</a></li><li class="n2"><a href="#engine">engine</a></li><li class="n3"><a href="#essentials-1">Essentials</a></li><li class="n3"><a href="#cluster-and-shutdown">Cluster and shutdown</a></li><li class="n3"><a href="#harness">Harness</a></li><li class="n3"><a href="#psychologist">Psychologist</a></li><li class="n3"><a href="#anamnese">Anamnese</a></li><li class="n3"><a href="#load-guards">Load guards</a></li><li class="n3"><a href="#internal-traffic-and-observability">Internal traffic and observability</a></li><li class="n2"><a href="#web">web</a></li><li class="n3"><a href="#why-the-version-doesnt-go-through-configjs">Why the version doesn't go through /config.js</a></li><li class="n2"><a href="#backup">Backup</a></li><li class="n2"><a href="#local-inference-containers">Local inference (containers)</a></li><li class="n2"><a href="#local-observability-containers">Local observability (containers)</a></li><li class="n2"><a href="#container-broker">Container broker</a></li><li class="n2"><a href="#dev-container-user-build-time">Dev container user (build-time)</a></li><li class="n2"><a href="#tooling-variables-not-product">Tooling variables (not product)</a></li><li class="n3"><a href="#demo-and-seed-scripts--appsapiscripts">Demo and seed scripts — apps/api/scripts/</a></li><li class="n3"><a href="#browser-e2e--e2e">Browser E2E — e2e/</a></li><li class="n3"><a href="#local-cluster-and-scheduled-proofs--deployk8s">Local cluster and scheduled proofs — deploy/k8s/</a></li><li class="n2"><a href="#full-inventory">Full inventory</a></li><li class="n3"><a href="#env-servico-api">api</a></li><li class="n3"><a href="#env-servico-engine">engine</a></li><li class="n3"><a href="#env-servico-web">web</a></li><li class="n3"><a href="#env-servico-broker">broker</a></li><li class="n3"><a href="#env-servico-api-scripts">api/scripts</a></li><li class="n3"><a href="#env-servico-e2e">e2e</a></li><li class="n3"><a href="#env-servico-deploy-k8s">deploy/k8s</a></li></ul></aside>
 </div>
