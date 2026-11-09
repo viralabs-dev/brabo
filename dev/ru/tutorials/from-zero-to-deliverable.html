@@ -27,15 +27,10 @@
 
 <article class="doc">
 <h1 id="from-zero-to-a-deliverable">С нуля до готового результата</h1>
-<p>Эта страница прослеживает один реальный проект, записанный вживую 2026-10-14, от
-пустого workspace до работающего результата. Проект, <code>viralabs-app-2026-10-14b</code>,
-— это сокращатель ссылок (Node 22 + SQLite). Вся команда работала на <strong>Claude
-Haiku 5.5</strong>, и прогон обошёлся в <strong>US$ 1.07</strong>. От идеи до выполнения прошло
-<strong>13 минут</strong>, а до последнего merge — около <strong>57 минут</strong> взаимодействия.</p>
-<p>Что получилось в итоге: <strong>8 из 8 задач</strong>, плюс ADR и pull request
-инфраструктуры, смерженные в ветку <code>dev</code> проекта, и результат, чей набор тестов
-проходит <strong>102/102</strong> в чистом клоне и который запускается через
-<code>docker compose up</code>.</p>
+<p>Эта страница проводит проект от начала до конца, от пустого workspace до работающего результата: сокращатель ссылок (Node 22 + SQLite), вся команда на одной модели. Экраны шагов 1–3 — снимки текущего интерфейса, которые <code>brabo-qa</code> делает для каждой версии, с скрытыми тестовыми данными.</p>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">Запись от 14 октября 2026 г.: описывает Brabo на ту дату</p>
+<p>Пример-прогон был записан вживую, и эти числа — из него. Проект <code>viralabs-app-2026-10-14b</code> работал на <strong>Claude Haiku 5.5</strong> и обошёлся в <strong>US$ 1.07</strong>. От идеи до выполнения прошло <strong>13 минут</strong>, а до последнего merge — около <strong>57 минут</strong> взаимодействия. Получилось <strong>8 из 8 задач</strong>, плюс ADR и pull request инфраструктуры, и результат, чей набор тестов проходит <strong>102/102</strong> в чистом клоне. Экраны шагов 4–6 взяты из этой записи, сделанной до миграции на shadcn.</p>
+</div>
 <div class="admonicao admonicao-dica" data-admonicao="dica"><p class="admonicao-titulo">Всё через чат Criativo</p>
 <p>Весь прогон велся из <strong>одного места — чата сессии Criativo</strong>: открытые вопросы,
 подтверждение архитектуры и каждый merge решались там, без перезагрузки
@@ -52,19 +47,18 @@ Haiku 5.5</strong>, и прогон обошёлся в <strong>US$ 1.07</strong
 <li><strong>Смержить из чата</strong> каждый pull request, прошедший гейты.</li>
 </ol>
 </div>
-<p>Каждый шаг ниже говорит, что делаете вы и что возвращают агенты. Записи — это
-настоящий экран Brabo; путь смонтированной папки на шаге 1 размыт.</p>
+<p>Каждый шаг ниже говорит, что делаете вы и что возвращают агенты. Экраны шагов 1–3 — текущей версии; шагов 4–6 — исторические (см. блок выше).</p>
 <h2 id="1-create-the-project">1. Создать проект</h2>
 <p>Вы создаёте проект в мастере и выбираете, где живёт код. Здесь это
 <strong>смонтированная папка</strong>: мастер предлагает путь внутри базы проектов
 установки, а сама папка должна существовать только к моменту, когда Infra
 поднимает контейнер. Пока ничего не провиженится — репозиторий рождается позже,
 когда подключается Arquiteto.</p>
-<p><img src="../assets/fluxo-do-zero/passo-01-criar-projeto.gif" alt="Создание проекта"></p>
+<figure class="figura"><img src="../assets/capturas/novo-projeto-claro.png" alt="Создание проекта"><figcaption>Мастер нового проекта: создать новый проект или взять существующий</figcaption></figure>
 <h2 id="2-give-the-team-a-model">2. Дать команде модель</h2>
 <p>В Настройках вы применяете одну модель ко всем агентам одним действием. В этом
 прогоне Claude Haiku 5.5 была применена ко всей команде.</p>
-<p><img src="../assets/fluxo-do-zero/passo-02-modelo-ao-time.gif" alt="Применение модели к команде"></p>
+<figure class="figura"><img src="../assets/capturas/modelo-do-time-claro.png" alt="Применение модели к команде"><figcaption>Модели по агентам, с действием «применить модель ко всей команде»</figcaption></figure>
 <h2 id="3-the-idea-and-the-questions-the-agents-ask-back">3. Идея и вопросы, которые задают агенты</h2>
 <p>Вы описываете продукт в чате Criativo. За первый ход <strong>Criativo</strong> записывает
 <strong>7 бизнес-правил и 1 решение</strong>, а то, что не смог решить сам, превращает в
@@ -75,7 +69,7 @@ Haiku 5.5</strong>, и прогон обошёлся в <strong>US$ 1.07</strong
 хода говорит, что было записано («Записано за этот ход: 7 бизнес-правил,
 1 решение, 2 открытых вопроса»). Когда закончите, <strong>«Я готов — потребность
 подтверждена»</strong> передаёт работу PO.</p>
-<p><img src="../assets/fluxo-do-zero/passo-03-ideacao-e-perguntas.gif" alt="Идея и открытые вопросы"></p>
+<figure class="figura"><img src="../assets/capturas/perguntas-abertas-claro.png" alt="Идея и открытые вопросы"><figcaption>Чат Criativo с открытыми вопросами в очереди ожидающих</figcaption></figure>
 <h2 id="4-po-architect-and-the-adr">4. PO, Arquiteto и ADR</h2>
 <p><strong>PO</strong> разбивает правила на бэклог — <strong>4 эпика, 8 историй и 8 задач</strong>, примерно
 за полторы минуты — и тоже задаёт встречные вопросы, когда в правиле не хватает
@@ -85,7 +79,10 @@ Haiku 5.5</strong>, и прогон обошёлся в <strong>US$ 1.07</strong
 SQLite on a persistent volume») и, когда архитектура определена, просит вас её
 подтвердить: <strong>«Подтвердить готовность архитектуры»</strong> — это то, что подключает
 Infra.</p>
-<p><img src="../assets/fluxo-do-zero/passo-04-po-arquiteto-adr.gif" alt="PO, Arquiteto и ADR"></p>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">Запись от 14 октября 2026 г.: описывает Brabo на ту дату</p>
+<p>Экран из записи от 14.10, до миграции на shadcn.</p>
+<figure class="figura"><img src="../assets/historico/fluxo-do-zero/passo-04-po-arquiteto-adr.png" alt="PO, Arquiteto и ADR"><figcaption>PO, Arquiteto и ADR (14.10, до shadcn)</figcaption></figure>
+</div>
 <h2 id="5-infra-the-plan-and-automatic-mode">5. Infra, план и автоматический режим</h2>
 <p><strong>Infra Lead</strong> сам поднимает контейнер проекта и открывает pull request
 инфраструктуры (<code>infra[bot]</code>, PR #2). <strong>Dev Lead</strong> читает бэклог и карту
@@ -94,7 +91,10 @@ Infra.</p>
 говорит, чего он не разрешает: merge в защищённую ветку остаётся за вами. С
 этого момента dev agent работает внутри контейнера (<code>/work</code>), и в чате можно
 прочитать каждую выполненную им команду и её вывод.</p>
-<p><img src="../assets/fluxo-do-zero/passo-05-infra-plano-modo-automatico.gif" alt="Infra, план и автоматический режим"></p>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">Запись от 14 октября 2026 г.: описывает Brabo на ту дату</p>
+<p>Экран из записи от 14.10, до миграции на shadcn.</p>
+<figure class="figura"><img src="../assets/historico/fluxo-do-zero/passo-05-infra-plano-modo-automatico.png" alt="Infra, план и автоматический режим"><figcaption>Infra, план и автоматический режим (14.10, до shadcn)</figcaption></figure>
+</div>
 <h2 id="6-merges-from-the-chat">6. Merge из чата</h2>
 <p>Каждая задача выполняется в dev agent (в среднем 90 с от взятия задачи до pull
 request, от 36 с до 144 с) и проходит конвейер <strong>Dev → QA → SecOps → Вы</strong>. Pull
@@ -102,8 +102,13 @@ request, прошедший гейты, попадает в очередь <stro
 чата Criativo: <strong>Merge</strong> предлагает merge, а <strong>Одобрить</strong> в том же блоке его
 подтверждает. В этом прогоне последние семь pull request (с #4 по #10) были
 смержены примерно за две минуты, без перезагрузки страницы.</p>
-<p><img src="../assets/fluxo-do-zero/passo-06-merges-pelo-chat.gif" alt="Merge из чата"></p>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">Запись от 14 октября 2026 г.: описывает Brabo на ту дату</p>
+<p>Экран из записи от 14.10, до миграции на shadcn.</p>
+<figure class="figura"><img src="../assets/historico/fluxo-do-zero/passo-06-merges-pelo-chat.png" alt="Merge из чата"><figcaption>Merge из чата (14.10, до shadcn)</figcaption></figure>
+</div>
 <h2 id="the-deliverable">Результат</h2>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">Запись от 14 октября 2026 г.: описывает Brabo на ту дату</p>
+<p>Так закончился прогон, записанный 14.10.</p>
 <p>Ветка <code>dev</code> репозитория проекта, склонированная начисто и запущенная в
 <code>node:22</code> с <code>npm test</code>, прошла <strong>102/102</strong> теста. <code>docker compose up</code> поднял API
 на порту 8080, и каждое правило было проверено по HTTP: неверный логин и запрос
@@ -116,6 +121,7 @@ request, прошедший гейты, попадает в очередь <stro
 справочник API. CORS preflight с <code>127.0.0.1:8080</code> и с <code>localhost:8080</code> получает
 каждый свой <code>Access-Control-Allow-Origin</code>, а чужой origin не получает ни
 одного.</p>
+</div>
 <h2 id="следующий-шаг">Следующий шаг</h2>
 <div class="cartoes">
 <ul>
@@ -124,7 +130,7 @@ request, прошедший гейты, попадает в очередь <stro
 </div>
 <nav class="site-pager"><a href="../getting-started.html">Первые шаги</a><a href="../tutorials/orquestrar-repositorios.html">Оркестрация репозиториев</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/from-zero-to-deliverable.md">Редактировать страницу</a><span>Обновлено 2026-11-08T19:23:03-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/from-zero-to-deliverable.md">Редактировать страницу</a><span>Обновлено 2026-11-09T07:03:28-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#1-create-the-project">1. Создать проект</a></li><li class="n2"><a href="#2-give-the-team-a-model">2. Дать команде модель</a></li><li class="n2"><a href="#3-the-idea-and-the-questions-the-agents-ask-back">3. Идея и вопросы, которые задают агенты</a></li><li class="n2"><a href="#4-po-architect-and-the-adr">4. PO, Arquiteto и ADR</a></li><li class="n2"><a href="#5-infra-the-plan-and-automatic-mode">5. Infra, план и автоматический режим</a></li><li class="n2"><a href="#6-merges-from-the-chat">6. Merge из чата</a></li><li class="n2"><a href="#the-deliverable">Результат</a></li><li class="n2"><a href="#следующий-шаг">Следующий шаг</a></li></ul></aside>
 </div>

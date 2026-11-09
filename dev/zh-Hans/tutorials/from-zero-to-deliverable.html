@@ -27,11 +27,10 @@
 
 <article class="doc">
 <h1 id="from-zero-to-a-deliverable">从零到交付物</h1>
-<p>本页跟随一个真实项目，于 2026-10-14 现场录制，从一个空工作区到一个可运行的交付物。项目
-<code>viralabs-app-2026-10-14b</code> 是一个短链接服务（Node 22 + SQLite）。整个团队都运行在 <strong>Claude Haiku
-5.5</strong> 上，这次运行花费 <strong>US$ 1.07</strong>。从想法到开始执行用了 <strong>13 分钟</strong>，到最后一次合并约 <strong>57 分钟</strong>的交互。</p>
-<p>最后产出的是：<strong>8 个任务中的 8 个</strong>，外加 ADR 和基础设施 pull request，合并进项目的 <code>dev</code> 分支；以及一个
-交付物，其测试套件在干净克隆中通过 <strong>102/102</strong>，并可用 <code>docker compose up</code> 启动。</p>
+<p>本页端到端地跟随一个项目，从空工作区到可运行的交付物：一个短链接服务（Node 22 + SQLite），整个团队使用同一个模型。第 1 至 3 步的界面是当前界面的截图，由 <code>brabo-qa</code> 在每个版本生成，并隐藏了测试数据。</p>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">2026年10月14日 的记录：描述当时的 Brabo</p>
+<p>作为示例的运行是现场录制的，下面的数字都来自它。项目 <code>viralabs-app-2026-10-14b</code> 运行在 <strong>Claude Haiku 5.5</strong> 上，花费 <strong>US$ 1.07</strong>。从想法到开始执行用了 <strong>13 分钟</strong>，到最后一次合并约 <strong>57 分钟</strong>的交互。产出 <strong>8 个任务中的 8 个</strong>，外加 ADR 和基础设施 pull request，以及一个在干净克隆中测试套件通过 <strong>102/102</strong> 的交付物。第 4 至 6 步的界面来自这次录制，早于 shadcn 迁移。</p>
+</div>
 <div class="admonicao admonicao-dica" data-admonicao="dica"><p class="admonicao-titulo">一切都在 Criativo 的聊天里完成</p>
 <p>整个运行都在<strong>一个地方——Criativo 的会话聊天</strong>中驱动：开放问题、架构确认和每一次合并都在那里决定，无需
 刷新页面或打开其他标签页。</p>
@@ -47,40 +46,51 @@
 <li><strong>在聊天中合并</strong>每一个通过闸门的 pull request。</li>
 </ol>
 </div>
-<p>下面每一步都说明你要做什么以及智能体交回什么。录屏是 Brabo 的真实界面；第 1 步中挂载文件夹的路径已做模糊处理。</p>
+<p>下面每一步都说明你要做什么以及智能体交回什么。第 1 至 3 步的界面来自当前版本；第 4 至 6 步是历史画面（见上方的框）。</p>
 <h2 id="1-create-the-project">1. 创建项目</h2>
 <p>你在向导中创建项目，并选择代码存放的位置。这里是一个<strong>挂载文件夹</strong>：向导会在安装的项目根目录中建议一个路径，
 而该文件夹只需在 Infra 启动容器时存在。此时还没有任何东西被供应——仓库要到之后 Arquiteto 被引入时才诞生。</p>
-<p><img src="../assets/fluxo-do-zero/passo-01-criar-projeto.gif" alt="创建项目"></p>
+<figure class="figura"><img src="../assets/capturas/novo-projeto-claro.png" alt="创建项目"><figcaption>新建项目向导：创建新项目或接入已有项目</figcaption></figure>
 <h2 id="2-give-the-team-a-model">2. 给团队一个模型</h2>
 <p>在设置中，你可以通过一个操作把一个模型应用到所有智能体。这次运行把 Claude Haiku 5.5 应用到了整个团队。</p>
-<p><img src="../assets/fluxo-do-zero/passo-02-modelo-ao-time.gif" alt="把模型应用到团队"></p>
+<figure class="figura"><img src="../assets/capturas/modelo-do-time-claro.png" alt="把模型应用到团队"><figcaption>按智能体设置模型，并可一次性把模型应用到整个团队</figcaption></figure>
 <h2 id="3-the-idea-and-the-questions-the-agents-ask-back">3. 想法，以及智能体反问的问题</h2>
 <p>你在 Criativo 的聊天中描述产品。在第一个回合中，<strong>Criativo</strong> 记录了 <strong>7 条业务规则和 1 项决定</strong>，并把它
 无法独自决定的内容变成<strong>开放问题</strong>，每个问题都附有建议答案以及它影响的规则（&quot;删除一个链接时，它的点击历史
 也要删除吗？&quot;）。这些问题位于聊天顶部的&quot;开放问题&quot;队列中：你接受建议或输入自己的答案，答案会被记录为一项决定。
 回合的结束语会说明写入了什么（&quot;本回合已记录：7 条业务规则、1 项决定、2 个开放问题&quot;）。完成后，
 **&quot;我准备好了——需求已验证&quot;**会把工作交给 PO。</p>
-<p><img src="../assets/fluxo-do-zero/passo-03-ideacao-e-perguntas.gif" alt="想法与开放问题"></p>
+<figure class="figura"><img src="../assets/capturas/perguntas-abertas-claro.png" alt="想法与开放问题"><figcaption>Criativo 的聊天，待处理队列中有开放问题</figcaption></figure>
 <h2 id="4-po-architect-and-the-adr">4. PO、Arquiteto 与 ADR</h2>
 <p><strong>PO</strong> 把规则拆分成 backlog——<strong>4 个史诗、8 个用户故事和 8 个任务</strong>，用时约一分半——并且在某条规则缺少取值时
 也会反问（&quot;密码的最小长度是多少？&quot;）。当每条规则都被用户故事覆盖后，交给 <strong>Arquiteto</strong> 的 handoff 会被自动
 接受。Arquiteto 以 pull request 的形式提出 ADR（<code>arquiteto[bot]</code>，PR #1，&quot;单模块，SQLite 位于持久卷上&quot;），
 并在架构定义后请你确认：**&quot;确认架构就绪&quot;**会把 Infra 引入。</p>
-<p><img src="../assets/fluxo-do-zero/passo-04-po-arquiteto-adr.gif" alt="PO、Arquiteto 与 ADR"></p>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">2026年10月14日 的记录：描述当时的 Brabo</p>
+<p>来自 10 月 14 日录制的画面，早于 shadcn 迁移。</p>
+<figure class="figura"><img src="../assets/historico/fluxo-do-zero/passo-04-po-arquiteto-adr.png" alt="PO、Arquiteto 与 ADR"><figcaption>PO、Arquiteto 与 ADR（10 月 14 日，shadcn 之前）</figcaption></figure>
+</div>
 <h2 id="5-infra-the-plan-and-automatic-mode">5. Infra、计划与自动模式</h2>
 <p><strong>Infra Lead</strong> 自行启动项目的容器，并打开基础设施 pull request（<code>infra[bot]</code>，PR #2）。<strong>Dev Lead</strong> 读取
 backlog 和模块图并提出执行计划；批准计划就会激活执行。界面一键为整个团队提供<strong>自动模式</strong>，并说明它不放行
 什么：合并到受保护分支仍由你决定。从那时起，dev agent 在容器内（<code>/work</code>）工作，你可以在聊天中查看它运行的
 每条命令及其输出。</p>
-<p><img src="../assets/fluxo-do-zero/passo-05-infra-plano-modo-automatico.gif" alt="Infra、计划与自动模式"></p>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">2026年10月14日 的记录：描述当时的 Brabo</p>
+<p>来自 10 月 14 日录制的画面，早于 shadcn 迁移。</p>
+<figure class="figura"><img src="../assets/historico/fluxo-do-zero/passo-05-infra-plano-modo-automatico.png" alt="Infra、计划与自动模式"><figcaption>Infra、计划与自动模式（10 月 14 日，shadcn 之前）</figcaption></figure>
+</div>
 <h2 id="6-merges-from-the-chat">6. 从聊天中合并</h2>
 <p>每个任务都在 dev agent 中运行（从认领任务到 pull request 平均 90 秒，介于 36 秒和 144 秒之间），并经过流水线
 <strong>Dev → QA → SecOps → 你</strong>。通过 gate 的 pull request 会进入 Criativo 聊天顶部的**&quot;可合并的 PR&quot;**队列：
 <strong>Merge</strong> 提出合并，同一区块中的 <strong>Approve</strong> 确认合并。在这次运行中，最后七个 pull request（#4 到 #10）在
 约两分钟内合并完毕，无需刷新页面。</p>
-<p><img src="../assets/fluxo-do-zero/passo-06-merges-pelo-chat.gif" alt="通过聊天合并"></p>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">2026年10月14日 的记录：描述当时的 Brabo</p>
+<p>来自 10 月 14 日录制的画面，早于 shadcn 迁移。</p>
+<figure class="figura"><img src="../assets/historico/fluxo-do-zero/passo-06-merges-pelo-chat.png" alt="通过聊天合并"><figcaption>通过聊天合并（10 月 14 日，shadcn 之前）</figcaption></figure>
+</div>
 <h2 id="the-deliverable">交付物</h2>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">2026年10月14日 的记录：描述当时的 Brabo</p>
+<p>10 月 14 日录制的那次运行是这样结束的。</p>
 <p>项目仓库的 <code>dev</code> 分支，干净克隆后在 <code>node:22</code> 中运行 <code>npm test</code>，通过了 <strong>102/102</strong> 个测试。
 <code>docker compose up</code> 在 8080 端口启动了 API，每条规则都通过 HTTP 进行了检查：错误的登录和不带 token 的请求
 得到 401；<code>ftp</code> URL 或超过 2048 个字符的 URL 得到 400 <code>INVALID_URL</code>；短码有 7 个字符；公共重定向是记录点击
@@ -88,6 +98,7 @@ backlog 和模块图并提出执行计划；批准计划就会激活执行。界
 并移除其点击记录；面板显示点击数和点击历史；<code>npm run user:create</code> 拒绝短于 12 个字符的密码；<code>/docs</code> 提供 API
 参考。来自 <code>127.0.0.1:8080</code> 和 <code>localhost:8080</code> 的 CORS 预检各自得到自己的 <code>Access-Control-Allow-Origin</code>，
 而外部来源一个也得不到。</p>
+</div>
 <h2 id="下一步">下一步</h2>
 <div class="cartoes">
 <ul>
@@ -96,7 +107,7 @@ backlog 和模块图并提出执行计划；批准计划就会激活执行。界
 </div>
 <nav class="site-pager"><a href="../getting-started.html">快速开始</a><a href="../tutorials/orquestrar-repositorios.html">编排多个仓库</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/from-zero-to-deliverable.md">编辑此页</a><span>更新于 2026-11-08T19:23:03-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/from-zero-to-deliverable.md">编辑此页</a><span>更新于 2026-11-09T07:03:28-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#1-create-the-project">1. 创建项目</a></li><li class="n2"><a href="#2-give-the-team-a-model">2. 给团队一个模型</a></li><li class="n2"><a href="#3-the-idea-and-the-questions-the-agents-ask-back">3. 想法，以及智能体反问的问题</a></li><li class="n2"><a href="#4-po-architect-and-the-adr">4. PO、Arquiteto 与 ADR</a></li><li class="n2"><a href="#5-infra-the-plan-and-automatic-mode">5. Infra、计划与自动模式</a></li><li class="n2"><a href="#6-merges-from-the-chat">6. 从聊天中合并</a></li><li class="n2"><a href="#the-deliverable">交付物</a></li><li class="n2"><a href="#下一步">下一步</a></li></ul></aside>
 </div>

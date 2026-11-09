@@ -27,16 +27,10 @@
 
 <article class="doc">
 <h1 id="do-zero-a-um-entregável">Do zero a um entregável</h1>
-<p>Esta página acompanha um projeto real, gravado ao vivo em 2026-10-14, de um
-workspace vazio até um entregável rodando. O projeto,
-<code>viralabs-app-2026-10-14b</code>, é um encurtador de links (Node 22 + SQLite). O
-time inteiro rodou com <strong>Claude Haiku 5.5</strong>, e a execução custou
-<strong>US$ 1,07</strong>. Da ideia à execução foram <strong>13 minutos</strong>, e até o último merge
-cerca de <strong>57 minutos</strong> de interação.</p>
-<p>O que saiu no fim: <strong>8 de 8 tarefas</strong>, mais o ADR e a pull request de
-infraestrutura, mergeadas na branch <code>dev</code> do projeto, e um entregável cuja
-suíte de testes passa <strong>102/102</strong> num clone limpo e que sobe com
-<code>docker compose up</code>.</p>
+<p>Esta página acompanha um projeto de ponta a ponta, de um workspace vazio até um entregável rodando: um encurtador de links (Node 22 + SQLite), com o time inteiro no mesmo modelo. As telas dos passos 1 a 3 são capturas da interface atual, geradas pelo <code>brabo-qa</code> a cada versão e com os dados de teste ocultados.</p>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">Registro de 14/10/2026: descreve o Brabo daquela data</p>
+<p>A execução que serve de exemplo foi gravada ao vivo, e estes números são dela. O projeto, <code>viralabs-app-2026-10-14b</code>, rodou com <strong>Claude Haiku 5.5</strong> e custou <strong>US$ 1,07</strong>. Da ideia à execução foram <strong>13 minutos</strong>, e até o último merge cerca de <strong>57 minutos</strong> de interação. Saíram <strong>8 de 8 tarefas</strong>, mais o ADR e a pull request de infraestrutura, e um entregável cuja suíte passa <strong>102/102</strong> num clone limpo. As telas dos passos 4 a 6 são dessa gravação, anterior à migração para o shadcn.</p>
+</div>
 <div class="admonicao admonicao-dica" data-admonicao="dica"><p class="admonicao-titulo">Tudo pelo chat do Criativo</p>
 <p>A execução inteira foi conduzida de <strong>um lugar só, o chat da sessão do
 Criativo</strong>: perguntas abertas, a confirmação da arquitetura e cada merge foram
@@ -53,19 +47,18 @@ decididos ali, sem recarregar a página nem abrir outra aba.</p>
 <li><strong>Mergear pelo chat</strong> cada pull request que passar nos gates.</li>
 </ol>
 </div>
-<p>Cada passo abaixo diz o que você faz e o que os agentes devolvem. As gravações
-são a tela real do Brabo; o caminho da pasta montada está borrado no passo 1.</p>
+<p>Cada passo abaixo diz o que você faz e o que os agentes devolvem. As telas dos passos 1 a 3 são as da versão atual; as dos passos 4 a 6 são históricas (ver o quadro acima).</p>
 <h2 id="1-criar-o-projeto">1. Criar o projeto</h2>
 <p>Você cria o projeto no assistente e escolhe onde o código mora. Aqui é uma
 <strong>pasta montada</strong>: o assistente sugere um caminho dentro da base de projetos
 da instalação, e a pasta só precisa existir quando a Infra sobe o container.
 Nada é provisionado ainda — o repositório nasce depois, quando o Arquiteto
 entra.</p>
-<p><img src="../assets/fluxo-do-zero/passo-01-criar-projeto.gif" alt="Criando o projeto"></p>
+<figure class="figura"><img src="../assets/capturas/novo-projeto-claro.png" alt="Criando o projeto"><figcaption>Assistente de novo projeto: criar um projeto novo ou adotar um existente</figcaption></figure>
 <h2 id="2-dar-um-modelo-ao-time">2. Dar um modelo ao time</h2>
 <p>Em Configurações você aplica um modelo a todos os agentes numa ação só. Esta
 execução aplicou o Claude Haiku 5.5 ao time inteiro.</p>
-<p><img src="../assets/fluxo-do-zero/passo-02-modelo-ao-time.gif" alt="Aplicando o modelo ao time"></p>
+<figure class="figura"><img src="../assets/capturas/modelo-do-time-claro.png" alt="Aplicando o modelo ao time"><figcaption>Modelos por agente, com a ação de aplicar um modelo ao time inteiro</figcaption></figure>
 <h2 id="3-a-ideia-e-as-perguntas-que-os-agentes-devolvem">3. A ideia, e as perguntas que os agentes devolvem</h2>
 <p>Você descreve o produto no chat do Criativo. No primeiro turno o <strong>Criativo</strong>
 grava <strong>7 regras de negócio e 1 decisão</strong>, e transforma o que não conseguiu
@@ -77,7 +70,7 @@ como decisão. A linha de fecho do turno diz o que foi gravado (&quot;Gravado ne
 turno: 7 regras de negócio, 1 decisão, 2 perguntas abertas&quot;). Quando você
 terminar, <strong>&quot;Estou pronto — a necessidade está validada&quot;</strong> passa o trabalho ao
 PO.</p>
-<p><img src="../assets/fluxo-do-zero/passo-03-ideacao-e-perguntas.gif" alt="A ideia e as perguntas abertas"></p>
+<figure class="figura"><img src="../assets/capturas/perguntas-abertas-claro.png" alt="A ideia e as perguntas abertas"><figcaption>Chat do Criativo com as perguntas abertas na fila de pendências</figcaption></figure>
 <h2 id="4-po-arquiteto-e-o-adr">4. PO, Arquiteto e o ADR</h2>
 <p>O <strong>PO</strong> quebra as regras num backlog — <strong>4 épicos, 8 histórias e 8
 tarefas</strong>, em cerca de um minuto e meio — e também pergunta de volta quando
@@ -87,7 +80,10 @@ automaticamente. O Arquiteto propõe o ADR como pull request
 (<code>arquiteto[bot]</code>, PR #1, &quot;Módulo único com SQLite em volume persistente&quot;) e,
 com a arquitetura definida, pede que você a confirme:
 <strong>&quot;Confirmar arquitetura pronta&quot;</strong> é o que traz a Infra.</p>
-<p><img src="../assets/fluxo-do-zero/passo-04-po-arquiteto-adr.gif" alt="PO, Arquiteto e o ADR"></p>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">Registro de 14/10/2026: descreve o Brabo daquela data</p>
+<p>Tela da gravação de 14/10, antes da migração para o shadcn.</p>
+<figure class="figura"><img src="../assets/historico/fluxo-do-zero/passo-04-po-arquiteto-adr.png" alt="PO, Arquiteto e o ADR"><figcaption>PO, Arquiteto e o ADR (14/10, antes do shadcn)</figcaption></figure>
+</div>
 <h2 id="5-infra-o-plano-e-o-modo-automático">5. Infra, o plano e o modo automático</h2>
 <p>O <strong>Infra Lead</strong> sobe o container do projeto sozinho e abre a pull request de
 infraestrutura (<code>infra[bot]</code>, PR #2). O <strong>Dev Lead</strong> lê o backlog e o mapa de
@@ -96,7 +92,10 @@ execução. A tela oferece o <strong>modo automático</strong> para o time intei
 clique, dizendo o que ele não libera: merges em branch protegida continuam
 seus. Daí em diante o dev agent trabalha dentro do container (<code>/work</code>), e você
 pode ler no chat cada comando que ele rodou e a saída.</p>
-<p><img src="../assets/fluxo-do-zero/passo-05-infra-plano-modo-automatico.gif" alt="Infra, o plano e o modo automático"></p>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">Registro de 14/10/2026: descreve o Brabo daquela data</p>
+<p>Tela da gravação de 14/10, antes da migração para o shadcn.</p>
+<figure class="figura"><img src="../assets/historico/fluxo-do-zero/passo-05-infra-plano-modo-automatico.png" alt="Infra, o plano e o modo automático"><figcaption>Infra, plano e modo automático (14/10, antes do shadcn)</figcaption></figure>
+</div>
 <h2 id="6-merges-pelo-chat">6. Merges pelo chat</h2>
 <p>Cada tarefa roda no dev agent (90 s em média de pegar a tarefa até a pull
 request, entre 36 s e 144 s) e passa pela esteira <strong>Dev → QA → SecOps →
@@ -105,8 +104,13 @@ merge&quot;</strong> no topo do chat do Criativo: <strong>Mergear</strong> prop�
 <strong>Aprovar</strong>, no mesmo bloco, o confirma. Nesta execução as últimas sete pull
 requests (#4 a #10) foram mergeadas em cerca de dois minutos, sem recarregar a
 página.</p>
-<p><img src="../assets/fluxo-do-zero/passo-06-merges-pelo-chat.gif" alt="Merges pelo chat"></p>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">Registro de 14/10/2026: descreve o Brabo daquela data</p>
+<p>Tela da gravação de 14/10, antes da migração para o shadcn.</p>
+<figure class="figura"><img src="../assets/historico/fluxo-do-zero/passo-06-merges-pelo-chat.png" alt="Merges pelo chat"><figcaption>Merges pelo chat (14/10, antes do shadcn)</figcaption></figure>
+</div>
 <h2 id="o-entregável">O entregável</h2>
+<div class="historico" data-historico="2026-10-14"><p class="historico-faixa">Registro de 14/10/2026: descreve o Brabo daquela data</p>
+<p>A execução gravada em 14/10 terminou assim.</p>
 <p>A branch <code>dev</code> do repositório do projeto, clonada limpa e rodada em <code>node:22</code>
 com <code>npm test</code>, passou em <strong>102/102</strong> testes. <code>docker compose up</code> subiu a API
 na porta 8080, e cada regra foi conferida por HTTP: login errado e requisição
@@ -119,6 +123,7 @@ cliques; <code>npm run user:create</code> recusa senha com menos de 12 caractere
 <code>/docs</code> serve a referência da API. O preflight de CORS a partir de
 <code>127.0.0.1:8080</code> e de <code>localhost:8080</code> recebe cada um o seu
 <code>Access-Control-Allow-Origin</code>, e uma origem estranha não recebe nenhum.</p>
+</div>
 <h2 id="próximo-passo">Próximo passo</h2>
 <div class="cartoes">
 <ul>
@@ -127,7 +132,7 @@ cliques; <code>npm run user:create</code> recusa senha com menos de 12 caractere
 </div>
 <nav class="site-pager"><a href="../getting-started.html">Primeiros passos</a><a href="../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/from-zero-to-deliverable.md">Editar esta página</a><span>Atualizado em 2026-11-08T19:23:03-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/from-zero-to-deliverable.md">Editar esta página</a><span>Atualizado em 2026-11-09T07:03:28-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#1-criar-o-projeto">1. Criar o projeto</a></li><li class="n2"><a href="#2-dar-um-modelo-ao-time">2. Dar um modelo ao time</a></li><li class="n2"><a href="#3-a-ideia-e-as-perguntas-que-os-agentes-devolvem">3. A ideia, e as perguntas que os agentes devolvem</a></li><li class="n2"><a href="#4-po-arquiteto-e-o-adr">4. PO, Arquiteto e o ADR</a></li><li class="n2"><a href="#5-infra-o-plano-e-o-modo-automático">5. Infra, o plano e o modo automático</a></li><li class="n2"><a href="#6-merges-pelo-chat">6. Merges pelo chat</a></li><li class="n2"><a href="#o-entregável">O entregável</a></li><li class="n2"><a href="#próximo-passo">Próximo passo</a></li></ul></aside>
 </div>
