@@ -119,8 +119,9 @@ for par in "${DESTINOS[@]}"; do
   fi
 done
 
-# ignorados pelo .gitignore daqui (ex.: node_modules) não entram
-git add -f -A -- . ':!node_modules' ':!**/node_modules' >/dev/null 2>&1 || true
+# ignorados pelo .gitignore daqui (ex.: node_modules) não entram. `**/node_modules` sozinho
+# casa só a pasta, não o conteúdo: o `/**` é o que exclui o node_modules aninhado (AT-870).
+git add -f -A -- . ':!node_modules' ':!**/node_modules/**' >/dev/null 2>&1 || true
 # o que está no índice e não está em HEAD veio dos irmãos
 git diff --cached --name-only --diff-filter=A -z | tr '\0' '\n' > "$MANIFESTO"
 echo "layout reconstruído: $(git ls-files | wc -l) arquivo(s) no índice"

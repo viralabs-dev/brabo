@@ -97,6 +97,14 @@ describe('montar-layout.sh', () => {
     expect(readFileSync(join(brabo, 'apps/web/web.txt'), 'utf8')).toBe('novo');
   });
 
+  it('node_modules aninhado (website/) nunca entra no índice: o ls-tree passava de 1 MB e o gerador dava ENOBUFS (AT-870)', () => {
+    mkdirSync(join(brabo, 'website/node_modules/pkg'), { recursive: true });
+    writeFileSync(join(brabo, 'website/node_modules/pkg/index.js'), 'x');
+    montar();
+    expect(git(brabo, 'ls-files', 'website')).toBe('');
+    expect(git(brabo, 'ls-files', '--', 'website/node_modules/pkg')).toBe('');
+  });
+
   describe('trava irmaos.lock (AT-780)', () => {
     it('sem BRABO_REF, usa o SHA da trava e não a ponta da dev', () => {
       writeFileSync(join(irmaos, 'brabo-web', 'web.txt'), 'travado');
