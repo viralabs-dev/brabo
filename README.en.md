@@ -81,8 +81,8 @@ your confirmation.
   <img src="docs/assets/capturas/dev-agent-claro.png" alt="The execution session thread: the dev agent picks up the task, commits, opens the pull request and reaches the gate" />
 </picture>
 
-Every command goes through the project's policy, and what the dev agent does
-stays in the session thread.
+Every step of the dev agent (command, commit, push, pull request) is born as a proposal
+and goes through the project's policy, and the decision stays in the session thread, with its reason.
 
 ### The merge is always yours
 

@@ -76,8 +76,8 @@ A decisão de arquitetura nasce como pull request, e a arquitetura só segue com
   <img src="docs/assets/capturas/dev-agent-claro.png" alt="O fio da sessão de execução: o dev agent pega a tarefa, faz o commit, abre a pull request e chega ao gate" />
 </picture>
 
-Cada comando passa pela política do projeto, e o que o dev agent faz fica no fio
-da sessão.
+Cada passo do dev agent (comando, commit, push, pull request) nasce como proposta e passa
+pela política do projeto, e a decisão fica no fio da sessão, com o motivo.
 
 ### O merge é sempre seu
 

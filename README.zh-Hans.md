@@ -77,7 +77,7 @@
   <img src="docs/assets/capturas/dev-agent-claro.png" alt="执行会话记录：开发智能体领取任务、提交、创建 pull request 并到达关卡" />
 </picture>
 
-每条命令都经过项目策略，开发智能体做的事情都留在会话记录中。
+开发智能体的每一步（命令、提交、推送、pull request）都作为提案产生，并经过项目策略，决定连同理由留在会话记录中。
 
 ### 合并永远由你决定
 
