@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- CI: repina o brabo-ci na release final `v1.4.0` (`5320046`), para a promoção `dev → main` de 09/11/2026 (a `main` só aceita release final).
+
 - **fix(docs)**: AT-875. O `<a id="rn-NNN">` colado ao último item de lista da RN anterior virava continuação do `<li>` e repetia o id no HTML (13 no `brabo-engine`, `parte-06`, nos 4 idiomas). `ancorar-rn.mjs` e o `partir` de `partir-rn.mjs` passam a pôr uma linha em branco antes do `<a id>` (o `ancorar-rn` também corrige a âncora já colada); a guarda `ancoras-de-rn.mjs` exige essa linha em branco nas `parte-NN.md`; o `site/links.mjs` ganha `idsRepetidos` e reprova id repetido em qualquer HTML do site. Specs com mutação nos três.
 - **docs**: AT-874 (lado do `brabo`). A frase do dev agent nos 4 READMEs (`README.md`, `README.en.md`, `README.ru.md`, `README.zh-Hans.md`) passa a dizer que cada passo do dev agent (comando, commit, push, pull request) nasce como proposta e passa pela política do projeto, e que a decisão fica no fio da sessão, com o motivo (opção B do dono).
 - **feat(docs)**: AT-871 (PR 2). O `ancoras-de-rn.mjs` passa a reprovar, só em `business-rules/<área>/parte-NN.md`, a RN sem `<a id="rn-NNN"></a>` na linha imediatamente antes do título (spec com mutação: ausente reprova, presente passa). Entra depois da migração dos cinco irmãos.
