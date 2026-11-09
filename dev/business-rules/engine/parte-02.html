@@ -1,0 +1,1083 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — Engine — parte 2 (desde RN-305) | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../../business-rules/engine/parte-02.html" selected>pt-BR</option><option value="../../en/business-rules/engine/parte-02.html">en</option><option value="../../ru/business-rules/engine/parte-02.html">ru</option><option value="../../zh-Hans/business-rules/engine/parte-02.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../../dev/business-rules/engine/parte-02.html" selected>dev</option><option value="../../../prd/business-rules/engine/parte-02.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../../index.html">Início</a></li><li><a href="../../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Arquitetura</a></li><li><a href="../../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Política de branches</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../../explanation/localizacao.html">Localização</a></li><li><a href="../../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../../glossary.html">Glossário</a></li><li><a href="../../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>Regras de negócio</span></summary><ul><li><a href="../../business-rules.html">Regras de negócio</a></li><li><a href="../../business-rules/custo.html">Custo e metering</a></li><li><a href="../../business-rules/autenticacao.html">Autenticação</a></li><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><details open><summary><span>Engine</span></summary><ul><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/engine/parte-01.html">Engine — parte 1 (desde RN-016)</a></li><li><a href="../../business-rules/engine/parte-02.html" aria-current="page">Engine — parte 2 (desde RN-305)</a></li><li><a href="../../business-rules/engine/parte-03.html">Engine — parte 3 (desde RN-577)</a></li><li><a href="../../business-rules/engine/parte-04.html">Engine — parte 4 (desde RN-622)</a></li><li><a href="../../business-rules/engine/parte-05.html">Engine — parte 5 (desde RN-724)</a></li><li><a href="../../business-rules/engine/parte-06.html">Engine — parte 6 (desde RN-880)</a></li></ul></details></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Produto</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="engine--parte-2-desde-rn-305">Engine — parte 2 (desde RN-305)</h1>
+<h2 id="staff-código-pronto-dormente-para-disparo-automático-rn-305rn-306-adr-0088">Staff: código pronto, dormente para disparo automático (RN-305/RN-306, ADR 0088)</h2>
+<p>Não é fase planejada: <code>packages/contracts/fluxo.yml</code> declara o Staff/Principal Engineer como
+<code>status: planned</code> desde o ADR 0085 (&quot;contrato pronto, ativação decidida,
+aguarda gatilho&quot;). O dono do produto decidiu antecipar o CÓDIGO mesmo sabendo
+que o gatilho automático (a Anamnese notando um problema sistêmico
+RECORRENTE) não vai disparar — a Anamnese está pausada
+(<code>ANAMNESE_ENABLED=false</code>, decisão de produto de 2026-08-10). Ver a
+pendência já documentada em RN-086: o mesmo sinal que faria a Anamnese
+propor subir o teto de paralelismo é o que faria ela propor um handoff ao
+Staff, e nenhum dos dois dispara enquanto ela estiver pausada.</p>
+<h3 id="rn-305">RN-305 — O Staff ativa pelo caminho GENÉRICO de handoff, sem <code>USER_STARTED_AGENTS</code>, e sem <code>kickoff/1</code></h3>
+<p><code>USER_STARTED_AGENTS</code> (<code>apps/api/src/domain/sessions/agent-activation.ts</code>) é
+a exceção do Criativo (inicia SEM handoff, por comando do usuário) — o Staff
+NÃO entra nela. Investigação confirmou que <code>canActivateAgent</code> já ativa
+qualquer agente com handoff <code>accepted</code> endereçado a ele, o mesmo caminho que
+já vale para <code>dev-lead</code>/<code>arquiteto</code>/<code>infra</code>; e <code>assertHandoffTargetAllowed</code>
+(<code>apps/api/src/domain/agents/agent-areas.ts</code>) só recusa handoff endereçado a
+SUBAGENTE de área — o Staff não tem área, então nenhuma mudança de domínio
+na api foi necessária. &quot;Acionável manualmente&quot; significa que a MECÂNICA de
+domínio permite (qualquer agente pode chamar
+<code>EngineApiClient.create_handoff(..., &quot;staff&quot;, ...)</code>, e um humano aceita pela
+rota já existente), não que existe hoje uma tela dedicada para escolher
+&quot;endereçar handoff ao Staff&quot; — a UI genérica de handoff a agente à escolha
+segue no backlog (<code>docs/explanation/backlog.md</code>), como já estava antes desta
+mudança.</p>
+<p><code>Engine.Agents.StaffServer</code> (<code>apps/engine/lib/engine/agents/staff_server.ex</code>)
+é o quinto agente conversacional solo (junto de Criativo, PO, Arquiteto, Dev
+Lead), espelhando o Arquiteto — <code>GenServer</code> por sessão, rehydration do event
+log, laço bounded de tool use com teto 14 (<code>staff_server.ex:49</code>) — mas <strong>sem
+<code>kickoff/1</code></strong>: os outros leads sintetizam uma instrução de abertura a partir
+de um artefato anterior no event log da sessão (product_brief, module_map,
+backlog); o Staff não tem essa fonte, porque o problema sistêmico nasce de
+fora da sessão. <code>StaffSupervisor.start_agent/2</code> sobe o processo (rehidrata o
+histórico) e ele fica ocioso até a primeira <code>user_message</code>
+(<code>staff_server.ex:60</code>) — que é como quem endereçou o handoff explica o
+problema. <code>apps/engine/lib/engine_web/controllers/agent_command_controller.ex:60</code>
+(cláusula <code>start/2</code> de <code>&quot;staff&quot;</code>) nunca chama <code>kickoff</code> (a função nem
+existe), ao contrário de po/arquiteto/dev-lead/infra.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/api/src/domain/sessions/agent-activation.ts</code>
+(<code>canActivateAgent</code>, <code>USER_STARTED_AGENTS</code> — intocado),
+<code>apps/api/src/domain/agents/agent-areas.ts</code>
+(<code>assertHandoffTargetAllowed</code> — intocado),
+<code>apps/engine/lib/engine/agents/staff_server.ex</code>,
+<code>staff_supervisor.ex</code>,
+<code>apps/engine/lib/engine_web/controllers/agent_command_controller.ex</code>
+(cláusulas <code>start/2</code>/<code>message/2</code>/<code>via_for/2</code> de <code>&quot;staff&quot;</code>),
+<code>apps/engine/lib/engine/application.ex</code> (<code>Engine.Agents.StaffSupervisor</code>
+na árvore de supervisão)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/staff_server_test.exs</code>
+(rehydration, ausência de kickoff automático — o turno só roda por
+<code>user_message</code>)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0088-staff-agente-dormente-para-disparo-automatico.html">0088</a></li>
+</ul>
+<h3 id="rn-306">RN-306 — <code>propose_rfc</code> grava o artefato DIRETO e devolve o handoff no MESMO tool call, sem <code>proposed_action</code></h3>
+<p><code>Engine.Agents.StaffTools.propose_rfc</code>
+(<code>apps/engine/lib/engine/agents/staff_tools.ex:41</code>) é a única ferramenta do
+Staff: problema, opções com trade-offs, recomendação e o escopo de uma PoC
+DESCARTÁVEL (<code>descartavel: true</code> é FIXO — nunca escrito pelo modelo). <code>run/2</code>
+(<code>staff_tools.ex:89</code>) grava <code>artifact.rfc_staff</code> via
+<code>EngineApiClient.append_event_returning/3</code> — mesmo padrão SEM tabela e SEM
+caso de uso dedicado de <code>Engine.Harness.Tools.EmitInsight</code> (o <code>emit_insight</code>
+do Arquiteto), e não o de <code>artifact.c4_diagram</code> (ADR 0068), que tem caso de
+uso próprio na api porque DERIVA o nível Container do <code>module_map</code> vigente —
+o RFC não deriva nada do lado de lá, todo o payload vem do tool call.</p>
+<p>Depois de gravar, o MESMO <code>run/2</code> chama
+<code>EngineApiClient.create_handoff(..., &quot;staff&quot;, &quot;arquiteto&quot;, artifact_id)</code> —
+sem confirmação humana no meio, mesmo padrão de
+<code>CriativoServer.executar_confirm_readiness/1</code> emitindo o product_brief e
+oferecendo o handoff ao PO na mesma resposta. <code>propose_rfc</code> NÃO é
+<code>proposed_action</code>: registrar um documento de arquitetura não é efeito
+externo (não é git, terminal, nem gasto de agente) — a decisão real
+(adotar, adaptar, recusar a recomendação) é do Arquiteto, no handoff que a
+ferramenta já devolve. Falha ao criar o handoff NÃO derruba o processo nem
+perde o RFC já gravado (RN-116) — o motivo entra no tool-result, e o modelo
+sabe que precisa tentar de novo só o handoff, não reescrever o RFC.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/staff_tools.ex</code></li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/staff_server_test.exs</code>
+(&quot;propõe o RFC, grava o artefato e devolve o handoff ao arquiteto&quot;;
+&quot;propose_rfc com opções vazias vira tool-result de erro&quot;; &quot;falha ao
+devolver o handoff ao arquiteto NÃO derruba o processo&quot;)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0088-staff-agente-dormente-para-disparo-automatico.html">0088</a></li>
+</ul>
+<p><strong>Declarado, não escondido</strong>: a roster do painel do time
+(<code>apps/web/src/lib/agent-status.ts</code>, <code>staffActive</code>) e o card do dashboard
+(<code>ProjectCardSummary.roster</code>, <code>apps/api/.../projects-summary.repository.ts</code>)
+mostram o Staff quando ativo, mesmo critério de <code>infraActive</code> — evitando a
+divergência que o comentário de <code>RosterFacts</code> já alertava. <code>SessionPage.tsx</code>
+NÃO foi tocado: <code>staff</code> fica fora de <code>AGENTES_DE_CHAT</code>, o mesmo padrão já
+aceito para <code>infra</code> (um lead REAL e ATIVO também fora dessa lista — o
+handoff para ele &quot;nunca é aceito por AQUI&quot;, conforme o comentário do próprio
+arquivo). O caminho ponta a ponta de uso hoje é a rota interna
+(<code>POST .../agent/message</code>, <code>agent: &quot;staff&quot;</code>), não a tela de Sessão.</p>
+<hr>
+<h2 id="o-appsec-ganha-o-segundo-momento-do-secops-rn-360361-adr-0090">O appsec ganha o segundo momento do secops (RN-360/361, ADR 0090)</h2>
+<p><code>packages/contracts/fluxo.yml</code> já declarava o <code>id: appsec</code> como <code>proposto</code>, com o critério
+de separação escrito por antecipação: &quot;mesmo padrão do QA: dois MOMENTOS, não
+dois agentes por ora&quot;. Esta mudança constrói esse segundo momento — threat
+model de DESIGN, ANTES de existir código/PR — decisão consciente do dono do
+produto de antecipar a ativação, sem esperar o gate <code>implementavel</code> que o
+próprio registro citava como gatilho.</p>
+<h3 id="rn-360">RN-360 — O threat model de DESIGN roda sobre story + module_map, sem worktree/task_id, no MESMO processo do secops</h3>
+<p>Quem roda o appsec é o MESMO <code>Engine.Gates.SecOpsAgentServer</code> que já existe
+para o veredito determinístico de PR — não um processo novo. <code>run_design/2</code>
+(<code>apps/engine/lib/engine/gates/secops_agent_server.ex:76</code>) é um <code>GenServer.cast</code>
+para a mesma chave de <code>Registry</code> (<code>{project_id, &quot;secops&quot;}</code>) que <code>run/2</code> já
+usa; o <code>handle_cast({:run_design, story_id}, state)</code>
+(<code>secops_agent_server.ex:93</code>) busca o contexto por
+<code>Engine.Gates.AppSecContextBuilder.fetch/2</code>
+(<code>apps/engine/lib/engine/gates/appsec_context_builder.ex:31</code>) — a story no
+backlog do projeto (<code>EngineApiClient.list_backlog/1</code>, a MESMA leitura que a
+RN-164 deu ao PO) e o <code>module_map</code> vigente da sessão que criou a story
+(<code>EngineApiClient.get_infra_context/2</code>, a MESMA leitura sem task/story que a
+área de Infra já faz) — e então chama <code>Engine.Gates.AppSecAgent.run/3</code>
+(<code>apps/engine/lib/engine/gates/appsec_agent.ex:47</code>).</p>
+<p><code>AppSecAgent</code> é módulo SEM ESTADO (não é GenServer, mesma forma de
+<code>QaPerformanceSegurancaAgent</code>), com registro de ferramentas SEM <code>Terminal</code> —
+<code>[ReadFile, SearchWorkspace, EmitThreatModel]</code> — rodando um checklist
+STRIDE-lite (Spoofing/Tampering/Repudiation/Information disclosure/Denial of
+service/Elevation of privilege) via <code>Engine.Harness.ToolLoop.run/1</code>. A
+diferença estrutural do &quot;segundo momento sem Terminal, sem task_id&quot; para o
+padrão de gate anterior: nenhum <code>dev_state</code>/<code>worktree_path</code> entra no <code>ctx</code> —
+<code>ReadFile</code>/<code>SearchWorkspace</code> degradam para o fallback de
+<code>Engine.Actions.Workspace.workspace_dir/1</code> (o checkout COMPARTILHADO do
+projeto, não um worktree de agente), e <code>session_id</code> vem de
+<code>story[&quot;sessionId&quot;]</code>, nunca de um <code>dev_state</code>. <code>EmitThreatModel</code>
+(<code>apps/engine/lib/engine/gates/tools/emit_threat_model.ex</code>) não tem veredito
+<code>approved</code>/<code>changes_requested</code> — o appsec sempre TERMINA registrando o
+threat model, nunca aprovando/reprovando nada —, e por isso não reaproveita
+<code>Engine.Gates.Hooks.Termination</code> (a forma extraída é outra): tem hook
+PRÓPRIO, <code>Engine.Gates.Hooks.AppSecTermination</code>.</p>
+<p>Terminado com sucesso, <code>run_appsec_design/3</code>
+(<code>secops_agent_server.ex:234</code>) emite <code>artifact.threat_model</code>
+(<code>storyId</code>/<code>threatModel</code>/<code>requisitosDeSeguranca</code>/<code>riscos</code>, schema em
+<code>apps/engine/lib/engine/harness/artifact_schemas.ex:71</code> — <code>riscos</code> fica de
+fora das chaves obrigatórias porque lista vazia é resposta válida). Falha
+(teto de iterações, orçamento, ou o modelo parando sem chamar
+<code>emit_threat_model</code>) vira <code>agent.error</code> durável com origem
+(<code>modelo</code>/<code>politica</code>/<code>infra</code>), mesma régua da RN-059 — nunca resposta vazia
+nem silêncio só em broadcast.</p>
+<p><strong>O gatilho automático existe desde a <a href="#rn-539">RN-539</a></strong>. Esta entrega foi
+mantida autocontida de propósito (nenhum arquivo de outra frente tocado:
+<code>decide.ts</code>, <code>apps/api/config/gates.yml</code> e <code>dev_lead_tools.ex</code> intocados), e declarava a
+lacuna: <code>run_design/2</code> era ACIONÁVEL e nada acionava sozinho. O ponto de
+disparo que ela nomeava — <code>assess_implementability</code> do Dev Lead, frente
+<code>qa-estrategia</code>, gate <code>implementavel</code>, mesmo ADR 0090 — passou a ser o
+chamador de verdade, em paralelo e uma vez só por story.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/secops_agent_server.ex</code> (<code>run_design/2</code>,
+<code>handle_cast/2</code>, <code>run_appsec_design/3</code>, <code>emit_threat_model/3</code>,
+<code>emit_bloqueio_appsec/3</code>); <code>apps/engine/lib/engine/gates/appsec_agent.ex</code>;
+<code>apps/engine/lib/engine/gates/appsec_context_builder.ex</code>;
+<code>apps/engine/lib/engine/gates/tools/emit_threat_model.ex</code>;
+<code>apps/engine/lib/engine/gates/hooks/appsec_termination.ex</code>;
+<code>apps/engine/lib/engine/harness/artifact_schemas.ex</code> (schema <code>threat_model</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/appsec_agent_test.exs</code>,
+<code>apps/engine/test/engine/gates/appsec_context_builder_test.exs</code>,
+<code>apps/engine/test/engine/gates/secops_agent_server_test.exs</code> (os três
+testes de <code>run_design</code>)</li>
+<li><strong>Origem:</strong> <a href="../../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090</a></li>
+</ul>
+<h3 id="rn-361">RN-361 — O threat model concluído cria TRÊS handoffs, sempre endereçando o LEAD</h3>
+<p><code>criar_handoffs_appsec/3</code> (<code>secops_agent_server.ex:326</code>) cria um handoff por
+alvo declarado em <code>packages/contracts/fluxo.yml</code> (<code>saidas</code> do <code>appsec</code>): arquiteto,
+dev-lead e infra — mesmo padrão de
+<code>OfferInfraHandoffUseCase</code>/<code>ArquitetoServer.executar_offer_infra_handoff/1</code>
+(chamadas SEPARADAS, uma por alvo, para uma falha de handoff não desfazer os
+outros dois já criados). O id do fluxo é <code>area-infra</code>, mas o AGENTE
+endereçável é <code>&quot;infra&quot;</code> (<code>apps/api/src/domain/agents/agent-areas.ts</code> —
+<code>lead: 'infra'</code>), nunca <code>area-infra</code>: handoff externo endereça só o LEAD de
+área (ADR 0038), e <code>CreateHandoffUseCase.assertHandoffTargetAllowed</code>
+recusaria um <code>toAgent</code> que não resolve a um lead/agente-sem-área. Falha de UM
+alvo vira <code>agent.error</code> narrado por alvo (RN-116) — os outros dois handoffs
+já criados não são desfeitos.</p>
+<p><strong>Desde a <a href="parte-04.html#rn-636">RN-636</a> os três são PERGUNTADOS, não mais sempre
+criados:</strong> o destino que já tem oferta pendente ou já está ativo no projeto não
+recebe outra, e isso não é falha.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/secops_agent_server.ex:55</code>
+(<code>@appsec_handoff_targets</code>), <code>:377</code> (<code>criar_handoffs_appsec/3</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/secops_agent_server_test.exs</code>
+(&quot;run_design: threat model concluído emite artifact.threat_model e cria
+os TRÊS handoffs&quot;)</li>
+<li><strong>Origem:</strong> <a href="../../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090</a></li>
+</ul>
+<hr>
+<h2 id="n-agentes-online-no-dashboard--status-ao-vivo-nunca-presença-histórica-rn-409-adr-0097">&quot;N agentes online&quot; no dashboard — status AO VIVO, nunca presença histórica (RN-409, ADR 0097)</h2>
+<h3 id="rn-414">RN-414 — <code>rag_search</code>: agentes ganham a ferramenta que o produto nunca tinha exposto</h3>
+<p><code>grep -rn &quot;rag&quot; apps/engine/lib</code> dava ZERO ocorrências antes desta
+entrega — o RAG completo (pgvector, busca híbrida) só era consumido pela
+aba web &quot;Chat RAG&quot;. A tool nova <code>rag_search</code>
+(<code>apps/engine/lib/engine/harness/tools/rag_search.ex</code>, categoria
+<code>:direct</code>, leitura não é efeito externo) chama <code>POST /internal/rag/search</code>
+— rota nova que REUSA <code>HybridSearchUseCase</code> sem duplicar a lógica de
+busca — e devolve hits formatados com citação (<code>path</code> + trecho), sempre
+com <code>degraded: true</code> visível no INÍCIO do texto quando o embedding não
+estava disponível (nunca escondido pelo corte de teto).</p>
+<p>Tetos próprios, no espírito da RN-150: <code>top_k</code> clampado a 10 dentro da
+própria tool (não confia no que a api aceitaria), teto de 16 KiB no texto
+formatado (menor que os 32 KiB de <code>search_workspace</code>/<code>read_file</code> — cada
+hit de RAG já é chunk+excerpt inteiro). Falha de rede vira erro legível
+ao modelo, nunca crash do <code>ToolLoop</code> (RN-163).</p>
+<p>Registrada em <code>Engine.Harness.Tools</code> (PO/Arquiteto/conversacionais) e
+<code>Engine.Dev.Tools</code> (dev agent); estendida também aos gates de leitura que
+já citam ADR/convenção indexada (QA-automação, QA-estratégia, AppSec,
+QA-performance/segurança) — não a <code>Infra.WorkflowsAgent</code> nem
+Psicólogo/Anamnese, que raciocinam sobre event log, não sobre docs/código
+do projeto.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tools/rag_search.ex</code>;
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex</code> (<code>rag_search/4</code>);
+<code>apps/api/src/interfaces/http/internal/internal-rag.controller.ts</code></li>
+<li><strong>Teste:</strong> <code>rag_search_test.exs</code> (hits formatados com citação;
+degradação visível; falha de rede sem crash; teto de bytes truncando
+com marca clara; clamp de <code>top_k</code>); <code>engine_api_client_rag_test.exs</code></li>
+<li><strong>Origem:</strong> ver <a href="../../adr/0100-rag-search-e-modelos-garantidos-no-boot.html">ADR 0100</a></li>
+</ul>
+<hr>
+<h3 id="rn-417">RN-417 — Psicólogo e Anamnese consultam por relevância, com degradação declarada para recência</h3>
+<p><code>Psychologist.ContextBuilder</code>/<code>Anamnese.ContextBuilder</code> continuam lendo o
+que sempre leram (eventos recentes / janela temporal), e ganham uma
+SEGUNDA fonte, <code>EngineApiClient.rag_search/4</code>, com uma query derivada do
+GATILHO da análise — a causa de término já classificada, no Psicólogo;
+competências do catálogo ainda sem <code>current_profile</code>, na Anamnese
+(NUNCA texto livre de hipótese/racional, pela proibição já estabelecida
+de a Anamnese jamais inferir saúde/personalidade/idade/gênero — a query
+só contém nomes de competência/membro/projeto). Os hits entram no
+orçamento EXISTENTE de <code>Triage</code> (<code>max_prompt_events</code>/<code>max_payload_chars</code>)
+— descontam vagas da janela de recentes, nunca somam por fora dela.</p>
+<p>A chamada ao RAG é estritamente ADITIVA: sem hit (RAG indisponível, erro,
+ou simplesmente sem resultado), o comportamento é IDÊNTICO ao de antes
+desta RN — nenhum teste pré-existente precisou mudar. <code>degraded: true</code>
+(RAG caiu pra léxico-only por falta de embedding) aparece EXPLICITAMENTE
+no contexto final, nos dois agentes — nunca escondido pelo corte de
+teto.</p>
+<p>Os kickoffs de Psicólogo (<code>psychologist-kickoff</code>) e Anamnese
+(<code>anamnese-kickoff</code>) passam a resolver como TEMPLATE do grafo
+(<code>EngineApiClient.get_prompt_template/2</code>) quando <code>graph_templates_enabled?</code>
+está ligada (<code>GRAPH_TEMPLATES_ENABLED</code>, default <code>false</code>) — com fallback
+obrigatório pro texto inline em qualquer falha (api fora, template não
+semeado, flag desligada). <code>:pinned =&gt; true</code> continua igual nos dois
+caminhos.</p>
+<p>O TERCEIRO consumidor da mesma flag é o prompt de sumarização do
+<code>ContextManager</code> (<code>context-manager-summarize</code>, o quarto e último template da
+leva da <a href="../infra.html#rn-413">RN-413</a> — era o único ainda sem consumidor, lacuna que a
+<a href="../../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101</a>
+declarou aberta e que fecha aqui). Mesma régua, byte a byte: flag ligada
+tenta o template e substitui <code>{{turnos}}</code> pelo MESMO corpo <code>&lt;role&gt;: &lt;content&gt;</code> que a trilha inline já montava; qualquer desfecho que não seja
+<code>{&quot;body&quot; =&gt; corpo}</code> com corpo binário não-vazio cai no inline — SEM erro e
+SEM log de erro, porque flag desligada, template ainda não semeado e api do
+grafo fora do ar são o MESMO caminho de degradação. Com a flag desligada (o
+default) a api nem é chamada. O render é função privada PRÓPRIA, não um
+helper compartilhado: o conjunto de placeholders é do template, não do
+mecanismo — cada um dos três consumidores tem o seu. E o fallback
+determinístico de quando o MODELO falha (<code>&quot;(N turnos anteriores omitidos)&quot;</code>) é outra coisa e NÃO passa por template nenhum: é comportamento
+de código, não texto de prompt, e o próprio <code>.md</code> do template declara isso.</p>
+<blockquote>
+<p><strong>Desde a <a href="parte-03.html#rn-621">RN-621</a></strong> o prompt de resumo, nas duas trilhas, pede que
+cada turno mantenha o idioma original e que citação e código não se traduzam;
+o template versionado subiu para a versão <code>&quot;2&quot;</code>.</p>
+</blockquote>
+<p><strong>Consumo do restante do grafo (<code>query_user_context</code> — hipóteses com
+evidência e perfis lidos DIRETO do Neo4j) fica DECLARADO fora desta
+entrega</strong>: ainda sem rota HTTP exposta do lado api; Psicólogo/Anamnese
+hoje só consultam o RAG (pgvector) via <code>rag_search</code>, não o grafo de
+relações em si.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/psychologist/context_builder.ex</code>,
+<code>apps/engine/lib/engine/workers/psychologist_worker.ex</code>;
+<code>apps/engine/lib/engine/anamnese/context_builder.ex</code>,
+<code>apps/engine/lib/engine/workers/anamnese_worker.ex</code>;
+<code>apps/engine/lib/engine/harness/context_manager.ex</code> (<code>prompt/1</code>,
+<code>render_template/2</code>, <code>prompt_inline/1</code>)</li>
+<li><strong>Teste:</strong> <code>context_builder_test.exs</code> dos dois agentes (hits presentes;
+falha do RAG degrada sem erro; <code>degraded: true</code> visível; clamp de
+<code>top_k</code>; query derivada do gatilho); <code>psychologist_worker_test.exs</code>/
+<code>anamnese_worker_test.exs</code> (template com sucesso e com fallback;
+<code>:pinned</code> idêntico nos dois caminhos; flag desligada nunca chama a api);
+<code>context_manager_test.exs</code> (template com <code>{{turnos}}</code> substituído;
+<code>{:error, :not_found}</code> cai no inline e a compactação termina normal;
+flag desligada nunca chama <code>get_prompt_template</code>)</li>
+<li><strong>Origem:</strong> ver <a href="../../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101</a></li>
+</ul>
+<hr>
+<h3 id="rn-419">RN-419 — O runner local se autentica por ticket de uso único, escopado a projeto e papel</h3>
+<p><strong>REVISADA pela <a href="../api.html#rn-421">RN-421</a> (ADR 0104)</strong>: a condição de recusa do
+ticket citada abaixo (<code>workspaceMode !== 'local'</code>) virou <code>executionMode !== 'runner'</code> — mesma régua, nome novo. O resto desta entrada continua
+valendo tal como está.</p>
+<p>O canal <code>terminal:&lt;projectId&gt;</code> (socket Phoenix novo, <code>/runner</code>) recebe
+dois papéis distintos — <code>:runner</code> (o CLI na máquina do usuário, no
+máximo UM por projeto, exclusividade garantida por
+<code>:global.register_name/3</code>) e <code>:web</code> (a aba Terminal, múltiplos
+simultâneos) — e os dois entram autenticados por TICKET DE USO ÚNICO,
+mesmo padrão de segurança da RN-108 (ticket de socket de sessão), com uma
+inversão de propriedade: o ticket é EMITIDO PELO ENGINE
+(<code>runner_socket_tickets</code>, schema <code>&quot;engine&quot;</code>, migration Ecto própria — não
+uma extensão da tabela de ticket de sessão, que é da api), e a API o pede
+via rota HTTP interna nova (<code>POST /internal/projects/:projectId/runner-tickets</code>)
+— o inverso do fluxo de ticket de sessão, onde a api grava direto na
+própria tabela.</p>
+<p><code>POST /projects/:projectId/runner-ticket</code> (role <code>developer</code>+, recusa se
+<code>workspaceMode !== 'local'</code>) e <code>POST /projects/:projectId/terminal-ticket</code>
+(role <code>viewer</code>+, qualquer modo) são as duas rotas públicas que emitem o
+ticket pro cliente certo — o runner pede a primeira, a web pede a
+segunda. Ticket consumido (validação + <code>UPDATE</code> condicional de uso
+único) no <code>join</code> do canal; ticket de OUTRO projeto ou reusado nunca abre
+o tópico.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/runners/socket_ticket.ex</code>,
+<code>apps/engine/lib/engine/runners/registry.ex</code>,
+<code>apps/engine/lib/engine_web/channels/{runner_socket,terminal_channel}.ex</code>;
+<code>apps/api/src/interfaces/http/runner/runner-tickets.controller.ts</code>,
+<code>apps/api/src/application/use-cases/runner/request-runner-ticket.use-case.ts</code></li>
+<li><strong>Teste:</strong> <code>runner_socket_test.exs</code>/<code>terminal_channel_test.exs</code> (join
+com ticket válido sucede; ticket reusado recusa; ticket de outro
+projeto não abre o tópico errado; segundo <code>:runner</code> no mesmo projeto é
+recusado; um segundo runner consegue conectar depois que o primeiro
+cai); <code>request-runner-ticket.use-case.spec.ts</code>/
+<code>runner-tickets.controller.spec.ts</code> (recusa pra projeto não-<code>local</code> no
+ticket de runner; ticket de terminal funciona pra qualquer modo)</li>
+<li><strong>Origem:</strong> ver <a href="../../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103</a></li>
+</ul>
+<hr>
+<h3 id="rn-420">RN-420 — Comando de agente roteado ao runner passa pelo MESMO pipeline de aprovação; PTY é ação do usuário, auditada</h3>
+<p><strong>REVISADA pela <a href="../runner.html#rn-423">RN-423</a> (ADR 0104)</strong>: a condição pra rotear deixou
+de ser binária. <code>workspace_mode == &quot;local&quot;</code> virou <code>execution_mode == &quot;runner&quot;</code> <strong>E</strong> <code>workspace_verified_at</code> não-nulo <strong>E</strong> runner conectado —
+faltando qualquer uma das TRÊS, o comando é RECUSADO explicitamente, nunca
+cai no <code>System.cmd</code>/bind-mount de <code>mounted</code> (que não existe pra um projeto
+<code>runner</code>, sem bind-mount nenhum). O resto desta entrada — o pipeline de
+aprovação de sempre, PTY como ação do usuário — continua valendo tal como
+está.</p>
+<p><code>Engine.Actions.TerminalExecutor</code> decide rotear um comando pro runner (em
+vez do <code>System.cmd</code> de sempre, dentro do container) <strong>DEPOIS</strong> que o
+pipeline normal (<code>decide()</code>/<code>proposed_action</code>) já aprovou — o roteamento
+é só uma escolha de DESTINO pro mesmo comando já autorizado, nunca um
+segundo caminho de execução que escapa da política (que continua com os
+tetos absolutos da RN-418 valendo igual, sudo/git incluídos). Condição
+pra rotear (histórico, ver revisão acima): <code>workspace_mode == &quot;local&quot;</code> E
+runner conectado (<code>Engine.Runners.Registry.connected?/1</code>) — sem qualquer
+uma das duas, o comportamento de sempre continua (<code>System.cmd</code> no
+container via bind-mount, ADR 0072 vira FALLBACK, nunca removido).</p>
+<p>PTY interativo é DIFERENTE: é ação do USUÁRIO autenticado digitando no
+terminal da própria máquina, não do agente — por isso NÃO passa por
+<code>proposed_action</code>. Mas precisa deixar rastro: <code>pty_open</code>/<code>pty_close</code>
+vindos da web emitem <code>terminal.session.started</code>/<code>terminal.session.ended</code>
+no event log (endereçados à sessão mais recente do projeto,
+<code>ProjectSession.latest_id/1</code>, mesmo mecanismo que a Anamnese já usa pra
+narrar algo project-scoped). Achado real na consolidação: sem runner
+conectado, a web precisa de um <code>pty_error</code> EXPLÍCITO de volta — descartar
+o pedido só com um log no servidor deixaria a aba presa em &quot;carregando&quot;
+pra sempre, nunca alcançando o estado &quot;sem runner&quot; que a tela já sabia
+mostrar.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/actions/terminal_executor.ex</code>,
+<code>apps/engine/lib/engine/runners/runner_router.ex</code>,
+<code>apps/engine/lib/engine_web/channels/terminal_channel.ex</code></li>
+<li><strong>Teste:</strong> <code>terminal_executor_test.exs</code> (roteia pro runner com modo
+<code>local</code> + runner conectado; <code>cwd</code> passa adiante; cai no caminho atual
+sem runner conectado; nunca roteia em modo <code>container</code>);
+<code>terminal_channel_test.exs</code> (<code>pty_open</code> sem runner conectado devolve
+<code>pty_error</code> pra web, nunca fica sem resposta)</li>
+<li><strong>Origem:</strong> ver <a href="../../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103</a></li>
+</ul>
+<h2 id="o-explorador-de-pasta-do-runner-vira-três-colunas-e-a-criação-de-um-projeto-runner-deixa-de-esperar-o-passo-final-rn-436436">O explorador de pasta do Runner vira três colunas, e a criação de um projeto <code>runner</code> deixa de esperar o passo final (RN-436/436)</h2>
+<h3 id="rn-454">RN-454 — A aba Insights sabe que o Psicólogo está pausado ANTES de o usuário esbarrar no 503</h3>
+<p>Achado por USO: a aba Insights, com zero hipóteses, mostrava &quot;Sem hipóteses
+ainda — o Psicólogo analisa cada sessão encerrada&quot; mesmo com
+<code>PSYCHOLOGIST_ENABLED=false</code> — a mesma frase que aparece quando o Psicólogo
+está ATIVO e só ainda não rodou. As duas situações são indistinguíveis pelo
+texto, o que é a mesma classe de defeito que a RN-088/RN-107 já fecharam
+para outras telas: um estado que existe e o produto sabe, mas não mostra.</p>
+<p>A <a href="parte-01.html#rn-117">RN-117</a> já cobria a descoberta da pausa, mas só no CLIQUE de
+&quot;Reanalisar&quot; (503 → <code>PsychologistDisabledError</code>) — e esse botão só existe
+na faixa de análises, que só aparece quando <code>runs.length &gt; 0</code>. Uma sessão
+sem hipótese nenhuma nunca chega perto dele, então a pausa era invisível
+justamente na tela vazia.</p>
+<p><code>GET /internal/psychologist/status</code> (engine, <code>PsychologistCommandController.status/2</code>)
+é leitura pura de <code>PsychologistWorker.enabled?/0</code> — SEM efeito colateral,
+diferente de <code>/reanalyze</code>, que cria um job quando ativado. A api expõe
+<code>GET /projects/:projectId/psychologist/status</code> (<code>GetPsychologistStatusUseCase</code>,
+<code>role:viewer</code>) por cima disso — projeto na URL só por consistência com as
+rotas irmãs (<code>hypotheses</code>, <code>psychologist/analyses</code>); a flag em si é GLOBAL,
+como a RN-117 já registra. <code>ProjectInsightsTab.tsx</code> consome essa leitura
+(<code>usePsychologistStatus</code>) e escolhe a frase do estado vazio por ela: pausado
+mostra &quot;O Psicólogo está pausado — nenhuma sessão é analisada até ser
+reativado&quot; (<code>insights.projectInsightsTab.emptyPaused</code>); do contrário, mantém
+a frase original, que É honesta quando a feature está de fato ativa. O
+aviso persistente (<code>pausedNotice</code>) e os botões de &quot;Reanalisar&quot; também
+passaram a refletir essa leitura proativa, e não só o <code>useState</code> descoberto
+pelo 503 — que continua existindo, como reforço, para o caso raro de a
+flag mudar EM VOO entre a leitura de status e o clique.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine_web/controllers/psychologist_command_controller.ex</code>
+(<code>status/2</code>), <code>apps/engine/lib/engine_web/router.ex</code>
+(<code>GET /internal/psychologist/status</code>),
+<code>apps/api/src/application/ports/api-to-engine-client.port.ts</code>
+(<code>getPsychologistStatus</code>),
+<code>apps/api/src/infrastructure/http-clients/api-to-engine-client.ts</code>,
+<code>apps/api/src/application/use-cases/execution/get-psychologist-status.use-case.ts</code>,
+<code>apps/api/src/interfaces/http/psychologist/psychologist.controller.ts</code>
+(<code>status</code>), <code>apps/web/src/lib/api-client.ts</code> (<code>getPsychologistStatus</code>),
+<code>apps/web/src/lib/hooks.ts</code> (<code>usePsychologistStatus</code>),
+<code>apps/web/src/routes/ProjectInsightsTab.tsx</code></li>
+<li><strong>Teste:</strong>
+<code>apps/engine/test/engine_web/controllers/psychologist_command_controller_test.exs</code>
+(<code>status/2</code>, <code>enabled: true</code>/<code>false</code>),
+<code>apps/api/test/infrastructure/http-clients/api-to-engine-client.spec.ts</code>
+(<code>getPsychologistStatus</code>),
+<code>apps/api/test/application/use-cases/execution/get-psychologist-status.use-case.spec.ts</code>,
+<code>apps/web/src/routes/ProjectInsightsTab.test.tsx</code></li>
+<li><strong>Borda:</strong> a flag continua GLOBAL (ver RN-117) — a rota da api aceita
+<code>projectId</code> na URL só para bater com o padrão das rotas irmãs do
+controller, e não porque a resposta varia por projeto.</li>
+<li><strong>Origem:</strong> achado por USO real navegando a aba Insights com
+<code>PSYCHOLOGIST_ENABLED=false</code>, não roteiro. Sem ADR — extensão pontual do
+mecanismo de leitura já existente da RN-117, mesmo padrão da RN-088/
+RN-107 para o resto do produto.</li>
+</ul>
+<hr>
+<h2 id="pasta-local-anexada-vira-o-quarto-escopo-do-índice-rag-lido-pelo-navegador-rn-455457-adr-0113">Pasta local anexada vira o quarto escopo do índice RAG, lido pelo NAVEGADOR (RN-455..457, ADR 0113)</h2>
+<h3 id="rn-459">RN-459 — Teto de iterações não termina mais calado em quatro dos seis agentes conversacionais</h3>
+<p>Achado durante a investigação da faixa de atividade do turno (RN-460):
+<code>arquiteto_server.ex</code>, <code>dev_lead_server.ex</code>, <code>ux_designer_server.ex</code> e
+<code>staff_server.ex</code> terminavam CALADOS quando o teto de iterações estourava
+(<code>defp run_turn(state, remaining) when remaining &lt;= 0, do: state</code>, sem
+evento nenhum) — contradizendo a regra permanente de que laço de agente
+não termina calado. Só o PO já emitia <code>toolloop.limit_reached</code>
+(RN-166); o Criativo diverge deliberadamente com <code>agent.error</code> (<code>reason: &quot;limite_de_iteracoes&quot;</code>, decisão documentada no próprio código — reusar o
+nome do <code>ToolLoop</code> mentiria sobre quem produziu o evento) e não foi
+tocado. Os quatro corrigidos passam a emitir <code>toolloop.limit_reached</code>
+(mesmo evento do PO, mesmo payload <code>iteration</code>/<code>max_iterations</code>) antes de
+retornar — nenhuma mudança na estrutura de <code>dispatch_tool</code> de cada um.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/arquiteto_server.ex:195</code>,
+<code>dev_lead_server.ex:244</code>, <code>ux_designer_server.ex:121</code>,
+<code>staff_server.ex:113</code></li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/{arquiteto,dev_lead, ux_designer,staff}_server_test.exs</code> (&quot;teto de iterações emite
+toolloop.limit_reached&quot;)</li>
+<li><strong>Origem:</strong> achado por leitura completa dos seis servers, durante a
+implementação da RN-460; escopo estendido por decisão do dono do
+produto</li>
+</ul>
+<h2 id="a-busca-do-rag-deixa-rastro-e-o-rastro-congela-os-pesos-rn-479481">A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)</h2>
+<h3 id="rn-492">RN-492 — O comando de terminal do dev agent roda DENTRO do container real, quando há um</h3>
+<p><code>Engine.Actions.TerminalExecutor.decisao_de_execucao/1</code> ganha a QUINTA saída
+(<code>:executar_no_container</code>): projeto em <code>execution_mode: container</code> com uma
+linha REGISTRADA <code>running</code> em <code>project_containers</code>
+(<code>Engine.Containers.ProjectContainerLifecycle.running?/1</code>, leitura read-only
+direta da tabela, mesmo padrão de <code>Engine.Projects.Project</code>). Antes desta
+regra, mesmo com um container de pé (RN-491), TODO comando de terminal
+rodava via <code>System.cmd</code> no processo do engine, contra a pasta compartilhada
+— o container ficava ocioso.</p>
+<p>O comando atravessa engine → api → broker
+(<code>POST internal/projects/:projectId/container-exec</code>,
+<code>ExecutarComandoNoContainerUseCase</code>, <code>ContainerBrokerPort.exec</code>) e roda via
+<code>docker exec</code>. <code>cwd</code>, quando presente, é TRADUZIDO do caminho de HOST (dentro
+de <code>PROJECT_WORKSPACES_ROOT</code>) para dentro de <code>/work</code> — o único diretório que
+o container enxerga — trocando o prefixo <code>&lt;project_workspaces_root&gt;/ &lt;workspace_dir_name&gt;</code> por <code>/work</code> e preservando o sufixo (o worktree
+individual de um dev agent, <code>.worktrees/&lt;agent_id&gt;</code>, incluso). O worktree em
+si não muda de lugar nem de mecanismo de criação: <code>Workspace.ensure!/4</code>
+continua escrevendo no MESMO diretório físico que o broker monta em <code>/work</code>
+(verificado em código: <code>raizDoProjeto</code> do broker e <code>PROJECT_WORKSPACES_ROOT</code>
+do engine resolvem a mesma pasta, via <code>workspace_dir_name</code>, RN-109) — o
+container é só mais um observador dela.</p>
+<p><strong><code>running</code> REGISTRADO nunca confirma que o container está de pé DE VERDADE
+agora (RN-486).</strong> Se ele morreu ou foi removido por fora entre o registro e
+esta chamada, <code>broker.exec</code> falha e vira <code>failed_result</code> NORMAL — exit_code
+<code>nil</code>, mensagem nomeando o motivo — nunca crash, nunca fallback silencioso de
+volta pro <code>System.cmd</code> fora do container (isso reabriria o vetor de
+isolamento que esta regra existe para fechar). <code>mounted</code> nunca cai nesta
+saída: o broker recusa subir container pra esse modo
+(<code>ModoDeExecucaoNaoSuportadoError</code>).</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/actions/terminal_executor.ex</code>
+(<code>decisao_de_execucao/1</code>, <code>run_no_container/4</code>, <code>cwd_para_container/2</code>),
+<code>apps/engine/lib/engine/containers/project_container_lifecycle.ex</code>,
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex</code>
+(<code>executar_comando_no_container/4</code>),
+<code>apps/api/src/interfaces/http/internal/internal-projects.controller.ts</code>
+(<code>POST :projectId/container-exec</code>),
+<code>apps/api/src/application/use-cases/containers/executar-comando-no-container.use-case.ts</code>,
+<code>apps/api/src/application/ports/container-broker.port.ts</code> (<code>exec</code>,
+<code>timeoutMs</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/actions/terminal_executor_test.exs</code>
+(as cinco saídas de <code>decisao_de_execucao/1</code>; tradução de <code>cwd</code> na raiz e
+num worktree; <code>sucesso: false</code> e falha de transporte viram <code>failed_result</code>;
+container sem linha <code>running</code>/em <code>stopped</code> cai no caminho de sempre),
+<code>apps/api/test/application/use-cases/containers/executar-comando-no-container.use-case.spec.ts</code>
+(<code>BrokerRecusouError</code>/<code>BrokerIndisponivelError</code> nunca propagam; outro erro
+propaga),
+<code>apps/api/test/infrastructure/http-clients/container-broker.client.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0130-broker-de-container.html">0130</a>, <a href="../../adr/0134-dev-agents-executam-dentro-do-container.html">0134</a></li>
+<li><strong>Origem:</strong> plano do dono do produto, Parte 1 / PR 1.6</li>
+</ul>
+<h3 id="rn-502">RN-502 — Dev agent só reivindica task com container <code>running</code>, e o terminal não cai mais fora dele</h3>
+<p>Duas metades da mesma regra: <strong>sem ambiente de execução, o dev agent não
+começa</strong>, e <strong>sem ambiente de execução, o comando não roda em lugar nenhum</strong>.</p>
+<p><strong>A guarda do claim.</strong> <code>Engine.Dev.AgentIo.try_claim/2</code> — o ponto ÚNICO de
+claim — consulta
+<code>Engine.Containers.ProjectContainerLifecycle.running?/1</code> ANTES de chamar
+<code>claim_task/1</code>. Sem uma linha REGISTRADA <code>running</code> em <code>project_containers</code>
+(<a href="../api.html#rn-243">RN-243</a>/ADR 0081), o agente cai em <code>:idle</code>, persiste, emite
+<code>dev.blocked_by_container</code> e <strong>não chama a api</strong>. A guarda vem antes do claim
+de propósito: reivindicar para devolver logo em seguida deixaria a task
+marcada e sem dono vivo, que é o estado que <code>block_task/4</code> existe para nunca
+produzir.</p>
+<p><strong>Exceção: o Noop não exige container.</strong> O dev agent <code>noop</code>
+(<code>devAgentImpl: 'noop'</code>, <code>impl == &quot;noop&quot;</code> no estado) dispensa a guarda em
+<code>try_claim/2</code>: ele não executa nada em container, só valida a infraestrutura
+sem LLM, e a guarda o deixava parado em <code>blocked_by_container</code>. O
+<code>DevAgentServer</code> real continua exigindo o container <code>running</code>
+(<code>apps/engine/lib/engine/dev/agent_io.ex:154</code>, <code>try_claim</code>; AT-833).</p>
+<p><strong><code>:idle</code>, e não um status novo.</strong> É o único estado do qual um wake ainda
+resgata — os guards de <code>handle_info/2</code> são todos casados com ele
+(<code>{:wake, :became_claimable}</code> exige <code>:idle</code>, <code>:rearm</code> exige <code>:idle_tripped</code>,
+<code>gate_resolved</code> exige <code>task_id</code> batendo,
+<a href="parte-01.html#rn-047">RN-047</a>). Um
+<code>:blocked_by_container</code> inventado seria um estado do qual nada resgata.</p>
+<p><strong>No ENGINE e não só no <code>activate-execution</code> da api</strong>, porque o claim tem um
+caminho que nenhuma rota cobre: a REIDRATAÇÃO. <code>Engine.Dev.DevRehydrator</code> não
+faz cast <code>:work</code>; quem claima depois de um restart é <code>DevAgentServer.init/1</code>
+→ <code>finish_restart_recovery/1</code> → <code>try_claim/2</code>. Um gate só na fronteira HTTP
+deixaria todo agente reidratado voltar a trabalhar sem container.</p>
+<p><strong>O wake.</strong> Leitura não avisa ninguém: um agente já parado continuaria parado
+até um evento não relacionado passar por perto. Então a chegada em <code>running</code>
+PUBLICA — <code>RegistrarTransicaoDeContainerUseCase</code> grava a linha e o evento na
+MESMA transação, <code>aggregateType: 'container'</code> (o terceiro agregado que
+<code>Engine.Outbox.Drain</code> passou a drenar, ao lado de <code>session</code> e <code>task</code>),
+<code>aggregateId</code> = o PROJETO. <code>Engine.Workers.DevAgentWakeWorker</code> entrega
+<code>{:wake, :became_claimable}</code> a TODOS os agentes do projeto
+(<code>DevAgentState.list_by_project/1</code> — o container é do projeto, não de um
+módulo). É a MESMA mensagem que já existia, e não uma nova: a semântica dela
+já é &quot;pode haver trabalho agora&quot;, e uma mensagem própria exigiria cláusula
+nova de <code>handle_info/2</code> nos dois servers com guard idêntico ao que já existe.
+Só <code>running</code> publica; <code>provisioning</code>/<code>stopped</code>/<code>failed</code>/<code>removed</code> não soltam
+ninguém.</p>
+<p><strong>A segunda metade: o terminal.</strong> <code>Engine.Actions.TerminalExecutor</code>
+degradava calado — <code>container</code> sem container <code>running</code> caía em
+<code>:caminho_de_sempre</code>, isto é, <code>System.cmd</code> DENTRO do processo do engine, o
+mesmo que fala com o banco, com a api e com todos os outros projetos. O ADR
+0134 (<a href="#rn-492">RN-492</a>) tinha fechado o isolamento só no caminho feliz.
+Agora recusa (<code>:recusar_container_ausente</code>), espelhando o
+<code>:recusar_nao_verificado</code>/<code>:recusar_runner_desconectado</code> que o modo <code>runner</code>
+já tinha (<a href="../runner.html#rn-423">RN-423</a>), e como <code>failed_result</code> normal — nunca crash.
+<code>mounted</code> entra no MESMO ramo: com container <code>running</code> atravessa pro broker
+igual a <code>container</code>; sem ele, recusa. O catch-all <code>:caminho_de_sempre</code>
+encolhe para o que sempre deveria ter sido sozinho — <strong>projeto inexistente ou
+<code>project_id</code> malformado</strong>. Nenhum modo de execução cai nele.</p>
+<p><strong>Consequência declarada:</strong> projeto sem container de pé para de trabalhar, e
+diz por quê. É deliberado — é o que a regra existe para fazer — e é por isso
+que ela só pode entrar DEPOIS das mudanças que dão container ao modo
+<code>mounted</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/agent_io.ex</code> (<code>try_claim/2</code>),
+<code>apps/engine/lib/engine/actions/terminal_executor.ex</code>
+(<code>decisao_de_execucao/1</code>),
+<code>apps/engine/lib/engine/outbox/drain.ex</code>,
+<code>apps/engine/lib/engine/workers/dev_agent_wake_worker.ex</code>,
+<code>apps/api/src/application/use-cases/containers/registrar-transicao-de-container.use-case.ts</code></li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/claim_com_container_test.exs</code> —
+<code>:work</code> inicial sem container cai em <code>:idle</code>, persiste, emite e <strong>não</strong>
+chama a api; o Noop dispensa a guarda (pega a task e emite <code>dev.working</code>); agente REIDRATADO para em
+<code>:idle</code> sem claimar; <code>container.running</code> na outbox percorre
+drain → worker → wake → agente e ele re-claima; e o caminho de sempre
+segue intacto com container <code>running</code>.
+<code>apps/engine/test/engine/actions/terminal_executor_test.exs</code> — recusa para
+<code>container</code> (sem linha e com <code>stopped</code>) e para <code>mounted</code>; <code>mounted</code> com
+<code>running</code> atravessa pro broker; só projeto inexistente cai em
+<code>:caminho_de_sempre</code>.
+<code>apps/api/test/application/use-cases/containers/ciclo-de-vida-do-container.use-case.spec.ts</code>
+— <code>running</code> publica <code>container.running</code> no agregado <code>container</code>; os outros
+destinos e a criação da linha não publicam nada</li>
+<li><strong>ADR:</strong> <a href="../../adr/0143-agentes-de-dev-so-depois-do-container.html">0143</a></li>
+<li><strong>Origem:</strong> plano &quot;Nome e local na mesma tela, e container antes dos dev
+agents&quot; (PR 7) — dez tasks do <code>exp001</code> travaram de uma vez porque nada
+ordenava container antes de dev agent</li>
+</ul>
+<hr>
+<h2 id="o-artefato-de-decisão-dos-conversacionais-rn-505">O artefato de decisão dos conversacionais (RN-505)</h2>
+<h3 id="rn-505">RN-505 — <code>decision_record</code> reusa o padrão GENÉRICO de <code>emit_artifact</code>, não o dedicado</h3>
+<p>Um agente conversacional que toma uma decisão relevante numa conversa (por
+que escolheu X e não Y, o que considerou, o que aceitou perder) registra isso
+com <code>emit_artifact</code> e <code>type: decision_record</code> — payload com <code>context</code>,
+<code>options</code> (lista), <code>choice</code> e <code>consequences</code>, as quatro chaves obrigatórias
+em <code>Engine.Harness.ArtifactSchemas</code> (<code>artifact_schemas.ex:82</code>), tool-emittable
+desde que entrou em <code>@tool_emittable</code> (<code>artifact_schemas.ex:98</code>). <strong>Sem
+validação cruzada de propósito:</strong> <code>choice</code> não precisa bater com um item de
+<code>options</code> — texto livre é mais robusto, e o schema genérico só valida
+presença de chave (a mesma régua de <code>note</code>/<code>business_rule</code>).</p>
+<p><strong>Por que reusar o padrão GENÉRICO em vez do dedicado.</strong> <code>artifact.project_image</code>
+e <code>artifact.c4_diagram</code> (RN vizinhas desta) são artefatos VERSIONADOS — cada
+emissão substitui a anterior como &quot;vigente&quot;, com rota HTTP própria de leitura
+e schema TypeScript dedicado na api. Uma decisão não é assim: é um registro
+append-only por natureza, não um &quot;vigente&quot; que se substitui — o mesmo
+raciocínio que já vale para <code>note</code>/<code>business_rule</code>. Pagar o preço do padrão
+dedicado (schema TS, versionamento, rota nova) para um log que só precisa
+existir e ser pesquisável no event log da sessão custaria estrutura que a
+decisão não pede.</p>
+<p><strong>Distinção declarada com <code>open_adr_pr</code> (só o Arquiteto tem).</strong> Os dois
+COEXISTEM, com propósitos diferentes: <code>decision_record</code> é para TODA decisão
+relevante de qualquer um dos seis conversacionais, sem fricção nenhuma —
+nunca commita arquivo, nunca abre PR, nunca espera aprovação humana.
+<code>open_adr_pr</code> é para quando a decisão é grande o bastante para virar
+DOCUMENTO real em <code>docs/adr/*.md</code>, com PR de verdade e aprovação humana
+obrigatória. Um projeto pode ter dez <code>decision_record</code> e zero ADR numa
+sessão — o segundo não é a versão &quot;séria&quot; do primeiro, é outra ferramenta
+para outra escala de decisão.</p>
+<p><strong>Wiring nos cinco conversacionais que ainda não tinham <code>emit_artifact</code></strong> —
+PO (<code>po_server.ex:115</code>), Arquiteto (<code>arquiteto_server.ex:103</code>), Dev Lead
+(<code>dev_lead_server.ex:153</code>), UX Designer (<code>ux_designer_server.ex:94</code>) e Staff
+(<code>staff_server.ex:94</code>); o Criativo já tinha a ferramenta desde a Fase 3b, só
+ganhou o tipo novo (é o <code>known/0</code> compartilhado quem decide, sem mudança no
+<code>CriativoServer</code>). Em cada um, o <code>run_tool/3</code> comum ganhou a cláusula
+<code>&quot;emit_artifact&quot; -&gt; EmitArtifact.run/2</code> (ex.: <code>po_server.ex:279</code>) — <strong>sem
+tratamento especial</strong>: diferente de <code>propose_execution_plan</code>/
+<code>assess_implementability</code> no Dev Lead (que suspendem o turno esperando
+aprovação, ADR 0086), <code>emit_artifact</code> nunca devolve <code>{:pending, _}</code>, então
+entra no dispatch comum sem precisar do <code>reduce_while</code> que aquelas duas
+ferramentas exigem. E os cinco ganharam a MESMA frase no <code>system_prompt/1</code>
+(ex.: <code>po_server.ex:463</code>) explicando quando usar <code>type: decision_record</code> —
+fora do texto de identidade (<code>Engine.Harness.Agents</code>) porque não é sobre
+QUEM o agente é, é uma instrução operacional sobre uma ferramenta.</p>
+<p><strong>Fora de escopo, declarado.</strong> Agentes de execução (QA, SecOps, Dev Agent de
+módulo) rodam sobre <code>ToolLoop</code>, sem harness comum aos seis conversacionais —
+ficam de fora desta fatia, investigação própria por módulo antes de
+estender. A amarração com a Frente 1 do mesmo plano (o dispatch do Infra
+Lead emitindo um <code>decision_record</code> server-emitted quando propõe subir
+container via runner) também fica de fora: depende de uma tool
+(<code>propose_container_start_via_runner</code>) que outro PR está criando em
+paralelo — ver TODO no PR desta mudança.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/artifact_schemas.ex</code> (schema +
+<code>@tool_emittable</code>); <code>apps/engine/lib/engine/agents/po_server.ex</code>,
+<code>arquiteto_server.ex</code>, <code>dev_lead_server.ex</code>, <code>ux_designer_server.ex</code>,
+<code>staff_server.ex</code> (alias + <code>tool_specs</code> + <code>run_tool/3</code> +
+<code>system_prompt/1</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/artifact_schemas_test.exs</code>
+(<code>describe(&quot;decision_record …&quot;)</code>);
+<code>apps/engine/test/engine/agents/po_server_test.exs</code> e
+<code>arquiteto_server_test.exs</code>
+(<code>describe(&quot;Frente 3 do plano de decision_record — emit_artifact&quot;)</code>)</li>
+<li><strong>Origem:</strong> plano do dono do produto, Frente 3 (&quot;Artefato de decisão&quot;)</li>
+</ul>
+<hr>
+<h2 id="o-join-do-agente-local-deixa-de-ser-mudo-rn-514">O <code>join</code> do agente local deixa de ser mudo (RN-514)</h2>
+<h3 id="rn-514">RN-514 — O runner DECLARA o que sabe fazer no <code>join</code>, o servidor CONCEDE a interseção em <code>socket.assigns</code>, e mensagem sem capacidade é RECUSADA em vez de sumir</h3>
+<p>Até aqui o <code>join</code> do canal <code>terminal:&lt;projectId&gt;</code> era <strong>mudo dos dois lados</strong>:
+o runner mandava <code>socket.channel(\</code>terminal:${projectId}`, {})<code> e o servidor os ignorava literalmente (</code>def join(&quot;terminal:&quot; &lt;&gt; project_id, _params,
+socket)<code>). Toda a identidade vinha do ticket — o papel (</code>:runner<code>/</code>:web<code>) sai do </code>kind` —, e o servidor <strong>não tinha como saber</strong> se o binário do outro lado
+era de uma versão que entende uma mensagem nova.</p>
+<p>O defeito que isso produz é o pior possível, e é o que esta regra fecha: a
+mensagem chega, o handler não existe do outro lado, e <strong>nada acontece</strong> — sem
+erro, sem log, sem ninguém saber que a função nunca rodou.</p>
+<p><strong>Três capacidades, e só o que o runner sabe fazer é declarado.</strong> O
+vocabulário do servidor é <code>exec</code> (comando aprovado, ADR 0104), <code>pty</code>
+(terminal interativo, ADR 0103) e <code>espelho</code> (copiar o trabalho para uma pasta
+fora da base montada). O runner declara <strong><code>exec</code> e <code>pty</code></strong>, e <code>espelho</code> fica
+de fora <strong>de propósito</strong>: declarar o que não se implementa é exatamente o
+defeito que a negociação existe para impedir — o servidor concederia,
+entregaria a mensagem, e ela sumiria do mesmo jeito. <code>espelho</code> nasce só como
+<strong>nome do vocabulário</strong>, sem comportamento nenhum; quem o implementa é a
+sessão 6 da FASE 28.</p>
+<p><strong>Ausência de params é o LEGADO, e isso é fato — não benevolência.</strong> Todo
+binário anterior a esta mudança manda params vazios, e todo binário anterior
+a esta mudança sabe fazer <code>exec</code> e <code>pty</code>: são as duas funções com que o
+runner nasceu. Conceder <code>{exec, pty}</code> a quem não declara nada é ler
+corretamente a única coisa que aquele binário poderia ter dito. O contrário
+faria <strong>todo runner instalado parar de conectar</strong>, que é mudança exigindo
+ação do operador antes do deploy — <code>breaking/</code> e MAJOR, pela convenção do
+repositório, e não é isto que esta entrega é. Params ausentes, <code>capacidades</code>
+ausente, lista <strong>vazia</strong> e valor que não é lista caem todos no legado: são as
+formas que &quot;este binário não sabe declarar nada&quot; assume no caminho de rede.</p>
+<p><strong>Desconhecido é IGNORADO, nunca motivo de recusa.</strong> O conjunto concedido é a
+interseção do declarado com o vocabulário que <strong>este</strong> servidor conhece —
+runner mais NOVO que o engine tem que conseguir conectar. Já declarar
+<strong>apenas</strong> nomes desconhecidos é declaração vazia, não legado: quem sabe
+declarar disse o que sabe fazer.</p>
+<p><strong>O que cada modo EXIGE.</strong> <code>runner</code> exige <code>exec</code> — é literalmente o que faz o
+modo funcionar, e sem ele o <code>TerminalExecutor</code> rotearia comando aprovado para
+um binário que não o executa, com a falha aparecendo como <em>timeout</em> em vez de
+recusa. <code>container</code> e <code>mounted</code> não exigem nada (o runner nem é o caminho de
+execução deles). <strong>Nada exige <code>espelho</code> ainda</strong> — o mecanismo de recusa nasce
+implementado e testado, e não dispara na prática hoje. Isso é o desenho, não
+pendência. Modo que não se conseguiu ler (projeto inexistente, id malformado,
+consulta que falhou) exige <strong>nada</strong>: recusar por pré-condição não confirmada
+seria colapsar &quot;não sei&quot; com &quot;não tem&quot; (<a href="../web.html#rn-088">RN-088</a>).</p>
+<p><strong>O conjunto concedido vive em <code>socket.assigns</code>, nunca em tabela.</strong>
+Capacidade é propriedade <strong>daquela conexão</strong> — uma tabela poderia afirmar que
+um runner sabe algo que o processo conectado agora não sabe. É o mesmo
+raciocínio que faz a entrada <code>:global</code> do <code>Engine.Runners.Registry</code> morrer
+junto com o pid. Só o papel <code>:runner</code> recebe conjunto: o socket <code>:web</code> <strong>não
+ganha <code>:capacidades</code></strong> e nenhuma checagem de capacidade se aplica a ele — a
+aba não executa nada, ela pede.</p>
+<p><strong>Recusa do join nomeia a que falta.</strong> <code>{:error, %{reason: ...}}</code> dizendo
+qual capacidade o projeto exige e que o binário precisa ser atualizado. A
+recusa é <strong>fatal do lado do runner</strong>, sem retry (<code>JoinRecusadoError</code>,
+comportamento que já existia e não mudou) — por isso ela é a única chance de
+explicar, e &quot;recusado&quot; sem o nome do que falta obrigaria a adivinhar. A
+checagem acontece <strong>antes</strong> de <code>Registry.register/2</code>: registrar e recusar em
+seguida deixaria o <code>Registry</code> afirmando um runner que não entrou.</p>
+<p><strong>E a metade que entrega valor hoje: mensagem sem a capacidade concedida é
+RECUSADA com resposta nomeada, nunca engolida.</strong> <code>exec</code> para um runner sem
+<code>exec</code> responde ao chamador no <strong>mesmo formato de <code>exec_result</code></strong> que o
+runner mandaria (<code>exitCode</code> 126 — &quot;encontrado, mas não executável&quot; —, a causa
+no <code>output</code>), em vez de deixar o <code>RunnerRouter</code> bloqueado até o <code>receive ... after</code> e o usuário ver um <em>timeout</em> no lugar da causa. <code>pty_*</code> para um runner
+sem <code>pty</code> não é relayado, e a <code>:web</code> que originou recebe <code>pty_error</code> nomeado,
+pelo mesmo broadcast filtrado que o runner usaria para reportar erro de PTY —
+sem isso a aba ficaria em &quot;carregando&quot; para sempre, o defeito que o <code>whereis</code>
+de <code>handle_in(&quot;pty_open&quot;, ...)</code> já tinha fechado para o caso &quot;sem runner&quot;.
+Como o legado tem as duas capacidades, <strong>nada muda para ninguém hoje</strong>.</p>
+<p><strong>Isto não é fronteira de segurança.</strong> Capacidade é negociação de
+<strong>protocolo</strong>; quem autoriza continua sendo o ticket de uso único
+(<a href="../web.html#rn-108">RN-108</a>) e o pipeline de
+<code>proposed_action</code>. O que o runner ganha declarando é que mensagens daquele
+tipo lhe sejam <strong>entregues</strong>, nunca permissão para nada.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/runners/capacidades.ex</code> (novo — o
+vocabulário, o legado, o que cada modo exige e as duas mensagens);
+<code>apps/engine/lib/engine_web/channels/terminal_channel.ex:208</code>
+(<code>join/3</code> passa a receber <code>params</code>), <code>:215</code> (<code>autorizar_por_papel/3</code>),
+<code>:251</code> (<code>entrar_como_runner/3</code>, a concessão antes do <code>Registry</code>), <code>:305</code>
+(<code>exigencias_do_projeto/1</code>, que era <code>modo_de_execucao/1</code> até a RN-516 fazer a mesma consulta responder também o destino do espelho), <code>:595</code> (o gate de <code>exec</code> em
+<code>handle_info({:dispatch_exec, ...})</code>) e <code>:762</code> (o de <code>pty</code> em
+<code>handle_info({:relay, &quot;pty_&quot; &lt;&gt; _, ...})</code>);
+<code>apps/runner/src/channel.ts</code> (<code>CAPACIDADES_DO_RUNNER</code> e os params do
+<code>socket.channel/2</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/runners/capacidades_test.exs</code> (novo — o
+vocabulário puro: legado, lista vazia, desconhecido ignorado, o que cada
+modo exige, e que nada exige <code>espelho</code>);
+<code>apps/engine/test/engine_web/channels/terminal_channel_test.exs</code>
+(<code>describe &quot;capacidades declaradas no join (ADR 0147 ponto 1, RN-514)&quot;</code> —
+concessão em <code>assigns</code>, join sem params, desconhecido ignorado, <code>:web</code> sem
+conjunto, a recusa nomeando <code>exec</code> num projeto <code>runner</code>, e as duas
+mensagens recusadas com resposta em vez de silêncio);
+<code>apps/runner/src/channel.spec.ts</code> (o CONTEÚDO dos params do join, <code>espelho</code>
+fora da lista, e a recusa virando <code>JoinRecusadoError</code> com a mensagem do
+servidor legível)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0147-agente-local-com-capacidades.html">0147</a>, ponto 1</li>
+<li><strong>Origem:</strong> FASE 28, sessão 5</li>
+</ul>
+<hr>
+<h2 id="os-artefatos-dos-agentes-viram-arquivo-em-docs-rn-523">Os artefatos dos agentes viram arquivo, em <code>docs/</code> (RN-523)</h2>
+<h3 id="rn-523">RN-523 — A pasta <code>docs/</code> é PROJEÇÃO do event log: derivada, por agente, e nunca fonte de verdade</h3>
+<p>Todo artefato que os agentes produzem vive <strong>exclusivamente no event log</strong> —
+<code>apps/engine/lib/engine/harness/tools/emit_artifact.ex:3-5</code> diz literalmente
+que <em>&quot;não há tabela de artefatos&quot;</em>. Isso continua certo para a FONTE, e esta RN
+não mexe nisso. O que ela fecha é outro buraco: essa memória não chegava a
+lugar nenhum que uma pessoa abrisse. Quem abre a pasta do projeto no editor não
+encontrava nada do raciocínio que produziu o código. (O <strong>provisionamento
+adiado</strong> — criar projeto deixar de criar repositório, e o git nascer no aceite
+do handoff ao Dev Lead — abre um intervalo inteiro em que o projeto não tem nem
+repositório, e torna esta pasta ainda mais necessária; ele vem em PR próprio, e
+esta RN não depende dele.)</p>
+<p>Cada evento <code>artifact.*</code> de um tipo permitido vira um Markdown em
+<code>docs/&lt;agente&gt;/</code> dentro do workspace do projeto. É <strong>projeção derivada</strong>, no
+mesmo sentido estrito que o ADR 0101 deu ao grafo Neo4j: a fonte é o evento, a
+pasta pode ser apagada inteira e reconstruída — desde a <a href="../api.html#rn-590">RN-590</a> por
+<code>artefatos:reprojetar</code> —, e <strong>nada no produto lê dela</strong> para decidir coisa
+alguma.</p>
+<p><strong>O mecanismo é o do <code>GraphProjector</code>, copiado peça por peça</strong> — poller
+próprio, <code>drainOnce()</code> público, flag contra ciclos sobrepostos, lote de 50, e
+<code>markProcessed</code> só após sucesso. A linha de outbox é uma TERCEIRA, gravada na
+mesma transação do evento, sob um <code>aggregate_type</code> PRÓPRIO
+(<code>artifact_projection</code>): <code>Engine.Outbox.Drain</code> só drena <code>session</code>, <code>task</code> e
+<code>container</code>, e disputar a linha <code>'session'</code> seria perder a corrida contra ele
+quase sempre. Uma diferença deliberada em relação ao grafo: o <code>aggregateId</code> é o
+<strong>projeto</strong>, não a sessão — a pasta é do projeto, e gravá-lo ali poupa o
+projetor de uma consulta por artefato.</p>
+<p><strong>A lista é de PERMITIDOS.</strong> Tipo de artefato novo nasce fora da projeção e
+entra quando alguém decidir que ele é documento, em vez de aparecer sozinho
+numa pasta que o usuário lê. Ficam de fora <code>qa_verdict</code>, <code>secops_verdict</code>,
+<code>task_blocked</code> e <code>infra_delegation_files</code>: são desfechos OPERACIONAIS, e um
+veredito de gate por task encheria <code>docs/qa-lead/</code> de arquivos que ninguém
+abre, custando à pasta a propriedade que a torna útil — caber numa olhada.</p>
+<p><strong>Versionado sobrescreve; append-only leva o <code>seq</code>.</strong> Os quatro tipos lidos por
+redução ao maior <code>version</code> (<code>module_map</code>, <code>module_routing</code>, <code>project_image</code>,
+<code>c4_diagram</code>) escrevem sempre o mesmo arquivo, e a pasta mostra o vigente — o
+histórico continua inteiro no event log. Os demais viram arquivo próprio com o
+<code>seq</code> do evento no nome, e <strong>sem ele</strong> dois artefatos do mesmo tipo com o mesmo
+título gerariam o mesmo arquivo, com o segundo apagando o primeiro: a única
+forma de esta projeção perder informação que a fonte tem.</p>
+<p><strong>Duas barreiras contra o filesystem, e a segunda não é redundante.</strong> O nome
+sai do título que o MODELO escreveu. <code>slugDeArquivo</code> <strong>deriva</strong> um nome de um
+alfabeto fechado (nenhum caminho de retorno deixa separador sobreviver;
+devolve <code>null</code> quando não sobra nada), e <code>FsArtifactFileStore</code> confere de novo
+com <code>relative()</code> antes de abrir. As duas respondem perguntas diferentes — &quot;que
+nome eu derivo disto&quot; e &quot;o que eu vou de fato abrir&quot; —, e confiar só na
+primeira faria a segurança da escrita depender de nenhuma mudança futura de
+slug jamais deixar passar um separador, que é a contenção que o ADR 0130 recusa
+por princípio.</p>
+<p><strong>A projeção nunca derruba a fonte.</strong> Nenhum throw escapa do ciclo: cada item
+falha isolado, fica logado e permanece <code>processed_at IS NULL</code> para o ciclo
+seguinte. Diferente do grafo, <strong>não há aqui um erro que pare o lote inteiro</strong> —
+falha de escrita costuma ser do ITEM, e parar o lote bloquearia todos atrás
+dele. Evento que sumiu do event log é marcado processado, não retentado para
+sempre.</p>
+<p><strong>Em modo <code>runner</code> a pasta desvia para a raiz gerenciada</strong>, pelo mesmo motivo
+físico do <code>permissions.json</code> (<a href="../api.html#rn-478">RN-478</a>): quem escreve é a api, de
+dentro do container dela, e o canal do runner só transporta comando, sem
+primitiva de escrever conteúdo. Custo declarado: ali <code>docs/</code> não fica ao lado
+do código.</p>
+<p><strong>A escrita NÃO passa por <code>proposed_action</code></strong>, e não é omissão: aquele pipeline
+é a origem de todo efeito externo de um AGENTE PEDINDO PARA AGIR, e aqui o
+artefato já foi emitido e já está no event log. Passar a projeção pela fila
+encheria as aprovações de decisões rotineiras — uma por artefato — e corroeria
+o teto que dá sentido ao clique nas ações que são efeito externo de verdade.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/api/src/domain/artifacts/artifact-projection-events.ts</code> (o
+vocabulário e as regras de nome, puros);
+<code>apps/api/src/application/artifact-projection/artifact-projector.ts</code> (o
+poller); <code>apps/api/src/application/ports/artifact-file-store.port.ts</code> e
+<code>apps/api/src/infrastructure/filesystem/fs-artifact-file-store.ts</code> (a
+escrita, com a segunda barreira);
+<code>apps/api/src/infrastructure/filesystem/project-workspaces-root.ts</code>
+(<code>pastaDeArtefatosDoProjeto</code>, irmã de <code>permissionsFilePath</code>);
+<code>apps/api/src/application/use-cases/sessions/append-session-event.use-case.ts</code>
+(a terceira linha de outbox)</li>
+<li><strong>Teste:</strong> <code>apps/api/test/domain/artifacts/artifact-projection-events.spec.ts</code>
+(as regras de nome, o traversal e a colisão por <code>seq</code>) e
+<code>apps/api/test/application/artifact-projection/artifact-projector.spec.ts</code>
+(caminho feliz, versionado sobrescrevendo, e a degradação: falha deixa a
+linha não processada, o ciclo seguinte retenta, uma falha não bloqueia o
+lote, evento sumido não é retentado para sempre, reprocessar é idempotente)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0148-artefatos-projetados-em-arquivo.html">0148</a></li>
+<li><strong>Origem:</strong> pedido do dono do produto — <em>&quot;criar apenas uma pasta por ora
+chamada docs, onde os artefatos estarão de cada um dos agentes&quot;</em></li>
+</ul>
+<h2 id="a-revogação-de-chave-de-dispositivo-deixa-de-ser-cega-e-alcança-a-conexão-viva-rn-519520">A revogação de chave de dispositivo deixa de ser cega, e alcança a conexão viva (RN-519..520)</h2>
+<h3 id="rn-539">RN-539 — <code>assess_implementability</code> dispara o threat model de DESIGN em PARALELO, e uma vez só por story</h3>
+<p>O appsec (<code>Engine.Gates.SecOpsAgentServer.run_design/2</code>, <a href="#rn-360">RN-360</a>)
+nasceu implementado, testado e <strong>sem chamador de produção nenhum</strong>: a única
+menção fora de teste era um comentário em <code>artifact_schemas.ex</code>. A própria
+<a href="#rn-360">RN-360</a> declarava a lacuna, e <code>packages/contracts/fluxo.yml</code> (papel <code>appsec</code>,
+campo <code>acionamento</code>) já NOMEAVA o gatilho que faltava — <code>assess_implementability</code>
+do Dev Lead, gate <code>implementavel</code>, o mesmo <a href="../../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090</a>.
+Era ele. <code>run_assessment/2</code> passa a chamá-lo por
+<code>Engine.Gates.Dispatcher.run_appsec_design/2</code> — sexto callback do behaviour,
+CÓPIA estrutural de <code>run_qa_estrategia/3</code> e trocável em teste pelo mesmo
+motivo dos cinco vizinhos (o chamador é exercitado por um teste leve, sem
+sandbox Ecto, e não deveria subir um GenServer real só para provar que
+PEDIU).</p>
+<p><strong>Em paralelo, e o parecer não espera.</strong> O disparo acontece nas DUAS saídas
+de <code>run_assessment/2</code> — com plano de teste e sem — e o desfecho de cada uma
+fica byte a byte como era. Fazer o parecer depender do threat model faria o
+gate <code>implementavel</code> depender de DUAS produções assíncronas em vez de uma, e
+queimaria dois turnos do Dev Lead onde hoje se queima um: o ramo <code>:sem_plano</code>
+já devolve <code>{:error, ...}</code> pedindo ao modelo que chame de novo
+(<a href="parte-01.html#rn-163">RN-163</a>), e uma segunda espera empilhada nele multiplicaria a
+janela. O threat model chega a quem precisa pelo caminho que a
+<a href="#rn-361">RN-361</a> já definiu — handoff para <code>arquiteto</code>, <code>dev-lead</code> e
+<code>infra</code> —, nunca por este retorno; a mensagem do <code>:sem_plano</code> sequer menciona
+o appsec, porque prometer ao modelo algo que ele não vai receber ali é o
+defeito que a <a href="parte-01.html#rn-163">RN-163</a> fecha.</p>
+<p><strong>Desde a <a href="parte-04.html#rn-674">RN-674</a> não há mais <code>:sem_plano</code></strong>: o parecer sai na
+primeira chamada, o disparo do appsec acompanha a proposta, e a leitura do
+histórico serve só à guarda abaixo. O appsec segue no DESIGN — a decisão do
+dono que tirou o plano de teste do pre-dev foi sobre o QA.</p>
+<p><strong>E uma vez só por story.</strong> O modelo é INSTRUÍDO a chamar
+<code>assess_implementability</code> de novo enquanto o plano de teste não existe: sem
+guarda, cada rechamada custaria outra rodada de LLM do appsec e mais três
+handoffs sobre a MESMA story. <code>disparar_appsec_se_preciso/3</code> só dispara
+quando não há <code>artifact.threat_model</code> daquela <code>storyId</code> no histórico. A
+pergunta aqui é EXISTE, não QUAL — o oposto do plano de teste, onde o mais
+recente vence porque uma story pode ser reavaliada.</p>
+<p>A leitura do event log é <strong>uma</strong> por chamada: as duas perguntas (&quot;já há plano
+de teste?&quot;, &quot;já há threat model?&quot;) são respondidas sobre a mesma lista. Dois
+<code>list_events/2</code> na mesma invocação seriam o amplificador de tráfego que o
+<a href="../../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060</a> recusa, e este caminho é
+quente justamente por causa da retentativa. Histórico ILEGÍVEL não dispara
+nada: ausência de resposta não é prova de ausência de artefato, e disparar ali
+reabriria a rechamada por outra porta. A cláusula de args inválidos também não
+dispara — ela não sabe qual é a story.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:544</code>
+(<code>run_assessment/2</code>, a leitura única do histórico) e <code>:576</code>
+(<code>disparar_appsec_se_preciso/3</code>, a guarda de idempotência);
+<code>apps/engine/lib/engine/gates/dispatcher.ex:29</code> (o callback) e <code>:86</code>
+(<code>Engine.Gates.Dispatcher.Live.run_appsec_design/2</code>);
+<code>apps/engine/test/support/fake_gate_dispatcher.ex:23</code></li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/dev_lead_tools_test.exs</code>,
+describe &quot;assess_implementability dispara o appsec (RN-539)&quot; — story sem
+threat model dispara, story com threat model NÃO dispara (a idempotência),
+threat model de outra story não conta, o desfecho de <code>:sem_plano</code> não muda,
+o parecer é proposto normalmente ao lado do disparo, args inválidos e
+histórico ilegível não disparam</li>
+<li><strong>ADR:</strong> <a href="../../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">0090</a>
+(que declarava o gatilho automático como fora de escopo)</li>
+<li><strong>Origem:</strong> <code>packages/contracts/fluxo.yml</code>, papel <code>appsec</code>. Fica declarado e NÃO feito:
+<code>artifact.threat_model</code> é emitido na sessão da STORY
+(<code>emit_threat_model/3</code> lê <code>story[&quot;sessionId&quot;]</code>), enquanto a guarda lê o
+histórico da sessão do DEV LEAD. No caminho comum são a mesma sessão — o
+Dev Lead avalia stories que a própria sessão de execução criou. Não sendo,
+a guarda não enxerga o threat model e o appsec roda outra vez: custo de uma
+rodada de LLM repetida, nunca dado errado (o artefato é append-only e quem
+o consome é o handoff). Fechar isso exigiria a api aceitar busca de
+artefato por story ATRAVÉS de sessões, que hoje não existe</li>
+</ul>
+<h2 id="a-flag-que-liga-um-agente-tem-de-chegar-ao-processo-rn-540">A flag que liga um agente tem de CHEGAR ao processo (RN-540)</h2>
+<h3 id="rn-540">RN-540 — Flag booleana lida pelo <code>runtime.exs</code> é mapeada no <code>environment:</code> do serviço <code>engine</code> dos dois composes, com o default do código</h3>
+<p>Uma pausa só é reversível se existir o caminho de ligar. A da Anamnese e a do
+Psicólogo (<a href="parte-01.html#rn-115">RN-115</a>,
+<a href="parte-01.html#rn-117">RN-117</a>) foram declaradas reversíveis
+em TRÊS lugares — o docblock de <code>AnamneseSchedulerWorker.enabled?/0</code> (&quot;Ligar de
+volta é <code>ANAMNESE_ENABLED=true</code> e reiniciar o engine&quot;), o de
+<code>PsychologistWorker.enabled?/0</code> e a tabela de
+<a href="../../reference/configuration.html">configuração</a> — e o caminho <strong>não existia em
+ambiente nenhum</strong>.</p>
+<p><strong>Medido, não hipótese.</strong> Com o compose de dev de pé:</p>
+<pre class="codigo"><code>$ docker compose … exec -T engine sh -lc \
+    'echo &quot;[$START_ANAMNESE] [$ANAMNESE_ENABLED] [$PSYCHOLOGIST_ENABLED]&quot;'
+[true] [] []
+</code></pre>
+<p>A causa é a camada que só o Compose tem: <strong>ele não repassa o ambiente do host
+ao container</strong>. Uma variável chega ao processo se, e só se, estiver escrita no
+<code>environment:</code> (ou num <code>env_file</code>) daquele serviço. O <code>engine</code> mapeava TREZE
+variáveis de Anamnese/Psicólogo — todas TETOS de custo
+(<code>ANAMNESE_INTERVAL_SECONDS</code>, <code>ANAMNESE_BUDGET_MICROS</code>,
+<code>PSYCHOLOGIST_TRIAGE_THRESHOLD</code>, …) — e nenhuma das duas que decidem se os
+agentes rodam. <code>ANAMNESE_ENABLED=true</code> no <code>.env</code> era inerte:
+<code>apps/engine/config/runtime.exs</code> caía no default <code>&quot;false&quot;</code> e os dois seguiam
+desligados <strong>em silêncio, sem erro</strong>.</p>
+<p>Origem provável do defeito: quando o default do código virou <code>false</code>
+(2026-08-10), ninguém precisou da variável para DESLIGAR. Só quem tenta LIGAR
+descobre que o fio não existe — e essa pessoa, por construção, aparece meses
+depois.</p>
+<p><strong>A regra.</strong> Toda flag BOOLEANA que o <code>runtime.exs</code> lê — a forma
+<code>System.get_env(&quot;X&quot;, &quot;true&quot;|&quot;false&quot;) == &quot;true&quot;</code> — tem de estar mapeada no
+<code>environment:</code> do serviço <code>engine</code> dos dois composes. O recorte é o das
+booleanas e não o das 58 variáveis do arquivo porque uma flag existe
+exatamente para ser virada, e a virada acontece pelo ambiente: flag sem linha
+no compose é interruptor sem fio. Teto numérico com default bom
+(<code>READ_FILE_MAX_BYTES</code>) e variável de release (<code>SECRET_KEY_BASE</code>, <code>POOL_SIZE</code>)
+ficam legitimamente de fora, e é por isso que a lista é DERIVADA do
+<code>runtime.exs</code> em vez de mantida à mão.</p>
+<p>O default difere por arquivo, e a diferença é a decisão:</p>
+<ul>
+<li>em <code>docker/docker-compose.yml</code> (dev) a linha repete o default do CÓDIGO. Dev
+é onde a promessa dos docblocks é exercida, e um default divergente ali faria
+o compose decidir produto por baixo do <code>runtime.exs</code>.</li>
+<li>em <code>docker/docker-compose.prod.yml</code> basta estar mapeada. Aquele arquivo
+desliga os agentes de fundo de propósito (<code>START_ANAMNESE:-false</code> contra o
+<code>true</code> do código), com o motivo escrito ao lado — cobrar igualdade
+reprovaria uma decisão consciente.</li>
+</ul>
+<p><strong>Isto NÃO muda decisão de produto nenhuma.</strong> As duas flags continuam
+<code>false</code> por default nos dois composes: a pausa de 2026-08-10 segue valendo,
+byte a byte. O que passou a existir é o interruptor.</p>
+<p><strong>E <code>ANAMNESE_ENABLED=true</code> sozinho não basta.</strong> <code>START_ANAMNESE</code> (chave de
+BOOT, <code>apps/engine/lib/engine/application.ex:82,106-108</code>) decide se o <code>kickoff/0</code> que
+AGENDA o tick periódico é chamado; <code>ANAMNESE_ENABLED</code> (flag de PRODUTO) decide
+se uma rodada NOVA pode acontecer. São perguntas diferentes, e a Anamnese
+periódica exige as duas em <code>true</code>. O Psicólogo tem só a segunda — o gatilho
+automático dele é o fechamento de sessão, não um tick.</p>
+<p><strong><code>deploy/k8s/</code> fica de fora, e por decisão.</strong> Lá não existe a camada que
+quebra: um Deployment/ConfigMap não intercepta nada, e a variável é escrita
+onde toda variável é escrita. O <code>brabo-config</code> tem QUATRO literais (endereços
+de serviço e nível de log do web), sem nenhum dos 13 tetos nem
+<code>START_ANAMNESE</code> — o engine roda com os defaults do código, coerentemente.
+Não há interruptor sem fio a consertar ali.</p>
+<ul>
+<li><strong>Onde:</strong> <code>docker/docker-compose.yml:406-425</code> (as quatro chaves de boot e as
+quatro flags de produto, no bloco de cada agente);
+<code>docker/docker-compose.prod.yml:308-315</code>;
+<code>apps/engine/config/runtime.exs:157,158,162,168,185,229,238,264</code> (as oito
+flags); <code>.env.example</code> (as duas perguntas, lado a lado)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/flags-do-engine-no-compose.spec.ts</code> — deriva as flags
+do <code>runtime.exs</code> e reprova nomeando a que faltar em qualquer dos dois
+composes, e a que divergir do default do código no de dev. <code>warn</code> nenhum:
+reprova mesmo, no job <code>test-packages</code></li>
+<li><strong>Origem:</strong> achado por medição direta no container do engine, 2026-09-08.
+Fica declarado: a lista de exceções <code>FLAGS_FORA_DO_COMPOSE</code> nasce VAZIA — ela
+existe para que &quot;fora por decisão&quot; tenha onde ser dito, e não vire
+indistinguível de &quot;fora por esquecimento&quot;</li>
+</ul>
+<hr>
+<h2 id="a-chave-de-dispositivo-ganha-tela-e-a-tela-diz-o-alcance-de-revogar-rn-561">A chave de dispositivo ganha tela, e a tela diz o alcance de revogar (RN-561)</h2>
+<h3 id="rn-566">RN-566 — O Infra Lead recusa <code>container_start</code> por MODO antes de propor: a lacuna da RN-494 fecha na tool que a declarava</h3>
+<p><code>propose_container_start</code> propunha às cegas. <code>dispatch_container_start/2</code>
+montava o payload e chamava <code>EngineApiClient.propose_action(...)</code> direto — sem
+uma leitura de projeto entre uma coisa e outra, e com <strong>zero</strong> ocorrências de
+<code>execution_mode</code> na tool inteira. Num projeto <code>runner</code> a proposta só podia
+terminar em falha: desde a <a href="../runner.html#rn-507">RN-507</a>/<a href="../../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145</a>
+<code>container_start</code> <strong>não atende</strong> esse modo, porque o payload dela ELEGE uma
+candidata do roteamento do Arquiteto (<a href="../../adr/0131-roteamento-de-modulos-para-infra.html">ADR 0131</a>)
+e em <code>runner</code> não há roteamento contra o qual eleger — o tipo daquele modo é
+<a href="../api.html#rn-508"><code>container_start_via_runner</code></a>.</p>
+<p><strong>A régua não é nova, e não nasceu uma segunda.</strong> A tool irmã já recusava
+localmente (<a href="../api.html#rn-508">RN-508</a>) e a página <code>/containers</code> já ramificava por
+DESTINO (<a href="../api.html#rn-521">RN-521</a>, <code>acaoDeSubidaDoModo</code>): <code>container</code> e <code>mounted</code>
+sobem pelo BROKER, <code>runner</code> sobe pelo agente local (<a href="../../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144</a>/<a href="../api.html#rn-503">RN-503</a>).
+O que esta regra faz é dar à tool que faltava a MESMA régua — uma leitura de
+projeto (<code>recusa_local_de_subida/2</code>, que devolve <code>nil</code> ou motivo) e uma
+CLÁUSULA por tool (<code>recusa_por_modo/3</code>). Duas réguas paralelas divergiriam no
+primeiro modo novo do enum.</p>
+<p><strong>A recusa de <code>container_start</code> é lista de PERMITIDOS</strong>, como a do próprio
+broker: <code>container</code>/<code>mounted</code> passam, <code>runner</code> é recusado NOMEANDO a tool
+irmã, e modo novo no enum nasce recusado com mensagem em vez de proposto por
+omissão. Projeto inexistente também recusa — mesma cláusula das duas tools.</p>
+<p><strong>A recusa é ENTRADA do laço</strong> (<a href="parte-01.html#rn-163">RN-163</a>): texto de RESULTADO de
+ferramenta, que o modelo lê e usa para chamar a tool certa. Nunca
+<code>agent.error</code>, nunca fim de turno, nunca <code>proposed_action</code> — a api não é
+chamada. E <strong>não é silêncio</strong>: o <code>emit</code> do <code>tool.call</code> passou a acontecer
+ANTES da recusa nas DUAS tools (na irmã ele estava dentro do ramo que propõe),
+como no <code>dispatch_tool/2</code> genérico do mesmo módulo — recusa sem rastro no
+event log é a chamada sumindo do timeline do humano.</p>
+<p><strong>As leituras são LOCAIS, e isso é a decisão.</strong> <code>Project.get/1</code> e
+<code>Engine.Runners.Registry.connected?/1</code> rodam no MESMO processo BEAM do Infra
+Lead; um HTTP à api aqui poria uma chamada de rede dentro do laço do agente.
+O custo declarado no <code>CLAUDE.md</code> — <em>&quot;corrigir exigiria tocar o
+prompt/instrução do Infra Lead&quot;</em> — <strong>não se confirmou</strong>: nenhuma linha de
+prompt mudou, e o texto da recusa é o que o modelo lê como resultado.</p>
+<p><strong>O que esta regra NÃO fecha, e é metade da lacuna:</strong> a proposta cega por
+AUSÊNCIA DE IMAGEM continua possível em <code>container</code>/<code>mounted</code>. A recusa aqui é
+sobre MODO, e exigir imagem decidida inverteria a ordem — eleger a imagem é
+justamente o que essa proposta FAZ (<a href="../web.html#rn-491">RN-491</a>). A <code>/containers</code> checa
+as TRÊS coisas (imagem decidida, modo, pasta confirmada) porque tem um humano
+clicando; o agente passa a checar UMA. <code>GetInfraContextUseCase</code> segue sem
+<code>executionMode</code> — enriquecer o contexto do Infra Lead é frente à parte.
+<code>container_stop</code>/<code>container_remove</code> não entram: são propostas pela tela, nunca
+por agente (<a href="../api.html#rn-495">RN-495</a>).</p>
+<p>Nenhum teto muda: <code>container_start</code> segue <code>proposed_action</code> de verdade,
+<code>maintainer</code>, nunca semeada em auto-aprovação (até a <a href="../api.html#rn-671">RN-671</a>, que a
+semeia no aceite do handoff da Infra), e <code>container_remove</code> segue no
+teto absoluto de git push/comando privilegiado (<a href="../api.html#rn-418">RN-418</a>).</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/infra/infra_lead_server.ex:599</code> (o
+dispatch de <code>container_start</code> consultando antes de propor), <code>:889</code>
+(<code>recusa_local_de_subida/2</code> — a leitura ÚNICA do projeto), <code>:474</code> (a
+cláusula de <code>container_start</code>: lista de permitidos), <code>:477</code> (a recusa
+nomeando <code>container_start_via_runner</code>), <code>:492</code> (a cláusula da irmã, com a
+segunda pergunta — runner conectado), <code>:409</code> (o <code>emit</code> do <code>tool.call</code>
+movido para antes da recusa);
+<code>apps/engine/lib/engine/infra/tools/propose_container_start.ex</code>
+(moduledoc — a tool deixou de propor às cegas)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/infra/infra_lead_server_test.exs:422</code>
+(caminho feliz em <code>mounted</code> — o broker atende os dois), <code>:448</code> (caso de
+falha: <code>runner</code> recusa NOMEADO, <code>propose_action</code> nunca chamada, o <code>tool.call</code>
+narrado mesmo assim), <code>:538</code> (projeto inexistente), <code>:380</code> (o caminho feliz
+de <code>container</code>, que passou a exigir a linha no banco)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0144-a-segunda-raiz-do-broker.html">0144</a>,
+<a href="../../adr/0145-docker-pre-requisito-do-runner.html">0145</a></li>
+<li><strong>Origem:</strong> AT-048 (EP-020/HS-032) — a lacuna declarada no <code>CLAUDE.md</code> desde
+a <a href="../broker.html#rn-494">RN-494</a></li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/engine/parte-01.html">Engine — parte 1 (desde RN-016)</a><a href="../../business-rules/engine/parte-03.html">Engine — parte 3 (desde RN-577)</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-engine/blob/dev/docs/business-rules/engine/parte-02.md">Editar esta página</a></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#staff-código-pronto-dormente-para-disparo-automático-rn-305rn-306-adr-0088">Staff: código pronto, dormente para disparo automático (RN-305/RN-306, ADR 0088)</a></li><li class="n3"><a href="#rn-305">RN-305 — O Staff ativa pelo caminho GENÉRICO de handoff, sem USER_STARTED_AGENTS, e sem kickoff/1</a></li><li class="n3"><a href="#rn-306">RN-306 — propose_rfc grava o artefato DIRETO e devolve o handoff no MESMO tool call, sem proposed_action</a></li><li class="n2"><a href="#o-appsec-ganha-o-segundo-momento-do-secops-rn-360361-adr-0090">O appsec ganha o segundo momento do secops (RN-360/361, ADR 0090)</a></li><li class="n3"><a href="#rn-360">RN-360 — O threat model de DESIGN roda sobre story + module_map, sem worktree/task_id, no MESMO processo do secops</a></li><li class="n3"><a href="#rn-361">RN-361 — O threat model concluído cria TRÊS handoffs, sempre endereçando o LEAD</a></li><li class="n2"><a href="#n-agentes-online-no-dashboard--status-ao-vivo-nunca-presença-histórica-rn-409-adr-0097">&quot;N agentes online&quot; no dashboard — status AO VIVO, nunca presença histórica (RN-409, ADR 0097)</a></li><li class="n3"><a href="#rn-414">RN-414 — rag_search: agentes ganham a ferramenta que o produto nunca tinha exposto</a></li><li class="n3"><a href="#rn-417">RN-417 — Psicólogo e Anamnese consultam por relevância, com degradação declarada para recência</a></li><li class="n3"><a href="#rn-419">RN-419 — O runner local se autentica por ticket de uso único, escopado a projeto e papel</a></li><li class="n3"><a href="#rn-420">RN-420 — Comando de agente roteado ao runner passa pelo MESMO pipeline de aprovação; PTY é ação do usuário, auditada</a></li><li class="n2"><a href="#o-explorador-de-pasta-do-runner-vira-três-colunas-e-a-criação-de-um-projeto-runner-deixa-de-esperar-o-passo-final-rn-436436">O explorador de pasta do Runner vira três colunas, e a criação de um projeto runner deixa de esperar o passo final (RN-436/436)</a></li><li class="n3"><a href="#rn-454">RN-454 — A aba Insights sabe que o Psicólogo está pausado ANTES de o usuário esbarrar no 503</a></li><li class="n2"><a href="#pasta-local-anexada-vira-o-quarto-escopo-do-índice-rag-lido-pelo-navegador-rn-455457-adr-0113">Pasta local anexada vira o quarto escopo do índice RAG, lido pelo NAVEGADOR (RN-455..457, ADR 0113)</a></li><li class="n3"><a href="#rn-459">RN-459 — Teto de iterações não termina mais calado em quatro dos seis agentes conversacionais</a></li><li class="n2"><a href="#a-busca-do-rag-deixa-rastro-e-o-rastro-congela-os-pesos-rn-479481">A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)</a></li><li class="n3"><a href="#rn-492">RN-492 — O comando de terminal do dev agent roda DENTRO do container real, quando há um</a></li><li class="n3"><a href="#rn-502">RN-502 — Dev agent só reivindica task com container running, e o terminal não cai mais fora dele</a></li><li class="n2"><a href="#o-artefato-de-decisão-dos-conversacionais-rn-505">O artefato de decisão dos conversacionais (RN-505)</a></li><li class="n3"><a href="#rn-505">RN-505 — decision_record reusa o padrão GENÉRICO de emit_artifact, não o dedicado</a></li><li class="n2"><a href="#o-join-do-agente-local-deixa-de-ser-mudo-rn-514">O join do agente local deixa de ser mudo (RN-514)</a></li><li class="n3"><a href="#rn-514">RN-514 — O runner DECLARA o que sabe fazer no join, o servidor CONCEDE a interseção em socket.assigns, e mensagem sem capacidade é RECUSADA em vez de sumir</a></li><li class="n2"><a href="#os-artefatos-dos-agentes-viram-arquivo-em-docs-rn-523">Os artefatos dos agentes viram arquivo, em docs/ (RN-523)</a></li><li class="n3"><a href="#rn-523">RN-523 — A pasta docs/ é PROJEÇÃO do event log: derivada, por agente, e nunca fonte de verdade</a></li><li class="n2"><a href="#a-revogação-de-chave-de-dispositivo-deixa-de-ser-cega-e-alcança-a-conexão-viva-rn-519520">A revogação de chave de dispositivo deixa de ser cega, e alcança a conexão viva (RN-519..520)</a></li><li class="n3"><a href="#rn-539">RN-539 — assess_implementability dispara o threat model de DESIGN em PARALELO, e uma vez só por story</a></li><li class="n2"><a href="#a-flag-que-liga-um-agente-tem-de-chegar-ao-processo-rn-540">A flag que liga um agente tem de CHEGAR ao processo (RN-540)</a></li><li class="n3"><a href="#rn-540">RN-540 — Flag booleana lida pelo runtime.exs é mapeada no environment: do serviço engine dos dois composes, com o default do código</a></li><li class="n2"><a href="#a-chave-de-dispositivo-ganha-tela-e-a-tela-diz-o-alcance-de-revogar-rn-561">A chave de dispositivo ganha tela, e a tela diz o alcance de revogar (RN-561)</a></li><li class="n3"><a href="#rn-566">RN-566 — O Infra Lead recusa container_start por MODO antes de propor: a lacuna da RN-494 fecha na tool que a declarava</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-pt-BR.json" data-base="../../"></script></body>
+</html>

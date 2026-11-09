@@ -1,0 +1,1369 @@
+<!doctype html>
+<html lang="ru" data-locale="ru" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — Web — parte 4 (desde RN-491) | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Меню">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Поиск" aria-label="Поиск" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Язык"><option value="../../../business-rules/web/parte-04.html">pt-BR</option><option value="../../../en/business-rules/web/parte-04.html">en</option><option value="../../../ru/business-rules/web/parte-04.html" selected>ru</option><option value="../../../zh-Hans/business-rules/web/parte-04.html">zh-Hans</option></select>
+<select data-seletor aria-label="Среда"><option value="../../../../dev/ru/business-rules/web/parte-04.html" selected>dev</option><option value="../../../../prd/ru/business-rules/web/parte-04.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="Сменить тему">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Начните здесь</h2></summary><ul><li><a href="../../index.html">Главная</a></li><li><a href="../../getting-started.html">Первые шаги</a></li></ul></details></section><section><details open><summary><h2>🎓 Туториалы</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">С нуля до готового результата</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Оркестрация репозиториев</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Как строится Brabo</a></li></ul></details></section><section><details open><summary><h2>🧭 Практические руководства</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Разработка Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">Токен GitHub Packages</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Участие в проекте</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">Как мы пишем</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Как внести вклад</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Где попросить помощи</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Сообщить об уязвимости</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Концепции</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Архитектура</a></li><li><a href="../../explanation/gates.html">Gates и то, как они измеряются</a></li><li><a href="../../explanation/modelo-de-time.html">Модель команды и поток результатов</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Процесс и конвейер</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Политика веток</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">Цепочка поставок CI</a></li><li><a href="../../explanation/release-do-produto.html">Релиз продукта</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Локализация</span></summary><ul><li><a href="../../explanation/localizacao.html">Локализация</a></li><li><a href="../../explanation/localizacao-en.html">Локализация — английский (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Локализация — русский (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Локализация — упрощённый китайский (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Технические заметки</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Справочник</h2></summary><ul><li><a href="../../glossary.html">Глоссарий</a></li><li><a href="../../reference/componentes-da-doc.html">Компоненты документации</a></li><li><a href="../../explanation/documentation-workflow.html">Синхронизация документации</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>Бизнес-правила</span></summary><ul><li><a href="../../business-rules.html">Бизнес-правила</a></li><li><a href="../../business-rules/custo.html">Стоимость и metering</a></li><li><a href="../../business-rules/autenticacao.html">Аутентификация</a></li><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Produto</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><details open><summary><span>Web</span></summary><ul><li><a href="../../business-rules/web.html">Web</a></li><li><a href="../../business-rules/web/parte-01.html">Web — parte 1 (desde RN-039)</a></li><li><a href="../../business-rules/web/parte-02.html">Web — parte 2 (desde RN-124)</a></li><li><a href="../../business-rules/web/parte-03.html">Web — parte 3 (desde RN-239)</a></li><li><a href="../../business-rules/web/parte-04.html" aria-current="page">Web — parte 4 (desde RN-491)</a></li><li><a href="../../business-rules/web/parte-05.html">Web — parte 5 (desde RN-626)</a></li><li><a href="../../business-rules/web/parte-06.html">Web — parte 6 (desde RN-728)</a></li><li><a href="../../business-rules/web/parte-07.html">Web — parte 7 (desde RN-978)</a></li></ul></details></li></ul></details></li><li><span>Справочник API</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Решения (ADR)</a></h2></section><section><details><summary><h2>🗂️ История проекта</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Хронология</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Интерфейс до и после shadcn (31.10.2026)</a></li><li><a href="../../explanation/historico-de-fases.html">История фаз</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Фазы 1–15, часть 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Программа 16–26 и раунды, часть 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Программа 28 и аудиты, часть 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">От локального runner далее, часть 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">ФАЗА 28 — папка пользователя</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — установка одной строкой</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — локальный агент машины</a></li><li><a href="../../explanation/backlog.html">Backlog после триажа</a></li><li><details><summary><span>Проверки и измерения</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">Первый dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Реальное выполнение (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Находки реального прогона конвейера</a></li><li><a href="../../explanation/validacao-fase-12.html">Проверка Фазы 12</a></li><li><a href="../../explanation/validacao-real.html">Реальная валидация (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Измерение эвристики языка</a></li><li><a href="../../explanation/medicao-do-jev.html">Измерение маршрутизатора инструментов Jev</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Аудит: fluxo.yml × код (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Визуальный аудит до и после Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">Эта страница ещё не переведена; показан оригинал на португальском.</div>
+<article class="doc">
+<h1 id="web--parte-4-desde-rn-491">Web — parte 4 (desde RN-491)</h1>
+<h2 id="a-busca-do-rag-deixa-rastro-e-o-rastro-congela-os-pesos-rn-479481">A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)</h2>
+<h3 id="rn-491">RN-491 — A Infra elege entre as candidatas do Arquiteto, e a eleição vira uma NOVA versão de <code>artifact.project_image</code></h3>
+<p><code>propose_container_start</code> fecha a metade que a RN-487 deixou declarada em
+aberto: a Infra elege UMA das <code>imagemCandidata</code> do roteamento vigente do
+Arquiteto (<code>artifact.module_routing</code>) e propõe subir o container REAL do
+projeto. A eleição só tem efeito porque <code>ExecuteContainerStartUseCase</code> REUSA
+<code>DecidirImagemDoProjetoUseCase</code> para emitir uma nova versão de
+<code>artifact.project_image</code> com <code>decidedBy: 'infra-lead'</code> — sem isso a eleição
+seria auditável e INERTE: o broker compõe o container lendo <code>GET .../container-spec</code>, que lê <code>artifact.project_image</code> (RN-105), nunca
+<code>artifact.module_routing</code>.</p>
+<p><strong>A imagem eleita precisa estar na lista de candidatas, sempre — validado
+ANTES de tocar no artefato.</strong> Fora da lista, a ação falha nomeando a imagem
+recusada e listando as candidatas válidas, e nem <code>DecidirImagemDoProjetoUseCase</code>
+nem o broker chegam a ser chamados: a Infra elege, nunca inventa.</p>
+<p><strong>Novo <code>container_start</code> (<code>maintainer</code>, mesmo calibre de <code>open_infra_pr</code>/
+<code>parallelize</code>), deliberadamente FORA do bloco de tetos absolutos de
+<code>decide.ts</code></strong> — mesmo raciocínio já registrado ali para
+<code>propose_execution_plan</code>/<code>assess_implementability</code>: é a PRIMEIRA vez que este
+container sobe de verdade para esta eleição, não uma ultrapassagem de um teto
+já autorizado. Diferente de <code>open_infra_pr</code>, esta ação NÃO é seedada em
+<code>INFRA_AUTONOMY_SEEDS</code> — o Infra Lead nunca aplica nada com <code>open_infra_pr</code>
+(só propõe uma PR que um humano ainda mergeia), mas subir um container é
+efeito externo real, então fica <code>require_approval</code> por padrão, decidido caso a
+caso pelo <code>ApprovalCard</code>. Um <code>maintainer</code> PODE configurar auto-aprovação
+depois, e por isso <code>ProposeActionUseCase</code> também executa no caminho
+<code>auto_approved</code>, mesma lição do comentário sobre <code>parallelize</code> nesse arquivo
+(&quot;sem isto a ação nascia, era aprovada — e nada subia&quot;).</p>
+<p><strong>Revisado pela <a href="../api.html#rn-671">RN-671</a> (ADR 0190, 01/10):</strong> <code>container_start</code> passa
+a ser SEMEADO <code>auto_approve</code> no aceite do handoff da Infra, e o servidor do
+Infra Lead propõe a primeira subida sozinho quando há roteamento. O resto desta
+regra — a lista de candidatas, <code>maintainer</code>, fora dos tetos absolutos — segue.</p>
+<p><strong>Depois do broker confirmar, a transição de ciclo de vida segue a máquina de
+estados do ADR 0081, nunca reprovisiona à toa.</strong> Sem linha ainda, ou linha em
+<code>failed</code>/<code>removed</code>: <code>provisioning</code> (a que lê a imagem recém-decidida e
+congela <code>imageVersion</code>) e só então <code>running</code>. Linha em <code>stopped</code>: direto para
+<code>running</code> — a máquina de estados nem permite <code>stopped -&gt; provisioning</code>, e
+reprovisionar reemitiria uma imagem que já está gravada na linha. Linha já
+<code>provisioning</code>/<code>running</code>: completa a transição pendente ou não faz nada,
+apoiado no <code>start</code> idempotente do broker (<code>jaEstavaDePe</code>).</p>
+<p><strong>Revisa a RN-485.</strong> &quot;Nada dispara subida... o único chamador que existe hoje
+faz LEITURA&quot; deixa de ser verdade: <code>container_start</code> é o primeiro chamador
+real de <code>ContainerBrokerPort.start</code>, das cinco operações que o ADR 0128/0130
+declarou. <code>RegistrarTransicaoDeContainerUseCase</code> ganha o primeiro chamador
+fora de teste também. Continua valendo que NADA dispara sozinho — é sempre uma
+<code>proposed_action</code>, decidida por um humano ou por política explícita.</p>
+<p><strong>Dev agents NÃO passam a trabalhar dentro do container que sobe aqui.</strong> Essa
+etapa é uma PR posterior, declarada em aberto no CLAUDE.md — a frase que a
+tela de aprovação mostra (<code>apps/web/src/lib/aprovacoes.ts</code>) para de propósito
+antes de prometer isso.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/api/src/application/use-cases/actions/execute-container-start.use-case.ts</code>,
+<code>apps/api/src/domain/actions/decide.ts</code> (<code>ACTION_TYPES</code>,
+<code>MIN_ROLE_FOR_ACTION_TYPE</code>), <code>apps/api/src/domain/containers/container-start-execution-result.ts</code>,
+<code>apps/api/src/application/use-cases/actions/approve-action.use-case.ts</code>,
+<code>apps/api/src/application/use-cases/actions/propose-action.use-case.ts</code>,
+<code>apps/api/src/application/use-cases/execution/get-infra-context.use-case.ts</code>
+(<code>moduleRouting</code>, primeiro consumidor HTTP de <code>GetModuleRoutingUseCase</code>),
+<code>apps/web/src/lib/aprovacoes.ts</code>,
+<code>apps/engine/lib/engine/infra/tools/propose_container_start.ex</code>,
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex</code></li>
+<li><strong>Teste:</strong>
+<code>apps/api/test/application/use-cases/actions/execute-container-start.use-case.spec.ts</code>
+(caminho feliz elegendo candidata; imagem fora das candidatas recusa sem
+chamar <code>DecidirImagemDoProjetoUseCase</code> nem o broker; <code>BrokerRecusouError</code>/
+<code>BrokerIndisponivelError</code> viram <code>failed</code>, nunca propagam; <code>stopped</code> pula
+direto para <code>running</code>),
+<code>apps/api/test/domain/actions/decide.spec.ts</code> (<code>container_start</code> exige
+<code>maintainer</code>; CONSEGUE chegar a <code>auto_approve</code> quando configurado — ao
+contrário de <code>parallelize</code>/merge protegido/<code>instruction_patch</code>),
+<code>apps/api/test/application/use-cases/execution/get-infra-context.use-case.spec.ts</code>
+(<code>moduleRouting</code> presente e ausente),
+<code>apps/web/src/lib/aprovacoes.test.ts</code> (frase não promete dev agent dentro
+do container),
+<code>apps/engine/test/engine/infra/infra_lead_server_test.exs</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0130-broker-de-container.html">0130</a>, <a href="../../adr/0133-infra-elege-imagem-do-roteamento.html">0133</a></li>
+<li><strong>Origem:</strong> plano do dono do produto, Parte 1 / PR 1.5</li>
+</ul>
+<h3 id="rn-499">RN-499 — O handoff da Infra tem card acionável PRÓPRIO, fora do fio — sem alargar <code>AGENTES_DE_CHAT</code></h3>
+<p><code>OfferInfraHandoffUseCase</code> oferece o handoff pro Infra Lead
+(<code>offer-infra-handoff.use-case.ts:43</code>), e até aqui <strong>tela nenhuma podia
+aceitá-lo</strong>. <code>offeredHandoff</code> (<code>SessionPage.tsx</code>) restringe o card do fio a
+<code>AGENTES_DE_CHAT</code> (<a href="parte-02.html#rn-136">RN-136</a>), que não inclui <code>infra</code>, e
+<code>acceptHandoff</code> (<code>api-client.ts</code>) tinha <strong>um único consumidor</strong> — esse card,
+atrás desse filtro. O comentário do próprio código registrava a consequência
+como aceita: <em>&quot;como Infra nunca é aceito por AQUI … na prática, nunca&quot;</em>.</p>
+<p>O efeito não era cosmético: o handoff ficava <code>offered</code> para sempre, o Infra
+Lead nunca era ativado, <code>propose_container_start</code> nunca era chamado
+(<a href="#rn-491">RN-491</a>) e <strong>nenhum projeto de nenhum modo chegava a ter container
+de pé</strong>. A cadeia &quot;Infra aceita → propõe <code>container_start</code> → aprovado →
+<code>running</code>&quot; era inalcançável por qualquer caminho de tela.</p>
+<p><strong>O filtro NÃO foi alargado, e isso é a regra.</strong> <code>AGENTES_DE_CHAT</code> está certo
+em excluir <code>infra</code>: o <code>agent_command_controller.ex</code> do engine não tem cláusula
+de <code>message</code> pro Infra Lead, e a última cláusula (sem guarda) trataria
+<code>&quot;infra&quot;</code> como se fosse o Criativo — pôr <code>infra</code> na lista faria a tela
+oferecer um fio de conversa que não existe e o composer mandar mensagem pro
+agente errado. (Desde a <a href="../engine.html#rn-584">RN-584</a> o engine recusa com nome em vez de
+entregar ao Criativo; o filtro continua certo pelo mesmo motivo.) Aceitar a Infra é uma ação <strong>propositiva</strong>, não conversacional.</p>
+<p>O card acionável mora, então, <strong>fora do fio</strong>: na faixa fixa entre a área que
+rola e o composer, a mesma que hospeda o handoff manual
+(<a href="../api.html#rn-440">RN-440</a>) e que já se declara o lugar das ações de handoff que &quot;não
+são conversa, são redirecionamento&quot;. Três consequências que a escolha compra:
+o <code>handoff.offered</code> da Infra <strong>continua narrado</strong> no fio como divisor mudo
+(nada muda na timeline); nenhum handoff conversacional muda de forma; e o
+botão não some quando a oferta sai da janela de 200 eventos numa sessão longa
+— o card do fio dependeria do evento estar visível, este não depende.</p>
+<p>O card <strong>diz a consequência do clique</strong>, porque ela não é óbvia: aceitar ativa
+o Infra Lead, que assume o provisionamento e vai <strong>propor</strong> a subida do
+container; a proposta ainda passa pelo pipeline de aprovação de sempre
+(<code>container_start</code>, <code>maintainer</code>, nunca auto-aprovável por seed —
+<a href="#rn-491">RN-491</a>). Aceitar não sobe container nenhum.</p>
+<p>Fechamento: o mesmo <code>activeFor(h.toAgent)</code> do card do fio — handoff já aceito,
+ou Infra já ativa nesta sessão por qualquer outro caminho, não reabre convite.
+E o clique chama o <strong>mesmo</strong> <code>handleAcceptHandoff</code>, sem segundo caminho de
+aceite.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code>
+(<code>handoffDaInfraOferecido</code>, e o bloco <code>styles.infraHandoffRow</code> acima do
+<code>manualHandoffRow</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.handoff-da-infra.test.tsx</code> —
+card aparece e aceita com os ids certos; some com a Infra já ativa; some em
+sessão não-ativa; o divisor mudo do fio continua lá sem botão de fio; e a
+<strong>não-regressão</strong> de <a href="parte-02.html#rn-136">RN-136</a>: Infra (mais antigo) + Dev Lead (mais
+novo) pendentes mostram os DOIS cards, cada um aceitando o próprio handoff</li>
+<li><strong>Origem:</strong> exploração do plano &quot;Nome e local na mesma tela, e container
+antes dos dev agents&quot; (D0) — o bloqueador que tornava o requisito &quot;dev agent
+só depois do container de pé&quot; equivalente a &quot;dev agent nunca começa&quot;</li>
+</ul>
+<h2 id="o-navegador-de-pastas-servido-pela-api-rn-504">O navegador de pastas servido pela api (RN-504)</h2>
+<h3 id="rn-504">RN-504 — O navegador de pastas é escopado à base de projetos e NUNCA sai dela</h3>
+<p><code>GET /workspaces/:workspaceId/project-folders</code> lista as <strong>subpastas</strong> de um
+caminho, e existe porque o assistente de criação de projeto perde, de uma vez,
+os DOIS mecanismos de &quot;procurar pasta&quot; que tinha: <code>FolderBrowserModal</code> navegava
+pelo <strong>websocket do runner</strong> (<code>fs_list_dir</code>/<code>fs_home_dir</code>) e o
+<code>RunnerOnboardingPanel</code> usava <code>showDirectoryPicker</code>, que devolve um handle do
+navegador e nunca um caminho absoluto. Sem runner, o navegador não tem como
+listar filesystem nenhum — e é caminho absoluto que <code>projects.workspace_path</code>
+guarda.</p>
+<p><strong>A contenção é UMA, e é dura.</strong> <code>path</code> é opcional e omitido quer dizer a base
+(<code>baseDeProjetos()</code>); todo <code>path</code> fornecido tem que satisfazer
+<code>dentroDaBaseDeProjetos</code> (RN-500), que reusa <code>dentroDoEscopo</code> — a mesma função
+do escopo de terminal do ADR 0055 — e por isso pega a armadilha de prefixo:
+<code>/home/voce/brabo2</code> <strong>não</strong> está dentro de <code>/home/voce/brabo</code>, embora a string
+comece igual. <code>..</code> e <code>.</code> são <strong>recusados</strong> em vez de resolvidos, pela mesma
+razão de <code>caminhoDeWorkspaceLocalValido</code>: resolver aceitaria que o caminho lido
+não é o caminho pedido.</p>
+<p><strong>Sair da base é 400, e não 403.</strong> 403 diria &quot;você não tem permissão para ver
+isto&quot; e sugeriria que outro papel veria — não é o caso. Não existe papel nenhum
+que navegue fora da base, porque fora da base não é uma área mais privilegiada,
+é uma área que esta rota simplesmente não endereça. O pedido está MALFORMADO.</p>
+<p><strong>Os tetos são contrato, não detalhe de implementação:</strong> só diretório em
+<code>entries</code>; no máximo <strong>500</strong>, ordenados <strong>antes</strong> do corte (senão &quot;as 500
+primeiras&quot; seria a ordem que o filesystem devolveu, que muda entre máquinas);
+sem recursão; entradas começadas com <code>.</code> fora; e symlink <strong>reportado, nunca
+descido</strong> — <code>readdirSync(withFileTypes)</code> tem semântica de <code>lstat</code>, então um
+link apontando para fora da base não é porta de saída. <strong>O que fica de fora é
+CONTADO</strong> (<code>arquivos</code>, <code>simbolicos</code>, <code>truncado</code>): sem isso uma pasta cheia de
+código voltaria como lista vazia e a tela diria &quot;pasta vazia&quot;, afirmando sobre
+o que não leu (RN-180).</p>
+<p><strong>Não há POST.</strong> Criar pasta é da materialização do workspace montado, no
+momento em que o container sobe — nunca do seletor.</p>
+<p><strong>O mínimo é <code>maintainer</code></strong>, o mesmo de <code>POST .../projects</code> e de
+<code>.../projects-base</code>, e pelo mesmo raciocínio um passo adiante: <code>projects-base</code>
+revela UM caminho da máquina do operador, esta rota revela a TOPOLOGIA abaixo
+dele. Herdar o <code>viewer</code> das rotas vizinhas por elas serem vizinhas é o defeito
+que a RN-102 nomeia — o mínimo é do ENDPOINT, nunca da seção. <code>workspaceId</code> não
+entra no cálculo: a base é da INSTALAÇÃO, e ele está na rota porque é o que dá
+escopo ao <code>RolesGuard</code>.</p>
+<p><strong>No cliente</strong>, o transporte vira uma das DUAS implementações da interface
+<code>FsBrowser</code> (<code>apps/web/src/lib/fs-browser.ts</code>): <code>criarFsBrowserViaApi</code> (nova) e
+<code>connectFsBrowserChannel</code> (o canal do runner, re-tipada). <code>FolderBrowserModal</code>
+escolhe por <code>origem: { tipo: 'api'; workspaceId } | { tipo: 'runner'; projectId }</code>
+— união discriminada, e não duas props opcionais, porque &quot;nenhuma das duas&quot; e
+&quot;as duas&quot; seriam estados representáveis que o componente teria de tratar em
+runtime. O transporte via runner fica <strong>sem chamador no web</strong> a partir daqui, e
+continua no repositório por decisão declarada do dono do produto (o runner sai
+da interface, o binário segue sendo refinado); o protocolo em
+<code>apps/runner/src/channel.ts</code> não é tocado de qualquer forma.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/api/src/infrastructure/filesystem/project-folders-browser.ts</code>
+(<code>listarPastasDeProjeto</code>, <code>TETO_DE_ENTRADAS</code>, <code>PastaForaDaBaseError</code>,
+<code>PastaNaoLegivelError</code>);
+<code>apps/api/src/interfaces/http/iam/workspaces.controller.ts</code>
+(<code>listProjectFolders</code>); <code>apps/web/src/lib/fs-browser.ts</code>;
+<code>apps/web/src/components/FolderBrowserModal.tsx</code></li>
+<li><strong>Teste:</strong>
+<code>apps/api/test/infrastructure/filesystem/project-folders-browser.spec.ts</code>,
+<code>apps/api/test/interfaces/http/iam/workspaces-project-folders.controller.spec.ts</code>,
+<code>apps/web/src/lib/fs-browser.test.ts</code>,
+<code>apps/web/src/components/FolderBrowserModal.test.tsx</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0141-base-unica-dos-projetos-montados.html">0141</a> (a base que
+esta rota escopa)</li>
+<li><strong>Origem:</strong> plano do dono do produto, PR 4</li>
+</ul>
+<h2 id="a-base-decide-o-que-a-criação-de-projeto-oferece-rn-513">A base decide o que a criação de projeto oferece (RN-513)</h2>
+<h3 id="rn-513">RN-513 — Com base consentida, <code>mounted</code> é o pré-selecionado com <code>&lt;base&gt;/&lt;slug&gt;</code> sugerido; sem base, ou sem saber, ele não é oferecido</h3>
+<blockquote>
+<p><strong>Revisada pela <a href="../api.html#rn-573">RN-573</a> (ADR 0161):</strong> a pré-seleção de <code>mounted</code>
+passou a exigir TAMBÉM o broker de container confirmado. Com base e sem
+broker (a instalação por Release), <code>runner</code> é o pré-selecionado e
+<code>container</code>/<code>mounted</code> ficam inertes com o motivo em texto; com o broker
+desconhecido, <code>container</code> segue selecionado. O resto desta regra vale como
+está.</p>
+</blockquote>
+<p>Duas metades desta regra <strong>já eram regra</strong> e nunca tinham chegado ao cliente.
+&quot;Não oferecer o modo sem base&quot; é a <a href="../api.html#rn-500">RN-500</a>; &quot;sugerir <code>&lt;base&gt;/&lt;slug&gt;</code>&quot;
+é a <a href="../api.html#rn-501">RN-501</a>, e o ADR 0142 adiou a validação de disco justamente para
+que o assistente pudesse propor uma pasta que <strong>ainda não existe</strong>. Até aqui,
+<code>GET /workspaces/:workspaceId/projects-base</code> não tinha <strong>chamador nenhum</strong> no
+web, e o card &quot;Pasta montada&quot; era oferecido incondicionalmente — numa
+instalação sem <code>BRABO_PROJECTS_BASE</code>, escolher o modo terminava numa recusa
+400 da api depois de a pessoa ter escolhido, digitado o caminho e chegado ao
+fim do assistente.</p>
+<p>O que é <strong>novo</strong> é a <strong>pré-seleção</strong>: com base configurada, <code>mounted</code> nasce
+selecionado. Ela revisa o default do ADR 0072 (onde <code>container</code> é &quot;a normal&quot; e
+o modo local é escape hatch) e o revisa <strong>só para a instalação local</strong>, onde a
+base foi consentida por um humano no host (<a href="../infra.html#rn-511">RN-511</a>). O enum
+<code>project_execution_mode</code> não muda, nenhum modo novo nasce, e a conversão de
+modo (ADR 0111) não é tocada.</p>
+<p><strong>A consulta nasce com o assistente, não com o passo.</strong> O passo &quot;Onde o código
+vai morar&quot; é o quinto; um <code>useQuery</code> montado só ali faria o card aparecer
+piscando depois que a pessoa já estivesse olhando a tela.</p>
+<p><strong>Desconhecido não vira oferta.</strong> Enquanto a resposta não chegou, e também
+quando a consulta <strong>falha</strong> (403, rede, api fora), o card não aparece e
+<code>container</code> segue selecionado. Falha não é permissão para oferecer um modo
+cuja pré-condição não se conseguiu confirmar: é a mesma régua da
+<a href="parte-01.html#rn-088">RN-088</a>/<a href="parte-03.html#rn-468">RN-468</a> — o produto não colapsa &quot;não sei&quot; com &quot;não
+tem&quot; — e a dos ADRs 0041/0042, onde capability só é declarada quando
+<strong>provada</strong>.</p>
+<p><strong>A pré-seleção nunca sobrescreve escolha humana.</strong> A base chega por rede,
+sempre DEPOIS do primeiro render. A tela guarda a escolha do usuário separada
+do modo vigente (<code>modoDeWorkspaceEscolhido</code> × <code>modoDeWorkspace</code>), e a
+pré-seleção só vale enquanto ninguém tocou nos cards — trocar o modo debaixo da
+mão de quem já clicou é defeito, não conveniência.</p>
+<p><strong>A sugestão nunca clobbera o que foi digitado.</strong> <code>&lt;base&gt;/&lt;slug&gt;</code> entra em dois
+casos e só neles: campo vazio com nada sugerido ainda, ou campo contendo
+exatamente a sugestão anterior desta tela (o nome mudou no passo de detalhes, e
+a sugestão acompanha). Qualquer outra coisa — inclusive o campo vazio <strong>depois</strong>
+de o usuário ter apagado a sugestão — fica como está. Slug vazio (a adoção, onde
+o nome vem do provider) não vira segmento inventado: o campo continua vazio, e
+<code>canAdvanceFromWorkspace</code> segura o passo. O campo é <strong>editável</strong> o tempo todo; a
+pré-seleção não relaxou nenhuma régua de avanço.</p>
+<p><strong>E o aviso do modo parou de mentir.</strong> O texto anterior era anterior ao ADR
+0141: dizia que o caminho era livre e que só funcionaria se o usuário o
+montasse. Hoje são <strong>dois estados, e são os dois que o backend tem</strong> — sob a
+base, nota neutra (a criação passa, e a pasta nem precisa existir: a Infra a
+cria ao subir o container, <a href="../api.html#rn-501">RN-501</a>); fora da base, aviso dizendo que
+a api <strong>recusa a criação</strong> (400, em <code>resolverWorkspacePath</code>) e <strong>nomeando</strong> a
+base, em vez de mandar procurar a variável. Campo vazio não é &quot;fora da base&quot;:
+não há caminho para a api recusar ainda, e alarmar antes de a pessoa digitar
+seria a tela afirmando sobre o que não tem. A comparação é por <strong>segmento</strong>,
+nunca <code>startsWith</code> cru — <code>/base-outra</code> não está dentro de <code>/base</code> —, espelhando
+<code>dentroDoEscopo</code> da api.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/NewProjectWizard.tsx:220</code> (a consulta),
+<code>:238</code> (<code>podeOferecerMounted</code>/<code>baseDeProjetos</code>), <code>:283</code> (o modo vigente),
+<code>:333</code> (<code>caminhoForaDaBase</code>), <code>:360</code> (a sugestão);
+<code>apps/web/src/lib/wizard.ts:143</code> (<code>caminhoSugeridoNaBase</code>) e <code>:171</code>
+(<code>caminhoDentroDaBase</code>) — as funções puras;
+<code>apps/web/src/lib/api-client.ts:305</code> (<code>getProjectsBase</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/NewProjectWizard.test.tsx</code>
+(<code>describe('NewProjectWizard — a base de projetos decide o que é oferecido')</code> — base presente, base <code>null</code>, consulta recusada com 403, a
+escolha humana antes de a base chegar, e os dois estados do aviso);
+<code>apps/web/src/lib/wizard.test.ts</code> (<code>describe('caminhoSugeridoNaBase')</code> e
+<code>describe('caminhoDentroDaBase')</code>)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0146-base-consentida-no-bootstrap.html">0146</a>, ponto 4</li>
+<li><strong>Origem:</strong> FASE 28, sessão 3</li>
+</ul>
+<hr>
+<h2 id="o-picker-do-modo-runner-volta-a-ler-o-disco-de-quem-escolhe-rn-533">O picker do modo Runner volta a ler o disco de QUEM ESCOLHE (RN-533)</h2>
+<h3 id="rn-533">RN-533 — Em modo <code>runner</code> o navegador de pastas pergunta ao agente local, e a tela diz de quem é o disco</h3>
+<p>O assistente de criação tinha <strong>um</strong> navegador de pastas para <strong>dois</strong> modos que
+leem discos <strong>diferentes</strong>. A <a href="#rn-504">RN-504</a> apontou os dois para a api —
+certo para <code>mounted</code>, cuja pasta mora sob <code>BRABO_PROJECTS_BASE</code>, no SERVIDOR — e
+declarou o preço por escrito: <em>&quot;para <code>runner</code> a lista deixa de ser o disco da
+máquina do usuário e passa a ser a base&quot;</em>. Aquilo foi aceito porque <em>&quot;o modo
+<code>runner</code> sai da criação de projeto no PR seguinte&quot;</em>, o que <strong>não aconteceu</strong>: o
+modo continua sendo oferecido, e a direção do
+<a href="../../adr/0151-base-consentida-no-runner.html">ADR 0151</a> (ponto 7) é a oposta. Enquanto
+durou, escolher <code>runner</code> e clicar &quot;Procurar pasta…&quot; navegava um disco que não é
+o daquele projeto — e <strong>nada na tela dizia isso</strong>, então o erro só apareceria
+pelo CONTEÚDO da lista.</p>
+<p><strong>O MODO decide o transporte, e são duas perguntas diferentes.</strong> <code>mounted</code>
+segue byte a byte pela api (<code>GET workspaces/:workspaceId/project-folders</code>,
+escopado duro à base — RN-504 intacta); <code>runner</code> volta a <code>fs_list_dir</code>, que
+sempre existiu dos dois lados e cujo transporte no web nunca saiu do
+repositório. Não é um transporte sobrando que ganhou uso: é a pergunta &quot;o que há
+na SUA máquina?&quot;, que a api não tem como responder, voltando a ser feita a quem
+tem como.</p>
+<p><strong>A âncora do modo <code>runner</code> é a criação ANTECIPADA da <a href="parte-03.html#rn-437">RN-437</a>.</strong> O
+ticket do canal é escopado a um <code>projectId</code> real, então o clique cria o projeto
+antes de abrir o modal — o propósito original daquela regra, que a RN-504 tinha
+deixado sem consumidor. E falhar essa criação <strong>não abre o modal em transporte
+nenhum</strong>: cair na api mostraria a base do SERVIDOR sob o rótulo de &quot;sua
+máquina&quot;, exatamente o defeito que esta regra fecha.</p>
+<p><strong>Sem agente local conectado, o modo continua oferecido — e quem declara é o
+PICKER, não o passo de modo.</strong> A <a href="#rn-513">RN-513</a> esconde <code>mounted</code> quando a
+base é desconhecida ou ausente, e está certa: ali a api TEM sinal
+(<code>GET .../projects-base</code>), e sem base a criação termina em 400 no fim do
+assistente, sem conserto na tela. Aqui nenhuma das duas coisas vale. Não existe
+sinal de presença de runner na api — a <a href="../api.html#rn-521">RN-521</a> já declara isso por
+escrito —, então esconder o modo ou apagar o botão seria decidir &quot;não tem&quot; a
+partir de &quot;não sei&quot;, o colapso que a <a href="parte-01.html#rn-088">RN-088</a>/<a href="parte-03.html#rn-468">RN-468</a>
+proíbem; e o modo <strong>não está quebrado</strong> sem runner, porque o caminho é
+confirmado depois, pelo CLI (<a href="../runner.html#rn-423">RN-423</a>) — o que falta é só a
+NAVEGAÇÃO. Então a declaração vai para o único lugar que de fato pergunta: o
+picker, no instante em que pergunta.</p>
+<p><strong>O motivo é DISCRIMINADO, e os dois desfechos não colapsam.</strong>
+<code>MotivoDeFalhaDoAgente</code> é <code>sem-agente</code> (o engine AFIRMA que não há runner
+conectado — um fato do servidor) ou <code>sem-resposta</code> (teto da requisição, socket
+caído, ticket recusado — ignorância, e dita como ignorância na tela). Antes
+desta regra quem decidia era <code>erro?.includes('Nenhum runner conectado')</code> no
+COMPONENTE — uma tela casando substring de uma frase em pt-BR que mora num
+<code>.ex</code> do engine, exatamente o que a <a href="../runner.html#rn-532">RN-532</a> recusa por escrito do
+outro lado (<em>&quot;o texto é para um humano ler, o motivo é para o outro lado
+DECIDIR&quot;</em>). O casamento sobrou em <strong>um</strong> lugar, o módulo que é dono do
+protocolo do canal, e a degradação é nomeada: frase reescrita no engine cai em
+<code>sem-resposta</code> — o estado &quot;não sei&quot; —, nunca em &quot;há agente&quot;. O transporte de
+api <strong>nunca</strong> preenche <code>motivo</code>, e isso é decisão: recusa da api é recusa da
+api, tem mensagem própria que ENSINA e não há agente local a instalar para
+consertá-la.</p>
+<p><strong>A espera é a da <a href="parte-03.html#rn-474">RN-474</a>, REUSADA e não reescrita.</strong> Os dois motivos
+levam à <code>EsperaDoRunner</code> — mesmos três estados (<code>esperando</code>/<code>confirmado</code>/
+<code>semResposta</code>, que nunca colapsam), mesmo TETO de 3 minutos, mesma redação,
+mesmo sinal (<code>workspaceVerifiedAt</code> MUDANDO, nunca &quot;existindo&quot;). Ela ganhou uma
+callback opcional porque aqui a confirmação tem CONSEQUÊNCIA: a listagem que
+falhou é refeita sozinha, em vez de a pessoa ter de descobrir que precisa
+clicar em algo. A callback dispara UMA vez por instância — sem o <code>ref</code>, cada
+rodada da sonda a redispararia e o chamador entraria em laço — e ela <strong>não
+afirma &quot;está de pé agora&quot;</strong> (<code>workspaceVerifiedAt</code> nunca disse isso, RN-468):
+por isso quem a recebe REPETE o pedido, e se o agente já caiu de novo a tela
+volta ao mesmo estado, honesta das duas vezes. Espera é UMA por tela:
+<code>RunnerOnboardingPanel</code> ganhou <code>mostrarEspera</code>, <code>false</code> só onde quem o monta já
+mostra a sua — duas seriam duas sondas, dois tetos e, no pior caso, duas frases
+discordando sobre o mesmo carimbo.</p>
+<p><strong>E o picker diz de QUEM é o disco, nas DUAS origens.</strong> O único sinal antes
+disso era o rótulo de um atalho (&quot;Base de projetos&quot; × &quot;Pasta pessoal&quot;), que
+nomeia um lugar e não uma máquina. A frase da api não é decoração de simetria:
+sem ela a do runner leria como aviso excepcional, quando é informação que as
+duas devem.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/fs-browser.ts:60</code>
+(<code>MotivoDeFalhaDoAgente</code>, e por que só o transporte do runner o preenche);
+<code>apps/web/src/lib/fs-browser-channel.ts:66</code>
+(<code>FRASE_DO_ENGINE_SEM_RUNNER</code>, o único casamento por substring que sobrou) e
+<code>:68</code> (<code>motivoDaMensagem</code>); <code>apps/web/src/components/FolderBrowserModal.tsx:227</code>
+(<code>agenteNaoRespondeu</code>, a decisão pelo motivo) e a linha de origem nas duas
+origens; <code>apps/web/src/components/EsperaDoRunner.tsx:91</code> (<code>onConfirmado</code>) e
+<code>:136</code> (o <code>ref</code> que a dispara uma vez);
+<code>apps/web/src/components/RunnerOnboardingPanel.tsx:131</code> (<code>mostrarEspera</code>);
+<code>apps/web/src/routes/NewProjectWizard.tsx:304</code> (<code>origemDoNavegador</code>, o
+transporte escolhido pelo modo, <code>undefined</code> quando não há projeto a ancorar)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/components/FolderBrowserModal.test.tsx</code> (a lista
+declarando o disco da máquina do usuário; <code>sem-agente</code> caindo no painel de
+onboarding; a decisão pelo MOTIVO e não pelo texto, com uma redação que
+ninguém prometeu manter; <code>sem-resposta</code> com a ressalva de que isso não prova
+ausência, UMA espera só e o teto anunciado; a listagem refeita sozinha quando
+o carimbo muda); <code>apps/web/src/routes/NewProjectWizard.test.tsx</code> (o modo
+decidindo o transporte nos dois sentidos; a criação antecipada ancorando o
+canal; a criação que FALHA não abrindo navegador nenhum)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0151-base-consentida-no-runner.html">0151</a> ponto 7</li>
+<li><strong>Origem:</strong> FASE 29, sessão 9. Fica declarado e NÃO feito: o picker <strong>não</strong>
+dispara <code>workspace_create</code> — escolher uma pasta é escolher, e criar é outra
+coisa. <code>Engine.Runners.PastaDoProjeto.criar/3</code> (RN-532) segue sem chamador, e
+ligá-lo exigiria uma rota HTTP nova na api, fora do escopo desta sessão. O
+conserto definitivo do casamento por substring — o engine mandar um código ao
+lado do texto, como o runner já faz com os cinco <code>motivo</code> da RN-532 — também
+é do lado do engine, e fica declarado no código</li>
+</ul>
+<hr>
+<h2 id="criar-projeto-não-provisiona-repositório-rn-541">Criar projeto não provisiona repositório (RN-541)</h2>
+<h3 id="rn-541">RN-541 — Criar um projeto NÃO cria repositório git; o bootstrap é adiado até o handoff do Arquiteto</h3>
+<p>Criar um projeto e provisionar o git eram, na prática, o mesmo gesto — e o que
+os unia era uma TELA. <code>ProvisioningPage</code> dispara <code>provisionRepository</code> no efeito
+de montagem e é o <strong>único</strong> chamador dele no web; o assistente navegava para lá
+ao confirmar, então todo projeto nascia com repositório e Gitflow completos, sem
+que ninguém tivesse pedido.</p>
+<p>O dono do produto quer o contrário: o que se gera por ora segue <strong>sem git</strong>, e o
+repositório só nasce quando o desenvolvimento começa de verdade — o momento em
+que o <strong>Arquiteto passa o handoff ao Dev Lead</strong>.</p>
+<p><strong>O mecanismo do adiamento é não navegar para aquela tela.</strong> Ao criar, o
+assistente vai direto para a página do PROJETO. Nada mais precisou ser desligado:
+como o disparo mora no <code>useEffect</code> de uma rota que deixou de ser visitada, deixar
+de visitá-la É o adiamento. A rota continua existindo e continua alcançável — o
+Dashboard leva a ela quando o provisionamento <strong>falhou</strong> e precisa ser retomado.</p>
+<p><strong>Provider e credencial saem da criação, e ficam na adoção.</strong> Sem repositório
+para criar agora, perguntar &quot;onde hospedar&quot; seria colher uma decisão que a tela
+não usa, e o passo de credencial cobraria um PAT para um repositório que ninguém
+vai criar. Adotar é o oposto por construção — aponta para um repositório que já
+existe, e sem provider não há o que apontar. O assistente passa a ter <strong>três</strong>
+passos ao criar e quatro ou cinco ao adotar.</p>
+<p><strong>A tela de Confirmar deixa de prometer o Gitflow.</strong> Ela anunciava &quot;N passos de
+Gitflow&quot; ao criar, contando <code>BOOTSTRAP_STEPS</code>; isso passaria a ser mentira no
+instante em que o bootstrap deixou de rodar ali. Passa a dizer QUANDO o
+repositório nasce, em vez de afirmar que já está nascendo.</p>
+<p><strong>Consequência declarada:</strong> entre a criação e o handoff, o projeto existe sem
+repositório. Nada quebra — <code>GET .../repository</code> responde <code>null</code> e não 404, a
+página do projeto já tem o estado &quot;repositório não provisionado&quot; e a seção de
+Repositório em Configurações simplesmente não aparece —, mas todo caminho que
+precise de working tree falha NOMEADO até lá (<code>remoto_de_trabalho</code> devolve
+<code>:not_found</code>, e <code>open_adr_pr</code> recusa com &quot;Projeto sem repositório provisionado&quot;).
+Isso deixa de ser borda e passa a ser o estado normal do começo de um projeto.</p>
+<p><strong>O gatilho é a próxima entrega</strong>, e sem ele um projeto criado hoje ficaria sem
+repositório para sempre: o aceite do handoff Arquiteto → Dev Lead passa a
+provisionar <code>local</code>, o único provider que não pede credencial.
+Desde a <a href="../api.html#rn-582">RN-582</a>, esse gatilho é o aceite do handoff <strong>ao Arquiteto</strong>
+(o do Dev Lead ficou como segunda porta), e ativar a execução sem repositório é
+recusado.</p>
+<p>O aviso &quot;no plano gratuito do GitHub, repositório privado não aceita proteção de
+branch&quot; saiu da tela junto — não por ter deixado de ser verdade, mas por ter
+ficado <strong>inalcançável</strong>: a condição era <code>provider === 'github'</code>, e ao criar não
+há mais provider escolhido.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/NewProjectWizard.tsx:379</code> (<code>stepKeys</code>, agora
+dependente de <code>adotando</code>), <code>:540</code> (a guarda de <code>provider</code> restrita à adoção) e
+<code>:590</code> (a navegação para <code>/projects/$projectId</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/NewProjectWizard.test.tsx</code>, <code>describe('NewProjectWizard — o git é adiado')</code>
+— &quot;criar não passa mais pela página de provisionamento — vai direto ao
+projeto&quot;, &quot;criar tem TRÊS passos: provider e credencial saíram&quot;, &quot;adotar
+mantém provider e credencial&quot; e &quot;a tela de Confirmar não promete mais o
+Gitflow agora&quot;</li>
+<li><strong>Origem:</strong> pedido do dono do produto — <em>&quot;o que for gerado por hora segue sem
+git; git mesmo só será iniciado após iniciar desenvolvimento em projetos
+novos, neste momento que deve rodar o bootstrap&quot;</em></li>
+</ul>
+<hr>
+<h2 id="a-tela-reconhece-um-agente-local-de-máquina-já-pareado-rn-548-fase-30">A tela reconhece um agente local de MÁQUINA já pareado (RN-548, FASE 30)</h2>
+<h3 id="rn-548">RN-548 — Com chave de MÁQUINA ativa, o painel do runner para de mandar parear e passa a dizer o que falta — sem nunca afirmar que o agente está de pé</h3>
+<p>Sessão 7 da <a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30</a>, decidida pelo
+<a href="../../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154</a>. É a metade de WEB da
+identidade de máquina: a <a href="../produto.html#rn-543">RN-543</a> fez a listagem de chaves marcar a
+ESPÉCIE (<code>projeto</code> | <code>maquina</code>) <em>&quot;para que uma chave de máquina não ficasse
+invisível em toda tela&quot;</em>, e ficou sem consumidor. Esta RN é o consumidor.</p>
+<p><strong>O defeito, medido.</strong> <code>RunnerOnboardingPanel</code> é o painel que os TRÊS pontos de
+onboarding montam (<code>TerminalPanel</code>, <code>FolderBrowserModal</code> e o passo <code>workspace</code>
+do <code>NewProjectWizard</code>), e ele tinha uma pergunta só: <em>&quot;configure a pasta&quot;</em>.
+Com a chave de máquina do ADR 0154, essa pergunta passa a estar errada no caso
+mais comum — a máquina já foi pareada, o que falta é o agente estar rodando.
+Mandar a pessoa repetir o pareamento que a máquina já tem é o painel
+respondendo à pergunta errada, com um fluxo que termina no terminal dela.</p>
+<p><strong>Sete estados, e nenhum vira o outro
+(<a href="parte-01.html#rn-088">RN-088</a>/<a href="parte-03.html#rn-470">RN-470</a>).</strong> <code>semPapel</code>
+(não perguntamos),
+<code>verificando</code> (perguntamos e não voltou), <code>naoSei</code> (a pergunta falhou),
+<code>semChaveDeMaquina</code> (voltou e não há), <code>revogada</code> (houve e foi revogada),
+<code>pareadaNuncaUsada</code> (há chave ativa que agente nenhum usou — a ÓRFÃ da
+<a href="../api.html#rn-519">RN-519</a> renascida na espécie nova) e <code>pareada</code>. <strong>&quot;Não sei&quot; nunca
+vira &quot;não tem&quot;</strong>, e os dois vazios têm textos diferentes porque o gesto é
+diferente: um pede parear, o outro explica por que o agente parou de conectar.
+A falha é derivada de <code>isError</code> e não de haver <code>status</code> — erro de rede não tem
+status, e derivá-la do status deixaria um <code>fetch</code> recusado girando em
+&quot;verificando…&quot; para sempre, que é mentira por omissão depois de dez segundos.
+<code>semChaveDeMaquina</code> é o único que renderiza NADA, e de propósito: o painel
+inteiro já É a resposta para &quot;nenhuma máquina pareada&quot;.</p>
+<p><strong>Reconhecer NÃO é dizer que o agente está de pé, e a régua é a de sempre.</strong>
+<code>workspaceVerifiedAt</code> é registro de uma confirmação e não batimento
+(<a href="parte-03.html#rn-468">RN-468</a>); chave registrada é a mesma coisa um passo antes — ela
+prova que a máquina foi pareada um dia, nunca que há processo vivo agora. Uma
+tela que confundisse as duas seria PIOR que a de hoje, porque a de hoje ao
+menos não mente. Por isso o tom do alerta é <code>accent</code> e nunca <code>success</code> (verde
+leria como &quot;está de pé&quot; — a mesma aritmética que <code>AmbienteDoProjeto</code> faz na
+linha do runner), a ressalva é dita em texto ao lado, e quem responde pelo
+AGORA continua sendo a <code>EsperaDoRunner</code> (<a href="parte-03.html#rn-474">RN-474</a>), REUSADA e não
+reescrita: reconhecida a máquina, o que falta é o agente CONECTAR, que é
+exatamente a pergunta dela.</p>
+<p><strong>E há um segundo limite, que o dado impõe e nenhuma redação apaga: a lista é
+da CONTA, não deste navegador.</strong> <code>runner_device_keys</code> não sabe de que máquina o
+navegador está falando, então o mais forte que a tela pode afirmar é <em>&quot;sua
+conta tem uma máquina pareada&quot;</em> — nunca <em>&quot;esta máquina está pareada&quot;</em>. É por
+isso que o fluxo do navegador
+(<a href="../../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118</a>) <strong>não é
+removido</strong>: ele muda de LUGAR, para um <code>&lt;details&gt;</code> cujo rótulo nomeia o único
+caso em que ainda é a resposta (&quot;estou em outra máquina&quot;). Aposentá-lo é o
+<code>BRB-031</code>, decisão do mantenedor, e não consequência desta entrega.</p>
+<p><strong>A ESPÉCIE aparece, e o que aparece é o CUSTO dela.</strong> O painel não lista
+chaves nem oferece revogação — isso é a tela que o web nunca ganhou, a metade
+aberta da RN-519, e é frente própria. O que
+ele diz é o que a espécie significa para quem lê: uma chave de máquina atende
+TODOS os projetos do dono em modo <code>runner</code>, e revogá-la derruba o agente local
+em todos eles (<a href="../api.html#rn-520">RN-520</a>, cujo alcance <code>{projeto, usuário}</code> não muda
+aqui). Sem essa frase, a marca da RN-543 seria decoração.</p>
+<p><strong>O papel é o do ENDPOINT, e a api é a autoridade.</strong> O mínimo sai de
+<code>roleAtLeast</code> (<a href="../api.html#rn-102">RN-102</a>) contra <code>developer</code>, o
+que <code>RunnerDeviceKeysController</code> exige nas três rotas — a tela deixa de
+perguntar o que a api negaria, e diz por quê UMA vez em TEXTO (<code>title</code> em
+elemento <code>disabled</code> não abre no Chromium). Isso <strong>não é fronteira de
+segurança</strong>: quem recusa é o <code>RolesGuard</code>. O 403 de verdade cai no MESMO
+estado, e não é redundância — o papel lido é o de WORKSPACE e quem autoriza é
+o EFETIVO do projeto (<a href="parte-03.html#rn-471">RN-471</a>), uma SOBREPOSIÇÃO nos dois sentidos:
+o proxy evita a pergunta obviamente perdida, a api corrige o proxy.</p>
+<p><strong>Onde aparece, e por que não é igual nos três montadores.</strong> O reconhecimento é
+por PROJETO, porque a rota é <code>GET /projects/:projectId/runner-device-keys</code> —
+existe em <code>TerminalPanel</code> e <code>FolderBrowserModal</code>, que sempre têm projeto, e no
+<code>NewProjectWizard</code> só DEPOIS da criação antecipada (<a href="parte-03.html#rn-437">RN-437</a>). Sem
+<code>projectId</code> não há a quem perguntar e o painel fica byte a byte como era. A
+diferença não é escolha de desenho: é a forma do endpoint.</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/web/src/lib/agente-de-maquina.ts</code> (a derivação inteira —
+<code>reconhecerAgenteDeMaquina</code>, <code>podeLerChavesDeDispositivo</code>,
+<code>maquinaJaPareada</code>), <code>apps/web/src/components/RunnerOnboardingPanel.tsx:173</code>
+(as duas consultas e o <code>ReconhecimentoDeMaquina</code>),
+<code>apps/web/src/components/RunnerOnboardingPanel.module.css</code>
+(<code>.reconhecimento</code>, <code>.gesto</code>), <code>apps/web/src/lib/api-client.ts:442</code>
+(<code>listRunnerDeviceKeys</code>), <code>apps/web/src/lib/api-types.ts:807</code>
+(<code>RunnerDeviceKeyListItem</code>, <code>RunnerDeviceKeyEspecie</code>),
+<code>apps/web/src/locales/{en,pt-BR}/terminal.json</code> (<code>agenteDeMaquina.*</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/agente-de-maquina.test.ts</code> — o caminho feliz
+(ativa e usada, com o uso MAIS RECENTE entre N) e os sete estados sem
+colapso, inclusive a falha SEM status e a chave de PROJETO que NÃO conta;
+<code>apps/web/src/components/RunnerOnboardingPanel.test.tsx</code> — o painel
+anunciando o pareamento com o gesto do serviço e o fluxo do ADR 0118
+recolhido e ainda alcançável, as duas ressalvas (&quot;não é agente rodando&quot;,
+&quot;é da sua CONTA&quot;) mais a do alcance, a chave REVOGADA voltando a mandar
+parear, a consulta falhada dizendo que não sabe, o papel abaixo de
+<code>developer</code> sem chamar a rota, e o wizard sem <code>projectId</code> sem a quem
+perguntar</li>
+<li><strong>Lacuna DECLARADA, FECHADA depois pela <a href="../api.html#rn-552">RN-552</a>:</strong> quando esta RN
+fechou, ninguém CRIAVA chave de máquina (era o <code>install.sh</code>, ADR 0155 ponto
+4, sessão 6), então esta tela só era exercitável com uma chave registrada à
+mão — a mesma metade que as RN-543 e RN-544 já declaravam. O comando que o painel oferece é
+<code>brabo-runner service status --project &lt;id&gt;</code>, a forma que existe HOJE; a
+forma por máquina chega com a unit da sessão 4 — <strong>FECHADO depois
+(AT-106)</strong>: reconhecida a chave de MÁQUINA, o painel oferece
+<code>brabo-runner service status --machine</code> (a unit de máquina da
+<a href="../runner.html#rn-545">RN-545</a>), e o bloco da chave de PROJETO segue oferecendo
+<code>--project &lt;id&gt;</code>; as duas espécies ativas mostram cada uma o seu. O comando
+continua sendo para a pessoa PERGUNTAR — a tela não afirma a resposta
+(chaves <code>agenteDeMaquina.comandoDeServico</code> e
+<code>chaveDeProjeto.comandoDeServico</code>, testes em <code>RunnerOnboardingPanel.test.tsx</code>
+nos dois ramos e no par). Uma chave de PROJETO ativa
+NÃO muda o painel: é o defeito irmão, um escopo abaixo, e fechá-lo é decisão
+à parte — <strong>FECHADO depois (AT-107)</strong>: o painel reconhece chave de PROJETO
+ativa DESTE projeto (<code>reconhecerChaveDeProjeto</code>, <code>lib/agente-de-maquina.ts</code>,
+mesma listagem e mesma <code>queryKey</code>, nenhuma rota nova), com o mesmo
+vocabulário — tom <code>accent</code>, chave registrada não é agente de pé, o gatilho é
+conferir o serviço — e o custo da ESPÉCIE dito: revogar derruba o agente
+NESTE projeto, não em todos. Chave de outro projeto e revogada não contam, e
+o <code>&lt;details&gt;</code> do ADR 0118 continua alcançável. E o web continua sem TELA onde listar ou revogar chave de
+dispositivo (a metade aberta da <a href="../api.html#rn-519">RN-519</a>) — esta entrega consome a
+listagem e não a constrói. <strong>FECHADA depois pela <a href="#rn-561">RN-561</a></strong>, que a
+constrói: a seção de Configurações reusa <code>podeLerChavesDeDispositivo</code> daqui
+e a MESMA <code>queryKey</code>, e por isso revogar por lá invalida o reconhecimento
+deste painel</li>
+<li><strong>ADR:</strong> <a href="../../adr/0154-chave-de-dispositivo-de-maquina.html">0154</a></li>
+<li><strong>Origem:</strong> FASE 30, sessão 7 —
+<a href="../../explanation/fase-30-runner-por-maquina.html">o recorte da fase</a></li>
+</ul>
+<hr>
+<h2 id="a-conversão-de-modo-deixa-de-ser-um-salto-no-escuro-rn-559-rn-560">A conversão de modo deixa de ser um salto no escuro (RN-559, RN-560)</h2>
+<h3 id="rn-559">RN-559 — A conversão para <code>mounted</code> abre o MESMO navegador de pastas do wizard; o ramo <code>runner</code> continua digitado, e a tela diz por quê</h3>
+<p><code>ExecutionModeSection</code> era o <strong>único dos cinco lugares</strong> do produto em que se
+escolhe uma pasta e se digitava o caminho <strong>no escuro</strong> — os outros quatro já
+abriam o <code>FolderBrowserModal</code> desde a <a href="parte-03.html#rn-473">RN-473</a>/<a href="#rn-504">RN-504</a>. A
+lacuna estava declarada no <code>CLAUDE.md</code> e o motivo declarado era do <strong>outro
+ramo</strong>: onboardar um runner ANTES de a conversão salvar registra chave num
+projeto que ainda não é <code>runner</code>, e <code>ConfirmProjectWorkspaceUseCase</code> recusa com
+400. Nada disso vale para <code>mounted</code>, e é isso que esta regra fecha.</p>
+<p><strong>Mesmo componente, mesmo transporte, nenhuma régua nova.</strong> O ramo <code>mounted</code>
+monta o <code>FolderBrowserModal</code> com <code>origem: { tipo: 'api', workspaceId }</code> — a
+mesma união discriminada que <code>NewProjectWizard</code> usa para esse modo
+(<a href="#rn-533">RN-533</a>), porque a pasta mora dentro da base do SERVIDOR
+(<a href="../../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141</a>) e é o servidor quem a
+enxerga. Não nasce navegador novo nem endpoint novo, e o navegador <strong>não
+garante</strong> caminho válido: quem valida continua sendo
+<code>validarExecutionModeEWorkspacePath</code> e o CHECK do banco.</p>
+<p><strong>O ramo <code>runner</code> NÃO ganha navegador, e isso é decisão, não esquecimento.</strong> O
+transporte dele (<code>{ tipo: 'runner', projectId }</code>) exige um runner conectado a
+ESTE projeto, e um projeto que ainda não é <code>runner</code> não tem nenhum — a espera
+terminaria num erro com cara de bug. A ordem <em>&quot;converte, depois onboarda&quot;</em> segue
+sendo decisão de produto à parte. O que muda é a tela passar a <strong>dizer</strong> isso em
+texto em vez de só não oferecer botão nenhum, que é a régua do
+<a href="../../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064</a>: tira-se o
+controle, nunca a informação.</p>
+<p><strong>A base é um estado de QUATRO valores, e eles não colapsam.</strong> A rota
+<code>GET workspaces/:workspaceId/projects-base</code> (<a href="../api.html#rn-500">RN-500</a>) pode estar em
+voo, ter falhado, ter respondido <code>null</code> ou ter respondido um caminho — e cada
+um desses tem texto PRÓPRIO, pela régua da <a href="parte-01.html#rn-088">RN-088</a>/<a href="parte-03.html#rn-468">RN-468</a>:
+<em>&quot;não sei&quot;</em> nunca vira <em>&quot;não tem&quot;</em>. O botão fica na tela apagado nos três
+primeiros, com o motivo dito em TEXTO logo abaixo, e não por <code>title</code> (que em
+elemento <code>disabled</code> não abre no Chromium).</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>estado da base</th>
+<th>o botão</th>
+<th>o que a tela diz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>em voo</td>
+<td>apagado</td>
+<td>&quot;consultando a base de projetos desta instalação&quot;</td>
+</tr>
+<tr>
+<td>a consulta falhou</td>
+<td>apagado</td>
+<td>não deu para SABER se ela existe; recarregue</td>
+</tr>
+<tr>
+<td>respondeu <code>null</code></td>
+<td>apagado</td>
+<td>esta instalação não declarou base</td>
+</tr>
+<tr>
+<td>respondeu um caminho</td>
+<td>vivo</td>
+<td>a base, NOMEADA, e que é nela que o navegador abre</td>
+</tr>
+</tbody>
+</table></div>
+<p>O modo <code>mounted</code> <strong>não sai do seletor</strong> quando a base falta, e essa é a
+diferença deliberada em relação ao wizard (<a href="#rn-513">RN-513</a>): um projeto que
+JÁ é <code>mounted</code> não pode ver o próprio modo sumir do controle por causa de uma
+consulta em voo. O que some é o NAVEGADOR, não a conversão.</p>
+<p><strong>O mínimo é o do ENDPOINT.</strong> <code>PUT projects/:projectId/execution-mode</code> e
+<code>GET workspaces/:workspaceId/projects-base</code> pedem os dois <code>maintainer</code>, lido por
+<code>roleAtLeast</code> sobre a <code>ROLE_ORDER</code> e nunca por uma lista de papéis à mão
+(<a href="../api.html#rn-102">RN-102</a>) — a seção fazia
+<code>role === 'owner' || role === 'maintainer'</code>, que acerta por acidente enquanto o
+mínimo é alto. Quem não alcança o mínimo não dispara a consulta da base: ela
+terminaria num 403 certo, e o <em>&quot;não sei&quot;</em> que ela produziria seria sobre a
+autorização, não sobre a base.</p>
+<p>O valor escolhido no navegador é tratado como valor DIGITADO: ele preenche o
+campo e só vai à api quando alguém confirma no botão da seção. Esta seção <strong>não
+vira autosave</strong> (<a href="parte-03.html#rn-469">RN-469</a>).</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/web/src/routes/settings/ExecutionModeSection.tsx:68</code> (os
+quatro estados da base, como união), <code>:211</code> (o mínimo por <code>roleAtLeast</code>),
+<code>:220</code> (a consulta que não sai para quem não alcança <code>maintainer</code>), <code>:260</code> (a
+derivação dos quatro), <code>:280</code> (o que o navegador exige para existir), <code>:414</code>
+(o botão, apagado e não escondido), <code>:423</code> (o texto do ramo <code>runner</code>), <code>:475</code>
+(o <code>FolderBrowserModal</code> com <code>origem: { tipo: 'api', workspaceId }</code>);
+<code>apps/web/src/locales/pt-BR/settings.json:231</code> e
+<code>apps/web/src/locales/en/settings.json:231</code> (<code>executionMode.path.*</code>, os cinco
+textos nos dois idiomas)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/settings/conversao-de-modo.test.tsx</code> — o
+caminho feliz (abrir o navegador, escolher <code>loja</code>, o campo preencher e a
+conversão enviar o que foi ESCOLHIDO, só depois do botão), a consulta da base
+FALHANDO (botão inerte, texto próprio, o modal não montando nem à força, e o
+campo continuando editável), a base AUSENTE com texto DIFERENTE do de falha e
+do de carregamento, o ramo <code>runner</code> sem botão e com o motivo em texto, e o
+papel abaixo de <code>maintainer</code> (controles apagados, valor vigente ainda
+visível, consulta da base não disparada)</li>
+<li><strong>Lacuna DECLARADA:</strong> o ramo <code>runner</code> desta seção <strong>continua digitado no
+escuro</strong> — a lacuna do <code>CLAUDE.md</code> encolheu para ele e não fechou. Fechá-la
+exige decidir a ordem &quot;converte, depois onboarda&quot;, que é decisão de produto à
+parte e segue sem dono. <em>Atualização:</em> a ordem foi decidida e medida na
+<a href="#rn-612">RN-612</a> — o ramo <code>runner</code> ganha o onboarding DEPOIS de salvar, e o
+navegador segue fora por outro motivo, dito lá</li>
+<li><strong>ADR:</strong> <a href="../../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">0111</a>,
+<a href="../../adr/0141-base-unica-dos-projetos-montados.html">0141</a></li>
+<li><strong>Origem:</strong> AT-049 (EP-021/HS-033)</li>
+</ul>
+<h3 id="rn-560">RN-560 — O aviso da conversão diz o que ela recusa, o que ela leva e o que ela NÃO leva — nomeando o caminho antigo</h3>
+<p>O aviso fixo da seção afirmava <em>&quot;isto migra a pasta de trabalho do agente&quot;</em>, nos
+dois idiomas. <code>ConvertProjectExecutionModeUseCase</code> <strong>não tem uma linha que copie
+ou mova conteúdo de pasta</strong>: ele move o <code>permissions.json</code> (a POLÍTICA, com
+allow/deny/ask intactos — <a href="../api.html#rn-448">RN-448</a>), zera <code>workspaceVerifiedAt</code>
+(<a href="../api.html#rn-450">RN-450</a>) e <code>mirrorPath</code> (<a href="../api.html#rn-515">RN-515</a>), desprovisiona o
+container ao SAIR de <code>container</code> (<a href="../api.html#rn-449">RN-449</a>) e grava o novo
+<code>workspacePath</code>. <code>materializarWorkspaceMontado</code> apenas CRIA a pasta nova
+(<a href="../api.html#rn-501">RN-501</a>). O que estiver na pasta antiga — <strong>trabalho não commitado
+incluído</strong> — fica lá, órfão.</p>
+<p>O órfão já era lacuna declarada no <code>CLAUDE.md</code> desde a
+<a href="../api.html#rn-447">RN-447</a>..<a href="../api.html#rn-450">450</a>. O que esta regra fecha não é o órfão: é a
+tela afirmando o CONTRÁRIO do que o servidor faz. Isto é correção de afirmação,
+não feature — migrar conteúdo entre modos segue fora, sem dono.</p>
+<p><strong>Três fatos, e não um parágrafo</strong>, porque respondem perguntas diferentes:</p>
+<ol>
+<li><strong>o que a conversão RECUSA</strong> — dev agent trabalhando ou travado agora vira
+409, e a frase da api é a que aparece no toast (o texto que já existia e
+continua valendo);</li>
+<li><strong>o que ela LEVA</strong> — a política do projeto muda de escopo com o conteúdo
+intacto;</li>
+<li><strong>o que ela NÃO leva</strong> — o conteúdo da pasta, trabalho não commitado
+incluído, <strong>nomeando o caminho antigo</strong>.</li>
+</ol>
+<p><strong>O aviso NOMEIA o caminho</strong> porque <em>&quot;fica no disco antigo&quot;</em> sem dizer QUAL
+disco manda a pessoa procurar. O valor está a uma linha de distância
+(<code>project.workspacePath</code>) e <strong>some da tela</strong> no instante em que a conversão
+salva. Quando não há caminho a nomear — o projeto é <code>container</code>, e a pasta
+antiga é um volume do SERVIDOR — a frase é OUTRA, apontando a pasta gerenciada:
+uma variante com <code>{{caminho}}</code> vazio diria <em>&quot;o que estiver em &quot;</em>, que é a tela
+recusando nomear o que sabe. É o caso em que a pessoa tem MENOS como adivinhar.</p>
+<p><strong>Ele não promete detecção.</strong> Perguntar ao disco <em>&quot;há trabalho não commitado?&quot;</em>
+é I/O por modo e impossível de responder para <code>runner</code> do lado da api: a pasta
+mora numa máquina que o servidor não enxerga. Não se mede, não se afirma
+(ADRs <a href="../../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">0041</a>/<a href="../../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">0042</a>).
+E ele não bloqueia nada: a conversão continua sendo a mesma chamada, com as
+mesmas recusas.</p>
+<p>O tom do <code>Alert</code> passou de <code>accent</code> para <code>warning</code>, porque o terceiro fato é uma
+PERDA de alcance e não uma informação neutra. Segue sem <code>role=&quot;alert&quot;</code>: é texto
+que já estava na tela quando ela abriu, e uma live region assertiva ali viraria
+interrupção sem causa.</p>
+<ul>
+<li>
+<p><strong>Código:</strong> <code>apps/web/src/routes/settings/ExecutionModeSection.tsx:333</code> (os
+três fatos, um por linha), <code>:337</code> (a variante que nomeia o caminho antigo × a
+da pasta gerenciada);
+<code>apps/web/src/locales/pt-BR/settings.json:220</code> e
+<code>apps/web/src/locales/en/settings.json:220</code> (<code>executionMode.warning.*</code>, os
+quatro textos nos dois idiomas — <code>en</code> é o idioma default do app
+(<a href="../api.html#rn-425">RN-425</a>), e um aviso honesto só em português é a mesma mentira com
+sotaque)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>apps/web/src/routes/settings/conversao-de-modo.test.tsx</code> — o
+caminho feliz (o aviso contendo o caminho antigo E as palavras &quot;trabalho não
+commitado&quot;), a variante sem caminho antigo (projeto <code>container</code> apontando a
+pasta gerenciada, e a variante com caminho NÃO renderizada), e a prova
+negativa nos DOIS bundles de idioma: a promessa de migração não sobrevive em
+nenhum deles, e as quatro chaves existem em ambos</p>
+</li>
+<li>
+<p><strong>As consequências CONDICIONAIS (AT-144).</strong> A pergunta que esta regra deixou
+em aberto — listar TODAS as consequências ou só a que enganava — foi decidida
+pelo mantenedor: <strong>só as que valem para ESTE projeto</strong>. O aviso acrescenta,
+depois dos três fatos, uma linha por consequência que se aplica, e NENHUMA
+para o que não se aplica:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>linha</th>
+<th>quando aparece</th>
+<th>a mesma condição do caso de uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>o destino de espelho é zerado, NOMEADO</td>
+<td><code>mirrorPath</code> preenchido</td>
+<td>toda conversão zera (<a href="../api.html#rn-515">RN-515</a>)</td>
+</tr>
+<tr>
+<td>o container registrado é parado e removido</td>
+<td>o projeto é <code>container</code> HOJE e o ciclo de vida existe fora de <code>removed</code></td>
+<td><code>removerContainerSeExistir</code> só roda ao SAIR de <code>container</code> (<a href="../api.html#rn-449">RN-449</a>)</td>
+</tr>
+<tr>
+<td>&quot;não consegui ler se há container&quot;</td>
+<td>o projeto é <code>container</code> e a leitura do ciclo de vida FALHOU</td>
+<td>— (&quot;não sei&quot; nunca vira &quot;não tem&quot;, <a href="parte-03.html#rn-468">RN-468</a>)</td>
+</tr>
+<tr>
+<td>a pasta confirmada em <code>&lt;data&gt;</code> deixa de valer</td>
+<td><code>workspaceVerifiedAt</code> preenchido</td>
+<td>toda conversão zera (<a href="../api.html#rn-450">RN-450</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>A linha do container <strong>não</strong> aparece em <code>mounted</code>/<code>runner</code> mesmo com container
+registrado, porque o caso de uso não o remove ali — o aviso diria o contrário
+do servidor, que é o defeito que esta regra existe para fechar. Os dados são
+os que a seção já tem (<code>Project</code>: <code>mirrorPath</code>, <code>workspaceVerifiedAt</code>,
+<code>executionMode</code>) mais o ciclo de vida do container, que a seção NÃO carregava:
+ele vem da rota que JÁ existe, <code>GET projects/:projectId/container/lifecycle</code>
+(<code>viewer</code>), consultada só quando o projeto é <code>container</code> — nenhum endpoint
+novo. Enquanto a leitura está em voo, a linha simplesmente não aparece.</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/web/src/routes/settings/ExecutionModeSection.tsx:106</code>
+(<code>consequenciasCondicionais</code>), <code>:122</code> (<code>containerParaOAviso</code>, os três
+estados), <code>:240</code> (<code>cicloQuery</code>, só em <code>container</code>), <code>:344</code> (as quatro
+linhas no <code>Alert</code>)</li>
+<li><strong>Teste:</strong> o describe <code>AT-144</code> em
+<code>apps/web/src/routes/settings/conversao-de-modo.test.tsx</code> — nenhuma
+condição (nenhuma linha a mais), container registrado, linha <code>removed</code> que
+não conta, leitura FALHANDO com texto próprio, <code>mounted</code> com espelho (a
+linha do espelho sim, a do container não, e a consulta nem sai), <code>runner</code>
+com pasta confirmada (com a data), e as três condicionais em <code>en</code></li>
+</ul>
+</li>
+<li>
+<p><strong>ADR:</strong> <a href="../../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">0111</a></p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-050 (EP-021/HS-034); as condicionais, AT-144 (EP-021/HS-034)</p>
+</li>
+</ul>
+<h2 id="a-chave-de-dispositivo-ganha-tela-e-a-tela-diz-o-alcance-de-revogar-rn-561">A chave de dispositivo ganha tela, e a tela diz o alcance de revogar (RN-561)</h2>
+<h3 id="rn-561">RN-561 — A aba Configurações lista e revoga chave de dispositivo, marcando a ESPÉCIE — porque revogar a de MÁQUINA derruba o agente local em TODOS os projetos do dono</h3>
+<p>A metade que faltava da <a href="../api.html#rn-519">RN-519</a>, declarada por escrito desde então no
+<code>CLAUDE.md</code>: <em>&quot;o que segue aberto é só a TELA: <code>apps/web</code> não tem onde listar
+nem revogar, então quem quiser revogar chama a rota&quot;</em>. As duas rotas existem —
+o <code>DELETE</code> desde o
+<a href="../../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118</a> e o
+<code>GET</code> desde a RN-519 —, e <strong>tela nenhuma as usava</strong>. Esta RN é a tela, e ela
+<strong>não abre rota nova</strong>: o que a listagem já devolve basta para desenhar tudo o
+que segue.</p>
+<p><strong>Onde ela mora, e por que de PROJETO.</strong> Ela leva a aba Configurações de 17 para
+<strong>18</strong> seções e é a <strong>13ª na ordem de render</strong> (<code>device-keys</code>, grupo <code>pessoas</code>,
+logo depois de <code>access-tokens</code> — a vizinha que faz o mesmo com PAT); a ordem do
+registro é a MESMA do barrel, porque é ela que o scroll-spy usa. De projeto
+porque o endpoint é
+<code>/projects/:projectId/runner-device-keys</code>: uma tela de CONTA exigiria rota nova,
+e o recorte é sobre a que existe.</p>
+<p><strong>A ESPÉCIE aparece, e não é enfeite — é o alcance da única ação irreversível
+da tela.</strong> Desde a <a href="../produto.html#rn-543">RN-543</a> a listagem marca <code>projeto</code> | <code>maquina</code>, e
+uma chave de MÁQUINA (<code>project_id</code> nulo) <strong>serve todos os projetos do dono</strong> e
+por isso aparece na lista de TODOS eles. Mostrá-la sem a marca faria a tela
+afirmar que é &quot;a chave deste projeto&quot;, e quem clicasse em revogar acharia que
+derruba o agente local aqui quando derruba <strong>em todos</strong> — a tela mentiria
+justamente sobre o que menos pode errar. A marca é <code>warning</code> para a de máquina
+e <code>muted</code> para a de projeto, e <strong>nunca <code>success</code></strong>: verde leria como &quot;está de
+pé&quot;, que é a aritmética que a <a href="#rn-548">RN-548</a> já recusou.</p>
+<p><strong>A confirmação DEPENDE da espécie, e diz também o custo colateral.</strong> Revogar
+abre um diálogo com TRÊS frases, e a do meio é a que muda: a de máquina nomeia
+<em>todos os seus projetos em modo runner</em> (o laço de
+<code>RevokeRunnerDeviceKeyUseCase</code> sobre <code>listRunnerModeReachableBy</code>), a de projeto
+nomeia <em>o projeto dela</em>. Um texto só para as duas mentiria numa das metades. A
+terceira frase é o custo que a <a href="../api.html#rn-520">RN-520</a> declarou e que esta entrega
+<strong>não muda</strong>: o alvo da desconexão é <code>{projeto, usuário}</code> e nunca <code>{chave}</code>, então
+outro runner do mesmo usuário no mesmo projeto também cai — mesmo autenticado
+por PAT ou por outra chave — e reconecta sozinho se a credencial dele ainda
+valer.</p>
+<p><strong>Uso registrado NÃO é agente de pé, e o vocabulário é o MESMO da RN-548.</strong>
+<code>lastUsedAt</code> é a classe de dado do <code>workspaceVerifiedAt</code> (<a href="parte-03.html#rn-468">RN-468</a>):
+registro de uma confirmação, nunca batimento. A ressalva é dita em TEXTO na
+legenda, e a coluna de status fala de REVOGAÇÃO (&quot;ativa&quot;/&quot;revogada&quot;, um fato
+sobre a linha), nunca de conexão — quem sabe do AGORA continua sendo o canal do
+terminal. Inventar um segundo vocabulário para a mesma distinção seria a tela
+dizendo a mesma coisa de dois jeitos, e um dos dois envelheceria.</p>
+<p><strong>Cinco estados, e nenhum vira o outro
+(<a href="parte-01.html#rn-088">RN-088</a>/<a href="parte-03.html#rn-470">RN-470</a>).</strong> Nenhuma chave
+(&quot;Nenhuma chave de dispositivo sua serve este projeto&quot;), chave REVOGADA (que
+<strong>continua na lista</strong> por decisão da RN-519 — sumir com a linha faria a tela
+afirmar que nunca existiu, e ela não ganha botão porque revogar de novo, ainda
+que idempotente na api, sugeriria efeito que não sobrou), <code>lastUsedAt</code> NULO (a
+chave ÓRFÃ da <a href="parte-03.html#rn-473">RN-473</a>: registrada por uma aba que fechou no meio do
+fluxo e nunca usada por runner nenhum — texto próprio, e uma explicação abaixo
+da tabela que só aparece quando existe uma, porque explicar o que não ocorre é
+ruído), &quot;ainda não carregou&quot; e &quot;não consegui ler&quot;. <strong>&quot;Não sei&quot; nunca vira &quot;não
+tem&quot;.</strong></p>
+<p><strong>O papel é o do ENDPOINT, e é o EFETIVO do projeto.</strong> O mínimo é <code>developer</code>
+— o que <code>RunnerDeviceKeysController</code> exige nas TRÊS rotas
+(<a href="../api.html#rn-102">RN-102</a>) — e a comparação sai da MESMA função
+que a RN-548 criou (<code>podeLerChavesDeDispositivo</code>, sobre <code>roleAtLeast</code>), nunca
+uma segunda régua e nunca <code>role === 'x' || role === 'y'</code> à mão. O que muda em
+relação à RN-548 é o INSUMO: lá o painel lia o papel de WORKSPACE e <strong>declarava</strong>
+a lacuna, porque monta em lugares que não buscam <code>project_members</code>; aqui os
+dados estão à mão — a seção mora na mesma aba que <code>MembersSection</code>, com a MESMA
+<code>queryKey</code>, e o react-query deduplica —, então o papel é composto como no caso
+de uso (<code>projectRole ?? workspaceRole</code>, uma SOBREPOSIÇÃO nos dois sentidos,
+<a href="parte-03.html#rn-471">RN-471</a>) e a lacuna <strong>fecha</strong> em vez de se repetir. Papel AUSENTE não
+é papel INSUFICIENTE: enquanto a lista de membros está em voo a tela diz que
+está verificando, e não acusa quem lê de não alcançar <code>developer</code>. Quem não
+alcança <strong>continua vendo</strong> a seção inteira, o que uma chave de dispositivo é e o
+que revogar a de máquina custa — some o CONTROLE, nunca a INFORMAÇÃO
+(<a href="../../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064</a>) —, e o motivo é dito UMA vez
+em TEXTO (<code>title</code> em elemento <code>disabled</code> não abre no Chromium). Como as três
+rotas pedem o MESMO papel, quem não alcança também não vê a LISTA: a tela deixa
+de perguntar o que a api negaria, em vez de transformar um 403 previsível em
+&quot;não consegui ler&quot;. Isto <strong>não é fronteira de segurança</strong> — quem recusa é o
+<code>RolesGuard</code>.</p>
+<p><strong>Uma por vez, e por isso não há desfecho de lote.</strong> A tela não oferece
+&quot;revogar todas&quot;, então a régua da <a href="parte-03.html#rn-469">RN-469</a> — ação de UI que vira N
+chamadas não é transação, e a tela diz isso — não se aplica: oferecer o lote
+criaria um desfecho parcial a narrar para uma ação que ninguém pediu. Falha na
+revogação mostra a frase da PRÓPRIA api e a linha <strong>continua</strong> na lista.</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/web/src/routes/settings/RunnerDeviceKeysSection.tsx:76</code>
+(a seção inteira; o papel efetivo em <code>:107</code>, a consulta em <code>:130</code>, a
+confirmação por espécie em <code>:326</code>);
+<code>apps/web/src/routes/settings/sumario.ts:62</code> (a entrada nova, 13ª na ordem de
+render, das 18);
+<code>apps/web/src/routes/ProjectSettingsTab.tsx:86</code> (a composição, na MESMA
+ordem); <code>apps/web/src/locales/{en,pt-BR}/settings.json</code>
+(<code>runnerDeviceKeys.*</code>). Consome <code>listRunnerDeviceKeys</code>/
+<code>revokeRunnerDeviceKey</code> (<code>apps/web/src/lib/api-client.ts:431</code>) e
+<code>podeLerChavesDeDispositivo</code> (<code>apps/web/src/lib/agente-de-maquina.ts:68</code>) sem
+alterar nenhum dos dois</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/settings/chaves-de-dispositivo.test.tsx</code> — as
+duas espécies marcadas na mesma lista; a revogada que fica, marcada e sem
+botão; a órfã com texto próprio e a explicação que NÃO aparece sem ela; vazio
+e falha com textos diferentes; a ressalva de que uso registrado não é agente
+de pé; o aviso de alcance nas DUAS espécies, com a chamada saindo só depois
+de confirmar; cancelar sem revogar; a falha trazendo a frase da api com a
+chave ainda na lista; <code>viewer</code> sem chamar a rota e com o motivo em texto; a
+sobreposição do papel de projeto nos DOIS sentidos; e o papel ausente que
+diz &quot;verificando&quot; em vez de acusar</li>
+<li><strong>Fica declarado e NÃO fecha:</strong> (1) o <strong>alvo da revogação</strong> continua sendo
+<code>{projeto, usuário}</code> e nunca <code>{chave}</code> — a tela DIZ isso e não muda, porque
+mudar exige coluna nova em <code>runner_socket_tickets</code> e contrato novo de auth
+(RN-520), frente própria com ADR; (2) numa instalação <strong>sem PROJETO</strong>, a
+chave de máquina recém-criada pela <a href="../api.html#rn-552">RN-552</a> segue <strong>inalcançável</strong>:
+as duas rotas são de projeto, e sem projeto não há a quem perguntar — FECHOU
+na <a href="../api.html#rn-611">RN-611</a>, com rota e seção por CONTA; (3) a
+visão de <code>maintainer</code> (listar/revogar de qualquer usuário) continua FORA por
+decisão da RN-519, não por omissão desta tela; (4) sem E2E de navegador — o
+que se prova aqui é o que a tela AFIRMA, e isso a suíte de componente prova</li>
+<li><strong>Origem:</strong> AT-012 (EP-003/HS-007)</li>
+</ul>
+<hr>
+<h3 id="rn-568">RN-568 — A presença de QA, SecOps e dos membros de área no painel do time é decidida pela sessão INTEIRA, não pela janela de 200 eventos</h3>
+<p>A Visão geral e a aba Executores montam a roster com <code>deriveAgentRoster</code> sobre
+os ÚLTIMOS 200 eventos da sessão (<code>useSessionEvents</code>, <code>latest: true</code>). Dois dos
+fatos de presença saíam dessa janela: <code>gatesEverOpened</code> (qa e secops entram
+quando algum <code>pr.gate_changed</code>/<code>infra.gate_changed</code> já aconteceu) e
+<code>delegatedSubagents</code> (membro de área entra com delegação registrada). Os dois
+eventos são dos primeiros de uma execução — numa sessão longa eles saem da
+janela, e QA, SecOps e <code>qa-automacao</code> <strong>sumiam do painel</strong> de uma execução que
+continuava rodando. É a mesma classe de defeito que já tinha sido fechada para
+<code>executionActivated</code>, e o resumo do workspace (<a href="../api.html#rn-090">RN-090</a>) já agregava
+os dois fatos sobre a sessão inteira (<code>bool_or</code> e <code>selectDistinct</code> em
+<code>projects-summary.repository.ts</code>) — as duas telas o carregavam e ignoravam
+esses dois campos.</p>
+<p><strong>A regra:</strong> <code>deriveAgentRoster</code>/<code>rosterFactsFromEvents</code> aceitam um
+<code>agregado</code> OPCIONAL (<code>AgregadoDaSessao</code>), e as duas telas o preenchem com o
+resumo. Quatro decisões, cada uma com motivo:</p>
+<ol>
+<li><strong>Ausente é &quot;não li&quot;, nunca &quot;não houve&quot;.</strong> Sem resumo carregado (primeiro
+paint, erro), o fato sai só da janela, exatamente como antes. Leitura
+ausente nunca vira &quot;QA não está aqui&quot;.</li>
+<li><strong>O agregado SOMA à janela, não a substitui</strong> (OU lógico no gate, união nas
+delegações). Os dois fatos são MONÓTONOS dentro de uma sessão — gate que
+abriu não desabre, delegação registrada não some —, então a janela só
+produz falso NEGATIVO, nunca falso positivo. Um <code>false</code> agregado que
+discorde de um gate VISTO na janela é resumo atrasado (as duas leituras
+têm cadências próprias de poll), e não pode esconder QA.</li>
+<li><strong>Só vale quando o resumo é da MESMA sessão que a tela lê</strong>
+(<code>latestSessionId === sessionId</code>). O resumo agrega a sessão mais RECENTE
+do projeto; a Visão geral lê essa mesma sessão, mas a aba Executores lê a
+sessão de EXECUÇÃO vigente (<a href="../api.html#rn-139">RN-139</a>). Uma ideação aberta depois
+faz as duas divergirem, e aí o agregado seria de OUTRA sessão — a tela
+volta a decidir só pela janela.</li>
+<li><strong>Só a PRESENÇA muda.</strong> <code>rosterFromFacts</code> (a regra única, compartilhada com
+o card do dashboard) fica intacto, e o STATUS de cada agente (<code>gateStatus</code>,
+<code>subagentStatus</code>) continua lido da janela. Nenhuma requisição nova e o teto
+de 200 não muda.</li>
+</ol>
+<p><code>delegatedSubagents</code> entrou pelo MESMO molde porque cabe sem mudar regra: a
+tabela <code>delegations</code> que o resumo lê e os eventos <code>delegation.*</code> que a janela
+lê nascem juntos em <code>RecordDelegationUseCase</code> (uma linha, um evento, os três
+desfechos), então os dois conjuntos descrevem a mesma coisa.</p>
+<p><strong><code>executionActivated</code> (AT-130).</strong> É o terceiro fato do mesmo molde: a aba
+Executores o lia do resumo SEM a guarda do item 3, então com uma sessão mais
+nova que a de execução o resumo (dela) dizia <code>false</code> e os dev agents sumiam —
+ou <code>true</code>, e apareciam sem prova. Agora ele vai em <code>agregado.executionActivated</code>
+só quando <code>latestSessionId === sessionId</code>, e <code>deriveAgentRoster</code> o SOMA (OU
+lógico, monótono) à janela e ao parâmetro, que também passa a olhar
+<code>execution.activated</code> nos eventos. Sem campo novo na API. Testes:
+<code>ProjectExecutorsTab.test.tsx</code> (resumo de OUTRA sessão, nos dois sentidos).
+<strong>Segue aberto:</strong> com a sessão de execução longa E o resumo de outra sessão, o
+evento pode ter saído da janela e a aba volta a decidir só por ela — é o custo
+da guarda, o mesmo dos outros dois fatos.</p>
+<ul>
+<li>
+<p><strong>Código:</strong> <code>apps/web/src/lib/agent-status.ts:356</code> (<code>AgregadoDaSessao</code>),</p>
+</li>
+<li>
+<p><strong>Código:</strong> <code>apps/web/src/lib/agent-status.ts:356</code> (<code>AgregadoDaSessao</code>),
+<code>:296</code> (o parâmetro opcional de <code>rosterFactsFromEvents</code>), <code>:304</code> (a união das
+delegações), <code>:312</code> (o OU do gate), <code>:410</code> (o parâmetro repassado por
+<code>deriveAgentRoster</code>); <code>apps/web/src/routes/ProjectOverviewTab.tsx:97</code> e
+<code>apps/web/src/routes/ProjectExecutorsTab.tsx:111</code> (o agregado com a guarda
+de sessão)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>apps/web/src/lib/agent-status.test.ts:628</code> (o bloco inteiro:
+<code>:633</code> gate fora da janela traz QA/SecOps com status da janela, <code>:658</code> sem
+agregado a janela decide sozinha, <code>:676</code> <code>false</code> agregado não esconde gate
+visto na janela); <code>apps/web/src/routes/ProjectExecutorsTab.test.tsx:385</code>
+(QA e membro de área voltam pelo resumo), <code>:397</code> (resumo de outra sessão não
+decide); <code>apps/web/src/routes/ProjectOverviewTab.test.tsx:301</code> (SecOps volta
+pelo resumo)</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-047 — a lacuna declarada no <code>CLAUDE.md</code> e nos comentários das
+duas telas</p>
+</li>
+</ul>
+<h3 id="rn-572">RN-572 — A árvore do time traduz todo tipo <code>dev.*</code> que o engine emite, e só diz trabalho em curso onde o painel diz <code>trabalhando</code></h3>
+<p>Numa instalação real (14/09) os dev agents &quot;não saíram do <em>começou a task</em>&quot;.
+O event log tinha <code>dev.started</code> seguido de <code>dev.blocked_by_container</code>, com o
+<code>reason</code> por extenso (<a href="../engine.html#rn-502">RN-502</a>). A árvore do time
+(<code>timeline-tree.ts</code>) não tinha tradução para o bloqueio — o que não está em
+<code>TRADUCAO</code> é descartado —, então o ramo parava no marco anterior e a frase do
+presente afirmava trabalho sobre um agente parado. O painel do time, na mesma
+tela de execução, já dizia <code>aguardando</code> para o mesmo evento
+(<code>DEV_STATUS_EVENTS</code>, <a href="../ci.html#rn-411">RN-411</a>): duas telas, duas tabelas, e só uma
+delas estava coberta pela comparação com o vocabulário do engine.</p>
+<p><strong>A regra</strong>, em três partes:</p>
+<ol>
+<li><strong>Todo tipo <code>dev.*</code> que o engine emite tem decisão na árvore</strong> — traduzido
+em <code>TRADUCAO</code> ou declarado em <code>TRADUCAO_FORA</code> com o motivo (vazia hoje).
+Omitir deixou de ser possível: <code>scripts/ci/vocabulario-de-eventos-dev.spec.ts</code>
+deriva o vocabulário do engine pelo mesmo extrator do inventário de eventos
+e reprova, nomeando o tipo, o que faltar; e reprova também o tipo <code>dev.*</code>
+traduzido que o engine não emite. Na primeira rodada ele achou DOIS
+faltando (<code>dev.blocked_by_container</code> e <code>dev.error</code>) e UM sobrando
+(<code>dev.rearmed</code>, que a api grava com ator <code>user</code> e que por isso nunca chegou
+a ramo nenhum — a árvore só pendura marco de ator <code>agent</code>).</li>
+<li><strong>Se o último marco de um dev agent é trabalho em curso não se decide na
+árvore.</strong> Para marco <code>dev.*</code>, o ramo só fica ATIVO quando o painel dá
+<code>trabalhando</code> ao mesmo evento (<code>statusDoEventoDev</code>, lido de
+<code>DEV_STATUS_EVENTS</code>). <code>aguardando</code>, <code>ocioso</code>, <code>falhou</code> e <code>travado</code> deixam o
+ramo parado — e com eles <code>dev.idle</code>, <code>dev.blocked</code>, <code>dev.awaiting_gate</code>,
+<code>dev.awaiting_approval</code> e <code>dev.idle_tripped</code>, que antes também contavam
+como ativos. Tipo <code>dev.*</code> que o painel não decidiu NÃO vira ativo: na
+dúvida a tela não afirma trabalho.</li>
+<li><strong>O bloqueio por container é marco próprio</strong> (<code>espera</code>, cor de
+<code>warning</code>, a mesma do gate), com o <code>reason</code> do engine como detalhe — é ele
+que diz o que fazer. E <code>dev.started</code> deixa de dizer &quot;começou a task&quot;:
+medido no engine, ele sai ao RECEBER a ordem de trabalhar, antes de
+<code>try_claim</code> (<code>DevAgentServer.handle_cast(:work)</code>); passa a dizer
+&quot;procurando task&quot;, e quem afirma a task é <code>dev.working</code>, que agora mostra o
+título dela.</li>
+</ol>
+<p><strong>O que esta regra NÃO faz, e por quê:</strong></p>
+<ul>
+<li>
+<p><strong><code>container.start_failed</code> não entra na árvore.</strong> É a razão do bloqueio,
+mas o ator é <code>system</code> (<code>action-executor</code>): pendurá-lo no ramo de um dev
+agent seria inventar autoria, e o único outro lugar da estrutura, o
+<code>tronco</code>, NÃO É RENDERIZADO por consumidor nenhum (medido:
+<code>AgentTimelineTree</code> e a seção Atividades do <code>Shell</code> leem só <code>ramos</code>). O
+evento continua no log cronológico, a um clique, e o ramo bloqueado já diz,
+pelo <code>reason</code>, que falta subir o container.</p>
+</li>
+<li>
+<p><strong>Os rótulos da árvore ficaram em pt-BR fixo nesta correção</strong> — migrá-los
+era mudança da tela inteira. A AT-134 fez essa migração depois, e ela NÃO
+mexeu na regra acima: a DECISÃO por tipo (se vira nó, que <code>MarcoTipo</code>, que
+detalhe) continua em <code>TRADUCAO</code>, no código, e é ela que o spec compara com o
+engine; só o TEXTO saiu, como CHAVE (<code>ChaveDeRotulo</code>) resolvida em
+<code>executors:timelineTree.label.*</code>, com a frase do presente em
+<code>timelineTree.now.*</code> e o detalhe de origem em <code>timelineTree.detail.origin</code>,
+nos dois idiomas (<code>en</code> é o default, <a href="../api.html#rn-425">RN-425</a>). <code>montarArvore</code>
+recebe o idioma como argumento (<code>getFixedT</code>), e os dois consumidores
+(<code>AgentTimelineTree</code> e a seção Atividades do <code>Shell</code>) o passam do
+<code>useTranslation</code> — trocar de idioma refaz a árvore. Uma chave que a tabela
+usa sem texto em um dos dois locales reprova em <code>timeline-tree.test.ts</code>.</p>
+</li>
+<li>
+<p><strong>Código:</strong> <code>apps/web/src/lib/timeline-tree.ts:164</code> (<code>TRADUCAO</code>), <code>:209</code>
+(<code>dev.started</code>), <code>:212</code> (<code>dev.working</code> com o título), <code>:230</code>
+(<code>dev.blocked_by_container</code>), <code>:235</code> (<code>dev.error</code>), <code>:255</code>
+(<code>TRADUCAO_FORA</code>), <code>:307</code> (o <code>ativo</code> lido do painel), <code>:96</code>
+(<code>ChaveDeRotulo</code>, AT-134), <code>:135</code> (<code>tradutorDaArvore</code>);
+<code>apps/web/src/locales/{en,pt-BR}/executors.json</code> (<code>timelineTree.label</code>,
+<code>timelineTree.now</code>, <code>timelineTree.detail</code>);
+<code>apps/web/src/lib/agent-status.ts:134</code> (<code>statusDoEventoDev</code>);
+<code>apps/web/src/components/AgentTimelineTree.module.css</code> (<code>.espera</code>)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>scripts/ci/vocabulario-de-eventos-dev.spec.ts:300</code> (o bloco da
+árvore: <code>:308</code> todo tipo do engine decidido, <code>:324</code> nada traduzido que o
+engine não emite, <code>:342</code> nada nos dois lados);
+<code>apps/web/src/lib/timeline-tree.test.ts:130</code> (a sequência medida:
+<code>dev.started</code> + <code>dev.blocked_by_container</code> deixa o ramo parado com o
+motivo — caso de falha), <code>:149</code> (<code>dev.started</code> não afirma task), <code>:156</code>
+(estados que o painel não chama de trabalho deixam o ramo parado; <code>dev.working</code>
+segue ativo com o título), <code>:168</code> (<code>dev.error</code> encerra com o motivo), <code>:367</code>
+(AT-134: toda chave usada tem texto nos dois locales, as subárvores têm as
+mesmas chaves, e o idioma passado vence o ativo)</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-087 — instalação real de 14/09; o i18n dos rótulos, AT-134</p>
+</li>
+</ul>
+<h2 id="o-repositório-nasce-no-aceite-do-handoff-ao-arquiteto-e-a-execução-não-começa-sem-ele-rn-582">O repositório nasce no aceite do handoff ao Arquiteto, e a execução não começa sem ele (RN-582)</h2>
+<h3 id="rn-600">RN-600 — A criação de projeto pela tela não manda o corpo que a api já se sabe que recusa, uma criação por vez, e a recusa aparece na tela</h3>
+<p>No teste do dono em 26/09 a api registrou 11 <code>POST /workspaces/:id/projects → 400</code> em ~4 s, e o mesmo projeto <code>runner</code>, criado pela api com caminho, saiu 201.
+Medido por leitura e reproduzido no vitest do assistente: não há retry
+automático (<code>createProject</code> é chamada direto, sem <code>useMutation</code>), então cada
+POST foi um CLIQUE. A causa provável é o &quot;Procurar pasta...&quot; do modo <code>runner</code>,
+que CRIA o projeto antecipadamente (<a href="parte-03.html#rn-437">RN-437</a>): no passo de detalhes o
+campo de caminho fica ACIMA do nome, e clicar antes de digitar o nome mandava
+<code>{ name: '', slug: '', executionMode: 'runner', workspacePath: '/workspace-a-confirmar' }</code> — o <code>CreateProjectDto</code> recusa <code>name</code> com menos de 2
+caracteres e <code>slug</code> fora do kebab-case —, e a falha virava só o toast &quot;Não deu
+para preparar a navegação de pasta agora&quot;, sem motivo; clicar de novo era a
+única resposta que a tela sugeria. Um nome de UMA letra passava no <code>Continuar</code>
+e voltava 400 no &quot;Provisionar&quot; pelo mesmo <code>MinLength(2)</code>.</p>
+<p>Três metades, todas na tela (a api está certa em recusar):</p>
+<ol>
+<li><strong>Não mandar o que já se sabe recusado.</strong> <code>nomeAceitoPelaApi</code> espelha o DTO
+(2+ caracteres, recortado, e slug não vazio) e passa a ser o gate de nome do
+passo de detalhes. No modo <code>runner</code>, &quot;Procurar pasta...&quot; fica INERTE enquanto
+o nome não passa, ou enquanto um caminho DIGITADO não é plausível
+(<code>caminhoLocalParecePlausivel</code>), e o motivo é dito em texto abaixo do campo
+(<code>procurar-bloqueado</code>, ADR 0064). Caminho VAZIO continua não bloqueando — o
+placeholder provisório da <a href="parte-03.html#rn-437">RN-437</a> cobre. É a revisão da frase
+&quot;nunca bloqueando o clique&quot; da RN-437, que falava do CAMINHO e não previu o
+nome vazio. O nome vai recortado no corpo.</li>
+<li><strong>Uma criação por vez.</strong> <code>criacaoEmVoo</code> (um <code>useRef</code>) trava os DOIS caminhos
+que criam — &quot;Procurar pasta...&quot; e &quot;Provisionar&quot; —, porque o <code>disabled</code> só
+chega ao botão no render seguinte. No jsdom o <code>disabled</code> já segura o segundo
+clique; a ref é o que segura dois eventos no mesmo quadro do navegador.</li>
+<li><strong>A recusa na tela.</strong> A falha 400 da criação antecipada passa a pôr a frase
+da api (<code>mensagemDaApi</code>, lista do <code>class-validator</code> juntada) no MESMO
+<code>Alert</code> do passo que o &quot;Provisionar&quot; já usava (<a href="../api.html#rn-170">RN-170</a>); outros
+erros seguem só com o toast.</li>
+</ol>
+<p><strong>O que não foi medido:</strong> o log da api do teste do dono não sobreviveu ao
+reinício do container, então o CORPO de cada um dos 11 POSTs não foi visto — a
+causa acima é a única que a leitura do código e o vitest reproduzem, e não
+prova que foi ela. A adjacência (<a href="parte-03.html#rn-437">RN-437</a>) segue como era: o projeto
+criado antecipadamente com o caminho provisório não recebe o caminho refinado
+depois no &quot;Provisionar&quot; (ele é REUSADO, não atualizado) — quem o corrige é o
+runner ao conectar (RN-423).</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/web/src/lib/wizard.ts:108</code> (<code>nomeAceitoPelaApi</code>);
+<code>apps/web/src/routes/NewProjectWizard.tsx:112</code> (<code>montarPayloadDeCriacao</code>),
+<code>:202</code> (<code>criacaoEmVoo</code>), <code>:321</code> (<code>bloqueioDoProcurarNoRunner</code>), <code>:486</code>
+(<code>handleProcurarPasta</code>), <code>:536</code> (<code>handleConfirm</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/NewProjectWizard.test.tsx:850</code> (describe
+<code>criar projeto sem rajada de 400</code> — sem nome, 11 cliques e nenhum POST;
+caminho relativo; nome de uma letra; nome recortado; três cliques no mesmo
+quadro criam um; a recusa da api na tela); <code>apps/web/src/lib/wizard.test.ts:210</code>
+(<code>nomeAceitoPelaApi</code>)</li>
+<li><strong>Origem:</strong> AT-215 (teste do dono, 26/09), irmã da AT-214</li>
+</ul>
+<h2 id="a-conversão-de-modo-deixa-de-ser-um-salto-no-escuro-rn-559-rn-560-1">A conversão de modo deixa de ser um salto no escuro (RN-559, RN-560)</h2>
+<h3 id="rn-612">RN-612 — Converter para <code>runner</code> é converte, DEPOIS onboarda: salvar monta o painel de onboarding do projeto agora <code>runner</code>, e o navegador de pastas fica fora por construção</h3>
+<p>O ramo <code>runner</code> da conversão era digitado no escuro (<a href="#rn-559">RN-559</a>) porque a
+ordem estava indecidida: onboardar ANTES de salvar registra chave num projeto
+que ainda não é <code>runner</code>, e <code>ConfirmProjectWorkspaceUseCase</code> recusa a
+confirmação com 400. A decisão do mantenedor foi <strong>medir</strong> a outra ordem com a
+chave de MÁQUINA (<a href="../produto.html#rn-543">RN-543</a>/<a href="#rn-548">RN-548</a>) e implementar se o
+atrito fosse aceitável. A medição foi feita no CÓDIGO (sem subir o ambiente) e
+deu isto:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>quem vai atender o projeto</th>
+<th>o que acontece depois de salvar</th>
+<th>gestos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>agente de MÁQUINA esperando (zero projetos <code>runner</code>, <a href="../runner.html#rn-550">RN-550</a>)</td>
+<td>a próxima consulta de <code>GET /runner/projects</code> o lista e o agente conecta sozinho — cadência 15/30/60 s de <code>espera-de-projetos.ts</code></td>
+<td><strong>zero</strong>, em até 60 s</td>
+</tr>
+<tr>
+<td>agente de MÁQUINA já atendendo OUTRO projeto</td>
+<td>a lista é lida UMA vez, no start, com conexão viva (RN-550) — o projeto novo <strong>não</strong> entra</td>
+<td><strong>um</strong>: reiniciar o serviço</td>
+</tr>
+<tr>
+<td>nenhuma chave de máquina</td>
+<td>o mesmo pareamento da criação de projeto (<a href="parte-03.html#rn-473">RN-473</a>)</td>
+<td>parear + um comando</td>
+</tr>
+</tbody>
+</table></div>
+<p>Nos três casos o atrito é o da criação de projeto ou menor, então a conversão
+passa a ser <strong>dois passos na mesma seção</strong>: salvar para <code>runner</code> monta, logo
+abaixo, o MESMO <code>RunnerOnboardingPanel</code> da aba Código e do wizard, com o
+<code>projectId</code> de um projeto que agora É <code>runner</code> — o reconhecimento da máquina
+pareada, a <code>EsperaDoRunner</code> e o pareamento do ADR 0118 vêm junto, sem régua
+nova. Acima do painel a seção DIZ a assimetria do agente de máquina (espera
+sozinho × reinício), com o comando de reinício das duas plataformas
+(<code>systemctl --user restart brabo-runner.service</code>,
+<code>launchctl kickstart -k gui/$(id -u)/dev.brabo.runner</code>): a tela não sabe se o
+agente tem outra conexão viva, então nomeia os dois casos em vez de afirmar um.</p>
+<p>O painel aparece quando o projeto SALVO é <code>runner</code>, sem troca de modo pendente
+no seletor, e com a pasta ainda não confirmada — ou até o fim da visita em que
+a conversão salvou, para a <code>EsperaDoRunner</code> mostrar a confirmação em vez de
+sumir no instante em que ela chega. Um projeto <code>runner</code> já confirmado não o
+ganha.</p>
+<p><strong>O caminho digitado é PROVISÓRIO, e a tela diz isso.</strong> Quem decide a pasta de
+um projeto <code>runner</code> é o runner: a confirmação SOBRESCREVE <code>workspacePath</code>
+(<a href="../runner.html#rn-423">RN-423</a>), e o agente de máquina nem olha o valor digitado — ele usa
+<code>&lt;base&gt;/&lt;workspaceDirName&gt;</code> (<a href="../runner.html#rn-544">RN-544</a>). O campo continua obrigatório
+porque o CHECK do banco pede caminho não-nulo fora de <code>container</code>; a seção não
+inventa placeholder.</p>
+<p><strong>O navegador de pastas continua FORA do ramo <code>runner</code>, e agora pelo motivo
+certo.</strong> Não é mais a ordem: é que o transporte <code>{ tipo: 'runner', projectId }</code>
+exige um runner conectado a ESTE projeto, e um runner conectado já confirmou a
+PRÓPRIA pasta (<code>--dir</code>, ou a derivada da base). Escolher outra ali seria uma
+segunda conversão <code>runner → runner</code> que a próxima reconexão desfaria. Oferecer o
+botão seria um controle que não controla nada; a seção diz isso em texto
+(<a href="../../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064</a>).</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/web/src/routes/settings/ExecutionModeSection.tsx:304</code>
+(<code>mostrarProximoPasso</code>), <code>:317</code> (<code>setConvertidoParaRunner</code>, a visita em que a
+conversão salvou), <code>:452</code> (o bloco do próximo passo), <code>:487</code>
+(<code>RunnerOnboardingPanel</code>, o mesmo da aba Código);
+<code>apps/web/src/locales/pt-BR/settings.json:249</code> e
+<code>apps/web/src/locales/en/settings.json:249</code> (<code>executionMode.nextStep.*</code>) e
+<code>:238</code> (<code>executionMode.path.runnerTyped</code>, reescrito); a cadência medida em
+<code>apps/runner/src/espera-de-projetos.ts:60</code> (<code>CADENCIA_DA_ESPERA_MS</code>) e a
+lista lida uma vez em <code>apps/runner/src/index.ts</code> (<code>rodarComoAgenteDeMaquina</code>)</li>
+<li><strong>Teste:</strong> o describe <code>RN-612</code> em
+<code>apps/web/src/routes/settings/conversao-de-modo.test.tsx</code> — o caminho feliz
+(antes de salvar não há painel; salvar monta o próximo passo, com o comando de
+reinício, e o painel pergunta pelas chaves DESTE projeto), a chave de máquina
+reconhecida, o caso de falha (projeto <code>runner</code> já confirmado não ganha o
+passo), o rascunho de outro modo escondendo o passo, e o texto em <code>en</code></li>
+<li><strong>Lacuna DECLARADA:</strong> o reinício do agente de máquina que já atende outro
+projeto continua sendo um gesto no terminal — repesquisar a lista com conexão
+viva foi recusado pela RN-550, e esta regra não reabre isso. E a medição é de
+CÓDIGO, não de tela: o ambiente não foi subido</li>
+<li><strong>ADR:</strong> <a href="../../adr/0111-conversao-de-execution-mode-de-projeto-existente.html">0111</a>,
+<a href="../../adr/0154-chave-de-dispositivo-de-maquina.html">0154</a></li>
+<li><strong>Origem:</strong> AT-143 (EP-021/HS-033)</li>
+</ul>
+<hr>
+<h2 id="o-repositório-nasce-no-aceite-do-handoff-ao-arquiteto-e-a-execução-não-começa-sem-ele-rn-582-1">O repositório nasce no aceite do handoff ao Arquiteto, e a execução não começa sem ele (RN-582)</h2>
+<h3 id="rn-614">RN-614 — A tela mostra o motivo da política e a raiz do escopo, numa frase só, nos dois lugares</h3>
+<p>A <a href="../api.html#rn-567">RN-567</a> pôs no <code>proposed_action.created</code> a regra que decidiu
+(<code>reason</code>) e a <a href="../api.html#rn-609">RN-609</a> pôs a raiz do escopo (<code>scopeRoot</code>, só em
+<code>terminal</code>) — e as duas declararam que a tela não mudava. Quem auditava pela
+tela uma ação que PASSOU continuava sem saber qual regra a deixou passar.</p>
+<p><strong>A regra:</strong> o dado aparece em DOIS lugares (decisão do mantenedor), e os dois
+dizem a MESMA frase, montada por UMA função, <code>fraseDaDecisaoDaPolitica</code>:</p>
+<ul>
+<li>a <strong>linha do evento no painel de log</strong> — <code>classifyEvent</code> ganha o ramo de
+<code>proposed_action.created</code> (tipo <code>permission</code>, <code>bad</code> quando negada), com o
+desfecho da política e, depois do travessão, a frase;</li>
+<li>o <strong><code>ApprovalCard</code></strong>, numa linha própria logo abaixo da frase do que
+acontece (<a href="../produto.html#rn-096">RN-096</a>) — nunca dentro do payload colapsado.</li>
+</ul>
+<p>A ação (<code>proposed_actions</code>) não guarda nenhum dos dois campos: a tela os lê do
+EVENTO, que ela já carrega (<code>decisaoDaPoliticaDaAcao</code>, pelo <code>actionId</code>). Por
+isso o card tem TRÊS estados, que não colapsam: tela que não lê o event log
+(o painel &quot;precisa de você&quot;, PRs, containers) não passa o dado e o card CALA;
+tela que lê (o chat da sessão e a fila da aba Aprovações, ambos sobre a sessão
+mais recente) e não achou o evento na janela carregada diz <em>&quot;fora dos eventos
+carregados nesta tela&quot;</em>; e o evento achado dá a frase. A aba Insights não tem
+<code>ApprovalCard</code> — hipótese do Psicólogo não é <code>proposed_action</code>.</p>
+<p><strong>Desde a AT-336 (<a href="../api.html#rn-656">RN-656</a>), cada card da aba Aprovações tem o
+PRÓPRIO motivo</strong>, lido pela ação quando o log carregado não o cobre; o
+parágrafo seguinte é o estado da AT-333, que ela substituiu — a nota única
+sobra só para a leitura que FALHA. Desde a AT-340 o mesmo vale para os cards
+das pendências de OUTRAS sessões no chat (<a href="parte-05.html#rn-626">RN-626</a>), que antes
+calavam: o log do fio nunca cobre ação de outra sessão.</p>
+<p><strong>Na AT-333, a fila da aba Aprovações passou a dizer a lacuna UMA vez.</strong> A fila é a
+do PROJETO (<a href="parte-05.html#rn-638">RN-638</a>) e os eventos são os de UMA sessão, então ali o
+<em>&quot;fora dos eventos carregados&quot;</em> saía em quase todo card — verdade repetida por
+card, a ferramenta se explicando. A api não expõe o motivo por ação (a ação
+não o guarda, e a leitura de eventos não filtra por <code>actionId</code>: medido), e
+buscar sem janela exigiria endpoint novo. A aba passa então a CONTAR as
+pendentes sem o evento e a dizer, numa nota acima da fila, quantas são e por
+quê (<em>&quot;destas N ações&quot;</em>, ou <em>&quot;de N das M ações abaixo&quot;</em>), no molde da
+<a href="parte-02.html#rn-180">RN-180</a>; o card dessas cala (o estado &quot;tela que não lê&quot;), e o card
+cujo evento está carregado continua mostrando a frase. A nota só conta com o
+log em mãos: antes de os eventos chegarem ela não afirma nada. O chat da
+sessão segue com os três estados por card — ali o recorte é o do próprio fio.</p>
+<p><strong>Ausente não é &quot;sem motivo&quot;, e o absoluto nunca aparece.</strong> Evento anterior à
+RN-567 diz <em>&quot;motivo da política não registrado&quot;</em>; <code>terminal</code> anterior à RN-609
+diz <em>&quot;raiz do escopo não registrada&quot;</em>; outro tipo, sem <code>scopeRoot</code>, não fala de
+raiz (o escopo só é consultado em <code>terminal</code>). As quatro âncoras têm texto
+próprio — pasta gerenciada, segmento dentro da base de projetos, nome da pasta
+na máquina do runner, e <code>indisponivel</code> (<em>&quot;sem forma relativa&quot;</em>, sem segmento).
+Âncora que a tela não conhece diz que não conhece, e não imprime o segmento: a
+tela não reconstrói caminho nenhum. As frases estão em <code>en</code> e <code>pt-BR</code>
+(<code>approvals.json</code>, chave <code>politica</code>).</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/web/src/lib/decisao-da-politica.ts:111</code>
+(<code>fraseDaDecisaoDaPolitica</code>), <code>:65</code> (<code>lerDecisaoDaPolitica</code>), <code>:124</code>
+(<code>decisaoDaPoliticaDaAcao</code>), <code>:145</code> (<code>linhaDoEventoDePolitica</code>);
+<code>apps/web/src/lib/activity.ts:804</code> (o ramo de <code>proposed_action.created</code>);
+<code>apps/web/src/components/ApprovalCard.tsx:272</code> (a linha do card);
+<code>apps/web/src/routes/session-timeline-montagem.tsx:825</code> e
+<code>apps/web/src/routes/ProjectApprovalsTab.tsx:311</code> (<code>decisoesDaPolitica</code>, desde a
+AT-336 por <code>useDecisoesDaPolitica</code>) e <code>:499</code> (quem passa o dado)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/decisao-da-politica.test.ts:43</code> (as âncoras,
+<code>:43</code>/<code>:54</code>/<code>:65</code>/<code>:76</code>), <code>:87</code> (evento antigo), <code>:102</code> (âncora desconhecida
+sem vazar caminho), <code>:114</code> (os dois idiomas), <code>:144</code> (a linha do log É a
+frase do card); <code>apps/web/src/components/ApprovalCard.test.tsx:733</code> (o card
+usa a mesma função, e os três estados);
+<code>apps/web/src/routes/ProjectApprovalsTab.test.tsx:304</code> (desde a AT-336, a nota
+conta só a leitura que falha)</li>
+<li><strong>Origem:</strong> AT-148 (EP-025/HS-043); a nota da fila, AT-333; o motivo por cartão, AT-336</li>
+</ul>
+<hr>
+<h2 id="o-idioma-das-respostas-dos-agentes-rn-618620-rn-622624-adr-0177">O idioma das respostas dos agentes (RN-618..620, RN-622..624, ADR 0177)</h2>
+<h3 id="rn-620">RN-620 — A barra da sessão mostra o idioma das respostas de QUEM VÊ, com a origem, e trocar ali é o override só daquela pessoa naquela sessão</h3>
+<ol>
+<li><strong>Ao lado do seletor de modelo, em outro escopo.</strong> O modelo da barra é da
+SESSÃO e vale para todos; o idioma é da PESSOA (<code>GET .../sessions/:sessionId/response-language</code>, resolvido para quem chama,
+<a href="../api.html#rn-618">RN-618</a>). Trocar ali é o override por sessão — decisão do
+mantenedor, AT-169 resposta 2 — e nunca mexe no de outro participante nem
+na Conta.</li>
+<li><strong>Nunca o valor sem a origem</strong> (a régua da <a href="parte-03.html#rn-470">RN-470</a>): &quot;fixado
+por você nesta sessão&quot;, &quot;escolhido por você na Conta&quot;, &quot;detectado pelas
+suas mensagens e confirmado por você&quot; e &quot;o idioma da interface&quot; são
+quatro textos, e nenhum colapsa em outro. Carregando e falhou também têm
+texto próprio — a falha não finge um idioma. O detectado nunca vira
+afirmação sobre a pessoa (&quot;você é brasileiro&quot;), só sobre as mensagens
+(AT-080).</li>
+<li><strong>&quot;Seguir a Conta&quot; solta o override</strong> (<code>language: null</code>) e diz em QUE
+idioma isso dá — a mesma cadeia sem o degrau da sessão, derivada no
+cliente da cadeia que a rota já devolve, sem endpoint novo. &quot;Outro
+código…&quot; abre um campo que só fixa no botão (RN-469), e a recusa da api
+chega no toast com a frase dela. Um link leva à Conta, onde mora a
+escolha que vale em todas as sessões.</li>
+<li><strong>Quem troca</strong>: o mínimo do <code>PUT</code> (<code>developer</code>), por <code>roleAtLeast</code> sobre o
+papel de WORKSPACE (a lacuna declarada das telas que não buscam
+<code>project_members</code>). Abaixo dele o valor e a origem continuam na barra, o
+seletor fica inerte e o motivo vem em texto.</li>
+<li><strong>O que a barra NÃO afirma</strong>: nunca &quot;os agentes respondem em X&quot; como fato
+sobre a pessoa — só o efetivo e a origem. Desde a <a href="../engine.html#rn-622">RN-622</a> esse
+efetivo chega ao modelo nas mensagens de quem vê, e o aviso &quot;ainda não
+chega aos agentes&quot; saiu da linha de origem. A linha trunca nos 60px da
+barra e leva o texto inteiro no <code>title</code> — o texto está na tela, o <code>title</code>
+só devolve o que as reticências cortaram.</li>
+<li><strong>Na barra estreita, o idioma MUDA de lugar e não some</strong> (AT-317). A barra
+se arruma pela PRÓPRIA largura (<code>modoDaBarra</code>, medida por
+<code>ResizeObserver</code>; largura desconhecida é a barra completa): a partir de
+1720px tudo fica em linha; abaixo disso modelo, idioma e orçamento viram UM
+controle cujo gatilho resume o modelo e o código do idioma (abaixo de 920px
+só o ícone, com nome acessível), e o painel dele traz o indicador inteiro
+com a origem QUEBRANDO em vez de cortar. A pergunta da detecção
+(<a href="../api.html#rn-624">RN-624</a>) mora no painel, e enquanto existe o gatilho ganha uma
+marca e o nome acessível a anuncia. O título da sessão é o único item que
+encolhe (com piso e o nome inteiro no <code>title</code>), e os botões não quebram
+linha — &quot;Encerrar&quot; vira ícone com nome acessível só na barra mínima.</li>
+</ol>
+<ul>
+<li><strong>Código:</strong> <code>apps/web/src/routes/SessionLanguageIndicator.tsx:72</code>
+(<code>SessionLanguageIndicator</code>), <code>:29</code> (<code>idiomaSemOverride</code>), <code>:163</code>
+(<code>origemPorExtenso</code>), <code>:215</code> (<code>podeTrocar</code>);
+<code>apps/web/src/routes/SessionTopbar.tsx:260</code> (<code>SessionLanguageIndicator</code>),
+<code>:128</code> (<code>modoDaBarra</code>), <code>:377</code> (<code>AjustesAgrupados</code>);
+<code>apps/web/src/lib/modo-da-barra-da-sessao.ts:35</code> (<code>modoDaBarra</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionTopbar.test.tsx:174</code> (a barra de
+1440px não é completa), <code>:191</code> (agrupa, e o painel traz idioma com origem),
+<code>:236</code> (barra mínima com nome acessível), <code>:256</code> (pergunta pendente marca o
+controle), <code>:273</code> (leitura do idioma falhada — caso de falha);
+<code>apps/web/src/routes/SessionLanguageIndicator.test.tsx:99</code>
+(efetivo com origem e o link, sem o aviso antigo), <code>:112</code> (o detectado não vira
+&quot;escolhido&quot;), <code>:126</code> (trocar fixa só nesta sessão), <code>:151</code> (&quot;Seguir a
+Conta&quot; manda <code>null</code>), <code>:180</code> (recusa da api — caso de falha), <code>:202</code>
+(abaixo de <code>developer</code>), <code>:213</code> (leitura falhada), <code>:225</code> (a cadeia sem a
+sessão)</li>
+<li><strong>Origem:</strong> AT-165, sobre as decisões das AT-169 (resposta 2) e AT-168
+(resposta 7)</li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/web/parte-03.html">Web — parte 3 (desde RN-239)</a><a href="../../business-rules/web/parte-05.html">Web — parte 5 (desde RN-626)</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-web/blob/dev/docs/business-rules/web/parte-04.md">Редактировать страницу</a></footer>
+</main>
+<aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#a-busca-do-rag-deixa-rastro-e-o-rastro-congela-os-pesos-rn-479481">A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)</a></li><li class="n3"><a href="#rn-491">RN-491 — A Infra elege entre as candidatas do Arquiteto, e a eleição vira uma NOVA versão de artifact.project_image</a></li><li class="n3"><a href="#rn-499">RN-499 — O handoff da Infra tem card acionável PRÓPRIO, fora do fio — sem alargar AGENTES_DE_CHAT</a></li><li class="n2"><a href="#o-navegador-de-pastas-servido-pela-api-rn-504">O navegador de pastas servido pela api (RN-504)</a></li><li class="n3"><a href="#rn-504">RN-504 — O navegador de pastas é escopado à base de projetos e NUNCA sai dela</a></li><li class="n2"><a href="#a-base-decide-o-que-a-criação-de-projeto-oferece-rn-513">A base decide o que a criação de projeto oferece (RN-513)</a></li><li class="n3"><a href="#rn-513">RN-513 — Com base consentida, mounted é o pré-selecionado com &lt;base&gt;/&lt;slug&gt; sugerido; sem base, ou sem saber, ele não é oferecido</a></li><li class="n2"><a href="#o-picker-do-modo-runner-volta-a-ler-o-disco-de-quem-escolhe-rn-533">O picker do modo Runner volta a ler o disco de QUEM ESCOLHE (RN-533)</a></li><li class="n3"><a href="#rn-533">RN-533 — Em modo runner o navegador de pastas pergunta ao agente local, e a tela diz de quem é o disco</a></li><li class="n2"><a href="#criar-projeto-não-provisiona-repositório-rn-541">Criar projeto não provisiona repositório (RN-541)</a></li><li class="n3"><a href="#rn-541">RN-541 — Criar um projeto NÃO cria repositório git; o bootstrap é adiado até o handoff do Arquiteto</a></li><li class="n2"><a href="#a-tela-reconhece-um-agente-local-de-máquina-já-pareado-rn-548-fase-30">A tela reconhece um agente local de MÁQUINA já pareado (RN-548, FASE 30)</a></li><li class="n3"><a href="#rn-548">RN-548 — Com chave de MÁQUINA ativa, o painel do runner para de mandar parear e passa a dizer o que falta — sem nunca afirmar que o agente está de pé</a></li><li class="n2"><a href="#a-conversão-de-modo-deixa-de-ser-um-salto-no-escuro-rn-559-rn-560">A conversão de modo deixa de ser um salto no escuro (RN-559, RN-560)</a></li><li class="n3"><a href="#rn-559">RN-559 — A conversão para mounted abre o MESMO navegador de pastas do wizard; o ramo runner continua digitado, e a tela diz por quê</a></li><li class="n3"><a href="#rn-560">RN-560 — O aviso da conversão diz o que ela recusa, o que ela leva e o que ela NÃO leva — nomeando o caminho antigo</a></li><li class="n2"><a href="#a-chave-de-dispositivo-ganha-tela-e-a-tela-diz-o-alcance-de-revogar-rn-561">A chave de dispositivo ganha tela, e a tela diz o alcance de revogar (RN-561)</a></li><li class="n3"><a href="#rn-561">RN-561 — A aba Configurações lista e revoga chave de dispositivo, marcando a ESPÉCIE — porque revogar a de MÁQUINA derruba o agente local em TODOS os projetos do dono</a></li><li class="n3"><a href="#rn-568">RN-568 — A presença de QA, SecOps e dos membros de área no painel do time é decidida pela sessão INTEIRA, não pela janela de 200 eventos</a></li><li class="n3"><a href="#rn-572">RN-572 — A árvore do time traduz todo tipo dev.* que o engine emite, e só diz trabalho em curso onde o painel diz trabalhando</a></li><li class="n2"><a href="#o-repositório-nasce-no-aceite-do-handoff-ao-arquiteto-e-a-execução-não-começa-sem-ele-rn-582">O repositório nasce no aceite do handoff ao Arquiteto, e a execução não começa sem ele (RN-582)</a></li><li class="n3"><a href="#rn-600">RN-600 — A criação de projeto pela tela não manda o corpo que a api já se sabe que recusa, uma criação por vez, e a recusa aparece na tela</a></li><li class="n2"><a href="#a-conversão-de-modo-deixa-de-ser-um-salto-no-escuro-rn-559-rn-560-1">A conversão de modo deixa de ser um salto no escuro (RN-559, RN-560)</a></li><li class="n3"><a href="#rn-612">RN-612 — Converter para runner é converte, DEPOIS onboarda: salvar monta o painel de onboarding do projeto agora runner, e o navegador de pastas fica fora por construção</a></li><li class="n2"><a href="#o-repositório-nasce-no-aceite-do-handoff-ao-arquiteto-e-a-execução-não-começa-sem-ele-rn-582-1">O repositório nasce no aceite do handoff ao Arquiteto, e a execução não começa sem ele (RN-582)</a></li><li class="n3"><a href="#rn-614">RN-614 — A tela mostra o motivo da política e a raiz do escopo, numa frase só, nos dois lugares</a></li><li class="n2"><a href="#o-idioma-das-respostas-dos-agentes-rn-618620-rn-622624-adr-0177">O idioma das respostas dos agentes (RN-618..620, RN-622..624, ADR 0177)</a></li><li class="n3"><a href="#rn-620">RN-620 — A barra da sessão mostra o idioma das respostas de QUEM VÊ, com a origem, e trocar ali é o override só daquela pessoa naquela sessão</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-ru.json" data-base="../../"></script></body>
+</html>

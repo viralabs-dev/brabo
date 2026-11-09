@@ -1,0 +1,1441 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — Engine — parte 4 (desde RN-622) | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../../business-rules/engine/parte-04.html">pt-BR</option><option value="../../../en/business-rules/engine/parte-04.html" selected>en</option><option value="../../../ru/business-rules/engine/parte-04.html">ru</option><option value="../../../zh-Hans/business-rules/engine/parte-04.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../../dev/en/business-rules/engine/parte-04.html" selected>dev</option><option value="../../../../prd/en/business-rules/engine/parte-04.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="../../index.html">Home</a></li><li><a href="../../getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Developing Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Architecture</a></li><li><a href="../../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../../explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Branching policy</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../../explanation/release-do-produto.html">Product release</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="../../explanation/localizacao.html">Localization</a></li><li><a href="../../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="../../glossary.html">Glossary</a></li><li><a href="../../reference/componentes-da-doc.html">Doc components</a></li><li><a href="../../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>Business rules</span></summary><ul><li><a href="../../business-rules.html">Business rules</a></li><li><a href="../../business-rules/custo.html">Cost and metering</a></li><li><a href="../../business-rules/autenticacao.html">Authentication</a></li><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><details open><summary><span>Engine</span></summary><ul><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/engine/parte-01.html">Engine — parte 1 (desde RN-016)</a></li><li><a href="../../business-rules/engine/parte-02.html">Engine — parte 2 (desde RN-305)</a></li><li><a href="../../business-rules/engine/parte-03.html">Engine — parte 3 (desde RN-577)</a></li><li><a href="../../business-rules/engine/parte-04.html" aria-current="page">Engine — parte 4 (desde RN-622)</a></li><li><a href="../../business-rules/engine/parte-05.html">Engine — parte 5 (desde RN-724)</a></li><li><a href="../../business-rules/engine/parte-06.html">Engine — parte 6 (desde RN-880)</a></li></ul></details></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Product</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Timeline</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../../explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">This page is not translated yet; showing the original in Portuguese.</div>
+<article class="doc">
+<h1 id="engine--parte-4-desde-rn-622">Engine — parte 4 (desde RN-622)</h1>
+<h2 id="o-idioma-das-respostas-dos-agentes-rn-618620-rn-622624-adr-0177">O idioma das respostas dos agentes (RN-618..620, RN-622..624, ADR 0177)</h2>
+<h3 id="rn-622">RN-622 — O idioma chega ao modelo como a ÚLTIMA mensagem de cada chamada do turno, efêmera: o do AUTOR quando há um, o do PROJETO quando não há</h3>
+<p>As RN-618..620 decidiram EM QUE idioma o agente responde e mostraram isso na
+tela; nada disso chegava ao modelo. Esta regra é o transporte (AT-164, sobre a
+especificação da AT-081 e o mecanismo verificado por provider na AT-161).</p>
+<ol>
+<li><strong>Uma mensagem <code>role: &quot;system&quot;</code> no FIM da lista, a cada chamada de LLM do
+turno</strong> — inclusive as iterações de ferramenta —, e NUNCA no histórico:
+ela não entra em <code>state.messages</code>, então não se acumula de turno em turno,
+não é resumida pela compactação (<a href="parte-03.html#rn-621">RN-621</a>) e some com o turno. No
+OpenAI-compatível ela vai no fim da conversa; no Anthropic é içada para o
+fim do <code>system</code> do topo (AT-161). Não é <code>agent_instructions</code>: é texto de
+código, fora do teto de <code>instruction_patch</code> (<a href="../api.html#rn-007">RN-007</a>).</li>
+<li><strong>Um lugar só.</strong> Quem acrescenta é a fachada <code>EngineApiClient</code>
+(<code>llm_turn/5</code> e <code>llm_turn_stream/6</code>), por onde passa TODA chamada de LLM do
+engine — os sete conversacionais, o <code>ToolLoop</code> (dev agents e gates) e o
+Infra Lead. Nenhum servidor monta a orientação.</li>
+<li><strong>Turno COM autor humano</strong> (a mensagem que alguém digitou a um agente): a
+api resolve o idioma DAQUELA pessoa naquela sessão
+(<code>ResolverIdiomaDaRespostaUseCase</code>, <a href="../api.html#rn-618">RN-618</a> — override da sessão
+<blockquote>
+<p>conta &gt; detectado confirmado &gt; interface) e o manda no comando
+<code>agent/message</code> como <code>idiomaDaResposta</code>, campo OPCIONAL. O servidor do
+agente o põe no estado do TURNO durante o <code>handle_call</code>, e a Task do turno
+o herda do dicionário de processo (<code>TurnoAssincrono</code>); o GenServer não o
+guarda para o turno seguinte. Dois autores na mesma sessão recebem cada um
+o seu.</p>
+</blockquote>
+</li>
+<li><strong>Turno SEM autor humano</strong> (kickoff, dev agents, gates, commit, corpo de
+PR, a retomada do Dev Lead depois da aprovação): o idioma do PROJETO
+(<a href="../api.html#rn-619">RN-619</a>), lido de <code>projects.language</code> a cada chamada (decisão do
+mantenedor, AT-169 resposta 1).</li>
+<li><strong>O sumarizador da compactação (<code>context-manager</code>) fica fora</strong>: &quot;responda
+em X&quot; traduziria o resumo, e preservar o idioma de cada turno nele é a
+<a href="parte-03.html#rn-621">RN-621</a>.</li>
+<li><strong>Falha nunca derruba o turno.</strong> A resolução que falha na api vira log e a
+mensagem segue SEM <code>idiomaDaResposta</code>; turno com autor sem idioma segue
+SEM orientação — nunca o do projeto no lugar do da pessoa. A leitura do
+idioma do projeto que falha no engine vira <code>warning</code> e a chamada segue sem
+orientação. Valor que não tem forma de código BCP-47 também não vira
+orientação: nada que não seja um código é interpolado no prompt.</li>
+<li><strong>Os textos</strong> são constantes de código, um por idioma: <code>pt-BR</code> (&quot;Responda
+em português brasileiro (pt-BR), salvo pedido explícito do usuário por
+outro idioma nesta mensagem.&quot;), <code>en</code>, e um genérico em inglês que nomeia o
+código BCP-47 para qualquer outro idioma da lista aberta (AT-168
+resposta 2). O texto não depende do modelo: trocar de modelo no meio da
+sessão não muda nada, e não há cascata por modelo nem caso especial de
+DeepSeek.</li>
+<li><strong>Custo</strong> — teto decidido de 50 tokens de ENTRADA por chamada (AT-169
+resposta 8). Medido com <code>gpt-tokenizer</code>, só o conteúdo, cl100k / o200k:
+<code>pt-BR</code> 29 / 23, <code>en</code> 18 / 18, genérico <code>es-MX</code> 26 / 26 e o PIOR caso (o
+genérico com o código mais longo que a forma aceita) 42 / 42; a moldura
+de mensagem soma ~4, então o pior caso fica em ~46. O teste trava o texto
+em 160 caracteres como vigia do teto.</li>
+<li><strong>Medição:</strong> o <code>chat.message</code> gravado pela api carrega <code>idiomaAlvo</code> e
+<code>origem</code> quando a resolução deu certo — o evento é imutável e diz, para
+sempre, o que foi pedido ao modelo naquele turno (AT-082).</li>
+</ol>
+<p><strong>O que esta regra NÃO fecha, declarado:</strong></p>
+<ul>
+<li>
+<p><strong>Chat humano sem agente</strong> (<code>SendChatMessageUseCase</code>) fica fora, por
+decisão do mantenedor (AT-169 resposta 3).</p>
+</li>
+<li>
+<p><strong>Só a MENSAGEM a um agente carrega autor</strong> (e a resposta ao formulário de
+pergunta estruturada, que a reusa). Os outros comandos que uma pessoa
+dispara — confirmar prontidão ao Criativo, aceitar handoff — sobem turno
+sem autor e caem no idioma do PROJETO: o product brief do
+<code>confirmReadiness</code> sai no idioma do projeto.</p>
+</li>
+<li>
+<p><strong>Artefato de turno com autor</strong>: esta regra o declarava seguindo o idioma de
+quem escreveu; desde a <a href="#rn-623">RN-623</a> a mesma mensagem ganha a cláusula
+do artefato, no idioma do projeto.</p>
+</li>
+<li>
+<p><strong>Não medido:</strong> o tokenizador do DeepSeek e o da Anthropic; se a orientação
+basta contra o prompt de sistema em pt-BR é o que a validação paga da
+AT-167 mede. No Anthropic, a orientação içada ao topo muda o prefixo do
+cache a cada troca de autor ou de idioma — cache não é observável hoje.</p>
+</li>
+<li>
+<p><strong>Código:</strong> <code>apps/engine/lib/engine/harness/idioma_da_resposta.ex:294</code>
+(<code>anexar</code>), <code>:253</code> (<code>com_idioma_do_autor</code>), <code>:161</code> (<code>orientacao</code>), <code>:94</code>
+(<code>@sem_orientacao</code>), <code>:301</code> (<code>texto_do_turno</code>), <code>:326</code>
+(<code>idioma_do_projeto</code>);
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex:738</code>
+(<code>IdiomaDaResposta</code>), <code>:854</code> (<code>IdiomaDaResposta</code>);</p>
+<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:738</code>
+(<code>IdiomaDaResposta</code>), <code>:854</code> (<code>IdiomaDaResposta</code>);
+<code>apps/engine/lib/engine/projects/project.ex:64</code> (<code>idioma</code>);
+<code>apps/engine/lib/engine_web/controllers/agent_command_controller.ex:527</code>
+(<code>idioma_da_resposta</code>);
+<code>apps/engine/lib/engine/agents/criativo_server.ex:140</code> (<code>handle_call</code>, e a
+MESMA cláusula nos outros seis);
+<code>apps/engine/lib/engine/agents/turno_assincrono.ex:134</code>
+(<code>copiar_dicionario</code>);
+<code>apps/api/src/application/use-cases/agents/send-agent-message.use-case.ts:151</code>
+(<code>resolverIdioma</code>), <code>:155</code> (<code>idiomaAlvo</code>);
+<code>apps/api/src/infrastructure/http-clients/api-to-engine-client.ts:215</code>
+(<code>idiomaDaResposta</code>)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>apps/engine/test/engine/harness/idioma_da_resposta_test.exs:78</code>
+(sem autor: o idioma do projeto, no fim), <code>:123</code> (com autor: o do autor
+vence o do projeto), <code>:134</code> (autor sem idioma resolvido: sem orientação),
+<code>:98</code> (a consulta que falha — caso de falha: lista intacta e log), <code>:93</code> (o
+sumarizador fica fora), <code>:67</code> (o vigia do teto de 50 tokens), <code>:340</code> (ponta
+a ponta: o idioma do autor no fim de cada chamada e fora do histórico),
+<code>:370</code> (a fachada também anexa no <code>llm_turn/5</code>);
+<code>apps/engine/test/engine_web/controllers/agent_command_controller_test.exs:402</code>
+(o comando leva o idioma até o modelo), <code>:414</code> (campo inválido: aceito, sem
+orientação);
+<code>apps/api/test/application/use-cases/agents/send-agent-message.use-case.spec.ts:109</code>
+(resolve pelo autor e pela sessão — o override da sessão vence), <code>:125</code> (a
+resolução que falha não derruba a mensagem — caso de falha);
+<code>apps/api/test/infrastructure/http-clients/api-to-engine-client.spec.ts:528</code>
+(o campo viaja só quando resolvido)</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-164, especificada na AT-081 e destravada pelas decisões das
+AT-168 e AT-169 (mantenedor, 2026-09-28); mecanismo verificado na AT-161</p>
+</li>
+</ul>
+<h3 id="rn-623">RN-623 — Num turno COM autor, a resposta é no idioma da pessoa e o ARTEFATO compartilhado é no idioma do PROJETO</h3>
+<p>A <a href="../api.html#rn-619">RN-619</a> prometeu o idioma do projeto para o artefato
+compartilhado, e a <a href="#rn-622">RN-622</a> pôs o idioma do AUTOR em todo turno com
+autor — então o que um agente gravava DURANTE a conversa com uma pessoa saía no
+idioma dela. Decisão do mantenedor (AT-168 resposta 8, AT-245): <strong>o artefato
+segue o PROJETO</strong>; a resposta de chat continua no idioma do autor.</p>
+<ol>
+<li><strong>O mecanismo é a mesma mensagem da RN-622, com uma segunda cláusula.</strong>
+Num turno com autor, quando a chamada leva ao menos uma ferramenta que
+grava artefato compartilhado e o idioma do projeto (<code>projects.language</code>)
+DIFERE do do autor, a orientação vira &quot;Responda em português brasileiro
+(pt-BR), salvo pedido… <strong>Artefatos do projeto: em en.</strong>&quot; — no idioma do
+texto base: a cláusula do <code>pt-BR</code> é em português, a dos outros em inglês
+(&quot;Write project artifacts in X.&quot;). Continua UMA mensagem <code>system</code> efêmera
+no fim, montada pela fachada; quem decide é o conjunto de ferramentas que a
+MESMA chamada leva ao modelo, que a fachada já tem.</li>
+<li><strong>Por que a orientação, e não a descrição da ferramenta.</strong> A descrição
+viaja em TODA chamada, em cada ferramenta, com os idiomas iguais ou não; a
+cláusula existe só quando eles diferem, e mora no único lugar que já decide
+o idioma. Sem acréscimo nenhum quando os idiomas são iguais, quando a
+chamada não tem ferramenta de artefato, e em turno SEM autor (que já recebe
+o idioma do projeto).</li>
+<li><strong>O que é artefato compartilhado</strong> — o que a ferramenta PERSISTE é lido por
+outras pessoas e pelos próximos agentes:
+<ul>
+<li><code>emit_artifact</code> (<code>business_rule</code>, <code>note</code>, <code>decision_record</code>) — Criativo,
+PO, Arquiteto, Dev Lead, UX Designer, Staff;</li>
+<li><code>create_epic</code>, <code>create_story</code>, <code>create_task</code> — PO;</li>
+<li><code>create_module_map</code>, <code>assign_story_modules</code>, <code>choose_project_image</code>,
+<code>create_c4_diagram</code>, <code>route_modules_to_infra</code>, <code>propose_adr</code> (o ADR de
+<code>open_adr_pr</code>), <code>emit_insight</code> — Arquiteto;</li>
+<li><code>propose_execution_plan</code>, <code>assess_implementability</code> — Dev Lead;</li>
+<li><code>propose_prototype</code> — UX Designer; <code>propose_rfc</code> — Staff;</li>
+<li><code>propose_infra_pr</code> — Infra Lead.
+O product brief NÃO passa por aqui: ele é emitido pelo SERVIDOR no
+<code>confirmReadiness</code>, que é turno sem autor e já sai no idioma do projeto
+(como o handoff e o revise, que esta regra não muda).</li>
+</ul>
+</li>
+<li><strong>O que NÃO é:</strong> <code>ask_structured_questions</code> (é pergunta à PESSOA do
+turno), <code>offer_handoff</code> (não leva texto), as de leitura (<code>listar_*</code>,
+<code>rag_*</code>, <code>read_file</code>, <code>search_workspace</code>), <code>validate_infra_file</code> (só
+valida) e as propostas de subir container (pedem decisão, não gravam
+artefato). Os dev agents e os gates não têm turno com autor.</li>
+<li><strong>Falha nunca derruba o turno.</strong> Ler o idioma do projeto que falha vira
+<code>warning</code> e segue SÓ a orientação do autor — nunca sem orientação, nunca a
+do projeto no lugar da da pessoa. Autor sem idioma resolvido segue sem
+orientação, como na RN-622.</li>
+<li><strong>Custo</strong> — o teto de 50 tokens de entrada da AT-169 vale para a mensagem
+inteira. Medido com <code>gpt-tokenizer</code>, só o conteúdo, cl100k / o200k, sobre
+todos os pares de <code>pt-BR</code>, <code>en</code>, <code>es</code>, <code>es-MX</code> e <code>zh-Hant-TW</code>: pior caso
+<code>pt-BR</code> → <code>zh-Hant-TW</code> 42 / 36; <code>en</code> → <code>pt-BR</code> 26 / 26; genérico <code>es-MX</code> →
+<code>zh-Hant-TW</code> 36 / 36. A cláusula só entra com os DOIS códigos na forma
+canônica curta (<code>idioma[-Escrita][-Região]</code>, ex.: <code>pt-BR</code>, <code>zh-Hant-TW</code>,
+<code>es-419</code>), porque é a FORMA que segura o teto: o pior dela (<code>pt-BR</code> → código
+de 12 caracteres) mede 44 / 37, ~48 com a moldura da mensagem. Código fora
+dessa forma fica só com a orientação do autor, e o log diz. O teste trava
+todo par em 165 caracteres como vigia.</li>
+</ol>
+<p><strong>O que esta regra NÃO fecha, declarado:</strong> a lista é por NOME de ferramenta —
+ferramenta nova que grave artefato entra nela no mesmo PR (o teste amarra
+cada nome a uma spec que existe, mas não descobre ferramenta nova). Se o
+modelo SEGUE as duas cláusulas na mesma mensagem é o que a validação paga da
+AT-167 mede; os tokenizadores do DeepSeek e da Anthropic seguem não medidos.</p>
+<ul>
+<li>
+<p><strong>Código:</strong> <code>apps/engine/lib/engine/harness/idioma_da_resposta.ex:174</code>
+(<code>orientacao</code>), <code>:127</code> (<code>@ferramentas_de_artefato</code>), <code>:118</code>
+(<code>@forma_curta</code>), <code>:301</code> (<code>texto_do_turno</code>), <code>:319</code> (<code>grava_artefato?</code>),
+<code>:320</code> (<code>idioma_do_projeto_para_o_artefato</code>);
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex:738</code>
+(<code>IdiomaDaResposta</code>), <code>:854</code> (<code>IdiomaDaResposta</code>);</p>
+<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:738</code>
+(<code>IdiomaDaResposta</code>), <code>:854</code> (<code>IdiomaDaResposta</code>);
+<code>apps/web/src/routes/settings/ProjectLanguageSection.tsx</code></p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>apps/engine/test/engine/harness/idioma_da_resposta_test.exs:157</code>
+(idiomas diferentes: a orientação diz os dois), <code>:168</code> (iguais: só um),
+<code>:175</code> (código fora da forma curta: só o do autor, com log), <code>:190</code> (o vigia
+do teto), <code>:204</code> (cada nome da lista é uma spec que existe), <code>:235</code> (autor
+pt-BR, projeto en, numa mensagem só), <code>:259</code> (sem ferramenta de artefato:
+só o autor), <code>:290</code> (idioma do projeto ilegível — caso de falha: só o do
+autor, com log), <code>:316</code> (sem autor: nada muda), <code>:340</code> (ponta a ponta pelo
+Criativo); <code>apps/web/src/routes/settings/idioma-do-projeto.test.tsx:84</code></p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-245, sobre a decisão da AT-168 (resposta 8) e as do
+mantenedor de 2026-09-29</p>
+</li>
+</ul>
+<h3 id="rn-625">RN-625 — O laço pergunta ao Jev qual ferramenta, e o modelo do usuário vê só o menu que sobra; o Jev restringe e nunca decide</h3>
+<p>Decisão do mantenedor (AT-236, 2026-09-28) e, sobre o critério, de 2026-09-29:
+antes de cada chamada de chat de um agente, a api pergunta ao Jev
+(<code>typesafe/jev-1.13</code>, Decisions API do OpenRouter) qual ferramenta cabe no
+passo, e o provider de chat recebe só o <strong>menu</strong> que a política P3 tira dessa
+resposta. O mecanismo está no <a href="../../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179</a>;
+a decisão de adoção, com os números, também.</p>
+<ol>
+<li><strong>Quando.</strong> Só com o provider do modelo do turno igual a <code>openrouter</code>, com
+duas ou mais ferramentas no pedido, com agente no turno (fora a Anamnese e o
+sumarizador da compactação), sem <code>catalogoCompleto</code> pedido pelo engine e com
+o workspace ligado (<code>workspaces.tool_router_enabled</code>, padrão ligado,
+<code>PUT workspaces/:workspaceId/tool-router</code>, <code>owner</code>). Qualquer condição falha:
+nenhuma chamada, nenhum evento. Com provider ≠ <code>openrouter</code> nem o workspace é
+lido. A chave é a do titular do workspace, a mesma do chat (RN-058).</li>
+<li><strong>A política é a P3 e só restringe.</strong> Menu = {escolha do Jev, ferramenta
+anterior da MESMA execução}. <code>responder_sem_ferramenta</code> do Jev, ou nenhuma
+ferramenta anterior no catálogo do passo, deixa o catálogo INTEIRO. Não há
+<code>tool_choice</code> (o modelo ainda pode responder em texto) e não há limiar de
+confiança na v1: a confiança é gravada e é da AT-239 propor um. Critério de
+adoção: <strong>80%</strong>, decisão do dono de 2026-09-29 — top-1 do Jev 73% (66–79),
+cobertura de menu da P3 91% (85,1–94), top-2 90%; cobertura é o TETO da
+acurácia ponta a ponta (62%–91% em replay), e a validação real é a AT-239.</li>
+<li><strong>O <code>state</code></strong> é o que o produto tem antes do passo, recortado das <code>messages</code>
+que o engine já manda, sem leitura de banco: <code>agente</code> = o <code>agentId</code>;
+<code>contexto</code> = o começo (1.500 caracteres) da mensagem <code>system</code> que o
+<code>ToolLoop</code> põe na frente (<code>apps/engine/lib/engine/harness/tool_loop.ex:98</code>,
+<code>system_msg</code>, montada por <code>system_prompt/1</code> em <code>:316</code>); <code>pedido</code> = a última
+mensagem <code>user</code> — nos agentes de execução a mensagem inicial do laço
+(<code>apps/engine/lib/engine/dev/dev_agent_server.ex:651</code>, <code>initial_message/2</code>,
+ou a de correção em <code>:523</code>), nos conversacionais a fala da pessoa; e
+<code>passos_recentes</code> = as 6 últimas chamadas de ferramenta depois dessa
+mensagem, uma entrada por chamada, argumento e resultado cortados em 500
+caracteres — o resultado vem da mensagem <code>tool</code> que o laço anexa
+(<code>tool_loop.ex:293</code>, <code>concluir_despacho/5</code>, com <code>toolCallId</code>). A execução
+corrente é &quot;depois da última <code>user</code>&quot; porque <code>ctx.messages</code> recomeça a cada
+<code>ToolLoop.run</code>. Teto de 8 mil tokens; estourou, queda <code>estado_grande</code>.</li>
+<li><strong>O turno nunca falha por causa do Jev.</strong> Erro HTTP, timeout (2.000 ms,
+<code>TOOL_ROUTER_TIMEOUT_MS</code>), erro de rede, JSON inesperado, escolha fora das
+opções, estado grande e colisão com o nome reservado: o provider recebe o
+catálogo inteiro e o evento leva <code>motivoDaQueda</code> e <code>origemDaQueda</code>
+(<code>infra</code>, <code>modelo</code> ou <code>codigo</code> — RN-059), nunca calado.</li>
+<li><strong>A política não muda.</strong> O Jev não aprova, não nega e não escolhe modelo. A
+ferramenta escolhida que exige aprovação continua exigindo; a chamada a uma
+ferramenta fora do cardápio é despachada como sempre e o evento só registra
+<code>foraDoCardapio</code>. O teto de iteração é o de antes (a chamada ao Jev não é uma
+iteração).</li>
+<li><strong>Registro por passo.</strong> O engine grava <code>tool_router.decided</code>, na fachada
+<code>EngineApiClient</code> para todos os agentes, com menu antes e depois, escolha,
+confiança, segunda opção, <code>aplicado</code>, queda, latência, custo real e
+<code>foraDoCardapio</code>. A api grava UMA linha de <code>token_usage</code> do Jev: ator = o
+próprio agente (o gasto entra no orçamento de área, ADR 0110), <code>modelName = typesafe/jev-1.13</code>, <code>modelId</code> nulo, <code>estimated = false</code>, <code>costMicros</code> = o
+<code>usage.cost</code> da resposta, preço por milhão IMPLÍCITO (<code>custo ÷ tokens</code>) com
+<code>price_implicit = true</code> — mantém <code>tokens × preço = custo</code> da RN-044 sem
+inventar preço de catálogo. Sem <code>usage.cost</code> na resposta não há linha. O gate
+de orçamento não é reconsultado entre o Jev e o chat.</li>
+<li><strong>Sair do beco.</strong> Menu restringido e o modelo responde sem chamar ferramenta
+(nem em texto recuperável), sem erro do provider: a fachada repete o passo UMA
+vez com <code>catalogoCompleto: true</code>, que pula o Jev. No stream, só se nada foi
+escrito para a pessoa. Pede mais ferramentas, nunca uma que o agente não tinha.</li>
+</ol>
+<p><strong>O que esta regra NÃO fecha, declarado:</strong> a tela (mostrar que o passo foi
+roteado, com a confiança, e a faixa &quot;escolhendo ferramenta&quot; pelo frame
+<code>tool_routing_started</code>) é de <code>apps/web</code>; o ganho é da AT-239; um timeout que o
+OpenRouter cobrou sem devolver <code>usage.cost</code> não entra em <code>token_usage</code>; o
+endpoint é ALPHA e o smoke manual
+(<code>jev-tool-router.smoke.spec.ts</code>, teto US$ 0,05) é quem acusa a mudança.</p>
+<ul>
+<li>
+<p><strong>Código:</strong> <code>apps/api/src/domain/llm/tool-router.ts:27</code> (<code>MODELO_DO_JEV</code>),
+<code>:109</code> (<code>montarPedidoAoJev</code>), <code>:166</code> (<code>lerRespostaDoJev</code>), <code>:216</code>
+(<code>recortarEstado</code>), <code>:272</code> (<code>menuP3</code>);
+<code>apps/api/src/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.ts:118</code>
+(<code>preparar</code>), <code>:143</code> (<code>executar</code>), <code>:305</code> (<code>registrarGasto</code>);
+<code>apps/api/src/application/use-cases/llm/run-llm-turn.use-case.ts:190</code>
+(<code>decisaoDoJev</code>); <code>apps/api/src/application/use-cases/llm/stream-llm-turn.use-case.ts:212</code>
+(<code>preparar</code>); <code>apps/api/src/infrastructure/llm/jev-tool-router.ts:32</code>
+(<code>decidir</code>); <code>apps/api/src/db/schema/iam.ts:169</code> (<code>toolRouterEnabled</code>);
+<code>apps/api/src/db/schema/llm.ts:375</code> (<code>priceImplicit</code>);
+<code>apps/engine/lib/engine/harness/roteamento_de_ferramenta.ex:60</code> (<code>registrar</code>),
+<code>:112</code> (<code>custo_micros</code>), <code>:123</code> (<code>repetir_com_catalogo_inteiro?</code>), <code>:146</code>
+(<code>mesclar_repeticao</code>); <code>apps/engine/lib/engine/sessions/engine_api_client.ex:754</code>
+(<code>llm_turn</code>), <code>:845</code> (<code>llm_turn_stream</code>);</p>
+<p>(<code>mesclar_repeticao</code>); <code>apps/engine/lib/engine/sessions/engine_api_client.ex:754</code>
+(<code>llm_turn</code>), <code>:845</code> (<code>llm_turn_stream</code>);
+<code>apps/engine/lib/engine/harness/tool_loop.ex:132</code> (o custo do Jev no orçamento
+local)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>apps/api/test/domain/llm/tool-router.spec.ts:25</code> (<code>questions</code> é
+objeto), <code>:86</code> (forma inesperada vira queda — caso de falha), <code>:138</code> (o
+<code>state</code>), <code>:210</code> (a P3);
+<code>apps/api/test/infrastructure/llm/jev-tool-router.contract.spec.ts:60</code> (a
+resposta gravada), <code>:121</code> (erro HTTP), <code>:130</code> (timeout), <code>:142</code> (rede),
+<code>:149</code> e <code>:154</code> (JSON inesperado), <code>:163</code> (escolha fora das opções);
+<code>apps/api/test/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.spec.ts:186</code>
+(provider ≠ openrouter não chama), <code>:222</code> (workspace desligado), <code>:255</code>
+(estado grande), <code>:277</code> (a P3), <code>:318</code> (sem ferramenta = catálogo inteiro),
+<code>:331</code> (sem anterior = inteiro), <code>:352</code> (a política não muda), <code>:369</code> (as
+quedas), <code>:456</code> (o metering, no orçamento de área);
+<code>apps/engine/test/engine/harness/roteamento_de_ferramenta_test.exs:67</code> (o
+evento), <code>:103</code> (a queda no evento), <code>:180</code> (sair do beco), <code>:288</code> (o custo no
+laço), <code>:299</code> (a aprovação continua exigida), <code>:325</code> (o roteamento não conhece
+a política)</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-238, sobre a especificação da AT-235, as dezesseis decisões da
+AT-236, a medição da AT-237/AT-280 e a decisão do dono de 2026-09-29 (critério
+de 80%)</p>
+</li>
+</ul>
+<h2 id="decidir-no-chat-onde-o-dono-está-rn-626">Decidir no chat, onde o dono está (RN-626)</h2>
+<h3 id="rn-629">RN-629 — O QA Lead trata o subagente que SUSPENDE de novo na retomada do mesmo jeito que na primeira vez, e resultado que não conhece vira bloqueio nomeado</h3>
+<p>O <code>qa-automacao</code> roda vários comandos e cada um pode pedir aprovação humana. O
+<code>QaLeadServer</code> já parava a área quando <code>run/5</code> devolvia <code>{:awaiting, _}</code> (achado
+AB, ADR 0052), mas a RETOMADA (<code>retomar/3</code>, quando a decisão chega) devolvia o
+resultado de um laço que podia suspender OUTRA vez — e esse segundo
+<code>{:awaiting, _}</code> entrava na lista de resultados colhidos como se fosse parecer.
+Ao consolidar, <code>registrar_resultado/5</code> não tinha cláusula para ele e o
+GenServer caía (<code>FunctionClauseError</code>, medido em 29/09/2026: 06:55:01 e
+07:00:10), deixando as três tasks entregues em <code>awaiting_qa</code> para sempre, sem
+veredito e sem desfecho nomeado.</p>
+<ol>
+<li><strong>Um só lugar decide o que fazer com o resultado de um subagente</strong>
+(<code>tratar_resultado/6</code>), venha ele de <code>run/5</code> ou de <code>retomar/3</code>.
+<code>{:awaiting, _}</code> guarda o estado em voo (chaveado pela nova ação), mantém a
+linha de <code>gate_states</code> em <code>in_progress</code> com o subagente e PARA a área: sem
+veredito, sem bloquear a task, sem registrar a delegação. Quem retoma é o
+mesmo <code>{:action_settled, _}</code> do <code>Engine.Dev.Wake</code> (ADR 0086), quantas vezes
+forem necessárias.</li>
+<li><strong>Resultado que o lead não conhece nunca derruba nem some</strong> (RN-059): vira
+<code>{:blocked, …}</code> com origem <code>codigo</code> (falta uma cláusula aqui, não é infra,
+modelo nem política), que <code>registrar_resultado/5</code> grava como delegação
+<code>failed</code> e <code>QaLead.consolidar/1</code> transforma em bloqueio da task com a origem.</li>
+</ol>
+<p><strong>Declarado, não resolvido:</strong> o restart do engine com o lead suspenso perde a
+inscrição no Wake (lacuna aceita do ADR 0086); o <code>GateRescuer</code> reinicia a área
+inteira (ADR 0067), não retoma o <code>ctx</code>. Esta regra não muda o ADR 0090 (o
+momento do QA-estratégia) nem o teto de iterações do subagente.</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/gates/qa_lead_server.ex:127</code>
+(<code>handle_info</code>), <code>:237</code> (<code>tratar_resultado</code>), <code>:230</code> (resultado desconhecido)</li>
+<li><strong>Testes:</strong> <code>apps/engine/test/engine/gates/qa_lead_server_test.exs:325</code>
+(segunda suspensão na retomada: fica suspenso, não decide nada, e a segunda
+decisão conclui a área); <code>:278</code> (uma suspensão, o caminho feliz)</li>
+<li><strong>Origem:</strong> AT-248, sobre o achado E2 da análise de uso real de 2026-09-29</li>
+</ul>
+<h3 id="rn-636">RN-636 — O AppSec só oferece o threat model a quem ainda não recebeu oferta nem está ativo</h3>
+<p>O AppSec criava três ofertas por história com <code>run_design</code>, aos mesmos três
+destinos — N histórias, 3N ofertas pendentes (AT-292, que funde a AT-273 do
+vault por decisão do dono; <a href="../../adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182</a>).</p>
+<ol>
+<li><strong>Pergunta no modo <code>seAusente</code>.</strong> <code>criar_handoffs_appsec/3</code> chama
+<code>EngineApiClient.create_handoff_if_absent/5</code>, que manda <code>seAusente: true</code> à
+MESMA rota interna. A api decide sob o lock do destino (<a href="../api.html#rn-635">RN-635</a>):
+com oferta pendente em QUALQUER sessão do projeto, devolve a existente
+(<code>desfecho: ja_oferecido</code>) e não a substitui; com o destino ativo, 409
+<code>agente_ja_ativo</code>. Perguntar antes, pelo engine, seria corrida com outra
+oferta.</li>
+<li><strong>&quot;Já atendido&quot; não é falha.</strong> As duas respostas acima seguem sem
+<code>agent.error</code>. Falha de verdade (5xx, rede) continua narrada por alvo, com
+origem (<a href="parte-01.html#rn-116">RN-116</a>, <a href="parte-02.html#rn-361">RN-361</a>).</li>
+<li><strong>O artefato fica.</strong> O <code>artifact.threat_model</code> é gravado ANTES e de qualquer
+jeito; o que deixa de nascer é a oferta repetida.</li>
+</ol>
+<ul>
+<li>
+<p><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/secops_agent_server.ex:377</code>
+(<code>criar_handoffs_appsec/3</code>);
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex:1142</code></p>
+<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:1326</code>
+(<code>create_handoff_if_absent</code>);
+<code>apps/api/src/domain/sessions/ciclo-de-vida-do-handoff.ts:71</code>
+(<code>decidirOferta</code>)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>apps/engine/test/engine/gates/secops_agent_server_test.exs</code>
+(&quot;run_design (RN-636): destino com oferta pendente ou já ativo não recebe
+outra, e isso não é erro&quot;, &quot;run_design (RN-636): falha de verdade ao
+oferecer segue narrada, só para aquele destino&quot;);
+<code>apps/api/test/application/use-cases/agents/ciclo-de-vida-do-handoff.spec.ts</code>
+(&quot;<code>seAusente</code> (AppSec, RN-636)…&quot;)</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-292, AT-273</p>
+</li>
+</ul>
+<h2 id="a-pr-do-dev-agent-mira-dev-e-o-gate-julga-o-diff-dessa-pr-rn-664">A PR do dev agent mira <code>dev</code>, e o gate julga o diff dessa PR (RN-664)</h2>
+<h3 id="rn-664">RN-664 — O trabalho dos agentes nasce de <code>dev</code>, a PR deles mira <code>dev</code>, e o gate julga o diff contra <code>dev</code> — os três juntos</h3>
+<blockquote>
+<p><strong>Revisada pela <a href="parte-06.html#rn-1021">RN-1021</a> (AT-617):</strong> no repositório do projeto a branch de trabalho agora é a <code>main</code> (trunk), e a constante <code>@branch_de_trabalho</code> do código vale <code>&quot;main&quot;</code>. O texto abaixo descreve a política de <code>dev</code> que ela substituiu; onde ele diz <code>dev</code> para a branch de trabalho do projeto, leia <code>main</code>.</p>
+</blockquote>
+<p>A política de branches do produto manda o trabalho nascer de <code>dev</code> (o bootstrap
+cria <code>dev</code> e <code>qa</code> a partir de <code>main</code>, <a href="../api.html#rn-582">RN-582</a>), mas até aqui ninguém
+apontava os agentes para ela: o <code>pr_open</code> do dev agent não levava
+<code>targetBranch</code> e a api completava com <code>repo.defaultBranch</code> (<code>main</code>); a PR de
+ADR do Arquiteto nascia de <code>main</code> e mirava <code>main</code>; o working tree do projeto
+abria a <code>default_branch</code>; o gate calculava o diff contra ela; e o contexto do
+QA dizia &quot;Repositório · branch main&quot; (AT-250, item A4 do uso real de 29/09).
+Toda PR de agente pulava a esteira <code>dev → qa → main</code>.</p>
+<p>Decisão do dono (30/09): os TRÊS passam a usar <code>dev</code>, juntos — mudar só um
+deixaria o gate julgando um diff que não é o da PR. A branch de TRABALHO é
+<code>dev</code> e NÃO é a <code>default_branch</code> do provider (que segue sendo a que a promoção
+alcança por último e continua lida onde ela é a pergunta):</p>
+<ul>
+<li>o working tree do projeto abre <code>dev</code> (<code>ensure_remoto/2</code> ignora o
+<code>default_branch</code> do remoto para escolher a base), e o worktree de cada dev
+agent nasce de <code>dev</code> EXPLICITAMENTE, não do HEAD — workspace inicializado
+antes desta regra está parado na <code>default_branch</code> (a marca de pronto impede
+re-inicializar) e ganha a <code>dev</code> local a partir de <code>origin/dev</code>, sem <code>fetch</code>
+novo;</li>
+<li>o <code>pr_open</code> do dev agent leva <code>targetBranch: &quot;dev&quot;</code> no payload, e a api, sem
+o campo (ação proposta antes), completa com <code>dev</code> e não mais com a
+<code>defaultBranch</code>; a PR de ADR nasce de <code>dev</code> e mira <code>dev</code>;</li>
+<li>o diff do gate é <code>dev...HEAD</code>, e a linha de contexto do projeto diz
+&quot;Repositório · branch de trabalho dev&quot;.</li>
+</ul>
+<p><strong>Repositório SEM <code>dev</code></strong> (adotado sem bootstrap, ou bootstrap que não chegou a
+<code>create_dev_branch</code>): NÃO há queda para a <code>default_branch</code> — seria o agente
+trabalhando e o gate julgando sobre uma base que não é a da PR. Cada ponto
+falha NOMEADO, pelo comportamento que já tinha para branch ausente, com uma
+exceção nova: o working tree recusava nada e criava uma <code>dev</code> LOCAL VAZIA
+(o caminho do bare que nunca recebeu push), marcava pronto e nunca mais
+re-inicializava. Agora esse caminho só vale para o remoto SEM branch nenhuma;
+com branches e sem <code>origin/dev</code>, a inicialização levanta com a mensagem
+nomeada (<code>mensagem_sem_branch_de_trabalho/1</code>, &quot;o repositório do projeto não
+tem a branch <code>dev</code>… crie a branch… e tente de novo&quot;) e o <code>.git</code> é desfeito
+(AT-112), então a próxima tentativa, com a <code>dev</code> criada, inicializa normal. O
+worktree recusa com a mesma mensagem quando não há <code>dev</code> nem <code>origin/dev</code>; o
+diff falha com o erro do git nomeando a revisão; o provider recusa a PR (e a
+criação da branch do ADR) nomeando a ref. O <code>infra</code> (<code>open_infra_pr</code>) NÃO
+mudou: segue nascendo e mirando a <code>defaultBranch</code>.</p>
+<p>O valor mora em DOIS lugares, de propósito, um por linguagem, e mudam juntos:
+<code>BRANCH_DE_TRABALHO</code> na api e <code>branch_de_trabalho/0</code> no engine.</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/projects/project_repository.ex:166</code>
+(<code>branch_de_trabalho</code>), <code>:177</code> (<code>branch_de_trabalho</code>), <code>:191</code>
+(<code>mensagem_sem_branch_de_trabalho</code>);
+<code>apps/engine/lib/engine/actions/workspace.ex:71</code> (<code>ensure_remoto</code>), <code>:224</code>
+(<code>init_from_bare!</code>), <code>:273</code> (<code>remoto_vazio?</code>);
+<code>apps/engine/lib/engine/actions/workspace/runner_git.ex:160</code> (<code>add_worktree</code>),
+<code>:183</code> (<code>garantir_base</code>), <code>:330</code> (<code>remoto_vazio?</code>);
+<code>apps/engine/lib/engine/dev/worktree_manager.ex:37</code> (<code>create</code>), <code>:321</code>
+(<code>add_worktree</code>), <code>:527</code> (<code>garantir_base</code>);
+<code>apps/engine/lib/engine/dev/agent_io.ex:436</code> (<code>propose_pr</code>);
+<code>apps/engine/lib/engine/gates/diff.ex:29</code> (<code>compute</code>);
+<code>apps/engine/lib/engine/harness/project_context.ex:29</code> (<code>repo_line</code>);
+<code>apps/api/src/domain/actions/protected-branches.ts:26</code> (<code>BRANCH_DE_TRABALHO</code>);
+<code>apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts:208</code>
+(<code>targetBranch</code>); <code>apps/api/src/application/use-cases/actions/execute-adr-pr.use-case.ts:86</code>
+(<code>fromRef</code>), <code>:99</code> (<code>targetBranch</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/diff_test.exs:64</code> (o diff é só a
+mudança do agente, nada da <code>main</code> — caminho feliz), <code>:73</code> (sem <code>dev</code> o diff
+falha nomeando a revisão — caso de falha), <code>:91</code> (o contexto diz a branch de
+trabalho); <code>apps/engine/test/engine/actions/workspace_test.exs:87</code>, <code>:98</code>,
+<code>:110</code> (repositório adotado sem <code>dev</code>: recusa nomeada, <code>.git</code> desfeito, e
+passa depois de criada a branch — caso de falha), <code>:130</code>;
+<code>apps/engine/test/engine/dev/worktree_manager_test.exs:119</code>, <code>:127</code>
+(workspace de antes da regra), <code>:147</code> (sem <code>dev</code> nem <code>origin/dev</code>);
+<code>apps/engine/test/engine/dev/dev_agent_server_test.exs:114</code>;
+<code>apps/api/test/application/use-cases/actions/execute-git-action.use-case.spec.ts:184</code>,
+<code>:213</code>; <code>apps/api/test/application/use-cases/actions/execute-adr-pr.use-case.spec.ts:143</code>,
+<code>:151</code> (sem <code>dev</code>, <code>failed</code> com o motivo do provider)</li>
+<li><strong>Origem:</strong> AT-250 (item A4 da análise do uso real de 29/09), decisão do dono
+de 30/09</li>
+</ul>
+<h2 id="o-idioma-das-respostas-dos-agentes-rn-618620-rn-622624-adr-0177-1">O idioma das respostas dos agentes (RN-618..620, RN-622..624, ADR 0177)</h2>
+<h3 id="rn-667">RN-667 — O formulário estruturado segue o idioma da resposta: a descrição da ferramenta não fixa idioma nenhum</h3>
+<p>A validação paga da AT-167 achou, para autor com preferência <code>en</code> (C06/C12),
+a chamada <code>ask_structured_questions</code> com a <strong>prosa em inglês e as perguntas do
+formulário em português</strong> — no DeepSeek tratado, 8 das 15 respostas de
+C06+C12. A causa é do produto, e mora num lugar só: a descrição da ferramenta
+dizia que <code>label</code> era &quot;o texto da pergunta, <strong>em pt-BR</strong>&quot;. Era uma SEGUNDA
+orientação de idioma, fixa, fora da fachada da <a href="#rn-622">RN-622</a>, competindo
+com ela em toda chamada do Criativo e do PO (as duas usam a MESMA spec).</p>
+<ol>
+<li><strong>O mecanismo é tirar a orientação concorrente, não acrescentar outra.</strong> A
+descrição passou a dizer &quot;o texto da pergunta, <strong>no idioma da sua
+resposta</strong> (vale também para <code>options</code>)&quot;, e o exemplo, que segue em
+português, é marcado &quot;os textos seguem o idioma da sua resposta&quot;. Ela não
+nomeia idioma NENHUM: QUAL é o idioma continua decidido só pela mensagem
+efêmera de <code>Engine.Harness.IdiomaDaResposta</code>, e a fachada <code>EngineApiClient</code>
+não muda.</li>
+<li><strong>A orientação da RN-622/623 fica byte a byte.</strong> Zero token a mais nos 50
+de teto. <code>ask_structured_questions</code> segue FORA de <code>@ferramentas_de_artefato</code>
+(é pergunta à pessoa do turno, <a href="#rn-623">RN-623</a> item 4), então autor <code>en</code>
+num projeto <code>pt-BR</code> recebe as perguntas em inglês — e é o que se quer.</li>
+<li><strong>Custo, onde ele cai.</strong> A descrição viaja em toda chamada que leva a
+ferramenta, com qualquer autor: medido com <code>gpt-tokenizer</code>, só o texto que
+mudou, +23 tokens em cl100k e +19 em o200k (a linha de <code>label</code> 18/17 → 29/27;
+a do exemplo 8/6 → 20/15). Não é a orientação indo para a descrição — a
+frase aponta para ela sem dizer idioma, e o que foi embora era justamente a
+frase que dizia um.</li>
+<li><strong>Guarda.</strong> Nenhuma descrição de ferramenta do harness (as 22 de
+<code>Engine.Harness.Tools.*</code>) pode citar <code>pt-BR</code>, <code>(en)</code>, &quot;in English&quot;, &quot;em
+português&quot; ou &quot;em inglês&quot; — a do <code>emit_artifact</code>, que exige as CHAVES do
+payload &quot;em INGLÊS&quot;, fica de fora porque fala de contrato, não de texto para
+a pessoa.</li>
+</ol>
+<p><strong>O que esta regra NÃO fecha, declarado:</strong> a medição paga antes/depois
+<strong>não rodou</strong> (sem chave do OpenRouter na máquina da mudança) — o &quot;antes&quot; é o
+da AT-167 (DeepSeek tratado: 8 de 15 respostas de C06+C12 com o formulário em
+português), e o &quot;depois&quot; é <strong>pendência do dono</strong>:
+<code>pnpm --filter @brabo/scripts idioma:validar --arquivo-de-chave ~/.config/brabo/openrouter-test.env --bracos tratamento --casos C06,C12 --rodadas 5 --teto-usd 0.5 --saida ~/.cache/brabo/validacao-idioma/at-282</code>,
+seguido de <code>idioma:validar --relatorio --saida</code> na mesma pasta e da revisão do
+formulário (rótulo <code>formulario</code> do <code>idioma:revisar</code>). Teto sugerido US$ 0,50:
+o braço tratado inteiro custou US$ 0,21 (DeepSeek) e US$ 0,94 (Haiku) em
+17 casos, e estes são 2. O script lê a descrição do arquivo do produto, então
+mede o texto novo sem cópia. Se o formulário continuar em português com a
+descrição neutra, o passo seguinte é uma cláusula condicional na orientação
+(só quando a chamada leva <code>ask_structured_questions</code>), e ela tem de caber no
+pior caso da RN-623 (44 / 37), que já está a ~48 com a moldura.</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/harness/tools/ask_structured_questions.ex:193</code>
+(<code>descricao</code>), <code>:44</code> (<code>spec</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tools/ask_structured_questions_test.exs:199</code>
+(a descrição manda seguir o idioma da resposta), <code>:207</code> (não nomeia idioma
+— caso de falha: a forma antiga &quot;em pt-BR&quot; é reprovada pela mesma régua),
+<code>:214</code> (nenhuma das ferramentas do harness fixa idioma);
+<code>scripts/idioma/validacao.spec.ts:60</code> (a medição lê a descrição nova)</li>
+<li><strong>Origem:</strong> AT-282, da revisão humana da AT-167 (PR #750, 29/09); entrada
+na rodada aprovada pelo mantenedor em 2026-09-30</li>
+</ul>
+<h2 id="o-infra-lead-não-anuncia-subida-que-não-fez-rn-668">O Infra Lead não anuncia subida que não fez (RN-668)</h2>
+<h3 id="rn-668">RN-668 — O que o turno do Infra Lead anuncia sobre a subida do container é decidido pelo código, não pelo texto do modelo</h3>
+<p>É a <a href="parte-01.html#rn-163">RN-163</a> (&quot;nada se anuncia que o
+código não vá executar&quot;) aplicada ao Infra Lead. No uso real de 29/09 (sessão
+<code>be70</code>, seq 282) ele escreveu que subiria o container &quot;em paralelo&quot; à PR de
+infra, e nenhum <code>tool.call</code> de subida veio depois (AT-264). Havia duas causas no
+código, e as duas fecham aqui:</p>
+<ol>
+<li><strong>O lote inteiro da resposta é despachado antes do encerramento.</strong>
+<code>propose_infra_pr</code> aceita encerra o turno sem nova ida ao modelo — é o único
+ponto em que o CÓDIGO corta o laço com o modelo querendo continuar —, mas
+ela parava o despacho no MEIO do lote: uma <code>propose_container_start</code> (ou
+<code>container_start_via_runner</code>) pedida na MESMA resposta, depois da PR, sumia
+sem <code>tool.call</code>, sem <code>tool.result</code> e sem aviso. Agora é a forma do Dev Lead
+(<code>propose_execution_plan</code>): todas as chamadas da resposta rodam, e só depois
+a PR aceita encerra o turno. Uma segunda <code>propose_infra_pr</code> na mesma resposta
+é recusada com motivo (<code>tool.call</code> + <code>tool.result</code> com <code>ok: false</code>) — só a
+primeira consolida com o Workflows.</li>
+<li><strong>O fecho do turno diz, com frase do SERVIDOR, quando a subida NÃO foi
+proposta</strong> — a forma do desfecho consolidado do Criativo (<code>encerrar/2</code>). A
+decisão é pelo que o laço executou (alguma proposta de subida ACEITA pela api
+neste turno?), nunca pelo que o modelo escreveu; não há leitura do texto
+dele. Fala-se em dois casos: o turno terminou pela PR e nenhuma subida foi
+proposta; ou uma subida foi tentada, recusada, e nenhuma proposta aceita veio
+depois. Turno que nunca tocou na subida (uma pergunta, uma correção de gate)
+não ganha frase nenhuma, e container já REGISTRADO <code>running</code>/<code>provisioning</code>
+também não (a mesma leitura local de <code>recusa_ja_de_pe/2</code>, sem HTTP).</li>
+</ol>
+<p>O kickoff e a descrição de <code>propose_infra_pr</code> passam a dizer o que o código faz:
+a subida vem ANTES da PR ou na MESMA resposta, porque a PR encerra o turno. Isso
+é ajuda ao modelo, não a garantia — a garantia é o fecho do item 2.</p>
+<p>Nada aqui sobe container nem propõe subida, com as recusas por modo e estado
+intactas (RN-566/RN-610). Desde a <a href="../api.html#rn-671">RN-671</a> (AT-260) a primeira subida
+é passo do SERVIDOR no kickoff, marcada pelo MESMO <code>registrar_subida</code>: no caso
+comum ela foi proposta e o fecho do item 2 não tem o que dizer; ele segue
+falando quando a subida do servidor foi recusada (ou NEGADA pela política, que
+desde então conta como recusa) e quando ela não cabia ao servidor (sem
+roteamento, <code>runner</code>) e o modelo não a propôs.</p>
+<ul>
+<li>
+<p><strong>Código:</strong> <code>apps/engine/lib/engine/infra/infra_lead_server.ex:505</code>
+(<code>dispatch_calls</code>), <code>:541</code> (<code>recusa_pr_repetida_no_lote</code>), <code>:1252</code>
+(<code>registrar_subida</code>), <code>:1254</code> (<code>fechar_subida</code>), <code>:1155</code></p>
+<p>(<code>dispatch_calls</code>), <code>:539</code> (<code>recusa_pr_repetida_no_lote</code>), <code>:1140</code>
+(<code>registrar_subida</code>), <code>:1150</code> (<code>fechar_subida</code>), <code>:1154</code>
+(<code>desfecho_da_subida</code>); <code>apps/engine/lib/engine/infra/tools/propose_infra_pr.ex</code>
+(a descrição da tool)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>apps/engine/test/engine/infra/infra_lead_server_test.exs:1075</code>
+(a subida pedida depois da PR na mesma resposta é despachada — caminho feliz),
+<code>:1107</code> (a PR encerra o turno sem subida e o fio diz — caso de falha),
+<code>:1147</code> (subida recusada e prometida, sem proposta: o fecho diz), <code>:1132</code>
+(container já de pé: nada a dizer), <code>:1169</code> (recusa corrigida no turno: sem
+frase), <code>:1190</code> (turno sem subida: sem frase), <code>:1199</code> (segunda
+<code>propose_infra_pr</code> no lote é recusada)</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-264 (uso real de 2026-09-29, item A18 da análise)</p>
+</li>
+</ul>
+<h2 id="o-git-credenciado-roda-no-host-do-runner-rn-676">O git credenciado roda no host do runner (RN-676)</h2>
+<h3 id="rn-673">RN-673 — A mensagem que chega com turno em curso entra numa fila persistida no log e é lida no fim do turno, N mensagens num turno só</h3>
+<p>Até aqui a mensagem que chegava a um agente conversacional no meio de um turno
+era 409 <code>turno_em_andamento</code> (<a href="parte-03.html#rn-578">RN-578</a>): gravada como <code>chat.message</code>
+(a api grava antes de falar com o engine) e nunca lida. O uso real de 29/09
+mediu três numa sessão só — PO, Infra Lead e Dev Lead. Decisão do dono (01/10),
+para os SETE conversacionais pelo mesmo caminho:</p>
+<ol>
+<li><strong>Fila, não recusa.</strong> Com turno em curso, a mensagem entra na fila do agente
+(<code>TurnoAssincrono.receber_mensagem/4</code>), o agente grava <code>chat.message_queued</code>
+(<code>mensagemId</code>, <code>texto</code>, <code>idioma</code>, <code>posicao</code>) e o clique recebe 202 com
+<code>{entrega: &quot;enfileirada&quot;, posicao}</code>. Sem turno, o turno sobe na hora, como
+sempre (<code>entrega: &quot;lida&quot;</code>). A rota da api devolve também o <code>mensagemId</code> — o
+id do <code>chat.message</code>.</li>
+<li><strong>N mensagens = 1 turno.</strong> No FIM do turno (<code>finalizar/1</code>, nunca
+<code>suspender/1</code>) as pendentes viram UM turno, na ordem de chegada, num texto só
+(<code>FilaDeMensagens.texto_do_turno/1</code>: uma é ela mesma; várias, numeradas), e o
+agente grava <code>chat.message_delivered</code> com os ids. A entrega é uma mensagem a
+si mesmo, depois do fecho do servidor (a correção de gate do Infra Lead e o
+handoff do Arquiteto vêm primeiro). A mensagem que chega entre o fim do turno
+e a entrega entra no FIM da fila, e a fila é entregue na hora.</li>
+<li><strong>Teto de 10</strong> pendentes por agente e sessão. A 11ª é 409
+<code>fila_de_mensagens_cheia</code>, com <code>agent.error</code> durável de origem <code>politica</code> —
+ela está gravada e não será lida.</li>
+<li><strong>Cancelar.</strong> <code>POST …/agents/:agent/messages/:messageId/cancel</code>
+(<code>developer</code>, o mínimo da rota de mensagem): só quem ENVIOU (403
+<code>mensagem_de_outra_pessoa</code>), só em sessão que aceita conversa
+(<a href="../api.html#rn-581">RN-581</a>). Quem decide se ela ainda está na fila é o processo do
+agente, que serializa a corrida com a entrega: 409 <code>mensagem_fora_da_fila</code>
+quando já foi lida ou cancelada. O engine grava <code>chat.message_cancelled</code> em
+nome de quem cancelou; com o agente fora do ar, grava direto (a fila é o log).</li>
+<li><strong>Persistida no log, nunca em tabela.</strong> Pendente = enfileirada e nem
+entregue nem cancelada — a mesma derivação no engine e na tela. O <code>init/1</code>
+dos sete reconstrói a fila e agenda a entrega; a <a href="parte-03.html#rn-580">RN-580</a> tira do
+histórico a cancelada e a pendente do próprio agente; no boot, depois de
+fechar o turno órfão (<a href="parte-03.html#rn-586">RN-586</a>), o agente com fila pendente é
+acordado. O turno interrompido continua nunca refeito.</li>
+<li><strong>Turno suspenso em aprovação</strong> (Dev Lead, RN-284) segue recusando com
+<code>aguardando_aprovacao</code> — sem fim previsto, enfileirar prometeria leitura sem
+data. A fila que já existia espera a retomada terminar.</li>
+<li><strong>A tela.</strong> Com turno em curso o composer não trava mais para mensagem a
+agente: o botão vira &quot;Pôr na fila&quot; e a mensagem não arma turno novo. No fio,
+&quot;na fila de <agente>&quot; com Cancelar para o autor, e &quot;cancelada&quot; riscada. O
+chat sem agente segue travando.</li>
+</ol>
+<p>A recusa <code>turno_em_andamento</code> continua para o que não é fala: revisão de
+história do PO, prontidão do Criativo, oferta de handoff do Arquiteto.</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/agents/turno_assincrono.ex:322</code>
+(<code>receber_mensagem</code>), <code>:245</code> (<code>tratar_resultado</code>), <code>:519</code> (<code>entregar_fila</code>),
+<code>:380</code> (<code>cancelar_mensagem</code>), <code>:425</code> (<code>fila_ao_subir</code>), <code>:559</code>
+(<code>emitir_recusa_por_fila_cheia</code>);
+<code>apps/engine/lib/engine/agents/fila_de_mensagens.ex:71</code> (<code>pendentes</code>), <code>:111</code>
+(<code>fora_do_historico</code>), <code>:158</code> (<code>texto_do_turno</code>), <code>:182</code>
+(<code>acordar_pendentes</code>);
+<code>apps/engine/lib/engine/agents/reidratacao.ex:178</code> (<code>fora_do_historico</code>);
+<code>apps/engine/lib/engine/agents/dev_lead_server.ex:251</code> (<code>_mensagem_id</code>);
+<code>apps/engine/lib/engine_web/controllers/agent_command_controller.ex:405</code>
+(<code>cancel_queued_message</code>), <code>:468</code> (<code>responder_ao_aceite</code>);
+<code>apps/api/src/application/use-cases/agents/cancel-queued-agent-message.use-case.ts:35</code>
+(<code>CancelQueuedAgentMessageUseCase</code>);
+<code>apps/api/src/infrastructure/http-clients/api-to-engine-client.ts:69</code>
+(<code>entregaDaResposta</code>);
+<code>apps/api/src/domain/sessions/conversa-em-sessao-encerrada.ts:72</code>;
+<code>apps/web/src/lib/fila-de-mensagens.ts:27</code> (<code>estadosNaFila</code>);
+<code>apps/web/src/lib/enfileirar-mensagem.ts:25</code> (<code>useEnfileirarMensagem</code>);
+<code>apps/web/src/routes/PainelDaFila.tsx:20</code> (<code>PainelDaFila</code>, que substituiu o selo — RN-978)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/fila_de_mensagens_test.exs:156</code>
+(entra na fila — caminho feliz), <code>:181</code> (N mensagens = 1 turno), <code>:223</code> (a
+que chega na janela vai ao fim), <code>:246</code> (teto de 10 — caso de falha), <code>:276</code>
+e <code>:306</code> (cancelar e cancelar fora da fila), <code>:322</code> (restart), <code>:349</code> (Dev
+Lead suspenso), <code>:78</code>/<code>:120</code> (derivação e reidratação);
+<code>apps/engine/test/engine_web/controllers/agent_command_controller_test.exs:70</code>;
+<code>apps/api/test/application/use-cases/agents/cancel-queued-agent-message.use-case.spec.ts:40</code>,
+<code>:61</code> (outra pessoa — caso de falha), <code>:95</code>, <code>:106</code>;
+<code>apps/api/test/application/use-cases/agents/send-agent-message.use-case.spec.ts:74</code>;
+<code>apps/api/test/infrastructure/http-clients/api-to-engine-client.spec.ts:531</code>;
+<code>apps/web/src/routes/SessionPage.fila-de-mensagens.test.tsx:163</code>, <code>:189</code>
+(fila cheia), <code>:207</code>, <code>:233</code>; <code>apps/web/src/lib/fila-de-mensagens.test.ts:17</code></li>
+<li><strong>Origem:</strong> AT-267 (item A21 da análise do uso real de 2026-09-29), decisão do
+dono de 01/10; <a href="../../adr/0191-a-mensagem-com-turno-em-curso-entra-numa-fila.html">ADR 0191</a></li>
+</ul>
+<p><strong>Complementada pela <a href="parte-06.html#rn-924">RN-924</a>.</strong> A mesma ideia (estado da fila no log, reconstruído no <code>init/1</code>) vale para a correção de gate do Infra Lead, e a fila de mensagens espera o fim do turno retomado (<a href="parte-06.html#rn-920">RN-920</a>).</p>
+<h2 id="o-plano-de-teste-nasce-depois-da-entrega-do-dev-rn-674-adr-0192">O plano de teste nasce depois da entrega do dev (RN-674, ADR 0192)</h2>
+<h3 id="rn-674">RN-674 — A QA-estratégia escreve o plano sobre o código ENTREGUE, no começo do ciclo do <code>qa-verificada</code>, e o <code>implementavel</code> se julga sem ele</h3>
+<p>No uso real de 29/09 o plano de teste PRE-DEV (<a href="../contracts.html#rn-341">RN-341</a>) terminou
+duas vezes em <code>toolloop.limit_reached</code> 8/8 sem <code>emit_plano_de_teste</code>: o laço
+leu docs, RAG vazio e pastas até concluir que &quot;o código ainda não existe&quot;. O
+dono decidiu (01/10) pela saída (b): o plano nasce DEPOIS da entrega. O
+<a href="../../adr/0192-plano-de-teste-depois-da-entrega.html">ADR 0192</a> revisa o 0090 nesse
+ponto, e a regra tem quatro partes:</p>
+<ol>
+<li><strong>O plano é o primeiro passo do ciclo de revisão.</strong> <code>run_area/3</code> do
+<code>QaLeadServer</code> obtém o plano da entrega ANTES das subespecialidades
+(<code>plano_de_teste_da_entrega/5</code>): reencontra na cauda da sessão (teto da
+reidratação, <a href="parte-03.html#rn-580">RN-580</a>) o <code>artifact.plano_de_teste</code> da MESMA
+<code>taskId</code> — a rodada de correção não paga outro laço —, e senão roda
+<code>QaEstrategiaAgent.run/6</code> com o worktree do dev como <code>workspace_root</code>, as
+regras de negócio da task e a lista de arquivos que a entrega tocou
+(<code>git diff dev...HEAD</code>, até 40 nomes). Diff que falha vira texto (&quot;não
+consegui listar: motivo&quot;), nunca lista vazia.</li>
+<li><strong>O plano é INSUMO, nunca veredito.</strong> Ele chega à Automação no FIM da
+mensagem dela, para o passo de achar qual teste cobre cada regra; a régua do
+veredito não muda (uma linha de <code>coverageMatrix</code> por regra da story,
+<code>approved</code> só com suite verde e toda regra coberta) e o contrato externo
+segue sendo UM <code>qa_verdict</code> por ciclo. Plano que FALHA não segura a revisão:
+a QA-estratégia grava <code>agent.error</code> com origem (<a href="parte-01.html#rn-059">RN-059</a>)
+e a Automação recebe a mensagem de sempre, byte a byte.</li>
+<li><strong>O <code>implementavel</code> se julga sobre a história e o <code>module_map</code>.</strong>
+<code>run_assessment/2</code> não lê nem dispara plano: propõe o parecer na PRIMEIRA
+chamada, sobre o que o kickoff do Dev Lead já lhe dá, com payload
+<code>storyId</code>/<code>parecer</code>/<code>justificativa</code>. Gate, dono, severidade <code>warn</code> e
+aprovação humana não mudam; só a <code>entrada</code> (<code>[story-ready, module_map]</code>).
+O appsec (<a href="parte-02.html#rn-539">RN-539</a>) segue disparando ali, no design.</li>
+<li><strong>O teto continua 8.</strong> <code>&quot;qa-estrategia&quot;</code> não ganha cláusula em
+<code>Iteracoes.tipo/1</code>; o que mudou foi o insumo. O agente passa a rodar sob o
+<code>task_budget_micros</code> que as subespecialidades compartilham
+(<a href="parte-01.html#rn-036">RN-036</a>).</li>
+</ol>
+<p><code>run_design/3</code>, <code>Dispatcher.run_qa_estrategia/3</code> e <code>QaEstrategiaContext</code>
+saíram, e <code>artifact.plano_de_teste</code> passa a exigir <code>taskId</code>. Declarado e não
+decidido aqui: se os critérios executáveis do plano devem virar linhas
+OBRIGATÓRIAS da <code>coverageMatrix</code> (e portanto reprovar entrega).</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/qa_lead_server.ex:190</code> (<code>plano_de_teste_da_entrega</code>),
+<code>:741</code> (<code>plano_de_teste_da_entrega</code>), <code>:742</code> (<code>plano_ja_emitido</code>),
+<code>:747</code> (<code>arquivos_alterados</code>);
+<code>apps/engine/lib/engine/gates/qa_estrategia_agent.ex:87</code> (<code>run</code>),
+<code>:104</code> (<code>token_budget_micros</code>), <code>:189</code> (<code>descrever_arquivos</code>);
+<code>apps/engine/lib/engine/gates/qa_automacao_agent.ex:226</code> (<code>com_o_plano</code>);
+<code>apps/engine/lib/engine/agents/dev_lead_tools.ex:544</code> (<code>run_assessment</code>),
+<code>:577</code> (<code>propor_parecer</code>);
+<code>apps/engine/lib/engine/harness/artifact_schemas.ex:59</code> (<code>taskId</code>);
+<code>apps/api/config/gates.yml</code> (<code>qa-verificada</code>, <code>implementavel</code>); <code>packages/contracts/fluxo.yml</code>
+(<code>qa-estrategia</code>, <code>area-qa</code>, <code>dev-lead</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/qa_lead_server_test.exs</code>, describe
+&quot;plano de teste da entrega (ADR 0192)&quot; — o plano antes da Automação e dentro
+da mensagem dela (caminho feliz), o reuso por <code>taskId</code>, o plano de outra
+task que não conta, e o plano que falha sem segurar a revisão (caso de
+falha); <code>apps/engine/test/engine/gates/qa_estrategia_agent_test.exs</code> (os
+arquivos da entrega na mensagem, o diff que falhou, <code>taskId</code> no artefato);
+<code>apps/engine/test/engine/agents/dev_lead_tools_test.exs</code>, describe
+&quot;assess_implementability (ADR 0090, insumo do ADR 0192)&quot; (parecer na
+primeira chamada, payload sem plano); <code>dev_lead_server_test.exs</code>
+(&quot;assess_implementability pending TAMBÉM suspende&quot;); <code>apps/engine/test/engine/harness/artifact_schemas_test.exs</code>
+(&quot;sem taskId é rejeitado&quot;). ExUnit: provado só no CI (o <code>repo.hex.pm</code> deu
+403 no ambiente da rodada).</li>
+<li><strong>Origem:</strong> AT-269 (item A23 da análise do uso real de 29/09); decisão do
+dono em 01/10</li>
+</ul>
+<h2 id="a-anamnese-religada-sujeito-elegível-e-fato-do-perfil-rn-680">A Anamnese religada: sujeito elegível e fato do perfil (RN-680)</h2>
+<h3 id="rn-680">RN-680 — A Anamnese não roda sem sujeito elegível, e a hipótese que a própria pessoa aceitou vira fato do perfil dela no grafo e entra no contexto dos agentes que conversam com ela</h3>
+<p>Decisão do dono em 01/10 (AT-277): <strong>religar a Anamnese com correções</strong>. No
+uso real de 29/09 ela rodou seis vezes e as seis terminaram em
+<code>anamnese.run_skipped</code> (&quot;nenhum membro elegível&quot;), escritos pelo MODELO depois
+de uma chamada paga (8 933 micros), e as três hipóteses aceitas ficaram na fila
+sem destino. Ver o <a href="../../adr/0196-anamnese-religada-com-sujeito-e-fato-do-perfil.html">ADR 0196</a>.</p>
+<ol>
+<li><strong>Sem sujeito elegível, a rodada não roda.</strong> Sujeito é o membro EFETIVO do
+projeto (<code>projectRole ?? workspaceRole</code>, a régua da <a href="../web.html#rn-471">RN-471</a>),
+fora do opt-out, com interação PRÓPRIA no que a rodada mostra ao modelo —
+evento dele com <code>actor_kind: &quot;user&quot;</code> na janela, ou decisão dele. A guarda
+vem ANTES da triagem e nem a hipótese na fila a atravessa. Sem sujeito:
+nenhuma chamada ao LLM e nenhuma busca no RAG; o motivo vai NOMEADO para o
+log do engine (<code>sem_sujeito_elegivel</code>, com <code>nenhum_membro</code> ou
+<code>nenhuma_interacao_propria</code> e os números) e, na rodada pedida à mão,
+também para o event log (<code>anamnese.run_skipped</code> com
+<code>causa: &quot;sem_sujeito_elegivel&quot;</code>). Pelo tick é só log — seria um aviso a cada
+15 minutos por projeto. O prompt passa a listar só os sujeitos.</li>
+<li><strong>Membro do projeto é o EFETIVO.</strong> Criar projeto não grava
+<code>project_members</code>, e a Anamnese lia só essa tabela — o dono do workspace
+nunca era membro. Os três casos de uso da Anamnese passam a ler
+<code>listEffectiveMembers</code>; <code>listMembers</code> continua só <code>project_members</code>.</li>
+<li><strong>A hipótese ACEITA pela PRÓPRIA pessoa vira fato do perfil.</strong> O
+<code>psychologist.hypothesis_accepted</code> carrega <code>projectId</code>, <code>sujeito</code> (o autor
+da sessão analisada), <code>hipotese</code>, <code>sugestao</code> e <code>fatoDoPerfil</code>, e o
+<code>GraphEventTranslator</code> — o mesmo do projetor e de <code>grafo:reprojetar</code> — o
+traduz para <code>(:FatoDoPerfil {hypothesisId})</code>, ligado à pessoa (<code>SOBRE</code>) e ao
+projeto (<code>NO_PROJETO</code>). <code>fatoDoPerfil</code> só é <code>true</code> quando quem aceitou é o
+sujeito: um fato sobre a pessoa nunca nasce do clique de outra, e o payload
+diz por quê (<code>motivoSemFato</code>). A recusada fica só registrada, como antes.
+Os aceites gravados antes desta RN não têm os campos e não viram fato.</li>
+<li><strong>O fato entra no contexto dos agentes que conversam com a pessoa.</strong> A
+mensagem do autor a um agente conversacional leva os fatos DELE neste
+projeto — lidos por <code>QueryUserContextUseCase</code>, escopados ao projeto, os 5
+mais recentes, com o total ao lado e o recorte dito —, e o engine os põe no
+turno como mensagem <code>system</code> EFÊMERA, pelo mesmo caminho do idioma
+(<a href="#rn-622">RN-622</a>): nunca no histórico, antes da orientação de idioma, com
+teto de 2 000 caracteres. Grafo fora do ar vira log, e o turno segue sem os
+fatos. Turno sem autor não recebe fatos.</li>
+<li><strong>Religada.</strong> <code>ANAMNESE_ENABLED</code> volta ao default <code>true</code> no <code>runtime.exs</code> e
+nos três composes; <code>START_ANAMNESE</code> não muda (o de produção segue <code>false</code>,
+divergência já declarada). O Psicólogo segue pausado.</li>
+</ol>
+<ul>
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/anamnese/elegibilidade.ex:59</code> (<code>avaliar</code>);
+<code>apps/engine/lib/engine/workers/anamnese_worker.ex:63</code> (<code>maybe_analyze</code>),
+<code>:97</code> (<code>narrar_sem_sujeito</code>);
+<code>apps/api/src/domain/iam/membros-efetivos.ts:16</code> (<code>membrosEfetivos</code>);
+<code>apps/api/src/infrastructure/persistence/drizzle/project.repository.ts:209</code> (<code>listEffectiveMembers</code>);
+<code>apps/api/src/application/use-cases/execution/accept-hypothesis.use-case.ts:75</code> (<code>fatoDoPerfil</code>);
+<code>apps/api/src/application/graph-projection/graph-event-translator.ts:171</code> (<code>projectProfileFact</code>);
+<code>apps/api/src/application/use-cases/graph/query-user-context.use-case.ts:68</code> (<code>fatos</code>);
+<code>apps/api/src/domain/graph/perfil-do-autor.ts:30</code> (<code>textoDoPerfilDoAutor</code>);
+<code>apps/api/src/application/use-cases/agents/send-agent-message.use-case.ts:152</code> (<code>resolverPerfil</code>);
+<code>apps/engine/lib/engine/harness/perfil_do_autor.ex:68</code> (<code>anexar</code>);
+<code>apps/engine/lib/engine/harness/idioma_da_resposta.ex:253</code> (<code>com_idioma_do_autor</code>);
+<code>apps/engine/config/runtime.exs:315</code> (<code>anamnese_enabled?</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/anamnese/elegibilidade_test.exs:17</code>
+(caminho feliz), <code>:35</code> e <code>:46</code> (sem sujeito — casos de falha);
+<code>apps/engine/test/engine/workers/anamnese_worker_test.exs:305</code> (sem membro,
+nem com fila, não chama o LLM), <code>:324</code>, <code>:343</code> (rodada à mão narra), <code>:360</code>;
+<code>apps/engine/test/engine/anamnese/context_builder_test.exs:82</code>;
+<code>apps/api/test/infrastructure/persistence/drizzle/project-effective-members.repository.spec.ts:69</code>;
+<code>apps/api/test/application/use-cases/execution/accept-dismiss-hypothesis.use-case.spec.ts:136</code>,
+<code>:156</code> (aceite de terceiro não vira fato);
+<code>apps/api/test/application/graph-projection/graph-projector.spec.ts:361</code>, <code>:386</code>;
+<code>apps/api/test/application/use-cases/agents/send-agent-message.use-case.spec.ts:181</code>,
+<code>:207</code> (grafo fora do ar);
+<code>apps/engine/test/engine/harness/perfil_do_autor_test.exs:14</code>;
+<code>apps/engine/test/engine_web/controllers/agent_command_controller_test.exs:428</code></li>
+<li><strong>Origem:</strong> AT-277 (item A31 da análise do uso real de 29/09; decisão do dono
+em 01/10)</li>
+</ul>
+<h2 id="o-teto-da-rn-418-vale-também-pela-porta-tipada-rn-689">O teto da RN-418 vale também pela porta tipada (RN-689)</h2>
+<h3 id="rn-690">RN-690 — O assistente guarda os <code>toolCalls</code> da resposta: o resultado da ferramenta não chega órfão ao provider</h3>
+<p>Os agentes conversacionais com laço próprio (Criativo, PO, Arquiteto, Dev Lead,
+UX Designer, Staff e Infra Lead) guardavam no histórico a mensagem do
+assistente SEM os <code>toolCalls</code> da resposta e, em seguida, a mensagem
+<code>role: &quot;tool&quot;</code> com o <code>toolCallId</code>. No fio, o provider recebia um resultado que
+respondia a chamada nenhuma e o descartava: o modelo nunca via o que a
+ferramenta devolveu e repetia a mesma chamada até o teto do laço (medido na
+v7.0.0: o PO chamou <code>listar_regras_de_negocio</code> 12 de 12 vezes em dois turnos).</p>
+<p>A mensagem do assistente passa a levar os <code>toolCalls</code> NATIVOS da resposta
+quando há algum — o mesmo formato que o <code>ToolLoop</code> já guardava e que o
+<code>ContextManager</code> agrupa na compactação —, montada num lugar só. Resposta sem
+<code>toolCalls</code> não ganha a chave. Chamada recuperada do texto (<code>ToolCallRecovery</code>,
+id nulo) fica de fora: não há id para casar. A api já repassava o campo aos
+providers (<code>toWireMessage</code> no OpenAI-compatível, <code>tool_use</code> no Anthropic); a
+reidratação continua trazendo ferramentas como texto.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/mensagem_do_assistente.ex:17</code> (<code>de</code>);
+<code>apps/engine/lib/engine/agents/po_server.ex:280</code>, e o mesmo ponto nos outros seis servidores</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/po_server_test.exs:93</code> (a segunda
+chamada leva o <code>assistant</code> com <code>toolCalls</code> logo antes do <code>tool</code> que o
+responde; a resposta final, sem ferramenta, não ganha a chave — caso de falha)</li>
+<li><strong>Origem:</strong> AT-350</li>
+</ul>
+<h3 id="rn-695">RN-695 — A análise da Anamnese não entra no fio da sessão</h3>
+<p>Medido no uso real da v7.0.0: o texto que o modelo da Anamnese escreve durante
+a rodada (&quot;Analisando a janela do log… usuário (09824667-…)… Decisão de
+proficiência&quot;) aparecia como BOLHA no fio da sessão de ideação, entre o
+Criativo e o PO, com o UUID cru do usuário. A Anamnese não conversa com
+ninguém: ela analisa a PESSOA, e o que ela produz é o perfil
+(<a href="#rn-680">RN-680</a>).</p>
+<p><strong>A regra:</strong> o texto da rodada é gravado como <code>anamnese.analysis</code>, nunca como
+<code>agent.response</code>. O <code>ToolLoop</code> aceita <code>response_event</code> no contexto (padrão
+<code>agent.response</code>, inalterado para todo outro consumidor) e a Anamnese o põe.
+O fio da sessão não desenha NENHUM evento cujo ator é o agente <code>anamnese</code> —
+inclusive o <code>agent.response</code> gravado antes da correção. O painel de log da
+sessão continua mostrando os eventos dela; o resultado mora em Configurações ›
+Perfil de proficiência, sem id cru. Nenhum marcador &quot;perfil atualizado&quot; entra
+no fio: fica de fora até alguém pedir.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tool_loop.ex:128</code> (<code>loop</code>);
+<code>apps/engine/lib/engine/workers/anamnese_worker.ex:157</code> (<code>build_ctx</code>);
+<code>apps/web/src/routes/session-timeline-montagem.tsx:147</code> (<code>ehDaAnamnese</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/workers/anamnese_worker_test.exs:253</code>
+(o texto sai <code>anamnese.analysis</code>; <code>agent.response</code> nunca é gravado — caso de
+falha); <code>apps/web/src/routes/session-timeline-montagem.falha-de-turno.test.tsx:86</code>
+(a resposta da Anamnese some do fio, a do Criativo fica)</li>
+<li><strong>Origem:</strong> AT-355</li>
+</ul>
+<h3 id="rn-697">RN-697 — O turno da prontidão do Criativo só sintetiza: sem ferramentas</h3>
+<p>O turno que <code>confirm_readiness</code> dispara consolida as regras num resumo e grava o
+<code>product_brief</code>. No uso real (v7.0.0, Haiku 4.5) ele levou 25 s e gravou mais
+quatro <code>artifact.business_rule</code> e um <code>chat.structured_question</code> que ninguém
+responderia: o PO já tinha entrado pelo aceite implícito (RN-658). O turno passa
+a ir ao modelo SEM catálogo de ferramentas, e nenhuma chamada é atendida nele —
+nem a que o modelo copie do histórico. O catálogo volta intacto no turno
+seguinte; o turno normal continua com <code>emit_artifact</code> e
+<code>ask_structured_questions</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/criativo_server.ex:223</code> (<code>executar_confirm_readiness</code>);
+<code>:268</code> (<code>ferramentas_da_prontidao</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/criativo_server_test.exs:172</code> (o turno
+vai com <code>tools: []</code> e não grava regra nem pergunta) e <code>:192</code> (regressão: o turno
+normal mantém as duas ferramentas)</li>
+<li><strong>Origem:</strong> AT-352</li>
+</ul>
+<h3 id="rn-698">RN-698 — O texto do turno vira UMA resposta, e o teto de iterações aparece no fio</h3>
+<p>Com ferramentas, o modelo escreve em pedaços — um trecho antes da chamada, outro
+na volta seguinte, muitas vezes continuando a mesma frase. Cada volta virava a
+sua <code>agent.response</code>, e o fio recolhe as anteriores em &quot;Passos do turno&quot;: à
+mostra ficava só o último pedaço (&quot; histórias e tarefas que cubram tudo.&quot;,
+começando com espaço). O transporte não perdia nada — o frame <code>final</code> da api
+leva o texto inteiro da VOLTA —; o que se partia era o TURNO. Nos sete
+conversacionais, o texto de uma volta com ferramenta é acumulado no processo do
+turno e gravado numa <code>agent.response</code> só quando o turno fecha (sem ferramenta,
+teto, falha, suspensão do Dev Lead, PR da Infra). Pedaço que começa ou termina
+com espaço entra como veio; dois pedaços colados viram parágrafos.</p>
+<p>O <code>toolloop.limit_reached</code> dos conversacionais (RN-166) passa a ser uma linha
+no fio, na bolha de falha, origem <code>modelo</code>, dizendo o teto (&quot;parou no teto de N
+passos sem terminar o turno&quot;); sem o número no payload a linha diz <code>?</code>.</p>
+<p>A <code>agent.response</code> do turno leva o <code>modelName</code> (RN-146) em TODO desfecho, não
+só no fecho sem ferramenta: quando o turno fecha sem uma chamada final que o
+traga (entregou um formulário <code>ask_structured_questions</code>, esgotou o teto,
+falhou), vale o modelo da última volta acumulada. Sem chamada de LLM que tenha
+devolvido modelo, o campo fica <code>nil</code> — nunca um modelo inventado (AT-384; o
+Infra Lead não grava <code>modelName</code> em desfecho nenhum e segue fora).</p>
+<p><strong>Revisão (decisão do dono, 03/10, AT-395): só o fecho do turno na bolha.</strong> No
+uso real (loja-teste-2, 02/10) a resposta única juntava o texto de TODAS as
+voltas (&quot;Vou registrar… Excelente! Registrei…&quot;, dois resumos seguidos no PO).
+A <code>agent.response</code> do turno continua UMA, mas o <code>content</code> passa a ser só o
+FECHO — o texto da última volta que escreveu algo (o turno que termina num
+formulário, sem texto na última volta, fica com a anterior) — e o texto das
+voltas anteriores vai, na ordem, no campo <code>passos</code>, ausente quando não há.
+Nada some: o fio desenha cada passo como narração do mesmo turno+autor antes
+do fecho, e o colapso de &quot;Passos do turno&quot; que já existia os recolhe, fechado
+por padrão; os passos não contam no corte de mensagens do fio (RN-644). A
+reidratação (RN-580) devolve <code>passos</code> ANTES do <code>content</code>, no mesmo
+<code>assistant</code>, para o modelo não perder o que disse no meio do turno. Vale nos
+sete conversacionais (o Infra Lead também, sem <code>modelName</code>). Sem teto próprio
+para <code>passos</code>: o acúmulo já era gravado inteiro antes da revisão.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/texto_do_turno.ex:88</code> (<code>descarregar</code>);
+<code>:123</code> (<code>juntar</code>); <code>:51</code> (<code>descarregar_com_modelo</code>); <code>:65</code> (<code>payload_do_turno</code>);
+<code>apps/engine/lib/engine/agents/reidratacao.ex:183</code> (<code>acumular</code>);
+<code>apps/web/src/routes/session-timeline-montagem.tsx:884</code> (<code>passos</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/texto_do_turno_test.exs:43</code> (três
+voltas: fecho e dois passos), <code>:56</code> (uma volta, sem <code>passos</code>), <code>:60</code> (termina
+em formulário); <code>apps/engine/test/engine/agents/reidratacao_test.exs</code>
+(passos antes do fecho); <code>apps/web/src/routes/SessionPage.ordenacao-e-avisos.test.tsx:502</code>
+(só o fecho à mostra, passos ao expandir) e <code>:524</code> (sem passos, nada extra);
+<code>apps/engine/test/engine/agents/criativo_server_test.exs:209</code> (duas
+voltas, uma resposta inteira; nenhuma segunda), <code>apps/engine/test/engine/agents/texto_do_turno_test.exs</code>
+e <code>apps/web/src/routes/session-timeline-montagem.falha-de-turno.test.tsx:85</code>
+(a linha do teto; sem número, não inventa um); o modelo no formulário em
+<code>apps/engine/test/engine/agents/criativo_server_test.exs:703</code> (com modelo) e
+<code>:724</code> (sem modelo, <code>nil</code>)</li>
+<li><strong>Origem:</strong> AT-354, AT-384, AT-395</li>
+</ul>
+<h3 id="rn-699">RN-699 — O Dev Lead lê o module_map vigente e o backlog do PROJETO, e relê os dois quando o plano é recusado</h3>
+<p>Medido no uso real (02/10): aceito o Dev Lead, ele respondeu que faltava o
+module_map — e o mapa existia. O kickoff procurava o evento
+<code>architecture.module_map_created</code>, que NENHUM código emite (o Arquiteto grava o
+mapa pela api), e caía sempre em &quot;(sem module_map)&quot;. O mapa agora vem da MESMA
+leitura de projeto que o AppSec usa (<code>get_infra_context</code>, o vigente da api),
+nunca de evento da sessão; sem mapa, o kickoff diz que não há.</p>
+<p>No mesmo uso, as tarefas nasceram DEPOIS do kickoff, o Dev Lead inventou um
+<code>task_id</code>, a api recusou o plano e o turno acabou sem nova tentativa. Ele ganha
+<code>read_backlog</code>: leitura CONTIDA, sem parâmetro, escopada ao projeto (as tarefas
+pendentes pela mesma rota da <code>listar_backlog</code> do PO, teto de 200 linhas dizendo
+o total real, e o module_map vigente). A recusa da api volta ao laço dizendo
+para chamar <code>read_backlog</code> e corrigir; e só o <code>propose_execution_plan</code>
+bem-sucedido encerra o turno — antes, qualquer ferramenta bem-sucedida na
+última chamada (uma leitura, um <code>emit_artifact</code>) encerrava. A instrução do
+kickoff proíbe inventar <code>task_id</code> e pede que ele só diga ter avaliado as
+histórias em que chamou <code>assess_implementability</code>.</p>
+<ul>
+<li>
+<p><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:418</code> (<code>module_map_vigente</code>);
+<code>:353</code> (<code>spec_read_backlog</code>); <code>:419</code> (<code>tarefas_do_backlog</code>);
+<code>apps/engine/lib/engine/agents/dev_lead_server.ex:682</code> (<code>kickoff_instruction</code>);</p>
+</li>
+<li>
+<p><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:418</code> (<code>module_map_vigente</code>);
+<code>:353</code> (<code>spec_read_backlog</code>); <code>:419</code> (<code>tarefas_do_backlog</code>);
+<code>apps/engine/lib/engine/agents/dev_lead_server.ex:682</code> (<code>kickoff_instruction</code>);
+<code>:416</code> (<code>run_turn</code>)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>apps/engine/test/engine/agents/dev_lead_server_test.exs:164</code> (o
+mapa vigente chega ao kickoff e o tipo antigo não é lido), o teste seguinte
+(sem mapa, diz que não há — caso de falha) e <code>:202</code> (plano recusado pela api →
+<code>read_backlog</code> no mesmo turno, com as tarefas reais)</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-362, AT-363</p>
+</li>
+</ul>
+<h3 id="rn-700">RN-700 — O PO não anuncia o handoff ao Arquiteto sem fazê-lo, e história sem tarefa não é entregue</h3>
+<p>No uso real o PO escreveu &quot;Handoff ao Arquiteto&quot; e encerrou o turno sem chamar
+<code>offer_handoff</code> (fere a RN-163), e entregou cinco histórias <code>ready</code> com zero
+tarefas — o Dev Lead não tinha o que distribuir. No fim de todo turno do PO,
+se o servidor ainda não registrou oferta ao Arquiteto naquele processo, ele lê
+as regras do projeto (<code>uncoveredCount</code>, a mesma cobertura do aceite automático
+da RN-660) e o backlog: com toda regra coberta e toda história com ≥ 1 tarefa,
+o SERVIDOR oferece o handoff (molde da Infra que propõe sozinha, ADR 0190,
+RN-671/672), e a RN-660 segue decidindo o aceite. Com regra coberta e história
+sem tarefa, não oferece e grava <code>backlog.handoff_not_offered</code> (origem <code>modelo</code>)
+nomeando as histórias; leitura ou oferta que falha grava o mesmo evento com
+origem <code>infra</code>. Regra descoberta, ou backlog sem regra/história, não é julgado.
+A instrução do PO passa a exigir tarefa por história. Quem cria as tarefas é o
+PO (decisão do agente principal na AT-364: ele já tem <code>create_task</code>).</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/po_server.ex:520</code> (<code>fechar_handoff</code>);
+<code>:563</code> (<code>oferecer_handoff</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/po_server_test.exs:592</code> (oferece e
+não repete), <code>:610</code> (história sem tarefa: não oferece, nomeia)</li>
+<li><strong>Origem:</strong> AT-364</li>
+</ul>
+<h2 id="o-instalador-oferece-os-modelos-locais-e-não-confunde-o-dev-com-uma-instalação-rn-691-rn-692">O instalador oferece os modelos locais, e não confunde o dev com uma instalação (RN-691, RN-692)</h2>
+<h3 id="rn-702">RN-702 — A compactação de contexto respeita a janela padrão de 128k e nunca troca turnos por um marcador vazio</h3>
+<ul>
+<li><strong>Regra:</strong> sem <code>context_window</code> no contexto (os agentes conversacionais não o
+declaram), a janela de compactação é <code>DEFAULT_CONTEXT_WINDOW</code>, cujo padrão
+passou de 8 192 para 128 000, o mesmo valor que os agentes de gate e de dev
+declaram. Quando o sumarizador (<code>context-manager</code>) falha ou devolve texto
+vazio, o resumo é DETERMINÍSTICO (um trecho de até 300 caracteres de cada
+turno substituído) e o <code>context.compacted</code> grava <code>summaryOrigin: &quot;deterministico&quot;</code> e <code>falha</code> com <code>origem</code> e <code>motivo</code> (RN-059). Com o
+sumarizador respondendo, <code>summaryOrigin: &quot;modelo&quot;</code> e <code>falha: null</code>.</li>
+<li><strong>Medição (AT-366):</strong> sessão 17d41c20, Arquiteto em
+<code>anthropic/claude-haiku-4.5</code> (janela de 200k): 6 799 tokens passavam de
+<code>0,7 × 8 192 = 5 734</code> e compactavam 35 turnos; o sumarizador falhou e o
+resumo gravado foi o marcador <code>&quot;(35 turnos anteriores omitidos)&quot;</code>. No turno
+seguinte o Arquiteto pediu de novo uma confirmação que já tinha recebido.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/context_manager.ex:157</code> (<code>summarize</code>),
+<code>apps/engine/lib/engine/harness/context_manager.ex:188</code> (<code>resumo_deterministico</code>),
+<code>apps/engine/config/runtime.exs</code> (<code>default_context_window</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/context_manager_test.exs</code>
+(&quot;sem context_window declarado: 6,8k tokens NÃO compactam&quot;; &quot;sumarizador
+respondendo: summaryOrigin modelo, sem falha&quot;; caso de falha: &quot;sumarizador
+falhando: falha NOMEADA com origem e resumo determinístico com o conteúdo&quot;)</li>
+<li><strong>Lacuna declarada:</strong> a janela continua não sendo lida do catálogo por
+modelo (o engine não recebe o <code>context_window</code> do binding); 128k é o padrão
+da instalação, ajustável por <code>DEFAULT_CONTEXT_WINDOW</code>.</li>
+<li><strong>Origem:</strong> AT-366</li>
+</ul>
+<h3 id="rn-706">RN-706 — O agente de execução sabe onde está: pasta, imagem, rede, git tipado e o próprio módulo</h3>
+<ul>
+<li><strong>Regra:</strong> os dev agents (<code>dev-*</code>) e os subagentes de QA (<code>qa-*</code>) recebem em
+toda chamada de LLM uma mensagem <code>system</code> EFÊMERA de ambiente, pelo mesmo
+caminho do idioma (RN-622) e do perfil do autor (RN-680) — nunca em
+<code>state.messages</code>, nunca por servidor. Ela diz a pasta real em que o
+<code>terminal</code> roda (o <code>workspace_root</code> do laço, traduzido para <code>/work</code> pela
+mesma regra do <code>TerminalExecutor</code> quando há container <code>running</code>
+REGISTRADO), a imagem e a rede do último <code>artifact.project_image</code>, que no
+terminal NÃO rodam git (o container de execução pode não ter git): a <code>main</code>
+atual, o commit do merge, o push e a PR são do sistema
+(<a href="parte-06.html#rn-1010">RN-1010</a>, AT-798; a liberação do <code>git merge</code> no modo pasta da
+<a href="../api.html#rn-1019">RN-1019</a> segue na política, mas o engine não depende dela) e, para o dev
+agent, o MÓDULO dele: o que consome de outro módulo vem do contrato
+(<code>listar_contratos_de_modulos</code>) e se usa por stub/mock, nunca reimplementado,
+e arquivos de raiz que já existem na <code>dev</code> (<code>package.json</code>, lockfile) não se
+recriam. Sem container <code>running</code>, a mensagem DIZ isso e não afirma <code>/work</code>.
+Teto de 1 200 caracteres; falha de leitura vira mensagem ausente, nunca turno
+derrubado.</li>
+<li><strong>Medição (AT-379/AT-378, 02/10, loja-teste):</strong> <code>dev-api</code> e <code>qa-automacao</code>
+rodaram <code>cd /workspace</code> (nenhum prompt cita essa pasta); <code>git status</code> deu
+exit 127 numa imagem sem git; o <code>dev-api</code> (módulo <code>api</code>) criou
+<code>src/catalog.js</code> e <code>package.json</code>, os mesmos do <code>dev-catalog</code>, e o merge
+conflitou.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/ambiente_do_agente.ex:102</code> (<code>montar</code>),
+<code>:48</code> (<code>com_ambiente</code>), <code>:65</code> (<code>anexar</code>),
+<code>apps/engine/lib/engine/harness/tool_loop.ex:87</code> (<code>com_ambiente</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/ambiente_do_agente_test.exs</code>
+(&quot;caminho feliz: com container running, a pasta é /work/.worktrees/<agente>&quot;;
+caso de falha: &quot;sem container running, não afirma /work&quot;)</li>
+<li><strong>Lacuna declarada:</strong> nenhum aviso no resultado do <code>git_commit</code> para arquivo
+de outro módulo (o <code>module_map</code> não diz quais caminhos são de cada módulo,
+então o aviso não seria determinístico) e nenhum bloqueio de commit, por
+decisão do dono.</li>
+<li><strong>Origem:</strong> AT-379, AT-378</li>
+</ul>
+<h3 id="rn-707">RN-707 — O semgrep do gate de SecOps tem <code>$HOME</code> gravável, e a falha sem saída é nomeada</h3>
+<ul>
+<li><strong>Regra:</strong> nos composes de produção e de instalação, o tmpfs <code>/home/engine</code>
+do engine nasce com o dono do usuário da imagem
+(<code>/home/engine:uid=1000,gid=1000,mode=0700</code>). O <code>SemgrepDetector.Live</code>
+distingue o exit <code>1</code> com JSON (achados) do exit <code>0</code>/<code>1</code> com stdout vazio,
+que vira <code>{:error, {:sem_saida, exit_code}}</code> em vez de <code>:invalid_output</code>.
+O veredito do gate NÃO muda: scanner que não rodou continua &quot;pulado&quot; no
+resumo do parecer.</li>
+<li><strong>Medição (AT-380):</strong> dentro de <code>brabo-engine-1</code> (imagem de produção,
+<code>read_only: true</code>), o tmpfs <code>/home/engine</code> nascia <code>root</code> <code>2755</code>; o
+<code>semgrep scan</code> do gate saía <code>1</code> com stdout vazio e
+<code>PermissionError: '/home/engine/.semgrep'</code> no stderr, e o parser chamava
+isso de <code>:invalid_output</code>. Com o tmpfs <code>uid=1000</code> o mesmo comando devolve o
+JSON (exit 0). O Kubernetes não tinha o defeito (<code>fsGroup: 1000</code> no
+<code>emptyDir</code>).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/actions/semgrep_detector.ex:73</code>
+(<code>interpretar</code>), <code>docker/docker-compose.prod.yml</code>,
+<code>docker/docker-compose.install.yml</code></li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/actions/semgrep_detector_test.exs</code>
+(&quot;JSON com results vira findings, inclusive com exit 1 (achou algo)&quot;; caso
+de falha: &quot;exit 1 com stdout vazio é falha de execução nomeada, não
+:invalid_output&quot;)</li>
+<li><strong>Decisão (revista pela <a href="#rn-714">RN-714</a>):</strong> a frase &quot;o veredito do gate
+NÃO muda&quot; deixou de valer: o dono decidiu (02/10) que SAST que não rodou
+deixa o gate PENDENTE e bloqueando.</li>
+<li><strong>Origem:</strong> AT-380</li>
+</ul>
+<h3 id="rn-710">RN-710 — O Workflows não é delegado sem CI que rode, e não pergunta a ninguém</h3>
+<p>No aceite da Infra, o <code>infra-workflows</code> respondia com uma pergunta (&quot;qual é o
+provider do repositório do projeto?&quot;) que nenhum humano recebe — subagente não
+conversa —, e a delegação terminava <code>failed</code> com origem <code>modelo</code> e um
+<code>dev.error</code> genérico no fio (medido no loja-teste, 02/10). O projeto era
+<code>local</code>: repositório bare no servidor, sem runner de CI.</p>
+<ul>
+<li>
+<p>Provider <code>local</code> ou ausente: a delegação ao Workflows é <strong>dispensada</strong>
+(<code>delegation</code> <code>dispensed</code>, com a justificativa nomeada — &quot;repositório local
+… não tem CI que rode&quot;), e a PR de infra sai só com o que o Lead produziu.
+Só <code>github</code> e <code>gitlab</code> delegam.</p>
+</li>
+<li>
+<p>Quando delega, o prompt diz que o provider recebido JÁ é o do projeto e
+proíbe perguntar.</p>
+</li>
+<li>
+<p>O subagente que para com TEXTO em vez de chamar a ferramenta continua falha
+nomeada reportada ao lead, mas o diagnóstico diz o que ele pediu: &quot;pediu
+informação que não recebeu, em vez de chamar emit_infra_delegation_result:
+<texto>&quot; (até 300 caracteres).</p>
+</li>
+<li>
+<p>O título da PR de infra leva o prefixo <code>infra: </code> só quando o resumo do
+modelo ainda não começa com ele (sem diferenciar maiúsculas) — antes saía
+&quot;infra: infra: Dockerfile…&quot; (AT-396).</p>
+</li>
+<li>
+<p><strong>Onde:</strong> <code>apps/engine/lib/engine/infra/workflows_agent.ex:61</code> (<code>dispensa</code>),
+<code>apps/engine/lib/engine/infra/infra_lead.ex:69</code> (<code>com_prefixo</code>),
+<code>apps/engine/lib/engine/infra/workflows_agent.ex:183</code> (<code>parada_sem_ferramenta</code>),
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:1288</code> (<code>finalize</code>)</p>
+<p><code>apps/engine/lib/engine/infra/infra_lead_server.ex:1288</code> (<code>finalize</code>)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>apps/engine/test/engine/infra/workflows_agent_test.exs</code> (&quot;RN-710: …&quot;)
+e <code>apps/engine/test/engine/infra/infra_lead_server_test.exs</code> (&quot;RN-710:
+repositório local dispensa o Workflows …&quot;) e
+<code>apps/engine/test/engine/infra/infra_lead_test.exs</code> (&quot;com_prefixo/1 (AT-396)&quot;)</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-368, AT-396</p>
+</li>
+</ul>
+<h3 id="rn-711">RN-711 — O conversacional sabe onde está no fluxo, e a restrição técnica do usuário vira decision_record</h3>
+<ul>
+<li>
+<p><strong>Regra:</strong> os sete agentes conversacionais (Criativo, PO, Arquiteto, Infra,
+Dev Lead, UX Designer, Staff) recebem em toda chamada de LLM uma mensagem
+<code>system</code> EFÊMERA com o fluxo de entrega — as sete etapas na ordem (Criativo →
+PO → Arquiteto → Infra → Dev Lead → dev agents → QA/SecOps → merge manual),
+ONDE o agente está, o PRÓXIMO passo real e QUEM o dispara (humano ×
+sistema) —, pela fachada <code>EngineApiClient</code>, depois do ambiente (RN-706) e
+antes do perfil (RN-680) e do idioma (RN-622, sempre o último). A fonte é
+UMA, <code>Engine.Harness.FluxoDoTime</code>, conferida por teste contra
+<code>packages/contracts/fluxo.yml</code>: todo papel citado existe ali como <code>active</code>, e o texto não
+cita etapa fora dele (deploy, pipeline, Dockerfile, InfraAgent). O Criativo
+registra restrição técnica EXPLÍCITA do usuário (linguagem, &quot;nenhuma
+dependência&quot;, &quot;sem rede&quot;, &quot;um módulo só&quot;) como <code>decision_record</code>
+(<code>emit_artifact</code>, RN-505), sem sermão; o kickoff do Arquiteto lê os
+<code>artifact.decision_record</code> da sessão (a mesma leitura por tipo, RN-580) e
+manda respeitá-los, dizendo QUAL e POR QUÊ quando contrariar. O fechamento do
+Arquiteto não pede de novo a confirmação já dada, e a Infra não cola os
+arquivos no chat nem promete deploy.</p>
+</li>
+<li>
+<p><strong>Medição (AT-369/AT-370, 02/10, loja-teste):</strong> o Criativo anunciou o
+Arquiteto como próximo (é o PO); o PO disse que o Arquiteto ia &quot;implementar&quot;;
+o Arquiteto, que &quot;dev agents começam&quot; após os ADRs, e pediu &quot;Confirme:
+Arquitetura pronta&quot; depois da confirmação; a Infra despejou ~80 linhas de
+compose no fio. O pedido &quot;Node puro, nenhuma dependência, sem rede, um módulo
+só&quot; não virou artefato e o Arquiteto criou três módulos.</p>
+</li>
+<li>
+<p><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/fluxo_do_time.ex:120</code> (<code>texto</code>),
+<code>:97</code> (<code>anexar</code>), <code>apps/engine/lib/engine/sessions/engine_api_client.ex:647</code></p>
+<p><code>:97</code> (<code>anexar</code>), <code>apps/engine/lib/engine/sessions/engine_api_client.ex:754</code>
+(<code>llm_turn</code>), <code>apps/engine/lib/engine/harness/agents.ex:23</code> (<code>identity</code>),
+<code>apps/engine/lib/engine/agents/arquiteto_server.ex:408</code> (<code>build_kickoff</code>)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>apps/engine/test/engine/harness/fluxo_do_time_test.exs</code>
+(&quot;todo papel citado existe no fluxo.yml como ativo&quot;; caso de falha: &quot;nenhum
+texto cita etapa/agente fora do fluxo&quot;),
+<code>apps/engine/test/engine/agents/arquiteto_server_test.exs</code> (&quot;kickoff lê os
+decision_record e manda respeitar &quot;um módulo só&quot;&quot;),
+<code>apps/engine/test/engine/harness/agents_test.exs</code></p>
+</li>
+<li>
+<p><strong>Lacuna declarada:</strong> a leitura de <code>decision_record</code> do Arquiteto é da
+SESSÃO (como as regras e as histórias do kickoff), não do projeto inteiro; e
+nada RECUSA um <code>create_module_map</code> que contrarie a restrição — a instrução
+pede a justificativa, não a impõe.</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-369, AT-370</p>
+</li>
+</ul>
+<h3 id="rn-714">RN-714 — SAST que não rodou deixa o gate de SecOps pendente, nunca aprovado</h3>
+<ul>
+<li><strong>Regra:</strong> quando o semgrep do gate de SecOps não roda — binário ausente,
+saída inválida (<code>:invalid_output</code>), <code>:sem_saida</code>, exceção ou teto de tempo
+—, nenhum veredito é gravado: a PR continua em <code>awaiting_secops</code>, o gate
+fica PENDENTE e bloqueia, e a PR não chega ao usuário como aprovada pela
+SecOps. O motivo vai ao fio como <code>agent.error</code> de origem <code>infra</code>
+(&quot;SAST não rodou: <motivo> — … reexecute o gate depois de corrigir&quot;). O
+contrato externo não muda: continuam os dois vereditos de sempre
+(<code>approved</code>/<code>changes_requested</code>), um por gate. O gitleaks ausente continua
+só &quot;pulado&quot; no resumo.</li>
+<li><strong>Reexecução:</strong> o ciclo fica <code>in_progress</code> em <code>gate_states</code>, e o
+<code>GateRescuer</code> o reexecuta no boot do engine e depois do limiar de staleness
+(<code>gate_rescue_stale_after_seconds</code>, 15 min). Não há botão de reexecutar
+gate na tela.</li>
+<li><strong>Sem repetição (AT-386):</strong> o resgate que reencontra o MESMO motivo não
+grava outro <code>agent.error</code>: se o último evento do SecOps daquela task
+(<code>agent.error</code> ou <code>artifact.secops_verdict</code>, lidos por tipo, cauda com teto)
+já é este erro com o mesmo <code>reason</code>, fica só a linha de Logger do servidor.
+Motivo diferente, um veredito no meio ou leitura que falha gravam de novo; o
+<code>agent.error</code> passa a levar <code>taskId</code>.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/secops_agent_server.ex:116</code>
+(<code>run_secops</code>), <code>apps/engine/lib/engine/gates/secops_agent_server.ex:144</code>
+(<code>sast_nao_rodou</code>), <code>apps/engine/lib/engine/gates/secops_agent_server.ex:209</code>
+(<code>erro_ja_registrado?</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/secops_agent_server_test.exs</code>
+(&quot;sem achados (gitleaks e semgrep limpos): approved&quot;; casos de falha:
+&quot;semgrep com saída inválida: gate pendente, sem veredito, motivo nomeado&quot; e
+&quot;semgrep com binário ausente: gate pendente, sem veredito, motivo nomeado&quot;;
+AT-386: &quot;primeiro resgate grava; o segundo, com o mesmo motivo, não&quot;,
+&quot;motivo diferente, ou veredito depois do erro, grava de novo&quot;, &quot;o SAST que
+volta a rodar aprova como sempre&quot;)</li>
+<li><strong>Revisa:</strong> <a href="#rn-707">RN-707</a> (&quot;o veredito do gate NÃO muda&quot;)</li>
+<li><strong>Origem:</strong> AT-380</li>
+</ul>
+<h3 id="rn-717">RN-717 — O desvio do agente que a Anamnese observa vira sinal do produto, sem dado pessoal</h3>
+<ul>
+<li><strong>Regra:</strong> laço de agente, turno cancelado pelo usuário e mensagem do
+usuário que repara falha de agente são registrados pela Anamnese como
+<code>anamnese.agent_deviation</code> (ferramenta <code>report_agent_deviation</code>), nunca como
+perfil da pessoa. O payload é montado no engine por lista de permitidos —
+<code>agente</code>, <code>tipo</code> (<code>laco</code> | <code>cancelamento_pelo_usuario</code> |
+<code>reparo_pelo_usuario</code>) e <code>evidenceEventIds</code> (deduplicados, teto de 20) —,
+sem texto livre e sem id, nome, e-mail ou traço do usuário; campo extra é
+descartado. O tipo não é projetado no grafo do usuário. Tipo fora do
+vocabulário ou sem evidência é recusado, sem gravar.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/anamnese/tools/report_agent_deviation.ex:73</code>
+(<code>payload</code>), <code>apps/engine/lib/engine/anamnese/tools/report_agent_deviation.ex:52</code>
+(<code>run</code>), <code>apps/engine/lib/engine/anamnese/tools.ex</code>, regra no kickoff
+(<code>prompts/anamnese-kickoff.md</code> v4)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/anamnese/report_agent_deviation_test.exs</code>
+(&quot;reparo do usuário vira anamnese.agent_deviation do AGENTE, só com agente,
+tipo e evidência&quot;; falhas: &quot;tipo fora do vocabulário é recusado e nada é
+gravado&quot;, &quot;sem evidência é recusado&quot;),
+<code>apps/api/test/application/graph-projection/desvio-do-agente-fora-do-grafo.spec.ts</code></li>
+<li><strong>Lacuna declarada:</strong> a api não confere que a evidência existe; a leitura é
+por consulta ao event log, sem tela (<a href="../../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205</a>).</li>
+<li><strong>Origem:</strong> AT-356 (parte 2), decisão do dono de 02/10</li>
+</ul>
+<h2 id="uma-chave-de-cache-uma-pergunta-rn-718">Uma chave de cache, uma pergunta (RN-718)</h2>
+<h3 id="rn-719">RN-719 — Ferramenta de agente aceita lista enviada como texto JSON, e exceção dentro dela volta ao laço</h3>
+<p><strong>Contexto:</strong> medido ao vivo (02/10, Haiku 4.5 via OpenRouter), o modelo manda
+lista e objeto como STRING JSON (<code>&quot;business_rule_ids&quot;: &quot;[\&quot;01M…\&quot;]&quot;</code>). Três
+desfechos: <code>create_story</code> descartava os ids calado (história ficava <code>draft</code>),
+outras ferramentas recusavam e custavam voltas, e <code>create_c4_diagram</code> fazia
+<code>Enum.map</code> numa string e derrubava o turno do Arquiteto com <code>agent.error</code>.</p>
+<p><strong>A regra:</strong> toda ferramenta dos sete conversacionais e do <code>ToolLoop</code> roda por
+UM ponto, <code>Engine.Harness.ArgumentosDeFerramenta.executar/4</code>. Argumento cujo
+schema declara <code>array</code>/<code>object</code> e chega como string JSON válida do tipo vira o
+valor; string que não é recusa NOMEADA (&quot;o campo X precisa ser uma lista&quot;),
+antes de a ferramenta rodar. Campo declarado <code>string</code> nunca é tocado. Exceção
+levantada dentro da ferramenta vira <code>tool.result</code> <code>ok: false</code> com
+<code>origem: &quot;codigo&quot;</code>, e o erro entra no laço como qualquer outro (RN-163): o
+turno continua.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/argumentos_de_ferramenta.ex:26</code>
+(<code>executar</code>), <code>:73</code> (<code>coagir</code>), <code>:56</code> (<code>falha_interna?</code>);
+<code>apps/engine/lib/engine/agents/resultado_de_ferramenta.ex:29</code> (<code>payload</code>);
+<code>apps/engine/lib/engine/harness/tool_loop.ex:409</code> (<code>run_direct</code>);
+<code>apps/engine/lib/engine/agents/arquiteto_server.ex:357</code>
+(<code>executar_ferramenta</code>, o mesmo helper nos outros seis servidores)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/argumentos_de_ferramenta_test.exs</code>
+(<code>create_story</code> com ids em string JSON grava os ids; <code>create_c4_diagram</code> com
+<code>actors</code> em string JSON funciona; string não-JSON num campo array é recusa
+nomeada; ferramenta que lança não encerra o turno do <code>ToolLoop</code> e grava
+<code>tool.result</code> <code>ok: false</code>)</li>
+<li><strong>Origem:</strong> AT-387</li>
+</ul>
+<h3 id="rn-721">RN-721 — O id encurtado de história ou tarefa é resolvido dentro do projeto</h3>
+<p>O Arquiteto passava a <code>assign_story_modules</code> os 8 primeiros caracteres do id da
+história, a api respondia 400 &quot;storyId must be a UUID&quot; e, depois de oito
+tentativas, nenhuma história ganhava módulo (loja-teste-2, 02/10). Toda
+ferramenta de agente que recebe id de história ou tarefa —
+<code>assign_story_modules</code> e <code>create_task</code> (<code>story_id</code>), <code>assess_implementability</code>
+(<code>storyId</code>) e <code>propose_execution_plan</code> (<code>tarefas[].taskId</code>) — passa o id por
+<code>Engine.Harness.IdDoBacklog</code> antes de chamar a api:</p>
+<ul>
+<li>
+<p>UUID completo segue sem consulta.</p>
+</li>
+<li>
+<p>Prefixo de no mínimo 8 caracteres hexadecimais é resolvido contra o backlog
+do PROJETO (<code>list_backlog</code>): um só id que começa com ele vira o UUID;
+nenhum é recusa nomeada (&quot;nenhuma história do projeto tem id começando com
+…&quot;); mais de um é recusa nomeada (&quot;o prefixo … é ambíguo&quot;). A recusa volta
+ao modelo como resultado da ferramenta (RN-163).</p>
+</li>
+<li>
+<p>O que não é nem UUID nem prefixo segue como veio, e quem recusa é a api.</p>
+</li>
+<li>
+<p><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/id_do_backlog.ex:21</code> (<code>resolver</code>),
+<code>:43</code> (<code>resolver_em</code>); <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:180</code>
+(<code>resolver_tarefas</code>)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>apps/engine/test/engine/harness/id_do_backlog_test.exs</code> (prefixo
+único resolve; ambíguo e inexistente recusam nomeados)</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-390</p>
+</li>
+</ul>
+<h2 id="a-anamnese-não-paga-duas-vezes-pela-mesma-janela-e-o-resgate-de-gate-não-reinicia-ciclo-que-espera-alguém-rn-722">A Anamnese não paga duas vezes pela mesma janela, e o resgate de gate não reinicia ciclo que espera alguém (RN-722)</h2>
+<h3 id="rn-722">RN-722 — A Anamnese fecha a janela que avaliou e só roda com interação nova; o resgate de gate pergunta pela task, respeita a decisão humana pendente e estaciona o ciclo velho</h3>
+<ul>
+<li><strong>Regra (Anamnese):</strong> (1) a rodada que AVALIOU a janela e encerrou sem
+perfil (<code>skip_proficiency</code>) grava <code>anamnese_runs</code> com zero perfis, e a
+próxima começa em <code>window_to</code> — revisa a cláusula da RN-680/do moduledoc
+&quot;rodada que não conclui não grava&quot;: rodada que FALHA (teto, orçamento,
+provider) continua sem gravar, e a que nem chega ao LLM (sem sujeito,
+triagem, teto diário) não fecha nada; (2) os eventos que a própria Anamnese
+escreve (<code>anamnese.*</code> e todo evento de ator <code>agent</code>/<code>anamnese</code>) e os de
+ator <code>system</code> ficam fora da janela e da contagem da triagem; (3) decisão do
+dono de 02/10: sujeito é quem tem ao menos <strong>5</strong> interações próprias NOVAS
+(eventos de <code>actor_kind: &quot;user&quot;</code> mais decisões, na janela que já começa no
+fim da última tentativa) — revisa o &quot;ao menos UMA&quot; da RN-680 —, e o projeto
+tem no máximo <strong>4</strong> rodadas pagas por dia UTC (concluída, falha ou
+<code>run_skipped</code> escrito pelo modelo; o pulo sem sujeito não conta). Abaixo de
+qualquer dos dois, nenhuma chamada ao LLM nem ao RAG; o motivo vai ao log e,
+só na rodada pedida à mão, a <code>anamnese.run_skipped</code> (<code>causa: &quot;teto_diario&quot;</code> ou <code>&quot;sem_sujeito_elegivel&quot;</code>).</li>
+<li><strong>Regra (resgate de gate, revisa a RN-140):</strong> o <code>GateRescuer</code> (a) considera
+vivo o ciclo cuja TASK está em voo no lead, perguntando a ele
+(<code>{:em_voo?, task_id}</code>), e não mais o processo do projeto — lead ocioso não
+segura o resgate; lead ocupado demais para responder conta como vivo; (b)
+não reinicia ciclo cuja sessão tem <code>proposed_action</code> PENDENTE de ator do
+gate (<code>qa*</code>, <code>secops*</code>, <code>appsec</code>) — só registra no log; (c) decisão do dono
+de 02/10: ciclo parado há mais de 2 h desde a ÚLTIMA ATIVIDADE (<code>updated_at</code>)
+é ESTACIONADO (<code>parked_at</code>) com <code>gate.rescue_parked</code> no log da sessão
+(task, gate, idade, motivo), nem no boot nem no tick é retomado, e retomar
+exige gesto humano (<code>GateRescuer.retomar_estacionado/3</code>).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/workers/anamnese_worker.ex:189</code>
+(<code>fechar_janela</code>), <code>apps/engine/lib/engine/workers/anamnese_worker.ex:104</code>
+(<code>dentro_do_teto_diario?</code>),
+<code>apps/engine/lib/engine/session_events/event.ex:194</code>
+(<code>project_window_query</code>), <code>apps/engine/lib/engine/session_events/event.ex:202</code>
+(<code>count_anamnese_rounds_since</code>),
+<code>apps/engine/lib/engine/anamnese/elegibilidade.ex:67</code>
+(<code>min_interacoes_proprias</code>),
+<code>apps/api/src/application/use-cases/anamnese/record-proficiency.use-case.ts:160</code>
+(<code>fecharJanelaSemPerfil</code>), <code>apps/engine/lib/engine/gates/gate_rescuer.ex:379</code>
+(<code>task_em_voo?</code>), <code>apps/engine/lib/engine/gates/gate_rescuer.ex:403</code>
+(<code>aguardando_humano?</code>), <code>apps/engine/lib/engine/gates/gate_rescuer.ex:321</code>
+(<code>estacionar</code>), <code>apps/engine/lib/engine/gates/gate_rescuer.ex:359</code>
+(<code>retomar_estacionado</code>), <code>apps/engine/lib/engine/gates/qa_lead_server.ex:95</code>
+(<code>handle_call</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/workers/anamnese_worker_test.exs</code>
+(describe &quot;a janela avaliada fecha (RN-722)&quot;: &quot;skip_proficiency grava a
+rodada vazia; a segunda começa em window_to e, sem interação nova, não chama
+o LLM&quot;; falhas: &quot;falha ao fechar a janela não vira falha da rodada&quot;, &quot;rodada
+que FALHA não fecha a janela&quot;; describe &quot;piso de interações e teto diário
+(RN-722)&quot;), <code>apps/engine/test/engine/anamnese/elegibilidade_test.exs</code>,
+<code>apps/engine/test/engine/session_events/event_window_test.exs</code> (&quot;dez
+eventos da Anamnese sozinhos não passam a triagem&quot;),
+<code>apps/engine/test/engine/gates/gate_rescuer_test.exs</code> (&quot;lead do projeto vivo
+e OCIOSO não segura o resgate de uma task perdida&quot;, &quot;ciclo com ação PENDENTE
+de ator do gate espera o humano&quot;, &quot;ação pendente de OUTRO ator não segura o
+resgate&quot;, &quot;ciclo parado há mais de 2 h é ESTACIONADO&quot;, &quot;ciclo parado há
+MENOS de 2 h segue sendo resgatado&quot;),
+<code>apps/api/test/application/use-cases/anamnese/record-proficiency.use-case.spec.ts</code>
+(describe &quot;fecharJanelaSemPerfil (RN-722)&quot;)</li>
+<li><strong>Lacuna declarada:</strong> retomar um ciclo estacionado não tinha tela nem rota
+— era chamada de operador (<code>bin/engine rpc</code>); fechou na
+<a href="parte-05.html#rn-724">RN-724</a> (rota e botão no evento <code>gate.rescue_parked</code>). A pendência humana é lida
+pela SESSÃO do ciclo (a <code>proposed_action</code> não tem <code>task_id</code>)
+(<a href="../../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207</a>).</li>
+<li><strong>Origem:</strong> AT-391 (uso real de 02/10: ~US$ 8,90 de Anamnese num dia sem
+ninguém pedir; ciclo de gate reiniciado com ação pendente e outro 8 h sem
+resgate), decisões do dono de 02/10</li>
+</ul>
+<p><strong>Revisada pela <a href="parte-06.html#rn-923">RN-923</a> (<a href="../../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226</a>).</strong> O resgate AUTOMÁTICO (tick) de um ciclo vale uma vez: o segundo estaciona com <code>motivo: &quot;retomada_automatica_ja_usada&quot;</code> e espera o &quot;Retomar gate&quot;, que zera o contador. O estacionamento de 2 h segue como está.</p>
+<h2 id="uma-chave-de-cache-uma-pergunta-rn-718-1">Uma chave de cache, uma pergunta (RN-718)</h2>
+<h3 id="rn-723">RN-723 — A Infra herda a rede que o Arquiteto declarou para o projeto</h3>
+<p>Decisão do dono em 02/10 (<a href="../../adr/0208-a-infra-herda-a-rede-do-arquiteto.html">ADR 0208</a>),
+revisando a rede literal <code>none</code> da subida no aceite da <a href="../api.html#rn-671">RN-671</a>. A
+eleição da Infra usa o <code>network</code> da <code>artifact.project_image</code> mais recente
+emitida pelo Arquiteto (<code>actor_id: &quot;arquiteto&quot;</code>, qualquer sessão do projeto),
+lido localmente pelo engine; sem decisão dele, ou com valor fora de
+<code>none</code>/<code>egress</code>, segue <code>none</code>. Vale para a subida do servidor no aceite e para
+a tool <code>propose_container_start</code> sem <code>network</code>. A autonomia semeada não muda:
+<code>egress</code> sobe sem clique, e o preço (a rede <code>egress</code> alcança as portas
+publicadas da máquina, ADR 0189) está declarado no ADR.</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/session_events/event.ex:139</code> (<code>rede_do_arquiteto</code>),
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:803</code> (<code>rede_herdada</code>)</li>
+<li><strong>Testes:</strong> <code>apps/engine/test/engine/infra/infra_lead_server_test.exs</code> —
+&quot;RN-723: a subida herda a rede <code>egress</code> que o Arquiteto declarou&quot; e
+&quot;RN-723: rede do Arquiteto fora do vocabulário — a subida segue <code>none</code>&quot;</li>
+<li><strong>Origem:</strong> AT-392</li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/engine/parte-03.html">Engine — parte 3 (desde RN-577)</a><a href="../../business-rules/engine/parte-05.html">Engine — parte 5 (desde RN-724)</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-engine/blob/dev/docs/business-rules/engine/parte-04.md">Edit this page</a></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#o-idioma-das-respostas-dos-agentes-rn-618620-rn-622624-adr-0177">O idioma das respostas dos agentes (RN-618..620, RN-622..624, ADR 0177)</a></li><li class="n3"><a href="#rn-622">RN-622 — O idioma chega ao modelo como a ÚLTIMA mensagem de cada chamada do turno, efêmera: o do AUTOR quando há um, o do PROJETO quando não há</a></li><li class="n3"><a href="#rn-623">RN-623 — Num turno COM autor, a resposta é no idioma da pessoa e o ARTEFATO compartilhado é no idioma do PROJETO</a></li><li class="n3"><a href="#rn-625">RN-625 — O laço pergunta ao Jev qual ferramenta, e o modelo do usuário vê só o menu que sobra; o Jev restringe e nunca decide</a></li><li class="n2"><a href="#decidir-no-chat-onde-o-dono-está-rn-626">Decidir no chat, onde o dono está (RN-626)</a></li><li class="n3"><a href="#rn-629">RN-629 — O QA Lead trata o subagente que SUSPENDE de novo na retomada do mesmo jeito que na primeira vez, e resultado que não conhece vira bloqueio nomeado</a></li><li class="n3"><a href="#rn-636">RN-636 — O AppSec só oferece o threat model a quem ainda não recebeu oferta nem está ativo</a></li><li class="n2"><a href="#a-pr-do-dev-agent-mira-dev-e-o-gate-julga-o-diff-dessa-pr-rn-664">A PR do dev agent mira dev, e o gate julga o diff dessa PR (RN-664)</a></li><li class="n3"><a href="#rn-664">RN-664 — O trabalho dos agentes nasce de dev, a PR deles mira dev, e o gate julga o diff contra dev — os três juntos</a></li><li class="n2"><a href="#o-idioma-das-respostas-dos-agentes-rn-618620-rn-622624-adr-0177-1">O idioma das respostas dos agentes (RN-618..620, RN-622..624, ADR 0177)</a></li><li class="n3"><a href="#rn-667">RN-667 — O formulário estruturado segue o idioma da resposta: a descrição da ferramenta não fixa idioma nenhum</a></li><li class="n2"><a href="#o-infra-lead-não-anuncia-subida-que-não-fez-rn-668">O Infra Lead não anuncia subida que não fez (RN-668)</a></li><li class="n3"><a href="#rn-668">RN-668 — O que o turno do Infra Lead anuncia sobre a subida do container é decidido pelo código, não pelo texto do modelo</a></li><li class="n2"><a href="#o-git-credenciado-roda-no-host-do-runner-rn-676">O git credenciado roda no host do runner (RN-676)</a></li><li class="n3"><a href="#rn-673">RN-673 — A mensagem que chega com turno em curso entra numa fila persistida no log e é lida no fim do turno, N mensagens num turno só</a></li><li class="n2"><a href="#o-plano-de-teste-nasce-depois-da-entrega-do-dev-rn-674-adr-0192">O plano de teste nasce depois da entrega do dev (RN-674, ADR 0192)</a></li><li class="n3"><a href="#rn-674">RN-674 — A QA-estratégia escreve o plano sobre o código ENTREGUE, no começo do ciclo do qa-verificada, e o implementavel se julga sem ele</a></li><li class="n2"><a href="#a-anamnese-religada-sujeito-elegível-e-fato-do-perfil-rn-680">A Anamnese religada: sujeito elegível e fato do perfil (RN-680)</a></li><li class="n3"><a href="#rn-680">RN-680 — A Anamnese não roda sem sujeito elegível, e a hipótese que a própria pessoa aceitou vira fato do perfil dela no grafo e entra no contexto dos agentes que conversam com ela</a></li><li class="n2"><a href="#o-teto-da-rn-418-vale-também-pela-porta-tipada-rn-689">O teto da RN-418 vale também pela porta tipada (RN-689)</a></li><li class="n3"><a href="#rn-690">RN-690 — O assistente guarda os toolCalls da resposta: o resultado da ferramenta não chega órfão ao provider</a></li><li class="n3"><a href="#rn-695">RN-695 — A análise da Anamnese não entra no fio da sessão</a></li><li class="n3"><a href="#rn-697">RN-697 — O turno da prontidão do Criativo só sintetiza: sem ferramentas</a></li><li class="n3"><a href="#rn-698">RN-698 — O texto do turno vira UMA resposta, e o teto de iterações aparece no fio</a></li><li class="n3"><a href="#rn-699">RN-699 — O Dev Lead lê o module_map vigente e o backlog do PROJETO, e relê os dois quando o plano é recusado</a></li><li class="n3"><a href="#rn-700">RN-700 — O PO não anuncia o handoff ao Arquiteto sem fazê-lo, e história sem tarefa não é entregue</a></li><li class="n2"><a href="#o-instalador-oferece-os-modelos-locais-e-não-confunde-o-dev-com-uma-instalação-rn-691-rn-692">O instalador oferece os modelos locais, e não confunde o dev com uma instalação (RN-691, RN-692)</a></li><li class="n3"><a href="#rn-702">RN-702 — A compactação de contexto respeita a janela padrão de 128k e nunca troca turnos por um marcador vazio</a></li><li class="n3"><a href="#rn-706">RN-706 — O agente de execução sabe onde está: pasta, imagem, rede, git tipado e o próprio módulo</a></li><li class="n3"><a href="#rn-707">RN-707 — O semgrep do gate de SecOps tem $HOME gravável, e a falha sem saída é nomeada</a></li><li class="n3"><a href="#rn-710">RN-710 — O Workflows não é delegado sem CI que rode, e não pergunta a ninguém</a></li><li class="n3"><a href="#rn-711">RN-711 — O conversacional sabe onde está no fluxo, e a restrição técnica do usuário vira decision_record</a></li><li class="n3"><a href="#rn-714">RN-714 — SAST que não rodou deixa o gate de SecOps pendente, nunca aprovado</a></li><li class="n3"><a href="#rn-717">RN-717 — O desvio do agente que a Anamnese observa vira sinal do produto, sem dado pessoal</a></li><li class="n2"><a href="#uma-chave-de-cache-uma-pergunta-rn-718">Uma chave de cache, uma pergunta (RN-718)</a></li><li class="n3"><a href="#rn-719">RN-719 — Ferramenta de agente aceita lista enviada como texto JSON, e exceção dentro dela volta ao laço</a></li><li class="n3"><a href="#rn-721">RN-721 — O id encurtado de história ou tarefa é resolvido dentro do projeto</a></li><li class="n2"><a href="#a-anamnese-não-paga-duas-vezes-pela-mesma-janela-e-o-resgate-de-gate-não-reinicia-ciclo-que-espera-alguém-rn-722">A Anamnese não paga duas vezes pela mesma janela, e o resgate de gate não reinicia ciclo que espera alguém (RN-722)</a></li><li class="n3"><a href="#rn-722">RN-722 — A Anamnese fecha a janela que avaliou e só roda com interação nova; o resgate de gate pergunta pela task, respeita a decisão humana pendente e estaciona o ciclo velho</a></li><li class="n2"><a href="#uma-chave-de-cache-uma-pergunta-rn-718-1">Uma chave de cache, uma pergunta (RN-718)</a></li><li class="n3"><a href="#rn-723">RN-723 — A Infra herda a rede que o Arquiteto declarou para o projeto</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-en.json" data-base="../../"></script></body>
+</html>

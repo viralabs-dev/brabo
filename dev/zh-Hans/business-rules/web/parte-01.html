@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="zh-Hans" data-locale="zh-Hans" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — Web — parte 1 (desde RN-039) | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="菜单">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="搜索" aria-label="搜索" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="语言"><option value="../../../business-rules/web/parte-01.html">pt-BR</option><option value="../../../en/business-rules/web/parte-01.html">en</option><option value="../../../ru/business-rules/web/parte-01.html">ru</option><option value="../../../zh-Hans/business-rules/web/parte-01.html" selected>zh-Hans</option></select>
+<select data-seletor aria-label="环境"><option value="../../../../dev/zh-Hans/business-rules/web/parte-01.html" selected>dev</option><option value="../../../../prd/zh-Hans/business-rules/web/parte-01.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="切换主题">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 从这里开始</h2></summary><ul><li><a href="../../index.html">首页</a></li><li><a href="../../getting-started.html">快速开始</a></li></ul></details></section><section><details open><summary><h2>🎓 教程</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">编排多个仓库</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Brabo 是如何构建的</a></li></ul></details></section><section><details open><summary><h2>🧭 实用指南</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">开发 Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages 令牌</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>参与贡献</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">我们如何撰写</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 概念</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">架构</a></li><li><a href="../../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../../explanation/modelo-de-time.html">团队模型与交付物流程</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>流程与流水线</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">分支策略</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../../explanation/release-do-produto.html">产品发布</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>本地化</span></summary><ul><li><a href="../../explanation/localizacao.html">本地化</a></li><li><a href="../../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></details></li><li><details><summary><span>技术笔记</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 参考</h2></summary><ul><li><a href="../../glossary.html">术语表</a></li><li><a href="../../reference/componentes-da-doc.html">文档组件</a></li><li><a href="../../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>业务规则</span></summary><ul><li><a href="../../business-rules.html">业务规则</a></li><li><a href="../../business-rules/custo.html">成本与计量</a></li><li><a href="../../business-rules/autenticacao.html">认证</a></li><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Produto</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><details open><summary><span>Web</span></summary><ul><li><a href="../../business-rules/web.html">Web</a></li><li><a href="../../business-rules/web/parte-01.html" aria-current="page">Web — parte 1 (desde RN-039)</a></li><li><a href="../../business-rules/web/parte-02.html">Web — parte 2 (desde RN-124)</a></li><li><a href="../../business-rules/web/parte-03.html">Web — parte 3 (desde RN-239)</a></li><li><a href="../../business-rules/web/parte-04.html">Web — parte 4 (desde RN-491)</a></li><li><a href="../../business-rules/web/parte-05.html">Web — parte 5 (desde RN-626)</a></li><li><a href="../../business-rules/web/parte-06.html">Web — parte 6 (desde RN-728)</a></li><li><a href="../../business-rules/web/parte-07.html">Web — parte 7 (desde RN-978)</a></li></ul></details></li></ul></details></li><li><span>API 参考</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ 决策（ADR）</a></h2></section><section><details><summary><h2>🗂️ 项目历史</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">时间线</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">shadcn 前后的界面（2026 年 10 月 31 日）</a></li><li><a href="../../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">第 1 至 15 阶段，第 1 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">16–26 计划与轮次，第 2 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">28 计划与审计，第 3 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">从本地 runner 起，第 4 部分</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../../explanation/backlog.html">已分类的 backlog</a></li><li><details><summary><span>验证与测量</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../../explanation/medicao-do-jev.html">Jev 工具路由器的测量</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">此页尚未翻译；显示葡萄牙语原文。</div>
+<article class="doc">
+<h1 id="web--parte-1-desde-rn-039">Web — parte 1 (desde RN-039)</h1>
+<h2 id="painel-de-projetos">Painel de projetos</h2>
+<p>As RNs de orçamento, metering e teto de custo moram em
+<strong><a href="../custo.html">Regras de negócio — Custo</a></strong>.</p>
+<p>Mesmo motivo da seção de Autenticação abaixo: tamanho, não assunto.
+Âncoras <code>#rn-NNN</code> inalteradas.</p>
+<h2 id="cost">Cost</h2>
+<h3 id="rn-039">RN-039 — Dot de status do projeto: risco sempre vence inatividade</h3>
+<p>A sidebar do dashboard mostra um dot de saúde por projeto, derivado de três
+sinais independentes: orçamento (mesmos limiares 70%/90% do RN-018), task
+bloqueada (<code>tasks.blocked</code>) e atividade recente (7 dias). Cores: verde =
+saudável e ativo; âmbar = orçamento ≥70%; vermelho = orçamento ≥90% <strong>ou</strong>
+task bloqueada; cinza = sem atividade nos últimos 7 dias. Quando um sinal
+de risco (âmbar/vermelho) e o de inatividade (cinza) se aplicam ao mesmo
+tempo, o de risco vence — um projeto estourado e parado ainda é algo a
+olhar, não algo a esconder atrás de &quot;sem atividade&quot;.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/project-status.ts</code> (<code>deriveProjectStatus</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/project-status.test.ts</code></li>
+<li><strong>Origem:</strong> fidelidade do dashboard de projetos ao design aprovado</li>
+</ul>
+<h3 id="rn-064">RN-064 — Heartbeat não encerra sessão com trabalho pendente</h3>
+<blockquote>
+<p><strong>Estendida pela <a href="../api.html#rn-581">RN-581</a> (AT-072):</strong> um agente
+conversacional esperando o usuário passou a ser o QUINTO sinal, e o único com
+teto (8h, causa <code>conversation_idle_timeout</code>); a resposta ganhou
+<code>aguardandoUsuarioDesde</code>. O resto desta regra vale como está.</p>
+</blockquote>
+<p>O timeout de heartbeat mede inatividade da <strong>aba</strong>, não do <strong>trabalho</strong>. Antes
+de encerrar, o <code>SessionServer</code> pergunta à api se sobrou trabalho
+(<code>GET /internal/sessions/:id/pending-work</code>); havendo, reagenda o timeout e
+registra o motivo no log em vez de matar a sessão.</p>
+<p>O default são <strong>30 segundos</strong>. Sair da sessão para a aba de Backlog já bastava
+para matá-la — e numa execução real isso prendeu um handoff <code>offered</code> para o
+Arquiteto dentro de uma sessão fechada: épico e quatro histórias prontos, e a
+cadeia sem como seguir, porque não existe onde aceitar handoff de sessão morta.</p>
+<p>Fechar sessão é sobre o trabalho ter acabado, não sobre quem está olhando.</p>
+<p><strong>A api fora do ar NÃO impede o encerramento</strong>: <code>{:error, _}</code> encerra assim
+mesmo, com aviso no log. Trocar sessão órfã por sessão imortal seria trocar um
+defeito por outro.</p>
+<p>&quot;Trabalho pendente&quot; são <strong>três</strong> sinais — o segundo entrou pelo achado V, o
+terceiro pelo bug real do Criativo→PO→Arquiteto:</p>
+<ol>
+<li><strong>handoff <code>offered</code></strong> — o caso original acima;</li>
+<li><strong><code>proposed_action</code> com status <code>pending</code></strong> — alguém está esperando a SUA
+decisão, e um agente pode estar suspenso esperando o desfecho
+(<a href="../engine.html#rn-073">RN-073</a>);</li>
+<li><strong>agente ATIVADO ainda em turno</strong> — o último <code>agent.status</code> de cada ator
+que já falou na sessão é <code>working</code> sem um <code>idle</code> posterior.</li>
+</ol>
+<p>O segundo é o mesmo defeito do primeiro um nível abaixo, e a execução do
+<code>hello-limpo</code> mostrou o custo: a sessão nasceu 23:34:12, uma ação ficou
+<code>pending</code> às 23:34:13, e o heartbeat a fechou às <strong>23:34:42 — exatamente os 30s
+do timeout</strong>. O dev agent seguiu trabalhando por mais de uma hora numa sessão
+que o banco dava por encerrada, e isso envenena toda métrica por sessão:
+duração, custo e &quot;quantas terminaram bem&quot; passam a ler um estado que não
+descreve o que houve.</p>
+<p>O terceiro é a mesma janela, um passo antes de qualquer um dos dois primeiros
+existir: <code>AcceptHandoffUseCase</code> marca o handoff antigo como <code>accepted</code> e ativa
+o próximo agente na hora, mas a ativação no engine é <code>GenServer.cast</code>
+fire-and-forget — responde 201 antes de o agente sequer começar. O PO ativado
+pelo handoff do Criativo roda um kickoff de até 12 iterações de LLM usando só
+ferramentas <code>category: :direct</code> (<code>create_epic</code>/<code>create_story</code>/<code>create_task</code>),
+que nunca geram <code>proposed_action</code>, e só oferece o handoff seguinte (o sinal 1)
+no FIM do turno inteiro. Entre a ativação e esse fim, nem o sinal 1 nem o sinal
+2 existiam — só o ping do canal Phoenix a cada 10s segurava a sessão, e
+qualquer atraso maior que os 30s do timeout fechava a sessão com o PO ainda
+gerando o backlog, quebrando a cadeia de handoff pela raiz: o handoff seguinte
+acabava sendo oferecido numa sessão já <code>closed</code>, que não aceita mais nada.</p>
+<p><code>agent.status</code> (<code>working</code>/<code>idle</code>) é o que todo agente conversacional
+(Criativo/PO/Arquiteto/Dev Lead/Infra) já narra nos limites de turno, e é
+PERSISTIDO no event log, não só broadcastado no canal
+(<code>Engine.Sessions.LiveBroadcast.agent_status/4</code>, <a href="../../adr/0021-fechamento-4a-infra-e-painel.html">ADR 0021</a>)
+— o mesmo sinal que o painel do time já lê para derivar o roster
+(<code>conversationalStatus</code> em <code>apps/web/src/lib/agent-status.ts</code>). Reaproveitá-lo
+aqui não exigiu evento novo nenhum: o terceiro sinal é o último <code>agent.status</code>
+de CADA ator que já falou na sessão, e é genérico por tipo de evento — cobre
+qualquer agente ativado por handoff, não só o PO.</p>
+<p>A versão anterior desta regra dizia, por escrito, que incluir trabalho de agente
+&quot;sem um teste que prove a interação seria adivinhar&quot;. A execução produziu a
+prova, e o teste agora existe.</p>
+<p><strong>O que continua fora:</strong> task <code>in_progress</code> sem ação pendente nem handoff nem
+turno em aberto. O dev agent tem máquina de estados própria e retém o worktree
+por conta dele; o sinal que a api possui e que a execução comprovou é a ação
+pendente. Incluir a task exigiria a api ler <code>dev_agent_states</code>, que é do
+engine — decisão de fronteira, não conserto de passagem. Os dev agents também
+não emitem <code>agent.status</code> (rodam com máquina de estados própria, não com o
+loop conversacional de turno) — o terceiro sinal não os cobre, e não precisa:
+a ação pendente já cobre o caminho deles.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/api/src/application/use-cases/sessions/get-session-pending-work.use-case.ts</code>,
+<code>apps/api/src/application/ports/session-event-repository.port.ts</code>
+(<code>listByTypeInSession</code>), <code>apps/engine/lib/engine/sessions/session_server.ex</code>
+(<code>handle_info(:heartbeat_timeout, …)</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/sessions/session_lifecycle_test.exs</code>
+(<code>heartbeat NÃO encerra sessão com trabalho pendente</code> e o caso oposto) e
+<code>apps/api/test/application/use-cases/sessions/get-session-pending-work.use-case.spec.ts</code>
+(os três sinais, a ação já decidida que NÃO segura, o <code>idle</code> que libera, o
+isolamento por ator, a genericidade por tipo de agente e o escopo por
+sessão)</li>
+<li><strong>Origem:</strong> execução real da FASE 13b; achado V, Fase H do
+<a href="../../explanation/backlog.html">backlog</a>; bug real do encadeamento
+Criativo→PO→Arquiteto</li>
+</ul>
+<h3 id="rn-088">RN-088 — Falha de carregamento é dita na tela; 429 não se retenta</h3>
+<p>Toda tela que carrega dado da api distingue três estados, e nunca dois:
+<strong>carregando</strong> (esqueleto), <strong>erro</strong> (a mensagem que a api mandou, com o
+<code>trace_id</code> e um botão de tentar de novo) e <strong>vazio</strong> (o texto de lista vazia).
+<code>if (!dado) return null</code> colapsa os três, e o desfecho observado foi o pior
+possível: com a api limitando por <code>429</code>, a área principal de <code>/projects/:id</code>
+ficava <strong>completamente em branco</strong> — sem mensagem, sem erro, sem esqueleto — e
+o motivo existia só no console. No dashboard era pior que branco: <code>!projects</code>
+também era verdadeiro no erro, então a tela convidava a criar o <strong>primeiro</strong>
+projeto de um workspace que podia ter vinte.</p>
+<p>É a <a href="../engine.html#rn-059">RN-059</a> do outro lado do fio: falha nunca vira resposta vazia.
+Quem falha, diz.</p>
+<p>A frase é a <strong>da api</strong>, extraída por <code>mensagemDaApi</code> — a mesma função que o
+caminho de mutação já usava nos toasts. Um texto genérico nosso não sabe a
+diferença entre &quot;limite de requisições excedido, tente em instantes&quot; (espere) e
+&quot;acesso negado&quot; (não adianta esperar).</p>
+<p>O outro lado da mesma regra é não responder ao limite com mais tráfego. <strong>4xx
+não se retenta</strong>: <code>429</code> é literalmente o servidor mandando parar, e <code>401</code> já
+foi renovado uma vez dentro de <code>request()</code>. E <strong>poll para quando a query erra</strong>
+— volta no foco da janela, na remontagem ou no botão. Antes eram três
+retentativas por falha somadas a ~25 polls de 3 a 5 segundos que não sabiam
+parar: uma sessão real acumulou <strong>1128 erros 429</strong> contra um limite de 300
+requisições por minuto por usuário (<code>RateLimitGuard</code>), e o laço impedia a
+janela deslizante de se refazer. 5xx e falha de rede continuam com as três
+tentativas, onde repetir é a reação certa.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/query-policy.ts</code> (<code>deveRetentar</code>,
+<code>pollQueParaNoErro</code>), <code>apps/web/src/components/ErroDeCarregamento.tsx</code>,
+<code>apps/web/src/routes/ProjectPage.tsx</code>, <code>apps/web/src/routes/Dashboard.tsx</code>,
+<code>apps/web/src/routes/Shell.tsx</code>, <code>apps/web/src/main.tsx</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/query-policy.test.ts</code>;
+<code>apps/web/src/routes/ProjectPage.test.tsx</code> (429 vira mensagem com a frase da
+api; 403 mostra o motivo do 403; carregando não é erro);
+<code>apps/web/src/routes/Dashboard.test.tsx</code> (erro na lista não vira &quot;nenhum
+projeto ainda&quot;); <code>apps/web/src/routes/Shell.test.tsx</code> (a sidebar diz em vez
+de ficar vazia)</li>
+<li><strong>Origem:</strong> navegação real em <code>/projects/:id</code> com 1128 erros 429 no console</li>
+</ul>
+<h3 id="rn-089">RN-089 — Projeto de nome repetido se desempata na barra lateral</h3>
+<p>Nome de projeto <strong>não é único</strong> — nada no domínio impede. Quando dois ou mais
+projetos da lista têm o mesmo nome, cada um deles mostra na sidebar o id
+abreviado e a data de criação (<code>#a1b2c3d4 · 07/08 14:32</code>), os dois já presentes
+no payload do projeto. Quem tem nome único não mostra nada: a legenda em toda
+linha seria ruído no lugar com menos espaço da tela.</p>
+<p>Origem concreta: uma execução de validação criou vinte projetos chamados
+<code>validacao-real</code>, e as vinte linhas da sidebar eram visualmente idênticas.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/project-label.ts</code> (<code>nomesRepetidos</code>,
+<code>desempateDoProjeto</code>), <code>apps/web/src/routes/Shell.tsx</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/Shell.test.tsx</code> (nome repetido ganha
+desempate, nome único não)</li>
+<li><strong>Origem:</strong> navegação real com a sidebar cheia de projetos de validação</li>
+</ul>
+<h2 id="session">Session</h2>
+<h3 id="rn-098">RN-098 — O nome da sessão soma à hashtag, nunca a substitui</h3>
+<p>A sessão pode receber um nome amigável (<code>sessions.name</code>, opcional), na
+criação ou depois, por <code>PATCH /projects/:projectId/sessions/:sessionId</code>. O
+rótulo mostrado na tela é <strong>composto</strong>: <code>&lt;nome&gt; · #&lt;8 primeiros caracteres do id&gt;</code>. Sem nome, ele degrada para a <strong>hashtag sozinha</strong>.</p>
+<p>A hashtag nunca some, e o motivo é operacional: é ela que se cola numa URL,
+num comando ou numa conversa, e um nome escolhido por uma pessoa <strong>não é
+único</strong> — duas sessões chamadas &quot;Checkout&quot; são normais. Nome em branco (ou só
+espaços) conta como <strong>ausência</strong>, tanto na criação quanto ao renomear:
+gravar <code>''</code> transformaria o rótulo em <code>&quot; · #a1b2c3d4&quot;</code>, pior que a hashtag
+sozinha. <code>null</code> no corpo do <code>PATCH</code> é o jeito de <strong>desfazer</strong>.</p>
+<p>Renomear <strong>não</strong> é evento de sessão. O log de eventos é o que a sessão
+viveu, e o nome é um rótulo de navegação, trocado quantas vezes se
+quiser — N eventos de renomeação empurrariam justamente o que importa para
+fora da cauda de 200 eventos.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/session-label.ts:61</code> (<code>rotuloDaSessao</code>),
+<code>apps/api/src/application/ports/session-repository.port.ts:52</code> (<code>rename</code>).
+Alcançável tanto de dentro da sessão
+(<code>apps/web/src/routes/SessionPage.tsx:439</code>, <code>handleRename</code>) quanto da
+lista do projeto, sem precisar abrir a sessão antes
+(<code>apps/web/src/routes/ProjectSessionsTab.tsx:101</code>, <code>handleRenomear</code>) — as
+duas telas chamam o mesmo <code>renameSession</code> e o mesmo <code>rotuloDaSessao</code>.</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/session-label.test.ts</code>,
+<code>apps/api/test/application/use-cases/sessions/session-kind-e-nome.spec.ts</code>,
+<code>apps/web/src/routes/ProjectSessionsTab.test.tsx</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061</a></li>
+</ul>
+<h2 id="painel-de-projetos-1">Painel de projetos</h2>
+<h3 id="rn-099">RN-099 — Atividades pagina o passado sem repolar o que não muda</h3>
+<p>A coluna de <strong>Atividade</strong> da Visão geral mostra uma <strong>janela</strong> de 100 eventos
+ancorada na <strong>cauda</strong> da sessão, e desce no passado de página em página. Cada
+página usa o <code>afterSeq</code>/<code>nextCursor</code> que
+<code>GET /projects/:p/sessions/:s/events</code> <strong>já</strong> devolve: nenhuma rota nova,
+nenhum parâmetro novo.</p>
+<p><strong>Duas perguntas, duas queries.</strong> <code>useSessionEvents</code> responde &quot;como está
+agora&quot; — os últimos 200 em poll — e alimenta o painel do time, a linha do
+tempo em árvore, a seção de execução e a aba de Aprovações. Nenhuma delas
+pagina. A de Atividades responde &quot;o que aconteceu&quot;, e era a única que fazia
+essa pergunta com a resposta da outra: 200 itens de uma vez, sem começo nem
+fim, e ainda assim sem alcançar o início de uma sessão longa.</p>
+<p><strong>A âncora é a cauda, não o começo da sessão.</strong> O endpoint pagina para
+FRENTE, e não existe <code>beforeSeq</code> — inventar um seria contrato novo. Mas abrir
+o feed no evento nº 1 de uma sessão de milhares entrega a tela errada: quem
+abre Atividades quer o que acabou de acontecer. Então a primeira página é a
+mesma leitura <code>latest</code> que a tela já faz, com a <strong>mesma <code>queryKey</code></strong> (o React
+Query serve as duas com UMA busca), e cada clique desce uma janela fixa com
+<code>afterSeq</code>.</p>
+<p><strong>O que a paginação não pode custar.</strong> Uma requisição por ciclo de poll — a
+mesma de antes, e a economia da <a href="../api.html#rn-090">RN-090</a>/<a href="../api.html#rn-091">RN-091</a> não
+regride. Três peças garantem isso:</p>
+<ul>
+<li>a cauda é a query que a tela já tinha, compartilhada por <code>queryKey</code>;</li>
+<li>o primeiro clique <strong>não</strong> vira requisição: a leitura <code>latest</code> traz 200 e a
+janela mostra 100, então revelar o que já se pagou vem antes de pedir de
+novo;</li>
+<li>página antiga é uma janela <strong>fechada</strong> de <code>seq</code> sobre eventos <strong>imutáveis</strong>
+(nunca há UPDATE em tabela de evento): <code>staleTime: Infinity</code> e
+<strong>nenhum</strong> <code>refetchInterval</code>. Um poll ali seria pagar N requisições para
+receber N respostas idênticas.</li>
+</ul>
+<p><strong>A contagem é honesta sobre o que ela sabe.</strong> Os filtros por agente e por
+tipo rodam sobre a <strong>página carregada</strong>, não sobre a sessão — então a UI diz
+<code>N de M carregados</code>, e não &quot;N resultados&quot;. Levar o filtro ao servidor daria o
+total verdadeiro e mexeria no repositório de eventos; não é desta fase, e
+dizer o total errado seria pior que dizer menos.</p>
+<p>Os três estados da <a href="#rn-088">RN-088</a> valem aqui: <strong>erro antes de vazio</strong> — a
+coluna dizia &quot;nenhuma atividade&quot; quando a api tinha recusado.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/hooks.ts</code> (<code>useSessionEventHistory</code>,
+<code>EVENTOS_POR_PAGINA</code>), <code>apps/web/src/components/ActivityFeed.tsx</code>,
+<code>apps/web/src/routes/ProjectOverviewTab.tsx</code>,
+<code>apps/api/src/infrastructure/persistence/drizzle/session-event.repository.ts</code>
+(<code>listPaginated</code>, já existente)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/session-history.test.tsx</code> (abre na cauda; o
+primeiro clique não custa requisição; o seguinte pagina com <code>afterSeq</code>
+contíguo; o laço termina no começo da sessão; montado junto com o estado
+atual a cauda é UMA busca; página antiga não repolla);
+<code>apps/web/src/components/ActivityFeed.test.tsx</code> (o &quot;N de M carregados&quot;
+acompanha o filtro; sem as props de paginação nada muda)</li>
+<li><strong>Origem:</strong> pedido do usuário na primeira navegação real — &quot;Atividades na
+aba Visão Geral deve ser paginada, para não ficar infinita&quot;</li>
+</ul>
+<h2 id="session-1">Session</h2>
+<h3 id="rn-104">RN-104 — A aba deriva do tipo gravado, e cria nesse tipo</h3>
+<p>O projeto tem <strong>duas</strong> abas de sessão — <strong>Criativo</strong> e <strong>Chat</strong> — e cada
+uma é um <code>kind</code>: lista as sessões cujo <code>sessions.kind</code> é o seu, e o
+CTA dela cria nesse <code>kind</code>, <strong>sem perguntar de novo</strong>. Não há terceira
+aba listando as duas juntas.</p>
+<p>O tipo já era imutável (<a href="../api.html#rn-097">RN-097</a>), e é isso que o torna
+uma coordenada de navegação legítima em vez de um filtro salvo: uma sessão nunca
+troca de aba. A aba lê o campo <strong>gravado</strong> — não deriva o
+tipo de evento nenhum, pelo mesmo motivo da RN-097: <code>execution.activated</code>
+classifica ESTADO de execução, e uma aba que olhasse para ele mudaria
+sozinha.</p>
+<p>Duas consequências que a regra fixa, e que não são detalhe de tela:</p>
+<ul>
+<li><strong>A escolha do tipo sai do formulário.</strong> Ela morava num <code>fieldset</code> de
+radio buttons, e agora acontece no momento em que a pessoa clica na aba.
+Manter os dois ofereceria a chance de criar uma sessão que contradiz
+o lugar onde se está. O que sobra no formulário é o <strong>nome</strong>,
+que segue opcional (<a href="#rn-098">RN-098</a>).</li>
+<li><strong>Uma ação, um lugar de cada vez.</strong> &quot;Iniciar ideação&quot; continua existindo — é
+o que traz o agente Criativo para a sessão, e dali em diante a
+chave do dono começa a ser gasta (<a href="../api.html#rn-058">RN-058</a>); ninguém entra sozinho.
+O que mudou é onde ela mora: <strong>dentro do convite</strong> enquanto o convite está
+na tela, e na topbar quando não está. O convite APONTAVA para a
+topbar (&quot;use Iniciar ideação, no topo da tela&quot;), que é a
+versão literal do problema que originou a <a href="../api.html#rn-097">RN-097</a> — a
+ação num lugar e a explicação em outro. A topbar não pode
+simplesmente perder o botão: dá para digitar numa sessão criativa
+sem nunca ter chamado o agente Criativo, e aí o convite sai
+de cena.</li>
+</ul>
+<p>As três telas honram os três estados da <a href="#rn-088">RN-088</a>, com <strong>erro
+antes de vazio</strong>: a lista filtrada fica vazia nos dois casos, e dizer &quot;nenhuma
+ideação ainda&quot; depois de um 429 seria mentir sobre o que aconteceu.</p>
+<p>A chave de deep link do Chat continua <code>sessions</code>, não <code>chat</code>. É isso que faz um
+link antigo salvo com <code>?tab=sessions</code> abrir o Chat <strong>com a aba marcada na
+barra de abas</strong> — resolver a chave antiga como alias só no painel deixaria
+a barra de abas sem seleção nenhuma, porque <code>Tabs</code> compara <code>active</code>
+com <code>key</code>, e quem escreve <code>active</code> recebe a chave crua do
+<code>validateSearch</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/project-tabs.ts:95</code> (as duas entradas),
+<code>apps/web/src/routes/ProjectSessionsTab.tsx:114</code> (o filtro pelo <code>kind</code>
+gravado) e <code>:98</code> (o CTA criando no <code>kind</code> da aba),
+<code>apps/web/src/routes/SessionPage.tsx:715</code> (<code>conviteVisivel</code>, a única
+pergunta que a topbar e o convite compartilham)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/ProjectSessionsTab.test.tsx</code>,
+<code>apps/web/src/routes/project-tabs.test.tsx</code>,
+<code>apps/web/src/routes/SessionPage.sessao.test.tsx</code></li>
+<li><strong>Caso de borda:</strong> projeto sem sessão daquele tipo mostra o estado vazio
+DAQUELE TIPO, mesmo quando tem sessões do outro tipo — é
+informação, não erro.</li>
+<li><strong>Origem:</strong> <a href="../../adr/0061-tipo-da-sessao-na-criacao.html">ADR 0061</a></li>
+</ul>
+<h3 id="rn-107">RN-107 — A aba Code tem um QUARTO estado: bloqueada por decisão pendente</h3>
+<p>Os três estados da <a href="#rn-088">RN-088</a> (carregando/erro/vazio) não descrevem
+<code>sem_decisao</code> (<a href="../api.html#rn-105">RN-105</a>): não é carregando (a api já respondeu), não é
+erro (ela respondeu CERTO) e não é vazio (não falta dado — falta uma DECISÃO,
+que é outra coisa). Tratar <code>sem_decisao</code> como &quot;vazio&quot; mostraria um editor sem
+arquivos, convidando a pensar que o repositório está vazio; tratar como &quot;erro&quot;
+faria a tela sugerir &quot;tentar de novo&quot; para algo que só o Arquiteto resolve.</p>
+<p>A aba pergunta o estado do container ANTES de tentar ler código
+(<code>GET /projects/:id/container</code>), em vez de esperar a primeira árvore ou
+arquivo devolver 409 — a mesma checagem que a api já faz no funil de
+<code>ReadProjectCodeUseCase</code> (RN-105), só que perguntada primeiro, para o quarto
+estado nascer como mensagem própria e não como o rodapé de um erro genérico.
+Enquanto bloqueada, a tela reconsulta sozinha a cada 15s — depois de decidida
+a imagem não muda sem ação humana nova, e ficar reconsultando um estado
+estável seria a mesma família de tráfego desnecessário da PÓS-FASE 15.</p>
+<p>A apresentação do quarto estado foi EXTRAÍDA para <code>ContainerImageGateNotice</code>
+(<code>apps/web/src/components/ContainerImageGate.tsx</code>) — achado de uso: a aba PRs
+(<code>apps/web/src/routes/code/PrListAndDiff.tsx</code>, consumida por
+<code>ProjectPrsTab.tsx</code> e por <code>CodeDiffPanel.tsx</code>) chama <code>getCodePullRequests</code>/
+<code>getCodeDiff</code>, que passam pelo MESMO funil (RN-105) e podem devolver o MESMO
+409 — mas, ao contrário desta aba, sem perguntar antes. Ela mostrava esse 409
+no banner de erro genérico com &quot;Tentar de novo&quot;, a afordância errada para um
+estado que só o Arquiteto resolve. <code>isContainerImageGateError</code>
+(<code>apps/web/src/lib/api-client.ts</code>) identifica a causa pelo <code>status === 409</code>
+— única causa de <code>ConflictException</code> em <code>ReadProjectCodeUseCase.alvo</code> — e
+<code>PrListAndDiff</code> troca o banner por <code>ContainerImageGateNotice</code> quando ela bate,
+sem pré-checagem própria (reage ao 409 da query que já ia rodar).</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/ProjectCodeTab.tsx</code>,
+<code>apps/web/src/routes/ProjectCodeTab.module.css</code>,
+<code>apps/web/src/components/ContainerImageGate.tsx</code> (apresentação
+compartilhada), <code>apps/web/src/routes/code/PrListAndDiff.tsx</code> (consumidor
+reativo ao 409), <code>apps/web/src/lib/api-client.ts</code>
+(<code>isContainerImageGateError</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/ProjectCodeTab.test.tsx</code> (&quot;o gate&quot;),
+<code>apps/web/src/routes/code/CodeDiffPanel.test.tsx</code>,
+<code>apps/web/src/routes/ProjectPrsTab.test.tsx</code> (&quot;o gate do container não é
+erro genérico&quot;)</li>
+<li><strong>Borda:</strong> a checagem no front NÃO substitui a da api — é conveniência de
+UX. Se a api mudar de estado entre a consulta do gate e a leitura de
+verdade, a rota de leitura ainda recusa com 409 (RN-105); o front só evita
+o caso comum de mostrar o editor vazio por um instante. A aba PRs não faz
+pré-checagem: ela descobre o bloqueio quando a query já falhou, porque não
+há árvore/arquivo nenhum ali para o instante &quot;vazio&quot; que a pré-checagem da
+aba Code evita.</li>
+<li><strong>Origem:</strong> <a href="../../adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.html">ADR 0065</a></li>
+</ul>
+<h3 id="rn-108">RN-108 — O socket da sessão exige um ticket opaco de uso único, não o JWT reaproveitado</h3>
+<p><code>EngineWeb.SessionSocket.connect/3</code> recusava a conexão inteira só com o
+<code>session_id</code> (UUID) precisando existir no Registry — quem descobrisse o UUID
+entrava no canal <code>session:&lt;id&gt;</code> e recebia todos os broadcasts ao vivo da
+sessão. Fechar isso era limitação deliberada documentada no próprio módulo
+desde a Fase 3.</p>
+<p><code>POST /projects/:projectId/sessions/:sessionId/socket-ticket</code> (<code>scope: &quot;heartbeat&quot;|&quot;terminal&quot;</code>) emite um ticket opaco (32 bytes de CSPRNG,
+<code>TokenFactory</code>), TTL de <strong>30 segundos</strong>, uso único. <code>scope: &quot;heartbeat&quot;</code> exige
+papel <code>viewer</code>; <code>scope: &quot;terminal&quot;</code> exige <code>developer</code> — o mesmo papel mínimo
+de <code>MIN_ROLE_FOR_ACTION_TYPE.terminal</code> em <code>domain/actions/decide.ts</code> (hoje
+nenhum caminho pede <code>terminal</code> de verdade; o valor nasce certo para a FASE 25,
+o terminal interativo). A api persiste só o HASH (SHA-256 <strong>puro</strong>, não
+<code>hashDeToken</code>/HMAC — o engine não tem o pepper da api, e um token de 256 bits
+de CSPRNG não precisa de pepper contra dicionário, mesmo raciocínio que o
+próprio <code>hashDeToken</code> já registra), nunca o token bruto.</p>
+<p>O consumo é do ENGINE, que lê <code>session_socket_tickets</code> direto (mesmo padrão de
+<code>Engine.Outbox.Event</code> sobre <code>outbox_events</code> — nunca changeset/insert, só a
+escrita estreita que o uso único exige) em DUAS etapas:
+<code>SocketTicket.validar/1</code> (peek, sem marcar nada — chamado por <code>connect/3</code>,
+que ainda não sabe qual <code>session_id</code> vai ser pedido) e
+<code>SocketTicket.consumir/2</code> (<code>UPDATE</code> condicional exigindo o <code>session_id</code> do
+tópico bater com o da linha — chamado por <code>SessionChannel.join/3</code>, que
+também confere o <code>project_id</code> do ticket contra o da sessão, defesa em
+profundidade contra ticket de um projeto abrindo canal de outro). Sem ticket,
+ou com um inválido: a conexão inteira é recusada (<code>{:error, %{reason: &quot;unauthorized&quot;}}</code>), não só o join do canal.</p>
+<p>O web (<code>session-channel.ts</code>) busca um ticket NOVO antes de TODA
+<code>socket.connect()</code> — inclusive em reconexão automática, que existe. O
+reconnect nativo do <code>Phoenix.Socket</code> reusaria o mesmo <code>params</code> da construção
+(o ticket velho, já expirado ou consumido), então ele é neutralizado
+(<code>reconnectAfterMs</code> que praticamente nunca dispara) e a reconexão passa a ser
+inteiramente manual, com busca de ticket fresco a cada tentativa.</p>
+<p>Essa neutralização vale para TODO cliente do socket, e não só para o do web —
+inclusive o socket <code>/runner</code>, cujo ticket (<code>POST .../runner-ticket</code>) é do
+mesmo calibre. Ela falhou em DOIS dos quatro construtores de <code>Socket</code> do
+repositório, e o custo foi medido em execução real: <code>apps/runner/src/ channel.ts</code> construía o socket sem a opção — enquanto o docblock do módulo
+AFIRMAVA que o reconnect era &quot;por isso neutralizado&quot; — e o auto-reconnect
+repetia o mesmo ticket já consumido a cada <strong>~5,13s</strong> (o teto do backoff
+interno do phoenix.js), rendendo <strong>61 <code>REFUSED CONNECTION TO EngineWeb.RunnerSocket</code></strong> em poucas horas. Somado à política PRÓPRIA do
+runner (<code>index.ts</code>, essa correta), o resultado foram <strong>530 requisições num
+minuto</strong> contra o teto de 300 do <code>RATE_LIMIT_USER</code> — e como o limite é por
+USUÁRIO, o 429 aparecia no NAVEGADOR do dono da conta. Duas consequências, e
+a segunda é pior que o 429: enquanto está nesse laço o runner NÃO está
+conectado, então <code>RunnerReadiness</code> (RN-507) recusa e o projeto parece &quot;sem
+agente local&quot;. <code>apps/web/src/lib/fs-browser-channel.ts</code> tinha a MESMA linha
+de defeito (mesmo ticket de uso único, e sem política própria de reconexão —
+o <code>onClose</code> dele manda &quot;feche e reabra&quot;) e foi corrigido junto.</p>
+<p>O que impede a terceira instância é MECANISMO, não comentário: no runner as
+opções do <code>Socket</code> viraram um tipo com <code>reconnectAfterMs</code> OBRIGATÓRIO
+(<code>OpcoesDoSocket</code> em <code>channel.ts</code>), e os dois lados ganharam teste que assere
+a OPÇÃO PASSADA ao construtor — um teste que só verifique &quot;conecta&quot; passava
+com o defeito de pé, e passou. Junto, <code>conectarERodar</code> (<code>index.ts</code>) passou a
+DESCARTAR explicitamente a conexão caída (<code>conexao.desconectar()</code>): sem isso
+o <code>Socket</code> da rodada anterior sobrevivia à criação do próximo, e cada queda
+deixava mais um objeto vivo tentando com o ticket morto.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/api/src/db/schema/sessions.ts</code> (<code>sessionSocketTickets</code>),
+<code>apps/api/src/domain/sessions/socket-ticket-scope.ts</code>,
+<code>apps/api/src/application/use-cases/sessions/create-socket-ticket.use-case.ts</code>,
+<code>apps/api/src/interfaces/http/sessions/sessions.controller.ts</code> (rota
+<code>socket-ticket</code>), <code>apps/engine/lib/engine/sessions/socket_ticket.ex</code>,
+<code>apps/engine/lib/engine_web/channels/session_socket.ex</code>,
+<code>apps/engine/lib/engine_web/channels/session_channel.ex</code>,
+<code>apps/web/src/lib/session-channel.ts</code>,
+<code>apps/web/src/lib/fs-browser-channel.ts</code>,
+<code>apps/runner/src/channel.ts</code> (<code>OpcoesDoSocket</code>,
+<code>NUNCA_RECONECTAR_SOZINHO_MS</code>), <code>apps/runner/src/index.ts</code>
+(<code>conectarERodar</code>, o descarte da conexão caída)</li>
+<li><strong>Teste:</strong>
+<code>apps/api/test/application/use-cases/sessions/create-socket-ticket.use-case.spec.ts</code>,
+<code>apps/api/test/domain/sessions/socket-ticket-scope.spec.ts</code>,
+<code>apps/api/test/infrastructure/persistence/session-socket-ticket.repository.spec.ts</code>,
+<code>apps/engine/test/engine/sessions/socket_ticket_test.exs</code> (reuso falha,
+session_id errado falha, corrida concorrente só um vence),
+<code>apps/engine/test/engine_web/channels/session_socket_test.exs</code> (sem ticket
+a conexão é recusada),
+<code>apps/engine/test/engine_web/channels/session_channel_test.exs</code> (ticket de
+outro projeto: join falha), <code>apps/web/src/lib/session-channel.test.ts</code>,
+<code>apps/runner/src/channel.spec.ts</code> (&quot;neutraliza o auto-reconnect do
+Phoenix.Socket — ticket de uso único nunca é repetido&quot;; assere a OPÇÃO
+passada ao construtor, e reprova sem ela),
+<code>apps/web/src/lib/fs-browser-channel.test.ts</code> (o mesmo, no transporte via
+runner do navegador de pastas)</li>
+<li><strong>Borda:</strong> o ticket NÃO é o JWT reaproveitado — TTL curto, uso único, escopo
+fechado, e nasce de uma rota própria que já checa papel efetivo, não de
+decodificar o access token existente.</li>
+<li><strong>Origem:</strong> sem ADR — extração/hardening pontual, não mudança estrutural.</li>
+</ul>
+<h3 id="rn-113">RN-113 — Blame no editor é anotação SOB DEMANDA — um toggle, nunca embutida na leitura do arquivo</h3>
+<p>A UI que consome a fundação da <a href="../contracts.html#rn-110">RN-110</a> entra aqui: o editor da aba
+Code (<code>CodeEditor.tsx</code>) só chama <code>getCodeBlame</code> quando o usuário liga o toggle
+&quot;Blame&quot; — nunca junto da leitura de arquivo, que já dispara sozinha ao abrir
+uma aba. O motivo é o mesmo dos orçamentos de leitura composta (ADR 0060):
+blame é uma SEGUNDA chamada ao provider por arquivo aberto, e um arquivo perto
+do teto (<code>GIT_BLAME_LINE_LIMIT</code>, 2000 linhas) já é caro o bastante para não
+pagá-lo de graça em toda navegação. <code>truncated</code> (que a RN-110 já expõe) vira
+aviso visível, no mesmo padrão do aviso de <code>fileQuery.data.truncated</code>.</p>
+<p>Linhas consecutivas do MESMO commit mostram autor e sha curto só na PRIMEIRA
+linha do bloco — repetir o mesmo texto em cada linha de um bloco de dezenas
+de linhas seria ruído, não anotação; a linha só some do texto, nunca some da
+anotação (o <code>title</code> do elemento continua com data completa e resumo do
+commit em qualquer linha do bloco).</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/code/CodeEditor.tsx</code>,
+<code>apps/web/src/routes/code/CodeEditor.module.css</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/code/CodeEditor.test.tsx</code></li>
+<li><strong>Origem:</strong> onda de UI da FASE 26b (blame — dropdown rico de branches e
+lista de PRs são UI de outros dois agentes, sem risco de colisão)</li>
+</ul>
+<h2 id="painel-de-projetos-2">Painel de projetos</h2>
+<h3 id="rn-118">RN-118 — A árvore do time expõe detalhe de execução por marco, e abre os &quot;5 últimos&quot;</h3>
+<p><code>AgentTimelineTree</code>/<code>timeline-tree.ts</code> (FASE 14b) já agrupava o event log por
+agente, mas com três lacunas: o critério de abrir um ramo era só
+ativo/parado (sem relação com quantos agentes existiam), o contador do
+cabeçalho era o TOTAL de marcos (nunca &quot;o que é novo&quot;), e <code>tool.call</code>/
+<code>tool.result</code>/<code>agent.response</code> viravam marco mostrando só o nome da
+ferramenta — <code>args</code>, <code>result</code> e <code>iteration</code>, que o event log já grava,
+nunca chegavam na tela.</p>
+<p><strong>Abertura padrão</strong> passa a ser &quot;os 5 agentes de atividade mais recente
+(maior <code>seq</code> do último marco)&quot;, com ativo mantendo prioridade sobre
+recência — não se soma: como <code>montarArvore</code> já ordena ativos primeiro e,
+dentro de cada grupo, do mais recente pro mais antigo, os dois critérios
+colapsam numa fatia só (<code>ramosAbertosPorPadrao</code>, os primeiros
+<code>max(nº de ativos, 5)</code> ramos). Mais de 5 ativos: todos abrem, sem corte.</p>
+<p><strong>Contador de novidade</strong> por agente usa o MESMO mecanismo do sino
+(<code>read-state.ts</code>, <code>localStorage</code>), granular por <code>projectId:agentId</code> em vez
+de só <code>projectId</code> — não existia &quot;último visto&quot; nessa granularidade antes.
+Ramo colapsado com marco de <code>seq</code> maior que o último visto daquele agente
+mostra a contagem de NOVIDADE no lugar do total; abrir o ramo (automático
+ou manual) marca como visto até o <code>seq</code> mais recente.</p>
+<p><strong>Detalhe expansível</strong> é por MARCO, não por ramo — só <code>tool.call</code>,
+<code>tool.result</code> e <code>agent.response</code> (<code>EVENTOS_EXPANSIVEIS</code>) viram botão
+individual, porque só eles carregam payload que vale expandir. O
+agrupamento visual por ITERAÇÃO usa <code>iteration</code> do payload de
+<code>agent.response</code> quando existe (ToolLoop — <code>tool.call</code>/<code>tool.result</code>
+herdam a iteração da resposta que os despachou, porque no ToolLoop eles
+são emitidos DEPOIS dela); agentes fora do ToolLoop (PO, Criativo, sem
+<code>iteration</code> no payload) ganham um contador PRÓPRIO por agente, incrementado
+a cada resposta — inferência por proximidade de <code>seq</code>, não um campo novo no
+event log.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/timeline-tree.ts</code> (<code>Marco.iteracao</code>,
+<code>Marco.eventType</code>, <code>Marco.payload</code>, <code>ramosAbertosPorPadrao</code>,
+<code>marcoExpansivel</code>), <code>apps/web/src/components/AgentTimelineTree.tsx</code>,
+<code>apps/web/src/lib/read-state.ts</code> (<code>getAgentLastSeenSeq</code>/
+<code>setAgentLastSeenSeq</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/timeline-tree.test.ts</code> (agrupamento por
+iteração real e inferida, <code>ramosAbertosPorPadrao</code> com ativo/recência/sem
+corte), <code>apps/web/src/components/AgentTimelineTree.test.tsx</code> (abertura
+padrão, contador de novidade aparecendo/sumindo, marco expandindo com
+args/resultado/iteração)</li>
+<li><strong>Origem:</strong> pedido do usuário — lacunas confirmadas por investigação no
+componente existente da FASE 14b; sem ADR, mesma semântica de &quot;não visto&quot;
+do sino, só granularidade nova</li>
+</ul>
+<hr>
+<h2 id="session-2">Session</h2>
+<h3 id="rn-119">RN-119 — O agente ATIVO da sessão é o do <code>agent.activated</code> mais recente — nunca uma cadeia fixa</h3>
+<p><code>SessionPage</code> decide duas coisas a partir do MESMO agente: para quem vai a
+mensagem do composer, e de qual agente a topbar resolve o modelo mostrado
+(a cascata completa sessão→agente→área→projeto→workspace, a mesma que o
+<code>RunLlmTurnUseCase</code> usa para de fato rodar o turno). As duas perguntas
+tinham respostas DIFERENTES antes desta regra: o roteamento usava uma cadeia
+fixa de precedência (architect &gt; po &gt; creative, baseada em EXISTÊNCIA
+histórica — &quot;já ativou uma vez&quot;, que nunca &quot;desligava&quot;), e o modelo mostrado
+nem sabia quem estava ativo — a rota de vínculo de modelo não recebia agente
+nenhum e sempre caía no fallback fixo do agente Criativo
+(<code>herdarModeloDeStart</code>), mesmo depois de um handoff para o PO, o Arquiteto ou o Dev
+Lead.</p>
+<p>A definição única: o agente ATIVO é o do <code>agent.activated</code> mais
+RECENTE (por <code>seq</code>), entre os agentes conversacionais do fluxo do chat
+(Criativo, PO, Arquiteto, Dev Lead). <strong>O Infra Lead fica de fora</strong>:
+<code>agent_command_controller.ex</code> (engine) só tem rota <code>message</code> para
+po/dev-lead/arquiteto (mais o Criativo, como fallback implícito da última
+cláusula) — o Infra nunca teve <code>message</code> ligado, só <code>start</code>. Mandar mensagem
+para &quot;infra&quot; hoje cairia em silêncio no agente Criativo; tratá-lo
+como agente ativo do composer reabriria essa armadilha em vez de fechar
+uma.</p>
+<blockquote>
+<p><strong>Superada em parte pela <a href="parte-05.html#rn-631">RN-631</a> (AT-251):</strong> &quot;vence o <code>agent.activated</code>
+mais recente&quot; era ele mesmo um destinatário padrão implícito, e invisível.
+O destinatário do composer agora é ESCOLHIDO pela pessoa (um seletor &quot;Para&quot;
+listando os agentes que já estão na sessão) e o modelo da topbar
+segue esse destinatário. O que sobrevive desta regra é a metade do
+modelo: a rota de vínculo recebe o agente, nunca cai em fallback calado.</p>
+</blockquote>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/session-destinatario.ts:290</code>
+(<code>useDestinatarioDoChat</code>, desde a RN-631),
+<code>apps/web/src/lib/api-client.ts:1192</code> (<code>getSessionModelBinding</code>, o
+<code>agentId</code>), <code>apps/api/src/interfaces/http/llm/model-bindings.controller.ts:166</code>
+(<code>getSessionBinding</code>, <code>@Query('agentId')</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.destinatario-do-chat.test.tsx</code>
+(antes <code>SessionPage.agente-mais-recente.test.tsx</code>),
+<code>apps/web/src/routes/SessionPage.modelo-do-agente-ativo.test.tsx</code>,
+<code>apps/api/test/application/use-cases/llm/resolve-model-binding.use-case.spec.ts</code></li>
+<li><strong>Caso de borda:</strong> o Infra Lead não participa do roteamento do composer nem
+da definição de &quot;agente ativo&quot; — ele é proativo (Fase 4), não
+conversacional pelo composer.</li>
+</ul>
+<h3 id="rn-120">RN-120 — O poll de eventos da sessão pausa durante um turno em andamento</h3>
+<p><code>useSessionEvents</code> buscava eventos a cada poucos segundos SEM saber de um
+turno em andamento. Se o poll caía DURANTE um turno (comum — turnos costumam
+durar mais que o intervalo), ele trazia <code>chat.message</code>/<code>agent.response</code> já
+persistidos, que renderizavam JUNTO com o estado
+otimista/de streaming ainda na tela: a mesma mensagem, duas vezes.</p>
+<p>A correção pausa só o TIMER (<code>refetchInterval</code>) enquanto <code>streaming</code> é
+<code>true</code> — a query continua <code>enabled</code>, então a invalidação explícita que
+já dispara no fim do turno (<code>finalizarTurnoDoAgente</code>) segue
+buscando dados frescos na hora certa. <code>pausarPoll</code> é parâmetro
+OPCIONAL, padrão <code>false</code>: os outros consumidores do hook (Overview, Code,
+Provisioning, AdoptionPlan) não têm turno conversacional em andamento e
+ficam como estavam.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/hooks.ts:221</code> (<code>useSessionEvents</code>),
+<code>apps/web/src/routes/SessionPage.tsx:269</code> (<code>eventsQuery</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/hooks.pausar-poll.test.tsx</code></li>
+<li><strong>Caso de borda:</strong> pausar o timer não é desabilitar a query — a invalidação
+explícita segue funcionando, e a correção depende dela para nunca perder dado.</li>
+</ul>
+<h2 id="painel-de-projetos-3">Painel de projetos</h2>
+<h3 id="rn-121">RN-121 — Dev agent e QA são &quot;executores&quot;: aba própria, fora do &quot;Time de agentes&quot;</h3>
+<p>O grid &quot;Time de agentes&quot; e a &quot;Linha do tempo do time&quot; da Visão geral
+misturavam Criativo/PO/Arquiteto/Infra com dev-<code>&lt;módulo&gt;</code> e QA (lead +
+<code>qa-automacao</code>/<code>qa-performance-seguranca</code>) — sete, oito agentes na mesma
+grade, sem distinguir quem CRIA/DECIDE de quem IMPLEMENTA/VERIFICA. A aba
+<strong>Executores</strong> isola os dois últimos, com a MESMA renderização da Visão
+geral (<code>AgentCard</code>, o grid de área — extraído para <code>AgentTeamGrid.tsx</code> — e
+<code>AgentTimelineTree</code>), nunca um card reinventado.</p>
+<p><strong>A regra de separação é uma função só</strong>, <code>isExecutorGroup</code>/
+<code>isExecutorAgentId</code> (<code>lib/agent-status.ts</code>): <code>dev-lead</code>/<code>dev-&lt;qualquer módulo&gt;</code> e a área <code>qa</code> inteira (lead + subespecialidades) são executor;
+o resto não é. As DUAS telas filtram o MESMO <code>groupRosterByArea</code> com essa
+função — a Visão geral com <code>!isExecutorGroup</code>, Executores com
+<code>isExecutorGroup</code> — então um agente não pode aparecer nos dois nem sumir
+dos dois: é sempre exatamente um lado.</p>
+<p><strong>A árvore não duplica</strong>: cada aba filtra os EVENTOS antes de passar para
+<code>AgentTimelineTree</code> (por <code>actor.id</code> pertencer ou não ao conjunto de
+executores), então o ramo de um dev agent aparece só em Executores, nunca
+também na Visão geral. A coluna de Atividade (<code>ActivityFeed</code>, RN-099/100)
+NÃO foi filtrada — ela responde &quot;o que aconteceu&quot; na sessão inteira,
+dev/QA inclusive, e o filtro por agente do próprio componente já lista
+todo mundo que falou; só o grid e a árvore de &quot;quem está fazendo o quê&quot;
+mudam de lugar.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/agent-status.ts</code> (<code>isExecutorGroup</code>,
+<code>isExecutorAgentId</code>, <code>autonomyActionTypeFor</code> — movido de
+<code>ProjectOverviewTab.tsx</code>), <code>apps/web/src/components/AgentTeamGrid.tsx</code>
+(extraído do grid que já existia), <code>apps/web/src/routes/ ProjectExecutorsTab.tsx</code>, <code>apps/web/src/routes/ProjectOverviewTab.tsx</code>,
+<code>apps/web/src/routes/project-tabs.ts</code> (<code>key: 'executores'</code>, <code>ordem: 12</code>
+— logo depois da Visão geral, antes de Criativo/Chat/Code)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/agent-status.test.ts</code> (<code>isExecutorAgentId</code>/
+<code>isExecutorGroup</code> — dev-<code>&lt;módulo&gt;</code>, <code>dev-lead</code>, área <code>qa</code> inteira são
+executor; criativo/po/arquiteto/infra/secops não são);
+<code>apps/web/src/routes/ProjectExecutorsTab.test.tsx</code> (mostra só dev/QA,
+estado vazio sem os dois, contagem do cabeçalho);
+<code>apps/web/src/routes/ProjectOverviewTab.test.tsx</code> (dev-backend/QA somem
+do grid, o resto do time continua); <code>apps/web/src/routes/ project-tabs.test.tsx</code> (a aba nova entra na varredura genérica do
+registro — régua, painel, deep-link, ordem única)</li>
+<li><strong>Borda:</strong> SecOps NÃO é executor — ele entra na roster pelo MESMO
+<code>pr.gate_changed</code> que traz QA (Fase 4a, <code>rosterFactsFromEvents</code>), mas
+fica na Visão geral. <code>dev-lead</code> está na lista de executores por
+completude (RN-087 o descreve como conversacional), embora hoje nenhum
+caminho o instancie na roster da sessão (a delegação Dev Lead →
+<code>dev-&lt;módulo&gt;</code> segue fora de escopo, ADR 0053 item 5).</li>
+<li><strong>Origem:</strong> pedido do usuário — &quot;Executores&quot; própria pra dev agent e QA,
+fora do grid misturado da Visão geral.</li>
+</ul>
+<hr>
+<h2 id="session-3">Session</h2>
+<h3 id="rn-123">RN-123 — Sessão criativa sem agente Criativo ativo: a primeira mensagem TAMBÉM o ativa</h3>
+<p>Numa sessão <code>kind: 'criativa'</code> (<a href="../api.html#rn-097">RN-097</a>) ainda sem <code>agent.activated</code>,
+mandar a primeira mensagem pelo composer ativa antes o agente
+Criativo (esperando a ativação terminar) e só então entrega aquela
+mensagem a ele pelo caminho real (<code>sendAgentMessage</code> — histórico, prompt de
+sistema, ferramenta <code>emit_artifact</code>). Antes desta regra, quem digitava sem
+clicar em &quot;Iniciar ideação&quot; caía num chat SSE genérico, sem histórico e sem
+regras de negócio: NÃO era o agente Criativo de verdade, e a conversa
+não registrava nada no domínio.</p>
+<p>O clique em &quot;Iniciar ideação&quot; continua existindo (<a href="#rn-104">RN-104</a>) — ainda é
+o que dispara a ativação quando a pessoa prefere o gesto explícito, e
+é a partir dele que a chave do dono (<a href="../api.html#rn-058">RN-058</a>) começa a ser gasta em
+qualquer dos dois caminhos. O que mudou é que a PRIMEIRA MENSAGEM agora também
+conta como esse gesto: ninguém deveria precisar de um clique à parte antes de falar
+com quem a tela já o convidou a falar.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx:690</code> (<code>handleSend</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.ideacao-automatica.test.tsx</code></li>
+<li><strong>Caso de borda:</strong> sessão <code>consultiva</code> não tem agente Criativo — a regra
+não se aplica, e o caminho SSE genérico segue sendo o certo para ela.</li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/web.html">Web</a><a href="../../business-rules/web/parte-02.html">Web — parte 2 (desde RN-124)</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-web/blob/dev/docs/business-rules/web/parte-01.md">编辑此页</a></footer>
+</main>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#painel-de-projetos">Painel de projetos</a></li><li class="n2"><a href="#cost">Cost</a></li><li class="n3"><a href="#rn-039">RN-039 — Dot de status do projeto: risco sempre vence inatividade</a></li><li class="n3"><a href="#rn-064">RN-064 — Heartbeat não encerra sessão com trabalho pendente</a></li><li class="n3"><a href="#rn-088">RN-088 — Falha de carregamento é dita na tela; 429 não se retenta</a></li><li class="n3"><a href="#rn-089">RN-089 — Projeto de nome repetido se desempata na barra lateral</a></li><li class="n2"><a href="#session">Session</a></li><li class="n3"><a href="#rn-098">RN-098 — O nome da sessão soma à hashtag, nunca a substitui</a></li><li class="n2"><a href="#painel-de-projetos-1">Painel de projetos</a></li><li class="n3"><a href="#rn-099">RN-099 — Atividades pagina o passado sem repolar o que não muda</a></li><li class="n2"><a href="#session-1">Session</a></li><li class="n3"><a href="#rn-104">RN-104 — A aba deriva do tipo gravado, e cria nesse tipo</a></li><li class="n3"><a href="#rn-107">RN-107 — A aba Code tem um QUARTO estado: bloqueada por decisão pendente</a></li><li class="n3"><a href="#rn-108">RN-108 — O socket da sessão exige um ticket opaco de uso único, não o JWT reaproveitado</a></li><li class="n3"><a href="#rn-113">RN-113 — Blame no editor é anotação SOB DEMANDA — um toggle, nunca embutida na leitura do arquivo</a></li><li class="n2"><a href="#painel-de-projetos-2">Painel de projetos</a></li><li class="n3"><a href="#rn-118">RN-118 — A árvore do time expõe detalhe de execução por marco, e abre os &quot;5 últimos&quot;</a></li><li class="n2"><a href="#session-2">Session</a></li><li class="n3"><a href="#rn-119">RN-119 — O agente ATIVO da sessão é o do agent.activated mais recente — nunca uma cadeia fixa</a></li><li class="n3"><a href="#rn-120">RN-120 — O poll de eventos da sessão pausa durante um turno em andamento</a></li><li class="n2"><a href="#painel-de-projetos-3">Painel de projetos</a></li><li class="n3"><a href="#rn-121">RN-121 — Dev agent e QA são &quot;executores&quot;: aba própria, fora do &quot;Time de agentes&quot;</a></li><li class="n2"><a href="#session-3">Session</a></li><li class="n3"><a href="#rn-123">RN-123 — Sessão criativa sem agente Criativo ativo: a primeira mensagem TAMBÉM o ativa</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-zh-Hans.json" data-base="../../"></script></body>
+</html>

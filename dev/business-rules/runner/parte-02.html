@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — Runner — parte 2 (desde RN-550) | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../../business-rules/runner/parte-02.html" selected>pt-BR</option><option value="../../en/business-rules/runner/parte-02.html">en</option><option value="../../ru/business-rules/runner/parte-02.html">ru</option><option value="../../zh-Hans/business-rules/runner/parte-02.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../../dev/business-rules/runner/parte-02.html" selected>dev</option><option value="../../../prd/business-rules/runner/parte-02.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../../index.html">Início</a></li><li><a href="../../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Arquitetura</a></li><li><a href="../../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Política de branches</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../../explanation/localizacao.html">Localização</a></li><li><a href="../../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../../glossary.html">Glossário</a></li><li><a href="../../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>Regras de negócio</span></summary><ul><li><a href="../../business-rules.html">Regras de negócio</a></li><li><a href="../../business-rules/custo.html">Custo e metering</a></li><li><a href="../../business-rules/autenticacao.html">Autenticação</a></li><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Produto</a></li><li><details open><summary><span>Runner</span></summary><ul><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/runner/parte-01.html">Runner — parte 1 (desde RN-423)</a></li><li><a href="../../business-rules/runner/parte-02.html" aria-current="page">Runner — parte 2 (desde RN-550)</a></li></ul></details></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="runner--parte-2-desde-rn-550">Runner — parte 2 (desde RN-550)</h1>
+<h2 id="o-agente-de-máquina-espera-o-primeiro-projeto-e-a-chave-nasce-no-terminal-rn-550551-fase-30">O agente de máquina espera o primeiro projeto, e a chave nasce no terminal (RN-550/551, FASE 30)</h2>
+<h3 id="rn-550">RN-550 — Com ZERO conexões o agente local NÃO sai: ele espera e reconsulta a lista; com conexão viva a consulta continua sendo só no start</h3>
+<p>Sessão 8 da <a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30</a>. A
+<a href="parte-01.html#rn-544">RN-544</a> fez lista vazia ser estado NORMAL e o processo sair com <strong>0</strong>,
+dizendo <em>&quot;crie um projeto em modo Runner e suba o agente de novo — a lista é
+consultada só no start&quot;</em>. Isso contradizia, por escrito, o
+<a href="../../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155</a> ponto 5 — <em>&quot;ele
+<strong>espera</strong>… quando a pessoa criar o primeiro projeto na web, o agente já está
+lá&quot;</em> — e quebrava exatamente o caso que a fase persegue: a instalação nova, que
+é a instalação com ZERO projetos. O instalador subia o agente, o agente
+descobria que não havia nada e ia embora, e a pessoa que criasse o primeiro
+projeto minutos depois voltaria ao terminal sem nunca ter sido avisada disso.</p>
+<p><strong>A regra é ASSIMÉTRICA, e a assimetria é o desenho:</strong></p>
+<pre class="codigo"><code>conexões &gt; 0  →  a lista é consultada SÓ no start   (a RN-544 fica byte a byte)
+conexões = 0  →  reconsulta, com cadência declarada
+</code></pre>
+<p><strong>E ela NÃO desfaz a decisão da RN-544.</strong> O argumento daquela sessão continua
+inteiro: uma lista que volta <strong>MENOR</strong> é ambígua — projeto apagado, convertido
+de modo, papel revogado, ou um 500 transitório se disfarçando dos três —, e
+derrubar uma conexão <strong>VIVA</strong> por causa dessa ambiguidade trocaria um estado
+certo por um palpite. Com <strong>zero</strong> conexões não há nada a derrubar e não há
+ambiguidade nenhuma: qualquer projeto que apareça é ganho puro, e nenhuma
+decisão é tomada sobre o que sumiu. A reconsulta <strong>PARA</strong> no instante em que a
+primeira lista não-vazia chega, e daí em diante o comportamento é byte a byte o
+de hoje — o módulo da espera não é chamado de novo enquanto o processo viver.</p>
+<p><strong>O argumento do <code>exit 0</code> caiu porque a premissa dele caiu.</strong> A RN-544 escreveu
+que <em>&quot;ficar de pé com zero conexões seria um serviço 'ativo' que não faz nada, e
+o <code>status</code> da unit passaria a mentir&quot;</em> — e isso dependia de o processo não fazer
+nada. É essa premissa que esta RN remove: ele reconsulta, com cadência
+declarada, e DIZ que está fazendo isso. <code>active (running)</code> passa a ser
+verdadeiro, e quem mentia era a saída com 0, que deixava a instalação nova sem
+agente justamente no minuto em que a pessoa ia criar o primeiro projeto.</p>
+<p><strong>A cadência escalona e ESTABILIZA: 15s, 30s, 60s, e o último se repete para
+sempre.</strong> Os dois degraus curtos existem porque o caso a atender é o de alguém
+criando o primeiro projeto AGORA; um teto de minutos faria o agente aparecer
+depois de a pessoa desistir de olhar. O platô de 60s é o preço em regime — UMA
+requisição por minuto, de uma instalação, contra uma rota que devolve a lista do
+próprio dono da credencial. Crescer além disso economizaria tráfego que ninguém
+está pagando e pioraria a única coisa que a espera entrega.</p>
+<p><strong>Há teto, e ele é de FALHAS, nunca de espera.</strong> Esperar não tem limite —
+esperar é o estado normal de uma instalação nova, e pode durar dias. O que tem
+teto são as falhas <strong>SEGUIDAS</strong> da consulta: dez, e então o processo sai com 1
+NOMEANDO o número, como o laço de conexão já faz com
+<code>TETO_DE_TENTATIVAS_SEGUIDAS</code> e pelo mesmo motivo (não martelar a api para
+sempre quando o problema não é transitório). Uma consulta que RESPONDE zera o
+contador — inclusive quando responde VAZIO, que é sucesso, porque a lista vazia
+é a resposta certa. A constante é SEPARADA de propósito, com o mesmo valor: uma
+conta falhas de CONECTAR e a outra, falhas de LISTAR, e amarrá-las faria uma
+mudança de cadência de conexão mexer, sem ninguém pedir, no tempo que uma
+instalação nova espera antes de desistir. <code>CredencialNaoEDeMaquinaError</code> (o 403
+por espécie de chave, <a href="parte-01.html#rn-544">RN-544</a>) <strong>não</strong> entra no teto: ela é fatal na
+hora, porque uma chave de projeto não vira chave de máquina por esperar mais um
+minuto.</p>
+<p><strong>Ficar de pé em silêncio seria pior que sair.</strong> &quot;Esperando&quot; e &quot;travado&quot; são a
+mesma imagem para quem lê <code>journalctl</code>, então o processo diz a cadência ao
+entrar na espera, diz quando o primeiro projeto aparece, e bate um BATIMENTO a
+cada 30 consultas (meia hora, no platô) informando <strong>quantas</strong> consultas já
+houve. Nem toda consulta vira linha, também de propósito: um log por minuto,
+para sempre, é o ruído que enterra as linhas que importam.</p>
+<p><strong><code>Restart=on-abnormal</code> fica byte a byte, nas DUAS espécies de unit
+(<a href="parte-01.html#rn-545">RN-545</a>), e nada nelas muda.</strong> Medido: <code>on-abnormal</code> reergue por
+SINAL, watchdog ou timeout — nunca por código de saída, nem 0 nem 1. A saída
+com 0 nunca foi o que impedia o serviço de ser reerguido; o que impedia é que
+<code>on-abnormal</code> não olha código nenhum. O efeito real da mudança é o oposto do
+temido: a unit de MÁQUINA, que é a que roda este modo, passa a ficar
+<code>active (running)</code> de verdade em vez de terminar em <code>inactive (dead)</code> segundos
+depois de subir — e <code>service status --machine</code> passa a responder <code>rodando</code> (0)
+onde antes respondia <code>parado</code> (3) numa instalação nova. A unit por PROJETO não
+é afetada em linha nenhuma: ela roda o modo <code>projeto</code>, que nunca chega aqui.</p>
+<p><strong>Uma exceção, declarada: lista NÃO-vazia cujos projetos são todos recusados
+continua saindo com 1.</strong> Também são zero conexões, e mesmo assim não espera —
+porque ali cada recusa nomeia um defeito local concreto (segmento que escapa da
+base, pasta que é um arquivo) com conserto próprio, e reconsultar repetiria as
+mesmas recusas indefinidamente, enterrando no log a linha que diz o que
+consertar. A espera é para <em>&quot;ainda não existe projeto&quot;</em>, nunca para <em>&quot;existe e
+eu não consigo atendê-lo&quot;</em>.</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/runner/src/espera-de-projetos.ts:127</code>
+(<code>esperarPrimeiroProjeto</code>), <code>:60</code> (<code>CADENCIA_DA_ESPERA_MS</code>), <code>:75</code>
+(<code>TETO_DE_FALHAS_DE_CONSULTA</code>), <code>:88</code> (<code>CONSULTAS_POR_BATIMENTO</code>);
+<code>apps/runner/src/index.ts:1465</code> (a espera dentro de
+<code>rodarComoAgenteDeMaquina</code>, e a exceção dos recusados logo abaixo)</li>
+<li><strong>Teste:</strong> <code>apps/runner/src/espera-de-projetos.spec.ts</code> — o caminho feliz
+(espera, reconsulta, devolve a primeira lista não-vazia e PARA ali), a
+cadência que estabiliza, o batimento a cada N consultas, o teto de falhas
+seguidas com o número na mensagem, a resposta no meio ZERANDO o contador, o
+403 de espécie subindo intacto e o SIGTERM devolvendo <code>parado</code>;
+<code>apps/runner/src/index.spec.ts</code> — a JUNÇÃO no PROCESSO de verdade, contra uma
+api de mentira que devolve <code>[]</code>: o processo DIZ que fica de pé e <strong>não
+termina</strong>, que era o defeito</li>
+<li><strong>ADR:</strong> <a href="../../adr/0155-a-primeira-conta-nasce-no-terminal.html">0155</a> ponto 5</li>
+<li><strong>Origem:</strong> FASE 30, sessão 8 —
+<a href="../../explanation/fase-30-runner-por-maquina.html">o recorte da fase</a></li>
+</ul>
+<h3 id="rn-551">RN-551 — <code>brabo-runner device-key create</code>/<code>finish</code>: o par Ed25519 nasce NA MÁQUINA, a privada nunca viaja, e o arquivo que o runner lê nunca existe sem <code>kid</code></h3>
+<p>Sessão 8 da <a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30</a>, a outra
+metade. Até aqui, <strong>só o navegador</strong> gerava par de chaves de dispositivo
+(<code>apps/web/src/lib/runner-bootstrap.ts</code>, <a href="../../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118</a>,
+<a href="../api.html#rn-464">RN-464</a>); o CLI só sabia <strong>ler</strong> o que alguém tinha posto na pasta
+(<code>device-key.ts</code>). O <a href="../../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155</a>
+ponto 4 pede o outro lado: <em>&quot;o par é gerado <strong>na máquina</strong>; a privada nunca
+viaja… mantém verdadeira a frase que a RN-519 usa para recusar a visão de
+<code>maintainer</code>: 'a privada de uma chave de dispositivo nunca sai do navegador' —
+passa a ser 'nunca sai da máquina'&quot;</em>. Sem isso, a <a href="../produto.html#rn-543">RN-543</a>, a
+<a href="parte-01.html#rn-544">RN-544</a> e a <a href="parte-01.html#rn-545">RN-545</a> continuavam todas com a mesma lacuna
+declarada: <strong>ninguém cria chave de máquina</strong>.</p>
+<p><strong>São DOIS passos, e o motivo é o <code>kid</code>.</strong> O <code>kid</code> gravado dentro da JWK privada
+É o id do registro no servidor (<a href="../web.html#rn-475">RN-475</a>) — a cadeia inteira só o
+REPASSA (o runner lê <code>jwk.kid</code>, o JWT o leva no header, o <code>PatAuthGuard</code> acha a
+pública por ele), e ninguém o deriva de outra coisa. Ele só existe <strong>depois</strong> de
+a pública ser registrada, e uma privada gravada antes disso nasce inútil, que é
+literalmente o defeito que a RN-475 custou uma caçada para achar. O navegador
+resolve mantendo o par em MEMÓRIA entre o registro e a gravação; o CLI resolve
+com um arquivo <strong>PARCIAL</strong>:</p>
+<pre class="codigo"><code class="language-sh">PUB=$(brabo-runner device-key create)          # gera aqui, imprime a PÚBLICA
+ID=$(… registra PUB na api …  | jq -r .id)     # quem registra é o instalador
+brabo-runner device-key finish --id &quot;$ID&quot;      # carimba o kid e grava
+</code></pre>
+<p><strong>Em nenhum instante existe um <code>brabo-runner-device-key.jwk.json</code> sem <code>kid</code>.</strong> O
+<code>create</code> grava em <code>…jwk.json.parcial</code>, um nome que <code>lerChaveDeDispositivo</code> não
+procura; o <code>finish</code> carimba e grava o nome de verdade. O arquivo que o runner LÊ
+ou está completo ou não existe, e uma interrupção entre os dois passos deixa um
+<code>.parcial</code> que o runner IGNORA e que o próximo <code>create</code> NOMEIA — dizendo que o
+registro daquela tentativa pode ter ficado ÓRFÃO, que é inerte e aparece na
+listagem da <a href="../api.html#rn-519">RN-519</a>.</p>
+<p><strong>O CLI NÃO fala com a api, e a razão é de SEGREDO, não técnica.</strong> Quem registra
+a chave de máquina é o instalador, autenticado pelo <code>BRABO_SERVICE_TOKEN</code> que
+ele acabou de gerar (<a href="../../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155</a>
+ponto 1). Fazer o <code>brabo-runner</code> chamar a rota exigiria pôr esse token na mão
+dele — um segredo de INSTALAÇÃO, que abre rotas internas, entregue a um processo
+que hoje só vê credencial de dispositivo e que fica de pé para sempre na máquina
+do usuário. O corte é o oposto: <strong>cada lado guarda exatamente um segredo, e
+nenhum vê o do outro</strong>. O que atravessa a fronteira entre eles é a JWK PÚBLICA e
+o id — nada que precise ser protegido.</p>
+<p><strong>O destino padrão é a pasta de configuração da máquina, e a precedência é
+REUSADA.</strong> <code>$XDG_CONFIG_HOME/brabo/</code> (senão <code>~/.config/brabo/</code>), ao lado do
+<code>runner.json</code> da <a href="parte-01.html#rn-529">RN-529</a> e pelo mesmo motivo — é configuração da
+MÁQUINA, e uma chave de máquina não tem pasta de projeto onde morar.
+<code>pastaDeConfiguracaoDoBrabo</code> foi EXTRAÍDA de <code>caminhoDoArquivoDeBase</code> quando
+ganhou o segundo consumidor, nunca copiada. Isso <strong>não</strong> reabre a porta que a
+Onda 2 do <a href="../../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104</a>
+fechou (credencial em caminho global e IMPLÍCITO): <code>device-key.ts</code> continua lendo só do <code>cwd</code> que o chamador
+passar, e quem aponta para esta pasta é o <code>--dir</code> da unit de máquina
+(<a href="parte-01.html#rn-545">RN-545</a>), explicitamente, escrito no serviço. <code>--dir</code> existe e serve
+também a uma pasta de projeto — em disco as duas espécies são o mesmo arquivo, e
+quem sabe a diferença é o SERVIDOR (<a href="parte-01.html#rn-544">RN-544</a>): este comando não afirma
+espécie nenhuma.</p>
+<p><strong>A privada é gravada com modo 600, explícito, e nunca deixado ao <code>umask</code>.</strong> A
+pasta nasce 700 quando é ESTE comando que a cria; uma pasta que já existia é do
+usuário (pode ser a que o navegador configurou) e não é reapertada. O <code>--dir</code>
+passa pela MESMA <code>validarDirDentroDoHomeNoLinux</code> da <a href="parte-01.html#rn-434">RN-434</a>, reusada
+inteira: o que se grava é um segredo do usuário, e uma pasta fora do <code>$HOME</code>
+dele não é onde o <code>systemd --user</code> dele vai procurar.</p>
+<p><strong>O stdout carrega UM valor, numa linha, e todo o resto é stderr.</strong> É esse o
+contrato de que o <code>install.sh</code> depende (<code>PUB=$(…)</code>): misturar as duas coisas
+obrigaria o script a filtrar saída de humano, que é como um contrato se quebra
+sem ninguém perceber. No <code>create</code> o stdout é a JWK pública; no <code>finish</code>, o
+CAMINHO do arquivo — o valor que o passo seguinte (<code>service install --machine --dir &lt;pasta&gt;</code>) precisa.</p>
+<p><strong>Sobrescrever chave completa é RECUSADO, e não há <code>--force</code>.</strong> Trocar a chave
+de uma máquina já pareada trocaria a identidade de um agente que pode estar de
+pé AGORA, em silêncio: a pública continuaria registrada e o processo passaria a
+assinar com uma chave que ninguém conhece. A recusa nomeia o gesto (revogar,
+apagar, recriar), e uma flag que derruba uma guarda cujo sintoma é silencioso
+devolveria o sintoma silencioso.</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/runner/src/criar-chave-de-dispositivo.ts:202</code>
+(<code>criarChaveDeDispositivo</code>), <code>:275</code> (<code>finalizarChaveDeDispositivo</code>), <code>:82</code>
+(<code>SUFIXO_PARCIAL</code>), <code>:177</code> (<code>resolverDestino</code>); <code>apps/runner/src/base.ts:85</code>
+(<code>pastaDeConfiguracaoDoBrabo</code>, extraída);
+<code>apps/runner/src/index.ts:1280</code> (o despacho antes de <code>lerArgumentos</code>, e a
+separação stdout/stderr)</li>
+<li><strong>Teste:</strong> <code>apps/runner/src/criar-chave-de-dispositivo.spec.ts</code> — o caminho
+feliz ponta a ponta (a pública no stdout, o parcial em 600, o <code>finish</code>
+carimbando, e a chave resultante lida por <code>lerChaveDeDispositivo</code> e ASSINANDO
+um JWT de ticket de verdade), o <code>--dir</code>, e as recusas: <code>finish</code> sem <code>create</code>,
+sem <code>--id</code>, com <code>--id</code> colado do JSON inteiro, chave completa já no lugar
+(nos dois comandos), parcial que não é a JWK, subcomando desconhecido e o
+aviso de órfão; <code>apps/runner/src/index.spec.ts</code> — a JUNÇÃO no processo de
+verdade: <code>device-key create</code> roda numa pasta SEM credencial nenhuma, e o
+stdout contém só a JWK pública</li>
+<li><strong>Lacuna DECLARADA, e FECHADA nas duas metades:</strong> quem REGISTRA a pública
+não existia neste repositório quando esta RN fechou — a rota chegou na
+<a href="../api.html#rn-552">RN-552</a> e o <code>install.sh</code> que encadeia os dois comandos, na
+<a href="../produto.html#rn-547">RN-547</a>. O contrato que este comando assume é o que a rota de
+chave de PROJETO já tem (<code>{ name, publicKeyJwk }</code>, com <code>publicKeyJwk</code> sendo o
+JSON da JWK pública Ed25519 — <code>kty</code> &quot;OKP&quot;, <code>crv</code> &quot;Ed25519&quot;, <code>x</code> — e resposta
+com <code>id</code>), e é isso que o stdout do <code>create</code> produz: uma linha nesse formato.
+O comando também <strong>não</strong> escolhe o <code>name</code> do dispositivo, de propósito — ele é
+campo do registro, e quem nomeia é quem registra</li>
+<li><strong>ADR:</strong> <a href="../../adr/0155-a-primeira-conta-nasce-no-terminal.html">0155</a> ponto 4</li>
+<li><strong>Origem:</strong> FASE 30, sessão 8 —
+<a href="../../explanation/fase-30-runner-por-maquina.html">o recorte da fase</a></li>
+</ul>
+<hr>
+<h2 id="a-credencial-que-não-atravessa-o-container-do-agente-local-rn-558">A credencial que não atravessa o container do agente local (RN-558)</h2>
+<h3 id="rn-558">RN-558 — Credencial no <code>exec</code> com container ativo é RECUSADA pelo runner, com desfecho nomeado e origem <code>politica</code></h3>
+<p>Lacuna declarada por escrito ao fechar a <a href="parte-01.html#rn-507">RN-507</a>/<a href="../api.html#rn-508">RN-508</a>
+(<a href="../../adr/0145-docker-pre-requisito-do-runner.html">ADR 0145</a>) e medida de novo aqui,
+elo por elo, antes de qualquer linha ser escrita.</p>
+<p><strong>A cadeia, medida.</strong> <code>Engine.Runners.RunnerReadiness.verificar/1</code>
+(<code>runner_readiness.ex:52</code>) exige container <code>running</code> REGISTRADO antes de
+QUALQUER operação de <code>Engine.Actions.Workspace.RunnerGit</code> — inclusive o
+<code>git fetch</code> autenticado inicial, que sai de <code>fetch!/3</code>
+(<code>runner_git.ex:226</code>, via <code>exec/4</code> em <code>:288</code>). A ÚNICA forma de esse registro
+existir num projeto <code>runner</code> é o MESMO runner ter subido o próprio container
+(<a href="../../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137</a>), e é esse mesmo
+sucesso que marca <code>estado.containerAtivo</code> nele
+(<code>apps/runner/src/index.ts:822</code>, em <code>tratarContainerStart</code>). Com
+<code>containerAtivo</code> setado, <code>tratarExec</code> rota o comando para dentro do container
+(<code>index.ts:728</code>–<code>730</code>, e a recusa nova em <code>:693</code>), e a operação <code>exec</code> de
+<code>packages/docker-port</code> <strong>não tem campo de <code>env</code></strong> — de propósito (<a href="../../adr/0130-broker-de-container.html">ADR 0130</a>:
+sem <code>-e</code> livre nenhum). O campo <code>env</code> que a RN-507 acrescentou ao par
+<code>exec</code>/<code>exec_result</code> (<code>RunnerRouter.exec/5</code>, <code>runner_router.ex:50</code>;
+<code>ExecMessage.env</code>, <code>apps/runner/src/channel.ts:62</code>) só é aplicado no caminho
+HOST, onde <code>apps/runner/src/exec.ts:94</code> o MESCLA sobre <code>process.env</code>.</p>
+<p>Resultado: no instante em que a RN-507 deixa o <code>fetch</code> autenticado rodar, o
+container quase sempre já está de pé no MESMO runner — e era aí que a
+credencial (<a href="../../adr/0056-o-engine-trabalha-em-repositorio-remoto.html">ADR 0056</a>,
+<code>GitAuth.env_de_auth/1</code>) era descartada, <strong>em silêncio, sem erro</strong>. O <code>git</code>
+rodava com o helper efêmero instalado por <code>-c</code> e as duas variáveis VAZIAS, e
+saía com falha de autenticação — indistinguível de token inválido, permissão
+errada ou rede fora. A pessoa caçava a coisa errada, e o produto não dizia
+nada.</p>
+<p><strong>A correção é o desfecho NOMEADO, não a entrega da credencial.</strong> O <code>docker exec</code> continua sem campo de <code>env</code> — mexer nisso é mudar a porta de contenção,
+e é decisão de ADR, não recorte (ver a lacuna declarada abaixo). O que muda é
+que o par (<code>env</code> presente, container ativo) deixa de ser executado e passa a
+ser <strong>recusado</strong>, com marca, mensagem e origem.</p>
+<p><strong>Quem recusa é o RUNNER, e só ele pode.</strong> É o único processo que sabe as duas
+metades ao mesmo tempo: que o comando carrega credencial e que ele vai para
+dentro do container. O engine não sabe a segunda, e isso foi MEDIDO:
+<code>estado.containerAtivo</code> nasce <code>null</code> a cada execução do runner
+(<code>index.ts:1449</code>) e só é setado por <code>tratarContainerStart</code>, então um container
+<code>running</code> REGISTRADO no banco <strong>não implica</strong> container ativo naquele processo
+— um runner reiniciado com o container de pé roteia pro HOST, e ali a
+credencial chega normalmente. Subir a checagem para <code>RunnerReadiness</code> ou para
+<code>RunnerGit</code> recusaria um caminho que funciona. E <code>RunnerReadiness</code> fica BYTE A
+BYTE como está: ela não ganha flag nem quarta pré-condição — é a mesma regra
+que a <a href="parte-01.html#rn-516">RN-516</a> já enunciou sobre não lhe pendurar uma flag &quot;pula
+container&quot;.</p>
+<p><strong>A MARCA é constante de PROTOCOLO, não detalhe de mensagem.</strong>
+<code>MARCA_DE_CREDENCIAL_NAO_ENTREGUE</code> (<code>index.ts</code>) e <code>@marca</code>
+(<code>credencial_de_git.ex</code>) carregam o MESMO token, e é por ele — não pela frase —
+que o engine reconhece a recusa depois de ela ter atravessado um <code>rescue</code> e
+virado string solta. Mudar um lado só não quebra compilação de nada: a recusa
+continua acontecendo e só a CLASSIFICAÇÃO volta a errar, que é a forma exata do
+defeito que esta RN fecha. Nenhuma das duas suítes alcança a outra linguagem
+(ExUnit não lê TypeScript, o vitest do runner não lê Elixir), então a guarda
+mora em <code>scripts/ci/</code>, com os outros testes que leem o repositório inteiro como
+texto.</p>
+<p><strong>A origem é <code>politica</code>, e a escolha aponta AÇÃO.</strong> As quatro do
+<a href="../../adr/0020-destravar-gates-qa-secops.html">ADR 0020</a> não distribuem culpa, dizem o que
+fazer. Isto não é cláusula que ninguém escreveu (<code>codigo</code>) nem rede que caiu
+(<code>infra</code>): é a contenção do ADR 0130 funcionando como desenhada, contra um caso
+que ela não previu. Quem lê <code>politica</code> sabe que não há bug para caçar — há uma
+decisão de produto pendente. <code>Engine.Runners.CredencialDeGit.desfecho/1</code>
+acrescenta UM caso e não reclassifica nenhum outro: qualquer outra falha de
+worktree mantém byte a byte <code>{&quot;falha ao preparar o worktree&quot;, &quot;codigo&quot;}</code>, nos
+DOIS dev agents (o real e o Noop, que existe para exercitar ESTE caminho e não
+uma cópia dele).</p>
+<p><strong>A recusa de CONTENÇÃO vence, e a ordem é decisão.</strong> Ela entra DEPOIS de
+<code>validarCwdDentroDaRaiz</code> (<code>guard.ts</code>): um comando apontado para fora da raiz
+precisa ouvir <strong>isso</strong>, porque ali há uma fronteira de contenção sendo
+recusada, enquanto aqui há uma capacidade que falta. Colapsar as duas faria um
+comando fora do escopo parecer problema de credencial — o mesmo defeito de
+diagnóstico, com outro sinal.</p>
+<p><strong>O <code>env</code> nunca aparece na recusa — só a CONTAGEM.</strong> A invariante da RN-507 é
+que <code>msg.env</code> não vai para log nenhum, e esta saída vai para o event log do
+produto: a recusa diz &quot;2 variável(is) de ambiente&quot;, jamais um nome ou um valor.
+O número já diz o que se precisa saber ali.</p>
+<p><strong>O que NÃO é afetado, confirmado por leitura:</strong> repositório <code>local</code> (provider
+sem token) — <code>GitAuth.env_de_auth/1</code> devolve <code>[]</code>, <code>fetch!/3</code> converte para
+<code>nil</code>, o campo nem entra no payload, e a recusa não dispara; os modos
+<code>container</code> e <code>mounted</code> — nunca passam por <code>RunnerGit</code> (<code>Workspace.ensure!/4</code>
+bifurca por <code>execution_mode</code> e só <code>runner</code> vai para lá), e o container deles
+sobe pelo broker, do outro lado da rede; e comando de terminal comum, que nunca
+carregou <code>env</code>. <code>workspace_create</code> também carrega <code>env</code>, e também não é afetado:
+ele roda no HOST (<code>criarPastaDoProjeto</code>), não no container.</p>
+<ul>
+<li><strong>Código:</strong> <code>apps/runner/src/index.ts</code> (<code>MARCA_DE_CREDENCIAL_NAO_ENTREGUE</code> e
+a recusa em <code>tratarExec</code>, depois da
+validação de <code>cwd</code>), <code>apps/runner/src/channel.ts</code>
+(o docblock de <code>ExecMessage.env</code>, que prometia &quot;roda só sem a credencial&quot;),
+<code>apps/engine/lib/engine/runners/credencial_de_git.ex</code> (novo — a marca,
+<code>recusada?/1</code>, <code>mensagem/2</code> e <code>desfecho/1</code>),
+<code>apps/engine/lib/engine/actions/workspace/runner_git.ex</code> (a cláusula nova em
+<code>fetch!/3</code>, antes da genérica, e o moduledoc),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex</code> e
+<code>apps/engine/lib/engine/dev/noop_dev_agent_server.ex</code> (o desfecho de
+<code>{:error, reason}</code> na criação do worktree)</li>
+<li><strong>Teste:</strong> <code>apps/runner/src/index-handlers.spec.ts</code>, bloco <em>&quot;a credencial não
+atravessa o docker exec (RN-558)&quot;</em> — o caminho feliz (sem container, o <code>env</code>
+chega ao host e nada é recusado), o caso de falha (com container, recusa
+nomeada e <code>docker.exec</code> NÃO chamado), a prova negativa de que nome e valor
+das variáveis não vazam na saída, <code>env</code> vazio não virando recusa, e a recusa
+de contenção de <code>guard.ts</code> vencendo esta quando o <code>cwd</code> está fora da raiz;
+<code>apps/engine/test/engine/actions/workspace_runner_test.exs</code> (os dois testes
+<code>RN-558</code>: a recusa que vira mensagem nomeada com origem <code>politica</code>, e a falha
+REAL do fetch que mantém a mensagem de sempre com origem <code>codigo</code> — o par
+negativo que prova que a cláusula nova não sequestrou a antiga);
+<code>apps/engine/test/engine_web/channels/credencial_no_runner_test.exs</code> (AT-111,
+a CORRENTE inteira pelo <code>TerminalChannel</code> real: o <code>env</code> chega ao canal só no
+<code>fetch</code>, a resposta do runner é a fixture
+<code>apps/runner/fixtures/exec-result-recusa-de-credencial.json</code> — que o spec do
+runner compara byte a byte com a saída real de <code>tratarExec</code> —, <code>RunnerGit</code>
+devolve a mensagem nomeada, e o <code>DevAgentServer</code> grava <code>dev.blocked</code> com origem
+<code>politica</code>; mais o ramo sem container ativo, em que o <code>fetch</code> responde 0, e a
+falha real, que segue <code>codigo</code>. NÃO prova a ponte entre linguagens por
+execução: nenhum processo <code>node</code> sobe no ExUnit, e o par que a fecha é a
+fixture comum. Verificado por mutação: cortar o <code>env</code> no canal, no
+<code>RunnerGit</code>, o reconhecimento da recusa, o <code>desfecho/1</code> ou o uso dele no dev
+agent reprova o teste; desligar a recusa em <code>tratarExec</code> reprova o spec do
+runner);
+<code>scripts/ci/marca-de-credencial-do-runner.spec.ts</code> (a marca idêntica nos dois
+lados). Verificado por mutação: neutralizar a cláusula de <code>fetch!/3</code> reprova
+o teste do engine com a mensagem antiga à vista</li>
+<li><strong>Lacuna DECLARADA, que é a METADE que continua aberta — FECHADA pela
+<a href="#rn-676">RN-676</a> (<a href="../../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193</a>,
+decisão do dono de 01/10):</strong> o fetch credenciado vai MARCADO pelo engine e
+roda no HOST do runner mesmo com container ativo; esta recusa encolheu para o
+<code>env</code> SEM a marca (na prática, um runner anterior ao ADR 0193). O texto
+abaixo é o de quando ela fechou a metade do silêncio: a credencial
+continua <strong>não atravessando</strong> o <code>docker exec</code>. Clone/fetch de repositório
+remoto AUTENTICADO em modo <code>runner</code> segue impossível com o container de pé —
+o que mudou é que agora ele falha DIZENDO isso, em vez de parecer erro de
+token. Fechar exige decidir COMO uma operação credenciada fala com um <code>docker exec</code> sem campo de <code>env</code>, e as opções conhecidas mexem todas na porta de
+contenção do ADR 0130 (dar <code>env</code> à operação; um arquivo de credencial montado
+e apagado; rodar o <code>fetch</code> no host mesmo com container ativo, o que quebraria
+o invariante de que o trabalho acontece dentro do container). É ADR, nunca
+correção de passagem. A ADJACÊNCIA que esta entrega também declarou — a
+recusa acontecia DEPOIS de <code>init_from_bare!/5</code> já ter feito <code>git init</code>, e o
+<code>git_dir?/2</code> de <code>ensure!/5</code> marcava o workspace pronto na tentativa seguinte
+por encontrar o <code>.git</code>, de modo que a segunda tentativa falhava adiante no
+<code>worktree add</code> em vez de repetir a recusa — <strong>FECHOU no AT-112</strong>: a
+inicialização que falha (qualquer passo, não só o <code>fetch</code> credenciado)
+DESFAZ o <code>.git</code> que ela mesma criou (<code>inicializar_ou_desfazer!</code> em
+<code>Engine.Actions.Workspace</code> e em <code>RunnerGit</code>) e relança a exceção original,
+então a tentativa seguinte repete a MESMA causa. O desfazer só roda no ramo em
+que NÃO havia <code>.git</code> — o de &quot;workspace de antes da marca&quot; (que tem <code>.git</code> e
+não se re-inicializa) segue intacto, então não apaga trabalho de ninguém. Do
+lado <code>runner</code> o <code>rm -rf</code> é best-effort (o runner pode ter caído, uma das
+causas da falha). Sinais considerados e recusados: marcador de &quot;em
+andamento&quot; (segundo arquivo a manter, e órfão se o processo morrer entre os
+dois passos) e checar a ref esperada (o repositório vazio, sem
+<code>origin/&lt;branch&gt;</code>, é um estado LEGÍTIMO e cairia como falha)</li>
+<li><strong>ADR:</strong> nenhum novo — a entrega não move fronteira nenhuma. Ela CONSOME o
+<a href="../../adr/0130-broker-de-container.html">0130</a> (a porta sem <code>env</code>), o
+<a href="../../adr/0137-o-runner-sobe-o-container-do-projeto.html">0137</a> (o container na
+máquina do usuário), o <a href="../../adr/0145-docker-pre-requisito-do-runner.html">0145</a> (a
+pré-condição e o campo <code>env</code>) e o <a href="../../adr/0020-destravar-gates-qa-secops.html">0020</a> (as
+quatro origens)</li>
+<li><strong>Origem:</strong> <code>AT-053</code> — a lacuna que o ADR 0145 deixou declarada por escrito</li>
+</ul>
+<hr>
+<h2 id="o-git-credenciado-roda-no-host-do-runner-rn-676">O git credenciado roda no host do runner (RN-676)</h2>
+<h3 id="rn-676">RN-676 — Com container ativo, o <code>git fetch</code> credenciado de <code>RunnerGit</code> roda no HOST do runner, marcado pelo engine; o código continua no container</h3>
+<p>Decisão do dono (01/10), registrada no
+<a href="../../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193</a>: operação de git
+CREDENCIADA roda no HOST do runner, e o código roda no container. Fecha a
+metade que a <a href="#rn-558">RN-558</a> deixou aberta — o fetch autenticado em modo
+<code>runner</code> com o container de pé, que é o caminho comum, terminava sempre na
+recusa nomeada.</p>
+<ol>
+<li><strong>Quem marca é o engine, e só num ponto.</strong> <code>RunnerGit.fetch!/3</code> despacha o
+fetch com credencial por <code>RunnerRouter.exec_git_credenciado/5</code>, que põe
+<code>gitCredenciado: true</code> no payload <code>exec</code> e exige <code>env</code> não vazio por
+guarda. O comando de terminal do dev agent passa por <code>RunnerRouter.exec/4</code> e
+nunca leva a marca. Sem credencial (provider <code>local</code>), o fetch vai sem marca.</li>
+<li><strong>O runner roda no host só com a CONJUNÇÃO</strong>: a marca <code>true</code> literal <strong>e</strong>
+<code>env</code> não vazio. Aí o comando vai a <code>executarComando</code> (o <code>env</code> mesclado sobre
+<code>process.env</code>), mesmo com container ativo. A pasta é a mesma: <code>estado.dir</code> é
+o bind-mount de <code>/work</code>.</li>
+<li><strong><code>env</code> sem a marca não ganha o host.</strong> Com container ativo, esse par segue
+RECUSADO com a marca da RN-558 e origem <code>politica</code>. Hoje nenhum chamador do
+engine o produz; na prática ele chega de um <code>brabo-runner</code> anterior ao ADR
+0193, que não lê a marca — e a mensagem do engine diz para atualizá-lo. A
+marca sem <code>env</code> também não muda nada: o comando vai ao container.</li>
+<li><strong>Nenhuma contenção muda</strong>: <code>DockerPort.exec</code> segue sem <code>env</code> (ADR 0130), e
+<code>RunnerReadiness</code> (RN-507) fica byte a byte — a marca decide ONDE o runner
+executa, nunca SE o engine despacha.</li>
+<li><strong>O log nunca traz nome nem valor de variável do <code>env</code></strong>: a recusa dá a
+contagem, e o log do caminho host acrescenta só <code>[git credenciado, no host]</code>.</li>
+</ol>
+<ul>
+<li><strong>Código:</strong> <code>apps/runner/src/index.ts:701</code> (<code>gitCredenciadoNoHost</code>), <code>:666</code>
+(<code>tratarExec</code>); <code>apps/runner/src/channel.ts:71</code> (<code>gitCredenciado</code>), <code>:627</code>
+(<code>gitCredenciado</code>); <code>apps/engine/lib/engine/runners/runner_router.ex:93</code>
+(<code>exec_git_credenciado</code>), <code>:98</code> (<code>despachar_exec</code>);
+<code>apps/engine/lib/engine/actions/workspace/runner_git.ex:357</code> (<code>exec</code>), <code>:443</code>
+(<code>despachar</code>); <code>apps/engine/lib/engine_web/channels/terminal_channel.ex:609</code>
+(<code>git_credenciado</code>); <code>apps/engine/lib/engine/runners/credencial_de_git.ex:93</code>
+(<code>mensagem</code>)</li>
+<li><strong>Teste:</strong> <code>apps/runner/src/index-handlers.spec.ts:366</code> (o helper real do
+<code>git</code> recebe a credencial no host com container ativo — caminho feliz),
+<code>:391</code> (um <code>git fetch origin</code> real sucede no host), <code>:430</code> (<code>env</code> sem a marca
+segue recusado — caso de falha); <code>apps/runner/src/channel.spec.ts:208</code>;
+<code>apps/engine/test/engine/actions/workspace_runner_test.exs:451</code>, <code>:466</code>,
+<code>:476</code>; <code>apps/engine/test/engine_web/channels/credencial_no_runner_test.exs:149</code>
+(AT-111: a corrente pelo <code>TerminalChannel</code> real termina em <code>{:ok, _}</code>), <code>:177</code>.
+Os testes ExUnit não rodaram no ambiente desta entrega (<code>repo.hex.pm</code> 403); o
+CI os prova.</li>
+<li><strong>Origem:</strong> AT-116 (prova: AT-111), decisão do dono de 01/10</li>
+</ul>
+<h2 id="a-anamnese-religada-sujeito-elegível-e-fato-do-perfil-rn-680">A Anamnese religada: sujeito elegível e fato do perfil (RN-680)</h2>
+<h3 id="rn-688">RN-688 — O binário do runner lê o PTY com leitor próprio sob o Bun, e o auto-teste prova a SEGUNDA leitura</h3>
+<p>Sob o Bun (o binário do <code>bun build --compile</code>, <a href="../../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">ADR 0112</a>),
+o <code>tty.ReadStream</code> com que o <code>node-pty</code> lê o lado mestre do PTY é um
+<code>fs.ReadStream</code>, e a primeira leitura sem dados do fd não-bloqueante SOBE como
+<code>EAGAIN</code>: o stream se destrói, fecha o fd, e nenhum <code>onData</code> chega depois disso
+(oven-sh/bun#25822). O terminal interativo do binário parava depois do primeiro
+pedaço de saída nas TRÊS plataformas Unix; o Linux passava na prova só porque a
+primeira leitura já trazia o eco e a resposta juntos.</p>
+<p><strong>A regra:</strong> sob o Bun e fora do Windows, o <code>spawn</code> do <code>node-pty</code> roda com o
+<code>tty.ReadStream</code> trocado por um leitor próprio que lê o MESMO fd com <code>fs.read</code>
+e, no <code>EAGAIN</code>, ESPERA e tenta de novo (de 4 ms, dobrando até 32 ms, voltando
+ao mínimo a cada dado); <code>EIO</code> ou zero bytes é fim. A troca vale só DURANTE o
+<code>spawn</code> e é restaurada mesmo quando ele lança; sob o Node o módulo volta
+INTACTO. O fd e o processo filho continuam os de verdade — nada simula saída.
+E o <code>--self-test-pty</code> faz DUAS voltas, a segunda depois de uma pausa sem nada a
+ler: é a pausa que força a leitura a passar por um <code>EAGAIN</code>, e é por ela que o
+leitor antigo reprova também no Linux. Quando reprova, o auto-teste diz por quê
+(pedaços, saída do filho, uma sonda num segundo PTY e os eventos do stream) — o
+veredito não muda.</p>
+<p>Foi a sonda que mediu o Windows: lá o lado de leitura é o pipe nomeado do
+ConPTY, aberto pelo <code>node-pty</code> como <code>net.Socket</code>, sem fd que o leitor possa
+assumir, e o pipe termina depois do primeiro pedaço — por isso o <code>win32-x64</code>
+saiu da matriz (<a href="../../adr/0187-runner-sem-binario-win32-x64.html">ADR 0187</a>) em vez de
+ganhar contorno.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/runner/src/leitor-de-pty.ts:60</code> (<code>precisaDoLeitorProprio</code>),
+<code>:70</code> (<code>LeitorDeFdNaoBloqueante</code>), <code>:115</code> (<code>agendar</code>), <code>:152</code>
+(<code>comLeitorDePtyProprio</code>); <code>apps/runner/src/native-pty-loader.ts:114</code>
+(<code>comLeitorDePtyProprio</code>); <code>apps/runner/src/index.ts:1263</code>
+(<code>PAUSA_ENTRE_VOLTAS_MS</code>), <code>:1298</code> (<code>sondarPty</code>), <code>:1353</code>
+(<code>rodarAutoTestePty</code>)</li>
+<li><strong>Teste:</strong> <code>apps/runner/src/leitor-de-pty.spec.ts:14</code> (só sob o Bun e fora do
+Windows), <code>:23</code> (fora dele, o MESMO módulo), <code>:28</code> (troca só durante o
+<code>spawn</code>, restaura quando ele lança — caso de falha), <code>:48</code> (as duas voltas de
+um <code>cat</code> real, com <code>EAGAIN</code> entre elas); a prova de ponta a ponta é o
+<code>smoke:bin</code> da matriz, verde em <code>darwin-arm64</code>, <code>linux-x64</code> e <code>linux-arm64</code>
+no ensaio <code>36779817686</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">0112</a>,
+<a href="../../adr/0187-runner-sem-binario-win32-x64.html">0187</a></li>
+<li><strong>Origem:</strong> AT-342, AT-343</li>
+</ul>
+<h2 id="at-770--o-brabo-contracts-chega-por-pacote-do-github-packages">AT-770 — o brabo-contracts chega por pacote do GitHub Packages</h2>
+<h3 id="rn-1040">RN-1040 — O runner publicado não declara <code>@viralabs-dev/*</code> em <code>dependencies</code></h3>
+<p>O <code>@brabo/docker-port</code> chega do GitHub Packages (<code>npm:@viralabs-dev/brabo-docker-port@X.Y.Z</code>,
+alias do pnpm) e é <strong>devDependency</strong>: o <code>tsup</code> e o <code>bun build</code> o embutem, então o
+artefato do runner não o carrega em runtime. Um pacote que dependesse do GitHub
+Packages exigiria <code>.npmrc</code> e token de quem instala, e isso é proibido.</p>
+<p><strong>A regra:</strong> <code>dependencies</code> do <code>package.json</code> não tem nenhum <code>@viralabs-dev/*</code> nem
+<code>@brabo/docker-port</code>; o alias fica em <code>devDependencies</code>, na versão exata (sem <code>^</code>).
+O <code>.npmrc</code> do repo traz só a linha do registry do escopo, sem token (o token vive no
+CI, pelo <code>GITHUB_TOKEN</code>, ou no <code>~/.npmrc</code> do dev).</p>
+<ul>
+<li><strong>Onde:</strong> <code>package.json</code> (<code>devDependencies</code>), <code>.npmrc</code>, <code>.github/workflows/ci.yml</code>,
+<code>.github/workflows/build-runner-binaries.yml</code> (<code>packages: read</code>)</li>
+<li><strong>Teste:</strong> <code>src/contratos-por-pacote.spec.ts:11</code> (<code>dependencies</code> sem
+<code>@viralabs-dev/*</code>), <code>:16</code> (alias exato em <code>devDependencies</code>), <code>:20</code> (<code>.npmrc</code> sem token)</li>
+<li><strong>Origem:</strong> AT-770</li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/runner/parte-01.html">Runner — parte 1 (desde RN-423)</a><a href="../../business-rules/web.html">Web</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-runner/blob/dev/docs/business-rules/runner/parte-02.md">Editar esta página</a></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#o-agente-de-máquina-espera-o-primeiro-projeto-e-a-chave-nasce-no-terminal-rn-550551-fase-30">O agente de máquina espera o primeiro projeto, e a chave nasce no terminal (RN-550/551, FASE 30)</a></li><li class="n3"><a href="#rn-550">RN-550 — Com ZERO conexões o agente local NÃO sai: ele espera e reconsulta a lista; com conexão viva a consulta continua sendo só no start</a></li><li class="n3"><a href="#rn-551">RN-551 — brabo-runner device-key create/finish: o par Ed25519 nasce NA MÁQUINA, a privada nunca viaja, e o arquivo que o runner lê nunca existe sem kid</a></li><li class="n2"><a href="#a-credencial-que-não-atravessa-o-container-do-agente-local-rn-558">A credencial que não atravessa o container do agente local (RN-558)</a></li><li class="n3"><a href="#rn-558">RN-558 — Credencial no exec com container ativo é RECUSADA pelo runner, com desfecho nomeado e origem politica</a></li><li class="n2"><a href="#o-git-credenciado-roda-no-host-do-runner-rn-676">O git credenciado roda no host do runner (RN-676)</a></li><li class="n3"><a href="#rn-676">RN-676 — Com container ativo, o git fetch credenciado de RunnerGit roda no HOST do runner, marcado pelo engine; o código continua no container</a></li><li class="n2"><a href="#a-anamnese-religada-sujeito-elegível-e-fato-do-perfil-rn-680">A Anamnese religada: sujeito elegível e fato do perfil (RN-680)</a></li><li class="n3"><a href="#rn-688">RN-688 — O binário do runner lê o PTY com leitor próprio sob o Bun, e o auto-teste prova a SEGUNDA leitura</a></li><li class="n2"><a href="#at-770--o-brabo-contracts-chega-por-pacote-do-github-packages">AT-770 — o brabo-contracts chega por pacote do GitHub Packages</a></li><li class="n3"><a href="#rn-1040">RN-1040 — O runner publicado não declara @viralabs-dev/* em dependencies</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-pt-BR.json" data-base="../../"></script></body>
+</html>

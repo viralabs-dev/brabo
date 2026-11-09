@@ -1,0 +1,1221 @@
+<!doctype html>
+<html lang="zh-Hans" data-locale="zh-Hans" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — API — parte 4 (desde RN-231) | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="菜单">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="搜索" aria-label="搜索" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="语言"><option value="../../../business-rules/api/parte-04.html">pt-BR</option><option value="../../../en/business-rules/api/parte-04.html">en</option><option value="../../../ru/business-rules/api/parte-04.html">ru</option><option value="../../../zh-Hans/business-rules/api/parte-04.html" selected>zh-Hans</option></select>
+<select data-seletor aria-label="环境"><option value="../../../../dev/zh-Hans/business-rules/api/parte-04.html" selected>dev</option><option value="../../../../prd/zh-Hans/business-rules/api/parte-04.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="切换主题">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 从这里开始</h2></summary><ul><li><a href="../../index.html">首页</a></li><li><a href="../../getting-started.html">快速开始</a></li></ul></details></section><section><details open><summary><h2>🎓 教程</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">编排多个仓库</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Brabo 是如何构建的</a></li></ul></details></section><section><details open><summary><h2>🧭 实用指南</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">开发 Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages 令牌</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>参与贡献</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">我们如何撰写</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 概念</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">架构</a></li><li><a href="../../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../../explanation/modelo-de-time.html">团队模型与交付物流程</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>流程与流水线</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">分支策略</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../../explanation/release-do-produto.html">产品发布</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>本地化</span></summary><ul><li><a href="../../explanation/localizacao.html">本地化</a></li><li><a href="../../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></details></li><li><details><summary><span>技术笔记</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 参考</h2></summary><ul><li><a href="../../glossary.html">术语表</a></li><li><a href="../../reference/componentes-da-doc.html">文档组件</a></li><li><a href="../../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>业务规则</span></summary><ul><li><a href="../../business-rules.html">业务规则</a></li><li><a href="../../business-rules/custo.html">成本与计量</a></li><li><a href="../../business-rules/autenticacao.html">认证</a></li><li><details open><summary><span>API</span></summary><ul><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/api/parte-01.html">API — parte 1 (desde RN-001)</a></li><li><a href="../../business-rules/api/parte-02.html">API — parte 2 (desde RN-055)</a></li><li><a href="../../business-rules/api/parte-03.html">API — parte 3 (desde RN-100)</a></li><li><a href="../../business-rules/api/parte-04.html" aria-current="page">API — parte 4 (desde RN-231)</a></li><li><a href="../../business-rules/api/parte-05.html">API — parte 5 (desde RN-439)</a></li><li><a href="../../business-rules/api/parte-06.html">API — parte 6 (desde RN-503)</a></li><li><a href="../../business-rules/api/parte-07.html">API — parte 7 (desde RN-567)</a></li><li><a href="../../business-rules/api/parte-08.html">API — parte 8 (desde RN-618)</a></li><li><a href="../../business-rules/api/parte-09.html">API — parte 9 (desde RN-677)</a></li><li><a href="../../business-rules/api/parte-10.html">API — parte 10 (desde RN-727)</a></li><li><a href="../../business-rules/api/parte-11.html">API — parte 11 (desde RN-916)</a></li><li><a href="../../business-rules/api/parte-12.html">API — parte 12 (desde RN-1029)</a></li></ul></details></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Produto</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>API 参考</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ 决策（ADR）</a></h2></section><section><details><summary><h2>🗂️ 项目历史</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">时间线</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">shadcn 前后的界面（2026 年 10 月 31 日）</a></li><li><a href="../../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">第 1 至 15 阶段，第 1 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">16–26 计划与轮次，第 2 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">28 计划与审计，第 3 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">从本地 runner 起，第 4 部分</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../../explanation/backlog.html">已分类的 backlog</a></li><li><details><summary><span>验证与测量</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../../explanation/medicao-do-jev.html">Jev 工具路由器的测量</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">此页尚未翻译；显示葡萄牙语原文。</div>
+<article class="doc">
+<h1 id="api--parte-4-desde-rn-231">API — parte 4 (desde RN-231)</h1>
+<h2 id="programa-28-onda-4-frente-g2-pipeline-de-indexacao-e-busca-hibrida-do-chat-rag-rn-231-238-adr-0080">PROGRAMA 28 — Onda 4, frente G2: pipeline de indexação e busca híbrida do Chat RAG (RN-231..238, ADR 0080)</h2>
+<p>As RNs do auth first-party moram em
+<strong><a href="../autenticacao.html">Regras de negócio — Autenticação</a></strong>.</p>
+<p>Saíram daqui por TAMANHO, não por assunto: junto com Custo elas eram
+metade de uma página de 640 KB. O conteúdo não mudou, e as âncoras
+<code>#rn-NNN</code> são as mesmas — o que mudou foi o arquivo que as hospeda.</p>
+<h2 id="autenticacao">Autenticação</h2>
+<h3 id="rn-231">RN-231 — <code>ChunkRepository</code> ganha DELETE e as duas metades da busca híbrida</h3>
+<p>O port da Onda 3 (RN-226) só cobria escrita/leitura básica. A Onda 4
+acrescentou <code>deleteByScope</code>/<code>deleteBySession</code> (para reindexação idempotente
+por full rebuild — apagar e recriar, nunca UPDATE) e
+<code>searchByVector</code>/<code>searchByLexicalQuery</code> (as duas metades da busca híbrida,
+cada uma uma consulta independente, aproveitando o índice feito para ela —
+HNSW ou GIN). <code>deleteByScope</code> é tipado <code>Exclude&lt;ChunkScope, 'session'&gt;</code>:
+apagar <code>session</code> por projeto inteiro apagaria sessões que não estão sendo
+reindexadas agora, então sessão só apaga por <code>deleteBySession</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/ports/chunk-repository.port.ts</code>
+(linhas 105-146), <code>src/infrastructure/persistence/drizzle/chunk.repository.ts</code></li>
+<li><strong>Teste:</strong> <code>test/infrastructure/persistence/chunk.repository.spec.ts</code>
+— describes &quot;Onda 4 (G2)&quot; (delete por escopo/sessão, busca por
+vetor/léxico, caso feliz e vazio de cada um)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">0080</a></li>
+</ul>
+<h3 id="rn-232">RN-232 — Origem do texto indexado: <code>docs</code>/<code>adr</code> do repositório do PRÓPRIO projeto, <code>session</code> só de <code>chat.message</code>/<code>agent.response</code></h3>
+<p><code>docs</code>/<code>adr</code> são indexados via <code>ReadProjectCodeUseCase</code> — a mesma superfície
+da aba Code, com a mesma credencial do owner, o mesmo portão de container
+(RN-105) e a mesma checagem de caminho (RN-095) — nunca a documentação do
+Brabo enquanto produto. <code>session</code> indexa só dois tipos de evento
+(<code>chat.message</code>, <code>agent.response</code>); o resto do event log (<code>tool.call</code>,
+<code>agent.status</code>, <code>agent.error</code>...) é mecanismo/falha, não conhecimento
+citável.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/rag/index-project-docs.use-case.ts</code>
+(linhas 16-17, 64), <code>src/application/use-cases/rag/index-session.use-case.ts</code>
+(linha 29, 45). Desde a AT-764, a leitura de cada <code>.md</code> usa o teto próprio
+da indexação, não o da aba Code (<a href="#rn-1036">RN-1036</a>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/rag/index-project-docs.use-case.spec.ts</code>,
+<code>test/application/use-cases/rag/index-session.use-case.spec.ts</code>
+(casos felizes + &quot;projeto sem docs/&quot; + &quot;evento sem payload.text é
+ignorado&quot;)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">0080</a></li>
+</ul>
+<h3 id="rn-233">RN-233 — Provider de embedding indisponível: grava sem vetor e declara a lacuna, nunca finge indexação completa</h3>
+<p>Quando <code>ollama</code>/<code>nomic-embed-text</code> não responde, <code>RagEmbeddingService.embedMany</code>
+não lança — devolve <code>available: false</code> e <code>null</code> por entrada pedida. O
+pipeline grava os chunks mesmo assim (<code>embedding: null</code>; <code>search_vector</code> é
+<code>GENERATED ALWAYS AS</code> e não depende de provider nenhum), e o relatório de
+indexação declara a lacuna (<code>embedding: { available, embedded, skipped, reason }</code>). A mesma degradação vale na busca: <code>HybridSearchUseCase</code> roda só
+com o sinal léxico e <code>vectorAvailable: false</code> avisa.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/rag/rag-embedding.service.ts</code>
+(linhas 53-58)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/rag/rag-embedding.service.spec.ts</code>
+— &quot;CASO DE FALHA: provider sem a capability...&quot; e &quot;CASO DE FALHA: provider
+que lança no meio do lote...&quot;; <code>index-project-docs.use-case.spec.ts</code>/
+<code>index-session.use-case.spec.ts</code> — &quot;CASO DE FALHA: provider de embedding
+indisponível grava os chunks SEM vetor...&quot;; <code>hybrid-search.use-case.spec.ts</code>
+— &quot;quando o embedding está indisponível, degrada para busca só léxica&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">0080</a></li>
+</ul>
+<h3 id="rn-234">RN-234 — Busca híbrida: duas consultas independentes, fusão por peso (0.6/0.4), limiar 0.2, e o contrato de citação</h3>
+<p><code>searchByVector</code>/<code>searchByLexicalQuery</code> são consultas SEPARADAS (nunca um
+JOIN), fundidas em <code>HybridSearchUseCase</code> por soma ponderada
+(<code>RAG_SEARCH_WEIGHT_VECTOR = 0.6</code>, <code>RAG_SEARCH_WEIGHT_LEXICAL = 0.4</code> — as
+escalas de cosseno e <code>ts_rank</code> normalizado não são comparáveis por
+natureza) e cortadas em <code>RAG_SEARCH_SCORE_THRESHOLD = 0.2</code>. Nenhum dos
+quatro números vem de calibração com dado real — são ponto de partida
+documentado. A citação (<code>HybridSearchHit</code>) expõe
+<code>chunkId</code>/<code>content</code>/scores separados (<code>null</code>, não zero, quando o sinal não
+achou o chunk)/<code>origin</code> como união discriminada por <code>kind</code> (<code>file</code> com
+<code>sourcePath</code>/<code>headingPath</code>, <code>session</code> com <code>sessionId</code>/<code>eventId</code>).</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/rag/hybrid-search.use-case.ts</code>
+(linhas 44-113), <code>src/domain/rag/rag-search-limits.ts</code>
+(linhas 60-93), <code>src/domain/rag/rag-citation.ts</code> (linhas 12-71)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/rag/hybrid-search.use-case.spec.ts</code>
+(fusão/ordenação/limiar, query fora da faixa, degradação léxico-only,
+origin de sessão) e <code>test/infrastructure/persistence/chunk.repository.spec.ts</code>
+(as consultas SQL de fato, contra pgvector/tsvector real)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">0080</a></li>
+</ul>
+<h3 id="rn-1046">RN-1046 — A busca híbrida devolve no máximo N trechos do mesmo arquivo</h3>
+<p>Depois da fusão e do limiar (<a href="#rn-234">RN-234</a>) e antes do corte em <code>limit</code>, a
+busca mantém só os <code>maxPerFile</code> melhores trechos de cada arquivo
+(<code>RAG_SEARCH_MAX_CHUNKS_PER_FILE</code>, hoje 2), na ordem do score. Assim um
+documento grande e repetitivo (o <code>business-rules.md</code> agregado) não ocupa todas
+as citações e abafa o documento específico (um ADR). O melhor trecho de cada
+arquivo nunca é descartado, então o filtro só pode subir a posição do primeiro
+trecho de um arquivo, nunca baixá-la. Trecho sem arquivo (sessão) não entra na
+conta. O <code>maxPerFile</code> vigente vai congelado em <code>rag_searches.pesos</code>
+(<a href="parte-05.html#rn-479">RN-479</a>), para a calibração não comparar rodadas com regras
+diferentes; linhas antigas não o têm. O seed do golden set aceita
+<code>GOLDEN_SET_RAG_MAX_PER_FILE</code> e, em caso perdido, imprime a posição do arquivo
+esperado entre os candidatos antes do corte.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/rag/hybrid-search.use-case.ts</code>
+(<code>limitarPorArquivo</code>), <code>src/domain/rag/rag-search-limits.ts</code>,
+<code>src/domain/rag/rag-telemetry.ts</code>, <code>scripts/seed-golden-set-rag.ts</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/rag/hybrid-search.use-case.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">0080</a>
+(a decisão sobre diversidade fica no ADR 0272)</li>
+</ul>
+<h3 id="rn-235">RN-235 — Chunking: 1200 caracteres, 150 de sobreposição, por parágrafo/heading</h3>
+<p><code>CHUNK_TARGET_CHARS = 1200</code> (~300 tokens em português),
+<code>CHUNK_OVERLAP_CHARS = 150</code> (12,5%), com corte preferindo quebra de
+parágrafo, depois de palavra, dentro de uma janela de 200 caracteres.
+Markdown (<code>docs</code>/<code>adr</code>) é dividido por HEADING antes de ser recortado por
+tamanho, preservando <code>headingPath</code>. Números documentados como ponto de
+partida ajustável, não calibrados contra dado real de qualidade de
+recuperação (não existe, ainda, um corpo de perguntas reais rodado contra
+este índice).</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/rag/chunking.ts</code> (linhas 30-31, 53 em
+diante)</li>
+<li><strong>Teste:</strong> <code>test/domain/rag/chunking.spec.ts</code> (texto que
+cabe/não cabe, texto vazio, sobreposição real, texto patológico sem
+espaço, headings aninhados, markdown sem heading)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">0080</a></li>
+</ul>
+<h3 id="rn-236">RN-236 — Reindexação é sempre MANUAL, full rebuild idempotente</h3>
+<p>Não há watcher por push nem por fechamento de sessão. <code>ReindexProjectUseCase</code>
+roda <code>docs</code>/<code>adr</code> uma vez e uma <code>IndexSessionUseCase</code> por sessão do projeto,
+cada indexação apagando o escopo/sessão antes de recriar — rodar duas vezes
+seguidas não duplica. Disparado por <code>POST /projects/:projectId/rag/reindex</code>,
+<code>role:maintainer</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/rag/reindex-project.use-case.ts</code>
+(linha 36)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/rag/reindex-project.use-case.spec.ts</code>
+(agrega docs+sessões, embeddingAvailable falso quando qualquer rodada
+falha, projeto inexistente)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">0080</a></li>
+</ul>
+<h3 id="rn-237">RN-237 — Cobertura do índice é contagem REAL, nunca &quot;há N minutos&quot; inventado</h3>
+<p><code>GetRagCoverageUseCase</code> conta arquivos <code>.md</code> reais no repositório do
+projeto contra quantos têm chunk, e sessões do projeto contra quantas têm
+chunk. Não existe coluna de timestamp de indexação por escopo, e a
+resposta não inclui nenhum &quot;reindexado há Xmin&quot; — um número chutado
+mentiria (mesma régua do ADR 0042 para nota de modelo).</p>
+<p>Desde a AT-764 (<a href="#rn-1036">RN-1036</a>), cada escopo <code>docs</code>/<code>adr</code> também traz
+<code>filesCut</code>: quantos desses arquivos têm chunk marcado <code>metadata.sourceCut</code>,
+isto é, foram lidos só até o teto de indexação. Um arquivo &quot;indexado&quot; que
+<code>filesCut</code> conta tem parte do texto FORA do índice, e a cobertura não o
+apresenta mais como inteiro.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/rag/get-rag-coverage.use-case.ts</code>
+(linha 47)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/rag/get-rag-coverage.use-case.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">0080</a></li>
+</ul>
+<h3 id="rn-1036">RN-1036 — A indexação de docs nunca descarta em silêncio o conteúdo de um arquivo</h3>
+<p>A indexação de docs lê cada <code>.md</code> até o teto próprio de indexação
+(<code>RAG_INDEX_FILE_MAX_BYTES</code>, 4 MiB), separado do teto da aba Code
+(<code>GIT_BLOB_MAX_BYTES</code>, 512 KiB, <a href="parte-02.html#rn-095">RN-095</a>), que não muda. Um arquivo
+cortado por esse teto, ou pulado por ser binário (<code>\0</code> no conteúdo), aparece:</p>
+<ul>
+<li>em <code>cutFiles</code> no relatório de indexação (<code>POST .../rag/reindex</code>), com
+<code>{ path, bytes, reason }</code>: <code>bytes</code> é o tamanho do arquivo no repositório e
+<code>reason</code> é <code>too_large</code> (lido só até o teto) ou <code>binary</code> (pulado, sem chunk);</li>
+<li>no <code>Logger.warn</code> da api, com o caminho e os bytes;</li>
+<li>no metadado dos chunks de um arquivo cortado (<code>metadata.sourceCut: true</code>);</li>
+<li>na cobertura (<a href="#rn-237">RN-237</a>), em <code>filesCut</code> de cada escopo.</li>
+</ul>
+<p>O que passa do teto é cortado no teto, nunca descartado em silêncio. O insert
+dos chunks é fatiado (<code>RAG_INSERT_BATCH_SIZE</code>, 1000 por comando) porque o
+Postgres aceita 65 535 parâmetros por comando e um arquivo de 4 MiB já gera
+~5 400 chunks. O provider do GitHub lê o conteúdo em formato <code>raw</code>: no formato
+JSON a API devolve <code>content</code> vazio para arquivo de 1 a 100 MB, e o arquivo
+sumiria sem aviso.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/rag/index-project-docs.use-case.ts</code>, <code>src/application/use-cases/git/read-project-code.use-case.ts</code> (<code>file(..., maxBytes)</code>), <code>src/application/use-cases/rag/get-rag-coverage.use-case.ts</code>, <code>src/domain/rag/rag-search-limits.ts</code>, <code>src/infrastructure/persistence/drizzle/chunk.repository.ts</code>, <code>src/infrastructure/git/github-provider.ts</code>, <code>src/interfaces/http/rag/dto/rag.response.dto.ts</code>.</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/rag/index-project-docs.use-case.spec.ts</code> (600 KiB indexado até o fim; acima de 4 MiB em <code>cutFiles</code> com <code>sourceCut</code>; <code>.md</code> com <code>\0</code> pulado e declarado), <code>test/application/use-cases/git/read-project-code.use-case.spec.ts</code> (default de 512 KiB intacto), <code>test/application/use-cases/rag/get-rag-coverage.use-case.spec.ts</code> (<code>filesCut</code>), <code>test/infrastructure/persistence/chunk.repository.spec.ts</code> (9 500 chunks em <code>createMany</code>), <code>test/infrastructure/git/github-provider.contract.spec.ts</code> (arquivo acima de 1 MB em <code>raw</code>).</li>
+<li><strong>ADR:</strong> 0269.</li>
+<li><strong>Origem:</strong> AT-764 (EP-033), decisão do dono de 06/11/2026 (teto de 4 MiB); rodada 223, lane A.</li>
+</ul>
+<h3 id="rn-238">RN-238 — As três rotas HTTP do RAG dividem papel por quem MUDA o que o produto gasta</h3>
+<p><code>POST .../rag/search</code> e <code>GET .../rag/coverage</code> são <code>role:viewer</code> (leitura
+pura); <code>POST .../rag/reindex</code> é <code>role:maintainer</code>, porque dispara N
+chamadas ao repositório do projeto e ao provider de embedding — mesma
+régua &quot;muda o que o produto gasta sem perguntar&quot; do teto de paralelismo de
+área (RN-083).</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/interfaces/http/rag/rag.controller.ts</code> (linhas
+50, 57, 81, 98), <code>docs/security-surface.md</code></li>
+<li><strong>Teste:</strong> <code>test/interfaces/route-surface.spec.ts</code>
+(classificação de papel, tags fechadas, metadados OpenAPI das três
+rotas)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0080-busca-hibrida-pesos-limiar-e-citacao.html">0080</a></li>
+</ul>
+<h2 id="programa-28-onda-4-frente-e2-virtualizacao-de-linha-e-minimapa-na-aba-code-rn-239-242">PROGRAMA 28 — Onda 4, frente E2: virtualização de linha e minimapa na aba Code (RN-239..242)</h2>
+<h3 id="rn-243">RN-243 — O ciclo de vida do container é TABELA, e nenhuma linha dela chama Docker</h3>
+<p><code>project_containers</code> (migração <code>0046</code>) grava o ESTADO mutável do container
+de um projeto — distinto de <code>artifact.project_image</code> no event log (ADR
+0065), que é a DECISÃO imutável do Arquiteto. Nem
+<code>RegistrarTransicaoDeContainerUseCase</code> nem
+<code>ObterCicloDeVidaDoContainerUseCase</code> chamam um daemon Docker: nenhum
+serviço do produto monta <code>/var/run/docker.sock</code> nem roda <code>privileged</code>
+hoje, e conceder isso é decisão de segurança fora do escopo desta regra.
+Um orquestrador real, quando existir, CONSOME esta tabela depois de agir
+de verdade — nunca o contrário.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/containers/container-lifecycle.ts</code>,
+<code>src/application/use-cases/containers/registrar-transicao-de-container.use-case.ts</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/containers/ciclo-de-vida-do-container.use-case.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">0081</a></li>
+</ul>
+<h3 id="rn-244">RN-244 — A máquina de estados do container: só <code>removed</code> sai reprovisionando</h3>
+<p><code>provisioning → running ⇄ stopped</code>, com <code>failed</code> alcançável de
+<code>provisioning</code>/<code>running</code>/<code>stopped</code>, e <code>removed → provisioning</code> como a
+ÚNICA saída de <code>removed</code> — nenhum estado é terminal de verdade, porque um
+projeto pode reprovisionar com uma imagem revisada pelo Arquiteto.
+Transição fora da tabela lança <code>InvalidContainerTransitionError</code>, que o
+caso de uso traduz para 409 — mesmo formato de <code>session-state-machine.ts</code>
+e <code>pr-gate-state-machine.ts</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/containers/container-lifecycle.ts</code>
+(<code>ALLOWED_TRANSITIONS</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/containers/container-lifecycle.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">0081</a></li>
+</ul>
+<h3 id="rn-245">RN-245 — A primeira transição exige a imagem já decidida, e CONGELA versão e recursos</h3>
+<p>Não existe linha até a primeira chamada com <code>to: 'provisioning'</code>, e ela só
+é aceita se o Arquiteto já tiver decidido a imagem do projeto (RN-105) —
+o mesmo portão que já protege a aba Code, aplicado na origem em vez de
+duplicado. A versão de <code>artifact.project_image</code> e os recursos declarados
+naquele instante são CONGELADOS na linha nova (<code>image_version</code>, <code>cpus</code>,
+<code>memory_mb</code>, <code>pids_limit</code>): uma revisão posterior do artefato não muda
+retroativamente o que uma instância já provisionada promete.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/containers/registrar-transicao-de-container.use-case.ts</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/containers/ciclo-de-vida-do-container.use-case.spec.ts</code>
+— &quot;a primeira transição (provisioning) cria a linha…&quot; e &quot;sem decisão de
+imagem do Arquiteto, não há o que provisionar&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">0081</a></li>
+</ul>
+<h3 id="rn-246">RN-246 — Projeto em modo <code>local</code> não tem ciclo de vida de container</h3>
+<p>Um projeto com <code>workspace_mode: 'local'</code> (ADR 0072, RN-169) roda no
+container do AGENTE de sempre — não sobe container próprio. Pedir
+qualquer transição para um projeto <code>local</code> é recusado com 400 ANTES de
+tocar a tabela, na origem, não filtrado depois na UI.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/containers/registrar-transicao-de-container.use-case.ts</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/containers/ciclo-de-vida-do-container.use-case.spec.ts</code>
+— &quot;projeto em modo <code>local</code> não tem ciclo de vida de container (ADR 0072)&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">0081</a></li>
+</ul>
+<h3 id="rn-247">RN-247 — Uma linha por projeto: <code>project_id</code> é único</h3>
+<p>Só existe UM container vigente por projeto de cada vez — o mesmo desenho
+de <code>dev_agent_states</code> no engine (ADR 0045). A constraint única mora no
+BANCO (<code>project_containers_project_id_unique</code>), não só no caso de uso:
+<code>create</code> chamado duas vezes para o mesmo projeto falha na escrita, nunca
+produz uma segunda linha silenciosa.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/db/migrations/0046_chilly_forgotten_one.sql</code></li>
+<li><strong>Teste:</strong> <code>test/infrastructure/persistence/drizzle/container.repository.spec.ts</code>
+— &quot;só uma linha por projeto — create duplicado viola a constraint única&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">0081</a></li>
+</ul>
+<h3 id="rn-248">RN-248 — Teto de recursos DECLARADO, não aplicado — o campo existe para quando houver orquestrador</h3>
+<p><code>cpus</code>/<code>memory_mb</code>/<code>pids_limit</code> gravam o que o artefato do Arquiteto
+prometia no momento do provisionamento, mas nenhum processo hoje faz o
+kernel respeitar esse teto — não há orquestrador chamando <code>docker run --cpus … --memory … --pids-limit …</code>. O campo nasce mesmo assim porque
+adiar a coluna para quando o orquestrador existir obrigaria uma migration
+de correção no dia em que ele chegasse; declarar sem aplicar é honesto
+enquanto a tabela não mentir sobre APLICAR (nenhuma tela ou resposta de
+API hoje afirma &quot;o container está limitado a X&quot; — só &quot;a intenção
+registrada era X&quot;).</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/db/schema/containers.ts</code> (<code>projectContainers</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/persistence/drizzle/container.repository.spec.ts</code>
+— &quot;create nasce em <code>provisioning</code>, com a versão e os recursos passados&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">0081</a></li>
+</ul>
+<h2 id="programa-28-onda-5-frente-g3-a-tela-do-chat-rag-rn-252-254-adr-0082">PROGRAMA 28 — Onda 5, frente G3: a tela do Chat RAG (RN-252..254, ADR 0082)</h2>
+<h3 id="rn-267">RN-267 — <code>GET /projects/:projectId/container/lifecycle</code> é a primeira exposição HTTP do ciclo de vida do container</h3>
+<p>O ADR 0081 criou <code>ObterCicloDeVidaDoContainerUseCase</code> sem rota, de propósito
+(&quot;expor uma seria adivinhar contrato&quot; antes de existir um consumidor real).
+A Onda 5/F2 é esse consumidor (RN-268), e a rota nasce como espelho fiel do
+caso de uso: <code>null</code> quando o projeto nunca foi provisionado — o resultado
+esperado hoje, porque nenhum orquestrador real transiciona
+<code>project_containers</code> em produção (<code>RegistrarTransicaoDeContainerUseCase</code> não
+tem chamador nenhum fora de teste) — ou o estado registrado
+(<code>status</code>/<code>imageVersion</code>/<code>resources</code>/<code>failureReason</code>/<code>statusChangedAt</code>), NUNCA
+confirmado contra um daemon Docker, porque não existe cliente Docker no
+produto (RN-243). Mesma permissão da rota irmã (<code>GET /projects/:projectId/container</code>): <code>viewer</code>, GET, sem <code>@Post</code> — quem
+transicionaria o ciclo de vida é um orquestrador que ainda não existe.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/interfaces/http/containers/containers.controller.ts</code>
+(<code>cicloDeVida</code>), <code>src/interfaces/http/containers/dto/containers.response.dto.ts</code>
+(<code>CicloDeVidaDoContainerResponseDto</code>)</li>
+<li><strong>Teste:</strong> <code>test/interfaces/http/containers/containers.controller.spec.ts</code></li>
+<li><strong>Borda:</strong> <code>id</code>/<code>projectId</code>/<code>containerId</code> da linha interna NÃO vazam na
+resposta — o contrato HTTP não é a mesma forma que a linha do banco.</li>
+<li><strong>ADR:</strong> <a href="../../adr/0083-terminal-mostra-estado-real-do-container.html">0083</a>
+(revisa o <a href="../../adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.html">0081</a>)</li>
+</ul>
+<h3 id="rn-272">RN-272 — O callback do login social decide em ORDEM: identidade conhecida, depois vínculo por e-mail, depois conta nova</h3>
+<p><code>SocialLoginCallbackUseCase</code> resolve a identidade do provider em três
+passos, nesta ordem, e nunca fora dela: <code>(provider, providerUserId)</code>
+já vinculada → login direto; sem vínculo mas o e-mail bate com uma conta
+existente → decide por <a href="#rn-274">RN-274</a>/<a href="#rn-275">RN-275</a>; nenhuma das
+duas → provisiona conta nova (<a href="#rn-278">RN-278</a>). A chave de busca do
+primeiro passo é sempre <code>providerUserId</code>, nunca e-mail — evita que trocar
+o e-mail no provider &quot;perca&quot; o vínculo.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/auth/social-login-callback.use-case.ts</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/social-login-callback.use-case.spec.ts</code>
+— os sete casos de <code>SocialLoginCallbackUseCase</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0084-login-social-github-e-gitlab.html">0084</a></li>
+</ul>
+<h3 id="rn-273">RN-273 — O <code>state</code> do login social tem propósito PRÓPRIO, mesmo assinado pela mesma chave do fluxo de conexão de git</h3>
+<p><code>domain/auth/social-oauth-state.ts</code> assina com <code>GIT_OAUTH_STATE_SECRET</code> —
+a MESMA chave HMAC do <code>state</code> de &quot;conectar git ao projeto X&quot;
+(<code>domain/git/oauth-state.ts</code>) — mas o payload carrega
+<code>purpose: 'social_login'</code>, checado ANTES de qualquer outro campo. Um
+<code>state</code> do fluxo de conexão de git, mesmo com assinatura válida, é
+recusado aqui: sem o discriminante, aceitá-lo equivaleria a logar como o
+<code>userId</code> de quem iniciou aquela conexão — escalação de privilégio.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/auth/social-oauth-state.ts</code></li>
+<li><strong>Teste:</strong> <code>test/domain/auth/social-oauth-state.spec.ts</code>
+— &quot;RN-273: rejeita um state do fluxo de CONEXÃO de git, mesma chave&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0084-login-social-github-e-gitlab.html">0084</a></li>
+</ul>
+<h3 id="rn-274">RN-274 — Vincular identidade social a conta existente exige e-mail VERIFICADO pelo provider</h3>
+<p>Quando o e-mail devolvido pelo provider bate com uma conta já cadastrada,
+o vínculo só acontece se o provider marca aquele e-mail como verificado
+(<code>emailVerified: true</code>) — GitHub via <code>GET /user/emails</code>, GitLab via
+<code>confirmed_at</code>. Um e-mail digitado mas não verificado não é prova de
+identidade: qualquer um pode registrar um e-mail alheio num provider
+OAuth. Aceitar o vínculo sem essa checagem abriria account takeover —
+quem já tem <code>alguem@empresa.com</code> na Brabo não pediu para um GitHub
+alheio, com aquele endereço só DIGITADO, herdar a conta. A recusa é
+<code>403</code>, e nenhum vínculo é gravado.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/auth/social-login-callback.use-case.ts</code>
+(<code>vincularAContaExistente</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/social-login-callback.use-case.spec.ts</code>
+— &quot;RECUSA vincular quando o e-mail bate mas NÃO está verificado pelo provider&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0084-login-social-github-e-gitlab.html">0084</a></li>
+</ul>
+<h3 id="rn-275">RN-275 — Provisionar conta NOVA não exige e-mail verificado — só vincular a uma existente exige</h3>
+<p>A verificação de e-mail da RN-274 protege uma conta que já existe; quando
+não há conta correspondente, não há nada a proteger, só uma conta nova a
+nascer. Exigir e-mail verificado nesse caso encareceria o caminho comum
+(a maioria dos usuários de GitHub tem e-mail verificado, mas nem todos, e
+recusar o login por isso seria atrito sem ganho de segurança
+correspondente) sem reduzir risco nenhum — o pior caso é uma conta nova
+com um e-mail não comprovado, o mesmo risco que o registro por senha já
+aceita implicitamente até o clique no link de verificação.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/auth/social-login-callback.use-case.ts</code>
+(<code>provisionarContaNova</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/social-login-callback.use-case.spec.ts</code>
+— &quot;provisiona conta nova mesmo com e-mail NÃO verificado&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0084-login-social-github-e-gitlab.html">0084</a></li>
+</ul>
+<h3 id="rn-276">RN-276 — <code>providerUserId</code>, nunca e-mail ou login, é a chave de identidade social</h3>
+<p><code>social_identities</code> tem índice único em <code>(provider, provider_user_id)</code> —
+o id NUMÉRICO e estável do provider. E-mail e login (username) podem
+mudar de dono ou de valor no provider sem aviso; usá-los como chave
+faria uma troca de e-mail no GitHub &quot;perder&quot; o vínculo de quem já tinha
+conta, ou pior, herdar silenciosamente o vínculo de outra pessoa que
+reusou aquele endereço depois.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/db/migrations/0047_complete_hannibal_king.sql</code>,
+<code>src/application/ports/social-identity-repository.port.ts</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/social-login-callback.use-case.spec.ts</code>
+— &quot;identidade já conhecida: login direto, sem criar segunda linha&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0084-login-social-github-e-gitlab.html">0084</a></li>
+</ul>
+<h3 id="rn-277">RN-277 — Login social pede escopo MÍNIMO, nunca o de conexão de repositório</h3>
+<p><code>buildLoginAuthorizeUrl</code> pede <code>read:user user:email</code> (GitHub) e
+<code>read_user</code> (GitLab) — nunca o <code>repo</code>/<code>api</code> que o fluxo de CONEXÃO de git
+pede. Entrar na conta não deveria conceder acesso a repositório nenhum;
+os dois fluxos reusam o MESMO app OAuth (RN-281) mas pedem autorizações
+diferentes, decididas na hora da autorização, não na configuração do app.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/infrastructure/git/github-oauth-client.ts</code>,
+<code>src/infrastructure/git/gitlab-oauth-client.ts</code>
+(<code>buildLoginAuthorizeUrl</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/social-login-callback.use-case.spec.ts</code>
+— &quot;StartSocialLoginUseCase › caminho feliz&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0084-login-social-github-e-gitlab.html">0084</a></li>
+</ul>
+<h3 id="rn-278">RN-278 — Conta provisionada por login social nasce SEM senha — mesmo estado &quot;pendente&quot; da migração do Keycloak</h3>
+<p>Provisionar por login social grava uma linha em <code>users</code> e NENHUMA em
+<code>auth_credentials</code> — o mesmo par que a migração do Keycloak já deixava
+para &quot;conta sem senha ainda&quot; (ver RN-032 e <code>migracao-keycloak.spec.ts</code>).
+<code>LoginUseCase</code> e <code>ResetPasswordUseCase</code> já tratam esse estado; não foi
+necessário um segundo mecanismo de &quot;senha pendente&quot; para o login social.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/ports/auth-credential-repository.port.ts</code>
+(<code>criarUsuarioSemCredencial</code>),
+<code>src/infrastructure/persistence/drizzle/auth-credential.repository.ts</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/social-login-callback.use-case.spec.ts</code>
+— &quot;caminho feliz: provisiona um usuário NOVO, sem senha (RN-278)&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0084-login-social-github-e-gitlab.html">0084</a></li>
+</ul>
+<h3 id="rn-279">RN-279 — Vincular por e-mail verificado também verifica o e-mail da conta existente</h3>
+<p>Quando uma conta registrada por senha (e nunca verificada) é vinculada a
+uma identidade social cujo e-mail o provider marca como verificado, a
+conta ganha <code>emailVerifiedAt</code> preenchido como efeito colateral. O
+provider acabou de provar, por um caminho independente, exatamente o que
+o clique no link de verificação provaria — não faz sentido a conta
+continuar bloqueada do login por senha (RN-032) depois de provar posse
+do e-mail por outro caminho igualmente forte.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/auth/social-login-callback.use-case.ts</code>
+(<code>vincularAContaExistente</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/social-login-callback.use-case.spec.ts</code>
+— &quot;vincula a conta existente (…) e marca o e-mail dela como verificado (RN-274/279)&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0084-login-social-github-e-gitlab.html">0084</a></li>
+</ul>
+<h3 id="rn-280">RN-280 — Login social recusa conta DESABILITADA, mesma régua do login por senha</h3>
+<p>Identidade social vinculada a uma conta com <code>auth_credentials.disabled_at</code>
+preenchido é recusada com <code>403</code>, tanto no login direto (identidade já
+conhecida) quanto na tentativa de vincular. Desabilitar uma conta não
+pode ser contornado trocando de método de entrada.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/auth/social-login-callback.use-case.ts</code>
+(<code>entrarComIdentidadeConhecida</code>, <code>vincularAContaExistente</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/social-login-callback.use-case.spec.ts</code>
+— &quot;recusa login de identidade vinculada a conta DESABILITADA&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0084-login-social-github-e-gitlab.html">0084</a></li>
+</ul>
+<h3 id="rn-281">RN-281 — O login social reusa o MESMO app OAuth da conexão de git — sem variável de ambiente nova</h3>
+<p><code>GITHUB_OAUTH_CLIENT_ID</code>/<code>_SECRET</code> e <code>GITLAB_OAUTH_CLIENT_ID</code>/<code>_SECRET</code>
+continuam sendo os únicos client id/secret cadastrados. O que muda por
+fluxo é o <code>redirect_uri</code> (<code>/auth/oauth/&lt;provider&gt;/callback</code> contra
+<code>/git/oauth/&lt;provider&gt;/callback</code>) e o <code>scope</code> (RN-277) — os dois
+decididos em tempo de requisição. Ação do OPERADOR continua necessária
+(cadastrar o segundo callback URL no app de cada provider), documentada
+em <code>.env.example</code> — é essa exigência, não uma env var nova, que justifica
+o branch nascer <code>breaking/</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>.env.example</code>,
+<code>src/application/use-cases/auth/start-social-login.use-case.ts</code></li>
+<li><strong>Teste:</strong> manual (cadastro no app OAuth) — não há como testar
+automaticamente uma configuração externa ao produto</li>
+<li><strong>ADR:</strong> <a href="../../adr/0084-login-social-github-e-gitlab.html">0084</a></li>
+</ul>
+<h3 id="rn-282">RN-282 — O access token do login social nunca viaja na URL nem no corpo do callback</h3>
+<p><code>GET /auth/oauth/:provider/callback</code> grava os cookies de sessão
+(<code>definirCookiesDeSessao</code>, a MESMA função do login por senha) e
+redireciona para <code>WEB_ORIGIN/</code>. O boot da web (<code>restaurarSessao()</code>,
+chamado em toda carga de página) troca o refresh recém-gravado por um
+access token — nenhum código novo do lado do cliente além dos botões e o
+alias de rota de erro.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/interfaces/http/auth/auth.controller.ts</code>
+(<code>oauthCallback</code>)</li>
+<li><strong>Teste:</strong> <code>test/interfaces/route-surface.spec.ts</code> — cobre a
+classificação pública e os metadados OpenAPI da rota; o fluxo completo
+de cookie→boot é E2E, fora do escopo de teste de unidade</li>
+<li><strong>ADR:</strong> <a href="../../adr/0084-login-social-github-e-gitlab.html">0084</a></li>
+</ul>
+<h3 id="rn-283">RN-283 — Falha do callback de login social não vaza o motivo na URL</h3>
+<p>Qualquer falha (<code>state</code> inválido, code rejeitado pelo provider, conta
+desabilitada, e-mail não verificado) redireciona para
+<code>WEB_ORIGIN/login?oauth_error=1</code> — um único sinal genérico, nunca o
+motivo real. Mesmo padrão do callback de conexão de git
+(<code>WEB_ORIGIN/git-error</code>).</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/interfaces/http/auth/auth.controller.ts</code>
+(<code>oauthCallback</code>, bloco <code>catch</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/social-login-callback.use-case.spec.ts</code>
+— cobre os desfechos de falha que o controller mapeia para o mesmo
+redirect genérico</li>
+<li><strong>ADR:</strong> <a href="../../adr/0084-login-social-github-e-gitlab.html">0084</a></li>
+</ul>
+<hr>
+<h2 id="analytics-e-delivery-metricas-os-dois-papeis-viram-relatorio-rn-320-322-adr-0089">Analytics e delivery-metricas: os dois papéis viram RELATÓRIO (RN-320..322, ADR 0089)</h2>
+<p>Decisão consciente do dono do produto de ANTECIPAR a construção dos papéis
+<code>analytics</code> e <code>delivery-metricas</code> (<code>packages/contracts/fluxo.yml</code>, <code>status: proposto</code>) sem
+esperar o gatilho orgânico que cada um já declarava. Os dois viram um SCRIPT
+só — <code>scripts/analise-funil.ts</code> — no mesmo formato de
+<code>medir-execucao.ts</code> (Fase 13b): <code>NestFactory.createApplicationContext</code>,
+<code>--projeto &lt;uuid&gt;</code> obrigatório, leitura pura via Drizzle, sem escrita
+nenhuma. A forma é a que o próprio fluxo já prescrevia: <code>analytics</code> é
+&quot;absorvido por <code>medicao</code>&quot; e <code>delivery-metricas</code> &quot;nunca vira agente&quot; —
+nenhum GenServer, nenhum agente de LLM.</p>
+<h3 id="rn-320">RN-320 — <code>analise-funil.ts</code> é script, nunca agente — mesmo esqueleto de <code>medir-execucao.ts</code></h3>
+<p>O comando é <code>pnpm --filter api analise:funil -- --projeto &lt;uuid&gt; [--json]</code>.
+Só lê <code>proposed_actions</code> (filtrado por <code>actionType IN (git_commit, pr_open, git_merge)</code>) e <code>projects</code>, nunca escreve. A guarda
+<code>if (process.argv[1]?.endsWith('analise-funil.ts')) void main();</code> no fim do
+arquivo é a mesma de <code>medir-execucao.ts</code>: sem ela, importar o módulo no
+teste subiria o Nest inteiro e derrubaria o processo no <code>process.exit</code> do
+parser de argumentos.</p>
+<ul>
+<li><strong>Onde:</strong> <code>scripts/analise-funil.ts:64-73</code> (<code>lerOpcoes</code>),
+<code>:256-319</code> (<code>main</code>), <code>:390</code> (guarda de execução)</li>
+<li><strong>Teste:</strong> <code>test/scripts/analise-funil.spec.ts</code> (só as funções
+puras — a parte que fala com o banco é exercitada por execução real,
+mesmo padrão de <code>medir-execucao.spec.ts</code>)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">0089</a></li>
+</ul>
+<h3 id="rn-321">RN-321 — O funil conta SESSÃO por etapa, só ação <code>executed</code>, e o lead time usa <code>updated_at</code> da execução</h3>
+<p><code>calcularFunil</code> conta quantas sessões produziram pelo menos um <code>git_commit</code>,
+<code>pr_open</code> e <code>git_merge</code> com <code>status: 'executed'</code> — uma sessão com três
+commits entra uma vez só em cada etapa que alcançou, nunca três. A taxa de
+conversão de uma etapa é <code>sessões-da-etapa / sessões-da-etapa-anterior</code>, e é
+<code>null</code> (não <code>0</code>, não <code>Infinity</code>) quando o denominador é zero — não há
+&quot;conversão de&quot; nada para medir. <code>calcularLeadTimes</code> usa <code>updated_at</code> da
+linha de <code>proposed_actions</code>, não <code>created_at</code>: é o instante em que
+<code>ExecuteGitActionUseCase#record</code> gravou o <code>execution_result</code> de verdade
+(<code>updateExecutionResult</code> bumba <code>updatedAt</code>), não quando a ação foi
+PROPOSTA — a mesma distinção que <code>token_usage</code>/preço congelado já fazem em
+outro contexto (RN-042). Merge cujo <code>updated_at</code> precede o do commit (duas
+levas na mesma sessão, ou dado incoerente) é descartado, nunca vira lead
+time negativo.</p>
+<ul>
+<li><strong>Onde:</strong> <code>scripts/analise-funil.ts:115-160</code> (<code>calcularFunil</code>),
+<code>:170-193</code> (<code>calcularLeadTimes</code>)</li>
+<li><strong>Teste:</strong> <code>test/scripts/analise-funil.spec.ts</code> (describe
+&quot;calcularFunil&quot;, &quot;calcularLeadTimes&quot;)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">0089</a></li>
+</ul>
+<h3 id="rn-322">RN-322 — Deployment frequency real filtra merge em branch PROTEGIDA; três métricas ficam DECLARADAS ausentes, nunca aproximadas</h3>
+<p><code>deploymentFrequencyPorDia</code> só conta <code>git_merge</code> <code>executed</code> cujo
+<code>executionResult.targetBranch</code> está em <code>PROTECTED_BRANCHES</code>
+(<code>src/domain/actions/protected-branches.ts</code>) — merge numa branch de
+feature não é deploy. Cruza por REFERÊNCIA com o gate <code>backmerge</code>
+(<code>config/gates.yml</code>): a evidência dele é CI, em <code>.release/gate.json</code>, fora do
+alcance de um script que só lê o banco, então não há junção de dado, só o
+mesmo recorte de branch que o gate observa.</p>
+<p>Três métricas saem do relatório com uma seção &quot;Não medido, de propósito&quot; em
+vez de um número aproximado:</p>
+<ol>
+<li><strong>Funil de produto completo (ideação → commit).</strong> <code>sessions</code> não tem
+<code>storyId</code> — <a href="../web.html#rn-230">RN-230</a> já declara a lacuna na aba Criativo.
+Fechá-la exige schema novo, fora do escopo desta frente (nenhuma
+migration).</li>
+<li><strong>Evidência de adoção por feature.</strong> Não é dado que falta coletar: o
+Brabo não instrumenta os projetos que ele CONSTRÓI, e não há caminho
+nenhum para essa telemetria existir hoje.</li>
+<li><strong>MTTR e change failure rate.</strong> Exigem sinal de INCIDENTE de produção
+real — a mesma dependência que <code>packages/contracts/fluxo.yml</code> já registra para
+<code>secops-runtime</code>/<code>platform</code> (<code>status: proposto</code>/<code>planned</code>, ativação
+sincronizada com <code>DEPLOY_ENABLED</code>).</li>
+</ol>
+<ul>
+<li><strong>Onde:</strong> <code>scripts/analise-funil.ts:220-247</code>
+(<code>deploymentFrequencyPorDia</code>), <code>:372-386</code> (seção &quot;Não medido&quot; impressa)</li>
+<li><strong>Teste:</strong> <code>test/scripts/analise-funil.spec.ts</code> (describe
+&quot;deploymentFrequencyPorDia&quot;)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0089-analytics-e-delivery-metricas-como-relatorio.html">0089</a></li>
+</ul>
+<hr>
+<h2 id="o-gate-implementavel-ativa-qa-estrategia-como-segundo-momento-do-qa-lead-rn-340-341-adr-0090">O gate <code>implementavel</code> ativa — QA-estratégia como segundo momento do qa-lead (RN-340/341, ADR 0090)</h2>
+<h3 id="rn-340">RN-340 — O gate <code>implementavel</code> decide a story ANTES do dev agent escrever código</h3>
+<p><code>config/gates.yml</code> declarava o gate <code>implementavel</code> (dono <code>dev-lead</code>) desde a
+FASE 14d com <code>status: planned</code> — nunca ativado. O <a href="../../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090</a>
+ativa: a ferramenta <code>assess_implementability</code> do Dev Lead propõe o <strong>parecer
+de implementabilidade</strong> de uma story (<code>implementavel</code>/<code>inviavel</code> +
+justificativa) como <code>proposed_action</code>, MESMO padrão de
+<code>propose_execution_plan</code> (<a href="../engine.html#rn-284">RN-284</a>) — três desfechos
+(<code>{:ok, texto} | {:pending, action_id} | {:error, texto}</code>), papel mínimo
+<code>maintainer</code> em <code>decide.ts</code>, e DELIBERADAMENTE fora do bloco de tetos
+absolutos (é decisão inicial, não ultrapassagem de teto).</p>
+<p><strong>O parecer depende do plano de teste, que é um PRÉ-REQUISITO, não um
+argumento.</strong> <code>run_assessment/2</code> lê o <code>artifact.plano_de_teste</code> mais recente
+da story no HISTÓRICO da própria sessão do Dev Lead (emitido pela
+QA-estratégia, <a href="../contracts.html#rn-341">RN-341</a>):</p>
+<ol>
+<li><strong>Sem plano ainda</strong> — dispara <code>Engine.Gates.Dispatcher.run_qa_estrategia/3</code>
+(mesma indireção trocável em teste que <code>run_qa/2</code>/<code>run_secops/2</code> já usam)
+e devolve <code>{:error, texto}</code> pedindo para tentar de novo em instantes. Erro
+de ferramenta é ENTRADA do laço, não fim de linha (<a href="../engine.html#rn-163">RN-163</a>): o
+Dev Lead tem teto de 14 iterações para tentar de novo. A janela de espera
+é aceita e declarada — a QA-estratégia roda em processo separado
+(<code>qa-lead</code>), e um <code>run/2</code> síncrono não pode bloquear esperando o
+resultado sem acoplar os dois processos.</li>
+<li><strong>Com plano</strong> — monta o parecer com o plano de teste EMBUTIDO no payload
+(síntese e critérios executáveis), para o usuário decidir sem precisar
+abrir dois eventos, e propõe a ação.</li>
+</ol>
+<p><strong>Desde a <a href="../engine.html#rn-674">RN-674</a> (ADR 0192) os dois passos acima NÃO valem mais.</strong>
+O plano de teste nasce DEPOIS da entrega do dev e alimenta o <code>qa-verificada</code>;
+<code>run_assessment/2</code> não lê nem dispara plano, propõe o parecer na PRIMEIRA
+chamada, sobre a história e o <code>module_map</code> que o Dev Lead já tem no contexto,
+e o payload perdeu <code>planoDeTeste</code>/<code>criteriosExecutaveis</code>.
+<code>Dispatcher.run_qa_estrategia/3</code> saiu. O resto desta regra (proposta, três
+desfechos, papel mínimo, fora dos tetos absolutos) segue igual.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/dev_lead_tools.ex</code>
+(<code>run_assessment/2</code>, <code>spec_assess_implementability/0</code>),
+<code>dev_lead_server.ex</code> (<code>run_tool/3</code>); <code>src/domain/actions/decide.ts</code>
+(<code>assess_implementability</code>); <code>config/gates.yml</code> (<code>implementavel</code>,
+<code>status: active</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/dev_lead_tools_test.exs</code>
+(describe &quot;assess_implementability&quot;), <code>dev_lead_server_test.exs</code>
+(describe &quot;suspensão em aprovação&quot; — os dois testes novos),
+<code>test/domain/actions/decide.spec.ts</code> (describe &quot;parecer de
+implementabilidade do Dev Lead&quot;)</li>
+<li><strong>Origem:</strong> <a href="../../adr/0090-qa-estrategia-e-appsec-segundo-momento.html">ADR 0090</a></li>
+</ul>
+<h2 id="secops-runtime-relatorio-de-abuso-sobre-rate-limit-hits-rn-375-377-adr-0091"><code>secops-runtime</code> — relatório de abuso sobre <code>rate_limit_hits</code> (RN-375..377, ADR 0091)</h2>
+<p>Decisão consciente do dono do produto de antecipar o papel <code>secops-runtime</code>
+(<code>packages/contracts/fluxo.yml</code>, <code>camada_seguranca</code>), que nasceu <code>proposto</code> com o critério
+de separação &quot;produção com tráfego real (pós <code>DEPLOY_ENABLED</code> + <code>platform</code>
+ativo)&quot;. Esse gatilho não disparou — não há tráfego de produção. O que existe
+hoje é <code>rate_limit_hits</code> (<code>RateLimitGuard</code>, ADR 0027): uma linha por request
+contado, gravada mesmo sob tráfego de dev/CI. <code>secops-runtime</code> entra como
+SCRIPT (<code>pnpm --filter api relatorio:seguranca-runtime</code>), não agente LLM nem
+<code>GenServer</code> — não há decisão a tomar, só dado a agregar.</p>
+<h3 id="rn-375">RN-375 — O relatório declara a janela, nunca finge um histórico maior</h3>
+<p><code>DomainGaugesCollector.pruneRateLimit</code>
+(<code>src/infrastructure/observability/domain-gauges.collector.ts:177-186</code>)
+apaga hits mais velhos que <code>2 × RATE_LIMIT_WINDOW_MS</code> (240s com o default de
+60s), a cada <code>METRICS_GAUGE_INTERVAL_MS</code> (15s por padrão) — a tabela nunca
+guarda mais que uns poucos minutos. <code>relatorio-seguranca-runtime.ts</code> imprime
+DUAS janelas, nunca uma só: a CONFIGURADA (o teto teórico da poda) e a
+OBSERVADA (o que os dados efetivamente cobrem, do primeiro ao último
+<code>occurred_at</code> lido). Quando as duas coincidem, o relatório diz explicitamente
+que é sinal de poda — hits mais antigos podem ter existido e já foram
+apagados — nunca &quot;não houve mais hits que isso&quot;.</p>
+<h3 id="rn-376">RN-376 — O ranking trabalha só com o que <code>bucket_key</code> guarda: balde e quando</h3>
+<p><code>RateLimitGuard.registrarEContar</code>
+(<code>src/interfaces/http/shared/rate-limit.guard.ts:150-170</code>) grava só
+<code>bucket_key</code> (<code>user:&lt;uuid&gt;</code> ou <code>ip:&lt;endereço&gt;</code>) e <code>occurred_at</code> — NÃO há
+rota, método HTTP nem motivo do bloqueio. <code>rankingDeBaldes</code> e
+<code>interpretarBalde</code> (<code>scripts/relatorio-seguranca-runtime.ts</code>)
+classificam por esses dois campos e só eles; um <code>bucket_key</code> fora do formato
+<code>user:</code>/<code>ip:</code> cai em <code>desconhecido</code> em vez de estourar, para o script não
+quebrar se um <code>RateLimitGuard</code> futuro gravar outro formato. Pedir &quot;ranking de
+IP por rota&quot; seria inventar dimensão que a tabela nunca guardou.</p>
+<h2 id="o-papel-dbre-vira-dois-scripts-mecanicos-rn-400-403-adr-0093">O papel <code>dbre</code> vira dois scripts mecânicos (RN-400..403, ADR 0093)</h2>
+<h3 id="rn-400">RN-400 — O parecer de migração é análise ESTÁTICA de SQL, e ignora o padrão de risco quando ele só aparece em comentário</h3>
+<p><code>lintarConteudo</code> (o núcleo puro de <code>lint-migracao.ts</code>) varre cada <code>.sql</code> de
+<code>src/db/migrations/</code> linha a linha, sem depender de <code>--projeto</code>
+nem de banco — o risco que ele acha é de SCHEMA, não de carga, e por isso
+não depende de volume real de dados nenhum (o critério de separação que
+<code>packages/contracts/fluxo.yml</code> já declarava para o papel). Cinco padrões, cada um com a
+razão anexada ao achado: <code>DROP TABLE</code>/<code>TRUNCATE</code> (perda total,
+irreversível), <code>DROP COLUMN</code> (perda da coluna, irreversível),
+<code>ALTER COLUMN ... TYPE</code>/<code>SET DATA TYPE</code> (pode reescrever a tabela inteira)
+e <code>ADD COLUMN ... NOT NULL</code> sem <code>DEFAULT</code> (falha contra tabela não-vazia —
+o padrão que <code>0042_tough_captain_midlands.sql</code> evitou conscientemente,
+com nullable-primeiro-depois-backfill-depois-<code>SET NOT NULL</code>).</p>
+<p>Linha que começa com <code>--</code> (comentário) é ignorada de propósito: este
+repositório explica em prosa, no próprio SQL, por que um padrão foi
+EVITADO — analisar o texto do comentário acharia o padrão exatamente na
+frase que descreve por que ele não foi usado.</p>
+<ul>
+<li><strong>Onde:</strong> <code>scripts/lint-migracao.ts</code> (<code>REGRAS</code>, linha 75;
+<code>lintarConteudo</code>, linha 126)</li>
+<li><strong>Teste:</strong> <code>test/scripts/lint-migracao.spec.ts</code> — cada padrão
+individualmente, combinação de vários na mesma migration, e &quot;ignora o
+padrão de risco quando ele aparece só em COMENTÁRIO&quot;</li>
+<li><strong>ADR:</strong> <a href="../../adr/0093-dbre-linter-de-migracao-e-relatorio-de-backup.html">0093</a></li>
+</ul>
+<h2 id="auditoria-fluxo-yml-codigo-onda-2-rn-160-no-backend-e-delegacao-dev-lead-dev-rn-404-405-adr-0094">Auditoria fluxo.yml × código — Onda 2: RN-160 no backend e delegação Dev Lead → dev (RN-404/405, ADR 0094)</h2>
+<p>Fecha os dois últimos achados da auditoria (seção D,
+<code>docs/explanation/auditoria-fluxo-vs-codigo.md</code>): B6 (RN-160 garantida só no
+cliente) e B1 (a delegação Dev Lead → <code>dev-&lt;modulo&gt;</code> declarada pelo ADR 0053
+item 5 e nunca implementada).</p>
+<h3 id="rn-404">RN-404 — &quot;Confirmar arquitetura pronta&quot; (RN-160) é revalidada no BACKEND, não só desabilitada na UI</h3>
+<p><a href="../web.html#rn-160">RN-160</a> garantia a regra (&quot;pelo menos 1 história promovida antes do
+handoff duplo Arquiteto→Dev Lead/Infra&quot;) só desabilitando o botão em
+<code>SessionPage.tsx</code> — uma chamada HTTP direta a
+<code>POST /agents/arquiteto/handoff-infra</code>, sem passar pela UI, ignorava a regra
+por completo. <code>OfferInfraHandoffUseCase.execute</code> agora consulta
+<code>StoryRepository.findByProject(projectId)</code> e recusa com <code>BadRequestException</code>
+quando NENHUMA história do projeto tem <code>status !== 'draft'</code> — a checagem vem
+ANTES de gravar <code>architecture.readiness_confirmed</code> e ANTES de qualquer
+chamada ao engine (<code>offerInfraHandoff</code>; o <code>offerDevHandoff</code> saiu na
+<a href="parte-08.html#rn-672">RN-672</a>): uma recusa não
+pode deixar rastro de handoff meio-ofertado no event log, que é imutável.
+<code>StoryRepository</code> foi escolhido (e não <code>ListBacklogUseCase</code>) por ser mais
+leve — não precisa montar a árvore épico→história→tarefa para responder
+&quot;existe alguma não-draft?&quot;.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/agents/offer-infra-handoff.use-case.ts</code>
+(linhas 27-34, a checagem; injeção de <code>StoryRepository</code> no construtor)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/agents/offer-infra-handoff.use-case.spec.ts</code>
+— zero história promovida recusa com ZERO chamada ao engine e ZERO evento
+gravado; com ao menos uma <code>ready</code>/<code>in_progress</code>/<code>done</code>, segue o fluxo normal</li>
+<li><strong>ADR:</strong> <a href="../../adr/0094-delegacao-dev-lead-vira-dado.html">0094</a></li>
+</ul>
+<h2 id="auditoria-fluxo-yml-codigo-onda-6-ultima-o-gate-necessidade-validada-rn-406-adr-0095">Auditoria fluxo.yml × código — Onda 6 (última): o gate <code>necessidade-validada</code> (RN-406, ADR 0095)</h2>
+<h3 id="rn-408">RN-408 — <code>MAIL_TRANSPORT=smtp</code> deriva o boot pelo padrão da RN-114, sem o default público</h3>
+<p>Fecha o item de backlog &quot;SMTP real no MailSender&quot; (<a href="../../adr/0096-smtp-real-no-mailsender.html">ADR 0096</a>).
+<code>resolverConfigSmtp()</code> valida <code>SMTP_HOST</code>/<code>SMTP_USER</code>/<code>SMTP_PASSWORD</code>/
+<code>SMTP_FROM</code> no MESMO formato da <a href="parte-03.html#rn-114">RN-114</a> — em produção
+(<code>NODE_ENV === 'production'</code>), cada um derruba o boot se estiver ausente, só
+com espaços, ou (no caso de <code>SMTP_HOST</code>) igual ao literal de exemplo
+publicado (comentado) em <code>.env.example</code>. <code>SMTP_FROM</code> tem uma checagem a
+mais: precisa casar <code>&quot;Nome &lt;email@dominio&gt;&quot;</code> ou só <code>email@dominio</code>.
+<code>SMTP_PORT</code> inválida (não numérica ou fora de 1–65535) também derruba o boot
+em produção.</p>
+<p>A diferença para a RN-114 original é estrutural, não de rigor: os quatro
+segredos da RN-114 (<code>AUTH_JWT_SECRET</code> e companhia) TÊM um default de
+desenvolvimento público, e é a existência desse default que torna &quot;não
+vazia&quot; uma checagem insuficiente. Aqui não há default nenhum — <code>SMTP_HOST</code>
+fica em branco se ninguém setar —, então a régua inteira só é aplicada
+quando <code>NODE_ENV=production</code> E <code>MAIL_TRANSPORT=smtp</code>. Fora de produção, ou
+com o transporte em <code>log</code> (o default, inclusive em produção), nenhuma das
+cinco variáveis é exigida: enviar e-mail de verdade é opt-in do operador, e
+sem esse opt-in explícito o comportamento continua sendo o log-only de
+sempre — inclusive em produção, para quem já roda o produto hoje não
+quebrar ao atualizar.</p>
+<p>A validação roda dentro do construtor de <code>SmtpMailSender</code>, exercitado pelo
+<code>useFactory</code> de <code>AuthUseCasesModule</code> na montagem do grafo de providers do
+Nest (<code>NestFactory.create()</code>) — não por uma chamada eager em <code>main.ts</code>, como
+os quatro segredos da RN-114 original. A diferença é deliberada: aqueles
+quatro protegem caminho que QUALQUER requisição pode exercitar a qualquer
+momento, então falhar antes de subir importa. <code>SmtpMailSender</code> só é
+instanciado quando o operador optou por <code>smtp</code>, e <code>AuthUseCasesModule</code> é
+importado incondicionalmente (via <code>AuthHttpModule</code>), então a validação
+ainda acontece no boot — mesmo desenho que <code>CREDENTIALS_MASTER_KEY</code> já usa
+(validada no construtor de <code>EnvelopeEncryptionService</code>, exercitado pela
+mesma montagem de grafo).</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/infrastructure/mail/smtp-config.ts</code>
+(<code>resolverConfigSmtp</code>, <code>resolverModoDeTransporte</code>),
+<code>src/infrastructure/mail/smtp-mail-sender.ts</code> (<code>SmtpMailSender</code>,
+chama <code>resolverConfigSmtp()</code> no construtor),
+<code>src/application/use-cases/auth/auth-use-cases.module.ts</code>
+(<code>useFactory</code> do <code>MailSender</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/mail/smtp-config.spec.ts</code>
+(mesmo padrão de <code>auth-key-material.spec.ts</code>/<code>service-token.spec.ts</code>),
+<code>test/infrastructure/mail/smtp-mail-sender.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0096-smtp-real-no-mailsender.html">ADR 0096</a>, estendendo o
+padrão da <a href="parte-03.html#rn-114">RN-114</a> (que por sua vez estende o
+<a href="../../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059</a>)</li>
+</ul>
+<hr>
+<h2 id="workspace-pessoal-automatico-no-cadastro-rn-410">Workspace pessoal automático no cadastro (RN-410)</h2>
+<p>Achado navegando o produto depois de um reset de banco: o botão &quot;Novo
+projeto&quot;/&quot;+&quot; do dashboard não fazia NADA, sem erro nenhum. A causa raiz
+estava em duas camadas. A visível: <code>Dashboard.tsx</code> só abre o
+<code>NewProjectWizard</code> quando <code>useCurrentWorkspace()</code> acha um workspace
+(<code>list[0]?.workspace</code> de <code>GET /workspaces</code>); sem nenhum, o clique não tem
+onde ir. A funda: <code>RegisterUseCase</code> criava usuário e credencial mas NUNCA
+um workspace, e o mesmo valia para <code>SocialLoginCallbackUseCase</code> no ramo
+que provisiona conta nova — TODO cadastro novo, por senha ou por login
+social, caía nessa parede. Só não tinha aparecido antes porque
+<code>db/seed.ts</code> sempre cria um workspace junto dos dados de demonstração, e
+nenhuma tela do produto chama <code>createWorkspace</code> (a rota, o caso de uso e
+o client HTTP existem — só não têm chamador nenhum na UI).</p>
+<h3 id="rn-410">RN-410 — Toda conta NOVA nasce com um workspace pessoal, na MESMA transação da conta</h3>
+<p><code>RegisterUseCase</code> (registro por e-mail/senha) e <code>SocialLoginCallbackUseCase</code>
+(provisionamento de conta nova via login social) criam o workspace e
+adicionam o usuário como <code>owner</code> — mesmo par <code>create</code>/<code>addMember</code> que
+<code>CreateWorkspaceUseCase</code> já usa — dentro da MESMA transação que já cria
+usuário e credencial. Não é uma segunda chamada ao use case: ele abre a
+PRÓPRIA transação, e o ponto é nunca existir usuário sem workspace se algo
+falhar no meio.</p>
+<p>Nome e slug saem de UMA função pura,
+<code>nomeESlugDoWorkspacePessoal(nome, email, userId)</code>
+(<code>src/domain/auth/personal-workspace.ts</code>), reusada pelos dois
+pontos de criação — para a regra não divergir em dois arquivos, o mesmo
+motivo por trás de <code>normalizarEmail</code>/<code>exigirSenhaValida</code> morarem no
+domínio. O nome usa o <code>nome</code> informado (login social usa o login do
+provider), com o local-part do e-mail como fallback quando não há nome —
+nunca inventa nenhum dos dois. O slug é kebab-case do mesmo texto, SEMPRE
+sufixado com <code>userId.slice(0, 8)</code> (mesmo padrão de
+<code>extraDevAgentId</code>/<code>workspaceDirName</code>/rótulo de sessão): <code>workspaces.slug</code>
+é <code>UNIQUE</code> no banco e nada no produto faz retry-on-conflict, então dois
+cadastros com nome ou local-part iguais colidiriam sem o sufixo. Nome ou
+e-mail sem NENHUM caractere alfanumérico degradam para o literal
+<code>workspace-&lt;8 chars&gt;</code>, nunca para uma string vazia.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/auth/personal-workspace.ts</code>
+(<code>nomeESlugDoWorkspacePessoal</code>),
+<code>src/application/use-cases/auth/register.use-case.ts</code>,
+<code>src/application/use-cases/auth/social-login-callback.use-case.ts</code>
+(método <code>provisionarContaNova</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/auth/personal-workspace.spec.ts</code> (nome
+com/sem <code>nome</code>, fallback para o local-part do e-mail, acento/maiúscula
+virando kebab-case ASCII, fallback <code>workspace-&lt;id&gt;</code> sem caractere
+alfanumérico nenhum, slug sempre único por conta do sufixo);
+<code>test/application/use-cases/auth/register.use-case.spec.ts</code>
+(conta nova ganha workspace com o usuário como <code>owner</code>, e-mail duplicado
+não cria um segundo); <code>test/application/use-cases/auth/ social-login-callback.use-case.spec.ts</code> (mesma prova no ramo que
+provisiona conta nova via login social)</li>
+<li><strong>ADR:</strong> nenhum — correção de um caminho que devia ter feito isso desde
+o início, não decisão estrutural nova</li>
+<li><strong>Origem:</strong> achado por uso real, navegando o produto — não item de
+backlog planejado</li>
+</ul>
+<h2 id="n-agentes-online-no-dashboard-status-ao-vivo-nunca-presenca-historica-rn-409-adr-0097">&quot;N agentes online&quot; no dashboard — status AO VIVO, nunca presença histórica (RN-409, ADR 0097)</h2>
+<h3 id="rn-412">RN-412 — <code>dev.awaiting_gate</code>/<code>dev.awaiting_approval</code> seguram a sessão; a janela efetiva de compactação é coerente com o transporte</h3>
+<p>Achado por USO real (&quot;nas PRs sempre está estourando entity too
+large&quot;), com dois defeitos que se encadeiam. O gate de QA/SecOps
+morria com <code>413 request entity too large</code> → o dev agent que esperava o
+veredito ficava preso em <code>dev.awaiting_gate</code> indefinidamente → esse
+estado NÃO era um dos três que a <a href="../ci.html#rn-411">RN-411</a> segurava → o
+heartbeat de 30s fechava a sessão por baixo → a aba Executores exigia
+sessão ativa (<code>findActiveExecutionSession</code>) e apagava o roster inteiro,
+mesmo com trabalho real pendurado.</p>
+<p><strong>A causa do 413 era da própria api do Brabo, nunca do provider de
+LLM</strong> — ver <a href="../../adr/0098-limites-de-transporte-e-janela-efetiva-de-compactacao.html">ADR 0098</a>.
+Duas correções, as duas necessárias (uma sem a outra só adia o
+estouro):</p>
+<ol>
+<li><code>src/main.ts</code> nunca configurou limite de body do Express —
+valia o default de 100 KB, o gargalo mais estreito no sentido
+engine→api (o Phoenix aceita até 8 MB). <code>POST /internal/sessions/:sessionId/llm-turn</code> reenvia o histórico INTEIRO
+da conversa a cada iteração do <code>ToolLoop</code>, e 3-4 tool results de
+32 KiB (teto individual da RN-150) já somavam mais que 100 KB.
+<code>API_JSON_BODY_LIMIT</code> (default <code>10mb</code>) fecha essa ponta.</li>
+<li><code>Engine.Harness.ContextManager.Default</code> tinha dois defeitos que
+deixavam a compactação inalcançável antes do corpo estourar:
+<code>estimate/1</code> contava só <code>content</code>, então mensagens de <code>assistant</code>
+com <code>toolCalls</code> pesados custavam ~zero tokens na estimativa; e a
+janela de compactação usava só <code>context_window</code> (128.000 tokens nos
+agentes de gate — <code>qa_automacao_agent.ex</code>, <code>qa_performance_seguranca_agent.ex</code>,
+<code>qa_estrategia_agent.ex</code>, <code>appsec_agent.ex</code>, <code>dev_agent_server.ex</code>),
+dando ~350 KB antes de compactar (<code>threshold</code> 0.7 × janela). A
+janela EFETIVA agora é <code>min(context_window, teto_de_transporte)</code>
+(<code>transport_max_body_bytes</code>, config única, default 8 MiB), e o corte
+sempre acontece em FRONTEIRA DE ITERAÇÃO do <code>ToolLoop</code>
+(<code>group_by_iteration/1</code>) — nunca separando uma mensagem <code>assistant</code>
+com <code>toolCalls</code> dos <code>role: &quot;tool&quot;</code> que a respondem, que quebraria o
+protocolo de tool-use do provider.</li>
+</ol>
+<p><strong>A régua de trabalho pendente</strong> (<code>DEV_PENDING_TYPES</code>,
+<code>get-session-pending-work.use-case.ts</code>) ganhou dois tipos:
+<code>dev.awaiting_gate</code> (o argumento original — o gate agora não deveria
+mais morrer, mas travar a sessão por causa dele nunca foi correto, é
+defesa em profundidade) e <code>dev.awaiting_approval</code>, por um argumento
+DIFERENTE do que a RN-411 tinha descartado: a decisão de
+aprovação/negação grava <code>proposed_actions.status</code> de forma SÍNCRONA na
+transação do <code>ApproveActionUseCase</code> (o segundo sinal já não vê mais
+<code>pending</code> ali), mas a retomada do dev agent é ASSÍNCRONA — só depois de
+<code>avisarQuemEsperava()</code> gravar <code>task.action_settled</code>/<code>task.pr_settled</code>
+na outbox é que <code>Engine.Outbox.Drain</code> enfileira o job do Oban que
+acorda <code>DevAgentServer</code>. Nessa janela, nada segurava a sessão: o mesmo
+defeito da RN-411, um nível mais fundo.</p>
+<p><strong>A aba Executores/Visão Geral</strong> tinham o defeito irmão do lado web:
+<code>executionActivated</code> era derivado de <code>events.some((e) =&gt; e.type === 'execution.activated')</code> sobre a janela de só 200 eventos de
+<code>useSessionEvents</code> (<code>{ limit: 200, latest: true }</code>) — <code>execution.activated</code>
+é dos PRIMEIROS eventos de uma sessão de execução e saía da janela em
+qualquer sessão real. O valor correto já existia, agregado sobre TODOS
+os eventos (<code>bool_or(...)</code>, <a href="parte-02.html#rn-090">RN-090</a>), no resumo do workspace
+(<code>ProjectCardSummary.roster.executionActivated</code>) — <code>ProjectExecutorsTab.tsx</code>
+e <code>ProjectOverviewTab.tsx</code> passaram a consumi-lo em vez de derivar da
+janela. <code>gatesEverOpened</code> sofre da MESMA classe de defeito e ficou
+DECLARADO como limitação conhecida, não corrigido aqui — corrigi-lo
+exigiria mudar a assinatura de <code>deriveAgentRoster</code>/<code>rosterFactsFromEvents</code>,
+fora do escopo desta correção.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/main.ts</code>, <code>apps/engine/lib/engine/harness/context_manager.ex</code>,
+<code>apps/engine/lib/engine/harness/tokenizer.ex</code>,
+<code>src/application/use-cases/sessions/get-session-pending-work.use-case.ts</code>,
+<code>apps/web/src/routes/ProjectExecutorsTab.tsx</code>, <code>apps/web/src/routes/ProjectOverviewTab.tsx</code></li>
+<li><strong>Teste:</strong> <code>test/main.spec.ts</code> (body de 1 MB aceito; acima do
+limite → 413); <code>apps/engine/test/engine/harness/context_manager_test.exs</code>
+(toolCalls pesados disparam compactação; <code>:pinned</code> sobrevive; teto de
+transporte força compactação mesmo com janela de modelo grande);
+<code>get-session-pending-work.use-case.spec.ts</code> (último evento
+<code>dev.awaiting_gate</code>/<code>dev.awaiting_approval</code> → <code>pending: true</code>);
+<code>ProjectExecutorsTab.test.tsx</code>/<code>ProjectOverviewTab.test.tsx</code> (sessão
+com &gt;200 eventos ainda mostra o roster via resumo agregado)</li>
+<li><strong>Origem:</strong> achado por uso real — &quot;nas PRs sempre está estourando
+entity too large&quot;, investigado em conjunto com o dono do produto</li>
+</ul>
+<hr>
+<h3 id="rn-416">RN-416 — O grafo é memória DERIVADA, reconstruível por projeção da outbox</h3>
+<p>A alternativa de o engine escrever no Neo4j direto foi RECUSADA — abriria
+um segundo caminho de escrita além do event log, quebrando a garantia de
+fonte única de verdade. <code>GraphProjector</code> (api) drena uma SEGUNDA linha de
+outbox, mesma transação de sempre, <code>aggregateType: 'graph_projection'</code>
+— valor que o <code>Engine.Outbox.Drain</code> do lado engine nunca casa (o filtro
+dele é <code>aggregate_type IN ('session', 'task')</code>), evitando a corrida que
+existiria se reusasse <code>'session'</code> (o engine já drena e marca esse tipo em
+~2s). Mesmo padrão de <code>deny-action.use-case.ts</code>, que já grava em dois
+<code>aggregateType</code> na mesma transação.</p>
+<p>Instrumentado em dois pontos: <code>AppendSessionEventUseCase</code> (para
+<code>handoff.offered</code>, <code>psychologist.hypothesis_proposed</code>,
+<code>anamnese.profile_updated</code> — payload só <code>{eventId}</code>, o projector RELÊ o
+envelope completo do event log na hora de projetar, nunca confia numa
+cópia potencialmente velha) e <code>TransitionSessionUseCase</code> (para
+<code>session.closed</code>/<code>session.closed_abnormally</code>, que não passam por
+<code>session_events</code>). <code>GraphProjector</code> é um poller (~2s, mesmo formato do
+<code>DomainGaugesCollector</code>) que chama os casos de uso de gravação já
+existentes da fundação anterior — a idempotência mora NELES (chave
+natural por tipo: <code>Hipotese.id</code>, <code>Handoff(sessionId,seq)</code>,
+<code>PerfilAnamnese(userId,dimensao)</code>, <code>Interacao.sessionId</code> com extensão de
+faixa). <code>GraphUnavailableError</code> no meio de um lote PARA o ciclo inteiro
+(o resto falharia pelo mesmo motivo) — a linha fica não-processada e
+tenta de novo sozinha no próximo ciclo, sem intervenção.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/graph-projection/graph-projector.ts</code>;
+<code>src/domain/graph/graph-projection-events.ts</code>;
+<code>src/application/use-cases/sessions/append-session-event.use-case.ts</code>,
+<code>transition-session.use-case.ts</code></li>
+<li><strong>Teste:</strong> <code>graph-projector.spec.ts</code> (caminho feliz dos quatro tipos;
+resolução evidência→seq de hipótese; <code>GraphUnavailableError</code> deixa a
+linha sem marcar e para o ciclo; ciclo seguinte reprocessa com
+sucesso; reprocessar a MESMA linha duas vezes não duplica no grafo);
+testes novos em <code>append-session-event.use-case.spec.ts</code>/
+<code>transition-session.use-case.spec.ts</code> (tipo projetável grava a segunda
+linha; tipo não-projetável não grava nada extra)</li>
+<li><strong>Origem:</strong> ver <a href="../../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101</a></li>
+</ul>
+<hr>
+<h3 id="rn-418">RN-418 — Efeito externo git e comando privilegiado (sudo/doas) viram teto absoluto, nunca <code>deny</code></h3>
+<p><strong>Revisada pela <a href="parte-09.html#rn-713">RN-713</a></strong> (AT-385, 02/10): com o modo automático
+(a curinga em <code>auto_approve</code>), push e PR são auto-aprovados.</p>
+<p><strong>Revisada pela <a href="parte-09.html#rn-689">RN-689</a></strong> (AT-347, decisão do dono de 01/10): o teto
+abaixo vale também para as ações TIPADAS <code>git_push</code> e <code>pr_open</code>, que até ali
+só tinham o papel mínimo e nasciam <code>auto_approved</code> pelo curinga, por regra
+específica ou por <code>permissions.json</code>. O resto desta entrada continua valendo.</p>
+<p>Revisa a <a href="parte-03.html#rn-106">RN-106</a> por decisão GLOBAL e explícita do dono do
+produto: <code>git push</code>, abertura de PR, deploy (a mesma detecção por
+prefixo que a RN-106 já tinha) e <code>sudo</code>/<code>doas</code> (novo — casados por VERBO
+em <code>comandoPrivilegiadoNoComando</code>, varrendo todos os segmentos do
+comando) deixam de ser <code>deny</code> incondicional e viram TETO ABSOLUTO —
+<code>require_approval</code> incondicional, no MESMO bloco final e MESMO padrão de
+código dos outros tetos (merge protegida, <code>instruction_patch</code>,
+<code>parallelize</code>/<code>raise_max_parallel</code>, escopo de caminho):
+<code>current.policy === 'auto_approve'</code> → sobrescrito. Nunca auto-aprovável
+por <code>agent_autonomy</code> (inclusive o curinga <code>&quot;*&quot;</code> do modo automático) nem
+por <code>permissions.json</code>.</p>
+<p>A condição que torna isto seguro — sem a qual o teto seria decorativo —
+é a metade que fecha &quot;sempre permitir&quot; NA FONTE:
+<code>ApproveAlwaysActionUseCase</code>/<code>patternsForAction</code> recusam gravar padrão em
+<code>allow</code> pra ação de terminal com efeito externo git ou comando
+privilegiado. A instância específica ainda pode ser aprovada pelo fluxo
+normal (<code>ApproveActionUseCase</code>); só o clique que gravaria um padrão pra
+sempre é recusado, com mensagem clara. É o mesmo argumento que a RN-106
+original usava pra justificar <code>deny</code> — resolvido na origem, não mais
+bloqueando o sintoma.</p>
+<p>Um aviso automático de segurança sinalizou esta mudança durante a
+implementação (reescrever uma regra que o produto documentava como
+<code>deny</code> absoluto merece escrutínio) — o dono do produto confirmou
+explicitamente, depois de revisar, que a decisão era essa.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts</code> (bloco de tetos
+absolutos), <code>src/domain/actions/external-effect.ts</code>
+(<code>comandoPrivilegiadoNoComando</code>, <code>mensagemDeComandoPrivilegiado</code>),
+<code>src/application/use-cases/actions/approve-always-action.use-case.ts</code></li>
+<li><strong>Teste:</strong> <code>decide.spec.ts</code> (<code>git push</code> com auto mode <code>&quot;*&quot;</code> E com
+<code>allow</code> casando no <code>permissions.json</code> resolvem pra <code>require_approval</code>;
+<code>sudo</code> idem; os tetos anteriores continuam intactos — regressão
+completa); <code>approve-always-action.use-case.spec.ts</code> (&quot;sempre permitir&quot;
+sobre git com efeito externo/sudo não grava padrão; comando comum
+continua gravando normalmente — regressão); <code>external-effect.spec.ts</code></li>
+<li><strong>Origem:</strong> ver <a href="../../adr/0102-revisao-do-adr-0065-teto-absoluto-substitui-deny.html">ADR 0102</a></li>
+</ul>
+<hr>
+<h2 id="onda-1-do-adr-0104-execution-mode-em-tres-valores-workspace-verificado-pelo-runner">Onda 1 do ADR 0104 — <code>execution_mode</code> em três valores, workspace verificado pelo runner</h2>
+<p>O ADR 0072 (RN-169/RN-170) e o ADR 0103 (RN-419/RN-420) nunca se falaram: o
+runner reusava a mesma flag <code>workspace_mode == 'local'</code> sem bind-mount
+nenhum, então usar o runner de verdade continuava exigindo passar pela
+validação de PASTA MONTADA. O ADR 0104 reconcilia os dois. Migração <code>0048</code>
+recria o enum (<code>project_workspace_mode</code> → <code>project_execution_mode</code>,
+<code>local</code> → <code>mounted</code>) numa transação só — <code>ALTER TYPE ... ADD VALUE</code> não
+pode ser referenciado na mesma transação em que foi adicionado — e soma
+<code>workspace_verified_at</code> (nullable).</p>
+<h3 id="rn-421">RN-421 — <code>execution_mode</code> tem TRÊS valores: <code>container</code>/<code>mounted</code>/<code>runner</code></h3>
+<p><code>projects.workspace_mode</code> (dois valores) virou <code>projects.execution_mode</code>
+(três): <code>container</code> (DEFAULT, inalterado), <code>mounted</code> (o antigo <code>local</code>,
+RENOMEADO — mesmo comportamento, mesma validação de disco na criação) e
+<code>runner</code> (NOVO: uma pasta do usuário sem bind-mount, confirmada pelo CLI
+<code>brabo-runner</code>). O CHECK do banco passou a ser <code>(execution_mode &lt;&gt; 'container') = (workspace_path IS NOT NULL)</code> — cobre os dois modos não-
+<code>container</code> com a MESMA condição, sem <code>OR</code> explícito por valor.</p>
+<p><code>projectScopeRoot</code>/<code>Project.workspace_dir_name</code> (api e engine) derivam a
+raiz pela MESMA regra nos dois modos não-<code>container</code>: o caminho do usuário
+é a raiz, distinguido do nome de pasta gerenciada pela barra inicial. O que
+muda entre <code>mounted</code> e <code>runner</code> não é ONDE a raiz fica — é QUANDO/QUEM
+confirma que ela existe de verdade (<a href="#rn-422">RN-422</a>/<a href="../runner.html#rn-423">RN-423</a>).</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/db/migrations/0048_quiet_iron_fist.sql</code>,
+<code>src/db/schema/iam.ts</code> (<code>projectExecutionModeEnum</code>),
+<code>src/domain/iam/project.entity.ts</code> (<code>PROJECT_EXECUTION_MODES</code>),
+<code>src/infrastructure/filesystem/project-workspaces-root.ts</code>
+(<code>projectScopeRoot</code>), <code>apps/engine/lib/engine/projects/project.ex</code></li>
+<li><strong>Teste:</strong> <code>test/infrastructure/filesystem/project-workspaces-root.spec.ts</code>
+(describe &quot;projectScopeRoot nos modos mounted/runner&quot;),
+<code>apps/engine/test/engine/projects/project_test.exs</code></li>
+<li><strong>Decisão arquitetural:</strong>
+<a href="../../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104</a></li>
+<li><strong>Origem:</strong> reconciliação pedida pelo dono do produto, entre os ADRs 0072
+e 0103</li>
+</ul>
+<h3 id="rn-422">RN-422 — A validação de criação DIVERGE por modo: <code>mounted</code> toca disco, <code>runner</code> só o léxico</h3>
+<p><code>CreateProjectUseCase.caminhoValidado</code> ganhou um terceiro ramo. <code>mounted</code>
+continua exatamente como <code>local</code> era (RN-170, histórico): recusa com <code>400</code>
+o caminho que não existe, não é pasta ou não é gravável dentro do
+container, com a instrução de montagem. <code>runner</code> valida só o
+LÉXICO — mesma lista de proibições (absoluto, sem <code>..</code>, fora de raiz/pasta
+de sistema, sem sobreposição com o checkout do Brabo) — sem tocar disco:
+só o runner, rodando no HOST de verdade, tem autoridade para confirmar que
+a pasta existe. O projeto nasce com <code>workspace_verified_at: null</code>.</p>
+<p><code>caminhoDeWorkspaceLocalValido</code> (o predicado léxico) foi EXPORTADO de
+<code>project-workspaces-root.ts</code> para ser reusado nos dois lados que precisam
+dele sem tocar disco: a criação de projeto <code>runner</code> e a confirmação do
+runner (<a href="../runner.html#rn-423">RN-423</a>) — a mesma função, nunca duas cópias que um dia
+divergem.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/iam/create-project.use-case.ts</code>
+(<code>caminhoValidado</code>), <code>src/infrastructure/filesystem/project-workspaces-root.ts</code>
+(<code>caminhoDeWorkspaceLocalValido</code>, exportada), <code>src/interfaces/http/iam/dto/create-project.dto.ts</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/iam/create-project-modo-de-workspace.spec.ts</code>
+(bloco <code>runner</code>), <code>test/interfaces/http/iam/project-dto-modo-de-workspace.spec.ts</code>,
+<code>apps/web/src/lib/wizard.test.ts</code> (<code>canAdvanceFromWorkspace</code> para <code>runner</code>)</li>
+<li><strong>Decisão arquitetural:</strong>
+<a href="../../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">ADR 0104</a></li>
+<li><strong>Origem:</strong> reconciliação do ADR 0104</li>
+</ul>
+<h3 id="rn-424">RN-424 — PAT autentica SÓ <code>runner-ticket</code>, por construção — nunca dual-auth com JWT nessa rota</h3>
+<p>Um Personal Access Token (<code>brb_…</code>) nunca autoriza nenhuma rota além de
+<code>POST /projects/:projectId/runner-ticket</code>. A garantia não é um <code>if</code> que
+uma rota nova poderia esquecer de checar: é estrutural. <code>@RequirePatAuth()</code>
+marca o handler com <code>IS_PAT_ROUTE_KEY</code>; <code>JwtAuthGuard</code> (o <code>APP_GUARD</code>
+global) checa esse metadado ANTES de tentar <code>verify()</code> de JWT e devolve
+<code>true</code> sem validar nada — o mesmo formato de bypass que <code>IS_PUBLIC_KEY</code> e
+<code>IS_SERVICE_ROUTE_KEY</code> já usam. <code>PatAuthGuard</code>, aplicado só nesse handler
+via <code>@UseGuards()</code>, é quem de fato autentica: extrai o bearer, recusa
+(401) qualquer valor que não comece com <code>brb_</code> sem consultar o
+repositório — nunca tenta validar como JWT nessa rota, e nenhuma outra
+rota aceita <code>brb_…</code> como bearer.</p>
+<p>Depois que o <code>PatAuthGuard</code> popula <code>request.user</code>, <code>RolesGuard</code>/
+<code>ResolveEffectiveRoleUseCase</code> continuam rodando, inalterados — cinto e
+suspensório: se o dono do PAT perder papel suficiente no projeto pela via
+normal (<code>ProjectMember</code>/workspace), o token para de autorizar mesmo sem
+ter sido revogado explicitamente.</p>
+<p>A alternativa considerada e recusada: o <code>JwtAuthGuard</code> global reconhecer
+o prefixo <code>brb_</code> e popular <code>request.user</code> direto, pra QUALQUER rota. Isso
+autorizaria o PAT a tudo que o papel do usuário permite no resto da api —
+o escopo &quot;só pede ticket de runner&quot; viraria decorativo.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/interfaces/http/auth/pat-route.decorator.ts</code>
+(<code>IS_PAT_ROUTE_KEY</code>/<code>@RequirePatAuth()</code>),
+<code>src/interfaces/http/auth/jwt-auth.guard.ts</code> (o terceiro
+early-out), <code>src/interfaces/http/auth/pat-auth.guard.ts</code>
+(<code>PatAuthGuard</code>), <code>src/interfaces/http/runner/runner-tickets.controller.ts</code>
+(<code>runnerTicket</code>, o único handler marcado)</li>
+<li><strong>Teste:</strong> <code>test/interfaces/pat-auth.guard.spec.ts</code>,
+<code>test/interfaces/jwt-auth.guard.spec.ts</code> (<code>@RequirePatAuth()</code>
+passa sem tentar <code>verify()</code>), <code>test/interfaces/http/runner/runner-tickets.controller.spec.ts</code>
+(<code>runnerTicket</code> tem o decorator, <code>terminalTicket</code> não)</li>
+<li><strong>Decisão arquitetural:</strong>
+<a href="../../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105</a></li>
+</ul>
+<h3 id="rn-425">RN-425 — Validação de PAT colapsa inexistente/revogado/expirado numa resposta só; escopo errado é 403; <code>last_used_at</code> nunca throttla</h3>
+<p><code>PersonalAccessTokenRepository.validarEUsar(hash)</code> é UMA query:
+<code>UPDATE personal_access_tokens SET last_used_at = now() WHERE token_hash = $1 AND revoked_at IS NULL AND (expires_at IS NULL OR expires_at &gt; now()) RETURNING id, user_id, project_id</code>. Zero linhas devolve <code>null</code>, e
+o guard responde <strong>401 pra &quot;não existe&quot;, &quot;revogado&quot; e &quot;expirado&quot; com a
+MESMA mensagem</strong> — quem apresenta um token roubado ou expirado não
+descobre qual dos três é o motivo (mesmo padrão de
+<code>AccountTokenRepository.consumir()</code>).</p>
+<p>Escopo de projeto incorreto é uma categoria DIFERENTE: se <code>project_id</code>
+devolvido pela query não bate com <code>:projectId</code> da rota, é <strong>403</strong>, não
+401 — o token autenticou de verdade, só não tem direito a ESTE projeto.</p>
+<p><code>last_used_at</code> é atualizado de forma INCONDICIONAL, na MESMA query de
+validação — nunca com um throttle (ex.: &quot;só se <code>last_used_at</code> for <code>NULL</code>
+ou tiver mais de 5 minutos&quot;) no mesmo <code>WHERE</code>. Um throttle ali é um bug
+real: um PAT reapresentado duas vezes em menos de 5 minutos cairia fora
+do <code>WHERE</code> na segunda vez (porque <code>last_used_at</code> estaria &quot;fresco
+demais&quot;), e a query devolveria zero linhas pra um token <strong>válido</strong> —
+rejeitando com 401 uma reconexão legítima. O laço de retry do runner
+reconecta em segundos, não minutos. O custo de não throttlar é um
+<code>UPDATE</code> de uma linha por índice único a cada chamada — irrelevante no
+pior caso real (até 10 tentativas seguidas, teto do runner).</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/personal-access-token.repository.ts</code>
+(<code>validarEUsar</code>), <code>src/interfaces/http/auth/pat-auth.guard.ts</code></li>
+<li><strong>Teste:</strong> <code>test/infrastructure/persistence/personal-access-token.repository.spec.ts</code>
+(inexistente/revogado/expirado → <code>null</code>; &quot;toca <code>last_used_at</code> sempre
+que válido, sem throttle&quot; — regressão do bug acima),
+<code>test/interfaces/pat-auth.guard.spec.ts</code> (escopo errado → 403,
+não 401)</li>
+<li><strong>Decisão arquitetural:</strong>
+<a href="../../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105</a></li>
+</ul>
+<h3 id="rn-426">RN-426 — Listar/revogar PAT é escopado ao PRÓPRIO usuário, no WHERE da query — sem admin cross-user nesta onda</h3>
+<p><code>ListPersonalAccessTokensUseCase</code>/<code>RevokePersonalAccessTokenUseCase</code>
+filtram por <code>userId</code> dentro da consulta SQL (<code>WHERE user_id = $1 AND ...</code>),
+nunca trazendo tudo e filtrando depois em memória. Cada usuário só
+enxerga e só revoga os PRÓPRIOS tokens — inclusive dentro de um projeto
+onde ele é <code>maintainer</code>.</p>
+<p><code>revogar(id, userId, motivo)</code> é IDEMPOTENTE: se o <code>UPDATE</code> (com o mesmo
+<code>WHERE user_id = $1</code>) não acha linha porque já estava revogado, uma
+segunda consulta de desempate devolve a linha (revogar de novo não é
+erro); se não acha porque o token não existe OU não é do usuário
+chamador, devolve <code>null</code> — a MESMA resposta (404 no controller) pros
+dois casos, pra não vazar a existência de um token alheio pelo código de
+status.</p>
+<p><strong>Fechado pela RN-427</strong>: um <code>maintainer</code> revogar o PAT de outro usuário —
+o caso de resposta a incidente (dev desligado com token vazando) — que
+esta seção declarava fora de escopo saiu do backlog e está implementado.
+Esta régua (autorevogação, escopo por <code>userId</code>) não mudou em nada.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/auth/list-personal-access-tokens.use-case.ts</code>
+(<code>ListPersonalAccessTokensUseCase</code>), <code>src/application/use-cases/auth/revoke-personal-access-token.use-case.ts</code>,
+<code>src/infrastructure/persistence/drizzle/personal-access-token.repository.ts</code>
+(<code>listarDoUsuarioNoProjeto</code>, <code>revogar</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/list-personal-access-tokens.use-case.spec.ts</code>,
+<code>test/application/use-cases/auth/revoke-personal-access-token.use-case.spec.ts</code>,
+<code>test/infrastructure/persistence/personal-access-token.repository.spec.ts</code>
+(revogar token de outro usuário → <code>null</code>)</li>
+<li><strong>Decisão arquitetural:</strong>
+<a href="../../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105</a></li>
+</ul>
+<hr>
+<h3 id="rn-427">RN-427 — <code>maintainer</code> revoga PAT de QUALQUER usuário do projeto, escopado por <code>project_id</code> — resposta a incidente</h3>
+<p>Extensão do modelo da RN-426, não uma decisão de arquitetura nova: mesmo
+padrão já usado para fechar a RN-407 (PO lendo métricas de produto) sobre
+um modelo já decidido, sem ADR próprio. Fecha o corte que o ADR 0105
+declarava &quot;fora desta onda&quot; — resposta a incidente real (dev desligado
+com token vazando), onde esperar o próprio usuário revogar não é opção.</p>
+<p><code>ListPersonalAccessTokensAsMaintainerUseCase</code>/
+<code>RevokePersonalAccessTokenAsMaintainerUseCase</code> são casos de uso NOVOS,
+em rotas SEPARADAS (<code>GET .../personal-access-tokens/all</code>,
+<code>DELETE .../personal-access-tokens/:tokenId/admin</code>, ambas
+<code>@RequireRole('maintainer')</code>) — nunca um <code>if</code> dentro dos handlers de
+self-service, mesmo princípio já usado no resto do produto para
+autorização por nível (<code>OfferInfraHandoffUseCase</code>). A rota de
+autorevogação (RN-426) não muda em nada.</p>
+<p><code>listarDoProjeto</code> traz TODOS os tokens do projeto — sem filtro de
+<code>userId</code> — com um <code>innerJoin</code> em <code>users</code> pro e-mail do dono, mesmo padrão
+que a listagem de membros do projeto já usa: sem o e-mail, um
+<code>maintainer</code> vendo &quot;revogar token de quem?&quot; só teria um UUID cru, e o
+próprio motivo do item (resposta a incidente) pede saber QUEM é o dono.</p>
+<p><code>revogarComoMaintainer(id, projectId, motivo)</code> é o mesmo desenho
+idempotente de <code>revogar()</code> — <code>UPDATE</code> condicional seguido de <code>SELECT</code> de
+desempate quando o <code>UPDATE</code> não acha linha —, mas o <code>WHERE</code> compara
+<code>project_id</code>, nunca <code>user_id</code>: um <code>maintainer</code> revoga qualquer dono
+DENTRO do projeto dele, nunca um token de outro projeto. Sem linha
+nenhuma (token não existe OU é de outro projeto), devolve <code>null</code> — a
+MESMA resposta (404) pros dois casos, mesma disciplina de não vazar
+existência que a RN-426 já aplicava.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/auth/list-personal-access-tokens-as-maintainer.use-case.ts</code>,
+<code>src/application/use-cases/auth/revoke-personal-access-token-as-maintainer.use-case.ts</code>,
+<code>src/infrastructure/persistence/drizzle/personal-access-token.repository.ts</code>
+(<code>listarDoProjeto</code>, <code>revogarComoMaintainer</code>),
+<code>src/interfaces/http/runner/personal-access-tokens.controller.ts</code>
+(<code>listAllPats</code>, <code>revokePatAsMaintainer</code>),
+<code>apps/web/src/routes/settings/PersonalAccessTokensSection.tsx</code>
+(sub-lista visível só para <code>owner</code>/<code>maintainer</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/list-personal-access-tokens-as-maintainer.use-case.spec.ts</code>,
+<code>test/application/use-cases/auth/revoke-personal-access-token-as-maintainer.use-case.spec.ts</code>,
+<code>test/infrastructure/persistence/personal-access-token.repository.spec.ts</code>
+(<code>listarDoProjeto</code>/<code>revogarComoMaintainer</code>),
+<code>test/interfaces/http/runner/personal-access-tokens.controller.spec.ts</code>,
+<code>apps/web/src/routes/ProjectSettingsTab.test.tsx</code></li>
+<li><strong>Decisão arquitetural:</strong>
+<a href="../../adr/0105-personal-access-token-do-runner-escopado-por-construcao.html">ADR 0105</a>
+(extensão do modelo existente, sem ADR novo)</li>
+</ul>
+<hr>
+<h3 id="rn-430">RN-430 — PRs são project-wide; a decisão usa o sessionId da própria ação, nunca a mais recente</h3>
+<p>A aba <code>prs</code> resolve o defeito de <code>ProjectApprovalsTab.tsx</code>, que escopava a
+seção &quot;PRs em revisão&quot; a <code>usePendingActions(projectId, latestSession?.id)</code>
+— a revisão pendente de uma sessão anterior desaparecia assim que uma
+sessão nova nascia. A listagem vem direto do provider (<code>GET /projects/:id/code/pull-requests</code>, já project-wide por desenho); o
+cruzamento com a <code>proposed_action</code> correspondente (ex.: <code>git_merge</code>) usa
+<code>ProposedActionRepository.findPendingByProject(projectId, actionType?)</code>,
+novo, ao lado do já existente escopado por sessão. A decisão
+(aprovar/negar/sempre permitir) usa o <code>sessionId</code> que a própria
+<code>ProposedAction</code> carrega, nunca <code>latestSession</code> — a ação pode ter nascido
+numa sessão diferente da atual.</p>
+<p>A aba PRs é a primeira produtora real de <code>git_merge</code> pela UI (<code>actor.kind: 'user'</code>); a trava de branch protegida em <code>decide.ts</code> (RN-154) segue
+absoluta independente de quem propõe. <code>git_merge</code> ganhou corpo próprio no
+card de aprovação em vez do despejo de JSON cru (mesmo defeito que a
+RN-096 já corrigiu para outros tipos).</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/ports/proposed-action-repository.port.ts</code>,
+<code>src/infrastructure/persistence/drizzle/proposed-action.repository.ts</code>,
+<code>src/application/use-cases/actions/list-project-pending-actions.use-case.ts</code>,
+<code>src/interfaces/http/actions/project-actions.controller.ts</code>
+(<code>GET /projects/:projectId/actions?status=pending&amp;actionType=</code>),
+<code>apps/web/src/routes/ProjectPrsTab.tsx</code>, <code>apps/web/src/components/ApprovalCard.tsx</code></li>
+<li><strong>Teste:</strong> <code>list-project-pending-actions.use-case.spec.ts</code> (ação pendente
+de sessão antiga encontrada project-wide; filtro por actionType; nunca
+devolve ação decidida); <code>propose-action.use-case.spec.ts</code> (git_merge com
+payload real da aba PRs segue pending mesmo com <code>GitMerge()</code> em allow, e
+com agent_autonomy curinga ligado); <code>ProjectPrsTab.test.tsx</code> (PRs de
+múltiplas sessões aparecem juntas; decisão usa o sessionId da ação, não o
+da sessão mais recente); <code>ApprovalCard.test.tsx</code> (corpo próprio de
+<code>git_merge</code>)</li>
+<li><strong>ADR:</strong> nenhum — extensão de um caminho de leitura já existente, sem
+mudar o pipeline de decisão</li>
+<li><strong>Origem:</strong> pedido do dono do produto — &quot;não há maneiras de gerir PRs&quot;</li>
+</ul>
+<hr>
+<nav class="site-pager"><a href="../../business-rules/api/parte-03.html">API — parte 3 (desde RN-100)</a><a href="../../business-rules/api/parte-05.html">API — parte 5 (desde RN-439)</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-api/blob/dev/docs/business-rules/api/parte-04.md">编辑此页</a></footer>
+</main>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#programa-28-onda-4-frente-g2-pipeline-de-indexacao-e-busca-hibrida-do-chat-rag-rn-231-238-adr-0080">PROGRAMA 28 — Onda 4, frente G2: pipeline de indexação e busca híbrida do Chat RAG (RN-231..238, ADR 0080)</a></li><li class="n2"><a href="#autenticacao">Autenticação</a></li><li class="n3"><a href="#rn-231">RN-231 — ChunkRepository ganha DELETE e as duas metades da busca híbrida</a></li><li class="n3"><a href="#rn-232">RN-232 — Origem do texto indexado: docs/adr do repositório do PRÓPRIO projeto, session só de chat.message/agent.response</a></li><li class="n3"><a href="#rn-233">RN-233 — Provider de embedding indisponível: grava sem vetor e declara a lacuna, nunca finge indexação completa</a></li><li class="n3"><a href="#rn-234">RN-234 — Busca híbrida: duas consultas independentes, fusão por peso (0.6/0.4), limiar 0.2, e o contrato de citação</a></li><li class="n3"><a href="#rn-1046">RN-1046 — A busca híbrida devolve no máximo N trechos do mesmo arquivo</a></li><li class="n3"><a href="#rn-235">RN-235 — Chunking: 1200 caracteres, 150 de sobreposição, por parágrafo/heading</a></li><li class="n3"><a href="#rn-236">RN-236 — Reindexação é sempre MANUAL, full rebuild idempotente</a></li><li class="n3"><a href="#rn-237">RN-237 — Cobertura do índice é contagem REAL, nunca &quot;há N minutos&quot; inventado</a></li><li class="n3"><a href="#rn-1036">RN-1036 — A indexação de docs nunca descarta em silêncio o conteúdo de um arquivo</a></li><li class="n3"><a href="#rn-238">RN-238 — As três rotas HTTP do RAG dividem papel por quem MUDA o que o produto gasta</a></li><li class="n2"><a href="#programa-28-onda-4-frente-e2-virtualizacao-de-linha-e-minimapa-na-aba-code-rn-239-242">PROGRAMA 28 — Onda 4, frente E2: virtualização de linha e minimapa na aba Code (RN-239..242)</a></li><li class="n3"><a href="#rn-243">RN-243 — O ciclo de vida do container é TABELA, e nenhuma linha dela chama Docker</a></li><li class="n3"><a href="#rn-244">RN-244 — A máquina de estados do container: só removed sai reprovisionando</a></li><li class="n3"><a href="#rn-245">RN-245 — A primeira transição exige a imagem já decidida, e CONGELA versão e recursos</a></li><li class="n3"><a href="#rn-246">RN-246 — Projeto em modo local não tem ciclo de vida de container</a></li><li class="n3"><a href="#rn-247">RN-247 — Uma linha por projeto: project_id é único</a></li><li class="n3"><a href="#rn-248">RN-248 — Teto de recursos DECLARADO, não aplicado — o campo existe para quando houver orquestrador</a></li><li class="n2"><a href="#programa-28-onda-5-frente-g3-a-tela-do-chat-rag-rn-252-254-adr-0082">PROGRAMA 28 — Onda 5, frente G3: a tela do Chat RAG (RN-252..254, ADR 0082)</a></li><li class="n3"><a href="#rn-267">RN-267 — GET /projects/:projectId/container/lifecycle é a primeira exposição HTTP do ciclo de vida do container</a></li><li class="n3"><a href="#rn-272">RN-272 — O callback do login social decide em ORDEM: identidade conhecida, depois vínculo por e-mail, depois conta nova</a></li><li class="n3"><a href="#rn-273">RN-273 — O state do login social tem propósito PRÓPRIO, mesmo assinado pela mesma chave do fluxo de conexão de git</a></li><li class="n3"><a href="#rn-274">RN-274 — Vincular identidade social a conta existente exige e-mail VERIFICADO pelo provider</a></li><li class="n3"><a href="#rn-275">RN-275 — Provisionar conta NOVA não exige e-mail verificado — só vincular a uma existente exige</a></li><li class="n3"><a href="#rn-276">RN-276 — providerUserId, nunca e-mail ou login, é a chave de identidade social</a></li><li class="n3"><a href="#rn-277">RN-277 — Login social pede escopo MÍNIMO, nunca o de conexão de repositório</a></li><li class="n3"><a href="#rn-278">RN-278 — Conta provisionada por login social nasce SEM senha — mesmo estado &quot;pendente&quot; da migração do Keycloak</a></li><li class="n3"><a href="#rn-279">RN-279 — Vincular por e-mail verificado também verifica o e-mail da conta existente</a></li><li class="n3"><a href="#rn-280">RN-280 — Login social recusa conta DESABILITADA, mesma régua do login por senha</a></li><li class="n3"><a href="#rn-281">RN-281 — O login social reusa o MESMO app OAuth da conexão de git — sem variável de ambiente nova</a></li><li class="n3"><a href="#rn-282">RN-282 — O access token do login social nunca viaja na URL nem no corpo do callback</a></li><li class="n3"><a href="#rn-283">RN-283 — Falha do callback de login social não vaza o motivo na URL</a></li><li class="n2"><a href="#analytics-e-delivery-metricas-os-dois-papeis-viram-relatorio-rn-320-322-adr-0089">Analytics e delivery-metricas: os dois papéis viram RELATÓRIO (RN-320..322, ADR 0089)</a></li><li class="n3"><a href="#rn-320">RN-320 — analise-funil.ts é script, nunca agente — mesmo esqueleto de medir-execucao.ts</a></li><li class="n3"><a href="#rn-321">RN-321 — O funil conta SESSÃO por etapa, só ação executed, e o lead time usa updated_at da execução</a></li><li class="n3"><a href="#rn-322">RN-322 — Deployment frequency real filtra merge em branch PROTEGIDA; três métricas ficam DECLARADAS ausentes, nunca aproximadas</a></li><li class="n2"><a href="#o-gate-implementavel-ativa-qa-estrategia-como-segundo-momento-do-qa-lead-rn-340-341-adr-0090">O gate implementavel ativa — QA-estratégia como segundo momento do qa-lead (RN-340/341, ADR 0090)</a></li><li class="n3"><a href="#rn-340">RN-340 — O gate implementavel decide a story ANTES do dev agent escrever código</a></li><li class="n2"><a href="#secops-runtime-relatorio-de-abuso-sobre-rate-limit-hits-rn-375-377-adr-0091">secops-runtime — relatório de abuso sobre rate_limit_hits (RN-375..377, ADR 0091)</a></li><li class="n3"><a href="#rn-375">RN-375 — O relatório declara a janela, nunca finge um histórico maior</a></li><li class="n3"><a href="#rn-376">RN-376 — O ranking trabalha só com o que bucket_key guarda: balde e quando</a></li><li class="n2"><a href="#o-papel-dbre-vira-dois-scripts-mecanicos-rn-400-403-adr-0093">O papel dbre vira dois scripts mecânicos (RN-400..403, ADR 0093)</a></li><li class="n3"><a href="#rn-400">RN-400 — O parecer de migração é análise ESTÁTICA de SQL, e ignora o padrão de risco quando ele só aparece em comentário</a></li><li class="n2"><a href="#auditoria-fluxo-yml-codigo-onda-2-rn-160-no-backend-e-delegacao-dev-lead-dev-rn-404-405-adr-0094">Auditoria fluxo.yml × código — Onda 2: RN-160 no backend e delegação Dev Lead → dev (RN-404/405, ADR 0094)</a></li><li class="n3"><a href="#rn-404">RN-404 — &quot;Confirmar arquitetura pronta&quot; (RN-160) é revalidada no BACKEND, não só desabilitada na UI</a></li><li class="n2"><a href="#auditoria-fluxo-yml-codigo-onda-6-ultima-o-gate-necessidade-validada-rn-406-adr-0095">Auditoria fluxo.yml × código — Onda 6 (última): o gate necessidade-validada (RN-406, ADR 0095)</a></li><li class="n3"><a href="#rn-408">RN-408 — MAIL_TRANSPORT=smtp deriva o boot pelo padrão da RN-114, sem o default público</a></li><li class="n2"><a href="#workspace-pessoal-automatico-no-cadastro-rn-410">Workspace pessoal automático no cadastro (RN-410)</a></li><li class="n3"><a href="#rn-410">RN-410 — Toda conta NOVA nasce com um workspace pessoal, na MESMA transação da conta</a></li><li class="n2"><a href="#n-agentes-online-no-dashboard-status-ao-vivo-nunca-presenca-historica-rn-409-adr-0097">&quot;N agentes online&quot; no dashboard — status AO VIVO, nunca presença histórica (RN-409, ADR 0097)</a></li><li class="n3"><a href="#rn-412">RN-412 — dev.awaiting_gate/dev.awaiting_approval seguram a sessão; a janela efetiva de compactação é coerente com o transporte</a></li><li class="n3"><a href="#rn-416">RN-416 — O grafo é memória DERIVADA, reconstruível por projeção da outbox</a></li><li class="n3"><a href="#rn-418">RN-418 — Efeito externo git e comando privilegiado (sudo/doas) viram teto absoluto, nunca deny</a></li><li class="n2"><a href="#onda-1-do-adr-0104-execution-mode-em-tres-valores-workspace-verificado-pelo-runner">Onda 1 do ADR 0104 — execution_mode em três valores, workspace verificado pelo runner</a></li><li class="n3"><a href="#rn-421">RN-421 — execution_mode tem TRÊS valores: container/mounted/runner</a></li><li class="n3"><a href="#rn-422">RN-422 — A validação de criação DIVERGE por modo: mounted toca disco, runner só o léxico</a></li><li class="n3"><a href="#rn-424">RN-424 — PAT autentica SÓ runner-ticket, por construção — nunca dual-auth com JWT nessa rota</a></li><li class="n3"><a href="#rn-425">RN-425 — Validação de PAT colapsa inexistente/revogado/expirado numa resposta só; escopo errado é 403; last_used_at nunca throttla</a></li><li class="n3"><a href="#rn-426">RN-426 — Listar/revogar PAT é escopado ao PRÓPRIO usuário, no WHERE da query — sem admin cross-user nesta onda</a></li><li class="n3"><a href="#rn-427">RN-427 — maintainer revoga PAT de QUALQUER usuário do projeto, escopado por project_id — resposta a incidente</a></li><li class="n3"><a href="#rn-430">RN-430 — PRs são project-wide; a decisão usa o sessionId da própria ação, nunca a mais recente</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-zh-Hans.json" data-base="../../"></script></body>
+</html>
