@@ -533,6 +533,10 @@ engine 镜像运行于 Alpine 3.24 上的 **Elixir 1.20.4 / OTP 29.1.1**（build
 | `E2E_USER` | `owner@brabo.dev` | 套件登录用的账户 |
 | `E2E_PASSWORD` | 固定在 `e2e/suporte/api.ts` 中的种子密码 | 该账户的密码。它是**本地种子**的密码，绝不是真实密码——这里不重复写出，以便唯一的副本仍是代码中的那一份 |
 | `E2E_ENGINE_URL` | `http://localhost:4000` | `instalacao` spec（安装冒烟测试）访问 engine `/health` 的地址 |
+| `CAPTURAS_API` | `desconhecida` | `capturas.json` 记录的 api 镜像标签（api 最新的 `-dev.N` 标签，由 `capturas-da-doc` 工作流传入）；在它之外，截图不带版本 |
+| `CAPTURAS_ENGINE` | `desconhecida` | `capturas.json` 记录的 engine 镜像标签（取自 `componentes.json` 的固定版本，由 `capturas-da-doc` 工作流传入） |
+| `CAPTURAS_WEB` | `desconhecida` | `capturas.json` 记录的 web 镜像标签（取自 `componentes.json` 的固定版本，由 `capturas-da-doc` 工作流传入） |
+| `CAPTURAS_SAIDA` | `e2e/capturas/saida` | 文档截图的 PNG 与 `capturas.json` 的输出目录（`e2e/capturas/doc.captura.ts`） |
 
 
 ### 本地集群与定期证明——`deploy/k8s/`

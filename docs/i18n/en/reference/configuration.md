@@ -837,6 +837,10 @@ environment, not a unit test beside it (AT-124).
 | `E2E_USER` | `owner@brabo.dev` | the account the suite logs in with |
 | `E2E_PASSWORD` | the seed password hardcoded in `e2e/suporte/api.ts` | that account's password. It's the password of a **local seed**, never a real one — it isn't repeated here so that the only copy stays the one in the code |
 | `E2E_ENGINE_URL` | `http://localhost:4000` | where the `instalacao` spec (installation smoke) hits the engine `/health` |
+| `CAPTURAS_API` | `desconhecida` | the tag of the api image that `capturas.json` records (the latest `-dev.N` of the api, passed by the `capturas-da-doc` workflow); outside it, the captures go out without the version |
+| `CAPTURAS_ENGINE` | `desconhecida` | the tag of the engine image that `capturas.json` records (the `componentes.json` pin, passed by the `capturas-da-doc` workflow) |
+| `CAPTURAS_WEB` | `desconhecida` | the tag of the web image that `capturas.json` records (the `componentes.json` pin, passed by the `capturas-da-doc` workflow) |
+| `CAPTURAS_SAIDA` | `e2e/capturas/saida` | the folder that receives the PNGs and `capturas.json` of the doc captures (`e2e/capturas/doc.captura.ts`) |
 
 
 ### Local cluster and scheduled proofs — `deploy/k8s/`
