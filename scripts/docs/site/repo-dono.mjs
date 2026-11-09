@@ -21,3 +21,16 @@ export function urlDeEdicao(repo, raiz, relativo) {
   if (!dono) throw new Error(`raiz de doc sem repositório dono: ${raiz}`);
   return `https://github.com/${repo.split('/')[0]}/${dono[0]}/blob/dev/${posix.join(dono[1], relativo)}`;
 }
+
+/** O inverso de `urlDeEdicao` para uma `.md`: `{raiz, relativo}` se a URL é de arquivo da `docs/` de uma raiz conhecida (na `dev`), senão `null`. */
+export function raizDeUrl(url) {
+  const m = /^https:\/\/github\.com\/[^/]+\/([^/]+)\/blob\/dev\/([^#?]+\.md)$/.exec(url.split('#')[0]);
+  if (!m) return null;
+  for (const [raiz, [repo, pasta]] of Object.entries(DONOS)) {
+    if (repo === m[1] && m[2].startsWith(`${pasta}/`)) return { raiz, relativo: m[2].slice(pasta.length + 1) };
+  }
+  return null;
+}
+
+/** As raízes de doc e o repositório de cada uma (para as ferramentas que leem os clones irmãos). */
+export const DONOS_DAS_RAIZES = DONOS;
