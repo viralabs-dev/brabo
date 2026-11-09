@@ -610,7 +610,7 @@ create no mesmo arquivo.
 
 ### `estilo.mjs` — cobra o guia de escrita {#estilo-mjs}
 
-`scripts/docs/estilo.mjs` mede cada página que declara `tipo:` no frontmatter. Ele conta as palavras de prosa (sem frontmatter, código, tabela, título nem a seção "Para saber mais") e reprova o que passa do limite do tipo: tutorial 1 500, guia 800, conceito 1 200. Referência não tem limite. Também acusa ID interno (ADR, RN, AT, EP, HS, Fase, Rodada) fora de "Para saber mais". A CLI só avisa e sai 0. A cobrança é a catraca `PENDENTES` do `estilo.spec.ts`, que roda no `pnpm test:scripts` e só encolhe: página nova que estoura reprova, e página da lista que já passa também reprova ("tire da lista"). As regras de escrita estão em [Como escrevemos a documentação](../contribuir/como-escrevemos.md).
+`scripts/docs/estilo.mjs` mede cada página que declara `tipo:` no frontmatter. Ele conta as palavras de prosa (sem frontmatter, código, tabela, título nem a seção "Para saber mais") e reprova o que passa do limite do tipo: tutorial 1 500, guia 800, conceito 1 200. Referência não tem limite. Também acusa ID interno (ADR, RN, AT, EP, HS, Fase, Rodada) fora de "Para saber mais". Desde o fim da Onda 2 a CLI é ERRO: sai 1 quando uma página fora de `PENDENTES` estoura. A catraca `PENDENTES` mora no próprio `estilo.mjs` (as páginas dela só geram `AVISO`) e só encolhe; o `estilo.spec.ts` roda no `pnpm test:scripts` e também reprova a página da lista que já passa ("tire da lista"). As regras de escrita estão em [Como escrevemos a documentação](../contribuir/como-escrevemos.md).
 
 ### O build do site {#the-site-build}
 
@@ -936,7 +936,7 @@ O [ADR 0253](../adr/0253-o-site-de-docs-deixa-o-docusaurus.md) tirou o site do
 Docusaurus. `pnpm docs:build` roda `docs:site` (escreve `build/docs-site/`,
 ignorado pelo git, com as mesmas URLs e âncoras do site anterior) e
 `docs:site:check` (checador de links e âncoras, locale duplicado e faixa de
-tradução, mais o orçamento de peso: nenhuma página gerada passa de 150 KB de HTML em nenhum dos 4 idiomas; `scripts/docs/site/orcamento.mjs`, ADR 0287; a página de RN de um irmão acima do teto só avisa até ser partida). O núcleo mora em `scripts/docs/site/`: `paginas.mjs` descobre as
+tradução, mais o orçamento de peso: nenhuma página gerada passa de 150 KB de HTML em nenhum dos 4 idiomas; `scripts/docs/site/orcamento.mjs`, ADR 0287; a página acima do teto é ERRO, inclusive a de RN de irmão; só a lista `PENDENTES` do `orcamento.mjs`, que só encolhe, é tolerada). O núcleo mora em `scripts/docs/site/`: `paginas.mjs` descobre as
 páginas de cada idioma (a tradução onde existe, a fonte pt-BR no resto, então o
 link nunca sai do idioma), `render.mjs` converte o Markdown (âncora `{#id}`,
 admonições, Mermaid, realce com shiki, link `.md` para URL relativa),

@@ -45,9 +45,9 @@ node scripts/docs/estilo.mjs                          # todas as páginas
 node scripts/docs/estilo.mjs docs/contribuir/como-escrevemos.md
 ```
 
-O check imprime um `AVISO` por página acima do limite e um por ID interno fora de "Para saber mais". Por enquanto ele só avisa. A lista `PENDENTES` do `scripts/docs/estilo.spec.ts` guarda as páginas antigas que ainda estouram: ela só encolhe. Página nova, ou página que você acabou de ajustar, tem de passar.
+O check imprime um `ERRO` por página acima do limite e um por ID interno fora de "Para saber mais", e sai com código 1. A lista `PENDENTES` do `scripts/docs/estilo.mjs` guarda as páginas antigas que ainda estouram: elas só geram `AVISO`, e a lista só encolhe. Página nova, ou página que você acabou de ajustar, tem de passar.
 
-Como saber que deu certo: o comando termina com `estilo: 0 aviso(s)` para a sua página, e `pnpm test:scripts` sai com código 0.
+Como saber que deu certo: o comando termina com `estilo: 0 erro(s)` e sai com código 0 para a sua página, e `pnpm test:scripts` sai com código 0.
 
 ## Um modelo bom
 

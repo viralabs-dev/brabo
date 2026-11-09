@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 325 de 354 (91.8%) | 97.3% de 3.450.733 | 316 | 7 | 2 | 29 | 6 |
-| `ru` | 325 de 354 (91.8%) | 97.3% de 3.450.733 | 316 | 7 | 2 | 29 | 6 |
-| `zh-Hans` | 325 de 354 (91.8%) | 97.3% de 3.450.733 | 316 | 7 | 2 | 29 | 6 |
+| `en` | 327 de 356 (91.9%) | 97.3% de 3.454.715 | 315 | 10 | 2 | 29 | 6 |
+| `ru` | 327 de 356 (91.9%) | 97.3% de 3.454.715 | 315 | 10 | 2 | 29 | 6 |
+| `zh-Hans` | 327 de 356 (91.9%) | 97.3% de 3.454.715 | 315 | 10 | 2 | 29 | 6 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -23,6 +23,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 - `business-rules.md` (tradução de 2026-11-08)
 - `business-rules/produto.md` (tradução de 2026-11-06)
+- `business-rules/produto/parte-01.md` (tradução de 2026-11-06)
+- `business-rules/produto/parte-02.md` (tradução de 2026-11-06)
+- `contribuir/como-escrevemos.md` (tradução de 2026-11-08)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-08)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `reference/configuration.md` (tradução de 2026-11-08)
@@ -33,6 +36,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 - `business-rules.md` (tradução de 2026-11-08)
 - `business-rules/produto.md` (tradução de 2026-11-06)
+- `business-rules/produto/parte-01.md` (tradução de 2026-11-06)
+- `business-rules/produto/parte-02.md` (tradução de 2026-11-06)
+- `contribuir/como-escrevemos.md` (tradução de 2026-11-08)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-08)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `reference/configuration.md` (tradução de 2026-11-08)
@@ -43,6 +49,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 - `business-rules.md` (tradução de 2026-11-08)
 - `business-rules/produto.md` (tradução de 2026-11-06)
+- `business-rules/produto/parte-01.md` (tradução de 2026-11-06)
+- `business-rules/produto/parte-02.md` (tradução de 2026-11-06)
+- `contribuir/como-escrevemos.md` (tradução de 2026-11-08)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-08)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `reference/configuration.md` (tradução de 2026-11-08)

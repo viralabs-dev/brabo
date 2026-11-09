@@ -5,9 +5,8 @@
  *   node scripts/docs/site/orcamento.mjs [<dir-do-build>] [--relatorio]
  *
  *  - ERRO: página do `brabo` acima do teto (sai 1);
- *  - AVISO: página de RN dos irmãos acima do teto. Elas só se dividem na rodada B
- *    (`partir-rn.mjs` rodado em cada irmão); depois dela, esta lista vira ERRO
- *    (esvazie `IRMAOS_SO_AVISAM`);
+ *  - AVISO: página de RN dos irmãos acima do teto, só enquanto `IRMAOS_SO_AVISAM` for true.
+ *    Desde a rodada C (todas as áreas partidas) ele é false e a página de irmão estourada é ERRO;
  *  - `PENDENTES`: páginas do `brabo` já conhecidas acima do teto, com dono. A lista só encolhe.
  *  - `--relatorio`: todas as páginas acima do teto, ordenadas, e o total por locale.
  */
@@ -22,14 +21,13 @@ export const TETO = 150 * 1024;
  *  - `explanation/historico-de-fases-parte-4`: só o `ru` passa (194 KB; a fonte tem 138 KB); o cirílico pesa mais no HTML, e partir a tradução quebraria a paridade de slug com a fonte;
  *  - `runbook`: página do brabo-infra (464 KB), fora desta AT;
  *  - `reference/internal-api`: só o `ru` passa (202 KB), fora desta AT;
- *  - `business-rules/produto`: só o `ru` passa (200 KB); roda-se `partir-rn.mjs --repo produto` na rodada C;
  *  - `reference/configuration`: só o `ru` passa (170 KB); precisa de uma página por serviço.
  */
-export const PENDENTES = ['explanation/historico-de-fases-parte-4', 'runbook', 'reference/internal-api', 'business-rules/produto', 'reference/configuration'];
+export const PENDENTES = ['explanation/historico-de-fases-parte-4', 'runbook', 'reference/internal-api', 'reference/configuration'];
 
 /** Páginas de RN que moram nos irmãos (`business-rules/<x>.html` e `business-rules/<x>/parte-NN.html`). */
 const IRMAO = /^business-rules\/(?:api|engine|web|runner|ci|broker|contracts|infra)(?:\/|$)/;
-export const IRMAOS_SO_AVISAM = true;
+export const IRMAOS_SO_AVISAM = false;
 
 const LOCALE = /^(?:en|ru|zh-Hans)\//;
 const arquivosDe = (dir) =>
