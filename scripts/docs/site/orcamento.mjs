@@ -19,11 +19,10 @@ export const TETO = 150 * 1024;
 /**
  * Acima do teto e com dono; a lista só encolhe (slug, vale para os 4 locales):
  *  - `explanation/historico-de-fases-parte-4`: só o `ru` passa (194 KB; a fonte tem 138 KB); o cirílico pesa mais no HTML, e partir a tradução quebraria a paridade de slug com a fonte;
- *  - `runbook`: página do brabo-infra (464 KB), fora desta AT;
  *  - `reference/internal-api`: só o `ru` passa (202 KB), fora desta AT;
  *  - `reference/configuration`: só o `ru` passa (170 KB); precisa de uma página por serviço.
  */
-export const PENDENTES = ['explanation/historico-de-fases-parte-4', 'runbook', 'reference/internal-api', 'reference/configuration'];
+export const PENDENTES = ['explanation/historico-de-fases-parte-4', 'reference/internal-api', 'reference/configuration'];
 
 /** Páginas de RN que moram nos irmãos (`business-rules/<x>.html` e `business-rules/<x>/parte-NN.html`). */
 const IRMAO = /^business-rules\/(?:api|engine|web|runner|ci|broker|contracts|infra)(?:\/|$)/;
