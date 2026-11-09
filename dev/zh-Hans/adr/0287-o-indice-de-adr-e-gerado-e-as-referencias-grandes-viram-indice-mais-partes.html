@@ -66,10 +66,11 @@
 <li>Quem cita RN deve citar a parte (<code>business-rules/&lt;x&gt;/parte-NN.md#rn-NNN</code>); o link antigo segue valendo pela grade e pelo redirecionamento.</li>
 <li>O <code>ru</code> e o <code>zh-Hans</code> pesam mais por byte; é por isso que o teto se mede em todo locale.</li>
 <li>Custo: um gerador a mais para manter (<code>indice-de-adr.mjs</code>, <code>partir-rn.mjs</code>) e a grade congelada, que não pode perder linha.</li>
+<li>Cada RN da parte leva <code>&lt;a id=&quot;rn-NNN&quot;&gt;&lt;/a&gt;</code> antes do título (AT-871), porque o GitHub não gera id de <code>{#rn-NNN}</code> e o link <code>parte-NN.md#rn-NNN</code> abria a parte no topo. O <code>render.mjs</code> tira essa âncora do HTML do site (o título já tem o id); <code>ancorar-rn.mjs</code> migra as partes existentes.</li>
 </ul>
 <nav class="site-pager"><a href="../adr/0275-cada-irmao-confere-as-proprias-refs-com-simbolo.html">ADR 0275 — Cada irmão confere as próprias refs com símbolo no PR</a><a href="../adr/0288-link-entre-repos-nas-rns-e-url-do-repo-dono.html">ADR 0288 — O link entre repos nas RNs é a URL do repo dono, e o site a devolve para relativo</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0287-o-indice-de-adr-e-gerado-e-as-referencias-grandes-viram-indice-mais-partes.md">编辑此页</a><span>更新于 2026-11-09T07:38:56-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0287-o-indice-de-adr-e-gerado-e-as-referencias-grandes-viram-indice-mais-partes.md">编辑此页</a><span>更新于 2026-11-09T07:56:44-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#contexto">Contexto</a></li><li class="n2"><a href="#decisão">Decisão</a></li><li class="n2"><a href="#alternativas-rejeitadas">Alternativas rejeitadas</a></li><li class="n2"><a href="#consequências">Consequências</a></li></ul></aside>
 </div>
