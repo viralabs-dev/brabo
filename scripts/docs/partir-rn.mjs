@@ -189,7 +189,7 @@ export function partir(texto, { area, locale, cortes, limite }) {
     const rotulo = `${T.parte(k + 1)} (${T.desde} ${desde})`;
     const cab = [];
     if (f.h2Anterior) cab.push(semId(f.h2Anterior));
-    const corpoParte = reescreverLinks([...cab, ...f.segs.map((s) => s.texto)].join('\n'), (h) => reescreverHref(h, { area, parteDe, atual: k + 1 }));
+    const corpoParte = reescreverLinks([...cab, ...f.segs.map((s) => (s.tipo === 'rn' ? `<a id="${s.id}"></a>\n\n${s.texto}` : s.texto))].join('\n'), (h) => reescreverHref(h, { area, parteDe, atual: k + 1 }));
     const novoFm = fm
       .replace(/^id:.*$/m, `id: rn-${area}-parte-${pad(k + 1)}`)
       .replace(/^title:.*$/m, `title: ${aspas(`${tituloBase} — ${rotulo}`)}`)
@@ -211,6 +211,8 @@ export function conferir({ antes, indice, partes, limite }) {
   const idsAntes = antes.map((i) => i).sort();
   const idsPartes = partes.flatMap((p) => [...p.texto.matchAll(/^### RN-\d+\b.*\{#([^}\s]+)\}\s*$/gm)].map((m) => m[1])).sort();
   if (idsAntes.join() !== idsPartes.join()) problemas.push(`os {#rn-} das partes (${idsPartes.length}) não são os de antes (${idsAntes.length})`);
+  // O GitHub não gera id de `{#rn-NNN}`: a parte leva `<a id>` logo antes de cada RN (AT-871).
+  for (const p of partes) for (const m of p.texto.matchAll(/^### RN-\d+\b.*\{#(rn-\d+)\}\s*$/gm)) if (!p.texto.slice(0, m.index).endsWith(`<a id="${m[1]}"></a>\n\n`)) problemas.push(`${p.arquivo}: ${m[1]} sem o <a id> antes`);
   for (const m of indice.matchAll(/<a id="(rn-\d+)"><\/a>\[\d+\]\(([^)#]+)#([^)]+)\)/g)) {
     const parte = partes.find((p) => m[2].endsWith(`/${p.arquivo}`));
     if (!parte) problemas.push(`a grade aponta ${m[2]}, que não existe`);

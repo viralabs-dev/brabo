@@ -10,6 +10,8 @@ keywords: [regras de negócio, produto]
 
 ## A chave de dispositivo passa a poder ser da MÁQUINA (RN-543, FASE 30)
 
+<a id="rn-543"></a>
+
 ### RN-543 — `runner_device_keys.project_id` nulo é a chave de MÁQUINA: vale para os projetos do DONO, resolvida contra o projeto pedido {#rn-543}
 
 A identidade do agente local era por PROJETO. Uma máquina com três projetos em
@@ -121,6 +123,8 @@ existe para matar.
   [o recorte da fase](../../explanation/fase-30-runner-por-maquina.md)
 
 ## A primeira conta de uma instalação nasce no terminal (RN-546)
+
+<a id="rn-546"></a>
 
 ### RN-546 — Rota interna cria a PRIMEIRA conta, já verificada, e recusa quando existe qualquer usuário {#rn-546}
 
@@ -251,6 +255,8 @@ default declarado); credencial de LLM (é de quem vai gastar,
   do [0154](../../adr/0154-chave-de-dispositivo-de-maquina.md)
 
 ## O `install.sh` fecha a instalação (RN-547, FASE 30)
+
+<a id="rn-547"></a>
 
 ### RN-547 — O instalador cria a primeira conta, registra a chave desta máquina e sobe o agente como serviço — e o que falha no meio é RELATADO, nunca desfeito nem engolido {#rn-547}
 
@@ -412,6 +418,8 @@ existia, antes de qualquer escrita.
 
 ## O teto de auto-movimento no upsert de WORKSPACE, e a auto-promoção que fecha (RN-557)
 
+<a id="rn-557"></a>
+
 ### RN-557 — Mudar o PRÓPRIO papel é recusado com 403 nas duas rotas de associação, nos dois sentidos {#rn-557}
 
 > **Estendida pela [RN-615](../api.md#rn-615) (ADR 0173):** a rota de remoção de membro de
@@ -550,6 +558,8 @@ não tem chamador em `apps/web` — medido; a única ocorrência é o tipo gerad
 
 ## A chave de dispositivo ganha tela, e a tela diz o alcance de revogar (RN-561)
 
+<a id="rn-570"></a>
+
 ### RN-570 — O instalador sobe a instalação só com arquivos que a Release assinou, conferidos antes de perguntar ou gravar qualquer coisa {#rn-570}
 
 A [RN-549](../ci.md#rn-549) mediu, na primeira vez que o instalador rodou numa máquina
@@ -630,6 +640,8 @@ profile ligado. Coberto por `scripts/dev/prova-de-restauracao-env.spec.ts`.
 
 ## O broker de container na instalação, com consentimento (RN-575)
 
+<a id="rn-575"></a>
+
 ### RN-575 — O instalador só liga o broker de container com um "s" digitado, mede o grupo do socket de dentro de um container, e grava as quatro linhas juntas ou nenhuma {#rn-575}
 
 Numa instalação por Release, projeto `container` ou `mounted` nunca executava:
@@ -699,6 +711,8 @@ ali não é oferecido por outro caminho.
 
 ## O instalador oferece os modelos locais, e não confunde o dev com uma instalação (RN-691, RN-692)
 
+<a id="rn-691"></a>
+
 ### RN-691 — O `install.sh` PERGUNTA se liga os modelos locais (profile `llm`), mede a porta do Ollama antes de gravar, e compõe UMA linha de `COMPOSE_PROFILES` {#rn-691}
 
 Medido numa instalação real da v7.0.0 (AT-351): toda regra de negócio gravava
@@ -734,6 +748,8 @@ a ponta.
   está na lista do driver de TTY, na ordem)
 - **Origem:** AT-351
 
+<a id="rn-692"></a>
+
 ### RN-692 — Só o projeto compose `brabo` é instalação anterior, e a migração oferece reinstalar DO ZERO depois do backup provado {#rn-692}
 
 `detectar_por_sinais` casava `"Name":"brabo[^"]*"`, e o compose de DEV
@@ -760,6 +776,8 @@ Junto, o fechamento deixa de dizer que parear uma pasta pela tela do projeto
 - **Origem:** AT-358
 
 ## A migração do instalador traz a instalação anterior inteira de volta (RN-998)
+
+<a id="rn-998"></a>
 
 ### RN-998 — A migração restaura o banco num banco vazio, mantém a chave mestra, é retomável e entende a linha de versões {#rn-998}
 

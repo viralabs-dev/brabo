@@ -87,6 +87,7 @@ describe('partir + conferir', () => {
     expect(r.partes[1].texto).toContain("title: 'Regras — X — parte 2 (desde RN-002)'");
     expect(r.partes[1].texto).toContain('id: rn-api-parte-02');
     expect(r.partes[0].texto).not.toContain('sidebar_position');
+    expect(r.partes[1].texto).toContain('<a id="rn-002"></a>\n\n### RN-002');
   });
 
   it('link da RN movida aponta a parte nova; o relativo ganha um nível', () => {
@@ -101,6 +102,7 @@ describe('partir + conferir', () => {
     expect(conferir({ ...ok, indice: r.indice.replace('<a id="rn-003"></a>[003](api/parte-02.md#rn-003)', '') }).length).toBeGreaterThan(0);
     expect(conferir({ ...ok, indice: r.indice.replace('parte-02.md#rn-003', 'parte-01.md#rn-003') }).join()).toMatch(/rn-003/);
     expect(conferir({ ...ok, partes: [{ ...r.partes[0] }, { ...r.partes[1], texto: r.partes[1].texto.replace('{#rn-003}', '') }] }).length).toBeGreaterThan(0);
+    expect(conferir({ ...ok, partes: [r.partes[0], { ...r.partes[1], texto: r.partes[1].texto.replace('<a id="rn-003"></a>\n\n', '') }] }).join()).toMatch(/rn-003 sem o <a id>/);
     expect(conferir({ ...ok, limite: 10 * 1024 }).join()).toMatch(/acima de/);
   });
 });

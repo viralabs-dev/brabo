@@ -11,6 +11,8 @@ keywords: [business rules, product]
 
 ## The device key can now belong to the MACHINE (RN-543, PHASE 30)
 
+<a id="rn-543"></a>
+
 ### RN-543 — A null `runner_device_keys.project_id` is the MACHINE key: it holds for the OWNER's projects, resolved against the requested project {#rn-543}
 
 The local agent's identity was per PROJECT. A machine with three projects in
@@ -122,6 +124,8 @@ exists to kill.
   [the phase's scope](../../explanation/fase-30-runner-por-maquina.md)
 
 ## An installation's first account is born in the terminal (RN-546)
+
+<a id="rn-546"></a>
 
 ### RN-546 — An internal route creates the FIRST account, already verified, and refuses when any user exists {#rn-546}
 
@@ -252,6 +256,8 @@ declared default); LLM credential (it belongs to whoever is going to spend,
   on [0154](../../adr/0154-chave-de-dispositivo-de-maquina.md)
 
 ## `install.sh` closes the installation (RN-547, PHASE 30)
+
+<a id="rn-547"></a>
 
 ### RN-547 — The installer creates the first account, registers this machine's key and brings up the agent as a service — and what fails in the middle is REPORTED, never undone nor swallowed {#rn-547}
 
@@ -413,6 +419,8 @@ existed, before any write.
 
 ## The self-movement ceiling on the WORKSPACE upsert, and the self-promotion that closes (RN-557)
 
+<a id="rn-557"></a>
+
 ### RN-557 — Changing one's OWN role is refused with 403 on both membership routes, in both directions {#rn-557}
 
 > **Extended by [RN-615](../api.md#rn-615) (ADR 0173):** the workspace member removal route
@@ -551,6 +559,8 @@ has no caller in `apps/web` — measured; the only occurrence is the generated t
 
 ## The device key gets a screen, and the screen states the reach of revoking (RN-561)
 
+<a id="rn-570"></a>
+
 ### RN-570 — The installer brings up the installation only with files the Release signed, checked before asking or writing anything {#rn-570}
 
 [RN-549](../ci.md#rn-549) measured, the first time the installer ran on a clean
@@ -631,6 +641,8 @@ profile on. Covered by `scripts/dev/prova-de-restauracao-env.spec.ts`.
 
 ## The container broker in the installation, with consent (RN-575)
 
+<a id="rn-575"></a>
+
 ### RN-575 — The installer only turns on the container broker with a typed "s", measures the socket's group from inside a container, and writes the four lines together or none {#rn-575}
 
 In an installation by Release, a `container` or `mounted` project never executed:
@@ -700,6 +712,8 @@ there is not offered by another path.
 
 ## The installer offers the local models, and does not mistake dev for an installation (RN-691, RN-692)
 
+<a id="rn-691"></a>
+
 ### RN-691 — `install.sh` ASKS whether to switch on the local models (profile `llm`), measures the Ollama port before writing, and composes ONE `COMPOSE_PROFILES` line {#rn-691}
 
 Measured in a real installation of v7.0.0 (AT-351): every business rule recorded
@@ -735,6 +749,8 @@ to end.
   is in the TTY driver's list, in order)
 - **Origin:** AT-351
 
+<a id="rn-692"></a>
+
 ### RN-692 — Only the `brabo` compose project is a previous installation, and migration offers reinstalling FROM SCRATCH after the proven backup {#rn-692}
 
 `detectar_por_sinais` matched `"Name":"brabo[^"]*"`, and the DEV compose
@@ -761,6 +777,8 @@ Along with it, the wrap-up stops saying that pairing a folder through the projec
 - **Origin:** AT-358
 
 ## The installer's migration brings the whole previous installation back (RN-998)
+
+<a id="rn-998"></a>
 
 ### RN-998 — The migration restores the database into an empty database, keeps the master key, is resumable and understands the line of versions {#rn-998}
 

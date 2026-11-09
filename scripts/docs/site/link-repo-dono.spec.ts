@@ -33,3 +33,12 @@ describe('URL do repo dono volta a ser link interno (AT-868, ADR 0288)', () => {
     expect(raizDeUrl(`${base}/brabo-nada/blob/dev/docs/a.md`)).toBeNull();
   });
 });
+
+describe('âncora do GitHub antes da RN (AT-871)', () => {
+  it('o <a id> antes do título de mesmo id não duplica o id nem deixa <p> vazio', async () => {
+    const regra = pag('business-rules/api/parte-01', 'docs', 'business-rules/api/parte-01.md', '<a id="rn-001"></a>\n\n### RN-001 — x {#rn-001}\n\ncorpo');
+    const { html } = (await criarRenderizador({ paginas: [regra] }))(regra);
+    expect(html.match(/id="rn-001"/g)).toHaveLength(1);
+    expect(html).not.toMatch(/<p>\s*<\/p>/);
+  });
+});

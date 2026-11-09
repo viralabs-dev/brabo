@@ -11,6 +11,8 @@ keywords: [regras de negócio, produto]
 
 ## 设备密钥可以属于「机器」（RN-543，FASE 30）
 
+<a id="rn-543"></a>
+
 ### RN-543 — `runner_device_keys.project_id` 为空即「机器」密钥：对其「所有者」的项目有效，针对所请求的项目解析 {#rn-543}
 
 本地代理的身份原本是按「项目」的。一台有三个 `runner` 模式项目的机器有三把密钥、三个带 `brabo-runner-device-key.jwk.json` 的文件夹和三个服务 unit——人要把同一个浏览器流程（[RN-464](../api.md#rn-464)..[466](../runner.md#rn-466)，[RN-475](../web.md#rn-475)）走三遍，来描述**一台**机器。这是 [ADR 0154](../../adr/0154-chave-de-dispositivo-de-maquina.md) 测量的五个耦合中的第 4 项；第 1、2、3 项（主题、socket id、票据）描述的是一条**连接**，N 条连接逐字节满足它们，所以**这里 engine 中没有任何变化**。
@@ -51,6 +53,8 @@ todos os projetos daquela máquina"*），而且它**无需触碰 engine** 就�
   [阶段的范围划定](../../explanation/fase-30-runner-por-maquina.md)
 
 ## 安装的第一个账户在终端中诞生（RN-546）
+
+<a id="rn-546"></a>
 
 ### RN-546 — 内部路由创建「第一个」账户，已验证，并在存在任何用户时拒绝 {#rn-546}
 
@@ -104,6 +108,8 @@ todos os projetos daquela máquina"*），而且它**无需触碰 engine** 就�
 
 ## `install.sh` 完成安装（RN-547，FASE 30）
 
+<a id="rn-547"></a>
+
 ### RN-547 — 安装程序创建第一个账户、登记本机的密钥并把代理作为服务启动——中途失败的东西会被「报告」，绝不撤销，也绝不吞掉 {#rn-547}
 
 [FASE 30](../../explanation/fase-30-runner-por-maquina.md) 的第 6 次会话，由 [ADR 0155](../../adr/0155-a-primeira-conta-nasce-no-terminal.md) 决定。这次会话会同时触及三个 workspace，因此被**分成三次**：代理和 api 的两块已经关闭（[RN-546](#rn-546)、[RN-551](../runner.md#rn-551)、[RN-552](../api.md#rn-552)，基于 [RN-545](../runner.md#rn-545) 的 unit），这里剩下的是作为**编排者、仅此而已**的 `install.sh`——`apps/` 中没有改动任何一行，也没有诞生任何路由。
@@ -149,6 +155,8 @@ INSTALA NADA"*。已更正，静默截断它的固定行区间改为「直到第
   [阶段的范围划定](../../explanation/fase-30-runner-por-maquina.md)
 
 ## WORKSPACE upsert 中的自我变动上限，以及被关闭的自我提升（RN-557）
+
+<a id="rn-557"></a>
 
 ### RN-557 — 在两个关联路由中、两个方向上改变「自己」的角色都以 403 被拒绝 {#rn-557}
 
@@ -212,6 +220,8 @@ cláusula, não tem número para envelhecer"*。计数会增加一次可能与�
 
 ## 设备密钥获得界面，界面说明吊销的范围（RN-561）
 
+<a id="rn-570"></a>
+
 ### RN-570 — 安装程序只用 Release 签过名的文件来启动安装，并在询问或写入任何东西之前核对它们 {#rn-570}
 
 [RN-549](../ci.md#rn-549) 在安装程序第一次于干净机器上运行时测得，已发布的 `install.sh` **无法独自启动任何东西**：它调用 `docker compose -f docker/docker-compose.install.yml`，这是相对于其运行目录的「相对」路径，而这个文件不是 Release 的资产，不进入已签名的 `checksums.txt`，也不在任何地方被下载。按 runbook 的一行命令操作的人，会在脚本写入带密钥的 `.env` 「之后」死于 *"no such file or directory"*。维护者于 2026-09-13 决定了出路——签名的资产，而不是克隆（[ADR 0160](../../adr/0160-o-compose-do-instalador-viaja-assinado.md)）。
@@ -240,6 +250,8 @@ cláusula, não tem número para envelhecer"*。计数会增加一次可能与�
 - **来源：** AT-026——AT-008 的发现（RN-549），由维护者于 2026-09-13 决定
 
 ## 安装中的容器 broker，经同意开启（RN-575）
+
+<a id="rn-575"></a>
 
 ### RN-575 — 安装程序只在键入「s」后才开启容器 broker，从容器内部测量 socket 的组，四行要么一起写入要么都不写 {#rn-575}
 
@@ -272,6 +284,8 @@ cláusula, não tem número para envelhecer"*。计数会增加一次可能与�
 
 ## 安装程序提供本地模型，并且不把 dev 环境误认为一次安装（RN-691，RN-692）
 
+<a id="rn-691"></a>
+
 ### RN-691 — `install.sh`「询问」是否开启本地模型（profile `llm`），在写入前测量 Ollama 的端口，并组成「一行」`COMPOSE_PROFILES` {#rn-691}
 
 在 v7.0.0 的一次真实安装中测得（AT-351）：每条业务规则都写入 `backlog.semantic_duplicate_check_skipped`，带 `getaddrinfo EAI_AGAIN ollama`，因为通过 Release 的安装启动时没有 profile `llm`，而安装程序从不询问；手动开启它会在 11434 上遇到 `address already in use`，那是宿主机上「原生」Ollama 的端口。
@@ -285,6 +299,8 @@ cláusula, não tem número para envelhecer"*。计数会增加一次可能与�
   （`escrever_env_do_llm`），`:821`（`escrever_env_dos_profiles`）
 - **测试：** `scripts/dev/install-llm.spec.ts`（没有终端时保持关闭并说明成本；11434 被占用时选择下一个；整个范围被占用时失败——失败情形；一个正在监听的服务器被测为已占用；broker 和模型在同一行）；`scripts/dev/install-e2e.spec.ts`（新问题的回答在 TTY 驱动的列表中，顺序正确）
 - **来源：** AT-351
+
+<a id="rn-692"></a>
 
 ### RN-692 — 只有 compose 项目 `brabo` 才是之前的安装，迁移在备份得到证明后提供「从零」重新安装 {#rn-692}
 
@@ -300,6 +316,8 @@ cláusula, não tem número para envelhecer"*。计数会增加一次可能与�
 - **来源：** AT-358
 
 ## 安装程序的迁移把之前的整个安装带回来（RN-998）
+
+<a id="rn-998"></a>
 
 ### RN-998 — 迁移把数据库恢复到空库中，保留主密钥，可恢复，并理解版本线 {#rn-998}
 

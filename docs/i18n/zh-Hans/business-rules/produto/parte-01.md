@@ -11,6 +11,8 @@ keywords: [regras de negócio, produto]
 
 ## Backlog
 
+<a id="rn-012"></a>
+
 ### RN-012 — 从 `module_map` 中移除的模块会使用户故事降级 {#rn-012}
 
 关联到一个已不存在的模块的用户故事会回到 `draft`，并产生一个
@@ -21,6 +23,8 @@ keywords: [regras de negócio, produto]
 - **测试：** `test/domain/architecture/module-resolution.spec.ts`
 
 ## 项目面板
+
+<a id="rn-096"></a>
 
 ### RN-096 — 每个决定都用葡萄牙语说明会发生什么；原始 payload 生来折叠 {#rn-096}
 
@@ -68,6 +72,8 @@ projeto."）。payload 来自 engine 和十个不同的用例，没有一个承�
 之前 backlog 中的一项。事先调查（`docs/explanation/backlog.md`）确认不存在任何活跃度聚合——无论按项目还是按工作区：存在的只有**历史**在场
 （`RosterFacts`——“曾在会话中出现过”），而**真正**的实时状态只在客户端，从事件日志推导，并且只在项目**打开**时才有（`deriveAgentRoster`）。仪表盘卡片过去强制使用
 `() => 'ocioso'`，因为它不绘制任何状态——这就是本 RN 替换的硬编码。
+
+<a id="rn-409"></a>
 
 ### RN-409 — “N 在线”以**同一个**标准汇总两种机制：非空闲、非卡死 {#rn-409}
 
@@ -117,6 +123,8 @@ projects-summary`）是此刻**在线**的智能体数量——正在工作或�
 
 ## Runner 的文件夹浏览器变成三列，`runner` 项目的创建不再等待最后一步（RN-436/436）
 
+<a id="rn-451"></a>
+
 ### RN-451 — 独立二进制的冒烟测试运行真实的**子进程**，从不模拟 {#rn-451}
 
 `smoke-dist.mjs`（ADR 0106）已经应用于发布到 npm 的
@@ -135,6 +143,8 @@ projects-summary`）是此刻**在线**的智能体数量——正在工作或�
 ---
 
 ## 本地 runner 的终端永远卡在“Abrindo terminal...”（RN-433）
+
+<a id="rn-453"></a>
 
 ### RN-453 — 本地 runner 的相对 `--dir` 针对 `INIT_CWD` 解析，而不是针对 pnpm 重设的 cwd {#rn-453}
 
@@ -156,6 +166,8 @@ projects-summary`）是此刻**在线**的智能体数量——正在工作或�
 
 ## RAG 检索留下痕迹，痕迹冻结权重（RN-479..481）
 
+<a id="rn-481"></a>
+
 ### RN-481 — `rag.search`/`rag.feedback` 是时间线的**叙述**，只在有会话时存在 {#rn-481}
 
 这两个事件**只在智能体路径中**进入事件日志——标签页中的检索属于项目，没有可以叙述的会话。这是声明的不对称，不是缺口：**表是测量的来源，事件是叙述**。按事件日志测量会丢失一半的检索，而且恰好是有人工判断的那一半。
@@ -176,6 +188,8 @@ projects-summary`）是此刻**在线**的智能体数量——正在工作或�
   （投票的同一对用例）
 - **ADR：** [0129](../../adr/0129-telemetria-de-busca-do-rag-como-tabela.md)
 - **来源：** 产品负责人的计划，第 2 部分 / 第 1 步
+
+<a id="rn-485"></a>
 
 ### RN-485 — 容器 broker 不接受规格：它接收一个项目并**组装** {#rn-485}
 
@@ -210,6 +224,8 @@ broker（`apps/broker`）是产品中唯一能访问服务器上 Docker 守护�
   `apps/api/test/infrastructure/http-clients/container-broker.client.spec.ts`
   （`start` 发送空请求体）
 - **ADR：** [0130](../../adr/0130-broker-de-container.md)
+
+<a id="rn-497"></a>
 
 ### RN-497 — `brabo-runner` 在**用户的机器上**、用**用户的** Docker 启动项目的容器 {#rn-497}
 
@@ -267,6 +283,8 @@ containers/{start,stop,remove}`）是唯一的调用方；engine 一侧没有其
 
 ## FASE 29 — 一行安装：为所发布的东西签名
 
+<a id="rn-525"></a>
+
 ### RN-525 — 二进制代理对照同一发布的清单核对哈希，无法核对时拒绝，并「说明」这是完整性而不是来源 {#rn-525}
 
 `GET /runner-releases/binary` 是 `@Public()`，没有认证，是通过浏览器配置流程的第 4 步（[RN-473](../web.md#rn-473)，[ADR 0118](../../adr/0118-configuracao-automatica-do-runner-pelo-navegador.md)）。直到 FASE 29 的第 3 次会话，它只校验「输入」（`platform` 对照封闭的允许列表），并把 GitHub 的字节直接传给客户端，**什么都不校验**——它就是 [ADR 0149](../../adr/0149-assinatura-dos-artefatos-publicados.md) 点名、[RN-524](../ci.md#rn-524) 留待处理的那个消费者。
@@ -305,6 +323,8 @@ containers/{start,stop,remove}`）是唯一的调用方；engine 一侧没有其
 | 在已有裸仓库的卷上运行 `brabo-restore-git --restaurar` | 拒绝：叠加两种仓库状态不会报任何错误，只会在某次历史错误的 `fetch` 中显现。真想这么做的人用 `RESTORE_GIT_FORCE=1`（RN-528） |
 | 无法写入卷时运行 `brabo-restore-git --restaurar`（uid 70 × api 的所有者） | 在 `tar` 「之前」拒绝，点名 `--user 0:0`——在解压途中才发现会让卷只完成一半。而以 root 解压的内容会交还给「目录」的所有者（RN-528） |
 
+<a id="rn-526"></a>
+
 ### RN-526 — 安装程序校验自身的来源，在提问之前「点名」它发现的东西，绝不删除用户文件夹 {#rn-526}
 
 `install.sh`（仓库根目录，版本化并作为 Release 的资产发布）是唯一的安装入口。四项保证，每一项都针对一个具体缺陷：
@@ -327,6 +347,8 @@ containers/{start,stop,remove}`）是唯一的调用方；engine 一侧没有其
 `scripts/dev/install-invocacao.spec.ts` 以错误的形式运行脚本（`bash -c`、`/bin/bash -c`、管道、`dash -c`、`dash install.sh`），要求在任何下载之前给出带正确形式的点名拒绝、第三种哈希拒绝，以及 runbook、bootstrap 和文件头教的是「同一种」形式。
 **来源：** FASE 29，第 3 次会话（[ADR 0150](../../adr/0150-instalador-de-uma-linha.md)）。在本次会话中脚本**什么都不安装**——启动 compose、生成密钥和安装 runner 是第 4 和第 7 次会话，它在输出中**说明这一点**，而不是悄无声息地结束。
 
+<a id="rn-531"></a>
+
 ### RN-531 — 安装程序为两边同意「一个」基目录，并安装已可执行的本地代理 {#rn-531}
 
 **一个基目录，同意一次。** `install.sh` 询问项目将住在哪里，并把同一路径写入「两个」地方：`.env` 中的 `BRABO_PROJECTS_BASE`（服务器，[ADR 0141](../../adr/0141-base-unica-dos-projetos-montados.md)）以及 `runner.json` 的 `base` 字段（本地代理，[RN-529](../runner.md#rn-529)）。`mounted` 与 `runner` 之间的差别是**谁来执行**，而不是代码住在哪里——同一文件夹的两个不同基目录，就是 ADR 0141 明文拒绝的命名空间冲突。
@@ -343,6 +365,8 @@ containers/{start,stop,remove}`）是唯一的调用方；engine 一侧没有其
 **测试：** `scripts/dev/install.spec.ts`——存在 `install -m 0755`，不存在面向用户的 `chmod` 指令，以及点名的对照已签名清单的核对。
 **来源：** FASE 29，第 7 次会话（[ADR 0150](../../adr/0150-instalador-de-uma-linha.md)，
 [ADR 0151](../../adr/0151-base-consentida-no-runner.md)）。
+
+<a id="rn-534"></a>
 
 ### RN-534 — 安装程序进入已签名的清单，并在一台干净的机器上得到演练 {#rn-534}
 
@@ -369,6 +393,8 @@ do E2E é um TTY para o INSTALADOR"* 块）在 PR 中演练 PTY 驱动。
 ---
 
 ## 代理的产物变成文件，放在 `docs/` 中（RN-523）
+
+<a id="rn-542"></a>
 
 ### RN-542 — 安装程序比较已安装的版本与将要安装的版本，提供的选项按关系而定 {#rn-542}
 

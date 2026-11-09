@@ -199,6 +199,15 @@ function regraDeTitulos(state) {
   }
 }
 
+/** `<a id="X"></a>` sozinho num parágrafo logo antes do título de id X existe só para o GitHub (AT-871): sai do HTML. */
+function regraDeAncoraDoGithub(state) {
+  const t = state.tokens;
+  for (let i = t.length - 4; i >= 0; i--) {
+    const m = t[i].type === 'paragraph_open' && /^<a id="([^"]+)"><\/a>$/.exec(t[i + 1].content.trim());
+    if (m && t[i + 2].type === 'paragraph_close' && t[i + 3].type === 'heading_open' && t[i + 3].attrGet('id') === m[1]) t.splice(i, 3);
+  }
+}
+
 function resolverLink(href, pagina, porRelativo, repo) {
   // O inverso do `urlDeEdicao` (AT-868): a URL do GitHub do repo dono, de uma raiz conhecida, volta a ser link interno.
   // Sem a página, vira o relativo que não existe, e o `links.mjs` reprova (a URL externa escaparia dele).
@@ -231,6 +240,7 @@ export async function criarRenderizador({ paginas, repo = 'viralabs-dev/brabo', 
   md.block.ruler.before('fence', 'admonicao', regraDeComponente, { alt: ['paragraph', 'reference', 'blockquote', 'list'] });
   md.core.ruler.push('titulos_brabo', regraDeTitulos);
   md.core.ruler.push('figuras_brabo', regraDeFiguras);
+  md.core.ruler.push('ancora_github_brabo', regraDeAncoraDoGithub);
   md.renderer.rules.comp_open = md.renderer.rules.comp_close = (t, i) => t[i].meta.html;
   md.renderer.rules.table_open = () => '<div class="tabela-rolavel"><table>\n';
   md.renderer.rules.table_close = () => '</table></div>\n';

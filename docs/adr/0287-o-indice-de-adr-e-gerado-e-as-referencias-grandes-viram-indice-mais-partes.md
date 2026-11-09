@@ -38,3 +38,4 @@
 - Quem cita RN deve citar a parte (`business-rules/<x>/parte-NN.md#rn-NNN`); o link antigo segue valendo pela grade e pelo redirecionamento.
 - O `ru` e o `zh-Hans` pesam mais por byte; é por isso que o teto se mede em todo locale.
 - Custo: um gerador a mais para manter (`indice-de-adr.mjs`, `partir-rn.mjs`) e a grade congelada, que não pode perder linha.
+- Cada RN da parte leva `<a id="rn-NNN"></a>` antes do título (AT-871), porque o GitHub não gera id de `{#rn-NNN}` e o link `parte-NN.md#rn-NNN` abria a parte no topo. O `render.mjs` tira essa âncora do HTML do site (o título já tem o id); `ancorar-rn.mjs` migra as partes existentes.
