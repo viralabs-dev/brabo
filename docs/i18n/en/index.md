@@ -14,7 +14,7 @@ traducao_de: 3004ff7f6b56efe40bf264e493455011cb42d57d
 
 A team of AI agents takes your application from brief to deploy; the merge is always yours.
 
-![Brabo session screen: the Criativo returns the open questions in the chat](../../../docs/assets/capturas/perguntas-abertas-claro.png)
+![Brabo session screen: the Criativo returns the open questions in the chat](../../../docs/assets/capturas/perguntas-abertas-claro.png) ![Brabo session screen: the Criativo returns the open questions in the chat](../../../docs/assets/capturas/perguntas-abertas-escuro.png)
 :::
 
 :::cartoes

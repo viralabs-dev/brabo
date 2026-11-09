@@ -67,15 +67,30 @@
 
 ### Архитектор решает письменно
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/arquitetura-escuro.png" />
+  <img src="docs/assets/capturas/arquitetura-claro.png" alt="Вкладка «Архитектура» проекта: карта модулей, диаграмма C4 и предложенный ADR в ожидании вашего подтверждения" />
+</picture>
+
 Архитектурное решение рождается как pull request, а архитектура идёт дальше только после вашего
 подтверждения.
 
 ### Разработчики работают внутри контейнера
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/dev-agent-escuro.png" />
+  <img src="docs/assets/capturas/dev-agent-claro.png" alt="Лента сессии выполнения: dev-агент берёт задачу, делает commit, открывает pull request и доходит до гейта" />
+</picture>
+
 Каждая команда проходит политику проекта, а то, что делает dev-агент,
 остаётся в ленте сессии.
 
 ### Merge всегда за вами
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/merges-no-chat-escuro.png" />
+  <img src="docs/assets/capturas/merges-no-chat-claro.png" alt="Очередь pull request, готовых к merge, в чате Criativo, с кнопками merge и «Одобрить»" />
+</picture>
 
 Pull request, прошедшие гейты, приходят в чат, и один клик на «Одобрить»
 подтверждает merge.

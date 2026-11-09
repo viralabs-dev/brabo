@@ -66,15 +66,30 @@ business rules.
 
 ### The Architect decides in writing
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/arquitetura-escuro.png" />
+  <img src="docs/assets/capturas/arquitetura-claro.png" alt="The project's Architecture tab: module map, C4 diagram and the proposed ADR, waiting for your confirmation" />
+</picture>
+
 The architecture decision is born as a pull request, and the architecture only moves on with
 your confirmation.
 
 ### The devs work inside the container
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/dev-agent-escuro.png" />
+  <img src="docs/assets/capturas/dev-agent-claro.png" alt="The execution session thread: the dev agent picks up the task, commits, opens the pull request and reaches the gate" />
+</picture>
+
 Every command goes through the project's policy, and what the dev agent does
 stays in the session thread.
 
 ### The merge is always yours
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/merges-no-chat-escuro.png" />
+  <img src="docs/assets/capturas/merges-no-chat-claro.png" alt="The queue of pull requests ready to merge in the Creative's chat, with Merge and Approve" />
+</picture>
 
 Pull requests that pass the gates arrive in the chat, and one click on Approve
 confirms.

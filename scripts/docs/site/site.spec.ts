@@ -287,5 +287,15 @@ describe('página inicial (AT-856)', () => {
     expect(r.html).toContain('<h1 id="brabo">Brabo</h1>');
     expect(r.temH1).toBe(true);
   });
+
+  it('hero com as duas capturas no mesmo parágrafo; o CSS esconde uma conforme o data-theme', async () => {
+    const pagina = { locale: 'pt-BR', url: 'index.html', relativo: 'index.md', slug: '', corpo: ':::hero\n# Brabo\n\nfrase\n\n![a](x-claro.png) ![a](x-escuro.png)\n:::' };
+    const r = (await criarRenderizador({ paginas: [pagina as never], raiz: raizCom(tabela('x')) }))(pagina as never);
+    expect(r.html).toMatch(/<p><img[^>]*x-claro\.png[^>]*>\s*<img[^>]*x-escuro\.png[^>]*><\/p>/);
+    const css = readFileSync(path.join(__dirname, 'assets/site.css'), 'utf8');
+    expect(css).toContain(".hero img[src*='-claro.']");
+    expect(css).toContain("[data-theme='dark'] .hero img[src*='-claro.'] { display: none; }");
+    expect(css).toContain("[data-theme='light'] .hero img[src*='-escuro.'] { display: none; }");
+  });
 });
 

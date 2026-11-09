@@ -5,10 +5,10 @@ description: Um projeto real percorrido de ponta a ponta no Brabo — criar, esc
 
 # Do zero a um entregável
 
-Esta página acompanha um projeto de ponta a ponta, de um workspace vazio até um entregável rodando: um encurtador de links (Node 22 + SQLite), com o time inteiro no mesmo modelo. As telas dos passos 1 a 3 são capturas da interface atual, geradas pelo `brabo-qa` a cada versão e com os dados de teste ocultados.
+Esta página acompanha um projeto de ponta a ponta, de um workspace vazio até um entregável rodando: um encurtador de links (Node 22 + SQLite), com o time inteiro no mesmo modelo. As telas dos passos 1 a 6 são capturas da interface atual, geradas pelo `brabo-qa` a cada versão e com os dados de teste ocultados.
 
 :::historico 2026-10-14
-A execução que serve de exemplo foi gravada ao vivo, e estes números são dela. O projeto, `viralabs-app-2026-10-14b`, rodou com **Claude Haiku 5.5** e custou **US$ 1,07**. Da ideia à execução foram **13 minutos**, e até o último merge cerca de **57 minutos** de interação. Saíram **8 de 8 tarefas**, mais o ADR e a pull request de infraestrutura, e um entregável cuja suíte passa **102/102** num clone limpo. As telas dos passos 4 a 6 são dessa gravação, anterior à migração para o shadcn.
+A execução que serve de exemplo foi gravada ao vivo, e estes números são dela. O projeto, `viralabs-app-2026-10-14b`, rodou com **Claude Haiku 5.5** e custou **US$ 1,07**. Da ideia à execução foram **13 minutos**, e até o último merge cerca de **57 minutos** de interação. Saíram **8 de 8 tarefas**, mais o ADR e a pull request de infraestrutura, e um entregável cuja suíte passa **102/102** num clone limpo. As telas dos passos abaixo são da interface atual, não dessa gravação.
 :::
 
 :::dica[Tudo pelo chat do Criativo]
@@ -28,7 +28,7 @@ O caminho, em seis passos:
 6. **Mergear pelo chat** cada pull request que passar nos gates.
 :::
 
-Cada passo abaixo diz o que você faz e o que os agentes devolvem. As telas dos passos 1 a 3 são as da versão atual; as dos passos 4 a 6 são históricas (ver o quadro acima).
+Cada passo abaixo diz o que você faz e o que os agentes devolvem. As telas são as da versão atual; os números da execução de 14/10 estão no quadro acima.
 
 ## 1. Criar o projeto
 
@@ -73,11 +73,7 @@ automaticamente. O Arquiteto propõe o ADR como pull request
 com a arquitetura definida, pede que você a confirme:
 **"Confirmar arquitetura pronta"** é o que traz a Infra.
 
-:::historico 2026-10-14
-Tela da gravação de 14/10, antes da migração para o shadcn.
-
-![PO, Arquiteto e o ADR](../assets/historico/fluxo-do-zero/passo-04-po-arquiteto-adr.png "PO, Arquiteto e o ADR (14/10, antes do shadcn)")
-:::
+![PO, Arquiteto e o ADR](../assets/capturas/adr-no-chat-claro.png "Chat do Criativo com o ADR proposto pelo Arquiteto, à espera da sua confirmação")
 
 ## 5. Infra, o plano e o modo automático
 
@@ -89,11 +85,7 @@ clique, dizendo o que ele não libera: merges em branch protegida continuam
 seus. Daí em diante o dev agent trabalha dentro do container (`/work`), e você
 pode ler no chat cada comando que ele rodou e a saída.
 
-:::historico 2026-10-14
-Tela da gravação de 14/10, antes da migração para o shadcn.
-
-![Infra, o plano e o modo automático](../assets/historico/fluxo-do-zero/passo-05-infra-plano-modo-automatico.png "Infra, plano e modo automático (14/10, antes do shadcn)")
-:::
+![Infra, o plano e o modo automático](../assets/capturas/plano-e-modo-automatico-claro.png "Plano de execução do Dev Lead com a oferta do modo automático para o time")
 
 ## 6. Merges pelo chat
 
@@ -105,11 +97,7 @@ merge"** no topo do chat do Criativo: **Mergear** propõe o merge e
 requests (#4 a #10) foram mergeadas em cerca de dois minutos, sem recarregar a
 página.
 
-:::historico 2026-10-14
-Tela da gravação de 14/10, antes da migração para o shadcn.
-
-![Merges pelo chat](../assets/historico/fluxo-do-zero/passo-06-merges-pelo-chat.png "Merges pelo chat (14/10, antes do shadcn)")
-:::
+![Merges pelo chat](../assets/capturas/merges-no-chat-claro.png "Fila de pull requests prontas para merge no chat do Criativo")
 
 ## O entregável
 
