@@ -70,5 +70,5 @@ Brabo 对“完成”的定义包括：
 
 ## 延伸阅读
 
-- [文档流程](https://github.com/viralabs-dev/brabo/blob/dev/docs/documentation-workflow.md)，含完整机制。
+- [文档流程](https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/documentation-workflow.md)，含完整机制。
 - [如何贡献](https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md)，“文档是 PR 的一部分”一节。

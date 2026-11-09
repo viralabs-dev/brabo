@@ -70,5 +70,5 @@ ADR нужен не каждому изменению. Он нужен тому,
 
 ## Подробнее
 
-- [Процесс документирования](https://github.com/viralabs-dev/brabo/blob/dev/docs/documentation-workflow.md): весь механизм.
+- [Процесс документирования](https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/documentation-workflow.md): весь механизм.
 - [Как внести вклад](https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md), раздел «Документация входит в PR».

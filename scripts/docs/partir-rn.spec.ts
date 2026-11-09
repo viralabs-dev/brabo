@@ -66,12 +66,12 @@ describe('links', () => {
 
   it('só reescreve fora de cerca e de código em linha', () => {
     const t = 'veja [a](../a.md) e `[b](../b.md)`\n```\n[c](../c.md)\n```\n[d]: ../d.md\n![i](../i.png "t")';
-    expect(reescreverLinks(t, ctx)).toBe('veja [a](../../a.md) e `[b](../b.md)`\n```\n[c](../c.md)\n```\n[d]: ../../d.md\n![i](../../i.png "t")');
+    expect(reescreverLinks(t, (h) => reescreverHref(h, ctx))).toBe('veja [a](../../a.md) e `[b](../b.md)`\n```\n[c](../c.md)\n```\n[d]: ../../d.md\n![i](../../i.png "t")');
   });
 
   it('código em linha que atravessa linhas não troca a paridade das crases (link depois dele é reescrito)', () => {
     const t = 'abre `x [a](../a.md)\n--id` e ([b](../b.md)) `[c](../c.md)`\n\n[d](../d.md)';
-    expect(reescreverLinks(t, ctx)).toBe('abre `x [a](../a.md)\n--id` e ([b](../../b.md)) `[c](../c.md)`\n\n[d](../../d.md)');
+    expect(reescreverLinks(t, (h) => reescreverHref(h, ctx))).toBe('abre `x [a](../a.md)\n--id` e ([b](../../b.md)) `[c](../c.md)`\n\n[d](../../d.md)');
   });
 });
 
