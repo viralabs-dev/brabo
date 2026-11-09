@@ -134,11 +134,11 @@ export function reescreverHref(href, { area, parteDe, atual }) {
   return `../${caminho}${frag ? `#${frag}` : ''}`;
 }
 
-/** Reescreve os links Markdown de um trecho, fora de cercas e de código em linha. */
-export function reescreverLinks(texto, ctx) {
+/** Reescreve os links Markdown de um trecho, fora de cercas e de código em linha; `trocarHref(href)` devolve o href novo. */
+export function reescreverLinks(texto, trocarHref) {
   let cerca = null;
   let span = 0; // tamanho da crase que abriu um código em linha ainda aberto (pode atravessar linhas do parágrafo)
-  const trocar = (p) => p.replace(new RegExp(LINK.source, 'g'), (todo, a, h, fim, d, h2) => (h !== undefined ? `${a}${reescreverHref(h, ctx)}${fim}` : `${d}${reescreverHref(h2, ctx)}`));
+  const trocar = (p) => p.replace(new RegExp(LINK.source, 'g'), (todo, a, h, fim, d, h2) => (h !== undefined ? `${a}${trocarHref(h)}${fim}` : `${d}${trocarHref(h2)}`));
   return texto
     .split('\n')
     .map((l) => {
@@ -189,7 +189,7 @@ export function partir(texto, { area, locale, cortes, limite }) {
     const rotulo = `${T.parte(k + 1)} (${T.desde} ${desde})`;
     const cab = [];
     if (f.h2Anterior) cab.push(semId(f.h2Anterior));
-    const corpoParte = reescreverLinks([...cab, ...f.segs.map((s) => s.texto)].join('\n'), { area, parteDe, atual: k + 1 });
+    const corpoParte = reescreverLinks([...cab, ...f.segs.map((s) => s.texto)].join('\n'), (h) => reescreverHref(h, { area, parteDe, atual: k + 1 }));
     const novoFm = fm
       .replace(/^id:.*$/m, `id: rn-${area}-parte-${pad(k + 1)}`)
       .replace(/^title:.*$/m, `title: ${aspas(`${tituloBase} — ${rotulo}`)}`)

@@ -69,5 +69,5 @@ Doc inventada é pior que doc faltando. A marca vira pergunta no quadro, e a [at
 
 ## Para saber mais
 
-- [Fluxo de documentação](https://github.com/viralabs-dev/brabo/blob/dev/docs/documentation-workflow.md), com o mecanismo completo.
+- [Fluxo de documentação](https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/documentation-workflow.md), com o mecanismo completo.
 - [Como contribuir](https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md), seção "Documentação faz parte do PR".

@@ -24,8 +24,8 @@ import { createCssVariablesTheme, createHighlighter } from 'shiki';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { LOGO_SVG } from './layout.mjs';
-import { urlRelativa } from './paginas.mjs';
-import { urlDeEdicao } from './repo-dono.mjs';
+import { slugDe, urlDe, urlRelativa } from './paginas.mjs';
+import { raizDeUrl, urlDeEdicao } from './repo-dono.mjs';
 
 const LINGUAGENS = ['bash', 'json', 'sql', 'elixir', 'yaml', 'typescript', 'tsx', 'javascript', 'diff', 'dockerfile', 'markdown', 'html', 'css', 'toml', 'ini'];
 // Avisos: nome canônico (pt-BR) e os sinônimos em inglês que o site já aceitava.
@@ -200,6 +200,14 @@ function regraDeTitulos(state) {
 }
 
 function resolverLink(href, pagina, porRelativo, repo) {
+  // O inverso do `urlDeEdicao` (AT-868): a URL do GitHub do repo dono, de uma raiz conhecida, volta a ser link interno.
+  // Sem a página, vira o relativo que não existe, e o `links.mjs` reprova (a URL externa escaparia dele).
+  const dono = href.startsWith('https://github.com/') && raizDeUrl(href);
+  if (dono) {
+    const destino = porRelativo.get(dono.relativo);
+    const alvo = destino?.raiz === dono.raiz ? destino.url : urlDe(slugDe(dono.relativo), pagina.locale);
+    return urlRelativa(pagina.url, alvo) + (href.includes('#') ? `#${href.split('#').slice(1).join('#')}` : '');
+  }
   if (!href || /^(?:[a-z][a-z0-9+.-]*:|#|\/\/)/i.test(href)) return href;
   const [alvo, frag = ''] = href.split('#');
   const ancora = frag ? `#${frag}` : '';
