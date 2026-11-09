@@ -909,7 +909,7 @@ Pages, embora o job dele ainda se chame "Publish to GitHub Pages".
 > **Consequência prática:** o site pode estar velho mesmo com
 > `Documentação` verde. Se o `build_type` do Pages não for
 > `legacy`/`gh-pages`, o commit acontece e ninguém o serve — e nada no
-> CI fica vermelho. A conferência é `gh api repos/daneiel/brabo/pages`,
+> CI fica vermelho. A conferência é `gh api repos/viralabs-dev/brabo/pages`,
 > registrada em [Rulesets](../reference/rulesets.md).
 
 O desenho inteiro, com as alternativas descartadas, está no

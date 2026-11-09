@@ -863,7 +863,7 @@ workflow; GitHub создаёт его сам, когда источник Pages
 > **Практическое последствие:** сайт может быть старым даже при зелёной
 > `Documentação`. Если `build_type` у Pages не `legacy`/`gh-pages`, коммит
 > происходит, и никто его не отдаёт, — и ничто в CI не краснеет. Проверка —
-> `gh api repos/daneiel/brabo/pages`, записанная в
+> `gh api repos/viralabs-dev/brabo/pages`, записанная в
 > [Rulesets](../reference/rulesets.md).
 
 Весь замысел, с отвергнутыми альтернативами, — в
