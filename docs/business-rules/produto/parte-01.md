@@ -10,6 +10,8 @@ keywords: [regras de negócio, produto]
 
 ## Backlog
 
+<a id="rn-012"></a>
+
 ### RN-012 — A module removed from `module_map` demotes the story {#rn-012}
 
 A story linked to a module that ceased to exist goes back to `draft`, with
@@ -21,6 +23,8 @@ a `backlog.story_demoted` event.
 - **Test:** `test/domain/architecture/module-resolution.spec.ts`
 
 ## Painel de projetos
+
+<a id="rn-096"></a>
 
 ### RN-096 — Toda decisão diz em português o que acontece; o payload cru nasce colapsado {#rn-096}
 
@@ -114,6 +118,8 @@ ABERTO (`deriveAgentRoster`). O card do dashboard hoje forçava
 `() => 'ocioso'` porque não desenhava status nenhum — este é o hardcode que
 a RN substitui.
 
+<a id="rn-409"></a>
+
 ### RN-409 — "N online" soma dois mecanismos pela MESMA régua: não ocioso, não travado {#rn-409}
 
 `ProjectCardSummary.onlineAgentCount` (`GET /workspaces/:workspaceId/
@@ -205,6 +211,8 @@ consultas novas ficam sem número medido, só o argumento estrutural acima.
 
 ## O explorador de pasta do Runner vira três colunas, e a criação de um projeto `runner` deixa de esperar o passo final (RN-436/436)
 
+<a id="rn-451"></a>
+
 ### RN-451 — Smoke do binário standalone roda o SUBPROCESSO real, nunca mock {#rn-451}
 
 O mesmo padrão de disciplina que `smoke-dist.mjs` (ADR 0106) já aplica ao
@@ -236,6 +244,8 @@ apagaria a única coisa que o teste precisa provar.
 ---
 
 ## Terminal do runner local preso em "Abrindo terminal..." para sempre (RN-433)
+
+<a id="rn-453"></a>
 
 ### RN-453 — `--dir` relativo do runner local resolve contra `INIT_CWD`, não contra o cwd rebaseado do pnpm {#rn-453}
 
@@ -274,6 +284,8 @@ README) não muda de comportamento.
 
 ## A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)
 
+<a id="rn-481"></a>
+
 ### RN-481 — `rag.search`/`rag.feedback` são NARRAÇÃO da timeline, e só existem quando há sessão {#rn-481}
 
 Os dois eventos entram no event log **apenas no caminho do agente** — a busca
@@ -303,6 +315,8 @@ uma doc que passa mentindo é pior que uma doc que reprova.
   (o mesmo par, para o voto)
 - **ADR:** [0129](../../adr/0129-telemetria-de-busca-do-rag-como-tabela.md)
 - **Origem:** plano do dono do produto, Parte 2 / Etapa 1
+
+<a id="rn-485"></a>
 
 ### RN-485 — O broker de container não aceita especificação: ele recebe um projeto e COMPÕE {#rn-485}
 
@@ -373,6 +387,8 @@ hoje faz LEITURA. Efeito externo continua exigindo aprovação.
   `apps/api/test/infrastructure/http-clients/container-broker.client.spec.ts`
   (`start` manda corpo vazio)
 - **ADR:** [0130](../../adr/0130-broker-de-container.md)
+
+<a id="rn-497"></a>
 
 ### RN-497 — O `brabo-runner` sobe o container do projeto NA MÁQUINA DO USUÁRIO, com o Docker DELE {#rn-497}
 
@@ -472,6 +488,8 @@ mount É a raiz confirmada, ponto.
 
 ## FASE 29 — a instalação de uma linha: assinar o que se publica
 
+<a id="rn-525"></a>
+
 ### RN-525 — O proxy do binário confere o hash contra o manifesto da mesma release, recusa quando não pode conferir, e DIZ que isso é integridade e não procedência {#rn-525}
 
 `GET /runner-releases/binary` é `@Public()`, sem autenticação, e é o passo 4 do
@@ -561,6 +579,8 @@ seria um `hash_divergente` que pareceria adulteração.
 | `brabo-restore-git --restaurar` num volume que já tem bare repos | recusado: sobrepor dois estados de repositório não levanta erro nenhum e só aparece num `fetch` com história errada. `RESTORE_GIT_FORCE=1` para quem quer mesmo (RN-528) |
 | `brabo-restore-git --restaurar` sem poder escrever no volume (uid 70 × dono da api) | recusa **ANTES** do `tar`, nomeando `--user 0:0` — descobrir no meio da extração deixaria o volume pela metade. E o que é extraído como root volta para o dono do DIRETÓRIO (RN-528) |
 
+<a id="rn-526"></a>
+
 ### RN-526 — O instalador verifica a própria origem, NOMEIA o que achou antes de perguntar, e nunca apaga pasta de usuário {#rn-526}
 
 `install.sh` (raiz do repositório, versionado e publicado como asset da Release)
@@ -646,6 +666,8 @@ Nesta sessão o script **não instala nada** — subir o compose, gerar segredos
 instalar o runner são as sessões 4 e 7, e ele **diz isso** na saída em vez de
 terminar em silêncio.
 
+<a id="rn-531"></a>
+
 ### RN-531 — O instalador consente UMA base para os dois lados e instala o agente local já executável {#rn-531}
 
 **Uma base, consentida uma vez.** O `install.sh` pergunta onde os projetos vão
@@ -684,6 +706,8 @@ instrução de `chmod` dirigida ao usuário ausente, e a conferência contra o
 manifesto assinada nomeada.
 **Origem:** FASE 29, sessão 7 ([ADR 0150](../../adr/0150-instalador-de-uma-linha.md),
 [ADR 0151](../../adr/0151-base-consentida-no-runner.md)).
+
+<a id="rn-534"></a>
 
 ### RN-534 — O instalador entra no manifesto assinado, e é exercitado numa máquina limpa {#rn-534}
 
@@ -744,6 +768,8 @@ do E2E é um TTY para o INSTALADOR"*) exercita o driver de PTY em PR.
 ---
 
 ## Os artefatos dos agentes viram arquivo, em `docs/` (RN-523)
+
+<a id="rn-542"></a>
 
 ### RN-542 — O instalador compara a versão instalada com a que vai instalar, e a oferta é específica por relação {#rn-542}
 
