@@ -14,7 +14,7 @@ traducao_de: 3004ff7f6b56efe40bf264e493455011cb42d57d
 
 由 AI 智能体组成的团队带着你的应用从需求走到部署；合并始终由你决定。
 
-![Brabo 会话界面：Criativo 在聊天中返回尚未解决的问题](../../../docs/assets/readme/perguntas-no-chat.png)
+![Brabo 会话界面：Criativo 在聊天中返回尚未解决的问题](../../../docs/assets/capturas/perguntas-abertas-claro.png)
 :::
 
 :::cartoes

@@ -4,7 +4,6 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo.svg" />
-  <source media="(prefers-color-scheme: light)" srcset="docs/assets/logo.svg" />
   <img src="docs/assets/logo.svg" alt="Логотип Brabo" width="96" />
 </picture>
 
@@ -25,7 +24,10 @@
 
 [Документация](https://viralabs-dev.github.io/brabo/prd/ru/) · [С нуля до результата](https://viralabs-dev.github.io/brabo/prd/ru/tutorials/from-zero-to-deliverable) · [CHANGELOG](CHANGELOG.md) · [Безопасность](SECURITY.md) · [Участие](CONTRIBUTING.md)
 
-<img src="docs/assets/readme/perguntas-no-chat.png" alt="Экран сессии Brabo: Креатив записывает бизнес-правила и возвращает в чат открытые вопросы, каждый с предложенным ответом и затронутыми правилами" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/perguntas-abertas-escuro.png" />
+  <img src="docs/assets/capturas/perguntas-abertas-claro.png" alt="Экран сессии Brabo: Креатив записывает бизнес-правила и возвращает в чат открытые вопросы, каждый с предложенным ответом и затронутыми правилами" />
+</picture>
 
 <sub>Идея превращается в правила, а то, чего не хватает, — в вопрос: Креатив возвращает сомнения в чат.</sub>
 
@@ -54,7 +56,10 @@
 
 ### Идея превращается в правила, а то, чего не хватает, — в вопрос
 
-<img src="docs/assets/readme/perguntas-no-chat.png" alt="Креатив записывает правила и возвращает открытые вопросы в чат, каждый с предложенным ответом" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/perguntas-abertas-escuro.png" />
+  <img src="docs/assets/capturas/perguntas-abertas-claro.png" alt="Креатив записывает правила и возвращает открытые вопросы в чат, каждый с предложенным ответом" />
+</picture>
 
 Креатив возвращает сомнения в чат, с предложенным ответом и правилами, которые
 затрагивает каждый вопрос. Вы отвечаете прямо там, и ответы становятся
@@ -62,21 +67,15 @@
 
 ### Архитектор решает письменно
 
-<img src="docs/assets/readme/arquitetura-e-adr.png" alt="Архитектор предлагает архитектурное решение как pull request и просит подтвердить архитектуру" />
-
 Архитектурное решение рождается как pull request, а архитектура идёт дальше только после вашего
 подтверждения.
 
 ### Разработчики работают внутри контейнера
 
-<img src="docs/assets/readme/dev-agent-trabalhando.png" alt="Dev-агент рассказывает, что исправляет, работая внутри контейнера" />
-
 Каждая команда проходит политику проекта, а то, что делает dev-агент,
 остаётся в ленте сессии.
 
 ### Merge всегда за вами
-
-<img src="docs/assets/readme/merges-pelo-chat.png" alt="Очередь pull request, готовых к merge, в чате Креатива, с кнопками Одобрить и Отклонить" />
 
 Pull request, прошедшие гейты, приходят в чат, и один клик на «Одобрить»
 подтверждает merge.

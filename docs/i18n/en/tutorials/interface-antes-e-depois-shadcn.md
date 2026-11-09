@@ -7,6 +7,9 @@ description: Recording of the screens and of a Creative session before and after
 
 # Interface before and after shadcn (10/31/2026)
 
+:::historico 2026-10-31
+Visual record from Oct 31, 2026. The screens below are from the interface of that date and do not show the current version.
+
 Visual record of the round that switched the front end's base to shadcn/ui with Base UI
 ([ADR 0232](../adr/0232-shadcn-com-base-ui-no-apps-web.md)) and that, on the same day,
 made 9Router receive the agents' tools
@@ -27,11 +30,11 @@ the two is data (the test project created between the recordings) and the new Sp
 
 | Before | After |
 |---|---|
-| ![Walk before](../../../../docs/assets/shadcn-antes-depois/percurso-antes.gif) | ![Walk after](../../../../docs/assets/shadcn-antes-depois/percurso-depois.gif) |
+| ![Walk before](../../../../docs/assets/historico/shadcn-antes-depois/percurso-antes.gif) | ![Walk after](../../../../docs/assets/historico/shadcn-antes-depois/percurso-depois.gif) |
 
-![Account, light theme: before on the left, after on the right](../../../../docs/assets/shadcn-antes-depois/comparacao-04-conta-light.png)
+![Account, light theme: before on the left, after on the right](../../../../docs/assets/historico/shadcn-antes-depois/comparacao-04-conta-light.png)
 
-![Providers, light theme: before on the left, after on the right](../../../../docs/assets/shadcn-antes-depois/comparacao-03-providers-light.png)
+![Providers, light theme: before on the left, after on the right](../../../../docs/assets/historico/shadcn-antes-depois/comparacao-03-providers-light.png)
 
 ## A Creative session
 
@@ -47,9 +50,9 @@ requirements.
 
 | Before | After |
 |---|---|
-| ![Creative chat before](../../../../docs/assets/shadcn-antes-depois/chat-criativo-antes-dark.gif) | ![Creative chat after](../../../../docs/assets/shadcn-antes-depois/chat-criativo-depois-dark.gif) |
+| ![Creative chat before](../../../../docs/assets/historico/shadcn-antes-depois/chat-criativo-antes-dark.gif) | ![Creative chat after](../../../../docs/assets/historico/shadcn-antes-depois/chat-criativo-depois-dark.gif) |
 
-![The Creative's second reply: before on the left, after on the right](../../../../docs/assets/shadcn-antes-depois/comparacao-12-chat-resposta-2-dark.png)
+![The Creative's second reply: before on the left, after on the right](../../../../docs/assets/historico/shadcn-antes-depois/comparacao-12-chat-resposta-2-dark.png)
 
 ## New Spend page
 
@@ -57,4 +60,5 @@ The global `/spend` page ([RN-952](../business-rules/api.md#rn-952)) did not exi
 in the before. In the after recording it appears without the page margin — the content
 touches the sidebar; the defect was logged for fixing.
 
-![Spend, light theme, after](../../../../docs/assets/shadcn-antes-depois/depois-gastos-light.png)
+![Spend, light theme, after](../../../../docs/assets/historico/shadcn-antes-depois/depois-gastos-light.png)
+:::

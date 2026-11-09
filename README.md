@@ -4,7 +4,6 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo.svg" />
-  <source media="(prefers-color-scheme: light)" srcset="docs/assets/logo.svg" />
   <img src="docs/assets/logo.svg" alt="Logo do Brabo" width="96" />
 </picture>
 
@@ -25,7 +24,10 @@ A autoridade final continua sendo sua — por construção, não por convenção
 
 [Documentação](https://viralabs-dev.github.io/brabo/prd/) · [Do zero ao entregável](https://viralabs-dev.github.io/brabo/prd/tutorials/from-zero-to-deliverable) · [CHANGELOG](CHANGELOG.md) · [Segurança](SECURITY.md) · [Contribuir](CONTRIBUTING.md)
 
-<img src="docs/assets/readme/perguntas-no-chat.png" alt="Tela de sessão do Brabo: o Criativo registra as regras de negócio e devolve no chat as perguntas em aberto, cada uma com uma sugestão e as regras que ela afeta" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/perguntas-abertas-escuro.png" />
+  <img src="docs/assets/capturas/perguntas-abertas-claro.png" alt="Tela de sessão do Brabo: o Criativo registra as regras de negócio e devolve no chat as perguntas em aberto, cada uma com uma sugestão e as regras que ela afeta" />
+</picture>
 
 <sub>A ideia vira regras, e o que falta vira pergunta — o Criativo devolve as dúvidas no chat.</sub>
 
@@ -50,27 +52,24 @@ A autoridade final continua sendo sua — por construção, não por convenção
 
 ### A ideia vira regras, e o que falta vira pergunta
 
-<img src="docs/assets/readme/perguntas-no-chat.png" alt="O Criativo registra as regras e devolve as perguntas em aberto no chat, cada uma com uma sugestão" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/perguntas-abertas-escuro.png" />
+  <img src="docs/assets/capturas/perguntas-abertas-claro.png" alt="O Criativo registra as regras e devolve as perguntas em aberto no chat, cada uma com uma sugestão" />
+</picture>
 
 O Criativo devolve as dúvidas no chat, com sugestão e as regras que cada uma
 afeta. Você responde ali mesmo, e as respostas viram regras de negócio.
 
 ### O Arquiteto decide por escrito
 
-<img src="docs/assets/readme/arquitetura-e-adr.png" alt="O Arquiteto propõe a decisão de arquitetura como pull request e pede a confirmação da arquitetura" />
-
 A decisão de arquitetura nasce como pull request, e a arquitetura só segue com a sua confirmação.
 
 ### Os devs trabalham dentro do container
-
-<img src="docs/assets/readme/dev-agent-trabalhando.png" alt="O dev agent narra o que está corrigindo enquanto trabalha dentro do container" />
 
 Cada comando passa pela política do projeto, e o que o dev agent faz fica no fio
 da sessão.
 
 ### O merge é sempre seu
-
-<img src="docs/assets/readme/merges-pelo-chat.png" alt="A fila de PRs prontas para merge no chat do Criativo, com Aprovar e Negar" />
 
 As PRs que passam pelos gates chegam ao chat, e um clique em Aprovar confirma.
 
