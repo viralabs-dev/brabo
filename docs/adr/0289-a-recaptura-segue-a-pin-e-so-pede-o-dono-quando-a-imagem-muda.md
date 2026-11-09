@@ -3,7 +3,7 @@
 - **Status:** proposto (09/11/2026, AT-878)
 - **Data:** 2026-11-09
 - **Tema:** `engenharia`
-- **Referencia:** ADR [0286](0286-as-capturas-da-doc-sao-geradas-pelo-qa-e-entram-por-pr.md) (as capturas são geradas pelo qa; este a estende), [0255](0255-politica-de-pr-obrigatoria-em-todos-os-repos.md) (PR do bot na `dev` que dispensa a escada; este a emenda com uma segunda branch), [0282](0282-pins-dos-componentes-seguem-a-release-final.md) (a pin sobe com a Release final). AT-878. Sem RN: é processo de documentação.
+- **Referencia:** ADR [0286](0286-as-capturas-da-doc-sao-geradas-pelo-qa-e-entram-por-pr.md) (as capturas são geradas pelo qa; este a estende), [0255](0255-politica-de-pr-obrigatoria-em-todos-os-repos.md) (PR do bot na `dev` que dispensa a escada; este a emenda com uma segunda branch), [0282](0282-a-pin-dos-componentes-segue-a-release-final.md) (a pin sobe com a Release final). AT-878. Sem RN: é processo de documentação.
 
 ## Contexto
 
