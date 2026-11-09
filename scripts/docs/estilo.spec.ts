@@ -1,30 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { avisos, medirPagina, paginas } from './estilo.mjs';
+import { PENDENTES, avisos, medirPagina, paginas } from './estilo.mjs';
 import { lerFrontmatter } from './site/paginas.mjs';
 import { tipoDaPagina } from './site/tipos.mjs';
 
 const raiz = join(__dirname, '..', '..');
-
-/**
- * Catraca (AT-861): páginas com `tipo:` que ainda reprovam. Só encolhe:
- * página fora da lista que estoura reprova; página da lista que já passa
- * também reprova ("tire da lista").
- */
-const PENDENTES: string[] = [
-  'docs/architecture.md',
-  'docs/explanation/gates.md',
-  'docs/explanation/localizacao.md',
-  'docs/explanation/modelo-de-time.md',
-  'docs/explanation/regressivo-por-funcionalidade.md',
-  'docs/explanation/release-do-produto.md',
-  'docs/tutorials/orquestrar-repositorios/como-cada-repo-e-consumido.md',
-  'docs/tutorials/orquestrar-repositorios/erros-que-ja-cometemos.md',
-  'docs/tutorials/orquestrar-repositorios/o-mapa.md',
-  'docs/tutorials/orquestrar-repositorios/por-que-separar.md',
-  'docs/tutorials/orquestrar-repositorios/vida-de-uma-mudanca.md',
-];
 
 const pagina = (tipo: string, corpo: string) => `---\ntipo: ${tipo}\n---\n# T\n\n${corpo}\n`;
 const palavras = (n: number) => Array.from({ length: n }, () => 'a').join(' ');

@@ -27,14 +27,14 @@ describe('orçamento de peso da página gerada (AT-862, ADR 0287)', () => {
     expect(r.erros).toEqual(['ru/x.html: 151 KB, acima de 150 KB']);
   });
 
-  it('página de RN de irmão só avisa; a divisão em partes também conta como irmão', () => {
-    const r = verificarOrcamento(build({ 'business-rules/api.html': 900, 'ru/business-rules/web/parte-01.html': 200, 'business-rules/produto.html': 200 }), { pendentes: [] });
+  it('com irmaosSoAvisam ligado a página de RN de irmão só avisa; a divisão em partes também conta como irmão', () => {
+    const r = verificarOrcamento(build({ 'business-rules/api.html': 900, 'ru/business-rules/web/parte-01.html': 200, 'business-rules/produto.html': 200 }), { pendentes: [], irmaosSoAvisam: true });
     expect(r.avisos).toHaveLength(2);
     expect(r.erros).toEqual(['business-rules/produto.html: 200 KB, acima de 150 KB']);
   });
 
-  it('mutação: com irmaosSoAvisam desligado a página do irmão reprova', () => {
-    const r = verificarOrcamento(build({ 'business-rules/engine.html': 700 }), { pendentes: [], irmaosSoAvisam: false });
+  it('por padrão (rodada C) a página do irmão acima do teto reprova', () => {
+    const r = verificarOrcamento(build({ 'business-rules/engine.html': 700 }), { pendentes: [] });
     expect(r.erros).toHaveLength(1);
   });
 

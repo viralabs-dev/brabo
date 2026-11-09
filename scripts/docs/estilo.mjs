@@ -2,8 +2,9 @@
  * Check de estilo da doc (AT-861): orçamento de palavras por tipo de página e
  * ID interno (ADR, RN, AT...) fora de "Para saber mais".
  *
- * Por enquanto só AVISA: a CLI sai 0. Quem cobra é a catraca `PENDENTES` do
- * `estilo.spec.ts`, que só encolhe.
+ * É ERRO desde o fim da Onda 2 (AT-861): a CLI sai 1 quando uma página fora de
+ * `PENDENTES` estoura. `PENDENTES` é a catraca (só encolhe); o `estilo.spec.ts`
+ * também reprova a página da lista que já passa.
  *
  *   node scripts/docs/estilo.mjs [arquivo…]   (padrão: docs/**\/*.md, sem i18n)
  */
@@ -12,6 +13,24 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { lerFrontmatter } from './site/paginas.mjs';
 import { tipoDaPagina } from './site/tipos.mjs';
+
+/**
+ * Catraca: páginas com `tipo:` antigas que ainda estouram. Só encolhe; as da lista
+ * viram AVISO na CLI, as de fora viram ERRO (saída 1).
+ */
+export const PENDENTES = [
+  'docs/architecture.md',
+  'docs/explanation/gates.md',
+  'docs/explanation/localizacao.md',
+  'docs/explanation/modelo-de-time.md',
+  'docs/explanation/regressivo-por-funcionalidade.md',
+  'docs/explanation/release-do-produto.md',
+  'docs/tutorials/orquestrar-repositorios/como-cada-repo-e-consumido.md',
+  'docs/tutorials/orquestrar-repositorios/erros-que-ja-cometemos.md',
+  'docs/tutorials/orquestrar-repositorios/o-mapa.md',
+  'docs/tutorials/orquestrar-repositorios/por-que-separar.md',
+  'docs/tutorials/orquestrar-repositorios/vida-de-uma-mudanca.md',
+];
 
 /** Limite de palavras de prosa por tipo; tipo fora daqui é isento. */
 export const LIMITES = { tutorial: 1500, guia: 800, conceito: 1200 };
@@ -72,12 +91,18 @@ export function paginas(raiz) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const raiz = process.cwd();
   const alvos = process.argv.length > 2 ? process.argv.slice(2) : paginas(raiz);
-  let n = 0;
+  let erros = 0;
+  let pendentes = 0;
   for (const arq of alvos) {
-    for (const a of avisos(readFileSync(join(raiz, arq), 'utf8'), arq.replace(/^docs\//, '').replace(/\.md$/, ''))) {
-      console.warn(`AVISO ${arq}: ${a}`);
-      n++;
+    const lista = avisos(readFileSync(join(raiz, arq), 'utf8'), arq.replace(/^docs\//, '').replace(/\.md$/, ''));
+    const pendente = PENDENTES.includes(arq);
+    for (const a of lista) {
+      if (pendente) console.warn(`AVISO ${arq}: ${a} (pendente)`);
+      else console.error(`ERRO ${arq}: ${a}`);
     }
+    if (pendente) pendentes += lista.length;
+    else erros += lista.length;
   }
-  console.log(`estilo: ${n} aviso(s) em ${alvos.length} página(s)`);
+  console.log(`estilo: ${erros} erro(s), ${pendentes} aviso(s) pendente(s) em ${alvos.length} página(s)`);
+  if (erros) process.exit(1);
 }

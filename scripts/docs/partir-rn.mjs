@@ -137,20 +137,26 @@ export function reescreverHref(href, { area, parteDe, atual }) {
 /** Reescreve os links Markdown de um trecho, fora de cercas e de código em linha. */
 export function reescreverLinks(texto, ctx) {
   let cerca = null;
+  let span = 0; // tamanho da crase que abriu um código em linha ainda aberto (pode atravessar linhas do parágrafo)
+  const trocar = (p) => p.replace(new RegExp(LINK.source, 'g'), (todo, a, h, fim, d, h2) => (h !== undefined ? `${a}${reescreverHref(h, ctx)}${fim}` : `${d}${reescreverHref(h2, ctx)}`));
   return texto
     .split('\n')
     .map((l) => {
       const antes = cerca;
       cerca = cercaDepois(cerca, l);
       if (antes || cerca) return l;
-      return l
-        .split(/(`[^`]*`)/)
-        .map((p, k) =>
-          k % 2
-            ? p
-            : p.replace(new RegExp(LINK.source, 'g'), (todo, a, h, fim, d, h2) => (h !== undefined ? `${a}${reescreverHref(h, ctx)}${fim}` : `${d}${reescreverHref(h2, ctx)}`)),
-        )
-        .join('');
+      if (!l.trim()) span = 0;
+      let saida = '';
+      let i = 0;
+      for (const m of l.matchAll(/`+/g)) {
+        const trecho = l.slice(i, m.index);
+        saida += span ? trecho : trocar(trecho);
+        saida += m[0];
+        if (!span) span = m[0].length;
+        else if (span === m[0].length) span = 0;
+        i = m.index + m[0].length;
+      }
+      return saida + (span ? l.slice(i) : trocar(l.slice(i)));
     })
     .join('\n');
 }
