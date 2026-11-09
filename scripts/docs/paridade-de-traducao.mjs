@@ -170,7 +170,8 @@ export const ehFonteTraduzivel = (rel, conteudo = '') =>
  * mesmo `rel` em duas raízes é erro.
  */
 export function medirDoRepositorio(raiz, raizesDeDoc = lerRaizesDeDoc().map((r) => r.raiz)) {
-  const git = (...a) => execFileSync('git', a, { cwd: raiz, encoding: 'utf8' }).trim();
+  const gitBruto = (...a) => execFileSync('git', a, { cwd: raiz, encoding: 'utf8' });
+  const git = (...a) => gitBruto(...a).trim();
   // ADR 0273: é do brabo o que está em HEAD, ou o que o layout dos irmãos não trouxe (página nova ainda não commitada).
   const emHead = new Set(git('ls-tree', '-r', '--name-only', 'HEAD').split('\n'));
   const lst = resolve(raiz, git('rev-parse', '--git-dir'), 'layout-irmaos.lst');
@@ -184,7 +185,9 @@ export function medirDoRepositorio(raiz, raizesDeDoc = lerRaizesDeDoc().map((r) 
   };
   for (const base of raizesDeDoc) {
     const sujas = new Set(
-      git('status', '--porcelain', '--', base)
+      // sem `trim()`: o ` M` da 1ª linha perderia o espaço e o `slice(3)` comeria a 1ª letra do caminho,
+      // então o 1º arquivo sujo só contava se estivesse no índice (o layout põe uns e outros não).
+      gitBruto('status', '--porcelain', '--', base)
         .split('\n')
         .filter(Boolean)
         .map((l) => relative(base, l.slice(3))),
