@@ -882,7 +882,7 @@ GitHub Pages."
 > **Practical consequence:** the site can be stale even with
 > `Documentação` green. If Pages' `build_type` isn't `legacy`/`gh-pages`,
 > the commit happens and nobody serves it — and nothing in CI turns
-> red. The check is `gh api repos/daneiel/brabo/pages`, recorded in
+> red. The check is `gh api repos/viralabs-dev/brabo/pages`, recorded in
 > [Rulesets](../reference/rulesets.md).
 
 The whole design, with the discarded alternatives, is in

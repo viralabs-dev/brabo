@@ -189,8 +189,8 @@ traducao_de: d7d790431657e61a049b452214cfd432da2199df
 | `GIT_LOCAL_REPOS_ROOT` | `/tmp/brabo-git-repos` | 本地 provider。在 `/tmp` 中，仓库会在重启后消失 |
 | `PROJECT_WORKSPACES_ROOT` | `/tmp/brabo-project-workspaces` | **Container** 模式下项目 agent 的 worktree。**在 engine 中必须是相同路径**，并且是同一个卷 |
 | `BRABO_PROJECTS_BASE` | 空 | 宿主机上唯一的文件夹，**Mounted** 模式的项目都位于其下，以同一路径挂载到 `api` 和 `engine`。空是**正常**状态：api 报告 `projectsBase: null`，项目向导根本不会提供 Mounted 模式 |
-| `BRABO_RUNNER_RELEASES_REPO` | `daneiel/brabo` | 仓库（`dono/nome`），`GET /runner-releases/binary` 在 GitHub 上查询其最新 Release。所有者不再固定在代码中（AT-691，EP-033） |
-| `BRABO_REPO` | `daneiel/brabo` | 产品仓库的 `dono/nome`：`install.sh` 从中下载 Release 并核对 cosign 身份，runner 的 unit 把文档指向它 |
+| `BRABO_RUNNER_RELEASES_REPO` | `viralabs-dev/brabo-runner` | 仓库（`dono/nome`），`GET /runner-releases/binary` 在 GitHub 上查询其最新 Release。所有者不再固定在代码中（AT-691，EP-033） |
+| `BRABO_REPO` | `viralabs-dev/brabo` | 产品仓库的 `dono/nome`：`install.sh` 从中下载 Release 并核对 cosign 身份，runner 的 unit 把文档指向它 |
 | `GITHUB_OAUTH_CLIENT_ID` / `_SECRET` | 空 | 空 = 与 GitHub 的 OAuth 连接不可用（PAT 仍然可用） |
 | `GITLAB_OAUTH_CLIENT_ID` / `_SECRET` | 空 | 同上 |
 

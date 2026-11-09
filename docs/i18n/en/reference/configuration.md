@@ -297,8 +297,8 @@ makes rotation possible without downtime ([RN-035](../business-rules/api.md#rn-0
 | `GIT_LOCAL_REPOS_ROOT` | `/tmp/brabo-git-repos` | Local provider. In `/tmp`, repos disappear on reboot |
 | `PROJECT_WORKSPACES_ROOT` | `/tmp/brabo-project-workspaces` | project agent worktrees in **Container** mode. **Needs to be the same path on the engine**, and the same volume |
 | `BRABO_PROJECTS_BASE` | empty | the single host folder under which **Mounted**-mode projects live, mounted by identity into `api` and `engine`. Empty is a NORMAL state: the api reports `projectsBase: null` and the project wizard doesn't offer Mounted mode at all |
-| `BRABO_RUNNER_RELEASES_REPO` | `daneiel/brabo` | repository (`owner/name`) whose latest Release `GET /runner-releases/binary` queries on GitHub. The owner is not fixed in the code (AT-691, EP-033) |
-| `BRABO_REPO` | `daneiel/brabo` | `owner/name` of the product repository: `install.sh` downloads the Release from it and checks the cosign identity, and the runner's unit points the documentation at it |
+| `BRABO_RUNNER_RELEASES_REPO` | `viralabs-dev/brabo-runner` | repository (`owner/name`) whose latest Release `GET /runner-releases/binary` queries on GitHub. The owner is not fixed in the code (AT-691, EP-033) |
+| `BRABO_REPO` | `viralabs-dev/brabo` | `owner/name` of the product repository: `install.sh` downloads the Release from it and checks the cosign identity, and the runner's unit points the documentation at it |
 | `GITHUB_OAUTH_CLIENT_ID` / `_SECRET` | empty | empty = GitHub OAuth connection unavailable (PAT still works) |
 | `GITLAB_OAUTH_CLIENT_ID` / `_SECRET` | empty | same |
 
@@ -530,7 +530,7 @@ at boot. The `VITE_*` vars are the development fallback.
 | `VITE_ENGINE_URL` | engine address (Phoenix channel) |
 | `VITE_LOG_LEVEL` | level of the browser's JSON logger (default `info`). In a cluster the `WEB_LOG_LEVEL` key of `brabo-config` is in charge, which the entrypoint writes to `/config.js` — `VITE_*` only counts in a local build |
 | `VITE_BRABO_VERSION` | version shown in the footer of the auth screens (default `dev`). **The only one that's build-time by choice, not by limitation** — see below |
-| `VITE_BRABO_REPO` | `owner/name` of the product repository (default `daneiel/brabo`); build-time. It supplies the installer command in the runner panel and the address of the documentation site (AT-691) |
+| `VITE_BRABO_REPO` | `owner/name` of the product repository (default `viralabs-dev/brabo`); build-time. It supplies the installer command in the runner panel and the address of the documentation site (AT-691) |
 | `VITE_BRABO_AMBIENTE` | `dev`, `prd` or `local`; build-time, coming from `AMBIENTE` in `docker-bake.hcl` (default empty). Only `local` mounts the quick access by role on the login screen (ADR 0245); the Actions pass `dev` or `prd` |
 
 A blank page after deploy is almost always `/config.js` pointing to
