@@ -131,7 +131,9 @@ const ESPERA_DO_RUNNER = path.join(RAIZ, 'apps/runner/src/espera-de-projetos.ts'
  * de estado em runtime), mas dá para saber que o CONJUNTO mudou — e isso basta
  * para mandar alguém olhar o arquivo de respostas.
  */
-const PROMPTS_INTERATIVOS = 10;
+// 11 com o Laya (AT-626): o runner do E2E não tem GPU NVIDIA, então a pergunta
+// não dispara lá e o arquivo de respostas não ganha linha.
+const PROMPTS_INTERATIVOS = 11;
 
 describe('o E2E do instalador não pode ser afrouxado para passar', () => {
   it('NÃO roda em `pull_request` — a porta de pular a verificação é a que o ADR 0150 recusa', () => {
