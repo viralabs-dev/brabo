@@ -883,11 +883,11 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 > ⚠️ Блок сгенерирован `pnpm docs:generate`. Не редактируйте вручную — следующая сборка его перезапишет.
 
-Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **190**. У всех есть описание в таблицах выше.
+Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **194**. У всех есть описание в таблицах выше.
 
 Каждый источник помечен как **продукт** — то, что оператор установки задаёт в `.env` развёртывания, — или **инструменты**: их читают только CI и разработчики продукта. Переменной инструментов не место в `.env` оператора.
 
-[api](#env-servico-api) (68) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (7) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (6) · [deploy/k8s](#env-servico-deploy-k8s) (24)
+[api](#env-servico-api) (68) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (7) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
 
 ### api {#env-servico-api}
 
@@ -1076,14 +1076,18 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 ### e2e {#env-servico-e2e}
 
-переменных: 6 · инструменты
+переменных: 10 · инструменты
 
+- <a id="env-CAPTURAS_API"></a>`CAPTURAS_API` <sub>(e2e/capturas/doc.captura.ts)</sub>
+- <a id="env-CAPTURAS_ENGINE"></a>`CAPTURAS_ENGINE` <sub>(e2e/capturas/doc.captura.ts)</sub>
+- <a id="env-CAPTURAS_SAIDA"></a>`CAPTURAS_SAIDA` <sub>(e2e/capturas/doc.captura.ts)</sub>
+- <a id="env-CAPTURAS_WEB"></a>`CAPTURAS_WEB` <sub>(e2e/capturas/doc.captura.ts)</sub>
 - <a id="env-E2E_API_URL"></a>`E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
 - <a id="env-E2E_ENGINE_URL"></a>`E2E_ENGINE_URL` <sub>(e2e/testes/instalacao.spec.ts)</sub>
 - <a id="env-E2E_PASSWORD"></a>`E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
 - <a id="env-E2E_SERVICE_TOKEN"></a>`E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
 - <a id="env-E2E_USER"></a>`E2E_USER` <sub>(e2e/suporte/api.ts)</sub>
-- <a id="env-E2E_WEB_URL"></a>`E2E_WEB_URL` <sub>(e2e/playwright.config.ts)</sub>
+- <a id="env-E2E_WEB_URL"></a>`E2E_WEB_URL` <sub>(e2e/playwright.capturas.config.ts)</sub>
 
 ### deploy/k8s {#env-servico-deploy-k8s}
 

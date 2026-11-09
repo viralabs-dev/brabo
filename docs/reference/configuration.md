@@ -896,11 +896,11 @@ ninguém perceba.
 
 > ⚠️ Bloco gerado por `pnpm docs:generate`. Não edite à mão — o próximo build o sobrescreve.
 
-Inventário extraído do código: **190 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
+Inventário extraído do código: **194 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
 
 Cada fonte é marcada **produto** — o que quem opera a instalação configura no `.env` do deploy — ou **ferramenta**, lida só pelo CI e por quem desenvolve o produto. Variável de ferramenta nunca pertence ao `.env` de um operador.
 
-[api](#env-servico-api) (68) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (7) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (6) · [deploy/k8s](#env-servico-deploy-k8s) (24)
+[api](#env-servico-api) (68) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (7) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
 
 ### api {#env-servico-api}
 
@@ -1089,14 +1089,18 @@ Cada fonte é marcada **produto** — o que quem opera a instalação configura 
 
 ### e2e {#env-servico-e2e}
 
-6 variáveis · ferramenta
+10 variáveis · ferramenta
 
+- <a id="env-CAPTURAS_API"></a>`CAPTURAS_API` <sub>(e2e/capturas/doc.captura.ts)</sub>
+- <a id="env-CAPTURAS_ENGINE"></a>`CAPTURAS_ENGINE` <sub>(e2e/capturas/doc.captura.ts)</sub>
+- <a id="env-CAPTURAS_SAIDA"></a>`CAPTURAS_SAIDA` <sub>(e2e/capturas/doc.captura.ts)</sub>
+- <a id="env-CAPTURAS_WEB"></a>`CAPTURAS_WEB` <sub>(e2e/capturas/doc.captura.ts)</sub>
 - <a id="env-E2E_API_URL"></a>`E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
 - <a id="env-E2E_ENGINE_URL"></a>`E2E_ENGINE_URL` <sub>(e2e/testes/instalacao.spec.ts)</sub>
 - <a id="env-E2E_PASSWORD"></a>`E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
 - <a id="env-E2E_SERVICE_TOKEN"></a>`E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
 - <a id="env-E2E_USER"></a>`E2E_USER` <sub>(e2e/suporte/api.ts)</sub>
-- <a id="env-E2E_WEB_URL"></a>`E2E_WEB_URL` <sub>(e2e/playwright.config.ts)</sub>
+- <a id="env-E2E_WEB_URL"></a>`E2E_WEB_URL` <sub>(e2e/playwright.capturas.config.ts)</sub>
 
 ### deploy/k8s {#env-servico-deploy-k8s}
 

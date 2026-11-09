@@ -188,7 +188,7 @@ Versão atual: versão **v2.0.0** ([CHANGELOG](CHANGELOG.md)). O site
 |---|---|
 | [Primeiros passos](https://viralabs-dev.github.io/brabo/prd/getting-started) | da instalação ao primeiro turno de agente |
 | [Arquitetura](https://viralabs-dev.github.io/brabo/prd/architecture) | code map, fronteiras, invariantes, dívida técnica |
-| [Regras de negócio](https://viralabs-dev.github.io/brabo/prd/business-rules) | as 894 RNs, cada uma com `arquivo:linha` e o teste que a cobre |
+| [Regras de negócio](https://viralabs-dev.github.io/brabo/prd/business-rules) | as 895 RNs, cada uma com `arquivo:linha` e o teste que a cobre |
 | [Runbook](https://viralabs-dev.github.io/brabo/prd/runbook) | deploy, rollout, restore, rotação de chave, incidente de custo |
 | [Configuração](https://viralabs-dev.github.io/brabo/prd/reference/configuration) | todas as variáveis de ambiente |
 | [Providers de git](https://viralabs-dev.github.io/brabo/prd/reference/git-providers) | o contrato de quinze operações e as capabilities |
