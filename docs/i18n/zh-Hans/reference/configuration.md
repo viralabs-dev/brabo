@@ -377,7 +377,7 @@ web 是静态的，由 nginx 提供服务。它从**两个**来源读取配置�
 | `VITE_ENGINE_URL` | engine 地址（Phoenix 通道） |
 | `VITE_LOG_LEVEL` | 浏览器 JSON logger 的级别（默认 `info`）。在集群中以 `brabo-config` 的 `WEB_LOG_LEVEL` 键为准，由 entrypoint 写入 `/config.js`——`VITE_*` 只在本地构建中起作用 |
 | `VITE_BRABO_VERSION` | 显示在认证页面页脚的版本（默认 `dev`）。**唯一一个出于选择而非限制在构建时确定的变量**——见下文 |
-| `VITE_BRABO_REPO` | 产品仓库的 `dono/nome`（默认 `daneiel/brabo`）；构建时。runner 面板中的安装器命令和文档站点的地址由它而来（AT-691） |
+| `VITE_BRABO_REPO` | 产品仓库的 `dono/nome`（默认 `viralabs-dev/brabo`）；构建时。runner 面板中的安装器命令和文档站点的地址由它而来（AT-691） |
 | `VITE_BRABO_AMBIENTE` | `dev`、`prd` 或 `local`；构建时，来自 `docker-bake.hcl` 的 `AMBIENTE`（默认为空）。只有 `local` 会在登录页组装按角色的快速访问（ADR 0245）；Actions 传入 `dev` 或 `prd` |
 
 部署后页面空白，几乎总是 `/config.js` 指向了 `localhost`——部署的 smoke 检查的正是这一点。
