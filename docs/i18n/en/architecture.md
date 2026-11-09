@@ -1,5 +1,6 @@
 ---
-traducao_de: 72b7ce386be372596e8fa6caf64502089c39fa05
+tipo: conceito
+traducao_de: d7d790431657e61a049b452214cfd432da2199df
 id: architecture
 title: Architecture
 sidebar_label: Architecture
@@ -14,7 +15,7 @@ This document is the map for anyone who's going to **work** on the code. It
 says where to start reading, what each boundary promises, and what's already
 known to be crooked.
 
-Decisions and their rationale live in the [ADRs](adr/index.md) — 257 of
+Decisions and their rationale live in the [ADRs](adr/index.md) — 282 of
 them, several recording a real defect found in execution. Here we don't
 repeat the argument: we point at it.
 
@@ -560,9 +561,13 @@ permissive stage — not `require_approval`, because "always allow" would
 write the pattern into `allow` and reopen the door
 ([RN-106](business-rules/api.md#rn-106),
 [ADR 0065](adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.md)).
-The container's lifecycle (provision, recycle, clean up) doesn't exist yet
-— a declared cut from PHASE 25, recorded in CLAUDE.md — so this invariant
-coexists, for now, with the path-scope policy from
+The container's lifecycle (provision, recycle, clean up) exists as the
+`project_containers` table and the `provisioning → running ⇄ stopped` state
+machine ([RN-243](business-rules/api.md#rn-243) to
+[RN-248](business-rules/api.md#rn-248), [ADR 0081](adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.md)):
+the use cases only record the transition, and none of them calls Docker. The
+one that holds the server's Docker socket is `brabo-broker`. That is why this
+invariant coexists with the path-scope policy from
 [ADR 0055](adr/0055-escopo-de-caminho-na-politica-de-terminal.md).
 
 And since [ADR 0143](adr/0143-agentes-de-dev-so-depois-do-container.md)

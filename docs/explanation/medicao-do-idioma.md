@@ -2,9 +2,14 @@
 id: medicao-do-idioma
 title: Medição da heurística de idioma
 description: O instrumento que mede a heurística de detecção de idioma da AT-080 contra um corpus rotulado, os números que ele produziu no corpus sintético, e a validação paga da orientação de idioma e do custo dela (AT-167, 2026-09-29).
+tipo: historico
 ---
 
 # Medição da heurística de idioma {#measuring-the-language-heuristic}
+
+:::historico 2026-09-29
+Medição da heurística de idioma da AT-160: lista de marcadores e expressões regulares, sem dependência nova. Traz os números nos corpora, os limiares provisórios que o produto usa e a validação paga com Haiku (AT-167). Desde a AT-163 o produto roda essa heurística e pergunta antes de mudar qualquer coisa.
+:::
 
 > AT-160 (EP-028, HS-053). A heurística medida é a que a especificação da
 > AT-080 propôs ("A — heurística própria, sem dependência"). Desde a AT-163

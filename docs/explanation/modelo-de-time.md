@@ -1,3 +1,8 @@
+---
+title: Modelo de time e fluxo de entregáveis
+tipo: conceito
+---
+
 # Modelo de time e fluxo de entregáveis {#team-model-and-deliverable-flow}
 
 > Contexto consolidado da sessão de desenho do modelo de time

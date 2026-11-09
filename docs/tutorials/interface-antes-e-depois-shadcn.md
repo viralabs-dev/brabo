@@ -1,9 +1,13 @@
 ---
 title: Interface antes e depois do shadcn (31/10/2026)
 description: Gravação das telas e de uma sessão do Criativo antes e depois da migração das primitivas para shadcn/ui (ADR 0232) e da correção das ferramentas no 9Router (RN-950).
+tipo: historico
 ---
 
 # Interface antes e depois do shadcn (31/10/2026)
+
+:::historico 2026-10-31
+Registro visual de 31/10/2026. As telas abaixo são da interface daquela data e não mostram a versão atual.
 
 Registro visual da rodada que trocou a base do front para shadcn/ui com Base UI
 ([ADR 0232](../adr/0232-shadcn-com-base-ui-no-apps-web.md)) e que, no mesmo dia,
@@ -26,11 +30,11 @@ Gastos.
 
 | Antes | Depois |
 |---|---|
-| ![Percurso antes](../assets/shadcn-antes-depois/percurso-antes.gif) | ![Percurso depois](../assets/shadcn-antes-depois/percurso-depois.gif) |
+| ![Percurso antes](../assets/historico/shadcn-antes-depois/percurso-antes.gif) | ![Percurso depois](../assets/historico/shadcn-antes-depois/percurso-depois.gif) |
 
-![Conta, tema claro: antes à esquerda, depois à direita](../assets/shadcn-antes-depois/comparacao-04-conta-light.png)
+![Conta, tema claro: antes à esquerda, depois à direita](../assets/historico/shadcn-antes-depois/comparacao-04-conta-light.png)
 
-![Providers, tema claro: antes à esquerda, depois à direita](../assets/shadcn-antes-depois/comparacao-03-providers-light.png)
+![Providers, tema claro: antes à esquerda, depois à direita](../assets/historico/shadcn-antes-depois/comparacao-03-providers-light.png)
 
 ## Uma sessão do Criativo
 
@@ -46,9 +50,9 @@ requisitos.
 
 | Antes | Depois |
 |---|---|
-| ![Chat do Criativo antes](../assets/shadcn-antes-depois/chat-criativo-antes-dark.gif) | ![Chat do Criativo depois](../assets/shadcn-antes-depois/chat-criativo-depois-dark.gif) |
+| ![Chat do Criativo antes](../assets/historico/shadcn-antes-depois/chat-criativo-antes-dark.gif) | ![Chat do Criativo depois](../assets/historico/shadcn-antes-depois/chat-criativo-depois-dark.gif) |
 
-![Segunda resposta do Criativo: antes à esquerda, depois à direita](../assets/shadcn-antes-depois/comparacao-12-chat-resposta-2-dark.png)
+![Segunda resposta do Criativo: antes à esquerda, depois à direita](../assets/historico/shadcn-antes-depois/comparacao-12-chat-resposta-2-dark.png)
 
 ## Página nova de Gastos
 
@@ -56,4 +60,5 @@ A página global `/spend` ([RN-952](../business-rules/api.md#rn-952)) não exist
 no antes. Na gravação do depois ela aparece sem a margem da página — o conteúdo
 encosta na barra lateral; o defeito foi registrado para correção.
 
-![Gastos, tema claro, depois](../assets/shadcn-antes-depois/depois-gastos-light.png)
+![Gastos, tema claro, depois](../assets/historico/shadcn-antes-depois/depois-gastos-light.png)
+:::

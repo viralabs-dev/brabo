@@ -1,8 +1,13 @@
 ---
 sidebar_position: 8
+tipo: historico
 ---
 
 # Backlog triado {#triaged-backlog}
+
+:::historico 2026-09-12
+Triagem de backlog nascida da Fase 13c, com os achados da execução real e os itens antigos espalhados por ADRs. Classifica por prioridade (P1 a P3), custo e risco de esperar, em fases A a H. Depois acumulou os backlogs do runner (ADR 0104), do modelo de time e da revisão externa de 28/08. O backlog vivo hoje mora no Kanban do projeto.
+:::
 
 Saída da **FASE 13c**. Reúne os achados abertos da execução real
 ([achados-execucao-real.md](achados-execucao-real.md)) e os itens antigos que

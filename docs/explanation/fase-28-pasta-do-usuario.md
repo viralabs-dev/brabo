@@ -5,9 +5,14 @@ sidebar_label: FASE 28 — pasta do usuário
 sidebar_position: 15
 description: O recorte da FASE 28 — base consentida no bootstrap, mounted como padrão local, e um agente local que declara capacidades. As decisões estão nos ADRs 0146 e 0147.
 keywords: [fase 28, pasta do usuário, base de projetos, runner, espelho, capacidades]
+tipo: historico
 ---
 
 # FASE 28 — a pasta do usuário
+
+:::historico 2026-09-06
+Recorte da Fase 28: dar ao usuário uma pasta dele onde o trabalho acontece, com base consentida no bootstrap, `mounted` como padrão local e um agente local que declara capacidades. Diz o que a fase persegue, o que recusa e em que ordem. As decisões moram nos ADR 0146 e 0147.
+:::
 
 > Este documento é o **recorte** da fase: o que ela persegue, o que ela recusa,
 > e em que ordem. As **decisões** moram nos [ADR 0146](../adr/0146-base-consentida-no-bootstrap.md)

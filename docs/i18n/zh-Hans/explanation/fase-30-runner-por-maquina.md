@@ -5,10 +5,15 @@ sidebar_label: FASE 30——机器的本地智能体
 sidebar_position: 17
 description: FASE 30 的范围——本地智能体的身份不再按项目，而改为属于机器，安装器通过创建第一个账户并启动已配对的智能体来完成安装。决定在 ADR 0154 和 0155 中。
 keywords: [fase 30, runner, 本地智能体, 设备密钥, 安装器, 服务]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # FASE 30——机器的本地智能体
+
+:::historico 2026-09-11
+第 30 阶段的一个切片：一行安装 Brabo 并开始使用，每台机器一个本地智能体，第一个账户在终端中诞生。其中包括度量在切片中改变了什么、会话、这一阶段不触及什么，以及它所触碰的缺口。若有分歧，以 ADR 0154 或 0155 为准。
+:::
 
 > 本文档是本阶段的**范围**：它追求什么、拒绝什么，以及按什么顺序。**决定**在
 > [ADR 0154](../adr/0154-chave-de-dispositivo-de-maquina.md) 和

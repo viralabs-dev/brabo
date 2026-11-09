@@ -3,11 +3,14 @@ id: documentation-workflow
 title: Como a documentação se mantém viva
 sidebar_label: Sincronia da doc
 sidebar_position: 1
+tipo: referencia
 description: O mecanismo que impede a documentação de apodrecer — o que cada peça faz, por que existe e o que fazer quando a checagem reclama injustamente.
 keywords: [documentation, drift, docmap, CI, generation]
 ---
 
 # Como a documentação se mantém viva {#how-documentation-stays-alive}
+
+> Para **escrever** uma página, leia [Como escrevemos a documentação](../contribuir/como-escrevemos.md). Esta página descreve o **mecanismo** que mantém a doc em dia.
 
 Documentação não morre por falta de escrita inicial. Ela morre por
 **drift**: o código muda, a doc fica, e um dia alguém percebe que ela
@@ -605,6 +608,10 @@ vira spam, e spam é desligado. O workflow cria o próprio rótulo `docs`
 `scripts/ci/rotulos-dos-workflows.spec.ts` reprova todo `--label` sem esse
 create no mesmo arquivo.
 
+### `estilo.mjs` — cobra o guia de escrita {#estilo-mjs}
+
+`scripts/docs/estilo.mjs` mede cada página que declara `tipo:` no frontmatter. Ele conta as palavras de prosa (sem frontmatter, código, tabela, título nem a seção "Para saber mais") e reprova o que passa do limite do tipo: tutorial 1 500, guia 800, conceito 1 200. Referência não tem limite. Também acusa ID interno (ADR, RN, AT, EP, HS, Fase, Rodada) fora de "Para saber mais". Desde o fim da Onda 2 a CLI é ERRO: sai 1 quando uma página fora de `PENDENTES` estoura. A catraca `PENDENTES` mora no próprio `estilo.mjs` (as páginas dela só geram `AVISO`) e só encolhe; o `estilo.spec.ts` roda no `pnpm test:scripts` e também reprova a página da lista que já passa ("tire da lista"). As regras de escrita estão em [Como escrevemos a documentação](../contribuir/como-escrevemos.md).
+
 ### O build do site {#the-site-build}
 
 `onBrokenLinks`, `onBrokenAnchors` e `onBrokenMarkdownLinks` estão em
@@ -687,7 +694,7 @@ NÃO trata essa pasta como página da fonte pt-BR), com os rótulos da barra lat
 em `docs/i18n/<locale>/current.json` e os textos da moldura no próprio gerador
 (`scripts/docs/site/layout.mjs`). Uma página sem tradução num locale é servida a
 partir da fonte pt-BR no mesmo slug. A busca é por substring, com um índice por
-idioma carregado só quando a pessoa busca. Páginas cuja cópia pt-BR antiga estava
+idioma carregado só quando a pessoa busca; ele traz também os títulos de seção e as âncoras de variável (`#env-NOME`), então RN e variável se acham pelo nome. Páginas cuja cópia pt-BR antiga estava
 desatualizada ficam em `docs/` no idioma em que estão até o lote delas.
 
 O site em inglês saiu da raiz para `/brabo/<environment>/en/…`, e links
@@ -902,7 +909,7 @@ Pages, embora o job dele ainda se chame "Publish to GitHub Pages".
 > **Consequência prática:** o site pode estar velho mesmo com
 > `Documentação` verde. Se o `build_type` do Pages não for
 > `legacy`/`gh-pages`, o commit acontece e ninguém o serve — e nada no
-> CI fica vermelho. A conferência é `gh api repos/daneiel/brabo/pages`,
+> CI fica vermelho. A conferência é `gh api repos/viralabs-dev/brabo/pages`,
 > registrada em [Rulesets](../reference/rulesets.md).
 
 O desenho inteiro, com as alternativas descartadas, está no
@@ -929,7 +936,7 @@ O [ADR 0253](../adr/0253-o-site-de-docs-deixa-o-docusaurus.md) tirou o site do
 Docusaurus. `pnpm docs:build` roda `docs:site` (escreve `build/docs-site/`,
 ignorado pelo git, com as mesmas URLs e âncoras do site anterior) e
 `docs:site:check` (checador de links e âncoras, locale duplicado e faixa de
-tradução). O núcleo mora em `scripts/docs/site/`: `paginas.mjs` descobre as
+tradução, mais o orçamento de peso: nenhuma página gerada passa de 150 KB de HTML em nenhum dos 4 idiomas; `scripts/docs/site/orcamento.mjs`, ADR 0287; a página acima do teto é ERRO, inclusive a de RN de irmão; só a lista `PENDENTES` do `orcamento.mjs`, que só encolhe, é tolerada). O núcleo mora em `scripts/docs/site/`: `paginas.mjs` descobre as
 páginas de cada idioma (a tradução onde existe, a fonte pt-BR no resto, então o
 link nunca sai do idioma), `render.mjs` converte o Markdown (âncora `{#id}`,
 admonições, Mermaid, realce com shiki, link `.md` para URL relativa),
@@ -938,6 +945,8 @@ admonições, Mermaid, realce com shiki, link `.md` para URL relativa),
 referência da API. O caminho das traduções é uma constante só
 (`CAMINHO_DAS_TRADUCOES`, `docs/i18n/<locale>/`). `website/` guarda só a árvore
 isolada do Redoc.
+
+Cada página declara o tipo (`tutorial|guia|conceito|referencia|decisao|historico`) em `tipo:` no frontmatter, ou o recebe da pasta (`tutorials/`, `how-to/`, `explanation/`, `reference/`, `adr/`, `business-rules`). O menu tem 7 grupos de topo, e `scripts/docs/site/tipos.mjs` reprova página sem tipo, no grupo errado ou fora do menu.
 
 ## Rodando na sua máquina {#running-it-on-your-machine}
 
@@ -954,6 +963,7 @@ pnpm docs:generate   # regenerates
 pnpm docs:drift      # simulates the PR check (origin/dev...HEAD)
 pnpm docs:build      # the build CI runs — generates build/docs-site and checks links
 pnpm docs:start      # builds and serves on http://localhost:3000
+node scripts/docs/estilo.mjs  # style check: word budget per page type
 
 # does the API reference render? needs the build above, and isn't part
 # of docs:check because that one doesn't build the site
@@ -1062,12 +1072,14 @@ flowchart LR
   W["apps/web/docs"] --> U
   E["apps/engine/docs"] --> U
   R["apps/runner/docs · broker · packages"] --> U
-  I["deploy/docs · scripts/ci/docs"] --> U
+  I["deploy/docs · brabo-ci (scripts/ci/docs)"] --> U
+  Q["qa/docs · brabo-qa (docs/ do irmão em ., AT-846)"] --> U
   P["docs/ (agregador)"] --> U
   U(("união")) --> S["site: mesmas URLs"]
 ```
 
-- **RN nova** vai em `<raiz>/docs/business-rules/<raiz>.md`, na raiz que hospeda a primeira ref `caminho:N`. A numeração é global e a âncora `{#rn-NNN}` não muda; `docs/business-rules.md` é índice gerado e `custo.md`/`autenticacao.md` são stubs congelados.
+- **RN nova** vai em `<raiz>/docs/business-rules/<raiz>.md`, na raiz que hospeda a primeira ref `caminho:N`; quando a área foi partida (ADR 0287), vai na ÚLTIMA `business-rules/<raiz>/parte-NN.md`, e o `<raiz>.md` é o índice com a grade congelada de âncoras. Parte que passa de 90 KB de Markdown: `node scripts/docs/partir-rn.mjs --repo <raiz>` (ou abra a `parte-NN+1.md`). A numeração é global e a âncora `{#rn-NNN}` não muda; `docs/business-rules.md` é índice gerado e `custo.md`/`autenticacao.md` são stubs congelados.
+- **Link de RN para arquivo de outro repo** é a URL dele no GitHub, na `dev` (`https://github.com/viralabs-dev/<repo>/blob/dev/<caminho>`; ADR 0288). O site a devolve para link interno (`render.mjs`), e o `links.mjs` reprova a URL de raiz conhecida cuja página não existe. Num irmão com links relativos herdados, `BRABO_IRMAOS=<pasta> node scripts/docs/links-para-repo-dono.mjs --repo <área> --escrever` os troca.
 - **Os irmãos entram pela trava.** `irmaos.lock` (um SHA por irmão) é o que o `montar-layout.sh` usa no `docs-check`, no `docs-audit` e no degrau `dev` do deploy; `BRABO_REF` vence a trava (o degrau `main` usa `BRABO_REF=main`). Só o `regenera-gerados.yml` sobe a trava, junto com os gerados (ADR 0274). Assim, `scripts.md`, o índice de RN, as contagens e as refs com símbolo só mudam na subida, e a PR comum não fica vermelha por merge num irmão.
 - **`docs:check`** soma todas as raízes e reprova RN duplicada entre elas. Com `--raiz <nome>` roda por raiz o que só depende dela (âncoras, refs internas, glob do docmap, drift) e deixa para o agregador o que cruza raízes (contagens, índice de RN, paridade, links entre idiomas). *Hoje o `--raiz` só restringe as refs com símbolo; os demais geradores rodam inteiros. Por isso o irmão não o usa: as refs dele são conferidas no próprio CI (ADR 0275).*
 - **Traduções** ficam em `<raiz>/docs/i18n/<locale>/`, com um só `traducao.json`. Mover arquivos exige dois commits: a mudança e depois o recarimbo de `traducao_de`.

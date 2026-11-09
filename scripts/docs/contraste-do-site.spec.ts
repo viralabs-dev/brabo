@@ -19,14 +19,47 @@ function bloco(css: string, seletor: string): Record<string, string> {
   return vars;
 }
 
-function resolver(vars: Record<string, string>, nome: string): string | null {
-  let v: string | undefined = vars[nome];
-  for (let i = 0; v && i < 10; i++) {
-    const ref = /^var\((--[\w-]+)\)$/.exec(v);
-    if (!ref) break;
-    v = vars[ref[1]];
+// Divide `a, b, c` só nas vírgulas de fora dos parênteses.
+function partes(txt: string, sep: RegExp | string): string[] {
+  const out: string[] = [];
+  let prof = 0;
+  let atual = '';
+  for (const ch of txt) {
+    if (ch === '(') prof++;
+    if (ch === ')') prof--;
+    if (prof === 0 && (typeof sep === 'string' ? ch === sep : sep.test(ch))) {
+      if (atual.trim()) out.push(atual.trim());
+      atual = '';
+    } else atual += ch;
   }
-  return v && /^#[0-9a-f]{6}$/i.test(v) ? v : null;
+  if (atual.trim()) out.push(atual.trim());
+  return out;
+}
+
+const hex2 = (n: number) => Math.round(n).toString(16).padStart(2, '0');
+
+// Resolve hex, var() e `color-mix(in srgb, X N%, Y)` (os --*-panel do design system) até hex.
+function valor(vars: Record<string, string>, expr: string | undefined, prof = 0): string | null {
+  if (!expr || prof > 12) return null;
+  const e = expr.trim();
+  if (/^#[0-9a-f]{6}$/i.test(e)) return e.toLowerCase();
+  const ref = /^var\((--[\w-]+)\)$/.exec(e);
+  if (ref) return valor(vars, vars[ref[1]], prof + 1);
+  const mix = /^color-mix\((.*)\)$/s.exec(e);
+  if (!mix) return null;
+  const [espaco, a, b] = partes(mix[1], ',');
+  if (espaco !== 'in srgb' || !b) return null;
+  const [corA, pctA] = partes(a, /\s/);
+  const pct = parseFloat(pctA?.startsWith('var(') ? (vars[pctA.slice(4, -1)] ?? '') : (pctA ?? ''));
+  const ca = valor(vars, corA, prof + 1);
+  const cb = valor(vars, b, prof + 1);
+  if (!ca || !cb || Number.isNaN(pct)) return null;
+  const canal = (h: string, i: number) => parseInt(h.slice(i, i + 2), 16);
+  return `#${[1, 3, 5].map((i) => hex2((canal(ca, i) * pct) / 100 + (canal(cb, i) * (100 - pct)) / 100)).join('')}`;
+}
+
+function resolver(vars: Record<string, string>, nome: string): string | null {
+  return valor(vars, `var(${nome})`);
 }
 
 function luminancia(hex: string): number {
@@ -52,6 +85,16 @@ const PARES: [string, string][] = [
   ['--site-texto-2', '--site-fundo-lateral'],
   ['--site-link', '--site-fundo-lateral'],
   ['--site-codigo-texto', '--site-codigo-fundo'],
+  ['--site-passo-texto', '--site-passo-fundo'],
+  ['--site-logo-texto', '--site-logo-fundo'],
+  ['--site-texto', '--site-historico-fundo'],
+  ['--site-texto-2', '--site-historico-fundo'],
+  ['--site-link', '--site-historico-fundo'],
+  ...(['nota', 'dica', 'cuidado', 'perigo'] as const).flatMap((t): [string, string][] => [
+    ['--site-texto', `--site-aviso-${t}-fundo`],
+    ['--site-texto-2', `--site-aviso-${t}-fundo`],
+    [`--site-aviso-${t}-titulo`, `--site-aviso-${t}-fundo`],
+  ]),
 ];
 
 function medir(tokens: string, site: string) {
@@ -91,6 +134,19 @@ describe('contraste do site de documentação', () => {
       (x) => x.tema === 'claro' && x.nome === '--site-link / --site-fundo',
     );
     expect(m?.razao).toBeLessThan(4.5);
+  });
+
+  it('mutação: tinta do aviso a 60% (color-mix) reprova, então os fundos de aviso não são cegos', () => {
+    const mutado = TOKENS.replace('--tint-panel: 8%;', '--tint-panel: 60%;');
+    expect(mutado).not.toBe(TOKENS);
+    const reprovados = medir(mutado, SITE).filter((x) => x.nome.includes('aviso') && x.razao < 4.5);
+    expect(reprovados.length).toBeGreaterThan(0);
+  });
+
+  it('o color-mix do aviso resolve: 8% de accent sobre --surface-1 (escuro) fica entre os dois', () => {
+    const v = bloco(TOKENS, ':root');
+    expect(resolver(v, '--accent-panel')).toMatch(/^#[0-9a-f]{6}$/);
+    expect(resolver(v, '--accent-panel')).not.toBe(resolver(v, '--surface-1'));
   });
 
   it('mutação: sem o mapa do site é CEGO (zero valores)', () => {

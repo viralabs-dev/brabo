@@ -53,6 +53,18 @@ describe('arquivos de RN de todas as raízes', () => {
     const bloco = gerarIndiceDeRn(rns);
     expect(bloco.match(/<a id="rn-\d+"><\/a>/g)).toHaveLength(2);
     expect(bloco).toContain('(business-rules/api.md#rn-123)');
+    expect(bloco).toContain('- [api](business-rules/api.md) — 1 RN');
+    expect(bloco).toContain('- [web](business-rules/web.md) — 1 RN');
+  });
+
+  it('área partida: a grade aponta a parte e o domínio é o da pasta', () => {
+    const bloco = gerarIndiceDeRn([
+      { numero: 1, titulo: 'a', pagina: 'business-rules/api/parte-01.md' },
+      { numero: 2, titulo: 'b', pagina: 'business-rules/api/parte-02.md' },
+    ]);
+    expect(bloco).toContain('- [api](business-rules/api.md) — 2 RN');
+    expect(bloco).toContain('<a id="rn-002"></a>[002](business-rules/api/parte-02.md#rn-002)');
+    expect(bloco.split('\n').filter((l: string) => l.startsWith('- ['))).toHaveLength(1);
   });
 
   it('a árvore real: todas as raízes de RN, sem duplicata, e a ancoras-de-rn reexporta a mesma função', () => {

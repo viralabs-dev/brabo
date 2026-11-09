@@ -1,9 +1,14 @@
 ---
 sidebar_position: 8
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # 已分类的 backlog {#triaged-backlog}
+
+:::historico 2026-09-12
+源自第 13c 阶段的 backlog 分诊，包含真实执行的发现，以及散落在各个 ADR 中的旧事项。它按优先级（P1 到 P3）、成本和等待风险分类，分为 A 到 H 阶段。之后又累积了 runner（ADR 0104）、团队模型和 8 月 28 日外部评审的 backlog。如今“活的” backlog 位于项目的 Kanban 中。
+:::
 
 **FASE 13c** 的产出。汇集了真实执行中仍未关闭的发现
 （[achados-execucao-real.md](achados-execucao-real.md)）以及原本散落在各 ADR 和 CLAUDE.md

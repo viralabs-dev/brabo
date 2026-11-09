@@ -1,9 +1,14 @@
 ---
-traducao_de: 30ccc6978b8dbd50cc8a2f195d60a9bb3c0a71a6
+tipo: historico
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 sidebar_position: 13
 ---
 
 # 审计：fluxo.yml × 代码（v3，ADR 0085） {#audit-fluxoyml--code-v3-adr-0085}
+
+:::historico 2026-08-10
+一次只读审计，把 `fluxo.yml`（ADR 0085）与真实代码交叉比对。它列出各项分歧、每个激活触发器背后分阶梯的内容，以及代码在声明之外做的事。顺手没有修复任何东西：每一项分歧都成了一条发现。收尾记录在阶段历史中。
+:::
 
 一次隔离的审计会话——**只读**。它把 `packages/contracts/fluxo.yml`（ADR 0085 声明的目标模型）与真实代码
 交叉比对，以回答两个问题：代码要兑现流程中声明为 `active` 的一切还缺什么，以及在

@@ -1059,6 +1059,19 @@ resolver_imagens_do_ghcr() {
   done
 }
 
+# Token do GitHub Packages (AT-849): o `--source=local` constrói api, web e
+# broker, que instalam `@viralabs-dev/brabo-*` do registry do GitHub, e o bake
+# monta o `.npmrc` como secret (RN-1039). Sem a linha com token o build morre
+# dentro do container com um 401 mudo. Só confere se a linha EXISTE: o valor
+# nunca é lido para a tela. Mesmo critério do `conferir_npmrc` do brabo-infra.
+conferir_npmrc() {
+  local arquivo="${NPMRC:-${HOME}/.npmrc}"
+  if [ -r "$arquivo" ] && grep -qE '^//npm\.pkg\.github\.com/:_authToken=.' "$arquivo"; then
+    return 0
+  fi
+  recusar "--source=local precisa de um token do GitHub Packages em ${arquivo}, e a linha //npm.pkg.github.com/:_authToken= não está lá. Crie um PAT classic SÓ com a permissão read:packages (GitHub > Settings > Developer settings > Personal access tokens (classic)) e grave nele a linha //npm.pkg.github.com/:_authToken=<PAT>. Outro arquivo: NPMRC=<arquivo>. Passo a passo: https://viralabs-dev.github.io/brabo/prd/how-to/token-do-github-packages"
+}
+
 # Local: exige árvore LIMPA e em TAG. Uma imagem construída de árvore suja não
 # é a versão que ela diz ser, e o marcador registraria uma mentira.
 resolver_imagens_locais() {
@@ -1074,6 +1087,8 @@ resolver_imagens_locais() {
   # GHCR traz no manifesto, pela outra ponta.
   VERSAO_A_INSTALAR="$(git describe --exact-match --tags | sed 's/^v//')"
   COMMIT_A_INSTALAR="$(git rev-parse --short=12 HEAD)"
+
+  conferir_npmrc
 
   dizer 'Construindo as cinco imagens (docker buildx bake)…'
   docker buildx bake -f docker-bake.hcl || recusar 'o build local falhou.'
@@ -1344,7 +1359,7 @@ conferir_o_broker() {
 # o spec `install-runner-release` reprova a divergência. É o hash DESTE script que o
 # manifesto do produto assina, então a tag pinada aqui é tão confiável quanto ele.
 RUNNER_REPO='viralabs-dev/brabo-runner'
-RUNNER_TAG='v1.0.0'
+RUNNER_TAG='v1.2.0'
 URL_DO_RUNNER="https://github.com/${RUNNER_REPO}/releases/download/${RUNNER_TAG}"
 IDENTIDADE_REGEX_RUNNER="^https://github.com/${RUNNER_REPO}/\.github/workflows/build-runner-binaries\.yml@"
 

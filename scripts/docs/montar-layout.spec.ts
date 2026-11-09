@@ -71,6 +71,16 @@ describe('montar-layout.sh', () => {
     expect(readFileSync(join(brabo, '.git/layout-irmaos.lst'), 'utf8')).toContain('apps/api/api.txt');
   });
 
+  it('a docs/ de irmão posto em "." vai para <nome>/docs e não cai na docs/ daqui (AT-846; sem o desvio reprova)', () => {
+    mkdirSync(join(irmaos, 'brabo-qa', 'docs'), { recursive: true });
+    writeFileSync(join(irmaos, 'brabo-qa', 'docs', 'x.md'), 'qa');
+    commit('qa');
+    montar();
+    expect(readFileSync(join(brabo, 'qa/docs/x.md'), 'utf8')).toBe('qa');
+    expect(existsSync(join(brabo, 'docs/x.md'))).toBe(false);
+    expect(git(brabo, 'ls-files', 'qa/docs')).toContain('qa/docs/x.md');
+  });
+
   it('arquivo que saiu do irmão some na rodada seguinte; o que é daqui fica', () => {
     git(join(irmaos, 'brabo-api'), 'rm', '-q', 'api.txt');
     commit('api');
@@ -85,6 +95,14 @@ describe('montar-layout.sh', () => {
     commit('web');
     montar();
     expect(readFileSync(join(brabo, 'apps/web/web.txt'), 'utf8')).toBe('novo');
+  });
+
+  it('node_modules aninhado (website/) nunca entra no índice: o ls-tree passava de 1 MB e o gerador dava ENOBUFS (AT-870)', () => {
+    mkdirSync(join(brabo, 'website/node_modules/pkg'), { recursive: true });
+    writeFileSync(join(brabo, 'website/node_modules/pkg/index.js'), 'x');
+    montar();
+    expect(git(brabo, 'ls-files', 'website')).toBe('');
+    expect(git(brabo, 'ls-files', '--', 'website/node_modules/pkg')).toBe('');
   });
 
   describe('trava irmaos.lock (AT-780)', () => {

@@ -5,7 +5,8 @@ sidebar_label: 架构
 sidebar_position: 2
 description: Brabo 的地图——容器、代码地图、一次智能体轮次的流程、层级不变量和已知债务。
 keywords: [架构, 代码地图, 不变量, harness, event log]
-traducao_de: 72b7ce386be372596e8fa6caf64502089c39fa05
+tipo: conceito
+traducao_de: d7d790431657e61a049b452214cfd432da2199df
 ---
 
 # 架构
@@ -13,7 +14,7 @@ traducao_de: 72b7ce386be372596e8fa6caf64502089c39fa05
 本文档是给要在代码上**工作**的人的地图。它告诉你从哪里开始读、每条边界承诺什么，
 以及哪些地方已知是歪的。
 
-决策及其理由在 [ADR](adr/index.md) 中——共 257 个，其中好几个记录了在执行中发现的
+决策及其理由在 [ADR](adr/index.md) 中——共 282 个，其中好几个记录了在执行中发现的
 真实缺陷。这里不重复论证：只指向它。
 
 ## 外部视角 {#the-outside-view}
@@ -458,8 +459,11 @@ sequenceDiagram
 返回 `deny`——不是 `require_approval`，因为"总是允许"会把模式写入 `allow` 并重新打开
 这扇门（[RN-106](business-rules/api.md#rn-106)、
 [ADR 0065](adr/0065-container-por-projeto-a-fronteira-deixa-de-ser-politica.md)）。
-容器的生命周期（配置、回收、清理）尚不存在——FASE 25 的一个已声明的削减，记录在
-CLAUDE.md 中——因此这个不变量目前与
+容器的生命周期（配置、回收、清理）以 `project_containers` 表和状态机
+`provisioning → running ⇄ stopped` 的形式存在（[RN-243](business-rules/api.md#rn-243) 至
+[RN-248](business-rules/api.md#rn-248)，[ADR 0081](adr/0081-ciclo-de-vida-do-container-tabela-sem-orquestrador.md)）：
+用例只记录状态转换，没有任何一个会调用 Docker。持有服务器 Docker 套接字的是
+`brabo-broker`。因此这个不变量与
 [ADR 0055](adr/0055-escopo-de-caminho-na-politica-de-terminal.md) 的路径范围策略共存。
 
 而自 [ADR 0143](adr/0143-agentes-de-dev-so-depois-do-container.md)

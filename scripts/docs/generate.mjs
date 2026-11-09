@@ -30,9 +30,10 @@ import {
 } from './refs-com-simbolo.mjs';
 import { deduplicarProximoAdr, PROXIMO_ADR, substituirGrupo } from './reescrita.mjs';
 import { aferirAncoras } from './ancoras-de-rn.mjs';
+import { gerarIndiceDeAdr, statusDoAdr, tituloDoAdr } from './indice-de-adr.mjs';
 import { arquivosDeRn, contarRegras, gerarIndiceDeRn, numerosDuplicados, rnsDoLocale } from './regras-de-negocio.mjs';
 import { aferirContagens } from './contagens-do-codigo.mjs';
-import { conferirTabela, repositorio, RUNBOOK } from './procedimentos-do-runbook.mjs';
+import { conferirTabela, lerRunbook, repositorio, RUNBOOK } from './procedimentos-do-runbook.mjs';
 import { conferirTemas, corrigirRecuo, INDICE as INDICE_DE_ADR, TEMAS as TEMAS_DE_ADR } from './temas-de-adr.mjs';
 import { fontesDoInventarioDeEnv } from './fontes-de-env.mjs';
 import {
@@ -278,12 +279,18 @@ function gerarEnv() {
       `\n${T.avisoBloco}\n\n${T.envInventario(total)}` +
       (naoDocumentadas > 0 ? T.envNaoDoc(naoDocumentadas) : T.envTodasDoc) +
       `\n\n${T.envEscopos}\n`;
+    // Por serviço (AT-862): um índice dos serviços, um título por serviço e uma âncora `{#env-NOME}` por variável (a busca e os links a usam).
+    const idDe = (app) => `env-servico-${app.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+    corpo += `\n${porFonte.map(({ app, variaveis }) => `[${app}](#${idDe(app)}) (${variaveis.length})`).join(' · ')}\n`;
+    const comAncora = new Set(); // a mesma variável em dois serviços: a âncora é da primeira
     for (const { app, escopo, variaveis } of porFonte) {
-      corpo += `\n**${app}** — ${T.envVariaveis(variaveis.length)} · ${escopo === 'produto' ? T.produto : T.ferramenta}\n\n`;
+      corpo += `\n### ${app} {#${idDe(app)}}\n\n${T.envVariaveis(variaveis.length)} · ${escopo === 'produto' ? T.produto : T.ferramenta}\n\n`;
       for (const { nome, arquivo, documentada } of variaveis) {
         // A prosa da FONTE documenta? Senão a lacuna aparece aqui — e, desde a
         // AT-211, o check reprova (abaixo).
-        corpo += `- \`${nome}\`${documentada ? '' : T.envSemDescricao} <sub>(${arquivo})</sub>\n`;
+        const ancora = comAncora.has(nome) ? '' : `<a id="env-${nome}"></a>`;
+        comAncora.add(nome);
+        corpo += `- ${ancora}\`${nome}\`${documentada ? '' : T.envSemDescricao} <sub>(${arquivo})</sub>\n`;
       }
     }
     return corpo;
@@ -531,8 +538,9 @@ const SPEC = 'apps/api/docs/reference/openapi.json';
 // ----------------------------------------------------------- 5. índice de ADR
 
 /**
- * NÃO gera o índice: ele tem uma linha curada por ADR, que nenhum script
- * escreve. Verifica que todo ADR está linkado — a lacuna que importa.
+ * O índice é gerado por `gerarIndiceDeAdrNoBloco` (ADR 0287, que revisa o item 2
+ * do 0202). Esta função segue conferindo que todo ADR está linkado — a lacuna
+ * que importa — e pega o índice cujo bloco ainda não foi gerado.
  */
 function verificarIndiceAdr() {
   const indice = ler('docs/adr/index.md');
@@ -874,7 +882,7 @@ function verificarFrasesAncoradasNoCodigo() {
       oque: 'quantas imagens o produto publica no GHCR',
     },
     {
-      arquivo: 'deploy/docs/runbook.md',
+      arquivo: 'deploy/docs/runbook/instalacao.md',
       padrao: /as (\S+) imagens que o produto publica já estão resolvidas/,
       // AT-745: a prosa do infra passa a ser inglesa; a frase equivalente fica registrada em docs/adr/0260
       padraoEn: /the (\S+) images the product publishes are already resolved/,
@@ -895,7 +903,7 @@ function verificarFrasesAncoradasNoCodigo() {
       oque: 'a escada da esteira no `description` do frontmatter',
     },
     {
-      arquivo: 'docs/getting-started.md',
+      arquivo: 'docs/how-to/desenvolver-o-brabo.md',
       padrao: /db:generate\s+# depois de mudar (apps\/api\/src\/db\/schema(?:\/|\.ts))/,
       esperado: moradaDoSchema,
       oque: 'onde o `db:generate` manda mexer',
@@ -1094,7 +1102,8 @@ function verificarAncorasDeRn() {
  * zero linhas, é `CEGO` e também reprova.
  */
 function verificarProcedimentosDoRunbook() {
-  const r = conferirTabela(ler(RUNBOOK), repositorio(arquivos, ler));
+  const rb = lerRunbook(arquivos, ler);
+  const r = conferirTabela(rb.indice, repositorio(arquivos, ler), rb.partes);
 
   if (r.cego) {
     pendencias.push('procedimentos do runbook');
@@ -1169,13 +1178,11 @@ function verificarVersaoAnunciada() {
       padrao: /versão \*\*v(\d+\.\d+\.\d+)\*\*/,
     },
     {
-      // A primeira página do site publicado. O padrão exige a frase INTEIRA
-      // ("Fases 1 a NN concluídas**, versão **vX.Y.Z**") de propósito:
-      // as duas metades envelhecem juntas, e casar só a versão deixaria a
-      // contagem de fases mentindo do lado dela sem nada reprovar. Voltou a pt-BR
-      // com o ADR 0216 (pt-BR é a fonte); a tradução em inglês não é aferida.
+      // A primeira página do site publicado. A linha "Versão atual: **vX.Y.Z**"
+      // substituiu a seção "Estado" (AT-855): o estado das fases virou histórico.
+      // Voltou a pt-BR com o ADR 0216 (pt-BR é a fonte); a tradução em inglês não é aferida.
       arquivo: 'docs/intro.md',
-      padrao: /\*\*Fases 1 a \d+ concluídas\*\*, versão \*\*v(\d+\.\d+\.\d+)\*\*/,
+      padrao: /Versão atual: \*\*v(\d+\.\d+\.\d+)\*\*/,
     },
   ];
 
@@ -1248,8 +1255,28 @@ function gerarIndiceDeRnNoBloco() {
   }
 }
 
+/**
+ * Índice de ADR (AT-862, ADR 0287): a tabela por tema (número, título, status) é
+ * GERADA em `docs/adr/index.md` e nas cópias traduzidas, no bloco `indice-de-adr`.
+ * O título vem do H1 de cada ADR (do locale, quando a cópia existe).
+ */
+function gerarIndiceDeAdrNoBloco() {
+  const arqs = arquivos('docs/adr/[0-9]*.md').map((f) => f.replace('docs/adr/', '')).sort();
+  const status = new Map(arqs.map((a) => [a, statusDoAdr(ler(`docs/adr/${a}`))]));
+  for (const locale of [null, ...LOCALES_GERADOS]) {
+    const rel = locale ? copiaDoLocale(locale, 'docs/adr/index.md') : 'docs/adr/index.md';
+    if (!existsSync(join(RAIZ, rel)) || !ler(rel).includes('<!-- BEGIN:GENERATED:indice-de-adr -->')) continue;
+    const adrs = arqs.map((arquivo) => {
+      const copia = locale ? copiaDoLocale(locale, `docs/adr/${arquivo}`) : `docs/adr/${arquivo}`;
+      return { arquivo, titulo: tituloDoAdr(ler(existsSync(join(RAIZ, copia)) ? copia : `docs/adr/${arquivo}`)), status: status.get(arquivo) };
+    });
+    escreverBloco(rel, 'indice-de-adr', gerarIndiceDeAdr({ temasYml: ler(TEMAS_DE_ADR), adrs, T: locale ? TEXTOS[locale] : textosDaFonte(ler(rel), TEXTOS), locale }));
+  }
+}
+
 gerarScripts();
 gerarIndiceDeRnNoBloco();
+gerarIndiceDeAdrNoBloco();
 gerarEnv();
 gerarEventos();
 gerarOpenapi();

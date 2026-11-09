@@ -5,10 +5,15 @@ sidebar_label: FASE 29 — one-line installation
 sidebar_position: 16
 description: The scope of FASE 29 — signing of published artifacts, a versioned install.sh with a chosen source and a marker, volume backup and the runner's consented base. The decisions are in ADRs 0149 to 0152.
 keywords: [fase 29, installer, signature, cosign, backup, runner, projects base]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # FASE 29 — the one-line installation
+
+:::historico 2026-09-08
+A slice of Phase 29: join the three loose installation gestures (bring the services up, install the runner, choose where the code lives) into a one-line installer, now with signed artifacts. It says what the phase pursues, what it refuses and in what order. The decisions live in ADRs 0149 to 0152.
+:::
 
 > This document is the phase's **scope**: what it pursues, what it refuses,
 > and in what order. The **decisions** live in [ADR 0149](../adr/0149-assinatura-dos-artefatos-publicados.md),

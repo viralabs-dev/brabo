@@ -62,6 +62,33 @@ describe('conferirAncoras — mutação', () => {
   });
 });
 
+describe('AT-871 — <a id> antes da RN em parte-NN.md', () => {
+  const comAncora = '<a id="rn-002"></a>\n\n### RN-002 — x {#rn-002}';
+  it('âncora presente passa', () => {
+    expect(conferirAncoras(comAncora, { exigirAncoraHtml: true }).problemas).toEqual([]);
+  });
+  it('MUTAÇÃO: âncora ausente ou de outro número reprova', () => {
+    expect(conferirAncoras('### RN-002 — x {#rn-002}', { exigirAncoraHtml: true }).problemas).toHaveLength(1);
+    expect(conferirAncoras(comAncora.replace('"rn-002"', '"rn-003"'), { exigirAncoraHtml: true }).problemas).toHaveLength(1);
+  });
+  it('MUTAÇÃO: <a id> colado ao item de lista anterior reprova; com a linha em branco passa', () => {
+    const colado = '- item\n<a id="rn-002"></a>\n\n### RN-002 — x {#rn-002}';
+    expect(conferirAncoras(colado, { exigirAncoraHtml: true }).problemas).toHaveLength(1);
+    expect(conferirAncoras(colado.replace('- item\n', '- item\n\n'), { exigirAncoraHtml: true }).problemas).toEqual([]);
+  });
+  it('âncora logo depois de um cabeçalho `##` não reprova (o cabeçalho fecha o bloco)', () => {
+    expect(conferirAncoras('## H\n<a id="rn-002"></a>\n\n### RN-002 — x {#rn-002}', { exigirAncoraHtml: true }).problemas).toEqual([]);
+  });
+  it('sem a opção (índice, página não partida) não exige', () => {
+    expect(conferirAncoras('### RN-002 — x {#rn-002}').problemas).toEqual([]);
+  });
+  it('aferirAncoras exige só em parte-NN.md', () => {
+    const t = '### RN-002 — x {#rn-002}';
+    const r = aferirAncoras(['docs/business-rules/api/parte-01.md', 'docs/business-rules/api.md'], () => t);
+    expect(r.problemas.map((p: { arquivo: string }) => p.arquivo)).toEqual(['docs/business-rules/api/parte-01.md']);
+  });
+});
+
 describe('a árvore real', () => {
   const lista = arquivosDeRn(arquivos) as string[];
 

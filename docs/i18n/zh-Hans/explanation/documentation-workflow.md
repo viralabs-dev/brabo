@@ -5,10 +5,13 @@ sidebar_label: 文档同步
 sidebar_position: 1
 description: 阻止文档腐烂的机制——每个部件做什么、为什么存在，以及当检查不公正地抱怨时该怎么办。
 keywords: [documentation, drift, docmap, CI, generation]
-traducao_de: 2d508b95c379df9edb51cc94523fd3f05edd83b2
+tipo: referencia
+traducao_de: 3cb8d867681554d54e45048cb40b2c9eb24c32d9
 ---
 
 # 文档如何保持鲜活 {#how-documentation-stays-alive}
+
+> 要**撰写**页面，请阅读[我们如何撰写文档](../contribuir/como-escrevemos.md)。本页描述的是让文档保持最新的**机制**。
 
 文档不是因为最初没写而死的。它死于**漂移**：代码变了，文档没变，有一天有人发现它描述的是一个已经
 不存在的系统。从那一刻起，没有人再信任任何页面，包括那些正确的页面。
@@ -196,6 +199,8 @@ RN 通过 `caminho:linha` 引用代码，而每次有人编辑文件，行号就
 `website/i18n/` 下三个 RN 文件的 pt-BR 翻译**不**被核对。它们的引用很少（23 个匹配模式，2026-10-01
 时其中 15 个是错的），而且翻译无论如何都落后于英语源；核对一份没人保持更新的副本，会因翻译的滞后而
 让每个 PR 失败。
+
+**在同级仓库。** 自 [ADR 0275](../adr/0275-cada-irmao-confere-as-proprias-refs-com-simbolo.md) 起，每个同级仓库在 CI 中通过 `brabo-ci` 的可复用工作流 `refs-com-simbolo.yml` 核对自己带符号的引用，不需要布局，也不需要生成器（核对使用同一个核心 `refs-com-simbolo.ts`，窗口相同，`CEGO` 也相同）。指向其他同级仓库代码的引用只会列在摘要中：核对它的是锁的升级（ADR 0274），它会点名所属仓库。当同级仓库自己的引用不通过时，作业会把重新锚定的补丁作为 `refs-patch` 制品上传，不在 PR 上评论。该检查不在必需之列：漏过去的会落到锁上。
 
 ### 每个 RN 标题都带有其锚点 {#every-rn-heading-carries-its-anchor}
 
@@ -387,6 +392,10 @@ flowchart TD
 
 始终在**同一个** issue 中，原地更新。每个月一个新 issue 会变成垃圾信息，而垃圾信息会被关掉。
 
+### `estilo.mjs`——执行写作指南 {#estilo-mjs}
+
+`scripts/docs/estilo.mjs` 衡量每个在 frontmatter 中声明了 `tipo:` 的页面。它统计正文的字数（不含 frontmatter、代码、表格、标题和“Para saber mais”一节），并拒绝超过该类型上限的页面：教程 1 500、指南 800、概念 1 200。参考页没有上限。它还会标出“Para saber mais”之外的内部 ID（ADR、RN、AT、EP、HS、Fase、Rodada）。CLI 只发出警告并以 0 退出。真正的约束是 `estilo.spec.ts` 中的 `PENDENTES` 棘轮，它在 `pnpm test:scripts` 中运行，只会缩小：新页面超限就失败，名单上已经达标的页面也失败（“请从名单中移除”）。写作规则见[我们如何撰写文档](../contribuir/como-escrevemos.md)。
+
 ### 网站构建 {#the-site-build}
 
 `onBrokenLinks`、`onBrokenAnchors` 和 `onBrokenMarkdownLinks` 设为 `throw`。移动一个文件而不修正指向它
@@ -467,13 +476,10 @@ docmap 的规则 `traducao`（原为 `traducao-pt-br`）监视源并指向 `webs
 
 拦住滞后的是测量，而不是 docmap。`scripts/docs/paridade-de-traducao.mjs`（由旁边的 spec 经变异证明）在
 `pnpm docs:generate` 内部运行并写入两个文件：`docs/reference/paridade-de-traducao.md`
-（`generated: true`）和 `website/src/data/traducao.json`。对每个 locale，它统计相对于源（整个 `docs/`，自 ADR 0219 起包括
-`reference/`，但不含报告本身和 `openapi.json`）已翻译的页面和字符，并把已翻译的页面分为**最新**、**过时**和**无来源**。来源是
+（`generated: true`）和 `website/src/data/traducao.json`。对每个 locale，它统计相对于源（`brabo` 自己的 `docs/`，自 ADR 0219 起包括 `reference/`，但不含报告本身、`openapi.json` 和 `i18n/`；同级仓库的文档不计入，ADR 0273）已翻译的页面和字符，并把已翻译的页面分为**最新**、**过时**和**无来源**。来源是
 翻译页面 frontmatter 中的 `traducao_de: <SHA>`，即它所翻译的源的最后一次提交。当源有一个 COMMIT DATE
 晚于该 SHA 的提交、源有未提交的改动，或该 SHA 不存在时，页面就是过时的。它从不使用时钟，因此
-`--check` 在触及源的提交之前和之后给出相同的答案。对于 UI，它把 `apps/web/src/locales/<l>/` 中每个
-命名空间的键与 pt-BR 比较，并要求 `Intl.PluralRules` 为该 locale 给出的每种复数形式。当两个文件中任何
-一个过时时，`--check` 失败。
+`--check` 在触及源的提交之前和之后给出相同的答案。当一个路径在 `HEAD` 中，或不在清单 `.git/layout-irmaos.lst` 中时，它属于 `brabo`；因此同级仓库的文档合并不再改变一致性。界面不在这里衡量：键和复数形式的闸门是 `brabo-web` 的 `src/lib/i18n-paridade.test.ts`，API 文本只在 `docs:generate` 日志中发出警告。当两个文件中任何一个过时时，`--check` 失败。
 
 横幅是对 `@theme/DocItem/Content` 的 wrap swizzle（`website/src/theme/DocItem/Content/index.tsx`）。在
 pt-BR 之外，`metadata.source` 位于 `@site/docs/` 下的页面是 pt-BR 回落并说明这一点；被
@@ -483,7 +489,7 @@ pt-BR 之外，`metadata.source` 位于 `@site/docs/` 下的页面是 pt-BR 回�
 回落），而根路径上的同一页面以及一个不过时的 `en` 翻译页面没有。给译者的规则在
 [本地化](localizacao.md) 中。
 
-**代码仓库的文档只用英文（AT-745、ADR 0260）。** 带 `idioma_original: en` 的页面不计入一致性（`ehFonteTraduzivel`），在 `/en/` 中不带横幅，在其他语言中带横幅“此页仅有英文版本”（`paginas.mjs` 设置 `somenteIngles`；`faixa-de-traducao-check.mjs` 检查 HTML）。每种语言的 RN 索引在译文存在时使用译文，否则使用原文（`rnsDoLocale`），英文原文中的生成块以英文文本输出（`textosDaFonte`），锚定在同级仓库正文中的句子（`contagens-do-codigo.mjs`、runbook）接受 pt-BR 或英文（`padraoEn`）。`openapi-textos.json` 目录位于 `brabo` 的 `docs/i18n/<locale>/` 中。
+**所有仓库的文档默认使用 pt-BR（AT-766、ADR 0266，它取代 0260）。** 同级仓库可以有 `<raiz>/docs/i18n/`，在所属仓库中衡量（`brabo` 的一致性不计入它们，ADR 0273）。仍是英文的同级页面（混合状态，直到重新翻译）依然被接受：带 `idioma_original: en` 时它不计入一致性（`ehFonteTraduzivel`），在 `/en/` 中不带横幅，在其他语言中带横幅“此页仅有英文版本”（`paginas.mjs` 设置 `somenteIngles`；`faixa-de-traducao-check.mjs` 检查 HTML）。每种语言的 RN 索引在译文存在时使用译文，否则使用原文（`rnsDoLocale`），英文原文中的生成块以英文文本输出（`textosDaFonte`），锚定在同级仓库正文中的句子（`contagens-do-codigo.mjs`、runbook）接受 pt-BR 或英文（`padraoEn`）。`openapi-textos.json` 目录位于 `brabo` 的 `docs/i18n/<locale>/` 中。
 
 ### API 页面按目录翻译（ADR 0220） {#the-api-page-is-translated-by-catalog-adr-0220}
 
@@ -593,7 +599,7 @@ slug 会在每个 locale 中让 `docs:build` 失败。
 
 > **实际后果：** 即使 `Documentação` 是绿的，网站也可能是旧的。如果 Pages 的 `build_type` 不是
 > `legacy`/`gh-pages`，提交会发生而没人提供它——CI 中也没有任何东西变红。核对方法是
-> `gh api repos/daneiel/brabo/pages`，记录在 [Rulesets](../reference/rulesets.md) 中。
+> `gh api repos/viralabs-dev/brabo/pages`，记录在 [Rulesets](../reference/rulesets.md) 中。
 
 整个设计，连同被放弃的替代方案，在 [ADR 0034](../adr/0034-documentacao-publicada-por-degrau.md) 中。
 
@@ -602,6 +608,8 @@ slug 会在每个 locale 中让 `docs:build` 失败。
 `website/src/css/custom.css` 导入 `design/tokens.css`——与 `apps/web` 相同的颜色来源（ADR 0181）——只是把 Infima 的 `--ifm-*` 指向这些令牌：深色为黑，浅色为白，primary 为赤陶色（`--accent`），代码高亮使用 `--syntax-*`。没有复制任何 hex。字体刻意保持系统字体：站点不加载 `--font-*` 所命名的字体族。`scripts/docs/contraste-do-site.spec.ts` 在两个主题中把文本 `--ifm-*` 解析到 hex，对背景低于 4.5:1 即判失败（如果什么都没解析出来，则以 BLIND（盲）判失败）。
 
 例外是根索引（`/brabo/`，由 `scripts/docs/landing.mjs` 写出）：它是 Pages 上的独立 HTML，够不到 `tokens.css`，因此复制这些值，并按系统偏好覆盖两个主题。这份复制由 `scripts/docs/landing.spec.ts` 约束，它解析令牌并对不一致的值判失败——在 ADR 0181 之后它就曾经变成过石油蓝色。
+
+每个页面通过 frontmatter 中的 `tipo:` 声明自己的类型（`tutorial|guia|conceito|referencia|decisao|historico`），或从所在文件夹获得类型（`tutorials/`、`how-to/`、`explanation/`、`reference/`、`adr/`、`business-rules`）。菜单有 7 个顶层分组，`scripts/docs/site/tipos.mjs` 会拒绝没有类型、位于错误分组或不在菜单中的页面。
 
 ## 在你的机器上运行 {#running-it-on-your-machine}
 
@@ -614,8 +622,9 @@ cd website && pnpm install && cd ..  # only the first time, or when website/pnpm
 pnpm docs:check      # validates the map + checks generated content is up to date
 pnpm docs:generate   # regenerates
 pnpm docs:drift      # simulates the PR check (origin/dev...HEAD)
-pnpm docs:build      # the build CI runs — pnpm --dir website build under the hood
-pnpm docs:start      # local server, with hot reload
+pnpm docs:build      # the build CI runs — generates build/docs-site and checks links
+pnpm docs:start      # builds and serves on http://localhost:3000
+node scripts/docs/estilo.mjs  # style check: word budget per page type
 
 # does the API reference render? needs the build above, and isn't part
 # of docs:check because that one doesn't build the site
@@ -688,3 +697,25 @@ or in the body: docs-not-needed: internal refactor, no RN changed
 `lib/logger.ts`），而 `README.md` 几乎不被任何规则要求。只交付 CI 要求的东西，正是关于
 `OTEL_EXPORTER_OTLP_ENDPOINT` 的两句话错了好几个月的原因。当你改代码时，扫描 `docs/`，寻找这次改动变成
 错误的东西——包括没有人要你看的东西。
+
+## 按领域划分的文档根 {#raizes-de-doc-por-area}
+
+自 [ADR 0254](../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.md) 起，每个领域的文档位于 `<raiz>/docs/`（列表在 `scripts/docs/raizes-de-doc.mjs` 中，名称→文件夹的映射在 `scripts/docs/fontes.yml` 或 `BRABO_FONTES` 文件中），而 `docs/` 仍是聚合器。网站是**并集树**：文件保留原来的相对路径，公开 URL 不变，页面之间的链接使用网站的坐标，而不是磁盘的坐标。
+
+```mermaid
+flowchart LR
+  A["apps/api/docs"] --> U
+  W["apps/web/docs"] --> U
+  E["apps/engine/docs"] --> U
+  R["apps/runner/docs · broker · packages"] --> U
+  I["deploy/docs · brabo-ci (scripts/ci/docs)"] --> U
+  Q["qa/docs · brabo-qa (docs/ do irmão em ., AT-846)"] --> U
+  P["docs/ (agregador)"] --> U
+  U(("união")) --> S["site: mesmas URLs"]
+```
+
+- **新的 RN** 写在 `<raiz>/docs/business-rules/<raiz>.md`，即承载第一个 `caminho:N` 引用的根。编号是全局的，`{#rn-NNN}` 锚点不变；`docs/business-rules.md` 是生成的索引，`custo.md`/`autenticacao.md` 是冻结的桩。
+- **同级仓库通过锁进入。** `irmaos.lock`（每个同级仓库一个 SHA）是 `montar-layout.sh` 在 `docs-check`、`docs-audit` 和部署的 `dev` 台阶中使用的内容；`BRABO_REF` 优先于锁（`main` 台阶使用 `BRABO_REF=main`）。只有 `regenera-gerados.yml` 会升级锁，并同时更新生成文件（ADR 0274）。因此 `scripts.md`、RN 索引、计数和带符号的引用只在升级时变化，普通 PR 不会因为同级仓库的合并而变红。
+- **`docs:check`** 汇总所有根，并拒绝跨根重复的 RN。使用 `--raiz <名称>` 时，它按根运行只依赖该根的检查（锚点、内部引用、docmap glob、drift），把跨根的检查（计数、RN 索引、一致性、语言之间的链接）留给聚合器。*目前 `--raiz` 只限制带符号的引用；其余生成器仍完整运行。因此同级仓库不使用它：它的引用由自己的 CI 核对（ADR 0275）。*
+- **翻译**位于 `<raiz>/docs/i18n/<locale>/`，共用一个 `traducao.json`。移动文件需要两次提交：先做变更，再重新标记 `traducao_de`。
+- **代价：**根与根之间的链接在 GitHub 的视图中会得到 404；在网站上则正常。

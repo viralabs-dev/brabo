@@ -3,7 +3,10 @@
 // índice (mantém a busca do Redoc): a A1 não a passa em `paginas`.
 //
 // CONTRATO para o build.mjs (A1), por locale:
-//   const { json, bytes } = indiceDoLocale(paginas)   // paginas: [{slug, titulo, texto}]
+//   const { json, bytes } = indiceDoLocale(paginas)   // paginas: [{slug, titulo, texto, secoes?: [{id, texto}]}]
+// `secoes` (AT-862): os títulos de seção e as âncoras de variável entram como
+// itens próprios `{u, h, t, x: ''}` (`h` = fragmento), para achar uma RN ou uma
+// variável pelo nome mesmo quando o texto da página passa do teto.
 //   gravar `assets/busca-<locale>.json` (ou: await gravarIndice(dirDoLocale, locale, paginas))
 //   layout({ ..., extraScripts: tagDeBusca({ locale, base }) })
 // Copie também `assets/busca.js` para a saída. `base` é o caminho RELATIVO da
@@ -26,6 +29,15 @@ export function indiceDoLocale(paginas) {
     t: p.titulo,
     x: normalizar(`${p.titulo} ${p.texto}`).slice(0, TETO_DE_TEXTO),
   }));
+  for (const p of paginas) {
+    const vistos = new Set([normalizar(p.titulo)]);
+    for (const s of p.secoes ?? []) {
+      const n = normalizar(s.texto);
+      if (!n || vistos.has(n)) continue;
+      vistos.add(n);
+      itens.push({ u: p.slug, h: s.id, t: s.texto, x: '' });
+    }
+  }
   const json = JSON.stringify(itens);
   return { json, bytes: Buffer.byteLength(json) };
 }

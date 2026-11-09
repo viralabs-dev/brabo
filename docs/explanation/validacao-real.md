@@ -5,9 +5,14 @@ sidebar_label: Validação real (13b)
 sidebar_position: 6
 description: A execução contra um repositório remoto de verdade, com dev agent real e modelo de API — o que ela provou, o que ela reprovou, e por que reprovar aqui vale mais que passar.
 keywords: [validação, dogfooding, GitHub, dev agent, medição, FASE 13b]
+tipo: historico
 ---
 
 # A validação real — GitHub remoto e modelo de verdade
+
+:::historico 2026-08-06
+Validação com GitHub remoto, dev agent real e modelo de API: o que a Fase 12 deixara de fora. A metade barata passou inteira e a cara falhou de um jeito que nenhum teste mostrara. Relata dez execuções, cada correção e o que ela revelou, até a cadeia inteira ponta a ponta.
+:::
 
 A [validação da Fase 12](./validacao-fase-12.md) declara os próprios limites com
 todas as letras: `LocalGitProvider`, `NoopDevAgent`, veredito de gate escrito

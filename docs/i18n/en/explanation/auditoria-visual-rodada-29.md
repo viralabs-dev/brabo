@@ -2,10 +2,15 @@
 id: auditoria-visual-rodada-29
 title: Visual audit, before and after Rodada 29
 description: AT-290's screen audit — the main routes captured in both themes at 1440 px and 390 px, the layout checker run on every screen, and what Rodada 29 fixed, what persists and what is new, measured on 2026-09-30 against dev at 79e6b1209f.
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # Visual audit, before and after Rodada 29
+
+:::historico 2026-09-30
+A measurement, not a change: the interface before and after Round 29, captured against `dev` on two commits of the same day. It records what the verifier measured and what improved or did not. The captures are not in the repository; each finding cites the file name.
+:::
 
 > AT-290 (EP-031, HS-074). A **measurement, not a change**: nothing in `apps/`
 > was touched to write this page. The "before" capture ran on 2026-09-30

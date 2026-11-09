@@ -4,6 +4,7 @@ import {
   ancorasExplicitas,
   conferirTabela,
   gatilhosDoWorkflow,
+  lerRunbook,
   repositorio,
   RUNBOOK,
 } from './procedimentos-do-runbook.mjs';
@@ -228,8 +229,32 @@ describe('os extratores', () => {
   });
 });
 
+describe('runbook partido em índice mais partes (AT-869)', () => {
+  const linha = (anchor: string) => `${CABECALHO}\n| Restore | ${anchor} | **None** | manual |\n`;
+  const indice = (anchor: string) => `## Procedimentos {#procedimentos-e-verificacao}\n\n${linha(anchor)}`;
+  const partes = '## Restore {#restore}\n';
+
+  it('aceita `(runbook/<parte>.md#id)` quando o `{#id}` mora numa parte', () => {
+    const r = conferirTabela(indice('[Restore](runbook/restore.md#restore)'), repo, partes);
+    expect(r.problemas).toEqual([]);
+  });
+
+  it('reprova o id que nem o índice nem as partes têm, e o runbook sem partes não o inventa', () => {
+    expect(conferirTabela(indice('[Restore](runbook/restore.md#restore)'), repo).problemas[0]?.motivo).toMatch(/não é um `\{#id\}`/);
+    expect(conferirTabela(indice('[X](runbook/x.md#nada)'), repo, partes).problemas[0]?.motivo).toMatch(/`#nada`/);
+  });
+
+  it('lerRunbook soma as partes que existem e ignora o que não é filho direto', () => {
+    const lidos: Record<string, string> = { [RUNBOOK]: 'I', 'deploy/docs/runbook/b.md': 'B', 'deploy/docs/runbook/a.md': 'A' };
+    const r = lerRunbook(() => ['deploy/docs/runbook/b.md', 'deploy/docs/runbook/a.md', 'deploy/docs/runbook/x/y.md'], (c) => lidos[c]);
+    expect(r).toEqual({ indice: 'I', partes: 'A\nB' });
+    expect(lerRunbook(() => [], (c) => lidos[c])).toEqual({ indice: 'I', partes: '' });
+  });
+});
+
 describe('a árvore real', () => {
-  const r = conferirTabela(ler(RUNBOOK), repositorio(arquivos, ler));
+  const rb = lerRunbook(arquivos, ler);
+  const r = conferirTabela(rb.indice, repositorio(arquivos, ler), rb.partes);
 
   it('a tabela do runbook existe, confere inteira e não está cega', () => {
     expect(r.cego).toBeNull();

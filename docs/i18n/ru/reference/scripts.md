@@ -22,7 +22,7 @@ keywords: [scripts, pnpm, make, commands]
 | `pnpm docs:serve` | `python3 -m http.server 3000 -d build/docs-site` |
 | `pnpm docs:clear` | `rm -rf build/docs-site` |
 | `pnpm docs:site` | `node scripts/docs/site/build.mjs` |
-| `pnpm docs:site:check` | `node scripts/docs/site/links.mjs && node scripts/docs/links-do-locale.mjs build/docs-site && node scripts/docs/faixa-de-traducao-check.mjs build/docs-site` |
+| `pnpm docs:site:check` | `node scripts/docs/site/links.mjs && node scripts/docs/links-do-locale.mjs build/docs-site && node scripts/docs/faixa-de-traducao-check.mjs build/docs-site && node scripts/docs/site/tipos.mjs && node scripts/docs/site/orcamento.mjs` |
 | `pnpm docs:generate` | `node scripts/docs/generate.mjs` |
 | `pnpm docs:openapi-textos` | `node scripts/docs/openapi-textos.mjs` |
 | `pnpm docs:landing` | `node scripts/docs/landing.mjs` |
@@ -30,7 +30,7 @@ keywords: [scripts, pnpm, make, commands]
 | `pnpm docs:drift` | `node scripts/docs/drift.mjs` |
 | `pnpm docs:audit` | `node scripts/docs/audit.mjs` |
 | `pnpm docs:fontes` | `bash scripts/docs/montar-layout.sh` |
-| `pnpm test:scripts` | `vitest run scripts/docs scripts/dev/install- scripts/ci/assets-do-instalador scripts/ci/montar-images --exclude scripts/docs/openapi-por-locale.spec.ts` |
+| `pnpm test:scripts` | `vitest run scripts/docs scripts/dev/install- scripts/ci/assets-do-instalador scripts/ci/montar-images scripts/ci/pins-dos-componentes --exclude scripts/docs/openapi-por-locale.spec.ts` |
 
 ## api — `apps/api/package.json`
 
@@ -96,7 +96,7 @@ keywords: [scripts, pnpm, make, commands]
 
 | команда | запускает |
 |---|---|
-| `pnpm --filter @brabo/runner start` | `node --import ./scripts/strip-node-modules.mjs src/index.ts` |
+| `pnpm --filter @brabo/runner start` | `node src/index.ts` |
 | `pnpm --filter @brabo/runner build` | `tsup` |
 | `pnpm --filter @brabo/runner build:bin` | `node scripts/build-bin.mjs` |
 | `pnpm --filter @brabo/runner smoke` | `node scripts/smoke-dist.mjs` |

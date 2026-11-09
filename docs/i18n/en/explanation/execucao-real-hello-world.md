@@ -1,5 +1,6 @@
 ---
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 id: execucao-real-hello-world
 title: The real execution — the hello world
 sidebar_label: Real execution (hello world)
@@ -8,6 +9,10 @@ keywords: [dogfooding, real execution, findings, phase 13]
 ---
 
 # The real execution — the hello world
+
+:::historico 2026-08-05
+The first time the chain of agents ran end to end with an API model, in a new project with a real GitHub repository. The goal was to find out what breaks in real use. It is not the official Phase 13b measurement, because the engine was restarted several times in the middle.
+:::
 
 The first time the agent chain ran with an **API model** end to end,
 instead of local Ollama. A new project (`Hello API`), a real GitHub

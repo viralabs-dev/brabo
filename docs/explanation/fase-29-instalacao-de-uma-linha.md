@@ -5,9 +5,14 @@ sidebar_label: FASE 29 — instalação de uma linha
 sidebar_position: 16
 description: O recorte da FASE 29 — assinatura dos artefatos publicados, um install.sh versionado com fonte escolhida e marcador, backup de volumes e a base consentida do runner. As decisões estão nos ADRs 0149 a 0152.
 keywords: [fase 29, instalador, assinatura, cosign, backup, runner, base de projetos]
+tipo: historico
 ---
 
 # FASE 29 — a instalação de uma linha
+
+:::historico 2026-09-08
+Recorte da Fase 29: juntar os três gestos soltos de instalação (subir os serviços, instalar o runner, escolher onde o código mora) num instalador de uma linha, agora com artefatos assinados. Diz o que a fase persegue, o que recusa e em que ordem. As decisões moram nos ADR 0149 a 0152.
+:::
 
 > Este documento é o **recorte** da fase: o que ela persegue, o que ela recusa,
 > e em que ordem. As **decisões** moram nos [ADR 0149](../adr/0149-assinatura-dos-artefatos-publicados.md),
