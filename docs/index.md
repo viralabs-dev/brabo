@@ -13,7 +13,7 @@ tipo: conceito
 
 Um time de agentes de IA conduz sua aplicação do brief ao deploy; o merge é sempre seu.
 
-![Tela de sessão do Brabo: o Criativo devolve no chat as perguntas em aberto](assets/readme/perguntas-no-chat.png)
+![Tela de sessão do Brabo: o Criativo devolve no chat as perguntas em aberto](assets/capturas/perguntas-abertas-claro.png)
 :::
 
 :::cartoes

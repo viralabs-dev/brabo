@@ -4,7 +4,6 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo.svg" />
-  <source media="(prefers-color-scheme: light)" srcset="docs/assets/logo.svg" />
   <img src="docs/assets/logo.svg" alt="Brabo logo" width="96" />
 </picture>
 
@@ -25,7 +24,10 @@ Final authority stays yours — by construction, not by convention.**
 
 [Documentation](https://viralabs-dev.github.io/brabo/prd/en/) · [From zero to a deliverable](https://viralabs-dev.github.io/brabo/prd/en/tutorials/from-zero-to-deliverable) · [CHANGELOG](CHANGELOG.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
-<img src="docs/assets/readme/perguntas-no-chat.png" alt="Brabo session screen: the Creative records the business rules and hands the open questions back in the chat, each with a suggestion and the rules it affects" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/perguntas-abertas-escuro.png" />
+  <img src="docs/assets/capturas/perguntas-abertas-claro.png" alt="Brabo session screen: the Creative records the business rules and hands the open questions back in the chat, each with a suggestion and the rules it affects" />
+</picture>
 
 <sub>The idea becomes rules, and what is missing becomes a question — the Creative hands the doubts back in the chat.</sub>
 
@@ -53,7 +55,10 @@ Final authority stays yours — by construction, not by convention.**
 
 ### The idea becomes rules, and what is missing becomes a question
 
-<img src="docs/assets/readme/perguntas-no-chat.png" alt="The Creative records the rules and hands the open questions back in the chat, each with a suggestion" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/perguntas-abertas-escuro.png" />
+  <img src="docs/assets/capturas/perguntas-abertas-claro.png" alt="The Creative records the rules and hands the open questions back in the chat, each with a suggestion" />
+</picture>
 
 The Creative hands the doubts back in the chat, with a suggestion and the
 rules each one affects. You answer right there, and the answers become
@@ -61,21 +66,15 @@ business rules.
 
 ### The Architect decides in writing
 
-<img src="docs/assets/readme/arquitetura-e-adr.png" alt="The Architect proposes the architecture decision as a pull request and asks you to confirm the architecture" />
-
 The architecture decision is born as a pull request, and the architecture only moves on with
 your confirmation.
 
 ### The devs work inside the container
 
-<img src="docs/assets/readme/dev-agent-trabalhando.png" alt="The dev agent narrates what it is fixing while working inside the container" />
-
 Every command goes through the project's policy, and what the dev agent does
 stays in the session thread.
 
 ### The merge is always yours
-
-<img src="docs/assets/readme/merges-pelo-chat.png" alt="The queue of pull requests ready to merge in the Creative's chat, with Approve and Deny" />
 
 Pull requests that pass the gates arrive in the chat, and one click on Approve
 confirms.

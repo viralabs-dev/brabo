@@ -14,7 +14,7 @@ traducao_de: 3004ff7f6b56efe40bf264e493455011cb42d57d
 
 Команда ИИ-агентов ведёт ваше приложение от брифа до деплоя; слияние всегда за вами.
 
-![Экран сессии Brabo: Criativo возвращает в чате открытые вопросы](../../../docs/assets/readme/perguntas-no-chat.png)
+![Экран сессии Brabo: Criativo возвращает в чате открытые вопросы](../../../docs/assets/capturas/perguntas-abertas-claro.png)
 :::
 
 :::cartoes
