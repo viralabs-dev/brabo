@@ -80,18 +80,39 @@
 <td><code>gastos</code></td>
 <td>consumo do projeto</td>
 </tr>
+<tr>
+<td><code>adr-no-chat</code></td>
+<td>o ADR que o Arquiteto propôs, pendente para o dono (passo 4)</td>
+</tr>
+<tr>
+<td><code>arquitetura</code></td>
+<td>a aba Arquitetura: mapa de módulos, C4 e ADR (README)</td>
+</tr>
+<tr>
+<td><code>plano-e-modo-automatico</code></td>
+<td>o plano do Dev Lead pendente e a oferta do modo automático (passo 5)</td>
+</tr>
+<tr>
+<td><code>dev-agent</code></td>
+<td>o fio da execução: o dev agent pega a tarefa e entrega a PR (README)</td>
+</tr>
+<tr>
+<td><code>merges-no-chat</code></td>
+<td>a PR pronta na fila do chat, para o dono mergear (passo 6 e README)</td>
+</tr>
 </tbody>
 </table></div>
+<p>As cinco últimas (AT-872) vêm de estado semeado por HTTP, sem turno de LLM: <code>proporAdr</code> e <code>proporPlanoDoDevLead</code> propõem a ação como agente e exigem que nasça <code>pending</code>, e <code>semearExecucao({ name })</code> cria a execução com o dev Noop. Nada é aprovado (aprovar o ADR abriria PR; aprovar o plano ativaria dev real) e nada é mergeado. A ordem no arquivo importa: os testes de execução criam outro projeto, e as telas do chat precisam sair antes de o plano ser proposto. Por isso o engine das capturas é a <code>-dev.N</code> mais nova (ou o <code>engine_tag</code> do dispatch), como a api: o dev Noop só pega a tarefa sem container registrado nas <code>-dev</code> (engine#58). O passo &quot;Capturar&quot; roda sob <code>scripts/ci/com-token-de-servico.sh</code> porque a semeadura usa rotas internas (<code>E2E_SERVICE_TOKEN</code>).</p>
 <ul>
 <li><strong>Conta:</strong> <code>owner@brabo.dev</code>, a do seed do compose de produção (fictícia). O acesso rápido (<code>&lt;papel&gt;@brabo.dev</code>) não serve: só existe em imagem sem a marca (RN-984, ADR 0245), e a doc descreve a imagem da release.</li>
-<li><strong>O dublê</strong> só carrega em imagem sem a marca <code>prd</code> (RN-1065). Por isso a api das capturas é a <code>-dev.N</code> mais nova (ou a <code>api_tag</code> do dispatch), e as outras quatro imagens seguem as pins. O manifesto grava a tag que de fato rodou.</li>
+<li><strong>O dublê</strong> só carrega em imagem sem a marca <code>prd</code> (RN-1065). Por isso a api das capturas é a <code>-dev.N</code> mais nova (ou a <code>api_tag</code> do dispatch), e as outras três imagens (web, broker, backup) seguem as pins; o engine também é a <code>-dev.N</code> mais nova (AT-872). O manifesto grava a tag que de fato rodou.</li>
 <li><strong>Um login só.</strong> Os dois temas saem do mesmo contexto: o refresh do login vale uma vez, e navegar com a renovação em voo a aborta e derruba a sessão (por isso o <code>fotografar</code> espera a rede assentar antes de recarregar).</li>
 </ul>
 <h2 id="a-ocultação-at-864">A ocultação (AT-864)</h2>
 <p><code>e2e/suporte/ocultar.ts</code> tem duas camadas:</p>
 <ol>
 <li><strong><code>mask</code>:</strong> o <code>page.screenshot({ mask })</code> cobre com cor chapada o e-mail e o nome do usuário (o botão do menu da barra lateral), campos de senha, e-mail, chave, token e caminho. Os seletores são estruturais, nunca texto.</li>
-<li><strong>Guarda de texto:</strong> <code>conferirSemDadoSensivel</code> LANÇA antes do screenshot se o texto visível ou o valor de um campo casar com <code>/home/</code>, o usuário da máquina, o handle do GitHub, um token (<code>ghp_</code>, <code>github_pat_</code>, <code>sk-</code>, JWT, chave AWS) ou um e-mail fora dos domínios de teste (<code>brabo.dev</code>, <code>brabo.test</code>, <code>loja-teste.local</code>, <code>exemplo.com</code>). A mensagem diz o TIPO do achado, nunca o trecho: ela vai para log de Actions.</li>
+<li><strong>Guarda de texto:</strong> <code>conferirSemDadoSensivel</code> LANÇA antes do screenshot se o texto visível ou o valor de um campo casar com <code>/home/</code>, o usuário da máquina, o handle do GitHub, um token (<code>ghp_</code>, <code>github_pat_</code>, <code>sk-</code>, JWT, chave AWS) ou um e-mail fora dos domínios de teste (<code>brabo.dev</code>, <code>brabo.test</code>, <code>loja-teste.local</code>, <code>exemplo.com</code>, <code>bot.brabo.local</code>, o e-mail fictício que o worktree do dev agent grava). A mensagem diz o TIPO do achado, nunca o trecho: ela vai para log de Actions.</li>
 </ol>
 <p>A captura não é repetida até passar (<code>retries: 0</code>). A guarda cobre o que a página mostra; o que a imagem tem de visual (um nome dentro de um gráfico, por exemplo) só a leitura com zoom pega.</p>
 <h2 id="rodar-na-máquina">Rodar na máquina</h2>
