@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { construir } from './build.mjs';
 import { adrsPorTema, construirNavegacao, listaPlana } from './navegacao.mjs';
 import { descobrirPaginas, lerFrontmatter, slugDe, urlDe, urlRelativa } from './paginas.mjs';
-import { criarRenderizador, slugDeTitulo } from './render.mjs';
+import { COMPONENTES, criarRenderizador, slugDeTitulo } from './render.mjs';
 
 /** Repositório de mentira: duas páginas, uma tradução, um ADR com tema. */
 function repo() {
@@ -78,6 +78,55 @@ describe('render', () => {
   });
 });
 
+describe('componentes da doc (AT-857)', () => {
+  const pag = (locale: string, corpo: string, extra = {}) => ({ locale, url: locale === 'pt-BR' ? 'a/b.html' : `${locale}/a/b.html`, relativo: 'a/b.md', slug: 'a/b', corpo, ...extra });
+  const render = async (locale: string, corpo: string) => {
+    const r = await criarRenderizador({ paginas: [pag(locale, '') as never, { ...pag(locale, ''), relativo: 'a/c.md', url: 'a/c.html' } as never] });
+    return r(pag(locale, corpo) as never).html;
+  };
+
+  it('aviso: nomes novos com título por locale, sinônimos em inglês e título explícito', async () => {
+    expect(await render('pt-BR', ':::dica\nx\n:::')).toMatch(/admonicao-dica[^>]*><p class="admonicao-titulo">Dica</);
+    expect(await render('en', ':::perigo\nx\n:::')).toContain('>Danger<');
+    expect(await render('ru', ':::nota\nx\n:::')).toContain('>Примечание<');
+    expect(await render('zh-Hans', ':::cuidado\nx\n:::')).toContain('>小心<');
+    const velho = await render('pt-BR', ':::warning\nx\n:::');
+    expect(velho).toContain('admonicao-warning');
+    expect(velho).toContain('admonicao-cuidado');
+    expect(velho).toContain('>Atenção<');
+    expect(await render('pt-BR', ':::nota[Meu título]\nx\n:::')).toContain('>Meu título<');
+  });
+
+  it('historico: faixa com a data por locale; sem data ou data inválida reprova o build', async () => {
+    expect(await render('pt-BR', ':::historico 2026-10-31\ncorpo\n:::')).toContain('Registro de 31/10/2026');
+    expect(await render('en', ':::historico 2026-10-31\ncorpo\n:::')).toContain('Record from October 31, 2026');
+    await expect(render('pt-BR', ':::historico\ncorpo\n:::')).rejects.toThrow(/data ISO/);
+    await expect(render('pt-BR', ':::historico 2026-02-31\ncorpo\n:::')).rejects.toThrow(/data ISO/);
+  });
+
+  it('passos, cartoes (link .md resolvido) e abas', async () => {
+    expect(await render('pt-BR', ':::passos\n1. um\n2. dois\n:::')).toMatch(/<div class="passos">\s*<ol>/);
+    const c = await render('pt-BR', ':::cartoes\n- [Título](c.md): uma frase\n:::');
+    expect(c).toContain('<div class="cartoes">');
+    expect(c).toContain('href="c.html"');
+    expect(c).not.toContain('</a>: ');
+    const a = await render('pt-BR', ':::abas\n=== Linux\num\n=== macOS\ndois\n:::');
+    expect(a).toContain('data-abas');
+    expect(a.match(/<section class="aba"/g)).toHaveLength(2);
+    expect(a).toContain('data-aba="macOS"');
+    await expect(render('pt-BR', ':::abas\nsem rótulo\n:::')).rejects.toThrow(/===/);
+  });
+
+  it('imagem com título sozinha vira figure; sem título segue parágrafo', async () => {
+    expect(await render('pt-BR', '![alt](x.png "Legenda")')).toContain('<figure class="figura"><img src="x.png" alt="alt"><figcaption>Legenda</figcaption></figure>');
+    expect(await render('pt-BR', '![alt](x.png)')).toContain('<p><img');
+  });
+
+  it('COMPONENTES lista os nomes canônicos (contrato com o linter)', () => {
+    expect(COMPONENTES).toEqual(['nota', 'dica', 'cuidado', 'perigo', 'historico', 'passos', 'cartoes', 'abas', 'hero', 'diferenciais']);
+  });
+});
+
 describe('estado misto: fonte em inglês e fonte em pt-BR com i18n (AT-745, ADR 0260)', () => {
   const misto = () => {
     const raiz = repo();
@@ -136,9 +185,17 @@ describe('navegacao', () => {
   });
 
   it('aplica rótulos traduzidos e lista na ordem de leitura', () => {
-    const nav = construirNavegacao({ raiz: repo(), rotulos: { '🛠️ Operação': 'Ops' } });
-    expect(nav.some((i) => i.rotulo === 'Ops')).toBe(true);
+    const nav = construirNavegacao({ raiz: repo(), rotulos: { '🧭 Guias práticos': 'Guides' } });
+    expect(nav.some((i) => i.rotulo === 'Guides')).toBe(true);
     expect(listaPlana(nav)[0]?.slug).toBe('');
+  });
+
+  it('tem 7 grupos de topo, com os ADRs recolhidos e o Histórico por último (AT-854)', () => {
+    const nav: any[] = construirNavegacao({ raiz: repo() });
+    expect(nav).toHaveLength(7);
+    expect(nav.at(-1)).toMatchObject({ rotulo: '🗂️ Histórico do projeto', colapsada: true, espera: ['historico'] });
+    expect(nav.find((i) => i.rotulo.includes('Decisões (ADR)'))).toMatchObject({ slug: 'adr', colapsada: true });
+    expect(nav.every((i) => i.espera.length > 0)).toBe(true);
   });
 });
 
@@ -186,11 +243,59 @@ describe('árvore de união das raízes (AT-693)', () => {
   it('as Regras listam uma página por raiz e a edição aponta para a raiz da página', async () => {
     const { raiz } = duas();
     const nav = construirNavegacao({ raiz, repo: 'x/y', raizesDeDoc });
-    const regras = nav.find((i: any) => i.rotulo.includes('Regras'));
-    expect(regras.itens.map((i: any) => i.slug)).toEqual(['business-rules', 'business-rules/api']);
+    const regras = nav.find((i: any) => i.rotulo.includes('Referência')).itens.find((i: any) => i.rotulo === 'Regras de negócio');
+    expect(regras.slug).toBe('business-rules');
+    expect(regras.itens.map((i: any) => i.slug)).toEqual(['business-rules/api']);
     const saida = path.join(raiz, 'out');
     await construir({ raiz, saida, git: false, repo: 'x/y', raizesDeDoc });
     expect(readFileSync(path.join(saida, 'reference/permissions.html'), 'utf8')).toContain('/brabo-api/blob/dev/docs/reference/permissions.md');
     expect(readFileSync(path.join(saida, 'index.html'), 'utf8')).toContain('/brabo/blob/dev/docs/intro.md');
   }, 120_000);
 });
+
+describe('página inicial (AT-856)', () => {
+  const tabela = (a: string) => `# L\n\n<table><tr><td><b>${a}</b><br />um</td><td><b>B</b><br />dois</td></tr></table>\n`;
+  const render = async (raiz: string, locale: string, corpo: string) => {
+    const pagina = { locale, url: 'index.html', relativo: 'index.md', slug: '', corpo };
+    return (await criarRenderizador({ paginas: [pagina as never], raiz }))(pagina as never).html;
+  };
+  const raizCom = (readme: string) => {
+    const raiz = mkdtempSync(path.join(tmpdir(), 'inicio-'));
+    writeFileSync(path.join(raiz, 'README.md'), readme);
+    writeFileSync(path.join(raiz, 'README.en.md'), tabela('Hello'));
+    return raiz;
+  };
+
+  it('diferenciais lê a tabela do README do locale: mudar o README muda a página', async () => {
+    const raiz = raizCom(tabela('Aprovação'));
+    const antes = await render(raiz, 'pt-BR', ':::diferenciais\n:::');
+    expect(antes).toContain('<div class="diferencial"><b>Aprovação</b>');
+    expect((antes.match(/class="diferencial"/g) ?? []).length).toBe(2);
+    writeFileSync(path.join(raiz, 'README.md'), tabela('Outro texto'));
+    expect(await render(raiz, 'pt-BR', ':::diferenciais\n:::')).toContain('<b>Outro texto</b>');
+    expect(await render(raiz, 'en', ':::diferenciais\n:::')).toContain('<b>Hello</b>');
+  });
+
+  it('falha: README sem a tabela reprova o build, nunca sai faixa vazia', async () => {
+    await expect(render(raizCom('# sem tabela\n'), 'pt-BR', ':::diferenciais\n:::')).rejects.toThrow(/diferenciais/);
+  });
+
+  it('hero leva o logo e o corpo em Markdown; o h1 do hero conta como título', async () => {
+    const pagina = { locale: 'pt-BR', url: 'index.html', relativo: 'index.md', slug: '', corpo: ':::hero\n# Brabo\n\nfrase\n:::' };
+    const r = (await criarRenderizador({ paginas: [pagina as never], raiz: raizCom(tabela('x')) }))(pagina as never);
+    expect(r.html).toMatch(/<div class="hero"><span class="hero-logo"><svg/);
+    expect(r.html).toContain('<h1 id="brabo">Brabo</h1>');
+    expect(r.temH1).toBe(true);
+  });
+
+  it('hero com as duas capturas no mesmo parágrafo; o CSS esconde uma conforme o data-theme', async () => {
+    const pagina = { locale: 'pt-BR', url: 'index.html', relativo: 'index.md', slug: '', corpo: ':::hero\n# Brabo\n\nfrase\n\n![a](x-claro.png) ![a](x-escuro.png)\n:::' };
+    const r = (await criarRenderizador({ paginas: [pagina as never], raiz: raizCom(tabela('x')) }))(pagina as never);
+    expect(r.html).toMatch(/<p><img[^>]*x-claro\.png[^>]*>\s*<img[^>]*x-escuro\.png[^>]*><\/p>/);
+    const css = readFileSync(path.join(__dirname, 'assets/site.css'), 'utf8');
+    expect(css).toContain(".hero img[src*='-claro.']");
+    expect(css).toContain("[data-theme='dark'] .hero img[src*='-claro.'] { display: none; }");
+    expect(css).toContain("[data-theme='light'] .hero img[src*='-escuro.'] { display: none; }");
+  });
+});
+

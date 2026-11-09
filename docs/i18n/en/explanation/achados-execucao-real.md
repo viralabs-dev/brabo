@@ -1,8 +1,14 @@
 ---
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+title: Findings from the real execution of the pipeline
+tipo: historico
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # Findings from the real execution of the pipeline
+
+:::historico 2026-08-05
+Findings from a real execution session, run through the browser with an API model and a real git provider. Each item has the file:line or event that proves it. Those that blocked were fixed on the spot, with a named PR. The rest fed the Phase 13c triage.
+:::
 
 > Gathered in a browser-driven execution session on **2026-08-05**, with an
 > API model (not local) and a real git provider. It is the input for the

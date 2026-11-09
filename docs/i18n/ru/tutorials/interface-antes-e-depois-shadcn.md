@@ -1,10 +1,14 @@
 ---
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 title: Интерфейс до и после shadcn (31.10.2026)
 description: Запись экранов и сессии Criativo до и после миграции примитивов на shadcn/ui (ADR 0232) и исправления инструментов в 9Router (RN-950).
 ---
 
 # Интерфейс до и после shadcn (31.10.2026)
+
+:::historico 2026-10-31
+Визуальная запись от 31.10.2026. Экраны ниже относятся к интерфейсу той даты и не показывают текущую версию.
 
 Визуальная запись раунда, который сменил основу фронтенда на shadcn/ui с Base UI
 ([ADR 0232](../adr/0232-shadcn-com-base-ui-no-apps-web.md)) и в тот же день
@@ -27,11 +31,11 @@ description: Запись экранов и сессии Criativo до и пос
 
 | До | После |
 |---|---|
-| ![Прогулка до](../assets/shadcn-antes-depois/percurso-antes.gif) | ![Прогулка после](../assets/shadcn-antes-depois/percurso-depois.gif) |
+| ![Прогулка до](../assets/historico/shadcn-antes-depois/percurso-antes.gif) | ![Прогулка после](../assets/historico/shadcn-antes-depois/percurso-depois.gif) |
 
-![Account, светлая тема: до слева, после справа](../assets/shadcn-antes-depois/comparacao-04-conta-light.png)
+![Account, светлая тема: до слева, после справа](../assets/historico/shadcn-antes-depois/comparacao-04-conta-light.png)
 
-![Providers, светлая тема: до слева, после справа](../assets/shadcn-antes-depois/comparacao-03-providers-light.png)
+![Providers, светлая тема: до слева, после справа](../assets/historico/shadcn-antes-depois/comparacao-03-providers-light.png)
 
 ## Сессия Criativo
 
@@ -47,9 +51,9 @@ description: Запись экранов и сессии Criativo до и пос
 
 | До | После |
 |---|---|
-| ![Чат Criativo до](../assets/shadcn-antes-depois/chat-criativo-antes-dark.gif) | ![Чат Criativo после](../assets/shadcn-antes-depois/chat-criativo-depois-dark.gif) |
+| ![Чат Criativo до](../assets/historico/shadcn-antes-depois/chat-criativo-antes-dark.gif) | ![Чат Criativo после](../assets/historico/shadcn-antes-depois/chat-criativo-depois-dark.gif) |
 
-![Второй ответ Criativo: до слева, после справа](../assets/shadcn-antes-depois/comparacao-12-chat-resposta-2-dark.png)
+![Второй ответ Criativo: до слева, после справа](../assets/historico/shadcn-antes-depois/comparacao-12-chat-resposta-2-dark.png)
 
 ## Новая страница Gastos
 
@@ -57,4 +61,5 @@ description: Запись экранов и сессии Criativo до и пос
 не существовало. В записи «после» она появляется без полей страницы — содержимое
 прижато к боковой панели; дефект зафиксирован для исправления.
 
-![Gastos, светлая тема, после](../assets/shadcn-antes-depois/depois-gastos-light.png)
+![Gastos, светлая тема, после](../assets/historico/shadcn-antes-depois/depois-gastos-light.png)
+:::

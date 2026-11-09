@@ -7,7 +7,7 @@ orquestrada por agentes). Quem instala ou lê só precisa conhecer este repo
 - `docs/` — o AGREGADOR: intro, getting-started, ADRs, explicações, o ÍNDICE de
   RN (`docs/business-rules.md`), traduções em `docs/i18n/` e `docs/assets/`;
 - `scripts/docs/` — o gerador do site, os checks e o mapa `fontes.yml`;
-- `scripts/ci/docs/` — a doc da área ci (AT-693); `website/` — só a árvore do Redoc;
+- `scripts/ci/docs/` — NÃO mora aqui: a doc da área ci é do `brabo-ci` e entra no layout pela trava (AT-823); `website/` — só a árvore do Redoc;
 - `CHANGELOG.md` (o do PRODUTO), `README.*`, `THIRD_PARTY_NOTICES.md` e os
   arquivos de comunidade;
 - `install.sh` (+ `scripts/dev/install-*.spec.ts`, `scripts/ci/assets-do-instalador.ts`);
@@ -34,11 +34,13 @@ código" não vale entre repos: o drift só enxerga o diff deste repo.
 O script grava o que trouxe em `.git/layout-irmaos.lst` e, na rodada seguinte,
 remove o que já não está em `HEAD` (senão o `--update=none` esconde diff).
 `.github/workflows/regenera-gerados.yml` (a cada 6 h e por `workflow_dispatch`)
-sobe a trava e regenera os gerados que dependem dos irmãos no mesmo commit, e
+sobe a trava, sobe as pins do `componentes.json` (e o `RUNNER_TAG` do `install.sh`) até a última Release final de cada componente (`scripts/ci/pins-dos-componentes.ts --subir`, AT-796, ADR 0282) e regenera os gerados que dependem dos irmãos no mesmo commit, e
 abre/atualiza a PR fixa `chore/regenera-gerados` na `dev` (dispensa a escada,
 ADR 0255; o merge é humano); pendência em arquivo
 de irmão deixa o job vermelho nomeando o repo dono (AT-726).
+A trava `--conferir` do mesmo script roda no check `Pins dos componentes` (PR para a `main`) e no `release.yml` (reprova na tag, avisa no ensaio).
 O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mjs`).
+A `docs/` de irmão posto em `.` (hoje o `brabo-qa`) vai para `<nome>/docs` (`qa/docs`), não para a `docs/` daqui (AT-846); irmão novo nessa situação precisa de raiz e dono.
 
 ## Convenções do repositório
 - Branches permanentes `dev` e `main`; trabalho nasce de `dev` com a taxonomia
@@ -72,7 +74,8 @@ O "editar esta página" aponta para o repo DONO (`scripts/docs/site/repo-dono.mj
   ADR aceito NUNCA é editado: o novo referencia o antigo.
 - Regra de negócio nova → RN-XXX com arquivo:linha e o teste que a cobre, no
   `<raiz>/docs/business-rules/<raiz>.md` da ÁREA DONA DO CÓDIGO (a raiz que
-  hospeda a 1ª ref `caminho:N`; ADR 0254). `docs/business-rules.md` é ÍNDICE
+  hospeda a 1ª ref `caminho:N`; ADR 0254), ou na ÚLTIMA
+  `business-rules/<raiz>/parte-NN.md` quando a área foi partida (ADR 0287). `docs/business-rules.md` é ÍNDICE
   GERADO e `custo.md`/`autenticacao.md` são stubs congelados: não escreva RN
   neles. A numeração é GLOBAL (nunca reinicie por raiz) e o `docs:check` soma
   todas as raízes e reprova número duplicado. Âncora `{#rn-NNN}` é o contrato:

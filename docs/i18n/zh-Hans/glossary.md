@@ -5,7 +5,8 @@ sidebar_label: 术语表
 sidebar_position: 9
 description: Brabo 的通用语言——出现在代码、界面和 ADR 中的术语，以及它们在这里承载的含义。
 keywords: [glossary, ubiquitous language, harness, gate, handoff, DEK, outbox]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: referencia
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # 术语表 {#glossary}
@@ -330,3 +331,5 @@ thinking、接受 `tools`。在同步时来自远程目录；`false` 表示"未�
 
 **层（Layer）**——在上面的路径中，边界的标签：`interfaces`、`application`、`domain` 或
 `infrastructure`。对应 `apps/api/src/` 下的目录以及它们之间的依赖规则。
+
+**PR 与 CI 策略**——流水线术语（阶梯、晋升、rulesets、违规代码）见[策略术语表](reference/glossario-da-politica.md)，它位于 `brabo-ci`。

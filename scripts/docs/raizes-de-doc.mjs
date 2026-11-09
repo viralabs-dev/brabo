@@ -19,6 +19,7 @@ export const RAIZES_DE_DOC = {
   contracts: 'packages/docs',
   infra: 'deploy/docs',
   ci: 'scripts/ci/docs',
+  qa: 'qa/docs',
 };
 
 /**

@@ -12,6 +12,9 @@
  * ninguém ver. A contagem em prosa também não pega: ela conta cabeçalhos,
  * não âncoras.
  *
+ * Em `parte-NN.md` (AT-871) vale uma terceira: SEM `<a id="rn-NNN"></a>` na
+ * linha não vazia imediatamente antes do título, e essa âncora precisa de uma linha em branco antes dela (AT-875).
+ *
  * Duas reprovações, por cabeçalho:
  *   - SEM ÂNCORA  — o cabeçalho não termina em `{#...}`;
  *   - DIVERGE     — termina, mas não é `{#rn-NNN}` com os MESMOS dígitos do
@@ -34,11 +37,12 @@ const ANCORA_NO_FIM = /\{#([^}\s]+)\}\s*$/;
  * Confere os cabeçalhos de RN de UM texto.
  * @returns {{cabecalhos: number, problemas: {linha: number, rn: string, motivo: string}[]}}
  */
-export function conferirAncoras(texto) {
+export function conferirAncoras(texto, { exigirAncoraHtml = false } = {}) {
   const problemas = [];
   let cabecalhos = 0;
+  const linhas = texto.split('\n');
 
-  texto.split('\n').forEach((linha, i) => {
+  linhas.forEach((linha, i) => {
     const cabecalho = CABECALHO.exec(linha);
     if (cabecalho === null) return;
     cabecalhos++;
@@ -51,12 +55,27 @@ export function conferirAncoras(texto) {
     } else if (ancora[1] !== `rn-${numero}`) {
       problemas.push({ linha: i + 1, rn, motivo: `âncora \`{#${ancora[1]}}\` diverge — deveria ser \`{#rn-${numero}}\`` });
     }
+
+    // AT-871: o GitHub não gera id de `{#rn-NNN}`; o `<a id>` antes do título faz o link abrir na RN.
+    if (exigirAncoraHtml) {
+      let j = i - 1;
+      while (j >= 0 && linhas[j].trim() === '') j--;
+      if (j < 0 || linhas[j].trim() !== `<a id="rn-${numero}"></a>`) {
+        problemas.push({ linha: i + 1, rn, motivo: `sem \`<a id="rn-${numero}"></a>\` antes do título (o GitHub não abre a RN)` });
+      } else if (j > 0 && linhas[j - 1].trim() !== '' && !/^#{1,6}\s/.test(linhas[j - 1])) {
+        // AT-875 (cabeçalho antes não continua: o `## h` fecha o bloco): colado ao item de lista anterior, o `<a>` vira continuação do `<li>` e o id se repete no HTML.
+        problemas.push({ linha: j + 1, rn, motivo: `\`<a id="rn-${numero}"></a>\` sem linha em branco antes (vira continuação da lista e repete o id)` });
+      }
+    }
   });
 
   return { cabecalhos, problemas };
 }
 
 export { LOCALES_TRADUZIDOS, arquivosDeRn };
+
+/** Só `…/business-rules/<area>/parte-NN.md` leva o `<a id>`; o índice e as páginas não partidas ficam de fora. */
+const PARTE_DE_RN = /(^|\/)business-rules\/[^/]+\/parte-\d+\.md$/;
 
 /**
  * Confere uma lista de arquivos.
@@ -67,7 +86,7 @@ export { LOCALES_TRADUZIDOS, arquivosDeRn };
 export function aferirAncoras(arquivos, ler) {
   const resultado = { cabecalhos: 0, problemas: [] };
   for (const arquivo of arquivos) {
-    const { cabecalhos, problemas } = conferirAncoras(ler(arquivo));
+    const { cabecalhos, problemas } = conferirAncoras(ler(arquivo), { exigirAncoraHtml: PARTE_DE_RN.test(arquivo) });
     resultado.cabecalhos += cabecalhos;
     for (const p of problemas) resultado.problemas.push({ arquivo, ...p });
   }

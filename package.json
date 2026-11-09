@@ -10,7 +10,7 @@
     "docs:serve": "python3 -m http.server 3000 -d build/docs-site",
     "docs:clear": "rm -rf build/docs-site",
     "docs:site": "node scripts/docs/site/build.mjs",
-    "docs:site:check": "node scripts/docs/site/links.mjs && node scripts/docs/links-do-locale.mjs build/docs-site && node scripts/docs/faixa-de-traducao-check.mjs build/docs-site",
+    "docs:site:check": "node scripts/docs/site/links.mjs && node scripts/docs/links-do-locale.mjs build/docs-site && node scripts/docs/faixa-de-traducao-check.mjs build/docs-site && node scripts/docs/site/tipos.mjs && node scripts/docs/site/orcamento.mjs",
     "docs:generate": "node scripts/docs/generate.mjs",
     "docs:openapi-textos": "node scripts/docs/openapi-textos.mjs",
     "docs:landing": "node scripts/docs/landing.mjs",
@@ -18,14 +18,14 @@
     "docs:drift": "node scripts/docs/drift.mjs",
     "docs:audit": "node scripts/docs/audit.mjs",
     "docs:fontes": "bash scripts/docs/montar-layout.sh",
-    "test:scripts": "vitest run scripts/docs scripts/dev/install- scripts/ci/assets-do-instalador scripts/ci/montar-images --exclude scripts/docs/openapi-por-locale.spec.ts"
+    "test:scripts": "vitest run scripts/docs scripts/dev/install- scripts/ci/assets-do-instalador scripts/ci/montar-images scripts/ci/pins-dos-componentes --exclude scripts/docs/openapi-por-locale.spec.ts"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
     "vitest": "^4.1.11"
   },
   "dependencies": {
-    "markdown-it": "14.1.0",
+    "markdown-it": "14.3.3",
     "mermaid": "^11.16.1",
     "picomatch": "^4.0.5",
     "shiki": "4.5.0",

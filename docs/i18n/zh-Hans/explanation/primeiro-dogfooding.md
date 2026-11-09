@@ -5,10 +5,15 @@ sidebar_label: 第一次 dogfooding
 sidebar_position: 4
 description: Fase 10 的收获——Brabo 第一次构建 Brabo 自身时的十七项发现，哪些被度量了，哪些因为没有记录而丢失了。
 keywords: [dogfooding, 收获, Fase 10, 发现, 可操作性]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # 第一次 dogfooding 教会了什么
+
+:::historico 2026-08-02
+第 10 阶段的收获，当时 Brabo 第一次构建了自己的一部分（Bitbucket 支持）。它记录了 17 项真实发现、因观察表从未填写而未能度量的内容，以及第 12 阶段如何处理这一切。
+:::
 
 在 Fase 10 中，Brabo 构建了 Brabo 自身的一部分：对 Bitbucket 的支持和 `GenericGitProvider` 由产品的 agent 在一个 fork 中交付，一个人扮演用户的角色。这是第一次脱离演示的真实执行。
 

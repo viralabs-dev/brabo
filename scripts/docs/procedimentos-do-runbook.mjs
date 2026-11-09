@@ -150,21 +150,22 @@ function crases(celula) {
 /**
  * Confere a tabela contra o repositório.
  *
- * @param {string} texto o `docs/runbook.md`
+ * @param {string} texto o `docs/runbook.md` (o índice, quando o runbook é partido)
  * @param {{
  *   existe: (caminho: string) => boolean,
  *   alvos: Set<string>,
  *   gatilhos: (workflow: string) => Set<string>|null,
  * }} repo `gatilhos` devolve `null` quando o workflow não existe
+ * @param {string} [partes] o texto de `deploy/docs/runbook/*.md` (AT-869): os `{#id}` das partes valem como âncora
  * @returns {{cego: string|null, linhas: number, comVerificacao: number, declaradasSem: number,
  *   problemas: {linha: number, procedimento: string, coluna: string, motivo: string}[]}}
  */
-export function conferirTabela(texto, repo) {
+export function conferirTabela(texto, repo, partes = '') {
   const { cego, linhas } = extrairTabela(texto);
   const resultado = { cego, linhas: linhas.length, comVerificacao: 0, declaradasSem: 0, problemas: [] };
   if (cego) return resultado;
 
-  const ancoras = ancorasExplicitas(texto);
+  const ancoras = ancorasExplicitas(`${texto}\n${partes}`);
 
   for (const { linha, celulas: c } of linhas) {
     const [procedimento = '', ancora = '', verificacao = '', agenda = ''] = c;
@@ -176,7 +177,8 @@ export function conferirTabela(texto, repo) {
     }
 
     // anchor
-    const links = [...ancora.matchAll(/\]\(#([^)\s]+)\)/g)].map((m) => m[1]);
+    // `(#id)` no runbook inteiro ou `(runbook/<parte>.md#id)` quando ele é índice mais partes (AT-869)
+    const links = [...ancora.matchAll(/\]\((?:runbook\/[\w-]+\.md)?#([^)\s]+)\)/g)].map((m) => m[1]);
     if (links.length === 0) reprova('anchor', 'sem link `(#id)` para a seção do procedimento');
     for (const id of links) {
       if (!ancoras.has(id)) reprova('anchor', `\`#${id}\` não é um \`{#id}\` explícito de cabeçalho do runbook`);
@@ -236,6 +238,19 @@ export function conferirTabela(texto, repo) {
 
 /** O runbook mora na raiz de doc da infra (AT-693). */
 export const RUNBOOK = 'deploy/docs/runbook.md';
+
+/** As partes do runbook partido (AT-869, ADR 0287): `deploy/docs/runbook/<tema>.md`. Ausentes, o runbook é um arquivo só. */
+export const PARTES_DO_RUNBOOK = 'deploy/docs/runbook/*.md';
+
+/**
+ * O runbook nos dois layouts: o índice (ou o arquivo único) e o texto de todas as partes.
+ * @param {(glob: string) => string[]} arquivos `git ls-files <glob>`
+ * @param {(caminho: string) => string} ler
+ */
+export function lerRunbook(arquivos, ler) {
+  const partes = arquivos(PARTES_DO_RUNBOOK).filter((f) => /^deploy\/docs\/runbook\/[^/]+\.md$/.test(f)).sort();
+  return { indice: ler(RUNBOOK), partes: partes.map(ler).join('\n') };
+}
 
 /**
  * O `repo` de `conferirTabela` sobre a árvore VERSIONADA — o mesmo que o

@@ -1,8 +1,14 @@
 ---
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+title: 流水线真实执行中的发现
+tipo: historico
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # 流水线真实执行中的发现
+
+:::historico 2026-08-05
+一次真实执行会话的发现，该会话通过浏览器、使用 API 模型和真实的 git provider 进行。每一项都有可证明它的 file:line 或事件。阻塞性的当场修复，并附有具名 PR。其余的进入了第 13c 阶段的分诊。
+:::
 
 > 在 **2026-08-05** 通过浏览器引导的一次执行会话中调研，使用 API 模型（非本地）和真实的 git provider。这是
 > FASE 13c 分类的输入：每个条目都有证明它的 arquivo:linha 或事件，没有一个是"顺带"修正的——已关闭的那些

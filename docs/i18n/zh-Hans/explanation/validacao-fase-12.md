@@ -5,10 +5,15 @@ sidebar_label: Fase 12 的验证
 sidebar_position: 5
 description: 一份可审计的脚本流程，在一次执行中演练采用、手动晋升和重新调度——事件 id 从数据库提取，并说明该验证有意不证明的内容。
 keywords: [验证, Fase 12, dogfooding, 采用, 重新调度, 晋升]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 ---
 
 # 三项发现已经消亡的验证
+
+:::historico 2026-08-07
+证明首次 dogfooding 的三项 P1 发现在同一次运行中消失，所用脚本在判据不成立时会以非零退出码结束。文章先讲这次验证没有证明什么（本地 provider、noop dev agent），然后给出从数据库读出的证据。
+:::
 
 [第一次 dogfooding 的收获](./primeiro-dogfooding.md)留下了三项 P1 级的可操作性发现。Fase 12 逐一处理了它们；本文档证明这三项是在**同一次执行中**消亡的，而不只是在每个切片为自己编写的单元测试中。
 

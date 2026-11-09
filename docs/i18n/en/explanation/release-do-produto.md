@@ -1,5 +1,6 @@
 ---
-traducao_de: a766a77602f64b8f373dcf2fcd64c6af12aebc25
+tipo: conceito
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # Product release {#product-release}
@@ -68,9 +69,9 @@ the image verification are left for the first tag.
 | `imagens.<alvo>` | repository, tag and image of each image component; the `imagem.json` must match |
 | `runner` | repository and tag of `brabo-runner`; `install.sh` downloads the binary from there (`RUNNER_TAG`, checked by `scripts/dev/install-runner-release.spec.ts`) |
 
-Bumping a component means editing the tag here, in a PR, and the product ships with it on the next
-tag. Five of five images or none: a product Release with a component without `imagem.json` is
-refused.
+The pin **does not move by itself in Git**, but a bot moves it (AT-796, ADR 0282): every 6 h `regenera-gerados.yml` reads each component's `releases/latest`, checks the asset the product consumes (`imagem.json`; `checksums.txt` and the signature for the runner) and, if the Release is newer, swaps only the tag on that line of `componentes.json`. It never lowers a pin. `infra` and the backup image move together, and the `RUNNER_TAG` in `install.sh` changes in the same commit. Everything lands in the fixed PR `chore/regenera-gerados`, which skips the ladder; the merge is human.
+
+The gate (`scripts/ci/pins-dos-componentes.ts --conferir`) fails when a pin is behind the Latest, has no final Release, lacks the asset, `infra.ref` differs from `imagens.backup.tag`, or `RUNNER_TAG` differs from `runner.tag`. It runs as the `Pins dos componentes` check (PRs to `main`) and in `release.yml`: on a tag it fails, in the rehearsal it only warns. Five of five images or none: a product Release with a component without `imagem.json` is refused.
 
 ## Decisions not yet made {#open}
 
@@ -78,13 +79,16 @@ refused.
 > stamp the first `v1.0.0` tags of the repositories (the order matters: `brabo` needs the
 > components' Releases to exist before its own).
 
-> **TODO(humano):** `componentes.json` is edited by hand; it remains to decide whether a bot
-> updates it when a component stamps a new tag or whether it stays a PR decision.
+> **TODO(humano):** make the `Pins dos componentes` check required in the `main` ruleset. Until then it shows red on the promotion PR but does not block it.
 
 ## Hotfix of a component {#hotfix}
 
 The hotfix is a PATCH through the normal ladder (the owner's decision, AT-728); `hotfix/` is not used directly on `main`.
 
 1. The component fixes it through its own `dev` → `main` and gets `vX.Y.Z+1`.
-2. A PR in `brabo` bumps the component's tag in `componentes.json`.
+2. The bot opens or updates the `chore/regenera-gerados` PR with the new pin (or the owner dispatches `regenera-gerados`); merge it into `dev`. The gate fails the promotion while the pin is behind.
 3. The `brabo` promotion goes out as a product patch.
+
+## Tag without a Release because of a stale pin {#pin-atras}
+
+If a component ships a Release between the merge into `main` and the stamp, the `release.yml` gate fails on the tag and the product is left with a tag without a Release (it happened with v2.1.0 and v2.1.1). The way out: merge the bot's PR into `dev`, promote, and let a product **patch** go out. Example: web v1.2.1 became Latest while the pin was at v1.2.0; after the bot's PR is merged, the next promotion carries web v1.2.1.

@@ -1,3 +1,8 @@
+---
+title: Release do produto
+tipo: conceito
+---
+
 # Release do produto {#product-release}
 
 > Como o Brabo, que vive em vários repositórios `viralabs-dev/brabo*`, publica **uma** versão do
@@ -63,8 +68,9 @@ para a primeira tag.
 | `imagens.<alvo>` | repositório, tag e imagem de cada componente de imagem; o `imagem.json` precisa bater |
 | `runner` | repositório e tag do `brabo-runner`; o `install.sh` baixa o binário dali (`RUNNER_TAG`, conferido por `scripts/dev/install-runner-release.spec.ts`) |
 
-Subir um componente é editar a tag aqui, num PR, e o produto sai com ela na próxima tag. Cinco de
-cinco imagens ou nenhuma: Release de produto com componente sem `imagem.json` é recusada.
+A pin **não anda sozinha no Git**, mas anda por um bot (AT-796, ADR 0282): a cada 6 h o `regenera-gerados.yml` lê a `releases/latest` de cada componente, confere o asset que o produto consome (`imagem.json`; `checksums.txt` e a assinatura no runner) e, se a Release for mais nova, troca só a tag na linha do `componentes.json`. Nunca desce a pin. O `infra` e a imagem de backup andam juntos, e o `RUNNER_TAG` do `install.sh` muda no mesmo commit. Tudo cai na PR fixa `chore/regenera-gerados`, que dispensa a escada; o merge é humano.
+
+A trava (`scripts/ci/pins-dos-componentes.ts --conferir`) reprova quando uma pin está atrás da Latest, não tem Release final, falta o asset, `infra.ref` difere de `imagens.backup.tag` ou o `RUNNER_TAG` difere de `runner.tag`. Ela roda no check `Pins dos componentes` (PR para a `main`) e no `release.yml`: na tag reprova, no ensaio só avisa. Cinco de cinco imagens ou nenhuma: Release de produto com componente sem `imagem.json` é recusada.
 
 ## Decisões que ainda não estão tomadas {#open}
 
@@ -72,13 +78,16 @@ cinco imagens ou nenhuma: Release de produto com componente sem `imagem.json` é
 > carimbar as primeiras tags `v1.0.0` dos repositórios (a ordem importa: o `brabo` precisa que as
 > Releases dos componentes existam antes da dele).
 
-> **TODO(humano):** o `componentes.json` é editado à mão; falta decidir se um bot o atualiza quando
-> um componente carimba tag nova ou se continua sendo decisão de PR.
+> **TODO(humano):** tornar o check `Pins dos componentes` obrigatório no ruleset da `main`. Até lá ele aparece vermelho na PR de promoção, mas não a bloqueia.
 
 ## Hotfix de um componente {#hotfix}
 
 O hotfix é PATCH pela escada normal (decisão do dono, AT-728); não se usa `hotfix/` direto na `main`.
 
 1. O componente corrige pela própria `dev` → `main` e ganha `vX.Y.Z+1`.
-2. Uma PR no `brabo` sobe a tag do componente no `componentes.json`.
+2. O bot abre ou atualiza a PR `chore/regenera-gerados` com a pin nova (ou o dono dispara o `regenera-gerados`); mergeie-a na `dev`. A trava reprova a promoção enquanto a pin estiver atrás.
 3. A promoção do `brabo` sai como patch do produto.
+
+## Tag sem Release por pin atrás {#pin-atras}
+
+Se um componente soltar Release entre o merge na `main` e o carimbo, a trava do `release.yml` reprova na tag e o produto fica com a tag sem Release (aconteceu na v2.1.0 e na v2.1.1). A saída: mergear a PR do bot na `dev`, promover e deixar sair um **patch** do produto. Exemplo: o web v1.2.1 virou Latest com a pin em v1.2.0; depois do merge da PR do bot, a promoção seguinte leva o web v1.2.1.

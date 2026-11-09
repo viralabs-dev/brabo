@@ -59,6 +59,7 @@ jobs:
           set -euo pipefail
           {
             sed -n '/^#/p' irmaos.lock
+            # shellcheck disable=SC2013  # nomes de repo não têm espaço; a divisão por palavra é a intenção
             for r in $(awk '!/^[[:space:]]*(#|$)/ { print $1 }' irmaos.lock); do
               sha=$(git ls-remote "https://github.com/viralabs-dev/$r" refs/heads/dev | cut -f1)
               printf '%s' "$sha" | grep -Eq '^[0-9a-f]{40}$' || { echo "::error::$r: sem dev no remoto"; exit 1; }
@@ -66,6 +67,17 @@ jobs:
             done
           } > "$RUNNER_TEMP/irmaos.lock"
           mv "$RUNNER_TEMP/irmaos.lock" irmaos.lock
+
+      # AT-796, ADR 0282: a pin de cada componente segue a última Release final (só sobe,
+      # nunca desce). O `RUNNER_TAG` do install.sh anda junto. Cai na mesma PR fixa.
+      - name: Subir as pins dos componentes
+        id: pins
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          set -euo pipefail
+          node scripts/ci/pins-dos-componentes.ts --subir componentes.json install.sh | tee "$RUNNER_TEMP/pins.txt"
+          { echo 'lista<<PINS_FIM'; grep -- ' → ' "$RUNNER_TEMP/pins.txt" || true; echo PINS_FIM; } >> "$GITHUB_OUTPUT"
 
       - name: Reconstruir o layout dos irmãos (trava nova)
         run: bash scripts/docs/montar-layout.sh
@@ -75,7 +87,7 @@ jobs:
         id: irmaos
         run: |
           { echo 'lista<<IRMAOS_FIM'; cat "$(git rev-parse --git-dir)/irmaos-sha.lst"; echo IRMAOS_FIM; } >> "$GITHUB_OUTPUT"
-      - uses: viralabs-dev/brabo-ci/.github/actions/vinculos@13f3697aaf3e4a151637755babb58422a44db303  # brabo-ci dev, merge da ci#17
+      - uses: viralabs-dev/brabo-ci/.github/actions/vinculos@62f6d3405a08216dd1054704c4c871c75e8ec9b6  # v1.5.0-dev.1
         with:
           irmaos: ${{ steps.irmaos.outputs.lista }}
 
@@ -104,18 +116,20 @@ jobs:
           GH_TOKEN: ${{ steps.app.outputs.token }}
           REPO: ${{ github.repository }}
           MEUS: ${{ steps.diff.outputs.meus }}
+          PINS: ${{ steps.pins.outputs.lista }}
         run: |
           set -euo pipefail
           aberta=$(gh pr list -R "$REPO" --head "$BRANCH" --base dev --state open --json number --jq '.[0].number // empty')
           if [ "$MEUS" = 0 ]; then
             if [ -n "$aberta" ]; then
+              # shellcheck disable=SC2016  # as crases são texto literal da mensagem
               gh pr close "$aberta" -R "$REPO" --delete-branch --comment 'A `dev` está em dia com os gerados; nada a regenerar.'
             fi
           else
             git reset -q
             xargs -d '\n' -a "$RUNNER_TEMP/meus.lst" git add --
             git -c user.name='viralabs-dev-brabo[bot]' -c user.email='noreply@github.com' \
-              commit -q -m 'docs: regenera os gerados que dependem dos irmãos' -m 'Gerado por regenera-gerados.yml (AT-726).'
+              commit -q -m 'docs: regenera os gerados e sobe as pins dos componentes' -m 'Gerado por regenera-gerados.yml (AT-726, AT-796).'
             # mesma árvore que a PR aberta já tem: não reempurra (re-rodaria o CI e derrubaria a aprovação)
             if git fetch -q origin "$BRANCH" 2>/dev/null && [ "$(git rev-parse 'HEAD^{tree}')" = "$(git rev-parse 'FETCH_HEAD^{tree}')" ]; then
               echo "A PR já tem estes gerados; nada a empurrar."
@@ -123,9 +137,10 @@ jobs:
               git push -f origin "HEAD:refs/heads/$BRANCH"
             fi
             if [ -z "$aberta" ]; then
+                # shellcheck disable=SC2016  # as crases são texto literal do corpo da PR
               gh pr create -R "$REPO" --base dev --head "$BRANCH" \
-                --title 'docs: regenera os gerados que dependem dos irmãos' \
-                --body 'Aberta por `regenera-gerados.yml` (AT-726): os gerados do brabo ficaram velhos depois de mudança num repositório irmão. A PR dispensa a escada (ADR 0255); o merge é humano.'
+                --title 'docs: regenera os gerados e sobe as pins dos componentes' \
+                --body "$(printf '%s\n\n%s\n%s' 'Aberta por `regenera-gerados.yml` (AT-726, AT-796): gerados velhos depois de mudança num irmão e/ou Release nova de componente. A PR dispensa a escada (ADR 0255, 0282); o merge é humano.' 'Pins subidas:' "${PINS:-nenhuma}")"
             fi
           fi
           if [ -s "$RUNNER_TEMP/irmaos.lst" ]; then

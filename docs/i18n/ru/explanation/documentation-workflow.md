@@ -5,10 +5,13 @@ sidebar_label: Синхронизация документации
 sidebar_position: 1
 description: Механизм, который не даёт документации загнить, — что делает каждая часть, зачем она существует и что делать, когда проверка жалуется несправедливо.
 keywords: [documentation, drift, docmap, CI, generation]
-traducao_de: 2d508b95c379df9edb51cc94523fd3f05edd83b2
+tipo: referencia
+traducao_de: 3cb8d867681554d54e45048cb40b2c9eb24c32d9
 ---
 
 # Как документация остаётся живой {#how-documentation-stays-alive}
+
+> Чтобы **писать** страницу, прочтите [Как мы пишем документацию](../contribuir/como-escrevemos.md). Эта страница описывает **механизм**, который поддерживает документацию в актуальном состоянии.
 
 Документация умирает не от нехватки первоначального написания. Она умирает
 от **дрейфа**: код меняется, документ остаётся, и однажды кто-то замечает,
@@ -290,6 +293,8 @@ RN цитирует код по `путь:строка`, и номер стро�
 которую никто не поддерживает в актуальном состоянии, проваливала бы каждый
 PR из-за отставания перевода.
 
+**В соседнем репозитории.** Начиная с [ADR 0275](../adr/0275-cada-irmao-confere-as-proprias-refs-com-simbolo.md) каждый соседний репозиторий проверяет собственные refs с символом в CI через переиспользуемый `refs-com-simbolo.yml` из `brabo-ci`, без layout и без генератора (проверка использует то же ядро, `refs-com-simbolo.ts`, с тем же окном и тем же `CEGO`). Ref на код другого соседа только перечисляется в summary: проверяет её подъём блокировки (ADR 0274), который называет репозиторий-владелец. Когда собственная ref соседа не проходит, задание выгружает патч переякорения как артефакт `refs-patch`, не комментируя PR. Эта проверка не входит в обязательные: то, что проскользнёт, попадёт на блокировку.
+
 ### Каждый заголовок RN несёт свой якорь {#every-rn-heading-carries-its-anchor}
 
 Якорь `{#rn-NNN}` в заголовке RN — контракт для внешних ссылок: он переживает
@@ -564,6 +569,10 @@ TODO — **объявленный** пробел, с вопросом, запи�
 Всегда в **одном и том же** issue, обновляемом на месте. Новый issue каждый
 месяц становится спамом, а спам отключают.
 
+### `estilo.mjs` — требует соблюдения руководства по письму {#estilo-mjs}
+
+`scripts/docs/estilo.mjs` измеряет каждую страницу, объявляющую `tipo:` во frontmatter. Он считает слова прозы (без frontmatter, кода, таблиц, заголовков и раздела «Para saber mais») и отклоняет то, что превышает лимит типа: туториал 1 500, руководство 800, концепция 1 200. У справочника лимита нет. Он также отмечает внутренние ID (ADR, RN, AT, EP, HS, Fase, Rodada) вне «Para saber mais». CLI только предупреждает и выходит с 0. Требование обеспечивает храповик `PENDENTES` в `estilo.spec.ts`, который работает в `pnpm test:scripts` и только сокращается: новая страница с превышением проваливается, и страница из списка, которая уже проходит, тоже проваливается («уберите из списка»). Правила письма — в [Как мы пишем документацию](../contribuir/como-escrevemos.md).
+
 ### Сборка сайта {#the-site-build}
 
 `onBrokenLinks`, `onBrokenAnchors` и `onBrokenMarkdownLinks` установлены в
@@ -673,18 +682,14 @@ locale — `en`, `ru` и `zh-Hans`, в
 запускается внутри `pnpm docs:generate` и пишет два файла:
 `docs/reference/paridade-de-traducao.md` (`generated: true`) и
 `website/src/data/traducao.json`. По каждому locale он считает
-переведённые страницы и символы относительно источника (весь `docs/`, с ADR 0219 включая
-`reference/`, кроме самого отчёта и `openapi.json`) и делит переведённые страницы на **актуальные**,
+переведённые страницы и символы относительно источника (`docs/` самого `brabo`, с ADR 0219 включая `reference/`, кроме самого отчёта, `openapi.json` и `i18n/`; документация соседних репозиториев не учитывается, ADR 0273) и делит переведённые страницы на **актуальные**,
 **устаревшие** и **без происхождения**. Происхождение — это
 `traducao_de: <SHA>` во frontmatter переведённой страницы, последний коммит
 источника, который она переводит. Страница устарела, когда у источника есть
 коммит с COMMIT DATE позже этого SHA, когда в источнике есть незакоммиченные
 изменения или когда SHA не существует. Он никогда не использует часы,
 поэтому `--check` даёт один и тот же ответ до и после коммита, касающегося
-источника. Для UI он сравнивает ключи каждого namespace в
-`apps/web/src/locales/<l>/` с pt-BR и требует каждую форму множественного
-числа, которую `Intl.PluralRules` даёт этому locale. `--check` проваливается,
-когда любой из двух файлов устарел.
+источника. Путь принадлежит `brabo`, когда он есть в `HEAD` или отсутствует в манифесте `.git/layout-irmaos.lst`; поэтому merge документации в соседнем репозитории больше не меняет паритет. Интерфейс здесь не измеряется: барьер по ключам и формам множественного числа — это `src/lib/i18n-paridade.test.ts` в `brabo-web`, а тексты API только предупреждают в логе `docs:generate`. `--check` проваливается, когда любой из двух файлов устарел.
 
 Полоса — это swizzle-обёртка `@theme/DocItem/Content`
 (`website/src/theme/DocItem/Content/index.tsx`). Вне pt-BR страница, чей
@@ -700,7 +705,7 @@ pt-BR и говорит об этом; переведённая страница
 `en` неустаревшая страница её не имеют. Правила для переводчиков — в
 [Localização](localizacao.md).
 
-**Документация репозиториев с кодом — только на английском (AT-745, ADR 0260).** Страница с `idioma_original: en` не входит в паритет (`ehFonteTraduzivel`), отдаётся без полосы в `/en/` и с полосой «эта страница существует только на английском» в остальных локалях (`paginas.mjs` ставит `somenteIngles`; `faixa-de-traducao-check.mjs` проверяет HTML). Индекс RN каждой локали берёт перевод, если он есть, и источник, если нет (`rnsDoLocale`), генерируемый блок в английском источнике выходит с английскими текстами (`textosDaFonte`), а фразы, привязанные к прозе соседних репозиториев (`contagens-do-codigo.mjs`, runbook), принимают pt-BR или английский (`padraoEn`). Каталоги `openapi-textos.json` живут в `brabo`, в `docs/i18n/<locale>/`.
+**Документация всех репозиториев по умолчанию на pt-BR (AT-766, ADR 0266, который заменяет 0260).** У соседних репозиториев может быть `<raiz>/docs/i18n/`, измеряемый в репозитории-владельце (паритет `brabo` их не считает, ADR 0273). Страница соседа, всё ещё на английском (смешанное состояние, до повторного перевода), по-прежнему принимается: с `idioma_original: en` она не входит в паритет (`ehFonteTraduzivel`), отдаётся без полосы в `/en/` и с полосой «эта страница существует только на английском» в остальных локалях (`paginas.mjs` ставит `somenteIngles`; `faixa-de-traducao-check.mjs` проверяет HTML). Индекс RN каждой локали берёт перевод, если он есть, и источник, если нет (`rnsDoLocale`), генерируемый блок в английском источнике выходит с английскими текстами (`textosDaFonte`), а фразы, привязанные к прозе соседних репозиториев (`contagens-do-codigo.mjs`, runbook), принимают pt-BR или английский (`padraoEn`). Каталоги `openapi-textos.json` живут в `brabo`, в `docs/i18n/<locale>/`.
 
 ### Страница API переводится по каталогу (ADR 0220) {#the-api-page-is-translated-by-catalog-adr-0220}
 
@@ -858,7 +863,7 @@ workflow; GitHub создаёт его сам, когда источник Pages
 > **Практическое последствие:** сайт может быть старым даже при зелёной
 > `Documentação`. Если `build_type` у Pages не `legacy`/`gh-pages`, коммит
 > происходит, и никто его не отдаёт, — и ничто в CI не краснеет. Проверка —
-> `gh api repos/daneiel/brabo/pages`, записанная в
+> `gh api repos/viralabs-dev/brabo/pages`, записанная в
 > [Rulesets](../reference/rulesets.md).
 
 Весь замысел, с отвергнутыми альтернативами, — в
@@ -881,6 +886,8 @@ workflow; GitHub создаёт его сам, когда источник Pages
 `scripts/docs/landing.spec.ts`, который разрешает токены и проваливает
 расходящееся значение — однажды после ADR 0181 она уже стала цвета петроль.
 
+Каждая страница объявляет тип (`tutorial|guia|conceito|referencia|decisao|historico`) в `tipo:` во frontmatter либо получает его от папки (`tutorials/`, `how-to/`, `explanation/`, `reference/`, `adr/`, `business-rules`). В меню 7 групп верхнего уровня, и `scripts/docs/site/tipos.mjs` отклоняет страницу без типа, в неверной группе или вне меню.
+
 ## Запуск на вашей машине {#running-it-on-your-machine}
 
 У `website/` собственный `pnpm-lock.yaml` начиная с [ADR 0117](../adr/0117-lockfile-proprio-para-o-website.md) —
@@ -893,8 +900,9 @@ cd website && pnpm install && cd ..  # only the first time, or when website/pnpm
 pnpm docs:check      # validates the map + checks generated content is up to date
 pnpm docs:generate   # regenerates
 pnpm docs:drift      # simulates the PR check (origin/dev...HEAD)
-pnpm docs:build      # the build CI runs — pnpm --dir website build under the hood
-pnpm docs:start      # local server, with hot reload
+pnpm docs:build      # the build CI runs — generates build/docs-site and checks links
+pnpm docs:start      # builds and serves on http://localhost:3000
+node scripts/docs/estilo.mjs  # style check: word budget per page type
 
 # does the API reference render? needs the build above, and isn't part
 # of docs:check because that one doesn't build the site
@@ -991,3 +999,25 @@ Dependabot, чей diff — ничего, кроме замены закрепл
 `OTEL_EXPORTER_OTLP_ENDPOINT` оставались неверными месяцами. Когда меняете
 код, просмотрите `docs/` в поисках того, что изменение сделало ложным, —
 включая то, на что никто не просил вас смотреть.
+
+## Корни документации по областям {#raizes-de-doc-por-area}
+
+Начиная с [ADR 0254](../adr/0254-a-doc-de-cada-area-mora-na-raiz-dela.md) документация каждой области живёт в `<raiz>/docs/` (список — в `scripts/docs/raizes-de-doc.mjs`, карта имя→папка — в `scripts/docs/fontes.yml` или в файле `BRABO_FONTES`), а `docs/` остаётся агрегатором. Сайт — это **дерево-объединение**: файл сохраняет прежний относительный путь, публичный URL не меняется, а ссылки между страницами используют координаты сайта, а не диска.
+
+```mermaid
+flowchart LR
+  A["apps/api/docs"] --> U
+  W["apps/web/docs"] --> U
+  E["apps/engine/docs"] --> U
+  R["apps/runner/docs · broker · packages"] --> U
+  I["deploy/docs · brabo-ci (scripts/ci/docs)"] --> U
+  Q["qa/docs · brabo-qa (docs/ do irmão em ., AT-846)"] --> U
+  P["docs/ (agregador)"] --> U
+  U(("união")) --> S["site: mesmas URLs"]
+```
+
+- **Новая RN** идёт в `<raiz>/docs/business-rules/<raiz>.md`, в корень, где живёт первая ref `caminho:N`. Нумерация глобальная, а якорь `{#rn-NNN}` не меняется; `docs/business-rules.md` — сгенерированный индекс, а `custo.md`/`autenticacao.md` — замороженные заглушки.
+- **Соседние репозитории входят через блокировку.** `irmaos.lock` (по одному SHA на соседа) — то, что `montar-layout.sh` использует в `docs-check`, `docs-audit` и на ступени `dev` деплоя; `BRABO_REF` главнее блокировки (ступень `main` использует `BRABO_REF=main`). Блокировку поднимает только `regenera-gerados.yml`, вместе со сгенерированными файлами (ADR 0274). Поэтому `scripts.md`, индекс RN, подсчёты и refs с символом меняются только при подъёме, и обычный PR не краснеет из-за merge в соседнем репозитории.
+- **`docs:check`** суммирует все корни и отклоняет дублирующуюся RN между ними. С `--raiz <имя>` он запускает по корню то, что зависит только от него (якоря, внутренние refs, glob docmap, drift), а то, что пересекает корни (подсчёты, индекс RN, паритет, ссылки между языками), оставляет агрегатору. *Сегодня `--raiz` ограничивает только refs с символом; остальные генераторы работают целиком. Поэтому сосед им не пользуется: его refs проверяются в его собственном CI (ADR 0275).*
+- **Переводы** лежат в `<raiz>/docs/i18n/<locale>/`, с единым `traducao.json`. Перемещение файлов требует двух коммитов: изменение, а затем повторное клеймение `traducao_de`.
+- **Цена:** ссылка между корнями даёт 404 в просмотре GitHub; на сайте она работает.

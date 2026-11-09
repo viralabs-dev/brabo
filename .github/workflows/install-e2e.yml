@@ -49,7 +49,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-26.04, macos-14]
+        os: [ubuntu-26.04, macos-15]
     runs-on: ${{ matrix.os }}
     # 25 bastavam enquanto o job parava no `.env`. Com o fechamento inteiro
     # (RN-547) ele ainda espera o agente entrar na espera e, depois do projeto
@@ -86,6 +86,7 @@ jobs:
           # passo e a autoverificação do instalador leem, não pela Release.
           limite=$(( SECONDS + 900 ))
           faltam() {
+            # shellcheck disable=SC2016  # o $a é variável do jq, não do shell
             gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets \
               --jq '[.assets[].name] as $a | ["install.sh","checksums.txt","checksums.txt.bundle"] - $a | length' \
               2>/dev/null || echo 3
@@ -417,6 +418,7 @@ jobs:
           exigir 'elo 1 (RN-546): a primeira conta não foi criada' 'conta criada e já verificada'
           exigir 'elo 2 (RN-551): o par não foi gerado na máquina' 'par Ed25519 gerado nesta máquina'
           exigir 'elo 3 (RN-552): a pública não foi registrada' 'chave registrada na api (id '
+          # shellcheck disable=SC2016  # as crases são texto literal, o padrão de busca
           exigir 'elo 4 (RN-551): o `kid` não foi carimbado' 'chave completa em '
           exigir 'elo 5 (RN-545): a unit de máquina não foi instalada' 'agente local instalado como serviço desta máquina'
 
@@ -445,7 +447,7 @@ jobs:
           jq -e 'has("kid") and (.kid | length > 0)' "$chave" >/dev/null \
             || { echo "::error::a chave que o runner lê ficou SEM kid"; exit 1; }
           jq -e 'has("d")' "$chave" >/dev/null \
-            || { echo "::error::a privada não é privada — sem `d` o runner não assina nada"; exit 1; }
+            || { echo "::error::a privada não é privada — sem \`d\` o runner não assina nada"; exit 1; }
           test ! -f "${chave}.parcial" \
             || { echo "::error::o .parcial sobrou depois de o finish fechar"; exit 1; }
 
@@ -682,9 +684,11 @@ jobs:
           api='http://localhost:3000'
           estado="${XDG_STATE_HOME:-$HOME/.local/state}/brabo/install-state.json"
           dc() { docker compose -f docker/docker-compose.install.yml --env-file .env "$@"; }
+          # shellcheck disable=SC2016  # o $1 e o $POSTGRES_* expandem DENTRO do container
           sql() { dc exec -T postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -tAc "$1"' _ "$1"; }
           repos_bare() { dc exec -T api sh -c "find /data/git-repos -maxdepth 1 -name '*.git' | wc -l" | tr -d '[:space:]'; }
           nos_do_grafo() {
+            # shellcheck disable=SC2016  # as variáveis expandem DENTRO do container
             dc exec -T neo4j sh -c 'cypher-shell -u "${NEO4J_USER:-neo4j}" -p "${NEO4J_AUTH#*/}" --format plain "MATCH (n) RETURN count(n)"' \
               | tail -n 1 | tr -d '[:space:]'
           }

@@ -2,9 +2,14 @@
 id: auditoria-visual-rodada-29
 title: Auditoria visual, antes e depois da Rodada 29
 description: A auditoria de telas da AT-290 — as rotas principais capturadas nos dois temas a 1440 px e 390 px, o verificador de layout rodado em cada tela, e o que a Rodada 29 corrigiu, o que persiste e o que é novo, medido em 2026-09-30 contra a dev em 79e6b1209f.
+tipo: historico
 ---
 
 # Auditoria visual, antes e depois da Rodada 29 {#visual-audit-before-and-after-rodada-29}
+
+:::historico 2026-09-30
+Medição, não mudança: a interface antes e depois da Rodada 29, capturada contra a `dev` em dois commits do mesmo dia. Registra o que o verificador mediu e o que melhorou ou não. As capturas não estão no repositório; cada achado cita o nome do arquivo.
+:::
 
 > AT-290 (EP-031, HS-074). Uma **medição, não uma mudança**: nada em `apps/`
 > foi tocado para escrever esta página. A captura do "antes" rodou em 2026-09-30

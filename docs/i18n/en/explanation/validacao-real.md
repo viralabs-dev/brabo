@@ -1,5 +1,6 @@
 ---
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 id: validacao-real
 title: The real validation — remote GitHub and a real model
 sidebar_label: Real validation (13b)
@@ -9,6 +10,10 @@ keywords: [validation, dogfooding, GitHub, dev agent, measurement, PHASE 13b]
 ---
 
 # The real validation — remote GitHub and a real model
+
+:::historico 2026-08-06
+Validation with a remote GitHub, a real dev agent and an API model: what Phase 12 had left out. The cheap half passed entirely and the expensive one failed in a way no test had shown. It reports ten runs, each fix and what it revealed, up to the whole chain end to end.
+:::
 
 The [Phase 12 validation](./validacao-fase-12.md) states its own limits in
 full: `LocalGitProvider`, `NoopDevAgent`, a gate verdict written by the

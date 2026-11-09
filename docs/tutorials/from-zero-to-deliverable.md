@@ -5,23 +5,30 @@ description: Um projeto real percorrido de ponta a ponta no Brabo — criar, esc
 
 # Do zero a um entregável
 
-Esta página acompanha um projeto real, gravado ao vivo em 2026-10-14, de um
-workspace vazio até um entregável rodando. O projeto,
-`viralabs-app-2026-10-14b`, é um encurtador de links (Node 22 + SQLite). O
-time inteiro rodou com **Claude Haiku 5.5**, e a execução custou
-**US$ 1,07**. Da ideia à execução foram **13 minutos**, e até o último merge
-cerca de **57 minutos** de interação.
+Esta página acompanha um projeto de ponta a ponta, de um workspace vazio até um entregável rodando: um encurtador de links (Node 22 + SQLite), com o time inteiro no mesmo modelo. As telas dos passos 1 a 6 são capturas da interface atual, geradas pelo `brabo-qa` a cada versão e com os dados de teste ocultados.
 
-O que saiu no fim: **8 de 8 tarefas**, mais o ADR e a pull request de
-infraestrutura, mergeadas na branch `dev` do projeto, e um entregável cuja
-suíte de testes passa **102/102** num clone limpo e que sobe com
-`docker compose up`.
+:::historico 2026-10-14
+A execução que serve de exemplo foi gravada ao vivo, e estes números são dela. O projeto, `viralabs-app-2026-10-14b`, rodou com **Claude Haiku 5.5** e custou **US$ 1,07**. Da ideia à execução foram **13 minutos**, e até o último merge cerca de **57 minutos** de interação. Saíram **8 de 8 tarefas**, mais o ADR e a pull request de infraestrutura, e um entregável cuja suíte passa **102/102** num clone limpo. As telas dos passos abaixo são da interface atual, não dessa gravação.
+:::
 
+:::dica[Tudo pelo chat do Criativo]
 A execução inteira foi conduzida de **um lugar só, o chat da sessão do
 Criativo**: perguntas abertas, a confirmação da arquitetura e cada merge foram
-decididos ali, sem recarregar a página nem abrir outra aba. Cada passo abaixo
-diz o que você faz e o que os agentes devolvem. As gravações são a tela real
-do Brabo; o caminho da pasta montada está borrado no passo 1.
+decididos ali, sem recarregar a página nem abrir outra aba.
+:::
+
+O caminho, em seis passos:
+
+:::passos
+1. **Criar o projeto** e escolher onde o código mora.
+2. **Dar um modelo ao time**, em uma ação só.
+3. **Descrever a ideia** e responder as perguntas abertas dos agentes.
+4. **Conferir o PO, o Arquiteto e o ADR**, e confirmar a arquitetura.
+5. **Aprovar o plano** de execução e ligar o modo automático.
+6. **Mergear pelo chat** cada pull request que passar nos gates.
+:::
+
+Cada passo abaixo diz o que você faz e o que os agentes devolvem. As telas são as da versão atual; os números da execução de 14/10 estão no quadro acima.
 
 ## 1. Criar o projeto
 
@@ -31,14 +38,14 @@ da instalação, e a pasta só precisa existir quando a Infra sobe o container.
 Nada é provisionado ainda — o repositório nasce depois, quando o Arquiteto
 entra.
 
-![Criando o projeto](../assets/fluxo-do-zero/passo-01-criar-projeto.gif)
+![Criando o projeto](../assets/capturas/novo-projeto-claro.png "Assistente de novo projeto: criar um projeto novo ou adotar um existente")
 
 ## 2. Dar um modelo ao time
 
 Em Configurações você aplica um modelo a todos os agentes numa ação só. Esta
 execução aplicou o Claude Haiku 5.5 ao time inteiro.
 
-![Aplicando o modelo ao time](../assets/fluxo-do-zero/passo-02-modelo-ao-time.gif)
+![Aplicando o modelo ao time](../assets/capturas/modelo-do-time-claro.png "Modelos por agente, com a ação de aplicar um modelo ao time inteiro")
 
 ## 3. A ideia, e as perguntas que os agentes devolvem
 
@@ -53,7 +60,7 @@ turno: 7 regras de negócio, 1 decisão, 2 perguntas abertas"). Quando você
 terminar, **"Estou pronto — a necessidade está validada"** passa o trabalho ao
 PO.
 
-![A ideia e as perguntas abertas](../assets/fluxo-do-zero/passo-03-ideacao-e-perguntas.gif)
+![A ideia e as perguntas abertas](../assets/capturas/perguntas-abertas-claro.png "Chat do Criativo com as perguntas abertas na fila de pendências")
 
 ## 4. PO, Arquiteto e o ADR
 
@@ -66,7 +73,7 @@ automaticamente. O Arquiteto propõe o ADR como pull request
 com a arquitetura definida, pede que você a confirme:
 **"Confirmar arquitetura pronta"** é o que traz a Infra.
 
-![PO, Arquiteto e o ADR](../assets/fluxo-do-zero/passo-04-po-arquiteto-adr.gif)
+![PO, Arquiteto e o ADR](../assets/capturas/adr-no-chat-claro.png "Chat do Criativo com o ADR proposto pelo Arquiteto, à espera da sua confirmação")
 
 ## 5. Infra, o plano e o modo automático
 
@@ -78,7 +85,7 @@ clique, dizendo o que ele não libera: merges em branch protegida continuam
 seus. Daí em diante o dev agent trabalha dentro do container (`/work`), e você
 pode ler no chat cada comando que ele rodou e a saída.
 
-![Infra, o plano e o modo automático](../assets/fluxo-do-zero/passo-05-infra-plano-modo-automatico.gif)
+![Infra, o plano e o modo automático](../assets/capturas/plano-e-modo-automatico-claro.png "Plano de execução do Dev Lead com a oferta do modo automático para o time")
 
 ## 6. Merges pelo chat
 
@@ -90,9 +97,12 @@ merge"** no topo do chat do Criativo: **Mergear** propõe o merge e
 requests (#4 a #10) foram mergeadas em cerca de dois minutos, sem recarregar a
 página.
 
-![Merges pelo chat](../assets/fluxo-do-zero/passo-06-merges-pelo-chat.gif)
+![Merges pelo chat](../assets/capturas/merges-no-chat-claro.png "Fila de pull requests prontas para merge no chat do Criativo")
 
 ## O entregável
+
+:::historico 2026-10-14
+A execução gravada em 14/10 terminou assim.
 
 A branch `dev` do repositório do projeto, clonada limpa e rodada em `node:22`
 com `npm test`, passou em **102/102** testes. `docker compose up` subiu a API
@@ -106,3 +116,10 @@ cliques; `npm run user:create` recusa senha com menos de 12 caracteres; e
 `/docs` serve a referência da API. O preflight de CORS a partir de
 `127.0.0.1:8080` e de `localhost:8080` recebe cada um o seu
 `Access-Control-Allow-Origin`, e uma origem estranha não recebe nenhum.
+:::
+
+## Próximo passo
+
+:::cartoes
+- [Orquestrar um produto em vários repositórios](orquestrar-repositorios/index.md): a trilha para dividir um produto como o Brabo foi dividido.
+:::

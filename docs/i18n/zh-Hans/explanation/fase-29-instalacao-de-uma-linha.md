@@ -1,5 +1,6 @@
 ---
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: 9d7eae2505b22c873aea004c17b7f0f3abab09d3
 id: fase-29-instalacao-de-uma-linha
 title: FASE 29 — 一行命令安装
 sidebar_label: FASE 29 — 一行命令安装
@@ -9,6 +10,10 @@ keywords: [fase 29, 安装程序, 签名, cosign, 备份, runner, 项目 base]
 ---
 
 # FASE 29 — 一行命令安装
+
+:::historico 2026-09-08
+第 29 阶段的一个切片：把三个零散的安装动作（启动服务、安装 runner、选择代码存放位置）合并成一个一行安装器，现在带有签名的产物。它说明了这一阶段追求什么、拒绝什么以及按什么顺序。相关决定位于 ADR 0149 至 0152。
+:::
 
 > 本文档是该阶段的**范围界定**：它追求什么、拒绝什么、按什么顺序。**决策**位于
 > [ADR 0149](../adr/0149-assinatura-dos-artefatos-publicados.md)、

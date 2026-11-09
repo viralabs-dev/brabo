@@ -23,7 +23,7 @@ run-name: ${{ format('Documentação · {0} · {1}', github.ref_name, github.eve
 on:
   push:
     branches: [dev, main]
-    paths: ['docs/**', 'scripts/ci/docs/**', 'scripts/docs/**', 'website/**', 'irmaos.lock', '.github/workflows/docs-deploy.yml']
+    paths: ['docs/**', 'scripts/docs/**', 'website/**', 'irmaos.lock', '.github/workflows/docs-deploy.yml']
   # a subida da trava (`irmaos.lock`, AT-780) já republica o `/dev/`; à mão serve
   # para o `/prd/` quando a `main` de um irmão mudou (não há repository_dispatch:
   # a branch default é `dev`, e ele publicaria `dev` quando o alvo pode ser `prd`)
@@ -123,7 +123,7 @@ jobs:
         id: irmaos
         run: |
           { echo 'lista<<IRMAOS_FIM'; cat "$(git rev-parse --git-dir)/irmaos-sha.lst"; echo IRMAOS_FIM; } >> "$GITHUB_OUTPUT"
-      - uses: viralabs-dev/brabo-ci/.github/actions/vinculos@13f3697aaf3e4a151637755babb58422a44db303  # brabo-ci dev, merge da ci#17
+      - uses: viralabs-dev/brabo-ci/.github/actions/vinculos@62f6d3405a08216dd1054704c4c871c75e8ec9b6  # v1.5.0-dev.1
         with:
           irmaos: ${{ steps.irmaos.outputs.lista }}
 

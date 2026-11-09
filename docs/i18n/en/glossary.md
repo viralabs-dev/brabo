@@ -5,7 +5,8 @@ sidebar_label: Glossary
 sidebar_position: 9
 description: Brabo's ubiquitous language — the terms that show up in the code, the screens, and the ADRs, with the meaning they carry here.
 keywords: [glossary, ubiquitous language, harness, gate, handoff, DEK, outbox]
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: referencia
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # Glossary
@@ -462,3 +463,5 @@ that's what makes it work without a collector. See
 **Layer** — in the path above, the boundary's label: `interfaces`,
 `application`, `domain`, or `infrastructure`. Corresponds to the
 directories under `apps/api/src/` and the dependency rule between them.
+
+**PR and CI policy** — the pipeline terms (ladder, promotion, rulesets, violation codes) are in the [policy glossary](reference/glossario-da-politica.md), which lives in `brabo-ci`.

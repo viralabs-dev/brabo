@@ -16,6 +16,8 @@
       themeVariables: {
         background: v('--surface-0'), primaryColor: v('--surface-2'), primaryTextColor: v('--text-primary'),
         primaryBorderColor: v('--border-strong'), lineColor: v('--text-secondary'), fontFamily: v('--font-body'),
+        secondaryColor: v('--surface-1'), tertiaryColor: v('--surface-1'), clusterBkg: v('--surface-1'), clusterBorder: v('--border'),
+        edgeLabelBackground: v('--surface-0'), nodeTextColor: v('--text-primary'), titleColor: v('--text-primary'),
       },
     });
     d.querySelectorAll('[data-mermaid]').forEach(function (el) {
@@ -33,5 +35,65 @@
     try { window.localStorage.setItem('brabo.docs.theme', novo); } catch (e) {}
     mermaidTema();
   });
+  // Abas (:::abas): sem JS as seções ficam empilhadas, com o rótulo de cada uma.
+  d.querySelectorAll('[data-abas]').forEach(function (grupo, g) {
+    var abas = Array.prototype.slice.call(grupo.querySelectorAll(':scope > .aba'));
+    var lista = d.createElement('div');
+    lista.className = 'abas-lista';
+    lista.setAttribute('role', 'tablist');
+    var botoes = abas.map(function (aba, i) {
+      var b = d.createElement('button');
+      b.type = 'button';
+      b.setAttribute('role', 'tab');
+      b.id = 'aba-' + g + '-' + i;
+      b.textContent = aba.dataset.aba;
+      aba.setAttribute('role', 'tabpanel');
+      aba.setAttribute('aria-labelledby', b.id);
+      b.addEventListener('click', function () { abrir(i); });
+      b.addEventListener('keydown', function (e) {
+        var n = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : -1;
+        if (n < 0) return;
+        abrir((n + abas.length) % abas.length);
+        botoes[(n + abas.length) % abas.length].focus();
+      });
+      lista.appendChild(b);
+      return b;
+    });
+    function abrir(i) {
+      abas.forEach(function (aba, k) {
+        aba.hidden = k !== i;
+        botoes[k].setAttribute('aria-selected', String(k === i));
+        botoes[k].tabIndex = k === i ? 0 : -1;
+      });
+    }
+    grupo.insertBefore(lista, grupo.firstChild);
+    grupo.classList.add('abas-js');
+    abrir(0);
+  });
+  // RN que mudou de página (ADR 0287): a âncora antiga é um <a id> vazio colado ao link da parte, com o mesmo #hash. Vai direto.
+  var h = location.hash.slice(1), ra = h && d.getElementById(h), rl = ra && (ra.href ? ra : ra.nextElementSibling);
+  if (rl && rl.tagName === 'A' && rl.hash === '#' + h && rl.pathname !== location.pathname) location.replace(rl.href);
+  // Índice de ADR (ADR 0287): filtro por tema e por status. Sem JS os seletores ficam escondidos e valem os links de tema.
+  var fa = d.querySelector('[data-adr-filtro]');
+  if (fa) {
+    var st = fa.querySelector('[data-adr-status]'), tm = fa.querySelector('[data-adr-tema]');
+    var filtrar = function () {
+      d.querySelectorAll('.doc h2[id^="tema-"]').forEach(function (h2) {
+        var els = [h2], n = 0;
+        for (var e = h2.nextElementSibling; e && e.tagName !== 'H2'; e = e.nextElementSibling) {
+          els.push(e);
+          e.querySelectorAll('tbody tr').forEach(function (tr) {
+            tr.hidden = !!st.value && tr.lastElementChild.textContent.trim() !== st.value;
+            if (!tr.hidden) n++;
+          });
+        }
+        var mostra = (!tm.value || tm.value === h2.id) && n > 0;
+        els.forEach(function (x) { x.hidden = !mostra; });
+      });
+    };
+    st.addEventListener('change', filtrar);
+    tm.addEventListener('change', filtrar);
+    fa.hidden = false;
+  }
   mermaidTema();
 })();

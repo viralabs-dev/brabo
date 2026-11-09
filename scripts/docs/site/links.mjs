@@ -5,6 +5,7 @@
  *
  *  - todo href/src relativo aponta para arquivo que existe no build;
  *  - todo `#fragmento` existe como id="…" (ou name="…") na página de destino;
+ *  - nenhum id repetido na mesma página (AT-875);
  *  - nada de fora carrega: sem http(s):// em <script src>, <link href> ou @import de CSS
  *    (links de navegação externos em <a> ficam de fora).
  * Só lê o HTML estático; não abre navegador.
@@ -79,6 +80,18 @@ export function carregaDeFora(dir) {
   return achados;
 }
 
+/** Id repetido na mesma página (AT-875): o `<a id>` de RN colado a uma lista duplicava o id e o link abria o lugar errado. */
+export function idsRepetidos(dir) {
+  const achados = [];
+  for (const arq of arquivosDe(dir).filter((f) => f.endsWith('.html'))) {
+    const vistos = new Set();
+    const dup = new Set();
+    for (const m of readFileSync(arq, 'utf8').matchAll(/<[a-z][^>]*?\sid="([^"]*)"/g)) (vistos.has(m[1]) ? dup : vistos).add(m[1]);
+    for (const id of dup) achados.push(`${path.relative(dir, arq)}: id repetido "${id}"`);
+  }
+  return achados;
+}
+
 function main() {
   const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
   const dir = path.resolve(process.argv[2] ?? path.join(raiz, 'build/docs-site'));
@@ -88,8 +101,9 @@ function main() {
   const fora = carregaDeFora(dir);
   console.log(`links: ${r.paginas} páginas, ${r.links} links, ${r.ancoras} âncoras verificados.`);
   if (r.pendentes.length) console.log(`links: ${r.pendentes.length} pendência(s) DECLARADA(S) (${PENDENTES.join(', ')}).`);
-  for (const e of [...r.erros, ...fora]) console.error(`  ${e}`);
-  if (r.erros.length || fora.length) { console.error(`links: ${r.erros.length} link(s)/âncora(s) quebrados, ${fora.length} recurso(s) de fora.`); process.exit(1); }
+  const reps = idsRepetidos(dir);
+  for (const e of [...r.erros, ...fora, ...reps]) console.error(`  ${e}`);
+  if (r.erros.length || fora.length || reps.length) { console.error(`links: ${r.erros.length} link(s)/âncora(s) quebrados, ${fora.length} recurso(s) de fora, ${reps.length} id(s) repetido(s).`); process.exit(1); }
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

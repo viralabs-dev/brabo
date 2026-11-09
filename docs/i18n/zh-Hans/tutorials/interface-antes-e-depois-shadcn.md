@@ -1,10 +1,14 @@
 ---
 title: shadcn 前后的界面（2026 年 10 月 31 日）
 description: 将基础组件迁移到 shadcn/ui（ADR 0232）以及修正 9Router 中工具（RN-950）前后，各界面和一次 Criativo 会话的录像。
-traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
+tipo: historico
+traducao_de: c262a6ba5d5df58cf58dd0092a43c2cbcd3763e2
 ---
 
 # shadcn 前后的界面（2026 年 10 月 31 日）
+
+:::historico 2026-10-31
+2026 年 10 月 31 日的视觉记录。下方画面来自当时的界面，并非当前版本。
 
 这一轮把前端的基础换成了带 Base UI 的 shadcn/ui（[ADR 0232](../adr/0232-shadcn-com-base-ui-no-apps-web.md)），并在同一天让 9Router 接收智能体的工具（[RN-950](../business-rules/api.md#rn-950)），这是它的视觉记录。**之前**是 10 月 31 日上午的 `dev` 安装；**之后**是 `dev` `5851354c7c`，项目自有的基础组件（`Button`、`Badge`、`Card`、`Alert`、`Table`、`Input`、`Select`、`Modal`、`Disclosure`、标签页）已改由 shadcn 的组件提供。
 
@@ -16,11 +20,11 @@ traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 
 | 之前 | 之后 |
 |---|---|
-| ![Percurso antes](../assets/shadcn-antes-depois/percurso-antes.gif) | ![Percurso depois](../assets/shadcn-antes-depois/percurso-depois.gif) |
+| ![Percurso antes](../assets/historico/shadcn-antes-depois/percurso-antes.gif) | ![Percurso depois](../assets/historico/shadcn-antes-depois/percurso-depois.gif) |
 
-![Conta, tema claro: antes à esquerda, depois à direita](../assets/shadcn-antes-depois/comparacao-04-conta-light.png)
+![Conta, tema claro: antes à esquerda, depois à direita](../assets/historico/shadcn-antes-depois/comparacao-04-conta-light.png)
 
-![Providers, tema claro: antes à esquerda, depois à direita](../assets/shadcn-antes-depois/comparacao-03-providers-light.png)
+![Providers, tema claro: antes à esquerda, depois à direita](../assets/historico/shadcn-antes-depois/comparacao-03-providers-light.png)
 
 ## 一次 Criativo 会话
 
@@ -31,12 +35,13 @@ traducao_de: efdead964c2245ce1900dfb47140b0af64a2492f
 
 | 之前 | 之后 |
 |---|---|
-| ![Chat do Criativo antes](../assets/shadcn-antes-depois/chat-criativo-antes-dark.gif) | ![Chat do Criativo depois](../assets/shadcn-antes-depois/chat-criativo-depois-dark.gif) |
+| ![Chat do Criativo antes](../assets/historico/shadcn-antes-depois/chat-criativo-antes-dark.gif) | ![Chat do Criativo depois](../assets/historico/shadcn-antes-depois/chat-criativo-depois-dark.gif) |
 
-![Segunda resposta do Criativo: antes à esquerda, depois à direita](../assets/shadcn-antes-depois/comparacao-12-chat-resposta-2-dark.png)
+![Segunda resposta do Criativo: antes à esquerda, depois à direita](../assets/historico/shadcn-antes-depois/comparacao-12-chat-resposta-2-dark.png)
 
 ## 新的开销页面
 
 全局页面 `/spend`（[RN-952](../business-rules/api.md#rn-952)）在"之前"并不存在。在"之后"的录像中，它显示时没有页面边距——内容紧贴侧边栏；该缺陷已登记待修正。
 
-![Gastos, tema claro, depois](../assets/shadcn-antes-depois/depois-gastos-light.png)
+![Gastos, tema claro, depois](../assets/historico/shadcn-antes-depois/depois-gastos-light.png)
+:::

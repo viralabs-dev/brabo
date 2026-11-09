@@ -5,6 +5,7 @@ sidebar_label: Glossário
 sidebar_position: 9
 description: A linguagem ubíqua do Brabo — os termos que aparecem no código, nas telas e nos ADRs, com o sentido que têm aqui.
 keywords: [glossário, linguagem ubíqua, harness, gate, handoff, DEK, outbox]
+tipo: referencia
 ---
 
 # Glossário
@@ -434,3 +435,5 @@ de um `AsyncLocalStorage` alimentado pelo decorator `@Traced`, não de um span
 **Camada** — no caminho acima, o rótulo da fronteira: `interfaces`,
 `application`, `domain` ou `infrastructure`. Corresponde aos diretórios sob
 `apps/api/src/` e à regra de dependência entre eles.
+
+**Política de PR e do CI** — os termos da esteira (escada, promoção, rulesets, códigos de violação) estão em [glossário da política](reference/glossario-da-politica.md), que mora no `brabo-ci`.

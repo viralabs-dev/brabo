@@ -5,9 +5,14 @@ sidebar_label: Primeiro dogfooding
 sidebar_position: 4
 description: A colheita da Fase 10 — os dezessete achados da primeira vez em que o Brabo construiu o próprio Brabo, o que ficou medido e o que se perdeu por não ter sido anotado.
 keywords: [dogfooding, colheita, Fase 10, achados, operabilidade]
+tipo: historico
 ---
 
 # O que o primeiro dogfooding ensinou
+
+:::historico 2026-08-02
+Colheita da Fase 10, quando o Brabo construiu parte de si mesmo (suporte a Bitbucket) pela primeira vez. Registra os 17 achados reais, o que ficou sem medição porque a tabela de observação nunca foi preenchida e o que a Fase 12 fez com tudo isso.
+:::
 
 Na Fase 10 o Brabo construiu uma parte do próprio Brabo: o suporte a Bitbucket e
 o `GenericGitProvider` foram entregues pelos agentes do produto, num fork, com

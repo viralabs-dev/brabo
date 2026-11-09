@@ -185,6 +185,15 @@ rules:
     docs: ["docs/reference/internal-api.md"]
     severity: block
 
+  # AT-826: o detalhe de contratos e imagem saiu do README da api para esta página.
+  - id: api-contratos-e-imagem
+    watch:
+      - "apps/api/Dockerfile"
+      - "apps/api/Dockerfile.dev"
+    docs: ["apps/api/docs/reference/contratos-e-imagem.md"]
+    severity: warn
+    note: "Mudou a imagem ou o consumo dos contratos? A página diz como a api os usa."
+
   - id: superficie-http-interna
     watch:
       - "apps/api/src/interfaces/http/internal/**"
@@ -432,7 +441,7 @@ rules:
       - "apps/web/src/lib/logger.ts"
     docs:
       - "deploy/docs/explanation/observability.md"
-      - "deploy/docs/runbook.md"
+      - "deploy/docs/runbook/operacao.md"
     severity: warn
     note: "`trace_id` é contrato (Alloy + derivedFields do Loki). Formato de log e propagação mudam o runbook."
 
@@ -441,7 +450,7 @@ rules:
       - "docker/docker-compose*.yml"
       - ".env.example"
       - "docker/**"
-    docs: ["docs/reference/configuration.md", "deploy/docs/runbook.md"]
+    docs: ["docs/reference/configuration.md", "deploy/docs/runbook/operacao.md"]
     generated: true
     severity: block
     note: "Vars do ambiente de inferência (ADR 0020) vivem no runbook."
@@ -458,7 +467,9 @@ rules:
       - "packages/docker-port/**"
     docs:
       - "docs/reference/internal-api.md"
-      - "deploy/docs/runbook.md"
+      - "apps/broker/docs/dependencias-e-imagens.md"
+      - "deploy/docs/runbook/ambiente-local.md"
+      - "deploy/docs/runbook/instalacao.md"
     severity: warn
     note: "Cinco operações, e a especificação é COMPUTADA — mudar isso muda o contrato e o runbook."
 
@@ -477,8 +488,9 @@ rules:
       - "apps/runner/**"
     docs:
       - "apps/runner/README.md"
+      - "apps/runner/docs/how-to/usar-o-runner.md"
       - "apps/api/docs/security-surface.md"
-      - "deploy/docs/runbook.md"
+      - "deploy/docs/runbook/ambiente-local.md"
     severity: warn
     note: "O agente local roda na máquina do usuário: o que ele DECLARA no join e o que ele instala são contrato, não detalhe."
 
@@ -493,7 +505,7 @@ rules:
       - "apps/api/src/application/graph-projection/**"
       - "apps/api/src/scripts/reprojetar-grafo.ts"
     docs:
-      - "deploy/docs/runbook.md"
+      - "deploy/docs/runbook/restore.md"
       - "docs/business-rules.md"
     severity: warn
     note: "O que a reprojeção reconstrói (e o que NÃO) é o que o runbook diz a quem perdeu o grafo."
@@ -507,7 +519,7 @@ rules:
       - "apps/api/src/application/artifact-projection/**"
       - "apps/api/src/scripts/reprojetar-artefatos.ts"
     docs:
-      - "deploy/docs/runbook.md"
+      - "deploy/docs/runbook/restore.md"
       - "docs/business-rules.md"
     severity: warn
     note: "O que a reprojeção da pasta docs/ reconstrói (e o que NÃO) é o que o runbook diz a quem a perdeu."
@@ -591,8 +603,11 @@ rules:
     watch:
       - ".github/workflows/release.yml"
       - ".github/workflows/tag-release.yml"
+      - ".github/workflows/pins-dos-componentes.yml"
+      - ".github/workflows/regenera-gerados.yml"
       - "componentes.json"
       - "scripts/ci/montar-images.ts"
+      - "scripts/ci/pins-dos-componentes.ts"
     docs:
       - "docs/explanation/release-do-produto.md"
     severity: warn
@@ -602,7 +617,7 @@ rules:
     watch:
       - "install.sh"
     docs:
-      - "deploy/docs/runbook.md"
+      - "deploy/docs/runbook/instalacao.md"
     severity: warn
     note: "O que o instalador verifica, e o que ele nunca apaga, são contrato."
 
@@ -638,9 +653,10 @@ rules:
       - "e2e/playwright.config.ts"
       - "e2e/package.json"
     docs:
-      - "docs/getting-started.md"
+      - "docs/how-to/desenvolver-o-brabo.md"
+      - "qa/docs/rodadas-manuais.md"
     severity: warn
-    note: "Mudou como o E2E sobe ou roda? O getting-started ensina o comando."
+    note: "Mudou como o E2E sobe ou roda? O guia Desenvolver o Brabo ensina o comando."
 
   - id: adr-trigger
     watch:
