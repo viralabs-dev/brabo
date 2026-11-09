@@ -85,6 +85,17 @@ export function itensDeRegras(raiz, raizesDeDoc) {
   );
 }
 
+/** As partes de `deploy/docs/runbook/<tema>.md` (AT-869, ADR 0287), alfabético; vazio enquanto o runbook do infra é um arquivo só. */
+export function partesDoRunbook(raiz, raizesDeDoc) {
+  const nomes = new Set();
+  for (const rd of raizesExistentes(raiz, raizesDeDoc)) {
+    try {
+      for (const f of readdirSync(path.join(raiz, rd, 'runbook'))) if (f.endsWith('.md')) nomes.add(f.slice(0, -3));
+    } catch { /* raiz sem runbook partido */ }
+  }
+  return [...nomes].sort().map((n) => `runbook/${n}`);
+}
+
 /** Uma página por `reference/workflows/<x>.md` de cada raiz (hoje só as do brabo-ci), alfabético. */
 export function slugsDeWorkflows(raiz, raizesDeDoc) {
   const nomes = new Set();
@@ -103,6 +114,9 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
   const pgs = (...slugs) => slugs.map((s) => pg(s));
   const link = (rotulo, arq) => ({ tipo: 'link', rotulo: t(rotulo), href: `https://github.com/${repo}/blob/dev/${arq}` });
   // `espera` (AT-854): os tipos de página que o grupo de topo aceita; `tipos.mjs` reprova o resto.
+  // runbook partido: categoria recolhida com o índice como link dela; inteiro: uma página só
+  const partesRb = partesDoRunbook(raiz, raizesDeDoc);
+  const runbook = partesRb.length ? [cat('Manual de operação', pgs(...partesRb), { slug: 'runbook', colapsada: true })] : pgs('runbook');
   const orquestrar = ['por-que-separar', 'o-mapa', 'como-cada-repo-e-consumido', 'vida-de-uma-mudanca', 'monte-o-seu', 'erros-que-ja-cometemos'].map((s) => `tutorials/orquestrar-repositorios/${s}`);
   return [
     cat('🚀 Comece aqui', pgs('', 'getting-started'), { espera: ['conceito', 'tutorial', 'guia', 'referencia'] }),
@@ -112,7 +126,9 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
       cat('Como o Brabo é construído', pgs(...['do-pedido-a-atividade', 'a-rodada', 'a-regra-vira-codigo', 'qualidade-e-o-teste-permanente', 'copie-o-metodo'].map((s) => `tutorials/como-o-brabo-e-construido/${s}`)), { slug: 'tutorials/como-o-brabo-e-construido', colapsada: true }),
     ], { espera: ['tutorial'] }),
     cat('🧭 Guias práticos', [
-      ...pgs('how-to/desenvolver-o-brabo', 'how-to/usar-o-runner', 'how-to/token-do-github-packages', 'runbook', 'tutorials/adotar', 'explanation/usar-em-outra-org', 'rodadas-manuais'),
+      ...pgs('how-to/desenvolver-o-brabo', 'how-to/usar-o-runner', 'how-to/token-do-github-packages'),
+      ...runbook,
+      ...pgs('tutorials/adotar', 'explanation/usar-em-outra-org', 'rodadas-manuais'),
       cat('Contribuir', [pg('contribuir/como-escrevemos', 'Como escrevemos'), link('Como contribuir', 'CONTRIBUTING.md'), link('Onde pedir ajuda', 'SUPPORT.md'), link('Reportar vulnerabilidade', 'SECURITY.md')]),
     ], { espera: ['guia'] }),
     cat('💡 Conceitos', [
