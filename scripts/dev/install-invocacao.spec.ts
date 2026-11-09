@@ -181,7 +181,12 @@ describe('a forma certa é UMA só, nos lugares que a ensinam', () => {
   });
 
   it('o runbook e o bootstrap ensinam a forma certa, e nenhum dos dois a antiga', () => {
-    const runbook = fs.readFileSync(path.join(RAIZ, 'deploy/docs/runbook.md'), 'utf8');
+    // AT-869: o runbook do infra é um arquivo só ou índice mais partes (`deploy/docs/runbook/*.md`); vale o texto somado
+    const pasta = path.join(RAIZ, 'deploy/docs/runbook');
+    const partes = fs.existsSync(pasta) ? fs.readdirSync(pasta).filter((f) => f.endsWith('.md')).sort() : [];
+    const runbook = [path.join(RAIZ, 'deploy/docs/runbook.md'), ...partes.map((f) => path.join(pasta, f))]
+      .map((f) => fs.readFileSync(f, 'utf8'))
+      .join('\n');
     expect(runbook).toContain(FORMA_CERTA);
     const bootstrap = fs.readFileSync(path.join(RAIZ, 'scripts/dev/bootstrap.sh'), 'utf8');
     expect(bootstrap.replaceAll('${BRABO_REPO:-viralabs-dev/brabo}', 'viralabs-dev/brabo')).toContain(FORMA_CERTA);
