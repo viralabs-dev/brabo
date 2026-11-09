@@ -44,7 +44,7 @@
 <h2 id="2-带策略的-ci-仓库">2. 带策略的 CI 仓库</h2>
 <p>在代码仓库中<strong>先做这一个</strong>，因为其他所有仓库都会调用它。</p>
 <ul>
-<li><strong>照搬</strong> <a href="https://github.com/viralabs-dev/brabo-ci#readme"><code>brabo-ci</code></a>，或者在不 fork 的情况下直接调用它的工作流。<a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/tutorials/adotar.md">采用指南</a>能让一个从未见过 Brabo 的仓库做到 <code>pr-police</code> 和 <code>escada</code> 变绿，示例仓库 <code>daneiel/brabo-ci-exemplo</code> 证明了这些步骤。</li>
+<li><strong>照搬</strong> <a href="https://github.com/viralabs-dev/brabo-ci#readme"><code>brabo-ci</code></a>，或者在不 fork 的情况下直接调用它的工作流。<a href="../adotar.html">采用指南</a>能让一个从未见过 Brabo 的仓库做到 <code>pr-police</code> 和 <code>escada</code> 变绿，示例仓库 <code>daneiel/brabo-ci-exemplo</code> 证明了这些步骤。</li>
 <li><strong>调整：</strong> <code>ci_ref</code>（你所选版本的 SHA）、变量 <code>OWNER_HANDLE</code>，以及如果想按角色审批，则调整 <code>community</code> 模式。</li>
 <li><strong>不要盲目照搬：</strong> QA 关卡、<code>dependencias-de-merge</code>（假定有那 11 个仓库）和 <code>contracts-alinhado</code>（假定有 <code>@viralabs-dev/brabo-*</code> 软件包）是 Brabo 特有的。</li>
 <li><strong>完成标志：</strong> 一个示例 PR 显示 <code>Política de branches</code> 和 <code>Escada de aprovação</code> 均为绿色。</li>

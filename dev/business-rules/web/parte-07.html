@@ -79,7 +79,7 @@
 <li><strong>Teste:</strong> o reutilizável <code>contracts-alinhado.yml</code> do <code>brabo-ci</code> (spec <code>scripts/ci/contracts-alinhado.spec.ts</code> no <code>brabo-ci</code>) roda no PR; <code>apps/web/src/lib/agent-areas.contrato.test.ts</code> confere o <code>agent-areas.generated.ts</code> contra o <code>areas.json</code> da mesma tag.</li>
 <li><strong>Origem:</strong> AT-770 (EP-033), R2a.</li>
 </ul>
-<p>O web cumpre a RN-1039 (o token do GitHub Packages nunca entra em camada, <code>ARG</code> ou <code>ENV</code>, só como secret do BuildKit), definida no brabo-broker em <a href="https://github.com/viralabs-dev/brabo-broker/blob/dev/docs/business-rules/broker.md"><code>docs/business-rules/broker.md</code></a>. A prova no web é <code>test/token-do-registry.test.ts:1</code>, junto de <code>Dockerfile:54</code>, <code>.npmrc:1</code>, <code>.github/workflows/ci.yml:61</code> e <code>.github/workflows/release.yml:56</code>.</p>
+<p>O web cumpre a RN-1039 (o token do GitHub Packages nunca entra em camada, <code>ARG</code> ou <code>ENV</code>, só como secret do BuildKit), definida no brabo-broker em <a href="../broker.html"><code>docs/business-rules/broker.md</code></a>. A prova no web é <code>test/token-do-registry.test.ts:1</code>, junto de <code>Dockerfile:54</code>, <code>.npmrc:1</code>, <code>.github/workflows/ci.yml:61</code> e <code>.github/workflows/release.yml:56</code>.</p>
 <h2 id="achados-do-tp-01-27ª-rn-1060-a-rn-1063">Achados do TP-01 27ª (RN-1060 a RN-1063)</h2>
 <h3 id="rn-1060">RN-1060 — Aberta por um loopback diferente do da api, a web vai para o loopback da api antes de montar</h3>
 <ul>

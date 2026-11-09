@@ -104,7 +104,7 @@
 <span class="line"><span style="color:var(--shiki-token-keyword)">with</span><span style="color:var(--shiki-token-keyword)">:</span></span>
 <span class="line"><span style="color:var(--shiki-token-keyword)">  ci_ref</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> &#x3C;тот же sha></span></span>
 <span class="line"></span></code></pre>
-<p><code>uses:</code> выбирает YAML, а <code>ci_ref</code> выбирает скрипты, поэтому оба должны быть <strong>одним и тем же 40-символьным SHA</strong>. Комментарий сообщает версию читателю, а проверка <code>pins-do-brabo-ci</code> проверяет, что комментарий соответствует SHA (<a href="../../adr/0280-o-pin-do-brabo-ci-aponta-para-uma-tag.html">ADR 0280</a>). Пошаговое описание - в <a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/tutorials/adotar.md">руководстве по внедрению</a>.</p>
+<p><code>uses:</code> выбирает YAML, а <code>ci_ref</code> выбирает скрипты, поэтому оба должны быть <strong>одним и тем же 40-символьным SHA</strong>. Комментарий сообщает версию читателю, а проверка <code>pins-do-brabo-ci</code> проверяет, что комментарий соответствует SHA (<a href="../../adr/0280-o-pin-do-brabo-ci-aponta-para-uma-tag.html">ADR 0280</a>). Пошаговое описание - в <a href="../adotar.html">руководстве по внедрению</a>.</p>
 <h3 id="3-соседний-клон">3. Соседний клон</h3>
 <p>Два репозитория читают <strong>код</strong> остальных:</p>
 <ul>

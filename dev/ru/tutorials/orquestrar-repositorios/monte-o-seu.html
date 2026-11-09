@@ -44,7 +44,7 @@
 <h2 id="2-репозиторий-ci-с-политикой">2. Репозиторий CI с политикой</h2>
 <p>Делайте его <strong>первым из репозиториев с кодом</strong>, потому что его вызывают все остальные.</p>
 <ul>
-<li><strong>Скопируйте</strong> <a href="https://github.com/viralabs-dev/brabo-ci#readme"><code>brabo-ci</code></a> или, без форка, просто вызывайте его workflow. <a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/tutorials/adotar.md">Руководство по внедрению</a> доводит репозиторий, никогда не видевший Brabo, до зелёных <code>pr-police</code> и <code>escada</code>, а репозиторий-пример <code>daneiel/brabo-ci-exemplo</code> подтверждает шаги.</li>
+<li><strong>Скопируйте</strong> <a href="https://github.com/viralabs-dev/brabo-ci#readme"><code>brabo-ci</code></a> или, без форка, просто вызывайте его workflow. <a href="../adotar.html">Руководство по внедрению</a> доводит репозиторий, никогда не видевший Brabo, до зелёных <code>pr-police</code> и <code>escada</code>, а репозиторий-пример <code>daneiel/brabo-ci-exemplo</code> подтверждает шаги.</li>
 <li><strong>Измените:</strong> <code>ci_ref</code> (SHA выбранной версии), переменную <code>OWNER_HANDLE</code> и, если нужны одобрения по ролям, режим <code>community</code>.</li>
 <li><strong>Не копируйте вслепую:</strong> ворота QA, <code>dependencias-de-merge</code> (предполагает 11 репозиториев) и <code>contracts-alinhado</code> (предполагает пакеты <code>@viralabs-dev/brabo-*</code>) специфичны для Brabo.</li>
 <li><strong>Готово, когда:</strong> пример PR показывает зелёные <code>Política de branches</code> и <code>Escada de aprovação</code>.</li>

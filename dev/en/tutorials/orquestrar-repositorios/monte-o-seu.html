@@ -44,7 +44,7 @@
 <h2 id="2-the-ci-repository-with-the-policy">2. The CI repository, with the policy</h2>
 <p>Do this one <strong>first among the code ones</strong>, because all the others call it.</p>
 <ul>
-<li><strong>Copy</strong> <a href="https://github.com/viralabs-dev/brabo-ci#readme"><code>brabo-ci</code></a>, or, without a fork, just call its workflows. The <a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/tutorials/adotar.md">adoption guide</a> takes a repository that has never seen Brabo to green <code>pr-police</code> and <code>escada</code>, and the example repository <code>daneiel/brabo-ci-exemplo</code> proves the steps.</li>
+<li><strong>Copy</strong> <a href="https://github.com/viralabs-dev/brabo-ci#readme"><code>brabo-ci</code></a>, or, without a fork, just call its workflows. The <a href="../adotar.html">adoption guide</a> takes a repository that has never seen Brabo to green <code>pr-police</code> and <code>escada</code>, and the example repository <code>daneiel/brabo-ci-exemplo</code> proves the steps.</li>
 <li><strong>Adapt:</strong> the <code>ci_ref</code> (the SHA of the version you chose), the <code>OWNER_HANDLE</code> variable and, if you want approval by roles, the <code>community</code> mode.</li>
 <li><strong>Do not copy blindly:</strong> the QA gate, <code>dependencias-de-merge</code> (which assumes the 11 repositories) and <code>contracts-alinhado</code> (which assumes the <code>@viralabs-dev/brabo-*</code> packages) are specific to Brabo.</li>
 <li><strong>Done when:</strong> an example PR shows <code>Política de branches</code> and <code>Escada de aprovação</code> green.</li>

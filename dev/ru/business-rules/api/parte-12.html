@@ -59,7 +59,7 @@
 <li><strong>Limite:</strong> sem <code>embed</code> nem <code>listModels</code> (RAG e sincronização de catálogo seguem sem o dublê).</li>
 <li><strong>Onde:</strong> <code>src/infrastructure/security/ambiente.ts</code> (<code>dubleDeLlm</code>), <code>src/infrastructure/llm/duble-llm-provider.ts</code> (<code>dubleSeAutorizado</code>, <code>DubleLLMProvider</code>), <code>src/infrastructure/llm/llm-provider-registry.ts</code> (<code>resolve</code>), <code>src/infrastructure/llm/llm-infrastructure.module.ts</code> (<code>LLM_DUBLE</code>).</li>
 <li><strong>Teste:</strong> <code>test/scripts/marca-da-imagem.spec.ts</code> (marca por tag nos workflows) e <code>test/infrastructure/llm/duble-llm-provider.spec.ts</code> (variável sim ou não × marca prd ou não; roteiro por agente e passo; custo 0 e modelo dublê).</li>
-<li><strong>Origem:</strong> AT-815 (EP-033), decisão do dono de 08/11/2026 (P1); <a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0279-provider-de-llm-duble-do-regressivo.md">ADR 0279</a>; rodada 251, lane L3.</li>
+<li><strong>Origem:</strong> AT-815 (EP-033), decisão do dono de 08/11/2026 (P1); <a href="../../adr/0279-provider-de-llm-duble-do-regressivo.html">ADR 0279</a>; rodada 251, lane L3.</li>
 </ul>
 <h3 id="rn-1068">RN-1068 — O PO e o Dev Lead corrigem o texto de uma tarefa <code>todo</code>, com a régua da história</h3>
 <ul>
@@ -75,7 +75,7 @@
 <li><strong>Teste:</strong> <code>test/domain/actions/adr-supersedes.spec.ts</code>, <code>test/application/use-cases/actions/propose-action.use-case.spec.ts</code> (<code>open_adr_pr com supersedes</code>, contra Postgres).</li>
 <li><strong>Origem:</strong> AT-806 (EP-030), decisão do dono (b) de 08/11/2026; ADR 0283; rodada 271, lane L2.</li>
 </ul>
-<p>A api cumpre a RN-1039 (o token do GitHub Packages nunca entra em camada nem em <code>ARG</code>/<code>ENV</code>; só como secret do BuildKit), definida no <a href="https://github.com/viralabs-dev/brabo-broker/blob/dev/docs/business-rules/broker.md">brabo-broker</a>. Quem prova na api é <code>test/dockerfile-sem-token.spec.ts:13</code> (todo <code>pnpm install</code> do <code>Dockerfile</code> monta o secret, nenhum <code>ARG</code>/<code>ENV</code> com token, <code>.npmrc</code> só com o registry).</p>
+<p>A api cumpre a RN-1039 (o token do GitHub Packages nunca entra em camada nem em <code>ARG</code>/<code>ENV</code>; só como secret do BuildKit), definida no <a href="../broker.html">brabo-broker</a>. Quem prova na api é <code>test/dockerfile-sem-token.spec.ts:13</code> (todo <code>pnpm install</code> do <code>Dockerfile</code> monta o secret, nenhum <code>ARG</code>/<code>ENV</code> com token, <code>.npmrc</code> só com o registry).</p>
 <nav class="site-pager"><a href="../../business-rules/api/parte-11.html">API — parte 11 (desde RN-916)</a><a href="../../business-rules/broker.html">Broker</a></nav>
 </article>
 <footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-api/blob/dev/docs/business-rules/api/parte-12.md">Редактировать страницу</a></footer>
