@@ -62,8 +62,8 @@ export function conferirAncoras(texto, { exigirAncoraHtml = false } = {}) {
       while (j >= 0 && linhas[j].trim() === '') j--;
       if (j < 0 || linhas[j].trim() !== `<a id="rn-${numero}"></a>`) {
         problemas.push({ linha: i + 1, rn, motivo: `sem \`<a id="rn-${numero}"></a>\` antes do título (o GitHub não abre a RN)` });
-      } else if (j > 0 && linhas[j - 1].trim() !== '') {
-        // AT-875: colado ao item de lista anterior, o `<a>` vira continuação do `<li>` e o id se repete no HTML.
+      } else if (j > 0 && linhas[j - 1].trim() !== '' && !/^#{1,6}\s/.test(linhas[j - 1])) {
+        // AT-875 (cabeçalho antes não continua: o `## h` fecha o bloco): colado ao item de lista anterior, o `<a>` vira continuação do `<li>` e o id se repete no HTML.
         problemas.push({ linha: j + 1, rn, motivo: `\`<a id="rn-${numero}"></a>\` sem linha em branco antes (vira continuação da lista e repete o id)` });
       }
     }
