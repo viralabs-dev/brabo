@@ -13,7 +13,7 @@ traducao_de: d7d790431657e61a049b452214cfd432da2199df
 Each rule has a **statement**, **where it lives** (`file:line`), and **the
 test that covers it**. If you change a rule, update the line here in the same
 change — that's what
-[`.docmap.yml`](https://github.com/daneiel/brabo/blob/dev/docs/.docmap.yml)
+[`.docmap.yml`](https://github.com/viralabs-dev/brabo/blob/dev/docs/.docmap.yml)
 requires with `block` severity.
 
 The rules live on the page of the **owning area** (`business-rules/<area>.md`), in the repository that implements them: the api, the engine, the web, the runner, the ci and the others. This page is only the **index**: one line per area, with the count, and below it the grid of numbers. Each number is an anchor (`#rn-NNN`) that leads to the page, or the part of the page, where the RN lives. The old links remain valid.
