@@ -71,6 +71,14 @@ describe('AT-871 — <a id> antes da RN em parte-NN.md', () => {
     expect(conferirAncoras('### RN-002 — x {#rn-002}', { exigirAncoraHtml: true }).problemas).toHaveLength(1);
     expect(conferirAncoras(comAncora.replace('"rn-002"', '"rn-003"'), { exigirAncoraHtml: true }).problemas).toHaveLength(1);
   });
+  it('MUTAÇÃO: <a id> colado ao item de lista anterior reprova; com a linha em branco passa', () => {
+    const colado = '- item\n<a id="rn-002"></a>\n\n### RN-002 — x {#rn-002}';
+    expect(conferirAncoras(colado, { exigirAncoraHtml: true }).problemas).toHaveLength(1);
+    expect(conferirAncoras(colado.replace('- item\n', '- item\n\n'), { exigirAncoraHtml: true }).problemas).toEqual([]);
+  });
+  it('âncora logo depois de um cabeçalho `##` não reprova (o cabeçalho fecha o bloco)', () => {
+    expect(conferirAncoras('## H\n<a id="rn-002"></a>\n\n### RN-002 — x {#rn-002}', { exigirAncoraHtml: true }).problemas).toEqual([]);
+  });
   it('sem a opção (índice, página não partida) não exige', () => {
     expect(conferirAncoras('### RN-002 — x {#rn-002}').problemas).toEqual([]);
   });

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { construir } from './build.mjs';
 // @ts-expect-error módulo .mjs sem tipos
-import { carregaDeFora, verificarLinks } from './links.mjs';
+import { carregaDeFora, idsRepetidos, verificarLinks } from './links.mjs';
 // @ts-expect-error módulo .mjs sem tipos
 import { renderizarPagina } from './layout.mjs';
 
@@ -45,6 +45,19 @@ describe('verificarLinks (mutação)', () => {
     const r = verificarLinks(d, { pendentes: ['reference/api'] });
     expect(r.pendentes).toEqual(['a.html: link quebrado -> reference/api.html']);
     expect(r.erros).toEqual(['a.html: link quebrado -> reference/outra.html']);
+  });
+});
+
+describe('idsRepetidos (AT-875)', () => {
+  it('site íntegro não tem id repetido', () => {
+    expect(idsRepetidos(site())).toEqual([]);
+  });
+  it('MUTAÇÃO: o mesmo id duas vezes na página reprova (o <a id> colado à lista)', () => {
+    const d = site((f) => { f['sub/b.html'] += '<li>x<a id="rn-1010"></a></li><h3 id="rn-1010">RN</h3>'; });
+    expect(idsRepetidos(d)).toEqual(['sub/b.html: id repetido "rn-1010"']);
+  });
+  it('o mesmo id em páginas diferentes é legítimo', () => {
+    expect(idsRepetidos(site((f) => { f['a.html'] += '<h2 id="sec">S</h2>'; }))).toEqual([]);
   });
 });
 

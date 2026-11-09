@@ -22,6 +22,19 @@ describe('ancorar', () => {
   });
 });
 
+describe('ancorar — linha em branco antes do <a id> (AT-875)', () => {
+  const lista = '### RN-001 — a {#rn-001}\n\n- item\n### RN-002 — b {#rn-002}\n';
+  it('âncora nova depois de linha não vazia ganha linha em branco antes', () => {
+    expect(ancorar(lista)).toContain('- item\n\n<a id="rn-002"></a>\n\n### RN-002');
+  });
+  it('âncora que já existe colada à lista é corrigida, só inserindo a linha em branco', () => {
+    const colada = '- item\n<a id="rn-002"></a>\n\n### RN-002 — b {#rn-002}\n';
+    const n = ancorar(colada);
+    expect(n).toBe('- item\n\n<a id="rn-002"></a>\n\n### RN-002 — b {#rn-002}\n');
+    expect(ancorar(n)).toBe(n);
+  });
+});
+
 describe('CLI', () => {
   const raiz = mkdtempSync(join(tmpdir(), 'ancorar-'));
   for (const rel of ['docs/business-rules/api/parte-01.md', 'docs/i18n/en/business-rules/api/parte-01.md', 'scripts/ci/docs/business-rules/ci/parte-01.md']) {

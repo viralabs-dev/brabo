@@ -189,7 +189,10 @@ export function partir(texto, { area, locale, cortes, limite }) {
     const rotulo = `${T.parte(k + 1)} (${T.desde} ${desde})`;
     const cab = [];
     if (f.h2Anterior) cab.push(semId(f.h2Anterior));
-    const corpoParte = reescreverLinks([...cab, ...f.segs.map((s) => (s.tipo === 'rn' ? `<a id="${s.id}"></a>\n\n${s.texto}` : s.texto))].join('\n'), (h) => reescreverHref(h, { area, parteDe, atual: k + 1 }));
+    const itens = [...cab];
+    // AT-875: o `<a id>` precisa de linha em branco antes, senão vira continuação do último item de lista da RN anterior.
+    for (const s of f.segs) itens.push(s.tipo === 'rn' ? `${itens.length && itens[itens.length - 1].split('\n').pop().trim() ? '\n' : ''}<a id="${s.id}"></a>\n\n${s.texto}` : s.texto);
+    const corpoParte = reescreverLinks(itens.join('\n'), (h) => reescreverHref(h, { area, parteDe, atual: k + 1 }));
     const novoFm = fm
       .replace(/^id:.*$/m, `id: rn-${area}-parte-${pad(k + 1)}`)
       .replace(/^title:.*$/m, `title: ${aspas(`${tituloBase} — ${rotulo}`)}`)
