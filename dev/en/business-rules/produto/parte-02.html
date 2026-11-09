@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Business rules — Product — part 2 (from RN-543) | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../../business-rules/produto/parte-02.html">pt-BR</option><option value="../../../en/business-rules/produto/parte-02.html" selected>en</option><option value="../../../ru/business-rules/produto/parte-02.html">ru</option><option value="../../../zh-Hans/business-rules/produto/parte-02.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../../dev/en/business-rules/produto/parte-02.html" selected>dev</option><option value="../../../../prd/en/business-rules/produto/parte-02.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="../../index.html">Home</a></li><li><a href="../../getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Developing Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Architecture</a></li><li><a href="../../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../../explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Branching policy</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../../explanation/release-do-produto.html">Product release</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="../../explanation/localizacao.html">Localization</a></li><li><a href="../../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="../../glossary.html">Glossary</a></li><li><a href="../../reference/componentes-da-doc.html">Doc components</a></li><li><a href="../../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>Business rules</span></summary><ul><li><a href="../../business-rules.html">Business rules</a></li><li><a href="../../business-rules/custo.html">Cost and metering</a></li><li><a href="../../business-rules/autenticacao.html">Authentication</a></li><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><details open><summary><span>Product</span></summary><ul><li><a href="../../business-rules/produto.html">Product</a></li><li><a href="../../business-rules/produto/parte-01.html">Produto — part 1 (from RN-012)</a></li><li><a href="../../business-rules/produto/parte-02.html" aria-current="page">Produto — part 2 (from RN-543)</a></li></ul></details></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Timeline</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../../explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="produto--part-2-from-rn-543">Produto — part 2 (from RN-543)</h1>
+<h2 id="the-device-key-can-now-belong-to-the-machine-rn-543-phase-30">The device key can now belong to the MACHINE (RN-543, PHASE 30)</h2>
+<h3 id="rn-543">RN-543 — A null <code>runner_device_keys.project_id</code> is the MACHINE key: it holds for the OWNER's projects, resolved against the requested project</h3>
+<p>The local agent's identity was per PROJECT. A machine with three projects in
+<code>runner</code> mode had three keys, three folders with
+<code>brabo-runner-device-key.jwk.json</code> and three service units — and the person went
+three times through the same browser flow (<a href="../api.html#rn-464">RN-464</a>..<a href="../runner.html#rn-466">466</a>,
+<a href="../web.html#rn-475">RN-475</a>) to describe <strong>one</strong> machine. It is item 4 of the five
+couplings <a href="../../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154</a>
+measured; items 1, 2 and 3 (topic, socket id, ticket) describe a <strong>connection</strong>
+and N connections satisfy them byte for byte, so <strong>nothing in the engine changes here</strong>.</p>
+<p><strong>One table, two kinds.</strong> Filled <code>project_id</code> = the usual PROJECT key.
+NULL <code>project_id</code> = the MACHINE key. A sibling table was considered and
+refused in the ADR: <code>PatAuthGuard</code> finds the public key by <code>kid</code> and does not need to know the
+kind, and two tables would make two lookups — the second forgotten exactly
+once. NULL and not a sentinel: the FK is real, and <code>project_id = '00000000-…'</code> would require
+a fake row in <code>projects</code>. <code>user_id</code> stays <code>NOT NULL</code> — the ADR refuses a
+key that crosses users, because the credential describes <strong>who</strong> acts.</p>
+<p><strong>The point that decides everything is a single one.</strong> <code>PatAuthGuard.autorizarPapel</code> refused
+when the credential's project differed from the route's project. That comparison
+was <strong>not</strong> deleted: it is what prevents project A's key from serving project
+B, and it disappears <strong>only</strong> for a null <code>project_id</code>, because then there is nothing to compare. The
+role is now resolved against the <strong>REQUESTED</strong> project, which is ADR 0154 point 2
+to the letter — <em>&quot;authorization remains the usual one, resolved against the
+requested project&quot;</em>. <strong>No new ceiling and none loosened</strong>: the machine key
+gives the runner nothing its OWNER did not already have, and an insufficient role in the
+requested project is still 403. The PAT branch does not change —
+<code>personal_access_tokens.project_id</code> stays <code>NOT NULL</code>.</p>
+<p><strong>The agent ASKS which projects it serves.</strong> <code>GET runner/projects</code> returns the
+projects in <code>execution_mode: 'runner'</code> in which the credential's owner reaches
+at least <code>developer</code> — the SAME minimum as <code>runner-ticket</code>, because listing a
+project whose ticket would be refused is promising what the next route denies. It
+asks instead of sweeping the disk: the machine's base belongs to the user and may have a
+folder that is no project at all, and guessing by folder name is the class of
+error <a href="../../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141</a> refused.
+What travels is the SEGMENT (<code>workspaceDirName</code>, <a href="../api.html#rn-109">RN-109</a>) and never an
+absolute path — the same invariant as the broker.</p>
+<p>It is the <strong>first <code>@RequirePatAuth()</code> route without <code>:projectId</code> in the path</strong>, and the
+two consequences are locked by tests: only a MACHINE credential gets in
+(a project one describes a single project and has nothing to discover — 403 with its
+OWN message, never the &quot;wrong project&quot; one, which would lie about the reason), and
+there is no <code>@RequireRole</code>, because there is no project to resolve it against. The minimum
+is applied per <strong>ROW</strong>, with the product's SINGLE rule
+(<code>ResolveEffectiveRoleUseCase.forProject</code>, <code>projectRole ?? workspaceRole</code> —
+<a href="../web.html#rn-471">RN-471</a>); the candidates query in SQL is <code>alcança</code>, never <code>tem papel</code>, and rewriting the <code>??</code> there would be a second rule. That is why
+<code>route-surface.spec.ts</code> classifies it as <code>jwt</code> — the classifier reads
+<code>@RequireRole</code> and does not see the mechanism — and <code>docs/security-surface.md</code> corrects the
+reading in prose, exactly as it already does for <code>runner-ticket</code>.</p>
+<p><strong>The listing of <a href="../api.html#rn-519">RN-519</a> now states the KIND.</strong> A machine
+key serves every project of the owner, so it enters the listing of all of them —
+marked (<code>especie: 'maquina'</code>, <code>projectId: null</code>). Both halves are
+mandatory: without entering the list it would be invisible and permanent on every
+screen, which is the defect RN-519 closed reborn in the new kind; without the
+mark, the same row would appear in N projects looking like N different keys. The
+kind is DERIVED from <code>project_id</code> in a single place — there is no column for it, and there
+must not be.</p>
+<p><strong>And revocation now has a PLURAL target.</strong> <a href="../api.html#rn-520">RN-520</a> takes down the live
+connection of <code>{projeto, usuário}</code>, and a machine key names no project at all.
+Not taking it down would reopen exactly what RN-520 closed — the key dies for a
+NEW ticket and the live connections keep executing approved commands —, now in
+N connections instead of one. So revoking a machine key requests a
+<code>disconnectRunnerOfUser</code> <strong>per project</strong> in <code>runner</code> mode the owner reaches. It is
+the consequence the ADR declared in advance (<em>&quot;revoking will take down
+all of that machine's projects&quot;</em>), and it fits <strong>without touching the engine</strong>: the
+<code>{projeto, usuário}</code> signature stays byte for byte, it is just called N times. The list
+comes from the CANDIDATES, without a role filter, and that is deliberate — disconnecting is not
+an authorization decision, and missing a project would leave standing what the revocation
+exists to kill.</p>
+<ul>
+<li><strong>Code:</strong> <code>apps/api/src/db/schema/auth.ts</code> (<code>runnerDeviceKeys.projectId</code>,
+without <code>.notNull()</code>); <code>apps/api/src/db/migrations/0058_public_war_machine.sql</code>;
+<code>apps/api/src/interfaces/http/auth/pat-auth.guard.ts</code> (<code>autorizarPapel</code>);
+<code>apps/api/src/interfaces/http/runner/runner-projects.controller.ts</code>;
+<code>apps/api/src/application/use-cases/runner/list-runner-projects.use-case.ts</code>;
+<code>apps/api/src/infrastructure/persistence/drizzle/project.repository.ts</code>
+(<code>listRunnerModeReachableBy</code>);
+<code>apps/api/src/infrastructure/persistence/drizzle/runner-device-key.repository.ts</code>;
+<code>apps/api/src/application/use-cases/auth/revoke-runner-device-key.use-case.ts</code></li>
+<li><strong>Test:</strong> <code>apps/api/test/interfaces/pat-auth.guard.spec.ts</code> — <em>&quot;chave de
+MÁQUINA&quot;</em>, with BOTH directions locked (the machine one holds in any
+project; the PROJECT one stays refused in a different project) and the route without
+<code>:projectId</code>; <code>apps/api/test/application/use-cases/runner/list-runner-projects.use-case.spec.ts</code>
+(a role below <code>developer</code> is left out);
+<code>apps/api/test/infrastructure/persistence/drizzle/runner-device-key.repository.spec.ts</code>
+and <code>.../project-runner-mode.repository.spec.ts</code> (against Postgres — what
+changed is a <code>NOT NULL</code> and a <code>WHERE</code>, and no fake proves either of the
+two); <code>apps/api/test/application/use-cases/auth/revoke-runner-device-key.use-case.spec.ts</code>
+(<em>&quot;o alvo da desconexão vira PLURAL&quot;</em>);
+<code>apps/api/test/interfaces/http/runner/runner-projects.controller.spec.ts</code></li>
+<li><strong>Gap DECLARED, and CLOSED by <a href="../api.html#rn-552">RN-552</a>:</strong> when this RN
+closed, no api route <strong>created</strong> a machine key — the route would be born in the
+PR that had the first real caller, <code>install.sh</code>
+(<a href="../../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155</a> point 4), never
+before. That is what happened: <code>POST /internal/machine-device-keys</code>. The port's type is already the COLUMN's
+(<code>projectId: string | null</code>), so the future consumer has nothing to change
+there. And the web still has no screen on which to list or revoke a device key
+(the open half of RN-519): the new kind makes the gap bigger, and it stays
+declared, not closed here. <strong>CLOSED later by <a href="../web.html#rn-561">RN-561</a></strong>, which is
+the screen — and the kind mark created here is what it uses not to lie
+about the reach of revoking.</li>
+<li><strong>ADR:</strong> <a href="../../adr/0154-chave-de-dispositivo-de-maquina.html">0154</a></li>
+<li><strong>Origin:</strong> PHASE 30, session 2 —
+<a href="../../explanation/fase-30-runner-por-maquina.html">the phase's scope</a></li>
+</ul>
+<h2 id="an-installations-first-account-is-born-in-the-terminal-rn-546">An installation's first account is born in the terminal (RN-546)</h2>
+<h3 id="rn-546">RN-546 — An internal route creates the FIRST account, already verified, and refuses when any user exists</h3>
+<p>Session 5 of <a href="../../explanation/fase-30-runner-por-maquina.html">PHASE 30</a>, decided by
+<a href="../../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155</a>. It is the api half
+of the step that closes the one-line installation; the <code>install.sh</code> that consumes this
+route is session 6, and it arrived in <a href="#rn-547">RN-547</a>.</p>
+<p><strong>The hole, measured.</strong> In a new installation nobody can get in. The <code>.env</code>
+the installer generates has <strong>no</strong> email variable at all, <code>MAIL_TRANSPORT</code>
+falls back to the default <code>log</code> (<code>docker/docker-compose.install.yml</code>), and normal registration
+requires verifying the email — which through a disabled channel does not close. The installation
+ends saying &quot;Ready&quot; and the only way out is fishing the link from
+<code>docker compose logs api</code>.</p>
+<p><strong>The route.</strong> <code>POST /internal/first-account</code>, <code>engine-service</code> — authenticated by
+<code>BRABO_SERVICE_TOKEN</code>, in the same header and with the same constant-time
+comparison as the other internal routes. Body <code>{ email, senha, nome? }</code>, response
+<code>{ userId, email, workspaceId }</code>, <code>201</code>.</p>
+<p><strong>Why internal, and never public.</strong> A public &quot;create the first
+owner&quot; route is a race between whoever installed and whoever scanned the port, and whoever loses
+the race loses the installation: <code>owner</code> of the first workspace is not a role one
+recovers via HTTP. The service token closes the race in the right place — it is
+generated by <code>install.sh</code> itself and written to <code>.env</code> with mode <code>600</code>, so
+presenting it proves control of the <strong>machine</strong>, which is the credential this step
+really wants.</p>
+<p><strong>The account is born VERIFIED, and that is the only thing this route loosens.</strong> What
+email verification proves is <em>&quot;this person controls this inbox&quot;</em>; whoever runs the
+installer has already proven something stronger — the machine, the <code>.env</code> with the five
+secrets and the Docker daemon. Demanding the weaker proof from them, through a channel
+the installation knows is off, is theater. <strong>Normal registration stays byte
+for byte</strong>: the ADR creates a path for a named case, it does not touch the other one.</p>
+<p><strong>The refusal is about the INSTALLATION, not about the email.</strong>
+<code>UserRepository.existeAlgumUsuario()</code> (<code>SELECT 1 … LIMIT 1</code>, never <code>count(*)</code>),
+and <code>409</code> if there is any user. The question is about <code>users</code> and not about
+<code>auth_credentials</code>, because an account provisioned by social login
+(<a href="../api.html#rn-278">RN-278</a>) is born without a credential and asking about the credential would say &quot;there is
+nobody&quot; in a populated installation. Inheriting the per-email idempotency of
+<code>provisionarUsuario</code> would turn the route into an account creator with a misleading
+name — it would be enough to vary the address. In a migration
+(<a href="../infra.html#rn-530">RN-530</a>) the users come in the restore and the step goes silent by the same
+criterion.</p>
+<p><strong>Personal workspace in the SAME transaction</strong> (<a href="../api.html#rn-410">RN-410</a>). This is the THIRD
+account creation point, and it gains no name/slug rule of its own: it calls the
+same <code>nomeESlugDoWorkspacePessoal</code> as the other two. Without it the installation
+would close with a login that goes through and a dashboard where &quot;New project&quot; has nowhere
+to create — the half of the hole this phase came to plug, not the other.</p>
+<p><strong>The extraction, and why not <code>BRABO_FORCE_SEED</code>.</strong> <code>provisionarUsuario</code> refuses
+to run with <code>NODE_ENV=production</code>, and the installer runs exactly in production. What
+the refusal protects is written in its docblock: a <strong>known</strong> password created
+<strong>without human interaction</strong>. The route is another category — the password is chosen by a
+human in the TTY, read without echo and confirmed, behind the service token, and only when
+there is no user at all. So the core (the trio of writes that makes the account
+be born verified) became <code>ProvisionarUsuarioUseCase</code>, and <strong>the refusal stayed in the
+script</strong>, which is what it protects. Telling the installer to declare itself a &quot;forced
+seed&quot; would make it cross a rule that never spoke about it, and would loosen the
+refusal precisely where it holds.</p>
+<p><strong>One password rule, not two.</strong> The domain's <code>exigirSenhaValida</code>, called by the
+SAME code registration calls — and that is why this route's DTO does <strong>not</strong> repeat
+a <code>@MinLength</code>: the call covers the policy's FIVE refusals, not only the
+length. The <code>@MaxLength</code> stays, because it is not policy: it is argon2id
+protection, which copies the input before deriving. <code>PoliticaDeSenhaError</code> is a domain
+<code>Error</code> and has no global filter, so the use case <strong>translates</strong> it to
+<code>400</code> — without that the installer would read &quot;server error&quot; where the right answer is
+&quot;choose another password&quot;. Translating there does not touch normal registration.</p>
+<p><strong>Its own kind in the auth trail.</strong> <code>first_account_created</code>, and not
+<code>register_created</code>: the account is born verified without any email having been
+sent, and whoever audits later needs to see that written, not deduce it from the
+absence of an <code>email_verified</code> alongside. A closed union in TypeScript, a <code>text</code>
+column in the database — a new kind costs no migration.</p>
+<p><strong>No <code>GET</code>.</strong> &quot;Is there any user?&quot; is a question nobody needs to ask from
+outside: the <code>POST</code> answers <code>201</code> or <code>409</code>, and the <code>409</code> is already the answer. A read
+route would publish the same fact with one more surface, and its answer
+would be exactly the signal a scanner wants.</p>
+<p><strong>The new surface is declared, not hidden.</strong> A second
+user creation path that works in PRODUCTION comes to exist. It is narrow on three
+independent counts (first account, internal route, service token) and disappears
+as soon as the installation has people. It is in
+<a href="../../security-surface.html"><code>security-surface.md</code></a>, in the ADR's Consequences and here.</p>
+<p><strong>A declared window, not closed.</strong> The &quot;is there any user&quot; check runs
+INSIDE the transaction, but <code>READ COMMITTED</code> does not prevent two concurrent calls
+with different emails from passing together. Closing it would require an advisory lock
+on the absence of rows, and that is not where containment lives: whoever reaches the route
+already has the service token, that is, already controls the whole installation. What the
+condition prevents is the route BECOMING a permanent account creation surface, and
+that it prevents.</p>
+<p><strong>What did NOT come in, by the ADR's decision:</strong> a public first-owner route; a password
+generated by the code or a default (the password is never written — neither in <code>.env</code>, nor in the
+marker, nor in a log); SMTP turned on by itself (<code>MAIL_TRANSPORT=log</code> stays the
+declared default); LLM credential (it belongs to whoever is going to spend,
+<a href="../api.html#rn-058">RN-058</a>); and any change to normal registration.</p>
+<ul>
+<li><strong>Code:</strong> <code>apps/api/src/application/use-cases/auth/criar-primeira-conta.use-case.ts</code>
+(the refusal for a populated installation, the password rule, the personal workspace and the
+event), <code>apps/api/src/application/use-cases/auth/provisionar-usuario.use-case.ts</code>
+(the extracted core, without the production refusal),
+<code>apps/api/src/scripts/provisionar-usuario.ts</code> (only the refusal, plus the
+delegation), <code>apps/api/src/interfaces/http/internal/internal-first-account.controller.ts</code>,
+<code>apps/api/src/interfaces/http/internal/dto/first-account-internal.dto.ts</code> and
+<code>…/first-account-internal.response.dto.ts</code>,
+<code>apps/api/src/application/ports/user-repository.port.ts</code> and
+<code>apps/api/src/infrastructure/persistence/drizzle/user.repository.ts</code>
+(<code>existeAlgumUsuario</code>), <code>apps/api/src/domain/auth/auth-event.ts</code>
+(<code>first_account_created</code>),
+<code>apps/api/src/domain/auth/password-policy.ts</code> (UNTOUCHED — it is the reused rule)</li>
+<li><strong>Test:</strong> <code>apps/api/test/application/use-cases/auth/criar-primeira-conta.use-case.spec.ts</code>
+(happy path with a verified account and personal workspace, the own kind, the
+<code>409</code> with a populated installation, the <code>400</code> for length and the <code>400</code> for a reason
+that is NOT length, and the name fallback);
+<code>apps/api/test/interfaces/http/internal/internal-first-account.controller.spec.ts</code>
+(the pass-through to the use case, the absent <code>nome</code> becoming <code>null</code>, and the three
+guard refusals: absent header, wrong token, right token);
+<code>apps/api/test/scripts/provisionar-usuario.spec.ts</code> (the production refusal
+STAYED in the script, and the delegation);
+<code>apps/api/test/interfaces/route-surface.spec.ts</code> (the route classified)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0155-a-primeira-conta-nasce-no-terminal.html">0155</a>, which depends
+on <a href="../../adr/0154-chave-de-dispositivo-de-maquina.html">0154</a></li>
+</ul>
+<h2 id="installsh-closes-the-installation-rn-547-phase-30"><code>install.sh</code> closes the installation (RN-547, PHASE 30)</h2>
+<h3 id="rn-547">RN-547 — The installer creates the first account, registers this machine's key and brings up the agent as a service — and what fails in the middle is REPORTED, never undone nor swallowed</h3>
+<p>Session 6 of <a href="../../explanation/fase-30-runner-por-maquina.html">PHASE 30</a>, decided by
+<a href="../../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155</a>. The session would touch
+three workspaces at once and was <strong>split into three</strong>: the two pieces of the agent
+and of the api have already closed (<a href="#rn-546">RN-546</a>, <a href="../runner.html#rn-551">RN-551</a>, <a href="../api.html#rn-552">RN-552</a>,
+over the unit of <a href="../runner.html#rn-545">RN-545</a>), and what remained here is <code>install.sh</code> as an
+<strong>orchestrator and nothing more</strong> — no line of <code>apps/</code> was touched, and no
+route was born.</p>
+<p><strong>The hole it closes.</strong> A new installation ended saying &quot;Ready&quot; with a
+login that NOBODY got through: the generated <code>.env</code> has no email variable
+at all, <code>MAIL_TRANSPORT</code> falls back to the default <code>log</code>, and normal registration requires
+verifying the email. The only way out was fishing the link from
+<code>docker compose logs api</code>. And the local agent stayed installed without a credential,
+waiting for someone to go back to the browser to pair a folder.</p>
+<p><strong>The chain, and every link already existed.</strong> <code>POST /internal/first-account</code>
+(<a href="#rn-546">RN-546</a>) → <code>brabo-runner device-key create</code> (<a href="../runner.html#rn-551">RN-551</a>) →
+<code>POST /internal/machine-device-keys</code> (<a href="../api.html#rn-552">RN-552</a>) → <code>device-key finish --id &lt;id&gt;</code> → <code>brabo-runner service install --machine</code>
+(<a href="../runner.html#rn-545">RN-545</a>). The <code>id</code> the api returns on registration is what becomes the private key's <code>kid</code>,
+and the whole chain only PASSES IT ON — nobody derives it from anything else
+(<a href="../web.html#rn-475">RN-475</a>). The service's <code>--dir</code> comes from the PATH the <code>finish</code>
+printed, not from a second calculation by the script about where the configuration folder
+is.</p>
+<p><strong>What happens when a middle link fails: nothing is undone, everything is
+REPORTED, and the script always exits 0.</strong> It is this delivery's decision, and the argument is
+that the links already fulfilled are useful on their own — with the account created the person gets in,
+with the key registered the machine is paired, and the service is the only step
+they repeat by hand with a command the script prints. Undoing would require deleting the
+account and revoking the key, and there is no route for that nor should there be one the
+installer calls on its own. The price is that an installation can end up half
+done; what it never does is end half done SILENTLY — each failure
+becomes a named line in a <strong>&quot;What was left pending&quot;</strong> block, at the end, where whoever
+installed is still looking. Taking down the whole installation because of the last
+step would trade half an installation for none.</p>
+<p><strong>Idempotency is the HTTP CODE, and <code>409</code> is not a failure.</strong> Both routes answer
+<code>409</code> when the installation already has people — a second run, or a migration
+(<a href="../infra.html#rn-530">RN-530</a>) whose restore brought the users. That is the
+EXPECTED outcome: the step goes silent saying why, and does <strong>not</strong> enter the pending items.
+Any other code is a failure, and shows up with the code and the api's response
+alongside. <code>000</code> — the curl that never got to talk to the api — has its own treatment
+for the same reason: collapsing it with a response code would make &quot;the api did not come up&quot;
+read as &quot;the api refused&quot;. And the agent step only runs when THIS run
+created the account: with a pre-existing user, registering a machine key would mint
+a durable credential for someone who asked for nothing in this round.</p>
+<p><strong>The password touches neither disk nor <code>argv</code>.</strong> Read in the TTY without echo (<code>stty -echo</code>, with the
+terminal mode restored at the end), confirmed, and sent to the api via the <code>curl</code>'s
+<strong>STDIN</strong> — never via <code>--data</code> on the command line, which <code>/proc/&lt;pid&gt;/cmdline</code>
+publishes to any user of the machine, and never via a file. The header with
+the <code>BRABO_SERVICE_TOKEN</code> goes in a mode-600 <code>--config</code>, deleted right after: it
+is a secret too, and that secret already lives on disk, in <code>.env</code>, with the same mode.
+Without <code>stty</code> on the machine the step is <strong>refused</strong>, never degraded to asking
+with echo — promising no echo and delivering with echo is worse than not asking. The password
+does not go to <code>.env</code>, does not go to the marker and does not go to any log; the
+marker gains the <strong>email</strong>, which identifies and is not a secret, and
+<code>MARCADOR_SCHEMA</code> goes up to <strong>3</strong> together with the field, by the same rule that made it
+go up to 2 when gaining <code>versao</code>.</p>
+<p><strong>The password refusal is repeatable, and the ceiling is 3.</strong> The policy is the domain's
+(<a href="#rn-546">RN-546</a>), the same as normal registration, and it is only known AFTER the
+POST. Aborting the installation there would leave someone with the compose up and the
+second run falling into the migration path — so the loop is over the
+question+answer pair, and exhausting the ceiling becomes a named pending item instead of a refusal.
+A typed password different from the confirmation never leaves the machine.
+A tab in what was typed is <strong>refused</strong> and never silently removed: an
+installer that rewrites the password produces an account whose password is not the one the
+person typed.</p>
+<p><strong>The refusal of <code>service install --machine</code> is the COMMON case on a developer's
+machine, and it arrives in its own words.</strong> <code>install --machine</code> refuses
+when there is a per-PROJECT unit installed, without <code>--force</code> (<a href="../runner.html#rn-545">RN-545</a>:
+<em>&quot;installing and warning would leave the wrong installation up&quot;</em>). The installer
+passes on the CLI's output WHOLE instead of summarizing it — it is what names the
+<code>uninstall</code> of each unit found, which is the gesture — and the pending item carries the
+exact command to repeat later.</p>
+<p><strong>The key's <code>name</code> is the <code>hostname</code>, and the choice is this script's.</strong>
+<a href="../runner.html#rn-551">RN-551</a> declares in writing that the CLI does <strong>not</strong> name: the <code>name</code> is a
+field of the record, and whoever names is whoever registers. Whoever opens the list of device
+keys needs to know WHICH machine to go to, and the hostname is the name the
+person already uses to talk about their machines — it is what the shell prompt shows.
+It is not a secret, it is not unique, and the api derives nothing from it. Quotes and slashes go
+(they would move out of place inside the JSON), the cut is at 80 (the DTO's <code>@MaxLength(80)</code>,
+applied here so the refusal does not come from the api) and the total absence of <code>hostname</code> and
+<code>uname</code> returns a fixed name — empty would become a <code>400</code> by <code>@MinLength(1)</code>, after
+the account already exists.</p>
+<p><strong>The <code>.parcial</code> left over when the registration does not close STAYS where it is, and is
+named.</strong> The <code>create</code> writes the private key to a file with a <code>.parcial</code> suffix that the
+runner ignores by construction (<a href="../runner.html#rn-551">RN-551</a>), and if the registration fails it
+is left over. Deleting it would be the installer deciding it knows something it does not: a
+timeout after the api writes is indistinguishable from a timeout before, and the
+file may be the only copy of the private half of an already registered key. It
+is inert, the next <code>device-key create</code> names it and replaces it, and the message
+says both things.</p>
+<p><strong>What this script does NOT do, and now says it right.</strong> The last line of the output
+announced, months after the functions existed, that it <em>&quot;does not pair the local
+agent&quot;</em> and that the key <em>&quot;still comes from the project screen&quot;</em>. The text was
+rewritten: SMTP stays off by decision (<code>MAIL_TRANSPORT=log</code>, here as
+in production — and the account created is born verified precisely because of that), the LLM credential
+still belongs to whoever is going to spend
+(<a href="../api.html#rn-058">RN-058</a>), and pairing through the project screen
+(<a href="../../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118</a>)
+still exists for whoever wants it — what changed is that it stopped being
+mandatory. The <code>--help</code> suffered from the same defect in a place no test
+reached (it prints the HEADER, which is a comment, and the rule forbidding talk
+of &quot;phase sessions&quot; only read code lines): it said <em>&quot;THIS VERSION INSTALLS
+NOTHING&quot;</em>. Fixed, and the fixed line range that cut it off
+silently became &quot;up to the first line that is not a comment&quot;.</p>
+<p><strong>What did NOT come in:</strong> a new route of any kind (the session is orchestration —
+if something were missing on the other side, the gesture was to stop and report); SMTP; LLM
+credential; a password written anywhere; and any path that creates an account without
+a TTY — without an interactive terminal the script reports and <strong>exits 0</strong>, at the step that already
+existed, before any write.</p>
+<ul>
+<li><strong>Code:</strong> <code>install.sh:1835</code> (<code>fechar_a_instalacao</code>, the chaining and the
+&quot;always 0&quot;), <code>:1634</code> (<code>perguntar_e_criar_a_conta</code>, the consent, the loop and
+the ceiling), <code>:1734</code> (<code>parear_esta_maquina</code>, the <code>id</code> becoming <code>--id</code>), <code>:1811</code>
+(<code>subir_o_agente_como_servico</code>, the refusal passed on whole), <code>:1537</code>
+(<code>post_interno</code>, the body via stdin and the header via the 600 <code>--config</code>),
+<code>:1578</code> (<code>criar_primeira_conta</code>) and <code>:1597</code> (<code>registrar_chave_de_maquina</code>) —
+the verdicts of the two routes —, <code>:1612</code> (<code>ler_sem_eco</code>), <code>:1516</code>
+(<code>nome_da_maquina</code>), <code>:1798</code> (<code>avisar_chave_parcial</code>), <code>:1208</code>/<code>:1215</code>
+(<code>escapar_json</code>/<code>sem_controle</code>), <code>:109</code> (<code>MARCADOR_SCHEMA=4</code>), <code>:1871</code> (the
+call, after the runner and before the marker), <code>:1882</code> (the <code>ownerEmail</code>).
+Numbers re-read by symbol on 09/18 (AT-096), on 09/27 (AT-065, which
+added the Mac Intel branch in <code>instalar_o_runner</code>) and on 10/01 (AT-122);
+those of <code>:966</code>/<code>:682</code> no longer matched on 09/17</li>
+<li><strong>Test:</strong> <code>scripts/dev/install-fechamento.spec.ts</code> — the shell functions
+run FOR REAL (the whole script loaded by <code>source</code>, minus the call
+to <code>main</code>) against a real <code>node:http</code> server and a stand-in <code>brabo-runner</code>: the
+account's happy path (body, service token and password arriving), <code>409</code>/<code>400</code>/
+<code>500</code>/no-response with DIFFERENT verdicts, the password loop and the ceiling of 3, the
+order <code>create → registrar → finish → service install</code> with the <code>--id</code> being the
+api's <code>id</code>, the <code>service install</code> refusal passed on in its own words, the
+<code>.parcial</code> that stays when the registration fails, the <code>create</code> that refuses without anything
+being registered, and the closing without the agent's binary; <code>scripts/dev/install.spec.ts</code>
+(the printable plan, and the <code>--help</code> that stopped lying)</li>
+<li><strong>Gap DECLARED:</strong> the end-to-end installation on a clean machine —
+real compose, real api, real runner binary, unit written
+and agent waiting for the first project — is the <strong>E2E</strong> of the phase's session 8, and only
+it can prove it. Here <code>brabo-runner</code> is a shell stand-in and the api is a
+test server; what is proven is the CHAINING, never the integration. And the
+main flow of <code>install.sh</code> (verifying its own origin against the signed
+<code>checksums.txt</code>) still has no coverage, for the reason
+<code>install.spec.ts</code> already recorded: no Release has that asset until the next
+final tag</li>
+<li><strong>ADR:</strong> <a href="../../adr/0155-a-primeira-conta-nasce-no-terminal.html">0155</a></li>
+<li><strong>Origin:</strong> PHASE 30, session 6 —
+<a href="../../explanation/fase-30-runner-por-maquina.html">the phase's scope</a></li>
+</ul>
+<h2 id="the-self-movement-ceiling-on-the-workspace-upsert-and-the-self-promotion-that-closes-rn-557">The self-movement ceiling on the WORKSPACE upsert, and the self-promotion that closes (RN-557)</h2>
+<h3 id="rn-557">RN-557 — Changing one's OWN role is refused with 403 on both membership routes, in both directions</h3>
+<blockquote>
+<p><strong>Extended by <a href="../api.html#rn-615">RN-615</a> (ADR 0173):</strong> the workspace member removal route
+said below not to exist came to exist, with the SAME ceiling
+(removing oneself is 403) — and it is that clause that holds the last owner, without
+counting. The reasoning below about ceiling 1 still holds.</p>
+</blockquote>
+<p>The third and last door of the line opened by <a href="../api.html#rn-472">RN-472</a> and continued by
+<a href="../api.html#rn-556">RN-556</a>. <a href="../../adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127</a>
+declared this one in writing — <em>&quot;<code>POST workspaces/:workspaceId/members</code> remains an
+upsert with no ceiling at all — same class of defect, scope above&quot;</em> — and
+<a href="../../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156</a> reaffirmed it as
+&quot;different scope, separate decision&quot;. It is <code>BRB-002</code>, security P1.</p>
+<p><strong>The defect, measured.</strong> <code>AddWorkspaceMemberUseCase.execute</code> received
+<code>(workspaceId, userId, role)</code> and called <code>workspaces.addMember</code> — <strong>it did not receive the
+actor</strong> —, and the controller (<code>@Post(':workspaceId/members')</code>,
+<code>@RequireRole('owner')</code>) called it with the bare body, without <code>@CurrentUser()</code>. There
+was nothing with which to apply any ceiling.</p>
+<p><strong>Why it is more serious one scope above.</strong> Two things that exist in the project do not
+exist here: (a) <strong>there is no level above to catch the fall</strong> — in the project,
+demoting oneself drops the effective role to the workspace role, which often
+holds it; in the workspace the role is the role, and an <code>owner</code> who writes themselves <code>viewer</code>
+loses the entire workspace, with all the projects and the very capacity to invite
+whoever would restore them; (b) <strong>there is no member removal route</strong> —
+<code>WorkspacesController</code> has no member <code>@Delete</code> (measured, and ADR 0156 had
+already used that fact). Undoing is this same route, which requires the just
+abandoned <code>owner</code>.</p>
+<p><strong>Self-PROMOTION was a loophole, and it closes.</strong> ADR 0127 recorded in the Consequences
+that it stayed: <em>&quot;A <code>maintainer</code> can write themselves as <code>owner</code> of the project (…) the
+ceilings are about going down&quot;</em>. This RN <strong>revises</strong> that sentence. The two halves are the
+same movement — a person deciding alone what authority they have — and the upper one
+is the only one that <strong>escalates privilege</strong>: ADR 0127 could say its ceilings
+were not about escalation (&quot;nobody gains a role they did not have&quot;), and about promotion
+that is false.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>movement</th>
+<th>outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>changing one's own role in the PROJECT, downward</td>
+<td><strong>403</strong> — <a href="../api.html#rn-472">RN-472</a>, unchanged</td>
+</tr>
+<tr>
+<td>changing one's own role in the PROJECT, upward</td>
+<td><strong>403</strong> — it was allowed, and this is what changes</td>
+</tr>
+<tr>
+<td>changing one's own role in the WORKSPACE, in any direction</td>
+<td><strong>403</strong> — the new door</td>
+</tr>
+<tr>
+<td>rewriting one's own role with the SAME value</td>
+<td>passes — an idempotent upsert is not a movement</td>
+</tr>
+<tr>
+<td>an <code>owner</code> demoting ANOTHER <code>owner</code> in the workspace</td>
+<td>passes — it is the only way to revoke ownership</td>
+</tr>
+<tr>
+<td>associating/demoting ANOTHER person, in any scope</td>
+<td>passes — the usual legitimate capability</td>
+</tr>
+<tr>
+<td>self-promotion through REMOVAL of the project row</td>
+<td>passes — protected by ADR 0156, point 3</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>The ceiling does NOT count owners.</strong> Refusing only when the caller is the last
+owner was considered and refused by the literal criterion of ADR 0127: <em>&quot;it is stated in a
+clause, it has no number to age&quot;</em>. A count adds a read
+that can get out of phase with the write, has to judge whether an inactive second owner
+counts, and makes the same call with the same body pass today and refuse tomorrow without
+anything the caller controls having changed. And the clause <strong>already produces the
+invariant the count would exist to guarantee</strong>: a workspace is never left without an
+<code>owner</code>, because removing the last one would require them to do it themselves.</p>
+<p><strong>Ceiling 1 has no counterpart in this scope, and it was considered, not mirrored.</strong>
+Unlike removal (<a href="../api.html#rn-556">RN-556</a>), here the movement EXISTS — an <code>owner</code>
+can demote another. The refusal comes from ceiling 1 being a rule about <strong>hierarchy
+inversion</strong>: in the project the row overlays the workspace one (<a href="../web.html#rn-471">RN-471</a>) and
+a <code>maintainer</code> reaches whoever is ABOVE them; in the workspace
+<code>@RequireRole('owner')</code> already guarantees nobody reaches someone bigger than themselves — the
+precondition is absent. Putting the counterpart, added to the absence of a removal route, would make
+<code>owner</code> an <strong>absorbing state</strong>: nobody would leave it via HTTP, and offboarding,
+ownership rotation and correcting a wrong invite would come to require a direct write
+to the database — the class of state ADR 0127 was born to eliminate, with the
+sign flipped.</p>
+<p><strong>The rule is not copied: the comparison becomes ONE classifier.</strong>
+<code>autoMovimentoDoProprioPapel</code> returns the DIRECTION
+(<code>'rebaixamento' | 'promocao' | null</code>) instead of a boolean, because whoever calls
+needs it to choose the message. <code>ehAutoRebaixamento</code> keeps existing
+as a READING of the classifier, and for a behavior reason and not a
+compatibility one: <code>remocaoEhAutoRebaixamento</code> delegates to it, and widening it would make
+REMOVAL also refuse self-promotion — removing one's own row that restricted
+someone is precisely how one undoes the restriction ceiling 1 prevents from creating,
+a movement ADR 0156 protected in writing.</p>
+<p><strong>Four messages, one per DIRECTION and per SCOPE.</strong> Whoever tried to promote themselves does not
+receive the demotion sentence (it is not what they did), and whoever hits the
+workspace ceiling is not told to talk to a <code>maintainer</code> — there the role that undoes is
+<code>owner</code>. The same discipline as point 5 of <a href="../api.html#rn-556">RN-556</a> and of
+<a href="../web.html#rn-470">RN-470</a>.</p>
+<p><strong>The actor's role comes from the repository, not from <code>ResolveEffectiveRoleUseCase</code></strong> —
+the inverse of RN-556's choice, for the same reason it gave: in the project use
+cases the other one comes in so the actor's role does not become a second hand-written
+composition of <code>projectRole ?? workspaceRole</code>; in the workspace there is no composition
+to protect (<code>forWorkspace</code> IS <code>workspaces.findMemberRole</code>), and this use case already
+has the repository in hand.</p>
+<p><strong>The PROMOTION half in the workspace is unreachable via HTTP, and is applied
+anyway.</strong> With <code>@RequireRole('owner')</code> the actor is already at the top and there is nowhere to
+go up. It goes in and is tested for the reason ceiling 2 always had for not having a
+threshold: the use case does not presume the guard, and it is what stays right on the day
+the route changes its minimum. The same design as the capability refusal of
+<a href="../engine.html#rn-514">RN-514</a>, implemented before it had any trigger.</p>
+<p><strong>No web line changes, and it is not an omission:</strong> <code>POST /workspaces/:workspaceId/members</code>
+has no caller in <code>apps/web</code> — measured; the only occurrence is the generated type in
+<code>api-types.generated.ts</code>. There is no toast to adjust nor <code>Select</code> to close.</p>
+<ul>
+<li><strong>Code:</strong> <code>apps/api/src/domain/iam/tetos-de-rebaixamento.ts</code>
+(<code>autoMovimentoDoProprioPapel</code>, the type <code>SentidoDoAutoMovimento</code>, the three
+new messages and the <code>ehAutoRebaixamento</code> that became a reading of the
+classifier),
+<code>apps/api/src/application/use-cases/iam/add-workspace-member.use-case.ts</code>
+(the signature with <code>atorId</code>, the read of the actor's role and the two 403s),
+<code>apps/api/src/application/use-cases/iam/add-project-member.use-case.ts</code>
+(the swap of <code>ehAutoRebaixamento</code> for the classifier, which is what closes the
+self-promotion there),
+<code>apps/api/src/interfaces/http/iam/workspaces.controller.ts</code>
+(<code>@CurrentUser()</code>, the <code>@ApiForbiddenResponse</code> and the description),
+<code>apps/api/src/interfaces/http/iam/dto/add-member.dto.ts</code> and
+<code>apps/api/src/interfaces/http/iam/projects.controller.ts</code> (the descriptions that
+promised &quot;no ceiling at all&quot; and &quot;downgrading yourself&quot;),
+<code>apps/api/src/db/seed.ts</code> (the <code>owner.id</code> as actor),
+<code>apps/api/src/application/use-cases/iam/resolve-effective-role.use-case.ts</code>
+(UNTOUCHED, third ADR in a row)</li>
+<li><strong>Test:</strong> <code>apps/api/test/application/use-cases/iam/tetos-de-rebaixamento.use-case.spec.ts</code>,
+block <em>&quot;Teto de auto-movimento no WORKSPACE — a quarta porta&quot;</em> (the refusal with
+another owner present, the refusal of the sole owner, the unreachable promotion, the
+message per scope, the idempotent upsert, the <code>owner</code> demoting another <code>owner</code>
+and the association of third parties), plus the three cases in the ceiling 2 block — the
+self-promotion test INVERTED, with the name keeping its origin, the assertion that
+each direction has its sentence, and the idempotent upsert in the project</li>
+<li><strong>ADR:</strong> <a href="../../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">0157</a>,
+which references <a href="../../adr/0127-tetos-de-rebaixamento-em-project-members.html">0127</a>
+and <a href="../../adr/0156-teto-de-auto-rebaixamento-na-remocao.html">0156</a>, and revises the first's
+sentence about self-promotion</li>
+<li><strong>Origin:</strong> <code>BRB-002</code>, Security P1 of the maintainer's registry — the last
+movement the two previous ADRs left declared</li>
+</ul>
+<hr>
+<h2 id="the-device-key-gets-a-screen-and-the-screen-states-the-reach-of-revoking-rn-561">The device key gets a screen, and the screen states the reach of revoking (RN-561)</h2>
+<h3 id="rn-570">RN-570 — The installer brings up the installation only with files the Release signed, checked before asking or writing anything</h3>
+<p><a href="../ci.html#rn-549">RN-549</a> measured, the first time the installer ran on a clean
+machine, that the published <code>install.sh</code> <strong>brought up nothing on its own</strong>: it called
+<code>docker compose -f docker/docker-compose.install.yml</code>, a path RELATIVE to the
+directory it ran from, and that file was not a Release asset, did not enter
+the signed <code>checksums.txt</code> and was not downloaded anywhere. Whoever followed the
+runbook's one-liner died in <em>&quot;no such file or directory&quot;</em> AFTER the script
+had written the <code>.env</code> with the secrets. The maintainer decided the way out on
+2026-09-13 — a signed asset, and not a clone (<a href="../../adr/0160-o-compose-do-instalador-viaja-assinado.html">ADR 0160</a>).</p>
+<p><strong>The rule:</strong></p>
+<ol>
+<li><strong>Four files travel with the installer, in the SAME manifest.</strong> The installation
+compose and the three the installation uses by relative path — the
+<code>postgres/init.sql</code> and the <code>ollama/pull-models.sh</code> that the compose bind-mounts, and the
+<code>backup/test-restore-compose.sh</code> that the migration (<a href="../infra.html#rn-530">RN-530</a>) executes —
+are published as <code>brabo-install-*</code> assets by the <code>checksums</code> job and enter the
+<code>sha256sum</code> that generates the signed <code>checksums.txt</code>. The fourth was not in the
+E2E's workaround and was found while implementing: in a folder without a checkout the
+migration would die there. The job checks each manifest line against the file
+(<code>sha256sum -c --strict</code>) before attaching.</li>
+<li><strong>The table has two sides and a guard.</strong> The publisher reads
+<code>scripts/ci/assets-do-instalador.ts</code>; the downloader reads the <code>case</code> of
+<code>destino_do_asset_do_instalador</code> in <code>install.sh</code> (bash 3.2, without Node). The spec
+fails the divergence between the two AND derives from the compose every <code>./…</code> bind-mount
+that is not in the table — which is exactly how the defect was born.</li>
+<li><strong>Verifying comes right after its own origin, and before everything.</strong> The
+installer downloads the four and compares each sha256 against the <code>checksums.txt</code> that
+<code>verificar_a_si_mesmo</code> already verified (never a second download), by
+EXACT name equality. The three refusals are distinct — asset not published,
+manifest that does not cover it, hash that does not match — and all happen with the
+machine untouched.</li>
+<li><strong>It never falls back to the relative path.</strong> <code>COMPOSE_DE_INSTALACAO</code> is born EMPTY and only gets an
+absolute path when the verified copies are put under the installation's folder,
+at the first instant they are needed (the migration or the
+startup). Whatever is already there is REPLACED, never read — with <code>rm</code> before the
+<code>cp</code>, so a symlink does not carry the write outside.</li>
+</ol>
+<p><strong>What this rule does NOT close:</strong> the end-to-end proof only happens on the first
+final tag after the merge — <code>install-e2e.yml</code> does not run on PRs (ADR 0150) —, and
+no already published Release gains the assets: they stay with the old
+installer and the workaround of running it from inside a checkout at the tag. The adjacency
+ADR 0160 declared — <code>test-restore-compose.sh</code> called Compose without
+<code>--env-file</code>, and Compose looks for the <code>.env</code> in the compose's folder — closed in
+AT-102: the installer passes <code>BRABO_ENV_FILE</code> (<code>--env-file</code>, and not
+<code>--project-directory</code>, which would also change the project's name and the base of the
+relative paths) and the installation compose declares the <code>backup_local</code> volume
+that the <code>backup</code> service references, whose absence refused the whole file with the
+profile on. Covered by <code>scripts/dev/prova-de-restauracao-env.spec.ts</code>.</p>
+<ul>
+<li><strong>Code:</strong> <code>install.sh:129</code> (<code>COMPOSE_DE_INSTALACAO</code> empty until materialized),
+<code>:587</code> (<code>ASSETS_DO_INSTALADOR</code>), <code>:589</code> (<code>destino_do_asset_do_instalador</code>, the
+downloader side's table), <code>:614</code> (<code>baixar_e_verificar_os_arquivos_da_instalacao</code>),
+<code>:607</code>/<code>:615</code>/<code>:617</code> (the three refusals), <code>:648</code>
+(<code>materializar_os_arquivos_da_instalacao</code>), <code>:1573</code> (the migration materializes
+before the backup), <code>:1677</code> (the verification right after its own origin),
+<code>:1831</code> (the startup materializes before the <code>up</code>);
+<code>scripts/ci/assets-do-instalador.ts:55</code> (the publisher side's table), <code>:93</code>
+(<code>problemasDoMapeamento</code>), <code>:135</code> (<code>prepararAssets</code>);
+<code>.github/workflows/build-runner-binaries.yml:468</code> (the assets prepared from the
+tag's checkout), <code>:494</code> (in the same <code>sha256sum</code>), <code>:520</code> (the
+<code>--strict</code> check), <code>:527</code> (attached together with the manifest)</li>
+<li><strong>Test:</strong> <code>scripts/dev/install-arquivos-da-instalacao.spec.ts:144</code> (happy
+path against a fake Release), <code>:162</code> (absent asset, <code>.env</code> never
+written — failure case), <code>:179</code> (hash that does not match — failure case), <code>:191</code>
+(manifest that does not cover), <code>:202</code> (a similar name does not cover), <code>:217</code>
+(materializing without verifying is a refusal), <code>:225</code> (what was already there is replaced,
+and the symlink does not carry the write outside), <code>:258</code>/<code>:273</code>/<code>:280</code> (the order in
+<code>main</code> and in the migration); <code>scripts/ci/assets-do-instalador.spec.ts:89</code> (every
+relative bind-mount is an asset), <code>:114</code> (the shell's <code>case</code> is the
+TypeScript table), <code>:148</code>/<code>:152</code>/<code>:161</code> (the pipeline signs, checks and attaches);
+<code>scripts/dev/install-e2e.spec.ts:247</code> (the manual workaround does not come back, and the E2E
+asserts the installer downloaded them), <code>:295</code> (the token that downloads the manifest is not
+in the installer's environment)</li>
+<li><strong>Origin:</strong> AT-026 — the finding of AT-008 (RN-549), decided by the maintainer on
+2026-09-13</li>
+</ul>
+<h2 id="the-container-broker-in-the-installation-with-consent-rn-575">The container broker in the installation, with consent (RN-575)</h2>
+<h3 id="rn-575">RN-575 — The installer only turns on the container broker with a typed &quot;s&quot;, measures the socket's group from inside a container, and writes the four lines together or none</h3>
+<p>In an installation by Release, a <code>container</code> or <code>mounted</code> project never executed:
+what starts the container of those two modes is the broker (<a href="../../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144</a>),
+and the installation did not have the service because the image was not published (ADR 0150,
+decision 7). <a href="../../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a>
+publishes the image as the fifth and puts the service in the installation compose,
+OFF; this rule is what decides when it turns on, because turning it on hands the
+machine's Docker socket to an installation service.</p>
+<p><strong>The rule:</strong></p>
+<ol>
+<li><strong>Only a typed &quot;s&quot;/&quot;sim&quot; turns it on.</strong> The question comes after the base (the broker's second
+root derives from it) and before the <code>.env</code>, and SAYS in text what it grants —
+this machine's Docker socket, and that whoever commands the broker commands
+Docker — and what contains it. Enter, any other answer and the lack of a
+terminal leave it off, and the lack of a terminal is STATED, never decided
+silently. While the answer is not yes, Docker is not touched.</li>
+<li><strong>The socket's group is MEASURED, from inside a container</strong>, with the broker's own
+image, no network, read-only rootfs and the socket mounted by
+<code>--mount type=bind</code> — which refuses a nonexistent source instead of creating a
+folder on the host, as <code>-v</code> would. It is the gid seen from inside that <code>group_add</code>
+needs (in Docker Desktop the host's says nothing). A measurement that fails, a path
+that is not a socket or a gid that is not a number are a named REFUSAL, which teaches to
+run again answering no — never the compose default's <code>999</code>.</li>
+<li><strong>The four lines go together or none goes:</strong> <code>COMPOSE_PROFILES=container-broker</code>,
+<code>BROKER_URL=http://broker:8090</code>, <code>DOCKER_GID</code> and <code>PROJECT_WORKSPACES_HOST_ROOT</code>.
+A profile without a URL brings up a broker nobody calls; a URL without a profile points the
+api to a service that does not come up. <code>escrever_env</code> refuses to write the block without the
+measured gid — a defect of the script, not of the machine. <code>BRABO_BROKER_IMAGE</code> is
+ALWAYS written, on or not: Compose interpolates the whole file before
+filtering by profile.</li>
+<li><strong>The managed folder's root is COMPUTED and then CHECKED.</strong> Before
+startup, <code>&lt;DockerRootDir&gt;/volumes/brabo_project_workspaces/_data</code>; after,
+compared with the volume's <code>Mountpoint</code>. Diverging, or the api not reaching the
+broker over the internal network, becomes a named PENDING item at the end — never a refusal, which
+would take down an installation that is up because of a step fixed by editing the
+<code>.env</code>.</li>
+<li><strong>The decision shows up in the final summary</strong>, in both directions, and the sentence about what
+the installer does NOT do stops saying that only the Mounted folder stays without a
+container: <code>container</code> does too.</li>
+</ol>
+<p><strong>What this rule does NOT close:</strong> the <code>DOCKER_GID</code> and the computed root were not
+measured on Docker Desktop for macOS, and the tag's E2E runs the interactive half only
+on Linux. Rootless or remote Docker does not have the socket at <code>/var/run/docker.sock</code>,
+which is the path the compose mounts, and falls into the refusal of item 2 — turning the broker on
+there is not offered by another path.</p>
+<ul>
+<li><strong>Code:</strong> <code>install.sh:1196</code> (<code>consentir_broker</code>), <code>:1148</code>
+(<code>medir_gid_do_socket</code>), <code>:1183</code> (<code>calcular_raiz_gerenciada</code>), <code>:1320</code>
+(<code>conferir_o_broker</code>), <code>:792</code> (<code>escrever_env_do_broker</code>), <code>:855</code> (the broker in the
+manifest), <code>:1812</code> (the order: after the base, before the <code>.env</code>);
+<code>docker/docker-compose.install.yml</code> (the <code>broker</code> service and the <code>broker</code> network)</li>
+<li><strong>Test:</strong> <code>scripts/dev/install-broker.spec.ts:158</code> (without a terminal: off,
+stated, Docker untouched — failure case), <code>:169</code> (Enter), <code>:179</code> (<code>n</code>), <code>:187</code>
+(<code>s</code> turns on, with <code>--mount</code> and no network), <code>:208</code>/<code>:221</code>/<code>:229</code> (the three refusals),
+<code>:237</code> (the root as a pending item), <code>:248</code> (the final sentence);
+<code>scripts/dev/install-env.spec.ts:250</code>/<code>:259</code> (the four lines together or
+none), <code>:270</code> (the gid guard), <code>:291</code>/<code>:307</code> (the <code>.env</code> against Compose's
+parser: the broker comes up without a flag, with the token, the two roots and the gid, and the api
+points to it — or none of that); <code>scripts/dev/composes-em-conformidade.spec.ts:114</code>
+(the layers of ADR 0130 in the file that travels)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">0162</a></li>
+<li><strong>Origin:</strong> AT-097 — decided by the maintainer on 2026-09-18</li>
+</ul>
+<hr>
+<h2 id="the-installer-offers-the-local-models-and-does-not-mistake-dev-for-an-installation-rn-691-rn-692">The installer offers the local models, and does not mistake dev for an installation (RN-691, RN-692)</h2>
+<h3 id="rn-691">RN-691 — <code>install.sh</code> ASKS whether to switch on the local models (profile <code>llm</code>), measures the Ollama port before writing, and composes ONE <code>COMPOSE_PROFILES</code> line</h3>
+<p>Measured in a real installation of v7.0.0 (AT-351): every business rule recorded
+<code>backlog.semantic_duplicate_check_skipped</code> with <code>getaddrinfo EAI_AGAIN ollama</code>,
+because the installation from a Release starts without the <code>llm</code> profile and the installer never
+asked; switching it on by hand hit <code>address already in use</code> on 11434, the
+port of a NATIVE Ollama on the host.</p>
+<p><strong>The rule:</strong> after the broker question (<a href="#rn-575">RN-575</a>), the installer states
+the COST (disk for the image and for the models the <code>ollama-model-loader</code> downloads, RAM
+with a model loaded) and what is LOST without it (the semantic
+duplicate check of <a href="../api.html#rn-681">RN-681</a> and a local model for the agents), and only a typed &quot;s&quot;
+switches it on; without a terminal it stays off SAYING so. Switching on MEASURES the host
+port before writing anything — 11434, or the first free one up to 11443,
+through bash's own <code>/dev/tcp</code> (3.2 included) — and the whole range being taken is a NAMED
+refusal, with nothing written, never an <code>address already in use</code> on startup.
+The <code>.env</code> gets <code>OLLAMA_PORT</code> and the <code>llm</code> profile; the consented profiles go out
+in a SINGLE <code>COMPOSE_PROFILES</code> line (<code>container-broker,llm</code>), because two
+lines do not add up — the last one would win and the broker would silently vanish.</p>
+<p>Left OUT, declared: the session stating ONCE that the semantic check was
+skipped (api side, another front); and the tag's E2E answers NO (switching on would
+download GBs of models), so startup with the <code>llm</code> profile is not proven end
+to end.</p>
+<ul>
+<li><strong>Where:</strong> <code>install.sh:1274</code> (<code>consentir_llm</code>), <code>:1259</code>
+(<code>escolher_porta_do_ollama</code>), <code>:1249</code> (<code>porta_em_uso</code>), <code>:800</code>
+(<code>escrever_env_do_llm</code>), <code>:821</code> (<code>escrever_env_dos_profiles</code>)</li>
+<li><strong>Test:</strong> <code>scripts/dev/install-llm.spec.ts</code> (without a terminal it stays off
+stating the cost; 11434 taken picks the next one; whole range taken fails
+— failure case; a listening server is measured as in use; broker and models
+in a single line); <code>scripts/dev/install-e2e.spec.ts</code> (the answer to the new question
+is in the TTY driver's list, in order)</li>
+<li><strong>Origin:</strong> AT-351</li>
+</ul>
+<h3 id="rn-692">RN-692 — Only the <code>brabo</code> compose project is a previous installation, and migration offers reinstalling FROM SCRATCH after the proven backup</h3>
+<p><code>detectar_por_sinais</code> matched <code>&quot;Name&quot;:&quot;brabo[^&quot;]*&quot;</code>, and the DEV compose
+(<code>brabo-dev</code>, ADR 0170) counted as a previous installation — the installer
+offered to migrate the development environment. Now it matches only the EXACT name
+<code>brabo</code>.</p>
+<p>And the migration confirmation gets a third answer: <code>z</code> reinstalls FROM
+SCRATCH. The order of ADR 0150 does not change — backup, PROOF, question, delete, install —,
+but the old data is NOT restored: the proven backup stays in the folder, and
+restoring it later is the runbook's <code>#restore</code>. <code>s</code> restores — and, since
+<a href="#rn-998">RN-998</a>, restores EVERYTHING: Postgres into a freshly created, empty database, the git
+repositories and the reprojection of the graph and the artifacts; until then only
+the git repositories came back. Enter still deletes nothing.</p>
+<p>Along with it, the wrap-up stops saying that pairing a folder through the project screen
+&quot;still exists (ADR 0118)&quot;: that flow left in ADR 0203 (<a href="../web.html#rn-687">RN-687</a>).</p>
+<ul>
+<li><strong>Where:</strong> <code>install.sh:440</code> (<code>detectar_por_sinais</code>), <code>:1918</code>
+(<code>migrar_instalacao_anterior</code>)</li>
+<li><strong>Test:</strong> <code>scripts/dev/install-llm.spec.ts</code> (<code>brabo-dev</code> does not count and <code>brabo</code>
+counts; <code>z</code> deletes after the proof and leaves <code>MIGRAR_DE</code> empty; Enter does not delete —
+failure case; the ADR 0118 sentence does not come back)</li>
+<li><strong>Origin:</strong> AT-358</li>
+</ul>
+<h2 id="the-installers-migration-brings-the-whole-previous-installation-back-rn-998">The installer's migration brings the whole previous installation back (RN-998)</h2>
+<h3 id="rn-998">RN-998 — The migration restores the database into an empty database, keeps the master key, is resumable and understands the line of versions</h3>
+<p>The first real migration from a 7.0.0 to product 1.0.0 (AT-710) brought up an
+EMPTY installation with unreadable credentials. <a href="../../adr/0256-a-migracao-restaura-o-banco-num-banco-vazio.html">ADR 0256</a>
+closes the findings of AT-738, and the rules are these:</p>
+<ol>
+<li><strong>Postgres comes back on its own.</strong> After <code>down -v</code>, the installer brings up ONLY
+<code>postgres</code>, runs <code>brabo-restore --banco-vazio</code> (it refuses a database with any
+table) and only then brings up the rest, with the migrations on top of the dump. Next,
+the git repositories and the reprojection of the graph and the artifacts; a
+reprojection that fails is a PENDING item with the command, never a refusal.</li>
+<li><strong>The git comes back as the volume's owner</strong>, read in the api container (<code>stat</code>),
+never assumed: uid 70 of the backup image does not write to a volume of another
+owner, and neither does <code>--user 0:0</code>, because of <code>cap_drop</code>.</li>
+<li><strong>The secrets that encrypt restored data come from the previous <code>.env</code></strong>, at the minimum
+<code>CREDENTIALS_MASTER_KEY</code> (environment → previous <code>.env</code> → generated), and every
+key the new <code>.env</code> does not declare comes back with its last value
+(<code>CREDENTIALS_MASTER_KEY_PREVIOUS</code>, <code>ANAMNESE_ENABLED</code>, <code>BRABO_BIND</code>…). Left
+out are those the installer decides on the spot (<code>COMPOSE_PROFILES</code>,
+<code>BROKER_URL</code>, <code>DOCKER_GID</code>, <code>PROJECT_WORKSPACES_HOST_ROOT</code>, <code>OLLAMA_PORT</code>) and the
+<code>_PREVIOUS</code> of the ephemeral secrets, which are born new.</li>
+<li><strong>Backup, proof and deletion run with the migration's environment:</strong> the five
+<code>BRABO_*_IMAGE</code> of this version (the previous <code>.env</code> may cite a local image that
+is gone), <code>BRABO_BACKUP_USER</code> = uid:gid of whoever runs it (the folder is theirs) and
+<code>BRABO_BACKUP_HOST_DIR</code> = the destination, so the proof restores the SAME backup
+that stays in the folder. The folder is born <code>0755</code>, declared.</li>
+<li><strong>The migration is resumable.</strong> The marker (schema 4) is written right after
+<code>down -v</code> with <code>restauracaoPendente</code> (<code>destino</code> and <code>etapas</code>: <code>banco git grafo artefatos</code>), and again at each step and when the new version comes up. The next
+run that finds the pending item RESUMES the restoration, without migrating again and without
+deleting anything; an absent backup folder is a named refusal.</li>
+<li><strong>Line of versions.</strong> The marker records <code>linha</code>. Without it, the installation belongs to the
+previous line, except for images under <code>ghcr.io/viralabs-dev/</code> (the 1.0.0 of this line
+recorded schema 3). Between lines the relation is <code>nova-linha</code>, with its own sentence and
+a default of yes (<a href="parte-01.html#rn-542">RN-542</a>).</li>
+<li><strong>Download with retry.</strong> Every download goes through <code>baixar</code> (<code>curl --retry 6 --retry-delay 10 --retry-connrefused</code>); 404 is &quot;the Release does not
+publish&quot;, and the rest is &quot;the server did not deliver, run it again&quot; — different
+sentences.</li>
+</ol>
+<p>It revises <a href="../infra.html#rn-530">RN-530</a> (the dump no longer stays only in the folder) and
+the <code>s</code> sentence of <a href="#rn-692">RN-692</a>.</p>
+<ul>
+<li><strong>Where:</strong> <code>install.sh:1918</code> (<code>migrar_instalacao_anterior</code>), <code>:1903</code>
+(<code>com_ambiente_do_backup</code>), <code>:1993</code> (<code>restaurar_o_banco</code>), <code>:2009</code>
+(<code>restaurar_os_repositorios_git</code>), <code>:2025</code> (<code>reprojetar</code>), <code>:2062</code>
+(<code>gravar_marcador</code>), <code>:930</code> (<code>relacao_com_o_instalado</code>), <code>:949</code>
+(<code>restauracao_pendente</code>), <code>:736</code> (<code>gerar_segredos</code>), <code>:971</code>
+(<code>preservar_do_env_anterior</code>), <code>:194</code> (<code>baixar</code>)</li>
+<li><strong>Test:</strong> <code>scripts/dev/install-migracao.spec.ts</code> (one case per item, with
+<code>docker</code>, <code>curl</code> and the fake proof on the PATH; the failure case of each — a
+backup that fails deletes nothing, a refused restore stays pending, an unreadable owner
+refuses, 404 ≠ 504); <code>scripts/dev/install-fechamento.spec.ts</code> (schema 4)</li>
+<li><strong>Origin:</strong> AT-738 (EP-033), decisions of the owner of 5 November 2026</li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/produto/parte-01.html">Produto — part 1 (from RN-012)</a><a href="../../business-rules/runner.html">Runner</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/business-rules/produto/parte-02.md">Edit this page</a><span>Updated 2026-11-08T22:05:00-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#the-device-key-can-now-belong-to-the-machine-rn-543-phase-30">The device key can now belong to the MACHINE (RN-543, PHASE 30)</a></li><li class="n3"><a href="#rn-543">RN-543 — A null runner_device_keys.project_id is the MACHINE key: it holds for the OWNER's projects, resolved against the requested project</a></li><li class="n2"><a href="#an-installations-first-account-is-born-in-the-terminal-rn-546">An installation's first account is born in the terminal (RN-546)</a></li><li class="n3"><a href="#rn-546">RN-546 — An internal route creates the FIRST account, already verified, and refuses when any user exists</a></li><li class="n2"><a href="#installsh-closes-the-installation-rn-547-phase-30">install.sh closes the installation (RN-547, PHASE 30)</a></li><li class="n3"><a href="#rn-547">RN-547 — The installer creates the first account, registers this machine's key and brings up the agent as a service — and what fails in the middle is REPORTED, never undone nor swallowed</a></li><li class="n2"><a href="#the-self-movement-ceiling-on-the-workspace-upsert-and-the-self-promotion-that-closes-rn-557">The self-movement ceiling on the WORKSPACE upsert, and the self-promotion that closes (RN-557)</a></li><li class="n3"><a href="#rn-557">RN-557 — Changing one's OWN role is refused with 403 on both membership routes, in both directions</a></li><li class="n2"><a href="#the-device-key-gets-a-screen-and-the-screen-states-the-reach-of-revoking-rn-561">The device key gets a screen, and the screen states the reach of revoking (RN-561)</a></li><li class="n3"><a href="#rn-570">RN-570 — The installer brings up the installation only with files the Release signed, checked before asking or writing anything</a></li><li class="n2"><a href="#the-container-broker-in-the-installation-with-consent-rn-575">The container broker in the installation, with consent (RN-575)</a></li><li class="n3"><a href="#rn-575">RN-575 — The installer only turns on the container broker with a typed &quot;s&quot;, measures the socket's group from inside a container, and writes the four lines together or none</a></li><li class="n2"><a href="#the-installer-offers-the-local-models-and-does-not-mistake-dev-for-an-installation-rn-691-rn-692">The installer offers the local models, and does not mistake dev for an installation (RN-691, RN-692)</a></li><li class="n3"><a href="#rn-691">RN-691 — install.sh ASKS whether to switch on the local models (profile llm), measures the Ollama port before writing, and composes ONE COMPOSE_PROFILES line</a></li><li class="n3"><a href="#rn-692">RN-692 — Only the brabo compose project is a previous installation, and migration offers reinstalling FROM SCRATCH after the proven backup</a></li><li class="n2"><a href="#the-installers-migration-brings-the-whole-previous-installation-back-rn-998">The installer's migration brings the whole previous installation back (RN-998)</a></li><li class="n3"><a href="#rn-998">RN-998 — The migration restores the database into an empty database, keeps the master key, is resumable and understands the line of versions</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-en.json" data-base="../../"></script></body>
+</html>

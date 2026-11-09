@@ -74,8 +74,8 @@
 <pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">node</span><span style="color:var(--shiki-token-string)"> scripts/docs/estilo.mjs</span><span style="color:var(--shiki-token-comment)">                          # todas as páginas</span></span>
 <span class="line"><span style="color:var(--shiki-token-function)">node</span><span style="color:var(--shiki-token-string)"> scripts/docs/estilo.mjs</span><span style="color:var(--shiki-token-string)"> docs/contribuir/como-escrevemos.md</span></span>
 <span class="line"></span></code></pre>
-<p>O check imprime um <code>AVISO</code> por página acima do limite e um por ID interno fora de &quot;Para saber mais&quot;. Por enquanto ele só avisa. A lista <code>PENDENTES</code> do <code>scripts/docs/estilo.spec.ts</code> guarda as páginas antigas que ainda estouram: ela só encolhe. Página nova, ou página que você acabou de ajustar, tem de passar.</p>
-<p>Como saber que deu certo: o comando termina com <code>estilo: 0 aviso(s)</code> para a sua página, e <code>pnpm test:scripts</code> sai com código 0.</p>
+<p>O check imprime um <code>ERRO</code> por página acima do limite e um por ID interno fora de &quot;Para saber mais&quot;, e sai com código 1. A lista <code>PENDENTES</code> do <code>scripts/docs/estilo.mjs</code> guarda as páginas antigas que ainda estouram: elas só geram <code>AVISO</code>, e a lista só encolhe. Página nova, ou página que você acabou de ajustar, tem de passar.</p>
+<p>Como saber que deu certo: o comando termina com <code>estilo: 0 erro(s)</code> e sai com código 0 para a sua página, e <code>pnpm test:scripts</code> sai com código 0.</p>
 <h2 id="um-modelo-bom">Um modelo bom</h2>
 <p>A trilha <code>orquestrar-repositorios</code> segue este guia: abre com &quot;Para quem é&quot;, tem frases de 15 a 18 palavras e cada página cabe em 825 palavras. Copie o formato dela.</p>
 <h2 id="para-saber-mais">Para saber mais</h2>
@@ -85,7 +85,7 @@
 </ul>
 <nav class="site-pager"><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a><a href="../intro.html">O que é o Brabo</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/contribuir/como-escrevemos.md">Editar esta página</a><span>Atualizado em 2026-11-08T19:19:41-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/contribuir/como-escrevemos.md">Editar esta página</a><span>Atualizado em 2026-11-08T22:05:00-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#as-regras">As regras</a></li><li class="n2"><a href="#orçamento-por-tipo">Orçamento por tipo</a></li><li class="n2"><a href="#rodar-o-check">Rodar o check</a></li><li class="n2"><a href="#um-modelo-bom">Um modelo bom</a></li><li class="n2"><a href="#para-saber-mais">Para saber mais</a></li></ul></aside>
 </div>
