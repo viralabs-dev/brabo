@@ -16,7 +16,8 @@ export function ancorar(texto) {
       const a = `<a id="${m[1]}"></a>`;
       let k = out.length - 1;
       while (k >= 0 && !out[k].trim()) k--;
-      if (out[k] !== a) out.push(a, '');
+      // O `<a id>` colado ao item de lista anterior vira continuação do `<li>` e o id se repete no HTML (AT-875): linha em branco antes.
+      if (out[k] === a) { if (k > 0 && out[k - 1].trim()) out.splice(k, 0, ''); } else out.push(...(out.length && out[out.length - 1].trim() ? [''] : []), a, '');
     }
     out.push(l);
   }

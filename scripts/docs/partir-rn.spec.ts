@@ -90,6 +90,12 @@ describe('partir + conferir', () => {
     expect(r.partes[1].texto).toContain('<a id="rn-002"></a>\n\n### RN-002');
   });
 
+  it('AT-875: RN depois de item de lista leva linha em branco antes do <a id>', () => {
+    const t = doc(`## A\n\n### RN-001 — t 1 {#rn-001}\n\n- item\n### RN-002 — t 2 {#rn-002}\n\ncorpo\n`);
+    const p = partir(t, { area: 'api', locale: 'pt-BR', limite: 90 * 1024 }).partes[0].texto;
+    expect(p).toContain('- item\n\n<a id="rn-002"></a>\n\n### RN-002');
+  });
+
   it('link da RN movida aponta a parte nova; o relativo ganha um nível', () => {
     expect(r.partes[0].texto).toContain('[RN-2](parte-02.md#rn-002)');
     expect(r.partes[0].texto).toContain('[RN-1](#rn-001)');
