@@ -103,6 +103,11 @@ jobs:
       - name: Specs dos scripts
         run: pnpm test:scripts
 
+      # AT-859: imagem só do manifesto (ou em historico/), até 400 KB; a versão do web do
+      # manifesto abaixo da pin reprova só em PR para a `main` (na `dev` avisa).
+      - name: Imagens da doc (capturas)
+        run: node scripts/docs/capturas-check.mjs
+
       - name: Integridade do .docmap.yml
         run: node scripts/docs/docmap.mjs
 

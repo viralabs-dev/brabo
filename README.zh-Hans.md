@@ -4,7 +4,6 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo.svg" />
-  <source media="(prefers-color-scheme: light)" srcset="docs/assets/logo.svg" />
   <img src="docs/assets/logo.svg" alt="Brabo 标志" width="96" />
 </picture>
 
@@ -25,7 +24,10 @@
 
 [文档](https://viralabs-dev.github.io/brabo/prd/zh-Hans/) · [从零到交付物](https://viralabs-dev.github.io/brabo/prd/zh-Hans/tutorials/from-zero-to-deliverable) · [CHANGELOG](CHANGELOG.md) · [安全](SECURITY.md) · [参与贡献](CONTRIBUTING.md)
 
-<img src="docs/assets/readme/perguntas-no-chat.png" alt="Brabo 会话界面：创意智能体记录业务规则，并在聊天中返回待解决的问题，每个问题都附有建议答案和它影响的规则" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/perguntas-abertas-escuro.png" />
+  <img src="docs/assets/capturas/perguntas-abertas-claro.png" alt="Brabo 会话界面：创意智能体记录业务规则，并在聊天中返回待解决的问题，每个问题都附有建议答案和它影响的规则" />
+</picture>
 
 <sub>想法变成规则，缺少的部分变成问题——创意智能体在聊天中把疑问交还给你。</sub>
 
@@ -52,25 +54,22 @@
 
 ### 想法变成规则，缺少的部分变成问题
 
-<img src="docs/assets/readme/perguntas-no-chat.png" alt="创意智能体记录规则，并在聊天中返回待解决的问题，每个都附有建议答案" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/perguntas-abertas-escuro.png" />
+  <img src="docs/assets/capturas/perguntas-abertas-claro.png" alt="创意智能体记录规则，并在聊天中返回待解决的问题，每个都附有建议答案" />
+</picture>
 
 创意智能体在聊天中交还疑问，附上建议答案以及每个问题影响的规则。你就在那里回答，答案会变成业务规则。
 
 ### 架构师以书面方式做决定
 
-<img src="docs/assets/readme/arquitetura-e-adr.png" alt="架构师以 pull request 的形式提出架构决策，并请你确认架构" />
-
 架构决策以 pull request 的形式产生，架构只有在你确认后才继续推进。
 
 ### 开发者在容器内工作
 
-<img src="docs/assets/readme/dev-agent-trabalhando.png" alt="开发智能体在容器内工作时说明它正在修复什么" />
-
 每条命令都经过项目策略，开发智能体做的事情都留在会话记录中。
 
 ### 合并永远由你决定
-
-<img src="docs/assets/readme/merges-pelo-chat.png" alt="创意智能体聊天中待合并的 pull request 队列，带有批准和拒绝按钮" />
 
 通过各道关卡的 pull request 会出现在聊天中，点一下「批准」即可确认。
 
