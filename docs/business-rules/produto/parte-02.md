@@ -380,14 +380,14 @@ de LLM; senha gravada em qualquer lugar; e qualquer caminho que crie conta sem
 TTY — sem terminal interativo o script relata e **sai 0**, no passo que já
 existia, antes de qualquer escrita.
 
-- **Código:** `install.sh:1850` (`fechar_a_instalacao`, o encadeamento e o
-  "sempre 0"), `:1649` (`perguntar_e_criar_a_conta`, o consentimento, o laço e
-  o teto), `:1749` (`parear_esta_maquina`, o `id` virando `--id`), `:1826`
-  (`subir_o_agente_como_servico`, a recusa repassada inteira), `:1552`
+- **Código:** `install.sh:1946` (`fechar_a_instalacao`, o encadeamento e o
+  "sempre 0"), `:1745` (`perguntar_e_criar_a_conta`, o consentimento, o laço e
+  o teto), `:1845` (`parear_esta_maquina`, o `id` virando `--id`), `:1922`
+  (`subir_o_agente_como_servico`, a recusa repassada inteira), `:1648`
   (`post_interno`, o corpo pelo stdin e o cabeçalho pelo `--config` 600),
-  `:1571` (`criar_primeira_conta`) e `:1612` (`registrar_chave_de_maquina`) —
-  os vereditos das duas rotas —, `:1627` (`ler_sem_eco`), `:1531`
-  (`nome_da_maquina`), `:1790` (`avisar_chave_parcial`), `:1208`/`:1215`
+  `:1689` (`criar_primeira_conta`) e `:1708` (`registrar_chave_de_maquina`) —
+  os vereditos das duas rotas —, `:1723` (`ler_sem_eco`), `:1627`
+  (`nome_da_maquina`), `:1909` (`avisar_chave_parcial`), `:1208`/`:1215`
   (`escapar_json`/`sem_controle`), `:109` (`MARCADOR_SCHEMA=4`, AT-738), `:1871` (a
   chamada, depois do runner e antes do marcador), `:1882` (o `ownerEmail`).
   Números relidos pelo símbolo em 18/09 (AT-096), em 27/09 (AT-065, que
@@ -612,9 +612,9 @@ que o serviço `backup` referencia, cuja falta recusava o arquivo inteiro com o
 profile ligado. Coberto por `scripts/dev/prova-de-restauracao-env.spec.ts`.
 
 - **Código:** `install.sh:129` (`COMPOSE_DE_INSTALACAO` vazio até materializar),
-  `:587` (`ASSETS_DO_INSTALADOR`), `:589` (`destino_do_asset_do_instalador`, a
-  tabela do lado que baixa), `:614` (`baixar_e_verificar_os_arquivos_da_instalacao`),
-  `:607`/`:615`/`:617` (as três recusas), `:648`
+  `:602` (`ASSETS_DO_INSTALADOR`), `:604` (`destino_do_asset_do_instalador`, a
+  tabela do lado que baixa), `:629` (`baixar_e_verificar_os_arquivos_da_instalacao`),
+  `:607`/`:615`/`:617` (as três recusas), `:662`
   (`materializar_os_arquivos_da_instalacao`), `:1573` (a migração materializa
   antes do backup), `:1677` (a verificação logo depois da própria origem),
   `:1831` (a subida materializa antes do `up`);
@@ -690,9 +690,9 @@ no Linux. Docker rootless ou remoto não tem o socket em `/var/run/docker.sock`,
 que é o caminho que o compose monta, e cai na recusa do item 2 — ligar o broker
 ali não é oferecido por outro caminho.
 
-- **Código:** `install.sh:1211` (`consentir_broker`), `:1163`
-  (`medir_gid_do_socket`), `:1198` (`calcular_raiz_gerenciada`), `:1335`
-  (`conferir_o_broker`), `:792` (`escrever_env_do_broker`), `:855` (o broker no
+- **Código:** `install.sh:1243` (`consentir_broker`), `:1195`
+  (`medir_gid_do_socket`), `:1230` (`calcular_raiz_gerenciada`), `:1431`
+  (`conferir_o_broker`), `:807` (`escrever_env_do_broker`), `:855` (o broker no
   manifesto), `:1812` (a ordem: depois da base, antes do `.env`);
   `docker/docker-compose.install.yml` (o serviço `broker` e a rede `broker`)
 - **Teste:** `scripts/dev/install-broker.spec.ts:158` (sem terminal: desligado,
@@ -738,9 +738,9 @@ pulada (lado da api, outra frente); e o E2E da tag responde NÃO (ligar
 baixaria GBs de modelo), então a subida com o profile `llm` não é provada ponta
 a ponta.
 
-- **Onde:** `install.sh:1289` (`consentir_llm`), `:1274`
-  (`escolher_porta_do_ollama`), `:1264` (`porta_em_uso`), `:800`
-  (`escrever_env_do_llm`), `:821` (`escrever_env_dos_profiles`)
+- **Onde:** `install.sh:1321` (`consentir_llm`), `:1306`
+  (`escolher_porta_do_ollama`), `:1296` (`porta_em_uso`), `:808`
+  (`escrever_env_do_llm`), `:810` (`escrever_env_dos_profiles`)
 - **Teste:** `scripts/dev/install-llm.spec.ts` (sem terminal fica desligado
   dizendo o custo; 11434 ocupada escolhe a próxima; faixa inteira ocupada falha
   — caso de falha; um servidor escutando é medido como em uso; broker e modelos
@@ -768,7 +768,7 @@ os repositórios git. Enter continua não apagando nada.
 Junto, o fechamento deixa de dizer que parear uma pasta pela tela do projeto
 "continua existindo (ADR 0118)": esse fluxo saiu no ADR 0203 ([RN-687](../web.md#rn-687)).
 
-- **Onde:** `install.sh:440` (`detectar_por_sinais`), `:1935`
+- **Onde:** `install.sh:452` (`detectar_por_sinais`), `:2031`
   (`migrar_instalacao_anterior`)
 - **Teste:** `scripts/dev/install-llm.spec.ts` (`brabo-dev` não conta e `brabo`
   conta; `z` apaga depois da prova e deixa `MIGRAR_DE` vazio; Enter não apaga —
@@ -822,12 +822,12 @@ fecha os achados da AT-738, e as regras são estas:
 Ela revisa a [RN-530](../infra.md#rn-530) (o dump deixa de ficar só na pasta) e
 a frase de `s` da [RN-692](#rn-692).
 
-- **Onde:** `install.sh:1935` (`migrar_instalacao_anterior`), `:1920`
-  (`com_ambiente_do_backup`), `:2010` (`restaurar_o_banco`), `:2026`
-  (`restaurar_os_repositorios_git`), `:2042` (`reprojetar`), `:2062`
-  (`gravar_marcador`), `:930` (`relacao_com_o_instalado`), `:949`
-  (`restauracao_pendente`), `:736` (`gerar_segredos`), `:971`
-  (`preservar_do_env_anterior`), `:194` (`baixar`)
+- **Onde:** `install.sh:2031` (`migrar_instalacao_anterior`), `:2016`
+  (`com_ambiente_do_backup`), `:2106` (`restaurar_o_banco`), `:2122`
+  (`restaurar_os_repositorios_git`), `:2138` (`reprojetar`), `:2175`
+  (`gravar_marcador`), `:952` (`relacao_com_o_instalado`), `:971`
+  (`restauracao_pendente`), `:749` (`gerar_segredos`), `:993`
+  (`preservar_do_env_anterior`), `:206` (`baixar`)
 - **Teste:** `scripts/dev/install-migracao.spec.ts` (um caso por item, com
   `docker`, `curl` e a prova de mentira no PATH; o caso de falha de cada um —
   backup que falha não apaga, restore recusado fica pendente, dono ilegível
