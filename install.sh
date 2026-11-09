@@ -166,6 +166,18 @@ OLLAMA_PORTA_ESCOLHIDA=''
 OLLAMA_PORTA_PADRAO=11434
 OLLAMA_PORTA_TETO=11443
 
+# O Laya (AT-626, profile `tool-router-gpu`), preenchidas por `consentir_laya`.
+# `LAYA_LIGADO` é `sim` só com GPU NVIDIA que o roda (VRAM livre e RAM do
+# host medidas), um "s" digitado e a imagem no manifesto da Release.
+# `BRABO_LAYA_IMAGE` vem do manifesto (alvo OPCIONAL `laya`); a imagem é da
+# brabo-infra, e sem ela a oferta fica de fora. Os pisos são o pico medido do
+# ensemble (estimado ~3,5 GiB) + 512 MiB, e o OOM de RAM medido com 2 GiB;
+# sobrescreva por ambiente se a medição da AT-630 mudar o número.
+LAYA_LIGADO='nao'
+BRABO_LAYA_IMAGE=''
+LAYA_VRAM_MIN_MIB="${LAYA_VRAM_MIN_MIB:-4096}"
+LAYA_RAM_MIN_MIB="${LAYA_RAM_MIN_MIB:-6144}"
+
 # O volume da pasta GERENCIADA (modo `container`), com o prefixo do projeto
 # compose (`name: brabo` no compose de instalação). É o único nome que este
 # script precisa saber do layout do Docker: dele sai a raiz que o broker monta.
@@ -469,6 +481,7 @@ imprimir_plano() {
   printf 'consentir-base\tfaz\tUMA base para os dois lados: .env do servidor e runner.json do agente\n'
   printf 'ligar-broker\tpergunta\tdefault NÃO; sim mede o gid do socket DE DENTRO de um container e grava COMPOSE_PROFILES, BROKER_URL e DOCKER_GID no .env; sem TTY fica desligado\n'
   printf 'ligar-modelos-locais\tpergunta\tdefault NÃO; sim MEDE a porta do Ollama (11434, ou a primeira livre até 11443) e grava OLLAMA_PORT e o profile llm no .env; sem TTY fica desligado\n'
+  printf 'ligar-laya\tpergunta\tdefault NÃO; só aparece com GPU NVIDIA (runtime nvidia ou CDI, VRAM livre e RAM mínimas, dizendo qual falhou) e imagem no manifesto; sim grava o profile tool-router-gpu e BRABO_LAYA_IMAGE no .env; sem TTY fica desligado\n'
   printf 'ligar-broker-sem-perguntar\tnunca\to broker recebe o socket do Docker desta máquina (ADR 0162)\n'
   printf 'instalar-runner\tfaz\tbinário verificado contra o manifesto assinado, instalado com bit de execução\n'
   printf 'criar-primeira-conta\tpergunta\te-mail e senha no TTY, sem eco; a conta nasce verificada e o passo se cala se já houver gente\n'
@@ -793,6 +806,7 @@ NEO4J_PASSWORD=${NEO4J_PASSWORD}
 ENV
   escrever_env_do_broker "$env_arquivo"
   escrever_env_do_llm "$env_arquivo"
+  escrever_env_do_laya "$env_arquivo"
   escrever_env_dos_profiles "$env_arquivo"
 }
 
@@ -817,6 +831,13 @@ OLLAMA_PORT=${OLLAMA_PORTA_ESCOLHIDA}
 ENV
 }
 
+# O Laya (AT-626): a imagem e nada mais; o profile sai na linha única abaixo.
+escrever_env_do_laya() {
+  [ "$LAYA_LIGADO" = 'sim' ] || return 0
+  [ -n "$BRABO_LAYA_IMAGE" ] || recusar 'o Laya foi ligado sem a imagem do manifesto — isto é defeito deste script, não da sua máquina.'
+  printf '# Laya (roteador de ferramentas na GPU): LIGADO com consentimento no instalador (AT-626).\nBRABO_LAYA_IMAGE=%s\n' "$BRABO_LAYA_IMAGE" >> "$1"
+}
+
 # UMA linha de profiles, composta do que foi consentido — e nenhuma quando
 # nada foi. Duas linhas COMPOSE_PROFILES no mesmo `.env` não somam: a última
 # vence, e o broker sumiria calado ao se ligar os modelos.
@@ -824,6 +845,7 @@ escrever_env_dos_profiles() {
   local env_arquivo="$1" perfis=''
   if [ "$BROKER_LIGADO" = 'sim' ]; then perfis='container-broker'; fi
   if [ "$LLM_LIGADO" = 'sim' ]; then perfis="${perfis:+${perfis},}llm"; fi
+  if [ "$LAYA_LIGADO" = 'sim' ]; then perfis="${perfis:+${perfis},}tool-router-gpu"; fi
   [ -n "$perfis" ] || return 0
   printf 'COMPOSE_PROFILES=%s\n' "$perfis" >> "$env_arquivo"
 }
@@ -965,7 +987,7 @@ restauracao_pendente() {
 # religaria calado o que a pessoa acabou de recusar — e o `_PREVIOUS` dos
 # segredos efêmeros, que nascem novos: um `BRABO_SERVICE_TOKEN_PREVIOUS` antigo
 # seguiria abrindo as rotas internas.
-ENV_DO_INSTALADOR=' COMPOSE_PROFILES BROKER_URL DOCKER_GID PROJECT_WORKSPACES_HOST_ROOT OLLAMA_PORT AUTH_JWT_SECRET_PREVIOUS BRABO_SERVICE_TOKEN_PREVIOUS '
+ENV_DO_INSTALADOR=' COMPOSE_PROFILES BROKER_URL DOCKER_GID PROJECT_WORKSPACES_HOST_ROOT OLLAMA_PORT BRABO_LAYA_IMAGE AUTH_JWT_SECRET_PREVIOUS BRABO_SERVICE_TOKEN_PREVIOUS '
 # Os NOMES que voltaram, para `main` dizer — nunca os valores.
 PRESERVADAS_DO_ENV=''
 preservar_do_env_anterior() {
@@ -1057,6 +1079,16 @@ resolver_imagens_do_ghcr() {
     eval "${var}='${repo}@${digest}'"
     ok "${alvo}: ${digest}"
   done
+
+  # O Laya é OPCIONAL: release sem o alvo `laya` não oferece, e não recusa.
+  BRABO_LAYA_IMAGE=''
+  entrada="$(printf '%s' "$compacto" | grep -o "{[^{}]*\"alvo\": *\"laya\"[^{}]*}" || true)"
+  repo="$(printf '%s' "$entrada" | grep -o '"repositorio": *"[^"]*"' | cut -d'"' -f4)"
+  digest="$(printf '%s' "$entrada" | grep -o '"digest": *"[^"]*"' | cut -d'"' -f4)"
+  if [ -n "$repo" ] && [ -n "$digest" ]; then
+    BRABO_LAYA_IMAGE="${repo}@${digest}"
+    ok "laya: ${digest}"
+  fi
 }
 
 # Local: exige árvore LIMPA e em TAG. Uma imagem construída de árvore suja não
@@ -1309,6 +1341,70 @@ consentir_llm() {
   fi
   LLM_LIGADO='sim'
   ok 'modelos locais: ligados'
+}
+
+# As três medidas do Laya, uma função cada para o spec trocá-las. Só Linux:
+# fora dele não há `nvidia-smi` nem `/proc/meminfo`, e a resposta é "sem".
+laya_runtime_nvidia() {
+  command -v docker >/dev/null 2>&1 || return 1
+  { docker info 2>/dev/null | grep -qi 'nvidia'; } || [ -e /etc/cdi/nvidia.yaml ] || [ -e /var/run/cdi/nvidia.yaml ]
+}
+laya_vram_livre_mib() {
+  command -v nvidia-smi >/dev/null 2>&1 || return 1
+  nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits 2>/dev/null | sort -n | tail -n1 | tr -dc '0-9'
+}
+laya_ram_mib() {
+  awk '/^MemTotal:/ { printf "%d", $2 / 1024 }' /proc/meminfo 2>/dev/null
+}
+
+# 0 se a máquina roda o Laya; senão 1, com o motivo em LAYA_MOTIVO. Mede só o
+# que a nota da AT-626 manda: runtime, VRAM livre e RAM. O p95 ≤ 500 ms é da
+# sonda do serviço (`/health`), não daqui.
+laya_proficiente() {
+  LAYA_MOTIVO=''
+  local vram ram
+  if ! laya_runtime_nvidia; then LAYA_MOTIVO='o Docker não expõe GPU NVIDIA (sem runtime nvidia nem CDI)'; return 1; fi
+  vram="$(laya_vram_livre_mib || true)"
+  case "$vram" in ''|*[!0-9]*) LAYA_MOTIVO='o nvidia-smi não respondeu'; return 1 ;; esac
+  if [ "$vram" -lt "$LAYA_VRAM_MIN_MIB" ]; then LAYA_MOTIVO="VRAM livre ${vram} MiB, abaixo dos ${LAYA_VRAM_MIN_MIB} MiB que o Laya pede"; return 1; fi
+  ram="$(laya_ram_mib || true)"
+  case "$ram" in ''|*[!0-9]*) LAYA_MOTIVO='não medi a RAM desta máquina'; return 1 ;; esac
+  if [ "$ram" -lt "$LAYA_RAM_MIN_MIB" ]; then LAYA_MOTIVO="RAM ${ram} MiB, abaixo dos ${LAYA_RAM_MIN_MIB} MiB que o Laya pede"; return 1; fi
+  return 0
+}
+
+# A oferta do Laya (AT-626). Só aparece com GPU que o roda; o padrão segue o
+# Jev. Mesmo molde do broker e dos modelos locais: default NÃO, sem terminal
+# fica desligado, e nada é gravado aqui — quem grava é `escrever_env`.
+consentir_laya() {
+  LAYA_LIGADO='nao'
+  if ! laya_proficiente; then
+    detalhe "Laya (roteador local de ferramentas) não oferecido: ${LAYA_MOTIVO}. O Jev segue como padrão."
+    return 0
+  fi
+  if [ -z "$BRABO_LAYA_IMAGE" ]; then
+    detalhe 'Laya não oferecido: esta Release não traz a imagem dele. O Jev segue como padrão.'
+    return 0
+  fi
+  dizer ''
+  dizer "${C_BOLD}Laya (roteador de ferramentas na GPU)${C_RESET}"
+  dizer 'Esta máquina tem GPU NVIDIA que roda o Laya (profile tool-router-gpu), no lugar do Jev.'
+  dizer "O custo: alguns GB de disco para a imagem e a GPU reservada (${LAYA_VRAM_MIN_MIB} MiB de VRAM livre, ${LAYA_RAM_MIN_MIB} MiB de RAM)."
+  if [ "$LLM_LIGADO" = 'sim' ]; then
+    dizer 'Atenção: o Ollama dos modelos locais, se usar a mesma GPU, disputa a VRAM com o Laya.'
+  fi
+  dizer 'Ligar só instala o serviço: quem escolhe o Laya é o workspace, e o serviço precisa provar p95 ≤ 500 ms.'
+  dizer ''
+  if [ ! -t 0 ]; then
+    dizer 'Não há terminal para perguntar: o Laya fica DESLIGADO.'
+    return 0
+  fi
+  printf 'Ligar o Laya? [s/N] '
+  local resposta; read -r resposta || resposta=''
+  case "$resposta" in
+    s|S|sim|SIM) LAYA_LIGADO='sim'; ok 'Laya: ligado' ;;
+    *) ok 'Laya: desligado' ;;
+  esac
 }
 
 # Depois da subida, com a pilha de pé: o broker respondeu ao healthcheck (o
@@ -2317,6 +2413,7 @@ main() {
   consentir_broker
   # Mesmo lugar e mesma razão do broker: uma recusa (porta) não deixa nada gravado.
   consentir_llm
+  consentir_laya
 
   # O `.env` que existir aqui é LIDO antes de ser sobrescrito, e sem ser
   # executado: o pepper (RN-613), a chave mestra e tudo o que o novo não declara
@@ -2404,6 +2501,12 @@ main() {
   else
     dizer '  Modelos locais: DESLIGADOS — a checagem semântica de duplicata é pulada'
     dizer '  (deploy/docs/runbook.md explica como ligar).'
+  fi
+
+  if [ "$LAYA_LIGADO" = 'sim' ]; then
+    dizer '  Laya: LIGADO — serviço na GPU (profile tool-router-gpu); o workspace o escolhe.'
+  else
+    dizer '  Laya: DESLIGADO — o Jev é o roteador de ferramentas.'
   fi
 
   # O que ficou pela metade sai NOMEADO, e no fim — onde quem instalou ainda

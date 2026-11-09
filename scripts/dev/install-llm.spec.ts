@@ -183,3 +183,68 @@ printf 'MIGRAR_DE=[%s]\\n' "$MIGRAR_DE"`,
     expect(fs.readFileSync(SCRIPT, 'utf8')).not.toContain('continua existindo (ADR 0118)');
   });
 });
+
+describe('install.sh — a oferta do Laya (AT-626)', () => {
+  const GPU = (vram: number, ram = 16384) =>
+    `laya_runtime_nvidia() { return 0; }; laya_vram_livre_mib() { echo ${vram}; }; laya_ram_mib() { echo ${ram}; }`;
+  const SEM_GPU = `laya_runtime_nvidia() { return 1; }; laya_vram_livre_mib() { return 1; }; laya_ram_mib() { echo 16384; }`;
+
+  it('o plano declara a pergunta, com default NÃO', () => {
+    const plano = spawnSync('bash', [SCRIPT, '--print-plan'], { encoding: 'utf8' }).stdout;
+    expect(plano).toMatch(/^ligar-laya\tpergunta\tdefault NÃO; só aparece com GPU NVIDIA/m);
+  });
+
+  it('sem GPU: não oferece, diz o motivo, e o Jev segue', () => {
+    const r = rodar(`${SEM_GPU}\nBRABO_LAYA_IMAGE=img@sha256:x\nconsentir_laya </dev/null; printf 'L=%s\\n' "$LAYA_LIGADO"`);
+    expect(r.saida).toContain('não oferecido: o Docker não expõe GPU NVIDIA');
+    expect(r.saida).not.toContain('Ligar o Laya?');
+    expect(r.saida).toContain('L=nao');
+  });
+
+  it('GPU com VRAM ou RAM abaixo do piso: não oferece, nomeando qual falhou', () => {
+    const vram = rodar(`${GPU(2048)}\nBRABO_LAYA_IMAGE=i\nconsentir_laya; echo L=$LAYA_LIGADO`);
+    expect(vram.saida).toContain('VRAM livre 2048 MiB, abaixo dos 4096 MiB');
+    const ram = rodar(`${GPU(6000, 2048)}\nBRABO_LAYA_IMAGE=i\nconsentir_laya; echo L=$LAYA_LIGADO`);
+    expect(ram.saida).toContain('RAM 2048 MiB, abaixo dos 6144 MiB');
+    expect(ram.saida).toContain('L=nao');
+  });
+
+  it('com GPU mas sem a imagem no manifesto: não oferece', () => {
+    const r = rodar(`${GPU(5673)}\nconsentir_laya; echo L=$LAYA_LIGADO`);
+    expect(r.saida).toContain('esta Release não traz a imagem');
+    expect(r.saida).toContain('L=nao');
+  });
+
+  it('com GPU, sem terminal: oferece o texto e fica DESLIGADO', () => {
+    const r = rodar(`${GPU(5673)}\nBRABO_LAYA_IMAGE=i\nconsentir_laya; echo L=$LAYA_LIGADO`);
+    expect(r.saida).toContain('Laya (roteador de ferramentas na GPU)');
+    expect(r.saida).toContain('o Laya fica DESLIGADO');
+    expect(r.saida).toContain('L=nao');
+  });
+
+  const gerar = (laya: boolean, llm = false) => {
+    const arquivo = path.join(tmp, `env-laya-${laya}-${llm}`);
+    const r = rodar(
+      `for i in API ENGINE WEB BACKUP BROKER; do eval "BRABO_\${i}_IMAGE=img-\$i"; done
+BASE_DE_PROJETOS='${tmp}/projetos'
+BROKER_LIGADO=nao; LLM_LIGADO=${llm ? 'sim' : 'nao'}; OLLAMA_PORTA_ESCOLHIDA=11436
+LAYA_LIGADO=${laya ? 'sim' : 'nao'}; BRABO_LAYA_IMAGE='ghcr.io/x/laya@sha256:abc'
+gerar_segredos '${arquivo}'
+escrever_env '${arquivo}'`,
+    );
+    expect(r.codigo, r.saida).toBe(0);
+    return fs.readFileSync(arquivo, 'utf8').split('\n').filter((l) => l && !l.startsWith('#'));
+  };
+
+  it('ligado: grava a imagem e soma o profile numa linha só', () => {
+    const l = gerar(true, true);
+    expect(l).toContain('BRABO_LAYA_IMAGE=ghcr.io/x/laya@sha256:abc');
+    expect(l.filter((x) => x.startsWith('COMPOSE_PROFILES='))).toEqual(['COMPOSE_PROFILES=llm,tool-router-gpu']);
+  });
+
+  it('desligado: nem imagem nem profile', () => {
+    const l = gerar(false);
+    expect(l.some((x) => x.startsWith('BRABO_LAYA_IMAGE='))).toBe(false);
+    expect(l.some((x) => x.startsWith('COMPOSE_PROFILES='))).toBe(false);
+  });
+});
