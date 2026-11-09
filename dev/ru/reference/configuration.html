@@ -614,12 +614,12 @@ api к engine. Процедура в
 </tr>
 <tr>
 <td><code>BRABO_RUNNER_RELEASES_REPO</code></td>
-<td><code>daneiel/brabo</code></td>
+<td><code>viralabs-dev/brabo-runner</code></td>
 <td>репозиторий (<code>dono/nome</code>), чей последний Release запрашивает в GitHub <code>GET /runner-releases/binary</code>. Владелец не зашит в код (AT-691, EP-033)</td>
 </tr>
 <tr>
 <td><code>BRABO_REPO</code></td>
-<td><code>daneiel/brabo</code></td>
+<td><code>viralabs-dev/brabo</code></td>
 <td><code>dono/nome</code> репозитория продукта: <code>install.sh</code> скачивает из него Release и проверяет идентичность cosign, а unit runner указывает на него документацию</td>
 </tr>
 <tr>
@@ -1246,7 +1246,7 @@ api может сравнивать только с <code>process.cwd()</code> (
 </tr>
 <tr>
 <td><code>VITE_BRABO_REPO</code></td>
-<td><code>dono/nome</code> репозитория продукта (по умолчанию <code>daneiel/brabo</code>); при сборке. Из него берутся команда установщика на панели runner и адрес сайта документации (AT-691)</td>
+<td><code>dono/nome</code> репозитория продукта (по умолчанию <code>viralabs-dev/brabo</code>); при сборке. Из него берутся команда установщика на панели runner и адрес сайта документации (AT-691)</td>
 </tr>
 <tr>
 <td><code>VITE_BRABO_AMBIENTE</code></td>
@@ -2120,7 +2120,7 @@ spec и есть код, читающий окружение, а не модул
 </blockquote>
 <nav class="site-pager"><a href="../explanation/documentation-workflow.html">Синхронизация документации</a><a href="../reference/events.html">Eventos</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Редактировать страницу</a><span>Обновлено 2026-11-09T00:55:35Z · viralabs-dev-brabo[bot]</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Редактировать страницу</a><span>Обновлено 2026-11-09T06:57:53-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#compose-установки-docker-composeinstallyml">Compose установки (docker-compose.install.yml)</a></li><li class="n2"><a href="#api">api</a></li><li class="n3"><a href="#основные">Основные</a></li><li class="n3"><a href="#безопасность-">Безопасность 🔒</a></li><li class="n3"><a href="#auth-first-party">Auth first-party</a></li><li class="n3"><a href="#настоящий-smtp-mailsender">Настоящий SMTP (MailSender)</a></li><li class="n3"><a href="#recuperar-a-senha-sem-smtp">Восстановление пароля без SMTP</a></li><li class="n3"><a href="#seed-для-разработки">Seed для разработки</a></li><li class="n3"><a href="#rate-limit">Rate limit</a></li><li class="n3"><a href="#внутренний-трафик-">Внутренний трафик 🔒</a></li><li class="n3"><a href="#git">Git</a></li><li class="n3"><a href="#llm">LLM</a></li><li class="n3"><a href="#граф-знаний-adr-0099">Граф знаний (ADR 0099)</a></li><li class="n3"><a href="#наблюдаемость">Наблюдаемость</a></li><li class="n2"><a href="#engine">engine</a></li><li class="n3"><a href="#основные-1">Основные</a></li><li class="n3"><a href="#кластер-и-остановка">Кластер и остановка</a></li><li class="n3"><a href="#harness">Harness</a></li><li class="n3"><a href="#психолог">Психолог</a></li><li class="n3"><a href="#анамнез">Анамнез</a></li><li class="n3"><a href="#ограничители-нагрузки">Ограничители нагрузки</a></li><li class="n3"><a href="#внутренний-трафик-и-наблюдаемость">Внутренний трафик и наблюдаемость</a></li><li class="n2"><a href="#web">web</a></li><li class="n3"><a href="#почему-версия-не-идёт-через-configjs">Почему версия не идёт через /config.js</a></li><li class="n2"><a href="#резервное-копирование">Резервное копирование</a></li><li class="n2"><a href="#локальный-инференс-контейнеры">Локальный инференс (контейнеры)</a></li><li class="n2"><a href="#локальная-наблюдаемость-контейнеры">Локальная наблюдаемость (контейнеры)</a></li><li class="n2"><a href="#брокер-контейнеров">Брокер контейнеров</a></li><li class="n2"><a href="#dev-container-user-build-time">Пользователь контейнеров dev (сборка)</a></li><li class="n2"><a href="#переменные-инструментов-не-продукта">Переменные инструментов (не продукта)</a></li><li class="n3"><a href="#демонстрационные-скрипты-и-seed--appsapiscripts">Демонстрационные скрипты и seed — apps/api/scripts/</a></li><li class="n3"><a href="#браузерный-e2e--e2e">Браузерный E2E — e2e/</a></li><li class="n3"><a href="#локальный-кластер-и-плановые-проверки--deployk8s">Локальный кластер и плановые проверки — deploy/k8s/</a></li><li class="n2"><a href="#полный-инвентарь">Полный инвентарь</a></li><li class="n3"><a href="#env-servico-api">api</a></li><li class="n3"><a href="#env-servico-engine">engine</a></li><li class="n3"><a href="#env-servico-web">web</a></li><li class="n3"><a href="#env-servico-broker">broker</a></li><li class="n3"><a href="#env-servico-api-scripts">api/scripts</a></li><li class="n3"><a href="#env-servico-e2e">e2e</a></li><li class="n3"><a href="#env-servico-deploy-k8s">deploy/k8s</a></li></ul></aside>
 </div>

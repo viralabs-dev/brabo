@@ -622,12 +622,12 @@ ausente/curta, não com divergência entre os dois lados.</p>
 </tr>
 <tr>
 <td><code>BRABO_RUNNER_RELEASES_REPO</code></td>
-<td><code>daneiel/brabo</code></td>
+<td><code>viralabs-dev/brabo-runner</code></td>
 <td>repositório (<code>dono/nome</code>) cuja Release mais recente <code>GET /runner-releases/binary</code> consulta no GitHub. O dono não fica fixo no código (AT-691, EP-033)</td>
 </tr>
 <tr>
 <td><code>BRABO_REPO</code></td>
-<td><code>daneiel/brabo</code></td>
+<td><code>viralabs-dev/brabo</code></td>
 <td><code>dono/nome</code> do repositório do produto: o <code>install.sh</code> baixa dele a Release e confere a identidade do cosign, e a unit do runner aponta a documentação para ele</td>
 </tr>
 <tr>
@@ -1253,7 +1253,7 @@ boot. As <code>VITE_*</code> são o fallback de desenvolvimento.</p>
 </tr>
 <tr>
 <td><code>VITE_BRABO_REPO</code></td>
-<td><code>dono/nome</code> do repositório do produto (default <code>daneiel/brabo</code>); de build. Dele saem o comando do instalador no painel do runner e o endereço do site de documentação (AT-691)</td>
+<td><code>dono/nome</code> do repositório do produto (default <code>viralabs-dev/brabo</code>); de build. Dele saem o comando do instalador no painel do runner e o endereço do site de documentação (AT-691)</td>
 </tr>
 <tr>
 <td><code>VITE_BRABO_AMBIENTE</code></td>
@@ -2143,7 +2143,7 @@ marcadas com 🔒, que falham explicitamente em produção.</p>
 </blockquote>
 <nav class="site-pager"><a href="../explanation/documentation-workflow.html">Sincronia da doc</a><a href="../reference/events.html">Eventos</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Editar esta página</a><span>Atualizado em 2026-11-09T00:55:35Z · viralabs-dev-brabo[bot]</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Editar esta página</a><span>Atualizado em 2026-11-09T06:57:53-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#compose-de-instalação-docker-composeinstallyml">Compose de instalação (docker-compose.install.yml)</a></li><li class="n2"><a href="#api">api</a></li><li class="n3"><a href="#essenciais">Essenciais</a></li><li class="n3"><a href="#segurança-">Segurança 🔒</a></li><li class="n3"><a href="#auth-first-party">Auth first-party</a></li><li class="n3"><a href="#smtp-real-mailsender">SMTP real (MailSender)</a></li><li class="n3"><a href="#recuperar-a-senha-sem-smtp">Recuperar a senha sem SMTP</a></li><li class="n3"><a href="#seed-de-desenvolvimento">Seed de desenvolvimento</a></li><li class="n3"><a href="#rate-limit">Rate limit</a></li><li class="n3"><a href="#tráfego-interno-">Tráfego interno 🔒</a></li><li class="n3"><a href="#git">Git</a></li><li class="n3"><a href="#llm">LLM</a></li><li class="n3"><a href="#grafo-de-conhecimento-adr-0099">Grafo de conhecimento (ADR 0099)</a></li><li class="n3"><a href="#observabilidade">Observabilidade</a></li><li class="n2"><a href="#engine">engine</a></li><li class="n3"><a href="#essenciais-1">Essenciais</a></li><li class="n3"><a href="#cluster-e-desligamento">Cluster e desligamento</a></li><li class="n3"><a href="#harness">Harness</a></li><li class="n3"><a href="#psicólogo">Psicólogo</a></li><li class="n3"><a href="#anamnese">Anamnese</a></li><li class="n3"><a href="#guardas-de-carga">Guardas de carga</a></li><li class="n3"><a href="#tráfego-interno-e-observabilidade">Tráfego interno e observabilidade</a></li><li class="n2"><a href="#web">web</a></li><li class="n3"><a href="#por-que-a-versão-não-passa-pelo-configjs">Por que a versão não passa pelo /config.js</a></li><li class="n2"><a href="#backup">Backup</a></li><li class="n2"><a href="#inferência-local-containers">Inferência local (containers)</a></li><li class="n2"><a href="#observabilidade-local-containers">Observabilidade local (containers)</a></li><li class="n2"><a href="#broker-de-containers">Broker de containers</a></li><li class="n2"><a href="#dev-container-user-build-time">Usuário dos containers de dev (build)</a></li><li class="n2"><a href="#variáveis-de-ferramenta-não-do-produto">Variáveis de ferramenta (não do produto)</a></li><li class="n3"><a href="#scripts-de-demonstração-e-seed--appsapiscripts">Scripts de demonstração e seed — apps/api/scripts/</a></li><li class="n3"><a href="#e2e-de-navegador--e2e">E2E de navegador — e2e/</a></li><li class="n3"><a href="#cluster-local-e-provas-agendadas--deployk8s">Cluster local e provas agendadas — deploy/k8s/</a></li><li class="n2"><a href="#inventário-completo">Inventário completo</a></li><li class="n3"><a href="#env-servico-api">api</a></li><li class="n3"><a href="#env-servico-engine">engine</a></li><li class="n3"><a href="#env-servico-web">web</a></li><li class="n3"><a href="#env-servico-broker">broker</a></li><li class="n3"><a href="#env-servico-api-scripts">api/scripts</a></li><li class="n3"><a href="#env-servico-e2e">e2e</a></li><li class="n3"><a href="#env-servico-deploy-k8s">deploy/k8s</a></li></ul></aside>
 </div>

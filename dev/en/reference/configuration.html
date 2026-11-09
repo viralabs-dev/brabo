@@ -617,12 +617,12 @@ missing/short variable, not on a mismatch between the two sides.</p>
 </tr>
 <tr>
 <td><code>BRABO_RUNNER_RELEASES_REPO</code></td>
-<td><code>daneiel/brabo</code></td>
+<td><code>viralabs-dev/brabo-runner</code></td>
 <td>repository (<code>owner/name</code>) whose latest Release <code>GET /runner-releases/binary</code> queries on GitHub. The owner is not fixed in the code (AT-691, EP-033)</td>
 </tr>
 <tr>
 <td><code>BRABO_REPO</code></td>
-<td><code>daneiel/brabo</code></td>
+<td><code>viralabs-dev/brabo</code></td>
 <td><code>owner/name</code> of the product repository: <code>install.sh</code> downloads the Release from it and checks the cosign identity, and the runner's unit points the documentation at it</td>
 </tr>
 <tr>
@@ -1247,7 +1247,7 @@ at boot. The <code>VITE_*</code> vars are the development fallback.</p>
 </tr>
 <tr>
 <td><code>VITE_BRABO_REPO</code></td>
-<td><code>owner/name</code> of the product repository (default <code>daneiel/brabo</code>); build-time. It supplies the installer command in the runner panel and the address of the documentation site (AT-691)</td>
+<td><code>owner/name</code> of the product repository (default <code>viralabs-dev/brabo</code>); build-time. It supplies the installer command in the runner panel and the address of the documentation site (AT-691)</td>
 </tr>
 <tr>
 <td><code>VITE_BRABO_AMBIENTE</code></td>
@@ -2125,7 +2125,7 @@ exceptions are the ones marked 🔒, which fail explicitly in production.</p>
 </blockquote>
 <nav class="site-pager"><a href="../explanation/documentation-workflow.html">Docs sync</a><a href="../reference/events.html">Eventos</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Edit this page</a><span>Updated 2026-11-09T00:55:35Z · viralabs-dev-brabo[bot]</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Edit this page</a><span>Updated 2026-11-09T06:57:53-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#installation-compose-docker-composeinstallyml">Installation compose (docker-compose.install.yml)</a></li><li class="n2"><a href="#api">api</a></li><li class="n3"><a href="#essentials">Essentials</a></li><li class="n3"><a href="#security-">Security 🔒</a></li><li class="n3"><a href="#first-party-auth">First-party auth</a></li><li class="n3"><a href="#real-smtp-mailsender">Real SMTP (MailSender)</a></li><li class="n3"><a href="#recuperar-a-senha-sem-smtp">Recovering a password without SMTP</a></li><li class="n3"><a href="#development-seed">Development seed</a></li><li class="n3"><a href="#rate-limit">Rate limit</a></li><li class="n3"><a href="#internal-traffic-">Internal traffic 🔒</a></li><li class="n3"><a href="#git">Git</a></li><li class="n3"><a href="#llm">LLM</a></li><li class="n3"><a href="#knowledge-graph-adr-0099">Knowledge graph (ADR 0099)</a></li><li class="n3"><a href="#observability">Observability</a></li><li class="n2"><a href="#engine">engine</a></li><li class="n3"><a href="#essentials-1">Essentials</a></li><li class="n3"><a href="#cluster-and-shutdown">Cluster and shutdown</a></li><li class="n3"><a href="#harness">Harness</a></li><li class="n3"><a href="#psychologist">Psychologist</a></li><li class="n3"><a href="#anamnese">Anamnese</a></li><li class="n3"><a href="#load-guards">Load guards</a></li><li class="n3"><a href="#internal-traffic-and-observability">Internal traffic and observability</a></li><li class="n2"><a href="#web">web</a></li><li class="n3"><a href="#why-the-version-doesnt-go-through-configjs">Why the version doesn't go through /config.js</a></li><li class="n2"><a href="#backup">Backup</a></li><li class="n2"><a href="#local-inference-containers">Local inference (containers)</a></li><li class="n2"><a href="#local-observability-containers">Local observability (containers)</a></li><li class="n2"><a href="#container-broker">Container broker</a></li><li class="n2"><a href="#dev-container-user-build-time">Dev container user (build-time)</a></li><li class="n2"><a href="#tooling-variables-not-product">Tooling variables (not product)</a></li><li class="n3"><a href="#demo-and-seed-scripts--appsapiscripts">Demo and seed scripts — apps/api/scripts/</a></li><li class="n3"><a href="#browser-e2e--e2e">Browser E2E — e2e/</a></li><li class="n3"><a href="#local-cluster-and-scheduled-proofs--deployk8s">Local cluster and scheduled proofs — deploy/k8s/</a></li><li class="n2"><a href="#full-inventory">Full inventory</a></li><li class="n3"><a href="#env-servico-api">api</a></li><li class="n3"><a href="#env-servico-engine">engine</a></li><li class="n3"><a href="#env-servico-web">web</a></li><li class="n3"><a href="#env-servico-broker">broker</a></li><li class="n3"><a href="#env-servico-api-scripts">api/scripts</a></li><li class="n3"><a href="#env-servico-e2e">e2e</a></li><li class="n3"><a href="#env-servico-deploy-k8s">deploy/k8s</a></li></ul></aside>
 </div>
