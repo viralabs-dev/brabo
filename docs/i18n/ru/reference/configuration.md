@@ -293,8 +293,8 @@ Auth живёт в домене api, а после перехода являет
 | `GIT_LOCAL_REPOS_ROOT` | `/tmp/brabo-git-repos` | локальный provider. В `/tmp` репозитории исчезают при перезагрузке |
 | `PROJECT_WORKSPACES_ROOT` | `/tmp/brabo-project-workspaces` | worktrees агентов проекта в режиме **Container**. **Должен быть тем же путём в engine** и тем же томом |
 | `BRABO_PROJECTS_BASE` | пусто | единая папка хоста, под которой живут проекты в режиме **Mounted**, монтируемая по идентичности в `api` и `engine`. Пусто — НОРМАЛЬНОЕ состояние: api сообщает `projectsBase: null`, и мастер проекта даже не предлагает режим Mounted |
-| `BRABO_RUNNER_RELEASES_REPO` | `daneiel/brabo` | репозиторий (`dono/nome`), чей последний Release запрашивает в GitHub `GET /runner-releases/binary`. Владелец не зашит в код (AT-691, EP-033) |
-| `BRABO_REPO` | `daneiel/brabo` | `dono/nome` репозитория продукта: `install.sh` скачивает из него Release и проверяет идентичность cosign, а unit runner указывает на него документацию |
+| `BRABO_RUNNER_RELEASES_REPO` | `viralabs-dev/brabo-runner` | репозиторий (`dono/nome`), чей последний Release запрашивает в GitHub `GET /runner-releases/binary`. Владелец не зашит в код (AT-691, EP-033) |
+| `BRABO_REPO` | `viralabs-dev/brabo` | `dono/nome` репозитория продукта: `install.sh` скачивает из него Release и проверяет идентичность cosign, а unit runner указывает на него документацию |
 | `GITHUB_OAUTH_CLIENT_ID` / `_SECRET` | пусто | пусто = OAuth-подключение к GitHub недоступно (PAT продолжает работать) |
 | `GITLAB_OAUTH_CLIENT_ID` / `_SECRET` | пусто | то же |
 
@@ -528,7 +528,7 @@ Web статический, обслуживается nginx. Он читает 
 | `VITE_ENGINE_URL` | адрес engine (канал Phoenix) |
 | `VITE_LOG_LEVEL` | уровень JSON-логгера браузера (умолчание `info`). В кластере решает ключ `WEB_LOG_LEVEL` из `brabo-config`, который entrypoint пишет в `/config.js` — `VITE_*` важна только в локальной сборке |
 | `VITE_BRABO_VERSION` | версия, показываемая в подвале экранов auth (умолчание `dev`). **Единственная, задаваемая при сборке по выбору, а не из-за ограничения** — см. ниже |
-| `VITE_BRABO_REPO` | `dono/nome` репозитория продукта (по умолчанию `daneiel/brabo`); при сборке. Из него берутся команда установщика на панели runner и адрес сайта документации (AT-691) |
+| `VITE_BRABO_REPO` | `dono/nome` репозитория продукта (по умолчанию `viralabs-dev/brabo`); при сборке. Из него берутся команда установщика на панели runner и адрес сайта документации (AT-691) |
 | `VITE_BRABO_AMBIENTE` | `dev`, `prd` или `local`; при сборке, из `AMBIENTE` файла `docker-bake.hcl` (по умолчанию пусто). Только `local` монтирует быстрый доступ по роли на экране входа (ADR 0245); Actions передают `dev` или `prd` |
 
 Пустая страница после deploy — почти всегда `/config.js`, указывающий на

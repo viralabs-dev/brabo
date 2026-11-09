@@ -11,7 +11,7 @@ traducao_de: d7d790431657e61a049b452214cfd432da2199df
 # 业务规则
 
 每条规则都有**陈述**、**所在位置**（`file:line`）和**覆盖它的测试**。如果你修改了一条规则，请在同一次变更中更新这里对应的行——这是
-[`.docmap.yml`](https://github.com/daneiel/brabo/blob/dev/docs/.docmap.yml)
+[`.docmap.yml`](https://github.com/viralabs-dev/brabo/blob/dev/docs/.docmap.yml)
 以 `block` 级别所要求的。
 
 规则位于**所属区域**的页面（`business-rules/<区域>.md`）中，即实现它们的仓库：api、engine、web、runner、ci 等。本页只是**索引**：每个区域一行，附带数量，下方是编号网格。每个编号都是一个锚点（`#rn-NNN`），指向 RN 所在的页面或页面中的某一部分。旧链接仍然有效。
