@@ -441,7 +441,7 @@ rules:
       - "apps/web/src/lib/logger.ts"
     docs:
       - "deploy/docs/explanation/observability.md"
-      - "deploy/docs/runbook.md"
+      - "deploy/docs/runbook/operacao.md"
     severity: warn
     note: "`trace_id` é contrato (Alloy + derivedFields do Loki). Formato de log e propagação mudam o runbook."
 
@@ -450,7 +450,7 @@ rules:
       - "docker/docker-compose*.yml"
       - ".env.example"
       - "docker/**"
-    docs: ["docs/reference/configuration.md", "deploy/docs/runbook.md"]
+    docs: ["docs/reference/configuration.md", "deploy/docs/runbook/operacao.md"]
     generated: true
     severity: block
     note: "Vars do ambiente de inferência (ADR 0020) vivem no runbook."
@@ -468,7 +468,8 @@ rules:
     docs:
       - "docs/reference/internal-api.md"
       - "apps/broker/docs/dependencias-e-imagens.md"
-      - "deploy/docs/runbook.md"
+      - "deploy/docs/runbook/ambiente-local.md"
+      - "deploy/docs/runbook/instalacao.md"
     severity: warn
     note: "Cinco operações, e a especificação é COMPUTADA — mudar isso muda o contrato e o runbook."
 
@@ -489,7 +490,7 @@ rules:
       - "apps/runner/README.md"
       - "apps/runner/docs/how-to/usar-o-runner.md"
       - "apps/api/docs/security-surface.md"
-      - "deploy/docs/runbook.md"
+      - "deploy/docs/runbook/ambiente-local.md"
     severity: warn
     note: "O agente local roda na máquina do usuário: o que ele DECLARA no join e o que ele instala são contrato, não detalhe."
 
@@ -504,7 +505,7 @@ rules:
       - "apps/api/src/application/graph-projection/**"
       - "apps/api/src/scripts/reprojetar-grafo.ts"
     docs:
-      - "deploy/docs/runbook.md"
+      - "deploy/docs/runbook/restore.md"
       - "docs/business-rules.md"
     severity: warn
     note: "O que a reprojeção reconstrói (e o que NÃO) é o que o runbook diz a quem perdeu o grafo."
@@ -518,7 +519,7 @@ rules:
       - "apps/api/src/application/artifact-projection/**"
       - "apps/api/src/scripts/reprojetar-artefatos.ts"
     docs:
-      - "deploy/docs/runbook.md"
+      - "deploy/docs/runbook/restore.md"
       - "docs/business-rules.md"
     severity: warn
     note: "O que a reprojeção da pasta docs/ reconstrói (e o que NÃO) é o que o runbook diz a quem a perdeu."
@@ -616,7 +617,7 @@ rules:
     watch:
       - "install.sh"
     docs:
-      - "deploy/docs/runbook.md"
+      - "deploy/docs/runbook/instalacao.md"
     severity: warn
     note: "O que o instalador verifica, e o que ele nunca apaga, são contrato."
 

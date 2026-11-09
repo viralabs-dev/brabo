@@ -882,8 +882,7 @@ function verificarFrasesAncoradasNoCodigo() {
       oque: 'quantas imagens o produto publica no GHCR',
     },
     {
-      // AT-869: com o runbook partido a frase mora em `runbook/instalacao.md`; sem ele, no arquivo único
-      arquivo: arquivos('deploy/docs/runbook/instalacao.md').length ? 'deploy/docs/runbook/instalacao.md' : 'deploy/docs/runbook.md',
+      arquivo: 'deploy/docs/runbook/instalacao.md',
       padrao: /as (\S+) imagens que o produto publica já estão resolvidas/,
       // AT-745: a prosa do infra passa a ser inglesa; a frase equivalente fica registrada em docs/adr/0260
       padraoEn: /the (\S+) images the product publishes are already resolved/,
