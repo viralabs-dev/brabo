@@ -389,6 +389,7 @@ chunks 和混合搜索、对它的测量、Neo4j 图谱，以及从事件日志�
 | [0282](0282-a-pin-dos-componentes-segue-a-release-final.md) | A pin dos componentes segue a última Release final | 已接受 |
 | [0285](0285-a-prova-de-uma-aresta-e-arquivo-mais-trecho.md) | A prova de uma aresta do `repos.yml` é arquivo mais trecho literal, não arquivo:linha | 已接受 |
 | [0286](0286-as-capturas-da-doc-sao-geradas-pelo-qa-e-entram-por-pr.md) | As capturas da doc são geradas pelo brabo-qa e entram no brabo por PR do App | 已提议 |
+| [0289](0289-a-recaptura-segue-a-pin-e-so-pede-o-dono-quando-a-imagem-muda.md) | A recaptura segue a pin do web e só pede o dono quando a imagem muda | 已提议 |
 
 ## 文档 {#tema-docs}
 

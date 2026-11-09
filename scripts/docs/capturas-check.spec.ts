@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { citacoes, compararMinor, executar, verificar } from './capturas-check.mjs';
+import { citacoes, compararMinor, executar, soVersoes, verificar } from './capturas-check.mjs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -46,6 +46,26 @@ describe('capturas-check (AT-859)', () => {
     expect(compararMinor('v1.2.9', 'v1.3.0')).toBe(-1);
     expect(compararMinor('v2.0.0', 'v1.9.9')).toBe(1);
     expect(citacoes('<img src="docs/assets/logo.svg" />')[0].caminho).toBe('docs/assets/logo.svg');
+  });
+  describe('guarda (e): chore/capturas-versao só muda versão (ADR 0289)', () => {
+    const antes = [{ arquivo: 'a-claro.png', tela: 'A', tema: 'claro', web: 'v1.2.1', api: 'v2', engine: 'v2', data: '2026-11-08' }];
+    const m = { mudados: ['docs/assets/capturas.json'], antes, depois: [{ ...antes[0], web: 'v1.3.0', data: '2026-11-09' }] };
+    it('só campos de versão passa', () => expect(soVersoes(m)).toEqual([]));
+    it('MUTAÇÃO: um PNG no diff reprova', () => {
+      expect(soVersoes({ ...m, mudados: [...m.mudados, 'docs/assets/capturas/a-claro.png'] }).join()).toContain('só pode mudar');
+    });
+    it('MUTAÇÃO: campo fora da versão mudado reprova', () => {
+      expect(soVersoes({ ...m, depois: [{ ...m.depois[0], tela: 'B' }] }).join()).toContain('a-claro.png.tela mudou');
+    });
+    it('MUTAÇÃO: entrada trocada reprova', () => {
+      expect(soVersoes({ ...m, depois: [{ ...m.depois[0], arquivo: 'b.png' }] }).join()).toContain('não troca entradas');
+    });
+    it('executar usa o diff só nessa branch', () => {
+      const raiz = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+      const git = (...a: string[]) => (a[0] === 'diff' ? 'docs/assets/capturas/x.png\n' : '[]');
+      expect(executar(raiz, { GITHUB_HEAD_REF: 'chore/capturas-versao', GITHUB_BASE_REF: 'dev' }, git).erros.join()).toContain('x.png: a branch');
+      expect(executar(raiz, { GITHUB_HEAD_REF: 'feature/x' }, git).erros).toEqual([]);
+    });
   });
   it('o repositório real passa', () => {
     const raiz = resolve(dirname(fileURLToPath(import.meta.url)), '../..');

@@ -4,6 +4,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **feat(ci)**: AT-878, ADR 0289 (estende a 0286, emenda a 0255; lado do `brabo`). A recaptura da doc segue a pin do web: novo `capturas-gatilho.yml` (push na `dev` que toca `componentes.json` com a tag do web mudada faz `repository_dispatch` `capturas-pin-mudou` no `brabo-qa`, pelo App); o `capturas-check.mjs` ganha a guarda (e), em que a branch `chore/capturas-versao` só pode mudar `web`/`api`/`engine`/`data` de `capturas.json` (spec com mutação); repin do brabo-ci em `v1.5.0-dev.1` (`62f6d34`), que isenta essa branch da escada.
 - CI: repina o brabo-ci na release final `v1.4.0` (`5320046`), para a promoção `dev → main` de 09/11/2026 (a `main` só aceita release final).
 
 - **fix(docs)**: AT-875. O `<a id="rn-NNN">` colado ao último item de lista da RN anterior virava continuação do `<li>` e repetia o id no HTML (13 no `brabo-engine`, `parte-06`, nos 4 idiomas). `ancorar-rn.mjs` e o `partir` de `partir-rn.mjs` passam a pôr uma linha em branco antes do `<a id>` (o `ancorar-rn` também corrige a âncora já colada); a guarda `ancoras-de-rn.mjs` exige essa linha em branco nas `parte-NN.md`; o `site/links.mjs` ganha `idsRepetidos` e reprova id repetido em qualquer HTML do site. Specs com mutação nos três.
