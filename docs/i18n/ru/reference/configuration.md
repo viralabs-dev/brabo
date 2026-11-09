@@ -832,6 +832,10 @@ spec и есть код, читающий окружение, а не модул
 | `E2E_USER` | `owner@brabo.dev` | аккаунт, под которым входит набор |
 | `E2E_PASSWORD` | пароль seed, зафиксированный в `e2e/suporte/api.ts` | пароль этого аккаунта. Это пароль **локального seed**, никогда не реальный — здесь он не повторяется, чтобы единственной копией оставалась копия в коде |
 | `E2E_ENGINE_URL` | `http://localhost:4000` | куда spec `instalacao` (smoke установки) обращается к `/health` engine |
+| `CAPTURAS_API` | `desconhecida` | тег образа api, который записывает `capturas.json` (самый новый `-dev.N` api, передаёт workflow `capturas-da-doc`); вне него снимки выходят без версии |
+| `CAPTURAS_ENGINE` | `desconhecida` | тег образа engine, который записывает `capturas.json` (пин из `componentes.json`, передаёт workflow `capturas-da-doc`) |
+| `CAPTURAS_WEB` | `desconhecida` | тег образа web, который записывает `capturas.json` (пин из `componentes.json`, передаёт workflow `capturas-da-doc`) |
+| `CAPTURAS_SAIDA` | `e2e/capturas/saida` | папка, куда попадают PNG и `capturas.json` снимков для документации (`e2e/capturas/doc.captura.ts`) |
 
 
 ### Локальный кластер и плановые проверки — `deploy/k8s/`

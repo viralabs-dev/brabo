@@ -844,6 +844,10 @@ teste unitário ao lado dele (AT-124).
 | `E2E_PASSWORD` | a senha do seed fixa em `e2e/suporte/api.ts` | a senha dessa conta. É a senha de um **seed local**, nunca uma real — não é repetida aqui para que a única cópia continue sendo a do código |
 | `E2E_SERVICE_TOKEN` | não definida | o token de serviço que as specs usam para semear dados pelas rotas internas da api (`e2e/suporte/interno.ts`, RN-1064). No CI, o job o lê do `.env` que ele mesmo gerou, mascara com `::add-mask::` e o entrega só ao passo das specs (`scripts/ci/com-token-de-servico.sh`); localmente, é o `BRABO_SERVICE_TOKEN` do `.env` do compose. Nunca é impresso |
 | `E2E_ENGINE_URL` | `http://localhost:4000` | onde o spec `instalacao` (smoke da instalação) bate no `/health` do engine |
+| `CAPTURAS_API` | `desconhecida` | a tag da imagem da api que o `capturas.json` registra (a `-dev.N` mais recente da api, passada pelo workflow `capturas-da-doc`); fora dele, a captura sai sem a versão |
+| `CAPTURAS_ENGINE` | `desconhecida` | a tag da imagem do engine que o `capturas.json` registra (a pin do `componentes.json`, passada pelo workflow `capturas-da-doc`) |
+| `CAPTURAS_WEB` | `desconhecida` | a tag da imagem do web que o `capturas.json` registra (a pin do `componentes.json`, passada pelo workflow `capturas-da-doc`) |
+| `CAPTURAS_SAIDA` | `e2e/capturas/saida` | a pasta que recebe os PNG e o `capturas.json` das capturas da doc (`e2e/capturas/doc.captura.ts`) |
 
 
 ### Cluster local e provas agendadas — `deploy/k8s/`
