@@ -33,7 +33,7 @@ import { aferirAncoras } from './ancoras-de-rn.mjs';
 import { gerarIndiceDeAdr, statusDoAdr, tituloDoAdr } from './indice-de-adr.mjs';
 import { arquivosDeRn, contarRegras, gerarIndiceDeRn, numerosDuplicados, rnsDoLocale } from './regras-de-negocio.mjs';
 import { aferirContagens } from './contagens-do-codigo.mjs';
-import { conferirTabela, repositorio, RUNBOOK } from './procedimentos-do-runbook.mjs';
+import { conferirTabela, lerRunbook, repositorio, RUNBOOK } from './procedimentos-do-runbook.mjs';
 import { conferirTemas, corrigirRecuo, INDICE as INDICE_DE_ADR, TEMAS as TEMAS_DE_ADR } from './temas-de-adr.mjs';
 import { fontesDoInventarioDeEnv } from './fontes-de-env.mjs';
 import {
@@ -882,7 +882,8 @@ function verificarFrasesAncoradasNoCodigo() {
       oque: 'quantas imagens o produto publica no GHCR',
     },
     {
-      arquivo: 'deploy/docs/runbook.md',
+      // AT-869: com o runbook partido a frase mora em `runbook/instalacao.md`; sem ele, no arquivo único
+      arquivo: arquivos('deploy/docs/runbook/instalacao.md').length ? 'deploy/docs/runbook/instalacao.md' : 'deploy/docs/runbook.md',
       padrao: /as (\S+) imagens que o produto publica já estão resolvidas/,
       // AT-745: a prosa do infra passa a ser inglesa; a frase equivalente fica registrada em docs/adr/0260
       padraoEn: /the (\S+) images the product publishes are already resolved/,
@@ -1102,7 +1103,8 @@ function verificarAncorasDeRn() {
  * zero linhas, é `CEGO` e também reprova.
  */
 function verificarProcedimentosDoRunbook() {
-  const r = conferirTabela(ler(RUNBOOK), repositorio(arquivos, ler));
+  const rb = lerRunbook(arquivos, ler);
+  const r = conferirTabela(rb.indice, repositorio(arquivos, ler), rb.partes);
 
   if (r.cego) {
     pendencias.push('procedimentos do runbook');
