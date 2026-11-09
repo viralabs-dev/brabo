@@ -599,7 +599,7 @@ slug 会在每个 locale 中让 `docs:build` 失败。
 
 > **实际后果：** 即使 `Documentação` 是绿的，网站也可能是旧的。如果 Pages 的 `build_type` 不是
 > `legacy`/`gh-pages`，提交会发生而没人提供它——CI 中也没有任何东西变红。核对方法是
-> `gh api repos/daneiel/brabo/pages`，记录在 [Rulesets](../reference/rulesets.md) 中。
+> `gh api repos/viralabs-dev/brabo/pages`，记录在 [Rulesets](../reference/rulesets.md) 中。
 
 整个设计，连同被放弃的替代方案，在 [ADR 0034](../adr/0034-documentacao-publicada-por-degrau.md) 中。
 
