@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adotar a política do brabo-ci | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../tutorials/adotar.html">pt-BR</option><option value="../../en/tutorials/adotar.html" selected>en</option><option value="../../ru/tutorials/adotar.html">ru</option><option value="../../zh-Hans/tutorials/adotar.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../dev/en/tutorials/adotar.html">dev</option><option value="../../../prd/en/tutorials/adotar.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="../index.html">Home</a></li><li><a href="../getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><a href="../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html">Developing Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><a href="../runbook.html">Operations manual</a></li><li><a href="../tutorials/adotar.html" aria-current="page">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">Architecture</a></li><li><a href="../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">Branching policy</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../explanation/release-do-produto.html">Product release</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="../explanation/localizacao.html">Localization</a></li><li><a href="../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="../glossary.html">Glossary</a></li><li><a href="../reference/componentes-da-doc.html">Doc components</a></li><li><a href="../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">Business rules</a></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">Timeline</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="../explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a></li><li><a href="../explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">This page is not translated yet; showing the original in Portuguese.</div>
+<article class="doc">
+<h1 id="adotar">Adotar a política do brabo-ci</h1>
+<p><strong>Para quem é:</strong> quem mantém um repositório no GitHub, nunca viu o Brabo e quer a política de PR do brabo-ci nele (nome de branch, destino e aprovação).</p>
+<p><strong>Depois de ler, você consegue:</strong> deixar uma PR do seu repositório policiada pelo <code>pr-police</code> e pela <code>escada</code>, saber quando precisa do GitHub App e o que fazer quando um check reprova.</p>
+<p><strong>Como se prova:</strong> o repositório <a href="https://github.com/daneiel/brabo-ci-exemplo"><code>daneiel/brabo-ci-exemplo</code></a> foi montado só com os passos 1 a 4 e tem a <a href="https://github.com/daneiel/brabo-ci-exemplo/pull/1">PR de exemplo</a> com os dois checks verdes. O <code>politica.yml</code> do passo 3 é idêntico ao dele.</p>
+<p>Se a política for novidade, leia antes a <a href="../explanation/politica-em-10-minutos.html">política em 10 minutos</a>. Os termos estão no <a href="../reference/glossario-da-politica.html">glossário</a>.</p>
+<h2 id="ci-ref">Antes de começar: o <code>ci_ref</code></h2>
+<p>Cada reutilizável do brabo-ci busca os próprios scripts num segundo checkout. O <code>ci_ref</code> diz qual versão. Ele tem de ser o <strong>mesmo SHA de 40 caracteres</strong> do <code>uses:</code>, porque o <code>uses:</code> escolhe o YAML e o <code>ci_ref</code> escolhe os scripts: se divergirem, o YAML novo rodaria scripts de outra versão. Tag e branch não valem. O comentário <code># vX.Y.Z</code> depois do SHA diz a versão a quem lê.</p>
+<p>Para achar um SHA, abra as <a href="https://github.com/viralabs-dev/brabo-ci/tags">tags do brabo-ci</a> e copie o commit da tag que quiser. Este guia usa <code>738350eb049e9b117818816c29d99c01f7c5667a</code>, a tag <code>v1.4.0-dev.8</code>.</p>
+<h2 id="kit-minimo">Kit mínimo: <code>pr-police</code> e <code>escada</code></h2>
+<p>Precisa de uma conta com permissão de administrar o repositório. <strong>Não precisa de GitHub App nem de segredo.</strong></p>
+<h3 id="passo-branches">1. Crie <code>dev</code> e <code>main</code></h3>
+<p>A esteira é <code>dev -&gt; main</code>: o trabalho nasce de <code>dev</code> e a <code>main</code> só recebe promoções. Se o repositório só tem <code>main</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">git</span><span style="color:var(--shiki-token-string)"> checkout</span><span style="color:var(--shiki-token-string)"> main</span><span style="color:var(--shiki-token-punctuation)"> &#x26;&#x26;</span><span style="color:var(--shiki-token-function)"> git</span><span style="color:var(--shiki-token-string)"> pull</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">git</span><span style="color:var(--shiki-token-string)"> checkout</span><span style="color:var(--shiki-token-string)"> -b</span><span style="color:var(--shiki-token-string)"> dev</span><span style="color:var(--shiki-token-punctuation)"> &#x26;&#x26;</span><span style="color:var(--shiki-token-function)"> git</span><span style="color:var(--shiki-token-string)"> push</span><span style="color:var(--shiki-token-string)"> -u</span><span style="color:var(--shiki-token-string)"> origin</span><span style="color:var(--shiki-token-string)"> dev</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Como saber que funcionou:</strong> <code>git ls-remote --heads origin</code> lista <code>dev</code> e <code>main</code>.</p>
+<h3 id="passo-vars">2. Defina <code>OWNER_HANDLE</code></h3>
+<p>A <code>escada</code> trabalha no modo <code>solo</code> por padrão (a variável <code>APPROVAL_MODE</code> não precisa existir). No modo <code>solo</code> a aprovação exigida é a do dono, e ela precisa saber quem é:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> variable</span><span style="color:var(--shiki-token-string)"> set</span><span style="color:var(--shiki-token-string)"> OWNER_HANDLE</span><span style="color:var(--shiki-token-string)"> --body</span><span style="color:var(--shiki-token-string)"> seu-login</span><span style="color:var(--shiki-token-string)"> -R</span><span style="color:var(--shiki-token-string)"> seu-login/seu-repo</span></span>
+<span class="line"></span></code></pre>
+<p>É uma variável, não um segredo. Sem ela a <code>escada</code> reprova (veja a <a href="#problemas">solução de problemas</a>). A PR do próprio dono passa sem review, porque o GitHub não deixa ninguém aprovar a própria PR.</p>
+<p>O modo <code>community</code> (aprovação por papéis, com <code>APROVADORES_DEVS</code>, <code>APROVADORES_QUALIDADE</code>, <code>APROVADORES_PO</code> e <code>APROVADORES_GESTAO</code>) está descrito na <a href="../reference/workflows/approval-ladder.html">escada</a>.</p>
+<h3 id="passo-politica">3. Cole o <code>politica.yml</code></h3>
+<p>Em <code>.github/workflows/politica.yml</code>, na <code>dev</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">name</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> politica</span></span>
+<span class="line"><span style="color:var(--shiki-token-constant)">on</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  pull_request</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">    types</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-foreground)"> [</span><span style="color:var(--shiki-token-string)">opened</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-string)"> edited</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-string)"> reopened</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-string)"> synchronize</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-string)"> ready_for_review</span><span style="color:var(--shiki-foreground)">]</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  pull_request_review</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">    types</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-foreground)"> [</span><span style="color:var(--shiki-token-string)">submitted</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-string)"> edited</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-string)"> dismissed</span><span style="color:var(--shiki-foreground)">]</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">permissions</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  contents</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> read</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  pull-requests</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> write</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">jobs</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  pr-police</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">    uses</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> viralabs-dev/brabo-ci/.github/workflows/pr-police.yml@738350eb049e9b117818816c29d99c01f7c5667a</span><span style="color:var(--shiki-token-comment)">  # v1.4.0-dev.8</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">    with</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">      ci_ref</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> 738350eb049e9b117818816c29d99c01f7c5667a</span><span style="color:var(--shiki-token-comment)">  # v1.4.0-dev.8</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  escada</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">    uses</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> viralabs-dev/brabo-ci/.github/workflows/approval-ladder.yml@738350eb049e9b117818816c29d99c01f7c5667a</span><span style="color:var(--shiki-token-comment)">  # v1.4.0-dev.8</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">    with</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">      ci_ref</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> 738350eb049e9b117818816c29d99c01f7c5667a</span><span style="color:var(--shiki-token-comment)">  # v1.4.0-dev.8</span></span>
+<span class="line"></span></code></pre>
+<p>Troque o SHA e o comentário se quiser outra versão, sempre nos quatro lugares ao mesmo tempo. Nunca ponha <code>if:</code> nesses jobs: check obrigatório que se pula deixa veredito velho colado (<a href="../explanation/licoes-do-ci.html#job-exigido-sem-if">lição 2</a>). Os gatilhos ficam no seu repositório; a <a href="../reference/workflows/pr-police.html">referência</a> lista inputs e permissões.</p>
+<p><strong>Como saber que funcionou:</strong> a aba Actions mostra o workflow <code>politica</code>.</p>
+<h3 id="passo-pr">4. Abra uma PR</h3>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">git</span><span style="color:var(--shiki-token-string)"> checkout</span><span style="color:var(--shiki-token-string)"> -b</span><span style="color:var(--shiki-token-string)"> feature/minha-primeira-pr</span><span style="color:var(--shiki-token-string)"> dev</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">git</span><span style="color:var(--shiki-token-string)"> commit</span><span style="color:var(--shiki-token-string)"> --allow-empty</span><span style="color:var(--shiki-token-string)"> -m</span><span style="color:var(--shiki-token-string-expression)"> "docs: primeira PR policiada"</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">git</span><span style="color:var(--shiki-token-string)"> push</span><span style="color:var(--shiki-token-string)"> -u</span><span style="color:var(--shiki-token-string)"> origin</span><span style="color:var(--shiki-token-string)"> feature/minha-primeira-pr</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> pr</span><span style="color:var(--shiki-token-string)"> create</span><span style="color:var(--shiki-token-string)"> --base</span><span style="color:var(--shiki-token-string)"> dev</span><span style="color:var(--shiki-token-string)"> --fill</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Saída esperada</strong>, medida no exemplo (<a href="https://github.com/daneiel/brabo-ci-exemplo/pull/1">PR 1</a>):</p>
+<pre class="codigo"><code class="language-text">escada / Escada de aprovação        pass
+pr-police / Política de branches    pass
+</code></pre>
+<p>No log do <code>pr-police</code>: <code>feature/exemplo-de-pr -&gt; dev</code> e <code>APROVADO - família: trabalho</code>. A PR ganha a label <code>trabalho</code>; o workflow a cria se ela não existir.</p>
+<p><strong>Como saber que funcionou:</strong> os dois checks verdes e a label na PR. Para ver o contrário, abra uma PR de uma branch <code>login</code> (sem a função antes da barra): o <code>pr-police</code> reprova com <code>NOME-FORA-DO-FORMATO</code>.</p>
+<h3 id="passo-ruleset">5. Exija os checks (ruleset)</h3>
+<p>Sem ruleset os checks avisam mas não bloqueiam. Em Settings, Rules, Rulesets, crie um para <code>dev</code> e <code>main</code> que exija PR e os checks, pelos nomes exatos: <strong>Política de branches</strong> e <strong>Escada de aprovação</strong>. O passo a passo e os demais nomes (&quot;Check de promoção&quot;, &quot;Backmerge gate&quot;) estão em <a href="../reference/rulesets.html">rulesets</a>. O exemplo não liga ruleset, só mostra os checks.</p>
+<h2 id="carimbo">Carimbo de tag: <code>tag-release</code></h2>
+<p>O <code>tag-release</code> cria a tag de versão a cada merge em <code>dev</code> ou <code>main</code> (a função da branch decide MAJOR, MINOR ou PATCH). Cole <code>.github/workflows/tag.yml</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">name</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> tag</span></span>
+<span class="line"><span style="color:var(--shiki-token-constant)">on</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  push</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">    branches</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-foreground)"> [</span><span style="color:var(--shiki-token-string)">dev</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-string)"> main</span><span style="color:var(--shiki-foreground)">]</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">permissions</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  contents</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> write</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  pull-requests</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> write</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  issues</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> write</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">jobs</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  carimbar</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">    uses</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> viralabs-dev/brabo-ci/.github/workflows/tag-release.yml@738350eb049e9b117818816c29d99c01f7c5667a</span><span style="color:var(--shiki-token-comment)">  # v1.4.0-dev.8</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">    with</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">      ci_ref</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> 738350eb049e9b117818816c29d99c01f7c5667a</span><span style="color:var(--shiki-token-comment)">  # v1.4.0-dev.8</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">    secrets</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">      APP_ID</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> ${{ secrets.APP_ID }}</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">      APP_PRIVATE_KEY</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> ${{ secrets.APP_PRIVATE_KEY }}</span></span>
+<span class="line"></span></code></pre>
+<p>No primeiro merge o <code>version.ts</code> carimba <code>v1.0.0</code>; depois a função da branch sobe a versão. <strong>Sem o App</strong> a tag nasce com o <code>GITHUB_TOKEN</code> e o workflow avisa, mas a tag assim empurrada não dispara outros workflows (a Release não sai), e o hotfix exige o token do App. Este passo não está provado no exemplo; a prova da tag virá com o App.</p>
+<h2 id="app">O GitHub App</h2>
+<p>O App troca o <code>GITHUB_TOKEN</code> por um token que <strong>dispara outros workflows</strong>. Você precisa dele para a tag disparar a Release, para a PR de promoção rodar o &quot;Check de promoção&quot; e para hotfix.</p>
+<ol>
+<li>Em Settings do dono (usuário ou org), Developer settings, GitHub Apps, New GitHub App. Desligue o webhook.</li>
+<li>Permissões de repositório: <code>Contents: Read and write</code>, <code>Pull requests: Read and write</code>, <code>Issues: Read and write</code>, <code>Metadata: Read</code>. São a união dos <code>permissions:</code> do <code>tag-release</code> e do <code>promote</code>.</li>
+<li>Gere uma chave privada e instale o App no repositório.</li>
+<li>Cadastre os segredos de repositório <code>APP_ID</code> (o Client ID do App) e <code>APP_PRIVATE_KEY</code> (o conteúdo do <code>.pem</code>). Os nomes são os que o <code>tag.yml</code> acima lê; o brabo-ci não fixa o nome do App, só os dois segredos.</li>
+</ol>
+<p>O repositório-exemplo não cadastra segredo nenhum, e por isso só prova o kit mínimo.</p>
+<h2 id="kit-completo">Kit completo</h2>
+<p>Cada reutilizável tem uma página gerada do YAML, com gatilhos, inputs, segredos, permissões e um exemplo de chamada. Chame todos com o mesmo <code>ci_ref</code> do <code>uses:</code>.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>Reutilizável</th>
+<th>Para que serve</th>
+<th>Check</th>
+<th>Precisa do App</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../reference/workflows/promote.html"><code>promote</code></a></td>
+<td>abre a PR <code>dev -&gt; main</code> (<code>workflow_dispatch</code>)</td>
+<td>Abrir PR de promoção</td>
+<td>sim, para a PR disparar checks</td>
+</tr>
+<tr>
+<td><a href="../reference/workflows/promotion-check.html"><code>promotion-check</code></a></td>
+<td>confere a PR de promoção</td>
+<td>Check de promoção</td>
+<td>não</td>
+</tr>
+<tr>
+<td><a href="../reference/workflows/backmerge-gate.html"><code>backmerge-gate</code></a></td>
+<td>trava PRs enquanto um hotfix espera a retropropagação</td>
+<td>Backmerge gate</td>
+<td>não</td>
+</tr>
+<tr>
+<td><a href="../reference/workflows/archive-merged-branch.html"><code>archive-merged-branch</code></a></td>
+<td>arquiva branches mergeadas (nunca apaga)</td>
+<td>-</td>
+<td>não</td>
+</tr>
+<tr>
+<td><a href="../reference/workflows/dependabot-para-dev.html"><code>dependabot-para-dev</code></a></td>
+<td>manda PR de segurança do Dependabot para a <code>dev</code></td>
+<td>-</td>
+<td>não</td>
+</tr>
+<tr>
+<td><a href="../reference/workflows/publish-npm.html"><code>publish-npm</code></a></td>
+<td>publica pacotes no GitHub Packages a partir da tag</td>
+<td>-</td>
+<td>não (usa <code>GITHUB_TOKEN</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Prefira o App ao <code>BOT_TOKEN</code> (um PAT) no <code>promote</code> e no <code>tag-release</code>: o PAT é de uma pessoa e vence. Os checks de <code>promotion-check</code> e <code>backmerge-gate</code> entram no ruleset da <code>main</code> pelos nomes da tabela. Os demais reutilizáveis têm uma página cada em <code>reference/workflows/</code>, por exemplo <a href="../reference/workflows/pr-police.html"><code>pr-police</code></a>.</p>
+<h2 id="especifico-do-brabo">O que é específico do Brabo</h2>
+<p>Não copie sem pensar: o portão do QA (<code>qa-e2e-gatilho</code>, que presume o repo <code>brabo-qa</code>, as imagens <code>brabo-*</code> e os checks &quot;E2E do brabo-qa&quot; e &quot;Regressivo do brabo-qa&quot;), o <code>dependencias-de-merge</code> (os 11 repos e a sintaxe <code>Depende-de</code>) e o <code>contracts-alinhado</code> (os pacotes <code>@viralabs-dev/brabo-*</code>) são padrões do Brabo, não receitas genéricas. Leia <a href="../explanation/usar-em-outra-org.html">usar em outra org</a> para a lista completa.</p>
+<h2 id="outra-org">Em outra org ou num fork</h2>
+<p>Sem fork, o kit mínimo já roda em qualquer org: o brabo-ci é público e o <code>uses: viralabs-dev/brabo-ci/...</code> não pede token. Só o <code>ci_ref</code> é seu. O <code>owner:</code> do token do App e o escopo do npm vêm de <code>github.repository_owner</code>, então valem para o dono de quem chama. Num <strong>fork</strong>, aponte o <code>uses:</code> para o fork e passe <code>ci_repo: seu-dono/seu-fork</code> no <code>with:</code>, junto do <code>ci_ref</code>. O repositório-exemplo está num usuário (<code>daneiel</code>), fora da <code>viralabs-dev</code>, e roda sem mudar nada além do SHA.</p>
+<h2 id="problemas">Solução de problemas</h2>
+<p>Os códigos do <code>pr-police</code> e do <code>backmerge-gate</code> (<code>NOME-FORA-DO-FORMATO</code>, <code>DESTINO-INVALIDO</code>, <code>ORIGEM-CONTAMINADA</code> e os demais) estão em <a href="../reference/codigos-de-violacao.html">códigos de violação</a>, com o conserto de cada um. Os que a adoção costuma encontrar:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>Sintoma</th>
+<th>Causa</th>
+<th>Correção</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>escada</code> reprova: &quot;a variável de repositório <code>OWNER_HANDLE</code> não está definida&quot; (medido no exemplo)</td>
+<td>falta o passo 2</td>
+<td><code>gh variable set OWNER_HANDLE --body seu-login</code>, e reexecute o workflow</td>
+</tr>
+<tr>
+<td><code>pr-police</code> reprova com <code>NOME-FORA-DO-FORMATO</code> ou <code>FUNCAO-DESCONHECIDA</code></td>
+<td>a branch não é <code>funcao/descritivo</code> com função da lista</td>
+<td><a href="../reference/codigos-de-violacao.html#nome-fora-do-formato">renomeie a branch</a></td>
+</tr>
+<tr>
+<td><code>DESTINO-INVALIDO</code></td>
+<td>a PR mira a branch errada</td>
+<td><code>gh pr edit &lt;n&gt; --base dev</code></td>
+</tr>
+<tr>
+<td>a run fica em <code>action_required</code></td>
+<td>PR de fork de quem nunca contribuiu: o GitHub espera um mantenedor aprovar a execução</td>
+<td>aprove a run na aba da PR</td>
+</tr>
+<tr>
+<td>o workflow <code>politica</code> nunca roda</td>
+<td>o arquivo está só numa branch que não é a base da PR, ou o gatilho foi trocado para <code>pull_request_target</code></td>
+<td><code>pull_request</code> e o <code>politica.yml</code> já na <code>dev</code> (<a href="../explanation/licoes-do-ci.html#pull-request-x-target">lição 1</a>)</td>
+</tr>
+<tr>
+<td>a PR de promoção ou a tag não dispara outros workflows</td>
+<td>foi criada com o <code>GITHUB_TOKEN</code> (<a href="../explanation/licoes-do-ci.html#github-token-nao-dispara">lição 3</a>)</td>
+<td>configure o App</td>
+</tr>
+<tr>
+<td>aviso &quot;'trabalho' not found&quot;</td>
+<td>a label não existia</td>
+<td>o <code>pr-police</code> a cria sozinho; reexecute</td>
+</tr>
+<tr>
+<td>o check está verde, mas a base da PR mudou</td>
+<td>job com <code>if:</code> deixou o veredito velho colado (<a href="../explanation/licoes-do-ci.html#job-exigido-sem-if">lição 2</a>)</td>
+<td>tire o <code>if:</code> do job que chama</td>
+</tr>
+<tr>
+<td>erro de <code>ci_ref</code></td>
+<td>não tem 40 caracteres ou difere do <code>uses:</code></td>
+<td>use o mesmo SHA completo nos dois</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="provas">Provas</h2>
+<ul>
+<li>PR policiada: <a href="https://github.com/daneiel/brabo-ci-exemplo/pull/1">https://github.com/daneiel/brabo-ci-exemplo/pull/1</a> (<code>pr-police</code> e <code>escada</code> verdes).</li>
+<li>Promoção e tag <code>v1.0.0</code>: ainda não provadas no exemplo (pedem o App).</li>
+</ul>
+<nav class="site-pager"><a href="../runbook/segredos.html">Rotação de segredos</a><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/tutorials/adotar.md">Edit this page</a></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#ci-ref">Antes de começar: o ci_ref</a></li><li class="n2"><a href="#kit-minimo">Kit mínimo: pr-police e escada</a></li><li class="n3"><a href="#passo-branches">1. Crie dev e main</a></li><li class="n3"><a href="#passo-vars">2. Defina OWNER_HANDLE</a></li><li class="n3"><a href="#passo-politica">3. Cole o politica.yml</a></li><li class="n3"><a href="#passo-pr">4. Abra uma PR</a></li><li class="n3"><a href="#passo-ruleset">5. Exija os checks (ruleset)</a></li><li class="n2"><a href="#carimbo">Carimbo de tag: tag-release</a></li><li class="n2"><a href="#app">O GitHub App</a></li><li class="n2"><a href="#kit-completo">Kit completo</a></li><li class="n2"><a href="#especifico-do-brabo">O que é específico do Brabo</a></li><li class="n2"><a href="#outra-org">Em outra org ou num fork</a></li><li class="n2"><a href="#problemas">Solução de problemas</a></li><li class="n2"><a href="#provas">Provas</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-en.json" data-base="../"></script></body>
+</html>

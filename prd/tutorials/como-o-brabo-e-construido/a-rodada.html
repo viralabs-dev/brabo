@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A rodada | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../../tutorials/como-o-brabo-e-construido/a-rodada.html" selected>pt-BR</option><option value="../../en/tutorials/como-o-brabo-e-construido/a-rodada.html">en</option><option value="../../ru/tutorials/como-o-brabo-e-construido/a-rodada.html">ru</option><option value="../../zh-Hans/tutorials/como-o-brabo-e-construido/a-rodada.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../../dev/tutorials/como-o-brabo-e-construido/a-rodada.html">dev</option><option value="../../../prd/tutorials/como-o-brabo-e-construido/a-rodada.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../../index.html">Início</a></li><li><a href="../../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><details open><summary><span>Como o Brabo é construído</span></summary><ul><li><a href="../../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/do-pedido-a-atividade.html">Do pedido à atividade</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/a-rodada.html" aria-current="page">A rodada</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/a-regra-vira-codigo.html">A regra vira código, e a doc vai junto</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html">Qualidade e o teste de aceite permanente</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/copie-o-metodo.html">Copie o método</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Arquitetura</a></li><li><a href="../../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Política de branches</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../../explanation/localizacao.html">Localização</a></li><li><a href="../../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../../glossary.html">Glossário</a></li><li><a href="../../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../../business-rules.html">Regras de negócio</a></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="a-rodada">A rodada</h1>
+<p><strong>Para quem é:</strong> quem quer dividir um lote de atividades entre vários executores, humanos ou agentes, sem que eles pisem uns nos outros.</p>
+<p><strong>Depois de ler, você consegue:</strong> planejar uma rodada com lanes paralelas, dizer o que fica sequencial e por quê, e descrever o caminho até o merge.</p>
+<h2 id="o-que-é-uma-rodada">O que é uma rodada</h2>
+<p>Uma <strong>rodada</strong> é um lote de atividades já exploradas, executadas ao mesmo tempo. Cada atividade vai para uma <strong>lane</strong>, e cada lane é um executor (uma pessoa ou um agente). A rodada termina quando as mudanças estão integradas e validadas.</p>
+<h2 id="dois-papéis-separados">Dois papéis, separados</h2>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>Papel</th>
+<th>Pode escrever código?</th>
+<th>Faz o quê</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Analista</strong></td>
+<td>Não, só lê</td>
+<td>Levanta requisitos e escreve o resultado na nota</td>
+</tr>
+<tr>
+<td><strong>Executor</strong></td>
+<td>Sim, na sua lane</td>
+<td>Implementa, testa e documenta</td>
+</tr>
+</tbody>
+</table></div>
+<p>A separação é a regra mais valiosa do método. Quem levanta não corre o risco de &quot;já ir arrumando&quot;. Quem executa recebe a especificação pronta. Os dois agentes de exemplo estão em <a href="copie-o-metodo.html">Copie o método</a>.</p>
+<h2 id="montando-a-rodada">Montando a rodada</h2>
+<ol>
+<li><strong>Releia o quadro.</strong> Só entram atividades com <code>#explorada</code>.</li>
+<li><strong>Divida em lanes.</strong> Cada lane tem arquivos ou áreas <strong>disjuntos</strong> das outras da mesma rodada.</li>
+<li><strong>Marque o que é sequencial.</strong> Fica em fila o que tem dependência real, arquivo compartilhado, recurso único (um banco, um ambiente) ou um gesto humano.</li>
+<li><strong>Dispare todas as lanes de uma vez.</strong> O coordenador não espera uma terminar para soltar a próxima.</li>
+<li><strong>Atualize o quadro no mesmo instante:</strong> os cards das lanes vão para Em andamento.</li>
+</ol>
+<div class="admonicao admonicao-dica" data-admonicao="dica"><p class="admonicao-titulo">Arquivos compartilhados ficam com o coordenador</p>
+<p>Índices, listas de menu e o próprio quadro são pontos de colisão. Nenhuma lane os edita. Cada uma informa, no relatório, a linha que precisa entrar, e o coordenador as junta.</p>
+</div>
+<h2 id="o-que-cada-lane-recebe">O que cada lane recebe</h2>
+<p>Um bom brief de lane cabe numa tela e diz:</p>
+<ul>
+<li>o ponto de partida (a base do código, com o SHA);</li>
+<li>a nota da atividade, que é a especificação;</li>
+<li>o que <strong>não</strong> tocar;</li>
+<li>os comandos de validação, com o código de saída esperado em cada um;</li>
+<li>o formato do relatório.</li>
+</ul>
+<p>A lane não abre outros agentes. O teto de paralelismo é do coordenador, não de cada lane.</p>
+<h2 id="uma-pr-por-repositório">Uma PR por repositório</h2>
+<p>Quando duas lanes mexem no mesmo repositório, elas <strong>juntam</strong> o trabalho numa branch e abrem <strong>uma</strong> PR para a rodada. A prova é o CI dessa PR. Isso reduz ruído de revisão e deixa o histórico legível.</p>
+<p>O caminho da PR até a release está descrito em <a href="../orquestrar-repositorios/vida-de-uma-mudanca.html">A vida de uma mudança</a>. Não o repetimos aqui.</p>
+<h2 id="revisão-e-merge">Revisão e merge</h2>
+<p>O coordenador <strong>integra</strong>: confere o diff de cada lane, roda a validação e atualiza o quadro. O merge em branch protegida é do <strong>dono</strong> do produto. Nenhuma lane, e nenhum agente, mergeia na branch principal.</p>
+<div class="admonicao admonicao-cuidado" data-admonicao="cuidado"><p class="admonicao-titulo">Conferir o que a lane diz</p>
+<p>Relatório de lane não é prova. Rode o comando e leia o código de saída. &quot;Os testes passam&quot; sem o código de saída já enganou o time mais de uma vez.</p>
+</div>
+<h2 id="quando-algo-falha">Quando algo falha</h2>
+<p>Falha de uma lane não derruba as outras. O coordenador lê a causa, corrige o brief e dispara de novo só aquela lane. A causa vai para a nota da atividade.</p>
+<h2 id="um-exemplo-real">Um exemplo real</h2>
+<p>A <a href="https://github.com/viralabs-dev/brabo/pull/89">PR 89 do <code>brabo</code></a> foi uma rodada de documentação: várias lanes, cada uma com sua área, integradas numa única PR.</p>
+<h2 id="para-saber-mais">Para saber mais</h2>
+<ul>
+<li><a href="../orquestrar-repositorios/o-mapa.html">Quem faz o quê</a>, para o mapa dos repositórios.</li>
+<li><a href="../orquestrar-repositorios/erros-que-ja-cometemos.html">Erros que já cometemos</a>.</li>
+</ul>
+<nav class="site-pager"><a href="../../tutorials/como-o-brabo-e-construido/do-pedido-a-atividade.html">Do pedido à atividade</a><a href="../../tutorials/como-o-brabo-e-construido/a-regra-vira-codigo.html">A regra vira código, e a doc vai junto</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/como-o-brabo-e-construido/a-rodada.md">Editar esta página</a><span>Atualizado em 2026-11-08T20:11:19-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#o-que-é-uma-rodada">O que é uma rodada</a></li><li class="n2"><a href="#dois-papéis-separados">Dois papéis, separados</a></li><li class="n2"><a href="#montando-a-rodada">Montando a rodada</a></li><li class="n2"><a href="#o-que-cada-lane-recebe">O que cada lane recebe</a></li><li class="n2"><a href="#uma-pr-por-repositório">Uma PR por repositório</a></li><li class="n2"><a href="#revisão-e-merge">Revisão e merge</a></li><li class="n2"><a href="#quando-algo-falha">Quando algo falha</a></li><li class="n2"><a href="#um-exemplo-real">Um exemplo real</a></li><li class="n2"><a href="#para-saber-mais">Para saber mais</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-pt-BR.json" data-base="../../"></script></body>
+</html>

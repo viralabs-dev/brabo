@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — CI — parte 2 (desde RN-1031) | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../../business-rules/ci/parte-02.html" selected>pt-BR</option><option value="../../en/business-rules/ci/parte-02.html">en</option><option value="../../ru/business-rules/ci/parte-02.html">ru</option><option value="../../zh-Hans/business-rules/ci/parte-02.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../../dev/business-rules/ci/parte-02.html">dev</option><option value="../../../prd/business-rules/ci/parte-02.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../../index.html">Início</a></li><li><a href="../../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Arquitetura</a></li><li><a href="../../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Política de branches</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../../explanation/localizacao.html">Localização</a></li><li><a href="../../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../../glossary.html">Glossário</a></li><li><a href="../../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>Regras de negócio</span></summary><ul><li><a href="../../business-rules.html">Regras de negócio</a></li><li><a href="../../business-rules/custo.html">Custo e metering</a></li><li><a href="../../business-rules/autenticacao.html">Autenticação</a></li><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><details open><summary><span>CI</span></summary><ul><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/ci/parte-01.html">CI — parte 1 (desde RN-037)</a></li><li><a href="../../business-rules/ci/parte-02.html" aria-current="page">CI — parte 2 (desde RN-1031)</a></li></ul></details></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Produto</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="ci--parte-2-desde-rn-1031">CI — parte 2 (desde RN-1031)</h1>
+<h2 id="o-regressivo-por-funcionalidade-e-os-vínculos-dos-runs-rn-10311035-rn-10431045">O regressivo por funcionalidade e os vínculos dos runs (RN-1031..1035, RN-1043..1045)</h2>
+<h3 id="rn-1031">RN-1031 — O catálogo de funcionalidades e o mapa caminho → funcionalidade moram num arquivo só, e a spec se liga por tag</h3>
+<p><code>brabo-qa/funcionalidades.yml</code> é a única fonte: cada funcionalidade tem <code>id</code>
+(kebab-case, estável, nunca renomeado; aposentar é <code>status: aposentada</code>),
+<code>nome</code>, <code>descricao</code>, <code>tema</code> (do <code>temas.yml</code> dos ADRs), <code>status</code> e
+<code>caminhos: {&lt;repo&gt;: [globs]}</code>. Mora no <code>brabo-qa</code>, e não no <code>brabo-contracts</code>,
+porque o contracts é consumido por TAG e cada ajuste do mapa viraria tag e bump
+em seis consumidores. A spec do Playwright se liga à funcionalidade pela tag do
+próprio teste (<code>{ tag: '@f-&lt;id&gt;' }</code>) e o filtro é <code>--grep</code>: o catálogo não
+guarda lista de arquivos. Um teste do <code>brabo-qa</code> reprova id repetido ou fora de
+kebab-case, tema fora do <code>temas.yml</code>, glob que não casa nenhum arquivo do irmão
+(mapa podre) e tag <code>@f-&lt;id&gt;</code> sem entrada; funcionalidade sem spec é só listada.</p>
+<ul>
+<li><strong>Código:</strong> <code>funcionalidades.yml:1</code> (o catálogo e o contrato do arquivo),
+<code>scripts/ci/funcionalidades.ts:29</code> (<code>validarCatalogo</code>)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/funcionalidades.spec.ts</code> (o validador) e
+<code>scripts/ci/qa-regressivo-catalogo-real.spec.ts:12</code> (o catálogo real tem as 14
+funcionalidades ativas e globs que casam)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>Origem:</strong> AT-769 (EP-033)</li>
+</ul>
+<h3 id="rn-1032">RN-1032 — A PR para a <code>dev</code> roda o regressivo só das funcionalidades que tocou, sob o check <code>Regressivo do brabo-qa</code>, que NUNCA é exigido</h3>
+<p>Na PR com destino <code>dev</code>, o job <code>regressivo-dev</code> do <code>qa-e2e-gatilho.yml</code> cruza os
+arquivos da PR com o mapa de <a href="#rn-1031">RN-1031</a> e dispara o <code>brabo-qa</code> com as
+funcionalidades tocadas. O resultado volta como o check <code>Regressivo do brabo-qa</code>, criado pelo App no <code>head_sha</code>: <code>success</code>, <code>failure</code> (visível, mas o
+merge segue livre) ou <code>neutral</code> (nada tocado, só docs, PR de fork, repositório
+sem spec). O nome é distinto do <code>E2E do brabo-qa</code> de propósito: o ruleset &quot;main
+exige E2E&quot; amarra esse contexto, e o regressivo nunca entra em ruleset algum
+(o <code>rulesets.md</code> registra a linha &quot;não exigido&quot;). O job tem <code>continue-on-error</code>,
+o <code>/qa-aceitar</code> não se aplica na <code>dev</code>, e o App comenta uma vez, como lembrete,
+quando o mapa diz que a funcionalidade foi tocada e nenhuma spec <code>@f-&lt;id&gt;</code>
+mudou.</p>
+<ul>
+<li><strong>Código:</strong> <code>.github/workflows/qa-e2e-gatilho.yml:74</code> (o job
+<code>regressivo-dev</code>, com <code>continue-on-error</code>), <code>scripts/ci/qa-e2e-resumo.ts:22</code>
+(o nome do check por modo), <code>scripts/ci/qa-regressivo-lembrete.ts</code> (o
+comentário único do lembrete)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/qa-e2e-resumo.spec.ts</code> (o nome por modo) e
+<code>scripts/ci/qa-regressivo-selecao.spec.ts:33</code> (a seleção por mapa) e
+<code>scripts/ci/qa-regressivo-lembrete.spec.ts</code> (o lembrete)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>Origem:</strong> AT-769 (EP-033)</li>
+</ul>
+<h3 id="rn-1033">RN-1033 — Três regras de arquivo transversal valem antes do mapa: nada, catálogo inteiro e sem dono</h3>
+<p>Na ordem: (1) docs, <code>*.md</code>, <code>CHANGELOG.md</code>, <code>.github/**</code> (exceto o próprio
+<code>qa-e2e.yml</code>), testes do repositório e <code>.claude/**</code> não tocam funcionalidade, e
+o check sai <code>neutral</code>; (2) lockfiles e manifestos, <code>Dockerfile</code>, a entrada da
+app, schema e migrações, o cliente do web, <code>config/**</code> do engine e a suíte do
+<code>brabo-qa</code> (<code>e2e/suporte/**</code>, <code>playwright.config.ts</code>) rodam o catálogo inteiro,
+e a subida de TAG do contracts cai aqui; (3) caminho que nenhum glob casa roda o
+smoke <code>instalacao</code> + <code>autenticacao</code> e o resumo o lista como &quot;sem dono no mapa&quot;,
+para o mapa ser corrigido. O <code>brabo-contracts</code> não tem regressivo na própria PR.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/qa-regressivo-selecao.ts:67</code> (<code>selecionar</code>),
+<code>scripts/ci/qa-regressivo-selecao.ts:43</code> (<code>SMOKE</code>)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/qa-regressivo-selecao.spec.ts:41</code> (regra 1),
+<code>:55</code> (regra 2 por repositório), <code>:58</code> (regra 3)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>Origem:</strong> AT-769 (EP-033)</li>
+</ul>
+<h3 id="rn-1075">RN-1075 — O <code>brabo-runner</code> se atesta pelo próprio CI: o binário linux-x64 entra na PR, e o contrato com o engine só é provado no TP-01</h3>
+<p>O <code>brabo-runner</code> não tem <code>qa-e2e.yml</code>, imagem nem spec <code>@f-runner</code>/<code>@f-projetos</code> no <code>brabo-qa</code>; o regressivo do catálogo não roda na PR dele (decisão do dono de 08/11/2026, opção b). A PR se atesta pelo job <code>runner</code> do <code>ci.yml</code> dele: lint, tipos, testes, <code>dist</code> com <code>smoke</code> e o binário linux-x64 com <code>build:bin</code> + <code>smoke:bin</code> (<code>--self-test-pty</code>, PTY real). O <strong>contrato runner ↔ engine</strong> (join com ticket, capacidades, exec, pasta) <strong>não</strong> é provado na PR: só no TP-01 ao vivo. As chaves <code>runner</code> do <code>funcionalidades.yml</code> ficam no catálogo e servem só ao mapa.</p>
+<ul>
+<li><strong>Código:</strong> job <code>runner</code> do <code>.github/workflows/ci.yml</code> do <code>brabo-runner</code></li>
+<li><strong>Teste:</strong> o próprio job (log com <code>ok:</code> do <code>--self-test-pty</code>)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>Origem:</strong> AT-853 (EP-033)</li>
+</ul>
+<h3 id="rn-1034">RN-1034 — A PR para a <code>main</code> roda o catálogo inteiro no <code>E2E do brabo-qa</code>, e funcionalidade sem spec aparece como &quot;sem cobertura&quot; sem reprovar</h3>
+<p>O check <code>E2E do brabo-qa</code> (<a href="../../adr/0267-o-e2e-do-brabo-qa-e-portao-da-main.html">ADR 0267</a>)
+roda todas as specs e monta a tabela <code>funcionalidade | specs | resultado</code>.
+Funcionalidade do catálogo sem spec entra como <code>sem cobertura</code> e <strong>não
+reprova</strong> (decisão do dono de 06/11/2026): com a regra oposta a <code>main</code> ficaria
+vermelha por semanas e o <code>/qa-aceitar</code> viraria rotina. Os testes que existem
+passam sem alteração; vermelho de <code>spec</code> ou <code>ambiente</code> segue aceitável por
+<code>/qa-aceitar</code>, e de <code>digest</code> ou <code>assinatura</code> nunca.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/qa-e2e-resumo.ts:28</code> (o resultado <code>sem cobertura</code> na
+linha da tabela), <code>scripts/ci/qa-e2e-resumo.ts:22</code> (o nome do check da <code>main</code>)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/qa-e2e-resumo.spec.ts</code> (a tabela e a linha sem
+cobertura)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>Origem:</strong> AT-769 (EP-033)</li>
+</ul>
+<h3 id="rn-1035">RN-1035 — A PR para a <code>dev</code> publica a imagem <code>sha-&lt;12&gt;</code> assinada, só do próprio repositório, e a limpeza apaga as órfãs</h3>
+<p>Para o regressivo ter o que rodar, o <code>ci.yml</code> de api, engine, web e broker
+publica <code>ghcr.io/viralabs-dev/brabo-&lt;app&gt;:sha-&lt;12 primeiros do head&gt;</code> também
+quando a base é <code>dev</code>, com Trivy e <code>cosign sign</code> keyless, como na <code>main</code>. PR de
+fork não recebe segredo: a imagem é pulada e o regressivo diz &quot;não roda em PR de
+fork&quot;. O gatilho usa a <code>sha-&lt;12&gt;</code> no repositório da PR e a <code>-dev.N</code> mais nova
+nos outros. Cada <code>synchronize</code> deixa uma <code>sha-*</code> órfã, então o
+<code>limpeza-ghcr.yml</code> apaga toda <code>sha-*</code> de PR fechada e as com mais de 7 dias.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/qa-e2e-imagens.ts:83</code> (a escolha de <code>sha-&lt;12&gt;</code> para
+<code>dev</code> e <code>hotfix</code>)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/qa-e2e-imagens.spec.ts</code> (a escolha por base)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>Origem:</strong> AT-769 (EP-033)</li>
+</ul>
+<h3 id="rn-1043">RN-1043 — Todo run que lê outro repositório publica <code>## Vínculos</code> no topo do Summary, e o helper nunca reprova o job</h3>
+<p>Pela action <code>vinculos</code> do <code>brabo-ci</code>, o Summary de cada job que liga repositórios
+traz a tabela <code>## Vínculos</code> (origem, irmãos <code>repo@SHA</code> com link, destino e runs
+disparados) e um diagrama Mermaid, logo depois dos checkouts. Todo valor passa
+por regex antes de entrar no Markdown: repositório <code>viralabs-dev/brabo(-x)?</code>,
+SHA de 40 hex, PR numérica, URL do GitHub da organização, ator. O que não casa
+vira <code>?</code> e um <code>::warning::</code>. A <code>origem</code> inválida é só descartada, com aviso. O
+step leva <code>continue-on-error</code>: o helper nunca reprova um job. No <code>brabo</code>, o
+<code>docs-check</code>, o <code>docs-deploy</code>, o <code>docs-audit</code> e o <code>regenera-gerados</code> passam os
+SHAs do <code>.git/irmaos-sha.lst</code> que o <code>montar-layout.sh</code> grava
+(<a href="../../adr/0274-os-gerados-leem-os-irmaos-por-uma-trava-de-shas.html">ADR 0274</a>), e o
+<code>release.yml</code> passa o <code>infra</code> por caminho.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/vinculos.ts:57</code> (<code>montar</code>), <code>.github/actions/vinculos/action.yml:31</code>
+(o <code>continue-on-error</code>), <code>scripts/ci/validar-payload.ts:112</code> (<code>validarOrigem</code>),
+<code>.github/workflows/docs-check.yml:89</code> (o <code>brabo</code> repassa os irmãos)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/vinculos.spec.ts</code> (fixtures, valor malicioso, origem
+vazia) e <code>scripts/ci/validar-payload.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.html">0271</a></li>
+<li><strong>Origem:</strong> AT-773 (EP-033)</li>
+</ul>
+<h3 id="rn-1044">RN-1044 — O run de destino de um dispatch ou de uma tag tem <code>run-name</code> com a origem, e a correlação do dispatch vai no nome como <code>c=&lt;run_id&gt;-&lt;attempt&gt;</code></h3>
+<p>O <code>run-name</code> de um reutilizável é ignorado: vale o do chamador. O <code>e2e-pr.yml</code>
+do <code>brabo-qa</code> se chama <code>E2E ← &lt;repo&gt;#&lt;pr&gt; · &lt;sha7&gt; · &lt;ator&gt; · c=&lt;correlação&gt;</code>
+(<code>Regressivo ← …</code> no modo dev); os runs disparados por tag, como <code>release</code> e
+<code>install-e2e</code> do <code>brabo</code>, <code>release &lt;tag&gt; ← tag do carimbo</code>. O <code>repository_dispatch</code>
+responde 204 sem id, e o <code>client_payload</code> não aparece na API de runs; só o
+<code>display_title</code> fica consultável. Por isso o gatilho manda <code>origem.correlacao = &lt;run_id&gt;-&lt;attempt&gt;</code>, que entra no <code>run-name</code>, e o <code>qa-e2e-disparar.ts</code> consulta
+os runs do <code>brabo-qa</code> a cada 5 s por até 60 s, casando o <code>c=</code>. O <code>attempt</code> torna a
+correlação única por re-run. Payload antigo, sem <code>origem</code>, gera campos vazios e
+não quebra. A origem de um run disparado por tag sai da linha <code>Carimbo: &lt;url&gt;</code> que
+o <code>tag-release</code> grava na mensagem da tag anotada.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/qa-e2e-imagens.ts:113</code> (<code>origem.correlacao</code> no
+payload), <code>scripts/ci/qa-e2e-vinculos.ts:18</code> (<code>acharRun</code>),
+<code>scripts/ci/qa-e2e-disparar.ts:133</code> (a correlação), <code>scripts/ci/tag-release.ts:35</code>
+(<code>comCarimbo</code>), <code>.github/workflows/release.yml:3</code> (o <code>run-name</code> da tag)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/qa-e2e-vinculos.spec.ts</code> (o casamento do <code>c=</code>) e
+<code>scripts/ci/qa-e2e-imagens.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.html">0271</a></li>
+<li><strong>Origem:</strong> AT-773 (EP-033)</li>
+</ul>
+<h3 id="rn-1045">RN-1045 — O check do App aponta para o run do <code>brabo-qa</code> desde o início, e o run de origem registra o link do run disparado</h3>
+<p>O job <code>anunciar</code> do <code>e2e-pr.yml</code>, sem <code>needs</code> e em paralelo ao <code>e2e</code>, atualiza o
+check pelo <code>check_run_id</code> do payload com <code>details_url</code> do run do <code>brabo-qa</code> e os
+Vínculos, com o token do App só com <code>checks: write</code> e checkout limpo da <code>dev</code>. O
+<code>fechar</code> mantém o <code>details_url</code> no fim e anexa os Vínculos. Falha do <code>anunciar</code> só
+avisa. No run de origem, o gatilho escreve em <code>disparados</code> o run do <code>brabo-qa</code>
+que achou pela correlação de <a href="#rn-1044">RN-1044</a>; se não achou em 60 s, registra o
+link do check (que já aponta para o qa) e um aviso. O <code>alarmar-prova.sh</code> anexa o
+<code>vinculos.md</code> ao corpo da issue quando o arquivo existe.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/fechar-check.ts:39</code> (os Vínculos no fechamento),
+<code>scripts/ci/qa-e2e-vinculos.ts:42</code> (<code>vinculosDoGatilho</code>),
+<code>scripts/ci/qa-e2e-disparar.ts:154</code> (o aviso quando o run não é achado)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/fechar-check.spec.ts</code> e <code>scripts/ci/qa-e2e-vinculos.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.html">0271</a></li>
+<li><strong>Origem:</strong> AT-773 (EP-033)</li>
+</ul>
+<h2 id="publicação-de-pacotes-npm-rn-1042">Publicação de pacotes npm (RN-1042)</h2>
+<h3 id="rn-1042">RN-1042 — O pacote só sai pela tag, com o dist-tag da versão e a mesma versão em todos os pacotes</h3>
+<p>O <code>publish-npm.yml</code> é reutilizável e roda quando o chamador dispara pela tag
+(<code>on: push: tags: ['v*']</code>). <code>scripts/ci/publish-npm.ts</code> tira a versão da tag
+(sem o <code>v</code>) e aceita só <code>vX.Y.Z</code> ou <code>vX.Y.Z-dev.N</code>; qualquer outra forma reprova
+antes de publicar. A <code>-dev.N</code> vai ao dist-tag <code>dev</code>; a final vai ao <code>latest</code>, e
+um pré-release avulso nunca toma o <code>latest</code>. Cada pacote da lista recebe a mesma
+versão (<code>npm version --no-git-tag-version</code>) antes do <code>pnpm pack</code>, e o
+<code>actions/attest</code> e o <code>npm publish</code> usam o mesmo <code>.tgz</code>, sem <code>--provenance</code>.
+Republicar a versão só passa se o registry já guarda o mesmo arquivo (mesma
+<code>dist.integrity</code>); outra integridade reprova.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/publish-npm.ts:17</code> (<code>versaoDaTag</code>), <code>scripts/ci/publish-npm.ts:25</code>
+(<code>distTag</code>), <code>.github/workflows/publish-npm.yml:90</code> (a mesma versão nos pacotes),
+<code>.github/workflows/publish-npm.yml:100</code> (o <code>npm publish</code> do mesmo <code>.tgz</code>)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/publish-npm.spec.ts</code> (dist-tag <code>dev</code> e <code>latest</code>, tira o <code>v</code>)</li>
+<li><strong>Origem:</strong> AT-770 (EP-033)</li>
+</ul>
+<h2 id="dependência-de-merge-entre-repositórios-rn-10471050">Dependência de merge entre repositórios (RN-1047..1050)</h2>
+<h3 id="rn-1047">RN-1047 — A PR declara a dependência com <code>Depende-de: viralabs-dev/&lt;repo&gt;#&lt;n&gt;</code>, e a linha malformada reprova em vez de passar calada</h3>
+<p>Cada dependência de merge da PR é uma linha do corpo, <code>Depende-de:</code> seguido de
+<code>viralabs-dev/&lt;repo&gt;#&lt;n&gt;</code>, em qualquer lugar do texto, com ou sem <code>- </code> na frente.
+A regra casa linha por linha e não ignora caixa. O repo tem de estar na lista dos
+11 repositórios <code>brabo*</code> do mapa da pasta-mãe, o owner tem de ser <code>viralabs-dev</code>,
+a PR não pode citar a si mesma e a PR citada tem de existir (404 reprova). Uma
+linha que começa como declaração (<code>Depende-de</code> ou <code>depende de</code>) mas não casa a
+regra reprova com o motivo, para que um erro de digitação não faça a dependência
+sumir. O corpo é texto de terceiro: vai ao script por variável de ambiente, nunca
+interpolado num <code>run:</code>.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/dependencias-de-merge.ts</code> (a regra e a validação), a ser
+publicado no <code>brabo-ci</code>; ainda não existe na <code>dev</code> do <code>brabo</code></li>
+<li><strong>Teste:</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>, com a regex, a allowlist,
+o owner, a autorreferência e a linha malformada</li>
+<li><strong>ADR:</strong> <a href="../../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>Origem:</strong> AT-787 (EP-033)</li>
+</ul>
+<h3 id="rn-1048">RN-1048 — O check <code>Dependências de merge</code> tem quatro estados, nunca <code>neutral</code>, e a espera é amarela</h3>
+<p>O check é publicado pelo App no <code>head_sha</code> da PR, com o nome <code>Dependências de merge</code>. Sem linha <code>Depende-de</code>, sai <code>success</code> &quot;Sem dependências declaradas&quot;, e
+ele sempre publica, para não deixar um check velho colado. Com alguma dependência
+<code>OPEN</code>, sai <code>in_progress</code> (amarelo), com o título <code>esperando viralabs-dev/&lt;repo&gt;#&lt;n&gt;</code>
+listando as que faltam. Com todas <code>MERGED</code>, sai <code>success</code> &quot;Dependências mergeadas&quot;.
+Com uma dependência <code>CLOSED</code> sem merge, com linha inválida, com ciclo ou com 404,
+sai <code>failure</code> com o motivo; a dependência fechada sem merge pede que se tire a
+linha ou se aponte a PR que a substituiu, e não espera para sempre. <code>neutral</code> não
+é usado em nenhum caso, porque para um ruleset ele conta como verde. O job em si
+usa <code>continue-on-error</code>: o que reprova é o check, e a falha do job só avisa.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/dependencias-de-merge.ts</code> (a função pura de avaliação) e
+<code>.github/workflows/dependencias-de-merge.yml</code> (o reutilizável), no <code>brabo-ci</code></li>
+<li><strong>Teste:</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>, um caso para cada estado</li>
+<li><strong>ADR:</strong> <a href="../../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>Origem:</strong> AT-787 (EP-033)</li>
+</ul>
+<h3 id="rn-1049">RN-1049 — O merge da dependência atualiza o check das PRs que a citam, e o cron horário é só rede</h3>
+<p>Quando uma PR de um repo é mergeada, o job <code>avisar-dependentes</code>, no próprio
+repo dono da PR mergeada, procura as PRs abertas da organização que citam a
+mergeada no corpo e refaz a avaliação de cada uma. A busca é difusa, então cada
+candidata tem o corpo reparseado pela regra de <a href="#rn-1047">RN-1047</a> antes de
+qualquer escrita. O check é atualizado com o token do App, sem reexecutar o
+workflow da PR dependente. Um cron de hora em hora no <code>brabo-ci</code> refaz a mesma
+varredura para as PRs abertas com <code>Depende-de</code>, e cobre o merge perdido quando o
+run do repo dono quebra. O cron só liga quando o <code>brabo-ci</code> chegar à <code>main</code>,
+porque o <code>schedule</code> só roda da branch padrão.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/dependencias-de-merge.ts</code> (modo <code>avisar-dependentes</code>) e
+<code>.github/workflows/dependencias-de-merge.yml</code> (o job e o cron), no <code>brabo-ci</code></li>
+<li><strong>Teste:</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>, com a busca simulada e o
+corpo que não casa mais</li>
+<li><strong>ADR:</strong> <a href="../../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>Origem:</strong> AT-787 (EP-033)</li>
+</ul>
+<h3 id="rn-1050">RN-1050 — O ciclo de dependências reprova com o caminho inteiro, até a profundidade 5</h3>
+<p>A avaliação segue as linhas <code>Depende-de</code> das dependências abertas, passo a passo,
+até a profundidade 5. Se a cadeia volta à PR avaliada, o check reprova com o
+caminho completo (<code>A → B → A</code>) e o link de cada PR do caminho. Profundidade maior
+que 5 também reprova. A saída para o ciclo é editar o corpo de uma das PRs para
+tirar a linha que fecha o ciclo: a PR não precisa de bypass.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/dependencias-de-merge.ts</code> (o percurso até a profundidade 5), no <code>brabo-ci</code></li>
+<li><strong>Teste:</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>, com o ciclo A↔B e a profundidade estourada</li>
+<li><strong>ADR:</strong> <a href="../../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>Origem:</strong> AT-787 (EP-033)</li>
+</ul>
+<h3 id="rn-1071">RN-1071 — A PR de promoção depende das promoções abertas das camadas anteriores, e a ordem é uma lista testada</h3>
+<p>Numa PR com base <code>main</code> e head <code>dev</code> do próprio repo, o check <code>Dependências de merge</code> soma às linhas <code>Depende-de</code> do corpo uma dependência para cada PR de
+promoção aberta nos repos das camadas anteriores, mesmo que ninguém a tenha
+escrito. A ordem é <code>CAMADAS_DE_PROMOCAO</code>: 0 brabo-ci; 1 brabo-contracts e
+brabo-workspace; 2 brabo-api, brabo-engine, brabo-web, brabo-runner e brabo-broker;
+3 brabo-infra; 4 brabo-qa; 5 brabo. Só conta a aresta em que a <code>main</code> do consumidor
+usa um artefato final do produtor. O título mostra <code>esperando viralabs-dev/&lt;repo&gt;#&lt;n&gt;</code>.
+Se um repo de camada anterior tem a <code>dev</code> à frente da <code>main</code> e nenhuma promoção
+aberta, o check fica pendente e diz qual repo falta promover
+(<code>esperando promoção de viralabs-dev/&lt;repo&gt; (a dev está à frente da main)</code>). A
+abertura da promoção (<code>abrir-pr-de-promocao.sh</code>) também escreve as linhas
+<code>Depende-de</code> das promoções já abertas, em melhor esforço. A união das camadas é a
+lista <code>REPOS</code>, sem repetição, e o spec guarda isso.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/dependencias-de-merge.ts</code> (<code>CAMADAS_DE_PROMOCAO</code>, <code>predecessores</code>, <code>avaliar</code>, modo <code>linhas</code>) e <code>scripts/ci/abrir-pr-de-promocao.sh</code>, no <code>brabo-ci</code></li>
+<li><strong>Teste:</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code> (bloco &quot;promoção em camadas&quot;)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.html">0284</a>, que revê a decisão 7 do <a href="../../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>Origem:</strong> AT-788 (EP-033)</li>
+</ul>
+<h3 id="rn-1072">RN-1072 — O merge de uma promoção e o cron reavaliam as promoções das camadas seguintes</h3>
+<p>Como a dependência inferida não está escrita no corpo, a busca por <code>in:body</code> não a
+acha. Por isso o <code>avisar-dependentes</code> de uma PR mergeada também reavalia as
+promoções abertas (<code>base:main head:dev</code>) dos repos das camadas seguintes, e o
+<code>varrer</code> (cron horário) inclui a mesma busca. Uma promoção que abre depois da de
+baixo é acordada pelo próprio evento dela ou pelo cron.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/dependencias-de-merge.ts</code> (modos <code>avisar-dependentes</code> e <code>varrer</code>)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code> (<code>sucessores</code>); a busca em si é o GitHub, provada na próxima promoção</li>
+<li><strong>ADR:</strong> <a href="../../adr/0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.html">0284</a></li>
+<li><strong>Origem:</strong> AT-788 (EP-033)</li>
+</ul>
+<h2 id="o-relatório-de-decisão-do-regressivo-rn-10511053">O relatório de decisão do regressivo (RN-1051..1053)</h2>
+<h3 id="rn-1051">RN-1051 — O relatório do regressivo sai de um JSON único, e a recomendação segue uma regra fixa de seis linhas</h3>
+<p>O run do regressivo do <code>brabo-qa</code> grava um <code>relatorio-regressivo.json</code> (versão 1)
+e deriva dele o <code>relatorio-regressivo.md</code>. O Summary, o texto do check e o
+comentário da PR são apresentações desse JSON, nunca fontes à parte. A
+recomendação não é escrita à mão: sai da primeira linha que casar, nesta ordem:
+verde sem flaky vira <strong>aprovar</strong>; verde com flaky vira <strong>aprovar</strong>, com aviso e a
+lista; <code>digest</code> ou <code>assinatura</code> vira <strong>bloquear</strong>, porque nunca se aceita (AT-765)
+e o E2E roda de novo; <code>spec</code> em funcionalidade que a PR <strong>toca</strong> pelo mapa vira
+<strong>bloquear</strong>; <code>spec</code> só em funcionalidade que a PR <strong>não</strong> toca, ou em &quot;sem
+funcionalidade&quot;, vira <strong>aceitar com justificativa</strong> (<code>/qa-aceitar</code>); <code>ambiente</code> ou
+<code>sem-resposta</code> vira <strong>rodar de novo</strong>, e se repetir, <strong>aceitar com justificativa</strong>.
+No modo <code>dev</code> o mesmo rótulo sai com o prefixo &quot;atestado (não bloqueia)&quot;.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/qa-e2e-resumo.ts:292</code> (<code>montarCheck</code>, que hoje monta o
+check a partir do resultado); o <code>relatorio.ts</code> do <code>brabo-qa</code> e o JSON v1 ainda não
+existem na <code>dev</code> (AT-791, lanes L1 e L2)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/qa-e2e-resumo.spec.ts</code> (o check por modo); a regra de
+recomendação e o JSON v1 ganham o teste na L1 e na L2</li>
+<li><strong>ADR:</strong> <a href="../../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.html">0277</a></li>
+<li><strong>Origem:</strong> AT-791 (EP-033)</li>
+</ul>
+<h3 id="rn-1052">RN-1052 — O <code>/qa-aceitar</code> preserva o relatório do vermelho e registra o aceite contra a recomendação</h3>
+<p>Hoje o aceite monta o check de novo com <code>linhas: []</code>, e por isso apaga a tabela de
+digests e a de funcionalidades do vermelho: quem olha depois não vê o que foi
+aceito. A regra nova: o <code>/qa-aceitar</code> <strong>preserva</strong> o <code>summary</code> e o <code>text</code> do check
+vermelho, põe por cima o bloco do aceite (quem, quando, justificativa, o link do
+run vermelho e a recomendação que o relatório dava) e troca só o título para
+<code>Aceito com justificativa</code>. Quando a recomendação era <strong>bloquear</strong> por spec de
+funcionalidade tocada, o aceite vale mesmo assim, porque a decisão é do dono, mas o
+check e o comentário registram &quot;aceito contra a recomendação&quot;. Na <code>dev</code> o aceite não
+se aplica: o relatório é só o atestado.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/qa-e2e-aceitar.ts:53</code> (<code>montarCheck</code>, chamado com
+<code>linhas: []</code>, que é o defeito a corrigir); <code>scripts/ci/qa-e2e-aceite.ts:21</code>
+(<code>avaliarAceite</code>, que segue lendo o <code>external_id</code> <code>causa:*</code>)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/qa-e2e-aceite.spec.ts</code> (o veredito do aceite); o
+preservar do resumo e o registro &quot;contra a recomendação&quot; ganham o teste na L1</li>
+<li><strong>ADR:</strong> <a href="../../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.html">0277</a></li>
+<li><strong>Origem:</strong> AT-791 (EP-033)</li>
+</ul>
+<h3 id="rn-1053">RN-1053 — A spec sem tag <code>@f-*</code> aparece como &quot;sem funcionalidade&quot; e nunca some do relatório</h3>
+<p>A seleção do regressivo já separa o que não tem dono no mapa (<code>semDono</code>,
+<code>scripts/ci/qa-regressivo-selecao.ts:86</code>), mas esse dado não chega ao relatório. A
+regra nova: uma spec que não tem nenhuma tag <code>@f-&lt;id&gt;</code> cai no balde <strong>&quot;sem
+funcionalidade&quot;</strong>, na tabela e na lista de falhas, e nunca desaparece. Uma spec
+vermelha nesse balde vira <strong>aceitar com justificativa</strong>, nunca bloquear, pela regra
+de <a href="#rn-1051">RN-1051</a>. O <code>setup</code> de login
+(<code>entrar.setup.ts</code>) também cai nesse balde e é marcado como preparação, para não
+parecer um teste de funcionalidade. Sem o balde, a tabela mostraria tudo &quot;sem
+cobertura&quot; com um vermelho de spec, que é o achado da qa#28.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/qa-regressivo-selecao.ts:76</code> (<code>semDono.push</code>); o balde
+&quot;sem funcionalidade&quot; no relatório ainda não existe (AT-791, lanes L1 e L2)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/qa-regressivo-selecao.spec.ts</code> (a seleção por mapa e o
+<code>semDono</code>); o balde no relatório ganha o teste na L2</li>
+<li><strong>ADR:</strong> <a href="../../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.html">0277</a></li>
+<li><strong>Origem:</strong> AT-791 (EP-033)</li>
+</ul>
+<h2 id="o-gatilho-espera-o-carimbo-e-a-assinatura-antes-do-vermelho-rn-1066">O gatilho espera o carimbo e a assinatura antes do vermelho (RN-1066)</h2>
+<h3 id="rn-1066">RN-1066 — O gatilho espera o carimbo e a assinatura antes de reprovar por ambiente ou assinatura</h3>
+<p>Quando uma PR para a <code>main</code> (portão <code>E2E do brabo-qa</code>) ou para a <code>dev</code> (check
+<code>Regressivo do brabo-qa</code>) dispara o gatilho, a imagem do head do repo do evento pode
+ainda estar sendo carimbada ou assinada: o merge na <code>dev</code> move o head da promoção, e
+o carimbo (tag <code>-dev</code>, imagem) e a assinatura da imagem levam de 3 a 8 min. Por isso o
+gatilho repete três buscas até um teto configurável (<code>QA_ESPERA_MINUTOS</code>, padrão 10
+min, intervalo de 15 s):</p>
+<ul>
+<li>a tag <code>-dev</code> do head (na <code>main</code>);</li>
+<li>a existência da imagem (a <code>-dev</code> do head na <code>main</code>, a <code>sha-&lt;12&gt;</code> na <code>dev</code>);</li>
+<li>a verificação de assinatura <code>cosign verify</code>, com a identidade do <code>e2e-pr</code> do brabo-qa.</li>
+</ul>
+<p>Só depois do teto o check fecha vermelho, e a mensagem diz o que faltou: a tag <code>-dev</code>
+do head ou a imagem (causa <code>ambiente</code>), ou a assinatura (causa <code>assinatura</code>). Assinatura
+inválida nunca é aceita por <code>/qa-aceitar</code> (RN-1052). A espera vale só para a imagem do
+repo do evento; as dos outros serviços já estão carimbadas e assinadas.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/qa-e2e-espera.ts:51</code> (<code>esperarImagemAssinada</code>, a espera da
+imagem e da assinatura); <code>scripts/ci/qa-e2e-espera.ts:33</code> (<code>repetirAte</code>, a repetição
+até o teto); <code>scripts/ci/qa-e2e-disparar.ts:151</code> (o resolver das tags repetido até o
+teto) e <code>scripts/ci/qa-e2e-disparar.ts:157</code> (a espera só da imagem do repo do evento)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/qa-e2e-espera.spec.ts</code> (a repetição até o teto, a causa
+<code>ambiente</code> e a causa <code>assinatura</code>)</li>
+<li><strong>Origem:</strong> AT-790 (EP-033), brabo-ci#31</li>
+</ul>
+<h2 id="o-painel-da-mudança-rn-10541056-adr-0278">O painel da mudança (RN-1054..1056, ADR 0278)</h2>
+<h3 id="rn-1054">RN-1054 — Toda mudança tem um painel que compõe as runs</h3>
+<p>Cada mudança (um componente do <code>Depende-de</code>, uma PR solta ou uma tag) tem um run
+<code>Painel da mudança</code> no <code>brabo-ci</code>. Ele junta as runs da mudança por head SHA, merge SHA,
+tag e <code>c=</code> do E2E. Acompanha a cada 60 s, com ETag; se restarem menos de 500
+requisições, o intervalo passa a 5 min. Para quando tudo terminou e há 3 min de
+quietude, ou no teto de 45 min. Run ainda em andamento no teto sai como &quot;em andamento
+há N min&quot;. O painel <strong>nunca reprova</strong>.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/painel.ts:235</code> (<code>terminou</code>, a régua de parada)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/painel.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.html">0278</a></li>
+<li><strong>Origem:</strong> AT-792 (EP-033)</li>
+</ul>
+<h3 id="rn-1055">RN-1055 — O painel não publica check nas PRs; o link fica nas runs de origem</h3>
+<p>O helper de Vínculos, no modo auto com PR, escreve a linha <code>Disparado | Painel da mudança</code>. Ela aponta para <code>…/brabo-ci/actions/workflows/painel.yml?query=&lt;repo&gt;%23&lt;n&gt;</code>.
+O token do App do painel só lê (<code>actions</code>, <code>pull-requests</code> e <code>contents</code>). O único token
+com escrita é o do dispatch (<code>contents: write</code>, restrito ao <code>brabo-ci</code>). Por isso não
+é preciso <code>checks: write</code>.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/vinculos.ts:164</code> (<code>linhaDoPainel</code>, a linha do Vínculo)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/vinculos.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.html">0278</a></li>
+<li><strong>Origem:</strong> AT-792 (EP-033)</li>
+</ul>
+<h3 id="rn-1056">RN-1056 — Um painel por componente</h3>
+<p>O remetente (job <code>avisar-painel</code>) não dispara se já existe um painel <code>queued</code> ou
+<code>in_progress</code> com <code>&lt;repo&gt;#&lt;n&gt;</code> no título, casando o token inteiro. Quando o componente
+cresce (chave <code>m=&lt;hash&gt;</code>), o painel em curso escreve &quot;superado&quot; e sai, e o remetente
+dispara o novo.</p>
+<ul>
+<li><strong>Código:</strong> <code>scripts/ci/painel.ts:247</code> (<code>jaTemPainel</code>); <code>scripts/ci/painel.ts:90</code>
+(<code>superado</code>, que o painel em curso consulta)</li>
+<li><strong>Teste:</strong> <code>scripts/ci/painel.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.html">0278</a></li>
+<li><strong>Origem:</strong> AT-792 (EP-033)</li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/ci/parte-01.html">CI — parte 1 (desde RN-037)</a><a href="../../business-rules/contracts.html">Contratos</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/business-rules/ci/parte-02.md">Editar esta página</a></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#o-regressivo-por-funcionalidade-e-os-vínculos-dos-runs-rn-10311035-rn-10431045">O regressivo por funcionalidade e os vínculos dos runs (RN-1031..1035, RN-1043..1045)</a></li><li class="n3"><a href="#rn-1031">RN-1031 — O catálogo de funcionalidades e o mapa caminho → funcionalidade moram num arquivo só, e a spec se liga por tag</a></li><li class="n3"><a href="#rn-1032">RN-1032 — A PR para a dev roda o regressivo só das funcionalidades que tocou, sob o check Regressivo do brabo-qa, que NUNCA é exigido</a></li><li class="n3"><a href="#rn-1033">RN-1033 — Três regras de arquivo transversal valem antes do mapa: nada, catálogo inteiro e sem dono</a></li><li class="n3"><a href="#rn-1075">RN-1075 — O brabo-runner se atesta pelo próprio CI: o binário linux-x64 entra na PR, e o contrato com o engine só é provado no TP-01</a></li><li class="n3"><a href="#rn-1034">RN-1034 — A PR para a main roda o catálogo inteiro no E2E do brabo-qa, e funcionalidade sem spec aparece como &quot;sem cobertura&quot; sem reprovar</a></li><li class="n3"><a href="#rn-1035">RN-1035 — A PR para a dev publica a imagem sha-&lt;12&gt; assinada, só do próprio repositório, e a limpeza apaga as órfãs</a></li><li class="n3"><a href="#rn-1043">RN-1043 — Todo run que lê outro repositório publica ## Vínculos no topo do Summary, e o helper nunca reprova o job</a></li><li class="n3"><a href="#rn-1044">RN-1044 — O run de destino de um dispatch ou de uma tag tem run-name com a origem, e a correlação do dispatch vai no nome como c=&lt;run_id&gt;-&lt;attempt&gt;</a></li><li class="n3"><a href="#rn-1045">RN-1045 — O check do App aponta para o run do brabo-qa desde o início, e o run de origem registra o link do run disparado</a></li><li class="n2"><a href="#publicação-de-pacotes-npm-rn-1042">Publicação de pacotes npm (RN-1042)</a></li><li class="n3"><a href="#rn-1042">RN-1042 — O pacote só sai pela tag, com o dist-tag da versão e a mesma versão em todos os pacotes</a></li><li class="n2"><a href="#dependência-de-merge-entre-repositórios-rn-10471050">Dependência de merge entre repositórios (RN-1047..1050)</a></li><li class="n3"><a href="#rn-1047">RN-1047 — A PR declara a dependência com Depende-de: viralabs-dev/&lt;repo&gt;#&lt;n&gt;, e a linha malformada reprova em vez de passar calada</a></li><li class="n3"><a href="#rn-1048">RN-1048 — O check Dependências de merge tem quatro estados, nunca neutral, e a espera é amarela</a></li><li class="n3"><a href="#rn-1049">RN-1049 — O merge da dependência atualiza o check das PRs que a citam, e o cron horário é só rede</a></li><li class="n3"><a href="#rn-1050">RN-1050 — O ciclo de dependências reprova com o caminho inteiro, até a profundidade 5</a></li><li class="n3"><a href="#rn-1071">RN-1071 — A PR de promoção depende das promoções abertas das camadas anteriores, e a ordem é uma lista testada</a></li><li class="n3"><a href="#rn-1072">RN-1072 — O merge de uma promoção e o cron reavaliam as promoções das camadas seguintes</a></li><li class="n2"><a href="#o-relatório-de-decisão-do-regressivo-rn-10511053">O relatório de decisão do regressivo (RN-1051..1053)</a></li><li class="n3"><a href="#rn-1051">RN-1051 — O relatório do regressivo sai de um JSON único, e a recomendação segue uma regra fixa de seis linhas</a></li><li class="n3"><a href="#rn-1052">RN-1052 — O /qa-aceitar preserva o relatório do vermelho e registra o aceite contra a recomendação</a></li><li class="n3"><a href="#rn-1053">RN-1053 — A spec sem tag @f-* aparece como &quot;sem funcionalidade&quot; e nunca some do relatório</a></li><li class="n2"><a href="#o-gatilho-espera-o-carimbo-e-a-assinatura-antes-do-vermelho-rn-1066">O gatilho espera o carimbo e a assinatura antes do vermelho (RN-1066)</a></li><li class="n3"><a href="#rn-1066">RN-1066 — O gatilho espera o carimbo e a assinatura antes de reprovar por ambiente ou assinatura</a></li><li class="n2"><a href="#o-painel-da-mudança-rn-10541056-adr-0278">O painel da mudança (RN-1054..1056, ADR 0278)</a></li><li class="n3"><a href="#rn-1054">RN-1054 — Toda mudança tem um painel que compõe as runs</a></li><li class="n3"><a href="#rn-1055">RN-1055 — O painel não publica check nas PRs; o link fica nas runs de origem</a></li><li class="n3"><a href="#rn-1056">RN-1056 — Um painel por componente</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-pt-BR.json" data-base="../../"></script></body>
+</html>

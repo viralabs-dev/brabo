@@ -1,0 +1,1407 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — API — parte 7 (desde RN-567) | Brabo</title>
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../../business-rules/api/parte-07.html">pt-BR</option><option value="../../../en/business-rules/api/parte-07.html" selected>en</option><option value="../../../ru/business-rules/api/parte-07.html">ru</option><option value="../../../zh-Hans/business-rules/api/parte-07.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../../dev/en/business-rules/api/parte-07.html">dev</option><option value="../../../../prd/en/business-rules/api/parte-07.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="../../index.html">Home</a></li><li><a href="../../getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Developing Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><a href="../../runbook.html">Operations manual</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Architecture</a></li><li><a href="../../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../../explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Branching policy</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../../explanation/release-do-produto.html">Product release</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="../../explanation/localizacao.html">Localization</a></li><li><a href="../../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="../../glossary.html">Glossary</a></li><li><a href="../../reference/componentes-da-doc.html">Doc components</a></li><li><a href="../../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>Business rules</span></summary><ul><li><a href="../../business-rules.html">Business rules</a></li><li><a href="../../business-rules/custo.html">Cost and metering</a></li><li><a href="../../business-rules/autenticacao.html">Authentication</a></li><li><details open><summary><span>API</span></summary><ul><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/api/parte-01.html">API — parte 1 (desde RN-001)</a></li><li><a href="../../business-rules/api/parte-02.html">API — parte 2 (desde RN-055)</a></li><li><a href="../../business-rules/api/parte-03.html">API — parte 3 (desde RN-100)</a></li><li><a href="../../business-rules/api/parte-04.html">API — parte 4 (desde RN-231)</a></li><li><a href="../../business-rules/api/parte-05.html">API — parte 5 (desde RN-439)</a></li><li><a href="../../business-rules/api/parte-06.html">API — parte 6 (desde RN-503)</a></li><li><a href="../../business-rules/api/parte-07.html" aria-current="page">API — parte 7 (desde RN-567)</a></li><li><a href="../../business-rules/api/parte-08.html">API — parte 8 (desde RN-618)</a></li><li><a href="../../business-rules/api/parte-09.html">API — parte 9 (desde RN-677)</a></li><li><a href="../../business-rules/api/parte-10.html">API — parte 10 (desde RN-727)</a></li><li><a href="../../business-rules/api/parte-11.html">API — parte 11 (desde RN-916)</a></li><li><a href="../../business-rules/api/parte-12.html">API — parte 12 (desde RN-1029)</a></li></ul></details></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Product</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Timeline</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../../explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">This page is not translated yet; showing the original in Portuguese.</div>
+<article class="doc">
+<h1 id="api--parte-7-desde-rn-567">API — parte 7 (desde RN-567)</h1>
+<h2 id="a-chave-de-dispositivo-ganha-tela-e-a-tela-diz-o-alcance-de-revogar-rn-561">A chave de dispositivo ganha tela, e a tela diz o alcance de revogar (RN-561)</h2>
+<h3 id="rn-567">RN-567 — <code>proposed_action.created</code> diz QUAL regra decidiu: o <code>reason</code> de <code>decide()</code> passa a sobreviver quando a ação passa</h3>
+<p><code>decide()</code> sempre devolveu um par — <code>policy</code> e <code>reason</code> —, e a razão é
+escrita em todos os pontos de retorno: o IAM insuficiente, o piso do
+container (<a href="../engine.html#rn-492">RN-492</a>), <code>agent_autonomy</code>, as linhas do
+<code>permissions.json</code>, o comando composto, e cada teto absoluto. Mas
+<code>ProposeActionUseCase</code> só a guardava num lugar: <code>rejectionReason</code>, que
+<code>initialStatusFor</code> preenche <strong>só</strong> quando a política nega. Numa
+auto-aprovação — o desfecho que mais precisa de auditoria — o event log
+dizia <em>&quot;a política decidiu&quot;</em> (<a href="parte-01.html#rn-049">RN-049</a>) e
+nunca <em>qual</em> regra. <code>status</code> tornou a auto-aprovação distinguível de um
+clique; o motivo é o degrau seguinte.</p>
+<p><strong>A regra:</strong> o payload do evento de SESSÃO <code>proposed_action.created</code> ganha
+<code>reason</code>, com a string de <code>decide()</code> <strong>como está</strong>, nos TRÊS desfechos —
+<code>auto_approved</code>, <code>pending</code> e <code>denied</code>. Não nasce segunda régua
+&quot;estruturada&quot;: a string já é a fonte, e um enum paralelo divergiria dela no
+primeiro teto novo. No <code>denied</code> o valor é o MESMO que vira
+<code>rejectionReason</code>.</p>
+<p><strong>O outbox NÃO ganha o campo, e isso é decisão.</strong> A linha de outbox
+<code>proposed_action.created</code> é contrato api↔engine, e nenhum consumidor do
+engine lê o motivo; alargar contrato sem consumidor é o corte que o
+<a href="../../adr/0153-deploy-enabled-o-gatilho-que-ninguem-cria.html">ADR 0153</a> nomeia. A
+linha <code>session_event.appended</code> que <code>AppendSessionEventUseCase</code> grava para o
+mesmo evento carrega só <code>eventId</code>/<code>seq</code>/<code>type</code>, então o motivo também não
+vaza por ela.</p>
+<p><strong>Ausente não é &quot;sem motivo&quot;.</strong> Evento gravado antes desta regra não tem o
+campo, e não há reprocessamento nem coluna nova: quem lê trata <code>reason</code>
+ausente como &quot;não registrado&quot;. Todo evento novo tem o campo, porque
+<code>Decision.reason</code> é <code>string</code> obrigatória no tipo.</p>
+<p>Nada em <code>decide()</code> muda — nenhum teto, nenhum veredito, nenhuma string. A
+tela também não muda nesta regra: o motivo passa a EXISTIR no log, e
+mostrá-lo é outra entrega. (Desde a <a href="../web.html#rn-614">RN-614</a> a tela o mostra na
+linha do evento no painel de log e no <code>ApprovalCard</code>, pela mesma frase.)</p>
+<p><strong>O que o motivo NÃO diz, declarado:</strong> ele nomeia a regra, não a RAIZ do
+escopo — o ponto 7 do <a href="../../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055</a>
+pedia <em>qual raiz</em> autorizou, e <code>escopo: cd dentro da pasta do projeto</code> não
+carrega o caminho. (A raiz passou a ir no evento em campo PRÓPRIO desde a
+<a href="#rn-609">RN-609</a>, relativa e nunca absoluta.) No comando composto, a razão diz que todos os segmentos
+bateram em <code>allow</code>, sem dizer qual padrão casou qual segmento. E as linhas
+do <code>permissions.json</code> repetem os TOKENS do comando no texto (o <code>label</code> de
+<code>matchAgainstFile</code>) — o mesmo comando que já mora em
+<code>proposed_actions.payload</code> e no card de aprovação.</p>
+<ul>
+<li><strong>Código:</strong> <code>src/application/use-cases/actions/propose-action.use-case.ts:277</code>
+(<code>reason</code> no payload do evento de sessão), <code>:223</code> (o comentário do outbox
+sem o campo), <code>:227</code> (o payload do outbox, intacto), <code>:356</code> (o
+<code>rejectionReason</code>, que continua só no <code>deny</code>);
+<code>src/domain/actions/decide.ts:294</code> (<code>Decision</code>, a fonte da string)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:902</code>
+(caminho feliz: auto-aprovação grava <code>agent_autonomy: auto_approve</code>),
+<code>:959</code> (<code>require_approval</code> pelo default e pelo teto da trava de merge),
+<code>:1058</code> (<code>deny</code> com o mesmo texto do <code>rejectionReason</code>), <code>:999</code> (o outbox
+sem <code>reason</code>)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">0048</a>,
+<a href="../../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">0055</a> (ponto 7,
+parcialmente)</li>
+<li><strong>Origem:</strong> AT-066</li>
+</ul>
+<h3 id="rn-569">RN-569 — O grafo é reconstruído do event log pelo MESMO tradutor do projetor vivo, sem tocar a outbox, e nunca sai como sucesso calado</h3>
+<p>O <a href="../../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152</a> (decisão 4) recusou
+backup de <code>neo4j_data</code> apoiado numa premissa — <em>o grafo pode ser descartado
+porque pode ser reconstruído</em> — cujo mecanismo não existia: <code>grep</code> por
+<code>reprojet</code>/<code>reproject</code> em <code>apps/</code> e <code>scripts/</code> voltava vazio, e
+<code>application/graph-projection/</code> só tinha o projetor PARA FRENTE. Enquanto não
+existisse, o grafo não era descartável: era perdido.</p>
+<p><strong>A regra:</strong> <code>src/scripts/reprojetar-grafo.ts</code>
+(<code>pnpm --filter api grafo:reprojetar</code>; <code>node scripts/reprojetar-grafo.js</code> na
+imagem) reconstrói o grafo varrendo a fonte. Cinco decisões, cada uma com
+motivo:</p>
+<ol>
+<li><strong>Um tradutor só.</strong> A tradução evento → nó/aresta SAIU do <code>GraphProjector</code>
+para <code>GraphEventTranslator</code>, e os dois caminhos a chamam — o projetor chega à
+fonte por uma linha de outbox, a reprojeção por cursor. Dois tradutores
+divergiriam, e o divergente seria o que roda uma vez por ano. A superfície de
+injeção do projetor NÃO mudou (ele monta o tradutor com as dependências que
+já recebia). Um teste reprova tipo novo em <code>GRAPH_PROJECTABLE_EVENT_TYPES</code>
+sem tradução.</li>
+<li><strong>As fontes são duas, e são as de verdade.</strong> <code>handoff.offered</code>,
+<code>psychologist.hypothesis_proposed</code> e <code>anamnese.profile_updated</code> saem de
+<code>session_events</code>; a <code>Interacao</code> sai de <code>sessions</code> em
+<code>closed</code>/<code>closed_abnormally</code>, porque fechar sessão é transição pura e não
+deixa evento no log. <code>PromptTemplate</code>/<code>PromptVersion</code> NÃO saem do event log e
+NÃO são reprojetados — voltam por <code>scripts/dev/seed-prompts.ts</code>.</li>
+<li><strong>Idempotente, em lotes, e nunca apaga.</strong> Toda escrita é <code>MERGE</code> em chave
+natural, garantido por uma restrição de unicidade nessa chave
+(<a href="parte-12.html#rn-1030">RN-1030</a>), então um projetor vivo concorrente ou uma segunda
+réplica não consegue criar um segundo nó; rodar de novo é o jeito de
+retomar. <code>session_events</code> é varrida em
+ordem de <code>id</code> (ULID, a chave primária), 200 por lote, e <code>--after-event</code>
+retoma depois do cursor impresso. Com <code>--project</code>, só as sessões daquele
+projeto.</li>
+<li><strong>Não toca a outbox.</strong> O projetor vivo guarda o progresso em
+<code>outbox_events.processed_at</code>; a reprojeção nem lê nem escreve essa tabela, e
+por isso roda com a api de pé sem roubar, reabrir ou marcar linha.</li>
+<li><strong>Nunca sucesso calado.</strong> Grafo desligado é recusado ANTES de ler o log (um
+escopo vazio &quot;passaria&quot; com zero projetados); Neo4j que cai no meio para com
+o último evento concluído; projeto inexistente é recusado sem gravar nada; e
+item com payload incoerente é contado, nomeado, e o processo sai com 1.</li>
+</ol>
+<p><strong>O que esta regra NÃO fecha:</strong> <code>PerfilAnamnese</code> é snapshot por usuário +
+dimensão, SEM projeto — o último a escrever vence —, então uma rodada com
+<code>--project</code> pode deixá-lo no valor daquele projeto quando outro escreveu depois;
+a rodada total restaura o último global. Não há medição de tempo em event log
+grande (a única rodada real foi o compose de dev, 98 eventos, 2,5 s), e a prova
+no cluster local que o BRB-018 pede não foi feita — ele segue aberto.</p>
+<ul>
+<li><strong>Código:</strong> <code>src/application/graph-projection/graph-event-translator.ts:15</code>
+(<code>EVENTOS_DO_LOG_PROJETAVEIS</code>), <code>:31</code> (<code>FECHAMENTOS_DE_SESSAO</code>), <code>:56</code> (o
+tradutor), <code>:75</code> (<code>projetarEvento</code>), <code>:99</code> (<code>projetarFechamentoDeSessao</code>);
+<code>src/application/graph-projection/graph-projector.ts:77</code> (o projetor
+monta o MESMO tradutor), <code>:141</code> (chega à fonte pela outbox e delega);
+<code>src/scripts/reprojetar-grafo.ts:124</code> (<code>montarTradutor</code>), <code>:145</code>
+(<code>reprojetarGrafo</code>), <code>:154</code> (a recusa antes de ler), <code>:163</code> e <code>:169</code> (projeto
+inexistente), <code>:187</code> (a fase dos eventos, por cursor), <code>:213</code> (a interrupção
+nomeada), <code>:218</code> (a falha contada sem abortar o resto), <code>:230</code> (a fase das
+sessões fechadas), <code>:301</code> (<code>lerArgumentos</code>), <code>:370</code> (só a invocação direta
+reprojeta); <code>package.json:44</code> (<code>grafo:reprojetar</code>); <code>Makefile:61</code>
+(<code>test-reprojecao</code>)</li>
+<li><strong>Teste:</strong> <code>test/scripts/reprojetar-grafo.spec.ts:349</code> (projetor para
+frente → apaga o subgrafo → reprojeta o log inteiro → mesma contagem de nós e
+arestas e mesma lista de chaves; a segunda rodada idêntica; a outbox intacta),
+<code>:394</code> (por projeto), <code>:417</code> (projeto inexistente, nada gravado — caso de
+falha), <code>:432</code> (grafo indisponível é erro nomeado — caso de falha), <code>:441</code>
+(argumento desconhecido recusado), <code>:452</code> (o tradutor cobre exatamente os tipos
+projetáveis); <code>test/application/graph-projection/graph-projector.spec.ts</code>
+(o projetor para frente, inalterado, sobre o tradutor extraído). Os quatro
+primeiros exigem Neo4j de pé e PULAM sem ele — a CI do api não sobe Neo4j.</li>
+<li><strong>Origem:</strong> AT-032 (BRB-018) — a premissa do ADR 0152 sem mecanismo</li>
+</ul>
+<h3 id="rn-573">RN-573 — O assistente de criação só pré-seleciona o modo que a instalação executa: sem broker, <code>runner</code> é o sugerido e <code>container</code>/<code>mounted</code> ficam inertes com o motivo em texto</h3>
+<p>Numa instalação real da v6.1.0 (AT-085), o assistente pré-selecionou <code>mounted</code>
+— o <code>install.sh</code> sempre grava <code>BRABO_PROJECTS_BASE</code>, e com base conhecida a
+<a href="../web.html#rn-513">RN-513</a> pré-selecionava o modo. Mas a instalação por Release não tem
+broker de container (a imagem não é publicada, decisão 7 do
+<a href="../../adr/0150-instalador-de-uma-linha.html">ADR 0150</a>), e <code>container</code>/<code>mounted</code> só
+sobem container pelo broker (<a href="parte-06.html#rn-503">RN-503</a>). Resultado: seis
+<code>dev.blocked_by_container</code> e duas <code>container.start_failed</code> — ninguém trabalha
+no projeto, para sempre (<a href="../engine.html#rn-502">RN-502</a>).</p>
+<p><strong>A regra (<a href="../../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161</a>):</strong></p>
+<ol>
+<li><strong>A api diz se há broker, na rota que o assistente já lê.</strong>
+<code>GET workspaces/:workspaceId/projects-base</code> passa a devolver
+<code>brokerConfigurado</code> ao lado de <code>projectsBase</code> — mesma pergunta (&quot;que modo
+esta INSTALAÇÃO executa?&quot;), mesmo mínimo (<code>maintainer</code>), nenhuma rota nova.
+A fonte é <code>ContainerBrokerPort.configurado()</code>, a mesma da leitura do estado
+observado. Diz que <code>BROKER_URL</code> existe, nunca que o broker responde.</li>
+<li><strong>Três estados, que não colapsam.</strong> Broker <strong>confirmado</strong>: a RN-513 intacta.
+Ausência <strong>confirmada</strong>: <code>container</code> e <code>mounted</code> continuam na tela, <strong>inertes</strong>
+(o controle sai, a informação fica — <a href="parte-03.html#rn-102">RN-102</a>),
+o motivo é dito UMA vez em texto abaixo dos cards, e <code>runner</code> é o
+pré-selecionado. <strong>Não sei</strong> (carregando, consulta que falha, campo ausente):
+não vira &quot;tem&quot; — <code>mounted</code> NÃO é pré-selecionado, a revisão da RN-513 — e
+também não vira &quot;não tem&quot;: nenhum card trava e nada se afirma em texto;
+<code>container</code> segue selecionado, como antes.</li>
+<li><strong>A escolha humana não aponta para o que não roda.</strong> Quem clicou num modo
+antes de a resposta chegar, e a resposta confirma que ele não executa aqui,
+cai para <code>runner</code> — a mesma regra que já derrubava <code>mounted</code> quando a base
+some.</li>
+</ol>
+<p><strong>O que esta regra NÃO fecha:</strong> a conversão de modo
+(<a href="../web.html#rn-559">RN-559</a>) continua oferecendo <code>container</code>/<code>mounted</code> numa instalação
+sem broker; o instalador não pergunta se liga o broker, porque a imagem dele
+não é obtível por uma instalação de Release (medido — ver o ADR 0161); e no
+compose de desenvolvimento, que sobe o broker por padrão (<a href="../infra.html#rn-512">RN-512</a>) mas
+deixa <code>BROKER_URL</code> vazia até alguém a pôr no <code>.env</code>, o aviso aparece — e está
+certo, porque sem a variável a api nunca chama o broker.</p>
+<ul>
+<li><strong>Código:</strong> <code>src/interfaces/http/iam/workspaces.controller.ts:404</code>
+(<code>getProjectsBase</code>, <code>:256</code> o campo novo),
+<code>src/interfaces/http/iam/dto/iam.response.dto.ts:554</code>,
+<code>src/interfaces/http/iam/iam-http.module.ts</code> (o módulo do broker
+importado só pela pergunta <code>configurado()</code>);
+<code>apps/web/src/routes/NewProjectWizard.tsx:257</code> (<code>brokerConfirmado</code>), <code>:260</code>
+(<code>semBrokerConfirmado</code>), <code>:270</code> (<code>modoExecutavel</code>), <code>:283</code> (o modo vigente),
+<code>:716</code> (o card inerte), <code>:728</code> (o motivo em texto);
+<code>apps/web/src/locales/{pt-BR,en}/newProject.json</code> (<code>workspace.noBroker</code>)</li>
+<li><strong>Teste:</strong> <code>test/interfaces/http/iam/workspaces-projects-base.controller.spec.ts:59</code>
+(com <code>BROKER_URL</code>, <code>true</code>), <code>:69</code> (sem, <code>false</code> mesmo com base — caso de
+falha), <code>:79</code> (só espaço conta como ausente), <code>:52</code> (o mínimo continua
+<code>maintainer</code>); <code>apps/web/src/routes/NewProjectWizard.test.tsx:504</code> (sem
+broker: <code>runner</code> pré-selecionado, os dois cards inertes, o motivo em texto),
+<code>:523</code> (broker desconhecido: não pré-seleciona <code>mounted</code> nem trava nada),
+<code>:534</code> (clique em <code>container</code> antes da resposta cai para <code>runner</code>), <code>:479</code>
+(consulta que falha não afirma ausência)</li>
+<li><strong>Origem:</strong> AT-085 — instalação real da v6.1.0 em 2026-09-14, decidido pelo
+mantenedor em 2026-09-18</li>
+</ul>
+<h3 id="rn-574">RN-574 — A <code>/containers</code> recusa antes do clique a subida de <code>container</code>/<code>mounted</code> numa instalação sem broker, com motivo próprio em texto</h3>
+<p>A mesma instalação do AT-085 deixou aprovar, pela página de containers
+(<a href="parte-06.html#rn-521">RN-521</a>), duas <code>container_start</code> que só podiam terminar <code>failed</code> com
+<code>BrokerIndisponivelError</code>. A página já recusava localmente o que sabia que ia
+falhar — sem imagem, <code>runner</code> sem pasta confirmada, papel abaixo de
+<code>maintainer</code> — e não sabia desta.</p>
+<p><strong>A regra (<a href="../../adr/0161-a-tela-so-oferece-o-modo-que-a-instalacao-executa.html">ADR 0161</a>):</strong></p>
+<ol>
+<li><strong>A lista diz se há broker, em toda linha.</strong>
+<code>GET workspaces/:workspaceId/containers</code> ganha <code>brokerConfigurado</code> por linha,
+com o MESMO valor em todas, lido UMA vez por carga — é configuração da
+instalação, e trocar a lista por um envelope quebraria o contrato.</li>
+<li><strong>Um quarto motivo de recusa, <code>sem_broker_na_instalacao</code>,</strong> para <code>container</code>
+e <code>mounted</code> quando <code>brokerConfigurado !== true</code> (&quot;não sei&quot; não vira &quot;tem&quot;).
+Vem logo depois de &quot;já está de pé&quot; e ANTES de &quot;sem imagem decidida&quot;: numa
+instalação sem quem suba o container, mandar decidir a imagem seria apontar
+a porta errada. O texto diz o quê (esta instalação não sobe container para
+esses dois modos), por quê (sem broker, <code>BROKER_URL</code> vazia) e o que não é
+afetado (<code>runner</code>).</li>
+<li><strong><code>runner</code> nunca cai nele.</strong> Quem depende do broker é decidido pela MESMA
+ramificação por destino de <code>acaoDeSubidaDoModo</code> (<code>usaBroker</code>), não por uma
+segunda régua.</li>
+</ol>
+<p><strong>O que esta regra NÃO fecha:</strong> parar e remover não ganharam a recusa (sem
+broker não há container de <code>container</code>/<code>mounted</code> registrado de pé para parar,
+e o caso não foi medido), e o Infra Lead continua sem saber de broker ausente
+— ele recusa por MODO (<a href="../engine.html#rn-566">RN-566</a>), e propor <code>container_start</code> numa
+instalação sem broker continua possível pelo agente.</p>
+<ul>
+<li><strong>Código:</strong> <code>src/application/use-cases/containers/obter-visao-geral-de-containers.use-case.ts:71</code>
+(o campo), <code>:150</code> (lido uma vez por carga);
+<code>src/interfaces/http/containers/dto/containers.response.dto.ts:408</code>;
+<code>apps/web/src/routes/containers-subida.ts:33</code> (o motivo), <code>:94</code>
+(<code>usaBroker</code>), <code>:122</code> (a recusa);
+<code>apps/web/src/locales/{pt-BR,en}/containers.json</code>
+(<code>actions.bloqueio.sem_broker_na_instalacao</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/containers/obter-visao-geral-de-containers.use-case.spec.ts:252</code>
+(sem broker, <code>false</code> em toda linha — caso de falha), <code>:264</code> (com broker,
+<code>true</code>); <code>apps/web/src/routes/containers-subida.test.ts:54</code> (<code>container</code> e
+<code>mounted</code> recusam antes da imagem), <code>:75</code> (<code>runner</code> não é afetado), <code>:84</code>
+(campo ausente recusa), <code>:93</code> (já de pé continua dizendo isso);
+<code>apps/web/src/routes/ContainersPage.test.tsx:562</code> (botão inerte e o motivo
+em texto, nunca propõe), <code>:726</code> (<code>runner</code> segue subindo)</li>
+<li><strong>Origem:</strong> AT-085 — instalação real da v6.1.0 em 2026-09-14, decidido pelo
+mantenedor em 2026-09-18</li>
+</ul>
+<hr>
+<h2 id="o-broker-de-container-na-instalacao-com-consentimento-rn-575">O broker de container na instalação, com consentimento (RN-575)</h2>
+<h3 id="rn-581">RN-581 — A conversa em curso segura a sessão por até 8h, e a sessão encerrada recusa conversa</h3>
+<p>No <code>exp001</code> o heartbeat fechou a sessão 30 segundos depois de a aba parar, com
+o Criativo tendo acabado de perguntar — e o event log continuou recebendo
+eventos por quatro minutos depois do <code>closed_at</code>. Dois defeitos, um de cada
+lado do fechamento: nenhum dos sinais de trabalho pendente da
+<a href="../web.html#rn-064">RN-064</a> via uma conversa esperando o usuário
+(um Criativo que terminou o turno está <code>idle</code>, sem handoff, sem ação, sem
+<code>dev.*</code>), e nada — nem o funil de eventos, nem os casos de uso da conversa, nem
+o engine — olhava o estado da sessão antes de gravar.</p>
+<p><strong>A regra, pelo lado do heartbeat:</strong></p>
+<ol>
+<li><strong>Conversa esperando o usuário é trabalho pendente.</strong> É o QUINTO sinal do
+<code>pending-work</code>: o evento de fim de turno mais recente da sessão
+(<code>agent.response</code>, <code>chat.structured_question</code> ou <code>agent.error</code> do lado do
+agente; <code>chat.message</code> ou <code>chat.structured_question_answered</code> do lado do
+usuário) é do AGENTE, e o ator é um conversacional. <code>agent.error</code> conta como
+fim de turno de propósito: pela <a href="../engine.html#rn-059">RN-059</a> o
+agente diz no fio o que houve, e a próxima jogada é do usuário. Fala de quem
+não conversa (Psicólogo, dev agent) não segura.</li>
+<li><strong>É o único sinal com TETO: 8 horas</strong>, contadas do FIM do turno do agente
+(o <code>created_at</code> daquele evento), não do último heartbeat. A api devolve o
+instante (<code>aguardandoUsuarioDesde</code>) e o engine aplica o teto
+(<code>SESSION_CONVERSATION_IDLE_TIMEOUT_MS</code>, default <code>28800000</code>). Passado ele, a
+sessão fecha <code>closed</code> com causa PRÓPRIA, <code>conversation_idle_timeout</code> — não
+<code>heartbeat_timeout</code>, porque quem lê <code>termination_reason</code> (o Psicólogo, uma
+métrica por sessão) precisa separar a aba que sumiu da conversa que ninguém
+retomou. O <code>TerminationClassifier</code> a lê como <code>:timeout</code>: a api conhece seis
+causas nas hipóteses, e abrir uma sétima seria mudar aquele contrato.
+<strong>O teto vale com a aba ABERTA também</strong> (AT-152): o <code>SessionServer</code> tem um
+relógio próprio (<code>:conversation_idle_check</code>, a cada 5 min — sem variável de
+ambiente, só o hook de teste <code>:session_conversation_idle_check_ms</code>),
+independente do heartbeat — o ping da aba não o reseta nem o adia. A cada volta ele lê a pendência e só FECHA por teto (mesma causa,
+<code>conversation_idle_timeout</code>); api fora do ar, sem pendência ou pendência sem
+instante apenas reagendam, porque quem encerra por api fora do ar continua
+sendo o heartbeat. Antes, o teto só era checado quando o heartbeat expirava, e
+uma aba aberta (ping a cada ~10s) o tornava inalcançável: sessão imortal.</li>
+<li><strong>Sinal sem teto vence.</strong> Com handoff <code>offered</code>, ação <code>pending</code>, agente em
+turno ou dev agent trabalhando, o instante volta <code>null</code> e a sessão fica sem
+teto, como sempre ficou. É por isso que o sinal é o ÚLTIMO da lista.</li>
+<li><strong>Instante presente e ilegível é ERRO, nunca <code>nil</code>.</strong> <code>nil</code> com
+<code>pending: true</code> é pendência sem teto; um formato quebrado viraria sessão
+imortal. Como erro, cai no caminho da api fora do ar — encerra por
+heartbeat, dizendo por quê.</li>
+</ol>
+<p><strong>A regra, pelo lado da sessão encerrada:</strong></p>
+<ol start="5">
+<li><strong>Sessão <code>closed</code>/<code>closed_abnormally</code> recusa evento de CONVERSA</strong> com 409
+NOMEADO: <code>{ message, reason: &quot;sessao_encerrada&quot;, status, type }</code>. <code>closing</code>
+ainda aceita — a trava é de estado TERMINAL.</li>
+<li><strong>&quot;Conversa&quot; tem duas cláusulas, e as duas são necessárias.</strong> O TIPO só
+existe como conversa (<code>chat.message</code>, <code>chat.structured_question[_answered]</code>,
+<code>agent.status</code>, <code>agent.activated</code>, <code>handoff.offered</code>/<code>accepted</code>,
+<code>readiness.confirmed</code>, <code>necessity.validated</code>,
+<code>architecture.readiness_confirmed</code>), OU o ATOR é um agente conversacional (os
+seis mais <code>dev-lead</code> e <code>infra</code>). Uma lista de PERMITIDOS por tipo foi medida
+e recusada: quem escreve legitimamente numa sessão fechada são os
+CONSUMIDORES do fechamento — o Psicólogo roda um <code>ToolLoop</code> contra ela e grava
+<code>tool.call</code>, <code>agent.response</code>, <code>agent.error</code>; a Anamnese grava os próprios
+desfechos —, e eles falam o MESMO vocabulário genérico do Criativo. O tipo é
+igual; quem difere é o ator.</li>
+<li><strong>A decisão humana sobre ação continua entrando.</strong> <code>action.approved</code>/
+<code>action.denied</code> e os desfechos de execução não são conversa: a ação é item de
+uma fila DURÁVEL que sobrevive à sessão, e recusar a decisão deixaria uma
+pendência impossível de resolver. O caso normal nem chega aqui (ação
+<code>pending</code> segura a sessão, sinal 2 da RN-064); ele só existe quando a sessão
+morreu por outra porta.</li>
+<li><strong>A recusa não deixa rastro.</strong> O estado vem do MESMO <code>UPDATE</code> que reserva o
+<code>seq</code> (sem consulta a mais no caminho mais quente, sob o mesmo lock de linha
+da transição), e a recusa lança dentro da transação: o incremento volta, o
+<code>seq</code> segue sem buraco. O chat humano, que grava <code>chat.message</code> sem o funil,
+tem a mesma trava. Os casos de uso com efeito ANTES do evento recusam antes
+do efeito: <code>CreateHandoff</code> antes de criar a linha, <code>AcceptHandoff</code> antes de
+marcar <code>accepted</code> (que ativaria o agente seguinte), <code>ActivateAgent</code> antes de
+chamar o engine.</li>
+<li><strong>O fechamento PARA os conversacionais.</strong> <code>SessionLifecycleWorker</code>, por onde
+todo fechamento passa (heartbeat, conversa ociosa, humano, crash), para os
+conversacionais da sessão em TODOS os nós (<code>Engine.Agents.Conversacionais</code>,
+por <code>:erpc</code> — o registro é local e o job cai em qualquer réplica). O turno em
+curso é ABANDONADO no <code>terminate/2</code> dos seis servidores
+(<code>TurnoAssincrono.abandonar/1</code>): a task morre sem gravar nem transmitir nada,
+porque gravar seria pedir à api o que ela recusa. Não há resposta a dar:
+desde a <a href="../engine.html#rn-578">RN-578</a> (ADR 0163) quem disparou o turno já recebeu <code>:ok</code>
+no aceite. Pelo mesmo motivo o <code>offer_dev_handoff</code> que o Arquiteto guardou
+para o fecho do turno NÃO roda quando o fecho é o da sessão — o handoff
+seria recusado (desde a <a href="parte-08.html#rn-672">RN-672</a> não há mais o que guardar: o
+handoff ao Dev Lead sai da Infra). O Infra Lead, que roda o turno dentro do <code>handle_call</code>, é
+morto se não sair em 5s.</li>
+<li><strong>A recusa nunca é calada no engine.</strong> Quase todo chamador de
+<code>append_event/3</code> descarta o retorno; o cliente registra o 409
+<code>sessao_encerrada</code> como aviso no log, e o retorno segue o mesmo.</li>
+<li><strong>A tela reconhece o 409 pelo CÓDIGO e diz que a sessão fechou</strong> (AT-154).
+<code>ehRecusaDeSessaoEncerrada</code> confere <code>status === 409</code> E
+<code>body.reason === &quot;sessao_encerrada&quot;</code> — nunca o texto, e nunca só o 409, que
+também é &quot;turno em andamento&quot;. Nas quatro ações de conversa (enviar
+mensagem, responder pergunta estruturada, confirmar prontidão do Criativo e
+do Arquiteto) a tela mostra uma frase própria em vez do erro genérico, refaz
+a leitura da sessão (é o <code>status</code> novo que faz o composer sumir) e NÃO perde
+o que foi digitado: a mensagem volta ao rascunho e aparece somente leitura
+no lugar do composer, e as respostas do formulário continuam nos campos. A
+frase não promete &quot;Reabrir&quot; — a ação não existe. E o botão &quot;Encerrar&quot; fica
+inerte nos DOIS estados terminais (<code>sessaoEhTerminal</code>, o espelho de
+<code>isTerminal</code>), não só em <code>closed</code> (AT-155).</li>
+</ol>
+<p><strong>O que esta regra NÃO fecha:</strong> o teto só é aferido quando o HEARTBEAT expira —
+com a aba aberta e mandando heartbeat, a sessão continua viva sem teto, como
+sempre (quem está olhando não é conversa ociosa). A resposta do chat humano
+stateless a um turno que COMEÇOU com a sessão aberta entra mesmo que ela feche
+no meio (o ator é o modelo, e o gasto já foi medido). <code>deploy/k8s/</code> não carrega
+<code>SESSION_CONVERSATION_IDLE_TIMEOUT_MS</code>, e desde a AT-153 isso é DECISÃO escrita
+no Deployment do engine, não pendência: lá nada intercepta o ambiente, a
+ausência é o default do <code>runtime.exs</code>, e escrever o número faria uma segunda
+cópia sem guarda contra divergir — mudar o teto ali é um item <code>env:</code> no patch do
+engine do overlay. Os TRÊS composes o mapeiam com o default do código (o de
+instalação só desde a AT-153, e até ali a linha no <code>.env</code> de uma instalação era
+inerte), guardados por <code>scripts/ci/teto-ocioso-nos-composes.spec.ts</code>. Desde a AT-154 a tela trata o
+409 com frase própria (item 11); as demais ações da tela que gravam em sessão
+fechada seguem mostrando a mensagem da api.</p>
+<ul>
+<li>
+<p><strong>Código:</strong> <code>apps/web/src/lib/sessao-encerrada.ts</code>
+(<code>ehRecusaDeSessaoEncerrada</code>, <code>sessaoEhTerminal</code>);
+<code>src/domain/sessions/conversa-em-sessao-encerrada.ts:56</code>
+(<code>AGENTES_CONVERSACIONAIS</code>), <code>:67</code> (<code>TIPOS_DA_CONVERSA</code>), <code>:95</code>
+(<code>ehEventoDeConversa</code>), <code>:117</code> (<code>garantirQueSessaoAceitaEvento</code>);
+<code>src/application/use-cases/sessions/append-session-event.use-case.ts:45</code>
+(<code>conflitoDeSessaoEncerrada</code>), <code>:114</code> (o estado no mesmo <code>UPDATE</code> do <code>seq</code>),
+<code>:248</code> (<code>garantirQueAceita</code>);
+<code>src/infrastructure/persistence/drizzle/session.repository.ts:117</code>
+(<code>incrementSeq</code>);
+<code>src/application/use-cases/llm/send-chat-message.use-case.ts:78</code>
+(o chat humano); <code>src/application/use-cases/agents/create-handoff.use-case.ts:67</code>,
+<code>accept-handoff.use-case.ts:90</code>, <code>activate-agent.use-case.ts:52</code>;
+<code>src/application/use-cases/sessions/get-session-pending-work.use-case.ts:30</code>
+(<code>FALA_DO_AGENTE</code>), <code>:238</code> (o quinto sinal);
+<code>src/infrastructure/persistence/drizzle/session-event.repository.ts:124</code>
+(<code>findLatestOfTypesInSession</code>);
+<code>apps/engine/lib/engine/sessions/session_server.ex:115</code> (a pendência com
+instante), <code>:141</code> (<code>handle_info</code> do relógio próprio, AT-152), <code>:168</code>
+(<code>conversa_ociosa</code>), <code>:193</code> (<code>encerrar</code>), <code>:222</code>
+(<code>conversation_idle_timeout_ms</code>); <code>apps/engine/lib/engine/sessions/monitor.ex:185</code>
+(<code>classify</code>); <code>apps/engine/lib/engine/psychologist/termination_classifier.ex:46</code>;
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex:1227</code>
+(<code>narrar_recusa_de_sessao_encerrada</code>), <code>:1592</code> (<code>pendencia_da_resposta</code>);</p>
+<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:1227</code>
+(<code>narrar_recusa_de_sessao_encerrada</code>), <code>:1592</code> (<code>pendencia_da_resposta</code>);
+<code>apps/engine/lib/engine/agents/conversacionais.ex:49</code> (<code>parar_da_sessao</code>),
+<code>:69</code> (<code>parar_da_sessao_no_cluster</code>);
+<code>apps/engine/lib/engine/agents/turno_assincrono.ex:471</code> (<code>abandonar</code>);
+<code>apps/engine/lib/engine/workers/session_lifecycle_worker.ex:88</code>
+(<code>parar_conversacionais</code>); <code>apps/engine/config/runtime.exs:79</code></p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>test/application/use-cases/sessions/conversa-em-sessao-encerrada.spec.ts:144</code>
+(sessão encerrada recusa <code>chat.message</code> com 409 nomeado — caso de falha),
+<code>:167</code> (sem evento e sem <code>seq</code> consumido), <code>:183</code> (Psicólogo e Anamnese
+continuam entrando), <code>:211</code> (decisão sobre ação continua entrando), <code>:223</code>
+(sessão ativa aceita — caminho feliz), <code>:244</code> (<code>closing</code> aceita), <code>:258</code>
+(<code>SendAgentMessage</code> não chama o engine), <code>:263</code> (nenhum handoff órfão),
+<code>:276</code> (o aceite não ativa ninguém), <code>:309</code> (a ativação não sobe o
+agente); <code>test/application/use-cases/sessions/get-session-pending-work.use-case.spec.ts:478</code>
+(o Criativo respondeu: pendente com o instante), <code>:519</code> (o usuário falou por
+último), <code>:546</code> (quem não conversa não segura), <code>:563</code> (sinal sem teto vence);
+<code>apps/engine/test/engine/sessions/session_lifecycle_test.exs:87</code> (dentro do
+teto, reagenda), <code>:106</code> (acima do teto, <code>conversation_idle_timeout</code>,
+<code>closed</code>), <code>:124</code> (o default é 8h), <code>:151</code> (pendência sem instante segue sem
+teto), <code>:152</code> e <code>:194</code> (AT-152: com a aba aberta — pings — a conversa ociosa
+além do teto fecha, e dentro do teto não fecha); <code>apps/engine/test/engine/sessions/pendencia_de_conversa_test.exs:28</code>
+(instante inválido vira erro); <code>apps/engine/test/engine/agents/conversacionais_test.exs:60</code>
+(para só os da sessão), <code>:85</code> (AT-204: pid já morto no Registry não entra na lista de parados), <code>:126</code> (<code>session.closed</code> para o Criativo vivo);
+<code>apps/engine/test/engine/agents/turno_assincrono_test.exs:161</code> (abandonar não
+grava nem transmite, e não responde de novo), <code>:194</code> (o <code>terminate/2</code> abandona);
+<code>apps/engine/test/engine/psychologist/termination_classifier_test.exs:20</code></p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-072 — <code>exp001</code>; decisões do mantenedor em 2026-09-18 (teto de
+8h e causa própria; sessão encerrada recusa conversa, nomeado)</p>
+</li>
+</ul>
+<h2 id="o-repositorio-nasce-no-aceite-do-handoff-ao-arquiteto-e-a-execucao-nao-comeca-sem-ele-rn-582">O repositório nasce no aceite do handoff ao Arquiteto, e a execução não começa sem ele (RN-582)</h2>
+<h3 id="rn-582">RN-582 — O aceite do handoff ao Arquiteto provisiona o repositório; o aceite ao Dev Lead é a segunda porta, idempotente; e <code>execution/activate</code> sem repositório é 409 nomeado</h3>
+<p>Revisa o GATILHO da <a href="parte-06.html#rn-522">RN-522</a>, que cumpria a promessa da
+<a href="../web.html#rn-541">RN-541</a>. O mecanismo não muda — o mesmo <code>ProvisionRepositoryUseCase</code>,
+chamado pelo mesmo <code>AcceptHandoffUseCase</code>, sempre <code>local</code>, com a falha virando
+<code>repository.provision_failed</code> e nunca derrubando o aceite. Decisão estrutural
+no <a href="../../adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165</a>.</p>
+<p><strong>O que a instalação real mostrou (AT-092, v6.1.0, 2026-09-14).</strong> O Arquiteto
+propôs <code>open_adr_pr</code> três vezes antes de o repositório existir; os handoffs a
+<code>infra</code> e <code>dev-lead</code> foram oferecidos juntos, só o de <code>infra</code> foi aceito, e
+<code>POST /projects/:id/execution/activate</code> respondeu <strong>201</strong>. As tabelas
+<code>project_repositories</code>, <code>project_git_connections</code> e <code>repo_bootstraps</code> ficaram
+vazias — o projeto sem repositório para sempre. Dois defeitos: o gatilho vinha
+DEPOIS de quem precisa do repositório (Arquiteto e Infra Lead escrevem nele
+antes do Dev Lead), e o único gatilho era PULÁVEL (ativar a execução não exige
+o aceite ao Dev Lead).</p>
+<p><strong>1. O gatilho é o aceite do handoff ao <code>arquiteto</code>.</strong> O Arquiteto só é ativado
+por handoff <code>accepted</code> endereçado a ele (<code>canActivateAgent</code>), e esse handoff
+nasce do PO (<code>offer_handoff(to_agent: &quot;arquiteto&quot;)</code>) ou do usuário (handoff
+manual) — as duas portas passam pelo mesmo aceite. O provisionamento roda
+ANTES de <code>activateAgent</code>: o Arquiteto acorda num projeto que já tem onde
+escrever. Consequência: o Infra Lead, ativado por handoff DO Arquiteto, nunca
+mais acorda sem repositório.</p>
+<p><strong>2. O aceite ao <code>dev-lead</code> continua provisionando, como SEGUNDA PORTA.</strong> É a
+saída do projeto que passou pelo Arquiteto antes desta regra (o <code>exp001</code> da
+AT-092: Arquiteto aceito, Dev Lead <code>offered</code>) e a retomada natural de um
+provisionamento que falhou no aceite ao Arquiteto. Com o repositório <code>created</code>
+já de pé, a segunda chamada não cria nada — nem repositório, nem sessão, nem
+linha de bootstrap, nem branch, nem commit —, e isso está provado pelas DUAS
+portas em sequência contra o Postgres e o <code>LocalGitProvider</code> de verdade.</p>
+<p><strong>3. <code>execution/activate</code> sem repositório é RECUSADO com 409</strong>, logo depois da
+checagem de <code>module_map</code> e ANTES de qualquer efeito (orçamento persistido,
+<code>permissions.json</code>, sessão, engine, evento). A frase é escolhida pelo estado dos
+handoffs do projeto, lidos por <code>HandoffRepository.findByProject</code> (de todas as
+sessões — o handoff ao Arquiteto mora na do PO): handoff ao Arquiteto
+<code>offered</code> → aceite-o; senão ao Dev Lead <code>offered</code> → aceite-o; senão algum dos
+dois já <code>accepted</code> → o provisionamento não deixou repositório, veja o
+<code>repository.provision_failed</code> e use a página de provisionamento
+(<code>/projects/:id/provisioning?provider=local</code>); senão → nenhum handoff ao
+Arquiteto foi aceito. Um handoff oferecido a OUTRO agente nunca vira instrução
+de aceite (aceitar a Infra não provisiona nada). Repositório ADOTADO conta como
+repositório. Recusar e não provisionar aqui é decisão: provisionar dentro da
+ativação esconderia um efeito de git, e os agentes anteriores a ela seguiriam
+sem repositório.</p>
+<p><strong>4. A tela tira o controle e diz o motivo uma vez, em texto</strong> (a régua da
+<a href="parte-03.html#rn-102">RN-102</a> e do <a href="../../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064</a>). Na seção de Execução da Visão Geral, com o
+<code>GET .../git/repository</code> respondendo <code>null</code> CONFIRMADO, &quot;Ativar execução&quot; fica
+inerte no lugar, o texto diz onde o repositório nasce, e há um link para
+provisionar. No card do handoff ao Dev Lead, dentro da sessão, o atalho
+&quot;Ativar execução&quot; sai e o card diz que aceitar aquele handoff provisiona o
+repositório. Carregando ou com erro, nada tranca — &quot;não sei&quot; não vira &quot;não
+tem&quot;, e o backend recusa de qualquer forma. Aceitar um handoff invalida a
+consulta do repositório, porque o aceite pode tê-lo criado.</p>
+<p><strong>A sessão técnica não desloca a de trabalho (AT-131).</strong> A sessão que o
+provisionamento abre (<code>repo_bootstraps.session_id</code>, nome <code>git-bootstrap</code>) nasce
+no MEIO da fase do Arquiteto, e escolher &quot;a mais recente&quot; só por <code>createdAt</code> a
+punha no lugar da sessão de trabalho até a próxima nascer (ADR 0165 deixou isso
+declarado). Agora as duas leituras por <code>createdAt</code> do resumo do workspace
+(<code>latestSessionId</code> e o corte das não lidas) ordenam por &quot;é sessão de bootstrap&quot;
+ANTES de <code>createdAt</code>, e a Visão Geral (<code>useLatestSession</code>) faz o mesmo. A técnica
+só é a mais recente quando é a ÚNICA — no fluxo manual de provisionamento é nela
+que o projeto começa. A api lê o marcador por <code>repo_bootstraps</code>; a web só tem o
+NOME da sessão, e renomeá-la faz as duas divergirem (a Visão Geral então trata o
+resumo como de outra sessão e não o usa). O critério não muda o que o ADR 0165
+decidiu (onde o repositório nasce), por isso não há ADR novo.</p>
+<blockquote>
+<p><strong>Revista pela <a href="#rn-592">RN-592</a> (AT-183):</strong> a web deixou de ler o NOME — a
+listagem de sessões devolve o marcador <code>technical</code>, pelo mesmo vínculo em
+<code>repo_bootstraps</code>, e renomear a sessão não faz mais as duas divergirem.</p>
+</blockquote>
+<p><strong>A recusa da ativação não manda aceitar handoff de sessão encerrada
+(<a href="#rn-581">RN-581</a>, AT-131).</strong> Aceitar handoff numa sessão terminal é 409
+<code>sessao_encerrada</code>, checado ANTES de o handoff virar <code>accepted</code> — então nada é
+provisionado pela metade. A frase da recusa agora consulta o estado da sessão de
+cada handoff <code>offered</code>: só o que mora em sessão ABERTA vira &quot;aceite-o&quot;; se o
+único <code>offered</code> está em sessão encerrada, a frase diz isso e aponta a página de
+provisionamento. Sessão não encontrada conta como aberta (&quot;não sei&quot; não vira
+&quot;encerrada&quot;). Os eventos que o provisionamento grava não caem na RN-581: o ator
+é <code>system</code> e o destino é a sessão <code>git-bootstrap</code>, recém-criada. O que segue
+NÃO coberto: a Visão Geral e o card do handoff na sessão lêem o estado do
+repositório, não o de cada sessão, e não mudaram.</p>
+<ul>
+<li><strong>Onde:</strong>
+<code>src/application/use-cases/agents/accept-handoff.use-case.ts:66</code>
+(<code>AGENTES_QUE_PROVISIONAM_O_REPOSITORIO</code>, gatilho e segunda porta) e <code>:141</code>
+(o ramo, antes de <code>activateAgent</code>);
+<code>src/application/use-cases/execution/activate-execution.use-case.ts:143</code>
+(a recusa, antes de qualquer efeito);
+<code>src/domain/execution/repositorio-para-executar.ts:50</code>
+(<code>motivoDeExecucaoSemRepositorio</code>, e os dois nomes de agente que o aceite
+também usa); <code>src/infrastructure/persistence/drizzle/handoff.repository.ts:55</code>
+(<code>findByProject</code>); <code>apps/web/src/routes/ProjectOverviewTab.tsx:369</code> e <code>:511</code>;
+<code>apps/web/src/routes/SessionPage.tsx:147</code>; <code>apps/web/src/routes/session-timeline-montagem.tsx:495</code>;
+<code>apps/web/src/lib/session-acoes-de-handoff.ts:122</code>;
+<code>apps/engine/lib/engine/projects/project_repository.ex:74</code> (o texto da recusa
+da <a href="../engine.html#rn-577">RN-577</a>, que nomeava o gatilho antigo e muda junto)</li>
+<li><strong>Teste:</strong>
+<code>test/application/use-cases/agents/accept-handoff.use-case.spec.ts</code>
+(&quot;aceitar para o Arquiteto provisiona <code>local</code> com o slug do projeto&quot;, &quot;o
+repositório nasce ANTES de o Arquiteto acordar&quot;, &quot;aceitar para o Dev Lead
+continua provisionando <code>local</code> (segunda porta)&quot;);
+<code>test/application/use-cases/agents/accept-handoff-provisiona-uma-vez.spec.ts</code>
+(as duas portas contra o banco: &quot;UM createRepo, UMA linha, nenhuma falha&quot;, e
+&quot;o exp001: Arquiteto aceito SEM repositório, e a segunda porta provisiona&quot;);
+<code>test/application/use-cases/execution/activate-execution.use-case.spec.ts:725</code>
+(&quot;sem repositório: 409, e NENHUM efeito antes da recusa&quot;, &quot;a frase nomeia o
+handoff ao Dev Lead pendente — a saída do exp001&quot;, &quot;repositório ADOTADO conta
+como repositório&quot;); <code>test/domain/execution/repositorio-para-executar.spec.ts</code>;
+<code>test/infrastructure/persistence/handoff-por-projeto.repository.spec.ts</code>;
+<code>apps/web/src/routes/ProjectOverviewTab.test.tsx:409</code>, <code>:427</code> e <code>:440</code>;
+<code>apps/web/src/routes/SessionPage.handoff-devlead-e-colapso.test.tsx:575</code>;
+<code>apps/engine/test/engine/agents/arquiteto_server_test.exs:134</code> e
+<code>apps/engine/test/engine/infra/infra_lead_server_test.exs:520</code> (a recusa
+nomeia o gatilho novo)</li>
+<li><strong>Origem:</strong> AT-092 — instalação real da v6.1.0 em 2026-09-14, decidido pelo
+mantenedor em 2026-09-18</li>
+</ul>
+<h3 id="rn-583">RN-583 — O critério de roteamento do hub é do binding, viaja com ele, e congela no metering</h3>
+<p>Um binding de modelo pode guardar um <strong>critério de roteamento</strong> —
+<code>routing_preference</code>: <code>price</code>, <code>throughput</code> ou <code>latency</code> — que diz ao HUB
+como escolher o upstream que serve o modelo. Anulável: <code>null</code> é o
+comportamento de sempre, nada vai ao fio e o hub decide sozinho.</p>
+<ol>
+<li><strong>Viaja com o binding que venceu, nunca cascateia sozinho.</strong> A cascata
+continua sendo de binding: o nível vencedor traz o modelo E o critério
+dele. O nível que a cascata PULA (modelo indisponível, sem tool calling)
+leva o critério junto — sobreviver só o critério produziria combinação que
+ninguém escolheu.</li>
+<li><strong>Escrita em três formas.</strong> No <code>PUT .../model-binding</code> dos cinco escopos,
+<code>routingPreference</code> <strong>ausente</strong> preserva o gravado se o provider do modelo
+novo declara a capability, e vira <code>null</code> se não declara; <strong><code>null</code></strong> limpa;
+<strong>valor</strong> para provider sem a capability é <strong>422</strong>
+(<code>RoutingPreferenceNotSupportedError</code>). Invariante: nenhum binding guarda
+critério para provider que não o declara.</li>
+<li><strong>Congela o que FOI AO FIO.</strong> <code>token_usage.routing_preference</code> é gravado
+por chamada, ao lado do <code>upstream_provider</code> da <a href="parte-01.html#rn-042">RN-042</a>: o critério
+enviado, e <code>null</code> quando o binding não tinha ou quando o provider não
+declara a capability (o que não foi enviado não é procedência de nada).
+Mesma régua do preço congelado (ADR 0042).</li>
+<li><strong>Capability de PROVIDER, só com prova.</strong>
+<code>LLMProviderCapabilities.routingPreference</code> é obrigatória nos nove, e é
+<code>true</code> SÓ no OpenRouter desde 2026-09-29 (AT-158): o smoke com credencial
+real (<code>openrouter-provider.roteamento.smoke.spec.ts</code>) mostrou o critério
+MUDANDO o upstream que serviu — em <code>meta-llama/llama-3.3-70b-instruct</code>,
+<code>price</code> pousou na DeepInfra e <code>throughput</code> na Groq (<code>latency</code> foi Groq numa
+medição e CoreWeave na outra), enquanto sem critério o hub alternou
+Novita/DeepInfra. A prova é a DIFERENÇA, não o
+aceite: o modelo do default antigo (<code>~deepseek/deepseek-v4-flash-latest</code>)
+devolveu o MESMO upstream para os três critérios e sem critério, e isso não
+distingue &quot;o hub respeitou&quot; de &quot;não havia escolha&quot;. Os outros oito seguem
+<code>false</code>, e para eles a feature continua DORMENTE: a rota recusa com 422, a
+tela diz em texto que o provider não tem a opção provada, e nada muda no
+fio. O que a prova NÃO afirma: qual upstream cada critério escolhe — isso
+é decisão do hub e muda com o tempo.</li>
+</ol>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/llm/routing-preference.ts:56</code> (escrita),
+<code>src/domain/llm/routing-preference.ts:75</code> (o que vai ao fio),
+<code>src/domain/llm/binding-resolver.ts:100</code> (viaja com o binding),
+<code>src/application/use-cases/llm/record-llm-usage.use-case.ts:118</code>
+(congela no metering),
+<code>src/infrastructure/llm/openrouter-provider.ts:353</code> (<code>openrouterConfig</code>,
+a capability provada)</li>
+<li><strong>Teste:</strong> <code>test/domain/llm/routing-preference.spec.ts</code>,
+<code>test/application/use-cases/llm/set-model-binding.use-case.spec.ts</code>,
+<code>test/application/use-cases/llm/run-llm-turn.use-case.spec.ts</code>,
+<code>test/infrastructure/llm/openrouter-provider.contract.spec.ts</code>; a prova
+manual da capability é <code>test/infrastructure/llm/openrouter-provider.roteamento.smoke.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0166-preferencia-de-roteamento-no-binding-de-modelo.html">ADR 0166</a> (AT-090)</li>
+</ul>
+<h3 id="rn-590">RN-590 — A pasta <code>docs/</code> dos artefatos é reconstruída do event log pelo MESMO tradutor do projetor vivo, sem tocar a outbox, e nunca sai como sucesso calado</h3>
+<p>O <a href="../../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148</a> chamou a pasta <code>docs/</code>
+de reconstruível e declarou, no custo 3, que <strong>não existia comando de
+reprojeção</strong>: apagar a pasta não a reconstruía, porque as linhas de outbox já
+estavam marcadas. É a mesma lacuna que a <a href="#rn-569">RN-569</a> fechou para o grafo,
+num segundo consumidor. Medido por leitura do código: um restore do Postgres, a
+perda do volume <code>project_workspaces</code> e a conversão de <code>execution_mode</code> (que não
+toca <code>docs/</code>) deixam a pasta ausente ou no lugar antigo, e nada a reescreve.</p>
+<p><strong>A regra:</strong> <code>src/scripts/reprojetar-artefatos.ts</code>
+(<code>pnpm --filter api artefatos:reprojetar</code>; <code>node scripts/reprojetar-artefatos.js</code>
+na imagem) varre <code>session_events</code> e reescreve a pasta. Como na RN-569:</p>
+<ol>
+<li><strong>Um tradutor só.</strong> A tradução evento → pasta do agente, nome do arquivo e
+Markdown SAIU do <code>ArtifactProjector</code> para <code>ArtifactEventTranslator</code>; o
+projetor chega ao evento por uma linha de outbox, a reprojeção por cursor, e
+os dois o chamam. A superfície do projetor (construtor, <code>drainOnce</code>) não
+mudou. A lista do que é projetado continua sendo
+<code>ARTIFACT_PROJECTABLE_EVENT_TYPES</code> — tipo novo entra ali e é traduzido no
+mesmo lugar, nunca num segundo tradutor.</li>
+<li><strong>Idempotente e nunca apaga.</strong> O nome é função do evento (versionado:
+<code>&lt;tipo&gt;.md</code>; append-only: com o <code>seq</code>), então rodar de novo regrava os mesmos
+arquivos; retomar é rodar de novo, ou <code>--after-event</code> a partir do cursor
+impresso. Arquivo que o usuário pôs em <code>docs/</code> fica.</li>
+<li><strong>Não toca a outbox</strong> (<code>aggregate_type = 'artifact_projection'</code>): roda com a
+api de pé sem roubar, reabrir ou marcar linha.</li>
+<li><strong>Nunca sucesso calado.</strong> Diferente do grafo, não há destino que pare tudo
+(falha de escrita é do ITEM, ADR 0148): cada falha é contada e nomeada com o
+id do evento, o resto é gravado, e o processo sai com 1. <code>--project</code>
+inexistente é recusado sem gravar.</li>
+</ol>
+<p><strong>O que esta regra NÃO fecha:</strong> (a) os versionados (<code>module_map</code>,
+<code>module_routing</code>, <code>project_image</code>, <code>c4_diagram</code>) mostram o ÚLTIMO evento em
+ordem de <code>id</code>; <code>--after-event</code> começando entre duas versões pode deixar uma
+mais antiga — só a rodada completa garante o vigente; (b) escreve na localização
+ATUAL do projeto, e precisa enxergar o mesmo disco que a api; (c) não recria
+<code>qa_verdict</code>/<code>secops_verdict</code>/<code>task_blocked</code>/<code>infra_delegation_files</code>, que nunca
+foram arquivo; (d) sem medição de tempo em event log grande; (e) NÃO entra em
+backup — é derivada, o argumento do <a href="../../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152</a>.</p>
+<ul>
+<li><strong>Código:</strong> <code>src/application/artifact-projection/artifact-event-translator.ts:21</code>
+(<code>ArtifactEventTranslator</code>), <code>:24</code> (<code>projetarEvento</code>);
+<code>src/application/artifact-projection/artifact-projector.ts:64</code>
+(o projetor monta o MESMO tradutor), <code>:131</code> (delega);
+<code>src/scripts/reprojetar-artefatos.ts:96</code> (<code>reprojetarArtefatos</code>),
+<code>:115</code> (o tradutor), <code>:137</code> (varredura por cursor sobre <code>session_events</code>),
+<code>:163</code> (a falha contada sem abortar), <code>:185</code> (<code>lerArgumentos</code>), <code>:241</code> (só a
+invocação direta reprojeta); <code>package.json:45</code> (<code>artefatos:reprojetar</code>)</li>
+<li><strong>Teste:</strong> <code>test/scripts/reprojetar-artefatos.spec.ts:215</code> (projetor
+para frente → apaga a pasta → reprojeta → mesmos caminhos e conteúdos; segunda
+rodada idêntica; outbox intacta), <code>:254</code> (nunca apaga), <code>:265</code> (por projeto),
+<code>:275</code> (projeto inexistente — caso de falha), <code>:289</code> (falha de escrita contada
+sem abortar o resto — caso de falha), <code>:314</code> (argumento desconhecido);
+<code>test/application/artifact-projection/artifact-projector.spec.ts</code>
+(o projetor para frente, inalterado, sobre o tradutor extraído)</li>
+<li><strong>Origem:</strong> AT-128 — a lacuna que o ADR 0148 declarou (custo 3)</li>
+</ul>
+<h3 id="rn-591">RN-591 — A instalação sem broker é dita na conversão de modo, em parar/remover e na proposta do Infra Lead, pela mesma fonte da RN-574</h3>
+<p>A <a href="#rn-573">RN-573</a>/<a href="#rn-574">RN-574</a> (ADR 0161) ensinaram a <strong>criação</strong> de
+projeto e a <strong>subida</strong> na <code>/containers</code> a saber que a instalação não tem
+broker (<code>BROKER_URL</code> vazia). O fechamento declarou fora o resto: a conversão de
+modo, parar/remover e o Infra Lead. Esta regra leva as três portas, com a MESMA
+fonte — <code>ContainerBrokerPort.configurado()</code> — e nenhuma rota nova. Ela diz que
+a variável EXISTE, nunca que o broker responde (isso segue sendo
+<code>naoObservado</code>, <a href="parte-05.html#rn-486">RN-486</a>).</p>
+<ol>
+<li><strong>Conversão de modo (<code>ExecutionModeSection</code>).</strong> O campo
+<code>brokerConfigurado</code> já vinha em <code>GET .../projects-base</code>, que a seção já lê.
+Converter para <code>container</code>/<code>mounted</code> com a ausência <strong>CONFIRMADA</strong> (<code>false</code>)
+deixa o botão inerte e diz o motivo em texto; &quot;consultando&quot;, consulta que
+falha e campo ausente NÃO afirmam nada — &quot;não sei&quot; não vira &quot;tem&quot; nem &quot;não
+tem&quot; — e não bloqueiam. Converter para <code>runner</code>, ou para o modo que o projeto
+já tem, nunca é bloqueado. É regra de TELA, como a da criação: o
+<code>PUT projects/:projectId/execution-mode</code> não a aplica.</li>
+<li><strong>Parar/remover na <code>/containers</code>.</strong> <code>container_stop</code>/<code>container_remove</code> em
+<code>container</code>/<code>mounted</code> também passam pelo broker
+(<a href="parte-05.html#rn-495">RN-495</a>), então sem ele só podem terminar em falha: a tela deixa
+&quot;Parar&quot;/&quot;Remover&quot; inertes com texto próprio (<code>sem_broker_para_parar</code>), <code>!== true</code> como na subida. <code>runner</code> nunca cai aqui.</li>
+<li><strong>A api recusa ao propor.</strong> <code>ProposeActionUseCase</code> responde 409
+<code>sem_broker_na_instalacao</code>, ANTES de criar a proposta, para
+<code>container_start</code>/<code>container_stop</code>/<code>container_remove</code> em projeto que não é
+<code>runner</code> quando <code>configurado()</code> é <code>false</code>. É a decisão de COMO o Infra Lead
+sabe sem HTTP no laço: o engine não lê <code>BROKER_URL</code> (uma segunda fonte
+divergiria da <code>configurado()</code>), e a chamada que a tool JÁ fazia devolve a
+recusa. <code>dispatch_container_start/2</code> passou a entregar ao modelo o TEXTO da
+mensagem da api (<code>container_start recusado: …</code>), como resultado de
+ferramenta (<a href="../engine.html#rn-163">RN-163</a>), e não a tupla
+crua. A <a href="../engine.html#rn-566">RN-566</a> segue como estava: recusa por MODO, local.</li>
+</ol>
+<p><strong>O que NÃO fecha:</strong> a proposta às cegas por ausência de IMAGEM continua
+possível (a <a href="../engine.html#rn-566">RN-566</a> já declarava); a recusa da api vale também para
+quem chama sem ser o agente, o que é o desejado — a aprovação só terminaria
+<code>failed</code>; e o <code>PUT execution-mode</code> continua aceitando a conversão por chamada
+direta.</p>
+<ul>
+<li><strong>Código:</strong> <code>src/application/use-cases/actions/propose-action.use-case.ts:90</code>
+(recusa 409), <code>apps/web/src/routes/containers-subida.ts:181</code>
+(<code>semBrokerParaCicloDeVida</code>) e <code>:192</code> (<code>conversaoSemBroker</code>),
+<code>apps/web/src/routes/settings/ExecutionModeSection.tsx</code> (botão inerte),
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:886</code>
+(<code>motivo_da_recusa_da_api</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:207</code>
+(409 nas três ações, e <code>container_stop</code> segue <code>pending</code> com broker),
+<code>apps/web/src/routes/containers-subida.test.ts</code> (as duas funções, três
+estados), <code>apps/web/src/routes/settings/conversao-de-modo.test.tsx</code>,
+<code>apps/web/src/routes/ContainersPage.test.tsx</code>,
+<code>apps/engine/test/engine/infra/infra_lead_server_test.exs</code> (o texto do 409
+chega ao modelo)</li>
+<li><strong>Origem:</strong> AT-105 — declarado fora do recorte pelo ADR 0161</li>
+</ul>
+<h3 id="rn-592">RN-592 — A listagem de sessões diz qual é a técnica, pelo vínculo em <code>repo_bootstraps</code>, e a tela lê o marcador em vez do nome</h3>
+<p>A <a href="#rn-582">RN-582</a> (AT-131) fez a sessão técnica do provisionamento — a de
+<code>repo_bootstraps.session_id</code> — deixar de deslocar a sessão de trabalho como &quot;a
+mais recente&quot;, mas com DOIS critérios: a api a reconhecia pelo vínculo em
+<code>repo_bootstraps</code>, e a web pelo NOME (<code>git-bootstrap</code>). O nome é rótulo que o
+usuário renomeia (<a href="../web.html#rn-098">RN-098</a>), então renomear a sessão fazia a Visão Geral
+e o resumo do workspace discordarem de qual era a sessão de trabalho.</p>
+<ol>
+<li><strong>A api devolve o marcador.</strong> Cada item de <code>GET /projects/:projectId/sessions</code>
+carrega <code>technical: boolean</code> (<code>SessionListItemResponseDto</code>), <code>true</code> só para a
+sessão de <code>repo_bootstraps.session_id</code> DAQUELE projeto (uma por projeto,
+<code>unique(project_id)</code>). É o MESMO critério do resumo do workspace
+(<code>sessaoTecnicaDeBootstrap</code>), nunca o nome: renomear não muda o marcador, e
+uma sessão de trabalho chamada <code>git-bootstrap</code> não vira técnica.</li>
+<li><strong>Só a listagem o carrega.</strong> O marcador não é coluna de <code>sessions</code> nem campo
+da entidade <code>Session</code>: o GET de uma sessão e as respostas de
+criar/renomear/transicionar seguem com <code>SessionResponseDto</code>, sem ele. É a
+listagem que a tela ordena para achar &quot;a mais recente&quot;.</li>
+<li><strong>A tela lê o marcador.</strong> <code>sessaoMaisRecente</code> (<code>useLatestSession</code>) pula a
+sessão com <code>technical: true</code> e só a devolve quando é a ÚNICA — a regra da
+RN-582 inalterada, com a fonte trocada. O tipo <code>SessaoListada</code> do web tira o
+campo do tipo GERADO do OpenAPI.</li>
+</ol>
+<p><strong>O que NÃO fecha:</strong> a Visão Geral e o card do handoff na sessão continuam sem
+consultar o estado da sessão de cada handoff (a lacuna que a RN-582 declarou);
+decidir se passam a consultá-lo é decisão à parte, fora desta regra.</p>
+<ul>
+<li><strong>Código:</strong> <code>src/application/use-cases/sessions/list-sessions-for-project.use-case.ts:30</code>
+(<code>execute</code>), <code>src/interfaces/http/sessions/dto/sessions.response.dto.ts:110</code>
+(<code>SessionListItemResponseDto</code>), <code>apps/web/src/lib/hooks.ts:147</code>
+(<code>sessaoMaisRecente</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/sessions/list-sessions-for-project.use-case.spec.ts:81</code>
+(vínculo e não nome; técnica de outro projeto não marca),
+<code>apps/web/src/lib/sessao-mais-recente.test.ts:28</code> (renomeada continua fora) e
+<code>:36</code> (trabalho chamada <code>git-bootstrap</code> não é técnica)</li>
+<li><strong>Origem:</strong> AT-183 — achado da AT-131</li>
+</ul>
+<h3 id="rn-595">RN-595 — Toda <code>_PREVIOUS</code> que um serviço lê chega a ele pelos três composes, vazia por padrão</h3>
+<p>As três rotações sem downtime (<code>AUTH_JWT_SECRET</code>, <code>BRABO_SERVICE_TOKEN</code>,
+<code>CREDENTIALS_MASTER_KEY</code>) dependem de o processo ver o valor antigo numa
+variável <code>_PREVIOUS</code> durante a janela. O Compose não repassa o ambiente do
+host, e nenhuma das três estava no <code>environment:</code> de compose nenhum: definir a
+<code>_PREVIOUS</code> no <code>.env</code> não tinha efeito, e quem seguia o runbook fazia, sem
+saber, a troca seca que a rotação existe para evitar. Agora a api recebe as
+três, e o engine e o broker recebem <code>BRABO_SERVICE_TOKEN_PREVIOUS</code>, nos composes
+de dev, de produção e de instalação, sempre com default VAZIO — definida é
+rotação em andamento, e um default preenchido deixaria a instalação
+eternamente no meio de uma. Vazia é o mesmo que ausente nos três leitores.</p>
+<ul>
+<li><strong>Onde:</strong> <code>docker/docker-compose.yml</code>, <code>docker/docker-compose.prod.yml</code> e
+<code>docker/docker-compose.install.yml</code> (serviços <code>api</code>, <code>engine</code> e <code>broker</code>);
+os leitores são <code>src/infrastructure/security/auth-key-material.ts:136</code>
+(<code>passphraseAnterior</code>), <code>src/infrastructure/security/service-token.ts:92</code>
+(<code>tokenDeServicoAnterior</code>), <code>src/infrastructure/security/envelope-encryption.service.ts:93</code>,
+<code>apps/engine/config/runtime.exs:70</code> e <code>apps/broker/src/config.ts:85</code></li>
+<li><strong>Teste:</strong> <code>scripts/ci/previous-nos-composes.spec.ts</code> — DERIVA do código dos
+três serviços a lista de <code>_PREVIOUS</code> lidas e reprova a que faltar, ou vier
+com default não vazio, em qualquer um dos três composes; o bloco &quot;ExternalSecret
+do k8s&quot; reprova o <code>ExternalSecret</code> sem <code>dataFrom.extract</code>, uma <code>_PREVIOUS</code> em
+<code>data:</code> e o Deployment de api/engine sem <code>envFrom: brabo-secrets</code></li>
+<li><strong>Kubernetes (AT-220, decisão do mantenedor):</strong> os Pods leem
+<code>envFrom: brabo-secrets</code>, e o <code>ExternalSecret</code>
+(<code>deploy/k8s/base/common/externalsecrets.yaml</code>) puxa o objeto <code>brabo</code>
+INTEIRO do store por <code>dataFrom.extract</code> — a <code>_PREVIOUS</code> entra quando existe
+e sai quando é retirada, na sincronização seguinte. Não pode ser listada em
+<code>data:</code>: o ESO não tem chave opcional, e propriedade ausente (o estado
+normal) reprova a sincronização do Secret inteiro. Custo declarado: TODA
+chave do objeto vira variável de api, engine, migrações e backup, e a chave
+OBRIGATÓRIA ausente deixou de reprovar a sincronização — quem acusa é o
+consumidor. A sincronização por um ESO real foi exercitada à mão num k3d
+descartável, não em CI</li>
+<li><strong>Origem:</strong> AT-201 (achado da AT-196), mesma classe da RN-540; metade
+Kubernetes na AT-220</li>
+</ul>
+<h3 id="rn-597">RN-597 — Trocar o pepper é logout global</h3>
+<p>O pepper que chaveia o HMAC dos tokens opacos não tem <code>_PREVIOUS</code>, e trocá-lo
+tem consequência, não procedimento: todo refresh token em circulação, todo link
+de verificação de e-mail e de redefinição de senha em aberto e todo token de
+acesso pessoal (PAT) deixam de ser achados, porque o hash recalculado com o
+pepper novo não casa com o gravado. A refresh recusada registra
+<code>refresh_unknown</code> (e não <code>refresh_reuse_detected</code>), o link diz &quot;Link inválido
+ou expirado&quot;, e os baldes de lockout mudam de chave — conta travada destrava. A
+SENHA sobrevive (argon2id com salt por registro, sem pepper): trocar o pepper
+custa um login, nunca uma conta, e a api sobe normalmente com o valor novo.</p>
+<p>Até a <a href="#rn-613">RN-613</a>, o pepper sem valor próprio caía no
+<code>AUTH_JWT_SECRET</code>, e a rotação do JWT era também a do pepper, com todas as
+consequências acima. Desde ela o pepper é obrigatório em produção e nunca
+emprestado do JWT.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/infrastructure/security/auth-key-material.ts:212</code>
+(<code>pepper</code>), <code>:228</code> (<code>hashDeToken</code>), <code>:247</code> (<code>baldeDeEmail</code>);
+<code>src/interfaces/http/auth/pat-auth.guard.ts:142</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/rotacao-dos-segredos.spec.ts</code>,
+contra o Postgres de teste</li>
+<li><strong>Borda:</strong> o ALVO de &quot;trocar&quot; inclui o erro de quem separa o pepper do JWT
+gerando um valor novo em vez de copiar o atual — é a mesma troca, e desloga
+do mesmo jeito (fixado no mesmo spec, &quot;a ordem errada&quot;).</li>
+<li><strong>Origem:</strong> <a href="../../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031</a>,
+AT-196</li>
+</ul>
+<h3 id="rn-598">RN-598 — O token de serviço ANTERIOR passa pela mesma régua do atual</h3>
+<p>Durante a rotação, <code>BRABO_SERVICE_TOKEN_PREVIOUS</code> abre <code>/internal/*</code> tanto
+quanto o atual. Ele passa por UMA régua, a mesma do atual (<code>exigirTokenDeProducao</code>),
+e nenhuma cópia dela. O espaço em volta é descartado, e um valor feito só de
+espaço conta como ausente. Em produção, o literal público de desenvolvimento
+(<code>dev-service-token-change-me</code>) e um valor com menos de 16 caracteres depois
+do trim DERRUBAM o boot da api, com uma mensagem que nomeia
+<code>BRABO_SERVICE_TOKEN_PREVIOUS</code>. Antes disso, a variável era comparada crua: um
+anterior com o valor de exemplo abria a porta interna a qualquer um que
+tivesse lido este repositório, e sem dar erro nenhum. A obrigatoriedade é a
+única parte da regra do atual que NÃO é copiada, porque fora da rotação o
+anterior ausente é o estado normal. Um anterior igual ao atual (depois do
+trim) continua não contando como rotação.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/infrastructure/security/service-token.ts:63</code>
+(<code>exigirTokenDeProducao</code>), <code>:92</code> (<code>tokenDeServicoAnterior</code>);
+<code>src/main.ts:50</code> (<code>tokenDeServicoAnterior</code>), que roda no boot ao lado do atual</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/security/service-token.spec.ts</code> (describe
+&quot;tokenDeServicoAnterior (RN-598)&quot;)</li>
+<li><strong>Borda:</strong> esta RN é o lado da api. O engine e o broker aplicam a mesma
+régua desde a <a href="../engine.html#rn-601">RN-601</a>.</li>
+<li><strong>Origem:</strong> AT-205 (achado da AT-196)</li>
+</ul>
+<h3 id="rn-603">RN-603 — O modo automático libera o escopo de caminho, e só ele</h3>
+<p>Decisão do dono do produto em 2026-09-26 (AT-226,
+<a href="../../adr/0167-modo-automatico-libera-o-escopo-de-caminho.html">ADR 0167</a>): com o
+&quot;Modo automático&quot; ligado num agente — a curinga <code>&quot;*&quot;</code> da
+<a href="parte-03.html#rn-153">RN-153</a> resolvida como <code>auto_approve</code> —, o agente roda QUALQUER
+comando de terminal sem pedir aprovação, INCLUSIVE fora da pasta do projeto.
+O teto de escopo de caminho do ADR 0055 deixa de valer para esse agente.
+Medido no <code>exp001</code> (modo <code>mounted</code>, container de pé): 51 comandos pediram
+aprovação com o modo ligado, 47 só por citar <code>/work</code> ou <code>/tmp</code> — o dev agent
+roda no container e o escopo compara com a raiz do HOST.</p>
+<p><code>decide()</code> passa a receber a ORIGEM da autonomia (<code>ctx.autonomyOrigin</code>:
+<code>'especifica'</code> ou <code>'curinga'</code>), resolvida pelo MESMO repositório que já
+resolvia a precedência — <code>findMode</code> virou leitura de <code>resolve</code>, não uma
+segunda régua. Só a curinga em <code>auto_approve</code> é modo automático
+(<code>modoAutomaticoDoAgente</code>); origem ausente vale como específica. Em modo
+automático, dois pedidos deixam de existir: o teto de ESCOPO e o
+<code>require_approval</code> que o comando COMPOSTO sintetiza quando um segmento não tem
+regra nenhuma em <code>permissions.json</code> (o arquivo sem opinião, que nunca rebaixa
+um estágio anterior) — sem o segundo, <code>cd /work &amp;&amp; npm test</code> seguiria pedindo.</p>
+<p>Continua tudo como estava, em modo automático também: <code>deny</code> (do arquivo, dos
+padrões embutidos ou de autonomia específica) vence; um <code>ask</code> ESCRITO no
+arquivo pede; o teto de efeito externo/comando privilegiado (push, PR,
+deploy, <code>sudo</code>/<code>doas</code>, <a href="parte-04.html#rn-418">RN-418</a>) roda antes e não
+olha a origem; merge em branch protegida, <code>instruction_patch</code>,
+<code>parallelize</code>/<code>raise_max_parallel</code> e <code>container_remove</code> nunca são
+auto-aprováveis (<a href="parte-03.html#rn-154">RN-154</a>). Regra específica do tipo vence a curinga
+no repositório e chega como <code>'especifica'</code>: <code>terminal: require_approval</code> com a
+curinga ligada segue pedindo. Desligar (o toggle do card do agente grava a
+curinga como <code>require_approval</code>) restaura o teto. Desde a
+<a href="parte-08.html#rn-670">RN-670</a> (ADR 0189) a específica <code>auto_approve</code>
+sob a curinga <code>auto_approve</code> — o que &quot;Sempre permitir&quot; de dev agent grava —
+resolve como a CURINGA, e não desliga mais o modo automático; e, fora dele, o
+escopo compara com a pasta REAL de execução (<a href="parte-08.html#rn-669">RN-669</a>).</p>
+<p>A tela diz, antes do clique, o que o modo libera e o que continua pedindo: a
+nota do <code>ApprovalCard</code> aparece nas DUAS variantes (chat e fila de Aprovações),
+e o card do agente mostra uma frase sob o toggle — só quando a CURINGA está
+ligada, porque o toggle sobre o tipo representativo grava regra específica,
+que não libera o escopo.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:311</code> (<code>modoAutomaticoDoAgente</code>),
+<code>src/domain/actions/decide.ts:386</code> (o veredito sintetizado do
+composto ignorado), <code>src/domain/actions/decide.ts:504</code> (o teto de
+escopo pulado),
+<code>src/infrastructure/persistence/drizzle/agent-autonomy.repository.ts:25</code>
+(<code>resolve</code>, com a origem),
+<code>src/application/use-cases/actions/propose-action.use-case.ts:249</code>
+(<code>autonomyOrigin</code>), <code>apps/web/src/components/AgentTeamGrid.tsx:114</code>
+(<code>autonomyHint</code>), <code>apps/web/src/components/ApprovalCard.tsx:313</code> (a nota
+nas duas variantes)</li>
+<li><strong>Teste:</strong> <code>test/domain/actions/decide.spec.ts</code> (&quot;modo automático
+libera o escopo de caminho (RN-603)&quot;: fora do escopo e composto auto-aprovam;
+push/<code>sudo</code>/<code>deny</code>/<code>ask</code> escrito seguem; regra específica e curinga
+desligada não liberam; os outros tetos não mudam),
+<code>test/application/use-cases/actions/propose-action.use-case.spec.ts</code>
+(ponta a ponta com o repositório real),
+<code>test/infrastructure/persistence/drizzle/agent-autonomy.repository.spec.ts</code>
+(<code>resolve</code> devolve a origem), <code>apps/web/src/components/AgentTeamGrid.test.tsx</code>,
+<code>apps/web/src/components/AgentCard.test.tsx</code>,
+<code>apps/web/src/components/ApprovalCard.test.tsx</code></li>
+<li><strong>Origem:</strong> decisão do dono do produto (AT-226) depois do teste no <code>exp001</code></li>
+</ul>
+<h3 id="rn-604">RN-604 — A chamada ao broker tem um teto POR OPERAÇÃO, e o teto estourado diz que foi o teto</h3>
+<p>O cliente HTTP do broker aplicava UM teto, 5 s, às cinco operações. O
+docblock o justificava pelo caminho de LEITURA de tela (<a href="parte-05.html#rn-486">RN-486</a>), e
+ele valia também para <code>exec</code> — cujo pedido CARREGA o próprio <code>timeoutMs</code> — e
+para <code>start</code>, que espera o <code>docker run</code> e o pull de imagem que ele faz.
+Reproduzido na AT-233: um broker falso que responde um <code>exec</code> em 6 s, com
+<code>timeoutMs</code> de 8 s, voltava como <code>BrokerIndisponivelError('sem-resposta')</code> —
+&quot;o broker de container não respondeu … The operation was aborted due to
+timeout&quot;. Ou seja, todo comando de terminal com mais de 5 s num projeto
+<code>container</code>/<code>mounted</code> com container <code>running</code> (<a href="../engine.html#rn-492">RN-492</a>) falhava
+dizendo que o broker estava fora do ar, enquanto o comando seguia rodando.</p>
+<p>E o engine cortava também: a chamada <code>container-exec</code> não passava
+<code>receive_timeout</code> e caía no default do Req, 15 s — o MESMO default de
+<code>TERMINAL_ACTION_TIMEOUT_MS</code>. Reproduzido com uma api falsa (Bandit) que
+responde em 16 s: <code>{:error, %Req.TransportError{reason: :timeout}}</code>. Subir o
+teto só na api não consertaria nada.</p>
+<p>A regra:</p>
+<ol>
+<li><strong><code>inspect</code> segue curto (5 s)</strong> — é a leitura da <code>/containers</code> e da rota
+de ciclo de vida, e uma tela que espera o pior caso do broker é pior do que
+uma que declara &quot;não observado&quot;.</li>
+<li><strong><code>exec</code> DERIVA do <code>timeoutMs</code></strong> (ou do default de 15 s do broker, quando
+vem sem ele): contexto do broker (10 s) + <code>ps</code> (30 s) + o maior entre o
+comando e o <code>docker version</code> de diagnóstico (30 s) + 5 s de margem. O
+broker corta o comando em <code>timeoutMs</code> e RESPONDE <code>timedOut: true</code>; a api
+tem de estar esperando quando a resposta chega.</li>
+<li><strong><code>start</code>/<code>stop</code>/<code>remove</code> esperam o pior caso do PRÓPRIO broker</strong>: contexto
++ <code>ps</code> + a operação (o <code>run</code> com o pull; o <code>stop</code> com os 10 s de graça;
+<code>rm --force</code>) + o <code>docker version</code> que ele roda quando ela falha, mais a
+margem. Esperar isso é esperar a RESPOSTA do broker, inclusive a recusa
+nomeada dele. A conta nasceu com 105 s e esquecia o SEGUNDO <code>ps</code> do
+<code>resolver</code> (o gerenciado e o homônimo): o pior caso real era 130 s. Desde a
+<a href="../contracts.html#rn-605">RN-605</a> ela conta as seis chamadas de controle do <code>start</code> e dá
+195 s.</li>
+<li><strong>O engine espera mais que a api</strong>: <code>timeoutMs</code> + 90 s. A cadeia é broker &lt;
+api &lt; engine, e os testes dos dois lados a conferem (a api espelha a folga
+do engine como <code>FOLGA_DO_EXEC_NO_ENGINE_MS</code>, e o teste do engine lê esse
+número do fonte da api).</li>
+<li><strong>Teto estourado tem motivo próprio</strong>: <code>BrokerIndisponivelError</code> ganha
+<code>teto-excedido</code>, distinto de <code>sem-resposta</code> (conexão recusada, DNS), e a
+mensagem nomeia a operação e o número — e, nas longas, a consequência: o
+comando pode seguir rodando no container; o <code>run</code>/pull pode ter acontecido,
+então confira <code>/containers</code> antes de repetir. Na leitura da tela
+<code>teto-excedido</code> cai no MESMO <code>naoObservado: 'broker-sem-resposta'</code> de
+sempre, com o texto no <code>detalhe</code> — nenhum valor novo no DTO.</li>
+</ol>
+<p>Os números do outro lado (<code>TIMEOUT_DE_CONTROLE_MS</code>,
+<code>TIMEOUT_DE_EXEC_PADRAO_MS</code>, o <code>TIMEOUT_MS</code> do cliente de contexto do broker)
+são ESPELHADOS em constantes nomeadas, não importados: a api não consome o
+pacote da porta de Docker. Nada muda na contenção do broker (<a href="../../adr/0130-broker-de-container.html">ADR
+0130</a>), na <code>DockerPort</code> nem na
+<a href="../engine.html#rn-502">RN-502</a>.</p>
+<p><strong>Declarado, não fechado:</strong></p>
+<ul>
+<li>
+<p><strong>Pull de mais de 30 s continua falhando — no broker.</strong> O pull roda sob o
+<code>TIMEOUT_DE_CONTROLE_MS</code> (30 s) da porta de Docker, e uma imagem grande não
+sobe na primeira tentativa. Desde a <a href="../contracts.html#rn-605">RN-605</a> o estouro tem NOME
+(<code>PullExcedeuTetoError</code>, origem <code>infra</code>) em vez de &quot;código -1&quot; com
+<code>origem: null</code>; o teto em si não subiu, por decisão do mantenedor.</p>
+</li>
+<li>
+<p><strong>O <code>fetch</code> do Node espera cabeçalhos por no máximo 300 s.</strong> Um <code>exec</code> com
+<code>timeoutMs</code> acima de ~255 s é cortado pelo undici antes do teto desta regra;
+o erro sai <code>teto-excedido</code> nomeando os 300 s. O salto de fora
+(<code>/internal/actions/execute</code>, api → engine) também não tem teto explícito e
+cai nos mesmos 300 s, então <code>TERMINAL_ACTION_TIMEOUT_MS</code> acima de ~210 s
+não chega inteiro.</p>
+</li>
+<li>
+<p><strong>Broker doente no <code>ps</code></strong> (o <code>docker ps</code> levando os 30 s inteiros e o
+diagnóstico outros 30) pode exceder o teto do <code>exec</code> com comando curto;
+sai <code>teto-excedido</code>, com o nome certo.</p>
+</li>
+<li>
+<p><strong>Código:</strong>
+<code>src/infrastructure/http-clients/container-broker.client.ts:287</code> (<code>tetoDaOperacao</code>),
+<code>:252</code> (<code>TETO_DE_MUTACAO_MS</code>), <code>:264</code> (<code>FOLGA_DO_EXEC_NO_ENGINE_MS</code>),
+<code>:324</code> (<code>erroDeTransporte</code>);
+<code>src/application/ports/container-broker.port.ts:110</code> (<code>MotivoDeBrokerIndisponivel</code>);
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex:2120</code> (<code>teto_do_container_exec_ms</code>)</p>
+<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:2120</code> (<code>teto_do_container_exec_ms</code>)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>test/infrastructure/http-clients/container-broker.client.spec.ts:286</code>
+(a reprodução, contra um broker <code>node:http</code> que demora 6 s), <code>:182</code> (o
+teto de cada operação no <code>AbortSignal</code>), <code>:204</code> e <code>:229</code> (<code>teto-excedido</code>
+nomeando operação e número), <code>:245</code> (o teto do undici), <code>:330</code> (describe
+<code>tetoDaOperacao</code>, incluindo a ordem broker &lt; api &lt; engine);
+<code>test/application/use-cases/containers/spec-e-observacao-de-container.use-case.spec.ts:298</code>
+(a tela continua dizendo <code>broker-sem-resposta</code>);
+<code>test/application/use-cases/containers/executar-comando-no-container.use-case.spec.ts:98</code>;
+<code>apps/engine/test/engine/sessions/engine_api_client_container_exec_test.exs:72</code>
+(a reprodução do lado do engine, HTTP real com Bandit), <code>:91</code> (a folga
+espelhada na api)</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-233</p>
+</li>
+</ul>
+<h3 id="rn-609">RN-609 — <code>proposed_action.created</code> diz QUAL raiz o escopo comparou, relativa e nunca absoluta</h3>
+<p>A <a href="#rn-567">RN-567</a> pôs no evento a REGRA que decidiu (<code>reason</code>) e declarou o
+que ficava de fora: o ponto 7 do
+<a href="../../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055</a> pede <em>qual
+escopo</em> autorizou, e <code>escopo: cd dentro da pasta do projeto</code> não diz qual
+pasta era o escopo naquele dia. A raiz muda — conversão de modo, base
+nova —, e o evento é o único lugar que guarda o que valia no instante da
+decisão.</p>
+<p><strong>A regra:</strong> o payload do evento de SESSÃO <code>proposed_action.created</code> de uma
+ação <code>terminal</code> ganha <code>scopeRoot</code>, com três campos — <code>executionMode</code>,
+<code>ancora</code> e <code>segmento</code>:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>modo</th>
+<th><code>ancora</code></th>
+<th><code>segmento</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>container</code></td>
+<td><code>raiz_gerenciada</code></td>
+<td>o <code>workspace_dir_name</code> — a raiz É <code>&lt;PROJECT_WORKSPACES_ROOT&gt;/&lt;segmento&gt;</code></td>
+</tr>
+<tr>
+<td><code>mounted</code></td>
+<td><code>base_de_projetos</code></td>
+<td>o pedaço sob <code>BRABO_PROJECTS_BASE</code>, pela MESMA <code>segmentoSobABaseDeProjetos</code> que o broker usa</td>
+</tr>
+<tr>
+<td><code>mounted</code> (sem base, fora dela, ou a própria base)</td>
+<td><code>indisponivel</code></td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td><code>runner</code></td>
+<td><code>nome_da_pasta</code></td>
+<td>o <code>workspace_dir_name</code> — identifica a pasta sem ser relativo a nada que o servidor conheça</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Nunca o caminho absoluto, e isso é a decisão (AT-147, do mantenedor).</strong> O
+event log é lido por todo membro do projeto e evento não se reescreve; em
+<code>mounted</code>/<code>runner</code> a raiz é uma pasta da máquina do usuário, com o <code>$HOME</code>
+dele no caminho. Por isso <code>indisponivel</code> existe: cair no caminho absoluto
+&quot;para não perder informação&quot; seria exatamente o vazamento. No <code>runner</code> a base
+local do agente nunca atravessa a rede, então não há segmento relativo que o
+servidor possa calcular — a <code>ancora</code> diz que o valor é um NOME e não um
+caminho.</p>
+<p><strong>Só em <code>terminal</code>.</strong> É o único tipo em que <code>decide()</code> consulta o escopo
+(<code>terminalNoEscopo</code>); nos outros o campo não existe, em vez de existir
+dizendo algo que a decisão não usou. A derivação é a de <code>projectScopeRoot</code> —
+<code>raizDoEscopoNoEvento</code> mora ao lado dela, no mesmo arquivo, e não é segunda
+régua: o que ela faz é EXPRIMIR a mesma raiz sem a parte absoluta.</p>
+<p><strong>Aditivo, e ausente não é &quot;sem raiz&quot;.</strong> Evento gravado antes desta regra, ou
+de outro tipo, não tem o campo; não há reprocessamento nem coluna nova. O
+outbox não o carrega, pelo mesmo motivo da <a href="#rn-567">RN-567</a> (sem
+consumidor no engine). Nada em <code>decide()</code> muda, nenhum teto, e a tela não
+muda — onde ele aparece é outra entrega (AT-148). (Desde a
+<a href="../web.html#rn-614">RN-614</a> a raiz aparece junto do motivo, na linha do evento no painel
+de log e no <code>ApprovalCard</code>, sempre relativa e com texto próprio para
+<code>indisponivel</code>.) A web lê o payload como
+registro genérico, então evento antigo e novo passam pela mesma leitura.</p>
+<p><strong>Declarado:</strong> em <code>mounted</code>, o segmento é relativo à base configurada NO
+INSTANTE da decisão — se a base mudar depois, o segmento antigo continua
+dizendo o que era verdade então, que é o ponto. E a separação entre escopo e
+<code>permissions.json</code> (<a href="parte-05.html#rn-478">RN-478</a>) não entra no campo: ele descreve a
+raiz do ESCOPO, nunca onde o arquivo de política mora.</p>
+<ul>
+<li><strong>Código:</strong> <code>src/infrastructure/filesystem/project-workspaces-root.ts:907</code>
+(<code>raizDoEscopoNoEvento</code>), <code>:901</code> (<code>RaizDoEscopoNoEvento</code>), <code>:117</code>
+(<code>segmentoSobABaseDeProjetos</code>, reusada);
+<code>src/application/use-cases/actions/propose-action.use-case.ts:330</code>
+(<code>scopeRoot</code> só em <code>terminal</code>);
+<code>src/domain/actions/decide.ts:648</code> (<code>terminalNoEscopo</code>, o único
+consumidor do escopo)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:1154</code>
+(<code>container</code>), <code>:1134</code> (<code>mounted</code>), <code>:1134</code> (<code>runner</code>), <code>:1123</code> (o caminho
+absoluto sob <code>/home/usuario/…</code> NUNCA vaza, nos três casos, inclusive fora
+da base), <code>:1224</code> (<code>indisponivel</code>), <code>:1163</code> (outro tipo e o outbox sem o
+campo), <code>:1183</code> (evento anterior, sem o campo, pela mesma leitura);
+<code>test/infrastructure/filesystem/project-workspaces-root.spec.ts:772</code>
+(a função pura, nos três modos e nos três casos de <code>indisponivel</code>)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">0055</a> (ponto 7)</li>
+<li><strong>Origem:</strong> AT-147 (EP-025/HS-043)</li>
+</ul>
+<h3 id="rn-611">RN-611 — A chave de MÁQUINA ganha listagem e revogação por CONTA, sem <code>:projectId</code>: só as de máquina, só as do próprio usuário, e a revogação é a MESMA de sempre</h3>
+<p>A lacuna que a <a href="parte-06.html#rn-552">RN-552</a> e a <a href="../web.html#rn-561">RN-561</a> declararam por escrito:
+<em>&quot;numa instalação que ainda não tem PROJETO, a listagem e a revogação — as duas
+por <code>/projects/:projectId/runner-device-keys</code> — não têm projeto contra o que
+responder&quot;</em>. A instalação de uma linha (<a href="../produto.html#rn-547">RN-547</a>) cria EXATAMENTE essa
+situação: a conta e a chave de máquina nascem <strong>antes</strong> de qualquer projeto, e a
+chave ficava viva e inalcançável. Decisão do mantenedor (AT-118): <strong>sim, na
+Conta</strong>.</p>
+<p><strong>Duas rotas novas, e só duas.</strong> <code>GET /users/me/machine-device-keys</code> lista e
+<code>DELETE /users/me/machine-device-keys/:deviceKeyId</code> revoga (204, idempotente).
+Sem <code>@RequireRole</code>, como <code>users/me/credentials</code> e <code>users/me/preferences</code>: o
+escopo é a PRÓPRIA pessoa, e não há projeto nem workspace contra o que resolver
+um papel. O <code>userId</code> vem do JWT de sessão e vai para o <code>WHERE</code>; nenhum
+parâmetro nomeia outra pessoa, e a visão de <code>maintainer</code> sobre a chave alheia
+continua <strong>fora</strong> por decisão da <a href="parte-06.html#rn-519">RN-519</a> — esta rota não a reabre por
+outra porta.</p>
+<p><strong>Só a espécie de MÁQUINA.</strong> A listagem devolve SÓ <code>project_id IS NULL</code>
+(<code>especie: &quot;maquina&quot;</code>), revogadas INCLUÍDAS (a régua da RN-519: sumir com a
+linha faria a tela afirmar que a chave nunca existiu). As de PROJETO têm casa —
+a seção <code>device-keys</code> do projeto delas, onde o alcance de revogá-las é dito — e
+trazê-las para a Conta faria a Conta derrubar pareamento de projeto sem nomear
+o projeto. Pela mesma razão, a revogação por conta recusa chave de PROJETO com
+<strong>404</strong>, a MESMA resposta de chave que não existe ou que é de outra pessoa: a
+pergunta vai à MESMA listagem da tela, filtrada por <code>userId</code>, então não há como
+perguntar pela chave alheia e aprender que ela existe.</p>
+<p><strong>O que revogar derruba de fato, e o alvo NÃO muda.</strong> A revogação por conta não
+é uma revogação nova: <code>RevokeMachineDeviceKeyUseCase</code> confere que a chave está
+entre as de máquina do chamador e DELEGA a <code>RevokeRunnerDeviceKeyUseCase</code>, byte
+a byte. Ele grava a linha e, para a chave de máquina, pede ao engine um
+<code>disconnectRunnerOfUser</code> por projeto em modo <code>runner</code> que o dono alcança
+(<a href="parte-06.html#rn-520">RN-520</a>/<a href="../produto.html#rn-543">RN-543</a>). O alvo continua <code>{projeto, usuário}</code> e
+<strong>nunca</strong> <code>{chave}</code>: outro runner do mesmo usuário nesses projetos cai junto,
+mesmo com PAT ou outra chave, e reconecta se a credencial dele ainda valer.
+Numa instalação <strong>sem projeto</strong>, a lista de projetos é vazia e a revogação só
+grava a linha — e é o que basta: o agente de máquina que espera o primeiro
+projeto (<a href="../runner.html#rn-550">RN-550</a>) não tem conexão nenhuma a derrubar, e o próximo
+ticket que ele pedir é recusado. Mudar o alvo continua sendo frente própria,
+com ADR (AT-013).</p>
+<p><strong>&quot;Registrar substitui a anterior&quot; FICA.</strong> A <a href="parte-06.html#rn-552">RN-552</a> tinha duas razões
+para revogar a chave de máquina anterior a cada registro: (a) o token de serviço
+não pode fabricar credenciais duradouras em série, e a máquina reinstalada não
+pode deixar para trás uma chave viva que ninguém lembra de revogar; (b) a
+órfã seria INALCANÇÁVEL. Esta RN derruba a (b) e deixa a (a) intacta — ela não
+depende de tela. O que muda é que a substituída passa a APARECER, revogada, na
+Conta; e como ninguém a revogou pela tela, a seção diz em TEXTO que reinstalar
+revoga a anterior, para a linha não ser lida como incidente.</p>
+<p><strong>A tela mora na Conta</strong> (<code>/account</code>), a página que já existia para o que segue a
+pessoa entre projetos. Ela lista nome, data de criação, último uso e status, e
+herda o vocabulário INTEIRO da <a href="../web.html#rn-561">RN-561</a>/<a href="../web.html#rn-548">RN-548</a>:
+<code>lastUsedAt</code> é uso REGISTRADO, nunca conexão, e nulo tem texto próprio (&quot;nunca
+usada&quot;); &quot;ativa&quot;/&quot;revogada&quot; fala da LINHA e nunca de agente de pé — e &quot;ativa&quot;
+<strong>não</strong> é verde, porque a espécie de máquina nunca ganha verde e ali só há
+dela. Não há coluna de espécie: com uma espécie só ela repetiria a mesma
+palavra em toda linha, e o que ela carregava na seção de projeto — o ALCANCE — é
+dito na legenda e na confirmação (&quot;derruba o agente local em TODOS os seus
+projetos em modo runner; sem projeto nenhum, só impede a chave de ser usada de
+novo&quot;), junto com o custo colateral da RN-520. Carregando, falhou, vazio,
+revogada e nunca usada são cinco estados com cinco textos
+(<a href="../web.html#rn-088">RN-088</a>/<a href="../web.html#rn-470">RN-470</a>). Sem papel mínimo
+no endpoint, a tela não inventa um: <code>roleAtLeast</code> aqui trancaria quem pode, o
+defeito pior dos dois.</p>
+<p><strong>Revogar por uma lista invalida TODAS.</strong> A chave de máquina aparece na lista
+da Conta (<code>['machine-device-keys']</code>) e na de TODO projeto do dono
+(<code>['runner-device-keys', projectId]</code>, lida pelo <code>RunnerOnboardingPanel</code> e pela
+seção <code>device-keys</code>). <code>invalidarChavesDeDispositivo</code> invalida a por projeto por
+PREFIXO (todo projeto no cache) e a da Conta sempre, e as DUAS telas de
+revogação a chamam — antes, revogar pela seção do projeto invalidava só a do
+projeto aberto, e as outras listas seguiam anunciando a revogada.</p>
+<ul>
+<li><strong>Código:</strong> <code>src/interfaces/http/runner/machine-device-keys.controller.ts:48</code>
+(<code>MachineDeviceKeysController</code>), <code>:69</code> (<code>listMachineDeviceKeys</code>), <code>:93</code>
+(<code>revokeMachineDeviceKey</code>);
+<code>src/application/use-cases/auth/list-machine-device-keys.use-case.ts:33</code>
+(<code>ListMachineDeviceKeysUseCase</code>);
+<code>src/application/use-cases/auth/revoke-machine-device-key.use-case.ts:33</code>
+(<code>RevokeMachineDeviceKeyUseCase</code>);
+<code>src/infrastructure/persistence/drizzle/runner-device-key.repository.ts:97</code>
+(<code>listarDeMaquinaDoUsuario</code>);
+<code>apps/web/src/routes/MachineDeviceKeysSection.tsx:73</code>
+(<code>MachineDeviceKeysSection</code>);
+<code>apps/web/src/lib/chaves-de-dispositivo-queries.ts:31</code>
+(<code>invalidarChavesDeDispositivo</code>);
+<code>apps/web/src/lib/api-client.ts:455</code> (<code>listMachineDeviceKeys</code>);
+<code>apps/web/src/locales/{en,pt-BR}/machineKeys.json</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/machine-device-keys.use-case.spec.ts</code>
+(a lista só pelo usuário, a revogada incluída; a revogação REAL derrubando
+<code>{projeto, usuário}</code> em cada projeto; sem projeto, só grava; a chave fora das
+do chamador é 404 sem revogar nada);
+<code>test/interfaces/http/runner/machine-device-keys.controller.spec.ts</code>
+(sem <code>@RequireRole</code>, 204, <code>userId</code> do JWT, o 404 propagado);
+<code>test/infrastructure/persistence/drizzle/runner-device-key.repository.spec.ts</code>
+(contra o Postgres: só as de máquina do usuário, a substituída revogada na
+lista, a de outro usuário fora, instalação sem projeto);
+<code>apps/web/src/routes/MachineDeviceKeysSection.test.tsx</code> (lista, os cinco
+estados, a confirmação com o alcance, a invalidação da Conta E de todo
+projeto — provada também sobre uma entrada de projeto no cache —, a falha com
+a frase da api, e os dois idiomas);
+<code>test/interfaces/route-surface.spec.ts</code> (as duas rotas classificadas
+<code>jwt</code> em <code>docs/security-surface.md</code>)</li>
+<li><strong>Fica declarado e NÃO fecha:</strong> (1) o alvo da revogação continua
+<code>{projeto, usuário}</code> (RN-520, AT-013); (2) a visão de <code>maintainer</code> continua
+fora (RN-519); (3) a rota que CRIA chave de máquina continua servindo só
+instalação de UMA pessoa (RN-552) — a Conta lista e revoga, não cria.</li>
+<li><strong>Origem:</strong> AT-118 (EP-003/HS-007)</li>
+</ul>
+<h3 id="rn-613">RN-613 — <code>AUTH_TOKEN_PEPPER</code> é obrigatório e próprio; quem migra o define com o <code>AUTH_JWT_SECRET</code> atual</h3>
+<p>O pepper do HMAC dos tokens opacos (refresh, links de conta, PATs, balde de
+lockout) deixou de cair no <code>AUTH_JWT_SECRET</code>. O fallback silencioso
+(<code>AUTH_TOKEN_PEPPER ?? passphraseAtual()</code>) fazia de toda rotação &quot;sem
+downtime&quot; do JWT uma troca do pepper, e era o caminho COMUM: os composes de
+produção e de instalação nem repassavam a variável. Em produção a api RECUSA
+subir sem ele, e a recusa diz o conserto — <em>&quot;defina com o valor ATUAL de
+AUTH_JWT_SECRET para não deslogar ninguém&quot;</em> —, porque a correção óbvia (gerar
+um aleatório) é a que desloga todo mundo. Com o pepper igual ao JWT antigo o
+hash é byte a byte o de antes, os refresh tokens e os PATs seguem válidos, e
+daí em diante o JWT rotaciona sozinho. Pepper igual ao JWT NÃO é recusado: é o
+estado legítimo de toda instalação migrada. Valem as réguas do JWT (RN-114):
+em branco, os dois literais de exemplo do repositório e menos de 16 caracteres
+derrubam o boot. Fora de produção vale um default de desenvolvimento PRÓPRIO
+(<code>dev-auth-token-pepper-change-me</code>), nunca o do JWT.</p>
+<p>O <code>install.sh</code> faz a migração: instalação NOVA gera um pepper aleatório;
+havendo um <code>.env</code> anterior na pasta, ele é LIDO (nunca executado) antes de ser
+sobrescrito, e o pepper dele é mantido — ou, sem pepper, nasce com o
+<code>AUTH_JWT_SECRET</code> dele. O terminal diz de onde o valor veio, nunca o valor.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/infrastructure/security/auth-key-material.ts:168</code>
+(<code>pepperAtual</code>), <code>:212</code> (<code>pepper</code>); <code>src/main.ts:46</code> (a checagem de
+boot); <code>install.sh:702</code> (<code>valor_no_env_anterior</code>), <code>:734</code> (<code>gerar_segredos</code>),
+<code>:831</code> (<code>dizer_a_origem_do_pepper</code>); a variável nos três composes
+(<code>docker/docker-compose.yml</code>, <code>docker-compose.prod.yml</code>,
+<code>docker-compose.install.yml</code>), no <code>docker/smoke.sh</code> e no <code>.env.example</code></li>
+<li><strong>Teste:</strong> <code>test/infrastructure/security/auth-key-material.spec.ts</code>
+(describe &quot;pepperAtual (RN-613)&quot;: recusa sem pepper mesmo com JWT, a
+mensagem, os exemplos, o piso, igual ao JWT aceito, o default de dev);
+<code>test/application/use-cases/auth/rotacao-dos-segredos.spec.ts</code> (describe &quot;a
+migração do RN-613&quot;: o refresh gravado com a fórmula ANTIGA segue válido com o
+pepper igual ao JWT antigo e sobrevive à troca do JWT; o describe do
+<code>AUTH_JWT_SECRET</code>: sem pepper fora de produção, trocar o JWT não desloga);
+<code>scripts/dev/install-env.spec.ts</code> (describe &quot;o AUTH_TOKEN_PEPPER do
+instalador (RN-613)&quot;, contra <code>docker compose config</code>, valor inteiro)</li>
+<li><strong>Borda:</strong> o instalador só enxerga o <code>.env</code> da pasta em que roda. Instalação
+cujo <code>.env</code> mora em outro lugar, compose próprio e Kubernetes com
+<code>ExternalSecret</code> fazem a migração à mão, pelo runbook — no Kubernetes a
+propriedade <code>AUTH_TOKEN_PEPPER</code> já existia no <code>ExternalSecret</code> e no
+<code>bootstrap.sh</code>, e um provider que não a tenha já reprovava a sincronização.
+E a migração do instalador apaga os volumes (ADR 0150): o refresh só
+sobrevive para quem restaura o dump do Postgres, que é o caso que importa.</li>
+<li><strong>Origem:</strong> AT-210 (achado da AT-196), decisão do mantenedor: migração com o
+valor atual</li>
+</ul>
+<h3 id="rn-615">RN-615 — A remoção de membro de WORKSPACE nasce com o teto 2 herdado: remover a si mesmo é 403, e é essa cláusula que segura o último owner, sem contar</h3>
+<p>A quinta porta da linha dos tetos (<a href="parte-05.html#rn-472">RN-472</a>, <a href="parte-06.html#rn-556">RN-556</a>,
+<a href="../produto.html#rn-557">RN-557</a>), e a rota que o
+<a href="../../adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157</a> recusou
+abrir de passagem. Até aqui <code>WorkspacesController</code> não tinha <code>@Delete</code> de
+membro, e offboarding era escrita no banco. Decisão do mantenedor
+(AT-115/HS-006): <strong>a rota nasce, protegida por CLÁUSULA.</strong></p>
+<p><strong>A rota.</strong> <code>DELETE /workspaces/:workspaceId/members/:userId</code>, <code>owner</code> (o MESMO
+mínimo do upsert), 204, idempotente.</p>
+<p><strong>O teto é herdado, sem régua nova.</strong> <code>remocaoEhAutoRebaixamento</code> recebe o papel
+do ator no WORKSPACE como o efetivo de hoje e <code>null</code> como o papel de DEPOIS — no
+workspace não há nível acima para segurar a queda, então remover a própria
+linha é sempre queda para &quot;nenhum acesso&quot;, o ramo que a função já enunciava
+para o projeto sem linha de workspace. Remover a SI MESMO é <strong>sempre 403</strong>, com
+frase própria: <em>&quot;Você não pode remover a si mesmo deste workspace: aqui não há
+papel acima para segurar a queda, e sem a linha você perde o workspace e todos
+os projetos dele. Voltar exige o owner que você estaria abandonando. Peça a
+outro owner.&quot;</em></p>
+<p><strong>O último owner, pela MESMA cláusula.</strong> Só <code>owner</code> chama a rota; ninguém remove
+a si mesmo; logo toda remoção bem-sucedida deixa ao menos o CHAMADOR como
+<code>owner</code>. Tirar o último exigiria que ele se removesse — o movimento recusado. A
+contagem segue recusada (ADR 0157, ponto 2). O mínimo <code>owner</code> da rota é METADE
+da prova, e por isso é asserido em teste.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>movimento</th>
+<th>desfecho</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>remover a SI MESMO do workspace, havendo ou não outro owner</td>
+<td><strong>403</strong></td>
+</tr>
+<tr>
+<td>remover OUTRO <code>owner</code></td>
+<td>passa — é como se revoga propriedade por inteiro</td>
+</tr>
+<tr>
+<td>remover o TITULAR (<code>created_by</code>), por outro owner</td>
+<td><strong>409</strong> <code>criador_do_workspace</code> — <a href="#rn-616">RN-616</a></td>
+</tr>
+<tr>
+<td>remover qualquer outra pessoa</td>
+<td>passa</td>
+</tr>
+<tr>
+<td>remover quem não tem linha de workspace</td>
+<td>204 — as linhas de projeto dele no workspace saem igual</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>A cascata, numa transação.</strong> A linha de <code>workspace_members</code>; as linhas de
+<code>project_members</code> do removido nos projetos DESTE workspace (sem elas a
+sobreposição <code>projectRole ?? workspaceRole</code> da <a href="../web.html#rn-471">RN-471</a> o manteria
+dentro de todo projeto em que tivesse linha própria); e as credenciais dele
+presas a esses projetos — chaves de dispositivo de PROJETO e PATs —, revogadas
+com o motivo <code>workspace_member_removed</code>. Depois do commit, a conexão viva do
+runner dele cai em CADA projeto do workspace pelo caminho da
+<a href="parte-06.html#rn-520">RN-520</a>, em <code>try/catch</code> que só loga: engine fora do ar não derruba a
+remoção.</p>
+<p><strong>Declarado e NÃO feito:</strong> a chave de MÁQUINA (é da conta e serve outros
+workspaces; aqui ela deixa de alcançar porque o papel resolve para nenhum); o
+socket de SESSÃO já conectado e o terminal <code>:web</code> do removido (seguem até cair;
+o ticket novo é recusado); tela (não existe seção de membros de workspace no
+<code>apps/web</code>). O TITULAR (<code>workspaces.created_by</code>) não sai por esta rota — é a
+<a href="#rn-616">RN-616</a>.</p>
+<ul>
+<li><strong>Código:</strong> <code>src/interfaces/http/iam/workspaces.controller.ts:262</code>
+(<code>removeMember</code>);
+<code>src/application/use-cases/iam/remove-workspace-member.use-case.ts:79</code>
+(<code>RemoveWorkspaceMemberUseCase</code>);
+<code>src/domain/iam/tetos-de-rebaixamento.ts:88</code>
+(<code>MENSAGEM_TETO_AUTO_REMOCAO_DO_WORKSPACE</code>), <code>:248</code>
+(<code>remocaoEhAutoRebaixamento</code>);
+<code>src/infrastructure/persistence/drizzle/workspace.repository.ts:84</code>
+(<code>removeMember</code>);
+<code>src/infrastructure/persistence/drizzle/project.repository.ts:167</code>
+(<code>removeMemberFromWorkspaceProjects</code>);
+<code>src/infrastructure/persistence/drizzle/runner-device-key.repository.ts:169</code>
+(<code>revogarChavesDeProjetoNoWorkspace</code>);
+<code>src/infrastructure/persistence/drizzle/personal-access-token.repository.ts:187</code>
+(<code>revogarDoUsuarioNoWorkspace</code>)</li>
+<li><strong>Teste:</strong>
+<code>test/application/use-cases/iam/remove-workspace-member.use-case.spec.ts</code>
+(contra o Postgres: remove outro membro com a cascata inteira e nada fora do
+workspace; remove outro owner; engine fora do ar não derruba; idempotente;
+recusa a si mesmo sem escrever nada; frase própria; o owner único não sai; com
+dois owners, quem remove fica);
+<code>test/interfaces/http/iam/workspaces-members.controller.spec.ts</code>
+(<code>owner</code> nas duas rotas de membro, 204, a ordem ator/alvo, o 403 propagado);
+<code>test/interfaces/route-surface.spec.ts</code> (a rota classificada em
+<code>docs/security-surface.md</code>)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0173-remocao-de-membro-de-workspace.html">0173</a></li>
+<li><strong>Origem:</strong> AT-115 (EP-002/HS-006)</li>
+</ul>
+<hr>
+<h3 id="rn-616">RN-616 — O TITULAR do workspace não sai pela remoção de membro: 409 <code>criador_do_workspace</code> até transferir, e a titularidade só vai para outro <code>owner</code></h3>
+<p>Decisão do mantenedor sobre a questão que a <a href="#rn-615">RN-615</a> deixou aberta
+(AT-115, <a href="../../adr/0173-remocao-de-membro-de-workspace.html">ADR 0173</a>, ponto 7).
+<code>workspaces.created_by</code> não autoriza nada — quem autoriza é o papel
+(<a href="parte-05.html#rn-472">RN-472</a>) —, mas é por ele que se resolve a credencial de LLM que os
+agentes gastam e a de git das ações de agente
+(<a href="parte-02.html#rn-058">RN-058</a>) e o dono do relatório de gasto
+(<a href="parte-02.html#rn-060">RN-060</a>). Remover o criador deixaria os
+agentes gastando a credencial de quem já não está no workspace. A coluna passa a
+ser chamada, na regra, de <strong>titular</strong>.</p>
+<p><strong>A recusa.</strong> <code>DELETE /workspaces/:workspaceId/members/:userId</code> com alvo = titular
+é <strong>409</strong> com <code>code: &quot;criador_do_workspace&quot;</code>: <em>&quot;Não é possível remover o titular
+do workspace: a credencial de LLM que os agentes gastam, a de git das ações de
+agente e o relatório de gasto são dele (RN-058/RN-060). Transfira antes a
+titularidade para outro owner (PUT /workspaces/:workspaceId/owner-of-record) e
+remova depois.&quot;</em> O teto da RN-615 vem antes: o titular tentando se remover
+recebe o 403 de auto-remoção.</p>
+<p><strong>A transferência.</strong> <code>PUT /workspaces/:workspaceId/owner-of-record</code>, <code>owner</code>,
+corpo <code>{ userId }</code>, responde o workspace (200). O destino precisa JÁ ser <code>owner</code>
+do workspace, senão <strong>409</strong> <code>titular_precisa_ser_owner</code> (<em>&quot;A titularidade só vai
+para quem já é owner deste workspace: o titular paga o que os agentes gastam
+(RN-058). Promova a pessoa a owner antes, ou escolha outro owner.&quot;</em>). Grava
+<code>created_by</code> numa transação com a leitura do papel; transferir para o titular
+atual é idempotente. Qualquer <code>owner</code> pode transferir, inclusive para OUTRO
+owner que não pediu — declarado, é a mesma autoridade que remove donos.</p>
+<p><strong>O gasto, a partir do commit.</strong> <code>ResolveCredentialOwnerUseCase</code> devolve o novo
+titular: o turno de agente procura a credencial DELE para o provider do modelo,
+e as ações de git a credencial de git dele. Sem credencial, o desfecho é o que
+já existia — o turno termina com <em>&quot;Nenhuma credencial cadastrada para
+<provider>&quot;</em> e a leitura do remoto git falha nomeando de quem é a credencial que
+falta. A transferência NÃO confere isso antes (declarado no ADR). O gasto
+registrado não se move: <code>token_usage</code> não guarda titular, e o relatório inteiro,
+histórico incluído, passa a ser do novo titular. Sem evento de domínio: fica
+uma linha de log com de/para/quem.</p>
+<ul>
+<li><strong>Código:</strong> <code>src/domain/iam/titularidade-do-workspace.ts:22</code>
+(<code>CODIGO_CRIADOR_DO_WORKSPACE</code>), <code>:38</code> (<code>removeOTitular</code>);
+<code>src/application/use-cases/iam/remove-workspace-member.use-case.ts:120</code>
+(<code>removeOTitular</code>);
+<code>src/application/use-cases/iam/transfer-workspace-ownership.use-case.ts:39</code>
+(<code>TransferWorkspaceOwnershipUseCase</code>);
+<code>src/infrastructure/persistence/drizzle/workspace.repository.ts:98</code>
+(<code>transferirTitularidade</code>);
+<code>src/interfaces/http/iam/workspaces.controller.ts:324</code>
+(<code>transferOwnership</code>)</li>
+<li><strong>Teste:</strong>
+<code>test/application/use-cases/iam/remove-workspace-member.use-case.spec.ts</code>
+(<code>describe</code> &quot;o TITULAR não sai&quot;: o 409 com código e nada escrito; o titular
+removendo a si mesmo recebe o 403; depois de transferir, remover o antigo
+criador passa e o novo titular vira o protegido — e <code>describe</code>
+&quot;TransferWorkspaceOwnershipUseCase&quot;: para owner grava <code>created_by</code>; para
+<code>maintainer</code> e para não-membro é 409 <code>titular_precisa_ser_owner</code>; para o
+titular atual é idempotente);
+<code>test/interfaces/http/iam/workspaces-members.controller.spec.ts</code>
+(<code>owner</code> e a delegação da transferência)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0173-remocao-de-membro-de-workspace.html">0173</a>, ponto 7</li>
+<li><strong>Origem:</strong> AT-115 (EP-002/HS-006)</li>
+</ul>
+<hr>
+<nav class="site-pager"><a href="../../business-rules/api/parte-06.html">API — parte 6 (desde RN-503)</a><a href="../../business-rules/api/parte-08.html">API — parte 8 (desde RN-618)</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-api/blob/dev/docs/business-rules/api/parte-07.md">Edit this page</a></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#a-chave-de-dispositivo-ganha-tela-e-a-tela-diz-o-alcance-de-revogar-rn-561">A chave de dispositivo ganha tela, e a tela diz o alcance de revogar (RN-561)</a></li><li class="n3"><a href="#rn-567">RN-567 — proposed_action.created diz QUAL regra decidiu: o reason de decide() passa a sobreviver quando a ação passa</a></li><li class="n3"><a href="#rn-569">RN-569 — O grafo é reconstruído do event log pelo MESMO tradutor do projetor vivo, sem tocar a outbox, e nunca sai como sucesso calado</a></li><li class="n3"><a href="#rn-573">RN-573 — O assistente de criação só pré-seleciona o modo que a instalação executa: sem broker, runner é o sugerido e container/mounted ficam inertes com o motivo em texto</a></li><li class="n3"><a href="#rn-574">RN-574 — A /containers recusa antes do clique a subida de container/mounted numa instalação sem broker, com motivo próprio em texto</a></li><li class="n2"><a href="#o-broker-de-container-na-instalacao-com-consentimento-rn-575">O broker de container na instalação, com consentimento (RN-575)</a></li><li class="n3"><a href="#rn-581">RN-581 — A conversa em curso segura a sessão por até 8h, e a sessão encerrada recusa conversa</a></li><li class="n2"><a href="#o-repositorio-nasce-no-aceite-do-handoff-ao-arquiteto-e-a-execucao-nao-comeca-sem-ele-rn-582">O repositório nasce no aceite do handoff ao Arquiteto, e a execução não começa sem ele (RN-582)</a></li><li class="n3"><a href="#rn-582">RN-582 — O aceite do handoff ao Arquiteto provisiona o repositório; o aceite ao Dev Lead é a segunda porta, idempotente; e execution/activate sem repositório é 409 nomeado</a></li><li class="n3"><a href="#rn-583">RN-583 — O critério de roteamento do hub é do binding, viaja com ele, e congela no metering</a></li><li class="n3"><a href="#rn-590">RN-590 — A pasta docs/ dos artefatos é reconstruída do event log pelo MESMO tradutor do projetor vivo, sem tocar a outbox, e nunca sai como sucesso calado</a></li><li class="n3"><a href="#rn-591">RN-591 — A instalação sem broker é dita na conversão de modo, em parar/remover e na proposta do Infra Lead, pela mesma fonte da RN-574</a></li><li class="n3"><a href="#rn-592">RN-592 — A listagem de sessões diz qual é a técnica, pelo vínculo em repo_bootstraps, e a tela lê o marcador em vez do nome</a></li><li class="n3"><a href="#rn-595">RN-595 — Toda _PREVIOUS que um serviço lê chega a ele pelos três composes, vazia por padrão</a></li><li class="n3"><a href="#rn-597">RN-597 — Trocar o pepper é logout global</a></li><li class="n3"><a href="#rn-598">RN-598 — O token de serviço ANTERIOR passa pela mesma régua do atual</a></li><li class="n3"><a href="#rn-603">RN-603 — O modo automático libera o escopo de caminho, e só ele</a></li><li class="n3"><a href="#rn-604">RN-604 — A chamada ao broker tem um teto POR OPERAÇÃO, e o teto estourado diz que foi o teto</a></li><li class="n3"><a href="#rn-609">RN-609 — proposed_action.created diz QUAL raiz o escopo comparou, relativa e nunca absoluta</a></li><li class="n3"><a href="#rn-611">RN-611 — A chave de MÁQUINA ganha listagem e revogação por CONTA, sem :projectId: só as de máquina, só as do próprio usuário, e a revogação é a MESMA de sempre</a></li><li class="n3"><a href="#rn-613">RN-613 — AUTH_TOKEN_PEPPER é obrigatório e próprio; quem migra o define com o AUTH_JWT_SECRET atual</a></li><li class="n3"><a href="#rn-615">RN-615 — A remoção de membro de WORKSPACE nasce com o teto 2 herdado: remover a si mesmo é 403, e é essa cláusula que segura o último owner, sem contar</a></li><li class="n3"><a href="#rn-616">RN-616 — O TITULAR do workspace não sai pela remoção de membro: 409 criador_do_workspace até transferir, e a titularidade só vai para outro owner</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-en.json" data-base="../../"></script></body>
+</html>

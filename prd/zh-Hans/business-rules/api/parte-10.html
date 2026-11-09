@@ -1,0 +1,1328 @@
+<!doctype html>
+<html lang="zh-Hans" data-locale="zh-Hans" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — API — parte 10 (desde RN-727) | Brabo</title>
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="菜单">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="搜索" aria-label="搜索" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="语言"><option value="../../../business-rules/api/parte-10.html">pt-BR</option><option value="../../../en/business-rules/api/parte-10.html">en</option><option value="../../../ru/business-rules/api/parte-10.html">ru</option><option value="../../../zh-Hans/business-rules/api/parte-10.html" selected>zh-Hans</option></select>
+<select data-seletor aria-label="环境"><option value="../../../../dev/zh-Hans/business-rules/api/parte-10.html">dev</option><option value="../../../../prd/zh-Hans/business-rules/api/parte-10.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="切换主题">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 从这里开始</h2></summary><ul><li><a href="../../index.html">首页</a></li><li><a href="../../getting-started.html">快速开始</a></li></ul></details></section><section><details open><summary><h2>🎓 教程</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">编排多个仓库</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Brabo 是如何构建的</a></li></ul></details></section><section><details open><summary><h2>🧭 实用指南</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">开发 Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages 令牌</a></li><li><a href="../../runbook.html">运维手册</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>参与贡献</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">我们如何撰写</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 概念</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">架构</a></li><li><a href="../../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../../explanation/modelo-de-time.html">团队模型与交付物流程</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>流程与流水线</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">分支策略</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../../explanation/release-do-produto.html">产品发布</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>本地化</span></summary><ul><li><a href="../../explanation/localizacao.html">本地化</a></li><li><a href="../../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></details></li><li><details><summary><span>技术笔记</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 参考</h2></summary><ul><li><a href="../../glossary.html">术语表</a></li><li><a href="../../reference/componentes-da-doc.html">文档组件</a></li><li><a href="../../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>业务规则</span></summary><ul><li><a href="../../business-rules.html">业务规则</a></li><li><a href="../../business-rules/custo.html">成本与计量</a></li><li><a href="../../business-rules/autenticacao.html">认证</a></li><li><details open><summary><span>API</span></summary><ul><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/api/parte-01.html">API — parte 1 (desde RN-001)</a></li><li><a href="../../business-rules/api/parte-02.html">API — parte 2 (desde RN-055)</a></li><li><a href="../../business-rules/api/parte-03.html">API — parte 3 (desde RN-100)</a></li><li><a href="../../business-rules/api/parte-04.html">API — parte 4 (desde RN-231)</a></li><li><a href="../../business-rules/api/parte-05.html">API — parte 5 (desde RN-439)</a></li><li><a href="../../business-rules/api/parte-06.html">API — parte 6 (desde RN-503)</a></li><li><a href="../../business-rules/api/parte-07.html">API — parte 7 (desde RN-567)</a></li><li><a href="../../business-rules/api/parte-08.html">API — parte 8 (desde RN-618)</a></li><li><a href="../../business-rules/api/parte-09.html">API — parte 9 (desde RN-677)</a></li><li><a href="../../business-rules/api/parte-10.html" aria-current="page">API — parte 10 (desde RN-727)</a></li><li><a href="../../business-rules/api/parte-11.html">API — parte 11 (desde RN-916)</a></li><li><a href="../../business-rules/api/parte-12.html">API — parte 12 (desde RN-1029)</a></li></ul></details></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Produto</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>API 参考</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ 决策（ADR）</a></h2></section><section><details><summary><h2>🗂️ 项目历史</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">时间线</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">shadcn 前后的界面（2026 年 10 月 31 日）</a></li><li><a href="../../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">第 1 至 15 阶段，第 1 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">16–26 计划与轮次，第 2 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">28 计划与审计，第 3 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">从本地 runner 起，第 4 部分</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../../explanation/backlog.html">已分类的 backlog</a></li><li><details><summary><span>验证与测量</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../../explanation/medicao-do-jev.html">Jev 工具路由器的测量</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">此页尚未翻译；显示葡萄牙语原文。</div>
+<article class="doc">
+<h1 id="api--parte-10-desde-rn-727">API — parte 10 (desde RN-727)</h1>
+<h2 id="a-anamnese-nao-paga-duas-vezes-pela-mesma-janela-e-o-resgate-de-gate-nao-reinicia-ciclo-que-espera-alguem-rn-722">A Anamnese não paga duas vezes pela mesma janela, e o resgate de gate não reinicia ciclo que espera alguém (RN-722)</h2>
+<h3 id="rn-727">RN-727 — A história draft se corrige e se arquiva, pelo PO e pelo usuário, sem apagar nada</h3>
+<ul>
+<li><strong>Regra:</strong> uma história <code>draft</code> SEM tarefa em execução (<code>in_progress</code> ou
+<code>in_review</code>) pode ter o título corrigido e pode ser ARQUIVADA — pelo PO
+(ferramentas <code>update_story</code>, que também corrige a descrição, e
+<code>archive_story</code>) e pelo usuário na aba Backlog (&quot;Editar título&quot; e
+&quot;Arquivar&quot;, com confirmação). As duas portas passam pela MESMA régua
+(<code>recusaDeCorrecaoDeHistoria</code>), e a recusa é 409 NOMEADO: <code>historia_arquivada</code>,
+<code>historia_nao_draft</code> ou <code>historia_com_tarefa_em_execucao</code>, com a frase que o
+modelo e o toast mostram. Arquivar NÃO apaga: a linha de <code>stories</code> ganha
+<code>archived_at</code>/<code>archived_reason</code> (migration <code>0069</code>,
+<a href="../../adr/0212-historia-arquivada.html">ADR 0212</a>), as tarefas ficam, e o evento
+NOVO <code>backlog.story_archived</code> guarda quem, por quê e quais tarefas; a edição
+grava <code>backlog.story_updated</code> com o título anterior. A história arquivada
+sai do backlog (<code>listar_backlog</code> incluído — o PO não a vê para não
+completá-la de novo), da cobertura (<code>computeCoverage</code> lê só as não
+arquivadas), da fila de promoção, do plano do Dev Lead e do claim, e as
+tarefas dela saem junto, pela história; transição, <code>complete_story</code> e
+<code>create_task</code> recusam história arquivada. O papel mínimo do usuário é o das
+outras escritas de backlog (promover/devolver, RN-048): <code>developer</code>; abaixo
+dele os botões ficam inertes com o motivo em texto, e o mesmo vale para
+história fora de <code>draft</code> ou com tarefa em execução. Cada história mostra
+quantas tarefas tem.</li>
+<li><strong>Onde:</strong> <code>src/domain/backlog/correcao-de-historia.ts:33</code>
+(<code>recusaDeCorrecaoDeHistoria</code>),
+<code>src/application/use-cases/backlog/corrigir-historia.use-case.ts:52</code>
+(<code>editar</code>), <code>:162</code> (<code>arquivar</code>),
+<code>src/infrastructure/persistence/drizzle/backlog.repository.ts:97</code>
+(<code>findByProject</code>), <code>:403</code> (<code>claimNext</code>),
+<code>src/interfaces/http/backlog/backlog.controller.ts:205</code>
+(<code>updateTitle</code>), <code>:219</code> (<code>archive</code>),
+<code>src/interfaces/http/internal/internal-sessions.controller.ts:579</code>
+(<code>updateStoryRoute</code>), <code>:647</code> (<code>archiveStoryRoute</code>),
+<code>apps/engine/lib/engine/harness/tools/update_story.ex:45</code> (<code>run</code>),
+<code>apps/engine/lib/engine/harness/tools/archive_story.ex:38</code> (<code>run</code>),
+<code>apps/web/src/lib/correcao-de-historia.ts:10</code> (<code>motivoDeCorrecaoInerte</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/backlog/corrigir-historia.use-case.spec.ts</code>
+(feliz: título e arquivo com evento; falha: tarefa <code>in_progress</code>/<code>in_review</code>
+é 409 <code>historia_com_tarefa_em_execucao</code> sem escrita),
+<code>test/application/use-cases/execution/claim-next-task.use-case.spec.ts</code>
+(&quot;não pega task de story ARQUIVADA, nem a conta, nem a lista&quot;, contra
+Postgres), <code>test/interfaces/http/backlog/backlog-corrigir-historia.controller.spec.ts</code>
+(o papel das duas rotas é o de promover; <code>viewer</code> não alcança),
+<code>apps/engine/test/engine/harness/tools/corrigir_historia_test.exs</code> (a recusa
+nomeada chega ao modelo), <code>apps/web/src/routes/ProjectBacklogTab.test.tsx</code>
+(&quot;corrigir história (RN-727)&quot;: feliz, tarefa em execução e papel abaixo de
+<code>developer</code> deixam inerte com o motivo)</li>
+<li><strong>Origem:</strong> AT-406 (TP-01 de 03/10: o PO criou duas histórias duplicadas,
+chamou <code>delete_story</code> e recebeu &quot;ferramenta desconhecida&quot;; as duplicatas
+ganharam tarefa e entraram no plano), decisão do dono de 03/10 (&quot;PO e
+usuário&quot;)</li>
+</ul>
+<h3 id="rn-729">RN-729 — A PR de infra mira <code>main</code> e diz onde mergear; a sidebar abre só o projeto aberto</h3>
+<ul>
+<li><strong>Regra:</strong> quatro cláusulas medidas no TP-01 (03/10).
+(1) A PR de infra (<code>open_infra_pr</code>) segue a <a href="../engine.html#rn-664">RN-664</a>: a branch
+<code>feature/infra-setup</code> nasce de <code>main</code> e a PR mira <code>main</code> (a branch de
+trabalho trunk, <a href="parte-11.html#rn-1022">RN-1022</a>; antes era <code>dev</code>) — o worktree do dev
+agent nasce da mesma branch. Repositório sem ela falha nomeado pelo
+provider, sem queda para a default. A PR leva o autor <code>&lt;agente&gt;[bot]</code> (<code>infra[bot]</code> quando o ator não é
+agente), a mesma identidade da <a href="parte-09.html#rn-705">RN-705</a>. Em Aprovações, cada PR de
+infra em revisão ganha &quot;Mergear na aba PRs&quot;, que troca a moldura para a aba
+PRs (onde o merge mora). (2) Abrir um projeto RECOLHE os outros na sidebar
+e rola a lista até ele; no Dashboard nenhum fica forçado expandido; o
+chevron segue alternando à mão. (3) Os campos de texto do assistente &quot;Novo
+projeto&quot; (nome, caminho, repositório adotado) levam <code>SEM_AUTOFILL</code>, o mesmo
+conjunto da <a href="../web.html#rn-693">RN-693</a>. (4) Decidir um merge na aba PRs invalida a
+fila inteira de pendentes do projeto, então o contador &quot;PRs&quot; da sidebar não
+segue mostrando o merge já executado até o próximo poll; e o lead de QA (ou
+SecOps) deixa de dizer &quot;trabalhando&quot; quando, depois do último parecer, um
+subagente da área registra <code>delegation.failed</code> — passa a <code>falhou</code>. Nenhuma
+query nem poll novo.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-infra-pr.use-case.ts:71</code>
+(<code>ExecuteInfraPrUseCase</code>),
+<code>apps/web/src/routes/ProjectApprovalsTab.tsx:106</code> (<code>ProjectApprovalsTab</code>),
+<code>apps/web/src/routes/Shell.tsx:562</code> (<code>idDoProjetoAtual</code>),
+<code>apps/web/src/routes/NewProjectWizard.tsx:155</code> (<code>NewProjectWizard</code>),
+<code>apps/web/src/routes/ProjectPrsTab.tsx:150</code> (<code>invalidateMergeActions</code>),
+<code>apps/web/src/lib/agent-status.ts:254</code> (<code>gateStatus</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/actions/execute-infra-pr.use-case.spec.ts</code>
+(&quot;a branch nasce de dev, a PR mira dev e leva infra[bot]&quot;; falha:
+&quot;repositório sem dev falha nomeado, sem cair na default&quot;),
+<code>apps/web/src/routes/Shell.test.tsx</code> (&quot;abrir um projeto recolhe o visitado
+antes e rola até o aberto&quot;, &quot;no Dashboard nenhum projeto fica forçado
+expandido&quot;), <code>apps/web/src/routes/NewProjectWizard.test.tsx</code> (&quot;o campo de
+nome não convida o autofill&quot;), <code>apps/web/src/lib/agent-status.test.ts</code>
+(&quot;delegação falhada depois do parecer encerra o trabalhando&quot;)</li>
+<li><strong>Origem:</strong> AT-411, AT-412, AT-413, AT-415</li>
+</ul>
+<h3 id="rn-730">RN-730 — O 402 do provider tem <code>code</code> próprio, e é ele que decide o crédito esgotado</h3>
+<ul>
+<li><strong>Regra:</strong> o HTTP 402 do provider de LLM é normalizado como
+<code>insufficient_credit</code> (antes caía em <code>upstream</code>), na mesma tabela de status
+do ADR 0041 — os demais status continuam como estavam. O <code>code</code> viaja ao
+engine como <code>errorCode</code> ao lado do <code>error</code>, no corpo de <code>llm-turn</code> e no frame
+<code>final</code> de <code>llm-turn/stream</code> (<code>null</code> sem erro ou com erro que não é do
+provider, como orçamento e binding ausente). No engine,
+<code>FalhaDeTurno.credito_esgotado?/1</code> decide primeiro pelo <code>code</code>
+(<code>insufficient_credit</code> é crédito; outro <code>code</code> não é, mesmo com a frase), e
+o frame <code>{:final, texto, code}</code> dos conversacionais dá origem <code>infra</code> pelo
+código. O reconhecimento por texto da RN-726 fica só como REDE: api anterior
+ao campo, e caminho que só leva a mensagem.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/llm-provider-errors.ts:38</code>
+(<code>LLMInsufficientCreditError</code>), <code>:86</code> (<code>normalizeHttpStatus</code>),
+<code>src/application/use-cases/llm/run-llm-turn.use-case.ts:270</code>
+(<code>streamErrorCode</code>),
+<code>src/application/use-cases/llm/stream-llm-turn.use-case.ts:305</code>
+(<code>streamErrorCode</code>),
+<code>apps/engine/lib/engine/agents/falha_de_turno.ex:91</code> (<code>credito_esgotado?</code>),
+<code>:71</code> (<code>origem</code>), <code>apps/engine/lib/engine/harness/tool_loop.ex:168</code>
+(<code>last_error_code</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:931</code>
+(<code>handle_outcome</code>)</li>
+<li><strong>Teste:</strong> <code>test/contract/llm-provider.contract.ts</code> (<code>erro_402 vira chunk de erro com code &quot;insufficient_credit&quot;</code>; falha: <code>erro_500</code> segue
+<code>upstream</code>), rodado por todas as suítes de contrato de provider;
+<code>apps/engine/test/engine/agents/falha_de_turno_test.exs</code> (&quot;insufficient_credit
+é crédito esgotado e origem infra, sem frase nenhuma&quot;; falha: &quot;outro code não
+é crédito, mesmo com a frase; sem code, o texto é a rede&quot;)</li>
+<li><strong>Origem:</strong> AT-416 (a lacuna declarada da RN-726)</li>
+</ul>
+<h3 id="rn-734">RN-734 — O caminho OpenAI-compatível manda o teto de saída SEMPRE</h3>
+<ul>
+<li><strong>Regra:</strong> toda chamada de chat pelo dialeto <code>/chat/completions</code> (os
+providers que nascem de <code>OpenAICompatibleProvider</code>, OpenRouter incluído)
+leva o campo de teto de saída — <code>max_tokens</code> ou <code>max_completion_tokens</code>,
+conforme <code>maxTokensField</code> — mesmo quando quem chama não define
+<code>maxTokens</code>. Sem definição, o valor é <code>MAX_TOKENS_PADRAO</code> (4096), o MESMO
+<code>DEFAULT_MAX_TOKENS</code> do <code>anthropic-provider.ts</code>, para o agente ter o mesmo
+teto nos dois dialetos. O motivo é a RESERVA de crédito: sem o campo, o
+OpenRouter reserva por chamada a saída MÁXIMA do modelo e recusa com 402
+(&quot;would exceed your available credits given your current in-flight
+requests&quot;) com saldo que cobriria a chamada real. Hoje nenhum chamador
+(engine → <code>llm-turn</code>) define <code>maxTokens</code>, então o padrão vale para todos
+os agentes. A resposta cortada pelo teto (<code>finish_reason: &quot;length&quot;</code>) é
+lida e narrada desde a <a href="#rn-737">RN-737</a> (a RN-698 narra o teto de
+ITERAÇÕES, não o de tokens). Hipótese NÃO medida com chave real: que a
+reserva explica o 402 do TP-01.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/llm/openai-compatible-provider.ts:38</code>
+(<code>MAX_TOKENS_PADRAO</code>), <code>:634</code> (<code>flags</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/llm/openai-compatible-provider.contract.spec.ts</code>
+(sem <code>maxTokens</code> o corpo leva <code>max_tokens: 4096</code>; com <code>maxTokens: 123</code> leva
+123; com <code>maxTokensField: 'max_completion_tokens'</code> o campo muda e
+<code>max_tokens</code> não vai)</li>
+<li><strong>Origem:</strong> AT-419 (TP-01 de 03/10: US$ 1,79 livres e 402 na chamada do Dev
+Lead e na do dev agent)</li>
+</ul>
+<h3 id="rn-737">RN-737 — A resposta cortada pelo teto de saída é sinalizada, não executada e dita</h3>
+<ul>
+<li><strong>Regra:</strong> a api lê o motivo de parada nos dois dialetos — <code>finish_reason: &quot;length&quot;</code> no OpenAI-compatível (OpenRouter incluído) e <code>stop_reason: &quot;max_tokens&quot;</code> no Anthropic — e, só quando a resposta foi cortada pelo teto
+de saída (RN-734), devolve <code>truncated: true</code> na resposta de <code>llm-turn</code> e no
+frame <code>final</code> de <code>llm-turn-stream</code> (campo aditivo; ausente no caso normal).
+O engine anota o sinal no processo do turno, a cada chamada de LLM: (a) a
+chamada de ferramenta de resposta cortada NÃO é executada — volta ao laço
+como erro nomeado (&quot;a resposta foi cortada pelo limite de tokens… Reenvie o
+argumento em partes menores&quot;), que o modelo lê e corrige (RN-163); (b) o
+fecho de texto cortado ganha, DEPOIS do texto do modelo e sem reescrevê-lo,
+a linha no idioma do turno (RN-622, molde da RN-731): <code>pt*</code> &quot;Resposta
+cortada pelo limite de tamanho.&quot;, qualquer outro — ou nenhum — &quot;Response cut
+off by the length limit.&quot;. O Ollama não lê o motivo de parada (fora do
+escopo, declarado).</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/llm/openai-compatible-provider.ts:314</code>
+(<code>cortadaPeloTeto</code>),
+<code>src/infrastructure/llm/anthropic-provider.ts:228</code> (<code>finalMessage</code>),
+<code>src/application/use-cases/llm/run-llm-turn.use-case.ts:234</code>
+(<code>truncated</code>),
+<code>src/application/use-cases/llm/stream-llm-turn.use-case.ts:301</code>
+(<code>truncated</code>),
+<code>apps/engine/lib/engine/harness/resposta_cortada.ex:43</code> (<code>registrar</code>),
+<code>:89</code> (<code>descarregar</code>),
+<code>apps/engine/lib/engine/harness/argumentos_de_ferramenta.ex:26</code> (<code>executar</code>),
+<code>apps/engine/lib/engine/agents/texto_do_turno.ex:65</code> (<code>payload_do_turno</code>)</li>
+<li><strong>Teste:</strong> <code>test/contract/llm-provider.contract.ts</code> (&quot;resposta
+cortada pelo teto de saída emite o sinal truncated&quot; e &quot;resposta normal não
+traz o sinal de corte&quot;, rodados com servidor falso pelos harnesses
+OpenAI-compatível e Anthropic),
+<code>apps/engine/test/engine/harness/resposta_cortada_test.exs</code> (ferramenta de
+resposta cortada não roda e volta erro nomeado; resposta normal roda; fecho
+cortado ganha a linha em pt-BR sem reescrita; fecho normal intacto; pt/en)</li>
+<li><strong>Origem:</strong> AT-423 (lacuna declarada na RN-734)</li>
+</ul>
+<h3 id="rn-739">RN-739 — O diagnóstico leva o corpo de erro do provider inteiro, e a bolha segue curta</h3>
+<ul>
+<li><strong>Regra:</strong> a mensagem do erro normalizado de provider (ADR 0041) leva o
+corpo de erro até <code>LIMITE_DO_DETALHE</code> = 4 000 caracteres (era 200, e cortava
+o JSON do OpenRouter antes do <code>metadata.reason</code>, que diz a natureza do
+erro). Essa mensagem é o texto do frame final e vira, verbatim, o <code>reason</code>
+do <code>agent.error</code> (<code>FalhaDeTurno.diagnostico/1</code>, RN-733). A frase da bolha
+NÃO cresce com ela: fora do caso de crédito (que já tem frase curta), o
+texto narrado entra na bolha cortado em 300 caracteres com &quot;…&quot;.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/llm-provider-errors.ts:164</code>
+(<code>LIMITE_DO_DETALHE</code>), <code>apps/engine/lib/engine/agents/falha_de_turno.ex:284</code>
+(<code>@teto_da_bolha</code>), <code>:289</code> (<code>curto</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/llm/llm-provider-errors.spec.ts</code> (o 402
+leva <code>&quot;metadata&quot;:{&quot;reason&quot;:&quot;insufficient_credits&quot;</code> inteiro; corpo acima do
+teto corta), <code>apps/engine/test/engine/agents/falha_de_turno_test.exs</code>
+(RN-739: o <code>reason</code> contém o <code>metadata</code>; erro longo corta na bolha e não no
+diagnóstico)</li>
+<li><strong>Origem:</strong> AT-424 (TP-01, 3ª rodada, 03/10: <code>reason</code> cortado em
+<code>…&quot;code&quot;:402,&quot;metadata&quot;:{&quot;reason&quot;:&quot;in…</code>)</li>
+</ul>
+<h3 id="rn-741">RN-741 — O raciocínio tem orçamento próprio e não come a saída visível</h3>
+<ul>
+<li><strong>Regra:</strong> quando o modelo do binding raciocina (<code>models.supports_reasoning</code>,
+do catálogo), os casos de uso de LLM mandam <code>reasoning: true</code> ao provider.
+Um provider com <code>campoDeRaciocinio</code> configurado (hoje só o OpenRouter) manda
+um orçamento EXPLÍCITO de raciocínio — <code>reasoning: { max_tokens: ORCAMENTO_DE_RACIOCINIO }</code>, 4096 — e o <code>max_tokens</code> da chamada passa a ser a
+saída visível (o teto da RN-734) MAIS esse orçamento, para o texto e a
+chamada de ferramenta continuarem com o teto deles. O raciocínio nunca é
+desligado (<code>exclude</code>/<code>enabled: false</code> não são enviados). Modelo sem
+raciocínio, e provider sem a configuração, mandam o corpo de antes, byte a
+byte. O <code>anthropic-provider</code> direto não envia <code>thinking</code>, então o modelo não
+raciocina por ali e o buraco não existe — declarado, sem mudança. A forma do
+campo foi lida da doc do OpenRouter (Reasoning Tokens: <code>reasoning.max_tokens</code>;
+o <code>max_tokens</code> da chamada tem de ser maior que ele).
+<strong>Revisada pela <a href="#rn-782">RN-782</a>/<a href="#rn-783">RN-783</a> (AT-467):</strong> a medição
+com credencial de 10/10 mostrou que o Haiku 5.5 IGNORA <code>reasoning.max_tokens</code>;
+o campo deixou de ser enviado e a folga no <code>max_tokens</code> ficou.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/llm/openai-compatible-provider.ts:48</code>
+(<code>ORCAMENTO_DE_RACIOCINIO</code>), <code>:640</code> (<code>controla</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/llm/openai-compatible-provider.contract.spec.ts</code>
+(<code>raciocínio com orçamento próprio (RN-741)</code>: orçamento e teto somado; sem
+raciocínio o corpo não muda; provider sem campo não inventa orçamento)</li>
+<li><strong>Origem:</strong> AT-427 (TP-01, 08/10: <code>anthropic/claude-haiku-5.5</code> com
+<code>output_tokens = reasoning_tokens = 4096</code> em duas chamadas seguidas do PO)</li>
+</ul>
+<h3 id="rn-752">RN-752 — PR de infra mergeada sai de &quot;PRs de infra em revisão&quot;</h3>
+<ul>
+<li><strong>Regra:</strong> a leitura <code>GET .../infra-artifacts</code> (seção &quot;PRs de infra em
+revisão&quot; da aba Aprovações) não devolve o artefato de infra cuja PR já foi
+mergeada. O gate do artefato termina em <code>awaiting_user</code> e nada o move depois
+do merge; em vez de coluna nova, a régua é DERIVADA: a PR do artefato é o
+<code>pullRequestId</code> do resultado do <code>open_infra_pr</code> que a abriu (<code>prActionId</code>),
+e ela está mergeada quando um <code>git_merge</code> do projeto com status <code>executed</code>
+devolveu <code>state: 'merged'</code> para esse id — o mesmo casamento por
+<code>pullRequestId</code> que fecha as tarefas (RN-628). Merge que falhou ou ainda
+pende não tira nada da lista. O aviso de &quot;PR de infra pronta para merge&quot; no
+fio ou no painel &quot;precisa de você&quot; NÃO foi feito aqui.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/list-infra-artifacts.use-case.ts:26</code>
+(<code>execute</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/list-infra-artifacts.use-case.spec.ts</code>
+(merge executado tira a PR; merge falho ou pendente a mantém)</li>
+<li><strong>Origem:</strong> AT-436 (TP-01: depois de &quot;Merge&quot; → &quot;Aprovar&quot; na aba PRs, a PR
+seguia com Dev ✓ QA ✓ SecOps ✓ e &quot;Você&quot; pendente)</li>
+</ul>
+<h3 id="rn-758">RN-758 — O recorte do Jev nunca tira a ferramenta de obrigação do agente</h3>
+<ul>
+<li><strong>Regra:</strong> quando o Jev recorta o menu do passo (<a href="../engine.html#rn-625">RN-625</a>, P3), o
+menu recebe de volta o PISO do agente: para o PO, <code>create_story</code>,
+<code>create_task</code> e, desde a <a href="parte-11.html#rn-942">RN-942</a>, <code>declare_open_question</code>; para o Arquiteto, <code>create_module_map</code>,
+<code>route_modules_to_infra</code>, <code>declare_module_contracts</code>, <code>propose_adr</code> e
+<code>create_c4_diagram</code>. Só entra o que está no catálogo daquele passo — o piso
+nunca acrescenta ferramenta que o agente não tinha, e em toda queda o
+catálogo inteiro segue como antes. O piso é ESTÁTICO por agente, e isso é
+declarado: a api não tem sinal barato de qual obrigação está pendente
+naquele passo, então ele vale sempre que há recorte. Os dev agents ficam
+sem piso, de propósito (a obrigação deles muda a cada passo; para eles vale
+só a <a href="#rn-759">RN-759</a>) — salvo <code>report_done</code>/<code>report_blocked</code>, que entram no piso deles desde a <a href="#rn-839">RN-839</a>.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/tool-router.ts:401</code> (<code>menuComPiso</code>) e
+<code>src/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.ts:248</code>
+(<code>menuComPiso</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.spec.ts</code>
+(o PO com o menu <code>[&quot;listar_backlog&quot;,&quot;create_story&quot;]</code> mantém <code>create_task</code>;
+o Arquiteto com 2 de 9 mantém as cinco de artefato)</li>
+<li><strong>Origem:</strong> AT-445 (TP-01 de 09/10: o PO sem <code>create_task</code> respondeu &quot;Não
+tenho uma ferramenta para criar tarefas&quot; e fechou com 8 histórias sem
+tarefa; o Arquiteto com 2 de 9 fechou sem roteamento, contratos, ADR nem C4)</li>
+</ul>
+<h3 id="rn-759">RN-759 — O passo recortado avisa ao modelo que o menu é um recorte</h3>
+<ul>
+<li><strong>Regra:</strong> quando o recorte do Jev é aplicado (<code>aplicado: true</code>), a chamada
+ao provider DAQUELE passo leva, no fim, uma mensagem <code>system</code> EFÊMERA que
+diz quantas e quais ferramentas o passo recebeu, que as demais seguem
+disponíveis nas próximas voltas e que o agente não deve concluir que não tem
+uma ferramenta nem encerrar o turno esperando por ela. Ela nunca entra no
+histórico do agente nem no event log, e não existe sem recorte nem em queda.
+É montada na api, e não na fachada do engine como a <a href="../engine.html#rn-622">RN-622</a>,
+porque só a api sabe o menu depois do Jev. Não aplicar o recorte na volta
+que fecha o turno foi avaliado e não feito: a api não sabe antes da
+resposta que a volta será a última.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/tool-router.ts:420</code> (<code>avisoDeRecorte</code>) e
+<code>src/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.ts:263</code>
+(<code>avisoDeRecorte</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.spec.ts</code>
+(o aviso chega como última mensagem com recorte; sem recorte e em queda, as
+mensagens são as do pedido)</li>
+<li><strong>Origem:</strong> AT-445 (o dev agent bloqueou uma tarefa &quot;sem ferramenta para
+editar arquivos&quot; tendo <code>write_file</code>)</li>
+</ul>
+<h3 id="rn-761">RN-761 — Dependência instalada não entra no repositório: <code>.gitignore</code> base, commit que a exclui e gate que a acusa</h3>
+<ul>
+<li><strong>Regra:</strong> três camadas, com a MESMA lista de diretórios (<code>node_modules</code>,
+<code>deps</code>, <code>_build</code>, <code>.venv</code>, <code>venv</code>, <code>__pycache__</code>, <code>vendor</code>, <code>target</code>):
+<ol>
+<li>o bootstrap do repositório (os três providers e a adoção) ganha o passo
+<code>commit_gitignore</code>, que commita um <code>.gitignore</code> base em <code>main</code> ANTES de
+qualquer branch de trabalho nascer (o repositório é trunk,
+<a href="parte-11.html#rn-1022">RN-1022</a>), então toda branch de trabalho o herda. É o ponto único
+porque é por ele que TODO repositório criado ou adotado passa, antes de
+qualquer agente escrever; a Infra pelo <code>module_map</code> chegaria depois do
+primeiro commit do dev e só nos projetos que passam por ela. O passo só
+CRIA o arquivo: um <code>.gitignore</code> já existente, mesmo diferente, é do
+usuário e não entra no plano;</li>
+<li>o commit do dev agent (<code>git_commit</code>) e o commit que preserva o worktree
+ao bloquear (<a href="../engine.html#rn-743">RN-743</a>) estagiam tudo MENOS esses diretórios, em
+qualquer profundidade (pathspec <code>:(exclude,glob)</code>), mesmo sem
+<code>.gitignore</code>;</li>
+<li>o gate SecOps acusa, como achado (<code>changes_requested</code>), diretório da lista
+que apareça no diff da PR, com a contagem de arquivos.
+As duas cópias da lista (api e engine) são conferidas por teste. Declarado:
+arquivo de dependência JÁ rastreado antes desta regra não é removido pelo
+commit (a exclusão não estagia remoção); o projeto já bootstrapado só ganha
+o <code>.gitignore</code> se o bootstrap rodar de novo; no modo <code>runner</code> o commit roda
+pelo mesmo <code>GitExecutor</code> e a mesma exclusão vale onde o engine executa git.</li>
+</ol>
+</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/git/bootstrap-templates.ts:38</code>
+(<code>gitignoreContent</code>), <code>src/application/use-cases/git/bootstrap-steps.ts:128</code>
+(<code>soSeAusente</code>), <code>apps/engine/lib/engine/actions/diretorios_de_dependencia.ex:37</code>
+(<code>argumentos_do_add</code>), <code>:47</code> (<code>commitados</code>),
+<code>apps/engine/lib/engine/gates/secops_agent_server.ex:162</code>
+(<code>dependencias_commitadas</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/git/bootstrap-plan.spec.ts</code>
+(o repositório vazio planeja os 3 arquivos; <code>.gitignore</code> do usuário não entra
+no plano), <code>test/application/use-cases/git/provision-repository.use-case.spec.ts</code>
+(o local converge os 6 passos),
+<code>apps/engine/test/engine/actions/git_executor_test.exs</code> (<code>commit exclui diretórios de dependência mesmo sem .gitignore</code>),
+<code>apps/engine/test/engine/actions/diretorios_de_dependencia_test.exs</code> (a
+lista é a mesma da api; o SecOps acusa <code>node_modules</code>)</li>
+<li><strong>Origem:</strong> AT-446 (TP-01 de 09/10: PR com 1.453 arquivos, 1.437 em
+<code>node_modules/</code>, aprovada por QA e SecOps)</li>
+</ul>
+<h3 id="rn-762">RN-762 — O bloqueio por ciclo de correção esgotado grava a origem <code>politica</code></h3>
+<ul>
+<li><strong>Regra:</strong> quando o gate esgota o teto de correções (<code>maxGateCorrections</code>) e
+a task é bloqueada com &quot;ciclo de correção esgotado (gate)&quot;, o
+<code>backlog.task_blocked</code> e a linha da task levam <code>origin: &quot;politica&quot;</code> — o teto
+é decisão de configuração, não falha real (vocabulário do ADR 0020, regra da
+RN-059). Antes saía <code>origin: null</code>. O bloqueio de artefato de infra pelo
+mesmo motivo (<code>infra.artifact_blocked</code>) não tem campo de origem e fica como
+está, declarado.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/record-gate-verdict.use-case.ts:215</code>
+(<code>politica</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/record-gate-verdict.use-case.spec.ts</code>
+(o ciclo esgotado chama <code>MarkTaskBlockedUseCase</code> com <code>'politica'</code>; o veredito
+aprovado não bloqueia)</li>
+<li><strong>Origem:</strong> AT-450 (TP-01 de 09/10: <code>backlog.task_blocked</code> com
+<code>origin: null</code>)</li>
+</ul>
+<h3 id="rn-770">RN-770 — Miudezas da tela de projeto: autor da PR de ADR, modelo da Infra, título da PR do dev, selo da execução, caminho e tabela</h3>
+<ul>
+<li><strong>Regra:</strong> (1) a PR de ADR leva a identidade do agente (<code>&lt;agente&gt;[bot]</code>,
+senão <code>arquiteto[bot]</code>), como a de infra (<a href="#rn-729">RN-729</a>) — a aba PRs
+deixa de dizer &quot;autor desconhecido&quot;; (2) a <code>agent.response</code> do Infra Lead
+carrega o <code>modelName</code> do frame final, como os outros conversacionais — a
+bolha deixa de dizer &quot;modelo não registrado&quot;; (3) o título da PR do dev
+agent abre pela TAREFA e depois a história (<code>&lt;tarefa&gt; — &lt;história&gt;</code>), para
+três PRs da mesma história não parecerem a mesma com o fim cortado; (4) com
+execução ativa (o mesmo predicado da <a href="../web.html#rn-769">RN-769</a>), a barra da sessão
+diz &quot;Execução&quot; em vez do <code>kind</code> gravado (<code>criativa</code>, que não muda —
+<a href="parte-02.html#rn-097">RN-097</a>) e o composer não oferece o Criativo antes de ativado;
+(5) na confirmação da criação, cada segmento do caminho é <code>nowrap</code>: a quebra
+só acontece depois da barra, nunca no hífen; (6) a tabela Markdown no balão
+tem piso de <code>12rem</code> POR COLUNA e cresce por fração, com o contêiner em
+<code>min-content</code> — com <code>max-content</code> ela ficava da largura do texto sem quebra
+(medido no Chromium: 2 236px num balão de 708px) e a última coluna sumia.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-adr-pr.use-case.ts:95</code>
+(<code>openPullRequest</code>); <code>apps/engine/lib/engine/infra/infra_lead_server.ex:1599</code>
+(<code>gravar_texto_do_turno</code>); <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1282</code>
+(<code>propose_pr</code>); <code>apps/web/src/lib/session-destinatario.ts:228</code>
+(<code>agentesEmConversa</code>) e <code>apps/web/src/lib/session-kind.ts:69</code>
+(<code>tipoDaSessao</code>); <code>apps/web/src/routes/NewProjectWizard.tsx:1143</code>
+(<code>quebraPorSegmento</code>); <code>apps/web/src/components/ui/MarkdownMessage.tsx:178</code>
+(<code>TabelaMarkdown</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/actions/execute-adr-pr.use-case.spec.ts</code>,
+<code>apps/engine/test/engine/infra/infra_lead_server_test.exs</code> (&quot;agent.response
+carrega o nome do modelo&quot;), <code>apps/engine/test/engine/dev/dev_agent_server_test.exs</code>
+(fluxo feliz), <code>apps/web/src/lib/session-destinatario.test.ts</code>,
+<code>apps/web/src/lib/session-kind.test.ts</code>, <code>apps/web/src/routes/NewProjectWizard.test.tsx</code>,
+<code>apps/web/src/components/ui/MarkdownMessage.test.tsx</code></li>
+<li><strong>Origem:</strong> AT-455 (TP-01 de 09/10, achados 2, 3, 8, 9, 16 e 18)</li>
+</ul>
+<h3 id="rn-776">RN-776 — Tarefa da execução esperando alguém segura a sessão de execução</h3>
+<ul>
+<li><strong>Regra:</strong> o heartbeat não fecha a sessão de execução VIGENTE do projeto (a
+<code>active</code> mais recente com <code>execution.activated</code>) enquanto houver tarefa de
+história não arquivada BLOQUEADA, com PR em <code>awaiting_user</code>, ou devolvida
+por conflito de merge (<a href="parte-09.html#rn-715">RN-715</a>, <code>backlog.task_merge_conflict</code>
+nesta sessão) e ainda <code>in_progress</code>. É o sexto sinal da
+<a href="../web.html#rn-064">RN-064</a>, sem teto, como os outros sinais que esperam uma pessoa;
+vem antes do sinal da conversa ociosa (<a href="parte-07.html#rn-581">RN-581</a>), que continua
+o único com teto. Sessão de execução ANTIGA do mesmo projeto não é segurada
+pela tarefa: a tarefa é do projeto, e sem esse recorte ela ficaria imortal.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/sessions/get-session-pending-work.use-case.ts:242</code>
+(<code>findPendenteDaExecucao</code>), <code>src/infrastructure/persistence/drizzle/backlog.repository.ts:252</code>
+(<code>findPendenteDaExecucao</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/sessions/get-session-pending-work.use-case.spec.ts</code>
+(bloqueada, PR esperando merge e conflito seguram; sem nada, fecha; sessão
+de execução antiga não é segurada)</li>
+<li><strong>Origem:</strong> AT-457 (TP-01 de 09/10: as duas sessões de execução fecharam
+2–8 s depois do <code>dev.idle</code>, com tarefa bloqueada e PR esperando o merge)</li>
+</ul>
+<h3 id="rn-777">RN-777 — Desbloquear a tarefa acorda o dev do módulo DELA</h3>
+<ul>
+<li><strong>Regra:</strong> <code>task.became_claimable</code> com causa <code>task_unblocked</code> leva como
+<code>modules</code> o módulo da TAREFA (<code>tasks.module</code>, <a href="parte-09.html#rn-678">RN-678</a>) quando ele
+existe, e os da história só quando a tarefa não tem módulo — o claim é pelo
+módulo da tarefa, então é o dev dele que tem de acordar. O conflito de merge
+já acorda o dono (<a href="parte-09.html#rn-715">RN-715</a>); com a sessão de execução de pé
+(<a href="#rn-776">RN-776</a>), o dono continua com linha em <code>dev_agent_states</code> para
+ser acordado.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/unblock-task.use-case.ts:68</code>
+(<code>modules</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/unblock-task.use-case.spec.ts</code>
+(tarefa com módulo acorda o dev desse módulo)</li>
+<li><strong>Origem:</strong> AT-457</li>
+</ul>
+<h3 id="rn-782">RN-782 — Aceitar o parâmetro de raciocínio não é pedir raciocínio</h3>
+<ul>
+<li><strong>Regra:</strong> revisa a <a href="#rn-741">RN-741</a>. O modelo com <code>supportsReasoning</code> (no
+OpenRouter, <code>reasoning</code> em <code>supported_parameters</code> — 341 de 478 modelos, ou
+seja, &quot;aceita o parâmetro&quot;, não &quot;raciocina&quot;) continua com a FOLGA no teto:
+<code>max_tokens</code> = saída visível (RN-734) + <code>ORCAMENTO_DE_RACIOCINIO</code> (4096). O
+que sai é o campo <code>reasoning: { max_tokens }</code>: ele NÃO é mais enviado a
+modelo nenhum. Medição paga de 10/10 (AT-467): no
+<code>anthropic/claude-haiku-4.5</code>, que sem o campo não raciocina, ele LIGAVA o
+raciocínio em 74% das chamadas a 2,8× o custo; no
+<code>anthropic/claude-haiku-5.5</code> ele era IGNORADO (pedido 1024, gastou 8192 só de
+raciocínio). A decisão do que pedir mora num ponto só, <code>opcoesDeRaciocinio</code>,
+chamado pelos três casos de uso de turno. O TODO(humano) da RN-741 fecha com
+essa medição.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/raciocinio-do-agente.ts:18</code>
+(<code>opcoesDeRaciocinio</code>), <code>src/infrastructure/llm/openai-compatible-provider.ts:640</code>
+(<code>controla</code>), <code>src/application/use-cases/llm/run-llm-turn.use-case.ts:200</code>
+(<code>opcoesDeRaciocinio</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/llm/openai-compatible-provider.contract.spec.ts</code>
+(<code>modelo que raciocina: folga no teto e NENHUM campo de raciocínio (RN-782)</code>,
+corpo byte a byte), <code>test/domain/llm/raciocinio-do-agente.spec.ts</code></li>
+<li><strong>Origem:</strong> AT-467 (medição paga de 10/10)</li>
+</ul>
+<h3 id="rn-783">RN-783 — Os dev agents de execução rodam com o raciocínio desligado</h3>
+<ul>
+<li><strong>Regra:</strong> decisão do dono de 10/10. Para agente <code>dev-&lt;modulo&gt;</code> (o Dev Lead,
+<code>dev-lead</code>, é conversacional e fica de fora) com modelo de
+<code>supportsReasoning</code>, o provider que sabe dizer &quot;desligado&quot; (hoje só o
+OpenRouter, <code>campoDeRaciocinioDesligado</code>) manda <code>reasoning: { enabled: false }</code>,
+mantendo a folga da <a href="#rn-782">RN-782</a>. Medido no Haiku 5.5: 0 de 8 respostas
+cortadas e −42% de custo. Conversacionais e gates não mudam (sem campo), e
+modelo sem <code>supportsReasoning</code> não manda nada. Não é silencioso: a ajuda da
+faceta &quot;thinking&quot; do catálogo de modelos diz que nos dev agents de execução e,
+desde a RN-838, no QA de Automação o raciocínio vai desligado (o mínimo escolhido; o seletor e a bolha não mudam).</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/raciocinio-do-agente.ts:23</code>
+(<code>raciocinioDesligadoParaOAgente</code>), <code>src/infrastructure/llm/openrouter-provider.ts:251</code>
+(<code>campoDeRaciocinioDesligadoOpenRouter</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/llm/openai-compatible-provider.contract.spec.ts</code>
+(<code>dev agent: raciocínio desligado explícito, com a folga (RN-783)</code>),
+<code>test/domain/llm/raciocinio-do-agente.spec.ts</code> (dev-* desliga;
+criativo e dev-lead só a folga; sem <code>supportsReasoning</code>, nada)</li>
+<li><strong>Origem:</strong> AT-467 (decisão do dono de 10/10)</li>
+</ul>
+<h3 id="rn-784">RN-784 — As leituras de estado do Arquiteto entram no piso do Jev</h3>
+<ul>
+<li><strong>Regra:</strong> revisa a <a href="#rn-758">RN-758</a> e a <a href="../engine.html#rn-772">RN-772</a> (decisão do
+dono). O piso do Arquiteto ganha <code>listar_adrs_propostas</code> e <code>listar_backlog</code>:
+o recorte do Jev nunca as tira, para o Arquiteto não afirmar status de ADR
+nem tarefas do backlog sem poder consultá-los (<a href="../engine.html#rn-773">RN-773</a>). Continua
+valendo que o piso só devolve o que está no catálogo do passo.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/tool-router.ts:315</code> (<code>PISO_DO_MENU</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.spec.ts</code>
+(<code>Arquiteto recortado pelo Jev: as leituras de estado (ADRs propostas, backlog) continuam no menu (RN-784)</code>)</li>
+<li><strong>Origem:</strong> AT-460 (TP-01 de 09/10: o Jev tirou do menu do Arquiteto as
+leituras da AT-454)</li>
+</ul>
+<h3 id="rn-785">RN-785 — Requisito que depende de outra história ainda não feita é observação no gate de QA</h3>
+<ul>
+<li><strong>Regra:</strong> além das tarefas irmãs (<a href="../engine.html#rn-765">RN-765</a>), o recorte que a
+QA-estratégia e a QA-automação recebem traz as tarefas NÃO concluídas das
+OUTRAS histórias do mesmo módulo, com o título da história
+(<code>moduleOpenTasks</code> em <code>GET .../dev-context</code>). O módulo é o da tarefa, senão
+o pedido, senão os da história; história arquivada fica fora. Leitura
+contida (ADR 0060): no máximo 20, com o total real em
+<code>moduleOpenTasksTotal</code> e o corte dito no recorte. Requisito da entrega que
+depende do que outra história ainda vai entregar (uma rota, uma tela) vai ao
+<code>resumo</code> como observação e não reprova. A régua é de PROMPT, como na RN-765.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:235</code>
+(<code>tarefasAbertasDoModulo</code>), <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:20</code>
+(<code>texto</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/get-dev-task-context.use-case.spec.ts</code>
+(só a tarefa aberta da outra história do mesmo módulo; arquivada fora; teto
+com o total real) e <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
+(as tarefas abertas e o corte no texto). O golden-set do QA não ganhou caso
+(o veredito exige chamada paga) — declarado.</li>
+<li><strong>Origem:</strong> AT-461 (TP-01 de 09/10, sessão <code>80e3ce09</code>: a tarefa &quot;middleware
+JWT&quot; foi reprovada porque &quot;não há rotas de criar, listar, apagar links nem de
+painel no diff&quot;, rotas de outras histórias ainda não feitas)</li>
+</ul>
+<h3 id="rn-786">RN-786 — O gate de QA lê o contrato do módulo, e divergência com a história é observação</h3>
+<ul>
+<li>
+<p><strong>Regra:</strong> o recorte que a QA-estratégia e a QA-automação recebem traz o
+contrato VIGENTE do módulo da tarefa (<code>artifact.module_contracts</code>,
+<a href="parte-09.html#rn-684">RN-684</a>), em <code>moduleContract</code> de <code>GET .../dev-context</code>, como a
+fonte da INTERFACE. O módulo é o da tarefa, senão o pedido, senão o único da
+história; história com mais de um módulo e tarefa sem módulo é ambígua e vai
+sem contrato. Quando a história e o contrato divergem num nome de interface
+(rota, função, evento), a entrega que segue o contrato não é reprovada por
+isso: o parecer nomeia a DIVERGÊNCIA no <code>resumo</code> (história diz X, contrato
+diz Y), para o usuário e o Arquiteto. Régua de PROMPT, como a
+<a href="../engine.html#rn-765">RN-765</a>. Desde a <a href="../engine.html#rn-792">RN-792</a> o Arquiteto confere o contrato
+contra as rotas citadas nas histórias ao declará-lo.</p>
+</li>
+<li>
+<p><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:280</code>
+(<code>moduloDoContrato</code>), <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:66</code></p>
+</li>
+<li>
+<p><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:280</code>
+(<code>moduloDoContrato</code>), <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:70</code>
+(<code>secao_do_contrato</code>)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>test/application/use-cases/execution/get-dev-task-context.use-case.spec.ts</code>
+(o contrato do módulo da história; sem contrato ou módulo ambíguo, <code>null</code>) e
+<code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code> (a seção do
+contrato com a régua da divergência; sem contrato, sem seção)</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-462 (TP-01 de 09/10, sessão <code>80e3ce09</code>: a história pedia
+<code>GET /painel</code>, o contrato declarou <code>GET /panel</code>, o dev seguiu o contrato e o
+QA reprovou pela história)</p>
+</li>
+</ul>
+<h3 id="rn-802">RN-802 — A estimativa do plano do Dev Lead soma o dobro da primeira tarefa de cada módulo</h3>
+<p>O cartão de aprovação do <code>propose_execution_plan</code> (RN-709) dizia &quot;até N × teto&quot;,
+ignorando que a primeira tarefa de cada módulo tem o dobro do teto (RN-774).
+Agora a api leva no payload, ao lado de <code>orcamentoPorTarefaMicros</code>, o
+<code>multiplicadorDaPrimeiraDoModulo</code>, e a frase soma o teto EFETIVO:
+(tarefas − módulos com tarefa) × teto + módulos com tarefa × multiplicador ×
+teto, dizendo &quot;a primeira de cada módulo vale o dobro&quot;. Com 8 tarefas num
+módulo e teto de US$ 0,50: até US$ 4,50. É limite superior: a primeira de um
+módulo que já teve tarefa reivindicada não ganha o dobro, e a frase continua
+dizendo &quot;até&quot;. Sem o multiplicador no payload (proposta antiga), a conta antiga.</p>
+<p>O multiplicador é APLICADO só no engine (<code>Engine.Dev.TetoDaTarefa</code>); a api tem
+um espelho declarado, porque a tela não deve copiar a constante e o engine não
+é consultado na proposta. Mudar um exige mudar o outro.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/activate-execution.use-case.ts:83</code> (<code>MULTIPLICADOR_DA_PRIMEIRA_TAREFA_DO_MODULO</code>);
+<code>src/application/use-cases/actions/propose-action.use-case.ts:270</code> (<code>multiplicadorDaPrimeiraDoModulo</code>);
+<code>apps/web/src/lib/aprovacoes.ts:382</code> (<code>multiplicador</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/aprovacoes.test.ts</code> (it &quot;RN-802 (AT-473)&quot;: 8 tarefas, 1 módulo → US$ 4,50; 3 tarefas, 2 módulos → US$ 2,50; sem orçamento, sem número — caso de falha);
+<code>test/application/use-cases/actions/propose-action.use-case.spec.ts</code> (&quot;plano válido nasce pending&quot;)</li>
+<li><strong>Origem:</strong> AT-473</li>
+</ul>
+<h3 id="rn-809">RN-809 — As obrigações de módulo e imagem do Arquiteto entram no piso do Jev</h3>
+<ul>
+<li><strong>Regra:</strong> estende a <a href="#rn-758">RN-758</a> e a <a href="#rn-784">RN-784</a>. O piso do
+Arquiteto ganha <code>assign_story_modules</code> e <code>choose_project_image</code>, os passos 2 e
+3 do kickoff dele (<code>arquiteto_server.ex</code>): o recorte do Jev nunca as tira, e o
+Arquiteto não encerra dizendo que a ferramenta &quot;não está disponível nesta
+etapa&quot; com histórias sem módulo e imagem não decidida. Revisto pela AT-614, o
+piso também mantém <code>emit_insight</code> (passo 8, registro de tensão) e
+<code>declare_open_question</code>, que o recorte tirava. Só <code>emit_artifact</code> fica fora
+do piso: não é obrigação da etapa. Continua valendo que o piso só devolve o que está no
+catálogo do passo.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/tool-router.ts:315</code> (<code>PISO_DO_MENU</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.spec.ts</code>
+(<code>Arquiteto recortado pelo Jev sem assign_story_modules/choose_project_image: as duas continuam no menu (RN-809)</code>)</li>
+<li><strong>Origem:</strong> AT-481 (TP-01: o recorte deixou 7 de 11 ferramentas e o
+Arquiteto não distribuiu as histórias por módulo); AT-614 (o recorte também
+tirava <code>emit_insight</code> e <code>declare_open_question</code>)</li>
+</ul>
+<h3 id="rn-812">RN-812 — A PR aberta da mesma branch é reaproveitada, nunca duplicada</h3>
+<ul>
+<li><strong>Regra:</strong> antes de abrir a PR de um <code>pr_open</code>, o executor pergunta ao
+provider (<code>listPullRequests</code>, só as abertas) se já há PR ABERTA com a mesma
+origem e o mesmo destino. Havendo, ela é reaproveitada: a ação fecha
+<code>executed</code> com a URL e o id dela e <code>reaproveitada: true</code>, sem abrir outra —
+o push da task já a atualizou. No uso real a task reaberta depois de
+bloqueio abriu a pr-9 da mesma branch com a pr-8 aberta, e a aba PRs mostrou
+as duas. Provider sem a listagem, ou listagem que falha, não impede abrir: o
+caminho de sempre segue. Fica como estava a PR da branch que a <a href="../engine.html#rn-797">RN-797</a>
+fecha como &quot;já na dev&quot;: essa não é fechada no provider.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-git-action.use-case.ts:33</code>
+(<code>prAbertaDaBranch</code>), <code>src/application/use-cases/actions/execute-git-action.use-case.ts:206</code>
+(<code>prAbertaDaBranch</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/actions/execute-git-action.use-case.spec.ts</code>
+(&quot;pr_open com PR aberta da mesma branch → reaproveita, sem abrir outra&quot;;
+&quot;pr_open: listar PRs falha → abre a PR como sempre&quot;)</li>
+<li><strong>Origem:</strong> AT-485 (TP-01 de 10/10)</li>
+</ul>
+<h3 id="rn-827">RN-827 — O painel de contexto conta a sessão inteira, e a janela só dá o detalhe</h3>
+<ul>
+<li><strong>Regra:</strong> os NÚMEROS do painel &quot;Contexto da sessão&quot; — regras de negócio,
+decisões registradas e artefatos por agente — vêm de um agregado da sessão
+INTEIRA contado no servidor (<code>GET .../sessions/:sessionId/context-summary</code>,
+<code>viewer</code>, leitura sem tabela nova), SOMADO à janela de eventos que a tela já
+carregou pelo molde da <a href="../web.html#rn-568">RN-568</a>: as contagens são monótonas, então
+vale o maior dos dois. O DETALHE (o cartão da regra, a decisão, a árvore do
+backlog) continua sendo o da janela, e o aviso de recorte (&quot;Mostrando N de
+M&quot;) aparece só na seção cujo detalhe é parcial; o agente cujos artefatos
+ficaram todos antes da janela ganha o grupo com o total. Agregado AUSENTE
+(carregando ou falhou) é &quot;não li&quot;: o painel cai no recorte declarado da
+<a href="../web.html#rn-180">RN-180</a>/<a href="../web.html#rn-701">RN-701</a>, e &quot;Arquivos tocados&quot; vazio diz que não
+leu, nunca &quot;Nada ainda&quot;. O agregado NÃO polla (<a href="../engine.html#rn-579">RN-579</a>,
+<a href="../web.html#rn-632">RN-632</a>): é relido quando a janela vê um artefato ou uma ação de
+commit/PR nova (a chave da query), no foco e na remontagem.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/session-context-summary.repository.ts:24</code>
+(<code>resumir</code>), <code>apps/web/src/lib/contexto-da-sessao.ts:15</code>
+(<code>useContextoDaSessaoInteira</code>), <code>apps/web/src/lib/contexto-da-sessao.ts:34</code>
+(<code>totalDaSessao</code>), <code>apps/web/src/routes/ContextAside.tsx:174</code> (<code>resumo</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/persistence/drizzle/session-context-summary.repository.spec.ts</code>
+(&quot;conta a sessão INTEIRA, além de qualquer cauda de 200…&quot;),
+<code>test/application/use-cases/sessions/get-session-context-summary.use-case.spec.ts</code>
+(falha: &quot;sessão de outro projeto é 404 e não lê nada&quot;),
+<code>apps/web/src/routes/ContextAside.sessao-inteira.test.tsx</code> (&quot;com o agregado
+maior que a janela, mostra o total da sessão…&quot;; falha: &quot;sem o agregado, os
+arquivos dizem &quot;não li&quot;…&quot;)</li>
+<li><strong>Origem:</strong> AT-498 (TP-01 de 10/10: sessão de 301 eventos mostrou 0 regras
+sobre 11 e 2 decisões sobre 6)</li>
+</ul>
+<h3 id="rn-828">RN-828 — &quot;Arquivos tocados&quot; inclui a sessão de execução ligada, com teto e total real</h3>
+<ul>
+<li><strong>Regra:</strong> a lista de arquivos tocados do agregado (<a href="#rn-827">RN-827</a>) junta
+os <code>git_commit</code>/<code>git_push</code> da sessão pedida e da sessão de EXECUÇÃO ligada a
+ela — a que o plano do Dev Lead aprovado NESTA sessão ativou
+(<code>executionResult.sessaoDeExecucao</code> de <code>propose_execution_plan</code> executado),
+do mesmo projeto. Sessão sem essa ligação não entra. A lista vem do mais
+recente para o mais antigo, cortada em 100 (<code>TETO_DE_ARQUIVOS_TOCADOS</code>), e o
+<code>total</code> diz o número real; a tela declara o recorte quando ele corta.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/session-context-summary.repository.ts:33</code>
+(<code>ligadas</code>), <code>apps/web/src/routes/ContextAside.tsx:366</code> (<code>filesTouched</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/persistence/drizzle/session-context-summary.repository.spec.ts</code>
+(&quot;…e soma os arquivos da execução ligada&quot;; falha: &quot;corta a lista de arquivos
+no teto e devolve o total real; não lê sessão sem ligação&quot;)</li>
+<li><strong>Origem:</strong> AT-498</li>
+</ul>
+<h3 id="rn-838">RN-838 — O QA de Automação roda com o raciocínio desligado</h3>
+<ul>
+<li><strong>Regra:</strong> estende a <a href="#rn-783">RN-783</a> (decisão do dono de 10/10). O gate
+<code>qa-automacao</code> passa a ter o mesmo tratamento dos dev agents de execução:
+com modelo de <code>supportsReasoning</code>, o provider que sabe dizer &quot;desligado&quot;
+manda <code>reasoning: { enabled: false }</code>, mantendo a folga da
+<a href="#rn-782">RN-782</a>. O QA-estratégia (<code>qa-estrategia</code>) e os demais gates não
+mudam. Medição que motivou: o raciocínio dos gates subiu de 44 mil para 211
+mil tokens por rodada, e o custo deles de US$ 0,15 para US$ 0,55.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/raciocinio-do-agente.ts:39</code>
+(<code>raciocinioDesligadoParaOAgente</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/llm/raciocinio-do-agente.spec.ts</code>
+(<code>QA de Automação desliga; QA-estratégia e outros gates não (RN-838)</code>;
+<code>falha: QA de Automação com modelo sem supportsReasoning não manda nada</code>)</li>
+<li><strong>Origem:</strong> AT-504 (decisão do dono de 10/10)</li>
+</ul>
+<h3 id="rn-839">RN-839 — <code>report_done</code> e <code>report_blocked</code> entram no piso do Jev dos dev agents</h3>
+<ul>
+<li><strong>Regra:</strong> revisa a <a href="#rn-758">RN-758</a>/<a href="#rn-759">RN-759</a> (decisão do dono de
+10/10). Os dev agents de execução (<code>dev-&lt;modulo&gt;</code>, nunca o <code>dev-lead</code>)
+deixam de ficar sem piso SÓ para as duas ferramentas de desfecho da task:
+o recorte do Jev nunca tira <code>report_done</code> nem <code>report_blocked</code>. O resto do
+passo deles segue recortável, com o aviso de recorte da RN-759. Como todo
+piso, ele só devolve o que está no catálogo do passo.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/tool-router.ts:360</code> (<code>pisoDoMenu</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/llm/piso-dos-dev-agents.spec.ts</code>
+(<code>recorte que deixa só \</code>terminal` para dev-api: report_done e
+report_blocked continuam<code>; </code>falha: dev-lead e outro agente não ganham as
+ferramentas de desfecho`)</li>
+<li><strong>Origem:</strong> AT-499 (sequência, decisão do dono de 10/10)</li>
+</ul>
+<h3 id="rn-840">RN-840 — a ferramenta de parecer de cada agente de gate entra no piso do Jev</h3>
+<ul>
+<li><strong>Regra:</strong> estende a <a href="#rn-758">RN-758</a> e a <a href="#rn-839">RN-839</a> aos agentes de
+GATE. O recorte do Jev nunca tira de cada um a ferramenta de PARECER dele, e
+só a dele: <code>qa-automacao</code> → <code>emit_qa_verdict</code>, <code>qa-performance-seguranca</code> →
+<code>emit_perf_seguranca_verdict</code>, <code>qa-estrategia</code> → <code>emit_plano_de_teste</code>,
+<code>appsec</code> → <code>emit_threat_model</code>. Sem ela o gate rodava a suíte e parava sem
+veredito, com a delegação falhando por origem <code>modelo</code> e a tarefa pronta
+bloqueada. Agente fora dos gates não ganha ferramenta de parecer, e o piso
+só devolve o que está no catálogo do passo.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/tool-router.ts:315</code> (<code>PISO_DO_MENU</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/llm/tool-router-piso-dos-gates.spec.ts</code>
+(ids e ferramentas conferidos contra os <code>.ex</code> do engine; recorte que deixa
+só <code>terminal</code>/<code>read_file</code> termina com o parecer; falha: <code>criativo</code>,
+<code>dev-api</code> e <code>dev-lead</code> não ganham ferramenta de parecer; o piso não
+acrescenta ferramenta fora do catálogo)</li>
+<li><strong>Origem:</strong> AT-509 (TP-01, 12ª execução)</li>
+</ul>
+<h3 id="rn-844">RN-844 — O painel de contexto lista as regras, as decisões e os arquivos das PRs da sessão inteira</h3>
+<ul>
+<li><strong>Regra:</strong> extensão da <a href="#rn-827">RN-827</a> e da <a href="#rn-828">RN-828</a>. O agregado
+<code>GET .../sessions/:sessionId/context-summary</code> devolve, além dos números, os
+ITENS: as regras de negócio (<code>itensDeRegras</code>: título, descrição e quantas
+origens cita) e as decisões registradas (<code>itensDeDecisoes</code>: escolha e
+contexto) da sessão, as mais recentes primeiro, até 50 de cada
+(<code>TETO_DE_ITENS_DO_CONTEXTO</code>); o total segue em <code>regras</code>/<code>decisoes</code>. Com o
+agregado, o painel lista esses itens em vez da janela de 200 eventos — a
+regra que ficou antes da janela continua aparecendo — e o recorte diz
+&quot;Mostrando as N mais recentes de M&quot;. &quot;Arquivos tocados&quot; passa a incluir os
+arquivos das PRs (<code>pr_open</code>/<code>open_adr_pr</code>/<code>open_infra_pr</code> executadas, com
+<code>pullRequestId</code>) da sessão e da sessão de execução ligada, lidos do MESMO
+diff da aba PRs (<code>ReadProjectCodeUseCase.pullRequestDiff</code>), antes dos
+arquivos de payload de commit, no teto de 100 com o total real. Leitura
+contida (<a href="../../adr/0060-superficie-de-leitura-de-codigo.html">ADR 0060</a>): sem parâmetro
+livre, no máximo 20 diffs por chamada (<code>TETO_DE_PRS_LIDAS</code>); PR além do teto
+ou cujo diff falhou entra em <code>prsNaoLidas</code>, e a tela diz quantas ficaram de
+fora. Com o agregado e nada a listar, o vazio diz o que não houve (nenhum
+arquivo em PR nem commit desta sessão ou da execução ligada), nunca &quot;Nada
+ainda&quot;. O caso de uso mora no módulo de git porque é ele que lê o
+repositório; sessão de outro projeto continua 404 sem ler PR nenhuma.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/session-context-summary.repository.ts:151</code>
+(<code>itensDeRegras</code>), <code>src/infrastructure/persistence/drizzle/session-context-summary.repository.ts:195</code>
+(<code>prsDasSessoes</code>), <code>src/application/use-cases/git/resumir-contexto-da-sessao.use-case.ts:37</code>
+(<code>prs</code>), <code>apps/web/src/routes/ContextAside.tsx:197</code> (<code>businessRules</code>),
+<code>apps/web/src/routes/ContextAside.tsx:222</code> (<code>decisoes</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/persistence/drizzle/session-context-summary.repository.spec.ts</code>
+(&quot;RN-844: devolve os ITENS de regra e decisão fora de qualquer cauda, com
+teto de 50&quot;; &quot;RN-844: lista as PRs executadas da sessão e da execução
+ligada…&quot;), <code>test/application/use-cases/git/resumir-contexto-da-sessao.use-case.spec.ts</code>
+(&quot;lê os arquivos das PRs das sessões lidas…&quot;; falhas: &quot;corta no teto de
+arquivos, conta PR fora do teto e diff que falhou em prsNaoLidas&quot; e &quot;sessão
+de outro projeto é 404 e não lê PR nenhuma&quot;),
+<code>apps/web/src/routes/ContextAside.sessao-inteira.test.tsx</code> (&quot;…lista os itens
+do servidor (RN-844)&quot;; &quot;agregado sem arquivo diz O QUE não houve…&quot;)</li>
+<li><strong>Origem:</strong> AT-513 (TP-01 de 11/10: 9 regras sem lista, &quot;mostrando 1 de 4&quot;
+decisões e &quot;Arquivos tocados: Nada ainda&quot; com 12 PRs mergeadas)</li>
+</ul>
+<h3 id="rn-847">RN-847 — A PR mergeada continua dizendo os arquivos que mudou</h3>
+<ul>
+<li><strong>Regra:</strong> extensão da <a href="#rn-844">RN-844</a>. No provider git LOCAL, o diff de
+uma PR era <code>target...source</code> também depois do merge — e aí a merge base é a
+própria ponta da origem, então a PR mergeada devolvia ZERO arquivos (medido
+em teste: <code>[]</code> para fast-forward e para commit de merge), e o painel
+&quot;Contexto da sessão&quot; dizia &quot;Nenhum arquivo nas PRs&quot; com 14 PRs mergeadas,
+sem nada em <code>prsNaoLidas</code> (o diff não falhava, vinha vazio). Agora o merge
+grava no store da PR a merge base e a ponta da origem do instante do merge
+(<code>mergedBaseSha</code>/<code>mergedHeadSha</code>), e o diff da PR mergeada é
+<code>mergedBaseSha...mergedHeadSha</code>. PR mergeada antes desses campos cai no
+commit de merge do alvo (primeiro pai) cujo segundo pai é a ponta da origem;
+a mergeada por fast-forward sem os campos não tem como ser reconstruída e
+segue vazia (lacuna declarada). GitHub e GitLab já devolvem o diff da PR
+mergeada pela própria plataforma. Na tela, o resumo do contexto é relido
+nos MESMOS gatilhos que releem a lista de PRs (<a href="../web.html#rn-841">RN-841</a>): o alvo
+<code>prs</code> do canal (com a janela de 2 s dele, sem busca a mais) e a mudança da
+assinatura do backlog, por prefixo <code>['session-context-summary', projectId]</code>.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/git/local-git-provider.ts:374</code>
+(<code>mergedBaseSha</code>), <code>src/infrastructure/git/local-git-provider.ts:862</code>
+(<code>rangeDoDiff</code>), <code>apps/web/src/lib/canal-vivo.ts:221</code> (<code>prs</code>),
+<code>apps/web/src/components/PendenciasDeOutrasSessoes.tsx:105</code> (<code>invalidateQueries</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/git/local-git-provider.contract.spec.ts</code>
+(&quot;PR mergeada por fast-forward devolve os arquivos que mudou&quot;; &quot;PR mergeada
+por commit de merge devolve só os arquivos dela&quot;; &quot;PR mergeada antes de os
+SHAs serem gravados acha o commit de merge&quot;),
+<code>apps/web/src/lib/contexto-da-sessao.test.tsx</code> (&quot;o merge que chega pelo canal
+relê o resumo&quot;; &quot;CASO DE FALHA: evento que não mexe em PR não relê o
+resumo&quot;), <code>apps/web/src/components/PendenciasDeOutrasSessoes.test.tsx</code>
+(&quot;RN-841: a tarefa que entra em awaiting_user relê as PRs…&quot;). A falha de
+leitura somando em <code>prsNaoLidas</code> segue coberta por
+<code>test/application/use-cases/git/resumir-contexto-da-sessao.use-case.spec.ts</code>
+(&quot;corta no teto de arquivos, conta PR fora do teto e diff que falhou em
+prsNaoLidas&quot;).</li>
+<li><strong>Origem:</strong> AT-518 (TP-01, 13ª: &quot;Nenhum arquivo nas PRs nem nos commits&quot;
+com 14 PRs mergeadas, e a aba sem reler o resumo)</li>
+</ul>
+<h3 id="rn-848">RN-848 — O efeito de ação executada dentro de um pedido interno avisa o canal da sessão</h3>
+<ul>
+<li><strong>Regra:</strong> extensão da <a href="../engine.html#rn-579">RN-579</a> (AT-157). A api não avisa o canal
+da escrita que veio do engine (<code>/internal/*</code>), porque a fachada dele avisa o
+evento que ELE pediu para gravar. O que a api grava por conta própria como
+EFEITO de uma ação auto-aprovada executada dentro desse pedido
+(<code>infra.pr_opened</code>, <code>adr.pr_opened</code>, <code>action.*</code>) nenhuma fachada avisa, e
+passa a ser avisado: <code>ProposeActionUseCase</code> executa a ação sob a marca
+<code>runComoEfeitoDeAcao</code>, e o notifier só fica calado com origem engine SEM essa
+marca. O evento que o engine pediu (inclusive o <code>proposed_action.created</code>)
+continua sem aviso da api, para não sair em dobro.</li>
+<li><strong>Onde:</strong> <code>src/application/efeito-de-acao.ts:18</code> (<code>ehEfeitoDeAcao</code>),
+<code>src/application/use-cases/actions/propose-action.use-case.ts:347</code>
+(<code>runComoEfeitoDeAcao</code>),
+<code>src/infrastructure/http-clients/session-channel-notifier.ts:73</code>
+(<code>ehEfeitoDeAcao</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/sessions/aviso-ao-canal-da-sessao.spec.ts</code>
+(&quot;AT-516: efeito de ação executada dentro de /internal avisa o canal, uma
+vez&quot;; falha/regressão: &quot;escrita vinda do engine (/internal) não é avisada de
+novo pela api&quot;)</li>
+<li><strong>Origem:</strong> AT-516 (a PR de infra auto-aprovada só entrou em &quot;PRs prontas&quot;
+do chat ~5 min depois, pelo poll de fallback)</li>
+</ul>
+<h3 id="rn-852">RN-852 — A PR de infra declara como rodar o entregável, e isso vira artefato</h3>
+<ul>
+<li><strong>Regra:</strong> <code>open_infra_pr</code> EXIGE <code>run</code> = <code>{command, urls, envExample}</code>
+(ADR 0213): <code>command</code> texto não vazio até 300 caracteres; <code>urls</code> de 1 a 5
+itens <code>{label (até 60), url, kind}</code>, com <code>url</code> começando com
+<code>http://localhost:</code> ou <code>http://127.0.0.1:</code> e <code>kind</code> ∈ <code>api_docs</code> | <code>web</code>;
+<code>envExample</code> booleano. A api recusa na PROPOSTA com 400 <code>run_invalido</code>
+(texto que volta ao Infra Lead) e revalida na EXECUÇÃO, que falha nomeada
+sem commitar. Com a PR aberta (ou corrigida), a api emite
+<code>artifact.run_instructions</code> <code>{command, urls, envExample, prUrl, version}</code> —
+versionado, sem tabela, o de maior <code>version</code> é o vigente (o desenho de
+<code>artifact.project_image</code>), e projetado em <code>docs/</code> como os outros
+versionados. <code>GET /projects/:projectId/run-instructions</code> (<code>viewer</code>) devolve
+o vigente (<code>+ version, eventId, declaredAt</code>) ou <code>null</code>. É DECLARADO pela
+Infra, nunca verificado na máquina de quem lê (RN-468). E o contexto da
+Infra (<code>/internal/.../infra-context</code>) passa a levar <code>projectImage</code>, a
+decisão vigente de imagem, rede e recursos, <code>null</code> sem decisão.</li>
+<li><strong>Onde:</strong> <code>src/domain/infra/run-instructions.ts:77</code> (<code>recusaDoRun</code>),
+<code>src/application/use-cases/actions/propose-action.use-case.ts:183</code>
+(<code>recusaDoRun</code>),
+<code>src/application/use-cases/actions/execute-infra-pr.use-case.ts:111</code>
+(<code>recusaDoRun</code>), <code>:328</code> (<code>EVENTO_INSTRUCOES_DE_EXECUCAO</code>),
+<code>src/application/use-cases/execution/get-run-instructions.use-case.ts:26</code>
+(<code>execute</code>),
+<code>src/application/use-cases/execution/get-infra-context.use-case.ts:89</code>
+(<code>projectImage</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts</code>
+(&quot;sem <code>run</code>: 400 <code>run_invalido</code>, sem proposta&quot;; &quot;URL fora de localhost: 400
+nomeando o campo&quot;; &quot;<code>run</code> válido: a proposta nasce&quot;),
+<code>test/application/use-cases/actions/execute-infra-pr.use-case.spec.ts</code>
+(&quot;PR aberta emite artifact.run_instructions com prUrl e versão seguinte&quot;;
+falha: &quot;<code>run</code> inválido na execução falha sem commitar nem emitir&quot;),
+<code>test/application/use-cases/execution/get-run-instructions.use-case.spec.ts</code>
+(&quot;devolve o vigente — o de maior version&quot;; &quot;null sem artefato, e o de outro
+projeto não vaza&quot;),
+<code>test/application/use-cases/execution/get-infra-context.use-case.spec.ts</code>
+(&quot;RN-852: projectImage é a decisão vigente…&quot;; &quot;…null sem decisão de imagem&quot;)</li>
+<li><strong>Origem:</strong> AT-517 (o entregável do TP-01 não dizia como rodar na máquina
+do usuário)</li>
+</ul>
+<h3 id="rn-856">RN-856 — Desbloquear não encerra a execução, e a tarefa em curso órfã tem volta</h3>
+<ul>
+<li><strong>Regra:</strong> três metades de um defeito só (o TP-01 mediu 1 s entre o
+&quot;Desbloquear&quot; e o claim do dev, e o heartbeat encerrou a sessão nele). (1) O
+sexto sinal da <a href="../web.html#rn-064">RN-064</a> (<a href="#rn-776">RN-776</a>)
+conta também, na sessão de execução vigente, a tarefa <code>todo</code> de história
+<code>ready</code> cujo módulo é de um dev agent DESTA execução (ator de evento <code>dev.*</code>
+na sessão) e a tarefa <code>in_progress</code> atribuída a um deles — sem teto, como os
+outros. (2) O claim retoma, ANTES da fila <code>todo</code>, a tarefa <code>in_progress</code> que
+já é do agente (mesmo <code>assigned_to</code>, fora de gate, não bloqueada); a branch
+dela, se existir e não estiver mergeada, é o ponto de partida do worktree
+(a retomada do <code>WorktreeManager</code>). (3) Encerrar a sessão de execução
+(<a href="../engine.html#rn-763">RN-763</a>) bloqueia também a tarefa <code>in_progress</code> de dono <code>dev-*</code>
+que nenhuma linha de <code>dev_agent_states</code> segura, com o mesmo motivo e origem
+<code>politica</code>; a lista só vem para sessão de EXECUÇÃO, então encerrar uma
+consultiva do mesmo projeto não bloqueia nada.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/backlog.repository.ts:252</code>
+(<code>findPendenteDaExecucao</code>), <code>:403</code> (<code>claimNext</code>), <code>:221</code> (<code>listEmCursoDeDev</code>),
+<code>src/application/use-cases/sessions/get-session-pending-work.use-case.ts:49</code>
+(<code>em_curso_de_dev</code>),
+<code>apps/engine/lib/engine/dev/encerramento_da_sessao.ex:133</code> (<code>bloquear_orfas</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/sessions/get-session-pending-work.use-case.spec.ts</code>
+(&quot;tarefa recém-desbloqueada (todo) do módulo de um dev da execução segura a
+sessão&quot;; &quot;tarefa todo de módulo SEM dev na execução não segura&quot;; &quot;tarefa
+in_progress atribuída a dev da execução segura a sessão&quot;; &quot;listEmCursoDeDev
+lista a in_progress de dev só para sessão de EXECUÇÃO&quot;),
+<code>test/application/use-cases/execution/claim-next-task.use-case.spec.ts</code>
+(&quot;retoma a in_progress que já é DELE antes da fila todo&quot;; &quot;não retoma a
+in_progress dele que está em gate&quot;),
+<code>apps/engine/test/engine/dev/encerramento_da_sessao_test.exs</code> (&quot;bloqueia a
+task em curso ÓRFÃ…&quot;; &quot;sem nenhuma linha, a órfã também é bloqueada…&quot;)</li>
+<li><strong>Origem:</strong> AT-522 (TP-01, 14ª: sessão <code>538a0ba5</code> encerrada 1 s depois do
+desbloqueio, tarefa <code>in_progress</code> presa em <code>dev-api</code> sem processo)</li>
+</ul>
+<h3 id="rn-857">RN-857 — O passo de correção do dev agent tem escrita e terminal no recorte do Jev</h3>
+<ul>
+<li><strong>Regra:</strong> quando o recorte do Jev (RN-625) decide o menu de um dev agent
+de execução (<code>dev-&lt;modulo&gt;</code>, nunca o <code>dev-lead</code>) e a ÚLTIMA mensagem
+<code>user</code> do passo é o parecer de correção que o engine monta — gate pedindo
+correção (&quot;pediu correção nesta PR&quot;) ou merge recusado por conflito (RN-715)
+—, o menu ganha <code>write_file</code> e <code>terminal</code> além do piso de desfecho
+(RN-839). O critério é o texto que a api já recebe, sem campo novo; o piso
+fixo de todo passo não alarga (RN-759), outro agente não ganha, e o piso só
+acrescenta o que está no catálogo do passo (P3).</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/tool-router.ts:377</code> (<code>PISO_DA_CORRECAO_DO_DEV</code>),
+<code>:388</code> (<code>ehPassoDeCorrecao</code>), <code>:401</code> (<code>menuComPiso</code>),
+<code>src/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.ts:248</code> (<code>menuComPiso</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/llm/tool-router-correcao-do-dev.spec.ts</code>
+(&quot;dev agent em correção recebe write_file e terminal&quot;; &quot;passo comum de
+leitura do dev não alarga&quot;; &quot;outro agente com a mesma mensagem não ganha&quot;;
+&quot;as marcas existem no texto que o engine monta&quot;)</li>
+<li><strong>Origem:</strong> AT-523</li>
+</ul>
+<h3 id="rn-858">RN-858 — A pergunta em aberto de agente é registro durável, e só o autor da sessão a responde</h3>
+<ul>
+<li><strong>Regra:</strong> a dúvida que um agente deixa para o usuário vira o evento
+<code>artifact.open_question</code> (append-only, no log da sessão onde nasce) com
+<code>{questionId (uuid), pergunta (até 500), sugestao (até 300, opcional), afeta: {regras, historias, tarefas}, autor, sessionId}</code> — o funil de
+eventos recusa com 400 o payload fora desse formato, venha do engine ou da
+api. Ela fecha com <code>open_question.answered</code> <code>{questionId, resposta, aceitouSugestao, decisionEventId, respondidaPor}</code>; o STATUS sai do log
+(aberta = sem <code>answered</code>), nunca de tabela. <code>GET /projects/:projectId/open-questions?status=open|answered|all</code> (<code>viewer</code>,
+padrão <code>open</code>) lista as mais recentes primeiro, com teto de 50 e o <code>total</code>
+(RN-180), e diz em <code>autorDaSessao</code> quem pode responder. <code>POST .../open-questions/:questionId/answer</code> com <code>{resposta}</code> ou
+<code>{aceitarSugestao: true}</code> só é aceito do AUTOR da sessão de origem (403
+<code>so_o_autor_da_sessao</code>); já respondida é 409 <code>pergunta_ja_respondida</code>,
+pergunta de outro projeto é 404 e resposta vazia (ou sugestão que não
+existe) é 400. Responder grava, numa transação, um <code>artifact.decision_record</code>
+com o usuário como ator (<code>context</code> = a pergunta, <code>choice</code> = a resposta,
+<code>consequences</code> = o que afeta, mais <code>questionId</code> e <code>afeta</code>) e o
+<code>open_question.answered</code>, avisa o canal da sessão (pelo funil, RN-579) e pede
+ao engine para retomar o gate de QA ESTACIONADO de cada tarefa afetada
+(caminho da RN-724) — melhor esforço: gate que não estava estacionado ou
+engine fora do ar não desfaz a resposta. ADR 0214.</li>
+<li><strong>Onde:</strong> <code>src/domain/open-questions/pergunta-em-aberto.ts:44</code>
+(<code>validarPerguntaEmAberto</code>), <code>:112</code> (<code>respostaEscolhida</code>),
+<code>src/application/use-cases/sessions/append-session-event.use-case.ts:102</code>
+(<code>EVENTO_PERGUNTA_EM_ABERTO</code>),
+<code>src/application/use-cases/backlog/perguntas-em-aberto.use-case.ts:72</code>
+(<code>listar</code>), <code>:118</code> (<code>responder</code>), <code>:285</code> (<code>resumeParkedGate</code>),
+<code>src/interfaces/http/backlog/open-questions.controller.ts:51</code>
+(<code>list</code>), <code>:81</code> (<code>answer</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/backlog/perguntas-em-aberto.use-case.spec.ts</code>
+(&quot;o autor responde: decision_record (ator usuário, com questionId) e
+answered, e o gate é religado&quot;; &quot;aceitar a sugestão grava a sugestão como
+escolha&quot;; falhas: &quot;quem não é o autor da sessão recebe 403
+so_o_autor_da_sessao, sem escrever&quot;; &quot;já respondida é 409
+pergunta_ja_respondida&quot;; &quot;pergunta de outro projeto é 404&quot;; &quot;o funil de
+eventos recusa com 400 antes de qualquer escrita&quot;)</li>
+<li><strong>Origem:</strong> AT-521 (TP-01: quatro perguntas do Criativo sumiram do campo de
+visão e o fluxo seguiu sem respostas)</li>
+</ul>
+<h3 id="rn-859">RN-859 — A decisão do usuário chega a quem trabalha, e destrava a correção da história <code>ready</code></h3>
+<ul>
+<li><strong>Regra:</strong> <code>GET /internal/sessions/:sessionId/dev-context</code> devolve
+<code>decisoes</code>: os <code>artifact.decision_record</code> do projeto cujo <code>afeta</code> toca a
+tarefa, a história dela ou uma regra que a história cita — mais recentes
+primeiro, no máximo 10, com a pergunta e a decisão cortadas em 1 500
+caracteres cada (<code>{id, questionId, pergunta, decisao, decididaEm}</code>).
+Decisão sem <code>afeta</code> não entra. Elas vencem RF/DoR quando conflitam (o
+kickoff do dev e o recorte do QA as mostram — engine). E a régua de
+correção de história (RN-727, <code>recusaDeCorrecaoDeHistoria</code>) é revista
+(ADR 0214, sobre o ADR 0212): história <code>ready</code> também é corrigível quando o
+pedido cita um <code>questionId</code> que o usuário JÁ respondeu — pergunta aberta ou
+inexistente não destrava nada, e a trava de tarefa <code>in_progress</code>/<code>in_review</code>
+continua valendo. As duas portas do PO aceitam o <code>questionId</code>: <code>update_story</code>
+(título/descrição, o evento o leva) e <code>complete_story</code> (RF/DoD/DoR; a
+história segue <code>ready</code>, sem nova promoção, e <code>backlog.story_completed</code> leva
+o <code>questionId</code>). Quando <code>complete_story</code> encontra uma história que não é
+<code>draft</code> sem um <code>questionId</code> válido, o 409 é a recusa nomeada comum
+(<code>historia_nao_draft</code>, cuja mensagem nomeia <code>questionId</code>) mais os
+<code>questionId</code>s das perguntas JÁ RESPONDIDAS cujo <code>afeta.historias</code> cita a
+história; a API nunca infere o <code>questionId</code> no lugar do agente (AT-752). O
+engine lista cada decisão com o <code>questionId</code> e as histórias afetadas
+(<code>apps/engine/lib/engine/harness/decisoes_do_projeto.ex</code>), para o PO achar o
+id.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:123</code>
+(<code>decisoesDaTarefa</code>), <code>:402</code> (<code>decisoesDoContexto</code>),
+<code>src/domain/backlog/correcao-de-historia.ts:33</code>
+(<code>recusaDeCorrecaoDeHistoria</code>),
+<code>src/application/use-cases/backlog/corrigir-historia.use-case.ts:130</code>
+(<code>respostaDoUsuario</code>),
+<code>src/application/use-cases/backlog/complete-story.use-case.ts:101</code>
+(<code>corrigindoReady</code>), <code>src/application/use-cases/backlog/perguntas-em-aberto.use-case.ts:107</code>
+(<code>respondidasQueAfetam</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/get-dev-task-context.use-case.spec.ts</code>
+(&quot;devolve só as que afetam a tarefa, a história ou uma regra dela, mais
+recentes primeiro&quot;; &quot;decisão sem afeta não entra; teto de 10 e texto cortado
+em 1 500&quot;),
+<code>test/application/use-cases/backlog/corrigir-historia.use-case.spec.ts</code>
+(&quot;história ready citando pergunta RESPONDIDA é corrigida, e o evento a
+cita&quot;; falhas: &quot;história ready citando pergunta AINDA ABERTA segue
+recusada&quot;; &quot;história ready com tarefa em revisão segue recusada mesmo com a
+resposta&quot;),
+<code>test/application/use-cases/backlog/complete-story.use-case.spec.ts</code>
+(&quot;história ready com pergunta respondida tem RF/DoR corrigidos e segue
+ready&quot;; &quot;história ready com pergunta ainda aberta é recusada&quot;)</li>
+<li><strong>Origem:</strong> AT-521 (o QA reprovou três vezes lendo a DoR de uma história
+<code>ready</code> que ninguém podia corrigir, depois de o usuário já ter decidido)</li>
+</ul>
+<h3 id="rn-860">RN-860 — O gate de QA espera o usuário sem gastar o ciclo de correção</h3>
+<ul>
+<li><strong>Regra:</strong> o parecer de gate (<code>POST /internal/sessions/:sessionId/gates/verdict</code>)
+aceita o veredito <code>needs_user_decision</code>, só do gate <code>qa</code>, com <code>pergunta</code>
+(até 500) e <code>sugestao</code> (até 300) ou um <code>openQuestionId</code> que já existe — sem
+nenhum dos dois é 400. A máquina de estados mantém o MESMO gate e NÃO
+incrementa o contador de correção, nem no teto, então o ciclo não chega ao
+bloqueio <code>politica</code> da RN-762. Sem <code>openQuestionId</code>, a api grava o
+<code>artifact.open_question</code> (ator e autor <code>qa-agent</code>, na sessão de execução,
+afetando a tarefa e a história dela), o <code>pr.gate_changed</code> sai com
+<code>esperandoUsuario: true</code> e o <code>openQuestionId</code> (é por ele que a tela mostra
+a tarefa como &quot;esperando você&quot;), e a resposta devolve <code>nextAction: &quot;await_user&quot;</code> com o <code>openQuestionId</code> — o engine estaciona o ciclo (ADR 0207)
+e a resposta à pergunta o religa (RN-858). Nenhuma linha de outbox nasce
+nesse desfecho. ADR 0214.</li>
+<li><strong>Onde:</strong> <code>src/domain/execution/pr-gate-state-machine.ts:63</code>
+(<code>nextGateStatus</code>),
+<code>src/application/use-cases/execution/record-gate-verdict.use-case.ts:135</code>
+(<code>esperaUsuario</code>), <code>:171</code> (<code>nextAction</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/execution/pr-gate-state-machine.spec.ts</code>
+(&quot;needs_user_decision mantém o gate e NÃO incrementa o contador, nem no
+teto&quot;),
+<code>test/application/use-cases/execution/record-gate-verdict.use-case.spec.ts</code>
+(&quot;needs_user_decision no teto: grava a pergunta, não conta correção, não
+bloqueia&quot;; falha: &quot;needs_user_decision sem pergunta nem openQuestionId é
+recusado&quot;)</li>
+<li><strong>Origem:</strong> AT-521 (o QA de Automação reprovou quatro vezes &quot;não confirmado
+pelo usuário&quot; até o ciclo esgotar)</li>
+</ul>
+<h3 id="rn-870">RN-870 — O veredito só espera pergunta que existe e está aberta</h3>
+<ul>
+<li><strong>Regra:</strong> <code>POST /internal/sessions/:sessionId/gates/verdict</code> com
+<code>needs_user_decision</code> e <code>openQuestionId</code> confere, ANTES de qualquer escrita
+(comentário na PR, estado do gate, evento), que a pergunta existe no projeto
+e está aberta. Inexistente ou de outro projeto: 404
+<code>reason: &quot;pergunta_nao_encontrada&quot;</code>. Já respondida: 409
+<code>reason: &quot;pergunta_ja_respondida&quot;</code> com a decisão do usuário em <code>decisao</code> —
+sem escrita e sem <code>pr.gate_changed</code>. O estado sai do log (RN-858).</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/record-gate-verdict.use-case.ts:85</code>
+(<code>exigirPerguntaAberta</code>), <code>src/domain/open-questions/pergunta-em-aberto.ts:154</code>
+(<code>estadoDaPergunta</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/record-gate-verdict.use-case.spec.ts</code>
+(&quot;pergunta aberta: estaciona sem gravar outra&quot;; falha: &quot;inexistente ou de
+outro projeto: 404 nomeado, sem escrita&quot;, &quot;já respondida: 409 com a decisão,
+sem escrita nem pr.gate_changed&quot;)</li>
+<li><strong>Origem:</strong> AT-526, ADR 0215</li>
+</ul>
+<h3 id="rn-871">RN-871 — <code>afeta.regras</code> aceita o título exato da regra e guarda o id</h3>
+<ul>
+<li><strong>Regra:</strong> no funil de eventos, o <code>artifact.open_question</code> cujo
+<code>afeta.regras</code> traz o TÍTULO exato de um <code>artifact.business_rule</code> do projeto
+é gravado com o id da regra (a mais recente, se o título se repete); o que
+não é id nem título exato é recusado com 400 nomeando os valores. No contexto
+do dev, <code>decisoes</code> casa também pelo título das regras da história, para as
+decisões gravadas antes desta regra.</li>
+<li><strong>Onde:</strong> <code>src/domain/open-questions/pergunta-em-aberto.ts:179</code>
+(<code>resolverRegrasDoAfeta</code>), <code>src/application/use-cases/sessions/append-session-event.use-case.ts:122</code>
+(<code>resolverRegrasDoAfeta</code>), <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:135</code>
+(<code>decisoesDoContexto</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/backlog/perguntas-em-aberto.use-case.spec.ts</code>
+(&quot;título exato é convertido para o id da regra&quot;; falha: &quot;texto que não é id
+nem título de regra: 400 sem escrita&quot;),
+<code>test/application/use-cases/execution/get-dev-task-context.use-case.spec.ts</code>
+(&quot;decisão legada com TÍTULO de regra em afeta.regras casa pelo título&quot;)</li>
+<li><strong>Origem:</strong> AT-526, ADR 0215</li>
+</ul>
+<h3 id="rn-872">RN-872 — As outras decisões do projeto chegam ao dev e ao QA, em seção própria</h3>
+<ul>
+<li><strong>Regra:</strong> <code>GET /internal/sessions/:sessionId/dev-context</code> devolve, além de
+<code>decisoes</code> (as que tocam a tarefa, RN-859), <code>decisoesDoProjeto</code>: as demais
+<code>artifact.decision_record</code> do projeto, mais recentes primeiro, no mesmo
+formato. O teto de 10 é COMPARTILHADO — as da tarefa vêm primeiro e consomem
+o teto antes. Revisa a frase &quot;decisão sem <code>afeta</code> não entra&quot; do ADR 0214 para
+esta lista. O campo é aditivo (o engine que não o conhece o ignora).
+AT-812: a decisão também conta como da tarefa quando <code>afeta.modulos</code> tem o
+módulo dela ou o texto (<code>context</code>/<code>choice</code>) cita <code>modules/&lt;módulo&gt;</code> ou
+<code>dev-&lt;módulo&gt;</code> (com borda: <code>catalogo</code> não casa <code>catalogo-admin</code>). Exemplo: a
+orientação do Dev Lead &quot;documentar em <code>modules/catalogo/README.md</code>&quot; chega ao
+<code>dev-catalogo</code> em <code>decisoes</code>, mesmo entre mais de 10 decisões.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:135</code>
+(<code>decisoesDoContexto</code>), <code>src/interfaces/http/internal/dto/internal.response.dto.ts:237</code>
+(<code>decisoesDoProjeto</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/get-dev-task-context.use-case.spec.ts</code>
+(&quot;as que não tocam a tarefa vêm em decisoesDoProjeto; teto de 10 somado, as
+da tarefa primeiro&quot;; <code>decisão que cita o módulo (RN-872)</code>)</li>
+<li><strong>Origem:</strong> AT-526, ADR 0215; AT-812</li>
+</ul>
+<h3 id="rn-886">RN-886 — O 403 de orçamento do OpenRouter é crédito esgotado, com limite, gasto e reset</h3>
+<ul>
+<li><strong>Regra:</strong> o 403 do OpenRouter com <code>Budget limit exceeded</code> /
+<code>limit_source: openrouter_guardrail_budget</code> (guardrail mensal da chave) NÃO
+é credencial rejeitada: a api o normaliza no MESMO <code>insufficient_credit</code> do
+402 (RN-730) — sem código novo no contrato — e o resto do caminho do crédito
+vale igual: origem <code>infra</code> (RN-726), pausa sem retomada automática (nunca
+passageira, RN-864). A frase curta, no idioma do turno (RN-733), diz o
+limite, o gasto e o reset lidos do corpo (<code>limit_usd</code>, <code>spend_usd</code>,
+<code>resets_at</code>, o que vier) e pede ao admin do OpenRouter para subir o
+orçamento; o dev bloqueia a tarefa com essa frase no motivo, em vez de
+&quot;parou sem concluir nem reportar bloqueio&quot; com origem <code>codigo</code>. 403 sem o
+marcador segue <code>auth</code>.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/llm-provider-errors.ts:86</code> (<code>normalizeHttpStatus</code>),
+<code>:140</code> (<code>pareceOrcamento</code>); <code>apps/engine/lib/engine/agents/falha_de_turno.ex:212</code>
+(<code>orcamento_esgotado</code>), <code>:226</code> (<code>frase_de_orcamento</code>), <code>:163</code>
+(<code>credito_esgotado?</code>); <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1044</code>
+(<code>motivo_de_credito</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/llm/llm-provider-errors.spec.ts</code> (&quot;o 403 de
+orçamento vira insufficient_credit com o corpo inteiro&quot;; falha: &quot;403 sem
+marcador de orçamento continua credencial rejeitada&quot;);
+<code>apps/engine/test/engine/agents/falha_de_turno_test.exs</code> (&quot;RN-886: o 403 de
+orçamento do OpenRouter&quot;)</li>
+<li><strong>Origem:</strong> AT-534</li>
+</ul>
+<h3 id="rn-891">RN-891 — A interface tem quatro idiomas, com pt-BR como padrão e fallback</h3>
+<ul>
+<li><strong>Regra:</strong> o idioma da interface (<code>users.locale</code>) aceita <code>pt-BR</code>, <code>en</code>, <code>ru</code>
+e <code>zh-Hans</code>, e recusa qualquer outro; o padrão da conta continua <code>pt-BR</code>.
+No web, <code>pt-BR</code> é o padrão e o <code>fallbackLng</code> (revisa a RN-432, que fazia do
+<code>en</code> o padrão do web). A escolha gravada na conta vence sempre; sem ela, o
+navegador sugere: <code>pt*</code> → <code>pt-BR</code>; <code>zh</code>, <code>zh-CN</code>, <code>zh-SG</code>, <code>zh-Hans*</code> →
+<code>zh-Hans</code>; <code>ru*</code> → <code>ru</code>; <code>en*</code> → <code>en</code>; o resto (alemão, chinês
+tradicional…) → <code>pt-BR</code>. Locale sem catálogo em <code>locales/</code> não quebra o boot:
+a tela cai no pt-BR e o seletor da Conta, com os rótulos nativos, diz
+&quot;tradução em andamento&quot;. <code>&lt;html lang&gt;</code> acompanha o idioma ativo. A paridade
+de chaves compara cada locale existente com a fonte pt-BR.</li>
+<li><strong>Onde:</strong> <code>src/domain/iam/user.entity.ts:8</code> (<code>USER_LOCALES</code>),
+<code>apps/web/src/lib/idioma.ts:65</code> (<code>resolverIdiomaDoNavegador</code>),
+<code>apps/web/src/lib/i18n.ts:72</code> (<code>fallbackLng</code>)</li>
+<li><strong>Teste:</strong> <code>test/interfaces/http/iam/user-preferences-locale.dto.spec.ts</code>
+(&quot;aceita pt-BR, en, ru e zh-Hans&quot;; &quot;recusa idioma fora da lista&quot;);
+<code>apps/web/src/lib/idioma.test.ts</code> (&quot;idioma sem catálogo cai no pt-BR, nunca
+no inglês&quot;); <code>apps/web/src/lib/i18n-paridade.test.ts</code></li>
+<li><strong>Origem:</strong> AT-548, ADR 0216 (itens 1–4)</li>
+</ul>
+<h3 id="rn-892">RN-892 — O prefixo estável da chamada vai marcado para o cache de prompt, e a capability é ligada só no OpenRouter, provada</h3>
+<p>Medido no TP-01 (15/10): o <code>anthropic/claude-haiku-5.5</code> pelo OpenRouter
+recebeu 8,40 M tokens de entrada com <strong>0</strong> em cache, e a entrada foi US$ 0,84
+dos US$ 1,02. Modelos Anthropic só leem do cache o prefixo marcado com
+<code>cache_control: { type: &quot;ephemeral&quot; }</code> num bloco de conteúdo de texto (até
+quatro pontos, TTL de 5 min — https://openrouter.ai/docs/features/prompt-caching).</p>
+<ol>
+<li><strong>Capability de provider, obrigatória.</strong> <code>LLMProviderCapabilities.promptCaching</code>
+é <code>true</code> no OpenRouter e (RN-1008) na Anthropic direta, e <code>false</code> nos outros sete. Declará-la sem o hook <code>marcarCacheDePrompt</code>
+falha na construção. Desligada, o corpo é byte a byte o de antes.</li>
+<li><strong>Camada de modelo na config.</strong> No OpenRouter só <code>anthropic/*</code> recebe ponto;
+os demais cacheiam sozinhos e voltam intactos.</li>
+<li><strong>Dois pontos, sobre o que não muda.</strong> A última <code>system</code> do prefixo
+(instruções, e as ferramentas antes delas) e a última <code>user</code>/<code>tool</code> antes
+da cauda de <code>system</code> do fim. A cauda — idioma (RN-622), ambiente (RN-706),
+fluxo (RN-711), perfil (RN-680) — fica DEPOIS do último ponto, e a ordem
+das mensagens nunca muda.</li>
+<li><strong>Prova (ADRs 0041/0042).</strong> Em 2026-10-15 o smoke rodou com credencial
+real (<code>OPENROUTER_TEST_KEY=… pnpm --filter api exec vitest run test/infrastructure/llm/openrouter-provider.cache.smoke.spec.ts</code>) e a
+segunda chamada a <code>anthropic/claude-haiku-5.5</code> voltou com
+<code>cached_input_tokens=8011</code>; só então a capability do OpenRouter passou a
+<code>true</code>. Ligar outro provider exige o smoke equivalente. O ganho aparece no
+metering pela <a href="parte-08.html#rn-666">RN-666</a>.</li>
+</ol>
+<ul>
+<li><strong>Código:</strong> <code>src/infrastructure/llm/openrouter-provider.ts:302</code> (<code>marcarCacheDePromptOpenRouter</code>);
+<code>src/infrastructure/llm/openai-compatible-provider.ts:661</code> (<code>mensagens</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/llm/openrouter-provider.contract.spec.ts</code> (&quot;pontos de cache de prompt (RN-892)&quot;: ligada marca os dois pontos; desligada é byte a byte; capability sem hook falha — caso de falha)</li>
+<li><strong>Origem:</strong> AT-543</li>
+</ul>
+<h3 id="rn-894">RN-894 — Épico com o mesmo título de outro do projeto é recusado</h3>
+<ul>
+<li><strong>Regra:</strong> <code>create_epic</code> recusa (400) o épico cujo título, normalizado,
+é igual ao de outro épico do MESMO projeto, e a recusa devolve ao modelo o
+id do existente: &quot;Já existe o épico «título» (id …) neste projeto — use
+este id em epic_id&quot;. A régua é a MESMA da história (achado R,
+<code>tituloDuplicado</code>), sem segunda cópia. A duplicata SEMÂNTICA
+(<a href="parte-09.html#rn-681">RN-681</a>) não vale para épico: só título
+igual. Nada é criado nem gravado no event log quando recusa.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/backlog/create-epic.use-case.ts:25</code> (<code>tituloDuplicado</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/backlog/create-epic.use-case.spec.ts:41</code>
+(cria sem título igual) e <code>:49</code> (recusa o título igual com o id do existente)</li>
+<li><strong>Origem:</strong> AT-581</li>
+</ul>
+<h3 id="rn-902">RN-902 — Recriar o container congela a decisão de imagem vigente, e a imagem desatualizada é avisada</h3>
+<ul>
+<li><strong>Regra:</strong> a transição <code>removed → provisioning</code> e <code>failed → provisioning</code>
+RELÊ a decisão de imagem vigente e regrava <code>imageVersion</code> e <code>resources</code> da
+linha de <code>project_containers</code> (antes só a criação da linha os congelava, e a
+coluna Imagem seguia na versão antiga depois de Remover → Subir). Sem decisão
+vigente é 409 (<a href="parte-03.html#rn-105">RN-105</a>). <code>stopped → running</code> NÃO muda a versão: o
+container reaproveitado é o antigo. A página <code>/containers</code> ganha
+<code>decisaoVigente</code> e <code>imagemDesatualizada</code> por linha — a divergência compara
+CONTEÚDO (imagem, rede, recursos), nunca o número da versão, porque a eleição
+da Infra grava v+1 com o mesmo conteúdo a cada subida — e, com
+<code>running</code>/<code>stopped</code>/<code>provisioning</code> divergente, a linha diz em texto &quot;Parar →
+Remover → Subir de novo&quot; e passa a dizer por que &quot;Subir de novo&quot; não aplica a
+imagem nova. O resultado de <code>choose_project_image</code> traz <code>containerDePe</code> e o
+texto avisa que a decisão só vale ao recriar o container. &quot;Recriar&quot; numa só
+ação NÃO existe; nenhum teto de aprovação muda (<a href="parte-05.html#rn-495">RN-495</a>).</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/containers/registrar-transicao-de-container.use-case.ts:131</code>
+(<code>recongelar</code>), <code>src/domain/containers/project-container.ts:387</code>
+(<code>containerDivergeDaDecisao</code>),
+<code>apps/engine/lib/engine/harness/tools/choose_project_image.ex:99</code>
+(<code>mensagem_de_fixada</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/containers/ciclo-de-vida-do-container.use-case.spec.ts</code>
+(&quot;recongela versão e recursos&quot;, &quot;sem decisão vigente é 409&quot;, &quot;mantém a versão
+congelada&quot;); <code>test/domain/containers/project-container.spec.ts</code>
+(<code>containerDivergeDaDecisao</code>);
+<code>test/infrastructure/persistence/drizzle/containers-overview.repository.spec.ts</code>
+(&quot;imagemDesatualizada compara CONTEÚDO&quot;);
+<code>apps/web/src/routes/ContainersPage.test.tsx</code> (aviso e motivo);
+<code>apps/engine/test/engine/harness/tools/choose_project_image_test.exs</code></li>
+<li><strong>Origem:</strong> AT-595 (TP-01 20ª: a decisão v3 <code>egress</code> não alcançou o container
+v2 <code>none</code> e a coluna Imagem seguiu em v2)</li>
+</ul>
+<h3 id="rn-906">RN-906 — A api recusa a rede <code>none</code> quando a stack de um módulo baixa dependências</h3>
+<ul>
+<li><strong>Regra:</strong> ao decidir a imagem do projeto, se a rede é <code>none</code> e algum módulo
+do <code>module_map</code> vigente tem <code>stack</code> que casa, por PALAVRA inteira, com a lista
+fechada de ecossistemas que baixam dependências (node, npm, pnpm, yarn, python,
+pip, elixir, mix, go, rust, cargo, ruby, java, maven, gradle, php, dotnet...),
+a api responde 400 nomeando o módulo, a stack e o termo, e pede <code>egress</code>. Nada
+é gravado e a rede nunca é trocada sozinha: <code>egress</code> é autorização do usuário.
+Vale para o Arquiteto (<code>choose_project_image</code>) e para a eleição da Infra, que
+passam pelo mesmo caso de uso (na Infra, o <code>container_start</code> termina <code>failed</code>
+com o motivo, sem chamar o broker). Sem <code>module_map</code> ou com stack que não casa,
+segue só o aviso da RN-735. Sem exceção configurável. Revisa a RN-735 (aviso →
+recusa nesse caso).
+<strong>Exceção (AT-784):</strong> o módulo cuja <code>stack</code> declara não ter dependências
+(&quot;sem dependências&quot;, &quot;nenhuma dependência&quot;, &quot;no dependencies&quot;,
+&quot;zero-dependency&quot;, &quot;dependency-free&quot;) é ignorado, e <code>none</code> passa (ex.: &quot;Node.js
+puro (node:test), sem dependências&quot;, o caso do golden-set do QA). O <code>module_map</code>
+só tem texto, sem acesso ao <code>package.json</code>: a declaração é o único sinal. Quem
+baixa dependência (Node com Express, Python com <code>requirements</code>) segue recusado,
+e outro módulo que baixa recusa mesmo com um módulo sem dependências.</li>
+<li><strong>Onde:</strong> <code>src/domain/containers/project-container.ts</code> (<code>stackQueBaixaDependencias</code>,
+<code>DECLARA_SEM_DEPENDENCIAS</code>); chamada em
+<code>src/application/use-cases/containers/decidir-imagem-do-projeto.use-case.ts</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/containers/container-do-projeto.use-case.spec.ts</code>
+(recusa nos dois chamadores; <code>egress</code>, stack que não casa e sem mapa passam);
+<code>test/domain/containers/project-container.spec.ts</code> (casamento por palavra);
+<code>test/application/use-cases/actions/execute-container-start.use-case.spec.ts</code></li>
+<li><strong>Origem:</strong> AT-593 (EP-031).</li>
+</ul>
+<h3 id="rn-907">RN-907 — O OpenRouter recebe uma chave de sessão por agente, e a conversa fica presa ao upstream que a atendeu</h3>
+<p>Sem chave, o hub trata cada tarefa do dev agent (outra primeira mensagem) como
+conversa nova e sorteia outro upstream — 17 no TP-01 da 18ª rodada, com o
+acerto de cache caindo. O Brabo agora manda a chave.</p>
+<ol>
+<li><strong>Formato.</strong> <code>session_id</code> = <code>brabo:&lt;sessionId&gt;:&lt;agentId&gt;</code>, e <code>brabo:&lt;sessionId&gt;</code>
+sem agente — por agente + sessão, nunca por projeto. É montada pelos dois
+casos de uso de turno e viaja em <code>ChatOptions.sessionKey</code>.</li>
+<li><strong>Capability de provider, obrigatória.</strong> <code>LLMProviderCapabilities.stickySession</code>
+é <code>true</code> só no OpenRouter e <code>false</code> nos outros oito; declará-la sem o hook
+<code>campoDeSessao</code> falha na construção. Desligada, ou sem chave, o corpo é byte a
+byte o de antes.</li>
+<li><strong>Prova (ADRs 0041/0042).</strong> Em 2026-10-21 o smoke rodou com credencial real em
+<code>deepseek/deepseek-v4.1-flash</code>: com a chave, 6 de 6 chamadas no mesmo upstream
+(Together); sem ela, 4 upstreams em 6. Ligar outro provider exige o smoke
+equivalente.</li>
+<li><strong>Sem tabela.</strong> A chave é derivável de <code>token_usage</code> (<code>session_id</code> + <code>actor_id</code>),
+e o efeito se mede em <code>upstream_provider</code>, <code>cached_input_tokens</code> e <code>cost_micros</code>
+(RN-665/666). <code>provider.order</code>/<code>allow_fallbacks</code> ficam fora (ADR 0221).</li>
+</ol>
+<ul>
+<li><strong>Código:</strong> <code>src/infrastructure/llm/openrouter-provider.ts:236</code> (<code>campoDeSessaoOpenRouter</code>);
+<code>src/domain/llm/routing-preference.ts:88</code> (<code>chaveDeSessao</code>);
+<code>src/application/use-cases/llm/run-llm-turn.use-case.ts:243</code> (<code>chaveDeSessao</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/llm/openrouter-provider.contract.spec.ts</code> (&quot;chave de sessão (ADR 0221, RN-907)&quot;: com capability e chave leva <code>session_id</code>; sem chave ou desligada não leva; capability sem hook falha — caso de falha); <code>test/application/use-cases/llm/stream-llm-turn.use-case.spec.ts</code>; <code>run-llm-turn.use-case.spec.ts</code>; smoke <code>openrouter-provider.sessao.smoke.spec.ts</code></li>
+<li><strong>Origem:</strong> AT-580; ADR <a href="../../adr/0221-upstream-preso-por-sessao.html">0221</a></li>
+</ul>
+<h3 id="rn-909">RN-909 — O 9Router é o 10º provider: URL por instalação, credencial obrigatória, preço público de curadoria</h3>
+<ul>
+<li><strong>Regra:</strong> o provider <code>9router</code> fala com um gateway na máquina do dono. A URL base é <code>NINE_ROUTER_BASE_URL</code> (padrão <code>http://host.docker.internal:20128/v1</code>), lida a cada uso pelo provider e pelo teste de conexão (<code>GET /models</code> com a chave). A credencial é obrigatória. As capabilities de provider são <code>false</code> (só <code>listModels</code>, <code>streaming</code> e, desde a <a href="parte-11.html#rn-950">RN-950</a>, <code>toolCalling</code>, provado por smoke com chave) até um smoke com chave provar o resto (ADR 0041). O preço dos modelos não é descoberto: entra por curadoria manual e, por decisão do dono, modelo de assinatura registra o preço público da API equivalente, não zero. O provider manda <code>x-9router-token-saver: off</code> em toda chamada, para o 9Router não comprimir o <code>tool_result</code>.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/llm/nine-router-provider.ts:171</code> (<code>nineRouterConfig</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/llm/nine-router-provider.contract.spec.ts:109</code> (capabilities, URL do ambiente, cabeçalho, teste de conexão, parse da fixture sintética); smoke manual em <code>nine-router-provider.smoke.spec.ts</code>.</li>
+<li><strong>Origem:</strong> AT-576a (EP-026), ADR 0222, decisão do dono de 22/10.</li>
+</ul>
+<h3 id="rn-910">RN-910 — O teto padrão por área é 5 no dev, 4 no qa e 2 na infra</h3>
+<p>Cada área de agentes nasce com um teto de paralelismo que vem do catálogo:
+<code>dev</code> 5, <code>qa</code> 4, <code>infra</code> 2 (AT-599, pedido do dono de 22/10). A migração <code>0073</code>
+aplicou os mesmos valores a <strong>todos</strong> os projetos existentes, sobrescrevendo o
+que já estava decidido — decisão do dono, tomada sabendo que um teto posto de
+propósito se perde.</p>
+<ul>
+<li><strong>Hoje só o teto de <code>dev</code> é aplicado na execução.</strong> <code>RequestParallelizationUseCase</code>
+lê a área <code>dev</code> ao decidir o paralelismo. <code>qa</code> e <code>infra</code> têm o valor gravado,
+exibido e editável, mas nenhum código o consulta: subir o teto deles não muda
+execução nenhuma.</li>
+<li><strong>O teto de <code>dev</code> só morde com 3 módulos ou mais.</strong> O máximo de dev agents é um
+por módulo mais um extra (<code>dev-&lt;modulo&gt;-2</code>), ou seja, 2 × módulos (RN-083). Com
+2 módulos o máximo é 4, abaixo de 5.</li>
+<li><strong>Só o INSERT usa o valor de catálogo.</strong> Semear de novo não toca a linha
+(RN-094). A coluna continua <code>default(2)</code>: esse valor só aparece num INSERT cru,
+fora do caso de uso.</li>
+<li><strong>Onde:</strong> <code>src/domain/agents/agent-areas.ts:73</code> (<code>maxParallelPadrao</code>);
+<code>src/application/use-cases/agents/seed-agent-areas.use-case.ts:53</code>
+(<code>maxParallelAoNascer</code>); <code>src/infrastructure/persistence/drizzle/agent-area.repository.ts:62</code>
+(<code>nascer</code>); <code>src/application/use-cases/execution/request-parallelization.use-case.ts:13</code>
+(<code>MAX_PARALLEL_PADRAO</code>); migração <code>src/db/migrations/0073_paralelismo_padrao_por_area.sql</code>.</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/iam/create-project-semeia-areas.spec.ts</code>
+(projeto novo nasce com 5/4/2), <code>test/infrastructure/persistence/drizzle/agent-area.repository.spec.ts</code>
+(semear de novo não desfaz o teto alterado), <code>test/db/paralelismo-padrao-migration.spec.ts</code>
+(linhas com 2, 3 e 7 terminam em 5/4/2) e <code>test/application/use-cases/execution/request-parallelization.use-case.spec.ts</code>
+(o padrão de 5 decide o paralelismo do dev).</li>
+</ul>
+<h3 id="rn-914">RN-914 — O orçamento de raciocínio é por modelo, só para quem o respeita</h3>
+<ul>
+<li><strong>Regra:</strong> revisa a <a href="#rn-782">RN-782</a> (<a href="../../adr/0223-orcamento-de-raciocinio-por-modelo.html">ADR 0223</a>). Modelo com <code>models.reasoning_budget</code> preenchido (curado à mão, nunca pelo sync) e <code>supportsReasoning</code> manda <code>reasoning: { max_tokens: N }</code> e <code>max_tokens</code> = saída visível + N (<a href="#rn-741">RN-741</a>); só no provider que sabe controlar o raciocínio (hoje o OpenRouter) e nunca no agente com raciocínio desligado (<a href="#rn-783">RN-783</a>). Hoje só <code>qwen/qwen3.7-flash</code> (N = 2048), provado em 22/10: 1024 pedidos, 1024 gastos. Modelo sem orçamento segue a RN-782, corpo byte a byte. <code>deepseek/deepseek-v4.1-flash</code> fica sem orçamento: <code>reasoning.max_tokens</code>, <code>effort</code> e <code>reasoning_effort</code> foram ignorados (8192 de raciocínio). <code>effort</code> nunca é enviado. O limite contém o raciocínio mas não garante a tool call.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/raciocinio-do-agente.ts:18</code> (<code>opcoesDeRaciocinio</code>), <code>src/infrastructure/llm/openai-compatible-provider.ts:640</code> (<code>controla</code>), <code>src/db/schema/llm.ts:159</code> (<code>reasoningBudget</code>), <code>src/db/migrations/0074_orcamento_de_raciocinio.sql</code></li>
+<li><strong>Teste:</strong> <code>test/infrastructure/llm/openai-compatible-provider.contract.spec.ts</code> (<code>modelo com orçamento de raciocínio (RN-914)</code>), <code>test/domain/llm/raciocinio-do-agente.spec.ts</code></li>
+<li><strong>Origem:</strong> AT-569 (medição paga de 22/10, <code>~/brabo-gravacoes/raciocinio-smoke-2026-10-22/resultados.jsonl</code>)</li>
+</ul>
+<h3 id="rn-915">RN-915 — O raciocínio é contado no stream e abortado no limite; o custo abortado é estimado e depois reconciliado</h3>
+<p>Complementa a <a href="#rn-914">RN-914</a> (<a href="../../adr/0224-raciocinio-abortado-no-stream.html">ADR 0224</a>).</p>
+<ol>
+<li><strong>Aborto.</strong> Com <code>reasoning_budget</code> e raciocínio ligado, o provider soma os
+caracteres de <code>delta.reasoning</code>; passando de <code>caracteres/4 &gt; N</code> ele destrói a conexão
+e emite <code>truncated</code> com <code>motivo: &quot;raciocinio&quot;</code> (o corte por <code>max_tokens</code> não tem
+motivo). Sem orçamento (ou com raciocínio desligado), nada é contado.</li>
+<li><strong>Estimativa na hora.</strong> A resposta abortada não traz <code>usage</code>: saída = caracteres/4,
+entrada pelo estimador, ao preço do catálogo, <code>estimated</code>, <code>price_implicit</code> e
+<code>custo_a_reconciliar</code> (só se há id de geração).</li>
+<li><strong>Reconciliação.</strong> Periódica (<code>CUSTO_RECONCILIACAO_INTERVAL_MS</code>), idempotente: troca
+pelo <code>total_cost</code> de <code>GET /generation?id=</code> só com 200, só linha marcada e das últimas
+24 h; 404 ou erro deixam a linha como está. A estimativa vai para <code>catalog_cost_micros</code>.
+O <code>spentMicros</code> de budget/área não é corrigido.</li>
+</ol>
+<ul>
+<li><strong>Código:</strong> <code>src/infrastructure/llm/openai-compatible-provider.ts:391</code> (<code>limiteDeRaciocinio</code>);
+<code>src/application/use-cases/llm/reconciliar-custo-estimado.use-case.ts:57</code> (<code>execute</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/llm/raciocinio-abortado.spec.ts</code> (aborta e estima; sem orçamento não conta);
+<code>test/application/use-cases/llm/reconciliar-custo-estimado.use-case.spec.ts</code> (200 troca, 404 mantém);
+<code>test/infrastructure/persistence/token-usage.repository.spec.ts</code> (troca uma única vez)</li>
+<li><strong>Origem:</strong> AT-589; ADR <a href="../../adr/0224-raciocinio-abortado-no-stream.html">0224</a></li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/api/parte-09.html">API — parte 9 (desde RN-677)</a><a href="../../business-rules/api/parte-11.html">API — parte 11 (desde RN-916)</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-api/blob/dev/docs/business-rules/api/parte-10.md">编辑此页</a></footer>
+</main>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#a-anamnese-nao-paga-duas-vezes-pela-mesma-janela-e-o-resgate-de-gate-nao-reinicia-ciclo-que-espera-alguem-rn-722">A Anamnese não paga duas vezes pela mesma janela, e o resgate de gate não reinicia ciclo que espera alguém (RN-722)</a></li><li class="n3"><a href="#rn-727">RN-727 — A história draft se corrige e se arquiva, pelo PO e pelo usuário, sem apagar nada</a></li><li class="n3"><a href="#rn-729">RN-729 — A PR de infra mira main e diz onde mergear; a sidebar abre só o projeto aberto</a></li><li class="n3"><a href="#rn-730">RN-730 — O 402 do provider tem code próprio, e é ele que decide o crédito esgotado</a></li><li class="n3"><a href="#rn-734">RN-734 — O caminho OpenAI-compatível manda o teto de saída SEMPRE</a></li><li class="n3"><a href="#rn-737">RN-737 — A resposta cortada pelo teto de saída é sinalizada, não executada e dita</a></li><li class="n3"><a href="#rn-739">RN-739 — O diagnóstico leva o corpo de erro do provider inteiro, e a bolha segue curta</a></li><li class="n3"><a href="#rn-741">RN-741 — O raciocínio tem orçamento próprio e não come a saída visível</a></li><li class="n3"><a href="#rn-752">RN-752 — PR de infra mergeada sai de &quot;PRs de infra em revisão&quot;</a></li><li class="n3"><a href="#rn-758">RN-758 — O recorte do Jev nunca tira a ferramenta de obrigação do agente</a></li><li class="n3"><a href="#rn-759">RN-759 — O passo recortado avisa ao modelo que o menu é um recorte</a></li><li class="n3"><a href="#rn-761">RN-761 — Dependência instalada não entra no repositório: .gitignore base, commit que a exclui e gate que a acusa</a></li><li class="n3"><a href="#rn-762">RN-762 — O bloqueio por ciclo de correção esgotado grava a origem politica</a></li><li class="n3"><a href="#rn-770">RN-770 — Miudezas da tela de projeto: autor da PR de ADR, modelo da Infra, título da PR do dev, selo da execução, caminho e tabela</a></li><li class="n3"><a href="#rn-776">RN-776 — Tarefa da execução esperando alguém segura a sessão de execução</a></li><li class="n3"><a href="#rn-777">RN-777 — Desbloquear a tarefa acorda o dev do módulo DELA</a></li><li class="n3"><a href="#rn-782">RN-782 — Aceitar o parâmetro de raciocínio não é pedir raciocínio</a></li><li class="n3"><a href="#rn-783">RN-783 — Os dev agents de execução rodam com o raciocínio desligado</a></li><li class="n3"><a href="#rn-784">RN-784 — As leituras de estado do Arquiteto entram no piso do Jev</a></li><li class="n3"><a href="#rn-785">RN-785 — Requisito que depende de outra história ainda não feita é observação no gate de QA</a></li><li class="n3"><a href="#rn-786">RN-786 — O gate de QA lê o contrato do módulo, e divergência com a história é observação</a></li><li class="n3"><a href="#rn-802">RN-802 — A estimativa do plano do Dev Lead soma o dobro da primeira tarefa de cada módulo</a></li><li class="n3"><a href="#rn-809">RN-809 — As obrigações de módulo e imagem do Arquiteto entram no piso do Jev</a></li><li class="n3"><a href="#rn-812">RN-812 — A PR aberta da mesma branch é reaproveitada, nunca duplicada</a></li><li class="n3"><a href="#rn-827">RN-827 — O painel de contexto conta a sessão inteira, e a janela só dá o detalhe</a></li><li class="n3"><a href="#rn-828">RN-828 — &quot;Arquivos tocados&quot; inclui a sessão de execução ligada, com teto e total real</a></li><li class="n3"><a href="#rn-838">RN-838 — O QA de Automação roda com o raciocínio desligado</a></li><li class="n3"><a href="#rn-839">RN-839 — report_done e report_blocked entram no piso do Jev dos dev agents</a></li><li class="n3"><a href="#rn-840">RN-840 — a ferramenta de parecer de cada agente de gate entra no piso do Jev</a></li><li class="n3"><a href="#rn-844">RN-844 — O painel de contexto lista as regras, as decisões e os arquivos das PRs da sessão inteira</a></li><li class="n3"><a href="#rn-847">RN-847 — A PR mergeada continua dizendo os arquivos que mudou</a></li><li class="n3"><a href="#rn-848">RN-848 — O efeito de ação executada dentro de um pedido interno avisa o canal da sessão</a></li><li class="n3"><a href="#rn-852">RN-852 — A PR de infra declara como rodar o entregável, e isso vira artefato</a></li><li class="n3"><a href="#rn-856">RN-856 — Desbloquear não encerra a execução, e a tarefa em curso órfã tem volta</a></li><li class="n3"><a href="#rn-857">RN-857 — O passo de correção do dev agent tem escrita e terminal no recorte do Jev</a></li><li class="n3"><a href="#rn-858">RN-858 — A pergunta em aberto de agente é registro durável, e só o autor da sessão a responde</a></li><li class="n3"><a href="#rn-859">RN-859 — A decisão do usuário chega a quem trabalha, e destrava a correção da história ready</a></li><li class="n3"><a href="#rn-860">RN-860 — O gate de QA espera o usuário sem gastar o ciclo de correção</a></li><li class="n3"><a href="#rn-870">RN-870 — O veredito só espera pergunta que existe e está aberta</a></li><li class="n3"><a href="#rn-871">RN-871 — afeta.regras aceita o título exato da regra e guarda o id</a></li><li class="n3"><a href="#rn-872">RN-872 — As outras decisões do projeto chegam ao dev e ao QA, em seção própria</a></li><li class="n3"><a href="#rn-886">RN-886 — O 403 de orçamento do OpenRouter é crédito esgotado, com limite, gasto e reset</a></li><li class="n3"><a href="#rn-891">RN-891 — A interface tem quatro idiomas, com pt-BR como padrão e fallback</a></li><li class="n3"><a href="#rn-892">RN-892 — O prefixo estável da chamada vai marcado para o cache de prompt, e a capability é ligada só no OpenRouter, provada</a></li><li class="n3"><a href="#rn-894">RN-894 — Épico com o mesmo título de outro do projeto é recusado</a></li><li class="n3"><a href="#rn-902">RN-902 — Recriar o container congela a decisão de imagem vigente, e a imagem desatualizada é avisada</a></li><li class="n3"><a href="#rn-906">RN-906 — A api recusa a rede none quando a stack de um módulo baixa dependências</a></li><li class="n3"><a href="#rn-907">RN-907 — O OpenRouter recebe uma chave de sessão por agente, e a conversa fica presa ao upstream que a atendeu</a></li><li class="n3"><a href="#rn-909">RN-909 — O 9Router é o 10º provider: URL por instalação, credencial obrigatória, preço público de curadoria</a></li><li class="n3"><a href="#rn-910">RN-910 — O teto padrão por área é 5 no dev, 4 no qa e 2 na infra</a></li><li class="n3"><a href="#rn-914">RN-914 — O orçamento de raciocínio é por modelo, só para quem o respeita</a></li><li class="n3"><a href="#rn-915">RN-915 — O raciocínio é contado no stream e abortado no limite; o custo abortado é estimado e depois reconciliado</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-zh-Hans.json" data-base="../../"></script></body>
+</html>

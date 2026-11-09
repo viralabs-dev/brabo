@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why split, and when not to | Brabo</title>
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../../tutorials/orquestrar-repositorios/por-que-separar.html">pt-BR</option><option value="../../../en/tutorials/orquestrar-repositorios/por-que-separar.html" selected>en</option><option value="../../../ru/tutorials/orquestrar-repositorios/por-que-separar.html">ru</option><option value="../../../zh-Hans/tutorials/orquestrar-repositorios/por-que-separar.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../../dev/en/tutorials/orquestrar-repositorios/por-que-separar.html">dev</option><option value="../../../../prd/en/tutorials/orquestrar-repositorios/por-que-separar.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="../../index.html">Home</a></li><li><a href="../../getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><details open><summary><span>Orchestrate repositories</span></summary><ul><li><a href="../../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><a href="../../tutorials/orquestrar-repositorios/por-que-separar.html" aria-current="page">Why split, and when not to</a></li><li><a href="../../tutorials/orquestrar-repositorios/o-mapa.html">The map</a></li><li><a href="../../tutorials/orquestrar-repositorios/como-cada-repo-e-consumido.html">How each repository is consumed</a></li><li><a href="../../tutorials/orquestrar-repositorios/vida-de-uma-mudanca.html">The life of a change</a></li><li><a href="../../tutorials/orquestrar-repositorios/monte-o-seu.html">Build your own</a></li><li><a href="../../tutorials/orquestrar-repositorios/erros-que-ja-cometemos.html">Mistakes we already made</a></li></ul></details></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Developing Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><a href="../../runbook.html">Operations manual</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Architecture</a></li><li><a href="../../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../../explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Branching policy</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../../explanation/release-do-produto.html">Product release</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="../../explanation/localizacao.html">Localization</a></li><li><a href="../../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="../../glossary.html">Glossary</a></li><li><a href="../../reference/componentes-da-doc.html">Doc components</a></li><li><a href="../../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../../business-rules.html">Business rules</a></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Timeline</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../../explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="why-split-and-when-not-to">Why split, and when not to</h1>
+<p><strong>Who it is for:</strong> anyone deciding whether to split a product into repositories.</p>
+<p><strong>After reading, you can:</strong> list what you gain and what you pay by splitting, and say whether your case justifies the cost.</p>
+<h2 id="the-starting-point">The starting point</h2>
+<p>Brabo began as a <strong>monorepo</strong>: api, engine, web, runner, broker, infrastructure, documentation and end-to-end tests in one repository, with <strong>one version, one history and one pipeline</strong>. In November 2026 the product owner decided to split it into repositories inside an organization. The decision and the map are in <a href="../../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252</a>, for anyone who wants to read it later.</p>
+<h2 id="what-the-split-brought">What the split brought</h2>
+<p>What the ADR records as the reason and direct consequence:</p>
+<ul>
+<li><strong>Independent versions.</strong> Each repository has its own version, and the product has its own in the front-door repository. Fixing the api does not force you to republish the web.</li>
+<li><strong>A clear owner for each piece of documentation.</strong> <code>docs/</code> and the business rules live in the repository that owns the code, and each one's <code>docs:check</code> verifies its own.</li>
+<li><strong>Artifacts of their own.</strong> Whoever publishes a container image, a binary or a package does so in their own repository, with their own signing chain.</li>
+<li><strong>One front door.</strong> Someone who only wants to install needs to know one repository, not eleven.</li>
+</ul>
+<blockquote>
+<p><strong>TODO(humano):</strong> ADR 0252 does not list numbered criteria for &quot;when to split&quot; (for example team size or release pace). If the owner wants the path to state them, he must write them.</p>
+</blockquote>
+<h2 id="what-the-split-cost">What the split cost</h2>
+<p>Splitting moves the complexity to the <strong>edges</strong> between repositories. These are the costs Brabo measured and had to solve, each with the solution it adopted:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>Cost</th>
+<th>What happened</th>
+<th>Solution adopted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>The site reads the siblings' code</strong></td>
+<td>The documentation site needs the code of the other repositories. Reading the tip of each <code>dev</code> made the same PR go from green to red with no new commit.</td>
+<td>A <strong>SHA lock</strong> (<code>irmaos.lock</code>) in the front-door repository, bumped by a bot. <a href="../../adr/0274-os-gerados-leem-os-irmaos-por-uma-trava-de-shas.html">ADR 0274</a></td>
+</tr>
+<tr>
+<td><strong>Translation parity</strong></td>
+<td>The translation measurement summed the documentation of every repository, so a merge elsewhere turned other people's PRs red.</td>
+<td>Parity measures <strong>only</strong> the owning repository's documentation. <a href="../../adr/0273-a-paridade-de-traducao-mede-so-a-doc-do-brabo.html">ADR 0273</a></td>
+</tr>
+<tr>
+<td><strong>Merge order across repositories</strong></td>
+<td>GitHub has no dependency between repositories. One repository's <code>dev</code> went red between two merges done in the wrong order, and the order lived only in the memory of whoever promoted.</td>
+<td>The PR <strong>declares</strong> which PR it depends on (<code>Depende-de:</code>), and a check waits. <a href="../../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">ADR 0276</a></td>
+</tr>
+<tr>
+<td><strong>The promotion order</strong></td>
+<td>Promoting <code>dev</code> to <code>main</code> also has an order.</td>
+<td>The order is <strong>inferred</strong> from the repositories' layers. <a href="../../adr/0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.html">ADR 0284</a></td>
+</tr>
+<tr>
+<td><strong>The map goes stale</strong></td>
+<td>The list of repositories was copied by hand in 14 places, in 11 different wordings.</td>
+<td>A <strong>single source</strong> (<code>repos.yml</code>) generates each README's block. <a href="../../adr/0281-o-mapa-dos-repos-tem-uma-fonte-so.html">ADR 0281</a></td>
+</tr>
+<tr>
+<td><strong>The CI policy pin</strong></td>
+<td>Each repository pinned a different version of the policy; there were 5 different SHAs across 11 repositories.</td>
+<td>The pin points to a <strong>tag</strong>, and a check verifies it. <a href="../../adr/0280-o-pin-do-brabo-ci-aponta-para-uma-tag.html">ADR 0280</a></td>
+</tr>
+<tr>
+<td><strong>Shared contracts</strong></td>
+<td>A new tag of the contracts repository requires a bump in several consumers.</td>
+<td>Consumption by <strong>exact tag</strong>, and a script bumps the version in each consumer. See <a href="como-cada-repo-e-consumido.html">page 3</a>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Notice the pattern: <strong>every cost became a piece of automation</strong>. Splitting without that automation is the most common path to a set of repositories nobody can maintain.</p>
+<h2 id="when-not-to-split">When not to split</h2>
+<p>These signs come from the costs above, not from a Brabo rule. If several apply to you, postpone the split:</p>
+<ul>
+<li><strong>Nobody needs an independent version.</strong> If everything always ships together, the monorepo already gives you that for free.</li>
+<li><strong>One person or a small team looks after everything.</strong> The cost of the edges (lock, merge order, pins) is fixed, and the autonomy gain is small.</li>
+<li><strong>You cannot automate what crosses repositories.</strong> Without checks for merge order, pins and the map, the set rots in silence.</li>
+<li><strong>The code always changes together.</strong> If almost every change touches three repositories, you built a monorepo that is hard to use.</li>
+</ul>
+<p>Brabo split anyway because it wanted artifacts and documentation with owners, and accepted paying with automation. The next page shows the result.</p>
+<p>Next: <a href="o-mapa.html">The map</a>.</p>
+<nav class="site-pager"><a href="../../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a><a href="../../tutorials/orquestrar-repositorios/o-mapa.html">The map</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/orquestrar-repositorios/por-que-separar.md">Edit this page</a><span>Updated 2026-11-08T16:26:09-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#the-starting-point">The starting point</a></li><li class="n2"><a href="#what-the-split-brought">What the split brought</a></li><li class="n2"><a href="#what-the-split-cost">What the split cost</a></li><li class="n2"><a href="#when-not-to-split">When not to split</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-en.json" data-base="../../"></script></body>
+</html>

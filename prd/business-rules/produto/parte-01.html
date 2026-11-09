@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — Produto — parte 1 (desde RN-012) | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../../business-rules/produto/parte-01.html" selected>pt-BR</option><option value="../../en/business-rules/produto/parte-01.html">en</option><option value="../../ru/business-rules/produto/parte-01.html">ru</option><option value="../../zh-Hans/business-rules/produto/parte-01.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../../dev/business-rules/produto/parte-01.html">dev</option><option value="../../../prd/business-rules/produto/parte-01.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../../index.html">Início</a></li><li><a href="../../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Arquitetura</a></li><li><a href="../../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Política de branches</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../../explanation/localizacao.html">Localização</a></li><li><a href="../../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../../glossary.html">Glossário</a></li><li><a href="../../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>Regras de negócio</span></summary><ul><li><a href="../../business-rules.html">Regras de negócio</a></li><li><a href="../../business-rules/custo.html">Custo e metering</a></li><li><a href="../../business-rules/autenticacao.html">Autenticação</a></li><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><details open><summary><span>Produto</span></summary><ul><li><a href="../../business-rules/produto.html">Produto</a></li><li><a href="../../business-rules/produto/parte-01.html" aria-current="page">Produto — parte 1 (desde RN-012)</a></li><li><a href="../../business-rules/produto/parte-02.html">Produto — parte 2 (desde RN-543)</a></li></ul></details></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="produto--parte-1-desde-rn-012">Produto — parte 1 (desde RN-012)</h1>
+<h2 id="backlog">Backlog</h2>
+<h3 id="rn-012">RN-012 — A module removed from <code>module_map</code> demotes the story</h3>
+<p>A story linked to a module that ceased to exist goes back to <code>draft</code>, with
+a <code>backlog.story_demoted</code> event.</p>
+<ul>
+<li><strong>Where:</strong> <code>apps/api/src/domain/architecture/module-resolution.ts</code>; the
+event is emitted in
+<code>application/use-cases/architecture/create-module-map.use-case.ts:73</code></li>
+<li><strong>Test:</strong> <code>test/domain/architecture/module-resolution.spec.ts</code></li>
+</ul>
+<h2 id="painel-de-projetos">Painel de projetos</h2>
+<h3 id="rn-096">RN-096 — Toda decisão diz em português o que acontece; o payload cru nasce colapsado</h3>
+<p>Todo tipo de <code>proposed_action</code> tem uma <strong>frase em português</strong> que descreve o
+efeito de aprovar, e ela é a primeira coisa visível no card — antes de qualquer
+detalhe, nas três telas onde uma decisão é pedida (a fila de Aprovações, o card
+dentro do chat da sessão e a aba Insights). O payload cru continua acessível,
+<strong>dentro de um colapso que nasce fechado</strong>, e nunca é despejado na tela.</p>
+<p><strong>O que existia era um despejo.</strong> Todo tipo sem corpo visual próprio caía num
+<code>Object.entries(payload).map(([k, v]) =&gt; k + ': ' + JSON.stringify(v))</code>, sempre
+aberto. Quem abria a fila lia <code>worktree: /workspaces/dev-api</code>,
+<code>coAuthor: Brabo User &lt;user@brabo.dev&gt;</code> e <code>proposto: 4</code> — e tinha de deduzir o
+que ia acontecer se clicasse em Aprovar. Aprovação que exige dedução é
+aprovação que se dá no automático, e o produto inteiro se apoia em o usuário
+ser a autoridade final.</p>
+<p><strong>A frase degrada, e é isso que a torna confiável.</strong> Nenhuma delas assume que
+uma chave do payload existe: com payload vazio a frase continua sendo uma frase
+verdadeira, só menos específica (&quot;Registra um commit no repositório do
+projeto.&quot;). O payload vem do engine e de dez casos de uso diferentes, e nenhum
+deles promete um formato — frase que só funciona com a fixture certa é frase
+que quebra na primeira aprovação real.</p>
+<p><strong>Tipo que o web ainda não conhece não é caso teórico.</strong> A união <code>ActionType</code>
+do web já ficou defasada duas vezes: primeiro com os três tipos do bootstrap de
+Gitflow, e de novo com <code>parallelize</code>/<code>raise_max_parallel</code>, que entraram na FASE
+14d. O compilador não pega: a lista canônica está em <code>apps/api</code>, que o web não
+importa. Por isso duas coisas ao mesmo tempo — o card <strong>degrada</strong> (verbo neutro</p>
+<ul>
+<li>&quot;ver detalhes&quot;, com o payload colapsado, em vez do <code>undefined</code> no mapa de
+ícones que derrubava a árvore inteira do React), e o <strong>teste lê o <code>decide.ts</code>
+do backend</strong> e reprova quando um tipo entra sem frase.</li>
+</ul>
+<p><strong>O default de aberto/fechado é derivado, não configurado.</strong> A regra é uma só —
+abre o que ainda espera decisão de quem está olhando: no chat, ação <code>pending</code>;
+na fila, nunca (são N cards, e N detalhes abertos são a mesma parede de texto);
+em Insights, hipótese <code>proposed</code>. E o payload CRU não abre em variante nenhuma.
+A consequência de projeto é que <code>ApprovalCard</code> <strong>não ganhou prop nova
+obrigatória</strong>: o default sai de <code>variant</code> e <code>status</code>, que já existiam.</p>
+<p><strong>Verbo e frase saem de um módulo só</strong>, consumido pelas três telas. A hipótese
+do Psicólogo usa literalmente o verbo do <code>instruction_patch</code> em vez de um
+vocabulário paralelo — e a frase dela diz o que o accept faz de verdade
+(enfileira para a Anamnese, que <strong>pode</strong> propor o ajuste, que ainda vem para
+aprovação), nunca &quot;a instrução será alterada&quot;.</p>
+<p><strong><code>write_file</code> tinha frase, mas não corpo.</strong> Ele nasceu de fora de
+<code>COM_CORPO_PROPRIO</code>: a frase mostrava só o <code>path</code>, e o detalhe caía no mesmo
+despejo de JSON cru colapsado que esta RN existe para evitar — então um write
+que genuinamente pedia aprovação (fora do prefixo <code>dev-</code>, ou caminho fora do
+escopo do agente) exigia um clique a mais para ver o <code>content</code>. Entrou em
+<code>COM_CORPO_PROPRIO</code> com corpo próprio: <code>path</code> e um preview do <code>content</code> (até
+25 linhas/4.000 caracteres, com aviso de truncamento — nunca o arquivo
+inteiro, mesma regra do payload cru), aberto por padrão no chat enquanto
+pendente, igual <code>terminal</code>.</p>
+<p><strong>Payload vazio não é payload ausente.</strong> <code>command</code> (terminal) ou
+<code>path</code>/<code>content</code> (write_file) chegando como string vazia — tool-call
+malformada do modelo, não bug de renderização — degradava para um prompt
+<code>$ </code> ou um preview em branco, que o usuário lia como defeito da tela. Os dois
+corpos agora distinguem os dois casos e mostram &quot;o modelo não produziu um
+X válido para esta ação&quot; em vez de um branco.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/aprovacoes.ts</code> (<code>VERBO_DA_ACAO</code>, <code>fraseDaAcao</code>,
+<code>descreverAcao</code>, <code>descreverHipotese</code>), consumido por
+<code>apps/web/src/components/ApprovalCard.tsx</code> (Aprovações + chat da sessão,
+<code>COM_CORPO_PROPRIO</code>, <code>previewConteudo</code> para o <code>content</code> de <code>write_file</code>) e
+<code>apps/web/src/components/HypothesisCard.tsx</code> (Insights); colapso pelo
+<code>Disclosure</code> de <code>apps/web/src/components/ui/Disclosure.tsx</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/aprovacoes.test.ts</code> (lê <code>ACTION_TYPES</code> de
+<code>apps/api/src/domain/actions/decide.ts</code> e exige verbo + frase para cada tipo,
+com payload vazio); <code>apps/web/src/components/ApprovalCard.test.tsx</code>
+(<code>frase e colapso</code> — payload colapsado nas duas variantes, JSON legível ao
+abrir, tipo desconhecido não derruba a tela, <code>write_file</code> com corpo próprio
+aberto por padrão e truncamento do preview, <code>command</code>/<code>path</code>/<code>content</code>
+vazios mostrando a mensagem de fallback);
+<code>apps/web/src/components/HypothesisCard.test.tsx</code> (<code>frase e colapso</code>)</li>
+<li><strong>Origem:</strong> FASE 19 do programa 16–26, do pedido &quot;hoje está muito difícil a
+leitura&quot; na primeira navegação real depois do reset do banco</li>
+</ul>
+<hr>
+<h2 id="n-agentes-online-no-dashboard--status-ao-vivo-nunca-presença-histórica-rn-409-adr-0097">&quot;N agentes online&quot; no dashboard — status AO VIVO, nunca presença histórica (RN-409, ADR 0097)</h2>
+<p>Item do backlog anterior. Investigação prévia (<code>docs/explanation/backlog.md</code>)
+confirmou que não existia agregado de liveness nenhum — nem por projeto, nem
+por workspace: o que existia era só presença HISTÓRICA
+(<code>RosterFacts</code> — &quot;já apareceu na sessão alguma vez&quot;) e status ao vivo de
+VERDADE só no cliente, derivado do event log, e só quando um projeto está
+ABERTO (<code>deriveAgentRoster</code>). O card do dashboard hoje forçava
+<code>() =&gt; 'ocioso'</code> porque não desenhava status nenhum — este é o hardcode que
+a RN substitui.</p>
+<h3 id="rn-409">RN-409 — &quot;N online&quot; soma dois mecanismos pela MESMA régua: não ocioso, não travado</h3>
+<p><code>ProjectCardSummary.onlineAgentCount</code> (<code>GET /workspaces/:workspaceId/ projects-summary</code>) é a contagem de agentes ONLINE agora — trabalhando ou com
+uma pendência esperando decisão —, nunca tamanho de equipe. Chamar de
+&quot;online&quot; um número que na verdade é &quot;já apareceu alguma vez&quot; seria enganoso
+(mesmo princípio dos <a href="../../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041</a>/
+<a href="../../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">0042</a>/
+<a href="../../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">0077</a> contra dado
+fingido).</p>
+<p>Duas FONTES, uma régua:</p>
+<ul>
+<li><strong>Dev agents</strong> — <code>engine.dev_agent_states.status</code>, agregado em lote por
+<code>project_id</code> (<code>status NOT IN ('idle', 'idle_tripped')</code>). <code>working</code>,
+<code>awaiting_gate</code> e <code>awaiting_approval</code> contam (RN-047/ADR 0052 — os cinco
+estados da máquina do dev); <code>idle</code>/<code>idle_tripped</code> não. <code>dev-&lt;modulo&gt;</code> e
+<code>dev-&lt;modulo&gt;-2</code> são chaves DISTINTAS (<code>agent_id</code> na tabela), então contam
+separado sem esforço nenhum — é a própria chave primária que já separa.</li>
+<li><strong>Agentes conversacionais</strong> (criativo/po/arquiteto/dev-lead/ux-designer/
+staff/infra) — último evento <code>agent.status</code> de cada <code>actor_id</code>, na sessão
+MAIS RECENTE do projeto (mesmo escopo de sessão que o resto de <code>RosterFacts</code>
+usa, RN-090). <code>agent.status</code> só tem três valores possíveis
+(<code>Engine.Sessions.LiveBroadcast.agent_status/4</code> recusa qualquer outro):
+<code>working</code>/<code>awaiting_approval</code> contam, <code>idle</code> não.</li>
+</ul>
+<p><strong>QA/SecOps NUNCA contam</strong> — não é filtro, é AUSÊNCIA de dado: nenhum dos
+dois emite <code>agent.status</code> (rodam veredito único por invocação, sem noção de
+&quot;ocioso&quot; entre chamadas — o status deles vem de <code>pr.gate_changed</code>/
+<code>infra.gate_changed</code>, um mecanismo à parte que <code>deriveAgentRoster</code> já trata
+separado). Não precisou de exclusão explícita: a consulta só soma o que tem
+o tipo de evento certo.</p>
+<p>A régua é a MESMA que <code>deriveAgentRoster</code> já aplicaria se o projeto estivesse
+aberto (<code>'trabalhando'</code>/<code>'aguardando'</code> no cliente ≅ <code>working</code>/
+<code>awaiting_gate</code>/<code>awaiting_approval</code> no backend) — os DOIS caminhos calculam
+&quot;online&quot; a partir do mesmo eventual estado (event log/tabela de estado
+persistida), só que por MECANISMOS diferentes (agregação SQL no backend,
+dobra sobre eventos já buscados no cliente), no mesmo espírito de
+<code>infraActive</code>/<code>uxDesignerActive</code>/<code>staffActive</code> (RN-090/RN-287: duas fontes,
+uma régua). Não há função compartilhada entre <code>apps/api</code> e <code>apps/web</code> para
+isto — os dois já divergem de linguagem/runtime para o resto de <code>RosterFacts</code>
+também, e introduzir um pacote compartilhado só para uma contagem seria
+peso maior que o problema.</p>
+<p><strong>Consulta nova contra schema que a api não migra.</strong> <code>engine.dev_agent_states</code>
+é tabela do ENGINE (Ecto, schema Postgres <code>&quot;engine&quot;</code>), mesmo banco físico,
+mesma conexão — não uma segunda fonte de dados, um segundo NAMESPACE no
+mesmo Postgres. O precedente já existia: <code>apps/api/scripts/medir-execucao.ts</code>
+já lê <code>engine.oban_peers</code> pelo mesmo caminho (raw SQL via Drizzle), só que
+como SCRIPT manual, nunca testado. Esta RN eleva o padrão para código de
+PRODUÇÃO testado — ver o <a href="../../adr/0097-leitura-direta-do-schema-do-engine-para-online-agent-count.html">ADR 0097</a>
+para a decisão de NÃO expor isto como rota HTTP interna no engine.</p>
+<p><strong>Custo medido, não fingido grátis.</strong> As duas consultas novas levam o total
+do read model de DOZE para CATORZE (RN-090 continua valendo — catorze é
+CONSTANTE, provado por <code>projects-summary.repository.spec.ts</code> contando idas
+ao banco com 2 e com 20 projetos). Nenhuma tem <code>WHERE</code> por tempo — a de
+<code>agent.status</code> escaneia os mesmos <code>session_events</code> das sessões mais recentes
+que <code>lastEvents</code>/<code>marcos</code> já escaneiam ao lado dela, então o custo marginal é
+o de mais um filtro de <code>type</code> sobre um plano de consulta que já ia acontecer,
+não uma tabela nova sendo varrida do zero. Lacuna DECLARADA: não há execução
+real recente (dogfooding) com volume de produção para medir <code>ms</code> de verdade
+contra a régua da Fase 22 (525 mil linhas, <code>EXPLAIN ANALYZE</code>) — as duas
+consultas novas ficam sem número medido, só o argumento estrutural acima.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/api/src/application/ports/projects-summary-repository.port.ts</code>,
+<code>apps/api/src/infrastructure/persistence/drizzle/projects-summary.repository.ts</code>,
+<code>apps/api/src/interfaces/http/iam/dto/iam.response.dto.ts</code>,
+<code>apps/web/src/lib/api-types.ts</code>, <code>apps/web/src/components/ProjectCard.tsx</code>,
+<code>apps/web/src/routes/Dashboard.tsx</code></li>
+<li><strong>Teste:</strong> <code>apps/api/test/infrastructure/persistence/drizzle/projects-summary.repository.spec.ts</code>
+(<code>describe('onlineAgentCount (RN-409)')</code> — dev agent working/idle/
+idle_tripped, awaiting_gate/awaiting_approval, duas instâncias do mesmo
+agente-base, agente conversacional working/idle/awaiting_approval, só o
+ÚLTIMO <code>agent.status</code> conta, QA/SecOps nunca contam, soma entre as duas
+fontes, isolamento entre projetos);
+<code>apps/api/test/support/global-setup.ts</code> (<code>ensureEngineFixture</code> — a tabela
+do engine criada como fixture MÍNIMA e declarada, só para o teste acima
+poder existir);
+<code>apps/web/src/components/ProjectCard.test.tsx</code> (badge &quot;N online&quot; some com
+<code>0</code>/<code>undefined</code>, aparece com <code>onlineAgentCount &gt; 0</code>)</li>
+<li><strong>Origem:</strong> <code>docs/explanation/backlog.md</code> (item herdado da FASE 13c/
+colheita do dogfooding); decisão de produto de que o número tinha de ser
+liveness de verdade, não presença histórica, registrada no prompt que
+encomendou esta correção</li>
+</ul>
+<hr>
+<h2 id="o-explorador-de-pasta-do-runner-vira-três-colunas-e-a-criação-de-um-projeto-runner-deixa-de-esperar-o-passo-final-rn-436436">O explorador de pasta do Runner vira três colunas, e a criação de um projeto <code>runner</code> deixa de esperar o passo final (RN-436/436)</h2>
+<h3 id="rn-451">RN-451 — Smoke do binário standalone roda o SUBPROCESSO real, nunca mock</h3>
+<p>O mesmo padrão de disciplina que <code>smoke-dist.mjs</code> (ADR 0106) já aplica ao
+<code>dist/index.cjs</code> publicado no npm passa a valer também para
+<code>dist-bin/brabo-runner-&lt;platform&gt;-&lt;arch&gt;[.exe]</code> (ADR 0112): nenhuma suíte
+prova que um artefato EMPACOTADO funciona lendo o código-fonte dele — só
+executando o artefato de verdade, como subprocesso, e observando saída
+real. <code>scripts/smoke-bin.mjs</code> roda o binário COMPILADO (nunca
+<code>node src/index.ts</code> nem qualquer forma não-compilada) com <code>--self-test-pty</code>
+— uma flag interna, não documentada em <code>uso()</code> — que resolve <code>node-pty</code>
+exatamente como produção e spawna um PTY real via <code>GerenciadorDePty</code>,
+escrevendo e lendo dele. Só a linha <code>node-pty carregado com sucesso</code> +
+<code>SELF_TEST_PTY_OK:</code> no stdout do processo real conta como prova; nenhum
+mock de <code>node-pty</code> nem de <code>child_process</code> é aceitável para este teste
+específico, porque o que ele existe para provar é justamente que o <code>.node</code>
+nativo embutido (<code>with { type: 'file' }</code>, <code>native-pty-embed.generated.ts</code>)
+carrega e funciona DENTRO do binário — mockar qualquer peça do caminho
+apagaria a única coisa que o teste precisa provar.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/runner/scripts/smoke-bin.mjs</code>; <code>apps/runner/src/index.ts</code>
+(<code>rodarAutoTestePty</code>, a implementação de <code>--self-test-pty</code>)</li>
+<li><strong>Teste:</strong> o próprio <code>smoke-bin.mjs</code> — não há teste unitário que o
+substitua, de propósito (é o mesmo desenho de <code>smoke-dist.mjs</code>, que
+também não tem par unitário)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0112-binario-standalone-do-runner-via-bun-build-compile.html">0112</a></li>
+<li><strong>Origem:</strong> requisito explícito do dono do produto para este item de
+backlog (&quot;no mocking&quot;)</li>
+</ul>
+<hr>
+<h2 id="terminal-do-runner-local-preso-em-abrindo-terminal-para-sempre-rn-433">Terminal do runner local preso em &quot;Abrindo terminal...&quot; para sempre (RN-433)</h2>
+<h3 id="rn-453">RN-453 — <code>--dir</code> relativo do runner local resolve contra <code>INIT_CWD</code>, não contra o cwd rebaseado do pnpm</h3>
+<p><code>resolve(dirBruto)</code> em <code>lerArgumentos()</code> resolvia <code>--dir</code> relativo contra
+<code>process.cwd()</code> — correto quando o CLI roda direto (binário standalone,
+<code>npm install -g @brabo/runner</code>), mas ERRADO no único caminho de invocação
+que existe hoje sem publicação real no npm (achado real, ADR 0106/backlog):
+<code>pnpm --filter runner start</code> REBASEIA <code>process.cwd()</code> para a pasta do
+PACOTE (<code>apps/runner</code>), não a pasta de onde o usuário digitou o comando.
+<code>pnpm --filter runner start -- --dir ../exp001</code>, rodado de <code>~/dev/brabo</code>,
+criava <code>~/dev/brabo/apps/exp001</code> em vez de <code>~/dev/exp001</code> — silenciosamente,
+sem erro, porque RN-435 já faz <code>--dir</code> inexistente ser criado em vez de
+recusado.</p>
+<p><code>resolverDir()</code> (<code>apps/runner/src/guard.ts</code>) resolve contra <code>INIT_CWD</code>
+quando presente — a variável que npm/pnpm SEMPRE define com a pasta
+original de invocação, existente só quando o processo nasce de um script
+do <code>package.json</code> — e cai em <code>process.cwd()</code> quando ausente (binário
+direto, onde já é a pasta certa). <code>resolve()</code> do Node já ignora a base
+quando <code>dirBruto</code> é absoluto, então caminho absoluto (o caso documentado no
+README) não muda de comportamento.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/runner/src/guard.ts</code> (<code>resolverDir</code>), <code>apps/runner/src/index.ts</code> (<code>lerArgumentos</code>)</li>
+<li><strong>Teste:</strong> <code>apps/runner/src/guard.spec.ts</code> (<code>describe('resolverDir', …)</code>
+— relativo contra <code>INIT_CWD</code> quando presente, cai no cwd do processo
+quando ausente, absoluto ignora as duas bases)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0104-execution-mode-tres-valores-e-workspace-verificado-pelo-runner.html">0104</a>
+(extensão aditiva, mesma categoria de RN-435 — reduz atrito de invocação,
+não muda o runner como fonte da verdade do caminho)</li>
+<li><strong>Origem:</strong> achado em uso real, rodando <code>pnpm --filter runner start -- dir ../exp001</code> de dentro do checkout do monorepo — o único caminho de
+invocação disponível hoje, porque <code>@brabo/runner</code> ainda não foi publicado
+de verdade no npm (<code>NPM_TOKEN</code> pendente, ver backlog do ADR 0106)</li>
+</ul>
+<hr>
+<h2 id="a-busca-do-rag-deixa-rastro-e-o-rastro-congela-os-pesos-rn-479481">A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)</h2>
+<h3 id="rn-481">RN-481 — <code>rag.search</code>/<code>rag.feedback</code> são NARRAÇÃO da timeline, e só existem quando há sessão</h3>
+<p>Os dois eventos entram no event log <strong>apenas no caminho do agente</strong> — a busca
+da aba é de projeto e não tem sessão onde narrar. Isso é assimetria declarada,
+não lacuna: <strong>a tabela é a fonte da medição, o evento é narração</strong>. Medir pelo
+event log perderia metade das buscas, e justamente a metade com julgamento
+humano.</p>
+<p>Falha de narração não derruba nem a busca nem o voto: a linha da tabela já está
+gravada, e é ela que a medição lê. A falha vira log com origem <code>infra</code>, nunca
+silêncio.</p>
+<p><code>'rag'</code> entra em <code>PREFIXOS_DE_EVENTO</code> (<code>scripts/docs/generate.mjs</code>) no mesmo
+commit — sem isso o inventário gerado de <code>docs/reference/events.md</code> não enxerga
+os dois tipos, e <code>pnpm docs:check</code> ficaria verde sobre uma lista incompleta:
+uma doc que passa mentindo é pior que uma doc que reprova.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/api/src/domain/rag/rag-telemetry.ts</code>
+(<code>EVENTO_RAG_SEARCH</code>/<code>EVENTO_RAG_FEEDBACK</code>),
+<code>apps/api/src/application/use-cases/rag/hybrid-search.use-case.ts</code>,
+<code>apps/api/src/application/use-cases/rag/record-rag-feedback.use-case.ts</code>,
+<code>scripts/docs/generate.mjs</code> (<code>PREFIXOS_DE_EVENTO</code>)</li>
+<li><strong>Teste:</strong>
+<code>apps/api/test/application/use-cases/rag/hybrid-search.use-case.spec.ts</code>
+(narra com sessão; NÃO narra sem sessão),
+<code>apps/api/test/application/use-cases/rag/record-rag-feedback.use-case.spec.ts</code>
+(o mesmo par, para o voto)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0129-telemetria-de-busca-do-rag-como-tabela.html">0129</a></li>
+<li><strong>Origem:</strong> plano do dono do produto, Parte 2 / Etapa 1</li>
+</ul>
+<h3 id="rn-485">RN-485 — O broker de container não aceita especificação: ele recebe um projeto e COMPÕE</h3>
+<p>O broker (<code>apps/broker</code>) é o único processo do produto com acesso a um daemon
+Docker no servidor. A regra que o torna não-arbitrário não é um allowlist: é a
+<strong>forma da entrada</strong>.</p>
+<p><strong>Ele recebe <code>projectId</code> e uma das cinco operações — nada mais.</strong> As cinco são as
+da <code>DockerPort</code> do <a href="../../adr/0128-porta-de-docker-e-a-prova-de-empacotamento.html">ADR 0128</a>
+(<code>start</code>, <code>stop</code>, <code>remove</code>, <code>inspect</code>, <code>exec</code>), e uma sexta é decisão de produto
+com ADR, nunca um parâmetro a mais. <code>start</code>, <code>stop</code> e <code>remove</code> têm corpo VAZIO;
+<code>exec</code> leva comando e <code>cwd</code>, e mais nada.</p>
+<p><strong>A especificação é lida da api e COMPOSTA aqui.</strong> O broker chama
+<code>GET /internal/projects/:projectId/container-spec</code>, que devolve identidade do
+projeto, modo de execução e a decisão de imagem vigente do Arquiteto. Imagem,
+rede, recursos e o único mount saem daí. Não existe campo em que se escreva
+<code>privileged</code>, <code>cap_add</code>, <code>network: host</code> ou um <code>-v</code> livre — porque não existe
+campo. Se a especificação viajasse no corpo, a contenção de um processo
+root-equivalente no host dependeria de o CHAMADOR estar correto, e contenção que
+depende do chamador não é contenção.</p>
+<p><strong>Ele revalida o que a api devolveu, e as duas validações não são a mesma.</strong>
+<code>validarDecisaoDeImagem</code> (api) pergunta &quot;esta decisão de arquitetura é
+revisável?&quot; — exige <code>rationale</code>, recusa <code>latest</code>, aplica <code>RECURSOS_MAXIMOS</code> e
+devolve a recusa ao MODELO pelo tool-result (RN-061). <code>especificacaoValidada</code>
+(broker) pergunta &quot;posso entregar isto ao daemon?&quot; — é o PARSE de um JSON não
+confiável para dentro do tipo fechado. Os tetos daqui são os do BROKER, o último
+recurso que ele nunca ultrapassa venha o pedido de onde vier; hoje os números
+coincidem com os da api de propósito, e se um dia divergirem o menor vence sem
+nada quebrar, porque nenhum dos dois afirma ser o outro. Uma checagem existe só
+deste lado: referência de imagem que começa com <code>-</code> seria lida pelo CLI como
+FLAG, e <code>execFile</code> sem shell resolve injeção de COMANDO, não de ARGUMENTO.</p>
+<p><strong>A api não manda CAMINHO nenhum.</strong> O <code>-v</code> de um <code>docker run</code> é resolvido pelo
+DAEMON, contra o filesystem do HOST — um caminho de dentro do container da api
+faria o daemon criar e montar uma pasta VAZIA, com o dev agent trabalhando num
+diretório sem código e nada indicando por quê. O broker compõe o caminho com
+<code>PROJECT_WORKSPACES_HOST_ROOT</code>, configuração DELE, mais o <code>workspaceDirName</code>
+congelado na criação (RN-109). Sem essa variável, <code>start</code> RECUSA nomeando-a; as
+outras quatro operações continuam funcionando. Recusar é a regra: adivinhar
+produziria o mount vazio em silêncio.</p>
+<p><strong>Projeto <code>mounted</code>/<code>runner</code> é recusado com 409</strong>, porque a pasta deles mora na
+máquina do usuário e o host do broker não a enxerga — lá quem sobe container é o
+runner. É a mesma política que <code>RegistrarTransicaoDeContainerUseCase</code> já aplica
+na api, dita onde o broker consegue dizê-la.</p>
+<p><strong>Nada dispara subida.</strong> Não há laço, não há fila, não há <code>proposed_action</code> de
+<code>container_start</code>: o broker age quando chamado, e o único chamador que existe
+hoje faz LEITURA. Efeito externo continua exigindo aprovação.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/broker/src/operacoes.ts</code> (as cinco, e a composição em
+<code>especificacaoDoProjeto</code>), <code>apps/broker/src/servidor.ts</code> (a lista fechada de
+rotas e a tabela de status),
+<code>packages/docker-port/src/spec-de-container.ts</code> (o parse e os tetos),
+<code>apps/api/src/application/use-cases/containers/obter-spec-de-container.use-case.ts</code>
+(o que a api devolve, e o caminho que ela não devolve),
+<code>apps/api/src/interfaces/http/internal/internal-containers.controller.ts</code></li>
+<li><strong>Teste:</strong> <code>apps/broker/src/servidor.spec.ts</code> (imagem, rede, recursos e mount
+mandados no corpo são IGNORADOS; artefato com imagem que começa com <code>-</code> é 422
+e nada é tocado; uma sexta operação é 404; <code>cwd</code> fora de <code>/work</code> é recusado,
+inclusive <code>/workspace</code>; sem <code>PROJECT_WORKSPACES_HOST_ROOT</code> o <code>start</code> recusa
+dizendo qual variável falta),
+<code>packages/docker-port/src/spec-de-container.spec.ts</code> (o parse campo a campo),
+<code>apps/api/test/application/use-cases/containers/spec-e-observacao-de-container.use-case.spec.ts</code>
+(a api não devolve caminho nenhum, nem <code>rationale</code>),
+<code>apps/api/test/infrastructure/http-clients/container-broker.client.spec.ts</code>
+(<code>start</code> manda corpo vazio)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0130-broker-de-container.html">0130</a></li>
+</ul>
+<h3 id="rn-497">RN-497 — O <code>brabo-runner</code> sobe o container do projeto NA MÁQUINA DO USUÁRIO, com o Docker DELE</h3>
+<p>Fecha a metade que a RN-494 (ADR 0135) deixou declarada: <code>mounted</code>/<code>runner</code>
+passaram a EXIGIR imagem decidida (o portão da RN-105 vale nos três modos),
+mas continuavam sem subir container NENHUM — só <code>execution_mode: container</code>
+tinha alguém (o broker, <code>apps/broker</code>) capaz de chamar Docker de verdade.
+<code>container_start</code>/<code>container_stop</code>/<code>container_remove</code> (RN-491/495) agora têm
+um SEGUNDO caminho de execução, ramificado pelo <code>executionMode</code> do projeto
+dentro de <code>ExecuteContainerStartUseCase</code>/<code>ExecuteContainerStopUseCase</code>/
+<code>ExecuteContainerRemoveUseCase</code> — nunca na PROPOSTA nem na APROVAÇÃO da
+ação, que continuam agnósticas de modo (<code>decide.ts</code> não muda).</p>
+<p><strong><code>container</code> segue pelo broker, sem mudança nenhuma.</strong> <code>mounted</code>/<code>runner</code>
+pedem ao ENGINE (<code>ApiToEngineClient.startContainerViaRunner</code>/
+<code>stopContainerViaRunner</code>/<code>removeContainerViaRunner</code>, síncrono como
+<code>executeTerminalAction</code>) para repassar ao RUNNER conectado — o CLI que já
+mantém o canal <code>terminal:&lt;projectId&gt;</code> (ADR 0103/0104) ganha TRÊS pares de
+evento novos, <code>container_start</code>/<code>_result</code>, <code>container_stop</code>/<code>_result</code>,
+<code>container_remove</code>/<code>_result</code> (<code>apps/runner/src/channel.ts</code>), no MESMO molde
+de <code>exec</code>/<code>exec_result</code>: <code>Engine.Runners.RunnerRouter</code> despacha pro canal
+correlacionado por <code>ref</code> e fica bloqueado em <code>receive</code>, o runner chama
+<code>DockerViaCli.start/stop/remove</code> (<code>@brabo/docker-port</code>, ADR 0128) com o
+DOCKER DO USUÁRIO — não o do servidor — e responde. <code>EngineWeb. ContainerCommandController</code> (rotas <code>POST internal/projects/:projectId/ containers/{start,stop,remove}</code>) é o único chamador; nenhum outro caminho
+alcança essas três operações do lado engine.</p>
+<p><strong>A imagem que sobe não é ELEITA de novo</strong> — ao contrário do caminho
+<code>container</code>, que reusa <code>DecidirImagemDoProjetoUseCase</code> para gravar uma nova
+versão de <code>artifact.project_image</code>. O caminho <code>mounted</code>/<code>runner</code> só LÊ a
+decisão VIGENTE (<code>ObterSpecDeContainerUseCase</code>, o MESMO caso de uso que já
+compõe <code>GET .../container-spec</code> para o broker — chamado direto, sem HTTP,
+porque os dois rodam no processo da api) e a manda ao runner; sem imagem
+decidida (RN-105), falha ANTES de perguntar ao engine.</p>
+<p><strong>&quot;Sem runner conectado&quot; é FALHA NORMAL, nunca exceção genérica</strong> — mesma
+disciplina de <code>BrokerIndisponivelError</code>/<code>BrokerRecusouError</code> do caminho
+<code>container</code>. <code>RunnerNaoConectadoError</code> (sem runner, ou timeout) e
+<code>RunnerRecusouContainerError</code> (o runner respondeu e RECUSOU — Docker
+indisponível na máquina do usuário, especificação inválida) são as duas
+classes que <code>HttpApiToEngineClient</code> lança; os três casos de uso as capturam
+e gravam <code>failed</code> com o motivo, nunca deixam propagar. Do lado engine, a
+resposta é SEMPRE 200 — <code>sucesso: false</code> no corpo, com <code>motivoCodigo</code>
+(&quot;not_connected&quot;/&quot;timeout&quot;) só quando o engine NEM CHEGOU a perguntar ao
+runner (<code>RunnerRouter</code> devolveu <code>{:error, _}</code>), nunca um status HTTP de erro
+para o que é falha normal do comando.</p>
+<p><strong><code>Engine.Actions.TerminalExecutor</code> NÃO ganhou saída nova.</strong> A decisão
+&quot;rodar o comando no host ou dentro do container que este runner subiu&quot; é
+INTERNA ao runner — <code>decisao_de_execucao/1</code> já roteia INCONDICIONALMENTE
+todo comando de projeto <code>runner</code> conectado para <code>RunnerRouter.exec/4</code>
+(RN-423). O que muda é só <code>apps/runner/src/index.ts</code>: <code>EstadoDoRunner</code> ganha
+<code>containerAtivo</code> (o NOME do container que ESTE runner subiu, ou <code>null</code>), e
+<code>tratarExec</code> passa a rotear pra <code>DockerViaCli.exec</code> (via <code>docker exec</code>)
+quando há container ativo, ou pro caminho de sempre (<code>executarComando</code>
+direto no host) quando não há — o <code>cwd</code>, já validado por
+<code>validarCwdDentroDaRaiz</code> contra a raiz do projeto, é traduzido pra dentro de
+<code>/work</code> por troca de PREFIXO (<code>cwdParaContainer</code>, <code>guard.ts</code>), mesmo
+raciocínio de <code>cwd_para_container/2</code> do lado engine (RN-492).</p>
+<p><strong><code>guard.ts</code> (contenção em <code>$HOME</code> no Linux, RN-434) passa a cobrir também o
+caminho montado, sem NENHUMA validação nova.</strong> O bind-mount do container É
+<code>estado.dir</code> — a mesma raiz que <code>validarDirDentroDoHomeNoLinux</code> já validou
+no startup da CLI, antes de qualquer container subir. Não existe uma
+segunda checagem de &quot;caminho de mount válido&quot; porque não precisa existir: o
+mount É a raiz confirmada, ponto.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/runner/src/channel.ts</code>, <code>apps/runner/src/index.ts</code>
+(<code>EstadoDoRunner.containerAtivo</code>, <code>tratarContainerStart/Stop/Remove</code>,
+<code>tratarExec</code>), <code>apps/runner/src/guard.ts</code> (<code>cwdParaContainer</code>),
+<code>apps/engine/lib/engine/runners/runner_router.ex</code>
+(<code>start_container/stop_container/remove_container</code>),
+<code>apps/engine/lib/engine_web/channels/terminal_channel.ex</code>,
+<code>apps/engine/lib/engine_web/controllers/container_command_controller.ex</code>,
+<code>apps/engine/lib/engine_web/router.ex</code>,
+<code>apps/api/src/application/ports/api-to-engine-client.port.ts</code>
+(<code>RunnerNaoConectadoError</code>, <code>RunnerRecusouContainerError</code>),
+<code>apps/api/src/infrastructure/http-clients/api-to-engine-client.ts</code>,
+<code>apps/api/src/application/use-cases/actions/execute-container-start.use-case.ts</code>,
+<code>apps/api/src/application/use-cases/actions/execute-container-stop.use-case.ts</code>,
+<code>apps/api/src/application/use-cases/actions/execute-container-remove.use-case.ts</code></li>
+<li><strong>Teste:</strong>
+<code>apps/runner/src/channel.spec.ts</code> (roundtrip dos três pares novos),
+<code>apps/runner/src/index-handlers.spec.ts</code> (<code>tratarExec</code> roteia host vs.
+container; <code>tratarContainerStart/Stop/Remove</code> nunca lançam),
+<code>apps/runner/src/guard.spec.ts</code> (<code>cwdParaContainer</code>),
+<code>apps/engine/test/engine/runners/runner_router_test.exs</code>,
+<code>apps/engine/test/engine_web/channels/terminal_channel_test.exs</code>,
+<code>apps/api/test/infrastructure/http-clients/api-to-engine-client.spec.ts</code>,
+<code>apps/api/test/application/use-cases/actions/execute-container-start.use-case.spec.ts</code>,
+<code>apps/api/test/application/use-cases/actions/execute-container-stop.use-case.spec.ts</code>,
+<code>apps/api/test/application/use-cases/actions/execute-container-remove.use-case.spec.ts</code>
+(os três com describe &quot;mounted/runner (ADR 0137)&quot;)</li>
+<li><strong>Decisão arquitetural:</strong> <a href="../../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137</a></li>
+<li><strong>Origem:</strong> plano do dono do produto, Parte 1 / PR 1.3</li>
+</ul>
+<h2 id="fase-29--a-instalação-de-uma-linha-assinar-o-que-se-publica">FASE 29 — a instalação de uma linha: assinar o que se publica</h2>
+<h3 id="rn-525">RN-525 — O proxy do binário confere o hash contra o manifesto da mesma release, recusa quando não pode conferir, e DIZ que isso é integridade e não procedência</h3>
+<p><code>GET /runner-releases/binary</code> é <code>@Public()</code>, sem autenticação, e é o passo 4 do
+fluxo de configuração pelo navegador (<a href="../web.html#rn-473">RN-473</a>,
+<a href="../../adr/0118-configuracao-automatica-do-runner-pelo-navegador.html">ADR 0118</a>). Até a
+sessão 3 da FASE 29 ele validava a ENTRADA (<code>platform</code> contra uma allowlist
+fechada) e transmitia os bytes do GitHub direto para o cliente, <strong>sem verificar
+nada</strong> — é o consumidor que o <a href="../../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149</a>
+nomeia e a <a href="../ci.html#rn-524">RN-524</a> deixou pendente.</p>
+<p>Agora ele <strong>confere o sha256 dos bytes contra o <code>checksums.txt</code> da MESMA
+release</strong> antes de responder qualquer coisa, e o header <code>Content-Digest</code>
+(RFC 9530) repete o hash conferido, para quem receber poder refazer a conta.</p>
+<p><strong>O que esta verificação NÃO faz, e está escrito onde ela é feita.</strong> Ela <strong>não
+verifica a assinatura</strong> do manifesto (<code>checksums.txt.bundle</code>). Isto é
+<strong>integridade contra o manifesto, não procedência</strong>: quem consiga reescrever a
+Release reescreve os dois arquivos e passa. As duas formas de fechar isso foram
+MEDIDAS nesta sessão, e as duas foram recusadas:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>caminho</th>
+<th>medido</th>
+<th>por que não</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cosign</code> na imagem da api</td>
+<td><strong>155 MB</strong> (<code>cosign-linux-amd64</code> v2.6.1)</td>
+<td>quase dobra a imagem de runtime (Alpine + Node), publicada por digest no GHCR (<a href="../../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119</a>), para verificar um download opcional</td>
+</tr>
+<tr>
+<td><code>@sigstore/verify</code> + <code>@sigstore/tuf</code></td>
+<td><strong>2,5 MB, 12 pacotes</strong></td>
+<td>o tamanho não é o custo. <code>getTrustedRoot()</code> refresca metadados TUF contra <code>tuf-repo-cdn.sigstore.dev</code> (o <code>seeds.json</code> do pacote só semeia o <code>root.json</code>), então uma rota pública que hoje depende de UM host de terceiro passaria a depender de dois. E, pela régua dos ADRs <a href="../../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">0041</a>/<a href="../../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">0042</a> — capability só é declarada quando <strong>provada</strong> —, não há como provar o caminho hoje: <strong>nenhuma Release tem <code>checksums.txt.bundle</code></strong>, porque o job <code>checksums</code> nasceu na sessão 2 e só roda numa tag final, lacuna que a própria <a href="../ci.html#rn-524">RN-524</a> já declara do lado de quem assina</td>
+</tr>
+</tbody>
+</table></div>
+<p>Quem verifica a ASSINATURA é o <code>install.sh</code> (sessão 4/7), que tem <code>cosign</code> de
+verdade e o baixa pinado com <code>sha256sum -c</code> (decisão 4 do ADR 0149). <strong>BRB-005
+segue aberto para a metade de procedência desta rota</strong>, e
+<a href="../../reference/brb.html">o registro</a> diz isso — não é rodapé, é o limite do que a rota
+prova.</p>
+<p><strong>Release sem <code>checksums.txt</code> é RECUSA, nunca &quot;sirvo avisando&quot;.</strong> Um aviso que
+se aceita clicando é uma verificação que não existe (ADR 0149, decisão 3) — e
+seria o downgrade mais barato possível: apagar 400 bytes da Release desligaria a
+conferência de todo mundo. O custo está medido e é pequeno: na v5.0.0 há dois
+binários (<code>linux-x64</code>, <code>linux-arm64</code>) e nenhum manifesto, e o passo do binário é
+<strong>best-effort</strong> no fluxo do navegador (<a href="../web.html#rn-473">RN-473</a>, passo 4) — ele fica sem o agente local e diz isso (o npm saiu na AT-774). Toda release
+anterior à primeira tag depois do ADR 0149 cai nesse caminho, por construção.</p>
+<p><strong>Os seis desfechos de 502 não colapsam.</strong> O status sozinho não os separa e
+eles pedem ações diferentes de quem chamou, então a recusa carrega um <code>motivo</code>
+no corpo — <code>plataforma_nao_publicada</code>, <code>release_sem_manifesto</code>,
+<code>manifesto_nao_cobre_a_plataforma</code>, <code>manifesto_ilegivel</code>, <code>download_falhou</code>,
+<code>hash_divergente</code>. É a régua da <a href="../web.html#rn-470">RN-470</a> numa resposta de api: &quot;essa
+plataforma não saiu ainda&quot; manda esperar a próxima release, &quot;release sem
+manifesto&quot; manda usar o npm, e &quot;hash divergente&quot; é incidente. Em especial,
+&quot;manifesto não listado na release&quot; e &quot;manifesto listado que falhou ao baixar&quot;
+são desfechos DIFERENTES — confundi-los mandaria a pessoa instalar pelo npm por
+causa de uma falha de rede momentânea.</p>
+<p><strong>Conferir hash exige ler todos os bytes, e isso passa pelo disco.</strong> Bufferizar
+os ~79 MB do binário em memória seria exaustão trivial numa rota pública (o pod
+da api tem <code>limits.memory: 512Mi</code>), e cachear os bytes seria pior — cinco
+plataformas × 79 MB. Os bytes descem em <strong>stream</strong> para um arquivo temporário em
+<code>/tmp</code> (um <code>emptyDir</code> montado justamente porque o rootfs da api é read-only), com
+o hash calculado no caminho, e o arquivo é relido em stream para o cliente <strong>só
+depois</strong> de o hash bater: memória constante, e nenhum byte não conferido chega
+ao cliente. Um teto de 256 MiB aborta resposta absurda antes de encher o <code>/tmp</code>.
+O cache existente (URLs, 5 min) <strong>fica</strong>, e passa a guardar também o manifesto
+já parseado — centenas de bytes de TEXTO, nunca bytes de binário —, na MESMA
+entrada e nunca num cache próprio: em janelas diferentes, uma release publicada
+no meio faria o hash novo ser conferido contra o binário velho, e o desfecho
+seria um <code>hash_divergente</code> que pareceria adulteração.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/api/src/interfaces/http/runner/runner-releases.controller.ts</code>
+(a verificação, o teto de bytes, o arquivo temporário e o <code>Content-Digest</code>),
+<code>apps/api/src/interfaces/http/runner/checksums.ts</code> (a leitura pura do
+manifesto e a união de <code>MotivoDaRecusa</code>),
+<code>apps/web/src/lib/runner-bootstrap.ts</code> (<code>baixarBinario</code> passa a ler <code>message</code>
+e <code>motivo</code> do corpo, e a frase chega em <code>falhaDoBinario</code>)</li>
+<li><strong>Teste:</strong> <code>apps/api/test/interfaces/runner-releases.controller.spec.ts</code>
+(caminho feliz com <code>Content-Digest</code>; hash divergente sem NENHUM byte nem
+header no corpo; release sem manifesto recusando antes de baixar o binário;
+manifesto que não cobre a plataforma; manifesto ilegível; download falhado; e
+o cache guardando release e manifesto juntos) e o <code>describe('parsearChecksums')</code>
+do mesmo arquivo; <code>apps/web/src/lib/runner-bootstrap.test.ts</code> (a frase da api
+e o <code>motivo</code> chegando ao chamador, e corpo não-JSON não virando segunda
+exceção)</li>
+<li><strong>Origem:</strong> FASE 29, sessão 3. <a href="../../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149</a>,
+o terceiro consumidor da tabela da decisão 3 — pela METADE que a api pode
+provar hoje, com a outra metade nomeada em vez de fingida
+| <code>BACKUP_DIR</code> aponta para um diretório que existe e NÃO aceita escrita | o backup recusa ANTES do <code>pg_dump</code>, dizendo que é ESCRITA — um destino read-only passaria num teste de existência e falharia depois, com o diagnóstico apontando para o lugar errado (RN-528) |
+| <code>git gc</code> concorrente apaga um packfile no meio do <code>tar</code> dos bare repos | a execução vira <strong><code>failed</code></strong> em <code>backup_runs</code>, com o status do <code>tar</code> nomeado — nunca um arquivo parcial que se anuncia como bom, porque só a falha vira alerta (RN-528) |
+| Volume <code>git_local_repos</code> não montado no container de backup (o CronJob do k8s) | o passo é <strong>PULADO e dito no log</strong> — e &quot;não montado&quot; nunca é colapsado com &quot;montado e vazio&quot;, que é estado normal de instalação sem projeto <code>local</code> (RN-528) |
+| Há bare repos no volume e NENHUM arquivo no prefixo <code>git-daily/</code> | <code>brabo-restore-git</code> <strong>reprova</strong> dizendo que este volume está sem cobertura — ausente-e-vazio é outro desfecho, e sai com sucesso (RN-528) |
+| Arquivo dos bare repos truncado | reprova ao ser <strong>LIDO</strong> (<code>tar -tzf</code>), nunca pelo tamanho: um tar cortado tem bytes de sobra. É o <code>pg_restore --list</code> do lado do git (RN-528) |
+| <code>brabo-restore-git --restaurar</code> num volume que já tem bare repos | recusado: sobrepor dois estados de repositório não levanta erro nenhum e só aparece num <code>fetch</code> com história errada. <code>RESTORE_GIT_FORCE=1</code> para quem quer mesmo (RN-528) |
+| <code>brabo-restore-git --restaurar</code> sem poder escrever no volume (uid 70 × dono da api) | recusa <strong>ANTES</strong> do <code>tar</code>, nomeando <code>--user 0:0</code> — descobrir no meio da extração deixaria o volume pela metade. E o que é extraído como root volta para o dono do DIRETÓRIO (RN-528) |</li>
+</ul>
+<h3 id="rn-526">RN-526 — O instalador verifica a própria origem, NOMEIA o que achou antes de perguntar, e nunca apaga pasta de usuário</h3>
+<p><code>install.sh</code> (raiz do repositório, versionado e publicado como asset da Release)
+é a porta única de instalação. Quatro garantias, e cada uma existe contra um
+defeito concreto:</p>
+<p><strong>A invocação preserva o stdin e deixa um ARQUIVO.</strong> A forma documentada é
+<code>curl -fsSLO …/install.sh &amp;&amp; bash install.sh</code> — baixar e rodar um arquivo com
+<code>bash</code> —, e <strong>nunca</strong> <code>curl … | sh</code>: com o script chegando pelo pipe, o <code>stdin</code>
+do processo É o download, e qualquer <code>read</code> lê bytes do próprio script ou
+encontra EOF. Um instalador que não consegue perguntar escolheria sozinho onde
+criar pastas no computador de alguém — o oposto da régua que a RN-511 já aplica
+ao consentimento da base. Até a AT-083 a forma documentada era
+<code>sh -c &quot;$(curl -fsSL …)&quot;</code>, e ela <strong>nunca funcionou</strong>: a verificação da própria
+origem (o parágrafo seguinte) calcula o hash de <code>$0</code>, e em <code>X -c &quot;…&quot;</code> o <code>$0</code> é o
+nome do shell, não um arquivo; com <code>dash</code> como <code>sh</code> o script morria antes, no
+<code>set -o pipefail</code>. A decisão do mantenedor (18/09) foi mudar a DOC e manter a
+verificação por <code>$0</code>, <strong>sem</strong> porta de pular (ADR 0150). As formas erradas
+viraram <strong>recusas nomeadas</strong>, antes do primeiro download, que imprimem a forma
+certa: rodar sob um shell que não é bash (bloco POSIX no topo, antes do
+<code>set -o pipefail</code>) e rodar sem arquivo (<code>exigir_o_proprio_arquivo</code>, que exige o
+<code>BASH_SOURCE</code> do nível de cima <strong>e</strong> um <code>$0</code> legível — <code>/bin/bash -c</code> deixa
+<code>$0=/bin/bash</code>, que existe, e sem a primeira metade o hash dele iria ao
+manifesto e a pessoa leria a frase de adulteração). A forma é UMA constante
+(<code>COMO_RODAR</code>), usada pelas recusas e pelo relato sem TTY.</p>
+<p><strong>Ele verifica a própria origem antes de agir</strong>, e a cadeia tem dois elos: a
+assinatura do <code>checksums.txt</code> da Release (RN-524), e o hash <strong>deste arquivo</strong>
+dentro do manifesto verificado. O <code>cosign</code> que faz a verificação é ele mesmo
+pinado por versão e conferido por hash contra o valor escrito no script — quem
+confia no <code>install.sh</code> o bastante para executá-lo confia no hash que ele
+carrega, e a cadeia não fica mais frágil que o elo que a inicia. Falha em
+qualquer elo é <strong>recusa nomeada, nunca aviso</strong>.</p>
+<p><strong>Calcular hash tem UMA função e DUAS ferramentas aceitas</strong> — <code>sha256sum</code> ou
+<code>shasum -a 256</code> —, resolvidas <strong>antes do primeiro download</strong> e nunca no meio de
+uma verificação: a máquina que não tem com que conferir não deve chegar a ter o
+que conferir. Faltar as duas é <strong>recusa PRÓPRIA</strong>, que nomeia as duas
+ferramentas, diz onde cada uma mora e afirma que nada foi baixado — nunca a
+recusa de hash divergente, que é a de <strong>incidente</strong> (<em>&quot;pare e investigue&quot;</em>). A
+distinção não é estilo: o script chamava <code>sha256sum</code> direto nos cinco pontos de
+verificação, o macOS não o traz, e o <code>command not found</code> chegava a quem
+instalava como acusação de adulteração — bloqueando toda instalação na
+plataforma que o próprio script suporta (há <code>cosign</code> <code>darwin-*</code> pinado nele) e
+ensinando a ignorar a frase no dia em que ela for verdade. <code>--print-plan</code> roda
+sem nenhuma das duas e declara qual o script aceita (<code>conferir-hash</code>). E há uma
+TERCEIRA recusa, desde a AT-083: a ferramenta existe mas <strong>não consegue ler o
+arquivo</strong>. Sem ela, <code>hash_sha256</code> devolvia vazio de dentro da substituição de
+comando (o <code>errexit</code> não chega ao subshell) e a comparação seguinte falhava com
+o texto de incidente do chamador — a acusação de adulteração da AT-091 por outro
+caminho. Agora é <code>falha_ao_calcular_hash</code>, que nomeia o arquivo e diz que não
+houve o que comparar.</p>
+<p><strong>A detecção nomeia o que achou.</strong> Pelo marcador
+(<code>$XDG_STATE_HOME/brabo/install-state.json</code>) quando ele existe; por sinais
+(projeto de compose <code>brabo*</code>, units <code>brabo-runner-*</code>, binário no PATH) quando
+não — e a lista é impressa <strong>antes</strong> de qualquer pergunta. Não existe o caminho
+&quot;achei algo e decido sozinho&quot;. Sem TTY o script <strong>relata e sai 0</strong>, como
+<code>consentir-base.mjs</code> já faz.</p>
+<p><strong>Ele nunca apaga pasta de usuário.</strong> A base de projetos e a pasta de espelho
+estão fora do alcance de qualquer confirmação — a mesma régua do espelho
+(RN-516): pasta de usuário é acúmulo, não estado do produto. Volume nomeado só
+sai com confirmação, e listado um a um antes de perguntar.</p>
+<p>O marcador mora no <code>$XDG_STATE_HOME</code> e <strong>não</strong> em <code>~/.brabo/</code>, que é onde o
+runner guarda coisa por PROJETO: estado de instalação e configuração de projeto
+são vidas diferentes, e juntá-los faria a remoção de um apagar o outro.</p>
+<p><strong>Onde:</strong> <code>install.sh</code> (raiz).
+<strong>Teste:</strong> <code>scripts/dev/install.spec.ts</code> — os modos <code>--print-state</code> e
+<code>--print-plan</code> provam a DECISÃO sem TTY, sem rede e sem efeito, no molde de
+<code>bootstrap.spec.ts</code>; e o bloco <em>&quot;o hash num PATH sem sha256sum&quot;</em> roda as
+funções de hash no shell de verdade, com o <code>PATH</code> montado ferramenta por
+ferramenta, conferindo as DUAS recusas (ferramenta ausente × hash divergente)
+e que a primeira nunca usa o vocabulário da segunda;
+<code>scripts/dev/install-invocacao.spec.ts</code> roda o script pelas formas erradas
+(<code>bash -c</code>, <code>/bin/bash -c</code>, pipe, <code>dash -c</code>, <code>dash install.sh</code>) e cobra a recusa
+nomeada com a forma certa antes de qualquer download, a terceira recusa de hash,
+e que runbook, bootstrap e cabeçalho ensinam a MESMA forma.
+<strong>Origem:</strong> FASE 29, sessão 3 (<a href="../../adr/0150-instalador-de-uma-linha.html">ADR 0150</a>).
+Nesta sessão o script <strong>não instala nada</strong> — subir o compose, gerar segredos e
+instalar o runner são as sessões 4 e 7, e ele <strong>diz isso</strong> na saída em vez de
+terminar em silêncio.</p>
+<h3 id="rn-531">RN-531 — O instalador consente UMA base para os dois lados e instala o agente local já executável</h3>
+<p><strong>Uma base, consentida uma vez.</strong> O <code>install.sh</code> pergunta onde os projetos vão
+morar e grava o mesmo caminho nos DOIS lugares: <code>BRABO_PROJECTS_BASE</code> no <code>.env</code>
+(o servidor, <a href="../../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141</a>) e o
+campo <code>base</code> do <code>runner.json</code> (o agente local,
+<a href="../runner.html#rn-529">RN-529</a>). O que difere entre <code>mounted</code> e <code>runner</code> é <strong>quem executa</strong>,
+não onde o código mora — duas bases diferentes para a mesma pasta seriam a
+colisão de namespace que o ADR 0141 recusou por escrito.</p>
+<p>A base é recusada quando não é absoluta, quando fica <strong>dentro</strong> do checkout do
+Brabo e quando <strong>contém</strong> o checkout — os dois sentidos, como o <code>preflight.mjs</code>
+já faz do lado do servidor. O <code>~</code> não é expandido de propósito: o valor vai
+para um arquivo de configuração, e um <code>~</code> gravado ali é lido literalmente.</p>
+<p><strong>O agente local é instalado já executável.</strong> O binário é baixado, conferido
+contra o <strong>mesmo</strong> <code>checksums.txt</code> assinado que o script já verificou para
+conferir a si mesmo (RN-524) — baixá-lo duas vezes seriam duas chances de pegar
+manifestos diferentes, e a segunda não seria verificada — e instalado com
+<code>install -m 0755</code>, que põe o bit de execução no mesmo ato em que copia.</p>
+<p><strong>Isso fecha o BRB-031.</strong> O <code>chmod +x</code> manual sobreviveu à FASE 28 porque a
+instalação como serviço não vinha de um artefato versionado: quem chegava a
+rodar <code>brabo-runner service install</code> já precisara tornar o binário executável
+para chegar ao comando. Vindo do instalador, o passo desaparece — a File System
+Access API do navegador não preserva o bit, um script preserva.</p>
+<p>Release sem o binário da plataforma <strong>não interrompe a instalação</strong>: o resto já
+está de pé, e a mensagem aponta a issue no <code>brabo-runner</code> (o npm saiu na AT-774). É a mesma
+disposição do passo do binário na configuração pelo navegador (RN-473), e a
+razão é a mesma — o agente local é a última etapa, não um pré-requisito.</p>
+<p><strong>Onde:</strong> <code>install.sh</code>, <code>consentir_base</code> e <code>instalar_o_runner</code>.
+<strong>Teste:</strong> <code>scripts/dev/install.spec.ts</code> — <code>install -m 0755</code> presente, a
+instrução de <code>chmod</code> dirigida ao usuário ausente, e a conferência contra o
+manifesto assinada nomeada.
+<strong>Origem:</strong> FASE 29, sessão 7 (<a href="../../adr/0150-instalador-de-uma-linha.html">ADR 0150</a>,
+<a href="../../adr/0151-base-consentida-no-runner.html">ADR 0151</a>).</p>
+<h3 id="rn-534">RN-534 — O instalador entra no manifesto assinado, e é exercitado numa máquina limpa</h3>
+<p>Duas metades da mesma garantia.</p>
+<p><strong>O <code>install.sh</code> entra no <code>checksums.txt</code> e na Release.</strong> Sem isso a verificação
+que ele faz de si mesmo (RN-526) seria letra morta: ele confere o próprio hash
+contra o manifesto assinado, e o manifesto não o cobria. O arquivo vem do
+<strong>checkout da tag</strong>, não de download — é o mesmo commit que produziu tudo o mais
+que está sendo assinado no mesmo job.</p>
+<p><strong>E ele é exercitado numa máquina limpa</strong>, que é o que o runner efêmero do
+Actions é: host recém-criado, sem Brabo, sem <code>.env</code>, sem marcador. O E2E prova,
+nessa ordem: o <strong>plano</strong> não deixou de prometer o que nunca apaga; o <strong>estado</strong>
+numa máquina limpa não inventa marcador nem sinais; <strong>sem TTY</strong> o instalador
+relata, sai 0 e <strong>não grava</strong>; e, com um TTY de verdade (não um pipe — o pipe é
+justamente o que mataria o consentimento), a instalação completa verifica
+assinatura, confere o próprio hash, grava o marcador e deixa o <code>.env</code> em modo
+<strong>600</strong>.</p>
+<p><strong>Correção (AT-083):</strong> o &quot;TTY simulado por <code>script -qec</code>&quot; que este parágrafo
+afirmava <strong>nunca foi TTY para o instalador</strong>. O passo rodava
+<code>script -qec &quot;… ./install.sh … &lt; respostas&quot;</code>, com o <code>&lt;</code> DENTRO do comando do
+<code>script</code>: o stdin do instalador era o arquivo, <code>[ -t 0 ]</code> era sempre falso, e o
+fluxo interativo nunca foi exercitado. Hoje quem roda o instalador é um driver
+de PTY em Python (<code>python3 -I</code>, sem dependência nova), que o põe no lado
+escravo do pty e ESPERA cada pergunta antes de responder — e, para as duas de
+senha, espera o eco estar DESLIGADO, o que prova o &quot;sem eco&quot; da RN-547 e impede
+a senha de aparecer na saída. O E2E também baixa e roda o instalador pela MESMA
+forma que o runbook manda (<code>curl -fsSLO</code> + <code>bash install.sh</code>, RN-526), e
+reprova de cara se o instalador disser &quot;Sem terminal interativo&quot;. Como o
+workflow segue sem rodar em PR, o driver é extraído dele e exercitado em
+<code>scripts/dev/install-e2e.spec.ts</code> contra um instalador de mentira (terminal
+visto, respostas em ordem, senha fora da saída, e as duas paradas nomeadas),
+com a forma antiga fixada como a que NÃO dava terminal.</p>
+<p><strong>Ele não roda em <code>pull_request</code></strong>, e o motivo é o mesmo da assinatura: o
+manifesto assinado só existe depois de uma tag final. Fazer o script rodar em PR
+exigiria dar-lhe uma porta para PULAR a verificação — a porta que o ADR 0150
+recusa, e que uma vez aberta valeria para qualquer um, não só para o CI. É a
+decisão que o golden-set do RAG já tinha tomado pelo mesmo raciocínio
+(<a href="../../adr/0138-golden-set-do-rag-em-ci-agendado.html">ADR 0138</a>): o que não é
+exercitável em PR roda em cadência própria, e o workflow <strong>diz por quê</strong> em vez
+de fingir cobertura.</p>
+<p><strong>Onde:</strong> <code>.github/workflows/install-e2e.yml</code>;
+<code>.github/workflows/build-runner-binaries.yml</code>, job <code>checksums</code>.
+<strong>Teste:</strong> o próprio workflow — e <code>scripts/dev/install.spec.ts</code> continua
+cobrindo a decisão sem rede; <code>scripts/dev/install-e2e.spec.ts</code> (bloco <em>&quot;o TTY
+do E2E é um TTY para o INSTALADOR&quot;</em>) exercita o driver de PTY em PR.
+<strong>Origem:</strong> FASE 29, sessão 10 (<a href="../../adr/0149-assinatura-dos-artefatos-publicados.html">ADR 0149</a>,
+<a href="../../adr/0150-instalador-de-uma-linha.html">ADR 0150</a>).</p>
+<blockquote>
+<p><strong>TODO(humano):</strong> as RNs acima foram extraídas do código e dos testes. Falta
+confirmar se existe regra de negócio <strong>não implementada</strong> que deveria estar
+aqui — algo combinado e ainda não codificado não aparece nesta varredura.</p>
+</blockquote>
+<hr>
+<h2 id="os-artefatos-dos-agentes-viram-arquivo-em-docs-rn-523">Os artefatos dos agentes viram arquivo, em <code>docs/</code> (RN-523)</h2>
+<h3 id="rn-542">RN-542 — O instalador compara a versão instalada com a que vai instalar, e a oferta é específica por relação</h3>
+<p>O <code>install.sh</code> detectava instalação anterior desde a <a href="../infra.html#rn-530">RN-530</a> e
+oferecia migrar com backup provado. O que ele <strong>não</strong> sabia era <strong>qual</strong> versão
+estava lá: o marcador (<code>$XDG_STATE_HOME/brabo/install-state.json</code>) gravava
+<code>schemaVersion</code>, <code>instaladoEm</code>, plataforma, fonte, digests e caminhos — e nada
+que dissesse 5.0.0. A pergunta <em>&quot;migrar esta instalação?&quot;</em> era cega nos dois
+lados, e quem respondia não tinha como saber se aquilo subia, descia ou repetia.</p>
+<p>A informação sempre esteve à mão e era ignorada: <code>images.json</code> da Release traz
+<code>&quot;versao&quot;</code> ao lado de <code>commit</code> e <code>publicadoEm</code>, e <code>resolver_imagens_do_ghcr</code> lia
+só <code>repositorio</code> e <code>digest</code>. Pela outra ponta, <code>--source=local</code> já exige árvore
+<strong>limpa e em tag</strong> — então <code>git describe</code> é uma versão confiável ali, pelas duas
+recusas que já aconteceram antes.</p>
+<p><strong>A ordem é a decisão.</strong> As imagens passam a ser resolvidas <strong>antes</strong> da
+detecção: saber o que entra é pré-requisito de perguntar se o que existe sai.
+O marcador sobe para <code>schemaVersion: 2</code> e grava <code>versao</code> e <code>commit</code> — os dois
+juntos, porque um marcador novo sem o campo passaria por antigo.</p>
+<p>Com as duas versões em mãos, a oferta deixa de ser uma pergunta e vira quatro,
+uma por relação:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>relação</th>
+<th>oferta</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>maior</td>
+<td><code>Atualizar 5.0.0 → 5.1.0?</code></td>
+<td><strong>sim</strong> — é o que a pessoa veio fazer, e o backup provado torna reversível</td>
+</tr>
+<tr>
+<td>igual</td>
+<td><code>Já é a 5.0.0. Reinstalar do zero mesmo assim?</code></td>
+<td>não — não há ganho a oferecer</td>
+</tr>
+<tr>
+<td>menor</td>
+<td>nomeia <strong>rebaixamento</strong>, avisando que migração de banco não anda para trás</td>
+<td>não — pode não ter volta</td>
+</tr>
+<tr>
+<td>nova-linha</td>
+<td><code>Atualizar 7.0.0 (linha anterior) → 1.0.0 (linha nova)?</code> — a <a href="parte-02.html#rn-998">RN-998</a></td>
+<td><strong>sim</strong> — o recomeço das versões em 1.0.0 não é rebaixamento</td>
+</tr>
+<tr>
+<td>desconhecida</td>
+<td>marcador de schema 1 não tem versão: diz isso, e <strong>não adivinha</strong></td>
+<td>não</td>
+</tr>
+</tbody>
+</table></div>
+<p>O ramo <code>maior</code> era o <strong>único</strong> com default sim, e é o único que pode tê-lo: o
+passo é reversível pelo backup que acabou de ser provado. Desde a
+<a href="parte-02.html#rn-998">RN-998</a> a relação <code>nova-linha</code> divide esse default, pelo mesmo motivo
+(é atualização, só com outra numeração). Os outros três exigem um <code>s</code> digitado.</p>
+<p><strong>Em qualquer ramo a instalação é apagada e recriada do zero</strong>, nunca subida por
+cima — decisão do dono do produto, e a mesma razão da RN-530: um <code>up</code> sobre
+volumes de outra versão é estrago que não avisa, e meia migração é pior que
+nenhuma. A cadeia backup → <strong>PROVAR</strong> → perguntar → apagar → instalar →
+restaurar não muda em nenhum deles.</p>
+<p><code>comparar_versoes</code> é implementada à mão e <strong>não</strong> com <code>sort -V</code>: o BSD <code>sort</code> do
+macOS ganhou <code>-V</code> tarde, e este script roda na máquina dos outros — a mesma
+disciplina que já fez <code>sha_do_cosign</code> recusar array associativo por causa do
+bash 3.2. Ela ecoa o veredito em vez de devolver código de saída, porque sob
+<code>set -e</code> um <code>return 1</code> legítimo mataria o script.</p>
+<p>No menu do <code>pnpm bootstrap</code>, <em>Docker › Instalar (install.sh)</em> <strong>relata</strong> o plano
+e não instala — mecânica, não preferência: item de menu roda com stdin em
+<code>/dev/null</code> para o menu seguir lendo teclas do mesmo terminal, e este instalador
+existe para PERGUNTAR (é o motivo de o <a href="../../adr/0150-instalador-de-uma-linha.html">ADR 0150</a>
+recusar <code>curl | sh</code>). É o mesmo desenho do item <em>Base de projetos</em>
+(<a href="../infra.html#rn-511">RN-511</a>), e a nota do item carrega o comando que instala de verdade.</p>
+<ul>
+<li><strong>Código:</strong> <code>install.sh</code> (<code>comparar_versoes</code>, <code>campo_do_marcador</code>,
+<code>resolver_imagens_do_ghcr</code>, <code>resolver_imagens_locais</code>, <code>main</code>);
+<code>scripts/dev/bootstrap.sh</code> (item <code>1.7</code>)</li>
+<li><strong>Teste:</strong> <code>scripts/dev/install.spec.ts</code> — <em>&quot;a comparação de versões&quot;</em> e
+<em>&quot;o marcador registra a versão&quot;</em>; a função é extraída do script e rodada por
+<code>bash</code>, nunca reimplementada em TS (uma cópia continua passando depois que o
+shell quebra)</li>
+<li><strong>Achado rodando, não lendo:</strong> <code>cut -d.</code> sobre uma string <strong>sem ponto</strong>
+devolve a linha inteira, não vazio — então <code>5.0.0</code> vs <code>5</code> respondia <code>menor</code>.
+Normalizado com <code>.0.0</code> no fim, com teste de regressão.</li>
+<li><strong>ADR:</strong> <a href="../../adr/0150-instalador-de-uma-linha.html">0150</a></li>
+<li><strong>Origem:</strong> pedido do dono do produto — <em>&quot;o sh deve ser inteligente de
+entender que já há uma versão e verificar se será uma nova versão a ser
+executada ou não... caso seja uma nova ou escolhido isso pelo usuário deverá
+deletar a anterior e instalar do zero para evitar possíveis erros&quot;</em></li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/produto.html">Produto</a><a href="../../business-rules/produto/parte-02.html">Produto — parte 2 (desde RN-543)</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/business-rules/produto/parte-01.md">Editar esta página</a><span>Atualizado em 2026-11-09T07:56:44-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#backlog">Backlog</a></li><li class="n3"><a href="#rn-012">RN-012 — A module removed from module_map demotes the story</a></li><li class="n2"><a href="#painel-de-projetos">Painel de projetos</a></li><li class="n3"><a href="#rn-096">RN-096 — Toda decisão diz em português o que acontece; o payload cru nasce colapsado</a></li><li class="n2"><a href="#n-agentes-online-no-dashboard--status-ao-vivo-nunca-presença-histórica-rn-409-adr-0097">&quot;N agentes online&quot; no dashboard — status AO VIVO, nunca presença histórica (RN-409, ADR 0097)</a></li><li class="n3"><a href="#rn-409">RN-409 — &quot;N online&quot; soma dois mecanismos pela MESMA régua: não ocioso, não travado</a></li><li class="n2"><a href="#o-explorador-de-pasta-do-runner-vira-três-colunas-e-a-criação-de-um-projeto-runner-deixa-de-esperar-o-passo-final-rn-436436">O explorador de pasta do Runner vira três colunas, e a criação de um projeto runner deixa de esperar o passo final (RN-436/436)</a></li><li class="n3"><a href="#rn-451">RN-451 — Smoke do binário standalone roda o SUBPROCESSO real, nunca mock</a></li><li class="n2"><a href="#terminal-do-runner-local-preso-em-abrindo-terminal-para-sempre-rn-433">Terminal do runner local preso em &quot;Abrindo terminal...&quot; para sempre (RN-433)</a></li><li class="n3"><a href="#rn-453">RN-453 — --dir relativo do runner local resolve contra INIT_CWD, não contra o cwd rebaseado do pnpm</a></li><li class="n2"><a href="#a-busca-do-rag-deixa-rastro-e-o-rastro-congela-os-pesos-rn-479481">A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)</a></li><li class="n3"><a href="#rn-481">RN-481 — rag.search/rag.feedback são NARRAÇÃO da timeline, e só existem quando há sessão</a></li><li class="n3"><a href="#rn-485">RN-485 — O broker de container não aceita especificação: ele recebe um projeto e COMPÕE</a></li><li class="n3"><a href="#rn-497">RN-497 — O brabo-runner sobe o container do projeto NA MÁQUINA DO USUÁRIO, com o Docker DELE</a></li><li class="n2"><a href="#fase-29--a-instalação-de-uma-linha-assinar-o-que-se-publica">FASE 29 — a instalação de uma linha: assinar o que se publica</a></li><li class="n3"><a href="#rn-525">RN-525 — O proxy do binário confere o hash contra o manifesto da mesma release, recusa quando não pode conferir, e DIZ que isso é integridade e não procedência</a></li><li class="n3"><a href="#rn-526">RN-526 — O instalador verifica a própria origem, NOMEIA o que achou antes de perguntar, e nunca apaga pasta de usuário</a></li><li class="n3"><a href="#rn-531">RN-531 — O instalador consente UMA base para os dois lados e instala o agente local já executável</a></li><li class="n3"><a href="#rn-534">RN-534 — O instalador entra no manifesto assinado, e é exercitado numa máquina limpa</a></li><li class="n2"><a href="#os-artefatos-dos-agentes-viram-arquivo-em-docs-rn-523">Os artefatos dos agentes viram arquivo, em docs/ (RN-523)</a></li><li class="n3"><a href="#rn-542">RN-542 — O instalador compara a versão instalada com a que vai instalar, e a oferta é específica por relação</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-pt-BR.json" data-base="../../"></script></body>
+</html>

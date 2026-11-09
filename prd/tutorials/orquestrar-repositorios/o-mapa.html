@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O mapa | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../../tutorials/orquestrar-repositorios/o-mapa.html" selected>pt-BR</option><option value="../../en/tutorials/orquestrar-repositorios/o-mapa.html">en</option><option value="../../ru/tutorials/orquestrar-repositorios/o-mapa.html">ru</option><option value="../../zh-Hans/tutorials/orquestrar-repositorios/o-mapa.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../../dev/tutorials/orquestrar-repositorios/o-mapa.html">dev</option><option value="../../../prd/tutorials/orquestrar-repositorios/o-mapa.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../../index.html">Início</a></li><li><a href="../../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><details open><summary><span>Orquestrar repositórios</span></summary><ul><li><a href="../../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><a href="../../tutorials/orquestrar-repositorios/por-que-separar.html">Por que separar, e quando não</a></li><li><a href="../../tutorials/orquestrar-repositorios/o-mapa.html" aria-current="page">O mapa</a></li><li><a href="../../tutorials/orquestrar-repositorios/como-cada-repo-e-consumido.html">Como cada repositório é consumido</a></li><li><a href="../../tutorials/orquestrar-repositorios/vida-de-uma-mudanca.html">A vida de uma mudança</a></li><li><a href="../../tutorials/orquestrar-repositorios/monte-o-seu.html">Monte o seu</a></li><li><a href="../../tutorials/orquestrar-repositorios/erros-que-ja-cometemos.html">Erros que já cometemos</a></li></ul></details></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Arquitetura</a></li><li><a href="../../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Política de branches</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../../explanation/localizacao.html">Localização</a></li><li><a href="../../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../../glossary.html">Glossário</a></li><li><a href="../../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../../business-rules.html">Regras de negócio</a></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="o-mapa">O mapa</h1>
+<p><strong>Para quem é:</strong> quem quer enxergar o conjunto antes de entrar nos detalhes.</p>
+<p><strong>Depois de ler, você consegue:</strong> dizer o papel de cada repositório, apontar de quem ele depende e desenhar o mapa de memória.</p>
+<h2 id="os-sete-papéis">Os sete papéis</h2>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>Papel</th>
+<th>Repositório</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Porta de entrada</strong></td>
+<td><a href="https://github.com/viralabs-dev/brabo#readme"><code>brabo</code></a></td>
+<td>Documentação agregada, site, <code>install.sh</code> e a release do produto.</td>
+</tr>
+<tr>
+<td><strong>Código</strong></td>
+<td><a href="https://github.com/viralabs-dev/brabo-api#readme"><code>brabo-api</code></a>, <a href="https://github.com/viralabs-dev/brabo-engine#readme"><code>brabo-engine</code></a>, <a href="https://github.com/viralabs-dev/brabo-web#readme"><code>brabo-web</code></a>, <a href="https://github.com/viralabs-dev/brabo-runner#readme"><code>brabo-runner</code></a>, <a href="https://github.com/viralabs-dev/brabo-broker#readme"><code>brabo-broker</code></a></td>
+<td>Os componentes do produto. Quatro publicam imagem de contêiner; o runner publica um binário.</td>
+</tr>
+<tr>
+<td><strong>Contrato</strong></td>
+<td><a href="https://github.com/viralabs-dev/brabo-contracts#readme"><code>brabo-contracts</code></a></td>
+<td>Pacotes e arquivos de dados que os outros compartilham.</td>
+</tr>
+<tr>
+<td><strong>CI</strong></td>
+<td><a href="https://github.com/viralabs-dev/brabo-ci#readme"><code>brabo-ci</code></a></td>
+<td>Workflows reutilizáveis e a política de PR, a escada de aprovação, a promoção e a tag.</td>
+</tr>
+<tr>
+<td><strong>Orquestração</strong></td>
+<td><a href="https://github.com/viralabs-dev/brabo-infra#readme"><code>brabo-infra</code></a></td>
+<td>Composes, Dockerfiles de integração, manifestos de Kubernetes, scripts de desenvolvimento e a imagem de backup.</td>
+</tr>
+<tr>
+<td><strong>Qualidade</strong></td>
+<td><a href="https://github.com/viralabs-dev/brabo-qa#readme"><code>brabo-qa</code></a></td>
+<td>Testes de ponta a ponta no navegador, golden-sets e o catálogo de funcionalidades. É o portão da <code>main</code>.</td>
+</tr>
+<tr>
+<td><strong>Pasta-mãe</strong></td>
+<td><a href="https://github.com/viralabs-dev/brabo-workspace#readme"><code>brabo-workspace</code></a></td>
+<td>A pasta onde os clones ficam lado a lado e o <code>clonar-tudo.sh</code>. Não tem código de produto.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="o-diagrama">O diagrama</h2>
+<p>As setas dizem <strong>quem usa quem</strong>, e o rótulo diz <strong>por qual canal</strong> (a <a href="como-cada-repo-e-consumido.html">página 3</a> explica cada canal). Para não virar um novelo, o desenho mostra as arestas principais; a lista completa, com a prova de cada uma, está no <code>repos.yml</code>.</p>
+<pre class="mermaid" data-mermaid>flowchart LR
+  WS[&quot;brabo-workspace&lt;br/&gt;pasta-mãe&quot;]
+  BRABO[&quot;brabo&lt;br/&gt;porta de entrada&quot;]
+  subgraph CODIGO[&quot;código&quot;]
+    API[&quot;brabo-api&quot;]
+    ENG[&quot;brabo-engine&quot;]
+    WEB[&quot;brabo-web&quot;]
+    RUN[&quot;brabo-runner&quot;]
+    BRK[&quot;brabo-broker&quot;]
+  end
+  CON[&quot;brabo-contracts&lt;br/&gt;contrato&quot;]
+  CI[&quot;brabo-ci&lt;br/&gt;CI&quot;]
+  INFRA[&quot;brabo-infra&lt;br/&gt;orquestração&quot;]
+  QA[&quot;brabo-qa&lt;br/&gt;qualidade&quot;]
+
+  WS -. &quot;clona&quot; .-&gt; BRABO
+  WS -. &quot;clona&quot; .-&gt; CODIGO
+  CODIGO --&gt;|&quot;contrato: tag&quot;| CON
+  CODIGO --&gt;|&quot;workflow: SHA&quot;| CI
+  BRABO --&gt;|&quot;workflow: SHA&quot;| CI
+  INFRA --&gt;|&quot;workflow: SHA&quot;| CI
+  QA --&gt;|&quot;workflow: SHA&quot;| CI
+  CI --&gt;|&quot;dispara o E2E&quot;| QA
+  QA --&gt;|&quot;imagens por digest&quot;| CODIGO
+  INFRA --&gt;|&quot;código: compose&quot;| CODIGO
+  BRABO --&gt;|&quot;imagem/binário: pin&quot;| CODIGO
+  BRABO --&gt;|&quot;pin: ref&quot;| INFRA
+  BRABO -.-&gt;|&quot;doc: trava de SHAs&quot;| CODIGO
+</pre>
+<p>Duas leituras úteis do desenho:</p>
+<ul>
+<li><strong>O <code>brabo-ci</code> é a base.</strong> Todo repositório o chama; ninguém importa nada do <code>brabo-ci</code> em tempo de execução do produto.</li>
+<li><strong>O <code>brabo</code> está no topo.</strong> Ele pina as versões que formam o produto, lê o código dos outros para gerar a documentação e publica a release do produto. Por isso a promoção dele é a última.</li>
+</ul>
+<h2 id="uma-fonte-só-para-o-mapa">Uma fonte só para o mapa</h2>
+<p>Esta tabela e este desenho não são mantidos à mão. A fonte única é o arquivo <code>repos.yml</code>, na raiz do <code>brabo</code>: por repositório, o papel, o propósito, como é usado e a lista <code>depende_de</code>, em que <strong>cada aresta</strong> diz o repositório, o tipo de canal e a <strong>prova</strong> (o arquivo e um trecho literal, de uma linha, onde o código usa a dependência; o número da linha não é gravado, porque muda a cada commit).</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">brabo-web</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  papel</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> código</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  depende_de</span><span style="color:var(--shiki-token-keyword)">:</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">    - { </span><span style="color:var(--shiki-token-keyword)">repo</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string)"> brabo-contracts</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-keyword)"> tipo</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string)"> contrato</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-keyword)"> prova</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-foreground)"> { </span><span style="color:var(--shiki-token-keyword)">arquivo</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string)"> package.json</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-keyword)"> trecho</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> '"@brabo/shared": "npm:@viralabs-dev/brabo-shared@'</span><span style="color:var(--shiki-foreground)"> } }</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">    - { </span><span style="color:var(--shiki-token-keyword)">repo</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string)"> brabo-ci</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-keyword)"> tipo</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string)"> workflow</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-keyword)"> prova</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-foreground)"> { </span><span style="color:var(--shiki-token-keyword)">arquivo</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string)"> .github/workflows/carimbo.yml</span><span style="color:var(--shiki-token-punctuation)">,</span><span style="color:var(--shiki-token-keyword)"> trecho</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-string-expression)"> "brabo-ci/.github/workflows/tag-release.yml@"</span><span style="color:var(--shiki-foreground)"> } }</span></span>
+<span class="line"></span></code></pre>
+<p>O bloco &quot;Onde se encaixa&quot; do README de cada repositório é <strong>gerado</strong> desse arquivo pelo <code>brabo-ci</code>, e um check reprova o README cujo bloco divergiu. Assim o mapa de um repositório nunca discorda do de outro. Quem mexe numa dependência edita o <code>repos.yml</code> e regenera os blocos. Para saber mais: <a href="../../adr/0281-o-mapa-dos-repos-tem-uma-fonte-so.html">ADR 0281</a> e a <a href="../../architecture.html">arquitetura</a>.</p>
+<blockquote>
+<p><strong>Para o seu projeto:</strong> comece pela tabela de papéis. Se você não consegue dizer em uma frase o papel de um repositório, ele provavelmente não deveria existir separado.</p>
+</blockquote>
+<p>Próxima: <a href="como-cada-repo-e-consumido.html">Como cada repositório é consumido</a>.</p>
+<nav class="site-pager"><a href="../../tutorials/orquestrar-repositorios/por-que-separar.html">Por que separar, e quando não</a><a href="../../tutorials/orquestrar-repositorios/como-cada-repo-e-consumido.html">Como cada repositório é consumido</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/orquestrar-repositorios/o-mapa.md">Editar esta página</a><span>Atualizado em 2026-11-08T17:04:32-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#os-sete-papéis">Os sete papéis</a></li><li class="n2"><a href="#o-diagrama">O diagrama</a></li><li class="n2"><a href="#uma-fonte-só-para-o-mapa">Uma fonte só para o mapa</a></li></ul></aside>
+</div>
+<script src="../../assets/mermaid.min.js"></script>
+<script src="../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-pt-BR.json" data-base="../../"></script></body>
+</html>

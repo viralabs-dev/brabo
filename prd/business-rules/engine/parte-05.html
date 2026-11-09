@@ -1,0 +1,1397 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — Engine — parte 5 (desde RN-724) | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../../business-rules/engine/parte-05.html" selected>pt-BR</option><option value="../../en/business-rules/engine/parte-05.html">en</option><option value="../../ru/business-rules/engine/parte-05.html">ru</option><option value="../../zh-Hans/business-rules/engine/parte-05.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../../dev/business-rules/engine/parte-05.html">dev</option><option value="../../../prd/business-rules/engine/parte-05.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../../index.html">Início</a></li><li><a href="../../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Arquitetura</a></li><li><a href="../../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Política de branches</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../../explanation/localizacao.html">Localização</a></li><li><a href="../../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../../glossary.html">Glossário</a></li><li><a href="../../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>Regras de negócio</span></summary><ul><li><a href="../../business-rules.html">Regras de negócio</a></li><li><a href="../../business-rules/custo.html">Custo e metering</a></li><li><a href="../../business-rules/autenticacao.html">Autenticação</a></li><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><details open><summary><span>Engine</span></summary><ul><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/engine/parte-01.html">Engine — parte 1 (desde RN-016)</a></li><li><a href="../../business-rules/engine/parte-02.html">Engine — parte 2 (desde RN-305)</a></li><li><a href="../../business-rules/engine/parte-03.html">Engine — parte 3 (desde RN-577)</a></li><li><a href="../../business-rules/engine/parte-04.html">Engine — parte 4 (desde RN-622)</a></li><li><a href="../../business-rules/engine/parte-05.html" aria-current="page">Engine — parte 5 (desde RN-724)</a></li><li><a href="../../business-rules/engine/parte-06.html">Engine — parte 6 (desde RN-880)</a></li></ul></details></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Produto</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="engine--parte-5-desde-rn-724">Engine — parte 5 (desde RN-724)</h1>
+<h2 id="a-anamnese-não-paga-duas-vezes-pela-mesma-janela-e-o-resgate-de-gate-não-reinicia-ciclo-que-espera-alguém-rn-722">A Anamnese não paga duas vezes pela mesma janela, e o resgate de gate não reinicia ciclo que espera alguém (RN-722)</h2>
+<h3 id="rn-724">RN-724 — O ciclo de gate estacionado volta por um botão no fio, não só pelo terminal do operador</h3>
+<ul>
+<li><strong>Regra:</strong> o ciclo de gate ESTACIONADO pelo resgate
+(<a href="parte-04.html#rn-722">RN-722</a>, <a href="../../adr/0207-ciclo-de-gate-velho-estaciona.html">ADR 0207</a>)
+é retomado por <code>POST /projects/:projectId/tasks/:taskId/gates/:gate/resume</code>,
+com o MESMO papel mínimo de quem decide a PR (<code>developer</code>). A api só
+autoriza e pede ao engine (<code>POST /internal/projects/:id/tasks/:taskId/gates/:gate/resume</code>),
+que delega a <code>GateRescuer.retomar_estacionado/3</code>: ciclo que não existe, não
+está estacionado ou gate fora de <code>qa</code>/<code>secops</code> é 409 <code>gate_nao_estacionado</code>
+e nada é despachado. No fio da sessão, o evento <code>gate.rescue_parked</code> vira um
+aviso com o botão &quot;Retomar gate&quot;, inerte com o motivo em texto quando o papel
+não alcança <code>developer</code>; a recusa mostra a frase da api. Nenhum poll novo:
+o andamento do gate retomado chega pelo log da sessão.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine_web/controllers/gate_command_controller.ex:15</code>
+(<code>resume</code>),
+<code>apps/api/src/application/use-cases/gates/resume-parked-gate.use-case.ts:18</code>
+(<code>execute</code>),
+<code>apps/api/src/infrastructure/http-clients/api-to-engine-client.ts:379</code>
+(<code>resumeParkedGate</code>),
+<code>apps/api/src/interfaces/http/gates/gate-resume.controller.ts:40</code>
+(<code>resume</code>), <code>apps/web/src/routes/RetomarGateEstacionado.tsx:31</code>
+(<code>RetomarGateEstacionado</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine_web/controllers/gate_command_controller_test.exs</code>
+(&quot;ciclo estacionado: 202 e despacha o gate de novo&quot;; falha: &quot;ciclo NÃO
+estacionado: 409 nomeado e nada despachado&quot;),
+<code>apps/api/test/interfaces/http/gates/gate-resume.controller.spec.ts</code>
+(feliz, 409 <code>gate_nao_estacionado</code>, papel abaixo de <code>developer</code>),
+<code>apps/web/src/routes/RetomarGateEstacionado.test.tsx</code> (o clique chama a
+rota; a recusa vira toast com a frase da api; papel insuficiente deixa o
+botão inerte)</li>
+<li><strong>Origem:</strong> AT-397, fechando a lacuna declarada na RN-722</li>
+</ul>
+<h3 id="rn-725">RN-725 — Texto com escape literal é decodificado, e a recusa de argumento diz o que chegou</h3>
+<p><strong>Contexto:</strong> no TP-01 (03/10, Claude Haiku 4.5) o PO gravou títulos de
+história com o escape unicode LITERAL (<code>código</code>): a normalização da
+RN-719 só decodificava campo <code>array</code>/<code>object</code>. Recriadas com o título certo,
+as histórias passaram pela recusa de duplicata (RN-720/RN-081), que não casou
+o escapado com o normal. E as recusas &quot;exige X&quot; não diziam o que tinha
+chegado: o PO gastou 28+ passos (48% do custo do teste) até o teto, e
+<code>complete_story</code> respondia &quot;ainda faltam RF, DoD, DoR ou business_rule_ids&quot;
+sem dizer qual.</p>
+<p><strong>A regra:</strong></p>
+<ol>
+<li>No mesmo ponto da RN-719, string com <code>\uXXXX</code> LITERAL (par surrogate
+incluído) é decodificada, e com ela <code>\n</code>, <code>\t</code>, <code>\&quot;</code> e <code>\\</code> da MESMA
+string. String sem <code>\uXXXX</code> volta byte a byte — código num <code>content</code> com
+<code>&quot;\n&quot;</code> literal não muda. Isso revisa o &quot;campo <code>string</code> nunca é tocado&quot; da
+RN-719 só nesse caso.</li>
+<li>A duplicata EXATA de história (api) e de regra (engine) compara o título
+com o escape decodificado, antes da caixa e do NFD de sempre.</li>
+<li>Recusa de ferramenta que diz &quot;exige <code>X</code>&quot; ganha, no mesmo ponto, as CHAVES
+que chegaram (nomes, nunca valores), ou que chegou string/lista em vez de
+objeto. <code>emit_artifact</code> com chave faltando no <code>payload</code> diz as chaves
+faltantes e as recebidas, em vez de <code>{:missing_keys, …}</code>.</li>
+<li><code>complete_story</code> nomeia exatamente o que falta (<code>falta: business_rule_ids</code>),
+pela mesma régua de <code>missingForReady</code> da api, lida da história devolvida.</li>
+</ol>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/argumentos_de_ferramenta.ex:102</code>
+(<code>decodificar_escapes</code>), <code>:152</code> (<code>chaves_recebidas</code>), <code>:166</code>
+(<code>com_chaves_recebidas</code>); <code>apps/engine/lib/engine/harness/tools/complete_story.ex:80</code>
+(<code>faltam</code>); <code>apps/api/src/domain/backlog/story-overlap.ts:39</code>
+(<code>decodificarEscapesLiterais</code>), <code>:25</code> (<code>normalizarTitulo</code>);
+<code>apps/engine/lib/engine/harness/artifact_dedupe.ex</code> (<code>normalizar</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/argumentos_de_ferramenta_test.exs</code>
+(describe &quot;RN-725&quot;: escape decodificado, texto sem <code>\u</code> e lista intactos;
+recusa com as chaves e sem os valores; <code>complete_story</code> nomeia o campo);
+<code>apps/api/test/domain/backlog/story-overlap.spec.ts</code> (título escapado casa
+com o normal; título diferente segue diferente)</li>
+<li><strong>Origem:</strong> AT-405, AT-408</li>
+</ul>
+<h3 id="rn-726">RN-726 — Crédito do provedor esgotado pausa o dev agent, com origem <code>infra</code>, sem queimar as tarefas seguintes</h3>
+<ul>
+<li><strong>Regra:</strong> quando o provedor do modelo recusa por falta de CRÉDITO (HTTP 402,
+ou o texto &quot;available credits&quot;/&quot;add credits&quot; do OpenRouter), o turno do dev
+agent não é &quot;parou sem concluir&quot;: a tarefa é bloqueada com o motivo
+&quot;crédito do provider esgotado&quot; e origem <code>infra</code> (nunca <code>codigo</code>), o contador
+da parada automática (RN-047) NÃO avança, e o agente NÃO reivindica a
+próxima tarefa — fica em <code>idle_tripped</code> e emite <code>dev.credit_exhausted</code>
+(<code>motivo: credito_esgotado</code>), nunca <code>dev.idle_tripped</code>. A retomada é o
+Rearmar que já existia no painel do time, depois de recarregar o crédito; a
+tarefa bloqueada volta pelo desbloqueio de sempre. A tela de Executores
+mostra o agente <code>travado</code> com &quot;crédito do provedor do modelo esgotado —
+recarregue e rearme para retomar&quot;, e o sino diz o mesmo. O mesmo
+reconhecimento faz <code>FalhaDeTurno.origem/1</code> devolver <code>infra</code> para o frame
+final de crédito (vale para os agentes de gate, como o QA). A sessão conta
+<code>dev.credit_exhausted</code> como trabalho pendente, como <code>dev.idle_tripped</code>.
+Desde a RN-730 o 402 chega com <code>code</code> próprio (<code>insufficient_credit</code>) e é
+ele que decide; o reconhecimento pelo texto ficou só como rede.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/falha_de_turno.ex:142</code>
+(<code>credito_esgotado?</code>),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:931</code> (<code>handle_outcome</code>),
+<code>apps/engine/lib/engine/dev/agent_io.ex:279</code> (<code>pausar_por_credito</code>),
+<code>apps/web/src/lib/agent-status.ts:178</code> (<code>breakerReasonFor</code>),
+<code>apps/api/src/application/use-cases/sessions/get-session-pending-work.use-case.ts</code></li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/dev_agent_server_test.exs</code>
+(&quot;402 do provider: origem infra, pausa sem idle_tripped e sem queimar a
+próxima task&quot;; falha: &quot;erro que não é de crédito segue como antes: parou sem
+concluir, conta no disjuntor&quot;),
+<code>apps/engine/test/engine/agents/falha_de_turno_test.exs</code> (&quot;402 do provider
+é infra e é reconhecido&quot;), <code>apps/web/src/lib/agent-status.test.ts</code>
+(&quot;RN-726: dev.credit_exhausted é travado com motivo de crédito…&quot;)</li>
+<li><strong>Origem:</strong> AT-407 (TP-01 de 03/10: 402 do OpenRouter virou três tarefas
+bloqueadas com origem <code>codigo</code> e a parada automática)</li>
+</ul>
+<h3 id="rn-731">RN-731 — O fecho do turno diz o que foi gravado com o número do servidor</h3>
+<ul>
+<li><strong>Regra:</strong> o número do que um agente conversacional gravou num turno é FATO
+do servidor, nunca texto do modelo (RN-163). O Criativo, o PO e o Arquiteto
+contam, no processo do turno, cada ferramenta de escrita que voltou <code>ok</code>
+(<code>emit_artifact</code> por tipo — regra de negócio, decisão, nota, outro —,
+<code>create_epic</code>, <code>create_story</code>, <code>update_story</code>, <code>archive_story</code>,
+<code>create_task</code>), e o fecho da <code>agent.response</code> ganha, DEPOIS do texto do
+modelo e sem reescrevê-lo, a linha &quot;Gravado neste turno: N …&quot;. Ferramenta
+recusada e leitura não contam; turno sem escrita não ganha linha; a contagem
+morre com o turno. A linha sai no idioma do turno (RN-622): o do autor,
+senão o do projeto; <code>pt*</code> em português (&quot;Gravado neste turno: 1 regra de
+negócio&quot;), qualquer outro idioma — ou nenhum resolvido — em inglês
+(&quot;Recorded this turn: 2 business rules&quot;), com singular e plural nos dois.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/gravado_no_turno.ex:66</code> (<code>anotar</code>),
+<code>:99</code> (<code>descarregar</code>),
+<code>apps/engine/lib/engine/harness/idioma_da_resposta.ex:272</code> (<code>idioma_do_turno</code>),
+<code>apps/engine/lib/engine/agents/texto_do_turno.ex:65</code> (<code>payload_do_turno</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/gravado_no_turno_test.exs</code> (feliz:
+seis regras e uma decisão gravadas, uma recusada — o fecho &quot;8 regras&quot; do
+modelo fica e ganha &quot;6 regras de negócio, 1 decisão&quot; ao lado; sem escrita:
+nada acrescentado; pt-BR e en, singular e plural; idioma fora dos dois cai em en),
+<code>apps/engine/test/engine/agents/criativo_server_test.exs</code></li>
+<li><strong>Origem:</strong> AT-414 (TP-01 de 03/10: o Criativo fechou com &quot;Registrei as 8
+regras de negócio&quot; e o painel tinha 6)</li>
+</ul>
+<h3 id="rn-732">RN-732 — O texto do turno passa pela mesma régua de escape dos argumentos</h3>
+<ul>
+<li><strong>Regra:</strong> o texto que o modelo escreve no turno de um agente conversacional
+— o <code>content</code> (fecho) e cada <code>passos</code> da <code>agent.response</code> — passa pela MESMA
+<code>decodificar_escapes/1</code> da RN-725 antes de ser gravado: <code>\u00e3</code> literal vira
+<code>ã</code>. Uma régua só, sem cópia, e com o mesmo limite: só age quando há
+<code>\uXXXX</code> literal, então texto sem escape — inclusive código com <code>&quot;\n&quot;</code>
+literal num bloco cercado — volta byte a byte. O <code>agent.delta</code> do streaming
+NÃO é decodificado: um escape pode chegar partido entre dois deltas, e a
+bolha gravada substitui o texto em curso no fim do turno. Regra própria, e
+não cláusula da RN-725, porque a superfície é outra (resposta do modelo, não
+argumento de ferramenta) e a decisão sobre o delta é desta.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/texto_do_turno.ex:65</code> (<code>payload_do_turno</code>),
+<code>apps/engine/lib/engine/harness/argumentos_de_ferramenta.ex:102</code> (<code>decodificar_escapes</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/texto_do_turno_test.exs</code> (feliz:
+os cinco escapes medidos, no fecho e num passo; intacto: texto sem escape e
+bloco de código com <code>\n</code> literal)</li>
+<li><strong>Origem:</strong> AT-417 (TP-01 de 03/10, 2ª rodada: a resposta final do Criativo
+gravada com &quot;colis\u00e3o&quot;, &quot;usu\u00e1rio&quot; e mais três escapes na bolha)</li>
+</ul>
+<h3 id="rn-733">RN-733 — A falha de crédito diz o que fazer, e o <code>reason</code> nunca é a tupla</h3>
+<ul>
+<li><strong>Regra:</strong> o <code>reason</code> gravado no <code>agent.error</code> dos conversacionais, do
+Infra Lead e do <code>ToolLoop</code> (dev agent) é o TEXTO do frame final quando há
+um — nunca a tupla <code>{:final, …}</code> inspecionada; outras formas seguem com
+<code>inspect/1</code>. Com crédito do provider esgotado (<code>errorCode: insufficient_credit</code>, RN-730, ou o reconhecimento por texto da RN-726), a
+<code>mensagem</code> da bolha é curta e acionável no idioma do turno (RN-622): pt
+&quot;Crédito do provedor do modelo esgotado — recarregue a chave e tente de
+novo.&quot;, qualquer outro idioma &quot;The model provider's credit is exhausted —
+top up the key and try again.&quot;; sem idioma resolvido, pt-BR. O JSON do
+provider fica só no <code>reason</code> (diagnóstico). Os demais erros mantêm a frase
+de sempre.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/falha_de_turno.ex:166</code> (<code>mensagem</code>),
+<code>:189</code> (<code>diagnostico</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/dev_lead_server_test.exs</code> (402
+em pt-BR e en: frase curta, <code>reason</code> sem <code>{:final</code>; erro <code>upstream</code>: frase
+de sempre), <code>apps/engine/test/engine/agents/falha_de_turno_test.exs</code></li>
+<li><strong>Origem:</strong> AT-421 (TP-01 de 03/10, 2ª rodada: o Dev Lead gravou
+<code>reason: &quot;{:final, …&quot;</code> e a bolha despejou o JSON do 402)</li>
+</ul>
+<h3 id="rn-735">RN-735 — A rede <code>none</code> da imagem do Arquiteto diz que não instala dependências</h3>
+<ul>
+<li><strong>Regra:</strong> a descrição de <code>choose_project_image</code> e o RESULTADO dela dizem
+que, com rede <code>none</code>, nenhum gerenciador de pacotes (npm, pnpm, pip, mix,
+cargo, go mod...) instala dependência no container, e que a Infra herda essa
+rede (RN-723). Com <code>none</code>, o resultado pede ao modelo que chame a ferramenta
+de novo com <code>egress</code> se a stack instala dependências. É AVISO: a api não
+adivinha a stack, e a contenção do broker (ADR 0130) não muda. (Desde a
+RN-906 a api RECUSA <code>none</code> quando a stack declarada de um módulo baixa
+dependências; fora desse caso, segue só o aviso.)</li>
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/harness/tools/choose_project_image.ex:96</code>
+(<code>mensagem_de_fixada</code>), <code>apps/engine/lib/engine/harness/tools/choose_project_image.ex:23</code>
+(<code>spec</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tools/choose_project_image_test.exs</code></li>
+<li><strong>Origem:</strong> AT-420 (TP-01 de 03/10: <code>node:22-bookworm-slim</code> com rede <code>none</code>,
+e o dev agent não conseguiu <code>npm install</code>)</li>
+</ul>
+<h3 id="rn-742">RN-742 — O dev agent não morre calado, e a resposta HTTP tardia não fica na caixa dele</h3>
+<ul>
+<li><strong>Regra:</strong> toda chamada HTTP não-streamada do engine à api
+(<code>post_returning/3</code> e os GETs de <code>EngineApiClient.Live</code>) roda numa <code>Task</code>
+descartável; a resposta que chega depois do <code>receive_timeout</code> cai num
+processo que já acabou, nunca na caixa de mensagens de quem chamou, e
+exceção dentro do pedido volta como <code>{:error, _}</code>. E o dev agent que CAI
+(saída que não é <code>:normal</code> nem <code>:shutdown</code>) não é tratado como terminado: o
+<code>Engine.Dev.Monitor</code> grava <code>agent.error</code> DURÁVEL com origem <code>infra</code>
+(<code>reason: processo_do_dev_caiu</code>, <code>religado</code>, <code>taskId</code>) e o RELIGA a partir
+da própria linha de <code>dev_agent_states</code>, até 3 vezes por agente; o <code>resume</code>
+passa pelo <code>handle_continue({:restart_recovery, _})</code> que já existia, que
+bloqueia a task interrompida com diagnóstico (origem <code>infra</code>) e tenta o
+próximo claim. Sem linha, ou no teto, a linha sai e o erro diz que não
+houve religamento. O <code>llm_turn_stream/6</code> fica fora do isolamento (o <code>into:</code>
+grava no dicionário do chamador); os conversacionais já o chamam de dentro
+da Task do turno (<code>TurnoAssincrono</code>), então o padrão &quot;HTTP dentro do
+GenServer&quot; não os alcança — declarado. A web não mudou: a aba Executores
+passa a ver o <code>agent.error</code> e o <code>dev.blocked</code> da recuperação.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/sessions/engine_api_client.ex:2243</code>
+(<code>isolado</code>), <code>apps/engine/lib/engine/dev/monitor.ex:69</code> (<code>ao_terminar</code>),
+<code>:107</code> (<code>registrar_e_religar</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/sessions/engine_api_client_isolado_test.exs</code>
+(mensagem tardia não chega ao chamador; exceção vira <code>{:error, _}</code>),
+<code>apps/engine/test/engine/dev/monitor_test.exs</code> (crash grava <code>agent.error</code>
+infra e religa; <code>:normal</code> apaga a linha; sem linha não religa)</li>
+<li><strong>Origem:</strong> AT-428 (08/10: <code>CaseClauseError</code> em
+<code>Finch.HTTP1.Conn.receive_response/8</code> depois do timeout do <code>npm install</code>)</li>
+</ul>
+<p><strong>Revisada pela <a href="parte-06.html#rn-922">RN-922</a> (<a href="../../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226</a>).</strong> O dev que cai com <code>working</code> recente e sem retomada anterior na tarefa deixa de ser bloqueado: preserva o worktree como commit e retoma a mesma tarefa uma vez. Fora disso o bloqueio descrito acima segue.</p>
+<h3 id="rn-743">RN-743 — Bloquear a task preserva o trabalho do worktree, e a próxima parte dele</h3>
+<ul>
+<li><strong>Regra:</strong> antes de bloquear uma task (qualquer origem, inclusive o teto de
+orçamento <code>taskBudgetMicros</code>, cujo VALOR não muda aqui), o que o dev agent
+deixou no worktree vira commit na branch da própria task, com a identidade
+<code>&lt;agente&gt;[bot]</code> (<code>git add -A</code> + <code>commit --no-verify</code>). O <code>dev.blocked</code> leva
+<code>trabalhoPreservado</code> (<code>{branch, commit}</code> ou <code>null</code>) e o diagnóstico DIZ onde
+o trabalho ficou — ou que não foi possível preservá-lo, com o motivo; a falha
+ao preservar nunca impede o bloqueio. A próxima task do MESMO agente (logo,
+do mesmo módulo) nasce dessa branch (<code>create_from/4</code>) em vez de <code>dev</code>, uma
+vez só. Worktree limpo não gera commit. Declarado: o ponteiro mora só em
+memória (restart do engine perde o ponteiro, não o commit), e no modo
+<code>runner</code> o worktree está na máquina do usuário e o engine não preserva nada.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/worktree_manager.ex:79</code>
+(<code>preservar_em</code>), <code>:66</code> (<code>create_from</code>),
+<code>apps/engine/lib/engine/dev/agent_io.ex:542</code> (<code>preservar_trabalho</code>),
+<code>apps/engine/lib/engine/dev/agent_io.ex:330</code> (<code>base_preservada</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/worktree_manager_test.exs</code>
+(<code>preservar_em/3 e create_from/4</code>: commit com <code>dev-api[bot]</code> e a próxima
+task enxerga o arquivo; limpo é <code>:nada</code>; pasta sem repositório é erro),
+<code>apps/engine/test/engine/dev/bloqueio_preserva_trabalho_test.exs</code> (o
+<code>dev.blocked</code> diz a branch; falha ao preservar não impede o bloqueio)</li>
+<li><strong>Origem:</strong> AT-429 (08/10: <code>feature/task-86dade03</code> sem commit, <code>package.json</code>
+e <code>src</code> perdidos depois do bloqueio por orçamento)</li>
+</ul>
+<h3 id="rn-744">RN-744 — O dev sabe que o shell é <code>sh</code> e começa vendo o próprio worktree</h3>
+<ul>
+<li><strong>Regra:</strong> a descrição da ferramenta <code>terminal</code> diz que o shell do container
+é <code>sh</code> (dash), não bash — sem brace expansion, sem <code>[[ ]]</code>, sem arrays, sem
+<code>source</code> — e dá a forma que funciona. O kickoff de cada task do dev agent
+ganha uma segunda mensagem fixada com o RETRATO do worktree: a branch e os
+arquivos que já existem (rastreados + não rastreados não ignorados), com teto
+de 80 linhas e o total real quando corta (ADR 0060); é o servidor que monta,
+sem parâmetro do modelo. Pasta que o engine não alcança (modo <code>runner</code>) diz
+que o retrato está indisponível e manda listar pelo <code>terminal</code>. Declarado e
+NÃO corrigido: o worktree do dev pode nascer antes do merge da PR de infra,
+então o que a Infra entregou por PR pode não estar na <code>dev</code> de onde ele
+parte.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tools/terminal.ex:12</code> (<code>spec</code>),
+<code>apps/engine/lib/engine/dev/worktree_manager.ex:117</code> (<code>retrato</code>),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:657</code> (<code>retrato_do_worktree</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/worktree_manager_test.exs</code>
+(<code>retrato/2</code>: branch e arquivos; pasta inalcançável diz indisponível; a
+descrição do terminal diz <code>sh</code>)</li>
+<li><strong>Origem:</strong> AT-444 (TP-01 de 08/10: <code>mkdir -p src/{a,b}</code> no dash e o dev
+recriando o que já existia)</li>
+</ul>
+<h3 id="rn-745">RN-745 — Na resposta cortada, só a chamada incompleta é recusada</h3>
+<ul>
+<li><strong>Regra:</strong> quando a resposta do modelo vem cortada pelo teto de saída
+(<code>truncated: true</code>, <a href="../api.html#rn-737">RN-737</a>), só a ÚLTIMA chamada de ferramenta da
+resposta é tratada como incompleta e recusada com o erro nomeado (que agora
+diz &quot;a última da resposta&quot;, que as anteriores foram executadas e pede &quot;uma
+por chamada&quot;). As chamadas anteriores da mesma resposta executam
+normalmente — medido no código: o stream OpenAI-compatível monta as
+chamadas em ordem, o corte cai na última, e o <code>parseArgumentos</code> da api
+devolve <code>{}</code> para o JSON partido. A chamada é identificada por nome e
+argumentos. Resposta cortada sem chamada conhecida continua recusando toda
+ferramenta (régua da RN-737). A descrição de <code>propose_adr</code> orienta um ADR por
+resposta.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/resposta_cortada.ex:44</code>
+(<code>registrar</code>), <code>:64</code> (<code>incompleta?</code>),
+<code>apps/engine/lib/engine/harness/argumentos_de_ferramenta.ex:26</code> (<code>executar</code>),
+<code>apps/engine/lib/engine/harness/tools/propose_adr.ex:27</code> (<code>spec</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/resposta_cortada_test.exs</code> (&quot;só
+a última chamada da resposta cortada é recusada; as completas executam&quot;;
+&quot;ferramenta de resposta cortada NÃO executa&quot;, sem chamada conhecida)</li>
+<li><strong>Origem:</strong> AT-430 (08/10: o Arquiteto mandou 5 <code>propose_adr</code> numa resposta
+cortada e as cinco foram recusadas; 0 ADRs)</li>
+</ul>
+<h3 id="rn-746">RN-746 — O fecho do Arquiteto diz o que gravou, e as escritas recusadas são contadas</h3>
+<ul>
+<li><strong>Regra:</strong> a linha factual &quot;Gravado neste turno: …&quot; da
+<a href="#rn-731">RN-731</a> passa a contar as escritas do Arquiteto (ADR proposto,
+mapa de módulos, atribuição de módulos, imagem decidida, diagrama C4,
+roteamento para a infra, contrato de módulos, insight), a RFC do Staff e o
+protótipo do UX Designer, e conta à parte as chamadas de ESCRITA recusadas
+(<code>{:error, _}</code>) do turno: &quot;…; N chamadas de escrita recusadas&quot;. Turno que
+tentou escrever e não gravou nada fecha com &quot;Gravado neste turno: nada; N
+chamadas de escrita recusadas.&quot; (en: &quot;Recorded this turn: nothing; N write
+calls refused.&quot;). O Criativo passa a anotar a recusa também; Staff e UX
+Designer passam a anotar. Leitura nunca conta. O texto do modelo não é
+reescrito (RN-163: o agente não anuncia como feito o que o servidor
+recusou — quem lê vê o fato ao lado). Fora, declarado: Dev Lead (o plano
+suspende o turno, RN-284) e Infra Lead.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/gravado_no_turno.ex:81</code> (<code>anotar</code>),
+<code>:96</code> (<code>descarregar</code>), <code>:141</code> (<code>classe</code>),
+<code>apps/engine/lib/engine/agents/arquiteto_server.ex:330</code> (<code>dispatch_tool</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/gravado_no_turno_test.exs</code>
+(&quot;Arquiteto com as cinco propose_adr recusadas fecha com nada gravado&quot;;
+&quot;escritas do Arquiteto contadas, leitura e ferramenta desconhecida não&quot;)</li>
+<li><strong>Origem:</strong> AT-431 (08/10: com os 5 <code>propose_adr</code> <code>ok: false</code>, o Arquiteto
+fechou com &quot;✅ ADRs Propostas (5 decisões críticas)&quot; e nenhuma linha factual)</li>
+</ul>
+<h3 id="rn-756">RN-756 — A Anamnese só roda com interação de conteúdo técnico do sujeito; aprovar não conta</h3>
+<ul>
+<li><strong>Regra:</strong> revisa a contagem de &quot;interação própria&quot; da RN-680/RN-722. Só
+contam para fazer alguém sujeito da rodada (a) evento <code>actor_kind: &quot;user&quot;</code>
+do próprio membro cujo tipo está em <code>tipos_de_evento_com_conteudo/0</code> —
+<code>chat.message</code> (mensagem escrita por ele) e
+<code>chat.structured_question_answered</code> — e (b) decisão de ação com motivo de
+recusa escrito (<code>rejectionReason</code> não vazio, uma correção). Aprovação,
+aceite de handoff, clique e qualquer outro evento de usuário NÃO contam:
+não são evidência de competência. O piso de 5 (RN-722), o teto diário e o
+desfecho sem sujeito (motivo no log; <code>anamnese.run_skipped</code> só na rodada
+pedida à mão) não mudam, e a triagem segue LOCAL, antes do LLM e do RAG.</li>
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/anamnese/elegibilidade.ex:61</code>
+(<code>avaliar</code>), <code>:102</code> (<code>recusa_com_motivo?</code>), <code>:108</code>
+(<code>tipos_de_evento_com_conteudo</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/anamnese/elegibilidade_test.exs</code>
+(<code>só interação com conteúdo técnico conta (RN-756, AT-439)</code>: mensagem e
+resposta estruturada fazem sujeito; só aprovações, handoff e recusa sem
+motivo não fazem)</li>
+<li><strong>Origem:</strong> AT-439 (TP-01, 08/10, projeto <code>c1dc053d</code>: duas rodadas durante
+a execução, US$ 0,20, ambas <code>skip_proficiency</code> com &quot;o usuário apenas
+aprovou propostas&quot;)</li>
+</ul>
+<h3 id="rn-757">RN-757 — O <code>terminal</code> auto-aprovado espera o comando, e o teto do comando é 2 min</h3>
+<ul>
+<li><strong>Regra:</strong> a ação <code>terminal</code> que a api auto-aprova é EXECUTADA dentro da
+mesma requisição do <code>propose_action</code> (api → engine
+<code>/internal/actions/execute</code> → api <code>container-exec</code> → broker), e o engine
+espera essa requisição por <code>TERMINAL_ACTION_TIMEOUT_MS</code> + 120 s — não pelo
+default de 15 s do <code>Req</code>. O teto do comando (<code>TERMINAL_ACTION_TIMEOUT_MS</code>)
+passa de 15 s para 120 s nos três composes e no <code>runtime.exs</code>. A cadeia fica
+broker (T) &lt; api → broker (T + até 45 s, <a href="../api.html#rn-604">RN-604</a>) &lt; engine →
+<code>container-exec</code> (T + 90 s) &lt; engine → <code>propose_action</code> (T + 120 s), e com
+T = 120 s o salto de fora (240 s) segue abaixo dos 300 s de cabeçalhos do
+<code>fetch</code> do Node. Se a espera ainda estourar, o modelo recebe texto NOMEADO
+— o teto em segundos, que o processo pode seguir rodando e a sugestão de
+<code>nohup … &amp;</code> com log —, nunca <code>%Req.TransportError{reason: :timeout}</code> cru.
+Exec assíncrono/streaming foi considerado e não feito: a menor mudança que
+faz <code>npm install</code> comum caber é o teto.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/sessions/engine_api_client.ex:2006</code>
+(<code>opcoes_do_propose_action</code>) e
+<code>apps/engine/lib/engine/harness/hooks/action_pipeline.ex:85</code>
+(<code>resultado_de_teto_do_terminal</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/sessions/engine_api_client_propose_terminal_test.exs</code>
+(api falsa que demora 16 s ainda é esperada; ordem dos tetos abaixo de
+300 s; o texto de estouro nomeia o teto)</li>
+<li><strong>Origem:</strong> AT-440 (TP-01 de 08/10: <code>npm install 2&gt;&amp;1 | tail -50</code> num
+container <code>node:22-bookworm-slim</code> voltou &quot;falha no pipeline:
+%Req.TransportError{reason: :timeout}&quot;; medido nesta máquina, o mesmo
+<code>npm install</code> de <code>bcrypt</code>+<code>sqlite3</code>+<code>express</code> levou 5,3 s com a imagem em
+cache e prebuilds disponíveis — a cadeia, não o comando, cortava em 15 s)</li>
+</ul>
+<h3 id="rn-760">RN-760 — A próxima task do dev agent parte da última branch dele ainda não mergeada</h3>
+<ul>
+<li><strong>Regra:</strong> generaliza a <a href="#rn-743">RN-743</a>. Ao terminar uma task — aprovada
+nos gates (<code>nextAction: &quot;done&quot;</code>) ou bloqueada por QUALQUER motivo, inclusive
+o &quot;ciclo de correção esgotado (gate)&quot; que a api decide e chega ao engine só
+como <code>gate_resolved</code> —, o dev agent guarda a branch dela e a próxima task do
+MESMO agente (logo, do mesmo módulo) nasce dessa branch, e não de <code>dev</code>. O
+que sobrou sem commit no worktree é preservado antes, como na RN-743; o
+ponteiro gravado pelo <code>block_task/4</code> não é sobrescrito. Quando a branch
+anterior já é ancestral da <code>dev</code> local (mergeada), a próxima parte da <code>dev</code>,
+que já a contém. QUANDO a fila anda não muda: a próxima task continua sendo
+reivindicada ao fim dos gates, antes do merge do usuário (decisão do dono).
+Declarado: merge por squash num remoto não deixa a branch ancestral da <code>dev</code>,
+então a próxima segue partindo dela; o ponteiro continua só em memória, e no
+modo <code>runner</code> a checagem de merge não roda.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/agent_io.ex:352</code>
+(<code>levar_branch_para_a_proxima</code>), <code>:333</code> (<code>criar_worktree</code>),
+<code>apps/engine/lib/engine/dev/worktree_manager.ex:553</code>
+(<code>ja_mergeada_volta_ao_trabalho</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/bloqueio_preserva_trabalho_test.exs</code>
+(<code>levar_branch_para_a_proxima/1 e criar_worktree/2</code>: aprovada leva a branch
+para a próxima; o ponteiro do bloqueio não é sobrescrito),
+<code>apps/engine/test/engine/dev/worktree_manager_test.exs</code> (<code>add_worktree/4 com a branch da task anterior</code>: não mergeada parte dela, mergeada parte da
+<code>dev</code>)</li>
+<li><strong>Origem:</strong> AT-447 (TP-01 de 09/10: tasks <code>762833bd</code> e <code>5ebad64b</code> — a
+segunda nasceu de <code>dev</code> sem a rota de login da primeira, e o QA reprovou)</li>
+</ul>
+<h3 id="rn-763">RN-763 — Encerrar a sessão de execução para os dev agents e os gates, e &quot;Parar execução&quot; na aba Executores</h3>
+<ul>
+<li><strong>Regra:</strong> o fechamento da sessão (<code>session.closed</code>/<code>closed_abnormally</code>,
+pelo <code>SessionLifecycleWorker</code>, o ponto por onde todo fechamento passa) PARA
+os dev agents dela em todos os nós e os gates (QA lead e SecOps) do projeto
+— a régua que já valia para os conversacionais (<a href="../api.html#rn-581">RN-581</a>). O
+processo é derrubado na hora, sem gravar o turno em curso, e o
+<code>Engine.Dev.Monitor</code> é avisado antes (<code>esquecer/1</code>): a linha durável sai e
+o agente NÃO é religado (<a href="#rn-742">RN-742</a>). Para cada dev com task em curso
+(<code>working</code>, <code>awaiting_approval</code> ou <code>awaiting_gate</code>), o trabalho do worktree
+vira commit na branch da task (<a href="#rn-743">RN-743</a>) e a task é BLOQUEADA com
+motivo &quot;sessão de execução encerrada&quot;, origem <code>politica</code>, e o diagnóstico
+dizendo onde ficou o trabalho — volta à fila quando um humano a libera,
+nunca perdida. As linhas de <code>gate_states</code> da sessão saem, para o
+<code>GateRescuer</code> não reabrir ciclo da sessão encerrada. A aba Executores ganha
+&quot;Parar execução&quot; (papel <code>developer</code>, o de encerrar sessão), cujo mecanismo é
+o MESMO fechamento (<code>closing</code> → <code>closed</code>), sem estado novo; a confirmação
+diz antes do clique o que fica: as tarefas em curso (com a contagem), as PRs
+abertas, as aprovações pendentes e que a sessão não reabre. Declarado: ação
+pendente de dev agent continua pendente; PR aberta continua aberta; sessão
+com <code>execution.activated</code> não reabre (<a href="../api.html#rn-650">RN-650</a>), então retomar é
+ativar a execução numa sessão nova; a contagem de tarefas da confirmação vem
+da janela de eventos da aba. A confirmação no &quot;Encerrar&quot; da barra da sessão
+é de outra atividade (AT-452).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/encerramento_da_sessao.ex:40</code>
+(<code>parar_da_sessao</code>), <code>:74</code> (<code>parar_processos</code>), <code>:104</code> (<code>devolver_task</code>),
+<code>apps/engine/lib/engine/dev/monitor.ex:34</code> (<code>esquecer</code>),
+<code>apps/engine/lib/engine/workers/session_lifecycle_worker.ex:94</code>
+(<code>parar_execucao</code>), <code>apps/web/src/components/PararExecucao.tsx</code></li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/encerramento_da_sessao_test.exs</code>
+(o dev morre sem ser religado, a linha sai, a task é bloqueada com origem
+<code>politica</code>; sessão sem dev é no-op e o dev de outra sessão fica de pé),
+<code>apps/web/src/components/PararExecucao.test.tsx</code> (a confirmação diz o que
+fica e fecha <code>closing</code> → <code>closed</code>; a recusa da api fica na confirmação; sem
+papel o botão fica inerte com o motivo)</li>
+<li><strong>Origem:</strong> AT-456 (TP-01 de 09/10: com a sessão de execução encerrada, o
+<code>dev-encurtador-api</code> bloqueou a tarefa 3, pegou a 4 e abriu PR; o único
+freio foi parar o container)</li>
+</ul>
+<h3 id="rn-765">RN-765 — O gate de QA julga a TAREFA, e RF de tarefa irmã é observação</h3>
+<ul>
+<li>
+<p><strong>Regra:</strong> a QA-estratégia (plano de teste, <a href="parte-04.html#rn-674">RN-674</a>) e a
+QA-automação recebem, além da história, o RECORTE da tarefa: título e
+descrição, as regras de negócio da história e as OUTRAS tarefas da mesma
+história com o status (<code>siblingTasks</code> em <code>GET .../dev-context</code>). O veredito
+é sobre o que é DESTA tarefa: requisito que pertence a uma tarefa irmã
+(feita ou pendente) não reprova — vai ao <code>resumo</code> como observação, fora de
+<code>itens</code>, e não impede <code>approved</code>. A régua é de PROMPT, não de código: o
+<code>emit_qa_verdict</code> continua exigindo só a suite verde para aprovar. Desde a
+AT-479, quando a descrição da tarefa ou uma regra quantifica POR item (&quot;por
+X&quot;, &quot;cada&quot;, &quot;de todos os&quot; — &quot;por exemplo&quot;/&quot;por padrão&quot; não contam), o recorte
+ganha a seção &quot;Forma da resposta&quot;: conferir que a resposta traz o valor de
+CADA item, não só o total (o painel aprovado com só <code>{totalCliques}</code> sobre
+&quot;a contagem… de todos os links&quot;), e que a recusa de entrada nomeia o campo —
+esta última é OBSERVAÇÃO no <code>resumo</code>, fora de <code>itens</code>, salvo regra que a
+exija. Continua régua de prompt: nenhuma reprovação nova no código.</p>
+</li>
+<li>
+<p><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:18</code> (<code>texto</code>),
+<code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:82</code> (<code>secao_da_forma</code>),
+<code>apps/api/src/application/use-cases/execution/get-dev-task-context.use-case.ts:220</code>
+(<code>tarefasIrmas</code>) e <code>apps/engine/lib/engine/gates/qa_automacao_agent.ex:170</code></p>
+<p><code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:82</code> (<code>secao_da_forma</code>),
+<code>apps/api/src/application/use-cases/execution/get-dev-task-context.use-case.ts:220</code>
+(<code>tarefasIrmas</code>) e <code>apps/engine/lib/engine/gates/qa_automacao_agent.ex:225</code>
+(<code>com_o_recorte</code>)</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code> (desde
+a AT-479 também &quot;regra que quantifica por item pede a conferência da forma da
+resposta&quot; e o caso sem quantificador) e
+<code>apps/api/test/application/use-cases/execution/get-dev-task-context.use-case.spec.ts</code>
+(as irmãs sem a própria tarefa). O golden-set do QA (ADR 0168) NÃO ganhou
+caso: ele roda o modelo de verdade, e provar o veredito sem chamada paga
+não é possível — declarado.</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-448 (TP-01 de 09/10: o gate de QA da tarefa &quot;Modelar tabela
+de usuários e hash bcrypt&quot; reprovou três vezes por &quot;RF01: login HTTP com
+JWT não existe nesta entrega&quot;, que é de outra tarefa, e a tarefa bloqueou;
+<code>artifact.qa_verdict</code> das tasks <code>42bea901</code> e <code>762833bd</code>)</p>
+</li>
+</ul>
+<h3 id="rn-772">RN-772 — O Arquiteto lê o status ATUAL das ADRs que propôs</h3>
+<ul>
+<li><strong>Regra:</strong> o Arquiteto tem a leitura <code>listar_adrs_propostas</code>: as ações
+<code>open_adr_pr</code> do PROJETO, lidas agora de <code>proposed_actions</code> (mesmo
+Postgres, sem HTTP no laço), com o status de cada uma — pendente, aprovada,
+aprovada automaticamente, executada (com a URL da PR), recusada (com o
+motivo) ou falhada. Contida (ADR 0060, <a href="parte-01.html#rn-164">RN-164</a>): sem parâmetro,
+escopo fechado no projeto do contexto, uma contagem e uma consulta por
+chamada, as 20 mais recentes, e o total real dito quando corta. Falha de
+leitura é <code>tool.result</code> <code>ok: false</code> com o motivo, nunca texto vazio. Desde a
+<a href="../api.html#rn-784">RN-784</a> ela ESTÁ no piso do Jev.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tools/listar_adrs_propostas.ex:37</code>
+(<code>run</code>), <code>:40</code> (<code>ler</code>), <code>apps/engine/lib/engine/agents/arquiteto_server.ex:629</code>
+(<code>ListarAdrsPropostas</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tools/listar_adrs_propostas_test.exs</code>
+(aprovada aparece aprovada, executada com a PR, recusada com o motivo, só as
+do projeto; teto com o total real; sem proposta; leitura que falha vira erro
+nomeado)</li>
+<li><strong>Origem:</strong> AT-454 (TP-01 de 09/10, sessão <code>771131f4</code>: com as 3 ADRs
+aprovadas, o fecho seguinte disse &quot;As 3 ADRs seguem pendentes de aprovação&quot;)</li>
+</ul>
+<h3 id="rn-773">RN-773 — O Arquiteto lê o backlog, e consulta antes de afirmar estado</h3>
+<ul>
+<li><strong>Regra:</strong> o Arquiteto ganha a mesma <code>listar_backlog</code> do PO
+(<a href="parte-01.html#rn-164">RN-164</a>), com a contagem de tarefas por história. O kickoff dele e
+o resultado do <code>propose_adr</code> dizem que o status das ADRs e as tarefas mudam
+fora da conversa e mandam consultar as duas leituras antes de afirmá-los, em
+vez do retrato de um resultado anterior. Nada de fluxo do time é narrado
+aqui (<a href="parte-04.html#rn-711">RN-711</a>).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/arquiteto_server.ex:630</code>
+(<code>ListarBacklog</code>), <code>apps/engine/lib/engine/harness/tools/propose_adr.ex:108</code>
+(<code>propor</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tools/listar_backlog_test.exs</code>
+(a contagem de tarefas por história), <code>apps/engine/test/engine/agents/arquiteto_server_test.exs</code>
+(as duas leituras estão no catálogo do Arquiteto)</li>
+<li><strong>Origem:</strong> AT-454 (TP-01 de 09/10: com 17 tarefas no backlog, o Arquiteto
+disse &quot;faltam as tarefas&quot; e &quot;não consigo verificá-las daqui&quot;)</li>
+</ul>
+<h3 id="rn-774">RN-774 — A primeira tarefa de cada módulo tem o dobro do teto por tarefa</h3>
+<p>A primeira tarefa de um módulo monta o esqueleto inteiro (manifesto, app,
+banco, testes) e custa mais que as seguintes: no TP-01 de 08/10 ela gastou
+US$ 0,53 com o Haiku 4.5 e foi bloqueada pelo teto fixo de US$ 0,50
+(<code>taskBudgetMicros: 500000</code>). Por decisão do dono (09/10), ela ganha
+<strong>2× o teto por tarefa</strong> (US$ 1,00 com o padrão); as demais seguem o teto
+configurado. O multiplicador é constante nomeada no engine, não configuração.</p>
+<p>&quot;Primeira&quot; é medida pelo log, nunca pelo estado da tarefa: é a tarefa cujo
+<code>backlog.task_claimed</code> é o MAIS ANTIGO do projeto para aquele módulo. Bloquear
+zera <code>assigned_to</code> e reiniciar o engine perde a memória do processo; o log não
+muda, então a mesma tarefa reivindicada de novo depois de liberada continua a
+primeira, e uma correção pedida por gate também recebe o 2×. A api responde
+<code>task.primeiraDoModulo</code> no contexto do dev (<code>false</code> sem <code>module</code>, e <code>false</code> sem
+claim nenhum do módulo — o teto normal é o conservador), e o teto EFETIVO é
+resolvido num ponto só do engine. O bloqueio por orçamento diz o teto que valeu
+para aquela tarefa (&quot;teto da primeira tarefa do módulo: 1000000 micro-USD,
+US$ 1.00&quot;). Os gates de QA seguem com o <code>task_budget_micros</code> base — fora do
+recorte do card.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/teto_da_tarefa.ex:32</code> (<code>efetivo</code>);
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:733</code> (<code>diagnostico_de_orcamento</code>);
+<code>apps/api/src/application/use-cases/execution/get-dev-task-context.use-case.ts:207</code>
+(<code>ehPrimeiraTarefaDoModulo</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/dev_agent_server_test.exs</code> (describe
+&quot;RN-774&quot;: a primeira com US$ 0,53 não bloqueia, a segunda do mesmo módulo
+bloqueia — caso de falha —, a primeira de outro módulo também ganha 2×);
+<code>apps/engine/test/engine/dev/teto_da_tarefa_test.exs</code>;
+<code>apps/api/test/application/use-cases/execution/get-dev-task-context.use-case.spec.ts</code>
+(describe &quot;RN-774&quot;)</li>
+<li><strong>Origem:</strong> AT-433</li>
+</ul>
+<h3 id="rn-778">RN-778 — O dev agent órfão fecha por evento novo no boot</h3>
+<ul>
+<li><strong>Regra:</strong> no boot, para cada sessão não terminal, o dev agent cujo último
+<code>dev.*</code> na sessão é de espera (<code>dev.working</code>, <code>dev.blocked</code>, <code>dev.idle_tripped</code>
+e os demais que o <code>GetSessionPendingWorkUseCase</code> conta) e que NÃO tem linha
+em <code>dev_agent_states</code> NESTA sessão ganha <code>dev.error</code> com origem <code>infra</code>
+(<code>reason: dev_agent_sem_processo</code>) seguido de <code>dev.idle</code>, que o tira da régua
+do trabalho pendente (<a href="../web.html#rn-064">RN-064</a>). É o molde
+da <a href="parte-03.html#rn-586">RN-586</a> para o vocabulário <code>dev.*</code>: nunca reexecuta, nunca
+reescreve evento, e a linha durável é a prova de dono — com ela o
+<code>DevRehydrator</code> religa o agente, e fechá-lo seria matar um agente saudável.
+Não toca a tarefa: tarefa bloqueada ou com PR esperando o merge continua
+segurando a sessão de execução vigente pela RN-776 (AT-457), que tem dono
+humano.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_orfao.ex:49</code> (<code>varrer</code>),
+<code>apps/engine/lib/engine/sessions/rehydrator.ex:81</code> (<code>varrer</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/dev_orfao_test.exs</code> (o órfão fecha
+com <code>dev.error</code> infra + <code>dev.idle</code>; o que tem linha durável e o que já está
+<code>idle</code> não; leitura que falha não fecha nada)</li>
+<li><strong>Origem:</strong> AT-465 (TP-01 de 09/10: a sessão <code>63a4e1aa</code> reagendada pelo
+heartbeat a cada 30 s por um <code>dev.working</code> sem processo)</li>
+</ul>
+<p><strong>Citada pela <a href="parte-06.html#rn-922">RN-922</a> (<a href="../../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226</a>), sem mudar:</strong> o dev sem linha durável em <code>dev_agent_states</code> continua só fechado, porque não há tarefa a retomar.</p>
+<h3 id="rn-779">RN-779 — O worktree da task (re)pegada parte da <code>dev</code> ATUAL e a integra</h3>
+<ul>
+<li><strong>Regra:</strong> antes de criar o worktree de uma task (primeira vez ou retomada),
+o engine faz <code>git fetch origin</code> no working tree do projeto (serializado por
+projeto) — é no remoto que as PRs são mergeadas, e a <code>dev</code> local só andava no
+checkout da inicialização. A ponta da <code>dev</code> é <code>origin/dev</code> quando a local
+ficou para trás. A task nasce: (1) da branch da task anterior não mergeada
+(RN-760), (2) da PRÓPRIA branch quando ela tem trabalho que a <code>dev</code> não
+contém — a task retomada num processo novo, que perdeu o ponteiro em memória
+(RN-743) —, ou (3) da ponta atual da <code>dev</code>. Nos casos (1) e (2) o worktree
+INTEGRA a ponta da <code>dev</code> (<code>merge --no-ff</code>, identidade <code>&lt;agente&gt;[bot]</code>) antes
+do primeiro passo. Conflito nessa integração vai para o agente
+(<a href="parte-06.html#rn-1010">RN-1010</a>); só o que o agente não resolve é recusa NOMEADA
+(&quot;conflito ao integrar a <code>dev</code> atual&quot;, com os arquivos): o merge é abortado, a branch de
+origem fica intacta e a task bloqueia com motivo próprio e origem <code>codigo</code>.
+<code>fetch</code> que falha bloqueia a task com o motivo do git, nunca cai na <code>dev</code>
+velha. A readoção depois de conflito de merge (RN-715) INTEGRA a <code>main</code> atual pelo sistema, como o claim (AT-798, <a href="parte-06.html#rn-1010">RN-1010</a>).
+Medido no TP-01: a AT-447 DISPAROU no 1º claim (reflog: <code>Created from feature/task-b3cc92b8</code>); quem perdeu a base foi o reclaim, que redefiniu a
+branch para a <code>dev</code> LOCAL parada no merge da infra (<code>Reset to dev</code>).
+Declarado: no modo <code>runner</code> nada disso roda (o git é da máquina do usuário).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/worktree_manager.ex:156</code>
+(<code>atualizar_remoto</code>), <code>:321</code> (<code>add_worktree</code>), <code>:399</code>
+(<code>ponta_do_trabalho</code>), <code>:462</code> (<code>retomada</code>), <code>:472</code> (<code>integrar_trabalho</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/worktree_manager_test.exs</code>
+(<code>integração da dev atual (RN-779)</code>: retomada com branch antiga parte da dev
+nova do remoto; trabalho preservado integra a dev nova; anterior em
+<code>awaiting_user</code> é a base com a dev integrada; conflito é recusa nomeada)</li>
+<li><strong>Origem:</strong> AT-458 (TP-01 de 09/10: <code>feature/task-c80daf6c</code> nasceu de
+<code>1fa2241</code> sem as 12 tarefas mergeadas depois, e o merge conflitou)</li>
+</ul>
+<h3 id="rn-780">RN-780 — Resposta só de raciocínio cortada pelo teto é corte, não desistência</h3>
+<ul>
+<li><strong>Regra:</strong> no <code>ToolLoop</code> (caminho de todo agente de execução e de gate),
+a resposta sem texto e sem chamada de ferramenta que a api marca
+<code>truncated: true</code> (o <code>finish_reason: length</code> da RN-737) é o raciocínio que
+comeu o teto de saída. A volta é retentada UMA vez, sem a resposta vazia no
+histórico e contando iteração — o teto de iterações e o orçamento da tarefa
+continuam valendo. Se repetir, o laço para marcando <code>corte_pelo_teto</code>, e o
+dev agent bloqueia a task com o motivo &quot;resposta só de raciocínio, cortada
+pelo teto&quot; e origem <code>modelo</code>, em vez de &quot;parou sem concluir nem reportar
+bloqueio&quot;. Uma chamada de ferramenta no meio zera a retentativa. Declarado:
+o engine recebe da api <code>truncated</code> e <code>usage.outputTokens</code>, mas NÃO os
+<code>reasoningTokens</code> (ficam só em <code>token_usage</code>), então a resposta vazia que
+bate no teto sem <code>finish_reason: length</code> não é reconhecida.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tool_loop.ex:256</code>
+(<code>parada_sem_chamada</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1218</code>
+(<code>motivo_da_parada</code>), <code>:1237</code> (<code>stop_diagnosis</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tool_loop_test.exs</code> (<code>corte só de raciocínio</code>: retentada uma vez e segue; repetido para com
+<code>corte_pelo_teto</code>), <code>apps/engine/test/engine/dev/dev_agent_server_test.exs</code>
+(<code>resposta só de raciocínio cortada pelo teto bloqueia com motivo nomeado</code>)</li>
+<li><strong>Origem:</strong> AT-459 (TP-01 de 09/10: a tarefa <code>c80daf6c</code> bloqueou em 40 s
+com 8.192 tokens de saída, todos de raciocínio)</li>
+</ul>
+<h3 id="rn-781">RN-781 — A mensagem de commit do dev não grava pendência que é do sistema</h3>
+<ul>
+<li><strong>Regra:</strong> o resumo do <code>report_done</code> é a mensagem de commit do dev agent, e
+commit, push e PR são feitos pelo sistema depois dele. Antes de propor o
+<code>git_commit</code>, o engine corta do marcador de pendência (&quot;Pendente&quot;,
+&quot;Pendência&quot;, &quot;Pending&quot;) ao fim quando o resto fala de commit, push ou PR, e
+tira o parêntese &quot;(ainda sem commit…)&quot;; pendência que não fala disso fica.
+A descrição do campo <code>summary</code> diz que ele vira a mensagem de commit e que
+não se narra commit, push nem PR. Resumo que fica vazio cai na mensagem
+padrão <code>&lt;agente&gt;: &lt;task&gt;</code>.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/agent_io.ex:407</code>
+(<code>mensagem_de_commit</code>), <code>:382</code> (<code>propose_commit</code>),
+<code>apps/engine/lib/engine/dev/tools/report_done.ex:27</code> (<code>summary</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/mensagem_de_commit_test.exs</code>
+(corta a narração; tira o parêntese; pendência alheia ao sistema fica)</li>
+<li><strong>Origem:</strong> AT-464 item 2 (TP-01 de 09/10: <code>git log feature/task-9d6dcd53</code>
+com &quot;Pendente: commit… as ações git_commit, git_push e pr_open não estavam
+disponíveis neste passo&quot;)</li>
+</ul>
+<h3 id="rn-787">RN-787 — O gate conta o diff da PR contra a <code>dev</code> da origem, e o parecer de QA grava lista</h3>
+<ul>
+<li><strong>Regra:</strong> (1) o diff que o QA e o SecOps julgam (<code>dev...HEAD</code>,
+<a href="parte-04.html#rn-664">RN-664</a>) usa a <code>dev</code> MAIS NOVA que o working tree enxerga: com
+origem local (caminho no disco) o gate faz antes <code>git fetch origin dev</code>,
+melhor esforço, e entre <code>origin/dev</code> e a <code>dev</code> local vale a que contém a
+outra. A <code>dev</code> local do clone não anda quando a PR é mergeada na origem, e o
+parecer do SecOps contava o acumulado das tarefas já mergeadas. Com origem
+remota não há fetch no gate (a credencial é do <code>Workspace</code>) — declarado. O
+semgrep e o gitleaks seguem varrendo o worktree inteiro, não só o diff:
+estreitar o que o scanner vê muda o que o gate reprova, e isso fica para o
+dono. (2) <code>itens</code> e <code>coverageMatrix</code> do parecer de QA chegam ao
+<code>artifact.qa_verdict</code> sempre como LISTA: string JSON de lista é decodificada
+(o molde da <a href="parte-04.html#rn-719">RN-719</a>), e string que não é lista vira <code>[]</code>.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/diff.ex:44</code> (<code>base_mais_nova</code>),
+<code>apps/engine/lib/engine/gates/hooks/termination.ex:54</code> (<code>lista</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/diff_test.exs</code> (a tarefa B nascida
+da A, com a A mergeada na origem: o diff é só B) e
+<code>apps/engine/test/engine/gates/hooks/termination_test.exs</code> (string JSON vira
+lista; lista intacta; string inválida vira <code>[]</code>)</li>
+<li><strong>Origem:</strong> AT-464 itens 1 e 3 (TP-01 de 09/10, sessão <code>80e3ce09</code>: &quot;17
+arquivo(s) alterado(s) nesta PR&quot; numa PR de 3 arquivos contra a <code>dev</code>, e
+<code>coverageMatrix</code>/<code>itens</code> gravados como <code>&quot;[]&quot;</code> nos últimos pareceres)</li>
+</ul>
+<h3 id="rn-790">RN-790 — O README de como subir o entregável é critério do DoD que o PO escreve</h3>
+<ul>
+<li><strong>Regra:</strong> a instrução de kickoff do PO manda incluir, no DoD da história que
+cria a entrada da aplicação (servidor, CLI, configuração ou persistência) — ou
+numa história própria —, o critério &quot;README diz como instalar, configurar
+(variáveis de ambiente obrigatórias e opcionais, com o padrão) e subir a
+aplicação, e como criar o primeiro acesso, quando houver&quot;. O dev agent cumpre
+o DoD da história, e o gate o julga por ele. Régua de PROMPT, como a
+<a href="#rn-765">RN-765</a>: nenhuma ferramenta recusa história sem esse critério. A
+outra variante — o dev agent atualizar o README em toda tarefa que mexe em
+configuração/entrada — NÃO foi feita: exigiria classificar a tarefa no
+<code>AmbienteDoAgente</code> ou no <code>report_done</code>, regra nova de código — declarado.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/po_server.ex:605</code> (<code>kickoff_instruction</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/po_server_test.exs:438</code> (a
+instrução de kickoff traz o critério do README)</li>
+<li><strong>Origem:</strong> AT-466 (TP-01 de 09/10: o <code>encurtador-api</code> saiu com um README só
+com <code>npm test</code>, sem <code>JWT_SECRET</code> obrigatório, <code>DB_PATH</code>/<code>PORT</code>, <code>npm start</code>
+nem como criar o primeiro membro)</li>
+</ul>
+<h3 id="rn-792">RN-792 — Ao declarar o contrato, o Arquiteto recebe as rotas das histórias que o contrato não declara</h3>
+<ul>
+<li><strong>Regra:</strong> depois de <code>declare_module_contracts</code> gravar a versão
+(<a href="../api.html#rn-684">RN-684</a>), a ferramenta lê o backlog do projeto e extrai, de forma
+determinística e sem LLM, todo <code>MÉTODO /caminho</code> (GET, POST, PUT, PATCH,
+DELETE) do título, descrição, RF e DoD das histórias não arquivadas, e o
+mesmo padrão das <code>assinatura</code>s do contrato. Rota citada por história e
+ausente da UNIÃO das rotas do contrato (a história do front cita a rota do
+back) volta no resultado como DIVERGÊNCIA, com o que o contrato declara no
+mesmo método — entrada do laço (<a href="parte-01.html#rn-163">RN-163</a>), para o Arquiteto
+corrigir o contrato ou registrar a decisão. Parâmetro (<code>:id</code>, <code>{id}</code>), barra
+final e query string são normalizados; teto de 10 linhas, com o total. A
+leitura do backlog falhar NÃO recusa a declaração (já gravada): o resultado
+diz que não conferiu. Fica de fora, declarado: rota que só o contrato
+declara (não é divergência), história editada DEPOIS da declaração (só é
+conferida na próxima), e o contrato acompanhar a rota que o DEV renomeou
+(o QA nomeia a divergência no parecer, <a href="../api.html#rn-786">RN-786</a>, mas nada a leva
+de volta ao Arquiteto).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/rotas_do_contrato.ex:37</code>
+(<code>divergencias</code>), <code>apps/engine/lib/engine/harness/tools/declare_module_contracts.ex:125</code>
+(<code>conferencia_com_historias</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tools/declare_module_contracts_test.exs</code>
+(<code>GET /painel</code> na história × <code>GET /panel</code> no contrato acusa; rota igual com
+parâmetro e barra normalizados não acusa; backlog ilegível diz que não
+conferiu)</li>
+<li><strong>Origem:</strong> AT-468 (TP-01 de 09/10: a história pedia <code>GET /painel</code>, o
+contrato declarou <code>GET /panel</code>, e ninguém acusou na arquitetura)</li>
+</ul>
+<h3 id="rn-796">RN-796 — O item do gitleaks diz a regra e o trecho com o segredo mascarado</h3>
+<ul>
+<li><strong>Regra:</strong> o item que o <code>gitleaks</code> põe no parecer do SecOps leva, além do
+caminho e da linha, a regra que acusou (<code>RuleID</code>) e o trecho acusado
+(<code>Match</code>) com o segredo (<code>Secret</code>) trocado por <code>***</code> — nunca o segredo em
+claro. Sem o <code>Secret</code> para mascarar, o trecho não entra. E o ambiente do
+agente de execução (<a href="parte-04.html#rn-706">RN-706</a>) diz em uma linha que senha, token ou
+chave de teste são gerados em tempo de execução, nunca literais. Sem
+allowlist nova.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/actions/gitleaks_detector.ex:121</code>
+(<code>mensagem</code>), <code>apps/engine/lib/engine/harness/ambiente_do_agente.ex:102</code>
+(<code>montar</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/actions/gitleaks_relatorio_test.exs</code>,
+<code>apps/engine/test/engine/harness/ambiente_do_agente_test.exs</code></li>
+<li><strong>Origem:</strong> AT-470</li>
+</ul>
+<h3 id="rn-797">RN-797 — A task cuja branch não tem diff contra a <code>dev</code> fecha como &quot;já na dev&quot;</h3>
+<ul>
+<li><strong>Regra:</strong> no <code>report_done</code>, antes de propor commit, push e PR, o dev agent
+pergunta se a branch do worktree traz algo que a <code>dev</code> não tem: árvore limpa
+e <code>git diff --quiet &lt;ponta da dev&gt;...HEAD</code> sem diferença. É o caso da task
+reintegrada (<a href="#rn-779">RN-779</a>) cujo código já entrou por outra PR. Sem
+diff, a task fecha como <code>done</code> com o evento <code>dev.task_already_in_dev</code>
+(agente, task, branch, motivo) — sem commit, sem PR, sem gates e sem
+clique. Qualquer dúvida (pasta que o engine não alcança, como no modo
+<code>runner</code>; git que falha; ref da <code>dev</code> ausente) é &quot;tem diff&quot;: a task segue
+para os gates, nunca fecha sozinha. Mede DIFF e não ancestralidade, então
+cobre também o merge por squash que a <a href="#rn-760">RN-760</a> declara não ver.
+Declarado: a PR antiga da branch, se existir, não é fechada no provider.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/worktree_manager.ex:418</code>
+(<code>sem_diff_contra_a_dev?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1150</code>
+(<code>ja_na_dev</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/tarefa_ja_na_dev_test.exs</code></li>
+<li><strong>Origem:</strong> AT-474</li>
+</ul>
+<h3 id="rn-798">RN-798 — O QA confere os comandos do README tocado pela entrega contra os scripts</h3>
+<ul>
+<li><strong>Regra:</strong> quando o diff da entrega contra a <code>dev</code> toca um README, o QA
+confere, sem LLM, que todo <code>npm run &lt;s&gt;</code>, <code>npm test</code>, <code>npm start</code>,
+<code>pnpm [run] &lt;s&gt;</code> e <code>yarn [run] &lt;s&gt;</code> citado nele existe em <code>scripts</code> do
+<code>package.json</code> da mesma pasta (senão o da raiz do worktree). A conferência
+entra na consolidação como mais um parecer (&quot;Conferência do README&quot;):
+divergência é <code>changes_requested</code> com um item por comando, nomeando o
+script que falta; sem divergência, aprova. Sem README no diff, diff que
+falhou ou <code>package.json</code> inalcançável, nada é afirmado. De FORA, declarado:
+subcomando embutido do gerenciador (<code>pnpm install</code>, <code>pnpm dlx</code>…), comando
+com flag antes do script (<code>pnpm --filter x test</code>), flags de CLI do próprio
+projeto e comando que não é de Node.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/conferencia_do_readme.ex:28</code>
+(<code>conferir</code>), <code>apps/engine/lib/engine/gates/qa_lead_server.ex:818</code>
+(<code>conferencia_do_readme</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/conferencia_do_readme_test.exs</code></li>
+<li><strong>Origem:</strong> AT-475</li>
+</ul>
+<h3 id="rn-805">RN-805 — O plano de teste gravado é o que a ferramenta aceitou</h3>
+<ul>
+<li><strong>Regra:</strong> <code>emit_plano_de_teste</code> valida os argumentos JÁ normalizados
+(<a href="parte-04.html#rn-719">RN-719</a>: <code>criteriosExecutaveis</code> em string JSON vira lista), e o
+hook que encerra o laço da QA-estratégia lê <code>criteriosExecutaveis</code> pela MESMA
+normalização (<code>Termination.lista/1</code>, a da <a href="#rn-787">RN-787</a>). Antes, a tool
+dizia &quot;plano registrado: 9 critérios&quot;, o hook levava a string crua, o
+artefato era recusado (<code>:criterios_vazios</code>), o agente devolvia <code>{:ok, plano}</code>
+mesmo assim e a Automação caía no <code>Enum</code> da string — o QA Lead morria e o
+gate ficava parado até o resgate (18 min no uso real). Artefato recusado
+agora é falha NOMEADA da QA-estratégia (<code>agent.error</code>, origem <code>codigo</code>) e a
+revisão segue sem plano, como já seguia quando o plano falha; a Automação
+também normaliza os critérios que recebe.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/hooks/termination_plano_de_teste.ex:23</code>
+(<code>criterios_executaveis</code>), <code>apps/engine/lib/engine/gates/qa_estrategia_agent.ex:231</code>
+(<code>emit_returning</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/qa_estrategia_agent_test.exs</code>
+(&quot;critérios em string JSON viram lista: o plano é gravado e devolvido como lista&quot;)</li>
+<li><strong>Origem:</strong> AT-478 (TP-01 de 10/10)</li>
+</ul>
+<h3 id="rn-806">RN-806 — Um ciclo de QA por tarefa: pedido anterior ao veredito é descartado</h3>
+<ul>
+<li><strong>Regra:</strong> o QA Lead roda UM ciclo por task. Pedido <code>{:run, task}</code> para a
+task cujo ciclo está suspenso esperando decisão é ignorado, e ao fim de um
+ciclo (veredito ou bloqueio) todo <code>{:run, task}</code> que esperava na caixa do
+processo é descartado — foi pedido antes de o veredito existir, e a
+correção legítima do dev só nasce depois dele. No uso real o resgate
+(<a href="parte-04.html#rn-722">RN-722</a>) disparou o ciclo duas vezes no mesmo instante, e o
+segundo, rodando depois do aprovado, gravou um parecer contrário sobre a
+tarefa já mergeada. De FORA, declarado: duas réplicas do engine (a caixa é
+por processo, a mesma ressalva do <code>GateRescuer</code>) e a causa da dupla
+varredura do resgate, que não foi corrigida aqui.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/qa_lead_server.ex:106</code> (<code>handle_cast</code>),
+<code>apps/engine/lib/engine/gates/qa_lead_server.ex:157</code> (<code>descartar_pedidos_obsoletos</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/qa_lead_server_test.exs</code> (&quot;pedido
+repetido que esperava na caixa é descartado ao fim do ciclo&quot;; &quot;pedido para a
+task com ciclo suspenso não abre um segundo&quot;)</li>
+<li><strong>Origem:</strong> AT-478 (TP-01 de 10/10)</li>
+</ul>
+<h3 id="rn-810">RN-810 — Falha de rede passageira do provider é retentada, e o bloqueio dela é <code>infra</code> sem contar no disjuntor</h3>
+<ul>
+<li><strong>Regra:</strong> quando a chamada ao modelo volta com erro de REDE do provider —
+o <code>code</code> <code>connection</code>/<code>timeout</code> que a api normaliza (ADR 0041) ou, sem
+código, o texto do transporte (<code>EAI_AGAIN</code>, <code>ECONNRESET</code>, <code>ETIMEDOUT</code>,
+<code>ECONNREFUSED</code>, <code>ENOTFOUND</code>) —, o <code>ToolLoop</code> a retenta até duas vezes, com
+espera de 1 s e 3 s, gravando <code>toolloop.network_retry</code> a cada uma. Vale para
+todo consumidor do <code>ToolLoop</code> (dev agents e subagentes de gate). Esgotado o
+teto, a origem do desfecho é <code>infra</code>, nunca <code>codigo</code>, e o bloqueio da task
+do dev agent por essa causa NÃO incrementa o contador de bloqueios seguidos
+(<a href="parte-01.html#rn-047">RN-047</a>): o agente segue reivindicando. No uso real um
+<code>getaddrinfo EAI_AGAIN openrouter.ai</code> de 17 s bloqueou duas tarefas como
+<code>codigo</code> e desarmou o dev. A correção pós-gate segue a mesma régua
+(AT-621, <a href="#rn-864">RN-864</a>).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tool_loop.ex:285</code>
+(<code>llm_turn_com_retentativa</code>), <code>apps/engine/lib/engine/agents/falha_de_turno.ex:119</code>
+(<code>falha_de_rede?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1047</code>
+(<code>bloquear_parada</code>), <code>apps/engine/lib/engine/dev/agent_io.ex:228</code>
+(<code>finish_task</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tool_loop_test.exs</code> (&quot;falha de
+rede do provider: retenta e segue quando a rede volta&quot;; &quot;falha de rede que
+persiste esgota o teto&quot;), <code>apps/engine/test/engine/dev/dev_agent_server_test.exs</code>
+(&quot;erro de rede do provider: origem infra e o disjuntor não conta&quot;),
+<code>apps/engine/test/engine/agents/falha_de_turno_test.exs</code></li>
+<li><strong>Origem:</strong> AT-484 (TP-01 de 10/10)</li>
+</ul>
+<h3 id="rn-811">RN-811 — O &quot;já na dev&quot; compara com a <code>dev</code> do remoto atualizada</h3>
+<ul>
+<li><strong>Regra:</strong> antes da checagem &quot;já na dev&quot; (<a href="#rn-797">RN-797</a>) no
+<code>report_done</code>, o dev agent atualiza a <code>dev</code> do remoto pelo MESMO <code>fetch</code>
+que a <a href="#rn-779">RN-779</a> faz no claim, serializado por projeto. Sem ele a
+comparação usava a <code>dev</code> do dia em que o worktree nasceu: a branch da task
+cujos commits já tinham entrado na <code>dev</code> remota pela PR de outra task passou
+por QA e SecOps com 0 arquivos. <code>fetch</code> que falha não decide nada — compara
+com o que há, e na dúvida a task segue para os gates.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/worktree_manager.ex:418</code>
+(<code>sem_diff_contra_a_dev?</code>), <code>apps/engine/lib/engine/dev/worktree_manager.ex:438</code>
+(<code>sem_diff_atualizado?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:931</code>
+(<code>handle_outcome</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/tarefa_ja_na_dev_test.exs</code> (&quot;caminho
+feliz: com a dev atualizada, a branch não tem diff&quot;; &quot;falha: remoto
+inalcançável não fecha a task sozinha&quot;)</li>
+<li><strong>Origem:</strong> AT-486 (TP-01 de 10/10)</li>
+</ul>
+<h3 id="rn-813">RN-813 — Tarefa que toca o ponto de entrada exige evidência de que ele sobe</h3>
+<ul>
+<li><strong>Regra:</strong> extensão do recorte da <a href="#rn-765">RN-765</a>. Quando o título ou a
+descrição da tarefa toca o ponto de entrada, a fiação (rotas, migração,
+registro) ou o README de execução, o recorte do gate de QA ganha a seção
+&quot;Ponto de entrada&quot;: exigir evidência de que o entrypoint REAL sobe (o
+<code>start</code>/<code>main</code> do projeto rodado, ou um teste que importe o entrypoint real,
+não um app montado no próprio teste) e responde numa rota ou comando. Sem
+essa evidência, a lacuna vai para <code>itens</code>. É régua de PROMPT: o contrato
+externo dos gates (<code>apps/api/config/gates.yml</code>) e o código do <code>emit_qa_verdict</code> não
+mudam, e nenhum gate novo nasce. Tarefa que não toca nada disso não ganha a
+seção.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:121</code>
+(<code>secao_do_ponto_de_entrada</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
+(&quot;tarefa que toca a fiação exige evidência do ponto de entrada real&quot; e &quot;tarefa
+que não toca entrypoint nem fiação não ganha a seção&quot;)</li>
+<li><strong>Origem:</strong> AT-483 (TP-01 de 10/10: o <code>server.ts</code> nunca chamava a migração da
+tabela <code>links</code> e <code>/:code</code> sombreava <code>GET /links</code>; os 53 testes passavam porque
+cada um montava o próprio banco e app)</li>
+</ul>
+<h3 id="rn-814">RN-814 — O parecer do QA lista todas as lacunas numa volta</h3>
+<ul>
+<li><strong>Regra:</strong> extensão do recorte da <a href="#rn-765">RN-765</a>: o gate de QA lista em
+<code>itens</code> TODAS as lacunas da tarefa que achar na volta, de uma vez, nunca uma
+por volta — cada volta é uma correção paga e um passo do teto do ciclo. O
+prompt anterior só mandava listar &quot;quais regras faltam&quot;, e lacuna que não era
+regra descoberta ficava para a volta seguinte. Régua de prompt.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:20</code> (<code>texto</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code> (&quot;o
+recorte pede todas as lacunas numa volta só&quot;)</li>
+<li><strong>Origem:</strong> AT-487 (TP-01 de 10/10, tarefa <code>c7ced5a2</code>: duas reprovações por
+duas lacunas que já existiam na entrega original)</li>
+</ul>
+<h3 id="rn-817">RN-817 — O QA roda a suíte em estado limpo, e teste pulado não é verde</h3>
+<ul>
+<li><strong>Regra:</strong> extensão do recorte da <a href="#rn-765">RN-765</a>, para toda tarefa. Antes
+de rodar a suíte, o gate de QA encerra o que o PRÓPRIO projeto deixou de pé
+(servidor do <code>start</code> escutando numa porta do projeto), só processos daquela
+pasta, nunca de fora. Teste que sobe processo deve encerrar o GRUPO (ou
+subir <code>node</code> direto, não via <code>npm</code>); o que não encerra trava a suíte num
+clone limpo e é lacuna em <code>itens</code>. Teste que se PULOU por ambiente (porta
+ocupada, ferramenta ausente) não conta como verde: vai ao <code>resumo</code> como
+observação. É instrução do recorte, não passo do harness: quem roda a suíte
+é o próprio QA pelo <code>terminal</code>, que já passa pela política e pelo
+roteamento de container dos três modos — um <code>pkill</code> no harness precisaria
+de um segundo caminho de execução por modo. Régua de prompt; o contrato dos
+gates não muda.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:178</code>
+(<code>secao_do_ambiente_limpo</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
+(&quot;RN-817: pede ambiente limpo, encerrar o grupo e pulado como observação&quot;)</li>
+<li><strong>Origem:</strong> AT-496 (TP-01 de 10/10: <code>npm test</code> travava num clone limpo — o
+teste matava o <code>npm</code> e o <code>node</code> neto ficava na 3000 —, e no container o QA
+viu exit 0 porque o teste se pulava com a porta ocupada por um servidor
+órfão)</li>
+</ul>
+<h3 id="rn-818">RN-818 — A evidência do ponto de entrada é a que o ambiente do dev produz</h3>
+<ul>
+<li><strong>Regra:</strong> extensão da <a href="#rn-813">RN-813</a>. A seção &quot;Ponto de entrada&quot; diz o
+que CONTA como evidência no ambiente do dev — subir o processo do
+entrypoint na pasta do projeto, rodar o script no container do projeto,
+bater numa rota do processo de pé — e o que NÃO cabe ali: construir imagem
+Docker, <code>docker compose</code>, rede externa. Exigência desse segundo tipo nunca
+vai para <code>itens</code>; vai ao <code>resumo</code> como observação. Régua de prompt.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:121</code>
+(<code>secao_do_ponto_de_entrada</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
+(&quot;RN-818: com ponto de entrada diz o que conta e o que não cabe&quot; e &quot;RN-818:
+sem ponto de entrada não traz a régua de evidência&quot;)</li>
+<li><strong>Origem:</strong> AT-492 (TP-01 de 10/10, task <code>c708f8b2</code>: a 4ª volta exigiu
+construir a imagem a partir do Dockerfile, o container do projeto não tem
+Docker, e o ciclo esgotou em bloqueio <code>politica</code>)</li>
+</ul>
+<h3 id="rn-819">RN-819 — O QA varre regra por regra antes de emitir</h3>
+<ul>
+<li><strong>Regra:</strong> extensão da <a href="#rn-814">RN-814</a>. Além de listar todas as lacunas, o
+recorte pede uma VARREDURA POR REGRA antes de emitir: percorrer cada regra
+de negócio e cada critério da tarefa, um por um, apontando onde está a prova
+ou que ela falta, e só emitir depois de passar por todas. &quot;Liste todas&quot;
+sozinho não segurou lacuna pré-existente aparecendo na volta seguinte.
+Régua de prompt.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:20</code> (<code>texto</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
+(&quot;RN-819: pede varredura por regra antes de emitir&quot;)</li>
+<li><strong>Origem:</strong> AT-490 (TP-01 de 10/10: tarefas 2 e 11 trouxeram na 2ª volta
+lacuna que já estava na entrega)</li>
+</ul>
+<h3 id="rn-823">RN-823 — O ciclo de gate que o reinício do engine matou é retomado no boot, e o fio diz isso</h3>
+<ul>
+<li><strong>Regra:</strong> no BOOT do engine, a linha <code>in_progress</code> de <code>gate_states</code>
+RECENTE (abaixo de <code>gate_rescue_stale_after_seconds</code>, 15 min, e por isso
+invisível para o tick) sem processo vivo NESTE nó nem nos OUTROS nós do
+cluster é órfã do reinício, não um ciclo lento: o boot a retoma na hora
+(<code>Dispatcher.run_qa</code>/<code>run_secops</code>), sem esperar o limiar. &quot;Vivo&quot; é a régua da
+<a href="parte-04.html#rn-722">RN-722</a> (a task em voo no lead), perguntada também aos outros nós
+por <code>:erpc.multicall</code> — nó que não responde conta como VIVO, a régua do
+<code>TurnoOrfao</code> (<a href="parte-03.html#rn-586">RN-586</a>). Valem as guardas de sempre: ação pendente
+de ator do gate não reinicia, e dev dono ausente só apaga a linha. Antes de
+redespachar, o boot grava <code>gate.interrupted</code> no log da sessão (<code>taskId</code>,
+<code>gate</code>, <code>ultimaAtividadeEm</code>, <code>retomadoEm</code>), e o fio o mostra como aviso, nos
+dois idiomas. O tick periódico NÃO muda: fora do boot, linha recente é ciclo
+em voo. Resíduo declarado: nó que ainda não entrou no cluster no instante do
+boot não é perguntado, e o pior desfecho é o de sempre (trabalho duplicado e
+barato; o segundo veredito é recusado pela api).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/gate_rescuer.ex:231</code> (<code>run_boot</code>),
+<code>:240</code> (<code>interrompido_no_boot</code>),
+<code>apps/web/src/routes/RetomarGateEstacionado.helpers.ts:21</code> (<code>cicloInterrompido</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/gate_rescuer_test.exs</code> (&quot;boot com
+ciclo RECENTE órfão do reinício: grava gate.interrupted e retoma já
+(RN-823)&quot;; falhas: &quot;boot com ciclo recente esperando ação PENDENTE do gate:
+não reinicia nem grava (RN-823)&quot; e o processo local vivo intocado),
+<code>apps/web/src/routes/RetomarGateEstacionado.test.tsx</code> (&quot;cicloInterrompido
+(RN-823)&quot;)</li>
+<li><strong>Origem:</strong> AT-495 (TP-01 de 10/10: o reinício das 18:51 matou o ciclo de QA
+da tarefa 10, e o dev ficou <code>awaiting_gate</code> 15 min sem tela nenhuma dizer)</li>
+</ul>
+<p><strong>Revisada pela <a href="parte-06.html#rn-923">RN-923</a> (<a href="../../adr/0226-diario-vivo-e-retomada-dos-agentes.html">ADR 0226</a>).</strong> A retomada do boot conta como a automática do ciclo (<code>auto_resumes</code>): se o ciclo já usou a sua, o boot o estaciona em vez de redespachá-lo, e o subagente retomado leva o plano do último <code>agent.turn_resumed</code>.</p>
+<h3 id="rn-832">RN-832 — O dev agent sabe que <code>report_done</code> faz commit, push e PR, e que teste novo entra no script <code>test</code></h3>
+<ul>
+<li><strong>Regra:</strong> o dev agent não tem nem precisa de <code>git_commit</code>, <code>git_push</code> ou
+<code>pr_open</code>: commit, push e PR acontecem quando ele chama <code>report_done</code>. A
+descrição de <code>report_done</code>, a de <code>report_blocked</code> (&quot;falta ferramenta de git&quot;
+não é motivo de bloqueio), o kickoff do dev agent e a mensagem de ambiente
+(<a href="parte-04.html#rn-706">RN-706</a>) dizem isso — a de ambiente mandava, até aqui, usar as
+ações tipadas de git, que o dev não tem. O kickoff e o ambiente dizem também
+que, se o script <code>test</code> do <code>package.json</code> lista arquivos um a um, todo
+arquivo de teste novo entra nele. Só texto: nenhuma regra nova de código, e
+o Jev segue sem piso para dev agents (<a href="../api.html#rn-758">RN-758</a>) — até a <a href="../api.html#rn-839">RN-839</a>, que pôs <code>report_done</code>/<code>report_blocked</code> no piso deles.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/tools/report_done.ex:16</code> (<code>spec</code>),
+<code>apps/engine/lib/engine/dev/tools/report_blocked.ex:12</code> (<code>spec</code>),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:666</code> (<code>initial_message</code>),
+<code>apps/engine/lib/engine/harness/ambiente_do_agente.ex:102</code> (<code>montar</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/report_done_instrucao_test.exs</code>
+(&quot;caminho feliz: report_done, kickoff e ambiente carregam as duas
+instruções&quot;; falha: &quot;o ambiente não manda mais usar as ações tipadas de git&quot;)</li>
+<li><strong>Origem:</strong> AT-499 (TP-01, 11ª: tarefa bloqueada com a suíte verde por
+&quot;git_commit não existe&quot;; quatro voltas de QA por teste fora do script <code>test</code>)</li>
+</ul>
+<h3 id="rn-845">RN-845 — A leitura das ADRs propostas diz se a PR já foi mergeada</h3>
+<ul>
+<li><strong>Regra:</strong> na linha de uma ADR <code>executed</code>, <code>listar_adrs_propostas</code>
+(<a href="#rn-772">RN-772</a>) não afirma mais &quot;PR aberta&quot; pelo status da AÇÃO: cruza o
+<code>pullRequestId</code> do resultado com o <code>git_merge</code> EXECUTADO do mesmo projeto
+(a ação pela qual todo merge passa, <a href="../api.html#rn-418">RN-418</a>) e diz &quot;PR MERGEADA em
+&lt;data da decisão&gt;&quot; ou &quot;PR aberta (nenhum merge dela registrado no Brabo)&quot;.
+Resultado sem id de PR, ou consulta de merge que falha, vira &quot;estado da PR:
+NÃO CONSEGUI LER&quot; — nunca &quot;aberta&quot;. Contida (ADR 0060): uma consulta a mais,
+só sobre os ids listados, no mesmo Postgres. Limite declarado: PR fechada
+sem merge FORA do Brabo (no provider remoto) não é vista, e segue lida como
+aberta — perguntar ao provider seria HTTP no laço do agente.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tools/listar_adrs_propostas.ex:88</code>
+(<code>cruzar_com_merges</code>), <code>:102</code> (<code>merges_por_pr</code>), <code>:155</code> (<code>estado_da_pr</code>).</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tools/listar_adrs_propostas_test.exs</code>
+(&quot;PR mergeada aparece como mergeada…&quot;, &quot;estado da PR ilegível diz que não
+leu, nunca aberta&quot;).</li>
+<li><strong>Origem:</strong> AT-514 (TP-01, 11/10: o Arquiteto disse &quot;aberta como PR&quot; 30 s
+depois do merge).</li>
+</ul>
+<h3 id="rn-846">RN-846 — A rota HTTP vai ao README e o erro de entrada é do projeto</h3>
+<ul>
+<li><strong>Regra:</strong> extensão da <a href="#rn-819">RN-819</a>. O kickoff do dev agent de
+execução pede que rota HTTP criada ou mudada entre no README (método,
+caminho, corpo, respostas e códigos) e que erro de entrada (JSON malformado,
+campo inválido) responda com mensagem própria no formato do projeto, nunca a
+mensagem crua da biblioteca. O recorte do QA confere as duas coisas na
+varredura por regra, e o que faltar vai a <code>itens</code>. Régua de prompt.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:666</code>
+(<code>initial_message</code>) e <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:20</code>
+(<code>texto</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/report_done_instrucao_test.exs</code>
+(&quot;RN-846: kickoff pede a rota no README e erro de entrada próprio&quot;) e
+<code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code> (&quot;RN-846: confere
+rota no README e erro de entrada próprio&quot;)</li>
+<li><strong>Origem:</strong> AT-515 (TP-01, 12ª: o README não documentava a API, e JSON
+malformado respondia 400 com &quot;Expected property name…&quot; do parser)</li>
+</ul>
+<h3 id="rn-849">RN-849 — O turno de prontidão da arquitetura abre com o estado atual das ADRs</h3>
+<ul>
+<li><strong>Regra:</strong> extensão da <a href="#rn-845">RN-845</a>. Quando o usuário confirma que a
+arquitetura está pronta, o servidor do Arquiteto LÊ o estado das ADRs pelo
+mesmo código de <code>listar_adrs_propostas</code> (Postgres local, sem HTTP, mesmo teto
+de 20 linhas) e o põe na mensagem de abertura desse turno, com a instrução de
+não afirmar estado de ADR diferente. Leitura que falha diz &quot;NÃO CONSEGUI LER&quot;
+e manda dizer que não sabe — nunca &quot;pendente&quot;.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tools/listar_adrs_propostas.ex:50</code>
+(<code>contexto_de_prontidao</code>), <code>apps/engine/lib/engine/agents/arquiteto_server.ex:223</code>
+(<code>contexto_de_prontidao</code>).</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tools/listar_adrs_propostas_test.exs</code>
+(&quot;contexto_de_prontidao/2 (RN-849)&quot;).</li>
+<li><strong>Origem:</strong> AT-519 (TP-01: no turno de prontidão o Arquiteto disse &quot;pendente
+de aprovação&quot; sobre ADR já mergeada, repetindo a leitura do turno anterior).</li>
+</ul>
+<h3 id="rn-850">RN-850 — A rota entra na seção &quot;Rotas HTTP&quot; e o README não leva nota de processo</h3>
+<ul>
+<li><strong>Regra:</strong> extensão da <a href="#rn-846">RN-846</a>. O kickoff do dev agent pede que a
+rota entre DENTRO da seção &quot;Rotas HTTP&quot; do README (criada antes de &quot;Testes&quot;
+se faltar), nunca no fim do arquivo, e que o README, que é do usuário, não
+ganhe nota de processo nem instrução para agentes. O recorte do QA confere
+as duas coisas. Régua de prompt.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:666</code>
+(<code>initial_message</code>) e <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:20</code>
+(<code>texto</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/report_done_instrucao_test.exs</code>
+(&quot;RN-850: a rota vai dentro de Rotas HTTP e o README não leva nota de
+processo&quot;) e <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
+(&quot;RN-850: confere a seção Rotas HTTP e a ausência de nota de processo&quot;)</li>
+<li><strong>Origem:</strong> AT-520 (TP-01: cada tarefa acrescentou rotas no fim do README,
+depois de &quot;Testes&quot;, e sobrou um parágrafo de processo para agentes)</li>
+</ul>
+<h3 id="rn-851">RN-851 — O compose da Infra sobe o APP na máquina do usuário, e a PR declara como rodá-lo</h3>
+<ul>
+<li><strong>Regra:</strong> o kickoff do Infra Lead pede o compose que SOBE O APP (não só
+ambiente de dev): <code>build</code> do Dockerfile de cada módulo com <code>FROM</code> = a imagem
+decidida (<code>projectImage</code> do contexto da Infra; sem ela, a candidata do
+roteamento, dito no README), porta <code>${APP_PORT:-8080}:&lt;porta interna&gt;</code>, volume
+para dados persistentes, <code>.env.example</code> commitado (nunca <code>.env</code>) e a seção
+&quot;Rodar na sua máquina&quot; no README. O container de TRABALHO dos agentes segue
+subindo pelo broker, e não há deploy. <code>propose_infra_pr</code> ganha o campo
+OBRIGATÓRIO <code>run</code> (<code>command</code> até 300 caracteres; <code>urls</code> de 1 a 5, <code>label</code> até
+60, <code>kind</code> em <code>api_docs | web</code>, <code>url</code> começando com <code>http://localhost:</code> ou
+<code>http://127.0.0.1:</code>; <code>envExample</code> booleano), validado no engine ANTES do HALT
+com recusa nomeada que entra no laço (RN-163) e repassado no
+payload de <code>open_infra_pr</code>. Decisão no <a href="../../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213</a>.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/infra/instrucoes_de_execucao.ex:27</code>
+(<code>validar</code>), <code>apps/engine/lib/engine/infra/infra_lead_server.ex:1414</code>
+(<code>build_kickoff</code>) e <code>:1327</code> (<code>abrir_pr</code>), e
+<code>apps/engine/lib/engine/infra/tools/propose_infra_pr.ex:24</code> (<code>spec</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/infra/infra_lead_server_test.exs</code>
+(describe &quot;o compose sobe o app e a PR leva <code>run</code> (RN-851)&quot;)</li>
+<li><strong>Origem:</strong> AT-517 (o entregável não tinha como ser rodado pelo usuário)</li>
+</ul>
+<h3 id="rn-853">RN-853 — O dev expõe OpenAPI e Swagger quando a tarefa toca rotas</h3>
+<ul>
+<li><strong>Regra:</strong> parte do ADR 0213. Quando a
+tarefa toca ponto de entrada ou rotas (a MESMA régua do recorte do QA,
+<code>toca_ponto_de_entrada?</code>, nunca uma cópia), o kickoff do dev ganha a
+cláusula: módulo que expõe HTTP serve <code>/openapi.json</code> (OpenAPI 3) e <code>/docs</code>
+(UI Swagger); sem rede ou sem pacote, <code>/docs</code> é página HTML que carrega o
+swagger-ui de CDN; módulo web serve a página inicial; a URL entra na seção
+&quot;Rodar na sua máquina&quot; do README. Tarefa que não toca rotas não paga a
+cláusula (a mensagem é fixada e volta a cada iteração).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:698</code>
+(<code>clausula_de_openapi</code>),
+<code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:113</code>
+(<code>toca_ponto_de_entrada?</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/report_done_instrucao_test.exs</code>
+(&quot;RN-853: tarefa que toca rotas pede /openapi.json e /docs&quot;; falha: &quot;RN-853
+falha: tarefa sem rota nem entrypoint não paga a cláusula&quot;)</li>
+<li><strong>Origem:</strong> AT-517</li>
+</ul>
+<h3 id="rn-854">RN-854 — O QA prova <code>/openapi.json</code> e <code>/docs</code> dentro do container</h3>
+<ul>
+<li><strong>Regra:</strong> parte do ADR 0213. Na seção
+de ponto de entrada do recorte (<a href="#rn-813">RN-813</a>), o QA sobe o app pelo
+comando do README em background DENTRO do container, bate em
+<code>localhost:&lt;porta interna&gt;/openapi.json</code> e <code>/docs</code> (<code>curl</code>, <code>wget</code> ou
+<code>node -e fetch</code>) e encerra o grupo de processos (<a href="#rn-817">RN-817</a>). Falha
+vai a <code>itens</code>; o <code>docker compose up</code> real fica no <code>resumo</code> como &quot;provado só
+na máquina do usuário&quot;.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:121</code>
+(<code>secao_do_ponto_de_entrada</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
+(&quot;tarefa que toca rotas pede /openapi.json e /docs, compose em resumo&quot;;
+falha: &quot;falha: tarefa sem rota não recebe a seção&quot;)</li>
+<li><strong>Origem:</strong> AT-517</li>
+</ul>
+<h3 id="rn-862">RN-862 — A pergunta em aberto do lado do engine: ferramenta, veredito e decisão no contexto</h3>
+<ul>
+<li><strong>Regra:</strong> o Criativo, o PO, o Arquiteto e o Dev Lead declaram toda dúvida
+deixada para o usuário com <code>declare_open_question</code> (<code>pergunta</code> até 500,
+<code>sugestao</code> até 300 opcional, <code>afeta: {regras, historias, tarefas}</code>), que
+grava <code>artifact.open_question</code> com <code>questionId</code> (uuid), <code>autor</code> e
+<code>sessionId</code>; payload inválido é recusa nomeada e não grava. A instrução é UMA
+frase central, no texto do fluxo dos quatro (RN-711), nunca por servidor. No
+gate de QA, requisito &quot;não confirmado pelo usuário&quot; (ou contradito por decisão
+vigente) é <code>needs_user_decision</code>, nunca <code>changes_requested</code>:
+<code>emit_qa_verdict</code> o aceita só com <code>pergunta</code> ou <code>openQuestionId</code>, o QA Lead o
+consolida acima de <code>approved</code>, o veredito vai à api com a pergunta e o ciclo
+fica ESTACIONADO (ADR 0207, <code>gate.rescue_parked</code>, sem resgate automático)
+até a api pedir a retomada pela rota da RN-724. As <code>decisoes</code> do dev-context
+entram no kickoff do dev e no recorte do QA como &quot;Decisões registradas
+para esta tarefa/módulo — vencem RF/DoR quando conflitam&quot; (<code>pergunta → decisao</code>); vazio não escreve
+nada. A pergunta gravada conta no fecho do turno (RN-731), e o PO passa
+<code>question_id</code> em <code>update_story</code>/<code>complete_story</code> quando corrige a história a
+partir de uma resposta (<a href="../../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214</a>).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tools/declare_open_question.ex:54</code> (<code>run</code>),
+<code>apps/engine/lib/engine/harness/fluxo_do_time.ex:116</code> (<code>frase_da_pergunta</code>),
+<code>apps/engine/lib/engine/gates/tools/emit_qa_verdict.ex:81</code> (<code>run</code>),
+<code>apps/engine/lib/engine/gates/qa_lead.ex:89</code> (<code>consolidar_decisao</code>),
+<code>apps/engine/lib/engine/gates/qa_lead_server.ex:595</code> (<code>estacionar_por_decisao</code>),
+<code>apps/engine/lib/engine/dev/context_builder.ex:121</code> (<code>secao_de_decisoes</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/perguntas_em_aberto_test.exs</code>
+(&quot;válida grava artifact.open_question…&quot;; &quot;inválida é recusa nomeada…&quot;;
+&quot;consolidação: needs_user_decision vence approved&quot;; &quot;o recorte diz a régua…&quot;;
+&quot;ContextBuilder: a história leva as decisões…&quot;),
+<code>apps/engine/test/engine/gates/qa_lead_server_test.exs</code> (&quot;grava a pergunta
+na api, estaciona o ciclo e só o gesto humano o retoma&quot;)</li>
+<li><strong>Origem:</strong> AT-521, <a href="../../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214</a></li>
+</ul>
+<h3 id="rn-863">RN-863 — <code>api_docs</code> é sempre <code>/docs</code>, toda rota entra no OpenAPI, e o QA reprova a que falta</h3>
+<ul>
+<li><strong>Regra:</strong> módulo HTTP declara em <code>run.urls</code> SEMPRE <code>/docs</code> (a UI Swagger,
+<code>kind: &quot;api_docs&quot;</code>) mesmo antes de existir, e módulo web a página inicial —
+nunca uma rota de negócio; o kickoff da Infra diz isso no passo do README
+(estende a RN-851). A validação do <code>run</code> recusa, nomeada e com a MESMA régua
+nos dois lados, <code>api_docs</code> cuja URL não termina em <code>/docs</code> (estende a
+RN-852). A cláusula do dev diz que TODA rota HTTP criada ou mudada na tarefa
+entra no <code>/openapi.json</code> — path com método, corpo e respostas (estende a
+RN-853). No recorte do QA, cada rota da seção &quot;Rotas HTTP&quot; do README precisa
+estar em <code>paths</code> do <code>/openapi.json</code> servido; rota faltando é item que
+reprova, nunca observação (estende a RN-854).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/infra/instrucoes_de_execucao.ex:60</code> (<code>url</code>),
+<code>apps/api/src/domain/infra/run-instructions.ts:77</code> (<code>recusaDoRun</code>),
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:1414</code> (<code>build_kickoff</code>),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:698</code> (<code>clausula_de_openapi</code>),
+<code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:20</code> (<code>texto</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/infra/infra_lead_server_test.exs</code>
+(&quot;run api_docs em rota de negócio é recusado com motivo, sem propor&quot;),
+<code>apps/api/test/application/use-cases/execution/get-run-instructions.use-case.spec.ts</code>
+(&quot;recusaDoRun (RN-852)&quot;),
+<code>apps/engine/test/engine/dev/report_done_instrucao_test.exs</code> (&quot;RN-853: …&quot;),
+<code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code> (&quot;RN-854: …&quot;)</li>
+<li><strong>Origem:</strong> AT-524, <a href="../../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213</a></li>
+</ul>
+<h3 id="rn-864">RN-864 — Falha passageira de rede volta sozinha em até 3 tentativas, e o dev pausa</h3>
+<ul>
+<li><strong>Regra:</strong> a task bloqueada pelo dev agent com origem <code>infra</code> por falha
+PASSAGEIRA de rede/provedor — lista de permitidos explícita: DNS
+(<code>EAI_AGAIN</code>, <code>ENOTFOUND</code>, <code>getaddrinfo</code>), <code>ECONNRESET</code>, <code>ETIMEDOUT</code>,
+<code>aborted</code>, HTTP 5xx/429 do provedor (códigos <code>rate_limit</code>/<code>upstream</code>,
+<code>connection</code>/<code>timeout</code>) — é RETOMADA sozinha até 3 vezes, depois de 1, 3 e
+10 min (decisão do dono), por um job Oban que chama o MESMO desbloqueio do
+humano (<code>UnblockTaskUseCase</code>, pela rota interna <code>.../tasks/:taskId/unblock</code>,
+ator <code>system</code>, no-op se a task já não está bloqueada). O motivo do bloqueio
+diz qual retomada foi agendada; depois da 3ª retomada a falha seguinte fica
+bloqueada como antes, e o motivo diz que as 3 já foram tentadas. E o agente
+PAUSA 1 min em vez de pegar a próxima task (o wake é ignorado durante a
+pausa). Crédito esgotado (402, RN-726/730) e erro de código NÃO entram:
+bloqueiam na hora. O contador de retomadas é só em memória: reiniciar o
+engine o zera. Vale também para a correção pós-gate (AT-621): o 503 do
+provider numa correção segue o mesmo caminho do laço principal (crédito
+RN-726 + retomada), com o motivo marcado &quot;(correção)&quot;.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:843</code>
+(<code>handle_correction_outcome</code>), <code>apps/engine/lib/engine/agents/falha_de_turno.ex:140</code>
+(<code>passageira?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1075</code>
+(<code>bloquear_passageira</code>), <code>apps/engine/lib/engine/dev/agent_io.ex:302</code>
+(<code>pausar_por_rede</code>), <code>apps/engine/lib/engine/workers/retomada_de_tarefa_worker.ex:33</code>
+(<code>agendar</code>), <code>apps/api/src/application/use-cases/execution/unblock-task.use-case.ts:33</code>
+(<code>ator</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/dev_agent_server_test.exs</code> (&quot;falha
+passageira: agenda a retomada, pausa e não queima a fila&quot;, &quot;fim da pausa
+volta a reivindicar&quot;; falha: &quot;falha passageira depois de 3 retomadas fica
+bloqueada pedindo o clique&quot;, &quot;402 não agenda retomada&quot;; correção: &quot;correção
+com 503: infra, retomada agendada, pausa e disjuntor intacto&quot;, &quot;correção sem
+crédito: pausa por crédito, sem retomada&quot;, &quot;correção com erro não
+passageiro: bloqueia na hora, sem retomada&quot;),
+<code>apps/engine/test/engine/workers/retomada_de_tarefa_worker_test.exs</code></li>
+<li><strong>Origem:</strong> AT-525</li>
+</ul>
+<h3 id="rn-865">RN-865 — Endpoint e verbo HTTP com caminho também ligam a conferência do OpenAPI, e ela cobre as rotas do código</h3>
+<ul>
+<li><strong>Regra:</strong> a régua única de &quot;a tarefa toca ponto de entrada/rotas&quot;
+(<code>toca_ponto_de_entrada?</code>, usada pelo recorte do QA e pela cláusula do dev da
+RN-853) casa também &quot;endpoint&quot; e verbo HTTP seguido de caminho
+(<code>POST /links</code>). Sem isso, tarefa descrita como &quot;Endpoint protegido…&quot; não
+recebia nem a cláusula do OpenAPI (dev) nem a conferência do <code>/openapi.json</code>
+(QA) — foi assim que <code>POST /links</code> e <code>GET /panel</code> ficaram fora do OpenAPI
+com as duas tarefas aprovadas no TP-01. A conferência do QA passa a exigir em
+<code>paths</code> do <code>/openapi.json</code> servido, além das rotas da seção &quot;Rotas HTTP&quot; do
+README, cada rota que o CÓDIGO registra; a que falta é item que reprova
+(estende a RN-863).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:103</code>
+(<code>@ponto_de_entrada</code>), <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:114</code>
+(<code>toca_ponto_de_entrada?</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
+(&quot;RN-865: tarefa que diz só endpoint ou verbo com caminho recebe a seção&quot;;
+falha: &quot;falha: tarefa sem rota não recebe a seção&quot;)</li>
+<li><strong>Origem:</strong> AT-527</li>
+</ul>
+<h3 id="rn-868">RN-868 — O tick do resgate de gates é uma corrente só</h3>
+<ul>
+<li><strong>Regra:</strong> o <code>GateRescueSchedulerWorker</code> reagenda o próprio sucessor com a
+MESMA unicidade do <code>kickoff/0</code> (estados <code>available</code>/<code>scheduled</code>/<code>retryable</code>,
+sem <code>executing</code>, janela de dois intervalos). Antes só o <code>kickoff/0</code> era
+único: o job em execução não conta, então o kickoff do boot com o tick
+anterior em voo, ou um retry que re-roda o <code>perform/1</code>, abria uma SEGUNDA
+corrente, e elas nunca se fundiam. Medido no uso real (14/10): 11 jobs
+agendados ao mesmo tempo e a linha &quot;espera decisão humana&quot; da RN-722 11
+vezes por tick para UMA linha de <code>gate_states</code>. Não era defeito de dado. Com
+a unicidade no reagendamento as correntes duplicadas colapsam numa só no
+tick seguinte.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/workers/gate_rescue_scheduler_worker.ex:42</code>
+(<code>unicidade</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/workers/gate_rescue_scheduler_worker_test.exs</code>
+(&quot;o tick se reagenda e mantém a corrente viva&quot;; falha: &quot;com um sucessor já
+agendado, o tick não abre uma segunda corrente&quot;)</li>
+<li><strong>Origem:</strong> AT-529</li>
+</ul>
+<h3 id="rn-874">RN-874 — O PO recebe no turno as decisões do usuário e as perguntas abertas do projeto</h3>
+<ul>
+<li><strong>Regra:</strong> todo turno do PO leva, como mensagem <code>system</code> EFÊMERA
+acrescentada pela fachada <code>EngineApiClient</code> logo depois do fluxo do time
+(RN-711) — nunca em <code>state.messages</code> nem no prompt do servidor —, as
+decisões do usuário (<code>artifact.decision_record</code>, <code>choice</code> e <code>context</code>) e as
+perguntas AINDA abertas do projeto (<code>artifact.open_question</code> sem
+<code>open_question.answered</code> com o mesmo <code>questionId</code>), de TODAS as sessões. O
+texto manda escrever a RESPOSTA decidida na história, regra, DoR, DoD e
+tarefa, nunca &quot;pergunta em aberto N&quot;; pergunta ainda aberta é citada pelo
+<code>questionId</code>, sem inventar resposta. A leitura é LOCAL (Postgres direto, sem
+HTTP no laço), dos 200 eventos mais recentes desses tipos, com teto de 10
+decisões, 10 perguntas, 240 caracteres por item e 3 000 no texto. As
+perguntas abertas vêm ANTES das decisões e o corte é por linha inteira
+(revisado pela <a href="parte-06.html#rn-1058">RN-1058</a>). Sem
+decisão nem pergunta aberta, ou com a leitura falhando, o turno segue sem a
+mensagem, nunca cai. Só o <code>po</code> recebe. Cada decisão leva o seu
+<code>questionId</code> e as histórias de <code>afeta.historias</code>, para o PO citar o id em
+<code>complete_story</code>/<code>update_story</code> e corrigir uma história <code>ready</code> (RN-859, AT-752).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/decisoes_do_projeto.ex:34</code>
+(<code>anexar</code>), <code>:49</code> (<code>texto</code>),
+<code>apps/engine/lib/engine/session_events/event.ex:224</code>
+(<code>list_types_for_project</code>),
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex:753</code>
+(<code>DecisoesDoProjeto</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/decisoes_do_projeto_test.exs</code>
+(&quot;o turno do PO leva a decisão e só a pergunta AINDA aberta&quot;, &quot;a decisão sai
+com o questionId e as histórias de afeta&quot;, &quot;custo de
+entrada tem teto&quot;; falha: &quot;sem decisões nem perguntas não acrescenta nada&quot;,
+&quot;leitura que falha deixa o turno sem a mensagem, sem queda&quot;)</li>
+</ul>
+<h3 id="rn-876">RN-876 — O <code>needs_user_decision</code> recusado pela api volta ao QA, e só o aceite estaciona o gate</h3>
+<ul>
+<li><strong>Regra:</strong> o gate de QA só ESTACIONA (<code>gate.rescue_parked</code>) quando a api
+aceita o veredito <code>needs_user_decision</code> com <code>nextAction: &quot;await_user&quot;</code>. Se a
+api RECUSA (400, 404, ou o 409 <code>pergunta_ja_respondida</code>), a recusa volta ao
+laço da QA de Automação como mensagem nova (RN-163: erro é entrada do laço),
+retomando o MESMO contexto em que ela emitiu — no 409, com a decisão já
+tomada para o QA aplicar em vez de perguntar de novo. As outras delegações
+não rodam de novo. A volta conta no teto de iterações do próprio laço;
+esgotado, a tarefa é bloqueada com o motivo e a origem <code>modelo</code> (RN-059),
+nunca estacionada em silêncio. Antes, o retorno da api era descartado e o
+gate estacionava sem pergunta no fio (medido: <code>openQuestionId: &quot;1&quot;</code>, 400 do
+<code>@IsUUID</code>). A ferramenta <code>emit_qa_verdict</code> recusa, DENTRO do laço e antes da
+api, <code>openQuestionId</code> que não é uuid.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/qa_lead_server.ex:601</code>
+(<code>devolver_ao_qa</code>), <code>apps/engine/lib/engine/gates/qa_lead_server.ex:312</code>
+(<code>devolver_ao_qa</code>), <code>apps/engine/lib/engine/gates/qa_lead_server.ex:697</code>
+(<code>texto_da_recusa</code>), <code>apps/engine/lib/engine/gates/qa_automacao_agent.ex:186</code>
+(<code>devolver</code>), <code>apps/engine/lib/engine/gates/tools/emit_qa_verdict.ex:75</code>
+(<code>uuid</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/qa_lead_server_test.exs</code> (&quot;400:
+nada estaciona, o QA recebe o motivo e uma nova volta acontece&quot;; &quot;409 no
+laço: a volta seguinte do QA lê a decisão&quot;; falha: &quot;teto esgotado depois da
+recusa: bloqueio narrado, nunca estacionamento&quot;),
+<code>apps/engine/test/engine/harness/perguntas_em_aberto_test.exs</code> (&quot;AT-526
+(RN-876): openQuestionId que não é uuid é recusa nomeada; uuid passa&quot;)</li>
+<li><strong>Origem:</strong> AT-526</li>
+</ul>
+<h3 id="rn-877">RN-877 — O recorte do QA manda conferir as decisões antes de pedir decisão</h3>
+<ul>
+<li><strong>Regra:</strong> a instrução do recorte do QA diz que, antes de
+<code>needs_user_decision</code>, ele confere as decisões listadas; requisito que uma
+delas já responde não é pergunta e a decisão se aplica. <code>openQuestionId</code> só
+com o uuid de uma pergunta ABERTA; sem ele, a pergunta nova vai em
+<code>pergunta</code>/<code>sugestao</code>. É lembrete de leitura: não muda a régua do veredito.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:20</code> (<code>texto</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
+(&quot;AT-526 (RN-877): manda conferir as decisões antes de needs_user_decision&quot;;
+a falha da instrução é coberta pelo teste da RN-876 da ferramenta)</li>
+<li><strong>Origem:</strong> AT-526</li>
+</ul>
+<h3 id="rn-878">RN-878 — O idioma do agente de execução vale desde a primeira frase</h3>
+<ul>
+<li><strong>Regra:</strong> nos turnos SEM autor humano dos agentes de execução (<code>dev-*</code>,
+<code>qa-*</code>), a orientação de idioma da RN-622 diz que vale desde a PRIMEIRA
+frase, inclusive a narração antes de cada ferramenta, e perde a ressalva
+&quot;salvo pedido do usuário&quot; (não há usuário no turno). Medido na sessão
+<code>6c68fbc0</code> (projeto pt-BR, <code>anthropic/claude-haiku-5.5</code>): a orientação
+chegava, e mesmo assim a iteração 0 do <code>qa-automacao</code> e do
+<code>dev-encurtador-api</code> abria em inglês (&quot;I'll start by running…&quot;). O caminho
+continua UM (a fachada, RN-622): nada em prompt de servidor,
+<code>agent_instructions</code> ou descrição de ferramenta (RN-667). O teto de 50 tokens
+(AT-169) segue: medido com <code>gpt-tokenizer</code>, <code>pt-BR</code> 32/26, <code>en</code> 19/19 e o
+genérico com código na forma curta no pior caso 30/30 (cl100k/o200k); código
+fora da forma curta cai na orientação de sempre, que já cabia. Turno com
+autor e os conversacionais não mudam. Sem idioma resolvido, nada é
+acrescentado. A eficácia se mede no próximo TP-01.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/idioma_da_resposta.ex:164</code>
+(<code>orientacao_de_execucao</code>), <code>:154</code> (<code>agente_de_execucao?</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/idioma_da_resposta_test.exs</code>
+(&quot;agente de execução: vale desde a primeira frase, dentro do teto&quot;; falha:
+&quot;agente de execução sem idioma resolvido: nada é acrescentado&quot;)</li>
+<li><strong>Origem:</strong> AT-530</li>
+</ul>
+<h3 id="rn-879">RN-879 — URL absoluta do entregável com a porta, e o mesmo <code>code</code> para o mesmo erro</h3>
+<ul>
+<li><strong>Regra:</strong> quando a tarefa toca ponto de entrada ou rotas, a cláusula do dev
+manda que URL absoluta devolvida pela API do entregável (ex.: o link curto)
+venha de <code>PUBLIC_BASE_URL</code> ou do <code>Host</code> da requisição COM a porta — nunca
+<code>http://localhost</code> fixo nem o hostname sem porta —, e que o mesmo caso de
+erro responda o mesmo <code>code</code> em todas as rotas. O recorte do QA confere as
+duas coisas e trata a divergência (ex.: <code>not_found</code> × <code>link_not_found</code>)
+como ITEM. Decisão do dono de 14/10: regra geral.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:698</code> (<code>clausula_de_openapi</code>);
+<code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:122</code> (<code>secao_do_ponto_de_entrada</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/report_done_instrucao_test.exs</code>
+(&quot;RN-879/880: tarefa que toca rotas leva URL com porta, code único e CORS&quot; e
+a falha &quot;RN-879/880 falha: tarefa sem rota não recebe CORS nem PUBLIC_BASE_URL&quot;);
+<code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code> (&quot;RN-879/880: URL,
+code de erro e CORS&quot;)</li>
+<li><strong>Origem:</strong> AT-531</li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/engine/parte-04.html">Engine — parte 4 (desde RN-622)</a><a href="../../business-rules/engine/parte-06.html">Engine — parte 6 (desde RN-880)</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-engine/blob/dev/docs/business-rules/engine/parte-05.md">Editar esta página</a></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#a-anamnese-não-paga-duas-vezes-pela-mesma-janela-e-o-resgate-de-gate-não-reinicia-ciclo-que-espera-alguém-rn-722">A Anamnese não paga duas vezes pela mesma janela, e o resgate de gate não reinicia ciclo que espera alguém (RN-722)</a></li><li class="n3"><a href="#rn-724">RN-724 — O ciclo de gate estacionado volta por um botão no fio, não só pelo terminal do operador</a></li><li class="n3"><a href="#rn-725">RN-725 — Texto com escape literal é decodificado, e a recusa de argumento diz o que chegou</a></li><li class="n3"><a href="#rn-726">RN-726 — Crédito do provedor esgotado pausa o dev agent, com origem infra, sem queimar as tarefas seguintes</a></li><li class="n3"><a href="#rn-731">RN-731 — O fecho do turno diz o que foi gravado com o número do servidor</a></li><li class="n3"><a href="#rn-732">RN-732 — O texto do turno passa pela mesma régua de escape dos argumentos</a></li><li class="n3"><a href="#rn-733">RN-733 — A falha de crédito diz o que fazer, e o reason nunca é a tupla</a></li><li class="n3"><a href="#rn-735">RN-735 — A rede none da imagem do Arquiteto diz que não instala dependências</a></li><li class="n3"><a href="#rn-742">RN-742 — O dev agent não morre calado, e a resposta HTTP tardia não fica na caixa dele</a></li><li class="n3"><a href="#rn-743">RN-743 — Bloquear a task preserva o trabalho do worktree, e a próxima parte dele</a></li><li class="n3"><a href="#rn-744">RN-744 — O dev sabe que o shell é sh e começa vendo o próprio worktree</a></li><li class="n3"><a href="#rn-745">RN-745 — Na resposta cortada, só a chamada incompleta é recusada</a></li><li class="n3"><a href="#rn-746">RN-746 — O fecho do Arquiteto diz o que gravou, e as escritas recusadas são contadas</a></li><li class="n3"><a href="#rn-756">RN-756 — A Anamnese só roda com interação de conteúdo técnico do sujeito; aprovar não conta</a></li><li class="n3"><a href="#rn-757">RN-757 — O terminal auto-aprovado espera o comando, e o teto do comando é 2 min</a></li><li class="n3"><a href="#rn-760">RN-760 — A próxima task do dev agent parte da última branch dele ainda não mergeada</a></li><li class="n3"><a href="#rn-763">RN-763 — Encerrar a sessão de execução para os dev agents e os gates, e &quot;Parar execução&quot; na aba Executores</a></li><li class="n3"><a href="#rn-765">RN-765 — O gate de QA julga a TAREFA, e RF de tarefa irmã é observação</a></li><li class="n3"><a href="#rn-772">RN-772 — O Arquiteto lê o status ATUAL das ADRs que propôs</a></li><li class="n3"><a href="#rn-773">RN-773 — O Arquiteto lê o backlog, e consulta antes de afirmar estado</a></li><li class="n3"><a href="#rn-774">RN-774 — A primeira tarefa de cada módulo tem o dobro do teto por tarefa</a></li><li class="n3"><a href="#rn-778">RN-778 — O dev agent órfão fecha por evento novo no boot</a></li><li class="n3"><a href="#rn-779">RN-779 — O worktree da task (re)pegada parte da dev ATUAL e a integra</a></li><li class="n3"><a href="#rn-780">RN-780 — Resposta só de raciocínio cortada pelo teto é corte, não desistência</a></li><li class="n3"><a href="#rn-781">RN-781 — A mensagem de commit do dev não grava pendência que é do sistema</a></li><li class="n3"><a href="#rn-787">RN-787 — O gate conta o diff da PR contra a dev da origem, e o parecer de QA grava lista</a></li><li class="n3"><a href="#rn-790">RN-790 — O README de como subir o entregável é critério do DoD que o PO escreve</a></li><li class="n3"><a href="#rn-792">RN-792 — Ao declarar o contrato, o Arquiteto recebe as rotas das histórias que o contrato não declara</a></li><li class="n3"><a href="#rn-796">RN-796 — O item do gitleaks diz a regra e o trecho com o segredo mascarado</a></li><li class="n3"><a href="#rn-797">RN-797 — A task cuja branch não tem diff contra a dev fecha como &quot;já na dev&quot;</a></li><li class="n3"><a href="#rn-798">RN-798 — O QA confere os comandos do README tocado pela entrega contra os scripts</a></li><li class="n3"><a href="#rn-805">RN-805 — O plano de teste gravado é o que a ferramenta aceitou</a></li><li class="n3"><a href="#rn-806">RN-806 — Um ciclo de QA por tarefa: pedido anterior ao veredito é descartado</a></li><li class="n3"><a href="#rn-810">RN-810 — Falha de rede passageira do provider é retentada, e o bloqueio dela é infra sem contar no disjuntor</a></li><li class="n3"><a href="#rn-811">RN-811 — O &quot;já na dev&quot; compara com a dev do remoto atualizada</a></li><li class="n3"><a href="#rn-813">RN-813 — Tarefa que toca o ponto de entrada exige evidência de que ele sobe</a></li><li class="n3"><a href="#rn-814">RN-814 — O parecer do QA lista todas as lacunas numa volta</a></li><li class="n3"><a href="#rn-817">RN-817 — O QA roda a suíte em estado limpo, e teste pulado não é verde</a></li><li class="n3"><a href="#rn-818">RN-818 — A evidência do ponto de entrada é a que o ambiente do dev produz</a></li><li class="n3"><a href="#rn-819">RN-819 — O QA varre regra por regra antes de emitir</a></li><li class="n3"><a href="#rn-823">RN-823 — O ciclo de gate que o reinício do engine matou é retomado no boot, e o fio diz isso</a></li><li class="n3"><a href="#rn-832">RN-832 — O dev agent sabe que report_done faz commit, push e PR, e que teste novo entra no script test</a></li><li class="n3"><a href="#rn-845">RN-845 — A leitura das ADRs propostas diz se a PR já foi mergeada</a></li><li class="n3"><a href="#rn-846">RN-846 — A rota HTTP vai ao README e o erro de entrada é do projeto</a></li><li class="n3"><a href="#rn-849">RN-849 — O turno de prontidão da arquitetura abre com o estado atual das ADRs</a></li><li class="n3"><a href="#rn-850">RN-850 — A rota entra na seção &quot;Rotas HTTP&quot; e o README não leva nota de processo</a></li><li class="n3"><a href="#rn-851">RN-851 — O compose da Infra sobe o APP na máquina do usuário, e a PR declara como rodá-lo</a></li><li class="n3"><a href="#rn-853">RN-853 — O dev expõe OpenAPI e Swagger quando a tarefa toca rotas</a></li><li class="n3"><a href="#rn-854">RN-854 — O QA prova /openapi.json e /docs dentro do container</a></li><li class="n3"><a href="#rn-862">RN-862 — A pergunta em aberto do lado do engine: ferramenta, veredito e decisão no contexto</a></li><li class="n3"><a href="#rn-863">RN-863 — api_docs é sempre /docs, toda rota entra no OpenAPI, e o QA reprova a que falta</a></li><li class="n3"><a href="#rn-864">RN-864 — Falha passageira de rede volta sozinha em até 3 tentativas, e o dev pausa</a></li><li class="n3"><a href="#rn-865">RN-865 — Endpoint e verbo HTTP com caminho também ligam a conferência do OpenAPI, e ela cobre as rotas do código</a></li><li class="n3"><a href="#rn-868">RN-868 — O tick do resgate de gates é uma corrente só</a></li><li class="n3"><a href="#rn-874">RN-874 — O PO recebe no turno as decisões do usuário e as perguntas abertas do projeto</a></li><li class="n3"><a href="#rn-876">RN-876 — O needs_user_decision recusado pela api volta ao QA, e só o aceite estaciona o gate</a></li><li class="n3"><a href="#rn-877">RN-877 — O recorte do QA manda conferir as decisões antes de pedir decisão</a></li><li class="n3"><a href="#rn-878">RN-878 — O idioma do agente de execução vale desde a primeira frase</a></li><li class="n3"><a href="#rn-879">RN-879 — URL absoluta do entregável com a porta, e o mesmo code para o mesmo erro</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-pt-BR.json" data-base="../../"></script></body>
+</html>

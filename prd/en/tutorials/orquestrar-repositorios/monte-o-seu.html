@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build your own | Brabo</title>
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../../tutorials/orquestrar-repositorios/monte-o-seu.html">pt-BR</option><option value="../../../en/tutorials/orquestrar-repositorios/monte-o-seu.html" selected>en</option><option value="../../../ru/tutorials/orquestrar-repositorios/monte-o-seu.html">ru</option><option value="../../../zh-Hans/tutorials/orquestrar-repositorios/monte-o-seu.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../../dev/en/tutorials/orquestrar-repositorios/monte-o-seu.html">dev</option><option value="../../../../prd/en/tutorials/orquestrar-repositorios/monte-o-seu.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="../../index.html">Home</a></li><li><a href="../../getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><details open><summary><span>Orchestrate repositories</span></summary><ul><li><a href="../../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><a href="../../tutorials/orquestrar-repositorios/por-que-separar.html">Why split, and when not to</a></li><li><a href="../../tutorials/orquestrar-repositorios/o-mapa.html">The map</a></li><li><a href="../../tutorials/orquestrar-repositorios/como-cada-repo-e-consumido.html">How each repository is consumed</a></li><li><a href="../../tutorials/orquestrar-repositorios/vida-de-uma-mudanca.html">The life of a change</a></li><li><a href="../../tutorials/orquestrar-repositorios/monte-o-seu.html" aria-current="page">Build your own</a></li><li><a href="../../tutorials/orquestrar-repositorios/erros-que-ja-cometemos.html">Mistakes we already made</a></li></ul></details></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Developing Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><a href="../../runbook.html">Operations manual</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Architecture</a></li><li><a href="../../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../../explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Branching policy</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../../explanation/release-do-produto.html">Product release</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="../../explanation/localizacao.html">Localization</a></li><li><a href="../../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="../../glossary.html">Glossary</a></li><li><a href="../../reference/componentes-da-doc.html">Doc components</a></li><li><a href="../../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../../business-rules.html">Business rules</a></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Timeline</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../../explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="build-your-own">Build your own</h1>
+<p><strong>Who it is for:</strong> anyone who decided to split their own product and wants a route.</p>
+<p><strong>After reading, you can:</strong> list the repositories you will create, in order, and say for each what you copy from Brabo and what you adapt.</p>
+<div class="admonicao admonicao-dica" data-admonicao="dica"><p class="admonicao-titulo">Order matters</p>
+<p>Each step depends only on the earlier ones. Do one at a time and <strong>advance only when the step's example PR is green</strong>.</p>
+</div>
+<h2 id="0-before-anything-the-map">0. Before anything: the map</h2>
+<p>Write the roles table from <a href="o-mapa.html">page 2</a> for <strong>your</strong> product, with the consumption mode (<a href="como-cada-repo-e-consumido.html">page 3</a>) on each edge. If some repository has no clear role, do not create it yet.</p>
+<h2 id="1-the-parent-folder-and-clone-everything">1. The parent folder and &quot;clone everything&quot;</h2>
+<ul>
+<li><strong>Copy</strong> the pattern of <a href="https://github.com/viralabs-dev/brabo-workspace#readme"><code>brabo-workspace</code></a>: a folder that holds the clones side by side and a <code>clonar-tudo.sh</code> that clones them all and never deletes anything. The list of repositories is a single variable.</li>
+<li><strong>Adapt</strong> the organization name and the list of repositories.</li>
+<li><strong>Careful:</strong> the script is bash 3.2-compatible (macOS); avoid associative arrays and <code>mapfile</code>.</li>
+<li><strong>Done when:</strong> <code>clonar-tudo.sh</code> on a clean machine leaves all clones in place.</li>
+</ul>
+<h2 id="2-the-ci-repository-with-the-policy">2. The CI repository, with the policy</h2>
+<p>Do this one <strong>first among the code ones</strong>, because all the others call it.</p>
+<ul>
+<li><strong>Copy</strong> <a href="https://github.com/viralabs-dev/brabo-ci#readme"><code>brabo-ci</code></a>, or, without a fork, just call its workflows. The <a href="../adotar.html">adoption guide</a> takes a repository that has never seen Brabo to green <code>pr-police</code> and <code>escada</code>, and the example repository <code>daneiel/brabo-ci-exemplo</code> proves the steps.</li>
+<li><strong>Adapt:</strong> the <code>ci_ref</code> (the SHA of the version you chose), the <code>OWNER_HANDLE</code> variable and, if you want approval by roles, the <code>community</code> mode.</li>
+<li><strong>Do not copy blindly:</strong> the QA gate, <code>dependencias-de-merge</code> (which assumes the 11 repositories) and <code>contracts-alinhado</code> (which assumes the <code>@viralabs-dev/brabo-*</code> packages) are specific to Brabo.</li>
+<li><strong>Done when:</strong> an example PR shows <code>Política de branches</code> and <code>Escada de aprovação</code> green.</li>
+</ul>
+<h2 id="3-the-contracts-repository">3. The contracts repository</h2>
+<ul>
+<li><strong>Copy</strong> the pattern of <a href="https://github.com/viralabs-dev/brabo-contracts#readme"><code>brabo-contracts</code></a>: <code>publishConfig</code> with GitHub Packages, <code>files: [&quot;dist&quot;]</code> and a <code>publish.yml</code> that calls CI's <code>publish-npm.yml</code> from the tag.</li>
+<li><strong>Adapt:</strong> the packages' scope and what goes inside (types, schemas, data files).</li>
+<li><strong>Golden rule:</strong> consumers pin the <strong>exact version</strong>, never a branch.</li>
+<li><strong>Done when:</strong> a test consumer installs the package by tag with <code>pnpm add</code>.</li>
+</ul>
+<h2 id="4-the-code-repositories">4. The code repositories</h2>
+<ul>
+<li><strong>Copy</strong> the README skeleton with eight fixed sections (<a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/README.modelo.md"><code>README.modelo.md</code></a>), the <code>pr-police</code>/<code>escada</code>/<code>tag-release</code> call and the tag stamp.</li>
+<li><strong>Adapt</strong> what each repository publishes (image, binary, package) and the test commands.</li>
+<li><strong>Done when:</strong> each repository publishes a <code>-dev.N</code> tag on every merge into <code>dev</code>.</li>
+</ul>
+<h2 id="5-the-orchestrating-repository">5. The orchestrating repository</h2>
+<ul>
+<li><strong>Copy</strong> the idea of <a href="https://github.com/viralabs-dev/brabo-infra#readme"><code>brabo-infra</code></a>: compose, development scripts and the action that clones the siblings.</li>
+<li><strong>Adapt</strong> the compose services and the action's list of repositories.</li>
+<li><strong>Done when:</strong> <code>docker compose up</code> brings the set up from the published images.</li>
+</ul>
+<h2 id="6-the-quality-repository-with-the-gate">6. The quality repository, with the gate</h2>
+<ul>
+<li><strong>Copy</strong> the pattern of <a href="https://github.com/viralabs-dev/brabo-qa#readme"><code>brabo-qa</code></a>: the E2E that runs <strong>by digest</strong>, the job that creates the App token only after a clean checkout and the feature catalog.</li>
+<li><strong>Adapt</strong> the catalog and each repository's paths, and write the specs of <strong>your</strong> product.</li>
+<li><strong>Require</strong> the gate check in the <code>main</code> ruleset, and only there.</li>
+<li><strong>Done when:</strong> a PR to <code>main</code> turns red if the E2E breaks.</li>
+</ul>
+<h2 id="7-the-front-door">7. The front door</h2>
+<ul>
+<li><strong>Copy</strong> the structure of <a href="https://github.com/viralabs-dev/brabo#readme"><code>brabo</code></a>: <code>repos.yml</code> (single source of the map), <code>componentes.json</code> (pins), <code>irmaos.lock</code> and <code>install.sh</code>.</li>
+<li><strong>Adapt</strong> the list of repositories and the components that make up <strong>your</strong> product.</li>
+<li><strong>Turn on last</strong> the product release: it depends on every component's Release existing.</li>
+<li><strong>Done when:</strong> the installer checks the signed <code>checksums.txt</code> and installs the set on a clean machine.</li>
+</ul>
+<h2 id="once-it-is-standing">Once it is standing</h2>
+<div class="passos">
+<ol>
+<li>Generate each README's &quot;Onde se encaixa&quot; block from <code>repos.yml</code>.</li>
+<li>Turn on the merge-order and pin checks.</li>
+<li>Read the <a href="erros-que-ja-cometemos.html">mistakes we already made</a> before assuming all is well.</li>
+</ol>
+</div>
+<blockquote>
+<p><strong>TODO(humano):</strong> this path has not yet been validated by someone outside the project. The agreed proof is that someone from the SmartSky team, reading only the path, draws the map and narrates a change's path to the release; the result and any divergences must be recorded here.</p>
+</blockquote>
+<nav class="site-pager"><a href="../../tutorials/orquestrar-repositorios/vida-de-uma-mudanca.html">The life of a change</a><a href="../../tutorials/orquestrar-repositorios/erros-que-ja-cometemos.html">Mistakes we already made</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/orquestrar-repositorios/monte-o-seu.md">Edit this page</a><span>Updated 2026-11-08T19:23:03-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#0-before-anything-the-map">0. Before anything: the map</a></li><li class="n2"><a href="#1-the-parent-folder-and-clone-everything">1. The parent folder and &quot;clone everything&quot;</a></li><li class="n2"><a href="#2-the-ci-repository-with-the-policy">2. The CI repository, with the policy</a></li><li class="n2"><a href="#3-the-contracts-repository">3. The contracts repository</a></li><li class="n2"><a href="#4-the-code-repositories">4. The code repositories</a></li><li class="n2"><a href="#5-the-orchestrating-repository">5. The orchestrating repository</a></li><li class="n2"><a href="#6-the-quality-repository-with-the-gate">6. The quality repository, with the gate</a></li><li class="n2"><a href="#7-the-front-door">7. The front door</a></li><li class="n2"><a href="#once-it-is-standing">Once it is standing</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-en.json" data-base="../../"></script></body>
+</html>

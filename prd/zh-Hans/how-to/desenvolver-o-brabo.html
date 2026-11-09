@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-Hans" data-locale="zh-Hans" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>开发 Brabo | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="菜单">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="搜索" aria-label="搜索" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="语言"><option value="../../how-to/desenvolver-o-brabo.html">pt-BR</option><option value="../../en/how-to/desenvolver-o-brabo.html">en</option><option value="../../ru/how-to/desenvolver-o-brabo.html">ru</option><option value="../../zh-Hans/how-to/desenvolver-o-brabo.html" selected>zh-Hans</option></select>
+<select data-seletor aria-label="环境"><option value="../../../dev/zh-Hans/how-to/desenvolver-o-brabo.html">dev</option><option value="../../../prd/zh-Hans/how-to/desenvolver-o-brabo.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="切换主题">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 从这里开始</h2></summary><ul><li><a href="../index.html">首页</a></li><li><a href="../getting-started.html">快速开始</a></li></ul></details></section><section><details open><summary><h2>🎓 教程</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><a href="../tutorials/orquestrar-repositorios.html">编排多个仓库</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">Brabo 是如何构建的</a></li></ul></details></section><section><details open><summary><h2>🧭 实用指南</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html" aria-current="page">开发 Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">GitHub Packages 令牌</a></li><li><a href="../runbook.html">运维手册</a></li><li><a href="../tutorials/adotar.html">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>参与贡献</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">我们如何撰写</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 概念</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">架构</a></li><li><a href="../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../explanation/modelo-de-time.html">团队模型与交付物流程</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>流程与流水线</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">分支策略</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../explanation/release-do-produto.html">产品发布</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>本地化</span></summary><ul><li><a href="../explanation/localizacao.html">本地化</a></li><li><a href="../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></details></li><li><details><summary><span>技术笔记</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 参考</h2></summary><ul><li><a href="../glossary.html">术语表</a></li><li><a href="../reference/componentes-da-doc.html">文档组件</a></li><li><a href="../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">业务规则</a></li><li><span>API 参考</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ 决策（ADR）</a></h2></section><section><details><summary><h2>🗂️ 项目历史</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">时间线</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">shadcn 前后的界面（2026 年 10 月 31 日）</a></li><li><a href="../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../explanation/historico-de-fases-parte-1.html">第 1 至 15 阶段，第 1 部分</a></li><li><a href="../explanation/historico-de-fases-parte-2.html">16–26 计划与轮次，第 2 部分</a></li><li><a href="../explanation/historico-de-fases-parte-3.html">28 计划与审计，第 3 部分</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">从本地 runner 起，第 4 部分</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../explanation/backlog.html">已分类的 backlog</a></li><li><details><summary><span>验证与测量</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../explanation/medicao-do-jev.html">Jev 工具路由器的测量</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="开发-brabo">开发 Brabo</h1>
+<p>要<strong>使用</strong> Brabo，请看<a href="../getting-started.html">快速开始</a>。本指南面向要改代码的人：克隆 11 个仓库，并从它们启动 dev。</p>
+<h2 id="开始之前">开始之前</h2>
+<p>Git、Bash、带 Compose 的 Docker 和约 6 GiB 空闲内存。只有在运行某个仓库的测试时才需要 Node 和 pnpm；Elixir 在容器中运行。</p>
+<h2 id="1-克隆全部仓库">1. 克隆全部仓库</h2>
+<p><code>brabo-workspace</code> 是父文件夹：它只知道每个仓库在哪里。</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">git</span><span style="color:var(--shiki-token-string)"> clone</span><span style="color:var(--shiki-token-string)"> https://github.com/viralabs-dev/brabo-workspace.git</span><span style="color:var(--shiki-token-string)"> ~/dev/brabo</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">cd</span><span style="color:var(--shiki-token-string)"> ~/dev/brabo</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">./clonar-tudo.sh</span></span>
+<span class="line"></span></code></pre>
+<p><code>clonar-tudo.sh</code> 通过 HTTPS 克隆每个缺失的 <code>brabo-*</code>，对已存在的执行 <code>git fetch</code>，并且从不删除任何东西。</p>
+<p><strong>如何确认成功：</strong> 最后一行写着 <code>pronto: 11 repositórios</code>。</p>
+<h2 id="2-启动-dev">2. 启动 dev</h2>
+<p>启动 dev 的是 <code>brabo-infra</code>，它从相邻的克隆构建每个服务：</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">cd</span><span style="color:var(--shiki-token-string)"> brabo-infra</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">cp</span><span style="color:var(--shiki-token-string)"> .env.example</span><span style="color:var(--shiki-token-string)"> .env</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> dev</span></span>
+<span class="line"></span></code></pre>
+<p><code>make dev</code> 会确认相邻仓库都在位，然后启动 compose。要使用其他父文件夹，运行 <code>BRABO_IRMAOS=/outra/pasta make dev</code>。<code>brabo-infra</code> 还能做什么，见它的 README。</p>
+<p><strong>如何确认成功：</strong> <a href="http://localhost:5173">http://localhost:5173</a> 打开登录界面。在 <code>brabo-api</code> 的克隆中用 <code>pnpm seed</code> 创建测试账号（<code>owner@brabo.dev</code>、<code>maintainer@brabo.dev</code>、<code>developer@brabo.dev</code> 和 <code>viewer@brabo.dev</code>；密码来自 seed，可用 <code>BRABO_SEED_PASSWORD</code> 修改）。</p>
+<details>
+<summary>如果出了问题：两种本地模式争用端口</summary>
+<p>在你的机器上有两种运行 Brabo 的方式，它们<strong>争用相同的端口</strong>：</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>启动方式</th>
+<th>web 地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>开发</strong></td>
+<td><code>make dev</code></td>
+<td><a href="http://localhost:5173">http://localhost:5173</a></td>
+</tr>
+<tr>
+<td><strong>验证</strong></td>
+<td><code>make deploy-local</code>（k3d，生产镜像）</td>
+<td><a href="http://localhost:8088">http://localhost:8088</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>两者都有意把 api 发布在 <code>:3000</code>、engine 发布在 <code>:4000</code>，这样 <code>smoke.sh</code> 在两种模式下都有效。集群在运行时，<code>5173</code> 永远打不开：用 <code>make k8s-down</code> 把它关掉。端口被别的东西占用？在 <code>.env</code> 中修改 <code>API_PORT</code>、<code>ENGINE_PORT</code>、<code>WEB_PORT</code> 或 <code>OLLAMA_PORT</code>；CORS 会跟随 <code>WEB_PORT</code>。</p>
+<p>要知道你处在哪种模式，<code>make dev</code> 的 <code>preflight</code> 会告诉你。</p>
+</details>
+<details>
+<summary>如果出了问题：同一台机器上的一个安装和一个检出</summary>
+<p>dev 的 compose 是 Docker 项目 <strong><code>brabo-dev</code></strong>；<code>install.sh</code> 的安装是 <strong><code>brabo</code></strong>。名称是分开的，但只要还有安装版 compose 的容器，<code>make dev</code> 和 <code>reset-total.sh</code> 就会<strong>拒绝</strong>运行，并列出这些容器。关闭安装时<strong>不要</strong>加 <code>-v</code>：数据会保留，<code>up -d</code> 可以把它带回来。</p>
+</details>
+<h2 id="pasta-dos-workspaces">3. 工作区文件夹</h2>
+<p>默认情况下，智能体写出的内容保存在 Docker 卷中。要使用磁盘上的真实文件夹，请在 <code>brabo-infra</code> 的 <code>.env</code> 中<strong>同时</strong>设置这两项：</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-foreground)">PROJECT_WORKSPACES_HOST_DIR</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string)">~/brabo-projetos</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">GIT_LOCAL_REPOS_HOST_DIR</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string)">~/brabo-projetos-bare</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li>每个项目会得到一个子文件夹 <code>&lt;slug&gt;-&lt;id 的前 8 个字符&gt;</code>，在创建时确定。</li>
+<li>不要指向整个 <code>$HOME</code>，也不要指向含有其他机密的文件夹：它会成为<strong>所有</strong>项目的根目录。</li>
+<li>容器在 dev 中以 root 运行，所以智能体写出的内容属主是 <code>root</code>。运行一次 <code>sudo chown -R $USER ~/brabo-projetos</code>。</li>
+<li>只在 Linux 和 macOS 上测试过。在 Windows 上，bind mount 有已知的陷阱。</li>
+</ul>
+<h2 id="4-日常命令">4. 日常命令</h2>
+<p>每个仓库都有自己的命令，写在它的 <code>CLAUDE.md</code> 中。在 <code>brabo-api</code> 中：</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> test</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> build</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> db:generate</span><span style="color:var(--shiki-token-comment)">  # depois de mudar apps/api/src/db/schema/&#x3C;agregado>.ts</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> db:migrate</span></span>
+<span class="line"></span></code></pre>
+<p>在 <code>brabo-api</code> 的克隆中，schema 的路径是 <code>src/db/schema/&lt;agregado&gt;.ts</code>。浏览器 E2E（Playwright）位于 <code>brabo-qa</code>，针对安装版 compose 运行；具体步骤见 README 和<a href="../rodadas-manuais.html">手动轮次</a>。请始终从 <code>dev</code> 出发在 <code>feature/*</code> 上工作，并使用 pt-BR 的 conventional commits。</p>
+<h2 id="每样东西在哪里">每样东西在哪里</h2>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>仓库</th>
+<th>它是什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>brabo</code></td>
+<td>入口：文档、网站、<code>install.sh</code> 和产品发布</td>
+</tr>
+<tr>
+<td><code>brabo-api</code></td>
+<td>NestJS、Drizzle 和 PostgreSQL：schema、RBAC、LLM、metering</td>
+</tr>
+<tr>
+<td><code>brabo-engine</code></td>
+<td>Elixir/OTP：智能体、会话、闸门</td>
+</tr>
+<tr>
+<td><code>brabo-web</code></td>
+<td>React 和 Vite：界面和设计系统</td>
+</tr>
+<tr>
+<td><code>brabo-runner</code></td>
+<td>用户机器上的 CLI</td>
+</tr>
+<tr>
+<td><code>brabo-broker</code></td>
+<td>唯一持有服务器 Docker 套接字的进程</td>
+</tr>
+<tr>
+<td><code>brabo-contracts</code></td>
+<td>共享类型和契约，按 TAG 使用</td>
+</tr>
+<tr>
+<td><code>brabo-ci</code></td>
+<td>可复用的工作流和 PR 策略</td>
+</tr>
+<tr>
+<td><code>brabo-infra</code></td>
+<td>compose、Kubernetes 和 <code>make dev</code></td>
+</tr>
+<tr>
+<td><code>brabo-qa</code></td>
+<td>浏览器 E2E 和 golden set</td>
+</tr>
+<tr>
+<td><code>brabo-workspace</code></td>
+<td>父文件夹和 <code>clonar-tudo.sh</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>完整的地图，包括每个仓库使用什么，见<a href="../tutorials/orquestrar-repositorios/o-mapa.html">地图</a>。</p>
+<h2 id="延伸阅读">延伸阅读</h2>
+<ul>
+<li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025</a>（dev 模式）、<a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170</a>（dev 的 compose）和 <a href="../business-rules/api.html#rn-109">RN-109</a>（每个项目的文件夹）。</li>
+</ul>
+<nav class="site-pager"><a href="../tutorials/como-o-brabo-e-construido/copie-o-metodo.html">复制这套方法</a><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/how-to/desenvolver-o-brabo.md">编辑此页</a><span>更新于 2026-11-08T19:29:43-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#开始之前">开始之前</a></li><li class="n2"><a href="#1-克隆全部仓库">1. 克隆全部仓库</a></li><li class="n2"><a href="#2-启动-dev">2. 启动 dev</a></li><li class="n2"><a href="#pasta-dos-workspaces">3. 工作区文件夹</a></li><li class="n2"><a href="#4-日常命令">4. 日常命令</a></li><li class="n2"><a href="#每样东西在哪里">每样东西在哪里</a></li><li class="n2"><a href="#延伸阅读">延伸阅读</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-zh-Hans.json" data-base="../"></script></body>
+</html>

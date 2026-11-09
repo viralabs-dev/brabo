@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="ru" data-locale="ru" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — CI — часть 2 (с RN-1031) | Brabo</title>
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Меню">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Поиск" aria-label="Поиск" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Язык"><option value="../../../business-rules/ci/parte-02.html">pt-BR</option><option value="../../../en/business-rules/ci/parte-02.html">en</option><option value="../../../ru/business-rules/ci/parte-02.html" selected>ru</option><option value="../../../zh-Hans/business-rules/ci/parte-02.html">zh-Hans</option></select>
+<select data-seletor aria-label="Среда"><option value="../../../../dev/ru/business-rules/ci/parte-02.html">dev</option><option value="../../../../prd/ru/business-rules/ci/parte-02.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Сменить тему">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Начните здесь</h2></summary><ul><li><a href="../../index.html">Главная</a></li><li><a href="../../getting-started.html">Первые шаги</a></li></ul></details></section><section><details open><summary><h2>🎓 Туториалы</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">С нуля до готового результата</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Оркестрация репозиториев</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Как строится Brabo</a></li></ul></details></section><section><details open><summary><h2>🧭 Практические руководства</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Разработка Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">Токен GitHub Packages</a></li><li><a href="../../runbook.html">Руководство по эксплуатации</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Участие в проекте</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">Как мы пишем</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Как внести вклад</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Где попросить помощи</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Сообщить об уязвимости</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Концепции</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Архитектура</a></li><li><a href="../../explanation/gates.html">Gates и то, как они измеряются</a></li><li><a href="../../explanation/modelo-de-time.html">Модель команды и поток результатов</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Процесс и конвейер</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Политика веток</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">Цепочка поставок CI</a></li><li><a href="../../explanation/release-do-produto.html">Релиз продукта</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Локализация</span></summary><ul><li><a href="../../explanation/localizacao.html">Локализация</a></li><li><a href="../../explanation/localizacao-en.html">Локализация — английский (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Локализация — русский (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Локализация — упрощённый китайский (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Технические заметки</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Справочник</h2></summary><ul><li><a href="../../glossary.html">Глоссарий</a></li><li><a href="../../reference/componentes-da-doc.html">Компоненты документации</a></li><li><a href="../../explanation/documentation-workflow.html">Синхронизация документации</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>Бизнес-правила</span></summary><ul><li><a href="../../business-rules.html">Бизнес-правила</a></li><li><a href="../../business-rules/custo.html">Стоимость и metering</a></li><li><a href="../../business-rules/autenticacao.html">Аутентификация</a></li><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><details open><summary><span>CI</span></summary><ul><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/ci/parte-01.html">CI — часть 1 (с RN-037)</a></li><li><a href="../../business-rules/ci/parte-02.html" aria-current="page">CI — часть 2 (с RN-1031)</a></li></ul></details></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Produto</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>Справочник API</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Решения (ADR)</a></h2></section><section><details><summary><h2>🗂️ История проекта</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Хронология</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Интерфейс до и после shadcn (31.10.2026)</a></li><li><a href="../../explanation/historico-de-fases.html">История фаз</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Фазы 1–15, часть 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Программа 16–26 и раунды, часть 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Программа 28 и аудиты, часть 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">От локального runner далее, часть 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">ФАЗА 28 — папка пользователя</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — установка одной строкой</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — локальный агент машины</a></li><li><a href="../../explanation/backlog.html">Backlog после триажа</a></li><li><details><summary><span>Проверки и измерения</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">Первый dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Реальное выполнение (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Находки реального прогона конвейера</a></li><li><a href="../../explanation/validacao-fase-12.html">Проверка Фазы 12</a></li><li><a href="../../explanation/validacao-real.html">Реальная валидация (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Измерение эвристики языка</a></li><li><a href="../../explanation/medicao-do-jev.html">Измерение маршрутизатора инструментов Jev</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Аудит: fluxo.yml × код (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Визуальный аудит до и после Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="ci--часть-2-с-rn-1031">CI — часть 2 (с RN-1031)</h1>
+<h2 id="o-regressivo-por-funcionalidade-e-os-vínculos-dos-runs-rn-10311035-rn-10431045">Регрессионный прогон по функциональности и связи запусков (RN-1031..1035, RN-1043..1045)</h2>
+<h3 id="rn-1031">RN-1031 — Каталог функциональностей и карта путь → функциональность живут в одном файле, а spec привязывается тегом</h3>
+<p><code>brabo-qa/funcionalidades.yml</code> — единственный источник: у каждой функциональности
+есть <code>id</code> (kebab-case, стабильный, никогда не переименовывается; вывод из
+обращения — это <code>status: aposentada</code>), <code>nome</code>, <code>descricao</code>, <code>tema</code> (из <code>temas.yml</code>
+ADR), <code>status</code> и <code>caminhos: {&lt;repo&gt;: [globs]}</code>. Файл живёт в <code>brabo-qa</code>, а не в
+<code>brabo-contracts</code>, потому что contracts потребляется по TAG, и каждая правка карты
+превращалась бы в тег и обновление у шести потребителей. Spec Playwright
+привязывается к функциональности тегом самого теста (<code>{ tag: '@f-&lt;id&gt;' }</code>), а
+фильтр — это <code>--grep</code>: каталог не хранит список файлов. Тест <code>brabo-qa</code> отклоняет
+повторяющийся id или id не в kebab-case, тему вне <code>temas.yml</code>, glob, который не
+совпал ни с одним файлом соседнего репозитория (протухшая карта), и тег
+<code>@f-&lt;id&gt;</code> без записи; функциональность без spec просто перечисляется.</p>
+<ul>
+<li><strong>Код:</strong> <code>funcionalidades.yml:1</code> (каталог и контракт файла),
+<code>scripts/ci/funcionalidades.ts:29</code> (<code>validarCatalogo</code>)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/funcionalidades.spec.ts</code> (валидатор) и
+<code>scripts/ci/qa-regressivo-catalogo-real.spec.ts:12</code> (в реальном каталоге 14
+активных функциональностей и globs, которые совпадают)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>Источник:</strong> AT-769 (EP-033)</li>
+</ul>
+<h3 id="rn-1032">RN-1032 — PR в <code>dev</code> запускает регрессионный прогон только затронутых функциональностей под проверкой <code>Regressivo do brabo-qa</code>, которая НИКОГДА не обязательна</h3>
+<p>В PR с целью <code>dev</code> job <code>regressivo-dev</code> из <code>qa-e2e-gatilho.yml</code> сопоставляет
+файлы PR с картой из <a href="#rn-1031">RN-1031</a> и запускает <code>brabo-qa</code> с затронутыми
+функциональностями. Результат возвращается как проверка <code>Regressivo do brabo-qa</code>, создаваемая App на <code>head_sha</code>: <code>success</code>, <code>failure</code> (видна, но merge
+остаётся свободным) или <code>neutral</code> (ничего не затронуто, только docs, PR из форка,
+репозиторий без spec). Имя намеренно отличается от <code>E2E do brabo-qa</code>: ruleset
+«main требует E2E» привязывает именно тот контекст, а регрессионный прогон не
+входит ни в один ruleset (<code>rulesets.md</code> фиксирует строку «не обязателен»). У job
+есть <code>continue-on-error</code>, <code>/qa-aceitar</code> на <code>dev</code> не применяется, а App один раз
+оставляет комментарий-напоминание, когда карта говорит, что функциональность
+затронута, а ни один spec <code>@f-&lt;id&gt;</code> не изменился.</p>
+<ul>
+<li><strong>Код:</strong> <code>.github/workflows/qa-e2e-gatilho.yml:74</code> (job
+<code>regressivo-dev</code>, с <code>continue-on-error</code>), <code>scripts/ci/qa-e2e-resumo.ts:22</code>
+(имя проверки по режиму), <code>scripts/ci/qa-regressivo-lembrete.ts</code>
+(единственный комментарий-напоминание)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/qa-e2e-resumo.spec.ts</code> (имя по режиму) и
+<code>scripts/ci/qa-regressivo-selecao.spec.ts:33</code> (выбор по карте) и
+<code>scripts/ci/qa-regressivo-lembrete.spec.ts</code> (напоминание)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>Источник:</strong> AT-769 (EP-033)</li>
+</ul>
+<h3 id="rn-1033">RN-1033 — Три правила сквозных файлов действуют раньше карты: ничего, весь каталог и без владельца</h3>
+<p>По порядку: (1) docs, <code>*.md</code>, <code>CHANGELOG.md</code>, <code>.github/**</code> (кроме самого
+<code>qa-e2e.yml</code>), тесты репозитория и <code>.claude/**</code> не затрагивают функциональность, и
+проверка выходит <code>neutral</code>; (2) lockfile и манифесты, <code>Dockerfile</code>, точка входа
+приложения, схема и миграции, клиент web, <code>config/**</code> engine и набор
+<code>brabo-qa</code> (<code>e2e/suporte/**</code>, <code>playwright.config.ts</code>) запускают весь каталог, и
+сюда же попадает повышение TAG contracts; (3) путь, который не совпал ни с одним
+glob, запускает smoke <code>instalacao</code> + <code>autenticacao</code>, а сводка перечисляет его как
+«без владельца в карте», чтобы карту исправили. У <code>brabo-contracts</code> нет
+регрессионного прогона в собственном PR.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/qa-regressivo-selecao.ts:67</code> (<code>selecionar</code>),
+<code>scripts/ci/qa-regressivo-selecao.ts:43</code> (<code>SMOKE</code>)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/qa-regressivo-selecao.spec.ts:41</code> (правило 1),
+<code>:55</code> (правило 2 по репозиторию), <code>:58</code> (правило 3)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>Источник:</strong> AT-769 (EP-033)</li>
+</ul>
+<h3 id="rn-1075">RN-1075 — <code>brabo-runner</code> подтверждается собственным CI: бинарник linux-x64 входит в PR, а контракт с engine проверяется только в TP-01</h3>
+<p>У <code>brabo-runner</code> нет <code>qa-e2e.yml</code>, образа и spec <code>@f-runner</code>/<code>@f-projetos</code> в <code>brabo-qa</code>; регрессия каталога не запускается в его PR (решение владельца от 08.11.2026, вариант b). PR подтверждается заданием <code>runner</code> его <code>ci.yml</code>: lint, типы, тесты, <code>dist</code> со <code>smoke</code> и бинарник linux-x64 с <code>build:bin</code> + <code>smoke:bin</code> (<code>--self-test-pty</code>, настоящий PTY). <strong>Контракт runner ↔ engine</strong> (join с ticket, возможности, exec, папка) в PR <strong>не</strong> проверяется: только в живом TP-01. Ключи <code>runner</code> в <code>funcionalidades.yml</code> остаются в каталоге и служат только карте.</p>
+<ul>
+<li><strong>Код:</strong> задание <code>runner</code> в <code>.github/workflows/ci.yml</code> репозитория <code>brabo-runner</code></li>
+<li><strong>Тест:</strong> само задание (лог с <code>ok:</code> от <code>--self-test-pty</code>)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>Источник:</strong> AT-853 (EP-033)</li>
+</ul>
+<h3 id="rn-1034">RN-1034 — PR в <code>main</code> запускает весь каталог в <code>E2E do brabo-qa</code>, а функциональность без spec показывается как «без покрытия» и не проваливает проверку</h3>
+<p>Проверка <code>E2E do brabo-qa</code> (<a href="../../adr/0267-o-e2e-do-brabo-qa-e-portao-da-main.html">ADR 0267</a>)
+запускает все spec и собирает таблицу <code>funcionalidade | specs | resultado</code>.
+Функциональность каталога без spec попадает как <code>sem cobertura</code> и <strong>не
+проваливает</strong> проверку (решение владельца от 06/11/2026): при обратном правиле
+<code>main</code> неделями была бы красной, а <code>/qa-aceitar</code> стал бы рутиной. Существующие
+тесты проходят без изменений; красное по <code>spec</code> или <code>ambiente</code> по-прежнему можно
+принять через <code>/qa-aceitar</code>, а по <code>digest</code> или <code>assinatura</code> — никогда.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/qa-e2e-resumo.ts:28</code> (результат <code>sem cobertura</code> в строке
+таблицы), <code>scripts/ci/qa-e2e-resumo.ts:22</code> (имя проверки <code>main</code>)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/qa-e2e-resumo.spec.ts</code> (таблица и строка «без
+покрытия»)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>Источник:</strong> AT-769 (EP-033)</li>
+</ul>
+<h3 id="rn-1035">RN-1035 — PR в <code>dev</code> публикует подписанный образ <code>sha-&lt;12&gt;</code> только своего репозитория, а очистка удаляет осиротевшие</h3>
+<p>Чтобы регрессионному прогону было что запускать, <code>ci.yml</code> у api, engine, web и
+broker публикует <code>ghcr.io/viralabs-dev/brabo-&lt;app&gt;:sha-&lt;12 primeiros do head&gt;</code>
+и тогда, когда база — <code>dev</code>, с Trivy и keyless <code>cosign sign</code>, как в <code>main</code>. PR из
+форка не получает секретов: образ пропускается, а регрессионный прогон сообщает
+«не запускается в PR из форка». Триггер использует <code>sha-&lt;12&gt;</code> в репозитории PR и
+самый новый <code>-dev.N</code> в остальных. Каждый <code>synchronize</code> оставляет осиротевший
+<code>sha-*</code>, поэтому <code>limpeza-ghcr.yml</code> удаляет каждый <code>sha-*</code> закрытого PR и те,
+которым больше 7 дней.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/qa-e2e-imagens.ts:83</code> (выбор <code>sha-&lt;12&gt;</code> для
+<code>dev</code> и <code>hotfix</code>)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/qa-e2e-imagens.spec.ts</code> (выбор по базе)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0268-o-brabo-qa-tem-regressivo-por-funcionalidade.html">0268</a></li>
+<li><strong>Источник:</strong> AT-769 (EP-033)</li>
+</ul>
+<h3 id="rn-1043">RN-1043 — Каждый запуск, читающий другой репозиторий, публикует <code>## Vínculos</code> в начале Summary, а хелпер никогда не проваливает job</h3>
+<p>Через action <code>vinculos</code> из <code>brabo-ci</code> Summary каждого job, связывающего
+репозитории, содержит таблицу <code>## Vínculos</code> (источник, соседи <code>repo@SHA</code> со
+ссылкой, назначение и запущенные runs) и диаграмму Mermaid — сразу после
+checkout. Каждое значение проходит через regex до попадания в Markdown:
+репозиторий <code>viralabs-dev/brabo(-x)?</code>, SHA из 40 hex, числовой PR, URL GitHub
+организации, актор. То, что не совпало, превращается в <code>?</code> и <code>::warning::</code>.
+Некорректный <code>origem</code> просто отбрасывается с предупреждением. У шага стоит
+<code>continue-on-error</code>: хелпер никогда не проваливает job. В <code>brabo</code> <code>docs-check</code>,
+<code>docs-deploy</code>, <code>docs-audit</code> и <code>regenera-gerados</code> передают SHA из
+<code>.git/irmaos-sha.lst</code>, который записывает <code>montar-layout.sh</code>
+(<a href="../../adr/0274-os-gerados-leem-os-irmaos-por-uma-trava-de-shas.html">ADR 0274</a>), а
+<code>release.yml</code> передаёт <code>infra</code> по пути.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/vinculos.ts:57</code> (<code>montar</code>), <code>.github/actions/vinculos/action.yml:31</code>
+(<code>continue-on-error</code>), <code>scripts/ci/validar-payload.ts:112</code> (<code>validarOrigem</code>),
+<code>.github/workflows/docs-check.yml:89</code> (<code>brabo</code> передаёт соседей)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/vinculos.spec.ts</code> (fixtures, вредоносное значение, пустой
+источник) и <code>scripts/ci/validar-payload.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.html">0271</a></li>
+<li><strong>Источник:</strong> AT-773 (EP-033)</li>
+</ul>
+<h3 id="rn-1044">RN-1044 — У целевого запуска dispatch или тега есть <code>run-name</code> с источником, а корреляция dispatch передаётся в имени как <code>c=&lt;run_id&gt;-&lt;attempt&gt;</code></h3>
+<p><code>run-name</code> переиспользуемого workflow игнорируется: действует имя вызывающего.
+<code>e2e-pr.yml</code> из <code>brabo-qa</code> называется <code>E2E ← &lt;repo&gt;#&lt;pr&gt; · &lt;sha7&gt; · &lt;ator&gt; · c=&lt;correlação&gt;</code>
+(<code>Regressivo ← …</code> в режиме dev); запуски, вызванные тегом, такие как <code>release</code> и
+<code>install-e2e</code> из <code>brabo</code>, — <code>release &lt;tag&gt; ← tag do carimbo</code>. <code>repository_dispatch</code>
+отвечает 204 без id, а <code>client_payload</code> не виден в API runs; запрашивать можно
+только <code>display_title</code>. Поэтому триггер шлёт <code>origem.correlacao = &lt;run_id&gt;-&lt;attempt&gt;</code>, которое попадает в <code>run-name</code>, а <code>qa-e2e-disparar.ts</code> опрашивает
+runs <code>brabo-qa</code> каждые 5 с до 60 с, сопоставляя <code>c=</code>. <code>attempt</code> делает
+корреляцию уникальной для каждого re-run. Старый payload без <code>origem</code> даёт пустые
+поля и ничего не ломает. Источник запуска, вызванного тегом, берётся из строки
+<code>Carimbo: &lt;url&gt;</code>, которую <code>tag-release</code> записывает в сообщение аннотированного тега.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/qa-e2e-imagens.ts:113</code> (<code>origem.correlacao</code> в
+payload), <code>scripts/ci/qa-e2e-vinculos.ts:18</code> (<code>acharRun</code>),
+<code>scripts/ci/qa-e2e-disparar.ts:133</code> (корреляция), <code>scripts/ci/tag-release.ts:35</code>
+(<code>comCarimbo</code>), <code>.github/workflows/release.yml:3</code> (<code>run-name</code> тега)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/qa-e2e-vinculos.spec.ts</code> (сопоставление <code>c=</code>) и
+<code>scripts/ci/qa-e2e-imagens.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.html">0271</a></li>
+<li><strong>Источник:</strong> AT-773 (EP-033)</li>
+</ul>
+<h3 id="rn-1045">RN-1045 — Проверка App указывает на запуск <code>brabo-qa</code> с самого начала, а исходный запуск записывает ссылку на запущенный</h3>
+<p>Job <code>anunciar</code> из <code>e2e-pr.yml</code>, без <code>needs</code> и параллельно с <code>e2e</code>, обновляет
+проверку по <code>check_run_id</code> из payload, указывая <code>details_url</code> запуска <code>brabo-qa</code> и
+Vínculos, с токеном App только с <code>checks: write</code> и чистым checkout <code>dev</code>.
+<code>fechar</code> в конце сохраняет <code>details_url</code> и прикладывает Vínculos. Сбой <code>anunciar</code>
+лишь предупреждает. В исходном запуске триггер записывает в <code>disparados</code> запуск
+<code>brabo-qa</code>, найденный по корреляции из <a href="#rn-1044">RN-1044</a>; если за 60 с не нашёл,
+записывает ссылку на проверку (которая уже указывает на qa) и предупреждение.
+<code>alarmar-prova.sh</code> прикладывает <code>vinculos.md</code> к телу issue, когда файл существует.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/fechar-check.ts:39</code> (Vínculos при закрытии),
+<code>scripts/ci/qa-e2e-vinculos.ts:42</code> (<code>vinculosDoGatilho</code>),
+<code>scripts/ci/qa-e2e-disparar.ts:154</code> (предупреждение, когда запуск не найден)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/fechar-check.spec.ts</code> и <code>scripts/ci/qa-e2e-vinculos.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0271-os-runs-do-actions-mostram-os-vinculos-entre-os-repos.html">0271</a></li>
+<li><strong>Источник:</strong> AT-773 (EP-033)</li>
+</ul>
+<h2 id="publicação-de-pacotes-npm-rn-1042">Публикация npm-пакетов (RN-1042)</h2>
+<h3 id="rn-1042">RN-1042 — Пакет выходит только по тегу, с dist-tag версии и одной и той же версией во всех пакетах</h3>
+<p><code>publish-npm.yml</code> переиспользуемый и запускается, когда вызывающий вызывает его по
+тегу (<code>on: push: tags: ['v*']</code>). <code>scripts/ci/publish-npm.ts</code> берёт версию из тега
+(без <code>v</code>) и принимает только <code>vX.Y.Z</code> или <code>vX.Y.Z-dev.N</code>; любая другая форма
+отклоняется до публикации. <code>-dev.N</code> идёт в dist-tag <code>dev</code>; финальная — в <code>latest</code>,
+а одиночный pre-release никогда не занимает <code>latest</code>. Каждый пакет из списка
+получает одну и ту же версию (<code>npm version --no-git-tag-version</code>) до <code>pnpm pack</code>,
+а <code>actions/attest</code> и <code>npm publish</code> используют один и тот же <code>.tgz</code>, без
+<code>--provenance</code>. Повторная публикация версии проходит, только если registry уже
+хранит тот же файл (тот же <code>dist.integrity</code>); другая целостность отклоняется.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/publish-npm.ts:17</code> (<code>versaoDaTag</code>), <code>scripts/ci/publish-npm.ts:25</code>
+(<code>distTag</code>), <code>.github/workflows/publish-npm.yml:90</code> (одна версия в пакетах),
+<code>.github/workflows/publish-npm.yml:100</code> (<code>npm publish</code> того же <code>.tgz</code>)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/publish-npm.spec.ts</code> (dist-tag <code>dev</code> и <code>latest</code>, отбрасывание <code>v</code>)</li>
+<li><strong>Источник:</strong> AT-770 (EP-033)</li>
+</ul>
+<h2 id="dependência-de-merge-entre-repositórios-rn-10471050">Зависимость merge между репозиториями (RN-1047..1050)</h2>
+<h3 id="rn-1047">RN-1047 — PR объявляет зависимость строкой <code>Depende-de: viralabs-dev/&lt;repo&gt;#&lt;n&gt;</code>, а некорректная строка проваливает проверку, а не проходит молча</h3>
+<p>Каждая зависимость merge у PR — это строка тела: <code>Depende-de:</code> и далее
+<code>viralabs-dev/&lt;repo&gt;#&lt;n&gt;</code>, в любом месте текста, с <code>- </code> в начале или без.
+Правило сопоставляет построчно и учитывает регистр. Репозиторий должен входить в
+список 11 репозиториев <code>brabo*</code> из карты родительской папки, владелец должен быть
+<code>viralabs-dev</code>, PR не может ссылаться на самого себя, а указанный PR должен
+существовать (404 проваливает). Строка, которая начинается как объявление
+(<code>Depende-de</code> или <code>depende de</code>), но не подходит под правило, проваливает проверку
+с причиной, чтобы опечатка не заставила зависимость исчезнуть. Тело — это текст
+третьей стороны: оно попадает в скрипт через переменную окружения и никогда не
+интерполируется в <code>run:</code>.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/dependencias-de-merge.ts</code> (правило и валидация), будет
+опубликован в <code>brabo-ci</code>; в <code>dev</code> у <code>brabo</code> его пока нет</li>
+<li><strong>Тест:</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>, с regex, allowlist,
+владельцем, самоссылкой и некорректной строкой</li>
+<li><strong>ADR:</strong> <a href="../../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>Источник:</strong> AT-787 (EP-033)</li>
+</ul>
+<h3 id="rn-1048">RN-1048 — У проверки <code>Dependências de merge</code> четыре состояния, никогда не <code>neutral</code>, а ожидание жёлтое</h3>
+<p>Проверку публикует App на <code>head_sha</code> PR под именем <code>Dependências de merge</code>. Без строки <code>Depende-de</code> выходит <code>success</code> «Sem dependências declaradas», и
+она публикуется всегда, чтобы не оставалась залипшая старая проверка. Если какая-либо
+зависимость <code>OPEN</code>, выходит <code>in_progress</code> (жёлтый) с заголовком <code>esperando viralabs-dev/&lt;repo&gt;#&lt;n&gt;</code>,
+перечисляющим недостающие. Если все <code>MERGED</code>, выходит <code>success</code> «Dependências mergeadas».
+При зависимости <code>CLOSED</code> без merge, при недопустимой строке, цикле или 404
+выходит <code>failure</code> с причиной; зависимость, закрытая без merge, требует убрать
+строку или указать заменяющий её PR, а не ждать вечно. <code>neutral</code> не используется
+ни в одном случае, потому что для ruleset он считается зелёным. Сам job использует
+<code>continue-on-error</code>: проваливается проверка, а сбой job лишь предупреждает.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/dependencias-de-merge.ts</code> (чистая функция оценки) и
+<code>.github/workflows/dependencias-de-merge.yml</code> (переиспользуемый workflow), в <code>brabo-ci</code></li>
+<li><strong>Тест:</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>, по случаю на каждое состояние</li>
+<li><strong>ADR:</strong> <a href="../../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>Источник:</strong> AT-787 (EP-033)</li>
+</ul>
+<h3 id="rn-1049">RN-1049 — Merge зависимости обновляет проверку PR, которые на неё ссылаются, а часовой cron — лишь страховочная сеть</h3>
+<p>Когда PR в одном из репозиториев смёрджен, job <code>avisar-dependentes</code> в самом
+репозитории-владельце смёрдженного PR ищет открытые PR организации, которые
+ссылаются на смёрдженный в теле, и заново оценивает каждый. Поиск нечёткий, поэтому
+у каждого кандидата тело перепарсивается по правилу <a href="#rn-1047">RN-1047</a> до любой
+записи. Проверка обновляется токеном App, без повторного запуска workflow
+зависимого PR. Cron раз в час в <code>brabo-ci</code> повторяет тот же обход для открытых PR с
+<code>Depende-de</code> и покрывает потерянный merge, когда ломается запуск в
+репозитории-владельце. Cron включится, только когда <code>brabo-ci</code> попадёт в <code>main</code>,
+потому что <code>schedule</code> работает только из ветки по умолчанию.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/dependencias-de-merge.ts</code> (режим <code>avisar-dependentes</code>) и
+<code>.github/workflows/dependencias-de-merge.yml</code> (job и cron), в <code>brabo-ci</code></li>
+<li><strong>Тест:</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>, с имитацией поиска и
+телом, которое больше не подходит</li>
+<li><strong>ADR:</strong> <a href="../../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>Источник:</strong> AT-787 (EP-033)</li>
+</ul>
+<h3 id="rn-1050">RN-1050 — Цикл зависимостей проваливает проверку с полным путём, до глубины 5</h3>
+<p>Оценка идёт по строкам <code>Depende-de</code> открытых зависимостей шаг за шагом, до
+глубины 5. Если цепочка возвращается к оцениваемому PR, проверка проваливается с
+полным путём (<code>A → B → A</code>) и ссылкой на каждый PR пути. Глубина больше 5 тоже
+проваливает. Выход из цикла — отредактировать тело одного из PR, убрав строку,
+замыкающую цикл: PR не нужен bypass.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/dependencias-de-merge.ts</code> (обход до глубины 5), в <code>brabo-ci</code></li>
+<li><strong>Тест:</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code>, с циклом A↔B и превышенной глубиной</li>
+<li><strong>ADR:</strong> <a href="../../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>Источник:</strong> AT-787 (EP-033)</li>
+</ul>
+<h3 id="rn-1071">RN-1071 — PR продвижения зависит от открытых продвижений предыдущих слоёв, а порядок — это проверенный список</h3>
+<p>В PR с базой <code>main</code> и head <code>dev</code> того же репозитория проверка <code>Dependências de merge</code> добавляет к строкам <code>Depende-de</code> из тела по зависимости на каждый открытый
+PR продвижения в репозиториях предыдущих слоёв, даже если никто её не написал.
+Порядок задаёт <code>CAMADAS_DE_PROMOCAO</code>: 0 brabo-ci; 1 brabo-contracts и
+brabo-workspace; 2 brabo-api, brabo-engine, brabo-web, brabo-runner и brabo-broker;
+3 brabo-infra; 4 brabo-qa; 5 brabo. Учитывается только ребро, где <code>main</code>
+потребителя использует финальный артефакт производителя. В заголовке выводится <code>esperando viralabs-dev/&lt;repo&gt;#&lt;n&gt;</code>.
+Если у репозитория предыдущего слоя <code>dev</code> впереди <code>main</code> и нет открытого
+продвижения, проверка остаётся pending и называет репозиторий, который нужно
+продвинуть (<code>esperando promoção de viralabs-dev/&lt;repo&gt; (a dev está à frente da main)</code>).
+Открытие продвижения (<code>abrir-pr-de-promocao.sh</code>) также пишет строки <code>Depende-de</code>
+уже открытых продвижений, по мере возможности. Объединение слоёв — это список
+<code>REPOS</code> без повторов, и spec это охраняет.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/dependencias-de-merge.ts</code> (<code>CAMADAS_DE_PROMOCAO</code>, <code>predecessores</code>, <code>avaliar</code>, режим <code>linhas</code>) и <code>scripts/ci/abrir-pr-de-promocao.sh</code>, в <code>brabo-ci</code></li>
+<li><strong>Тест:</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code> (блок «promoção em camadas»)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.html">0284</a>, пересматривающий решение 7 из <a href="../../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">0276</a></li>
+<li><strong>Источник:</strong> AT-788 (EP-033)</li>
+</ul>
+<h3 id="rn-1072">RN-1072 — Merge продвижения и cron заново оценивают продвижения последующих слоёв</h3>
+<p>Поскольку выведенная зависимость не записана в теле, поиск по <code>in:body</code> её не
+находит. Поэтому <code>avisar-dependentes</code> смёрдженного PR также заново оценивает
+открытые продвижения (<code>base:main head:dev</code>) репозиториев последующих слоёв, а
+<code>varrer</code> (часовой cron) включает тот же поиск. Продвижение, открывшееся после
+нижележащего, пробуждается собственным событием или cron.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/dependencias-de-merge.ts</code> (режимы <code>avisar-dependentes</code> и <code>varrer</code>)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/dependencias-de-merge.spec.ts</code> (<code>sucessores</code>); сам поиск — это GitHub, он будет доказан на следующем продвижении</li>
+<li><strong>ADR:</strong> <a href="../../adr/0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.html">0284</a></li>
+<li><strong>Источник:</strong> AT-788 (EP-033)</li>
+</ul>
+<h2 id="o-relatório-de-decisão-do-regressivo-rn-10511053">Отчёт-решение регрессионного прогона (RN-1051..1053)</h2>
+<h3 id="rn-1051">RN-1051 — Отчёт регрессионного прогона строится из одного JSON, а рекомендация следует фиксированному правилу из шести строк</h3>
+<p>Запуск регрессионного прогона <code>brabo-qa</code> записывает <code>relatorio-regressivo.json</code>
+(версия 1) и выводит из него <code>relatorio-regressivo.md</code>. Summary, текст проверки и
+комментарий в PR — это представления этого JSON, а не отдельные источники.
+Рекомендация не пишется вручную: она берётся из первой подошедшей строки, в таком
+порядке: зелёный без flaky — <strong>одобрить</strong>; зелёный с flaky — <strong>одобрить</strong>, с
+предупреждением и списком; <code>digest</code> или <code>assinatura</code> — <strong>заблокировать</strong>, потому
+что это никогда не принимается (AT-765), а E2E запускается заново; <code>spec</code> в
+функциональности, которую PR <strong>затрагивает</strong> по карте, — <strong>заблокировать</strong>; <code>spec</code>
+только в функциональности, которую PR <strong>не</strong> затрагивает, или в «без
+функциональности» — <strong>принять с обоснованием</strong> (<code>/qa-aceitar</code>); <code>ambiente</code> или
+<code>sem-resposta</code> — <strong>запустить заново</strong>, а если повторится — <strong>принять с
+обоснованием</strong>. В режиме <code>dev</code> та же метка выходит с префиксом «atestado (não bloqueia)».</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/qa-e2e-resumo.ts:292</code> (<code>montarCheck</code>, который сегодня
+собирает проверку из результата); <code>relatorio.ts</code> из <code>brabo-qa</code> и JSON v1 в
+<code>dev</code> пока не существуют (AT-791, lanes L1 и L2)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/qa-e2e-resumo.spec.ts</code> (проверка по режиму); правило
+рекомендации и JSON v1 получают тест в L1 и L2</li>
+<li><strong>ADR:</strong> <a href="../../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.html">0277</a></li>
+<li><strong>Источник:</strong> AT-791 (EP-033)</li>
+</ul>
+<h3 id="rn-1052">RN-1052 — <code>/qa-aceitar</code> сохраняет отчёт о красном и записывает принятие против рекомендации</h3>
+<p>Сегодня принятие заново собирает проверку с <code>linhas: []</code> и поэтому стирает таблицу
+digests и таблицу функциональностей красного прогона: тот, кто смотрит позже, не
+видит, что было принято. Новое правило: <code>/qa-aceitar</code> <strong>сохраняет</strong> <code>summary</code> и
+<code>text</code> красной проверки, помещает сверху блок принятия (кто, когда, обоснование,
+ссылка на красный запуск и рекомендация, которую давал отчёт) и меняет только
+заголовок на <code>Aceito com justificativa</code>. Когда рекомендацией было <strong>заблокировать</strong>
+из-за spec затронутой функциональности, принятие всё равно действует, потому что
+решение за владельцем, но проверка и комментарий фиксируют «принято против
+рекомендации». В <code>dev</code> принятие не применяется: отчёт — лишь свидетельство.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/qa-e2e-aceitar.ts:53</code> (<code>montarCheck</code>, вызываемый с
+<code>linhas: []</code> — это и есть дефект для исправления); <code>scripts/ci/qa-e2e-aceite.ts:21</code>
+(<code>avaliarAceite</code>, который продолжает читать <code>external_id</code> <code>causa:*</code>)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/qa-e2e-aceite.spec.ts</code> (вердикт принятия); сохранение
+сводки и запись «против рекомендации» получают тест в L1</li>
+<li><strong>ADR:</strong> <a href="../../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.html">0277</a></li>
+<li><strong>Источник:</strong> AT-791 (EP-033)</li>
+</ul>
+<h3 id="rn-1053">RN-1053 — Spec без тега <code>@f-*</code> показывается как «без функциональности» и никогда не пропадает из отчёта</h3>
+<p>Выбор регрессионного прогона уже отделяет то, у чего нет владельца в карте (<code>semDono</code>,
+<code>scripts/ci/qa-regressivo-selecao.ts:86</code>), но эти данные не доходят до отчёта.
+Новое правило: spec без единого тега <code>@f-&lt;id&gt;</code> попадает в корзину <strong>«без
+функциональности»</strong>, в таблице и в списке сбоев, и никогда не исчезает. Красный
+spec в этой корзине становится <strong>принять с обоснованием</strong>, никогда не
+заблокировать, по правилу <a href="#rn-1051">RN-1051</a>. Логин-<code>setup</code>
+(<code>entrar.setup.ts</code>) тоже попадает в эту корзину и помечается как подготовка, чтобы
+не выглядеть тестом функциональности. Без корзины таблица показывала бы всё как
+«без покрытия» при красном spec, что и есть находка qa#28.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/qa-regressivo-selecao.ts:76</code> (<code>semDono.push</code>); корзины
+«без функциональности» в отчёте пока нет (AT-791, lanes L1 и L2)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/qa-regressivo-selecao.spec.ts</code> (выбор по карте и
+<code>semDono</code>); корзина в отчёте получает тест в L2</li>
+<li><strong>ADR:</strong> <a href="../../adr/0277-o-regressivo-roda-num-compose-so-e-o-relatorio-decide.html">0277</a></li>
+<li><strong>Источник:</strong> AT-791 (EP-033)</li>
+</ul>
+<h2 id="o-gatilho-espera-o-carimbo-e-a-assinatura-antes-do-vermelho-rn-1066">Триггер ждёт штамп и подпись, прежде чем стать красным (RN-1066)</h2>
+<h3 id="rn-1066">RN-1066 — Триггер ждёт штамп и подпись, прежде чем провалить проверку из-за окружения или подписи</h3>
+<p>Когда PR в <code>main</code> (шлюз <code>E2E do brabo-qa</code>) или в <code>dev</code> (проверка
+<code>Regressivo do brabo-qa</code>) запускает триггер, образ head репозитория события может
+ещё штамповаться или подписываться: merge в <code>dev</code> двигает head продвижения, а
+штамп (тег <code>-dev</code>, образ) и подпись образа занимают от 3 до 8 мин. Поэтому
+триггер повторяет три поиска до настраиваемого потолка (<code>QA_ESPERA_MINUTOS</code>, по
+умолчанию 10 мин, интервал 15 с):</p>
+<ul>
+<li>тег <code>-dev</code> для head (в <code>main</code>);</li>
+<li>существование образа (<code>-dev</code> для head в <code>main</code>, <code>sha-&lt;12&gt;</code> в <code>dev</code>);</li>
+<li>проверка подписи <code>cosign verify</code> с идентичностью <code>e2e-pr</code> из brabo-qa.</li>
+</ul>
+<p>Только после потолка проверка закрывается красной, и сообщение говорит, чего не
+хватило: тега <code>-dev</code> для head или образа (причина <code>ambiente</code>), либо подписи
+(причина <code>assinatura</code>). Недействительная подпись никогда не принимается через
+<code>/qa-aceitar</code> (RN-1052). Ожидание действует только для образа репозитория события;
+образы остальных сервисов уже проштампованы и подписаны.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/qa-e2e-espera.ts:51</code> (<code>esperarImagemAssinada</code>, ожидание
+образа и подписи); <code>scripts/ci/qa-e2e-espera.ts:33</code> (<code>repetirAte</code>, повтор
+до потолка); <code>scripts/ci/qa-e2e-disparar.ts:151</code> (резолвер тегов, повторяемый до
+потолка) и <code>scripts/ci/qa-e2e-disparar.ts:157</code> (ожидание только образа репозитория события)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/qa-e2e-espera.spec.ts</code> (повтор до потолка, причина
+<code>ambiente</code> и причина <code>assinatura</code>)</li>
+<li><strong>Источник:</strong> AT-790 (EP-033), brabo-ci#31</li>
+</ul>
+<h2 id="o-painel-da-mudança-rn-10541056-adr-0278">Панель изменения (RN-1054..1056, ADR 0278)</h2>
+<h3 id="rn-1054">RN-1054 — У каждого изменения есть панель, собирающая runs</h3>
+<p>У каждого изменения (компонента <code>Depende-de</code>, отдельного PR или тега) есть запуск
+<code>Painel da mudança</code> в <code>brabo-ci</code>. Он собирает runs изменения по head SHA, merge SHA,
+тегу и <code>c=</code> из E2E. Опрашивает каждые 60 с, с ETag; если остаётся меньше 500
+запросов, интервал становится 5 мин. Останавливается, когда всё завершено и прошло
+3 мин тишины, либо на потолке в 45 мин. Run, всё ещё идущий на потолке, выходит как
+«em andamento há N min». Панель <strong>никогда не проваливается</strong>.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/painel.ts:235</code> (<code>terminou</code>, правило остановки)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/painel.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.html">0278</a></li>
+<li><strong>Источник:</strong> AT-792 (EP-033)</li>
+</ul>
+<h3 id="rn-1055">RN-1055 — Панель не публикует проверку в PR; ссылка остаётся в исходных runs</h3>
+<p>Хелпер Vínculos в режиме auto с PR пишет строку <code>Disparado | Painel da mudança</code>. Она указывает на <code>…/brabo-ci/actions/workflows/painel.yml?query=&lt;repo&gt;%23&lt;n&gt;</code>.
+Токен App панели только читает (<code>actions</code>, <code>pull-requests</code> и <code>contents</code>). Единственный
+токен с записью — токен dispatch (<code>contents: write</code>, ограниченный <code>brabo-ci</code>).
+Поэтому <code>checks: write</code> не нужен.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/vinculos.ts:164</code> (<code>linhaDoPainel</code>, строка Vínculo)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/vinculos.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.html">0278</a></li>
+<li><strong>Источник:</strong> AT-792 (EP-033)</li>
+</ul>
+<h3 id="rn-1056">RN-1056 — Одна панель на компонент</h3>
+<p>Отправитель (job <code>avisar-painel</code>) не запускает панель, если уже есть панель
+<code>queued</code> или <code>in_progress</code> с <code>&lt;repo&gt;#&lt;n&gt;</code> в заголовке, при совпадении всего токена.
+Когда компонент растёт (ключ <code>m=&lt;hash&gt;</code>), работающая панель пишет «superado» и
+выходит, а отправитель запускает новую.</p>
+<ul>
+<li><strong>Код:</strong> <code>scripts/ci/painel.ts:247</code> (<code>jaTemPainel</code>); <code>scripts/ci/painel.ts:90</code>
+(<code>superado</code>, который опрашивает работающая панель)</li>
+<li><strong>Тест:</strong> <code>scripts/ci/painel.spec.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0278-a-mudanca-e-vista-num-painel-do-brabo-ci.html">0278</a></li>
+<li><strong>Источник:</strong> AT-792 (EP-033)</li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/ci/parte-01.html">CI — часть 1 (с RN-037)</a><a href="../../business-rules/contracts.html">Contratos</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/business-rules/ci/parte-02.md">Редактировать страницу</a></footer>
+</main>
+<aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#o-regressivo-por-funcionalidade-e-os-vínculos-dos-runs-rn-10311035-rn-10431045">Регрессионный прогон по функциональности и связи запусков (RN-1031..1035, RN-1043..1045)</a></li><li class="n3"><a href="#rn-1031">RN-1031 — Каталог функциональностей и карта путь → функциональность живут в одном файле, а spec привязывается тегом</a></li><li class="n3"><a href="#rn-1032">RN-1032 — PR в dev запускает регрессионный прогон только затронутых функциональностей под проверкой Regressivo do brabo-qa, которая НИКОГДА не обязательна</a></li><li class="n3"><a href="#rn-1033">RN-1033 — Три правила сквозных файлов действуют раньше карты: ничего, весь каталог и без владельца</a></li><li class="n3"><a href="#rn-1075">RN-1075 — brabo-runner подтверждается собственным CI: бинарник linux-x64 входит в PR, а контракт с engine проверяется только в TP-01</a></li><li class="n3"><a href="#rn-1034">RN-1034 — PR в main запускает весь каталог в E2E do brabo-qa, а функциональность без spec показывается как «без покрытия» и не проваливает проверку</a></li><li class="n3"><a href="#rn-1035">RN-1035 — PR в dev публикует подписанный образ sha-&lt;12&gt; только своего репозитория, а очистка удаляет осиротевшие</a></li><li class="n3"><a href="#rn-1043">RN-1043 — Каждый запуск, читающий другой репозиторий, публикует ## Vínculos в начале Summary, а хелпер никогда не проваливает job</a></li><li class="n3"><a href="#rn-1044">RN-1044 — У целевого запуска dispatch или тега есть run-name с источником, а корреляция dispatch передаётся в имени как c=&lt;run_id&gt;-&lt;attempt&gt;</a></li><li class="n3"><a href="#rn-1045">RN-1045 — Проверка App указывает на запуск brabo-qa с самого начала, а исходный запуск записывает ссылку на запущенный</a></li><li class="n2"><a href="#publicação-de-pacotes-npm-rn-1042">Публикация npm-пакетов (RN-1042)</a></li><li class="n3"><a href="#rn-1042">RN-1042 — Пакет выходит только по тегу, с dist-tag версии и одной и той же версией во всех пакетах</a></li><li class="n2"><a href="#dependência-de-merge-entre-repositórios-rn-10471050">Зависимость merge между репозиториями (RN-1047..1050)</a></li><li class="n3"><a href="#rn-1047">RN-1047 — PR объявляет зависимость строкой Depende-de: viralabs-dev/&lt;repo&gt;#&lt;n&gt;, а некорректная строка проваливает проверку, а не проходит молча</a></li><li class="n3"><a href="#rn-1048">RN-1048 — У проверки Dependências de merge четыре состояния, никогда не neutral, а ожидание жёлтое</a></li><li class="n3"><a href="#rn-1049">RN-1049 — Merge зависимости обновляет проверку PR, которые на неё ссылаются, а часовой cron — лишь страховочная сеть</a></li><li class="n3"><a href="#rn-1050">RN-1050 — Цикл зависимостей проваливает проверку с полным путём, до глубины 5</a></li><li class="n3"><a href="#rn-1071">RN-1071 — PR продвижения зависит от открытых продвижений предыдущих слоёв, а порядок — это проверенный список</a></li><li class="n3"><a href="#rn-1072">RN-1072 — Merge продвижения и cron заново оценивают продвижения последующих слоёв</a></li><li class="n2"><a href="#o-relatório-de-decisão-do-regressivo-rn-10511053">Отчёт-решение регрессионного прогона (RN-1051..1053)</a></li><li class="n3"><a href="#rn-1051">RN-1051 — Отчёт регрессионного прогона строится из одного JSON, а рекомендация следует фиксированному правилу из шести строк</a></li><li class="n3"><a href="#rn-1052">RN-1052 — /qa-aceitar сохраняет отчёт о красном и записывает принятие против рекомендации</a></li><li class="n3"><a href="#rn-1053">RN-1053 — Spec без тега @f-* показывается как «без функциональности» и никогда не пропадает из отчёта</a></li><li class="n2"><a href="#o-gatilho-espera-o-carimbo-e-a-assinatura-antes-do-vermelho-rn-1066">Триггер ждёт штамп и подпись, прежде чем стать красным (RN-1066)</a></li><li class="n3"><a href="#rn-1066">RN-1066 — Триггер ждёт штамп и подпись, прежде чем провалить проверку из-за окружения или подписи</a></li><li class="n2"><a href="#o-painel-da-mudança-rn-10541056-adr-0278">Панель изменения (RN-1054..1056, ADR 0278)</a></li><li class="n3"><a href="#rn-1054">RN-1054 — У каждого изменения есть панель, собирающая runs</a></li><li class="n3"><a href="#rn-1055">RN-1055 — Панель не публикует проверку в PR; ссылка остаётся в исходных runs</a></li><li class="n3"><a href="#rn-1056">RN-1056 — Одна панель на компонент</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-ru.json" data-base="../../"></script></body>
+</html>

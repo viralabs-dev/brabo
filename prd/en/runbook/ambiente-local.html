@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ambiente local e de dev | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../runbook/ambiente-local.html">pt-BR</option><option value="../../en/runbook/ambiente-local.html" selected>en</option><option value="../../ru/runbook/ambiente-local.html">ru</option><option value="../../zh-Hans/runbook/ambiente-local.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../dev/en/runbook/ambiente-local.html">dev</option><option value="../../../prd/en/runbook/ambiente-local.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="../index.html">Home</a></li><li><a href="../getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><a href="../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html">Developing Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><details open><summary><span>Operations manual</span></summary><ul><li><a href="../runbook.html">Operations manual</a></li><li><a href="../runbook/ambiente-local.html" aria-current="page">Ambiente local e de dev</a></li><li><a href="../runbook/deploy.html">Deploy e rollout</a></li><li><a href="../runbook/instalacao.html">Instalação e artefatos</a></li><li><a href="../runbook/operacao.html">Operação</a></li><li><a href="../runbook/restore.html">Restore</a></li><li><a href="../runbook/segredos.html">Rotação de segredos</a></li></ul></details></li><li><a href="../tutorials/adotar.html">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">Architecture</a></li><li><a href="../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">Branching policy</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../explanation/release-do-produto.html">Product release</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="../explanation/localizacao.html">Localization</a></li><li><a href="../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="../glossary.html">Glossary</a></li><li><a href="../reference/componentes-da-doc.html">Doc components</a></li><li><a href="../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">Business rules</a></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">Timeline</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="../explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a></li><li><a href="../explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">This page is not translated yet; showing the original in Portuguese.</div>
+<article class="doc">
+<h1 id="ambiente-local-e-de-dev">Ambiente local e de dev</h1>
+<p>Parte do <a href="../runbook.html">Runbook operacional</a>. Comece pela triagem do índice.</p>
+<h2 id="broker-de-container">O broker de containers</h2>
+<p>O broker (<a href="../adr/0130-broker-de-container.html">ADR 0130</a>) é o único processo do
+produto que fala com um daemon do Docker, e o único serviço com
+<code>/var/run/docker.sock</code> montado. <strong>Não monte esse socket em nenhum outro lugar.</strong></p>
+<p><strong>Localmente ele sobe com <code>make dev</code>; em produção, não.</strong> Essa
+assimetria é uma decisão (<a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146</a>,
+ponto 3), não um descuido — não &quot;uniformize&quot; os dois arquivos de compose. Quem
+roda <code>make dev</code> <strong>já tem o socket do Docker</strong> (está rodando
+<code>docker compose</code> contra o daemon do próprio host), então o broker recebê-lo
+não concede nada que o operador já não tenha. Em produção o socket é uma
+fronteira de privilégio de verdade e o operador não é o desenvolvedor, então ali ele
+fica sob <code>profiles: [&quot;container-broker&quot;]</code>.</p>
+<p>Até essa decisão o broker vinha desligado por padrão nos dois arquivos, com o
+argumento de que &quot;nada o chama ainda&quot;. Isso deixou de ser verdade: ele tem quatro chamadores reais
+(<a href="../adr/0133-infra-elege-imagem-do-roteamento.html">ADR 0133</a>/
+<a href="../adr/0136-pagina-global-de-containers.html">0136</a>), e o
+<a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144</a> fez o modo <strong>Pasta montada</strong> subir o
+container dele <em>pelo</em> broker — então, com o profile desligado, o modo local
+padrão terminava em <code>BrokerIndisponivelError</code>. Essa falha continua sendo o que você recebe quando
+o broker está de fato ausente: um <code>failed</code> NOMEADO, nunca uma queda, e nunca uma
+queda silenciosa para rodar fora de um container.</p>
+<p>O que você ainda precisa definir é o gid — e errá-lo <strong>não</strong> quebra o
+boot, quebra o uso:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># o gid do grupo docker do seu host — o default do compose (999) é o mais</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># comum e está errado em várias distribuições</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">getent</span><span style="color:var(--shiki-token-string)"> group</span><span style="color:var(--shiki-token-string)"> docker</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> cut</span><span style="color:var(--shiki-token-string)"> -d:</span><span style="color:var(--shiki-token-string)"> -f3</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># no .env</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">#    DOCKER_GID=&#x3C;o número acima></span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">#    PROJECT_WORKSPACES_HOST_DIR=/home/you/brabo-projects    # JÁ EXPANDIDO; deriva HOST_ROOT</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">#    GIT_LOCAL_REPOS_HOST_DIR=/home/you/brabo-projects-bare</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">#    BRABO_PROJECTS_BASE=/home/you/projetos-brabo            # deriva HOST_BASE</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-token-string)"> up</span><span style="color:var(--shiki-token-string)"> -d</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> engine</span><span style="color:var(--shiki-token-string)"> broker</span></span>
+<span class="line"></span></code></pre>
+<p><code>BROKER_URL</code> <strong>não</strong> está mais nessa lista: o compose de dev tem como default
+<code>http://broker:8090</code>, o serviço que ele sobe
+(<a href="../business-rules/infra.html#rn-599">RN-599</a>). Antes desse default, a api respondia
+<code>brokerConfigurado: false</code> ao lado de um broker saudável e a criação de projeto só
+oferecia <code>runner</code>. Um valor no <code>.env</code> continua vencendo; os composes de produção e de
+instalação não têm default, de propósito.</p>
+<p>O container do projeto roda como o <strong>dono da pasta do projeto</strong> (<a href="../adr/0180-container-com-o-dono-da-pasta.html">ADR 0180</a>, <a href="../business-rules/contracts.html#rn-627">RN-627</a>): a api lê o uid e o gid da pasta e o broker o inicia com <code>--user &lt;uid&gt;:&lt;gid&gt;</code> e <code>HOME=/tmp</code>. É isso que deixa um dev agent escrever em <code>/work</code> sob <code>--cap-drop ALL</code>. Duas coisas a saber quando não funciona: uma pasta de root, ilegível ou ausente cai no comportamento anterior (root dentro do container, sem escrita numa pasta de outro uid — <code>npm install</code> responde <code>EACCES</code>); e um container que já existe só muda quando é recriado (<code>container_remove</code>, depois <code>container_start</code>).</p>
+<p><code>make dev</code> também <strong>informa</strong> a pasta gerenciada a cada execução (RN-599): com
+<code>PROJECT_WORKSPACES_HOST_DIR</code> não definida, <code>api</code>/<code>engine</code> usam o volume gerenciado, o
+broker não recebe <code>PROJECT_WORKSPACES_HOST_ROOT</code>, e <code>container_start</code> termina
+recusado — com a stack saudável. Ele informa também um <code>~</code> no caminho (o Compose
+o expande no bind mount, não na variável do broker) e um
+<code>PROJECT_WORKSPACES_HOST_ROOT</code> explícito que difere da pasta que a api monta.
+Como o aviso do gid, ele nunca bloqueia e nunca escreve no <code>.env</code>; trocar o
+volume por uma pasta não migra o conteúdo do volume — veja
+<a href="#migrar-workspaces-pasta-local">migrar workspaces</a>.</p>
+<p><code>make dev</code> <strong>informa</strong> o estado de <code>DOCKER_GID</code> a cada execução
+(<a href="../business-rules/infra.html#rn-512">RN-512</a>), comparando-o com o grupo real da sua
+máquina, justamente para que a divergência não seja descoberta muito depois — quando alguém
+propõe <code>container_start</code> e toda operação morre com <code>permission denied</code> no
+socket. O aviso nunca bloqueia, e numa máquina sem grupo <code>docker</code> nenhum
+(Docker Desktop, rootless) ele diz que a pergunta não se aplica em vez de
+acusar você de um defeito.</p>
+<p>Em produção, suba-o explicitamente:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.prod.yml</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --profile</span><span style="color:var(--shiki-token-string)"> container-broker</span><span style="color:var(--shiki-token-string)"> up</span><span style="color:var(--shiki-token-string)"> -d</span><span style="color:var(--shiki-token-string)"> broker</span></span>
+<span class="line"></span></code></pre>
+<p>Numa <strong>instalação</strong> feita pelo <code>install.sh</code> o broker é o mesmo serviço,
+da imagem publicada, e o instalador pergunta se deve ligá-lo — veja
+<a href="instalacao.html#broker-na-instalacao">o broker numa instalação</a>
+(<a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a>).</p>
+<p><strong>O broker tem DUAS raízes, e nenhuma faz as vezes da outra</strong>
+(<a href="../business-rules/api.html#rn-503">RN-503</a>,
+<a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144</a>).
+<code>PROJECT_WORKSPACES_HOST_ROOT</code> é onde moram os projetos do modo <strong>Container</strong>;
+<code>BRABO_PROJECTS_HOST_BASE</code> é onde moram os projetos do modo <strong>Pasta montada</strong>, e o
+compose a deriva de <code>BRABO_PROJECTS_BASE</code>, então definir a base é normalmente
+tudo o que você faz. Qualquer que falte, a recusa a nomeia e não toca em nenhum
+container. Cair na outra raiz montaria a pasta do projeto errado
+— a raiz gerenciada é nomeada por <code>workspace_dir_name</code>, a base é nomeada por você,
+e o mesmo nome quer dizer pastas diferentes em cada uma.</p>
+<p>Para conferir que ele está de pé — a partir da api, que é o ÚNICO serviço que o
+alcança (a rede <code>broker</code> é <code>internal: true</code> e o serviço não publica porta nenhuma,
+então <code>curl</code> do seu host não vai funcionar, e é essa a ideia):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> -T</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  node</span><span style="color:var(--shiki-token-string)"> -e</span><span style="color:var(--shiki-token-string-expression)"> "fetch('http://broker:8090/health').then(r=>r.text()).then(console.log)"</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># esperado: {"status":"ok","servico":"broker"}</span></span>
+<span class="line"></span></code></pre>
+<p><code>/health</code> fala do PROCESSO, nunca do daemon. Reiniciar o
+broker não conserta um Docker fora do ar, e um healthcheck que falhasse por
+esse motivo produziria um laço de reinício que não resolve nada.</p>
+<p><strong>A imagem local instala as dependências no BUILD, e isso não é uma
+otimização.</strong> A única rede do broker é <code>internal: true</code>, então não há registry
+alcançável em runtime: uma imagem que rodava <code>corepack</code>/<code>pnpm install</code> ao
+iniciar morria com <code>getaddrinfo EAI_AGAIN registry.npmjs.org</code> e saía com 1. A
+correção tirou o registry do caminho de runtime (<code>pnpm install</code> como passo de build)
+em vez de abrir a rede — a rede é a primeira das cinco
+camadas de contenção. Desde a AT-360 nenhuma imagem usa corepack (o Node 25+ não
+o traz mais): todo Dockerfile instala o pnpm a partir do tarball do registry, conferido
+contra um sha512 gravado no Dockerfile (<code>PNPM_SHA512</code>), em
+<code>/usr/local/bin</code>. A versão dele bate com <code>packageManager</code> no <code>package.json</code>, então
+o pnpm nunca tenta baixar nada em runtime — medido com a imagem de dev
+sob <code>--network none</code>: <code>pnpm --version</code> imprime <code>11.3.0</code> e <code>/health</code>
+responde. Subir o pnpm quer dizer mudar <code>packageManager</code>, <code>PNPM_VERSION</code> e
+<code>PNPM_SHA512</code> (<code>npm view pnpm@&lt;v&gt; dist.integrity</code>, em hex) juntos.</p>
+<p>Duas consequências que você vai encontrar:</p>
+<ul>
+<li><strong>Os três <code>node_modules</code> são volumes nomeados montados sobre o que a imagem
+instalou</strong>, e o Docker só semeia um volume a partir da imagem quando o volume está
+VAZIO. Por isso <code>docker/broker/entrypoint.sh</code> os reconcilia contra uma cópia
+guardada fora de <code>/workspace</code>, carimbada com o sha256 do <code>pnpm-lock.yaml</code>
+com que a imagem foi construída. O primeiro boot depois de um <code>--build</code> registra
+<code>sincronizando…</code> e leva alguns segundos; os seguintes não registram nada.</li>
+<li><strong>Mudar uma dependência do broker exige <code>up -d --build broker</code>.</strong> O
+entrypoint compara o carimbo dele com o lockfile da árvore de trabalho e AVISA quando
+diferem. Ele avisa em vez de recusar o boot: o broker não tem dependência de
+runtime além do link de workspace para <code>@brabo/docker-port</code>, e trocar um
+aviso por uma indisponibilidade seria pior.</li>
+</ul>
+<p>O serviço também tem <strong>healthcheck</strong> (<code>wget</code> contra <code>127.0.0.1:8090/health</code>
+de dentro do container — ele não publica porta, e o <code>node:26-alpine</code> não tem
+<code>curl</code>). Sem ele, <code>up --wait</code> informava <code>Healthy</code> no instante em que o container
+iniciava, então o <code>scripts/dev/reset-total.sh</code> anunciava &quot;reset completo&quot; com um
+broker que tinha morrido cinco segundos antes.</p>
+<p><strong>Sintomas e o que cada um quer dizer:</strong></p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>o que você vê</th>
+<th>o que é</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>permission denied</code> em <code>/var/run/docker.sock</code></td>
+<td><code>DOCKER_GID</code> errado. O socket é <code>root:docker</code> e o broker roda não-root; refaça o passo 1 acima e recrie o container (<code>up -d --force-recreate broker</code>)</td>
+</tr>
+<tr>
+<td><code>não encontrei o executável docker no PATH</code></td>
+<td>a imagem foi construída sem <code>docker-cli</code>. Reconstrua-a (<code>--build</code>). Este erro é SEPARADO de &quot;daemon fora do ar&quot; de propósito: instalar e iniciar são correções diferentes</td>
+</tr>
+<tr>
+<td><code>getaddrinfo EAI_AGAIN registry.npmjs.org</code> e o container sai com 1</td>
+<td>uma imagem do broker construída antes de as dependências irem para o build. Reconstrua-a (<code>up -d --build broker</code>). NÃO dê saída de rede ao serviço: a rede <code>internal: true</code> é a contenção, e o registry é o que tem de sair do caminho de runtime</td>
+</tr>
+<tr>
+<td><code>AVISO — pnpm-lock.yaml mudou desde o build desta imagem</code></td>
+<td>a imagem é mais velha que o lockfile da árvore de trabalho. Ela continua rodando (o broker não tem dependência de runtime além do link de workspace); reconstrua quando você de fato mudou uma dependência do broker</td>
+</tr>
+<tr>
+<td><code>PROJECT_WORKSPACES_HOST_ROOT não está definida</code> no <code>start</code></td>
+<td>esperado, e a recusa é o comportamento correto. O <code>-v</code> é resolvido pelo DAEMON contra o sistema de arquivos do HOST; adivinhar montaria uma pasta VAZIA e o dev agent trabalharia num diretório sem código. As outras quatro operações continuam funcionando sem ela</td>
+</tr>
+<tr>
+<td>a rota do ciclo de vida diz <code>naoObservado: &quot;broker-nao-configurado&quot;</code></td>
+<td><code>BROKER_URL</code> está vazia na <strong>api</strong>. É um estado normal, não uma falha — a leitura declara que não olhou em vez de herdar o estado registrado (<a href="../business-rules/api.html#rn-486">RN-486</a>)</td>
+</tr>
+<tr>
+<td>a rota do ciclo de vida diz <code>naoObservado: &quot;broker-sem-resposta&quot;</code></td>
+<td><code>BROKER_URL</code> está definida e nada respondeu: o profile provavelmente está desligado, ou a api não está na rede <code>broker</code>. Se <code>detalhe</code> diz <code>não respondeu `inspect` dentro do teto desta operação (5000ms)</code>, o broker É alcançável e está lento — olhe o daemon, não a rede (<a href="../business-rules/api.html#rn-604">RN-604</a>)</td>
+</tr>
+<tr>
+<td>um comando de terminal ou <code>container_start</code> falha com <code>não respondeu `exec` dentro do teto desta operação</code> (ou <code>start</code>/<code>stop</code>/<code>remove</code>)</td>
+<td>a api parou de esperar no teto próprio daquela operação, não porque o broker está fora do ar (<a href="../business-rules/api.html#rn-604">RN-604</a>). No <code>exec</code> o comando pode ainda estar rodando dentro do container; no <code>start</code>/<code>stop</code>/<code>remove</code> o efeito pode ter acontecido — confira <code>/containers</code> antes de repetir. Um <code>start</code> cujo pull de imagem leva mais de 30s é cortado pelo próprio broker — esse tem linha própria abaixo</td>
+</tr>
+<tr>
+<td>o resultado de terminal de um dev agent diz <code>o comando passou do teto de execução de terminal (120s, TERMINAL_ACTION_TIMEOUT_MS)</code></td>
+<td>o comando rodou mais que <code>TERMINAL_ACTION_TIMEOUT_MS</code> (default de 120 s desde a <a href="../business-rules/engine.html#rn-757">RN-757</a>; era 15 s) e o engine parou de esperar; o processo pode ainda estar rodando no container. O agente é orientado a rodá-lo de novo sob <code>nohup … &amp;</code>. Subir a variável é possível, mas acima de ~180 s a espera externa do engine (valor + 120 s) passa do limite de 300 s de cabeçalhos do <code>fetch</code> do Node da api e o corte volta</td>
+</tr>
+<tr>
+<td><code>container_start</code> falha com <code>o `docker pull &lt;imagem&gt;` não terminou dentro do teto de 30000ms e foi cancelado</code> (o broker responde <code>504</code>, <code>origem: infra</code>)</td>
+<td>a imagem não está no daemon e o pull dela não cabe no teto de controle de 30s. Matar o CLI cancela o pull, então a imagem continua ausente — repetir não ajuda. Faça o pull no host que roda os containers (<code>docker pull &lt;imagem&gt;</code>; no modo <code>runner</code>, na máquina do usuário) e aprove o start de novo. Imagens grandes não sobem por este caminho na primeira tentativa, por decisão do mantenedor (<a href="../business-rules/contracts.html#rn-605">RN-605</a>)</td>
+</tr>
+<tr>
+<td><code>BRABO_PROJECTS_HOST_BASE não está definida</code> no <code>start</code> de um projeto <strong>Pasta montada</strong></td>
+<td>mesma forma da linha acima, outra raiz. Defina <code>BRABO_PROJECTS_BASE</code> no <code>.env</code> e recrie o broker; o compose deriva esta dela (<a href="../business-rules/api.html#rn-503">RN-503</a>)</td>
+</tr>
+<tr>
+<td>o broker responde <code>409</code> para um projeto em modo <code>runner</code></td>
+<td>esperado. Aquela pasta mora na máquina do usuário e este host não a enxerga — lá, quem sobe container é o runner (<a href="../adr/0137-o-runner-sobe-o-container-do-projeto.html">ADR 0137</a>)</td>
+</tr>
+<tr>
+<td>o broker responde <code>409</code> dizendo que não sabe onde está a pasta do projeto</td>
+<td>um projeto <strong>Pasta montada</strong> LEGADO, criado antes de a base existir e morando fora dela. A correção é mover a pasta para dentro de <code>BRABO_PROJECTS_BASE</code>, não mudar o modo do projeto — a mensagem nomeia a base e o caminho que viu (<a href="../business-rules/api.html#rn-503">RN-503</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>O broker nunca sobe um container sozinho.</strong> Não há laço nem
+fila: ele age quando chamado, e toda chamada de escrita nasce de uma
+<code>proposed_action</code> que um humano aprovou.</p>
+<h2 id="migrar-workspaces-pasta-local">Migrar workspaces para pasta local</h2>
+<p>Definir <code>PROJECT_WORKSPACES_HOST_DIR</code>/<code>GIT_LOCAL_REPOS_HOST_DIR</code>
+(<a href="../getting-started.html#local-folder-for-workspaces">Primeiros passos</a>) troca o
+volume do Docker pela pasta indicada — mas <strong>não copia</strong> o que já
+existia no volume antigo. Quem já tem projetos criados e não
+quer perder o trabalho precisa copiar o conteúdo antes de trocar:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-token-string)"> down</span><span style="color:var(--shiki-token-comment)">   # nunca com -v</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  -v</span><span style="color:var(--shiki-token-string)"> brabo-dev_project_workspaces:/de</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  -v</span><span style="color:var(--shiki-token-string-expression)"> "$(</span><span style="color:var(--shiki-token-function)">realpath</span><span style="color:var(--shiki-token-string)"> ~/brabo-projetos</span><span style="color:var(--shiki-token-string-expression)">)"</span><span style="color:var(--shiki-token-string)">:/para</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  alpine</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string-expression)"> 'cp -a /de/. /para/'</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  -v</span><span style="color:var(--shiki-token-string)"> brabo-dev_git_local_repos:/de</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  -v</span><span style="color:var(--shiki-token-string-expression)"> "$(</span><span style="color:var(--shiki-token-function)">realpath</span><span style="color:var(--shiki-token-string)"> ~/brabo-projetos-bare</span><span style="color:var(--shiki-token-string-expression)">)"</span><span style="color:var(--shiki-token-string)">:/para</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  alpine</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string-expression)"> 'cp -a /de/. /para/'</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># defina as duas variáveis no .env, depois:</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> dev</span></span>
+<span class="line"></span></code></pre>
+<p>O nome do volume (<code>brabo-dev_project_workspaces</code>) leva o prefixo do projeto
+Compose (<code>name: brabo-dev</code> em <code>docker/docker-compose.yml</code>, <a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR
+0170</a>) — confira com <code>docker volume ls</code>.
+Um ambiente de dev de antes do ADR 0170 ainda tem os dados sob <code>brabo_*</code>: veja
+<a href="#dev-para-brabo-dev">Levando um ambiente de dev para brabo-dev</a> antes. O volume antigo continua existindo
+depois (o Compose não apaga um volume que saiu de uso); remova-o
+com <code>docker volume rm</code> quando tiver certeza de que a cópia funcionou.</p>
+<h2 id="projeto-no-modo-local">Projeto no modo Pasta montada: a base de projetos</h2>
+<p><strong>Sintoma:</strong> o assistente de projeto nem oferece <strong>Pasta montada</strong>; ou
+oferece, e a api responde <code>400</code> dizendo que a pasta <em>não existe de
+dentro da api</em>.</p>
+<p>Os dois vêm do mesmo fato: um projeto no modo Pasta montada guarda o código numa
+pasta <strong>sua</strong>, e a api e o engine só a alcançam se ela estiver
+montada nos containers deles. O que mudou
+(<a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141</a>,
+<a href="../business-rules/api.html#rn-500">RN-500</a>) é quem arranja isso, e com que frequência:
+agora há <strong>uma base</strong>, configurada uma vez pelo operador, e todo
+projeto montado mora dentro dela. Você nunca mais edita o compose por
+projeto.</p>
+<p><strong>O que fazer — uma vez, para a instalação inteira.</strong> O caminho suportado é o
+passo de consentimento (<a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146</a>), que
+propõe uma pasta, recusa uma que se sobreponha ao checkout do Brabo ou a
+<code>PROJECT_WORKSPACES_HOST_DIR</code>, prova no macOS/Windows que o Docker a enxerga,
+a cria e escreve a variável:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">node</span><span style="color:var(--shiki-token-string)"> scripts/dev/consentir-base.mjs</span></span>
+<span class="line"></span></code></pre>
+<p>Rode-o no <strong>seu</strong> terminal. <code>pnpm bootstrap</code> → <em>Docker › Base de projetos</em>
+roda o mesmo script mas só consegue <strong>informar</strong>: todo item do menu roda com stdin
+vindo de <code>/dev/null</code> de propósito, então ele não consegue fazer pergunta.</p>
+<p>Escrever a linha à mão continua funcionando:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># .env — caminho ABSOLUTO. O `~` NÃO é expandido pelo Compose.</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">BRABO_PROJECTS_BASE</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string)">/home/voce/projetos-brabo</span></span>
+<span class="line"></span></code></pre>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-token-string)"> up</span><span style="color:var(--shiki-token-string)"> -d</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> engine</span></span>
+<span class="line"></span></code></pre>
+<p>É isso. Daqui em diante, um projeto no modo Pasta montada vai para algum lugar sob
+<code>/home/voce/brabo</code> e não precisa de mais configuração.</p>
+<p><strong>A pasta em si ainda não precisa existir</strong>
+(<a href="../adr/0142-validacao-de-workspace-montado-adiada.html">ADR 0142</a>,
+<a href="../business-rules/api.html#rn-501">RN-501</a>). Criar um projeto Pasta montada valida
+só o FORMATO do caminho mais &quot;está sob a base&quot;; a pasta é criada
+depois, quando a Infra sobe o container do projeto — que é o que permite ao
+assistente SUGERIR <code>&lt;base&gt;/&lt;slug do projeto&gt;</code> para começo de conversa. Entre
+esses dois momentos <code>workspacePath</code> aponta para uma pasta que ainda não está lá,
+e o <code>workspaceVerifiedAt</code> do projeto é <code>null</code>; converter um projeto existente
+para Pasta montada é a única exceção e cria a pasta na hora,
+porque move o <code>permissions.json</code> para dentro dela.</p>
+<p>Então um <code>400</code> na criação agora quer dizer só uma de duas coisas, e as duas nomeiam o que
+querem dizer: o caminho não está sob a base (a mensagem nomeia a base e
+sugere <code>&lt;base&gt;/&lt;nome&gt;</code>), ou <code>BRABO_PROJECTS_BASE</code> nem está configurada
+(a mensagem diz que o MODO não está disponível nesta instalação). Uma pasta
+que a api não consegue criar ou alcançar aparece depois, como um <code>failed</code> NOMEADO
+na ação <code>container_start</code> — nunca um 500, e o ciclo de vida do container
+não é marcado <code>provisioning</code> quando isso acontece.</p>
+<p><strong>Projetos montados ganham um container de verdade, e ele roda no SERVIDOR</strong>
+(<a href="../business-rules/api.html#rn-503">RN-503</a>,
+<a href="../adr/0144-a-segunda-raiz-do-broker.html">ADR 0144</a>). Como a base é
+alcançável pelo daemon do Docker do host, <code>container_start</code> de um projeto Pasta montada
+vai para o <a href="#broker-de-container">broker</a>, exatamente como o modo Container — ele
+deixou de exigir um <code>brabo-runner</code> conectado. Só o modo <strong>Runner</strong> ainda vai para
+o runner, na própria máquina do usuário, porque aquela pasta está num lugar que este
+servidor não enxerga. Localmente o broker já está de pé — ele vem com o <code>make dev</code>
+desde o <a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146</a>, justamente porque
+este é o caminho do modo padrão; em produção ainda precisa de
+<code>--profile container-broker</code>. Esse mesmo passo é quando a pasta acima é
+criada, nessa ordem: o daemon só faz bind-mount de uma pasta que já
+existe.</p>
+<p><strong>Por que o assistente esconde o modo Pasta montada.</strong> Sem <code>BRABO_PROJECTS_BASE</code>, a
+api informa <code>projectsBase: null</code> e a opção nem é oferecida. Isso
+é deliberado: oferecer um modo que a instalação não consegue honrar produz um
+projeto que trava depois, na primeira ferramenta do primeiro agente, longe
+da tela onde a decisão foi tomada. O modo Container (o padrão)
+e o modo Runner não são afetados e continuam funcionando sem esta variável.</p>
+<p><strong>Por que o mesmo caminho dos dois lados.</strong> A base é montada por <strong>identidade</strong> —
+<code>/home/voce/brabo:/home/voce/brabo</code> — em <code>api</code> e <code>engine</code> igualmente. O caminho
+é escrito UMA vez em <code>projects.workspace_path</code> e lido pelos dois processos
+(<a href="../business-rules/api.html#rn-169">RN-169</a>); é também a string
+que a tela mostra de volta para você. Montá-la em outro lugar faria o
+engine escrever onde a api não lê, e faria a tela mostrar um
+caminho que não existe nem na sua máquina nem na deles.</p>
+<p><strong>Confira o que os containers de fato enxergam:</strong></p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)">    ls</span><span style="color:var(--shiki-token-string)"> -la</span><span style="color:var(--shiki-token-string)"> /home/voce/brabo</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> engine</span><span style="color:var(--shiki-token-string)"> ls</span><span style="color:var(--shiki-token-string)"> -la</span><span style="color:var(--shiki-token-string)"> /home/voce/brabo</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Não aponte a base para o próprio checkout do Brabo.</strong> <code>make dev</code> recusa
+subir a stack quando <code>BRABO_PROJECTS_BASE</code> contém, ou está contida em,
+o repositório que você clonou — ele nomeia os dois caminhos e para. Essa checagem mora
+no preflight e em nenhum outro lugar de propósito: a api compara um caminho de projeto
+com <code>process.cwd()</code>, que dentro do container dela é <code>/workspace</code>,
+então ela não tem como enxergar o seu checkout real. Sem a guarda do preflight,
+clonar o Brabo em <code>$HOME/brabo</code> e definir a base para a mesma pasta
+passa em toda validação e põe dev agents rodando dentro da própria
+árvore do produto — a falha que o
+<a href="../adr/0055-escopo-de-caminho-na-politica-de-terminal.html">ADR 0055</a> existe para
+evitar.</p>
+<p><strong>Escolha uma pasta dedicada.</strong> Tudo sob a base é alcançável de
+dentro dos containers do produto. Não a aponte para o seu <code>$HOME</code> inteiro, e
+não a aponte para uma pasta que guarde outros segredos seus.</p>
+<p><strong>Outros modos de recusa, e o que cada um quer dizer:</strong></p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>a mensagem diz</th>
+<th>o que fazer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>o modo Pasta montada nem é oferecido</td>
+<td><code>BRABO_PROJECTS_BASE</code> não está definida — defina-a e <code>up -d api engine</code></td>
+</tr>
+<tr>
+<td><em>o modo Pasta montada não está disponível nesta instalação</em> (na criação)</td>
+<td>mesma causa, dita pela api: <code>BRABO_PROJECTS_BASE</code> não está definida (RN-501)</td>
+</tr>
+<tr>
+<td><em>a pasta tem de ficar dentro de <code>&lt;base&gt;</code></em> (na criação)</td>
+<td>o caminho está fora da base; use o <code>&lt;base&gt;/&lt;nome&gt;</code> que a mensagem sugere, ou mude a base e <code>up -d api engine</code></td>
+</tr>
+<tr>
+<td><em>não consegui criar/alcançar <code>&lt;caminho&gt;</code> de dentro da api</em> (no <code>container_start</code>)</td>
+<td>a base não está montada de fato, ou o dono da pasta no host a bloqueia. Confira com o <code>exec ls</code> acima, corrija, e aprove <code>container_start</code> de novo (RN-501)</td>
+</tr>
+<tr>
+<td><em>não existe de dentro da api</em></td>
+<td>a base não está montada nos containers; confira com o <code>exec ls</code> acima</td>
+</tr>
+<tr>
+<td><em>existe mas não é uma pasta</em></td>
+<td>o caminho aponta para um arquivo; use uma pasta</td>
+</tr>
+<tr>
+<td><em>o processo não consegue escrever nela</em></td>
+<td>dono/permissão da pasta no host. As imagens rodam não-root (<a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024</a>); ajuste o dono ou o modo da pasta</td>
+</tr>
+<tr>
+<td><em>Caminho inválido para um projeto Local</em></td>
+<td>é a raiz de um sistema de arquivos, uma pasta de sistema, relativo, tem <code>..</code>, ou se sobrepõe ao próprio checkout do Brabo — escolha uma pasta sua, fora desses (<a href="../adr/0072-projeto-local-ou-container.html">ADR 0072</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Limites conhecidos, declarados em vez de escondidos.</strong> Um symlink sob a base
+apontando para fora dela resolve diferente dentro dos containers, já que o
+alvo não está montado — o navegador de pastas recusa descer em symlinks,
+e a checagem de disco pega a divergência como falha nomeada. E esta
+versão suporta <strong>uma</strong> base: código que mora em outro lugar tem de ser movido
+para dentro dela.</p>
+<p><strong>Migrando das montagens antigas por projeto.</strong> Se você tem linhas escritas à mão
+<code>- /home/voce/projetos/loja:/home/voce/projetos/loja</code> em <code>api</code> e
+<code>engine</code>, elas continuam funcionando e nada as remove — projetos existentes
+não são quebrados por esta mudança. O caminho suportado daqui em diante é a base;
+mova essas pastas para dentro dela e tire as linhas escritas à mão quando tiver
+oportunidade.</p>
+<p><strong>Não confunda isto com o modo Container.</strong> Um projeto no modo Container
+(o padrão) continua usando <code>PROJECT_WORKSPACES_ROOT</code> e o procedimento de
+migração acima; o modo Pasta montada nunca toca essa raiz, e a base
+nunca é a mesma pasta que essa raiz (<a href="../adr/0141-base-unica-dos-projetos-montados.html">ADR 0141</a>
+explica por que confundi-las deixaria dois projetos caírem numa pasta só).</p>
+<h2 id="base-do-runner">A base de projetos do runner</h2>
+<p><strong>Sintoma:</strong> <code>brabo-runner</code> sai com código 2 dizendo
+<code>base de projetos recusada (…)</code>, ou começa imprimindo
+<code>base de projetos: nenhuma configurada</code> quando você esperava uma base, ou diz
+que está <code>Seguindo SEM base</code>.</p>
+<p>Esta é uma <strong>base diferente</strong> da de
+<a href="#projeto-no-modo-local">Projeto no modo Pasta montada</a>. Aquela
+(<code>BRABO_PROJECTS_BASE</code>) pertence ao SERVIDOR e é a única pasta que os
+containers enxergam; esta pertence à <strong>máquina do usuário</strong> e é onde
+o agente local cria a pasta de cada projeto
+(<a href="../adr/0151-base-consentida-no-runner.html">ADR 0151</a>,
+<a href="../business-rules/runner.html#rn-529">RN-529</a>). Elas nunca são a mesma variável, nunca
+o mesmo arquivo, e nunca são validadas uma contra a outra.</p>
+<p>De onde o runner a lê, em ordem:</p>
+<ol>
+<li><code>--base &lt;caminho absoluto&gt;</code> na linha de comando;</li>
+<li><code>$XDG_CONFIG_HOME/brabo/runner.json</code> — caindo para
+<code>~/.config/brabo/runner.json</code> — com a forma <code>{&quot;base&quot;: &quot;/abs/path&quot;}</code>.</li>
+</ol>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">cat</span><span style="color:var(--shiki-token-string-expression)"> "${XDG_CONFIG_HOME</span><span style="color:var(--shiki-token-keyword)">:-</span><span style="color:var(--shiki-token-string-expression)">$HOME</span><span style="color:var(--shiki-token-keyword)">/</span><span style="color:var(--shiki-token-string-expression)">.config}/brabo/runner.json"</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># {"base":"/home/you/projetos-brabo"}</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Nenhuma base é normal.</strong> Um runner sem base continua atendendo o projeto dele
+exatamente como sempre fez; o que ele não consegue é hospedar uma pasta de projeto criada
+depois. A linha de início diz em qual dos dois estados você está, sempre.</p>
+<p>Essa pasta deixou de ser só configuração: desde a
+<a href="../business-rules/runner.html#rn-551">RN-551</a> é também onde
+<code>brabo-runner device-key create</code> põe a chave de dispositivo <strong>privada</strong> da máquina
+(<code>brabo-runner-device-key.jwk.json</code>, modo 600) — veja
+<a href="#chave-de-dispositivo-pelo-terminal">Chave de dispositivo pelo terminal</a>. Faça backup
+dela como faria de um segredo, ou não faça backup nenhum e pareie de novo: a chave
+é revogável e substituível, e nada mais no produto consegue lê-la.</p>
+<p><strong>Recusas, e por que a disposição difere.</strong> A base é recusada quando é
+relativa, tem <code>..</code>, é <code>/</code>, aponta para um arquivo existente, fica fora do <code>$HOME</code>
+no Linux (a mesma regra que o <code>--dir</code> tem desde a
+<a href="../business-rules/runner.html#rn-434">RN-434</a>), ou fica <strong>dentro</strong> da pasta do projeto
+corrente (ou é igual a ela) — essa última faria todo projeto novo nascer
+dentro deste. Vindo de <code>--base</code>, isso encerra o processo com código 2;
+vindo do arquivo, é impresso no <code>stderr</code> e o runner <strong>segue
+sem base</strong>, porque matar um agente que atende um projeto por causa de uma
+configuração que ele ainda nem usa seria desproporcional. Um arquivo que existe e
+não declara <code>base</code> é ausência, não recusa.</p>
+<p><strong>Um projeto fora da base não é problema.</strong> O <code>--dir</code> é validado exatamente
+como sempre foi e a base não entra nisso: a base é regra de
+CRIAÇÃO. Não &quot;conserte&quot; um projeto legado movendo-o para dentro da base para silenciar
+algo — nada está reclamando.</p>
+<h2 id="agente-de-maquina">O agente de máquina: uma conexão por projeto</h2>
+<p><strong>Sintoma:</strong> <code>brabo-runner</code> foi iniciado sem <code>--project</code> e ou imprimiu
+o bloco de uso, ou disse <code>nenhum projeto em modo &quot;runner&quot; para esta conta</code>, ou
+atendeu alguns projetos e recusou outros.</p>
+<p>Desde a <a href="../business-rules/runner.html#rn-544">RN-544</a>
+(<a href="../adr/0154-chave-de-dispositivo-de-maquina.html">ADR 0154</a>) rodar sem
+<code>--project</code> é um modo de verdade: o agente pergunta <code>GET /runner/projects</code> e abre
+<strong>uma conexão por projeto</strong>, enraizada em <code>&lt;base&gt;/&lt;workspaceDirName&gt;</code>. O modo
+com <code>--project</code> não mudou nada. Lendo a saída:</p>
+<ul>
+<li><strong><code>Sem --project, este runner só roda como agente de MÁQUINA…</code></strong> — não há
+base consentida. As duas condições são exigidas, e por motivos diferentes:
+a credencial de máquina é o que a rota aceita, a base é de onde vem a pasta de cada
+projeto. Veja <a href="#base-do-runner">a base acima</a>.</li>
+<li><strong><code>a api recusou a descoberta de projetos: esta credencial está presa a um PROJETO</code></strong> — um 403. A credencial em uso (um PAT, ou uma chave de dispositivo do
+fluxo do navegador) nomeia um projeto e não tem nada a descobrir. Rode-o com
+<code>--project &lt;projectId&gt;</code> em vez disso, ou pareie uma chave de máquina — o material da chave é
+feito aqui mesmo (<code>brabo-runner device-key create</code>, veja
+<a href="#chave-de-dispositivo-pelo-terminal">abaixo</a>), e registrar a metade
+pública é o que o instalador faz. Em disco as duas espécies são o mesmo arquivo,
+então o runner não adivinha: o servidor é a autoridade e a mensagem dele é
+repassada literalmente.</li>
+<li><strong><code>nenhum projeto em modo &quot;runner&quot; para esta conta — nada a atender AINDA</code></strong> —
+este é o estado <strong>normal</strong> de uma instalação nova, e desde a
+<a href="../business-rules/runner.html#rn-550">RN-550</a> o processo <strong>fica de pé e continua perguntando</strong>:
+15s, depois 30s, depois 60s entre chamadas, repetindo para sempre, até o primeiro
+projeto aparecer. Ninguém precisa voltar ao terminal — crie o
+projeto no modo Runner no web e o agente o pega. A consulta
+<strong>para</strong> no instante em que a primeira conexão está viva: daí em diante a lista é
+lida só no início, porque uma lista que volta <em>menor</em> é ambígua e
+derrubar uma conexão viva por essa ambiguidade trocaria um estado conhecido por
+um palpite. Esperar não tem teto; <strong>falhar tem</strong> — dez chamadas falhas
+consecutivas e o processo sai com 1 nomeando a contagem (qualquer resposta, vazia inclusive,
+zera o contador). A cada 30 respostas vazias ele imprime um batimento dizendo quantas
+chamadas houve, para que &quot;esperando&quot; nunca pareça &quot;travado&quot; no
+<code>journalctl</code>. <code>Restart=on-abnormal</code> não mudou nas duas espécies de unit — ela
+nunca olhou o código de saída, para começo de conversa; o que muda é que a unit de máquina
+agora está genuinamente <code>active (running)</code>, e <code>brabo-runner service status --machine</code> responde <code>rodando</code> (0) numa instalação nova onde antes respondia
+<code>parado</code> (3).</li>
+<li><strong><code>[&lt;projeto&gt;] NÃO será atendido</code></strong> — a pasta daquele projeto foi recusada (o
+segmento escapou da base, ou o alvo existe e não é diretório). Os
+outros seguem. Só se NENHUM sobrar o processo sai com 1.</li>
+<li><strong><code>[&lt;projeto&gt;] este projeto deixa de ser atendido — os demais continuam</code></strong> —
+o join foi recusado (em geral um segundo runner já conectado àquele
+projeto) ou o teto de novas tentativas acabou. Os dois são por PROJETO agora, não por
+processo: um projeto falhando não derruba mais o agente para todos os outros.
+Quando todo projeto terminou assim o processo imprime o desfecho de cada um
+e sai com 1.</li>
+</ul>
+<p>Toda linha do laço de conexão leva o nome do projeto como prefixo. Se uma
+mensagem não tem prefixo, ela veio do modo de projeto único.</p>
+<h2 id="unit-do-agente-nao-inicia">A unit está <code>bad-setting</code> e nunca inicia</h2>
+<p><strong>Sintoma:</strong> <code>service install</code> informou sucesso, o arquivo da unit está em disco, e
+mesmo assim nada roda:</p>
+<pre class="codigo"><code>$ systemctl --user status brabo-runner.service
+   Loaded: bad-setting (Reason: Unit brabo-runner.service has a bad unit file setting.)
+   Active: inactive (dead)
+brabo-runner.service:16: WorkingDirectory= path is not absolute: &quot;/home/&lt;you&gt;/.config/brabo&quot;
+</code></pre>
+<p><strong>Causa.</strong> Units escritas <strong>antes</strong> desta correção punham o diretório de trabalho entre aspas
+(<code>WorkingDirectory=&quot;/home/…&quot;</code>). As duas metades de um arquivo de unit não compartilham uma
+sintaxe: <code>ExecStart=</code> é interpretado tirando aspas e separando palavras, então cada
+argumento vai entre aspas; <code>WorkingDirectory=</code> <strong>não</strong> — o systemd toma o resto da
+linha como o caminho. Com as aspas o valor deixa de começar com <code>/</code>, a
+unit é recusada no carregamento, e <strong>nunca inicia</strong> — em qualquer das espécies
+(por projeto e por máquina igualmente, <a href="../business-rules/runner.html#rn-518">RN-518</a> e
+<a href="../business-rules/runner.html#rn-545">RN-545</a>).</p>
+<p><strong>Correção: reinstale.</strong> <code>service install</code> sobrescreve o arquivo inteiro, então não há
+passo de reparo nem nada para editar à mão:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">brabo-runner</span><span style="color:var(--shiki-token-string)"> service</span><span style="color:var(--shiki-token-string)"> install</span><span style="color:var(--shiki-token-string)"> --machine</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --dir</span><span style="color:var(--shiki-token-string-expression)"> "${XDG_CONFIG_HOME</span><span style="color:var(--shiki-token-keyword)">:-</span><span style="color:var(--shiki-token-string-expression)">$HOME</span><span style="color:var(--shiki-token-keyword)">/</span><span style="color:var(--shiki-token-string-expression)">.config}/brabo"</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --api-url</span><span style="color:var(--shiki-token-string)"> http://localhost:3000</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># ou, para uma unit por projeto, de dentro da pasta daquele projeto:</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">brabo-runner</span><span style="color:var(--shiki-token-string)"> service</span><span style="color:var(--shiki-token-string)"> install</span></span>
+<span class="line"></span></code></pre>
+<p><code>status</code> e <code>uninstall</code> continuam funcionando numa unit no estado quebrado —
+a pasta é lida de volta de qualquer das formas —, então nada fica preso se você
+preferir removê-la primeiro.</p>
+<p><strong>Relacionado, e diferente:</strong> uma unit que carrega mas sobe na pasta errada.
+<code>WorkingDirectory=</code> passa por <strong>expansão de especificadores</strong>, então um <code>%</code> literal
+no caminho tem de ser escrito <code>%%</code>; o CLI o escapa agora, mas uma unit editada à mão
+com <code>/home/you/50%off</code> vai iniciar em silêncio em <code>/home/you/50&lt;os-id&gt;ff</code> —
+absoluto, aceito, e errado. Confira o valor resolvido, nunca o arquivo:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">systemctl</span><span style="color:var(--shiki-token-string)"> --user</span><span style="color:var(--shiki-token-string)"> show</span><span style="color:var(--shiki-token-string)"> -p</span><span style="color:var(--shiki-token-string)"> WorkingDirectory</span><span style="color:var(--shiki-token-string)"> brabo-runner.service</span></span>
+<span class="line"></span></code></pre>
+<p>O mesmo vale para o <strong>ambiente</strong> que a unit congela (AT-095). Units escritas
+antes dessa correção levavam <code>Environment=XDG_CONFIG_HOME=&lt;pasta&gt;</code> e
+<code>Environment=PATH=&lt;caminho&gt;</code> sem aspas, e <code>Environment=</code> tanto separa em espaços
+quanto expande especificadores: com <code>XDG_CONFIG_HOME=/home/you/50%off com espaco</code> o
+serviço recebia <code>/home/you/50&lt;os-id&gt;ff</code> — carrega, inicia, e o
+agente de máquina procura a base e a chave de dispositivo numa pasta que não
+existe, sem dizer nada. O CLI agora escreve a atribuição inteira entre aspas
+(<code>Environment=&quot;XDG_CONFIG_HOME=…&quot;</code>, com <code>\</code>, <code>&quot;</code> e <code>%</code> escapados). <strong>Correção:
+reinstale</strong>, como acima. Confira o que o systemd resolveu:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">systemctl</span><span style="color:var(--shiki-token-string)"> --user</span><span style="color:var(--shiki-token-string)"> show</span><span style="color:var(--shiki-token-string)"> -p</span><span style="color:var(--shiki-token-string)"> Environment</span><span style="color:var(--shiki-token-string)"> brabo-runner.service</span></span>
+<span class="line"></span></code></pre>
+<h2 id="chave-de-dispositivo-pelo-terminal">Chave de dispositivo pelo terminal</h2>
+<p><strong>Sintoma:</strong> uma máquina precisa de uma chave de dispositivo e não há navegador para rodar a
+configuração automática da tela do projeto — uma instalação nova, uma máquina sem tela, ou o
+agente de máquina acima recusando com <code>esta credencial está presa a um PROJETO</code>.</p>
+<p>Desde a <a href="../business-rules/runner.html#rn-551">RN-551</a>
+(<a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155</a> ponto 4) o par
+é gerado <strong>na máquina</strong>, em dois passos:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># 1) gere aqui; a JWK PÚBLICA é a única coisa no stdout</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">PUB</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-foreground)">$(</span><span style="color:var(--shiki-token-function)">brabo-runner</span><span style="color:var(--shiki-token-string)"> device-key</span><span style="color:var(--shiki-token-string)"> create</span><span style="color:var(--shiki-foreground)">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 2) registre essa chave pública na api — quem tem a credencial para</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">#    registrar faz isso; o CLI nunca fala com a api</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">ID</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-foreground)">$(</span><span style="color:var(--shiki-token-function)">…</span><span style="color:var(--shiki-token-string)"> POST</span><span style="color:var(--shiki-token-string)"> {</span><span style="color:var(--shiki-token-string-expression)">"name"</span><span style="color:var(--shiki-token-string)">:</span><span style="color:var(--shiki-token-string-expression)">"…"</span><span style="color:var(--shiki-token-string)">,</span><span style="color:var(--shiki-token-string-expression)">"publicKeyJwk"</span><span style="color:var(--shiki-token-string)">:</span><span style="color:var(--shiki-token-string-expression)">'"$PUB"'</span><span style="color:var(--shiki-token-string)">}</span><span style="color:var(--shiki-token-string)"> …</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> jq</span><span style="color:var(--shiki-token-string)"> -r</span><span style="color:var(--shiki-token-string)"> .id</span><span style="color:var(--shiki-foreground)">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 3) carimbe o id do registro como o `kid` da JWK e escreva o arquivo de verdade</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">brabo-runner</span><span style="color:var(--shiki-token-string)"> device-key</span><span style="color:var(--shiki-token-string)"> finish</span><span style="color:var(--shiki-token-string)"> --id</span><span style="color:var(--shiki-token-string-expression)"> "$ID"</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Dois passos, por causa do <code>kid</code>.</strong> Ele É o id do registro no servidor
+(<a href="../business-rules/web.html#rn-475">RN-475</a>) e só existe depois que a metade pública é
+registrada; uma chave privada escrita antes dele é inútil e o CLI a recusa
+para sempre. Então <code>create</code> escreve <code>brabo-runner-device-key.jwk.json.parcial</code>, um
+nome que o leitor ignora, e <code>finish</code> escreve o de verdade. <strong>O arquivo que o
+runner lê nunca existe sem <code>kid</code></strong> — uma interrupção entre os dois
+deixa um <code>.parcial</code> que o runner ignora e que o próximo <code>create</code> nomeia.</li>
+<li><strong>Onde:</strong> <code>$XDG_CONFIG_HOME/brabo/</code> (senão <code>~/.config/brabo/</code>), ao lado de
+<code>runner.json</code>, no modo 600; <code>--dir &lt;pasta&gt;</code> escreve em outro lugar (uma pasta de
+projeto, digamos). Essa pasta é para onde o <code>--dir</code> da unit de máquina deve apontar
+(<code>brabo-runner service install --machine --dir &lt;pasta&gt;</code>,
+<a href="../business-rules/runner.html#rn-545">RN-545</a>) — o runner lê a chave da
+pasta em que RODA, nunca de um caminho global que ele adivinhe.</li>
+<li><strong>stdout é para scripts, stderr é para pessoas.</strong> <code>create</code> imprime só a
+JWK pública; <code>finish</code>, só o caminho do arquivo terminado.</li>
+<li><strong>Recusas:</strong> <code>finish</code> sem um <code>create</code> (nada a carimbar), sem <code>--id</code>,
+com um <code>--id</code> que ainda tem a resposta JSON inteira dentro, um <code>.parcial</code>
+que não é uma JWK privada Ed25519, e — nos dois comandos — uma chave COMPLETA
+já no lugar. Essa última não tem <code>--force</code>: substituir a chave de uma
+máquina já pareada em silêncio deixaria um agente assinando com uma chave que o
+servidor não conhece. Revogue a chave atual
+(<a href="../business-rules/api.html#rn-519">RN-519</a>), apague o arquivo, depois <code>create</code> de novo.</li>
+<li>O CLI <strong>não</strong> afirma de que espécie é a chave. Em disco uma chave de máquina
+e uma chave de projeto são o mesmo arquivo; quem decide é a rota que registrou a metade
+pública.</li>
+</ul>
+<h2 id="instalador-nao-fecha">Quando o instalador não fecha a instalação</h2>
+<p><strong>Sintoma:</strong> o <code>install.sh</code> terminou com um bloco <strong>&quot;O que ficou pendente&quot;</strong>, ou uma
+instalação nova tem um login pelo qual ninguém consegue passar, nenhuma chave de dispositivo de máquina, ou nenhum
+serviço do agente rodando.</p>
+<p>Desde a <a href="../business-rules/produto.html#rn-547">RN-547</a>
+(<a href="../adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155</a>) o instalador
+<strong>fecha</strong> a instalação: ele cria a primeira conta, registra a chave de dispositivo desta
+máquina e instala a unit de máquina. A corrente é</p>
+<ol>
+<li><code>POST /internal/first-account</code> (<a href="../business-rules/produto.html#rn-546">RN-546</a>) — a
+conta nasce <strong>já verificada</strong>, porque <code>MAIL_TRANSPORT</code> é <code>log</code> e
+o instalador não liga SMTP;</li>
+<li><code>brabo-runner device-key create</code> (<a href="../business-rules/runner.html#rn-551">RN-551</a>) — o
+par Ed25519 é gerado <strong>na máquina</strong>; só a metade pública viaja;</li>
+<li><code>POST /internal/machine-device-keys</code> (<a href="../business-rules/api.html#rn-552">RN-552</a>) —
+o <code>id</code> devolvido é o que vira o <code>kid</code> da JWK privada
+(<a href="../business-rules/web.html#rn-475">RN-475</a>);</li>
+<li><code>brabo-runner device-key finish --id &lt;id&gt;</code>;</li>
+<li><code>brabo-runner service install --machine</code> (<a href="../business-rules/runner.html#rn-545">RN-545</a>).</li>
+</ol>
+<p><strong>Nada é desfeito, nunca, e toda falha é nomeada.</strong> O instalador sempre
+sai com 0: o compose está de pé, e os elos já completados são úteis por si
+sós. O que falhou é impresso no fim com o comando exato para repetir.</p>
+<ul>
+<li>
+<p><strong><code>service install --machine</code> recusou.</strong> Este é o caso <strong>comum</strong> numa
+máquina de desenvolvedor, não um caso de borda: ele recusa quando uma unit <strong>por projeto</strong> já está
+instalada, e não há <code>--force</code> — dois processos brigariam pelo
+mesmo projeto e o servidor negaria um deles. A recusa nomeia o
+<code>uninstall</code> de cada unit que encontrou. Remova-as, depois rode de novo o último passo, que
+o instalador imprimiu:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">brabo-runner</span><span style="color:var(--shiki-token-string)"> service</span><span style="color:var(--shiki-token-string)"> uninstall</span><span style="color:var(--shiki-token-string)"> --project</span><span style="color:var(--shiki-token-keyword)"> &#x3C;</span><span style="color:var(--shiki-token-string)">projectI</span><span style="color:var(--shiki-foreground)">d</span><span style="color:var(--shiki-token-keyword)">></span><span style="color:var(--shiki-token-comment)">   # para cada uma nomeada</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">brabo-runner</span><span style="color:var(--shiki-token-string)"> service</span><span style="color:var(--shiki-token-string)"> install</span><span style="color:var(--shiki-token-string)"> --machine</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --dir</span><span style="color:var(--shiki-token-string-expression)"> "${XDG_CONFIG_HOME</span><span style="color:var(--shiki-token-keyword)">:-</span><span style="color:var(--shiki-token-string-expression)">$HOME</span><span style="color:var(--shiki-token-keyword)">/</span><span style="color:var(--shiki-token-string-expression)">.config}/brabo"</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --api-url</span><span style="color:var(--shiki-token-string)"> http://localhost:3000</span></span>
+<span class="line"></span></code></pre>
+<p>A pasta em <code>--dir</code> é onde a chave foi escrita — nunca uma pasta de projeto,
+que levaria um <code>brabo-runner.config.json</code> e faria a unit subir no modo
+<strong>projeto</strong>, atendendo em silêncio um projeto enquanto se diz o
+agente de máquina.</p>
+</li>
+<li>
+<p><strong>Registrar a chave falhou.</strong> Um <code>…jwk.json.parcial</code> fica para trás de
+propósito. Ele é inerte — o runner não lê esse nome — e o instalador
+<strong>não</strong> o apaga: um timeout depois de a api commitar é indistinguível
+de um antes, então esse arquivo pode ser a única cópia da metade privada de uma
+chave que já está registrada. Rode o instalador de novo, ou termine à mão se
+você sabe o id do registro (<code>brabo-runner device-key finish --id &lt;id&gt;</code>). O
+próximo <code>device-key create</code> o nomeia e o substitui.</p>
+</li>
+<li>
+<p><strong>O passo da conta disse que a instalação já tem um usuário.</strong> É um
+<code>409</code>, e é o desfecho <strong>esperado</strong>, não uma falha — uma segunda execução, ou uma
+migração (<a href="../business-rules/infra.html#rn-530">RN-530</a>) cujo restore trouxe os
+usuários de volta. Entre com a conta que existe. Os passos da chave de máquina e do serviço
+são pulados nesse caso por desenho: cunhar uma credencial durável para
+alguém que não a pediu nesta execução não cabe ao instalador.</p>
+</li>
+<li>
+<p><strong>A senha foi recusada.</strong> A política é a do domínio, a mesma que o
+registro usa, e só se sabe dela depois do POST — então o instalador pergunta
+de novo, até três vezes, e transforma um teto esgotado numa linha pendente
+em vez de abortar uma instalação que já está de pé. Ele nunca escreve a
+senha em lugar nenhum: nem no <code>.env</code>, nem no marcador, nem num log. Só o
+<strong>e-mail</strong> vai para o marcador (<code>ownerEmail</code>, <code>schemaVersion: 3</code>).</p>
+</li>
+<li>
+<p><strong>Sem TTY.</strong> O instalador informa e sai com <strong>0</strong> antes de escrever qualquer coisa.
+Rode-o de um terminal, como arquivo baixado —
+<code>curl -fsSLO …/install.sh &amp;&amp; bash install.sh</code> — nunca <code>curl … | sh</code> (o
+download vira o stdin do processo e mata toda pergunta) e nunca
+<code>sh -c &quot;$(curl …)&quot;</code>, que não consegue verificar o próprio hash. Os dois são recusados pelo
+nome; veja <a href="instalacao.html#instalando">Instalando</a>.</p>
+</li>
+<li>
+<p><strong>O agente está de pé mas não atende nada.</strong> É o estado normal de uma instalação
+nova: ele espera e consulta de novo até o primeiro projeto no modo <code>runner</code> existir
+(<a href="../business-rules/runner.html#rn-550">RN-550</a>). Veja
+<a href="#agente-de-maquina">O agente de máquina</a>.</p>
+</li>
+</ul>
+<h2 id="pasta-do-projeto-nunca-aparece">A pasta do projeto nunca aparece na máquina do usuário</h2>
+<p><strong>Sintoma:</strong> esperava-se que uma pasta de projeto aparecesse sob a base do runner
+e ela não apareceu. O log do engine tem uma linha começando com
+<code>workspace_create: o projeto &lt;id&gt; não criou pasta —</code>, e a pasta está
+ausente.</p>
+<p>A mensagem nomeia qual das duas pré-condições falhou
+(<a href="../business-rules/runner.html#rn-532">RN-532</a>,
+<a href="../adr/0151-base-consentida-no-runner.html">ADR 0151</a> pontos 3 a 6), e elas são
+as únicas duas — <strong>nenhum container é exigido</strong>, deliberadamente: exigir um seria
+circular, já que um projeto <code>runner</code> só chega a um container <code>running</code> registrado
+depois que o runner o sobe sobre a própria pasta que esta mensagem
+existe para criar.</p>
+<ul>
+<li><strong><code>nenhum brabo-runner está conectado a este projeto agora</code></strong> — inicie o
+agente para aquele projeto; veja <a href="#base-do-runner">a base acima</a> para as flags.</li>
+<li><strong><code>não declarou a capacidade </code>workspace<code> no join</code></strong> — o binário conectado
+ou é anterior a esta versão, ou está rodando <strong>sem base consentida</strong>.
+As duas correções estão na seção anterior: rode o instalador, ou inicie o
+runner com <code>--base</code>. A recusa é nomeada de propósito porque as duas causas
+têm correções diferentes; o join em si NÃO é recusado, então o runner continua
+atendendo o projeto dele normalmente.</li>
+<li><strong><code>o brabo-runner recusou criar a pasta</code></strong> — a mensagem leva o
+motivo do próprio runner: <code>segmento</code> (o segmento escapou da base — a guarda
+recusou, nada foi criado), <code>nao-e-pasta</code> (o alvo já existe como
+arquivo; este CLI nunca sobrescreve um), <code>mkdir</code> (permissão ou disco) ou <code>git</code>
+(o <code>git init</code>/clone falhou — a pasta EXISTE e nenhum plano B foi
+tentado, de propósito).</li>
+<li><strong><code>não respondeu ... a tempo</code></strong> — um clone grande pode passar do teto.
+Confira a máquina do runner; nada fica escrito pela metade do lado do servidor,
+porque a escrita só acontece por <code>workspace_confirm</code>.</li>
+</ul>
+<p>Uma pasta que já existe como repositório git é <strong>sucesso</strong>, não
+erro: a operação é idempotente e informa <code>ja-era-repositorio</code> no
+log do runner.</p>
+<h2 id="credencial-nao-atravessa-o-container">Clone autenticado no modo Runner é recusado enquanto o container está de pé</h2>
+<p><strong>Sintoma:</strong> um dev agent num projeto <code>runner</code> fica bloqueado preparando o
+worktree, e o diagnóstico diz que a credencial não pôde ser entregue, nomeando
+<code>credencial-nao-atravessa-o-container</code>. A origem da tarefa bloqueada é
+<code>politica</code>, não <code>codigo</code>.</p>
+<p><strong>Isto não é um bug a caçar, e é exatamente isso que a origem está dizendo
+a você</strong> (<a href="../business-rules/runner.html#rn-558">RN-558</a>). A credencial de um remoto
+autenticado (<code>ADR 0056</code>) só consegue viajar no campo <code>env</code> da mensagem <code>exec</code>,
+e esse campo vale só para o caminho do <strong>host</strong>: a porta do Docker do produto não tem
+campo <code>env</code>, deliberadamente (<a href="../adr/0130-broker-de-container.html">ADR 0130</a>, sem
+<code>-e</code> livre). Quando o runner subiu o container do projeto, ele roteia
+todo comando para dentro dele — então a credencial não tem para onde ir.</p>
+<p>Antes da RN-558 o comando rodava assim mesmo, com as variáveis vazias, e você via uma
+falha de autenticação comum. Agora ele é recusado antes de executar, e nada
+roda. A recusa nunca imprime nomes nem valores de variáveis, só a contagem.</p>
+<p><strong>Desde o <a href="../adr/0193-git-credenciado-no-host-do-runner.html">ADR 0193</a>
+(<a href="../business-rules/runner.html#rn-676">RN-676</a>) esta recusa não acontece mais no
+caminho comum:</strong> o engine marca o <code>fetch</code> autenticado (<code>gitCredenciado</code>)
+e um runner atual o roda no <strong>host</strong> mesmo com o container de pé — a
+mesma pasta, montada em <code>/work</code>. Se você ainda a vê, o
+<code>brabo-runner</code> conectado é mais velho que essa mudança e não lê a marca.</p>
+<p><strong>O que fazer:</strong></p>
+<ol>
+<li>Atualize o <code>brabo-runner</code> na máquina do usuário e reinicie-o (ou o
+serviço dele). Essa é a correção.</li>
+<li>Se não dá para atualizar agora: pare o container do projeto (a
+página <code>/containers</code>, &quot;Parar&quot;) e deixe o worktree se materializar — no caminho do host
+a credencial é entregue normalmente, e o <code>fetch</code> inicial
+dá certo. Depois suba o container de novo; o clone é idempotente e não é
+repetido.</li>
+</ol>
+<p>Um repositório <strong>local</strong> (sem token) não é afetado, e nem os projetos <code>container</code> e
+<code>mounted</code> — eles nunca passam por este caminho. Nem o
+<code>workspace_create</code>, que roda no host.</p>
+<p><strong>O que segue aberto, declarado:</strong> a credencial continua não atravessando o
+<code>docker exec</code>. Fechar isso significa decidir como uma operação com credencial fala
+com um <code>docker exec</code> sem campo <code>env</code>, e toda opção conhecida toca a
+fronteira de contenção — um ADR, não uma correção de passagem.</p>
+<h2 id="dev-containers-nao-root">Os containers de dev escrevem como o seu usuário, não como root</h2>
+<p><strong>Sintoma:</strong> algo que o container de dev <code>api</code>, <code>web</code> ou <code>engine</code> escreveu num
+bind mount — <code>apps/api/dist</code>, <code>node_modules</code>, um arquivo que um agente gerou
+dentro de um projeto no modo de execução <code>mounted</code> — pertence a <code>root</code> no seu
+disco, e editá-lo ou apagá-lo sem <code>sudo</code> falha.</p>
+<p>Isso era esperado: as imagens de dev (<code>docker/api/Dockerfile</code>,
+<code>docker/web/Dockerfile</code>, <code>docker/engine/Dockerfile</code> — ao contrário do <code>Dockerfile.prod</code>,
+já não-root desde o <a href="../adr/0024-fase5-imagens-producao-ci.html">ADR 0024</a>) não tinham
+diretiva <code>USER</code> e rodavam como root. Agora elas rodam com o <strong>mesmo UID/GID do
+seu usuário do host</strong>, via os build args <code>DEV_UID</code>/<code>DEV_GID</code>
+(<a href="../reference/configuration.html#dev-container-user-build-time">Configuração</a>),
+então essa classe de problema não deveria voltar.</p>
+<p><strong>Se você ainda está vendo isso:</strong></p>
+<ol>
+<li>
+<p>Confirme o seu par com <code>id -u</code>/<code>id -g</code>. Se não for <code>1000</code>/<code>1000</code>, defina
+<code>DEV_UID</code>/<code>DEV_GID</code> no <code>.env</code> (veja <code>.env.example</code>) e reconstrua:
+<code>docker compose -f docker/docker-compose.yml build api web engine</code>.</p>
+</li>
+<li>
+<p><strong>Ambiente anterior a esta correção.</strong> Os volumes nomeados
+(<code>*_node_modules</code>, <code>engine_build</code>, <code>engine_deps</code>, <code>engine_mix</code>,
+<code>engine_hex</code>) ainda guardam conteúdo escrito pelos containers antigos como root — um
+volume nomeado novinho herda o dono certo na primeira montagem, mas um
+existente não é corrigido retroativamente. Zere-o uma vez, ou
+apagando os volumes (<code>docker compose -f docker/docker-compose.yml down -v</code> — seguro para estes, são artefatos de build reproduzíveis, nunca fonte
+da verdade) ou dando <code>chown</code> neles no lugar:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> -v</span><span style="color:var(--shiki-token-string)"> brabo-dev_api_app_node_modules:/v</span><span style="color:var(--shiki-token-string)"> alpine</span><span style="color:var(--shiki-token-string)"> chown</span><span style="color:var(--shiki-token-string)"> -R</span><span style="color:var(--shiki-token-string-expression)"> "$(</span><span style="color:var(--shiki-token-function)">id</span><span style="color:var(--shiki-token-string)"> -u</span><span style="color:var(--shiki-token-string-expression)">):$(</span><span style="color:var(--shiki-token-function)">id</span><span style="color:var(--shiki-token-string)"> -g</span><span style="color:var(--shiki-token-string-expression)">)"</span><span style="color:var(--shiki-token-string)"> /v</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># repita para os outros volumes node_modules/_build/deps/.mix/.hex</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Volumes novinhos</strong> (um primeiro clone, ou uma máquina que só rodou o
+instalador, que não define nenhum destes volumes) falhavam do outro jeito:
+<code>api</code> e <code>web</code> saíam com <code>EACCES: permission denied, mkdir '/workspace/node_modules/.pnpm'</code>, porque um volume novo herda o dono
+do caminho <strong>na imagem</strong> e o caminho não existia lá, então ele
+nascia <code>root:root</code> (AT-172). <code>docker/api/Dockerfile</code> e <code>docker/web/Dockerfile</code>
+agora criam e dão <code>chown</code> nos três pontos de montagem de <code>node_modules</code> antes do <code>USER</code>.
+Os pontos de montagem <strong>dentro do bind mount no seu disco</strong> são uma metade
+separada: o Docker cria um ausente no host como <code>root</code> (ele deixou
+<code>packages/shared/node_modules</code> com dono root no checkout), e nenhuma imagem consegue
+mudar isso. <code>make dev</code> roda <code>scripts/dev/preflight.mjs</code>, que os cria
+como você antes; <code>docker compose up</code> rodado à mão o pula, então rode
+<code>node scripts/dev/preflight.mjs</code> uma vez antes do seu primeiro <code>up</code> à mão.</p>
+</li>
+<li>
+<p>Para um arquivo já escrito por um agente numa pasta de projeto no modo <strong><code>mounted</code></strong>
+no host, a correção é o mesmo <code>sudo chown -R $USER &lt;pasta&gt;</code>
+que esta seção prescrevia para o repositório inteiro — agora é pontual
+para arquivos preexistentes, não o contorno permanente.</p>
+</li>
+<li>
+<p><strong>Os dois volumes de DADOS são outro caso, e <code>down -v</code> NÃO é seguro para
+eles.</strong> <code>/data/git-repos</code> e <code>/data/project-workspaces</code> são montados em
+<code>api</code> e <code>engine</code> como volumes nomeados. Um volume nomeado nasce com o dono
+do que existir naquele caminho <strong>na imagem</strong> — e quando o caminho não
+existe, ele nasce <code>root</code>, deixando o processo não-root de fora. As imagens de dev
+só começaram a criá-los e dar <code>chown</code> antes do <code>USER</code> recentemente; as
+imagens de produção sempre fizeram. O sintoma não é um arquivo que você não consegue editar no
+seu disco: é o <code>git init --bare</code> do <code>LocalGitProvider</code> morrendo com
+<code>permission denied: /data/git-repos/&lt;slug&gt;.git</code>, e o
+<code>permissions.json</code> de cada projeto sem onde ser escrito — ou seja, <strong>provisionar
+um repositório é impossível</strong>.</p>
+<p>Ao contrário dos volumes de artefato de build acima, estes dois guardam fonte da verdade
+(bare repos locais, worktrees por projeto), então apagá-los perde dados.
+Corrija-os no lugar:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> -v</span><span style="color:var(--shiki-token-string)"> brabo-dev_git_local_repos:/v</span><span style="color:var(--shiki-token-string)"> alpine</span><span style="color:var(--shiki-token-string)"> chown</span><span style="color:var(--shiki-token-string)"> -R</span><span style="color:var(--shiki-token-string-expression)"> "$(</span><span style="color:var(--shiki-token-function)">id</span><span style="color:var(--shiki-token-string)"> -u</span><span style="color:var(--shiki-token-string-expression)">):$(</span><span style="color:var(--shiki-token-function)">id</span><span style="color:var(--shiki-token-string)"> -g</span><span style="color:var(--shiki-token-string-expression)">)"</span><span style="color:var(--shiki-token-string)"> /v</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> -v</span><span style="color:var(--shiki-token-string)"> brabo-dev_project_workspaces:/v</span><span style="color:var(--shiki-token-string)"> alpine</span><span style="color:var(--shiki-token-string)"> chown</span><span style="color:var(--shiki-token-string)"> -R</span><span style="color:var(--shiki-token-string-expression)"> "$(</span><span style="color:var(--shiki-token-function)">id</span><span style="color:var(--shiki-token-string)"> -u</span><span style="color:var(--shiki-token-string-expression)">):$(</span><span style="color:var(--shiki-token-function)">id</span><span style="color:var(--shiki-token-string)"> -g</span><span style="color:var(--shiki-token-string-expression)">)"</span><span style="color:var(--shiki-token-string)"> /v</span></span>
+<span class="line"></span></code></pre>
+<p>Um volume criado depois da correção já sobe com o dono certo. Quando
+você acrescentar um volume nomeado <strong>novo</strong>, crie o diretório na imagem:
+esquecer não é erro de build, é um <code>permission denied</code> em runtime.</p>
+</li>
+</ol>
+<h2 id="reset-total">Reset total do ambiente de dev</h2>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">bash</span><span style="color:var(--shiki-token-string)"> scripts/dev/reset-total.sh</span><span style="color:var(--shiki-token-comment)">      # ou: pnpm bootstrap → Docker › Reset total</span></span>
+<span class="line"></span></code></pre>
+<p>Reconstrói as imagens, <strong>apaga o banco</strong>, migra e semeia de novo — as
+credenciais de provider que já estão no <code>.env</code> (<code>&lt;PROVIDER&gt;_TEST_KEY</code>) voltam
+ativas no owner, então você não as digita de novo na interface toda vez. Ele
+<strong>não</strong> remove nem recria volume nenhum — <code>node_modules</code>, <code>_build</code>/<code>deps</code>,
+<code>pgdata</code> (só os schemas dentro dele são apagados), <code>neo4j</code>, os bare repos
+locais e os workspaces dos projetos sobrevivem todos — e ele <strong>diz isso</strong> no começo
+e ao lado da linha de sucesso (AT-181). Essa é a escolha conservadora de
+propósito: apagar volumes jogaria fora workspaces e repositórios locais
+que ninguém pediu para perder.</p>
+<p>O preço é que <strong>um reset nunca reproduz um primeiro clone.</strong> Um defeito que
+só aparece com um volume que ainda não existe — como o volume <code>node_modules</code>
+que nascia <code>root</code> (AT-172) — passa por todo reset sem ser visto. Para
+exercitar esse caminho, use um <strong>projeto compose descartável</strong>, nunca este script e
+nunca o seu projeto <code>brabo-dev</code> (nem <code>brabo</code>, o nome da instalação):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -p</span><span style="color:var(--shiki-token-string)"> brabo-primeiro-clone</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> build</span><span style="color:var(--shiki-token-string)"> engine</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -p</span><span style="color:var(--shiki-token-string)"> brabo-primeiro-clone</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> --no-deps</span><span style="color:var(--shiki-token-string)"> engine</span><span style="color:var(--shiki-token-string)"> ls</span><span style="color:var(--shiki-token-string)"> -ldn</span><span style="color:var(--shiki-token-string)"> /root/.mix</span><span style="color:var(--shiki-token-string)"> /root/.hex</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  /workspace/apps/engine/_build</span><span style="color:var(--shiki-token-string)"> /workspace/apps/engine/deps</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -p</span><span style="color:var(--shiki-token-string)"> brabo-primeiro-clone</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> down</span><span style="color:var(--shiki-token-string)"> -v</span></span>
+<span class="line"></span></code></pre>
+<p>O <code>run</code> cria os volumes daquele projeto do zero e não publica porta, então
+não colide com a sua stack rodando. Medido assim para o engine em
+2026-09-25 (AT-182): <code>_build</code>, <code>deps</code>, <code>.mix</code> e <code>.hex</code> nascem com dono
+<code>DEV_UID:DEV_GID</code>, e <code>mix local.hex</code>/<code>local.rebar</code>/<code>deps.get</code> passam como o
+usuário não-root. Duas coisas ele deixa para trás: os pontos de montagem vazios
+<code>_build</code>/<code>deps</code> que cria <strong>dentro do seu checkout</strong>, com dono <code>root</code> (remova-os
+com o one-liner <code>alpine</code> da tabela abaixo), e a imagem que construiu.</p>
+<p><strong>A ordem é a questão, e não é negociável:</strong></p>
+<ol start="0">
+<li><strong>A guarda da instalação</strong> (<a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170</a>),
+antes do preflight: se esta máquina tem qualquer container do compose de
+INSTALAÇÃO (o rótulo <code>com.docker.compose.project.config_files</code> dele
+aponta para <code>docker-compose.install.yml</code>), ou se o compose de dev resolveria
+para o projeto <code>brabo</code>, ele recusa com <code>RESET NÃO COMEÇOU</code>, nomeando o que
+encontrou. Até o ADR 0170 dev e instalação eram o mesmo projeto Docker, e
+o <code>DROP SCHEMA</code> deste script teria caído no banco da instalação.</li>
+<li><code>preflight</code>, depois os <strong>pré-requisitos de host</strong> (AT-203), depois <code>build</code> — a
+parte lenta, feita enquanto o seu ambiente ainda está de pé. As migrations e o
+seed rodam no HOST, com o <code>apps/engine/deps</code>/<code>_build</code> e o
+<code>node_modules</code> do checkout — não os volumes dos containers, e nada que o build da imagem
+atualize. Então, antes de qualquer efeito, o script roda <code>mix deps.get</code> e
+<code>mix compile</code> em <code>apps/engine</code>, confere que <code>drizzle-kit</code> e <code>ts-node</code>
+resolvem, e confere a senha do Neo4j contra a do volume. Medido em
+2026-09-26: com uma dependência nova no <code>mix.lock</code> (mint 1.10.1, #613),
+<code>pnpm engine:migrate</code> morria com <code>lock mismatch</code> <strong>depois</strong> do
+<code>DROP SCHEMA</code>, e &quot;rodar de novo&quot; falhava do mesmo jeito. Uma recusa aqui diz
+<code>RESET NÃO COMEÇOU … Nada foi parado nem apagado</code>: o banco está intacto.</li>
+<li><strong><code>stop api engine</code>.</strong> Esses dois, e nenhum outro: são os que mantêm
+conexão viva com o Postgres do compose (o pool do Drizzle da api sobre
+<code>public</code>/<code>drizzle</code>, o Ecto/Oban do engine sobre <code>engine</code>). <code>web</code> é um servidor
+Vite e não fala com banco nenhum, <code>neo4j</code> é outro banco que este reset
+não toca, e o <code>broker</code> só fala HTTP com a api.</li>
+<li><code>up postgres</code>, <code>DROP SCHEMA</code>, <code>migrate</code>.</li>
+<li><code>up --wait</code> de tudo, depois <code>seed</code>.</li>
+<li>Pergunta <code>/health</code> à api e ao engine e <code>/</code> ao web, imprime
+<code>docker compose ps</code>, e só então conclui.</li>
+</ol>
+<p>Apagar os schemas <strong>por baixo de processos vivos</strong> era o que o quebrava:
+o engine morre dentro do <code>DROP SCHEMA engine CASCADE</code>
+(<code>Engine.Sessions.Rehydrator</code> consulta <code>engine.session_states</code>, que acabou de
+sumir — <code>ERROR 42P01 (undefined_table)</code>), as migrations recriam
+tudo depois, e <strong>nada traz um processo morto de volta</strong>. O seed
+então falhava no passo que ativa a sessão (api → engine) com
+<code>ECONNREFUSED</code>, e o script ainda imprimia &quot;reset completo&quot; — um <code>echo</code>
+fixo no fim de um script que nunca perguntava nada sobre o que tinha
+acabado de fazer.</p>
+<p><strong>Se ele parar no meio</strong>, ele diz isso e nomeia o passo
+(<code>RESET INCOMPLETO — parou em: &lt;passo&gt;</code>), e a resposta é <strong>rodá-lo
+de novo</strong>: ele apaga os schemas toda vez, então a segunda execução começa da
+mesma lousa limpa que a primeira. Rodar só <code>pnpm --filter api seed</code> para
+recuperar também é seguro agora — o seed é idempotente e reaproveita o workspace,
+o projeto e a sessão de demonstração em vez de duplicá-los (e <strong>não</strong>
+reacrescenta os 5 eventos da sessão).</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>o que você vê</th>
+<th>o que é</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RESET INCOMPLETO — parou em: migrations (api + engine)</code> com <code>permission denied</code> sob <code>apps/engine/_build</code></td>
+<td><code>pnpm engine:migrate</code> roda no HOST, e o Docker cria um ponto de bind-mount ausente como <code>root</code>. Corrija no lugar: <code>docker run --rm -v &quot;$PWD/apps/engine:/x&quot; alpine chown -R &quot;$(id -u):$(id -g)&quot; /x/_build</code></td>
+</tr>
+<tr>
+<td><code>RESET INCOMPLETO … banco apagado, migrado e semeado, mas estes serviços não responderam: &lt;lista&gt;</code></td>
+<td>o banco está bem; um processo não voltou. <code>docker compose -f docker/docker-compose.yml --env-file .env logs &lt;serviço&gt;</code> diz por quê. Nada aqui exige rodar o reset de novo</td>
+</tr>
+<tr>
+<td><code>RESET NÃO COMEÇOU — recusado em: guarda da instalação na máquina (ADR 0170)</code></td>
+<td>nada foi tocado. Há uma instalação do Brabo nesta máquina (os containers são listados), ou <code>COMPOSE_PROJECT_NAME=brabo</code> está definida. Derrube a instalação <strong>sem</strong> <code>-v</code> (a recusa imprime o <code>docker compose -f &lt;pasta&gt;/docker/docker-compose.install.yml --env-file &lt;pasta&gt;/.env down</code> exato — os volumes e os dados dela ficam) ou tire a variável; veja <a href="#dev-para-brabo-dev">Levando um ambiente de dev para brabo-dev</a></td>
+</tr>
+<tr>
+<td><code>RESET NÃO COMEÇOU — recusado em: pré-requisitos de host das migrations</code></td>
+<td>nada foi tocado. <code>mix deps.get</code>/<code>mix compile</code> falhou em <code>apps/engine</code> no host (leia a saída acima dela), ou <code>drizzle-kit</code>/<code>ts-node</code> não resolvem — <code>pnpm install --frozen-lockfile</code></td>
+</tr>
+<tr>
+<td><code>O NEO4J RECUSA A SENHA DO .env</code>, antes de qualquer efeito ou depois de <code>container brabo-dev-neo4j-1 is unhealthy</code></td>
+<td>o Neo4j guarda a senha no volume <code>neo4j_data</code> quando ele é <strong>criado</strong> e ignora <code>NEO4J_AUTH</code> depois, enquanto o healthcheck usa a do <code>.env</code>. Medido em 2026-09-26: um volume de 13/09, o container recriado com a senha default, healthcheck <code>The client is unauthorized due to authentication failure</code>. Ponha a senha antiga de volta em <code>NEO4J_PASSWORD</code>, ou mude-a dentro do Neo4j (<code>ALTER CURRENT USER SET PASSWORD FROM … TO …</code>, o comando é impresso), ou — o grafo é derivado, <code>pnpm --filter api grafo:reprojetar</code> o reconstrói — remova o volume você mesmo. O script nunca o remove (AT-181)</td>
+</tr>
+<tr>
+<td>o <code>up --wait</code> estoura o tempo</td>
+<td><code>BRABO_RESET_WAIT_TIMEOUT</code> (segundos, default 600). Um primeiro boot com volumes <code>node_modules</code>/<code>_build</code> vazios roda <code>pnpm install</code>/<code>mix deps.get</code> antes de o processo escutar</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="dev-para-brabo-dev">Levando um ambiente de dev para brabo-dev</h2>
+<p>Desde o <a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170</a> o compose de dev
+(<code>docker/docker-compose.yml</code>) é o projeto Docker <strong><code>brabo-dev</code></strong>: containers
+<code>brabo-dev-api-1</code>, <code>brabo-dev-postgres-1</code>…, volumes <code>brabo-dev_pgdata</code>,
+<code>brabo-dev_neo4j_data</code>…, rede <code>brabo-dev_default</code>. O compose de instalação
+(<code>docker-compose.install.yml</code>) continua <strong><code>brabo</code></strong>, e as instalações
+já existentes também. Antes, os dois eram <code>brabo</code> — um projeto Docker: subir um
+por cima do outro recriava os containers e os ligava ao banco do outro
+(medido em 2026-09-19: o banco de uma instalação recebeu uma migration de
+dev), e o <code>reset-total.sh</code> teria apagado os schemas da instalação.</p>
+<p><strong>O que muda para você se já desenvolvia aqui:</strong> o próximo <code>make dev</code>
+cria volumes <code>brabo-dev_*</code> NOVOS e vazios. Os seus dados ficam onde estavam, nos
+volumes <code>brabo_*</code>, intocados — nada nesta mudança remove um volume. O
+preflight avisa enquanto os vê (ele nunca recusa por isso, e nunca
+apaga). Escolha um dos dois caminhos.</p>
+<p><strong>Distinguindo volumes de dev dos de uma instalação.</strong> Os dois levam o rótulo
+<code>com.docker.compose.project=brabo</code>, então o prefixo sozinho não diz nada. O que diz:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> volume</span><span style="color:var(--shiki-token-string)"> ls</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> label=com.docker.compose.project=brabo</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --format</span><span style="color:var(--shiki-token-string-expression)"> '{{.Name}}\t{{.Label "com.docker.compose.volume"}}'</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> ps</span><span style="color:var(--shiki-token-string)"> -a</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> label=com.docker.compose.project=brabo</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --format</span><span style="color:var(--shiki-token-string-expression)"> '{{.Names}}\t{{.Label "com.docker.compose.project.config_files"}}'</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li>Volumes que só o compose de dev declara — <code>api_*_node_modules</code>,
+<code>web_*_node_modules</code>, <code>broker_*_node_modules</code>, <code>engine_build</code>, <code>engine_deps</code>,
+<code>engine_mix</code>, <code>engine_hex</code> — provam que um ambiente de dev usou o nome <code>brabo</code>.
+A instalação nunca os cria.</li>
+<li>Volumes que os dois composes declaram — <code>pgdata</code>, <code>neo4j_data</code>, <code>neo4j_logs</code>,
+<code>ollama_data</code>, <code>git_local_repos</code>, <code>project_workspaces</code>,
+<code>brabo_projects_base</code> — são ambíguos sozinhos. Se nenhum container de uma
+instalação existe (o segundo comando não mostra <code>docker-compose.install.yml</code>)
+e você nunca instalou o Brabo nesta máquina, eles são os seus dados antigos de dev.
+Se você instalou, eles podem ser da instalação (ou uma mistura, depois do
+acidente que este ADR fecha): não os copie nem apague antes de saber.
+<code>backup_local</code> só existe na instalação.</li>
+</ul>
+<p><strong>Caminho A — levar os dados</strong> (o banco, o grafo, os repositórios bare
+locais e os workspaces; os volumes de artefato de build não valem a
+cópia, os novos se enchem sozinhos no primeiro boot):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># 1. a stack antiga para baixo, SEM -v (ela pode ainda estar rodando como `brabo`).</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">#    SÓ quando o segundo comando acima não listou nenhum container de instalação:</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">#    `-p brabo down` derrubaria uma instalação do mesmo jeito.</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -p</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-token-string)"> down</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 2. crie os volumes novos (vazios) sem iniciar nada</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-token-string)"> create</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 3. copie, volume a volume</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">for</span><span style="color:var(--shiki-foreground)"> v </span><span style="color:var(--shiki-token-keyword)">in</span><span style="color:var(--shiki-token-string)"> pgdata</span><span style="color:var(--shiki-token-string)"> neo4j_data</span><span style="color:var(--shiki-token-string)"> neo4j_logs</span><span style="color:var(--shiki-token-string)"> git_local_repos</span><span style="color:var(--shiki-token-string)"> project_workspaces</span><span style="color:var(--shiki-token-string)"> ollama_data</span><span style="color:var(--shiki-foreground)">; </span><span style="color:var(--shiki-token-keyword)">do</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">  docker</span><span style="color:var(--shiki-token-string)"> volume</span><span style="color:var(--shiki-token-string)"> inspect</span><span style="color:var(--shiki-token-string-expression)"> "brabo_$v"</span><span style="color:var(--shiki-token-keyword)"> ></span><span style="color:var(--shiki-token-string)">/dev/null</span><span style="color:var(--shiki-token-keyword)"> 2>&#x26;1</span><span style="color:var(--shiki-token-keyword)"> ||</span><span style="color:var(--shiki-token-keyword)"> continue</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">  docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> -v</span><span style="color:var(--shiki-token-string-expression)"> "brabo_$v"</span><span style="color:var(--shiki-token-string)">:/de</span><span style="color:var(--shiki-token-string)"> -v</span><span style="color:var(--shiki-token-string-expression)"> "brabo-dev_$v"</span><span style="color:var(--shiki-token-string)">:/para</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">    alpine</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string-expression)"> 'cp -a /de/. /para/'</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">done</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 4. suba como brabo-dev</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> dev</span></span>
+<span class="line"></span></code></pre>
+<p><code>cp -a</code> mantém donos e modos, o que importa para o <code>pgdata</code> (a imagem do Postgres
+recusa um diretório de dados de que não é dona) e para os dois volumes de dados (veja
+<a href="#dev-containers-nao-root">Os containers de dev escrevem como o seu usuário</a> acima). O Postgres tem de estar <strong>parado</strong>
+enquanto o diretório dele é copiado — é para isso que serve o passo 1.</p>
+<p><strong>Caminho B — começar do zero:</strong> só rode <code>make dev</code>, depois
+<code>bash scripts/dev/reset-total.sh</code> para migrar e semear o banco novo. Os
+volumes antigos ficam no disco até você removê-los.</p>
+<p><strong>Removendo os volumes antigos, só depois de a stack nova funcionar e só os que
+você provou serem de dev</strong> (os da instalação são dados que você perderia):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> volume</span><span style="color:var(--shiki-token-string)"> rm</span><span style="color:var(--shiki-token-string)"> brabo_api_root_node_modules</span><span style="color:var(--shiki-token-string)"> brabo_engine_build</span><span style="color:var(--shiki-token-comment)">  # …um a um, pelo nome</span></span>
+<span class="line"></span></code></pre>
+<p>Nenhum script faz isso por você, de propósito: <code>docker volume rm</code> do
+<code>brabo_pgdata</code> de uma instalação é o único erro aqui que não se desfaz.</p>
+<hr>
+<h2 id="acesso-rapido-local">Ligando o acesso rápido na instalação local (TP-01)</h2>
+<p>O acesso rápido por papel (ADR 0245, RN-984) só existe em imagem construída
+nesta máquina, nunca nas das Actions. Para a instalação local do TP-01
+(<code>~/brabo-v7</code>):</p>
+<ol>
+<li>No checkout da <code>dev</code>: <code>AMBIENTE=local docker buildx bake</code> (ou os
+<code>docker build</code> com <code>--build-arg BRABO_AMBIENTE=local</code> na api e
+<code>--build-arg VITE_BRABO_AMBIENTE=local</code> no web).</li>
+<li>No <code>.env</code> da instalação: <code>BRABO_AMBIENTE=local</code> e <code>BRABO_BIND=127.0.0.1</code>
+(sem o bind, a porta fica aberta na rede e qualquer um entra como owner).
+O bind prende a api, o web e o engine; o Ollama e o neo4j ficam sempre em
+<code>127.0.0.1</code> (AT-811, RN-1057).</li>
+<li>Copie o <code>docker/docker-compose.install.yml</code> novo para a pasta da
+instalação (o de lá é cópia).</li>
+<li><code>docker compose up -d</code>. A tela de login mostra o botão &quot;Acesso rápido&quot;; as
+contas <code>&lt;papel&gt;@brabo.dev</code> ficam num workspace próprio. A instalação precisa
+já ter a primeira conta (sem usuário a rota responde 409).</li>
+</ol>
+<p>Para desligar: reconstrua sem <code>AMBIENTE</code> e tire <code>BRABO_AMBIENTE</code> do <code>.env</code>.
+O <code>install.sh</code> não liga o <code>local</code>.</p>
+<nav class="site-pager"><a href="../runbook.html">Operations manual</a><a href="../runbook/deploy.html">Deploy e rollout</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-infra/blob/dev/deploy/docs/runbook/ambiente-local.md">Edit this page</a></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#broker-de-container">O broker de containers</a></li><li class="n2"><a href="#migrar-workspaces-pasta-local">Migrar workspaces para pasta local</a></li><li class="n2"><a href="#projeto-no-modo-local">Projeto no modo Pasta montada: a base de projetos</a></li><li class="n2"><a href="#base-do-runner">A base de projetos do runner</a></li><li class="n2"><a href="#agente-de-maquina">O agente de máquina: uma conexão por projeto</a></li><li class="n2"><a href="#unit-do-agente-nao-inicia">A unit está bad-setting e nunca inicia</a></li><li class="n2"><a href="#chave-de-dispositivo-pelo-terminal">Chave de dispositivo pelo terminal</a></li><li class="n2"><a href="#instalador-nao-fecha">Quando o instalador não fecha a instalação</a></li><li class="n2"><a href="#pasta-do-projeto-nunca-aparece">A pasta do projeto nunca aparece na máquina do usuário</a></li><li class="n2"><a href="#credencial-nao-atravessa-o-container">Clone autenticado no modo Runner é recusado enquanto o container está de pé</a></li><li class="n2"><a href="#dev-containers-nao-root">Os containers de dev escrevem como o seu usuário, não como root</a></li><li class="n2"><a href="#reset-total">Reset total do ambiente de dev</a></li><li class="n2"><a href="#dev-para-brabo-dev">Levando um ambiente de dev para brabo-dev</a></li><li class="n2"><a href="#acesso-rapido-local">Ligando o acesso rápido na instalação local (TP-01)</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-en.json" data-base="../"></script></body>
+</html>

@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="ru" data-locale="ru" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rotação de segredos | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Меню">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Поиск" aria-label="Поиск" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Язык"><option value="../../runbook/segredos.html">pt-BR</option><option value="../../en/runbook/segredos.html">en</option><option value="../../ru/runbook/segredos.html" selected>ru</option><option value="../../zh-Hans/runbook/segredos.html">zh-Hans</option></select>
+<select data-seletor aria-label="Среда"><option value="../../../dev/ru/runbook/segredos.html">dev</option><option value="../../../prd/ru/runbook/segredos.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Сменить тему">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Начните здесь</h2></summary><ul><li><a href="../index.html">Главная</a></li><li><a href="../getting-started.html">Первые шаги</a></li></ul></details></section><section><details open><summary><h2>🎓 Туториалы</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">С нуля до готового результата</a></li><li><a href="../tutorials/orquestrar-repositorios.html">Оркестрация репозиториев</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">Как строится Brabo</a></li></ul></details></section><section><details open><summary><h2>🧭 Практические руководства</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html">Разработка Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">Токен GitHub Packages</a></li><li><details open><summary><span>Руководство по эксплуатации</span></summary><ul><li><a href="../runbook.html">Руководство по эксплуатации</a></li><li><a href="../runbook/ambiente-local.html">Ambiente local e de dev</a></li><li><a href="../runbook/deploy.html">Deploy e rollout</a></li><li><a href="../runbook/instalacao.html">Instalação e artefatos</a></li><li><a href="../runbook/operacao.html">Operação</a></li><li><a href="../runbook/restore.html">Restore</a></li><li><a href="../runbook/segredos.html" aria-current="page">Rotação de segredos</a></li></ul></details></li><li><a href="../tutorials/adotar.html">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Участие в проекте</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">Как мы пишем</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Как внести вклад</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Где попросить помощи</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Сообщить об уязвимости</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Концепции</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">Архитектура</a></li><li><a href="../explanation/gates.html">Gates и то, как они измеряются</a></li><li><a href="../explanation/modelo-de-time.html">Модель команды и поток результатов</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Процесс и конвейер</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">Политика веток</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Цепочка поставок CI</a></li><li><a href="../explanation/release-do-produto.html">Релиз продукта</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Локализация</span></summary><ul><li><a href="../explanation/localizacao.html">Локализация</a></li><li><a href="../explanation/localizacao-en.html">Локализация — английский (en)</a></li><li><a href="../explanation/localizacao-ru.html">Локализация — русский (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Локализация — упрощённый китайский (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Технические заметки</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Справочник</h2></summary><ul><li><a href="../glossary.html">Глоссарий</a></li><li><a href="../reference/componentes-da-doc.html">Компоненты документации</a></li><li><a href="../explanation/documentation-workflow.html">Синхронизация документации</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">Бизнес-правила</a></li><li><span>Справочник API</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ Решения (ADR)</a></h2></section><section><details><summary><h2>🗂️ История проекта</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">Хронология</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Интерфейс до и после shadcn (31.10.2026)</a></li><li><a href="../explanation/historico-de-fases.html">История фаз</a></li><li><a href="../explanation/historico-de-fases-parte-1.html">Фазы 1–15, часть 1</a></li><li><a href="../explanation/historico-de-fases-parte-2.html">Программа 16–26 и раунды, часть 2</a></li><li><a href="../explanation/historico-de-fases-parte-3.html">Программа 28 и аудиты, часть 3</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">От локального runner далее, часть 4</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">ФАЗА 28 — папка пользователя</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — установка одной строкой</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — локальный агент машины</a></li><li><a href="../explanation/backlog.html">Backlog после триажа</a></li><li><details><summary><span>Проверки и измерения</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">Первый dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Реальное выполнение (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Находки реального прогона конвейера</a></li><li><a href="../explanation/validacao-fase-12.html">Проверка Фазы 12</a></li><li><a href="../explanation/validacao-real.html">Реальная валидация (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Измерение эвристики языка</a></li><li><a href="../explanation/medicao-do-jev.html">Измерение маршрутизатора инструментов Jev</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Аудит: fluxo.yml × код (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Визуальный аудит до и после Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">Эта страница ещё не переведена; показан оригинал на португальском.</div>
+<article class="doc">
+<h1 id="rotação-de-segredos">Rotação de segredos</h1>
+<p>Parte do <a href="../runbook.html">Runbook operacional</a>. Comece pela triagem do índice.</p>
+<h2 id="rotacao-das-chaves-do-auth">Rotação das chaves do auth</h2>
+<p>Decisões no
+<a href="../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031</a> e no
+<a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032</a>.</p>
+<p>O auth first-party tem <strong>três</strong> segredos, com consequências muito diferentes
+quando trocados. Confundir os dois primeiros é o erro caro aqui.</p>
+<h3 id="rotacao-do-auth-jwt-secret"><code>AUTH_JWT_SECRET</code> — rotação sem indisponibilidade</h3>
+<p>O par Ed25519 que assina o access token é derivado dele. A rotação
+é a mesma dança de três passos da chave mestra (abaixo):</p>
+<ol>
+<li><code>AUTH_JWT_SECRET_PREVIOUS</code> recebe o valor antigo; <code>AUTH_JWT_SECRET</code> recebe
+o novo. Reinicie a api.</li>
+<li>As duas chaves aparecem em <code>/.well-known/jwks.json</code> e as duas verificam; só a
+nova <strong>assina</strong>. A api emite um <code>WARN</code> uma vez por processo, na primeira
+verificação ou leitura do JWKS depois do boot (a chave anterior é derivada sob
+demanda, não no início), enquanto isso durar.</li>
+<li>Depois de 15 minutos (o TTL do access token), nenhum token da chave antiga
+sobrevive. <strong>Remova <code>AUTH_JWT_SECRET_PREVIOUS</code></strong> e reinicie.</li>
+</ol>
+<p>Ninguém é deslogado: os refresh tokens têm hash com <code>AUTH_TOKEN_PEPPER</code>,
+não com esta chave, e desde a <a href="../business-rules/api.html#rn-613">RN-613</a>
+o pepper é obrigatório e nunca emprestado desta chave.</p>
+<p><strong>A ordem, se esta instalação é anterior à RN-613: pepper PRIMEIRO, JWT depois.</strong>
+Antes da RN-613 um pepper não definido caía em silêncio para <code>AUTH_JWT_SECRET</code> — e
+os composes de produção e de instalação nem passavam <code>AUTH_TOKEN_PEPPER</code> à
+api, então isso era toda instalação compose. Agora a api <strong>recusa
+subir</strong> sem o pepper, com uma mensagem dizendo o que fazer. A migração
+que não desloga ninguém:</p>
+<ol>
+<li>Defina <code>AUTH_TOKEN_PEPPER</code> com o valor <strong>atual</strong> de <code>AUTH_JWT_SECRET</code>
+(copie-o; não gere um novo). Reinicie a api. Os hashes dos tokens são
+byte a byte o que eram, então todo refresh token e PAT continua funcionando.
+O <code>install.sh</code> faz este passo sozinho quando encontra o <code>.env</code> anterior na
+pasta de onde roda, e diz isso no terminal sem imprimir o
+valor; o Kubernetes já tinha <code>AUTH_TOKEN_PEPPER</code> no <code>ExternalSecret</code>.</li>
+<li>Só então rode a rotação de <code>AUTH_JWT_SECRET</code> com os três passos acima. Daqui em diante
+os dois segredos são independentes, e um pepper igual ao segredo de JWT <em>antigo</em>
+é o estado esperado, não uma sobra.</li>
+</ol>
+<p><strong>Se alguém rotacionar o JWT antes de separar</strong>, numa versão anterior à RN-613
+essa rotação <em>era</em> uma troca de pepper: todo mundo é deslogado, todo link de
+e-mail/reset aberto morre e todo PAT para de autenticar — o logout global
+descrito na próxima seção. Não há como desfazer a não ser pondo o valor antigo
+de volta como <code>AUTH_TOKEN_PEPPER</code> (o que revive os tokens antigos que não
+expiraram, e invalida tudo o que foi emitido no meio). Na RN-613 e depois o
+erro não acontece em silêncio: sem pepper a api não sobe. O único
+jeito de ainda cair nele é gerar um pepper <strong>novo</strong> durante a migração
+em vez de copiar o segredo de JWT atual — mesmo logout global.</p>
+<p>Verificação: <code>apps/api/test/infrastructure/security/ed25519-access-token-issuer.spec.ts</code>
+(describe &quot;rotação de chave&quot;); para o pepper,
+<code>apps/api/test/infrastructure/security/auth-key-material.spec.ts</code> (describe
+&quot;pepperAtual (RN-613)&quot;: a recusa no boot e a mensagem dela),
+<code>apps/api/test/application/use-cases/auth/rotacao-dos-segredos.spec.ts</code>
+(describe &quot;a migração do RN-613&quot;: um refresh com hash pelo fallback antigo continua
+válido com o pepper definido como o segredo de JWT antigo, e sobrevive à
+rotação do JWT) e <code>scripts/dev/install-env.spec.ts</code> (o <code>.env</code> que o instalador
+escreve nos dois casos, pelo <code>docker compose config</code>).</p>
+<h3 id="troca-do-auth-token-pepper"><code>AUTH_TOKEN_PEPPER</code> — logout global, sem meio-termo</h3>
+<p>Esta é a chave HMAC para o hash dos refresh tokens e dos tokens de conta.
+Trocá-la invalida, tudo de uma vez:</p>
+<ul>
+<li><strong>todo</strong> refresh token em circulação — todo mundo é deslogado;</li>
+<li><strong>todo</strong> link aberto de verificação de e-mail e de redefinição de senha;</li>
+<li><strong>todo</strong> personal access token (PAT) — um runner iniciado com <code>--token</code>
+para de autenticar (chaves de dispositivo não são afetadas);</li>
+<li>os contadores de lockout: toda conta travada destrava.</li>
+</ul>
+<p>As senhas sobrevivem (argon2id, sem pepper): as pessoas entram de novo normalmente. Um
+refresh rejeitado assim aparece como <code>refresh_unknown</code> em <code>auth_events</code>,
+não como <code>refresh_reuse_detected</code>.</p>
+<p>Não há <code>AUTH_TOKEN_PEPPER_PREVIOUS</code>, e essa é uma decisão consciente:
+aceitar verificação dupla em todo refresh, para sempre, por um cenário
+que acontece uma vez na vida, não compensa. Se você precisar trocá-lo —
+suspeita de vazamento do banco, por exemplo — avise as pessoas antes: o sintoma
+para o usuário é ser deslogado sem motivo aparente e ver o
+link de redefinição dizer &quot;expirado&quot;.</p>
+<blockquote>
+<p>A api <strong>não</strong> deixa de subir com um pepper novo. Ela simplesmente deixa de
+reconhecer qualquer token antigo. Se o suporte relata &quot;todo mundo foi deslogado
+ao mesmo tempo&quot;, esta variável é o primeiro lugar para olhar — e, numa
+versão anterior à <a href="../business-rules/api.html#rn-613">RN-613</a> em que ela
+nunca foi definida, <code>AUTH_JWT_SECRET</code>. Ela <strong>deixa</strong> de subir sem um, em
+produção: veja a ordem de migração acima.</p>
+</blockquote>
+<p>Verificação: <code>apps/api/test/application/use-cases/auth/rotacao-dos-segredos.spec.ts</code>
+(<a href="../business-rules/api.html#rn-597">RN-597</a>).</p>
+<h3 id="rotacao-do-brabo-service-token"><code>BRABO_SERVICE_TOKEN</code> — rotação sem indisponibilidade, dos dois lados</h3>
+<p>Este é o segredo compartilhado que autentica o tráfego api ↔ engine
+(<a href="../business-rules/api.html#rn-035">RN-035</a>). Ele não tem nada a ver com sessão de
+usuário: errá-lo não desloga ninguém, quebra a comunicação
+interna.</p>
+<p>A dança é a mesma do <code>AUTH_JWT_SECRET</code>, com a diferença de que ela
+roda nas <strong>duas</strong> cargas — e a ordem importa, porque cada lado manda o
+atual e aceita os dois:</p>
+<ol>
+<li><code>BRABO_SERVICE_TOKEN_PREVIOUS</code> recebe o valor antigo na <strong>api e no
+engine</strong>; <code>BRABO_SERVICE_TOKEN</code> recebe o novo nos dois. Reinicie
+os dois. Em produção a api, o engine e o broker conferem o valor
+antigo com a mesma regra do novo, então se o valor antigo é o default
+público ou tem menos de 16 caracteres, cada um deles recusa subir neste
+passo e nomeia a variável
+(<a href="../business-rules/api.html#rn-598">RN-598</a>,
+<a href="../business-rules/engine.html#rn-601">RN-601</a>). Sair de um
+token fraco, portanto, quer dizer pular o <code>_PREVIOUS</code>, e pagar por isso com
+a janela de <code>403</code>/<code>401</code> descrita abaixo.</li>
+<li>Enquanto os dois estão de pé com a variável nova, o tráfego funciona em qualquer
+combinação de pods antigos e novos — é isso que torna o rollout seguro
+no meio do caminho.</li>
+<li>Quando o rollout dos dois Deployments terminou, <strong>remova
+<code>BRABO_SERVICE_TOKEN_PREVIOUS</code></strong> e reinicie.</li>
+</ol>
+<p>Pular o passo 1 e só trocar o valor atual produz <code>403</code>/<code>401</code>
+durante toda a janela em que um pod antigo continua de qualquer lado — o
+sintoma do
+<a href="deploy.html#diagnostico-do-deploy">diagnóstico acima</a>.</p>
+<p>Verificação: na api, <code>apps/api/test/infrastructure/security/service-token.spec.ts</code>
+(describe &quot;rotação do BRABO_SERVICE_TOKEN&quot;) e
+<code>apps/api/test/interfaces/engine-service.guard.spec.ts</code>; no engine,
+<code>apps/engine/test/engine_web/plugs/verify_service_token_test.exs</code> e
+<code>apps/engine/test/engine/runtime_service_token_test.exs</code> (a regra do boot); no
+broker, <code>apps/broker/src/config.spec.ts</code>.</p>
+<blockquote>
+<p><strong>Onde as variáveis <code>_PREVIOUS</code> chegam ao processo.</strong> Nos três
+composes (<code>docker-compose.yml</code>, <code>docker-compose.prod.yml</code>,
+<code>docker-compose.install.yml</code>) todas estão mapeadas no <code>environment:</code>
+do serviço que as lê, vazias por padrão — definir uma no <code>.env</code>
+e recriar o serviço basta
+(<a href="../business-rules/api.html#rn-595">RN-595</a>; guardado por
+<code>scripts/ci/previous-nos-composes.spec.ts</code>, que deriva a lista do
+código). <strong>No Kubernetes elas chegam aos Pods pelo cofre de segredos</strong>
+(AT-220): o <code>ExternalSecret</code>
+(<code>deploy/k8s/base/common/externalsecrets.yaml</code>) puxa o objeto <code>brabo</code>
+inteiro com <code>dataFrom.extract</code>, então um <code>_PREVIOUS</code> que existe lá cai em
+<code>brabo-secrets</code> e um que não existe simplesmente não está lá — sem falha de sync
+fora de uma rotação. Elas nunca são listadas uma a uma: uma entrada <code>data</code> cuja
+propriedade falta reprova o sync do Secret inteiro, e um <code>_PREVIOUS</code>
+ausente é o estado normal. De qualquer jeito, confirme dentro do
+container (<code>printenv</code>) antes de confiar no passo 2.</p>
+</blockquote>
+<h4 id="rotacao-no-kubernetes">Fazendo no Kubernetes</h4>
+<p>A mesma dança, com o objeto <code>brabo</code> no provedor de segredos fazendo as vezes do
+<code>.env</code>. No cluster local esse objeto é o Secret <code>brabo</code> que o bootstrap
+criou; em staging/prod é a entrada do provedor para onde o <code>SecretStore</code> aponta.</p>
+<ol>
+<li>
+<p><strong>Acrescente</strong> a chave <code>_PREVIOUS</code> (valor antigo) e <strong>substitua</strong> a chave atual (valor
+novo) no objeto <code>brabo</code> — as duas na mesma mudança. Localmente:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> patch</span><span style="color:var(--shiki-token-string)"> secret</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> --type</span><span style="color:var(--shiki-token-string)"> merge</span><span style="color:var(--shiki-token-string)"> -p</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">  '{"stringData":{"AUTH_JWT_SECRET_PREVIOUS":"&#x3C;old>","AUTH_JWT_SECRET":"&#x3C;new>"}}'</span></span>
+<span class="line"></span></code></pre>
+</li>
+<li>
+<p><strong>Faça o operator sincronizar agora</strong> em vez de esperar o <code>refreshInterval</code>
+(1h), e confira que a chave chegou:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> annotate</span><span style="color:var(--shiki-token-string)"> externalsecret</span><span style="color:var(--shiki-token-string)"> brabo-secrets</span><span style="color:var(--shiki-token-string)"> force-sync=</span><span style="color:var(--shiki-token-string-expression)">"$(</span><span style="color:var(--shiki-token-function)">date</span><span style="color:var(--shiki-token-string)"> +%s</span><span style="color:var(--shiki-token-string-expression)">)"</span><span style="color:var(--shiki-token-string)"> --overwrite</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> get</span><span style="color:var(--shiki-token-string)"> secret</span><span style="color:var(--shiki-token-string)"> brabo-secrets</span><span style="color:var(--shiki-token-string)"> -o</span><span style="color:var(--shiki-token-string)"> go-template=</span><span style="color:var(--shiki-token-string-expression)">'{{range $k, $v := .data}}{{$k}}{{"\n"}}{{end}}'</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string)"> _PREVIOUS</span></span>
+<span class="line"></span></code></pre>
+</li>
+<li>
+<p><strong>Reinicie</strong> quem a lê. O <code>envFrom</code> é lido quando o container inicia:
+o Secret mudar não muda um Pod rodando. <code>api</code> para
+<code>AUTH_JWT_SECRET</code> e <code>CREDENTIALS_MASTER_KEY</code>, <code>api</code> <strong>e</strong> <code>engine</code> para
+<code>BRABO_SERVICE_TOKEN</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> rollout</span><span style="color:var(--shiki-token-string)"> restart</span><span style="color:var(--shiki-token-string)"> deployment/api</span><span style="color:var(--shiki-token-string)"> deployment/engine</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/api</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> printenv</span><span style="color:var(--shiki-token-string)"> AUTH_JWT_SECRET_PREVIOUS</span></span>
+<span class="line"></span></code></pre>
+</li>
+<li>
+<p><strong>Aposente-a</strong> quando a condição da própria rotação for cumprida (15 min para
+<code>AUTH_JWT_SECRET</code>, os dois rollouts terminados para <code>BRABO_SERVICE_TOKEN</code>,
+<code>falhas=0</code> e zero pendentes para a chave mestra): <strong>remova</strong> a chave <code>_PREVIOUS</code>
+do objeto <code>brabo</code>, force o sync de novo (passo 2 — a chave
+some de <code>brabo-secrets</code>, não fica para trás) e reinicie de novo
+(passo 3). Até o reinício os Pods mantêm o valor antigo em memória, e a
+api continua avisando que há uma rotação em andamento.</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> patch</span><span style="color:var(--shiki-token-string)"> secret</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> --type</span><span style="color:var(--shiki-token-string)"> json</span><span style="color:var(--shiki-token-string)"> -p</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">  '[{"op":"remove","path":"/data/AUTH_JWT_SECRET_PREVIOUS"}]'</span></span>
+<span class="line"></span></code></pre>
+</li>
+</ol>
+<p>Verificação: os quatro passos foram exercitados contra o chart do External Secrets
+Operator fixado em <code>deploy/k8s/helm/charts.env</code> (0.19.2) num cluster k3d
+descartável, com o <code>SecretStore</code> local: a chave apareceu em
+<code>brabo-secrets</code> depois do <code>force-sync</code> e sumiu depois da remoção, com o
+<code>ExternalSecret</code> continuando <code>SecretSynced</code>. Desde a AT-146 os mesmos quatro passos rodam
+toda semana para <code>CREDENTIALS_MASTER_KEY</code>, dentro do ensaio da chave mestra
+(<code>make test-rotacao-chave-mestra-k8s</code>, veja
+<a href="#rotacao-da-chave-mestra">Verificando sem esperar um incidente</a>) — as
+outras chaves <code>_PREVIOUS</code> ainda não têm execução automatizada. O que roda em todo PR é
+o <code>scripts/ci/previous-nos-composes.spec.ts</code>, que reprova se o
+<code>ExternalSecret</code> deixa de usar <code>dataFrom.extract</code> ou lista um <code>_PREVIOUS</code> em
+<code>data:</code>.</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># gere um valor com entropia suficiente; ele nunca precisa ser digitado</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">openssl</span><span style="color:var(--shiki-token-string)"> rand</span><span style="color:var(--shiki-token-string)"> -base64</span><span style="color:var(--shiki-token-constant)"> 48</span></span>
+<span class="line"></span></code></pre>
+<h3 id="conta-travada-por-lockout">Conta travada por lockout</h3>
+<p>O lockout é curto (30s a 15 minutos) e se resolve sozinho: a
+janela deslizante esvazia. <strong>Não há endpoint de destravamento</strong>, de propósito — veja
+a <a href="../business-rules/api.html#rn-031">RN-031</a>. Se você precisa destravar alguém
+agora:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)">-- A chave é um HMAC do e-mail, não o e-mail. Ache-a pelo evento recente:</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">select</span><span style="color:var(--shiki-foreground)"> subject_key, </span><span style="color:var(--shiki-token-function)">count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">), </span><span style="color:var(--shiki-token-function)">max</span><span style="color:var(--shiki-foreground)">(occurred_at)</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  from</span><span style="color:var(--shiki-foreground)"> auth_events</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> where</span><span style="color:var(--shiki-foreground)"> kind </span><span style="color:var(--shiki-token-keyword)">in</span><span style="color:var(--shiki-foreground)"> (</span><span style="color:var(--shiki-token-string-expression)">'login_failure'</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-string-expression)">'login_blocked_user'</span><span style="color:var(--shiki-foreground)">)</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">   and</span><span style="color:var(--shiki-foreground)"> occurred_at </span><span style="color:var(--shiki-token-keyword)">></span><span style="color:var(--shiki-token-keyword)"> now</span><span style="color:var(--shiki-foreground)">() </span><span style="color:var(--shiki-token-keyword)">-</span><span style="color:var(--shiki-foreground)"> interval </span><span style="color:var(--shiki-token-string-expression)">'30 minutes'</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> group by</span><span style="color:var(--shiki-foreground)"> subject_key </span><span style="color:var(--shiki-token-keyword)">order by</span><span style="color:var(--shiki-token-constant)"> 3</span><span style="color:var(--shiki-token-keyword)"> desc</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">delete</span><span style="color:var(--shiki-token-keyword)"> from</span><span style="color:var(--shiki-foreground)"> auth_lockout_hits </span><span style="color:var(--shiki-token-keyword)">where</span><span style="color:var(--shiki-foreground)"> bucket_key </span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)"> '&#x3C;subject_key>'</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span></code></pre>
+<p>Uma redefinição de senha bem-sucedida também destrava a conta.</p>
+<p>Verificação: <strong>nenhuma</strong> para as duas consultas acima — elas foram conferidas contra
+o schema por leitura, nunca executadas por um spec. O próprio lockout (a
+janela, o contador, o que o destrava) é coberto por
+<code>apps/api/test/application/use-cases/auth/lockout.spec.ts</code>.</p>
+<blockquote>
+<p><strong>O rastro nunca é apagado.</strong> <code>auth_lockout_hits</code> é um contador
+efêmero; <code>auth_events</code> é append-only e sobrevive a tudo, inclusive
+à remoção do usuário (sem chave estrangeira, de propósito).</p>
+</blockquote>
+<h2 id="rotacao-da-chave-mestra">Rotação da chave mestra</h2>
+<p>Decisões no <a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027</a>.</p>
+<p><code>CREDENTIALS_MASTER_KEY</code> embrulha as DEKs que cifram os segredos do usuário:
+chaves de API de LLM e tokens de git. Ela é rotacionada periodicamente e, obrigatoriamente,
+depois de qualquer suspeita de vazamento.</p>
+<h3 id="whats-at-stake">O que está em jogo</h3>
+<p>Trocar a variável e reiniciar a api com uma chave só torna toda
+credencial existente ilegível, tudo de uma vez, sem erro de boot — a falha
+só aparece no primeiro uso, como &quot;não foi possível decifrar&quot;, e não há volta
+a não ser restaurando a chave antiga.</p>
+<p>É por isso que a rotação tem três passos, não um. Durante o do meio, as duas
+chaves coexistem:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>variável</th>
+<th>papel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CREDENTIALS_MASTER_KEY</code></td>
+<td>chave ATUAL — sempre usada para cifrar</td>
+</tr>
+<tr>
+<td><code>CREDENTIALS_MASTER_KEY_PREVIOUS</code></td>
+<td>chave anterior — tentada só quando a atual falha</td>
+</tr>
+</tbody>
+</table></div>
+<p>Duas tabelas guardam envelopes: <code>user_credentials</code> e
+<code>project_git_connections</code>.</p>
+<p>Desde a <a href="../business-rules/api.html#rn-563">RN-563</a> cada envelope leva também um
+<strong><code>key_id</code></strong> — a impressão digital da chave que o embrulhou. É ele que torna
+o progresso do passo 2 respondível em SQL. Duas coisas sobre ele importam às 3h:</p>
+<ul>
+<li><strong>Ele nunca decide se uma linha abre.</strong> A leitura continua tentando a chave
+atual e caindo para a anterior; o AES-GCM autentica, e ele é a
+autoridade. O rótulo é metadado, e uma linha cujo rótulo discorda do
+envelope é re-embrulhada corretamente assim mesmo (<a href="../adr/0158-o-id-da-chave-mestra-gravado-no-envelope.html">ADR 0158</a>).</li>
+<li><strong><code>key_id IS NULL</code> quer dizer &quot;escrita antes de essa coluna existir&quot;, nunca &quot;na
+chave atual&quot;.</strong> Numa instalação anterior a ela, tudo é <code>NULL</code>
+até a primeira rotação, e as consultas abaixo contam isso como pendente — que
+é a resposta honesta.</li>
+</ul>
+<p>Pegue a impressão digital atual do próprio log da api; ela imprime uma linha no boot:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> logs</span><span style="color:var(--shiki-token-string)"> -l</span><span style="color:var(--shiki-token-string)"> app.kubernetes.io/name=api</span><span style="color:var(--shiki-token-string)"> --tail=200</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string-expression)"> 'chave mestra corrente'</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># chave mestra corrente: key_id=4f2b91c0a77e13d5</span></span>
+<span class="line"></span></code></pre>
+<h3 id="before-size-it-up">Antes: dimensione</h3>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">select</span><span style="color:var(--shiki-token-string-expression)"> 'user_credentials'</span><span style="color:var(--shiki-token-keyword)"> as</span><span style="color:var(--shiki-foreground)"> tabela, </span><span style="color:var(--shiki-token-function)">count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">) </span><span style="color:var(--shiki-token-keyword)">from</span><span style="color:var(--shiki-foreground)"> user_credentials</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">union all</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">select</span><span style="color:var(--shiki-token-string-expression)"> 'project_git_connections'</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-function)">count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">) </span><span style="color:var(--shiki-token-keyword)">from</span><span style="color:var(--shiki-foreground)"> project_git_connections;</span></span>
+<span class="line"></span></code></pre>
+<p>O re-embrulho é um UPDATE por linha. Milhares de linhas levam segundos; é
+bom saber a ordem de grandeza antes de começar.</p>
+<h3 id="1-publish-both-keys">1. Publique as duas chaves</h3>
+<p>Gere a nova e publique <strong>as duas</strong> no provedor de segredos, mantendo
+a antiga em <code>CREDENTIALS_MASTER_KEY_PREVIOUS</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">openssl</span><span style="color:var(--shiki-token-string)"> rand</span><span style="color:var(--shiki-token-string)"> -hex</span><span style="color:var(--shiki-token-constant)"> 32</span><span style="color:var(--shiki-token-comment)">   # a chave nova</span></span>
+<span class="line"></span></code></pre>
+<p>No cluster local o Secret de origem é criado pelo bootstrap; em
+staging/prod o valor vai para o provedor de onde o External Secrets lê.
+Depois reinicie a api para ela carregar as duas:</p>
+<blockquote>
+<p>Publicar <code>CREDENTIALS_MASTER_KEY_PREVIOUS</code> no objeto <code>brabo</code> do
+provedor a põe em <code>brabo-secrets</code> no próximo sync (o <code>ExternalSecret</code>
+puxa o objeto inteiro) — force o sync e confirme que ela chegou como em
+<a href="#rotacao-no-kubernetes">Fazendo no Kubernetes</a>, depois reinicie. Nos
+composes é o <code>.env</code> mais recriar a api.</p>
+</blockquote>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> rollout</span><span style="color:var(--shiki-token-string)"> restart</span><span style="color:var(--shiki-token-string)"> deployment/api</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> rollout</span><span style="color:var(--shiki-token-string)"> status</span><span style="color:var(--shiki-token-string)">  deployment/api</span></span>
+<span class="line"></span></code></pre>
+<p>Confirme que a api está em modo de rotação — ela avisa no log, de propósito, e o
+aviso nomeia <strong>as duas</strong> impressões digitais, que é contra o que as consultas abaixo
+comparam:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> logs</span><span style="color:var(--shiki-token-string)"> -l</span><span style="color:var(--shiki-token-string)"> app.kubernetes.io/name=api</span><span style="color:var(--shiki-token-string)"> --tail=50</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string)"> CREDENTIALS_MASTER_KEY_PREVIOUS</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># ... rotação em andamento (atual key_id=&#x3C;NEW>, anterior key_id=&#x3C;OLD>). ...</span></span>
+<span class="line"></span></code></pre>
+<blockquote>
+<p>Daqui em diante <strong>nada quebra</strong>: um segredo novo já nasce na chave
+nova, um segredo antigo continua legível pela anterior. Você pode
+pausar neste estado por horas se precisar — mas não por semanas:
+aceitar duas chaves dobra a superfície de uma chave vazada, que é
+exatamente o motivo de você estar rotacionando.</p>
+</blockquote>
+<h3 id="2-re-wrap-the-store">2. Re-embrulhe o acervo</h3>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/api</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> node</span><span style="color:var(--shiki-token-string)"> scripts/rewrap-deks.js</span></span>
+<span class="line"></span></code></pre>
+<p>Saída esperada — o script imprime em português, e é isto que ele
+de fato escreve (<code>apps/api/src/scripts/rewrap-deks.ts</code>, <code>main</code>):</p>
+<pre class="codigo"><code>[rewrap] resultado
+
+  user_credentials         total=12  re-embrulhados=12  já na chave atual=0  falhas=0
+  project_git_connections  total=3   re-embrulhados=3   já na chave atual=0  falhas=0
+
+[rewrap] concluído. Agora remova CREDENTIALS_MASTER_KEY_PREVIOUS e reinicie a api.
+</code></pre>
+<p>Os contadores: <code>re-embrulhados</code>, <code>já na chave atual</code> e <code>falhas</code>. Há dois outros desfechos.
+Quando nada precisou ser re-embrulhado, a última linha é <code>[rewrap] nada a fazer — o acervo já está na chave atual.</code>. Quando alguma linha falhou, cada uma vai para o <code>stderr</code> como
+<code>[rewrap] &lt;tabela&gt;#&lt;id&gt;: &lt;motivo&gt;</code>, a execução termina com <code>[rewrap] &lt;N&gt; registro(s) não abriram com nenhuma das duas chaves. NÃO remova CREDENTIALS_MASTER_KEY_PREVIOUS até resolver.</code>, e o código de saída é 1.</p>
+<p>Propriedades que importam se algo interromper o script:</p>
+<ul>
+<li><strong>Idempotente.</strong> Rodá-lo de novo conta as linhas já convertidas como
+<code>já na chave atual</code> e não reescreve nada. Interrompido? Rode de
+novo.</li>
+<li><strong>Só o envelope muda.</strong> O texto cifrado do segredo fica byte a
+byte o mesmo, então parar no meio deixa o acervo consistente: parte na
+chave nova, parte na antiga, e as duas legíveis enquanto o PREVIOUS
+existir.</li>
+<li><strong><code>falhas &gt; 0</code> bloqueia o passo 3.</strong> São linhas que não abrem com
+nenhuma das chaves — em geral vindas de outro ambiente, ou de uma
+rotação anterior interrompida com a chave já descartada.
+O script identifica cada uma por id, e nomeia POR QUE falhou — uma linha de
+outro ambiente (&quot;embrulhado pela chave <code>&lt;kid&gt;</code>&quot;), uma linha cujo rótulo
+discorda do envelope (&quot;rótulo incoerente ou registro adulterado&quot;),
+e uma linha sem rótulo nenhum são três diagnósticos diferentes com três
+respostas diferentes. Não remova o PREVIOUS: sem ele você perde também o que
+ainda abria.</li>
+</ul>
+<p><strong>Interrompido, e quer saber onde parou?</strong> Pergunte ao banco em vez de
+rodar o script de novo pelo contador — com <code>&lt;NEW&gt;</code> a impressão digital atual
+do log acima:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">select</span><span style="color:var(--shiki-token-string-expression)"> 'user_credentials'</span><span style="color:var(--shiki-token-keyword)"> as</span><span style="color:var(--shiki-foreground)"> tabela, </span><span style="color:var(--shiki-token-function)">count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">) </span><span style="color:var(--shiki-token-keyword)">as</span><span style="color:var(--shiki-foreground)"> pendentes</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  from</span><span style="color:var(--shiki-foreground)"> user_credentials       </span><span style="color:var(--shiki-token-keyword)">where</span><span style="color:var(--shiki-foreground)"> key_id </span><span style="color:var(--shiki-token-keyword)">is</span><span style="color:var(--shiki-token-keyword)"> distinct</span><span style="color:var(--shiki-token-keyword)"> from</span><span style="color:var(--shiki-token-string-expression)"> '&#x3C;NEW>'</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">union all</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">select</span><span style="color:var(--shiki-token-string-expression)"> 'project_git_connections'</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-function)">count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">)</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  from</span><span style="color:var(--shiki-foreground)"> project_git_connections </span><span style="color:var(--shiki-token-keyword)">where</span><span style="color:var(--shiki-foreground)"> key_id </span><span style="color:var(--shiki-token-keyword)">is</span><span style="color:var(--shiki-token-keyword)"> distinct</span><span style="color:var(--shiki-token-keyword)"> from</span><span style="color:var(--shiki-token-string-expression)"> '&#x3C;NEW>'</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span></code></pre>
+<p><code>is distinct from</code>, nunca <code>&lt;&gt;</code>: linhas com <code>key_id IS NULL</code> têm de contar como
+pendentes, e <code>&lt;&gt;</code> as descartaria em silêncio.</p>
+<h3 id="3-discard-the-old-key">3. Descarte a chave antiga</h3>
+<p>Só depois de <code>falhas=0</code> <strong>e</strong> a consulta acima responder <code>0</code> nas duas tabelas. As
+duas dizem coisas diferentes e você quer as duas: <code>falhas=0</code> quer dizer que nada se recusou
+a abrir nesta execução, e a consulta quer dizer que nada ficou para trás — inclusive
+linhas que uma execução anterior, interrompida, nunca alcançou.</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># remova CREDENTIALS_MASTER_KEY_PREVIOUS do provedor, depois</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> annotate</span><span style="color:var(--shiki-token-string)"> externalsecret</span><span style="color:var(--shiki-token-string)"> brabo-secrets</span><span style="color:var(--shiki-token-string)"> force-sync=</span><span style="color:var(--shiki-token-string-expression)">"$(</span><span style="color:var(--shiki-token-function)">date</span><span style="color:var(--shiki-token-string)"> +%s</span><span style="color:var(--shiki-token-string-expression)">)"</span><span style="color:var(--shiki-token-string)"> --overwrite</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> rollout</span><span style="color:var(--shiki-token-string)"> restart</span><span style="color:var(--shiki-token-string)"> deployment/api</span></span>
+<span class="line"></span></code></pre>
+<p>Verifique que o aviso de rotação sumiu do log e que uma
+credencial existente ainda funciona (o caminho mais direto é a tela de
+credenciais do projeto, ou qualquer turno de agente que use uma chave de LLM).</p>
+<h3 id="verifying-without-waiting-for-an-incident">Verificando sem esperar um incidente</h3>
+<p><strong>O ciclo inteiro tem uma verificação nomeada, e ela roda no CI</strong>
+(<a href="../business-rules/api.html#rn-562">RN-562</a>):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> test</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> test/scripts/rewrap-deks.spec.ts</span></span>
+<span class="line"></span></code></pre>
+<p>Esse spec conduz a sequência desta página contra um Postgres de verdade e <strong>as duas</strong>
+tabelas: cifra com K1, publica K2, re-embrulha, descarta K1, e ainda decifra. Ele
+também fixa as duas propriedades em que este procedimento se apoia — idempotência (uma segunda
+execução informa <code>re-embrulhados=0</code>) e a linha ilegível sendo contada e nomeada
+sem abortar as outras.</p>
+<p>Cobertura mais estreita, em memória, das mesmas primitivas — inclusive o caso em que
+nenhuma chave funciona, e o caso em que o rótulo <code>key_id</code> mente — mora em
+<code>test/infrastructure/security/envelope-encryption.service.spec.ts</code>.</p>
+<p>O <code>rewrap</code> também roda em qualquer ambiente: num de teste, o ciclo completo à mão
+cabe em poucos minutos.</p>
+<p><strong>Já rodou de verdade? Não.</strong> A resposta do mantenedor (2026-09-27): esta
+rotação <strong>nunca</strong> foi executada num ambiente real. Então o spec acima
+não é uma rede de segurança sob um procedimento praticado — até a AT-146 era a única
+prova, e nunca tocou a imagem, o <code>ExternalSecret</code> nem um reinício da api.</p>
+<p><strong>O ensaio, no cluster, toda semana (AT-146).</strong>
+<code>make test-rotacao-chave-mestra-k8s</code> (<code>deploy/k8s/test-rotacao-chave-mestra.sh</code>)
+roda os três passos desta página contra o cluster local, com a mesma
+mecânica: ele escreve uma credencial de LLM com valor aleatório pela API
+e confere que todo envelope abre na chave de hoje; o <strong>passo 1</strong> publica a chave
+nova e a antiga como <code>_PREVIOUS</code> no Secret de origem <code>brabo</code> (o substituto
+local do provedor — nunca o <code>brabo-secrets</code> direto), força o
+sync do <code>ExternalSecret</code>, espera o <code>_PREVIOUS</code> chegar, reinicia a api e
+exige o aviso de rotação nomeando <strong>as duas</strong> impressões digitais; o <strong>passo 2</strong> exige
+linhas pendentes pela consulta acima, roda o <code>node scripts/rewrap-deks.js</code> da imagem
+(<code>falhas=0</code>), exige <strong>zero</strong> pendentes, e roda de novo (<code>nada a fazer</code>);
+o <strong>passo 3</strong> remove o <code>_PREVIOUS</code> da origem, exige que ele <strong>suma</strong>
+de <code>brabo-secrets</code> depois do sync, reinicia a api, exige a linha de boot
+com a impressão digital nova e nenhum aviso de rotação, e confere que todo envelope
+abre só com a chave nova — e que a credencial do início decifra
+para o <strong>mesmo valor</strong> (comparado por sha256 dentro do pod; o valor nunca
+sai dele). O veredito é o código de saída. Ele é o <strong>último</strong> alvo do
+agendado <code>.github/workflows/propriedades.yml</code>, porque troca um segredo e
+reinicia a api, e deixa o cluster na chave nova sem <code>_PREVIOUS</code>
+— uma rotação terminada, não uma pela metade. Primeira execução verde: <code>36502355798</code>
+(2026-09-29, 47 s).</p>
+<p>O que o ensaio <strong>não</strong> cobre, declarado: linhas de <code>project_git_connections</code>
+(criar uma conexão de git pela API valida um token contra um
+provider real, e o cluster da prova não tem saída de rede — a tabela é lida pelo
+verificador e pelo <code>rewrap</code>, em geral com 0 linhas; o envelope dela é o mesmo código,
+provado nas duas tabelas pelo spec acima), e o provedor de segredos de staging/produção
+(aqui a origem é o Secret local que o <code>SecretStore</code> do overlay
+lê; o <code>ExternalSecret</code> e o operator são os de verdade). É um
+ensaio num cluster descartável, <strong>não</strong> uma rotação de ambiente real:
+&quot;nunca rodou de verdade&quot; continua verdade até alguém rotacionar um.</p>
+<h3 id="interaction-with-restore">Interação com o restore</h3>
+<p><strong>Restaurar um dump num ambiente com outra chave mestra devolve
+um banco intacto com credenciais inúteis.</strong> O dump leva
+as DEKs embrulhadas, não a chave. Se você restaurou um backup de produção num
+ambiente de teste e as credenciais não abrem, não é corrupção:
+é a chave errada — e desde a <a href="../business-rules/api.html#rn-563">RN-563</a> você pode
+confirmar isso numa comparação em vez de por eliminação, lendo o <code>key_id</code>
+de qualquer linha e pondo-o ao lado da linha <code>chave mestra corrente</code> no
+log de boot da api. Veja
+<a href="restore.html#restore">Restore</a>.</p>
+<p>É por isso que a chave mestra faz parte do plano de recuperação: um backup de banco
+sem a chave correspondente não recupera os segredos do usuário.</p>
+<h3 id="when-something-goes-wrong">Quando algo dá errado</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>sintoma</th>
+<th>causa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a api sobe sem aviso de rotação, mas o script exige o PREVIOUS</td>
+<td>a variável nunca chegou ao pod; o ESO só ressincroniza a cada <code>refreshInterval</code> (1h)</td>
+</tr>
+<tr>
+<td><code>falhas</code> igual ao total</td>
+<td>o PREVIOUS publicado não é a chave que embrulhou o acervo</td>
+</tr>
+<tr>
+<td><code>já na chave atual</code> igual ao total, sem ter rodado antes</td>
+<td>as duas variáveis têm o mesmo valor — o serviço ignora o PREVIOUS nesse caso</td>
+</tr>
+<tr>
+<td>uma credencial para de funcionar DEPOIS do passo 3</td>
+<td>alguma linha ficou para trás; republique o PREVIOUS imediatamente e rode o script de novo. A consulta de progresso do passo 2 é o que impede isto, e é a checagem a rodar primeiro</td>
+</tr>
+<tr>
+<td>a consulta de pendentes responde o total inteiro, num banco que ninguém rotacionou ainda</td>
+<td>esperado: o <code>key_id</code> é escrito da próxima escrita em diante, então uma instalação anterior à <a href="../business-rules/api.html#rn-563">RN-563</a> o tem <code>NULL</code> em todo lugar até a primeira rotação. <code>NULL</code> conta como pendente de propósito — &quot;não sei qual chave&quot; não é &quot;já na atual&quot;</td>
+</tr>
+<tr>
+<td>o <code>rewrap</code> diz que uma linha está numa chave que não é nem a atual nem a anterior</td>
+<td>a linha veio de outro ambiente — o mais comum é um dump restaurado entre instalações. Veja <a href="#rotacao-da-chave-mestra">Interação com o restore</a> abaixo; o <code>key_id</code> da linha contra o do log de boot da api diz de relance</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<nav class="site-pager"><a href="../runbook/restore.html">Restore</a><a href="../tutorials/adotar.html">Adotar a política</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-infra/blob/dev/deploy/docs/runbook/segredos.md">Редактировать страницу</a></footer>
+</main>
+<aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#rotacao-das-chaves-do-auth">Rotação das chaves do auth</a></li><li class="n3"><a href="#rotacao-do-auth-jwt-secret">AUTH_JWT_SECRET — rotação sem indisponibilidade</a></li><li class="n3"><a href="#troca-do-auth-token-pepper">AUTH_TOKEN_PEPPER — logout global, sem meio-termo</a></li><li class="n3"><a href="#rotacao-do-brabo-service-token">BRABO_SERVICE_TOKEN — rotação sem indisponibilidade, dos dois lados</a></li><li class="n3"><a href="#conta-travada-por-lockout">Conta travada por lockout</a></li><li class="n2"><a href="#rotacao-da-chave-mestra">Rotação da chave mestra</a></li><li class="n3"><a href="#whats-at-stake">O que está em jogo</a></li><li class="n3"><a href="#before-size-it-up">Antes: dimensione</a></li><li class="n3"><a href="#1-publish-both-keys">1. Publique as duas chaves</a></li><li class="n3"><a href="#2-re-wrap-the-store">2. Re-embrulhe o acervo</a></li><li class="n3"><a href="#3-discard-the-old-key">3. Descarte a chave antiga</a></li><li class="n3"><a href="#verifying-without-waiting-for-an-incident">Verificando sem esperar um incidente</a></li><li class="n3"><a href="#interaction-with-restore">Interação com o restore</a></li><li class="n3"><a href="#when-something-goes-wrong">Quando algo dá errado</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-ru.json" data-base="../"></script></body>
+</html>

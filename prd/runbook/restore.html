@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restore | Brabo</title>
+<script src="../assets/tema.js"></script>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/fonts.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../runbook/restore.html" selected>pt-BR</option><option value="../en/runbook/restore.html">en</option><option value="../ru/runbook/restore.html">ru</option><option value="../zh-Hans/runbook/restore.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../dev/runbook/restore.html">dev</option><option value="../../prd/runbook/restore.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../index.html">Início</a></li><li><a href="../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><details open><summary><span>Manual de operação</span></summary><ul><li><a href="../runbook.html">Manual de operação</a></li><li><a href="../runbook/ambiente-local.html">Ambiente local e de dev</a></li><li><a href="../runbook/deploy.html">Deploy e rollout</a></li><li><a href="../runbook/instalacao.html">Instalação e artefatos</a></li><li><a href="../runbook/operacao.html">Operação</a></li><li><a href="../runbook/restore.html" aria-current="page">Restore</a></li><li><a href="../runbook/segredos.html">Rotação de segredos</a></li></ul></details></li><li><a href="../tutorials/adotar.html">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">Arquitetura</a></li><li><a href="../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">Política de branches</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../explanation/localizacao.html">Localização</a></li><li><a href="../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../glossary.html">Glossário</a></li><li><a href="../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">Regras de negócio</a></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="backup-e-restore">Backup e restore</h1>
+<p>Parte do <a href="../runbook.html">Runbook operacional</a>. Comece pela triagem do índice.</p>
+<h2 id="restore">Restore</h2>
+<p>Decisões no <a href="../adr/0027-fase5-backup-hardening-release.html">ADR 0027</a>.</p>
+<blockquote>
+<p><strong>Testado.</strong> O procedimento abaixo é exatamente o que o <code>make test-restore</code>
+roda, e ele roda contra o cluster local. Não há passo aqui que
+ninguém nunca exercitou. O registro da última execução está no fim.</p>
+</blockquote>
+<h3 id="what-is-backed-up-and-what-deliberately-is-not">O que tem backup, e o que deliberadamente não tem</h3>
+<p>Existem sete volumes nomeados; <strong>dois</strong> são fonte da verdade e só esses são
+copiados. A classificação é o
+<a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152</a>, e o motivo de
+fazê-la é que &quot;fazer backup de todo volume&quot; custa espaço enquanto esconde o que importa.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>volume</th>
+<th>natureza</th>
+<th>no backup?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pgdata</code></td>
+<td>fonte da verdade — event log, ações, pgvector, tudo</td>
+<td>sim, como <strong>dump lógico</strong>. Nunca uma cópia de arquivo do diretório de dados: copiar um Postgres rodando produz um backup que pode não restaurar</td>
+</tr>
+<tr>
+<td><code>git_local_repos</code></td>
+<td>fonte da verdade — os repos <em>bare</em> dos projetos do provider <code>local</code></td>
+<td><strong>sim</strong>, e este era o buraco. Ele não é reconstruível a partir do Postgres: o event log guarda a narrativa, não os objetos do git</td>
+</tr>
+<tr>
+<td><code>neo4j_data</code></td>
+<td>derivado — uma projeção do event log (<a href="../adr/0101-memoria-relacional-como-projecao-do-event-log.html">ADR 0101</a>)</td>
+<td>não. A resposta para memória derivada é <strong>reprojeção</strong>, não restore — <code>grafo:reprojetar</code>, veja <a href="#perda-do-grafo">Perda do grafo</a></td>
+</tr>
+<tr>
+<td><code>project_workspaces</code></td>
+<td>derivado — worktrees que o <code>WorktreeManager</code> recria a partir do bare repo, <strong>e</strong> a pasta <code>docs/</code> dos agentes dos projetos <code>container</code> e <code>runner</code>, que é uma projeção do event log (<a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148</a>)</td>
+<td>não. A resposta é <strong>reprojeção</strong> — <code>artefatos:reprojetar</code>, veja <a href="#perda-da-pasta-de-artefatos">Perda da pasta de artefatos</a></td>
+</tr>
+<tr>
+<td><code>ollama_data</code></td>
+<td>reobtível — os modelos baixam de novo</td>
+<td>não</td>
+</tr>
+<tr>
+<td><code>brabo_projects_base</code></td>
+<td>do usuário, não do produto</td>
+<td>não, e o instalador nunca o apaga</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="where-the-backup-lives">Onde o backup mora</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>o quê</th>
+<th>onde</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>agenda</td>
+<td>Kubernetes: CronJob <code>brabo-backup</code>, 03:17 UTC, diário. Compose: não há agendador — você o roda, ou o instalador roda antes de uma migração</td>
+</tr>
+<tr>
+<td>destino</td>
+<td>disco (<code>BACKUP_DIR</code>) <strong>ou</strong> um bucket compatível com S3 (<code>BACKUP_S3_ENDPOINT</code> / <code>BACKUP_S3_BUCKET</code>). <code>BACKUP_DIR</code> definida vence; vazia cai para o S3, que é o que o CronJob faz</td>
+</tr>
+<tr>
+<td>layout</td>
+<td><code>daily/brabo-&lt;ISO&gt;.dump</code> + <code>weekly/…</code> para o Postgres; <code>git-daily/brabo-git-&lt;ISO&gt;.tar.gz</code> + <code>git-weekly/…</code> para os bare repos</td>
+</tr>
+<tr>
+<td>retenção</td>
+<td>7 diários + 4 semanais de <strong>cada tipo</strong>, por CONTAGEM (<code>BACKUP_KEEP_DAILY</code> / <code>BACKUP_KEEP_WEEKLY</code>)</td>
+</tr>
+<tr>
+<td>formato</td>
+<td><code>pg_dump --format=custom --compress=9</code>; <code>tar -czf</code> para os repos</td>
+</tr>
+<tr>
+<td>histórico</td>
+<td>tabela <code>backup_runs</code> — o <strong>dump</strong>, chaveado por <code>object_key</code>. O arquivo dos repos leva o mesmo timestamp no prefixo irmão; o vínculo é o nome, não uma coluna</td>
+</tr>
+</tbody>
+</table></div>
+<p>No cluster local o destino S3 é um SeaweedFS (<code>s3-local</code>, o
+gateway <code>weed server -s3</code> na porta 9000) dentro do namespace <code>brabo</code> — era
+MinIO até o MinIO parar de publicar a imagem comunitária dele
+(<a href="../adr/0169-seaweedfs-no-lugar-do-minio-no-overlay-local.html">ADR 0169</a>); em
+staging/prod é o bucket de verdade. O procedimento não muda — só o
+endpoint. Se o bootstrap para em <code>rollout status deployment/s3-local</code> com
+<code>ImagePullBackOff</code>, a imagem fixada deixou de ser servida: o digest impede
+os bytes de mudarem, não o publicador de ir embora.</p>
+<blockquote>
+<p><strong>O destino padrão do compose é um volume nomeado, e isso serve para
+verificar e é errado para migrar.</strong> <code>docker compose down -v</code> apaga o
+<code>backup_local</code> junto com os dados que ele devia salvar. Aponte
+<code>BRABO_BACKUP_HOST_DIR</code> para um diretório do host antes de qualquer migração.</p>
+</blockquote>
+<h3 id="garantia-dos-bare-repos">O que o arquivo dos bare repos garante — e o que não garante</h3>
+<p>Nada é congelado: os repos são copiados enquanto api e engine podem estar escrevendo
+neles. O que isso compra, exatamente:</p>
+<ul>
+<li><strong>Garantido.</strong> Consistência <strong>por referência</strong>. O git escreve objetos antes de
+mover uma ref, e troca a ref por rename atômico (ou reescrevendo o
+<code>packed-refs</code> sob lock, também por rename). Um <code>tar</code> cruzando um <code>git push</code>
+captura a ref no valor antigo ou no novo, nunca meio valor — e
+no caso novo os objetos que ela alcança já estão em disco.</li>
+<li><strong>Garantido.</strong> Um arquivo parcial <strong>reprova a execução</strong> em vez de passar como
+bom. Um <code>git gc</code> concorrente pode apagar um packfile entre o <code>tar</code> listar um
+diretório e lê-lo; o status de saída do <code>tar</code> é capturado num arquivo (em <code>sh</code>
+POSIX o status de um pipeline é o do último comando) e um não-zero vira uma
+linha <code>failed</code> em <code>backup_runs</code>, que é o que alerta. Rode de novo.</li>
+<li><strong>Garantido.</strong> O arquivo é legível <strong>de ponta a ponta</strong> antes de qualquer coisa ser
+escrita — <code>brabo-restore-git</code> é o <code>pg_restore --list</code> do lado do git. Um
+tar truncado tem tamanho plausível e só lê-lo diz.</li>
+<li><strong>Não garantido.</strong> Qualquer instante global. O <code>tar</code> percorre a árvore ao longo de um período,
+então dois repositórios — ou duas refs de um — podem vir de momentos diferentes.
+Irrelevante para o git, que valida por ref; relevante para quem lê
+&quot;o backup das 03:17&quot; como um retrato só.</li>
+<li><strong>Não garantido.</strong> Conectividade de objetos. Nada aqui roda <code>git fsck</code>: a
+imagem de backup não tem git, de propósito. O que se prova é a integridade do
+contêiner, não do conteúdo.</li>
+<li><strong>Não copiados.</strong> Arquivos <code>*.lock</code>, e <code>objects/tmp_*</code>. Restaurar um lock órfão
+dá um repositório onde todo <code>git</code> se recusa a trabalhar, com uma mensagem que
+nunca menciona backup.</li>
+</ul>
+<h3 id="before-restoring-does-the-backup-exist-and-is-it-any-good">Antes de restaurar: o backup existe, e presta?</h3>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">select</span><span style="color:var(--shiki-foreground)"> finished_at, kind, </span><span style="color:var(--shiki-token-keyword)">status</span><span style="color:var(--shiki-foreground)">, object_key,</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">       pg_size_pretty(size_bytes) </span><span style="color:var(--shiki-token-keyword)">as</span><span style="color:var(--shiki-foreground)"> tamanho, error_message</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  from</span><span style="color:var(--shiki-foreground)"> backup_runs</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> order by</span><span style="color:var(--shiki-foreground)"> finished_at </span><span style="color:var(--shiki-token-keyword)">desc</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> limit</span><span style="color:var(--shiki-token-constant)"> 10</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span></code></pre>
+<p>Três coisas nessa saída importam mais que a última linha:</p>
+<ul>
+<li><strong>Um <code>status = 'failed'</code> recente com um sucesso antigo</strong> é o caso
+perigoso: existe backup, só que velho. O alerta <em>Last backup run failed</em>
+cobre exatamente isso.</li>
+<li><strong>Uma queda brusca em <code>size_bytes</code></strong> entre execuções sugere um dump
+truncado, e o tamanho sozinho não o denuncia — é o
+<code>pg_restore --list</code> do script que o pega.</li>
+<li><strong>Nenhuma linha</strong> quer dizer que o CronJob nunca rodou com sucesso. Aí
+o problema não é o restore.</li>
+</ul>
+<h3 id="restore-automatizado">O caminho automatizado (o mesmo que o teste roda)</h3>
+<p>No Kubernetes:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> test-restore</span></span>
+<span class="line"></span></code></pre>
+<p>Numa instalação compose — sem cluster, sem <code>kubectl</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> test-restore-compose</span></span>
+<span class="line"></span></code></pre>
+<p>Os dois disparam um backup <strong>real</strong> (mesma imagem, mesmo comando que roda em
+produção — não um <code>pg_dump</code> improvisado, que testaria um caminho que ninguém usa),
+restauram em <code>brabo_restore_test</code>, validam, e apagam o banco. Use-os
+quando o objetivo é <strong>verificar</strong> o backup, não recuperar dados.</p>
+<p>Os dois embrulhos ficam separados de propósito: unificá-los faria o caminho do compose
+depender de <code>kubectl</code>, que é a dependência que ele existe para não ter. O que
+<em>não</em> é duplicado é o julgamento — os dois rodam o mesmo <code>brabo-restore</code>, com as
+mesmas três validações. O do compose acrescenta um terceiro passo que o cluster não consegue
+pedir: ele verifica o arquivo dos bare repos, porque no Kubernetes o volume
+<code>git_local_repos</code> não está montado no pod de backup e o passo é
+legitimamente pulado, enquanto no compose ele está montado e pular seria um
+falso verde.</p>
+<p>Os dois são provados toda semana no
+<a href="#provas-de-propriedade-agendadas"><code>propriedades.yml</code></a>: <code>make test-restore</code> (e
+a quebra deliberada dele, <code>make test-restore-mutacao</code>) no job do cluster, e
+<code>make test-restore-compose</code> — com a verificação dos bare repos que só o
+caminho do compose faz — num segundo job, <code>restore-compose</code>, em outro runner
+(AT-195). A migração do instalador também roda o do compose.</p>
+<h3 id="restore-de-verdade">Restaurando de verdade, durante um incidente</h3>
+<p>O script <code>brabo-restore</code> restaura num banco NOVO e nunca toca
+o de origem — de propósito. Restaurar por cima do banco vivo é
+irreversível e quase sempre a decisão errada nos primeiros minutos de um
+incidente.</p>
+<p><strong>1. Suba um Job de restore apontando para o nome de banco que você quer:</strong></p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> create</span><span style="color:var(--shiki-token-string)"> job</span><span style="color:var(--shiki-token-string)"> restore-manual</span><span style="color:var(--shiki-token-string)"> --from=cronjob/brabo-backup</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --dry-run=client</span><span style="color:var(--shiki-token-string)"> -o</span><span style="color:var(--shiki-token-string)"> yaml</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">|</span><span style="color:var(--shiki-token-function)"> sed</span><span style="color:var(--shiki-token-string)"> -e</span><span style="color:var(--shiki-token-string-expression)"> 's|\["brabo-backup"\]|["brabo-restore"]|'</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">|</span><span style="color:var(--shiki-token-function)"> kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> apply</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> -</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> set</span><span style="color:var(--shiki-token-string)"> env</span><span style="color:var(--shiki-token-string)"> job/restore-manual</span><span style="color:var(--shiki-token-string)"> RESTORE_DB=brabo_recuperado</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> logs</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> job/restore-manual</span></span>
+<span class="line"></span></code></pre>
+<p>Para restaurar de uma cópia semanal em vez da última diária:
+<code>RESTORE_PREFIX=weekly/</code>.</p>
+<p><strong>2. Confira o que voltou</strong> — as mesmas perguntas que o script faz, agora com
+os seus próprios olhos:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)">-- quantas tabelas voltaram (compare com a origem, não com um número</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">-- fixo: toda migration nova muda esta contagem)</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">select</span><span style="color:var(--shiki-token-function)"> count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">) </span><span style="color:var(--shiki-token-keyword)">from</span><span style="color:var(--shiki-foreground)"> information_schema.tables</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> where</span><span style="color:var(--shiki-foreground)"> table_schema </span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)"> 'public'</span><span style="color:var(--shiki-token-keyword)"> and</span><span style="color:var(--shiki-foreground)"> table_type </span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)"> 'BASE TABLE'</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">-- o event log é denso por sessão: esta consulta tem de voltar VAZIA</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">select</span><span style="color:var(--shiki-foreground)"> session_id, </span><span style="color:var(--shiki-token-function)">count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">), </span><span style="color:var(--shiki-token-function)">min</span><span style="color:var(--shiki-foreground)">(seq), </span><span style="color:var(--shiki-token-function)">max</span><span style="color:var(--shiki-foreground)">(seq)</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  from</span><span style="color:var(--shiki-foreground)"> session_events</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> group by</span><span style="color:var(--shiki-foreground)"> session_id</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">having</span><span style="color:var(--shiki-token-function)"> count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">) </span><span style="color:var(--shiki-token-keyword)">&#x3C;></span><span style="color:var(--shiki-token-function)"> max</span><span style="color:var(--shiki-foreground)">(seq) </span><span style="color:var(--shiki-token-keyword)">-</span><span style="color:var(--shiki-token-function)"> min</span><span style="color:var(--shiki-foreground)">(seq) </span><span style="color:var(--shiki-token-keyword)">+</span><span style="color:var(--shiki-token-constant)"> 1</span><span style="color:var(--shiki-token-keyword)"> or</span><span style="color:var(--shiki-token-function)"> min</span><span style="color:var(--shiki-foreground)">(seq) </span><span style="color:var(--shiki-token-keyword)">&#x3C;></span><span style="color:var(--shiki-token-constant)"> 1</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span></code></pre>
+<p><strong>3. Promova o banco recuperado</strong> apontando <code>DATABASE_URL</code> para ele e
+reiniciando api e engine. Este é o último passo, e o único
+destrutivo:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> patch</span><span style="color:var(--shiki-token-string)"> secret</span><span style="color:var(--shiki-token-string)"> brabo-secrets</span><span style="color:var(--shiki-token-string)"> --type</span><span style="color:var(--shiki-token-string)"> merge</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  -p</span><span style="color:var(--shiki-token-string-expression)"> "{\"data\":{\"DATABASE_URL\":\"$(</span><span style="color:var(--shiki-token-function)">printf</span><span style="color:var(--shiki-token-string-expression)"> '%s' "$NOVA_URL" </span><span style="color:var(--shiki-token-keyword)">|</span><span style="color:var(--shiki-token-function)"> base64</span><span style="color:var(--shiki-token-string)"> -w0</span><span style="color:var(--shiki-token-string-expression)">)\"}}"</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> rollout</span><span style="color:var(--shiki-token-string)"> restart</span><span style="color:var(--shiki-token-string)"> deployment/api</span><span style="color:var(--shiki-token-string)"> deployment/engine</span></span>
+<span class="line"></span></code></pre>
+<blockquote>
+<p>O Secret é materializado pelo External Secrets a partir do provedor. Um
+<code>patch</code> direto é sobrescrito no próximo <code>refreshInterval</code> (1h):
+mude <strong>também</strong> o valor no provedor, ou o sistema volta em silêncio
+para o banco antigo dentro de uma hora — no meio da recuperação.</p>
+</blockquote>
+<p>Verificação: os passos 1 e 2 são o <code>brabo-restore</code> que o <code>make test-restore</code>
+roda toda semana, e as duas consultas do passo 2 são as que
+o <code>docker/backup/restore.sh</code> se faz. O passo 3 — o patch em <code>DATABASE_URL</code> e
+reiniciar api e engine contra o banco recuperado — <strong>nunca foi
+exercitado</strong>: a prova apaga <code>brabo_restore_test</code> ao terminar e nunca
+aponta uma api rodando para ele.</p>
+<h3 id="restore-compose-banco-vazio">Restaurando numa instalação compose (banco recém-criado)</h3>
+<p>Este é o caminho da <strong>migração</strong> do instalador (AT-738, ADR 0256): depois do
+<code>down -v</code> a instalação nova sobe com o Postgres vazio e o dump provado precisa
+voltar nele. Não há <code>kubectl</code>; o comando é o mesmo <code>brabo-restore</code>, com
+<code>--banco-vazio</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># 1. Só o postgres de pé: api e engine PARADOS (eles migram o banco ao subir).</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.install.yml</span><span style="color:var(--shiki-token-string)"> up</span><span style="color:var(--shiki-token-string)"> -d</span><span style="color:var(--shiki-token-string)"> --wait</span><span style="color:var(--shiki-token-string)"> postgres</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 2. Restaura o último dump da pasta do HOST (BRABO_BACKUP_HOST_DIR) no banco do DATABASE_URL.</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.install.yml</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> backup</span><span style="color:var(--shiki-token-string)"> brabo-restore</span><span style="color:var(--shiki-token-string)"> --banco-vazio</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 3. Só então suba o resto (api/engine) e restaure os bare repos git.</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.install.yml</span><span style="color:var(--shiki-token-string)"> up</span><span style="color:var(--shiki-token-string)"> -d</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.install.yml</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> backup</span><span style="color:var(--shiki-token-string)"> brabo-restore-git</span><span style="color:var(--shiki-token-string)"> --restaurar</span></span>
+<span class="line"></span></code></pre>
+<p>O que ele garante, e o que <strong>não</strong> faz:</p>
+<ul>
+<li><strong>Recusa</strong>, antes de baixar qualquer coisa, se o banco tiver QUALQUER tabela em
+<code>public</code>, <code>drizzle</code> ou <code>engine</code> (inclusive a <code>__drizzle_migrations</code> de uma api
+que já subiu): a mensagem diz <code>RECUSADO</code> e quantas tabelas achou. Banco com
+dado nunca é sobrescrito — o ADR 0152 segue valendo, e o caminho de incidente
+continua sendo o restore em banco NOVO acima.</li>
+<li>Restaura numa única transação (falha não deixa meio banco) e roda as mesmas
+validações do teste: lista de tabelas igual à do dump, contagem das tabelas
+críticas igual à do dump (a origem não existe mais; o número vem das linhas do
+<code>COPY</code>) e <code>seq</code> densa do event log. Zero linhas nas críticas reprova.</li>
+<li>O destino do backup tem de ser a pasta do host: o volume <code>backup_local</code> é
+apagado pelo <code>down -v</code>.</li>
+</ul>
+<p>Provado em <code>propriedades.yml</code>, job <code>restore-banco-vazio</code>: postgres e backup do
+compose de instalação num projeto descartável, dado semeado, backup em pasta do
+host, restore num banco novo com contagens iguais, e a recusa sobre o banco já
+restaurado.</p>
+<h3 id="what-the-restore-does-not-cover">O que o restore NÃO cobre</h3>
+<ul>
+<li><strong>As credenciais de usuário ficam ilegíveis se <code>CREDENTIALS_MASTER_KEY</code> for
+diferente.</strong> O dump leva as DEKs embrulhadas, não as chaves. Restaurar
+num ambiente com outra chave mestra devolve um
+banco intacto com credenciais de LLM e de git inúteis. Veja
+<a href="segredos.html#rotacao-da-chave-mestra">Rotação da chave mestra</a>.</li>
+<li><strong>Nada dos usuários fica de fora.</strong> Desde o corte do Keycloak
+(<a href="../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032</a>) não há
+banco de IdP separado: identidades, credenciais argon2id, refresh
+tokens e o event log de auth moram todos no mesmo Postgres e entram
+neste dump. O que <strong>não</strong> sobrevive é lê-los se o
+<code>AUTH_TOKEN_PEPPER</code> for diferente — mesmo raciocínio da chave mestra
+acima.</li>
+<li><strong>O <code>brabo-restore</code> restaura o banco, e só ele.</strong> Os bare repos
+são o comando irmão, <code>brabo-restore-git</code> — veja
+<a href="#restore-dos-bare-repos">Recuperando os bare repos</a>. São comandos
+separados e não duas fases de um só porque são dois artefatos com
+dois julgamentos: uma falha de git não pode reprovar a validação do event log, e
+o contrário seria pior.</li>
+<li><strong>Os worktrees dos agentes</strong> (<code>project_workspaces</code>) não são copiados, e não precisam
+ser: o <code>WorktreeManager</code> os recria a partir do bare repo. O que se
+perde é trabalho em andamento não commitado.</li>
+<li><s>Os repositórios de verdade moram no GitHub/GitLab</s> — <strong>isto estava
+escrito aqui e estava errado</strong>, e é por isso que o volume passou anos sem
+backup. Vale para projetos dos providers <code>github</code>/<code>gitlab</code>; para um
+projeto no provider <code>local</code> não há upstream em lugar nenhum, e o
+bare repo em <code>git_local_repos</code> <strong>é</strong> o código que os agentes produziram.</li>
+<li><strong>Não é PITR.</strong> A granularidade é o último dump; qualquer coisa escrita
+depois dele se perde. Se isso não é aceitável, o caminho é arquivamento de WAL
+no CloudNativePG, que está fora do escopo desta fase.</li>
+</ul>
+<h3 id="restore-dos-bare-repos">Recuperando os bare repos</h3>
+<p>Verificar não custa nada e não escreve nada — é o gesto semanal, e
+desde a AT-195 o job agendado <code>restore-compose</code> do <code>propriedades.yml</code> o faz
+(pelo <code>make test-restore-compose</code>, veja
+<a href="#restore-automatizado">o caminho automatizado</a>):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.prod.yml</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> backup</span><span style="color:var(--shiki-token-string)"> brabo-restore-git</span></span>
+<span class="line"></span></code></pre>
+<p>Restaurar é o gesto de uma vez por incidente, e tem de ser digitado:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.prod.yml</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> --user</span><span style="color:var(--shiki-token-string-expression)"> "$(</span><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> run</span><span style="color:var(--shiki-token-string)"> --rm</span><span style="color:var(--shiki-token-string)"> -v</span><span style="color:var(--shiki-token-string)"> brabo_git_local_repos:/v</span><span style="color:var(--shiki-token-string)"> alpine</span><span style="color:var(--shiki-token-string)"> stat</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string)"> %u:%g</span><span style="color:var(--shiki-token-string)"> /v</span><span style="color:var(--shiki-token-string-expression)">)"</span><span style="color:var(--shiki-token-string)"> backup</span><span style="color:var(--shiki-token-string)"> brabo-restore-git</span><span style="color:var(--shiki-token-string)"> --restaurar</span></span>
+<span class="line"></span></code></pre>
+<p>Duas coisas sobre esse comando, as duas medidas e não supostas:</p>
+<ul>
+<li><strong><code>--user &lt;dono do volume&gt;</code> não é opcional aqui, e root não serve</strong> (o serviço tem <code>cap_drop: ALL</code>; a mensagem de recusa imprime o <code>uid:gid</code> lido por <code>stat</code>). O <code>git_local_repos</code> é compartilhado por três
+imagens rodando com três uids diferentes (a api como <code>node</code>, o engine como
+<code>engine</code>, a imagem de backup como uid 70). O volume fica com o dono de quem
+o montou primeiro, modo 0755: o uid 70 o lê e não consegue escrever. Sem
+root o comando recusa <strong>antes</strong> de extrair, nomeando esta correção — ele não
+descobre o problema no meio do <code>tar</code>, deixando o volume escrito pela metade.</li>
+<li><strong>O que é extraído é devolvido ao dono do diretório</strong>, nunca
+deixado como root. Senão o volume voltaria intacto e inútil: api
+e engine, não-root, não conseguiriam escrever no que acabou de ser restaurado, e o
+sintoma apareceria muito depois do restore sem nada apontando para ele.</li>
+</ul>
+<p>Ele <strong>recusa extrair por cima de repos existentes</strong>. Sobrepor dois estados de repositório
+produz uma mistura de que nenhum <code>git</code> reclama e que ninguém nota até um <code>fetch</code>
+trazer de volta o histórico errado. Esvazie o volume, ou passe <code>RESTORE_GIT_FORCE=1</code>
+se a sobreposição é genuinamente o que você quer.</p>
+<p>Verificação: as funções de shell por trás dos dois gestos são provadas em todo PR por
+<code>scripts/ci/backup-lib.spec.ts</code> — arquivar e restaurar vão e voltam idênticos, nenhum
+<code>*.lock</code> copiado, um arquivo truncado recusado na leitura, um destino em que ele não consegue
+escrever recusado antes do <code>tar</code>. Os próprios comandos, na imagem de backup contra
+o volume real, rodam pelo <code>make test-restore-compose</code> (a metade que
+verifica, nunca <code>--restaurar</code>), toda semana no <code>propriedades.yml</code>. Esse job primeiro
+cria um bare repo no volume (<code>git init --bare</code>, como o
+<code>LocalGitProvider</code> faz) e reprova se o veredito não o nomeia: com o
+volume vazio, <code>brabo-restore-git</code> responde &quot;nada a restaurar&quot; e sai com 0,
+o que seria um verde que não leu arquivo nenhum.</p>
+<h3 id="perda-do-grafo">Perda do grafo (Neo4j)</h3>
+<p>O <code>neo4j_data</code> <strong>não</strong> está em backup nenhum, e isso é a decisão, não um
+descuido (<a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152</a>, decisão
+4). Restaurar uma projeção possivelmente velha ao lado de um Postgres restaurado noutro
+instante dá dois estados derivados de momentos diferentes sem nada para
+reconciliá-los. A resposta certa para memória derivada é reprojetar a partir da
+fonte — e esse comando existe (<a href="../business-rules/api.html#rn-569">RN-569</a>):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># Kubernetes (o script vem dentro da imagem da api)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/api</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> node</span><span style="color:var(--shiki-token-string)"> scripts/reprojetar-grafo.js</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/api</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> node</span><span style="color:var(--shiki-token-string)"> scripts/reprojetar-grafo.js</span><span style="color:var(--shiki-token-string)"> --project</span><span style="color:var(--shiki-token-keyword)"> &#x3C;</span><span style="color:var(--shiki-token-string)">project-uui</span><span style="color:var(--shiki-foreground)">d</span><span style="color:var(--shiki-token-keyword)">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># compose de instalação (mesma imagem do Kubernetes)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.install.yml</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> node</span><span style="color:var(--shiki-token-string)"> scripts/reprojetar-grafo.js</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># um checkout de dev (DATABASE_URL e NEO4J_* apontando para o banco e o grafo)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> grafo:reprojetar</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> grafo:reprojetar</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --project</span><span style="color:var(--shiki-token-keyword)"> &#x3C;</span><span style="color:var(--shiki-token-string)">project-uui</span><span style="color:var(--shiki-foreground)">d</span><span style="color:var(--shiki-token-keyword)">></span></span>
+<span class="line"></span></code></pre>
+<p>Saída esperada:</p>
+<pre class="codigo"><code>[reprojetar] escopo: event log inteiro
+[reprojetar] eventos: 4 projetados, cursor 01M2DTREY0TBKHCHG9NWXYF0A4
+[reprojetar] sessões fechadas: 2 projetadas
+
+[reprojetar] resultado
+
+  eventos projetados=4  sessões fechadas projetadas=2  falhas=0
+  grafo agora (inteiro): nós=80  arestas=80
+</code></pre>
+<p>O que ele faz, e o que garante:</p>
+<ul>
+<li><strong>A mesma tradução do projetor vivo.</strong> Evento → nó/aresta mora numa
+classe só (<code>GraphEventTranslator</code>), chamada tanto pelo projetor de ida quanto
+por este comando. Ele lê <code>handoff.offered</code>, <code>psychologist.hypothesis_proposed</code>
+e <code>anamnese.profile_updated</code> de <code>session_events</code>, e a <code>Interacao</code> de
+toda sessão em <code>closed</code>/<code>closed_abnormally</code> de <code>sessions</code> (fechar uma
+sessão não deixa evento no log).</li>
+<li><strong>Idempotente, e nunca apaga.</strong> Toda escrita é um <code>MERGE</code> numa chave
+natural: rodá-lo duas vezes dá o mesmo grafo, e <strong>rodar de novo é como você
+tenta de novo</strong> depois de uma falha no meio. Ele só acrescenta ou converge; um nó já no
+grafo fica.</li>
+<li><strong>Em lotes, por cursor.</strong> O <code>session_events</code> é percorrido na ordem de <code>id</code> (ULID,
+a chave primária), 200 linhas por vez — nunca a tabela inteira em memória. A
+linha de progresso imprime o cursor; <code>--after-event &lt;id&gt;</code> retoma a fase de eventos
+depois dele. Recomeçar é igualmente seguro, só mais lento.</li>
+<li><strong>Ele não toca a outbox, então a api pode ficar de pé.</strong> O projetor vivo
+guarda o progresso dele em <code>outbox_events.processed_at</code>
+(<code>aggregate_type = 'graph_projection'</code>); este comando nem lê nem
+escreve essa tabela, então não consegue roubar, reabrir nem marcar uma linha. Os dois escrevem com
+<code>MERGE</code> nas mesmas chaves.</li>
+<li><strong>Ele falha nomeado, nunca como sucesso silencioso.</strong> Neo4j não configurado ou
+inalcançável é recusado <em>antes</em> de ler o log (um escopo vazio, senão,
+&quot;daria certo&quot; com zero projetados); o Neo4j caindo no meio para com
+o último evento completado; um <code>--project</code> desconhecido é recusado sem nada
+escrito; um item com payload incoerente é contado, nomeado, e a execução
+sai com <code>1</code> no fim.</li>
+</ul>
+<p>O que ele <strong>não</strong> reconstrói, e a única ressalva de ordem:</p>
+<ul>
+<li><strong><code>PromptTemplate</code>/<code>PromptVersion</code></strong> não vêm do event log. A
+fonte deles é o diretório <code>prompts/</code>: reenvie-os com
+<code>node scripts/dev/seed-prompts.ts</code> (idempotente por hash).</li>
+<li><strong><code>PerfilAnamnese</code> é um retrato chaveado por usuário + dimensão, sem projeto.</strong>
+O último a escrever vence. Uma execução com <code>--project</code> reexecuta só os eventos de perfil
+daquele projeto, então pode deixar um retrato no último valor daquele projeto quando outro
+projeto escreveu um mais novo. A execução completa (sem <code>--project</code>) percorre o log inteiro em
+ordem e restaura o último global — use-a depois de perder o grafo; guarde
+<code>--project</code> para um reparo pontual.</li>
+<li><strong>Uma execução completa exige uma janela de manutenção, sem teto de tempo</strong>, e quanto
+ela leva num log grande não foi medido — veja
+<a href="#reprojecao-em-janela">Rodando uma reprojeção completa</a> para a janela, a
+linha de progresso e como saber quanto falta.</li>
+</ul>
+<p>A prova é o <code>make test-reprojecao</code>
+(<code>apps/api/test/scripts/reprojetar-grafo.spec.ts</code>): ele monta um cenário com
+o projetor de ida, <strong>apaga</strong> esse subgrafo, reprojeta, compara as contagens de nós e
+arestas mais a lista de chaves, e reprojeta de novo. Ele precisa do Neo4j de pé e
+pula sem ele — o job de CI da api não tem Neo4j, então ali ele pula. Ele não
+depende de ter havido um backup, de propósito.</p>
+<p>A mesma prova também roda <strong>dentro do cluster local</strong>: <code>make test-reprojecao-k8s</code>
+(<code>deploy/k8s/test-reprojecao.sh</code>) é o quarto alvo do agendado
+<code>propriedades.yml</code> (veja <a href="#provas-de-propriedade-agendadas">Provas de propriedade agendadas</a>).
+Ele roda o comando exatamente como esta seção manda rodá-lo num incidente
+(<code>kubectl exec deploy/api -- node scripts/reprojetar-grafo.js --project &lt;id&gt;</code>),
+contra o Postgres e o Neo4j do cluster, num projeto que ele mesmo cria.
+Desde a AT-191 o cenário dele exercita <strong>os quatro caminhos de tradução</strong> do
+<code>GraphEventTranslator</code> — um <code>handoff.offered</code>, um
+<code>psychologist.hypothesis_proposed</code> citando uma mensagem como evidência, um
+<code>anamnese.profile_updated</code> para um usuário próprio, e a <code>Interacao</code> da
+sessão fechada — e exige <strong>9 nós e 6 arestas</strong> antes da limpeza, depois
+da reconstrução e depois da segunda execução (medido na execução <code>36498776825</code>). O
+Psicólogo e a Anamnese seguem pausados: a prova acrescenta os eventos que eles
+escreveriam e confere o que a reprojeção reconstrói a partir deles.</p>
+<p>O grafo vazio até você rodar isto tem um efeito nomeado: leituras que dependem
+do grafo degradam. O RAG <strong>não</strong> é afetado — ele mora no pgvector, que está
+dentro do dump.</p>
+<h4 id="reprojecao-em-janela">Rodando uma reprojeção completa: uma janela de manutenção, sem teto de tempo</h4>
+<p>Uma reprojeção completa (do grafo ou da <a href="#perda-da-pasta-de-artefatos">pasta de artefatos</a>)
+é uma operação rara de <strong>recuperação</strong>, e roda numa <strong>janela de manutenção, sem
+teto de tempo</strong> — decisão do mantenedor (2026-09-27). Nada no produto
+a corta por tempo, avisa quando demora, ou a agenda: ela roda pelo tempo que
+o event log levar, e você planeja a janela para isso.</p>
+<p>Quanto tempo isso é num log de tamanho de produção <strong>não foi medido</strong>. A única execução real
+até agora é o compose de desenvolvimento (98 eventos em <code>session_events</code>, 2,5 s de ponta
+a ponta); uma extrapolação proporcional a partir disso não é medição, então cronometre a
+primeira execução completa da sua instalação e guarde esse número para a próxima janela.</p>
+<p><strong>Acompanhando o progresso.</strong> O comando imprime uma linha por lote — a cada 200
+eventos dos tipos que ele lê — antes do resultado final, então uma execução que
+ainda está imprimindo ainda está percorrendo o log:</p>
+<pre class="codigo"><code>[reprojetar] eventos: 200 projetados, cursor 01M2DTREY0TBKHCHG9NWXYF0A4
+[reprojetar] eventos: 400 projetados, cursor 01M2DV3K8Q2S7ZB1CXN4W6Y9HR
+...
+[reprojetar] sessões fechadas: 200 projetadas
+[reprojetar-artefatos] artefatos: 200 projetados, cursor 01M2DTREY0TBKHCHG9NWXYF0A4
+</code></pre>
+<p>O número é de quantos foram <strong>projetados</strong> (itens que falharam são impressos na
+própria linha e contados em <code>falhas=</code> no fim). A linha não leva um
+total. Para saber quanto falta, pergunte ao Postgres, com o cursor da
+última linha — só leitura, então é seguro enquanto a execução segue:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)">-- grafo, fase de eventos: quantos no total, e quantos ainda depois do cursor</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">SELECT</span><span style="color:var(--shiki-token-function)"> count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">) </span><span style="color:var(--shiki-token-keyword)">AS</span><span style="color:var(--shiki-foreground)"> total,</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">       count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">) </span><span style="color:var(--shiki-token-keyword)">FILTER</span><span style="color:var(--shiki-foreground)"> (</span><span style="color:var(--shiki-token-keyword)">WHERE</span><span style="color:var(--shiki-foreground)"> id </span><span style="color:var(--shiki-token-keyword)">></span><span style="color:var(--shiki-token-string-expression)"> '&#x3C;cursor>'</span><span style="color:var(--shiki-foreground)">) </span><span style="color:var(--shiki-token-keyword)">AS</span><span style="color:var(--shiki-foreground)"> remaining</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  FROM</span><span style="color:var(--shiki-foreground)"> session_events</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> WHERE</span><span style="color:var(--shiki-token-keyword)"> type</span><span style="color:var(--shiki-token-keyword)"> IN</span><span style="color:var(--shiki-foreground)"> (</span><span style="color:var(--shiki-token-string-expression)">'handoff.offered'</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-string-expression)">'psychologist.hypothesis_proposed'</span><span style="color:var(--shiki-foreground)">,</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">                'anamnese.profile_updated'</span><span style="color:var(--shiki-foreground)">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">-- grafo, segunda fase (a Interacao de cada sessão fechada)</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">SELECT</span><span style="color:var(--shiki-token-function)"> count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">) </span><span style="color:var(--shiki-token-keyword)">FROM</span><span style="color:var(--shiki-token-keyword)"> sessions</span><span style="color:var(--shiki-token-keyword)"> WHERE</span><span style="color:var(--shiki-token-keyword)"> status</span><span style="color:var(--shiki-token-keyword)"> IN</span><span style="color:var(--shiki-foreground)"> (</span><span style="color:var(--shiki-token-string-expression)">'closed'</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-string-expression)">'closed_abnormally'</span><span style="color:var(--shiki-foreground)">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">-- pasta de artefatos</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">SELECT</span><span style="color:var(--shiki-token-function)"> count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">) </span><span style="color:var(--shiki-token-keyword)">AS</span><span style="color:var(--shiki-foreground)"> total,</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">       count</span><span style="color:var(--shiki-foreground)">(</span><span style="color:var(--shiki-token-keyword)">*</span><span style="color:var(--shiki-foreground)">) </span><span style="color:var(--shiki-token-keyword)">FILTER</span><span style="color:var(--shiki-foreground)"> (</span><span style="color:var(--shiki-token-keyword)">WHERE</span><span style="color:var(--shiki-foreground)"> id </span><span style="color:var(--shiki-token-keyword)">></span><span style="color:var(--shiki-token-string-expression)"> '&#x3C;cursor>'</span><span style="color:var(--shiki-foreground)">) </span><span style="color:var(--shiki-token-keyword)">AS</span><span style="color:var(--shiki-foreground)"> remaining</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  FROM</span><span style="color:var(--shiki-foreground)"> session_events</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)"> WHERE</span><span style="color:var(--shiki-token-keyword)"> type</span><span style="color:var(--shiki-token-keyword)"> IN</span><span style="color:var(--shiki-foreground)"> (</span><span style="color:var(--shiki-token-string-expression)">'artifact.note'</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-string-expression)">'artifact.business_rule'</span><span style="color:var(--shiki-foreground)">,</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">                'artifact.decision_record'</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-string-expression)">'artifact.product_brief'</span><span style="color:var(--shiki-foreground)">,</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">                'artifact.module_map'</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-string-expression)">'artifact.module_routing'</span><span style="color:var(--shiki-foreground)">,</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">                'artifact.project_image'</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-string-expression)">'artifact.c4_diagram'</span><span style="color:var(--shiki-foreground)">,</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">                'artifact.prototipo_navegavel'</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-string-expression)">'artifact.plano_de_teste'</span><span style="color:var(--shiki-foreground)">,</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">                'artifact.threat_model'</span><span style="color:var(--shiki-foreground)">, </span><span style="color:var(--shiki-token-string-expression)">'artifact.insight'</span><span style="color:var(--shiki-foreground)">,</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">                'artifact.rfc_staff'</span><span style="color:var(--shiki-foreground)">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)">-- quando o evento do cursor foi escrito (os ids são ULIDs, ordenados por tempo)</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">SELECT</span><span style="color:var(--shiki-foreground)"> created_at </span><span style="color:var(--shiki-token-keyword)">FROM</span><span style="color:var(--shiki-foreground)"> session_events </span><span style="color:var(--shiki-token-keyword)">WHERE</span><span style="color:var(--shiki-foreground)"> id </span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)"> '&#x3C;cursor>'</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span></code></pre>
+<p>Acrescente <code>AND session_id IN (SELECT id FROM sessions WHERE project_id = '&lt;project-uuid&gt;')</code>
+a uma contagem quando a execução tem <code>--project</code>. As listas de tipos são as que os
+comandos leem (<code>EVENTOS_DO_LOG_PROJETAVEIS</code> em
+<code>apps/api/src/application/graph-projection/graph-event-translator.ts</code>,
+<code>ARTIFACT_PROJECTABLE_EVENT_TYPES</code> em
+<code>apps/api/src/domain/artifacts/artifact-projection-events.ts</code>); se algum dos arquivos
+ganhou um tipo, a contagem aqui fica curta dele.</p>
+<p><strong>O que esta decisão não acrescenta.</strong> Nenhum teto, nenhum aviso, nenhuma reprojeção
+dividida em janelas ou agendada pelo produto. <code>--project</code> e
+<code>--after-event</code> continuam exatamente o que já eram — um reparo pontual e uma
+retomada depois de uma interrupção — e <strong>não</strong> são o jeito de caber uma recuperação completa
+numa janela mais curta: uma execução com <code>--project</code> não consegue restaurar o retrato
+global de <code>PerfilAnamnese</code> (acima), e retomar no meio de um tipo de artefato
+versionado pode deixar uma versão mais velha (<a href="#perda-da-pasta-de-artefatos">abaixo</a>).
+A execução completa é a recuperação. Interrompê-la é seguro — a idempotência acima
+vale — e rodá-la de novo desde o início é sempre correto, só mais lento.</p>
+<h3 id="perda-da-pasta-de-artefatos">Perda da pasta de artefatos (<code>docs/</code>)</h3>
+<p>Todo artefato que os agentes emitem mora <strong>só no event log</strong>; a pasta <code>docs/</code>
+do projeto é uma <strong>projeção</strong> dele (<a href="../adr/0148-artefatos-projetados-em-arquivo.html">ADR 0148</a>),
+então não está em backup nenhum e isso é a decisão, não um descuido
+(o <a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152</a> raciocina o mesmo para o
+grafo). Restaurar o banco <strong>não</strong> a traz de volta sozinho: as
+linhas da outbox que movem o projetor vivo já estão marcadas como processadas, então
+nada reescreve a pasta. O comando que reescreve existe
+(<a href="../business-rules/api.html#rn-590">RN-590</a>):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># Kubernetes (o script vem dentro da imagem da api)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/api</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> node</span><span style="color:var(--shiki-token-string)"> scripts/reprojetar-artefatos.js</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/api</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> node</span><span style="color:var(--shiki-token-string)"> scripts/reprojetar-artefatos.js</span><span style="color:var(--shiki-token-string)"> --project</span><span style="color:var(--shiki-token-keyword)"> &#x3C;</span><span style="color:var(--shiki-token-string)">project-uui</span><span style="color:var(--shiki-foreground)">d</span><span style="color:var(--shiki-token-keyword)">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># compose de instalação (mesma imagem do Kubernetes)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.install.yml</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> node</span><span style="color:var(--shiki-token-string)"> scripts/reprojetar-artefatos.js</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># um checkout de dev (DATABASE_URL apontando para o banco)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> artefatos:reprojetar</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> --filter</span><span style="color:var(--shiki-token-string)"> api</span><span style="color:var(--shiki-token-string)"> artefatos:reprojetar</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> --project</span><span style="color:var(--shiki-token-keyword)"> &#x3C;</span><span style="color:var(--shiki-token-string)">project-uui</span><span style="color:var(--shiki-foreground)">d</span><span style="color:var(--shiki-token-keyword)">></span></span>
+<span class="line"></span></code></pre>
+<p>Saída esperada:</p>
+<pre class="codigo"><code>[reprojetar-artefatos] escopo: event log inteiro
+[reprojetar-artefatos] artefatos: 6 projetados, cursor 01M2DTREY0TBKHCHG9NWXYF0A4
+
+[reprojetar-artefatos] resultado
+
+  artefatos projetados=6  falhas=0
+</code></pre>
+<p>O que ele faz, e o que garante:</p>
+<ul>
+<li><strong>A mesma tradução do projetor vivo.</strong> Evento → pasta, nome de arquivo
+e Markdown moram numa classe só (<code>ArtifactEventTranslator</code>), chamada tanto pelo
+projetor de ida quanto por este comando.</li>
+<li><strong>Idempotente, e nunca apaga.</strong> O nome do arquivo é função do
+evento (tipos versionados: <code>&lt;tipo&gt;.md</code>; append-only: com o <code>seq</code>), então rodá-lo
+duas vezes reescreve os mesmos arquivos com o mesmo conteúdo, e <strong>rodar de
+novo é como você tenta de novo</strong>. Um arquivo que você criou em <code>docs/</code> fica.</li>
+<li><strong>Em lotes, por cursor.</strong> O <code>session_events</code> é percorrido na ordem de <code>id</code>, 200 linhas
+por vez; <code>--after-event &lt;id&gt;</code> retoma depois do cursor impresso.</li>
+<li><strong>Ele não toca a outbox</strong>, então a api pode ficar de pé.</li>
+<li><strong>Ele falha nomeado, nunca como sucesso silencioso.</strong> Uma escrita que falha (disco cheio,
+pasta inalcançável, um projeto cuja pasta sumiu) é contada e nomeada por
+evento, não para o resto, e a execução sai com <code>1</code> no fim. Um <code>--project</code>
+desconhecido é recusado sem nada escrito.</li>
+</ul>
+<p>Onde ele escreve, e o que <strong>não</strong> cobre:</p>
+<ul>
+<li><strong>Ele precisa ver o mesmo disco que a api.</strong> A pasta é resolvida pela mesma
+função que o projetor usa (<code>container</code>/<code>runner</code>:
+<code>&lt;PROJECT_WORKSPACES_ROOT&gt;/&lt;workspace_dir_name&gt;/docs/</code>; <code>mounted</code>: dentro da
+pasta do projeto). Rode-o na imagem da api, com os volumes da api.</li>
+<li><strong>Ele escreve no local <em>atual</em> do projeto.</strong> Uma conversão de modo não
+move a <code>docs/</code> (o código da conversão nunca a toca), então arquivos escritos antes
+dela ficam no local antigo; reprojetar os recria no atual.</li>
+<li><strong>Tipos versionados mostram o último evento, então não retome no meio
+deles.</strong> <code>module_map</code>, <code>module_routing</code>, <code>project_image</code> e <code>c4_diagram</code>
+sobrescrevem um arquivo; uma execução completa termina com a última versão emitida, enquanto
+<code>--after-event</code> começando entre duas versões pode deixar uma mais velha.</li>
+<li><strong>O que ele não lê:</strong> tipos fora da lista projetável (<code>qa_verdict</code>,
+<code>secops_verdict</code>, <code>task_blocked</code>, <code>infra_delegation_files</code>) nunca foram arquivos
+e não são recriados.</li>
+<li><strong>Ele roda numa janela de manutenção, sem teto de tempo</strong>, igual ao
+grafo: a linha de progresso e as consultas para acompanhá-la estão em
+<a href="#reprojecao-em-janela">Rodando uma reprojeção completa</a>. Quanto ele leva num
+event log grande não foi medido; o comando é seguro de interromper e rodar
+de novo.</li>
+</ul>
+<p>A prova é <code>apps/api/test/scripts/reprojetar-artefatos.spec.ts</code>: ele monta um
+cenário com o projetor de ida num Postgres de verdade e num disco de verdade, <strong>apaga</strong>
+a pasta, reprojeta, compara cada caminho e conteúdo, e reprojeta de novo.
+Ele roda em todo PR. O comando como esta seção manda rodá-lo num
+incidente — <code>node scripts/reprojetar-artefatos.js</code> dentro da <strong>imagem</strong> da api — é
+provado pelo <code>make test-reprojecao-artefatos-k8s</code> (<code>deploy/k8s/test-reprojecao-artefatos.sh</code>,
+AT-198), o irmão do alvo de cluster do grafo: ele cria um projeto próprio
+com um <code>artifact.note</code> pela API, espera o projetor vivo escrevê-lo,
+apaga a pasta <code>docs/&lt;agente&gt;/</code> do agente <strong>dentro do pod da api</strong>, roda o
+próprio script da imagem com <code>--project</code>, e exige que o arquivo reconstruído tenha o
+<strong>mesmo sha256</strong> do que o projetor vivo escreveu — depois roda de novo e
+exige o mesmo hash (idempotência). Ele roda no agendado
+<code>.github/workflows/propriedades.yml</code>, e como o irmão não depende de nenhum
+outro alvo.</p>
+<h3 id="when-the-restore-fails">Quando o restore falha</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>sintoma</th>
+<th>causa provável</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>no backup under .../daily/</code></td>
+<td>bucket errado, credencial errada, ou o CronJob nunca rodou</td>
+</tr>
+<tr>
+<td><code>not an intact custom dump</code></td>
+<td>upload interrompido; use o objeto anterior ou <code>weekly/</code></td>
+</tr>
+<tr>
+<td><code>pg_restore failed</code> com erro de extensão</td>
+<td>o banco de destino precisa das mesmas extensões (<code>pgvector</code>); no CNPG elas vêm do cluster, não do dump</td>
+</tr>
+<tr>
+<td><code>missing tables in the restored copy</code></td>
+<td>um dump de outra versão de schema — o script diz QUAIS faltam; confira a data do objeto contra a migration mais recente</td>
+</tr>
+<tr>
+<td><code>out of window</code> numa tabela crítica</td>
+<td>a contagem não bate com o timestamp do dump: investigue antes de promover</td>
+</tr>
+<tr>
+<td><code>server version mismatch</code></td>
+<td>o <code>pg_dump</code> do Job é 16; um cluster noutra major recusa a conexão</td>
+</tr>
+<tr>
+<td>timeout do Job</td>
+<td>banco grande demais para o <code>activeDeadlineSeconds</code>; suba o valor no Job, não no CronJob</td>
+</tr>
+<tr>
+<td><code>destination inaccessible … does not accept writes</code></td>
+<td>com <code>BACKUP_DIR</code>, o diretório existe e o uid do container não consegue escrever nele. É uma checagem de <strong>escrita</strong>, não de existência, de propósito: um destino só de leitura passaria no <code>ls</code> e reprovaria o dump, com o erro aparecendo depois do <code>pg_dump</code> e apontando para a coisa errada</td>
+</tr>
+<tr>
+<td><code>tar of the bare repos exited with N</code></td>
+<td>algo mudou sob os repos no meio da leitura — o mais provável é um <code>git gc</code> concorrente. A execução é marcada <code>failed</code> em vez de entregar um arquivo parcial. Rode de novo</td>
+</tr>
+<tr>
+<td><code>there are N bare repo(s) … and NO archive</code></td>
+<td>este volume não tem cobertura: o arquivo falta enquanto os repos não. Ausente-e-vazio é normal e informado de outro jeito</td>
+</tr>
+<tr>
+<td><code>does not accept writes by this user (uid 70)</code> no <code>--restaurar</code></td>
+<td>o caso do dono do volume compartilhado — restaure com <code>--user &lt;dono do volume&gt;</code>, veja <a href="#restore-dos-bare-repos">Recuperando os bare repos</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="provas-de-propriedade-agendadas">Provas de propriedade agendadas</h3>
+<p>Desde a AT-773, cada run mostra no título quem o disparou (<code>Provas de propriedade · agendado</code>, ou <code>manual · &lt;ator&gt;</code>) e, no Summary, o bloco <code>## Vínculos</code>: a origem, os irmãos lidos com o SHA de cada um (<code>brabo-api</code>, <code>brabo-engine</code>, <code>brabo-web</code>) e o destino do resultado. O helper nunca reprova o job; sem a tabela a prova segue. A issue de alarme recebe o mesmo bloco no corpo.</p>
+<p><code>make test-restore</code>, <code>make rollout-test</code> e <code>make hpa-test</code> provam
+<strong>propriedades</strong>, não configuração — um backup que roda toda noite e não
+restaura passa nos cinco alertas de <code>brabo-alerts.yaml</code>. Até o BRB-009 eles rodavam
+só quando alguém os digitava. O <code>.github/workflows/propriedades.yml</code> agora os roda
+numa agenda, num cluster k3d num runner hospedado pelo GitHub:</p>
+<ol>
+<li>instala <code>k3d</code>, <code>helm</code> e <code>kubectl</code> por checksum fixado;</li>
+<li>roda <code>deploy/k8s/bootstrap.sh</code> — o mesmo bootstrap que o <code>make deploy-local</code>
+roda, construindo as quatro imagens de produção a partir da árvore do checkout (sem
+registry, sem segredo) — com <code>BRABO_SKIP_OBSERVABILITY=1</code> (AT-177): nenhuma
+das provas lê Tempo, Loki, o Collector, Alloy ou Grafana, e essa é
+a única diferença do cluster que o <code>make deploy-local</code> te dá;</li>
+<li>roda <code>make smoke-k8s</code>, depois <code>make hpa-test</code>, <code>make rollout-test</code> e
+<code>make test-restore</code>, na ordem do <code>Makefile</code>, cada um mesmo quando um anterior
+falhou (um HPA quebrado não pode esconder um restore quebrado);</li>
+<li>roda <code>make test-restore-mutacao</code> (AT-126, BRB-009), a prova <strong>da</strong>
+prova: ele tira um backup real, depois cria uma tabela (<code>zz_mutacao_restore</code>) na
+origem que o dump não tem — exatamente &quot;um dump faltando uma tabela&quot; —
+e roda o mesmo <code>brabo-restore</code>. Ele passa só se o restore o <strong>rejeita</strong>
+e nomeia aquela tabela (a linha de log <code>faltando: zz_mutacao_restore</code>); se o restore
+aprova, ou rejeita por outro motivo, o passo falha e abre a própria
+issue. Um <code>make test-restore</code> verde diz que o backup restaura; este diz que a
+prova ainda perceberia se não restaurasse. A tabela é apagada na saída, mesmo em
+falha. Ele roda mesmo quando o <code>make test-restore</code> falhou (uma prova cega e um
+restore quebrado são dois defeitos, e os dois têm de aparecer);</li>
+<li>roda <code>make test-reprojecao-k8s</code> (AT-127, BRB-018): o grafo não tem backup
+(<a href="../adr/0152-backup-de-volumes-contra-compose.html">ADR 0152</a>) porque é
+reprojetado a partir do event log, então o workflow prova isso também — ele cria
+um projeto próprio com uma sessão fechada e quatro eventos (uma mensagem, um
+handoff, uma hipótese do Psicólogo e um perfil da Anamnese — todo caminho do
+tradutor, AT-191), o reprojeta, <strong>apaga esse subgrafo</strong> no Neo4j,
+reprojeta, e exige as mesmas contagens de nós e arestas (9|6), depois
+reprojeta de novo. Ele não usa estado deixado pelos outros alvos e
+<strong>não</strong> é acoplado ao <code>test-restore</code> (o grafo não depende de um backup);</li>
+<li>roda <code>make test-reprojecao-artefatos-k8s</code> (AT-198, RN-590), a mesma prova
+para a outra projeção derivada — a pasta <code>docs/</code> dos artefatos. Ele
+cria um projeto próprio com um <code>artifact.note</code>, espera o projetor
+vivo escrever o arquivo, <strong>apaga a pasta do agente dentro do pod da
+api</strong>, roda o <code>node scripts/reprojetar-artefatos.js --project</code> da imagem,
+e exige o <strong>mesmo sha256</strong>; depois reprojeta de novo e o exige
+outra vez. Ele não depende de nenhum outro alvo;</li>
+<li>roda <code>make test-rotacao-chave-mestra-k8s</code> (AT-146), <strong>por último</strong>: os três passos
+da <a href="segredos.html#rotacao-da-chave-mestra">rotação da chave mestra</a> — as duas chaves publicadas
+no Secret de origem <code>brabo</code>, o <code>ExternalSecret</code> forçado a sincronizar, a api
+reiniciada, o <code>rewrap-deks.js</code> da imagem, a chave anterior removida e a api
+reiniciada de novo — com todo envelope conferido abrindo em cada passo e uma
+credencial decifrando para o mesmo valor no fim. Ele troca a chave mestra do cluster
+e reinicia a api, e é por isso que nada roda depois dele;</li>
+<li>só quando <strong>tanto</strong> o restore quanto a quebra deliberada passaram na mesma
+execução, escreve <code>ultima-execucao-boa.json</code> (data, execução, commit, duração do restore)
+e o sobe como o artefato <code>restore-ultima-execucao-boa</code> (guardado 90 dias),
+e acrescenta a linha <em>Última execução boa do restore</em> ao resumo da execução;</li>
+<li>escreve a duração de cada passo no resumo da execução.</li>
+</ol>
+<p>Um <strong>segundo job</strong>, <code>restore-compose</code> (AT-195), roda ao lado dele noutro
+runner — o compose de produção publica 3000/4000/8088, as mesmas portas que o
+cluster k3d mapeia, então os dois não podem dividir um. Ele constrói as quatro imagens com
+<code>docker-bake.hcl</code> (como o <code>ci.yml</code> faz), sobe o compose de produção pelo
+<code>docker/smoke.sh</code> (que deixa o usuário e a sessão do seed no banco),
+cria um bare repo em <code>git_local_repos</code> como fixture, e roda
+<code>make test-restore-compose</code>: um backup real, o restore com as três
+validações, e a verificação do arquivo dos bare repos. Um verde sem a
+linha nomeando os bare repos verificados reprova o passo. As falhas dele abrem issues
+do mesmo jeito, com títulos próprios.
+Medido na execução <code>36371633435</code>: build das imagens 190 s, subida do compose (smoke) 43 s,
+<code>make test-restore-compose</code> 4 s — 4 min 31 s para o job, em paralelo com os
+11 min do job do cluster, então o relógio do workflow não se mexe.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>gatilho</th>
+<th>quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schedule</code></td>
+<td>semanal, domingo 04:00 UTC</td>
+</tr>
+<tr>
+<td><code>workflow_dispatch</code></td>
+<td>sob demanda, pela aba Actions (<code>gh workflow run propriedades.yml</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Uma falha abre uma issue</strong> com o título <code>Prova de propriedade falhou: &lt;alvo&gt;</code>,
+uma por alvo, e uma falha repetida do mesmo alvo <strong>comenta na issue
+aberta</strong> em vez de abrir outra. O bootstrap tem título próprio: com
+o cluster fora do ar, os três alvos ficam <code>skipped</code>, e uma execução agendada pulada
+é o silêncio que isto existe para quebrar. <strong>A primeira execução em que o alvo
+passa fecha a issue dele</strong> com um comentário nomeando aquela execução (AT-212) — ninguém
+precisa lembrar. Só uma execução na <strong>branch default</strong> (a agenda, ou um
+<code>workflow_dispatch</code> nela) mexe em issues: um <code>workflow_dispatch</code> vermelho numa
+branch falha na própria execução, registra um aviso, e nem abre nem comenta na
+issue da agenda, e um verde numa branch não fecha nada. As execuções ficam
+em fila <strong>por ref</strong> (<code>concurrency: propriedades-&lt;ref&gt;</code>): dois dispatches em
+branches diferentes rodam lado a lado, dois na mesma ref esperam um pelo outro.
+Ele <strong>não</strong> é gate nem check obrigatório — nada espera por ele.</p>
+<p>Medido nas execuções que construíram o workflow (4 vCPUs, 15 GiB de RAM, 87 GB de
+disco livre no <code>ubuntu-26.04</code>):</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>passo</th>
+<th>duração</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bootstrap (build das imagens + cluster + operators + app)</td>
+<td>705 s</td>
+</tr>
+<tr>
+<td><code>make smoke-k8s</code></td>
+<td>1 s</td>
+</tr>
+<tr>
+<td><code>make hpa-test</code></td>
+<td>19 s</td>
+</tr>
+<tr>
+<td><code>make rollout-test</code></td>
+<td>24 s</td>
+</tr>
+<tr>
+<td><code>make test-restore</code></td>
+<td>21 s</td>
+</tr>
+<tr>
+<td><code>make test-restore-mutacao</code></td>
+<td>31 s (execução <code>35473548113</code>)</td>
+</tr>
+<tr>
+<td><code>make test-reprojecao-k8s</code></td>
+<td>16 s (execução <code>35471428634</code>); 18 s com o cenário de quatro eventos (execução <code>36498776825</code>)</td>
+</tr>
+<tr>
+<td><code>make test-reprojecao-artefatos-k8s</code></td>
+<td>4 s (execução <code>36498695123</code>, job inteiro 10 min 28 s)</td>
+</tr>
+<tr>
+<td><code>make test-rotacao-chave-mestra-k8s</code></td>
+<td>47 s (execução <code>36502355798</code>, job inteiro 12 min 10 s)</td>
+</tr>
+<tr>
+<td>job inteiro</td>
+<td>12 min 56 s</td>
+</tr>
+</tbody>
+</table></div>
+<p>(Primeira execução inteira verde, <code>34784563928</code>, em 2026-09-13.)</p>
+<p>Com <code>BRABO_SKIP_OBSERVABILITY=1</code> e os operators em paralelo (AT-177), a
+fase do helm foi de 253 s (execução <code>36362479629</code>, na <code>dev</code>) para 89–90 s, o
+bootstrap de 710 s para 547–555 s e o job inteiro de 13 min 43 s para
+10 min 59 s (execuções <code>36367504128</code> e <code>36368334920</code>). O build das imagens (141–161 s)
+e a espera do <code>seed-smoke</code> (ainda 180 s) não mudam com isso.</p>
+<p><strong>O build das imagens continua um <code>docker build</code> simples, de propósito</strong> (AT-178, medido
+e recusado). Construir as quatro imagens pelo <code>docker-bake.hcl</code> com o
+cache <code>type=gha</code> que o <code>ci.yml</code> já usa — em paralelo, carregadas no daemon,
+o bootstrap então rodando com <code>BRABO_SKIP_BUILD=1</code> — foi tentado numa branch
+e rodou verde duas vezes:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th></th>
+<th>build das imagens</th>
+<th>job inteiro</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker build</code> no bootstrap (execuções <code>36367504128</code>, <code>36368334920</code>)</td>
+<td>161 s, 145 s</td>
+<td>10 min 59 s</td>
+</tr>
+<tr>
+<td>bake, primeira execução na ref (<code>36369702417</code>)</td>
+<td>177 s (setup do buildx incluído)</td>
+<td>11 min 44 s</td>
+</tr>
+<tr>
+<td>bake, cache quente (<code>36370592556</code>)</td>
+<td>116 s (setup do buildx incluído)</td>
+<td>11 min 32 s</td>
+</tr>
+</tbody>
+</table></div>
+<p>Quente, o passo ganha 30–45 s; frio, perde 15–30 s; no nível do job a
+diferença fica dentro do ruído entre execuções. A execução que importa é a semanal
+na <code>main</code>, e o cache do Actions despeja uma entrada que ninguém leu por 7 dias —
+uma cadência semanal é exatamente onde o cache está frio com mais frequência. O
+<code>no-cache-filter = [&quot;runtime&quot;]</code> do bakefile (AT-110) também reconstrói todo
+estágio final de qualquer jeito, que é o que mantém pequeno o ganho quente. Reveja só com
+uma medição mostrando cache quente na execução agendada.</p>
+<p>A cadência segue esse custo. Quase todo ele é o bootstrap, que uma
+execução noturna pagaria sete vezes por semana para reprovar propriedades cujo código
+muda muito menos que isso; semanal mantém o alarme dentro de uma sprint,
+e o <code>workflow_dispatch</code> cobre &quot;acabei de mexer no backup&quot;. O timeout do job é
+90 minutos e o passo do restore sozinho tem teto de 20 — veja o comentário nesse
+passo para saber por que o teto pertence ao passo e não ao script.</p>
+<p><strong>O que as primeiras execuções acharam</strong>, cada um invisível ao <code>kubeconform</code> e a
+todo check de PR, e cada um corrigido na mesma mudança que criou o
+workflow — o <code>make deploy-local</code> estava quebrado na <code>dev</code> havia semanas sem
+ninguém rodá-lo:</p>
+<ol>
+<li>O <code>imageName</code> do cluster CNPG fixado só por digest
+(<a href="../adr/0159-imagem-de-terceiro-por-digest.html">ADR 0159</a>) é recusado pelo
+webhook do operator — <em>&quot;Can't use just the image sha as we can't detect
+upgrades&quot;</em>. Agora ele leva <code>:16.10@sha256:…</code>.</li>
+<li>O Secret de origem do bootstrap não tinha <code>NEO4J_PASSWORD</code>, que o
+<code>ExternalSecret</code> da base lê desde o grafo (<a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099</a>):
+o <code>brabo-secrets</code> nunca se materializava e todo pod ficava em
+<code>CreateContainerConfigError</code>.</li>
+<li>A api não recebia nem <code>NEO4J_URI</code> nem <code>NEO4J_USER</code> no cluster, e em
+modo de produção ela recusa subir sem as três.</li>
+<li>O StatefulSet do Neo4j exportava <code>NEO4J_USER</code>/<code>NEO4J_PASSWORD</code>, que o
+entrypoint da imagem transforma em chaves de config e rejeita (<em>&quot;Unrecognized
+setting&quot;</em>) — o próprio defeito sobre o qual um comentário duas linhas abaixo avisava. Esses
+manifestos nunca tinham rodado num cluster.</li>
+<li>O <code>migrate-api</code> não conseguia <code>CREATE EXTENSION vector</code> (o papel do app não é
+superusuário), então a api subia sem tabelas. O cluster CNPG local agora
+a cria como superusuário, no banco do app e em <code>template1</code>.</li>
+<li><code>deploy/k8s/smoke.sh</code> e <code>rollout-test.sh</code> nunca mandavam o <code>kind</code> da sessão
+que se tornou obrigatório na FASE 20 (o <code>docker/smoke.sh</code> o ganhou naquela hora), então os dois
+falhavam com um 400 antes de provar qualquer coisa.</li>
+<li>O <code>make test-restore</code> morria no <code>pg_restore</code> com <em>&quot;permission denied to create
+extension vector&quot;</em> — o caso que a tabela acima já nomeia — porque
+nada no cluster local fornecia a extensão ao banco que o
+restore cria.</li>
+<li>Com a extensão fornecida, o <code>pg_restore</code> ainda morria — agora com <em>&quot;must be
+owner of extension vector&quot;</em>, no <code>COMMENT ON EXTENSION</code> do dump: só o
+dono da extensão pode comentá-la, e onde o papel do app não é
+superusuário (CNPG, qualquer Postgres gerenciado) a extensão pertence a outro papel.
+<strong>Este não é local ao cluster</strong>: o mesmo <code>brabo-restore</code> é o
+procedimento de incidente, então um restore de verdade num Postgres desses teria falhado
+do mesmo jeito. O <code>restore.sh</code> agora restaura a partir do índice do dump
+menos o comentário da extensão — uma string de descrição que a extensão instala,
+de que nenhum dado e nenhuma validação depende. Reproduzido contra um container
+<code>pgvector</code> simples com um papel não-superusuário antes e depois da mudança.</li>
+<li><code>deploy/k8s/test-restore.sh</code> esperava com <code>kubectl wait --for=condition=complete</code>, que nunca vê um Job que <strong>falhou</strong>, então o
+restore quebrado acima gastava o teto inteiro de 20 minutos do passo para informar o que o
+log do Job dizia em segundos (o teto do próprio script era 30). Agora ele consulta as duas
+condições e falha assim que o Job fica <code>Failed</code>.</li>
+<li><code>rollout-test.sh</code> procurava órfãs depois de um <code>sleep 15</code> fixo, que
+não distingue <em>ainda assentando</em> de <em>órfã de vez</em>. Agora ele consulta até um
+teto (<code>ROLLOUT_CONVERGENCE_SECONDS</code>, default 120) e registra, antes do
+rollout, em que réplica cada sessão vivia — os pods antigos levam os logs
+deles embora.</li>
+</ol>
+<p><strong>Medido, e a causa provável desde então corrigida</strong> (AT-078,
+<a href="../business-rules/engine.html#rn-588">RN-588</a>) — o <code>Monitor</code> do pod antigo apagando a
+linha de <code>session_states</code> que o par acabara de regravar; veja
+<a href="deploy.html#rollout-do-engine">Provando que nada ficou órfão</a> para o que uma órfã nova
+registraria. O que segue é o registro de antes da correção. <strong>A prova de rollout
+tinha falhado uma vez em quatro execuções que chegaram a ela</strong> (duas em dez até a execução <code>35448353884</code>, 2026-09-19, em que
+as cinco sessões viviam no mesmo pod antigo, quatro foram adotadas e uma terminou
+sem dono e sem drenagem; os únicos logs que a nomeavam morreram com aquele pod —
+e é por isso que a prova agora os guarda, veja
+<a href="deploy.html#rollout-do-engine">Provando que nada ficou órfão</a>). Com o mesmo script e a mesma espera fixa, a execução
+<code>34773908653</code> passou e a execução <code>34775712706</code> informou uma órfã — uma sessão
+<code>active</code> na api sem dono em nenhuma das três réplicas do engine, 15 s
+depois de o <code>rollout status</code> voltar. As duas execuções com a espera limitada passaram, e
+as duas convergiram em <strong>3 s</strong>, as cinco sessões adotadas. Uma convergência normal
+de 3 s torna &quot;a órfã só precisava de mais de 15 s&quot; a leitura menos provável;
+a mais provável é uma corrida intermitente na adoção ou na drenagem que a espera
+fixa por acaso pegou. Fica como está de propósito: o workflow existe para
+pegar exatamente isto, e a próxima ocorrência agora vai falhar com o teto que
+esperou, onde cada sessão vivia antes do rollout, e as linhas do engine que
+nomeiam a órfã. A correção é do engine, não desta prova.</p>
+<h3 id="last-verified-run">Última execução verificada</h3>
+<blockquote>
+<p><strong>O workflow agendado é agora a fonte disto, e a data não é mais
+editada à mão</strong> (AT-126). A execução mais recente do
+<a href="#provas-de-propriedade-agendadas"><code>propriedades.yml</code></a> que tem o
+artefato <code>restore-ultima-execucao-boa</code> é a última vez que o restore passou no
+Kubernetes <strong>e</strong> uma quebra deliberada dele foi pega na mesma execução:
+<code>gh run list --workflow propriedades.yml --status success --limit 1</code>, depois
+<code>gh run download &lt;run&gt; -n restore-ultima-execucao-boa</code> (guardado 90 dias). É
+um artefato de workflow, não uma métrica: um gauge do Prometheus ao lado dos alertas
+de backup exigiria código em <code>apps/api</code>, que esta mudança não tocou (o BRB-009 segue aberto nessa metade). O registro abaixo é mantido como foi escrito: é o
+histórico da primeira verificação e do que ela achou.</p>
+</blockquote>
+<!-- Atualize esta seção sempre que rodar o teste num ambiente novo. -->
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>campo</th>
+<th>valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>2026-07-27</td>
+</tr>
+<tr>
+<td>ambiente</td>
+<td>cluster k3d local, PostgreSQL 16.10 (CloudNativePG), MinIO</td>
+</tr>
+<tr>
+<td>comando</td>
+<td><code>make test-restore</code></td>
+</tr>
+<tr>
+<td>RTO observado</td>
+<td>~40s do disparo do backup ao veredito (um banco de ~108 KB)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Saída:</p>
+<pre class="codigo"><code>[restore]   ok    intact dump (108127 bytes)
+[restore] restoring into brabo_restore_test
+[restore]   ok    pg_restore completed
+[restore]   ok    35 tables restored, identical to the source
+[restore]   ok    users: 2 rows (window 2–2)
+[restore]   ok    projects: 2 rows (window 2–2)
+[restore]   ok    sessions: 2 rows (window 2–2)
+[restore]   ok    session_events: 7 rows (window 7–7)
+[restore]   ok    proposed_actions: 0 rows (window 0–0)
+[restore]   ok    intact event log: 7 events across 2 sessions, dense seq starting at 1
+[restore] RESTORE VALIDATED — all checks passed
+</code></pre>
+<p>O RTO acima é de um banco de produção vazio — serve para provar
+o PROCEDIMENTO, não para dimensionar uma recuperação de verdade. Meça de novo com um
+dump representativo antes de prometer um RTO a alguém.</p>
+<h4 id="what-this-run-found-and-that-the-test-now-prevents">O que esta execução achou (e que o teste agora impede)</h4>
+<ol>
+<li><strong>Divergência de versão major do Postgres.</strong> O CloudNativePG local estava
+rodando 17.4 enquanto o compose diz 16; o <code>pg_dump</code> recusava a
+conexão com &quot;server version mismatch&quot;. O <code>imageName</code> do cluster
+foi fixado em 16.10.</li>
+<li><strong>Falso verde de um banco vazio.</strong> Com zero linhas, toda comparação de
+contagem vira <code>0 == 0</code> e a checagem de <code>seq</code> não olha nada.
+Hoje o script falha explicitamente nos dois casos.</li>
+<li><strong>Uma contagem fixa de tabelas envelhece.</strong> A validação comparava com um número
+escrito no script, que já estava velho naquela mesma sessão.
+Agora ela compara a LISTA de tabelas com a origem e diz qual
+falta.</li>
+<li><strong>A imagem de backup carregava 48 CVEs HIGH/CRITICAL</strong> vindas do <code>mc</code>
+(Go congelado desde setembro de 2025) e do <code>gosu</code> na base
+<code>postgres:16-alpine</code>. Trocada por <code>alpine</code> + <code>postgresql16-client</code>
+<ul>
+<li><code>aws-cli</code>, todos do apk e portanto atualizáveis: 48 → 0. Veja
+a decisão 1b do ADR 0027.</li>
+</ul>
+</li>
+</ol>
+<h3 id="last-verified-run--compose-disk-destination">Última execução verificada — compose, destino em disco</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>campo</th>
+<th>valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>2026-09-09</td>
+</tr>
+<tr>
+<td>ambiente</td>
+<td>Docker compose, PostgreSQL 16 (imagem pgvector), destino em <strong>disco</strong> — sem cluster, sem bucket, sem <code>kubectl</code></td>
+</tr>
+<tr>
+<td>comando</td>
+<td><code>docker/backup/test-restore-compose.sh</code> (o que o <code>make test-restore-compose</code> roda)</td>
+</tr>
+<tr>
+<td>banco</td>
+<td>55 tabelas, 422 eventos em 13 sessões — um banco povoado, não um vazio</td>
+</tr>
+<tr>
+<td>bare repos</td>
+<td>2 (<code>exp001.git</code>, <code>exp004.git</code>), 27 003 bytes arquivados</td>
+</tr>
+</tbody>
+</table></div>
+<p>Saída (os três passos, resumida):</p>
+<pre class="codigo"><code>[backup] destination: disk at /backups
+[backup] generating dump for daily/brabo-20260909T025733Z.dump
+[backup] archiving 2 bare repo(s) for git-daily/brabo-git-20260909T025733Z.tar.gz
+[backup] finished: daily/brabo-20260909T025733Z.dump (322894 bytes)
+[restore]   ok    55 tables restored, identical to the source
+[restore]   ok    session_events: 422 rows (window 422–422)
+[restore]   ok    intact event log: 422 events across 13 sessions, dense seq from 1
+[restore] RESTORE VALIDATED — all checks passed
+[restore-git]   ok    2 intact bare repo(s) (27003 bytes)
+[test-restore-compose] backup restored and intact
+</code></pre>
+<p>O <code>backup_runs</code> ganhou a linha <code>status = 'ok'</code> de cada execução, com o <strong>dump</strong> como
+<code>object_key</code> — a mesma coluna que o <code>restore.sh</code> consulta para a janela do retrato.</p>
+<h4 id="what-this-run-found">O que esta execução achou</h4>
+<p><strong>O restore dos bare repos não conseguia escrever no volume em que restaura</strong>, e só
+rodá-lo revelou isso. O <code>git_local_repos</code> é compartilhado por três imagens com três
+uids; ele fica com o dono de quem o montou primeiro (medido: <code>1000:1000</code>,
+modo 0755) e a imagem de backup roda como uid 70. O primeiro <code>--restaurar</code> morreu
+no meio da extração com <code>tar: can't make dir ./exp001.git: Permission denied</code>,
+deixando o alvo escrito pela metade. Duas mudanças vieram disso, as duas acima: o
+comando recusa <strong>antes</strong> de extrair e nomeia <code>--user &lt;dono do volume&gt;</code>, e quando ele de fato
+roda como root devolve a árvore extraída ao dono do diretório em vez de
+deixá-la com dono root — o que teria produzido um volume que restaura
+perfeitamente e em que api e engine não conseguem escrever.</p>
+<p>Verificado depois com <code>git</code> de verdade (não a imagem de backup, que não tem):
+<code>git fsck --connectivity-only</code> limpo nos dois repos, refs e commits intactos,
+dono de volta em <code>1000:1000</code>.</p>
+<hr>
+<nav class="site-pager"><a href="../runbook/operacao.html">Operação</a><a href="../runbook/segredos.html">Rotação de segredos</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-infra/blob/dev/deploy/docs/runbook/restore.md">Editar esta página</a></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#restore">Restore</a></li><li class="n3"><a href="#what-is-backed-up-and-what-deliberately-is-not">O que tem backup, e o que deliberadamente não tem</a></li><li class="n3"><a href="#where-the-backup-lives">Onde o backup mora</a></li><li class="n3"><a href="#garantia-dos-bare-repos">O que o arquivo dos bare repos garante — e o que não garante</a></li><li class="n3"><a href="#before-restoring-does-the-backup-exist-and-is-it-any-good">Antes de restaurar: o backup existe, e presta?</a></li><li class="n3"><a href="#restore-automatizado">O caminho automatizado (o mesmo que o teste roda)</a></li><li class="n3"><a href="#restore-de-verdade">Restaurando de verdade, durante um incidente</a></li><li class="n3"><a href="#restore-compose-banco-vazio">Restaurando numa instalação compose (banco recém-criado)</a></li><li class="n3"><a href="#what-the-restore-does-not-cover">O que o restore NÃO cobre</a></li><li class="n3"><a href="#restore-dos-bare-repos">Recuperando os bare repos</a></li><li class="n3"><a href="#perda-do-grafo">Perda do grafo (Neo4j)</a></li><li class="n3"><a href="#perda-da-pasta-de-artefatos">Perda da pasta de artefatos (docs/)</a></li><li class="n3"><a href="#when-the-restore-fails">Quando o restore falha</a></li><li class="n3"><a href="#provas-de-propriedade-agendadas">Provas de propriedade agendadas</a></li><li class="n3"><a href="#last-verified-run">Última execução verificada</a></li><li class="n3"><a href="#last-verified-run--compose-disk-destination">Última execução verificada — compose, destino em disco</a></li></ul></aside>
+</div>
+<script src="../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-pt-BR.json" data-base="../"></script></body>
+</html>

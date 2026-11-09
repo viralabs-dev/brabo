@@ -1,0 +1,1437 @@
+<!doctype html>
+<html lang="zh-Hans" data-locale="zh-Hans" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — Web — parte 2 (desde RN-124) | Brabo</title>
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="菜单">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="搜索" aria-label="搜索" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="语言"><option value="../../../business-rules/web/parte-02.html">pt-BR</option><option value="../../../en/business-rules/web/parte-02.html">en</option><option value="../../../ru/business-rules/web/parte-02.html">ru</option><option value="../../../zh-Hans/business-rules/web/parte-02.html" selected>zh-Hans</option></select>
+<select data-seletor aria-label="环境"><option value="../../../../dev/zh-Hans/business-rules/web/parte-02.html">dev</option><option value="../../../../prd/zh-Hans/business-rules/web/parte-02.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="切换主题">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 从这里开始</h2></summary><ul><li><a href="../../index.html">首页</a></li><li><a href="../../getting-started.html">快速开始</a></li></ul></details></section><section><details open><summary><h2>🎓 教程</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">编排多个仓库</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Brabo 是如何构建的</a></li></ul></details></section><section><details open><summary><h2>🧭 实用指南</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">开发 Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages 令牌</a></li><li><a href="../../runbook.html">运维手册</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>参与贡献</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">我们如何撰写</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 概念</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">架构</a></li><li><a href="../../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../../explanation/modelo-de-time.html">团队模型与交付物流程</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>流程与流水线</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">分支策略</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../../explanation/release-do-produto.html">产品发布</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>本地化</span></summary><ul><li><a href="../../explanation/localizacao.html">本地化</a></li><li><a href="../../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></details></li><li><details><summary><span>技术笔记</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 参考</h2></summary><ul><li><a href="../../glossary.html">术语表</a></li><li><a href="../../reference/componentes-da-doc.html">文档组件</a></li><li><a href="../../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>业务规则</span></summary><ul><li><a href="../../business-rules.html">业务规则</a></li><li><a href="../../business-rules/custo.html">成本与计量</a></li><li><a href="../../business-rules/autenticacao.html">认证</a></li><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Produto</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><details open><summary><span>Web</span></summary><ul><li><a href="../../business-rules/web.html">Web</a></li><li><a href="../../business-rules/web/parte-01.html">Web — parte 1 (desde RN-039)</a></li><li><a href="../../business-rules/web/parte-02.html" aria-current="page">Web — parte 2 (desde RN-124)</a></li><li><a href="../../business-rules/web/parte-03.html">Web — parte 3 (desde RN-239)</a></li><li><a href="../../business-rules/web/parte-04.html">Web — parte 4 (desde RN-491)</a></li><li><a href="../../business-rules/web/parte-05.html">Web — parte 5 (desde RN-626)</a></li><li><a href="../../business-rules/web/parte-06.html">Web — parte 6 (desde RN-728)</a></li><li><a href="../../business-rules/web/parte-07.html">Web — parte 7 (desde RN-978)</a></li></ul></details></li></ul></details></li><li><span>API 参考</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ 决策（ADR）</a></h2></section><section><details><summary><h2>🗂️ 项目历史</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">时间线</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">shadcn 前后的界面（2026 年 10 月 31 日）</a></li><li><a href="../../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">第 1 至 15 阶段，第 1 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">16–26 计划与轮次，第 2 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">28 计划与审计，第 3 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">从本地 runner 起，第 4 部分</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../../explanation/backlog.html">已分类的 backlog</a></li><li><details><summary><span>验证与测量</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../../explanation/medicao-do-jev.html">Jev 工具路由器的测量</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">此页尚未翻译；显示葡萄牙语原文。</div>
+<article class="doc">
+<h1 id="web--parte-2-desde-rn-124">Web — parte 2 (desde RN-124)</h1>
+<h2 id="painel-de-projetos">Painel de projetos</h2>
+<h3 id="rn-124">RN-124 — O PO narra épico/história criados no fio, com link direto pro Backlog</h3>
+<p><code>backlog.epic_created</code>/<code>backlog.story_created</code> — que o PO já gravava no
+event log (<code>CreateEpicUseCase</code>/<code>CreateStoryUseCase</code>) — não tinham
+tratamento nenhum na timeline da sessão: criar história não deixava rastro
+NENHUM no fio, só na aba Backlog, pra quem já soubesse ir olhar lá. Os dois
+tipos ganham entrada na timeline, no MESMO corpo visual das outras
+mensagens do agente (<code>.message</code>/<code>.bubble</code>) — nenhuma classe nova pro chip
+em si, só o link.</p>
+<p>O link (&quot;Ver no Backlog&quot;) reusa o deep-link genérico da aba (<code>?tab=backlog</code>,
+o mesmo mecanismo do CTA &quot;Definir orçamento&quot; do card do dashboard) — não
+tenta realçar a história recém-criada dentro da aba, que é fora de escopo.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code> (<code>timeline</code> — bloco
+<code>backlog.epic_created</code>/<code>backlog.story_created</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.handoff-inline-e-links.test.tsx</code>
+(<code>item 2</code>)</li>
+<li><strong>Verificado por execução real:</strong> épico e história inseridos no event log
+de uma sessão real aparecem como &quot;Épico criado&quot;/&quot;História criada&quot; com o
+título, e o link navega pra <code>?tab=backlog</code> de verdade.</li>
+<li><strong>Origem:</strong> pedido do usuário — link do PO pras histórias criadas, direto
+pro Backlog.</li>
+</ul>
+<h3 id="rn-125">RN-125 — O aceite de handoff é INLINE no fio, com CTA pro Dev Lead apontando pra Executores</h3>
+<p>O divisor &quot;X passou o bastão ao Y&quot; que já existia na timeline (<code>handoff.offered</code>)
+vira um <strong>card acionável</strong> — com o botão de aceitar embutido — sempre que
+representa a oferta pendente <strong>atual</strong> (a mesma que <code>offeredHandoff</code> já
+resolvia para o botão da topbar). O botão da topbar <strong>saiu</strong>: com o aceite
+morando dentro do fio, no lugar exato onde a passagem aconteceu, manter os
+dois puxaria dois botões com o texto IDÊNTICO visíveis ao mesmo tempo — o
+mesmo problema que <code>ApprovalCard</code> já evita ao nunca duplicar a ação fora do
+fio (RN-096).</p>
+<p><strong>Qual evento vira o card é decidido por PAR, não por id.</strong> O payload de
+<code>handoff.offered</code> carrega só <code>toAgent</code>; o <code>fromAgent</code> é o <code>actor</code> do evento
+(RN-054 já usava essa leitura para o texto do divisor). Sem o id do handoff
+no evento, &quot;esta é a oferta atual&quot; é respondido achando o <code>handoff.offered</code>
+mais RECENTE (maior <code>seq</code>) com o MESMO par <code>fromAgent</code>/<code>toAgent</code> de
+<code>offeredHandoff</code> — o que impede reabrir um convite de aceite que uma oferta
+mais antiga pro mesmo par já tenha resolvido (aceita, recusada ou superada
+por uma oferta nova).</p>
+<p><strong>O card pro Dev Lead ganha um segundo link</strong>, &quot;Acompanhe a execução em
+Executores&quot;, pra aba que já existe (RN-121) — é o início da EXECUÇÃO, e quem
+aceita precisa saber onde olhar depois. As outras ofertas (PO, Arquiteto…)
+não ganham o link: a sessão delas segue sendo o próprio lugar de acompanhar,
+não há &quot;onde mais olhar&quot;.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code> (<code>timeline</code> — bloco
+<code>handoff.offered</code>, <code>offeredHandoffEventSeq</code>; <code>isActive</code> subiu para antes do
+<code>useMemo</code>), <code>apps/web/src/routes/SessionPage.module.css</code> (<code>.handoffCard</code>,
+<code>.timelineLink</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.handoff-inline-e-links.test.tsx</code>
+(card acionável só na oferta atual, oferta antiga do mesmo par fica muda,
+handoff já aceito não mostra botão nenhum, link de Executores só no
+<code>dev-lead</code>); <code>apps/web/src/routes/SessionPage.pista-e-status.test.tsx</code>
+atualizado para o botão inline (não mais na topbar)</li>
+<li><strong>Verificado por execução real:</strong> aceitar um handoff pro PO numa sessão
+criativa contra um build isolado (stack Docker próprio, projeto/sessão
+reais) — o card vira divisor mudo e o log de eventos avança assim que o
+clique volta da api; o CTA pro Dev Lead navega pra <code>?tab=executores</code> de
+verdade.</li>
+<li><strong>Origem:</strong> pedido do usuário — aceite de handoff também inline no fio,
+não só na topbar.</li>
+</ul>
+<h3 id="rn-126">RN-126 — Promoção de história é decidível INLINE no fio, com o mesmo mecanismo da aba Backlog</h3>
+<p><code>backlog.story_promotion_proposed</code> (RN-048) ganha o mesmo tratamento que
+RN-125 deu ao handoff: o evento vira <strong>card acionável</strong> na timeline da
+sessão, com os botões &quot;Promover&quot; e &quot;Devolver&quot; chamando os MESMOS
+<code>promoteStories</code>/<code>returnStory</code> que <code>PromotionQueue</code>
+(<code>ProjectBacklogTab.tsx</code>) já usa — nenhum endpoint novo, nenhuma segunda
+fonte de verdade. A decisão continua acontecendo em UM lugar (o backend), só
+o gatilho ganhou um segundo caminho.</p>
+<p><strong>Resolução por evento posterior, não por status derivado à parte.</strong> O card
+some sozinho (vira divisor mudo, sem botões) assim que um evento de seq
+MAIOR decidir o destino da MESMA história —
+<code>backlog.story_transitioned{storyId}</code> (promovida, emitido por
+<code>PromoteStoriesUseCase</code> via <code>TransitionStoryUseCase</code>) ou
+<code>backlog.story_promotion_returned{storyId}</code> (devolvida). Sem essa checagem,
+promover ou devolver deixaria os mesmos dois botões plantados no fio,
+oferecendo de novo uma decisão já tomada.</p>
+<p><code>backlog.story_promotion_returned</code> ganha narração simétrica no fio (motivo
+incluído), reusando a mesma frase que <code>apps/web/src/lib/activity.ts</code> já
+usava só no log colapsado da sidebar.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code> (<code>timeline</code> — blocos
+<code>backlog.story_promotion_proposed</code>/<code>backlog.story_promotion_returned</code>,
+<code>handlePromoteStory</code>/<code>handleReturnStory</code>, modal de motivo reusando
+<code>Modal</code>/<code>Textarea</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.promocao-inline-e-volta.test.tsx</code>
+(card com os botões, promover chama <code>promoteStories</code> com o <code>storyId</code> do
+payload, devolver exige motivo e chama <code>returnStory</code>, história resolvida
+por <code>story_transitioned</code> posterior vira divisor mudo, <code>story_promotion_returned</code>
+narra com o motivo)</li>
+<li><strong>Origem:</strong> pedido do usuário — promoção de história inline no fio, opção
+barata reusando RN-048 em vez de gatear a criação da história.</li>
+</ul>
+<h3 id="rn-131">RN-131 — Três corridas confirmadas AO VIVO no fio da sessão: convite por cima do histórico, indicador ansioso e turno preso em <code>handleReadiness</code></h3>
+<p>Três defeitos achados navegando <code>SessionPage.tsx</code> de verdade no Chrome, não
+por teste — e os três eram condição de corrida ou critério incompleto
+disfarçado de decisão de produto.</p>
+<p><strong>1. <code>conversaComecou</code> virou &quot;existe QUALQUER evento&quot;, não &quot;existe
+<code>chat.message</code>/<code>agent.response</code>&quot;.</strong> O critério anterior (achado G) nasceu
+pra não confundir os cards do bootstrap do git com conversa, mas tinha o
+efeito contrário: uma sessão criada pelo <code>git-bootstrap</code> (ações de
+commit/branch já aprovadas, zero <code>chat.message</code>) mostrava o convite por
+cima delas, e o mesmo acontecia — de forma bem mais grave — na sessão que a
+ativação de execução usa, com dezenas de eventos reais (<code>tool.call</code>,
+<code>tool.result</code>, eventos de task) e nenhum <code>chat.message</code>/<code>agent.response</code>: o
+convite cobria o histórico de execução <strong>inteiro</strong>. Sessão nova é a única
+sem nenhum evento — essa é a pergunta certa.</p>
+<p><strong>2. <code>conviteVisivel</code> espera <code>useSessionEvents</code> terminar de carregar.</strong> Em
+cache frio (reload de página), <code>session</code> podia chegar enquanto <code>events</code>
+ainda era <code>[]</code> — o default de <code>data?.items</code>, indistinguível de &quot;sessão
+vazia de verdade&quot; até o primeiro fetch resolver. Sem o gate
+<code>!eventsQuery.isPending</code>, o convite piscava por cima de sessões com
+histórico grande.</p>
+<p><strong>3. O indicador de &quot;pensando&quot; (bolha com os 3 pontinhos) só liga depois de
+5s sem nenhum texto chegar.</strong> Antes ele ligava no instante em que
+<code>streaming</code>/<code>statusAgent</code> virava truthy — ruído visual na maioria dos
+turnos, que respondem em menos de um segundo. Um <code>useEffect</code> arma um
+<code>setTimeout(…, 5000)</code> quando o turno começa sem texto ainda, e o desarma (via
+cleanup) assim que o primeiro delta chega ou o turno termina antes do prazo.
+Texto de verdade (<code>streamingText</code>) continua aparecendo <strong>na hora</strong>, nunca
+espera o timer — só o indicador vazio é que ganhou paciência.</p>
+<p><strong>4. <code>handleReadiness</code> ganhou a mesma rede de segurança que <code>handleSend</code> já
+tinha.</strong> <code>confirmReadiness</code> é, como <code>sendAgentMessage</code>, um <code>GenServer.call</code>
+síncrono no engine (até 120s) — e o canal Phoenix pode não ter terminado de
+conectar (ticket + join, RN-108) quando o turno acaba, perdendo o broadcast
+de <code>agent.done</code> pra sempre. <code>handleSend</code> já chamava
+<code>finalizarTurnoDoAgente()</code> assim que a chamada síncrona resolvia,
+independente do canal ter entregue o evento; <code>handleReadiness</code> tinha ficado
+de fora dessa correção, e sem ela a bolha do agente ficava presa vazia
+(<code>streaming: true</code>, sem texto) até a página recarregar.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code> (<code>conversaComecou</code>,
+<code>conviteVisivel</code>, o <code>useEffect</code> de <code>pensandoVisivel</code> logo abaixo de
+<code>agenteExibido</code>, e o bloco de sucesso de <code>handleReadiness</code>)</li>
+<li><strong>Teste:</strong>
+<code>apps/web/src/routes/SessionPage.convite-so-em-sessao-vazia.test.tsx</code>
+(sessão vazia mostra o convite; sessão com eventos de git-bootstrap ou com
+dezenas de <code>tool.call</code>/<code>tool.result</code> esconde; <code>eventsQuery.isPending</code>
+segura o convite até o primeiro fetch resolver),
+<code>apps/web/src/routes/SessionPage.pista-e-status.test.tsx</code> (achado B —
+indicador não aparece antes de 5s, aparece depois, some no primeiro delta
+e nunca aparece quando o turno termina antes do prazo), e
+<code>apps/web/src/routes/SessionPage.readiness-turno-preso.test.tsx</code>
+(<code>confirmReadiness</code> resolvendo sem <code>onAgentDone</code> reconcilia o estado do
+mesmo jeito que <code>SessionPage.turno-preso.test.tsx</code> já prova pra
+<code>handleSend</code>)</li>
+<li><strong>Origem:</strong> investigação AO VIVO do produto no Chrome — os três reproduzidos
+manualmente antes da correção.</li>
+</ul>
+<h3 id="rn-136">RN-136 — O card acionável de handoff no chat só considera quem CONVERSA nesta tela</h3>
+<blockquote>
+<p><strong>Desde o <a href="../../adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185</a>
+(<a href="../api.html#rn-658">RN-658</a>)</strong> o handoff Criativo→PO que o &quot;Estou pronto&quot; pediu
+nasce e é aceito na mesma chamada, em nome de quem clicou — o card de
+aceite dele só aparece quando esse aceite não cabe (sessão anterior ao ADR,
+brief que não veio do clique) ou falhou. O filtro abaixo não muda.</p>
+</blockquote>
+<p><code>OfferInfraHandoffUseCase</code> oferece o handoff pro Infra e, na MESMA
+confirmação, oferece pro Dev Lead logo em seguida (FASE 14d) — duas chamadas
+separadas, a de Infra primeiro. <code>handoffs</code> (o que <code>SessionPage.tsx</code> lê de
+<code>useHandoffs</code>) vem ordenado por <code>createdAt</code> ASC
+(<code>DrizzleHandoffRepository#findBySession</code>), e o <code>offeredHandoff</code> que decide
+qual card vira &quot;acionável&quot; resolvia com um <code>.find()</code> puro — sempre o
+<code>offered</code> mais <strong>antigo</strong>. Como o Infra Lead não é conversacional (não está
+em <code>AGENTES_DE_CHAT</code>, e nunca é aceito por esta tela), o card do Dev Lead só
+ficaria acionável depois de alguém aceitar o de Infra num lugar que esta
+tela não mostra — na prática, nunca: o usuário só via &quot;aceitar handoff de
+Infra&quot; e o convite pro Dev Lead ficava invisível atrás dele.</p>
+<p>O filtro restringe <code>offeredHandoff</code> a handoffs endereçados a um agente de
+<code>AGENTES_DE_CHAT</code>. O handoff pro Infra continua <strong>narrado</strong> no fio — o
+<code>handoff.offered</code> dele vira divisor mudo, como qualquer oferta que não é &quot;a
+atual&quot; — só o card com botão é que passa a ignorá-lo: Infra nunca teve (nem
+precisa ter) um jeito de ser aceito por aqui.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code> (<code>offeredHandoff</code>)</li>
+<li><strong>Teste:</strong>
+<code>apps/web/src/routes/SessionPage.handoff-devlead-e-colapso.test.tsx</code>,
+describe &quot;problema 1&quot; — Infra mais antigo + Dev Lead mais novo resolve pro
+card do Dev Lead, nunca pro de Infra; só Infra <code>offered</code> não mostra card
+nenhum</li>
+<li><strong>Origem:</strong> investigação de código + teste ao vivo no Chrome — o handoff
+pro Dev Lead nunca ficava acionável depois da FASE 14d</li>
+</ul>
+<h3 id="rn-137">RN-137 — &quot;Ativar execução&quot; tem atalho inline no card do Dev Lead, sem baixar a exigência de papel</h3>
+<p>O card de aceite do handoff pro Dev Lead ganhou um botão &quot;Ativar execução&quot;
+ao lado do link &quot;Acompanhe a execução em Executores&quot; — atalho pra quem já
+sabe o que quer, sem passar pela conversa. Chama a MESMA
+<code>activateExecution</code> que a Visão Geral usa, agora com <code>sessionId</code> (a sessão
+de chat aberta) como <code>originSessionId</code> — sem isto a sessão que trouxe o
+Dev Lead ficava <code>active</code> para sempre, mesmo com a execução (numa sessão
+SEPARADA) já tendo decolado por este atalho (<a href="../api.html#rn-135">RN-135</a>).</p>
+<p><strong>A rota continua exigindo <code>maintainer</code></strong> — DELIBERADAMENTE não alinhada ao
+<code>developer</code> que já basta pra aceitar o handoff no mesmo card. Quem ativa
+vira <code>session.createdBy</code> da sessão de execução, e é esse papel que
+<code>ProposeActionUseCase</code> resolve (<code>ResolveEffectiveRoleUseCase.forProject</code>)
+como o EFETIVO de todo <code>git_commit</code>/<code>git_push</code>/<code>pr_open</code> que os dev agents
+propuserem dali em diante — é o mesmo motivo que já justificava o
+<code>maintainer</code> do botão da Visão Geral
+(<code>ExecutionController#activate</code>). Baixar a exigência aqui inverteria essa
+resolução em silêncio: toda PR que a execução abrisse passaria de
+<code>auto_approve</code> para <code>require_approval</code> sempre que quem clicou fosse
+<code>developer</code>, sem ninguém ter decidido isso. Quem não é <code>maintainer</code> recebe
+a frase real da api (&quot;Papel insuficiente para esta ação&quot;, via
+<code>mensagemDaApi</code>) em vez de um erro genérico.</p>
+<p>Sem gate de <code>module_map</code> client-side: quando este card existe, o Arquiteto
+já o definiu — é o artefato que precede a oferta do handoff pro Dev Lead —,
+então replicar o <code>disabled={!hasModuleMap}</code> da Visão Geral travaria o botão
+à toa. O caso raro (sessão inconsistente) cai no mesmo catch que trata
+403/outros erros.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code>
+(<code>handleActivateExecution</code>), <code>apps/web/src/lib/api-client.ts</code>
+(<code>activateExecution</code> ganhou <code>originSessionId</code>)</li>
+<li><strong>Teste:</strong>
+<code>apps/web/src/routes/SessionPage.handoff-devlead-e-colapso.test.tsx</code>,
+describe &quot;problema 2&quot; — clique chama <code>activateExecution</code> com
+<code>sessionId</code>; 403 mostra a frase real da api; o botão convive com o de
+aceitar o handoff e com o link de Executores</li>
+<li><strong>Origem:</strong> investigação de código + teste ao vivo no Chrome — pedido de
+atalho, com a divergência de papel confirmada e mantida por decisão
+(não corrigida por alinhamento automático)</li>
+</ul>
+<h3 id="rn-138">RN-138 — Mensagens de um agente colapsam depois que ele passa o bastão</h3>
+<p>A timeline do chat mostrava tudo sempre expandido, sem agrupar por autor —
+numa sessão longa com Criativo, PO e Arquiteto se revezando, o histórico de
+quem já saiu de cena competia por espaço com quem está falando agora. Cada
+entrada da timeline ganhou um <code>agentId</code> (o <code>actor.id</code> de quem a gerou,
+quando é um agente — <code>agent.response</code>, <code>agent.error</code>, épico/história
+criados pelo PO, card de aprovação); entradas de usuário e as que marcam
+uma TRANSIÇÃO (handoff, promoção de história) ficam sem <code>agentId</code> de
+propósito, porque são pontos de corte por natureza.</p>
+<p>Uma sequência CONSECUTIVA do mesmo <code>agentId</code> vira cabeçalho colapsável
+(<code>Disclosure</code> do design system, fechado por padrão — nome do agente +
+contagem, reabre com um clique) quando as duas condições valem:</p>
+<ol>
+<li><strong>o agente já passou o bastão</strong> — existe um handoff dele (<code>fromAgent</code>)
+com <code>status: 'accepted'</code> (a mesma verdade que o <code>handoff.accepted</code> do
+event log grava, sem precisar reconstruir por junção de evento); e</li>
+<li><strong>nenhuma ação dele está <code>pending</code></strong> — a checagem é por <code>actor.id</code> em
+TODAS as <code>actions</code> da sessão, não só nas da sequência corrente: uma
+corrida de aprovação em aberto não pode ficar escondida atrás de um
+clique em NENHUM ponto do fio.</li>
+</ol>
+<p>Uma sequência de 1 entrada nunca colapsa — &quot;Fulano · 1 mensagem&quot; no lugar
+da própria mensagem não ganha nada. Qualquer entrada sem <code>agentId</code>, ou de
+um agente diferente, quebra a sequência corrente exatamente como uma troca
+de agente quebra — só agrupa o que é realmente consecutivo.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code> (<code>TimelineEntry.agentId</code>,
+<code>timelineAgrupada</code>), <code>apps/web/src/routes/SessionPage.module.css</code>
+(<code>.agentGroup*</code>)</li>
+<li><strong>Teste:</strong>
+<code>apps/web/src/routes/SessionPage.handoff-devlead-e-colapso.test.tsx</code>,
+describe &quot;problema 3&quot; — colapsa com bastão passado e sem ação pendente;
+não colapsa sem handoff aceito; não colapsa com ação pendente do mesmo
+agente; mensagem de outro autor no meio quebra o agrupamento</li>
+<li><strong>Origem:</strong> investigação de código + teste ao vivo no Chrome — pedido de
+colapso, com <code>AgentTimelineTree</code>/<code>timeline-tree.ts</code> como referência de
+FORMA (agrupar por agente, nome + contagem, aberto/fechado), adaptada à
+timeline heterogênea intercalada do chat</li>
+</ul>
+<hr>
+<h3 id="rn-144">RN-144 — A aba Criativo não lista a sessão de execução vigente</h3>
+<p>A sessão que recebe <code>execution.activated</code> e os eventos de tool-call dos dev
+agents precisa nascer com <code>kind: 'criativa'</code> — regra estrutural (RN-097,
+<code>garantirQuePodeAtivarExecucao</code>), sem isso o evento é recusado. Como
+<code>ProjectSessionsTab</code> (a aba Criativo, RN-104) lista sessões filtrando só por
+<code>session.kind === 'criativa'</code>, a sessão de execução aparecia MISTURADA na
+lista ao lado de ideações de verdade — abrir ela em <code>SessionPage.tsx</code> mostra
+uma timeline inteira de tool-calls de dev agent, parecendo (pro usuário) &quot;o
+dev escrevendo no chat do Criativo&quot;. Confirmado ao vivo: uma sessão real com
+35+ eventos de dev agent aparecia normal na lista, ao lado de sessões reais
+de ideação.</p>
+<p>A correção reusa o sinal que a <a href="../api.html#rn-139">RN-139</a> já expõe —
+<code>useActiveExecutionSession</code>/<code>GET /projects/:projectId/execution/session</code> — em
+vez de o backend calcular um campo novo por sessão (<code>hasExecutionActivated</code>
+ou equivalente). A aba Criativo busca a sessão vigente e a exclui da lista
+renderizada:</p>
+<ul>
+<li>a busca só roda na aba Criativo (<code>enabled</code> desligado em <code>kind !== 'criativa'</code>) — a aba Chat nunca fez essa chamada e continua sem fazer;</li>
+<li>o filtro é por <code>id</code>, depois do filtro por <code>kind</code> já existente — não muda o
+que a lista É, só o que ela EXCLUI.</li>
+</ul>
+<p><strong>Decisão deliberada de escopo:</strong> isto cobre só a execução VIGENTE, não
+execuções ANTIGAS já encerradas (<code>execution.activated</code> gravado numa sessão
+que hoje está <code>closed</code>). Calcular isso pediria o backend anotar, por sessão,
+se ela tem o evento gravado — mudança no repositório e no endpoint de
+listagem, para um caso residual: uma sessão de execução ANTIGA aparece com o
+badge <code>closed</code>, o que já sinaliza &quot;não é uma ideação ativa&quot; de um jeito bem
+menos ambíguo do que a vigente (que aparecia <code>active</code>, indistinguível de uma
+ideação em andamento). Se isso voltar a confundir na prática, a saída é o
+endpoint de listagem devolver o sinal por sessão — não um <code>filter</code> a mais no
+front por sessão antiga.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/ProjectSessionsTab.tsx</code>
+(<code>ProjectSessionsTab</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/ProjectSessionsTab.test.tsx</code> — a vigente
+some da lista Criativo com sessões normais ao lado, a aba Chat não chama a
+busca de execução vigente, e sem execução vigente (<code>null</code>) a lista aparece
+inteira</li>
+<li><strong>Origem:</strong> achado de investigação de código + teste ao vivo — sessão real
+com execução ativa aparecendo misturada na aba Criativo</li>
+</ul>
+<h3 id="rn-147">RN-147 — O cabeçalho do grupo colapsado mostra o ícone do agente, não só o nome</h3>
+<p>O <code>Disclosure</code> de <code>timelineAgrupada</code> (<a href="#rn-138">RN-138</a>) recebia só a STRING
+do nome em <code>titulo</code> — cada mensagem expandida já tem um avatar (<code>.avatar</code> +
+ícone), e o cabeçalho colapsado perdia essa pista visual justamente onde ela
+mais ajuda a escanear o fio.</p>
+<p><code>AvatarDoAgente</code> reusa a MESMA caixa <code>.avatar</code> das mensagens expandidas, mas
+o ícone escolhido é o do ROSTER (<code>AGENTS[id].icon</code>) — a mesma fonte que já
+identifica &quot;quem está falando&quot; no indicador de streaming (<code>agenteExibido.icon</code>,
+<a href="#rn-131">RN-131</a>) — e não o ícone por TIPO de evento que cada entrada
+expandida usa (<code>ModelIcon</code> em <code>agent.response</code>, <code>StackIcon</code> em
+<code>backlog.*_created</code>, <code>AlertCircleIcon</code> em <code>agent.error</code>). Um grupo colapsado
+pode misturar esses tipos de entrada de um mesmo agente; o cabeçalho
+representa o AGENTE, não a última entrada dele, e só o ícone do roster é
+estável para isso. Sem <code>id</code>, ou agente fora do roster, degrada para
+<code>ModelIcon</code> — nunca para uma caixa vazia.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code> (<code>AvatarDoAgente</code>,
+<code>timelineAgrupada</code>), <code>apps/web/src/routes/SessionPage.module.css</code>
+(<code>.agentGroupTitulo</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.arquiteto-modelo-icone.test.tsx</code>,
+describe &quot;problema 3&quot; — o cabeçalho colapsado tem o PATH do ícone do PO
+(<code>UserIcon</code>), não só um SVG decorativo genérico</li>
+<li><strong>Origem:</strong> investigação de código — <code>Disclosure</code> já aceitava <code>ReactNode</code>
+em <code>titulo</code>; faltava passar o avatar junto do nome</li>
+</ul>
+<h3 id="rn-148">RN-148 — Histórias com promoção pendente ao mesmo tempo viram carrossel, não N cards</h3>
+<p>O PO cria histórias uma a uma, e cada <code>backlog.story_promotion_proposed</code>
+(<a href="#rn-126">RN-126</a>) virava um card avulso na timeline — numa leva de várias
+histórias, isso empilhava N cards idênticos disputando o mesmo espaço,
+misturados com o resto da narração.</p>
+<p>Uma <strong>leva</strong> é o conjunto de propostas de promoção AINDA PENDENTES na
+sessão, avaliado a cada render — não &quot;criadas em sequência sem
+interrupção&quot;. O critério é o MESMO que cada card avulso já usava sozinho
+para decidir se virou card acionável ou divisor (nenhum
+<code>backlog.story_transitioned</code>/<code>backlog.story_promotion_returned</code> posterior
+com o mesmo <code>storyId</code>), só que olhado de uma vez para a sessão inteira:</p>
+<ul>
+<li><strong>0 ou 1 pendente:</strong> nada muda — card avulso de sempre (a degradação é
+deliberada: um carrossel de um slide só não ganha nada virando carrossel).</li>
+<li><strong>2+ pendentes ao mesmo tempo:</strong> viram UM <code>Carousel</code> (novo no design
+system, <code>apps/web/src/components/ui/Carousel.tsx</code>), inserido na posição
+da PRIMEIRA proposta ainda pendente; as demais somem como card
+individual — cada uma vira um SLIDE dele. Cada slide mostra a mesma
+frase do card avulso (&quot;história … pronta, aguardando sua promoção&quot;), um
+resumo/RF se o payload trouxer (hoje não traz — ver abaixo), e os botões
+Promover/Devolver daquela história específica, chamando os MESMOS
+<code>promoteStories</code>/<code>returnStory</code> de sempre.</li>
+<li><strong>&quot;Aprovar todas&quot;</strong> no cabeçalho do carrossel chama <code>promoteStories</code> com
+os ids de TODAS as pendentes numa chamada só — o endpoint já era lote
+(<code>promoteStories(projectId, storyIds[])</code>, RN-048), então não houve mudança
+de contrato nenhuma, só de quem monta a lista.</li>
+<li>Uma história resolvida (promovida ou devolvida) enquanto o carrossel está
+aberto sai da leva no próximo render (a query de eventos é invalidada nas
+duas ações) — se sobrar só 1 pendente, o carrossel se desfaz sozinho e o
+card volta a ser avulso.</li>
+</ul>
+<p><code>resumo</code>/RF no slide é campo PRONTO, não usado: <code>CreateStoryUseCase</code> hoje só
+grava <code>storyId</code>/<code>epicId</code>/<code>title</code> no payload de <code>backlog.story_promotion_proposed</code>
+— sem descrição nem requisitos funcionais. O slide já sabe exibir
+<code>description</code>/<code>rf</code> se o payload um dia carregar (degrada pro título sozinho
+até lá); estender o payload ficou fora desta entrega, por não ter sido
+pedido.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/components/ui/Carousel.tsx</code> (componente novo,
+navegação genérica), <code>apps/web/src/routes/SessionPage.tsx</code>
+(<code>promocoesPendentes</code>, <code>ehLevaDeHistorias</code>, <code>StorySlide</code>,
+<code>handlePromoteAll</code>), <code>apps/web/src/routes/SessionPage.module.css</code>
+(<code>.storySlide</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/components/ui/Carousel.test.tsx</code> (navegação,
+ARIA, só o slide atual montado, índice clampado quando a lista encolhe),
+<code>apps/web/src/routes/SessionPage.carrossel-historias.test.tsx</code> (3+
+pendentes viram carrossel; &quot;Aprovar todas&quot; manda o lote inteiro; promoção
+e devolução unitárias continuam funcionando a partir de um slide
+navegado; 1 pendente degrada pro card simples; história resolvida sai da
+leva e o carrossel recalcula a contagem)</li>
+<li><strong>Origem:</strong> pedido do usuário — histórias produzidas em lote pelo PO
+ficavam difíceis de decidir uma por uma no fio</li>
+</ul>
+<h3 id="rn-152">RN-152 — A branch de uma task diz de qual dev agent e módulo ela é, no dropdown da aba Code</h3>
+<p><code>CodeBranchPicker</code> já listava toda branch do repositório, inclusive as dos
+dev agents (<code>feature/task-XXXXXXXX</code>, <code>Engine.Dev.AgentIo</code>), mas sem pista
+nenhuma de quem a criou — só o nome cru. <code>ReadProjectCodeUseCase.branches</code>
+resolve isso sem chamada a mais ao provider de git: os 8 chars depois de
+<code>feature/task-</code> são exatamente o primeiro grupo hifenizado do uuid da task
+(<code>&quot;feature/task-&quot; &lt;&gt; String.slice(to_string(row.task_id), 0, 8)</code>, não um
+substring arbitrário), então casam contra <code>TaskRepository .findByProjectAndIdPrefix</code> (join por PROJETO, pra prefixo de 8 chars nunca
+vazar task de outro projeto). O <code>assignedTo</code> da task é o agent_id
+(<code>dev-&lt;modulo&gt;</code>/<code>dev-&lt;modulo&gt;-2</code>, RN-087); o módulo é resolvido comparando
+contra o <code>module_map</code> VIGENTE do projeto pelas MESMAS funções que o geraram
+(<code>devAgentId</code>/<code>extraDevAgentId</code> em <code>activate-execution.use-case.ts</code>) — nunca
+por regex reversa, que degeneraria em ambiguidade pra nome de módulo com
+caractere especial.</p>
+<p><code>producedBy: { agentId, moduleId } | null</code> é degradação honesta, do mesmo
+jeito que <code>ahead</code>/<code>behind</code> já são: <code>null</code> pra branch sem o padrão (manual do
+usuário, ou <code>main</code>/<code>dev</code>/<code>qa</code>), e também quando o padrão bate mas a
+task/módulo não são mais resolvíveis (task apagada, módulo removido do mapa
+vigente) — nunca um valor inventado. No dropdown, cada branch produzida por
+um dev ganha o ícone e a cor do agente (<code>AGENTS</code>/<code>agents.ts</code>, RN-087),
+reaproveitando a MESMA degradação que <code>apps/web/src/lib/agent-status.ts</code> já
+usa pro roster ao vivo: módulo sem chave fixa em <code>AGENTS</code> herda ícone/cor de
+<code>dev-backend</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/api/src/application/use-cases/git/read-project-code.use-case.ts</code>
+(<code>branches</code>/<code>producedBy</code>/<code>moduloDoAgente</code>),
+<code>apps/api/src/application/ports/backlog-repository.port.ts</code>
+(<code>TaskRepository.findByProjectAndIdPrefix</code>),
+<code>apps/api/src/infrastructure/persistence/drizzle/backlog.repository.ts</code>,
+<code>apps/api/src/interfaces/http/git/dto/code.response.dto.ts</code>
+(<code>CodeBranchProducedByResponseDto</code>), <code>apps/web/src/lib/api-types.ts</code>
+(<code>CodeBranchProducedBy</code>), <code>apps/web/src/routes/code/CodeBranchPicker.tsx</code>
+(<code>IconeDoAgenteProdutor</code>/<code>defDoAgenteProdutor</code>)</li>
+<li><strong>Teste:</strong>
+<code>apps/api/test/application/use-cases/git/read-project-code.use-case.spec.ts</code>
+(describe &quot;producedBy da branch de task&quot; — task resolvida com módulo e com
+o agente extra <code>-2</code>, branch fora do padrão nunca ganha <code>producedBy</code> mesmo
+com task de prefixo casável, prefixo sem task no projeto, módulo removido
+do mapa vigente e task sem dono ainda degradam pra <code>null</code>),
+<code>apps/web/src/routes/code/CodeBranchPicker.test.tsx</code> (branch de task mostra
+o selo do dev agent dono; branch sem padrão não ganha selo nenhum)</li>
+<li><strong>Origem:</strong> pedido do usuário — nenhuma pista visual de quem criou a
+branch no dropdown rico da FASE 26b</li>
+</ul>
+<h3 id="rn-156">RN-156 — indicador de espera de 5s tem texto fixo, sem interpolar o agente</h3>
+<p>O indicador que aparece depois de 5s sem resposta (<code>pensandoVisivel</code>) mostra
+a frase fixa &quot;Reunindo informações...&quot;, sem o nome do agente interpolado —
+substitui o texto anterior &quot;{Agente} está escrevendo…&quot;. O nome do agente já
+é visível no cabeçalho assim que o streaming de texto real começa; repeti-lo
+no indicador de espera não ajudava a leitura.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.pista-e-status.test.tsx</code>,
+<code>apps/web/src/routes/SessionPage.ordenacao-e-avisos.test.tsx</code></li>
+<li><strong>Origem:</strong> achado de PR #286 — o texto anterior nomeava um agente que já
+estava visível no cabeçalho</li>
+</ul>
+<h3 id="rn-157">RN-157 — criação de épico/história pelo PO vira aviso compacto, não bolha completa</h3>
+<p>Os eventos <code>backlog.epic_created</code>/<code>backlog.story_created</code> deixam de
+renderizar como bolha completa de mensagem (<code>.message</code>/<code>.bubble</code>, avatar de
+32px — o mesmo peso visual de uma resposta de agente de verdade) e passam a
+usar o mesmo formato de aviso compacto que <code>.handoffDivider</code>/<code>.handoffPill</code>
+já usa para a passagem de bastão: linha centralizada com filete horizontal e
+pílula compacta, mantendo o link &quot;Ver no Backlog&quot;. <code>agentId</code> continua
+populado no <code>TimelineEntry</code> — ao contrário do divisor de handoff, isto não
+marca uma transição entre agentes, é uma ação do PO dentro do próprio turno
+dele, e segue elegível ao colapso por agente (<a href="#rn-138">RN-138</a>).</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.handoff-inline-e-links.test.tsx</code>,
+<code>apps/web/src/routes/SessionPage.ordenacao-e-avisos.test.tsx</code></li>
+<li><strong>Origem:</strong> achado de PR #286 — a bolha completa tinha peso visual igual a
+uma resposta de agente de verdade, para uma ação de metadado do PO</li>
+</ul>
+<h3 id="rn-158">RN-158 — Markdown leve com highlight no chat</h3>
+<p><code>agent.response</code> no fio da Sessão renderiza um subconjunto de Markdown
+(negrito <code>**texto**</code>, itálico <code>*texto*</code>/<code>_texto_</code>, código inline
+<code>`texto`</code>, cabeçalho <code>#</code>/<code>##</code>/<code>###</code>, lista <code>-</code>/<code>1.</code>, link
+<code>[texto](url)</code> e fence de código <code>```linguagem</code>), via parser
+próprio por regex (<code>apps/web/src/lib/markdown.ts</code>), sem dependência nova.
+<code>chat.message</code> (texto digitado pelo usuário) permanece literal — Markdown
+só se aplica à SAÍDA de um agente/LLM, nunca à entrada humana.</p>
+<p>Segurança: o parser nunca produz HTML — devolve uma árvore de dados que
+<code>MarkdownMessage.tsx</code> converte em elementos React diretamente (nunca
+<code>dangerouslySetInnerHTML</code>). Um link só vira <code>&lt;a href&gt;</code> clicável quando o
+esquema da URL é <code>http</code>, <code>https</code> ou relativo (<code>/...</code>, <code>#...</code>); qualquer
+outro esquema (<code>javascript:</code>, <code>data:</code>, etc.) degrada para o texto do link,
+nunca para um <code>href</code> executável.</p>
+<p>Código dentro de um fence ganha realce por token, reusando
+<code>highlightLine</code>/<code>highlightFile</code> de <code>apps/web/src/routes/code/highlight.ts</code>
+— a mesma função que já colore a aba Code. <code>sh</code>/<code>bash</code> ganharam
+vocabulário próprio de palavras-chave de shell (antes só tinham o
+comentário de linha <code>#</code> mapeado e caíam no fallback de JS). Fences
+<code>```sh</code>/<code>```bash</code> ganham a estética visual de terminal
+(prompt <code>$</code> por linha de comando), consistente com o <code>$ comando</code> que
+<code>ApprovalCard</code> já usa para a ação <code>terminal</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/markdown.ts</code>,
+<code>apps/web/src/components/ui/MarkdownMessage.tsx</code>,
+<code>apps/web/src/routes/code/highlight.ts</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/markdown.test.ts</code>,
+<code>apps/web/src/components/ui/MarkdownMessage.test.tsx</code>,
+<code>apps/web/src/routes/code/highlight.test.ts</code>,
+<code>apps/web/src/routes/SessionPage.markdown-resposta.test.tsx</code></li>
+<li><strong>Origem:</strong> PR #288 — respostas de agente com listas, código e links
+chegavam como texto cru no fio, sem estrutura nenhuma</li>
+</ul>
+<h3 id="rn-159">RN-159 — Artefatos Gerados agrupados por agente</h3>
+<p>O painel &quot;Artefatos gerados&quot; da Sessão (<code>ContextAside</code> em
+<code>SessionPage.tsx</code>) lista PR de dev (<code>pr_open</code>), PR de ADR do Arquiteto
+(<code>open_adr_pr</code>) e épico/história criados pelo PO
+(<code>backlog.epic_created</code>/<code>backlog.story_created</code>), agrupados por
+<code>agentId</code> — quem gerou cada artefato — com o mesmo padrão de
+<code>Disclosure</code> colapsável da <a href="#rn-138">RN-138</a> (nome do agente + contagem,
+expansível pro título de cada artefato).</p>
+<p>Cada artefato navega pro lugar onde ele vive: PR (dev ou ADR) abre a URL
+real (<code>executionResult.pullRequestUrl</code>, mesmo campo que
+<code>ProjectOverviewTab.tsx</code> já lê para PR de ADR); épico/história navega
+para <code>/projects/:projectId?tab=backlog</code> (mesmo padrão <code>Link</code> já usado nos
+avisos compactos do PO no fio principal, <a href="#rn-124">RN-124</a>/
+<a href="#rn-157">RN-157</a>). PR ainda sem <code>pullRequestUrl</code> (execução pendente)
+aparece no painel sem virar link clicável.</p>
+<p>Fora de escopo, por decisão registrada em comentário no código
+(<code>ContextAside</code> em <code>SessionPage.tsx</code>): module_map/C4 — são estado
+VIGENTE do projeto (uma versão corrente, sobrescrita a cada geração), não
+um artefato datado por SESSÃO como PR/épico/história; a aba Visão Geral
+(<code>ProjectOverviewTab.tsx</code>) já é o lugar deles hoje, sem âncora própria —
+endereçar isso é fora do escopo desta entrega.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code> (<code>ContextAside</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.artefatos-gerados.test.tsx</code></li>
+<li><strong>Origem:</strong> PR #288 — o painel não distinguia quem gerou cada artefato
+nem cobria PR de ADR e épico/história, só PR de dev</li>
+</ul>
+<h3 id="rn-160">RN-160 — &quot;Confirmar arquitetura pronta&quot; exige pelo menos 1 história promovida</h3>
+<p>O botão &quot;Confirmar arquitetura pronta&quot; (handoff Arquiteto→Dev Lead, via
+<code>confirmArchitectureReadiness</code>) nasce <code>disabled</code> até existir no backlog do
+projeto pelo menos 1 história com status diferente de <code>draft</code> — ou seja, já
+promovida por <code>PromoteStoriesUseCase</code>/<code>TransitionStoryUseCase</code> (<a href="../api.html#rn-048">RN-048</a>),
+não bastando ter regra de negócio capturada. <code>in_progress</code>/<code>done</code> também
+contam, porque só se chega lá tendo passado por <code>ready</code>. A fonte é a MESMA
+que a aba Backlog já usa (<code>useBacklog</code>, <code>ProjectBacklogTab.tsx</code>, mesma
+queryKey <code>['backlog', projectId]</code>) — sem round-trip novo. Enquanto não há
+história promovida, o botão mostra a dica em <code>title</code> explicando o motivo.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code> (<code>hasPromotedStory</code>,
+render do botão)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.readiness-arquitetura-exige-historia.test.tsx</code></li>
+<li><strong>Origem:</strong> pedido do usuário — o botão de handoff Arquiteto→Dev Lead
+não tinha gate nenhum</li>
+</ul>
+<p>Só valia no CLIENTE: uma chamada HTTP direta ignorava a regra. Fechado por
+<a href="../api.html#rn-404">RN-404</a> (ADR 0094), que revalida no backend.</p>
+<h3 id="rn-161">RN-161 — Aceitar o handoff pro Dev Lead encadeia a ativação de execução quando o papel efetivo já autoriza</h3>
+<blockquote>
+<p><strong>Revisada pela <a href="../api.html#rn-677">RN-677</a> (ADR 0194, decisão do
+dono em 01/10):</strong> aceitar o handoff ao Dev Lead deixou de encadear a ativação
+da execução, para TODO papel — o aceite só o traz para PLANEJAR, e quem ativa
+é a APROVAÇÃO do plano dele (<code>propose_execution_plan</code>). O texto abaixo
+descreve a fusão como ela era.</p>
+</blockquote>
+<p><code>handleAcceptHandoff</code> (<code>SessionPage.tsx</code>) encadeia <code>activateExecution</code>
+automaticamente quando <code>toAgent === 'dev-lead'</code> E o papel EFETIVO de quem
+aceita — lido do mesmo <code>useCurrentWorkspaceWithRole()</code> que já autoriza o
+&quot;Auto mode&quot; (<a href="../api.html#rn-153">RN-153</a>) e as telas de Aprovações/Configurações — é
+<code>owner</code> ou <code>maintainer</code>. Para <code>developer</code> (ou papel ainda não resolvido), o
+fluxo atual continua intocado: aceitar não ativa nada, e &quot;Ativar execução&quot;
+permanece como segundo botão. A checagem é só no cliente —
+<code>POST .../execution/activate</code> continua exigindo <code>maintainer</code> no backend
+(<a href="#rn-137">RN-137</a>); a fusão só evita um clique redundante para quem já
+tinha os dois papéis. Reusa a MESMA <code>handleActivateExecution</code> que o botão
+&quot;Ativar execução&quot; já chama, que trata o próprio erro (toast +
+<code>mensagemDaApi</code>) e nunca relança — evita que um erro de ativação tardio
+seja reportado como &quot;não foi possível aceitar o handoff&quot;.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code>
+(<code>podeFundirHandoffComExecucao</code>, <code>handleAcceptHandoff</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.handoff-devlead-e-colapso.test.tsx</code>,
+describe &quot;problema 4&quot;</li>
+<li><strong>Decisão arquitetural:</strong> <a href="../../adr/0069-fusao-condicional-do-handoff-com-a-ativacao-de-execucao.html">ADR 0069</a></li>
+<li><strong>Origem:</strong> pedido do usuário (desenho aprovado)</li>
+</ul>
+<h3 id="rn-172">RN-172 — Handoff e aprovação são o DESFECHO do turno</h3>
+<p>No fio da sessão, o <strong>handoff oferecido</strong> e o <strong>card de aprovação</strong> aparecem
+DEPOIS da última fala do turno em que nasceram — nunca no meio dele.</p>
+<p>Isto <strong>não corrige ordenação</strong>: a RN-155 continua valendo inteira, e a
+timeline segue ordenada pelo <code>seq</code> do event log. O que o log registra é a
+verdade: <code>po_server.ex</code> (<code>run_turn/2</code>) emite, na MESMA iteração, o
+<code>agent.response</code> do turno, DEPOIS o <code>tool.call</code> de <code>offer_handoff</code> (que grava
+<code>handoff.offered</code>) e SÓ ENTÃO recursa para o <code>agent.response</code> de fechamento.
+O <code>seq</code> do handoff é honestamente menor que o da última fala. O mesmo vale
+para <code>proposed_action.created</code>, que nasce no meio do turno enquanto o agente
+ainda tem o que dizer. Mostrar &quot;passou o bastão&quot; ou &quot;aprove isto&quot; no meio da
+conversa é leitura errada de um dado certo — então a regra é de
+APRESENTAÇÃO, aplicada numa passada separada e explícita
+(<code>afundarDesfechos</code>), depois do <code>sort</code> por <code>seq</code>, e não escondida num
+comparador com três termos.</p>
+<p>Turnos diferentes <strong>nunca se misturam</strong>. Um desfecho desce até o fim do
+trecho logo abaixo dele e para na primeira entrada que falhe qualquer uma das
+três condições:</p>
+<ol>
+<li><strong>mesmo turno</strong> — turno é o <code>seq</code> da última ABERTURA anterior à entrada, e
+abertura é evento de ator <code>user</code> (<code>chat.message</code>, <code>agent.activated</code>,
+promoção/devolução de história). Protege o caso em que a fronteira entre
+dois turnos não tem entrada VISÍVEL nenhuma: <code>agent.activated</code> abre turno e
+não vira item do fio.</li>
+<li><strong>mesmo autor</strong> — em sessão de EXECUÇÃO vários agentes escrevem sem que o
+usuário fale uma única vez, e todos ficam no mesmo turno; o desfecho de um
+não pode atravessar a fala de outro.</li>
+<li><strong>não é desfecho</strong> — dois desfechos seguidos preservam a ordem entre si (o
+<code>handoff.offered</code> do Infra antes do Dev Lead, na mesma confirmação).</li>
+</ol>
+<p>Ator <code>system</code> NÃO abre turno: é ruído de infraestrutura no meio do fio, não
+decisão de quem conversa.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code>
+(<code>aberturasDeTurno</code>, <code>turnoDoSeq</code>, <code>afundarDesfechos</code>, e os campos
+<code>autor</code>/<code>turno</code>/<code>desfecho</code> de <code>TimelineEntry</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.ordenacao-e-avisos.test.tsx</code>
+(describes &quot;RN-172 — turno e desfecho (unidade)&quot; e &quot;RN-172 — a sequência
+REAL do engine, renderizada&quot;)</li>
+<li><strong>Origem:</strong> uso real no <code>exp001</code> — &quot;a passagem de bastão do PO para o
+arquiteto está aparecendo acima da última mensagem do PO&quot; e &quot;a mensagem de
+aprovação apareceu acima do chat do arquiteto até ele finalizar a resposta&quot;</li>
+</ul>
+<hr>
+<h3 id="rn-173">RN-173 — O fio acompanha tudo que cresce, e só quem já estava no fim</h3>
+<p>O chat rola para o fim quando o conteúdo cresce — <strong>e não só quando chega
+evento novo</strong>. As duas fontes da timeline são queries SEPARADAS (<code>events</code> e
+<code>actions</code>), e a altura ainda muda sem nenhuma das duas: abrir/fechar um
+<code>Disclosure</code> (colapso por agente da RN-138, &quot;Detalhes&quot; do card de aprovação),
+Markdown reflowando, diagrama renderizando depois. Por isso são dois
+mecanismos: as dependências do efeito cobrem o que o React sabe
+(<code>events.length</code>, <code>actions.length</code>, <code>streamingText</code>), e um <code>ResizeObserver</code>
+sobre o CONTEÚDO do fio cobre o que só o layout sabe.</p>
+<p>A guarda continua <strong>inalterada e deliberada</strong>: só rola quem já está a menos de
+120px do fim. Quem subiu para reler o histórico não é arrastado — o fio segue
+a conversa, não sequestra a leitura.</p>
+<p>No mesmo fio, o card de aprovação deixa de ocupar os 780px inteiros da
+coluna: ganha teto de 560px e fica centralizado, como
+<code>.handoffCard</code>/<code>.handoffDivider</code> já são. Recuar 45px como as bolhas seria
+errado — o card não é fala de ninguém, é uma decisão pedida ao usuário. A
+fila da aba Aprovações não muda: lá o card DEVE preencher a coluna do grid.
+Desde a AT-322 o card é UM só em toda superfície e preenche o contêiner —
+quem aplica o teto e a centralização no fio é o contêiner dele
+(<code>.acaoNoFio</code>), não mais uma variante do card.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code> (<code>acompanharOFim</code> e os dois
+efeitos que o chamam); <code>apps/web/src/components/ApprovalCard.module.css</code>
+(<code>.card</code>) e <code>apps/web/src/routes/SessionPage.module.css</code> (<code>.acaoNoFio</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.ordenacao-e-avisos.test.tsx</code>
+(describe &quot;RN-173 — o fio acompanha o que cresce&quot;, com o caso de o usuário
+ter rolado para cima)</li>
+<li><strong>Origem:</strong> uso real no <code>exp001</code> — &quot;o scroll do chat deve ficar sempre no
+final seguindo o chat&quot; e &quot;aprovação mal diagramado deve ficar ao centro&quot;</li>
+</ul>
+<h3 id="rn-174">RN-174 — Ação que dispara turno de agente arma o indicador do fio</h3>
+<p>O indicador de &quot;o agente está trabalhando&quot; (os três pontinhos depois de 5s,
+<a href="#rn-131">RN-131</a>/<a href="#rn-156">RN-156</a>) só aparece enquanto <code>streaming</code> ou
+<code>statusAgent</code> valem, e eles eram ligados em três lugares: o composer
+(<code>handleSend</code>), as confirmações de prontidão e o canal Phoenix. <strong>Toda ação da
+tela que dispara um turno síncrono no engine passa a armá-lo também.</strong></p>
+<p>São duas, e nenhuma delas é o composer:</p>
+<ol>
+<li><strong>Responder o formulário de perguntas estruturadas</strong> —
+<code>AnswerStructuredQuestionUseCase</code> reusa <code>SendAgentMessageUseCase</code>
+(<a href="../engine.html#rn-162">RN-162</a>), e a chamada só resolve depois do turno inteiro.</li>
+<li><strong>Devolver uma história ao PO</strong> — <code>ReturnStoryUseCase</code> chama <code>reviseStory</code>,
+que é <code>handle_call({:revise, …})</code> no <code>po_server</code>: a resposta HTTP espera o
+PO reescrever a história.</li>
+</ol>
+<p>O canal Phoenix não cobre o buraco, e é isso que torna a correção necessária
+em vez de redundante: quando ele ainda não terminou de conectar (ticket +
+join, <a href="parte-01.html#rn-108">RN-108</a>) o broadcast de <code>agent.status</code> &quot;working&quot; não tem
+ouvinte e se perde — a tela fica em silêncio absoluto por dezenas de segundos,
+que é indistinguível de &quot;não vai acontecer nada&quot;.</p>
+<p>O par é <code>iniciarTurnoDoAgente(agente)</code> <strong>antes</strong> do <code>await</code> (o <code>agent.status</code>
+do canal pode chegar primeiro, e sem o agente fixado o indicador nasceria sem
+saber quem fala) e <code>finalizarTurnoDoAgente()</code> no <code>finally</code> — nos DOIS
+caminhos, porque um erro que deixasse <code>streaming</code> ligado travaria o composer
+até o próximo turno. Resolver a chamada é sinal de fim de turno tão confiável
+quanto o <code>agent.done</code> do canal, e <code>finalizarTurnoDoAgente</code> é idempotente. O
+prazo de 5s não muda: turno que responde rápido continua sem mostrar nada.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/SessionPage.tsx</code> (<code>iniciarTurnoDoAgente</code>,
+<code>handleReturnStory</code>, <code>StructuredQuestionCard</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.perguntas-estruturadas.test.tsx</code>
+e <code>apps/web/src/routes/SessionPage.promocao-inline-e-volta.test.tsx</code>
+(describes de RN-174, com o caso de falha provando que o indicador não fica
+preso)</li>
+<li><strong>Origem:</strong> uso real no <code>exp001</code> — &quot;caso a web, api e engine demore mais de
+5s para ter uma resposta, a web deve apresentar uma animação no chat
+mostrando que o agente está pensando&quot;</li>
+</ul>
+<h3 id="rn-176">RN-176 — Tabela em Markdown no fio vira tabela de verdade</h3>
+<p>O Markdown leve do chat (<a href="#rn-158">RN-158</a>) passa a reconhecer <strong>tabela GFM</strong> e
+a renderizá-la com o <code>Table</code> do design system — o mesmo componente de
+Configurações, Gastos e Executores, não uma <code>&lt;table&gt;</code> própria: &quot;como o Brabo
+desenha uma tabela&quot; é uma decisão só. Antes, a tabela do Mapa de Módulos que o
+Arquiteto escreve na resposta saía como parágrafo com pipes literais.</p>
+<p>O que distingue tabela de prosa com <code>|</code> é a <strong>linha separadora</strong>, e ela é
+obrigatória como no GFM: sem ela o bloco continua sendo parágrafo, então
+&quot;escolha entre a | b | c&quot; não vira tabela por engano. O cabeçalho manda no
+número de colunas — linha curta ganha célula vazia, linha longa perde o
+excesso —, <code>\|</code> escapado fica dentro da célula, e o alinhamento sai dos
+dois-pontos do separador. Zero dependência nova: o parser continua sendo o
+próprio, por regex, e a árvore de dados continua virando elementos React
+diretos (nenhum <code>dangerouslySetInnerHTML</code>).</p>
+<p><strong>O artefato <code>artifact.module_map</code> continua FORA do fio</strong>, e a escolha é
+deliberada: ele é estado VIGENTE do projeto, não artefato datado por sessão —
+a mesma decisão já registrada na <a href="#rn-159">RN-159</a> —, e vive na Visão Geral.
+O que o usuário pediu foi a tabela <strong>dentro da mensagem</strong>, e é ela que passou
+a ser desenhada; a correção serve a QUALQUER agente que escreva uma tabela, e
+não só ao Mapa de Módulos.</p>
+<p>No balão, a tabela <strong>rola na horizontal</strong> em vez de espremer coluna: o fio tem
+~700px e um <code>module_map</code> tem 4 colunas.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/markdown.ts</code> (bloco <code>table</code>, <code>celulasDaLinha</code>),
+<code>apps/web/src/components/ui/MarkdownMessage.tsx</code> (<code>TabelaMarkdown</code>),
+<code>apps/web/src/components/ui/MarkdownMessage.module.css</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/markdown.test.ts</code> (describe &quot;tabela (RN-176)&quot;),
+<code>apps/web/src/components/ui/MarkdownMessage.test.tsx</code></li>
+<li><strong>Origem:</strong> uso real no <code>exp001</code> — &quot;a tabela dentro da mensagem do Mapa de
+Módulos do arquiteto tem que ficar bem estruturada em formato tabela,
+utilizar design system do próprio Brabo&quot;</li>
+</ul>
+<h3 id="rn-177">RN-177 — O log mostra tudo, e o histórico se recolhe por ORIGEM</h3>
+<p>O feed de atividade escondia seis tipos de evento (<code>tool.call</code>, <code>tool.result</code>,
+<code>agent.response</code>, <code>agent.delta</code>, <code>agent.status</code>, <code>context.compacted</code>) <strong>sem
+oferecer alternativa nenhuma</strong>: quem quisesse ver o que o agente e o harness
+trocam entre si tinha de abrir o banco. O filtro continua, e continua
+<strong>desligado por padrão</strong> — a razão dele não mudou (116 de 193 eventos reais
+eram desses tipos, ver <code>isMachineEvent</code>) —, mas virou <strong>escolha</strong>: um botão
+&quot;Eventos de máquina&quot; no mesmo trilho dos chips de tipo.</p>
+<p>Mostrar tudo só resolve metade: uma sessão longa vira uma lista que ninguém
+percorre. Por isso as <strong>5 mais recentes ficam abertas</strong> e o resto entra em
+colapsos por <strong>ORIGEM</strong> — uma classificação NOVA, que não substitui o
+<code>ActivityKind</code>: <code>kind</code> diz de que ASSUNTO o evento fala (commit, PR, permissão)
+e decide ícone e cor; <code>origem</code> diz de que CAMADA ele veio, e é ela que torna o
+histórico legível em punhados. As seis saem do dado que existe — <code>actor.kind</code> e
+o prefixo do <code>type</code> —, nunca de suposição:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>origem</th>
+<th>o que cai nela</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>harness</code></td>
+<td><code>tool.*</code>, <code>toolloop.*</code>, <code>agent.status</code>, <code>context.compacted</code></td>
+</tr>
+<tr>
+<td><code>llm</code></td>
+<td><code>agent.response</code>, <code>agent.delta</code>, <code>llm.*</code></td>
+</tr>
+<tr>
+<td><code>usuario</code></td>
+<td>qualquer evento com <code>actor.kind === 'user'</code></td>
+</tr>
+<tr>
+<td><code>sistema</code></td>
+<td>qualquer evento com <code>actor.kind === 'system'</code></td>
+</tr>
+<tr>
+<td><code>agente</code></td>
+<td><code>agent.*</code> restante, <code>handoff.*</code>, <code>delegation.*</code>, <code>chat.*</code> de agente</td>
+</tr>
+<tr>
+<td><code>eventos</code></td>
+<td>o event log de domínio (backlog, git, PR, artefato, bootstrap…)</td>
+</tr>
+</tbody>
+</table></div>
+<p>A <strong>precedência</strong> é o que torna a classificação previsível, e está na ordem dos
+<code>if</code>: mecanismo (<code>harness</code>, <code>llm</code>) vence ator, porque um <code>tool.call</code> é do
+harness qualquer que seja o ator; e ator vence prefixo de agente, porque
+<code>chat.message</code> existe dos dois lados e quem os distingue é quem falou. Tipo que
+ninguém previu cai em <code>eventos</code> — nunca some, nunca inventa categoria.</p>
+<p><strong>A mesma regra vale no FIO da sessão</strong>, com o eixo invertido: o fio é
+crescente (o mais novo junto do composer), então as 5 últimas entradas ficam
+abertas em baixo e o histórico recolhido fica no TOPO. O corte é sobre a lista
+já agrupada por agente (<a href="#rn-138">RN-138</a>) — quem conta é o que o usuário vê, e
+um colapso de doze mensagens é UMA entrada na tela. <strong>Revista no fio pela
+<a href="parte-05.html#rn-644">RN-644</a>:</strong> lá o corte conta só MENSAGENS, recua
+até a abertura do turno e o histórico é UM bloco cronológico, não grupos por
+origem (que punham a resposta acima da pergunta). O painel de log segue como
+descrito aqui.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/activity.ts:95</code> (<code>OrigemDeEvento</code>), <code>:125</code>
+(<code>origemDoEvento</code>), <code>:152</code> (<code>agruparPorOrigem</code>);
+<code>apps/web/src/components/ActivityFeed.tsx:34</code> (o corte de 5), <code>:66</code> (o
+toggle); <code>apps/web/src/routes/session-fio.tsx:119</code> (o corte do fio), <code>:291</code>
+(<code>dividirFio</code>); <code>apps/web/src/routes/SessionPage.tsx:516</code> (<code>fio</code>)
+toggle); <code>apps/web/src/routes/session-fio.tsx:119</code> (o corte do fio), <code>:291</code>
+(<code>dividirFio</code>); <code>apps/web/src/routes/SessionPage.tsx:516</code> (<code>fio</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/activity-origem.test.ts</code>,
+<code>apps/web/src/components/ActivityFeed.test.tsx</code> (describe &quot;ordem,
+agrupamento e o toggle de máquina&quot;),
+<code>apps/web/src/routes/SessionPage.painel-e-agrupamento.test.tsx</code> (describe
+&quot;RN-177&quot;)</li>
+<li><strong>Origem:</strong> uso real no <code>exp001</code> — &quot;em log de eventos mostrar também log do
+sistema, concentrar a mensagem em grupo, ou seja mantém as últimas 5
+mensagens mas abaixo vira o grupo de log de eventos, sistema, llm, harness,
+agente, usuário&quot;</li>
+</ul>
+<h3 id="rn-178">RN-178 — O painel da sessão lê do último para o primeiro, e a lista de regras pagina</h3>
+<p>As quatro seções do painel de contexto (regras de negócio, artefatos gerados,
+arquivos tocados e log de eventos) eram <strong>crescentes</strong>: abriam no começo da
+sessão. Numa sessão de milhares de eventos isso entrega a tela errada — quem
+abre o painel quer o que acabou de acontecer. As quatro passaram a ser
+<strong>decrescentes</strong>, inclusive dentro da árvore de backlog (<a href="#rn-179">RN-179</a>).</p>
+<p>Uma consequência que veio junto: o botão &quot;Carregar mais antigos&quot; do feed
+(<a href="parte-01.html#rn-099">RN-099</a>) <strong>mudou de lado</strong>. Ele ficava ACIMA da lista porque a lista
+era crescente e o passado estava em cima; com a ordem invertida o passado está
+no fim, e um botão no topo pediria para rolar na direção contrária à que ele
+carrega — o mesmo argumento de antes, com o sinal trocado.</p>
+<p>E <strong>acima de 5 regras a lista pagina</strong>, em vez de crescer sem fim: o painel tem
+a largura de uma coluna e uma sessão de ideação passa de vinte regras sem
+esforço. A página vigente é resolvida por <em>clamp</em> (<code>min(pagina, total - 1)</code>) e
+não por efeito de sincronização: uma regra nova chegando pelo poll alonga a
+lista, e um <code>useEffect</code> renderizaria uma vez com a página inválida antes de
+corrigir. Com 5 ou menos, o paginador <strong>não existe</strong> — controle que não pagina
+nada é ruído ocupando altura.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/ContextAside.tsx:110</code> (<code>REGRAS_POR_PAGINA</code>) e
+a ordenação das quatro seções no mesmo arquivo;
+<code>apps/web/src/components/ActivityFeed.tsx:98</code> (o <code>sort</code> decrescente)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.painel-e-agrupamento.test.tsx</code>
+(describe &quot;RN-178&quot;), <code>apps/web/src/components/ActivityFeed.test.tsx</code></li>
+<li><strong>Origem:</strong> uso real no <code>exp001</code> — &quot;mostrar log de eventos, arquivos tocados
+e regras de negócio sempre em ordem do último para o primeiro de acordo com
+a data&quot; e &quot;caso as regras de negócio ficar acima de 5, deve-se paginar&quot;</li>
+</ul>
+<h3 id="rn-179">RN-179 — O artefato do PO é uma ÁRVORE: épico → história → tarefa</h3>
+<p>O painel &quot;Artefatos gerados&quot; (<a href="#rn-159">RN-159</a>) listava épico e história lado
+a lado, planos, e <strong>ignorava <code>backlog.task_created</code></strong> — justamente o que um dev
+agent pega para trabalhar. Os três passaram a formar uma árvore, com o filho
+dentro de um colapso do pai, e as tarefas nascem FECHADAS: um épico com trinta
+tarefas tomaria o painel inteiro sem que ninguém tivesse pedido.</p>
+<p>O parentesco sai do <strong>vínculo que o evento já carrega</strong> —
+<code>backlog.story_created</code> grava <code>epicId</code>, <code>backlog.task_created</code> grava <code>storyId</code>
+—, nunca da vizinhança no log. Nó cujo pai não está entre os eventos carregados
+<strong>sobe para a raiz</strong> em vez de ser pendurado no épico mais próximo: inventar
+parentesco é pior que mostrar o nó solto, e uma tarefa cuja história ficou fora
+da janela é caso normal, não erro.</p>
+<p>Cada nível continua sendo um <strong>link</strong> para o Backlog, e o colapso dos filhos
+vem ABAIXO da linha em vez de dentro do cabeçalho — cabeçalho de <code>Disclosure</code> é
+<code>&lt;button&gt;</code>, e um <code>&lt;a&gt;</code> dentro de um <code>&lt;button&gt;</code> é HTML inválido e alvo de clique
+ambíguo. O contador do cabeçalho da seção conta a árvore INTEIRA, não só as
+raízes: dizer &quot;3&quot; com dezoito tarefas dentro seria o mesmo tipo de número que
+não corresponde a nada que a <a href="../api.html#rn-151">RN-151</a> tirou da sidebar.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/session-backlog-tree.ts:68</code>
+(<code>montarArvoreDeBacklog</code>), <code>apps/web/src/routes/ContextAside.tsx:210</code> (as
+raízes viram item), <code>:225</code> (a contagem da árvore)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.artefatos-gerados.test.tsx</code>
+(casos &quot;épico/história/tarefa do PO viram árvore&quot; e &quot;nó sem pai carregado
+aparece na raiz&quot;)</li>
+<li><strong>Origem:</strong> uso real no <code>exp001</code> — &quot;mostrar também as tarefas criadas no
+artefato do PO, mas abaixo do épico e ter opção de colapsar&quot;</li>
+</ul>
+<h3 id="rn-180">RN-180 — O painel diz o que NÃO está mostrando</h3>
+<p><code>useSessionEvents</code> busca <code>{ limit: 200, latest: true }</code>, e o painel de contexto
+lia esse recorte por prop. Consequência: numa sessão de milhares de eventos as
+quatro seções mostravam a cauda <strong>como se fosse a sessão inteira</strong> — regra de
+negócio capturada no começo da ideação simplesmente não existia, sem aviso
+nenhum.</p>
+<p>O painel passou a ler o mesmo histórico paginado que a aba de Atividade da
+Visão Geral já usava (<a href="parte-01.html#rn-099">RN-099</a>), com a <code>queryKey</code> da cauda
+compartilhada com o fio — <strong>zero requisição a mais</strong> no ciclo de poll
+(<a href="../api.html#rn-090">RN-090</a>/<a href="../api.html#rn-091">RN-091</a>). Duas coisas mudaram com isso:</p>
+<ol>
+<li><strong>O feed ganhou o pager que o componente sempre teve.</strong> As props
+<code>onLoadOlder</code>/<code>hasOlder</code>/<code>loadingOlder</code> são opcionais desde a RN-099 e este
+call site nunca as passava — era essa a razão de a sessão perder o começo em
+silêncio.</li>
+<li><strong>Uma nota conta quantos eventos faltam.</strong> O número sai de SUBTRAÇÃO sobre o
+<code>seq</code> (gapless e por sessão): <code>menor seq baixado − 1</code>. Nunca de uma
+requisição a mais — o mesmo mecanismo do &quot;+ N mais antigos&quot; do sino
+(<a href="../api.html#rn-100">RN-100</a>). Alcançando o começo da sessão a nota <strong>desaparece</strong>, em
+vez de afirmar um zero.</li>
+</ol>
+<p>As seções derivadas leem <code>baixados</code> (tudo que já veio) e não <code>events</code> (a janela
+de 100 do feed): elas não paginam item a item, e cortá-las na janela as faria
+mostrar MENOS do que mostravam antes desta mudança. É o mesmo botão que
+alimenta as duas.</p>
+<p>O <code>pausarPoll</code> desce por <code>useSessionEventHistory</code> até <code>useSessionEvents</code>, e não
+é detalhe: o intervalo de refetch é de cada OBSERVADOR, não da query. Um
+segundo observador da mesma chave com timer ligado ressuscitaria o poll que a
+tela pausa durante o turno — e com ele a duplicata visual da bolha em
+streaming.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/hooks.ts:262</code> (o <code>pausarPoll</code> do histórico),
+<code>:388</code> (<code>baixados</code>); <code>apps/web/src/routes/ContextAside.tsx:154</code>
+(<code>eventosAnteriores</code>) e o <code>ActivityFeed</code> com o pager, no fim do mesmo
+arquivo</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.painel-e-agrupamento.test.tsx</code>
+(describe &quot;RN-180&quot;)</li>
+<li><strong>Origem:</strong> revisão da própria rodada — o teto de 200 existia em silêncio nas
+quatro seções</li>
+</ul>
+<h3 id="rn-181">RN-181 — Delegação de área aparece no fio</h3>
+<p>Quando uma área (QA, Infra) delega a subagentes e consolida o veredito, os três
+desfechos que o lead registra — <code>delegation.completed</code>, <code>delegation.failed</code> e
+<code>delegation.dispensed</code> — só existiam no painel de log. Quem acompanhava a
+sessão via o gate abrir e fechar <strong>sem nenhum sinal</strong> de que houve uma segunda
+tentativa por baixo.</p>
+<p>Os três passaram a ser narrados no fio como <strong>aviso compacto</strong>, no formato da
+<a href="#rn-157">RN-157</a> — não bolha: é notificação do que aconteceu dentro da área,
+não uma fala. A FRASE sai de <code>classifyEvent</code>, a mesma do painel, porque duas
+redações do mesmo evento divergem na primeira mudança de payload; e ela já
+nomeia o subagente e a área, então o lead <strong>não</strong> é prefixado (produziria &quot;QA
+Lead QA Automação concluiu a delegação (qa)&quot;).</p>
+<p>O contrato externo da área <strong>não muda</strong> (ADR 0038): o fio não passa a endereçar
+subagente, só a narrar o que o lead já registrou. A origem da falha viaja junto
+em <code>delegation.failed</code>, pela mesma razão da <a href="../engine.html#rn-059">RN-059</a> — é ela que diz
+se o próximo passo é trocar a chave, esperar o provider ou abrir um bug.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/session-timeline-montagem.tsx:754</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.painel-e-agrupamento.test.tsx</code>
+(describe &quot;RN-181&quot;)</li>
+<li><strong>Origem:</strong> uso real no <code>exp001</code> — &quot;quando houver uma nova tentativa e
+consolidação de algum agente deve apresentar no chat&quot;</li>
+</ul>
+<h3 id="rn-182">RN-182 — O tema é escolhido, persistido e aplicado antes do primeiro paint</h3>
+<p>O tema claro existe em <code>design/tokens.css</code> desde o começo, sob
+<code>[data-theme='light']</code>, e <strong>nada em <code>apps/web</code> escrevia esse atributo</strong>: o
+único jeito de ver o tema claro era digitar o atributo no DevTools. Ele passa a
+ser alcançável.</p>
+<p>A preferência mora em <code>localStorage['brabo.theme']</code>, aceita <strong>só</strong> <code>'dark'</code> ou
+<code>'light'</code>, e o default é <code>dark</code> — o tema primário do design system. Quem aplica
+é <code>apps/web/public/theme-boot.js</code>, <strong>síncrono no <code>&lt;head&gt;</code> e antes do bundle</strong>:
+<code>data-theme</code> decide as cores de todo o <code>tokens.css</code>, e aplicá-lo depois da
+hidratação faria o usuário do tema claro ver um flash escuro a cada carga.</p>
+<p>É <strong>arquivo, não script inline</strong>, e a razão é a mesma que fez as fontes serem
+auto-hospedadas (ADR 0036): a imagem de produção serve sob <code>script-src 'self'</code>
+(<code>docker/web/nginx.conf</code>), sem <code>'unsafe-inline'</code> e sem nonce. Inline
+funcionaria em <code>pnpm dev:web</code> e seria <strong>bloqueado na imagem publicada</strong> — o
+pior modo de falha possível, porque só aparece depois do deploy.</p>
+<p>O caminho inteiro degrada em vez de quebrar: <code>localStorage</code> pode lançar (modo
+privado, storage bloqueado em iframe) e tema é preferência, não função; valor
+desconhecido cai no default em vez de virar um <code>data-theme</code> que o CSS não
+conhece e que renderizaria sem tema nenhum.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/public/theme-boot.js:41</code>,
+<code>apps/web/index.html:53</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/tema.test.ts</code> (describe &quot;contrato com o script
+de boot&quot;)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">0074</a></li>
+</ul>
+<h3 id="rn-183">RN-183 — A preferência de tema tem uma fonte, e o atributo do <code>&lt;html&gt;</code> é a verdade</h3>
+<p>Ler, gravar, alternar e observar o tema é <code>apps/web/src/lib/tema.ts</code> — o botão
+mora no shell e consome essa API, nunca escreve <code>data-theme</code> por conta própria.</p>
+<p>Três decisões dentro dela:</p>
+<ol>
+<li><strong><code>temaAtual()</code> lê o ATRIBUTO primeiro</strong>, e só depois o <code>localStorage</code> e o
+default. É o atributo que a tela está mostrando; cair na preferência gravada
+antes dele faria a UI afirmar um tema diferente do que se vê, no exato caso
+em que o boot falhou.</li>
+<li><strong><code>lerTemaSalvo()</code> devolve <code>null</code>, não o default</strong>, quando não há preferência
+gravada. Quem nunca escolheu pode um dia seguir o sistema operacional
+(<code>prefers-color-scheme</code>), e apagar essa distinção aqui tiraria a informação
+de quem decidir isso depois.</li>
+<li><strong><code>observarTema()</code> cobre o evento <code>storage</code></strong>, que o navegador dispara nas
+OUTRAS abas do mesmo origin. Sem isso dois separadores abertos ficariam em
+temas diferentes até o próximo reload.</li>
+</ol>
+<p>A chave e o default são repetidos em <code>public/theme-boot.js</code> porque ele roda
+antes do bundle e não pode importar nada. É a única duplicação possível de
+divergir em silêncio, e por isso o teste lê o arquivo de boot e reprova se os
+dois deixarem de bater.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/tema.ts:73</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/tema.test.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">0074</a></li>
+</ul>
+<h3 id="rn-184">RN-184 — Contraste é medido nos DOIS temas</h3>
+<p>Enquanto o tema claro era inalcançável (<a href="#rn-182">RN-182</a>), medir só o escuro
+era honesto: medir uma tela que ninguém pode abrir é medir uma intenção. Com o
+botão de tema, deixar de medir o claro passaria a esconder metade da superfície
+visível do produto — então os pares passam a ser cobrados nos dois temas, com o
+mesmo piso (4,5:1 para texto, 3:1 para elemento de interface).</p>
+<p>Para isso, <strong>seis tokens do tema claro mudaram de valor</strong>. O fundo mais
+exigente do claro é o <code>--code-bg</code> (papel, <code>#efe4d2</code>, a um passo das
+superfícies), e quem fecha contra ele fecha contra o resto: <code>--accent</code>
+3,56 → 4,81, <code>--warning</code> 3,15 → 4,98, <code>--success</code> 3,89 → 5,12, <code>--violet</code>
+4,16 → 4,95, <code>--text-muted</code> 2,76 → 5,17, e <code>--accent-hover</code> seguiu o accent um
+degrau abaixo. O tema escuro <strong>não mudou um valor</strong>, e a dívida conhecida dele
+seguiu travada pelos mesmos cinco números (3,89 / 3,10 / 3,88 / 3,88 / 4,41)
+até a <a href="parte-05.html#rn-640">RN-640</a> (ADR 0181), que a fechou com a
+paleta neutra e a transformou em piso.</p>
+<p>O <code>--text-muted</code> do claro não era dívida: a 2,40:1 sobre <code>--surface-2</code> ele
+reprovava até o piso de <strong>elemento de interface</strong>, que é o mais baixo que
+existe. Era defeito, e o tema claro não tem por que ser pior que o primário.</p>
+<ul>
+<li><strong>Onde:</strong> <code>design/tokens.css:208</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/contraste.test.ts</code>,
+<code>apps/web/src/design-contraste.test.ts</code>,
+<code>apps/web/test/design-contraste.test.ts</code></li>
+<li><strong>ADR:</strong> <a href="../../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">0074</a></li>
+</ul>
+<h3 id="rn-185">RN-185 — Os oito papéis de sintaxe, e o valor do handoff só entra medido</h3>
+<p>A paleta de realce era três tokens próprios (<code>--syntax-function</code>,
+<code>--syntax-comment</code>, <code>--syntax-operator</code>) e cinco reusos de semântico
+(<code>--accent</code>, <code>--warning</code>, <code>--violet</code>, <code>--success</code>, <code>--text-primary</code>). É esse
+reuso que fazia a paleta ser medida só no escuro: no claro os semânticos
+reprovavam contra o <code>--code-bg</code> de papel.</p>
+<p>Passa a ter os <strong>oito papéis</strong> do handoff, com o prefixo <code>--syntax-*</code> que o
+repositório já usa, e cada um com valor próprio por tema. Nomear os oito é o
+que permite o realce divergir do semântico no dia em que precisar.</p>
+<p><strong>Valor do handoff só entra quando a medição aprova.</strong> Contra o próprio
+<code>--code-bg</code> do handoff, cinco dos oito reprovam os 4,5:1 que texto de código
+exige — <code>--syn-cm</code> 4,09:1 no escuro e 2,32:1 no claro, <code>--syn-kw</code> 4,34:1,
+<code>--syn-str</code> 4,20:1, <code>--syn-fn</code> 4,14:1, <code>--syn-op</code> 4,00:1. Onde o handoff
+reprova, vale o número medido: é a mesma régua do ADR 0036 — a intenção do
+handoff vale, o mecanismo (ou o número) que quebra o produto, não.</p>
+<p>Os cinco semânticos continuam sendo quem pinta (<code>SyntaxTokens.module.css</code> não
+mudou nesta entrega) e por isso vão <strong>medidos ao lado</strong> dos oito: enquanto
+forem o pixel de verdade, é deles que o piso é cobrado. No tema claro cada
+papel tem hoje o MESMO número do semântico que o pinta, de propósito — duas
+fontes com números diferentes para o mesmo pixel divergiriam na primeira
+correção feita de um lado só.</p>
+<ul>
+<li><strong>Onde:</strong> <code>design/tokens.css:111</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/contraste.test.ts</code> (describe &quot;contraste — paleta
+de sintaxe sobre --code-bg&quot;)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0074-tema-alcancavel-e-o-boot-sob-csp.html">0074</a></li>
+</ul>
+<h3 id="rn-195">RN-195 — A sidebar recolhe para uma trilha de ícones, com a preferência persistida</h3>
+<p><code>Shell.tsx</code> tinha largura fixa (248px) e nenhum jeito de encolher. Passa a
+alternar entre 264px e 62px (tokens <code>--sidebar-w</code>/<code>--sidebar-w-collapsed</code>,
+removidos com o ADR 0241: hoje a largura é a do shadcn) com <code>transition: width .18s ease</code>. Recolhida, vira uma trilha vertical: um
+quadrado de iniciais por projeto (borda na cor de identidade,
+<a href="#rn-197">RN-197</a>) mais um ícone de Atividades; clicar num projeto na
+trilha reexpande a barra, abre aquele projeto e navega para ele.</p>
+<p>A preferência é do usuário e sobrevive a reload: <code>brabo.sidebar.collapsed</code>
+(<code>'1'</code>/<code>'0'</code>) em <code>apps/web/src/lib/sidebar-state.ts</code>. Ela é <strong>só manual</strong>
+(<code>colapsadoManual</code>): havia um segundo estado, <strong>automático</strong>
+(<code>autoColapsado</code>), somado por OR pela aba de Código, e ele foi removido pelo
+<a href="../../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126</a> — ver
+<a href="#rn-201">RN-201</a>. Nenhuma tela recolhe a sidebar por conta própria; o que se
+vê recolhido foi o usuário quem pediu, e está gravado.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/Shell.tsx:340-351</code> (estado e toggle),
+<code>apps/web/src/routes/Shell.module.css</code> (<code>.sidebar</code>, <code>.colapsado .sidebar</code>,
+<code>.trilha*</code>), <code>apps/web/src/lib/sidebar-state.ts</code>
+(<code>lerColapsado</code>/<code>gravarColapsado</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/sidebar-state.test.ts</code> (describe &quot;colapso&quot;),
+<code>apps/web/src/routes/Shell.test.tsx</code></li>
+<li><strong>Origem:</strong> PROGRAMA 28, Onda 2, frente B —
+<code>design_handoff_brabo/README.md</code> seção &quot;Navigation shell&quot;</li>
+</ul>
+<h3 id="rn-196">RN-196 — Projetos expansíveis revelam as abas do projeto, N ao mesmo tempo</h3>
+<p>Cada projeto na sidebar ganha um chevron: clicar nele expande a linha e
+revela a lista de abas daquele projeto (Visão geral, Executores, Criativo,
+Chat, Code, Backlog, Aprovações, Insights, Gastos, Configurações), cada uma
+um link para <code>/projects/$projectId?tab=&lt;chave&gt;</code>. Vários projetos podem ficar
+abertos ao mesmo tempo — o estado é um <code>Set&lt;string&gt;</code> de ids, persistido em
+<code>brabo.sidebar.open</code>.</p>
+<p>A lista de abas e os rótulos vêm de <code>ABAS_DO_PROJETO</code>
+(<code>apps/web/src/routes/project-tabs.ts</code>, dono da frente C, rodando em
+paralelo nesta mesma onda) — a sidebar só <strong>lê</strong> o array exportado, nunca
+reescreve nomes de aba. <strong>Suposição de shape</strong>, para conferir contra o que a
+frente C entregou: <code>AbaDoProjeto</code> tem <code>key: string</code>, <code>label: string</code> e
+<code>count?: (contagens: ContagensDeAba) =&gt; number | undefined</code>, com
+<code>ContagensDeAba = { promocoesPendentes, aprovacoesPendentes, hipotesesPendentes }</code>. A sidebar só consegue preencher
+<code>aprovacoesPendentes</code> de graça (<code>pendingApprovalsCount</code> já vem no resumo do
+dashboard, <a href="../api.html#rn-151">RN-151</a>); <code>promocoesPendentes</code>/<code>hipotesesPendentes</code>
+entram como <code>0</code> — calculá-los exigiria uma consulta nova POR PROJETO
+ABERTO na sidebar, a mesma classe de N+1 que a RN-090/091 fechou no
+dashboard. Os dois selos continuam corretos dentro da régua da própria
+<code>ProjectPage</code>; só o preview na sidebar é parcial, e é uma omissão
+deliberada, não um bug.</p>
+<p>O projeto da rota ATUAL sempre aparece expandido (<code>projetosAbertosEfetivo</code>),
+mesmo sem estar no <code>Set</code> persistido — abrir &quot;de graça&quot; pela rota não grava
+nada; só o clique explícito no chevron entra em <code>brabo.sidebar.open</code>.</p>
+<p><strong>Desde o <a href="../../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211</a>
+(AT-404) esta lista é a ÚNICA navegação do projeto:</strong> o trilho vertical saiu e
+ela recebeu tudo o que só ele tinha — os três grupos com cabeçalho, a aba
+ativa marcada, o <code>tablist</code> vertical nomeado pelo projeto, o teclado
+(<code>ArrowDown</code>/<code>ArrowUp</code>/<code>Home</code>/<code>End</code> com volta, atravessando grupos) e os CINCO
+contadores, cada um na sua aba e nunca somados. A omissão deliberada acima
+continua valendo para projeto FECHADO e para o projeto aberto fora da moldura
+(na Sessão, por exemplo): só Aprovações, do resumo. Com a moldura do projeto
+montada, os cinco números saem do MESMO hook que ela usa
+(<code>useContagensDoProjeto</code>), sem requisição nova. Recolhida, o quadrado do
+projeto aberto abre um flyout com as mesmas abas.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/Shell.tsx:564</code> (<code>projetosAbertosEfetivo</code>),
+<code>:504</code> (<code>useContagensDoProjeto</code>), <code>:519</code> (<code>irParaAba</code>), <code>:546</code>
+(<code>flyoutAberto</code>), <code>:243</code> (<code>contagensDoResumo</code>);
+<code>apps/web/src/routes/AbasDoProjeto.tsx:69</code> (<code>AbasDoProjeto</code>), <code>apps/web/src/routes/AbasDoProjeto.helpers.ts:11</code>
+(<code>itensDasAbas</code>), <code>apps/web/src/routes/AbasDoProjeto.tsx:86</code> (<code>aoTeclar</code>);
+<code>apps/web/src/lib/contagens-do-projeto.ts:22</code> (<code>useContagensDoProjeto</code>),
+<code>:70</code> (<code>publicarAbaAtiva</code>), <code>:86</code> (<code>pedirAba</code>);
+<code>apps/web/src/lib/sidebar-state.ts</code> (<code>lerProjetosAbertos</code>/<code>gravarProjetosAbertos</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/sidebar-state.test.ts</code> (describe &quot;conjuntos&quot;),
+<code>apps/web/src/routes/Shell.test.tsx</code> (describe &quot;Shell — abas do projeto
+aberto (ADR 0211)&quot;: as 12 abas, os cinco contadores separados, a ativa, o
+clique e a seta navegando, o flyout recolhido, a gaveta no telefone e o caso
+de falha — sem a moldura montada, só o número do resumo),
+<code>apps/web/src/routes/AbasDoProjeto.test.tsx</code> (grupos, ativa, contadores,
+teclado, roving tabindex, link por projeto), <code>apps/web/src/routes/project-tabs.test.tsx</code></li>
+<li><strong>Origem:</strong> PROGRAMA 28, Onda 2, frente B; ADR 0211 (AT-404)</li>
+</ul>
+<h3 id="rn-197">RN-197 — Duas cores de projeto, dois propósitos: identidade não é status</h3>
+<p>O handoff pede um &quot;ponto de cor do projeto&quot; na linha expandida e o mesmo
+princípio de cor na trilha recolhida. O produto já tinha um dot ali —
+<code>NavStatusDot</code> — mas ele é <strong>status</strong> (orçamento/atividade recente,
+derivado sem consulta própria de <code>useProjectsSummary</code>/<code>useProjectsStatus</code>,
+RN-039), não identidade: a cor dele MUDA com o tempo.</p>
+<p>Decisão, documentada em vez de resolvida: a linha expandida continua
+mostrando só <code>NavStatusDot</code> (é informação acionável; duplicar um segundo
+dot ao lado seria ruído). A cor de IDENTIDADE — estável por projeto, hash
+determinístico do id sobre uma paleta fixa de tokens (<code>corDoProjeto</code>,
+sem tabela nova, mesma ideia de <code>AGENTS[key].color</code>) — aparece só na
+trilha recolhida, como borda do quadrado de iniciais, que é onde não há
+espaço para os dois dots e onde a identidade (não o status) é o que ajuda a
+achar o projeto certo entre vários quadrados parecidos.</p>
+<p>Do mesmo jeito, o handoff pede &quot;badge com o total de últimas iterações&quot; no
+projeto; o produto usa <code>pendingApprovalsCount</code> desde a RN-151, que é
+posterior ao handoff e resolve um defeito real (um número que não
+correspondia a nada acionável ao clicar). Este badge <strong>não muda</strong> — RN-151
+continua valendo, e é o handoff que diverge aqui.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/sidebar-state.ts</code> (<code>corDoProjeto</code>),
+<code>apps/web/src/routes/Shell.tsx</code> (<code>NavStatusDot</code>, comentário da divergência)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/sidebar-state.test.ts</code> (describe &quot;corDoProjeto&quot;)</li>
+<li><strong>Origem:</strong> PROGRAMA 28, Onda 2, frente B — divergência entre
+<code>design_handoff_brabo/CHECKLIST-CONFRONTO.md</code> e RN-151</li>
+</ul>
+<h3 id="rn-199">RN-199 — Botão de tema no rodapé, funcional recolhido</h3>
+<p>O rodapé da sidebar ganha um botão sol/lua que consome a API de
+<code>apps/web/src/lib/tema.ts</code> da Onda 1/frente A (<code>temaAtual</code>,
+<code>alternarTema</code>, <code>observarTema</code>) sem reimplementar nada — só o BOTÃO é novo.
+Funciona recolhido (62px): o rótulo textual some, mas <code>aria-label</code>/<code>title</code>
+continuam descrevendo o tema atual e o clique continua alternando.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/Shell.tsx:130-148</code> (<code>BotaoDeTema</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/tema.test.ts</code> (a API, inalterada por esta RN)
+— <code>Shell.test.tsx</code> não duplica a suite do tema, só monta o Shell</li>
+<li><strong>Origem:</strong> PROGRAMA 28, Onda 2, frente B</li>
+</ul>
+<h3 id="rn-200">RN-200 — Só Projetos e Atividades como itens globais</h3>
+<p>Os dois itens sem rota do rodapé da nav (&quot;Chat global&quot;/&quot;Configurações&quot;,
+<code>title=&quot;em breve&quot;</code>) saem. O handoff é explícito: só Projetos e Atividades
+são itens GLOBAIS — tudo o mais é escopado a um projeto. &quot;Configurações&quot;
+continua existindo, como ABA de projeto (<a href="#rn-196">RN-196</a>) dentro da linha
+expandida — o que sai é o item solto sem destino.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/Shell.tsx</code> (o bloco <code>.globalNav</code>/
+<code>.inertNavItem</code> da FASE 17a foi removido, sem substituto global)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/Shell.test.tsx</code> (describe &quot;sem itens
+globais inertes&quot;)</li>
+<li><strong>Origem:</strong> PROGRAMA 28, Onda 2, frente B —
+<code>design_handoff_brabo/README.md</code> seção &quot;Navigation shell&quot;</li>
+</ul>
+<h3 id="rn-201">RN-201 — Projeto/aba ativos persistem entre páginas; o colapso da sidebar é SÓ do usuário</h3>
+<p>Duas chaves finais do handoff: <code>brabo.project</code> (o projeto ativo) e
+<code>brabo.tab</code> (a aba ativa) — gravadas quando o usuário clica um link de aba
+NA SIDEBAR (<code>LinhaDeAba</code>/o link de nome do projeto). <code>?tab=</code> na URL só vale
+como deep-link INICIAL (<code>project-tabs.ts</code>, FASE 24) — trocar de aba dentro
+de <code>ProjectPage.tsx</code> é estado local e não escreve na URL depois do
+primeiro load, então estas chaves são o único jeito de a preferência
+sobreviver entre uma navegação e outra. <strong>Esta metade nunca mudou.</strong></p>
+<p><strong>O auto-colapso da aba de Código SAIU (ADR 0126).</strong> Até aqui a aba de
+Código recolhia a sidebar sozinha para dar largura ao editor, sem gravar
+preferência: <code>AutoCollapseContext</code>/<code>useAutoCollapseSidebar</code> em
+<code>sidebar-state.ts</code>, registrados por <code>ProjectCodeTab.tsx</code> (a única
+chamadora) e somados por OR ao colapso manual dentro do <code>Shell</code>. O contexto,
+o hook, o estado <code>autoColapsado</code>, o <code>Provider</code> em torno de <code>&lt;Outlet /&gt;</code> e o
+<code>disabled</code> do botão de recolher — que existia só para proteger esse caminho
+— foram todos removidos.</p>
+<p>O motivo é estrutural: com o trilho vertical do projeto
+(<code>routes/ProjectRail.tsx</code>, removido no ADR 0211) sempre presente, manter o auto-colapso poria a
+trilha de ícones do Shell encostada no trilho do projeto — DOIS trilhos
+verticais adjacentes, permanentes, na aba mais pesada do produto.</p>
+<p>O que passa a valer: <strong>o colapso da sidebar é uma decisão do USUÁRIO, e só
+dele.</strong> Continua manual, continua persistido em <code>brabo.sidebar.collapsed</code>
+(<a href="#rn-195">RN-195</a>), e nenhuma tela recolhe a sidebar por conta própria.</p>
+<p><strong>O custo, aceito e declarado:</strong> a aba de Código passa a abrir com a sidebar
+EXPANDIDA (264px) + o trilho do projeto (180px) + o trilho do próprio
+<code>CodeShell</code> (48px) — 492px de moldura antes do primeiro caractere de código,
+MEDIDOS no navegador, contra ~110px antes (62px de sidebar recolhida + 48px
+do trilho do Código). Recolher manualmente continua possível e
+ainda produz trilho do Shell ao lado do trilho do projeto — a diferença é
+que agora quem escolheu foi o usuário, não o sistema.</p>
+<p><strong>Revisto pelo <a href="../../adr/0211-uma-navegacao-so-a-sidebar-absorve-o-trilho.html">ADR 0211</a>
+(AT-404):</strong> o trilho do projeto saiu, e a moldura da aba Código passou a
+<strong>312px</strong> com a sidebar expandida (264 + 48 do <code>CodeShell</code>) e <strong>110px</strong>
+recolhida (62 + 48) — sem trilho duplo em nenhum dos dois casos. O colapso
+continua só do usuário. A aba ativa que a sidebar marca vem da moldura do
+projeto (<code>publicarAbaAtiva</code>), não só de <code>brabo.tab</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/sidebar-state.ts:80-105</code>
+(<code>lerProjetoAtivo</code>/<code>gravarProjetoAtivo</code>, <code>lerAbaAtiva</code>/<code>gravarAbaAtiva</code>, e
+o comentário que registra a remoção), <code>apps/web/src/routes/Shell.tsx:366-369</code>
+(só <code>colapsadoManual</code> sobrou), <code>apps/web/src/routes/ProjectCodeTab.tsx</code>
+(nenhuma chamada de colapso)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/lib/sidebar-state.test.ts</code> (describe &quot;projeto e
+aba ativos&quot;), <code>apps/web/src/routes/Shell.test.tsx</code> (describe &quot;Shell —
+colapso da sidebar&quot;: a preferência só nasce de clique no botão e é sempre
+gravada). O describe &quot;useAutoCollapseSidebar&quot; foi removido junto com o
+hook.</li>
+<li><strong>Origem:</strong> PROGRAMA 28, Onda 2, frente B —
+<code>design_handoff_brabo/CHECKLIST-CONFRONTO.md</code> seção 1; a metade do
+auto-colapso foi revista pelo
+<a href="../../adr/0126-trilho-vertical-de-navegacao-do-projeto.html">ADR 0126</a></li>
+</ul>
+<h3 id="rn-202">RN-202 — A aba <code>sessions</code> continua &quot;Chat&quot;, nunca &quot;Chat RAG&quot;</h3>
+<p>O handoff de design mais recente do PROGRAMA 28 chama a aba consultiva de
+&quot;Chat RAG&quot; (<code>designs/Brabo Chat.dc.html</code>), mas o produto não tem essa
+funcionalidade: não há pipeline de indexação por projeto, não há índice
+vetorial, não há UI de citação de fonte. O ADR 0075 pôs <code>embed</code> no contrato de
+<code>LLMProvider</code> — a operação existe e é PROVADA no Ollama —, mas nada ainda a
+CONSOME. A aba <code>sessions</code> de hoje é o Chat consultivo comum da
+<a href="parte-01.html#rn-104">RN-104</a>: um agente respondendo com o contexto da sessão, sem
+produzir backlog, sem RAG nenhum por trás.</p>
+<p>Rotular a aba &quot;Chat RAG&quot; hoje anunciaria uma capacidade que não existe — o
+mesmo erro que o <a href="../../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042</a>
+já recusa para modelo de catálogo (&quot;não ativar modelo descoberto
+automaticamente&quot;). O rótulo muda no dia em que a funcionalidade chegar, junto
+com o dado por trás dele — nunca antes.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/project-tabs.ts:144</code> (entrada <code>key: 'sessions'</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/project-tabs.test.tsx</code> (describe &quot;abas do
+projeto derivam de um registro só&quot;, <code>'RN-202 — a aba \</code>sessions` continua
+&quot;Chat&quot;, nunca &quot;Chat RAG&quot;'`)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">0078</a></li>
+</ul>
+<h3 id="rn-203">RN-203 — O handoff é referência visual, não teto de quantas abas o produto tem</h3>
+<p>O handoff de design lista 7 abas de projeto (Visão geral, Criativo, Código,
+Chat RAG, Gastos, Aprovações, Configurações); o registro
+(<code>apps/web/src/routes/project-tabs.ts</code>) tem 10. As três a mais —
+<code>executores</code> (<a href="parte-01.html#rn-121">RN-121</a>), <code>backlog</code> (<a href="../api.html#rn-048">RN-048</a>) e
+<code>insights</code> (hipóteses do Psicólogo aguardando decisão) — nasceram DEPOIS do
+handoff ser desenhado, todas com dado real, contador derivado de consulta e
+pelo menos uma RN própria com teste.</p>
+<p>O handoff fixa como cada tela deve se PARECER — cores, tipografia,
+espaçamento, o desenho da moldura —, e essa parte foi seguida à risca nesta
+mesma mudança (header, régua, rolagem, largura do conteúdo). Ele não congela o
+inventário de abas no dia em que foi escrito. Apagar as três para &quot;bater&quot; com
+o handoff destruiria informação que o produto já sabia mostrar, pelo motivo
+errado.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/project-tabs.ts:91</code> (o <code>REGISTRO</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/project-tabs.test.tsx</code> (describe &quot;abas do
+projeto derivam de um registro só&quot;, <code>'RN-203 — as 3 abas que o handoff não previu continuam no registro'</code>)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0078-moldura-de-tela-e-o-registro-de-abas-diverge-do-handoff.html">0078</a></li>
+</ul>
+<h3 id="rn-210">RN-210 — &quot;Recomendado&quot; é uso real e custo, nunca nota calculada</h3>
+<p>O bloco &quot;Melhores modelos por capacidade&quot; (Configurações) não tem coluna de
+score. O handoff mostra uma nota por capacidade (código 9.4, imagem 9.1…), mas
+é dado FICTÍCIO do mock — nenhum provider publica &quot;qualidade de código&quot; e o
+produto não mede isso em lugar nenhum. Calcular um número aqui seria o mesmo
+&quot;palpite vestido de dado&quot; que o <a href="../../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041</a>
+proíbe para capability de MODELO, agora sobre qualidade.</p>
+<p>Em vez disso, &quot;recomendado&quot;/&quot;alternativa&quot; saem de dois sinais reais, entre os
+modelos que a curadoria DESTE workspace marcou para aquela capacidade (<code>uses</code>,
+<a href="../api.html#rn-057">RN-057</a>): primeiro os mais usados por agentes DESTE projeto — a
+mesma cascata que resolve o binding vigente de cada agente —, custo (do
+catálogo, ascendente) como desempate. &quot;O que o time já escolheu&quot; é o sinal
+mais honesto disponível sem inventar nota. Capacidade sem nenhum modelo curado
+mostra &quot;sem cobertura curada&quot; — nunca esconde a linha, mesmo padrão que a
+coluna Origem de <code>ModelsSection</code> já usa para o binding pulado.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/settings/MelhoresModelosPorCapacidadeSection.tsx</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/ProjectSettingsTab.test.tsx</code>
+(describe &quot;MelhoresModelosPorCapacidadeSection&quot;)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0077-ranking-de-modelos-por-capacidade-sem-nota-inventada.html">0077</a></li>
+</ul>
+<h3 id="rn-211">RN-211 — Gasto por provider na tela é Ranking, não paleta categórica inventada</h3>
+<p>O handoff pede barras diárias empilhadas por provider e uma quebra por
+provider. A skill de dataviz do repositório manda validar paleta
+categórica por script antes de usar, nunca por olho: <code>validate_palette.js</code>
+reprova toda combinação de 3+ tokens de <code>design/tokens.css</code> contra pelo
+menos um dos dois temas — <code>--accent</code>+<code>--violet</code> é o único par que passa
+nos dois (vários <code>--syntax-*</code> são literalmente o mesmo hex de
+<code>--warning</code>/<code>--violet</code>/<code>--success</code>, medido). Com 9 providers (ADR 0043) e
+2 cores validadas, ciclar a paleta é o anti-padrão que a própria skill
+nomeia (&quot;a 9th series is never a generated hue&quot;), e inventar hex novo
+violaria a instrução desta frente. A quebra por provider vira <code>Ranking</code> —
+a mesma peça de &quot;Por modelo&quot;/&quot;Por projeto&quot;/&quot;Por agente e pessoa&quot;, sem
+identidade por cor. A série DIÁRIA por provider não é entregue:
+<code>sumGroupedBy</code> (ADR 0076) agrupa por uma dimensão de cada vez, e não existe
+agregação cruzada dia×provider no backend desta onda.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/lib/spend.ts</code> (bloco &quot;Gasto por PROVIDER na
+tela&quot;), <code>apps/web/src/routes/ProjectSpendTab.tsx</code> (<code>GastoDoWorkspace</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/ProjectSpendTab.test.tsx</code> (describe &quot;a
+audiência do owner&quot; — <code>'mostra os cinco recortes do workspace, incluindo provider'</code>)</li>
+<li><strong>ADR:</strong> <a href="../../adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">0076</a></li>
+</ul>
+<h3 id="rn-212">RN-212 — Bloco &quot;por projeto&quot; é o TokenMeter plugado ao orçamento real</h3>
+<p>A aba de Gastos ganha um bloco por PROJETO (não por audiência):
+<code>OrcamentoDoProjeto</code> lê <code>GET /projects/:id/budget</code> e planta o resultado
+direto no <code>TokenMeter</code> existente, que já implementa os limiares 70/90
+(<code>tokenThreshold</code>) — nenhum componente novo. Três leituras: carregando
+(silencioso, evita piscar antes do papel resolver a audiência de baixo),
+sem orçamento definido (nota em texto, sem CTA) e erro (silencioso — na
+prática quase sempre 403 de quem tem papel de WORKSPACE mas não é
+<code>maintainer</code> no PROJETO, e mostrar banner de propósito seria alarme falso
+para a maioria dos membros, o mesmo padrão já usado pelo <code>TokenMeter</code>
+compacto de <code>ProjectPage.tsx</code>).</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/ProjectSpendTab.tsx</code>
+(<code>OrcamentoDoProjeto</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/ProjectSpendTab.test.tsx</code> (describe &quot;o
+orçamento do projeto&quot;)</li>
+</ul>
+<h3 id="rn-214">RN-214 — KPI de economia com modelo local fica de fora por falta de preço contrafactual</h3>
+<p><code>TokenMeter</code> já tem <code>savingsBRL</code>/<code>savingsPct</code> prontos para receber o
+número, e permanecem não alimentados de propósito. O card exigiria um
+preço CONTRAFACTUAL — quanto a mesma chamada teria custado num modelo
+pago — que não existe em lugar nenhum do produto: o catálogo (ADR 0042)
+só congela o preço do modelo REALMENTE usado (RN-044), e não há
+mapeamento declarado &quot;modelo local X ~ modelo pago Y&quot;. Inventá-lo aqui
+seria a mesma classe de &quot;nota vestida de dado&quot; que a RN-210 já recusou
+para ranking de capacidade. Pendência registrada no backlog para quando
+existir um preço contrafactual defensável e versionado.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/ProjectSpendTab.tsx</code> (comentário &quot;KPI de
+economia com modelos locais — CORTE DECLARADO&quot;, fim do arquivo)</li>
+</ul>
+<h3 id="rn-215">RN-215 — Aba Problemas nasce com estado vazio honesto</h3>
+<p>Não há lint nem teste integrado sobre o código do projeto gerido; a aba
+Problemas do painel inferior (handoff <code>design_handoff_brabo</code>) diz isso
+explicitamente em vez de mostrar contagem inventada (o mock do handoff traz
+badge &quot;3&quot;). Mesmo padrão já usado pelo Terminal (FASE 25b) e pelo item
+&quot;Testes&quot; desabilitado do rail.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/code/CodeBottomPanel.tsx</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/code/CodeBottomPanel.test.tsx</code> —
+&quot;Problemas diz honestamente que não há lint/teste integrado, sem
+contagem inventada&quot;</li>
+</ul>
+<h3 id="rn-216">RN-216 — Aba Saída nasce com estado vazio honesto</h3>
+<p>Não há stream de comando de build/deploy nesta aba — ele dependeria do
+terminal interativo (FASE 25b), que não existe. A aba explica isso e lembra
+que <code>git push</code>/PR/deploy não saem pelo terminal de qualquer forma (RN-106).</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/code/CodeBottomPanel.tsx</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/code/CodeBottomPanel.test.tsx</code> — &quot;Saída
+diz honestamente que não há stream de comando, sem simular execução&quot;</li>
+</ul>
+<h3 id="rn-217">RN-217 — Status bar da aba Código só mostra dado real</h3>
+<p>A status bar de 24px (<code>CodeShell.tsx</code>) mostra <code>↑N ↓M</code> de commits da branch
+atual (via <code>getCodeBranches</code>, mesma <code>queryKey</code> de <code>CodeBranchPicker</code> —
+dedup, zero requisição extra, RN-090/091) e a linguagem do arquivo ativo
+(<code>linguagemPorCaminho</code>). Posição do cursor e contagem de erros/testes do
+mock do handoff ficaram de fora: <code>CodeEditor</code> não expõe seleção/caret
+rastreável e não há lint/teste integrado (mesma decisão da RN-215).</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/code/CodeShell.tsx</code></li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/code/CodeShell.test.tsx</code> — &quot;a status bar
+mostra ↑/↓ real da branch atual&quot; e &quot;sem ahead/behind (branch em dia), a
+status bar não mostra o par vazio&quot;</li>
+</ul>
+<h3 id="rn-218">RN-218 — Foco visível nas abas próprias do painel inferior</h3>
+<p>As abas de <code>CodeBottomPanel.tsx</code> são implementação própria (não o <code>Tabs</code> do
+design system) e não herdavam o <code>:focus-visible</code> calibrado que
+<code>Tabs.module.css</code> ganhou na Onda 2/frente C. Corrigido com o mesmo padrão de
+<code>Input.module.css</code> (ADR 0036), incluindo <code>forced-colors</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/code/CodeBottomPanel.module.css</code></li>
+</ul>
+<h3 id="rn-227">RN-227 — Selo de status da sessão cobre os 5 estados reais, não os 4 do handoff</h3>
+<p>O handoff pede 4 selos (ativa/aguardando/fechada/abortada) para os 5
+estados reais da máquina (<code>created/active/closing/closed/closed_abnormally</code>).
+<code>closed_abnormally</code>→abortada e <code>created</code>→aguardando são diretos. <code>closing</code>
+NÃO é fundido com &quot;fechada&quot;: ganha selo próprio (&quot;encerrando&quot;, tom
+<code>accent</code>, pulsante), porque em <code>closing</code> o desfecho (<code>closed</code> ou
+<code>closed_abnormally</code>) ainda não é conhecido — chamá-la de &quot;fechada&quot;
+mentiria sobre isso.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/ProjectSessionsTab.tsx</code> (<code>SELO_DO_STATUS</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/ProjectSessionsTab.test.tsx</code> — describe
+&quot;ProjectSessionsTab — selo de status (RN-227)&quot;</li>
+</ul>
+<h3 id="rn-228">RN-228 — Filtro pill agrupa os 2 estados sem pill própria por TRAJETÓRIA</h3>
+<p>Os filtros pill do handoff (todas/ativas/fechadas/abortadas) só cobrem 4
+dos 5 estados. <code>created</code> (aguardando) entra no pill &quot;Ativas&quot; — ainda não
+chegou a lugar nenhum, é &quot;sessão em jogo&quot;. <code>closing</code> entra no pill
+&quot;Fechadas&quot; — já está a caminho de fechar sem erro. O SELO de cada linha
+(RN-227) nunca é reescrito pelo filtro; o pill só agrupa.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/ProjectSessionsTab.tsx</code>
+(<code>correspondeAoFiltro</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/ProjectSessionsTab.test.tsx</code> — describe
+&quot;filtro pill agrupa os 2 estados sem pill própria (RN-228)&quot;</li>
+</ul>
+<h3 id="rn-229">RN-229 — KPI &quot;custo do mês&quot; da aba Criativo é o consumo do ATOR, não o total do projeto</h3>
+<p>Reaproveita <code>getMySpend(projectId, 30)</code> — a MESMA queryKey que
+<code>ProjectSpendTab.tsx#MeuConsumo</code> usa para a visão do membro (RN-101, ADR
+0063), sem agregação nova. NUNCA mostra o total do projeto somando todo
+mundo (<code>porProjeto</code> em <code>getWorkspaceSpendReport</code>), porque esse dado é
+owner-only e a aba Criativo é vista por qualquer membro do projeto —
+mostrar o total geral vazaria gasto alheio para quem a RN-060/101 não
+autoriza a ver.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/ProjectSessionsTab.tsx</code> (<code>CriativoKpis</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/ProjectSessionsTab.test.tsx</code> — describe
+&quot;KPIs da aba Criativo&quot;, casos &quot;caminho feliz&quot; e &quot;CASO DE FALHA&quot;</li>
+</ul>
+<h3 id="rn-230">RN-230 — KPI &quot;taxa ideação → commit&quot; é declarado ausente, nunca calculado</h3>
+<p>Não existe, em lugar nenhum do produto, vínculo entre uma sessão criativa e
+o commit que ela produziu. A aba Criativo mostra &quot;—&quot; com a frase &quot;não
+medido: sessão não é vinculada a commit hoje&quot; em vez de inventar um
+cálculo — mesma classe de erro que o ADR 0042 já recusa para nota de
+modelo.</p>
+<ul>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/ProjectSessionsTab.tsx</code> (<code>CriativoKpis</code>)</li>
+<li><strong>Teste:</strong> <code>apps/web/src/routes/ProjectSessionsTab.test.tsx</code> — &quot;'Taxa
+ideação → commit' é DECLARADA ausente — nunca um número calculado&quot;</li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/web/parte-01.html">Web — parte 1 (desde RN-039)</a><a href="../../business-rules/web/parte-03.html">Web — parte 3 (desde RN-239)</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-web/blob/dev/docs/business-rules/web/parte-02.md">编辑此页</a></footer>
+</main>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#painel-de-projetos">Painel de projetos</a></li><li class="n3"><a href="#rn-124">RN-124 — O PO narra épico/história criados no fio, com link direto pro Backlog</a></li><li class="n3"><a href="#rn-125">RN-125 — O aceite de handoff é INLINE no fio, com CTA pro Dev Lead apontando pra Executores</a></li><li class="n3"><a href="#rn-126">RN-126 — Promoção de história é decidível INLINE no fio, com o mesmo mecanismo da aba Backlog</a></li><li class="n3"><a href="#rn-131">RN-131 — Três corridas confirmadas AO VIVO no fio da sessão: convite por cima do histórico, indicador ansioso e turno preso em handleReadiness</a></li><li class="n3"><a href="#rn-136">RN-136 — O card acionável de handoff no chat só considera quem CONVERSA nesta tela</a></li><li class="n3"><a href="#rn-137">RN-137 — &quot;Ativar execução&quot; tem atalho inline no card do Dev Lead, sem baixar a exigência de papel</a></li><li class="n3"><a href="#rn-138">RN-138 — Mensagens de um agente colapsam depois que ele passa o bastão</a></li><li class="n3"><a href="#rn-144">RN-144 — A aba Criativo não lista a sessão de execução vigente</a></li><li class="n3"><a href="#rn-147">RN-147 — O cabeçalho do grupo colapsado mostra o ícone do agente, não só o nome</a></li><li class="n3"><a href="#rn-148">RN-148 — Histórias com promoção pendente ao mesmo tempo viram carrossel, não N cards</a></li><li class="n3"><a href="#rn-152">RN-152 — A branch de uma task diz de qual dev agent e módulo ela é, no dropdown da aba Code</a></li><li class="n3"><a href="#rn-156">RN-156 — indicador de espera de 5s tem texto fixo, sem interpolar o agente</a></li><li class="n3"><a href="#rn-157">RN-157 — criação de épico/história pelo PO vira aviso compacto, não bolha completa</a></li><li class="n3"><a href="#rn-158">RN-158 — Markdown leve com highlight no chat</a></li><li class="n3"><a href="#rn-159">RN-159 — Artefatos Gerados agrupados por agente</a></li><li class="n3"><a href="#rn-160">RN-160 — &quot;Confirmar arquitetura pronta&quot; exige pelo menos 1 história promovida</a></li><li class="n3"><a href="#rn-161">RN-161 — Aceitar o handoff pro Dev Lead encadeia a ativação de execução quando o papel efetivo já autoriza</a></li><li class="n3"><a href="#rn-172">RN-172 — Handoff e aprovação são o DESFECHO do turno</a></li><li class="n3"><a href="#rn-173">RN-173 — O fio acompanha tudo que cresce, e só quem já estava no fim</a></li><li class="n3"><a href="#rn-174">RN-174 — Ação que dispara turno de agente arma o indicador do fio</a></li><li class="n3"><a href="#rn-176">RN-176 — Tabela em Markdown no fio vira tabela de verdade</a></li><li class="n3"><a href="#rn-177">RN-177 — O log mostra tudo, e o histórico se recolhe por ORIGEM</a></li><li class="n3"><a href="#rn-178">RN-178 — O painel da sessão lê do último para o primeiro, e a lista de regras pagina</a></li><li class="n3"><a href="#rn-179">RN-179 — O artefato do PO é uma ÁRVORE: épico → história → tarefa</a></li><li class="n3"><a href="#rn-180">RN-180 — O painel diz o que NÃO está mostrando</a></li><li class="n3"><a href="#rn-181">RN-181 — Delegação de área aparece no fio</a></li><li class="n3"><a href="#rn-182">RN-182 — O tema é escolhido, persistido e aplicado antes do primeiro paint</a></li><li class="n3"><a href="#rn-183">RN-183 — A preferência de tema tem uma fonte, e o atributo do &lt;html&gt; é a verdade</a></li><li class="n3"><a href="#rn-184">RN-184 — Contraste é medido nos DOIS temas</a></li><li class="n3"><a href="#rn-185">RN-185 — Os oito papéis de sintaxe, e o valor do handoff só entra medido</a></li><li class="n3"><a href="#rn-195">RN-195 — A sidebar recolhe para uma trilha de ícones, com a preferência persistida</a></li><li class="n3"><a href="#rn-196">RN-196 — Projetos expansíveis revelam as abas do projeto, N ao mesmo tempo</a></li><li class="n3"><a href="#rn-197">RN-197 — Duas cores de projeto, dois propósitos: identidade não é status</a></li><li class="n3"><a href="#rn-199">RN-199 — Botão de tema no rodapé, funcional recolhido</a></li><li class="n3"><a href="#rn-200">RN-200 — Só Projetos e Atividades como itens globais</a></li><li class="n3"><a href="#rn-201">RN-201 — Projeto/aba ativos persistem entre páginas; o colapso da sidebar é SÓ do usuário</a></li><li class="n3"><a href="#rn-202">RN-202 — A aba sessions continua &quot;Chat&quot;, nunca &quot;Chat RAG&quot;</a></li><li class="n3"><a href="#rn-203">RN-203 — O handoff é referência visual, não teto de quantas abas o produto tem</a></li><li class="n3"><a href="#rn-210">RN-210 — &quot;Recomendado&quot; é uso real e custo, nunca nota calculada</a></li><li class="n3"><a href="#rn-211">RN-211 — Gasto por provider na tela é Ranking, não paleta categórica inventada</a></li><li class="n3"><a href="#rn-212">RN-212 — Bloco &quot;por projeto&quot; é o TokenMeter plugado ao orçamento real</a></li><li class="n3"><a href="#rn-214">RN-214 — KPI de economia com modelo local fica de fora por falta de preço contrafactual</a></li><li class="n3"><a href="#rn-215">RN-215 — Aba Problemas nasce com estado vazio honesto</a></li><li class="n3"><a href="#rn-216">RN-216 — Aba Saída nasce com estado vazio honesto</a></li><li class="n3"><a href="#rn-217">RN-217 — Status bar da aba Código só mostra dado real</a></li><li class="n3"><a href="#rn-218">RN-218 — Foco visível nas abas próprias do painel inferior</a></li><li class="n3"><a href="#rn-227">RN-227 — Selo de status da sessão cobre os 5 estados reais, não os 4 do handoff</a></li><li class="n3"><a href="#rn-228">RN-228 — Filtro pill agrupa os 2 estados sem pill própria por TRAJETÓRIA</a></li><li class="n3"><a href="#rn-229">RN-229 — KPI &quot;custo do mês&quot; da aba Criativo é o consumo do ATOR, não o total do projeto</a></li><li class="n3"><a href="#rn-230">RN-230 — KPI &quot;taxa ideação → commit&quot; é declarado ausente, nunca calculado</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-zh-Hans.json" data-base="../../"></script></body>
+</html>

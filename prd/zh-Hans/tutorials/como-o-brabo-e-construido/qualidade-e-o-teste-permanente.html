@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-Hans" data-locale="zh-Hans" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>质量与常驻验收测试 | Brabo</title>
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="菜单">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="搜索" aria-label="搜索" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="语言"><option value="../../../tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html">pt-BR</option><option value="../../../en/tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html">en</option><option value="../../../ru/tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html">ru</option><option value="../../../zh-Hans/tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html" selected>zh-Hans</option></select>
+<select data-seletor aria-label="环境"><option value="../../../../dev/zh-Hans/tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html">dev</option><option value="../../../../prd/zh-Hans/tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="切换主题">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 从这里开始</h2></summary><ul><li><a href="../../index.html">首页</a></li><li><a href="../../getting-started.html">快速开始</a></li></ul></details></section><section><details open><summary><h2>🎓 教程</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">编排多个仓库</a></li><li><details open><summary><span>Brabo 是如何构建的</span></summary><ul><li><a href="../../tutorials/como-o-brabo-e-construido.html">Brabo 是如何构建的</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/do-pedido-a-atividade.html">从请求到任务</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/a-rodada.html">轮次</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/a-regra-vira-codigo.html">规则变成代码，文档随之而行</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.html" aria-current="page">质量与常驻验收测试</a></li><li><a href="../../tutorials/como-o-brabo-e-construido/copie-o-metodo.html">复制这套方法</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>🧭 实用指南</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">开发 Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages 令牌</a></li><li><a href="../../runbook.html">运维手册</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>参与贡献</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">我们如何撰写</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 概念</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">架构</a></li><li><a href="../../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../../explanation/modelo-de-time.html">团队模型与交付物流程</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>流程与流水线</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">分支策略</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../../explanation/release-do-produto.html">产品发布</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>本地化</span></summary><ul><li><a href="../../explanation/localizacao.html">本地化</a></li><li><a href="../../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></details></li><li><details><summary><span>技术笔记</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 参考</h2></summary><ul><li><a href="../../glossary.html">术语表</a></li><li><a href="../../reference/componentes-da-doc.html">文档组件</a></li><li><a href="../../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../../business-rules.html">业务规则</a></li><li><span>API 参考</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ 决策（ADR）</a></h2></section><section><details><summary><h2>🗂️ 项目历史</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">时间线</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">shadcn 前后的界面（2026 年 10 月 31 日）</a></li><li><a href="../../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">第 1 至 15 阶段，第 1 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">16–26 计划与轮次，第 2 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">28 计划与审计，第 3 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">从本地 runner 起，第 4 部分</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../../explanation/backlog.html">已分类的 backlog</a></li><li><details><summary><span>验证与测量</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../../explanation/medicao-do-jev.html">Jev 工具路由器的测量</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="质量与常驻验收测试">质量与常驻验收测试</h1>
+<p><strong>适合谁：</strong> 测试全绿，但当有人端到端使用产品时仍会发现缺陷的人。</p>
+<p><strong>读完之后你可以：</strong> 搭建三层职责各异的测试，并解释为什么最后一层永远不会结束。</p>
+<h2 id="三层">三层</h2>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>层</th>
+<th>何时运行</th>
+<th>证明什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>按功能的回归测试</strong></td>
+<td>在 PR 上</td>
+<td>你改动的功能依然正确</td>
+</tr>
+<tr>
+<td><strong>端到端门禁</strong></td>
+<td>晋升到主分支时</td>
+<td>整体可用，若失败则阻止合并</td>
+</tr>
+<tr>
+<td><strong>常驻验收测试</strong></td>
+<td>持续进行，每个轮次一次</td>
+<td>用户能在真实产品中从想法走到结果</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="按功能的回归测试">按功能的回归测试</h2>
+<p>产品有一份功能目录。每个功能列出构成它的代码路径，并有自己的浏览器测试。当你的 PR 触及其中一条路径时，被测试的是<strong>那个</strong>功能，而不是整个产品。如果它还没有测试，就显示为“无覆盖”，并不会失败。</p>
+<p>在指向 <code>dev</code> 的 PR 上，这个检查只是<strong>证明</strong>：它从不是必需的。规则关乎诚实：调整你所改功能的回归测试，或者在卡片上写明为什么不需要。</p>
+<p>详见<a href="../../explanation/regressivo-por-funcionalidade.html">按功能的回归测试</a>。</p>
+<h2 id="端到端门禁">端到端门禁</h2>
+<p>晋升到 <code>main</code> 时，<strong>整个</strong>目录都会运行，并阻止合并。这是唯一值得付出“全部运行”成本的地方：它很少发生，又保护着用户安装的东西。有一个明确的出口可以接受已知的失败，并留下是谁接受的记录。</p>
+<p>工作方式：<a href="../../e2e-portao/como-funciona.html">E2E 门禁</a>。</p>
+<h2 id="常驻验收测试">常驻验收测试</h2>
+<p>前两层测试的是别人<strong>预见到</strong>的东西。第三层寻找没有人预见到的东西。</p>
+<p>它是一份固定的脚本，像客户那样使用产品：创建项目、请求交付、批准、合并并收到结果。它<strong>始终针对用户安装的那个版本</strong>运行，每个工作轮次一次，并且从不“结束”。</p>
+<h3 id="它带回什么">它带回什么</h3>
+<ul>
+<li><strong>发现：</strong> 每个失败或摩擦都像任何请求一样，变成一个带卡片的<a href="do-pedido-a-atividade.html">任务</a>。</li>
+<li><strong>每轮一个评分：</strong> 交付的质量、智能体的产出，以及从想法到合并的时间。只度量交互、不计入主持者的停顿，可以让序列保持可比。</li>
+<li><strong>比较：</strong> 把本轮评分与之前几轮对照阅读。下降先是一个信号，然后才是事故。</li>
+</ul>
+<div class="admonicao admonicao-nota" data-admonicao="nota"><p class="admonicao-titulo">为什么针对已安装的版本</p>
+<p>在开发分支上测试，只能证明下一个版本可用。常驻测试存在的目的，是证明<strong>已经</strong>在用户手中的那个版本可用。</p>
+</div>
+<h2 id="结果如何回到方法中">结果如何回到方法中</h2>
+<p>一个循环就此闭合：常驻测试发现问题，发现变成任务，任务被调研，进入一个<a href="a-rodada.html">轮次</a>，变成 PR，然后测试再次运行。当某个发现重复出现时，它会在回归测试中获得一个测试，下面一层就会更早地抓住它。</p>
+<h2 id="该复制什么">该复制什么</h2>
+<p>从小处开始：一份<strong>十步</strong>的脚本，走完你产品的主路径，每周手动执行一次。写下哪里让人难受。然后才自动化，而且只自动化那些重复起来让人难受的步骤。</p>
+<h2 id="延伸阅读">延伸阅读</h2>
+<ul>
+<li><a href="../orquestrar-repositorios/vida-de-uma-mudanca.html">一次变更的一生</a>：关于回归测试和门禁的章节。</li>
+</ul>
+<nav class="site-pager"><a href="../../tutorials/como-o-brabo-e-construido/a-regra-vira-codigo.html">规则变成代码，文档随之而行</a><a href="../../tutorials/como-o-brabo-e-construido/copie-o-metodo.html">复制这套方法</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/como-o-brabo-e-construido/qualidade-e-o-teste-permanente.md">编辑此页</a><span>更新于 2026-11-08T20:11:19-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#三层">三层</a></li><li class="n2"><a href="#按功能的回归测试">按功能的回归测试</a></li><li class="n2"><a href="#端到端门禁">端到端门禁</a></li><li class="n2"><a href="#常驻验收测试">常驻验收测试</a></li><li class="n3"><a href="#它带回什么">它带回什么</a></li><li class="n2"><a href="#结果如何回到方法中">结果如何回到方法中</a></li><li class="n2"><a href="#该复制什么">该复制什么</a></li><li class="n2"><a href="#延伸阅读">延伸阅读</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-zh-Hans.json" data-base="../../"></script></body>
+</html>

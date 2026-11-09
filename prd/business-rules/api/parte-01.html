@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — API — parte 1 (desde RN-001) | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../../business-rules/api/parte-01.html" selected>pt-BR</option><option value="../../en/business-rules/api/parte-01.html">en</option><option value="../../ru/business-rules/api/parte-01.html">ru</option><option value="../../zh-Hans/business-rules/api/parte-01.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../../dev/business-rules/api/parte-01.html">dev</option><option value="../../../prd/business-rules/api/parte-01.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../../index.html">Início</a></li><li><a href="../../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><a href="../../runbook.html">Manual de operação</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">Arquitetura</a></li><li><a href="../../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">Política de branches</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../../explanation/localizacao.html">Localização</a></li><li><a href="../../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../../glossary.html">Glossário</a></li><li><a href="../../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>Regras de negócio</span></summary><ul><li><a href="../../business-rules.html">Regras de negócio</a></li><li><a href="../../business-rules/custo.html">Custo e metering</a></li><li><a href="../../business-rules/autenticacao.html">Autenticação</a></li><li><details open><summary><span>API</span></summary><ul><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/api/parte-01.html" aria-current="page">API — parte 1 (desde RN-001)</a></li><li><a href="../../business-rules/api/parte-02.html">API — parte 2 (desde RN-055)</a></li><li><a href="../../business-rules/api/parte-03.html">API — parte 3 (desde RN-100)</a></li><li><a href="../../business-rules/api/parte-04.html">API — parte 4 (desde RN-231)</a></li><li><a href="../../business-rules/api/parte-05.html">API — parte 5 (desde RN-439)</a></li><li><a href="../../business-rules/api/parte-06.html">API — parte 6 (desde RN-503)</a></li><li><a href="../../business-rules/api/parte-07.html">API — parte 7 (desde RN-567)</a></li><li><a href="../../business-rules/api/parte-08.html">API — parte 8 (desde RN-618)</a></li><li><a href="../../business-rules/api/parte-09.html">API — parte 9 (desde RN-677)</a></li><li><a href="../../business-rules/api/parte-10.html">API — parte 10 (desde RN-727)</a></li><li><a href="../../business-rules/api/parte-11.html">API — parte 11 (desde RN-916)</a></li><li><a href="../../business-rules/api/parte-12.html">API — parte 12 (desde RN-1029)</a></li></ul></details></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Produto</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="api--parte-1-desde-rn-001">API — parte 1 (desde RN-001)</h1>
+<h2 id="sessão">Sessão</h2>
+<p>O Brabo executa trabalho de engenharia por agentes de IA. Duas forças moldam
+praticamente toda regra daqui:</p>
+<p><strong>O agente não é confiável por construção.</strong> É um modelo de linguagem: pode
+alucinar, entrar em loop ou pedir algo destrutivo. As regras existem para que
+o dano possível seja limitado pela estrutura, não pela qualidade do prompt.</p>
+<p><strong>O gasto é real e contínuo.</strong> Todo turno consome token pago. Orçamento,
+teto e medição não são conveniências administrativas — são o que impede um
+loop de agente de virar prejuízo.</p>
+<h3 id="atores">Atores</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>ator</th>
+<th>quem é</th>
+<th>autoridade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Usuário</strong></td>
+<td>a pessoa. Papéis: <code>viewer</code>, <code>developer</code>, <code>maintainer</code>, <code>owner</code></td>
+<td>decisão final sobre qualquer ação com efeito externo; o merge é exclusivamente dele</td>
+</tr>
+<tr>
+<td><strong>Agente</strong></td>
+<td>processo de longa duração com um papel (Criativo, PO, Arquiteto, Dev, Infra, QA, SecOps, Psicólogo, Anamnese)</td>
+<td>propõe; nunca decide sozinho o que a política não permite</td>
+</tr>
+<tr>
+<td><strong>Sistema</strong></td>
+<td>api e engine</td>
+<td>aplica a política, registra o evento, mede o custo</td>
+</tr>
+</tbody>
+</table></div>
+<p>O vocabulário está no <a href="../../glossary.html">glossário</a>.</p>
+<hr>
+<h2 id="contexto-de-negócio">Contexto de negócio</h2>
+<h3 id="rn-001">RN-001 — A sessão tem cinco estados e transições fechadas</h3>
+<p><code>created → active → closing → closed</code>, com <code>closed_abnormally</code> alcançável
+de qualquer estado não terminal. <strong>De <code>closing</code> nunca há volta para
+<code>active</code></strong>, e os estados terminais não têm saída.</p>
+<pre class="mermaid" data-mermaid>stateDiagram-v2
+  [*] --&gt; created
+  created --&gt; active
+  created --&gt; closed_abnormally: falha no provisionamento
+  active --&gt; closing
+  active --&gt; closed_abnormally
+  closing --&gt; closed
+  closing --&gt; closed_abnormally
+  closed --&gt; [*]
+  closed_abnormally --&gt; [*]
+</pre>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/sessions/session-state-machine.ts:29</code></li>
+<li><strong>Teste:</strong> <code>test/domain/sessions/session-state-machine.spec.ts</code></li>
+<li><strong>Caso de borda:</strong> <code>closing</code> é um estado <strong>transitório</strong>. Uma sessão presa
+nele significa que o dreno começou e não terminou — há alerta para isso,
+ver o <a href="../../runbook.html">runbook</a>.</li>
+</ul>
+<h3 id="rn-002">RN-002 — Todo evento de sessão é imutável e o <code>seq</code> é denso</h3>
+<p>Nunca há <code>UPDATE</code> em <code>session_events</code>. O <code>seq</code> é único por sessão
+(<code>unique(session_id, seq)</code>) e não tem buracos: começa em 1 e é contíguo.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/db/schema/sessions.ts</code> (tabela <code>session_events</code>)</li>
+<li><strong>Teste:</strong> conferido no restore — <code>docker/backup/restore.sh</code> falha se
+<code>count(*) ≠ max(seq) − min(seq) + 1</code> ou <code>min(seq) ≠ 1</code></li>
+<li><strong>Por quê:</strong> é o que torna rastreável a evidência do Psicólogo e
+verificável o backup. Estado que precisa mudar mora em tabela própria, ao
+lado.</li>
+</ul>
+<h2 id="aprovação-de-ações">Aprovação de ações</h2>
+<p>O coração do sistema. Toda ação com efeito externo nasce como
+<code>proposed_action</code>.</p>
+<h3 id="rn-003">RN-003 — A ação tem seis estados, e negada é terminal</h3>
+<pre class="mermaid" data-mermaid>stateDiagram-v2
+  [*] --&gt; pending
+  [*] --&gt; auto_approved: a política permitiu
+  pending --&gt; approved: usuário aprova
+  pending --&gt; denied: usuário nega
+  approved --&gt; executed
+  approved --&gt; failed
+  auto_approved --&gt; executed
+  auto_approved --&gt; failed
+  denied --&gt; [*]
+  executed --&gt; [*]
+  failed --&gt; [*]
+</pre>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/actions/action-state-machine.ts:36</code></li>
+<li><strong>Teste:</strong> <code>test/domain/actions/action-state-machine.spec.ts</code></li>
+<li><strong>Caso de borda:</strong> uma ação aprovada que executou vira <code>executed</code>, <strong>não</strong>
+continua <code>approved</code>. Contar aprovações por <code>status = 'approved'</code> dá o
+número errado — o critério correto é <code>decided_by IS NOT NULL</code>.</li>
+</ul>
+<h3 id="rn-004">RN-004 — A decisão é avaliada em três estágios, e <code>deny</code> vence na hora</h3>
+<p>Ordem: <strong>(a) IAM → (b) <code>agent_autonomy</code> → (c) <code>permissions.json</code></strong>. Cada
+estágio só pode <strong>subir</strong> a permissividade; um estágio calado nunca rebaixa o
+anterior. <code>deny</code> em qualquer estágio retorna na hora.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:120</code></li>
+<li><strong>Teste:</strong> <code>test/domain/actions/decide.spec.ts</code> (10 KB — o maior do
+domínio)</li>
+</ul>
+<h3 id="rn-005">RN-005 — Papel mínimo por tipo de ação</h3>
+<p>Antes de qualquer política, o IAM: cada <code>ActionType</code> exige um papel efetivo
+mínimo. Sem ele, <code>deny</code> com motivo explícito.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:117</code> (<code>MIN_ROLE_FOR_ACTION_TYPE</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/actions/decide.spec.ts</code></li>
+</ul>
+<h3 id="rn-006">RN-006 — Teto: merge em branch protegida nunca é auto-aprovável</h3>
+<p><code>dev</code>, <code>qa</code>, <code>rc</code> e <code>main</code> são protegidas. Um <code>git_merge</code> que mira uma delas
+é rebaixado de <code>auto_approve</code> para <code>require_approval</code> <strong>depois</strong> que toda a
+política rodou. Nem <code>agent_autonomy</code> nem <code>permissions.json</code> conseguem
+promovê-lo.</p>
+<p><code>rc</code> continua na lista mesmo depois que a etapa saiu da política
+(<a href="../../adr/0030-politica-de-branches-mecanizada.html">ADR 0030</a>) e o bootstrap
+deixou de criá-la (<a href="#rn-029">RN-029</a>). Esta lista decide o que a trava
+<strong>recusa</strong>, e repositórios criados por versões anteriores ainda têm a
+branch: proteger uma que não existe não custa nada; desproteger uma que
+existe custa caro.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:523</code> (<code>isProtectedBranch</code>, o teto da trava de merge) + <code>protected-branches.ts:4</code></li>
+<li><strong>Teste:</strong> <code>test/domain/actions/decide.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011</a> §1</li>
+<li><strong>Nota:</strong> a proteção equivalente <strong>na plataforma</strong> (GitHub/GitLab)
+diverge entre os providers e não é o portão — ver
+<a href="../../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028</a>.</li>
+</ul>
+<h3 id="rn-007">RN-007 — Teto: patch de instrução nunca é auto-aprovável</h3>
+<p>Mudar a instrução de um agente sempre exige decisão humana. O valor da
+funcionalidade está no humano ver o diff; auto-aprovar seria o agente se
+reescrevendo.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:170</code></li>
+<li><strong>Teste:</strong> <code>test/domain/actions/decide.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016</a> §8</li>
+</ul>
+<h3 id="rn-008">RN-008 — O casamento de comando é por padrão, não por substring</h3>
+<p>O <code>permissions.json</code> casa um comando de terminal por padrão estruturado, com
+o comando devidamente tokenizado — não por <code>includes()</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/actions/command-matcher.ts</code></li>
+<li><strong>Teste:</strong> <code>test/domain/actions/command-matcher.spec.ts</code></li>
+</ul>
+<hr>
+<h2 id="backlog">Backlog</h2>
+<h3 id="rn-009">RN-009 — A história tem quatro estados, e <code>done</code> é terminal</h3>
+<p><code>draft → ready → in_progress → done</code>. Retrabalho é permitido: <code>ready → draft</code> e
+<code>in_progress → ready</code>.</p>
+<pre class="mermaid" data-mermaid>stateDiagram-v2
+  [*] --&gt; draft
+  draft --&gt; ready: passa na checagem de prontidão (RN-010)
+  ready --&gt; in_progress
+  ready --&gt; draft: retrabalho
+  in_progress --&gt; done
+  in_progress --&gt; ready: devolvida
+  done --&gt; [*]
+</pre>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/backlog/story-state-machine.ts:27</code></li>
+<li><strong>Teste:</strong> <code>test/domain/backlog/story-state-machine.spec.ts</code></li>
+</ul>
+<h3 id="rn-010">RN-010 — <code>draft → ready</code> exige quatro coisas, validadas no domínio</h3>
+<p>Para uma história virar <code>ready</code> ela precisa, <strong>de todas</strong>:</p>
+<ol>
+<li><code>dod</code> não vazio — Definition of Done</li>
+<li><code>dor</code> não vazio — Definition of Ready</li>
+<li>pelo menos 1 requisito funcional (<code>rf</code>)</li>
+<li>pelo menos 1 regra de negócio ligada (<code>businessRuleIds</code>)</li>
+</ol>
+<p>O erro nomeia <strong>exatamente o que falta</strong>, não um &quot;inválido&quot; genérico.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/backlog/story-readiness.ts:39</code></li>
+<li><strong>Teste:</strong> <code>test/domain/backlog/story-readiness.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0009-agente-po-backlog-rastreabilidade.html">ADR 0009</a> §3</li>
+<li><strong>Por quê:</strong> é o que impede o PO de despejar uma história vaga na fila do
+dev.</li>
+</ul>
+<h3 id="rn-011">RN-011 — Regra de negócio sem história é achado, não erro</h3>
+<p>A cobertura regra→história é calculada, e o que não tem história aparece como
+<strong>pendente</strong> — informação, não falha.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/backlog/coverage.ts</code></li>
+<li><strong>Teste:</strong> <code>test/domain/backlog/coverage.spec.ts</code></li>
+</ul>
+<h3 id="rn-013">RN-013 — O grafo de módulos não pode ter ciclo</h3>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/architecture/module-graph.ts</code></li>
+<li><strong>Teste:</strong> <code>test/domain/architecture/module-graph.spec.ts</code></li>
+</ul>
+<hr>
+<h2 id="gates-de-pr">Gates de PR</h2>
+<h3 id="rn-014">RN-014 — A ordem dos gates é imutável e <code>awaiting_user</code> é terminal</h3>
+<p><code>awaiting_qa → awaiting_secops → awaiting_user</code>. Aprovar o QA <strong>nunca</strong>
+pula direto para o usuário. <code>changes_requested</code> devolve ao dev <strong>na mesma
+branch</strong>, sem PR nova.</p>
+<pre class="mermaid" data-mermaid>stateDiagram-v2
+  [*] --&gt; awaiting_qa
+  awaiting_qa --&gt; awaiting_secops: QA aprova
+  awaiting_qa --&gt; awaiting_qa: changes_requested (volta ao dev)
+  awaiting_secops --&gt; awaiting_user: SecOps aprova
+  awaiting_secops --&gt; awaiting_secops: changes_requested
+  awaiting_user --&gt; [*]: o merge é do humano
+</pre>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/execution/pr-gate-state-machine.ts:24</code></li>
+<li><strong>Teste:</strong> <code>test/domain/execution/pr-gate-state-machine.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0013-gates-qa-secops-pr.html">ADR 0013</a> §1</li>
+<li><strong>Caso de borda:</strong> <code>awaiting_user</code> é terminal <strong>por desenho</strong> — o sistema
+nunca faz merge (RN-006).</li>
+</ul>
+<h3 id="rn-015">RN-015 — Ciclo K: o teto de correção é finito e herdado</h3>
+<p>Toda volta de gate consome uma rodada. Esgotado o teto, a tarefa fica
+<strong>bloqueada</strong> com motivo, em vez de girar para sempre. Um subagente criado
+pela paralelização <strong>herda</strong> o teto do agente-base.</p>
+<p>Desde a Fase 8b o teto vale também para a ÁREA de QA, sem mudança de
+código: o <code>QaLeadServer</code> é o único chamador de <code>record_gate_verdict</code>, então
+uma rodada de gate — não importa quantas especializações ela consultou por
+baixo — continua consumindo exatamente UMA rodada. Ver
+<a href="../engine.html#rn-036">RN-036</a>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>DEFAULT_MAX_GATE_CORRECTIONS = 3</code> em
+<code>src/application/use-cases/execution/record-gate-verdict.use-case.ts:21</code>;
+aplicado em <code>activate-execution.use-case.ts:89</code> e, no engine, em
+<code>qa_lead_server.ex:268</code> e <code>secops_agent_server.ex:142</code></li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/qa_automacao_agent_test.exs</code>
+(a especialização devolve <code>{:blocked, ...}</code> sem chamar a api)
+e <code>qa_lead_server_test.exs</code> (o Lead NUNCA chama
+<code>record_gate_verdict</code> nesse caso — é isso que impede a correção de ser
+queimada)</li>
+<li><strong>Origem:</strong> <a href="../../adr/0017-lock-de-workspace-e-monitor-de-dev-agents.html">ADR 0017</a> §4</li>
+</ul>
+<h3 id="rn-017">RN-017 — Orçamento tem escopo exclusivo: projeto <strong>ou</strong> sessão</h3>
+<p>Um <code>budget</code> referencia um projeto ou uma sessão, nunca os dois — garantido
+por um <code>check</code> no banco de dados, não só no código.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/db/schema/llm.ts</code> (<code>budgets_scope_check</code>)</li>
+<li><strong>Teste:</strong> a constraint é a garantia</li>
+</ul>
+<h3 id="rn-018">RN-018 — Notificação de orçamento em 70%, 90% e 100%, sem repetir</h3>
+<p>Cada limiar dispara <strong>uma vez</strong>; o último notificado fica persistido em
+<code>budgets.last_threshold_notified</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/llm/budget-threshold.ts:1</code></li>
+<li><strong>Teste:</strong> <code>test/domain/llm/budget-threshold.spec.ts</code></li>
+</ul>
+<h3 id="rn-019">RN-019 — <code>policy = 'block'</code> recusa a chamada; <code>'allow'</code> só registra</h3>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/llm/budget-threshold.ts:4</code></li>
+<li><strong>Caso de borda:</strong> um projeto em <code>allow</code> <strong>não se detém</strong> no teto. É a
+causa mais comum de &quot;o orçamento não segurou&quot; — veja o
+<a href="../../runbook.html">runbook</a>.</li>
+</ul>
+<h3 id="rn-020">RN-020 — O modelo é resolvido em cascata, do mais específico ao mais geral</h3>
+<p><code>session &gt; agent &gt; area &gt; project &gt; workspace</code>. Vence o primeiro que
+existir. <code>area</code> entrou na FASE 23 — veja a <a href="parte-03.html#rn-102">RN-102</a> para a posição
+dela e o que muda para quem já leu esta cascata.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/llm/binding-resolver.ts</code></li>
+<li><strong>Teste:</strong> <code>test/domain/llm/binding-resolver.spec.ts</code></li>
+</ul>
+<h2 id="psicologo-e-anamnese">Psicólogo e Anamnese</h2>
+<h3 id="rn-021">RN-021 — Hipótese sem evidência válida não é gravada</h3>
+<p>Os <code>evidenceEventIds</code> precisam apontar para eventos <strong>que existem e pertencem à
+sessão analisada</strong>. A validação é atômica por lote: um id inválido reprova o
+lote inteiro.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/psychologist/hypothesis-evidence.ts</code></li>
+<li><strong>Teste:</strong> <code>test/domain/psychologist/hypothesis-evidence.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015</a> §3</li>
+</ul>
+<h3 id="rn-022">RN-022 — O ciclo de vida da hipótese é compare-and-swap</h3>
+<p><code>proposed → accepted | dismissed</code>. Duas decisões concorrentes sobre a mesma
+hipótese: uma vence, a outra recebe conflito — não 500, não silêncio.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/psychologist/hypothesis-lifecycle.ts</code></li>
+<li><strong>Teste:</strong> <code>test/domain/psychologist/hypothesis-lifecycle.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0022-fechamento-4b-psicologo.html">ADR 0022</a> §7</li>
+</ul>
+<h3 id="rn-024">RN-024 — A Anamnese só perfila competência do catálogo — guarda-corpo estrutural</h3>
+<p>Competências de processo são <strong>seis</strong>, fechadas: <code>git</code>, <code>agile</code>, <code>arquitetura</code>,
+<code>testes</code>, <code>seguranca</code>, <code>infra</code>. Mais as stacks técnicas derivadas do
+<code>module_map</code>. Qualquer outra coisa — &quot;ansiedade&quot;, &quot;saúde mental&quot; — <strong>não tem
+caminho de escrita</strong>: é erro no domínio, não instrução de prompt.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/anamnese/competency-catalog.ts:16</code></li>
+<li><strong>Teste:</strong> <code>test/domain/anamnese/competency-catalog.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016</a> §1</li>
+<li><strong>Por quê:</strong> a Anamnese perfila <strong>competência técnica</strong>, não pessoa. O limite
+é estrutural porque uma instrução de prompt não é garantia.</li>
+</ul>
+<h3 id="rn-025">RN-025 — Apagar o perfil apaga de verdade, e o opt-out impede a re-derivação</h3>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/anamnese/proficiency-profile.entity.ts</code> +
+tabela <code>anamnese_opt_outs</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016</a> §2</li>
+</ul>
+<h3 id="rn-026">RN-026 — Patch de instrução negado não é reproposto</h3>
+<p>A comparação é sobre o conteúdo <strong>normalizado</strong>, não sobre o texto literal:
+reindentar o mesmo patch não o transforma em proposta nova. Não há tabela de
+dedup — a fonte é o próprio histórico de <code>proposed_action</code> com <code>actionType = instruction_patch</code> e <code>status = denied</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/instructions/patch-dedup.ts:22</code></li>
+<li><strong>Teste:</strong> <code>test/domain/instructions/patch-dedup.spec.ts</code></li>
+</ul>
+<h3 id="rn-027">RN-027 — Rollback de instrução é operação <strong>para frente</strong></h3>
+<p>Reverter cria uma versão nova com o conteúdo antigo; não apaga histórico. A
+tabela de versões é append-only.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/instructions/</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0016-anamnese-proficiencia-patches-instrucao.html">ADR 0016</a> §4</li>
+</ul>
+<hr>
+<h2 id="git">Git</h2>
+<h3 id="rn-029">RN-029 — O bootstrap de Gitflow é idempotente e retomável</h3>
+<p>Cinco passos; cada um verifica antes de agir e pode ser retomado do ponto que
+falhou. <code>skip</code> é sucesso, não erro.</p>
+<p>Eram seis. O sexto criava a branch <code>rc</code>, degrau que o
+<a href="../../adr/0030-politica-de-branches-mecanizada.html">ADR 0030</a> removeu da política —
+o bootstrap continuou criando, protegendo e <strong>documentando no repositório do
+usuário</strong> uma escada que o produto já tinha abandonado (achado #3 do primeiro
+dogfooding). O valor <code>create_rc_branch</code> continua no enum <code>bootstrap_step</code>:
+linhas antigas o referenciam, e passo que aconteceu de verdade não se apaga do
+histórico.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/git/bootstrap-steps.ts</code> +
+<code>domain/git/repo-bootstrap.entity.ts</code> (<code>RETIRED_BOOTSTRAP_STEPS</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/git/repo-bootstrap-status.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0005-repo-bootstrap-idempotent-steps.html">ADR 0005</a></li>
+</ul>
+<hr>
+<h3 id="rn-030">RN-030 — Reapresentar um refresh já usado revoga a família inteira</h3>
+<p>Cada refresh consome o token apresentado e emite um filho com o <strong>mesmo</strong>
+<code>family_id</code> e o mesmo <code>family_started_at</code>. Apresentar um token que já foi
+consumido é a assinatura de um roubo — alguém está usando uma cópia — e a
+resposta é revogar todos os tokens vivos daquela família, com evento de
+segurança.</p>
+<p>O usuário legítimo é deslogado junto. Isso é o comportamento correto, não um
+defeito: do lado do servidor, um duplo-submit do cliente e um replay de ladrão
+são idênticos.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/auth/refresh-token.ts:50</code> +
+<code>application/use-cases/auth/refresh.use-case.ts:98</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/rotacao-e-reuso.spec.ts</code></li>
+<li><strong>Borda:</strong> quem apresenta um token de família <strong>já revogada</strong> é vítima a
+jusante, não novo roubo: registra <code>refresh_revoked</code> e <strong>não</strong> dispara segunda
+cascata. Sem essa distinção, cada aba do usuário legítimo geraria um alarme
+falso durante o incidente.</li>
+<li><strong>Origem:</strong> <a href="../../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031</a></li>
+</ul>
+<h3 id="rn-031">RN-031 — Falha de login é contada por e-mail e por IP, e o bloqueio escala</h3>
+<p>Janela deslizante de 15 minutos no Postgres, sem Redis. Dois baldes por
+tentativa e o mais restritivo vence: e-mail (5 falhas → 30s, 8 → 5min, 12 →
+15min) e IP (20 → 30s, 30 → 2min). Um login bem-sucedido limpa o balde do
+e-mail; o de IP drena só por tempo.</p>
+<p>A chave do balde é o <strong>e-mail normalizado</strong>, nunca o id do usuário. Com id, o
+balde só existiria depois de encontrar a conta, e o próprio lockout viraria
+oráculo de existência.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/auth/lockout-policy.ts:97</code> +
+<code>infrastructure/persistence/drizzle/drizzle-login-throttle.ts:74</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/lockout.spec.ts</code></li>
+<li><strong>Borda:</strong> enquanto bloqueado, a tentativa <strong>não</strong> é registrada. Se fosse, um
+atacante manteria a conta da vítima travada para sempre só continuando a
+tentar — o lockout viraria negação de serviço contra quem ele protege.</li>
+<li><strong>Por quê:</strong> o balde de IP não pode ser limpo no sucesso; quem tem uma conta
+válida zeraria a janela à vontade e pulverizaria palpites sem limite.</li>
+<li><strong>Origem:</strong> <a href="../../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031</a></li>
+</ul>
+<h3 id="rn-032">RN-032 — Nenhuma resposta distingue conta existente de inexistente</h3>
+<p>Qualquer resposta diferente da falha uniforme só é alcançável <strong>depois</strong> de uma
+verificação de senha bem-sucedida. No login, e-mail inexistente, senha errada e
+conta bloqueada devolvem o mesmo 401 e gastam o mesmo tempo — o ramo sem conta
+verifica contra um hash dummy gerado com <strong>os mesmos parâmetros</strong> do real. No
+registro e no pedido de reset, endereço conhecido e desconhecido devolvem 202.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/auth/login.use-case.ts:79</code> +
+<code>register.use-case.ts:74</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/enumeracao.spec.ts</code></li>
+<li><strong>Borda:</strong> a checagem de bloqueio por e-mail roda <strong>depois</strong> do argon2, não
+antes. Sair mais cedo é a otimização que qualquer revisor sugeriria, e é
+exatamente o vazamento — o teste fica vermelho se alguém a introduzir.</li>
+<li><strong>Borda:</strong> o usuário MIGRADO do Keycloak (existe em <code>users</code>, sem linha em
+<code>auth_credentials</code>) também recebe o 401 uniforme — e o link de &quot;definir
+senha&quot; é disparado em silêncio. Responder <code>password_pending</code> confirmaria que
+o endereço existe <strong>e</strong> que é conta legada. Por isso <code>findByEmail</code> é um LEFT
+JOIN numa consulta só: duas consultas encadeadas fariam esse ramo pagar uma
+ida a mais ao banco, e o relógio revelaria o que o corpo esconde.</li>
+<li><strong>Por quê:</strong> o que se afirma é &quot;nenhum ramo pula o trabalho caro e nenhum
+produz resposta distinguível&quot;, <strong>não</strong> tempo constante. Ver as consequências
+no ADR.</li>
+<li><strong>Origem:</strong> <a href="../../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031</a>,
+borda do migrado em
+<a href="../../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032</a></li>
+</ul>
+<h3 id="rn-033">RN-033 — Token de verificação e de reset vale uma vez só</h3>
+<p>Consumo por UPDATE condicional com <code>returning</code>: o próprio UPDATE é a guarda.
+Zero linhas cobre inexistente, de outro propósito, já consumido, invalidado e
+expirado — todos com a mesma resposta. Pedir um link novo invalida o anterior.
+Concluir um reset revoga <strong>todas</strong> as sessões do usuário e não emite tokens.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/account-token.repository.ts:76</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/auth/tokens-de-conta.spec.ts</code></li>
+<li><strong>Borda:</strong> dois envios simultâneos não passam os dois. A corrida é o caso
+<strong>normal</strong>, não a exceção: scanner de e-mail corporativo abre todo link de
+toda mensagem, então o robô costuma consumir o token antes do humano clicar.</li>
+<li><strong>Por quê:</strong> o reset não emite sessão de propósito — logar direto a partir de
+um link recebido por e-mail faria comprometer o e-mail equivaler a tomar a
+conta, sem segundo passo.</li>
+<li><strong>Origem:</strong> <a href="../../adr/0031-auth-first-party-argon2id-e-rotacao-de-refresh.html">ADR 0031</a></li>
+</ul>
+<h3 id="rn-034">RN-034 — A sessão da web vive em cookie httpOnly, com CSRF</h3>
+<p>O refresh token vai num cookie <code>brabo_refresh</code> (<code>httpOnly</code>, <code>SameSite=Strict</code>,
+<code>Path=/auth</code>, <code>Secure</code> em produção) e <strong>não</strong> aparece no corpo de nenhuma
+resposta. O access token, de 15 minutos, fica em memória no cliente e viaja no
+<code>Authorization: Bearer</code>.</p>
+<p><code>/auth/refresh</code> e <code>/auth/logout</code> exigem <code>X-CSRF-Token</code> igual ao cookie
+<code>brabo_csrf</code>, comparado em tempo constante.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/interfaces/http/auth/session-cookies.ts:53</code> +
+<code>interfaces/http/auth/auth.controller.ts</code></li>
+<li><strong>Teste:</strong> <code>test/interfaces/session-cookies.spec.ts</code></li>
+<li><strong>Borda:</strong> falha de CSRF é <strong>403</strong>, não 401. Com 401 o cliente tentaria
+renovar a sessão e entraria em laço — a credencial está boa, quem está errada
+é a requisição.</li>
+<li><strong>Por quê:</strong> devolver o refresh também no corpo anularia o <code>httpOnly</code> —
+bastaria um XSS ler a resposta do login, e levaria a sessão longa em vez dos
+15 minutos do access.</li>
+<li><strong>Origem:</strong> <a href="../../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032</a></li>
+</ul>
+<h3 id="rn-035">RN-035 — O tráfego interno engine ↔ api exige o segredo de serviço</h3>
+<p>As 32 rotas <code>/internal/*</code> são <code>@ServiceRoute()</code>: ficam fora do JWT de usuário e
+fora do rate limit. Quem autentica é o <code>EngineServiceGuard</code>, comparando
+<code>X-Brabo-Service-Token</code> com <code>BRABO_SERVICE_TOKEN</code> em tempo constante. O mesmo
+segredo vale nos dois sentidos, e <code>BRABO_SERVICE_TOKEN_PREVIOUS</code> é aceito só na
+verificação, para a rotação não ter janela de indisponibilidade.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/interfaces/http/auth/engine-service.guard.ts:44</code> +
+<code>infrastructure/security/service-token.ts</code> +
+<code>apps/engine/lib/engine_web/plugs/verify_service_token.ex</code></li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine_web/plugs/verify_service_token_test.exs</code>,
+<code>test/interfaces/route-surface.spec.ts</code> e, para a rotação do lado da api
+(anterior aceito só na verificação, quem chama manda o atual, removido o
+anterior o velho cai), <code>test/infrastructure/security/service-token.spec.ts</code>
+(describe &quot;rotação do BRABO_SERVICE_TOKEN&quot;) e
+<code>test/interfaces/engine-service.guard.spec.ts</code> (<a href="parte-07.html#rn-597">RN-597</a>)</li>
+<li><strong>Borda:</strong> a isenção de rate limit vem do METADADO da rota, não do guard. O
+<code>RateLimitGuard</code> é <code>APP_GUARD</code> e roda antes de qualquer guard de controller —
+quando ele decide, o <code>EngineServiceGuard</code> ainda não rodou.</li>
+<li><strong>Origem:</strong> <a href="../../adr/0032-corte-do-keycloak-e-sessao-em-cookie.html">ADR 0032</a></li>
+</ul>
+<h3 id="rn-038">RN-038 — Agente contado no resumo do workspace = gastou tokens este mês</h3>
+<p>O resumo do dashboard de projetos (&quot;N projetos ativos · M agentes · gasto
+este mês&quot;) conta como &quot;agente&quot; quem tem pelo menos uma linha em
+<code>token_usage</code> com <code>actor_kind = 'agent'</code> no mês corrente, somando todos os
+projetos do workspace. Sem o filtro de <code>actor_kind</code>, um <code>user</code> mandando
+chat ou um <code>system</code> registrando uso inflaria a contagem — <code>token_usage</code>
+grava para qualquer tipo de ator, não só agente. O corte por mês usa
+<code>created_at &gt;= date_trunc('month', now())</code>; um agente que trabalhou só no
+mês anterior não conta, mesmo que ainda apareça no roster de alguma
+sessão. A contagem naturalmente inclui as subespecialidades de área da
+Fase 8 (<code>qa-automacao</code>, <code>qa-performance-seguranca</code>, <code>infra-workflows</code>):
+cada uma tem seu próprio <code>actor_id</code> quando gasta tokens.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/token-usage.repository.ts</code>
+(<code>summarizeForWorkspaceThisMonth</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/iam/get-workspace-summary.use-case.spec.ts</code></li>
+</ul>
+<hr>
+<h3 id="rn-040">RN-040 — Binding de agente exige tool calling nativo</h3>
+<p>Vincular um modelo a um <strong>agente</strong> (<code>scope = 'agent'</code>) só é permitido se o
+modelo tiver <code>supports_tool_calling</code>. Um agente só existe dentro do
+ToolLoop, e o ToolLoop só funciona se o modelo souber <strong>pedir</strong> ferramentas;
+sem isso, a falha apareceria adiante como &quot;o agente parou sem terminar&quot;,
+que é exatamente o diagnóstico por eliminação que o
+<a href="../../adr/0020-destravar-gates-qa-secops.html">ADR 0020</a> proibiu. A recusa é um
+422 e a mensagem aponta para o filtro <strong>&quot;aptos para agentes&quot;</strong> — sem esse
+apontamento a regra vira um beco sem saída.</p>
+<p>O <code>ToolCallRecovery</code> do engine recupera chamadas que o modelo escreveu em
+prosa, mas é um <strong>resgate, não uma licença</strong>: depende de o modelo acertar o
+formato por acaso.</p>
+<p>Só <code>agent</code> valida. <code>workspace</code> e <code>project</code> são o fallback do chat humano e
+<code>session</code> é conversa — nenhum deles roda um ToolLoop, e travá-los proibiria
+modelos só de chat no produto. O agente <code>context-manager</code> está coberto por
+construção: é um slug <strong>dentro</strong> do escopo <code>agent</code>, não um escopo próprio.</p>
+<p><strong>Nota aditiva — o filtro passou a vir MARCADO, e quem o liga é o ESCOPO.</strong> O
+parágrafo acima diz que a recusa aponta para o filtro &quot;aptos para agentes&quot;,
+&quot;senão a regra vira beco sem saída&quot; — e por muito tempo ela foi um: o prop que
+abre o seletor com o filtro marcado existia desde a Fase 9c e <strong>nenhuma tela de
+produção o passava</strong>. O seletor de um agente abria oferecendo modelo chat-only
+cujo clique só existia para ser recusado. As duas telas que gravam num escopo
+validado passam a abrir filtradas — <code>ModelsSection</code> (agente e a caixa
+da área na linha do lead, RN-912) —, e a régua de quem liga não é a tela e sim
+<code>assertModelFitsBindingScope</code>: onde a api RECUSA, o filtro vem marcado; onde ela
+não recusa, quem escolhe é a pessoa. Por isso o seletor de SESSÃO continua sem
+filtro — marcar ali esconderia modelo que a api aceita. <strong>Isto não elimina o
+422</strong>: o filtro cobre uma das três causas, e as outras duas
+(<a href="#rn-043">RN-043</a> — desativado no workspace, sumido do provider) seguem
+alcançáveis, com o indisponível ainda LISTADO e marcado; o desfecho de recusa da
+<a href="../web.html#rn-470">RN-470</a> continua sendo o que conta o que houve. E é estado INICIAL de
+um checkbox, não trava: desmarcar volta a listar tudo.</p>
+<p><strong>A consequência: o vigente que o filtro esconde é DITO.</strong> <code>workspace</code> e
+<code>project</code> nunca exigiram tool calling, e as rotas que resolvem o binding de um
+agente ou de uma área chamam <code>ResolveModelBindingUseCase</code> <strong>sem</strong>
+<code>exigeToolCalling</code> — então um padrão chat-only desses níveis é resolvido
+normalmente e vira o vigente da linha. Com o filtro marcado, o gatilho mostrava
+um nome que a lista aberta não continha, sem nenhuma opção marcada. O picker
+agora nomeia o modelo e a causa; ele PODE nomear a causa porque só há um filtro
+ali. Quando a lista inteira fica vazia, quem fala continua sendo o texto de
+lista vazia, que já manda desmarcar — dois avisos sobre o mesmo checkbox seriam
+ruído.</p>
+<p><strong>Correção de fato, não do texto acima:</strong> &quot;Only <code>agent</code> validates&quot; descreve a
+Fase 9a. Desde o <a href="../../adr/0064-escopo-de-area-na-cascata-e-o-binding-de-agente-global.html">ADR 0064</a>
+<code>area</code> entra na MESMA validação — ela não é fallback genérico, o único consumidor
+do modelo de uma área é um agente dela (<a href="parte-03.html#rn-102">RN-102</a>) —, e é por isso que
+são DUAS as telas que ligam o filtro.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/llm/model-capabilities.ts:38</code>;
+<code>apps/web/src/components/ModelPicker.tsx</code> (o filtro e o aviso de vigente
+escondido), <code>apps/web/src/routes/settings/ModelsSection.tsx</code> (quem o liga,
+no seletor do agente e no do lead que segue a área)</li>
+<li><strong>Teste:</strong> <code>test/domain/llm/model-capabilities.spec.ts</code>,
+<code>test/application/use-cases/llm/set-model-binding.use-case.spec.ts</code>;
+<code>apps/web/src/routes/settings/filtro-de-aptos.test.tsx</code> e
+<code>apps/web/src/routes/SessionPage.filtro-de-aptos.test.tsx</code> (as duas telas que
+ligam, e a que não liga)</li>
+<li><strong>Origem:</strong> <a href="../../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041</a></li>
+</ul>
+<h3 id="rn-041">RN-041 — Contagem de tokens que o provider não deu é marcada como estimada</h3>
+<p>Quando a resposta do provider não traz <code>usage</code>, a base compatível com
+OpenAI conta localmente com o tokenizer e emite o chunk com
+<code>estimated: true</code>. O número ainda serve para cobrança, mas a marca preserva
+a diferença entre <strong>&quot;o provider disse zero&quot;</strong> e <strong>&quot;o provider não disse
+nada&quot;</strong> — e é o que permite à UI qualificar o custo em vez de mostrar um
+valor sem procedência.</p>
+<p>Os outros dois providers divergem, e a divergência é normalizada, não
+escondida: o Ollama simplesmente não emite <code>usage</code> sem a linha <code>done</code>; o
+Anthropic não pode omitir a contagem, porque <code>usage</code> é obrigatório no
+<code>message_start</code> do protocolo dele. As três respostas estão em
+<a href="../../reference/llm-providers.html#normalized-divergences">docs/reference/llm-providers.md</a>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/infrastructure/llm/openai-compatible-provider.ts:167</code></li>
+<li><strong>Teste:</strong> <code>test/contract/llm-provider.contract.ts</code> (cenário
+<code>sem_usage</code>, rodado contra os três providers)</li>
+<li><strong>Origem:</strong> <a href="../../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041</a></li>
+</ul>
+<h3 id="rn-042">RN-042 — O metering registra quem ATENDEU a chamada, não só por onde ela entrou</h3>
+<p>Quando a chamada passa por um hub que informa o provider real,
+<code>token_usage</code> registra esse provider em <code>upstream_provider</code>, além do
+provider de entrada. Sem hub — ou com um hub que não informou — o campo é
+<strong><code>null</code></strong>, nunca string vazia: a consulta de custo por provider precisa
+distinguir &quot;não passou por hub&quot; de &quot;passou por um e o hub não disse&quot;.</p>
+<p>Nas métricas, o rótulo <code>upstream_provider</code> repete o próprio provider quando
+não há hub, de modo que <code>sum by (upstream_provider)</code> continua somando o
+custo inteiro.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/llm/record-llm-usage.use-case.ts:73</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/llm/record-llm-usage.use-case.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0041-base-openai-compativel-e-contrato-de-llm-providers.html">ADR 0041</a></li>
+</ul>
+<h3 id="rn-043">RN-043 — Um modelo descoberto entra desabilitado; um modelo que desaparece é marcado, nunca apagado</h3>
+<p>A sincronização do catálogo tem três desfechos, e nenhum é destrutivo:</p>
+<ol>
+<li><strong>Um modelo novo</strong> entra <strong>sem linha de curadoria em nenhum workspace</strong>,
+e a ausência de linha É o estado desabilitado. O catálogo de um provider
+tem centenas de linhas — despejá-las como ativas tornaria a escolha
+impossível e ligaria um modelo caro sem que ninguém decidisse. Ativar é a
+curadoria do owner, e vale só no workspace dele (<a href="#rn-052">RN-052</a>).</li>
+<li><strong>Um modelo que sumiu do catálogo remoto</strong> recebe
+<code>availability = 'unavailable'</code> e <strong>permanece na tabela</strong>:
+<code>model_bindings</code> e <code>token_usage</code> apontam para a linha, e apagá-la levaria
+junto o histórico de custo.</li>
+<li><strong>Um modelo que voltou</strong> retorna a <code>available</code> com a curadoria
+<strong>intacta</strong> — a escolha do owner sobrevive a uma ausência temporária do
+provider.</li>
+</ol>
+<p>Os dois eixos são deliberadamente independentes: a curadoria é decisão de
+uma pessoa, <code>availability</code> é uma observação do provider. Nenhum escreve no
+outro — e desde o <a href="../../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049</a>
+eles nem moram na mesma tabela, então a sincronização não tem campo de
+curadoria para atropelar, mesmo que quisesse.</p>
+<p>Três consequências no resto do sistema:</p>
+<ul>
+<li>
+<p>um binding <strong>NOVO</strong> para um modelo inativo ou indisponível é recusado no
+domínio (<code>ModelNotBindableError</code>, 422). Os bindings que já existem
+permanecem;</p>
+</li>
+<li>
+<p>a <strong>cascata</strong> do <code>resolveBinding</code> pula o candidato indisponível, registra
+o que pulou em <code>skipped</code> e — quando o turno leva ferramentas — revalida
+<code>supports_tool_calling</code> em TODOS os níveis. Sem isso, o fallback pousaria
+um agente num modelo só de chat e violaria a <a href="#rn-040">RN-040</a> em silêncio;</p>
+</li>
+<li>
+<p><strong>um provider que falhou não torna nada indisponível</strong>: um 401 é &quot;não sei
+o que há ali&quot;, não &quot;não há nada ali&quot;. O provider é pulado, com a ORIGEM da
+falha (<code>infra</code> | <code>modelo</code>) no relatório — nunca diagnóstico por
+eliminação.</p>
+</li>
+<li>
+<p><strong>Onde:</strong> <code>src/application/use-cases/llm/sync-model-catalog.use-case.ts:160</code>,
+<code>src/domain/llm/binding-resolver.ts:63</code>,
+<code>src/domain/llm/model-capabilities.ts:49</code></p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>test/application/use-cases/llm/sync-model-catalog.use-case.spec.ts</code>,
+<code>test/domain/llm/binding-resolver.spec.ts</code>,
+<code>test/application/use-cases/llm/set-model-binding.use-case.spec.ts</code></p>
+</li>
+<li>
+<p><strong>Origem:</strong> <a href="../../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042</a></p>
+</li>
+</ul>
+<h3 id="rn-044">RN-044 — O preço vale daqui para a frente, e o custo antigo continua conferindo</h3>
+<p>Toda linha de <code>token_usage</code> registra o preço que produziu o seu
+<code>cost_micros</code>. Mudar o preço de um modelo <strong>não reprecifica o consumo
+passado</strong> — e mais que isso: o custo antigo continua <strong>reproduzível</strong>,
+porque <code>tokens × preço registrado</code> bate com o custo registrado mesmo depois
+de três correções na tabela <code>models</code>.</p>
+<p>Toda mudança de preço grava uma linha em <code>model_price_changes</code>, append-only,
+com o par antes/depois e a origem (<code>manual</code> | <code>sync</code>). O par é gravado junto
+de propósito: reconstruir o &quot;antes&quot; a partir da linha anterior dependeria de
+nenhuma escrita ter escapado do caminho auditado, que é exatamente o que a
+auditoria existe para provar. Um preço igual ao atual é no-op — uma linha
+dizendo &quot;mudou de 10 para 10&quot; transformaria o log em ruído.</p>
+<p>A regra vale para <strong>todo</strong> caminho que muda preço, não só o da tela. Duas
+escritas costumavam escapar dela: a sincronização do catálogo (que mudava o
+preço via <code>upsert</code>, nunca produzindo a origem <code>sync</code> que o domínio declarava
+desde a Fase 9c) e o <code>seed.ts</code> (que roda num banco já semeado —
+<code>BRABO_FORCE_SEED=1</code> no <code>bootstrap.sh</code> do k8s — e portanto corrigia o preço
+em silêncio). Ambos agora auditam, com o seed reaproveitando o próprio
+<code>UpdateModelPricingUseCase</code>.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/llm/update-model-pricing.use-case.ts:44</code>,
+<code>src/application/use-cases/llm/sync-model-catalog.use-case.ts:213</code>,
+<code>src/db/seed.ts:376</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/llm/update-model-pricing.use-case.spec.ts</code>,
+<code>test/application/use-cases/llm/sync-model-catalog.use-case.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042</a></li>
+</ul>
+<h3 id="rn-045">RN-045 — Um repositório adotado só é alterado por um plano aprovado</h3>
+<p>Adotar um repositório existente <strong>diagnostica sem agir</strong>. A adoção valida o
+acesso (<code>getRepo</code>), grava as linhas do projeto e produz um <strong>plano</strong>: a lista
+serializada do que o bootstrap faria, obtida chamando o <code>check()</code> de cada
+passo — o mesmo que dá idempotência desde a <a href="#rn-029">RN-029</a>
+— sem nunca executar a mutação correspondente.</p>
+<p>Enquanto <code>repo_bootstraps.plan_decision</code> é <strong>nulo</strong>, nenhuma mutação roda. O
+portão fica <strong>antes</strong> do executor, não dentro dele: o runner do bootstrap é o
+mesmo da Fase 2, sem filtro, e simplesmente não é chamado. Somado à guarda
+que já pulava branches protegidas, não há caminho de código que toque uma
+branch fora de um plano aprovado.</p>
+<p>Os dois desfechos:</p>
+<ul>
+<li><strong>aprovar</strong> é tudo ou nada (aprovar passos soltos quebraria a cascata
+<code>dev←main, qa←dev</code>). O que executa é o plano <strong>rederivado</strong> no momento da
+execução: igual ou menor que o mostrado, <strong>nunca maior</strong> — uma branch que
+virou protegida nesse meio-tempo é pulada;</li>
+<li><strong>adotar como está</strong> dispensa o bootstrap, registra a decisão e <strong>não</strong>
+mexe no cursor para fingir convergência. O plano é guardado como evidência
+do que foi deliberadamente não aplicado.</li>
+</ul>
+<p>Decidir sobre um plano regenerado é recusado (409): a decisão carrega o
+<code>planGeneratedAt</code> que o usuário viu, e um &quot;sim&quot; dado sobre outra coisa não
+vale.</p>
+<p>O provisionamento normal recusa (409) rodar num repositório adotado — sem
+essa guarda, o caminho de retomada rodaria o bootstrap no repositório de
+terceiros sem plano nenhum.</p>
+<p><strong>Limite conhecido:</strong> &quot;proteção divergente&quot; aqui é presença × ausência,
+porque é só isso que o contrato expõe (<code>GitBranch.protected</code> é um booleano, e
+o <a href="../../adr/0028-protecao-de-branch-divergencia-entre-providers.html">ADR 0028</a>
+adiou uma <code>ProtectionPolicy</code> normalizada). Uma branch com proteção PARCIAL
+conta como &quot;desprotegida&quot; e pode ser sobrescrita — mas só dentro de um plano
+aprovado.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/git/decide-bootstrap-plan.use-case.ts</code>,
+<code>src/application/use-cases/git/bootstrap-plan.ts</code>,
+<code>src/application/use-cases/git/bootstrap-steps.ts:74</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/git/decide-bootstrap-plan.use-case.spec.ts</code>,
+<code>test/application/use-cases/git/bootstrap-plan.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0044-adocao-de-repositorio-existente.html">ADR 0044</a></li>
+</ul>
+<h3 id="rn-046">RN-046 — Todo repositório de projeto declara a sua origem</h3>
+<p><code>project_repositories.origin</code> e <code>repo_bootstraps.origin</code> dizem se o Brabo
+<strong>criou</strong> o repositório (<code>created</code>) ou <strong>adotou</strong> um que já existia
+(<code>adopted</code>). A origem é escrita explicitamente por quem grava a linha — não
+pelo default da coluna — e não muda depois.</p>
+<p>Não é decoração: é o que faz o produto tratar como caso legítimo o que a
+Fase 10 precisou fazer à mão (inserir linhas em <code>project_repositories</code> e
+<code>repo_bootstraps</code> para apontar um projeto para um fork). Um repositório
+<code>adopted</code> tem política de branches própria, não passa pelo provisionamento e
+só é alterado conforme a <a href="#rn-045">RN-045</a>.</p>
+<p>O backfill da migration <code>0031</code> marca tudo que já existia como <code>created</code>, e
+pode ser cego quanto a isso: a adoção não existia antes dela, então não há
+linha adotada para classificar errado.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/db/schema/git.ts</code>, <code>src/db/migrations/0031_special_winter_soldier.sql</code>,
+<code>src/domain/git/repo-bootstrap.entity.ts</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/git/adopt-repository.use-case.spec.ts</code></li>
+<li><strong>Origem:</strong> <a href="../../adr/0044-adocao-de-repositorio-existente.html">ADR 0044</a></li>
+</ul>
+<h3 id="rn-048">RN-048 — A promoção de story é do usuário por padrão; o modo muda quem dispara, nunca o que se valida</h3>
+<p><code>projects.story_promotion</code> escolhe QUEM promove uma story de <code>draft</code> para
+<code>ready</code>:</p>
+<ul>
+<li><strong><code>manual</code></strong>: o PO deixa a story completa e ela fica <code>draft</code> com
+<code>stories.proposed_ready = true</code>. <strong>Nenhuma de suas tarefas é pegável</strong> — o
+<code>claimNext</code> exige <code>story.status = 'ready'</code> — e é o usuário quem a promove,
+individualmente ou em lote, a partir do Backlog.</li>
+<li><strong><code>auto</code></strong> (default de projeto novo desde a <a href="parte-08.html#rn-659">RN-659</a>):
+o PO promove por conta própria ao terminar uma story completa. Esse era o
+comportamento anterior à Fase 12c; <code>manual</code> foi o default da 12c até a
+RN-659 (migration <code>0065</code>), que mudou só o default da coluna — projetos
+criados no meio do caminho continuam <code>manual</code>.</li>
+</ul>
+<p><strong>O modo muda o gatilho, não o critério.</strong> Os dois caminhos passam por
+<code>assertPromotable</code> — prontidão (RF/DoD/DoR/regra) e módulos resolvidos contra
+o <code>module_map</code> vigente — e é isso que o teste de simetria em
+<code>story-promotion.spec.ts</code> trava: para toda story, <code>isPromotable</code> concorda com
+o que <code>assertPromotable</code> levanta. Antes da fase, a validação era duplicada e
+assimétrica (a criação chamava <code>canBecomeReady</code>, a transição chamava
+<code>assertReady</code> + <code>assertModulesResolved</code>): duas portas para o mesmo estado,
+com fechaduras diferentes. Tornar o gatilho configurável exigiu unificá-las
+primeiro, senão &quot;promover pela UI&quot; e &quot;promover na criação&quot; seriam regras
+distintas com o mesmo nome.</p>
+<p>Uma story <strong>incompleta</strong> nunca é proposta. <code>proposed_ready</code> só liga quando a
+story já passaria na validação — propor o que o domínio recusaria empurraria
+o trabalho do PO para o usuário disfarçado de decisão.</p>
+<p>A <strong>recusa</strong> devolve a story ao PO: grava <code>returned_reason</code>/<code>returned_at</code>,
+desliga <code>proposed_ready</code>, emite <code>backlog.story_promotion_returned</code> e injeta o
+motivo como mensagem FIXADA na sessão do PO, com a mesma redação de
+precedência de um gate devolvido ao dev (lição do ADR 0020). A recusa é
+gravada <strong>antes</strong> de falar com o engine, e o engine falhar não a desfaz — é o
+inverso da ordem do rearme na <a href="../engine.html#rn-047">RN-047</a>, e por um motivo: lá o evento
+afirma algo SOBRE o engine, aqui ele afirma algo sobre o usuário, o que é
+verdade haja ou não um PO de plantão para ouvir.</p>
+<p>A promoção em lote <strong>não é tudo ou nada</strong>: cada story é a sua própria
+transação, e uma que perdeu a prontidão entre a proposta e a decisão volta
+<code>failed</code> com o motivo, sem derrubar as outras que o usuário acabou de
+revisar.</p>
+<p>O evento <code>backlog.story_transitioned</code> registra o <strong>ator real</strong> — <code>user</code> na
+promoção manual, <code>agent/po</code> na automática. O event log é imutável e é o que a
+auditoria lê: registrar o PO numa decisão do usuário apagaria exatamente a
+etapa humana que a regra existe para devolver.</p>
+<p>A migration <code>0033</code> faz um backfill <strong>dirigido</strong>, não cego: a coluna nasce
+<code>manual</code> e todo projeto que já existia é movido para <code>auto</code>. O novo default
+vale para quem vier depois; um projeto em andamento não pode parar de
+produzir por causa de um deploy.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/backlog/story-promotion.ts</code>,
+<code>src/db/migrations/0033_absurd_domino.sql</code>,
+<code>src/application/use-cases/backlog/promote-stories.use-case.ts</code>,
+<code>src/application/use-cases/backlog/return-story.use-case.ts</code>,
+<code>apps/engine/lib/engine/agents/po_server.ex</code> (<code>revision_message/1</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/backlog/story-promotion.spec.ts</code> (simetria),
+<code>test/db/story-promotion-migration.spec.ts</code> (backfill dirigido),
+<code>test/application/use-cases/backlog/promote-stories.use-case.spec.ts</code>,
+<code>test/application/use-cases/backlog/return-story.use-case.spec.ts</code>,
+<code>apps/engine/test/engine/agents/po_server_test.exs</code> (describe <code>revise/2</code>)</li>
+<li><strong>Origem:</strong> <a href="../../adr/0046-promocao-de-story-com-autoridade-do-usuario.html">ADR 0046</a></li>
+</ul>
+<h3 id="rn-049">RN-049 — Toda decisão sobre uma ação proposta fica no event log, com quem decidiu</h3>
+<p><code>proposed_action.created</code>, <code>.approved</code> e <code>.denied</code> são eventos de domínio em
+<code>session_events</code>, além das linhas do outbox que os levam ao engine. O outbox
+<strong>não</strong> é memória: ele é drenado, marcado com <code>processed_at</code> e podado.</p>
+<p><code>actor</code> é quem realmente decidiu — o <strong>usuário</strong> em <code>.approved</code>/<code>.denied</code>, o
+<strong>agente</strong> que propôs em <code>.created</code>. E <code>created.payload.status</code> diz como a
+ação nasceu (<code>pending</code>, <code>auto_approved</code>, <code>denied</code>).</p>
+<p>Isso rende a distinção que dá a métrica: <strong>decisão humana = evento
+<code>proposed_action.approved</code></strong>; a política decidindo sozinha aparece apenas em
+<code>.created</code> com <code>status: auto_approved</code> e ator agente, e nunca se confunde com
+um clique. Essa contagem — &quot;cliques de aprovação&quot; — era exatamente o que a
+Fase 10 queria medir e não conseguiu, porque a decisão não existia em lugar
+consultável (achado #17). <code>approve_always</code> conta como aprovação porque
+delega ao mesmo caso de uso, e emite <code>permission.granted</code> por cima.</p>
+<p>Ficou de fora, por decisão: o <code>proposed_action.created</code> que o bootstrap do
+repositório emite direto para o outbox. Essas mutações já são narradas por
+<code>bootstrap.step_*</code> na mesma sessão, e duplicá-las contaria o mesmo fato duas
+vezes numa métrica de aprovação.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/actions/propose-action.use-case.ts</code>,
+<code>.../approve-action.use-case.ts</code>, <code>.../deny-action.use-case.ts</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/actions/approve-deny-action.use-case.spec.ts</code>
+(describe <code>the decision in the event log</code>)</li>
+<li><strong>Origem:</strong> <a href="../../adr/0048-decisao-no-log-e-a-ordem-do-gate.html">ADR 0048</a></li>
+</ul>
+<h3 id="rn-051">RN-051 — Um preço digitado à mão vence o catálogo do provider</h3>
+<p>Uma linha de <code>models</code> com <code>manual_pricing = true</code> tem um número que alguém
+digitou depois de ler a documentação do provider. A sincronização do catálogo
+<strong>não toca nele</strong> — nem quando o catálogo remoto traz um preço próprio. Era
+isso que o schema sempre dizia (&quot;quem sincroniza preço NÃO PODE sobrescrever
+uma linha marcada aqui sem decisão explícita&quot;) e o que o código não fazia: o
+remoto sempre vencia quando trazia um preço, e a sincronização seguinte
+desfazia a correção de quem tinha acertado um número errado.</p>
+<p>A regra existe porque, para vários providers, o número digitado é o <strong>único
+que existe</strong>: NVIDIA NIM e Bitdeer não publicam preço por token em
+documentação nenhuma
+(<a href="../../reference/llm-providers.html">referência de providers</a>), e o valor
+semeado é uma aproximação de mercado. Deixar o catálogo remoto sobrescrevê-lo
+trocaria uma aproximação conhecida por outra, sem ninguém decidir.</p>
+<p>Um modelo NOVO nasce com a flag vinda do catálogo, não de um default fixo:
+descoberto <strong>com</strong> preço, <code>manual_pricing = false</code> (a fonte é a sincronização,
+e é ela quem mantém a linha em dia); descoberto <strong>sem</strong> preço, <code>true</code> — a
+linha está esperando alguém digitar um, e marcá-la já protege esse número do
+primeiro catálogo que resolver informar um preço.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/llm/sync-model-catalog.use-case.ts</code>
+(<code>resolverPreco</code>), <code>src/db/schema/llm.ts:137</code></li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/llm/sync-model-catalog.use-case.spec.ts</code>
+(<code>manually typed price beats a catalog that REPORTS a price</code>)</li>
+<li><strong>Origem:</strong> <a href="../../adr/0042-catalogo-vivo-ciclo-de-vida-do-modelo-e-preco-auditavel.html">ADR 0042</a></li>
+</ul>
+<h3 id="rn-052">RN-052 — A curadoria de modelos vale só no workspace que a decidiu</h3>
+<p>Ligar ou desligar um modelo no seletor é uma decisão <strong>daquele workspace</strong>, e
+não alcança o vizinho. O catálogo em si continua global — nome, preço,
+janela e capabilities são fatos do provider, iguais para todos, e duplicá-los
+por workspace criaria N verdades sobre o mesmo modelo, além de partir
+<code>token_usage.model_id</code> ao meio.</p>
+<p>Antes disso, <code>models.is_active</code> era uma coluna para a instalação inteira:
+quem clicava em &quot;ativar&quot; decidia por todos os workspaces, e a tela não dava
+sinal nenhum disso. O efeito prático era um workspace ligando um modelo caro
+no seletor de outro — e o gasto aparecendo no orçamento de quem não decidiu
+nada.</p>
+<p>Três regras derivadas:</p>
+<ol>
+<li><strong>A ausência de linha é o estado desabilitado.</strong> Não há um estado separado
+de &quot;nunca decidido&quot;; um modelo que a sincronização descobriu não tem linha
+e não aparece no seletor (<a href="#rn-043">RN-043</a>).</li>
+<li><strong>Desabilitar é <code>UPDATE</code>, não <code>DELETE</code>.</strong> Apagar a linha apagaria também
+quem decidiu e quando. As leituras tratam os dois casos como inativos; o
+registro existe para quem audita.</li>
+<li><strong>Os escopos <code>agent</code> e <code>session</code> não conferem a curadoria.</strong> Nenhum dos
+dois tem âncora de workspace — o binding de agente é por slug global. A
+checagem recebe <code>null</code> e confere só a disponibilidade, deixando a lacuna
+explícita em vez de adivinhar um workspace.</li>
+</ol>
+<ul>
+<li><strong>Onde:</strong> <code>src/db/schema/llm.ts</code> (<code>workspace_models</code>),
+<code>src/application/use-cases/llm/set-models-active.use-case.ts</code>,
+<code>src/application/use-cases/llm/set-model-binding.use-case.ts</code>
+(<code>workspaceDoEscopo</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/llm/set-models-active.use-case.spec.ts</code>
+(<code>activating in one workspace does NOT turn on the model in its neighbor</code>)</li>
+<li><strong>Origem:</strong> <a href="../../adr/0049-curadoria-de-modelo-por-workspace.html">ADR 0049</a></li>
+</ul>
+<h3 id="rn-053">RN-053 — Reativar a execução acorda quem está parado, dentro da sessão que já existe</h3>
+<p>Ativar a execução de um projeto que <strong>já está executando</strong> é reativação, não
+um começo do zero: ela cai na sessão de execução atual e acorda os agentes
+que estavam parados. Duas partes, uma de cada lado do sistema.</p>
+<p><strong>A sessão é reaproveitada.</strong> A ativação usa a sessão <code>active</code> do projeto
+que já carrega um <code>execution.activated</code>; só cria uma quando não há nenhuma.
+Não existe coluna dizendo &quot;esta sessão é de execução&quot; — o que distingue uma é
+o evento que ela guarda, e é isso que se consulta. Fechar a sessão continua
+sendo o jeito de recomeçar: uma fechada não é candidata, e a próxima
+ativação abre uma nova.</p>
+<p>Antes, o <code>create</code> era incondicional, e o engine <strong>descarta</strong> o novo
+<code>session_id</code> quando o agente já está vivo. Cada clique em &quot;ativar&quot; deixava
+para trás uma sessão ativa que recebia o <code>execution.activated</code> e mais nada —
+os eventos dos agentes continuavam indo para a sessão da ativação anterior.</p>
+<p><strong>O agente é acordado por wake, não por <code>work</code>.</strong> Um começo do zero dispara o
+ciclo (<code>:work</code> — emite <code>dev.started</code> e pega tarefa). Um agente que já estava
+vivo recebe <code>{:wake, :became_claimable}</code>, e quem decide é a guarda de estado
+do servidor:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>estado do agente</th>
+<th>o que a reativação faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>idle</code></td>
+<td>pega a próxima tarefa</td>
+</tr>
+<tr>
+<td><code>working</code>, <code>awaiting_gate</code>, <code>awaiting_approval</code></td>
+<td>nada — a tarefa em andamento não é abandonada</td>
+</tr>
+<tr>
+<td><code>idle_tripped</code></td>
+<td>nada — só o rearme explícito o destrava (<a href="../engine.html#rn-047">RN-047</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Disparar <code>:work</code> para todos seria pior que o defeito: ele pega tarefa
+incondicionalmente, e para um agente em <code>awaiting_gate</code> significaria largar o
+worktree que o gate está varrendo — além de contornar o circuit breaker com
+um clique.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/activate-execution.use-case.ts</code>,
+<code>src/infrastructure/persistence/drizzle/session.repository.ts</code>
+(<code>findActiveExecutionSession</code>),
+<code>apps/engine/lib/engine_web/controllers/execution_command_controller.ex</code>
+(<code>acordar/4</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/activate-execution.use-case.spec.ts</code>
+(describe <code>reactivation doesn't open an orphan session</code>),
+<code>test/infrastructure/persistence/session-execution.repository.spec.ts</code>,
+<code>apps/engine/test/engine_web/controllers/execution_command_controller_test.exs</code>
+(describe <code>reactivation</code>)</li>
+<li><strong>Origem:</strong> achado #11 do
+<a href="../../explanation/primeiro-dogfooding.html">primeiro dogfooding</a></li>
+</ul>
+<h2 id="gates-de-pr-1">Gates de PR</h2>
+<h3 id="rn-054">RN-054 — O handoff externo se dirige ao lead da área ou a um agente sem área — nunca a um subagente</h3>
+<p>Quem fala com uma área <strong>de fora</strong> fala com o lead. Um handoff dirigido a um
+subagente (<code>qa-automacao</code>, <code>qa-performance-seguranca</code>, <code>infra-workflows</code>) é
+recusado com um erro tipado que <strong>nomeia o lead</strong> a quem o chamador deveria
+ter se dirigido — recusar sem dizer o caminho certo só trocaria uma quebra de
+hierarquia por um agente travado.</p>
+<p>A recusa acontece <strong>antes</strong> do INSERT. Recusar depois deixaria um handoff
+fantasma na tabela e um <code>handoff.offered</code> — evento imutável — afirmando uma
+oferta que a política não permite.</p>
+<p>A delegação interna (lead → subagente) <strong>não</strong> passa por aqui: ela é privada
+da área, tem tabela própria (<code>delegations</code>) e caminho próprio
+(<code>RecordDelegationUseCase</code>). A regra é sobre a fronteira externa da área, não
+sobre o que acontece dentro dela.</p>
+<p>O ADR 0038 pedia esta validação, nomeando o lugar — <code>CreateHandoffUseCase</code> é o
+único do sistema que grava <code>toAgent</code> — e ela nunca tinha sido implementada
+(achado #12 do primeiro dogfooding). O <code>offer_handoff</code> do engine repassava
+<code>to_agent</code> como string livre, então até agora nada impedia um agente de
+quebrar a hierarquia.</p>
+<p><strong>Área, lead e membros têm UMA fonte</strong> desde a FASE 18:
+<code>src/domain/agents/agent-areas.ts</code>. A lista era escrita à mão em três lugares
+(api, web, engine) e o teste só comparava api com web — o engine divergia em
+silêncio. Agora <code>apps/web/src/lib/agent-areas.generated.ts</code> e
+<code>apps/engine/lib/engine/agents/areas.ex</code> são produzidos por
+<code>pnpm --filter api gerar:areas</code>, e o teste reprova o que estiver velho no
+disco. Desde a AT-046 o mesmo gerador também escreve
+<code>SOLO_CONVERSATIONAL_AGENTS</code> (RN-440) no arquivo da web — e só lá, porque o
+engine não tem leitor para ele.
+A lista continua sendo o CATÁLOGO; <code>agent_areas</code> é o ESTADO por projeto
+(RN-094), e os dois respondem perguntas diferentes.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/domain/agents/agent-areas.ts</code>
+(<code>assertHandoffTargetAllowed</code>, <code>HandoffToSubagentError</code>),
+<code>src/application/use-cases/agents/create-handoff.use-case.ts</code></li>
+<li><strong>Teste:</strong> <code>test/domain/agents/agent-areas.spec.ts</code> (a regra + a checagem
+de que as cópias derivadas não divergem da fonte),
+<code>test/application/use-cases/agents/create-handoff.use-case.spec.ts</code>
+(recusa sem linha e sem evento)</li>
+<li><strong>Origem:</strong> <a href="../../adr/0038-hierarquia-de-agentes.html">ADR 0038</a>, fechado a
+partir do achado #12 do <a href="../../explanation/primeiro-dogfooding.html">primeiro dogfooding</a></li>
+</ul>
+<hr>
+<nav class="site-pager"><a href="../../business-rules/api.html">API</a><a href="../../business-rules/api/parte-02.html">API — parte 2 (desde RN-055)</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-api/blob/dev/docs/business-rules/api/parte-01.md">Editar esta página</a></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#sessão">Sessão</a></li><li class="n3"><a href="#atores">Atores</a></li><li class="n2"><a href="#contexto-de-negócio">Contexto de negócio</a></li><li class="n3"><a href="#rn-001">RN-001 — A sessão tem cinco estados e transições fechadas</a></li><li class="n3"><a href="#rn-002">RN-002 — Todo evento de sessão é imutável e o seq é denso</a></li><li class="n2"><a href="#aprovação-de-ações">Aprovação de ações</a></li><li class="n3"><a href="#rn-003">RN-003 — A ação tem seis estados, e negada é terminal</a></li><li class="n3"><a href="#rn-004">RN-004 — A decisão é avaliada em três estágios, e deny vence na hora</a></li><li class="n3"><a href="#rn-005">RN-005 — Papel mínimo por tipo de ação</a></li><li class="n3"><a href="#rn-006">RN-006 — Teto: merge em branch protegida nunca é auto-aprovável</a></li><li class="n3"><a href="#rn-007">RN-007 — Teto: patch de instrução nunca é auto-aprovável</a></li><li class="n3"><a href="#rn-008">RN-008 — O casamento de comando é por padrão, não por substring</a></li><li class="n2"><a href="#backlog">Backlog</a></li><li class="n3"><a href="#rn-009">RN-009 — A história tem quatro estados, e done é terminal</a></li><li class="n3"><a href="#rn-010">RN-010 — draft → ready exige quatro coisas, validadas no domínio</a></li><li class="n3"><a href="#rn-011">RN-011 — Regra de negócio sem história é achado, não erro</a></li><li class="n3"><a href="#rn-013">RN-013 — O grafo de módulos não pode ter ciclo</a></li><li class="n2"><a href="#gates-de-pr">Gates de PR</a></li><li class="n3"><a href="#rn-014">RN-014 — A ordem dos gates é imutável e awaiting_user é terminal</a></li><li class="n3"><a href="#rn-015">RN-015 — Ciclo K: o teto de correção é finito e herdado</a></li><li class="n3"><a href="#rn-017">RN-017 — Orçamento tem escopo exclusivo: projeto ou sessão</a></li><li class="n3"><a href="#rn-018">RN-018 — Notificação de orçamento em 70%, 90% e 100%, sem repetir</a></li><li class="n3"><a href="#rn-019">RN-019 — policy = 'block' recusa a chamada; 'allow' só registra</a></li><li class="n3"><a href="#rn-020">RN-020 — O modelo é resolvido em cascata, do mais específico ao mais geral</a></li><li class="n2"><a href="#psicologo-e-anamnese">Psicólogo e Anamnese</a></li><li class="n3"><a href="#rn-021">RN-021 — Hipótese sem evidência válida não é gravada</a></li><li class="n3"><a href="#rn-022">RN-022 — O ciclo de vida da hipótese é compare-and-swap</a></li><li class="n3"><a href="#rn-024">RN-024 — A Anamnese só perfila competência do catálogo — guarda-corpo estrutural</a></li><li class="n3"><a href="#rn-025">RN-025 — Apagar o perfil apaga de verdade, e o opt-out impede a re-derivação</a></li><li class="n3"><a href="#rn-026">RN-026 — Patch de instrução negado não é reproposto</a></li><li class="n3"><a href="#rn-027">RN-027 — Rollback de instrução é operação para frente</a></li><li class="n2"><a href="#git">Git</a></li><li class="n3"><a href="#rn-029">RN-029 — O bootstrap de Gitflow é idempotente e retomável</a></li><li class="n3"><a href="#rn-030">RN-030 — Reapresentar um refresh já usado revoga a família inteira</a></li><li class="n3"><a href="#rn-031">RN-031 — Falha de login é contada por e-mail e por IP, e o bloqueio escala</a></li><li class="n3"><a href="#rn-032">RN-032 — Nenhuma resposta distingue conta existente de inexistente</a></li><li class="n3"><a href="#rn-033">RN-033 — Token de verificação e de reset vale uma vez só</a></li><li class="n3"><a href="#rn-034">RN-034 — A sessão da web vive em cookie httpOnly, com CSRF</a></li><li class="n3"><a href="#rn-035">RN-035 — O tráfego interno engine ↔ api exige o segredo de serviço</a></li><li class="n3"><a href="#rn-038">RN-038 — Agente contado no resumo do workspace = gastou tokens este mês</a></li><li class="n3"><a href="#rn-040">RN-040 — Binding de agente exige tool calling nativo</a></li><li class="n3"><a href="#rn-041">RN-041 — Contagem de tokens que o provider não deu é marcada como estimada</a></li><li class="n3"><a href="#rn-042">RN-042 — O metering registra quem ATENDEU a chamada, não só por onde ela entrou</a></li><li class="n3"><a href="#rn-043">RN-043 — Um modelo descoberto entra desabilitado; um modelo que desaparece é marcado, nunca apagado</a></li><li class="n3"><a href="#rn-044">RN-044 — O preço vale daqui para a frente, e o custo antigo continua conferindo</a></li><li class="n3"><a href="#rn-045">RN-045 — Um repositório adotado só é alterado por um plano aprovado</a></li><li class="n3"><a href="#rn-046">RN-046 — Todo repositório de projeto declara a sua origem</a></li><li class="n3"><a href="#rn-048">RN-048 — A promoção de story é do usuário por padrão; o modo muda quem dispara, nunca o que se valida</a></li><li class="n3"><a href="#rn-049">RN-049 — Toda decisão sobre uma ação proposta fica no event log, com quem decidiu</a></li><li class="n3"><a href="#rn-051">RN-051 — Um preço digitado à mão vence o catálogo do provider</a></li><li class="n3"><a href="#rn-052">RN-052 — A curadoria de modelos vale só no workspace que a decidiu</a></li><li class="n3"><a href="#rn-053">RN-053 — Reativar a execução acorda quem está parado, dentro da sessão que já existe</a></li><li class="n2"><a href="#gates-de-pr-1">Gates de PR</a></li><li class="n3"><a href="#rn-054">RN-054 — O handoff externo se dirige ao lead da área ou a um agente sem área — nunca a um subagente</a></li></ul></aside>
+</div>
+<script src="../../assets/mermaid.min.js"></script>
+<script src="../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-pt-BR.json" data-base="../../"></script></body>
+</html>

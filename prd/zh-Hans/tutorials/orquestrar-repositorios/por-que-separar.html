@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-Hans" data-locale="zh-Hans" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>为什么拆分，何时不拆 | Brabo</title>
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="菜单">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="搜索" aria-label="搜索" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="语言"><option value="../../../tutorials/orquestrar-repositorios/por-que-separar.html">pt-BR</option><option value="../../../en/tutorials/orquestrar-repositorios/por-que-separar.html">en</option><option value="../../../ru/tutorials/orquestrar-repositorios/por-que-separar.html">ru</option><option value="../../../zh-Hans/tutorials/orquestrar-repositorios/por-que-separar.html" selected>zh-Hans</option></select>
+<select data-seletor aria-label="环境"><option value="../../../../dev/zh-Hans/tutorials/orquestrar-repositorios/por-que-separar.html">dev</option><option value="../../../../prd/zh-Hans/tutorials/orquestrar-repositorios/por-que-separar.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="切换主题">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 从这里开始</h2></summary><ul><li><a href="../../index.html">首页</a></li><li><a href="../../getting-started.html">快速开始</a></li></ul></details></section><section><details open><summary><h2>🎓 教程</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><details open><summary><span>编排多个仓库</span></summary><ul><li><a href="../../tutorials/orquestrar-repositorios.html">编排多个仓库</a></li><li><a href="../../tutorials/orquestrar-repositorios/por-que-separar.html" aria-current="page">为什么拆分，何时不拆</a></li><li><a href="../../tutorials/orquestrar-repositorios/o-mapa.html">地图</a></li><li><a href="../../tutorials/orquestrar-repositorios/como-cada-repo-e-consumido.html">每个仓库如何被消费</a></li><li><a href="../../tutorials/orquestrar-repositorios/vida-de-uma-mudanca.html">一次变更的生命周期</a></li><li><a href="../../tutorials/orquestrar-repositorios/monte-o-seu.html">搭建你自己的</a></li><li><a href="../../tutorials/orquestrar-repositorios/erros-que-ja-cometemos.html">我们犯过的错误</a></li></ul></details></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Brabo 是如何构建的</a></li></ul></details></section><section><details open><summary><h2>🧭 实用指南</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">开发 Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages 令牌</a></li><li><a href="../../runbook.html">运维手册</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>参与贡献</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">我们如何撰写</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 概念</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">架构</a></li><li><a href="../../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../../explanation/modelo-de-time.html">团队模型与交付物流程</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>流程与流水线</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">分支策略</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../../explanation/release-do-produto.html">产品发布</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>本地化</span></summary><ul><li><a href="../../explanation/localizacao.html">本地化</a></li><li><a href="../../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></details></li><li><details><summary><span>技术笔记</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 参考</h2></summary><ul><li><a href="../../glossary.html">术语表</a></li><li><a href="../../reference/componentes-da-doc.html">文档组件</a></li><li><a href="../../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../../business-rules.html">业务规则</a></li><li><span>API 参考</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ 决策（ADR）</a></h2></section><section><details><summary><h2>🗂️ 项目历史</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">时间线</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">shadcn 前后的界面（2026 年 10 月 31 日）</a></li><li><a href="../../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">第 1 至 15 阶段，第 1 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">16–26 计划与轮次，第 2 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">28 计划与审计，第 3 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">从本地 runner 起，第 4 部分</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../../explanation/backlog.html">已分类的 backlog</a></li><li><details><summary><span>验证与测量</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../../explanation/medicao-do-jev.html">Jev 工具路由器的测量</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="为什么拆分何时不拆">为什么拆分，何时不拆</h1>
+<p><strong>适合谁：</strong> 正在决定是否把产品拆成多个仓库的人。</p>
+<p><strong>读完之后你可以：</strong> 列出拆分的收益与代价，并判断自己的情况是否值得付出这个代价。</p>
+<h2 id="起点">起点</h2>
+<p>Brabo 起初是一个<strong>单体仓库</strong>：api、engine、web、runner、broker、基础设施、文档和端到端测试都在同一个仓库里，只有<strong>一个版本、一份历史、一条流水线</strong>。2026 年 11 月，产品负责人决定把它拆成组织内的多个仓库。决定与地图记录在 <a href="../../adr/0252-o-brabo-vira-um-conjunto-de-repositorios.html">ADR 0252</a> 中，供有兴趣的人日后阅读。</p>
+<h2 id="拆分带来了什么">拆分带来了什么</h2>
+<p>ADR 记录为原因和直接后果的内容：</p>
+<ul>
+<li><strong>独立的版本。</strong> 每个仓库有自己的版本，产品的版本在入口仓库。修复 api 不必强制重新发布 web。</li>
+<li><strong>每份文档都有明确的归属。</strong> <code>docs/</code> 和业务规则存放在拥有代码的仓库里，各仓库自己的 <code>docs:check</code> 检查自己那一份。</li>
+<li><strong>各自的制品。</strong> 发布容器镜像、二进制文件或软件包的仓库，在自己的仓库里发布，并有自己的签名链。</li>
+<li><strong>一个入口。</strong> 只想安装的人只需认识一个仓库，而不是十一个。</li>
+</ul>
+<blockquote>
+<p><strong>TODO(humano)：</strong> ADR 0252 没有列出带编号的&quot;何时拆分&quot;标准（例如团队规模或发布节奏）。如果负责人希望路径写明这些标准，需要由他来撰写。</p>
+</blockquote>
+<h2 id="拆分花费了什么">拆分花费了什么</h2>
+<p>拆分把复杂度转移到仓库之间的<strong>边</strong>上。以下是 Brabo 实测并不得不解决的代价，以及采用的方案：</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>代价</th>
+<th>发生了什么</th>
+<th>采用的方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>站点要读取兄弟仓库的代码</strong></td>
+<td>文档站点需要其他仓库的代码。读取各 <code>dev</code> 的最新提交，会让同一个 PR 在没有新提交的情况下由绿变红。</td>
+<td>入口仓库中的 <strong>SHA 锁</strong>（<code>irmaos.lock</code>），由机器人更新。<a href="../../adr/0274-os-gerados-leem-os-irmaos-por-uma-trava-de-shas.html">ADR 0274</a></td>
+</tr>
+<tr>
+<td><strong>翻译对等</strong></td>
+<td>翻译度量汇总了所有仓库的文档，因此别处的一次合并会让无关的 PR 变红。</td>
+<td>对等性<strong>只</strong>度量所属仓库自己的文档。<a href="../../adr/0273-a-paridade-de-traducao-mede-so-a-doc-do-brabo.html">ADR 0273</a></td>
+</tr>
+<tr>
+<td><strong>跨仓库的合并顺序</strong></td>
+<td>GitHub 没有仓库之间的依赖。一个仓库的 <code>dev</code> 在两次顺序错误的合并之间变红，而顺序只存在于负责推进的人的记忆里。</td>
+<td>PR <strong>声明</strong>自己依赖哪个 PR（<code>Depende-de:</code>），由检查等待。<a href="../../adr/0276-a-pr-declara-de-que-pr-depende-o-merge.html">ADR 0276</a></td>
+</tr>
+<tr>
+<td><strong>推进顺序</strong></td>
+<td>把 <code>dev</code> 推进到 <code>main</code> 同样有顺序。</td>
+<td>顺序由仓库的层级<strong>推断</strong>。<a href="../../adr/0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.html">ADR 0284</a></td>
+</tr>
+<tr>
+<td><strong>地图会过时</strong></td>
+<td>仓库列表被手工复制到 14 个地方，有 11 种不同的写法。</td>
+<td><strong>单一来源</strong>（<code>repos.yml</code>）生成每个 README 的区块。<a href="../../adr/0281-o-mapa-dos-repos-tem-uma-fonte-so.html">ADR 0281</a></td>
+</tr>
+<tr>
+<td><strong>CI 策略的固定版本</strong></td>
+<td>每个仓库固定了策略的不同版本；11 个仓库之间有 5 个不同的 SHA。</td>
+<td>固定指向一个<strong>标签</strong>，并由检查校验。<a href="../../adr/0280-o-pin-do-brabo-ci-aponta-para-uma-tag.html">ADR 0280</a></td>
+</tr>
+<tr>
+<td><strong>共享契约</strong></td>
+<td>契约仓库的新标签需要在多个使用方中升级版本。</td>
+<td>按<strong>精确标签</strong>消费，并由脚本在每个使用方中升级版本。见<a href="como-cada-repo-e-consumido.html">第 3 页</a>。</td>
+</tr>
+</tbody>
+</table></div>
+<p>注意其中的规律：<strong>每一项代价都变成了一件自动化的工具</strong>。没有这些自动化就拆分，是得到一组无人能维护的仓库的最常见途径。</p>
+<h2 id="何时不拆">何时不拆</h2>
+<p>这些迹象来自上面的代价，而不是 Brabo 的规定。如果其中几条适用于你，请推迟拆分：</p>
+<ul>
+<li><strong>没有人需要独立版本。</strong> 如果一切总是一起发布，单体仓库已经免费提供了这一点。</li>
+<li><strong>一个人或一个小团队负责全部。</strong> 边的成本（锁、合并顺序、固定版本）是固定的，而自主性的收益很小。</li>
+<li><strong>你无法自动化跨仓库的事务。</strong> 没有合并顺序、固定版本和地图的检查，这组仓库会悄悄腐烂。</li>
+<li><strong>代码总是一起变化。</strong> 如果几乎每次变更都涉及三个仓库，你搭出来的是一个难用的单体仓库。</li>
+</ul>
+<p>Brabo 仍然选择拆分，是因为它希望制品和文档有明确的归属，并接受用自动化来付出代价。下一页展示结果。</p>
+<p>下一页：<a href="o-mapa.html">地图</a>。</p>
+<nav class="site-pager"><a href="../../tutorials/orquestrar-repositorios.html">编排多个仓库</a><a href="../../tutorials/orquestrar-repositorios/o-mapa.html">地图</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/tutorials/orquestrar-repositorios/por-que-separar.md">编辑此页</a><span>更新于 2026-11-08T16:26:09-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#起点">起点</a></li><li class="n2"><a href="#拆分带来了什么">拆分带来了什么</a></li><li class="n2"><a href="#拆分花费了什么">拆分花费了什么</a></li><li class="n2"><a href="#何时不拆">何时不拆</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-zh-Hans.json" data-base="../../"></script></body>
+</html>

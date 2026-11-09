@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deploy e rollout | Brabo</title>
+<script src="../assets/tema.js"></script>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/fonts.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../runbook/deploy.html" selected>pt-BR</option><option value="../en/runbook/deploy.html">en</option><option value="../ru/runbook/deploy.html">ru</option><option value="../zh-Hans/runbook/deploy.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../dev/runbook/deploy.html">dev</option><option value="../../prd/runbook/deploy.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../index.html">Início</a></li><li><a href="../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><details open><summary><span>Manual de operação</span></summary><ul><li><a href="../runbook.html">Manual de operação</a></li><li><a href="../runbook/ambiente-local.html">Ambiente local e de dev</a></li><li><a href="../runbook/deploy.html" aria-current="page">Deploy e rollout</a></li><li><a href="../runbook/instalacao.html">Instalação e artefatos</a></li><li><a href="../runbook/operacao.html">Operação</a></li><li><a href="../runbook/restore.html">Restore</a></li><li><a href="../runbook/segredos.html">Rotação de segredos</a></li></ul></details></li><li><a href="../tutorials/adotar.html">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">Arquitetura</a></li><li><a href="../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">Política de branches</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../explanation/localizacao.html">Localização</a></li><li><a href="../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../glossary.html">Glossário</a></li><li><a href="../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">Regras de negócio</a></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="deploy-e-rollout">Deploy e rollout</h1>
+<p>Parte do <a href="../runbook.html">Runbook operacional</a>. Comece pela triagem do índice.</p>
+<h2 id="deploy-local">Deploy local</h2>
+<p>Sobe o Brabo inteiro num cluster local e o valida com um
+smoke test. Decisões no
+<a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025</a>.</p>
+<h3 id="prerequisites">Pré-requisitos</h3>
+<p>Obrigatórios no PATH: <code>docker</code>, <code>kubectl</code>, <code>kustomize</code>, <code>jq</code>, <code>openssl</code>.</p>
+<p><code>k3d</code> e <code>helm</code> <strong>não</strong> precisam estar instalados — o bootstrap os instala
+em <code>~/.local/bin</code>, numa versão fixada com checksum conferido. Garanta que
+esse diretório está no PATH.</p>
+<p>Recursos: a stack inteira (Postgres, Prometheus, dois operators e os
+três apps) pede cerca de <strong>4 GiB</strong> livres.</p>
+<h3 id="bringing-it-up">Subir</h3>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> deploy-local</span><span style="color:var(--shiki-token-comment)">           # constrói as imagens, sobe o cluster, instala, valida</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> deploy-local-clean</span><span style="color:var(--shiki-token-comment)">     # o mesmo, sem reconstruir as imagens</span></span>
+<span class="line"></span></code></pre>
+<p>No fim: web em <a href="http://localhost:8088">http://localhost:8088</a>, api em <code>:3000</code>, engine em
+<code>:4000</code> — <strong>as mesmas portas do <code>docker-compose.prod.yml</code></strong>, de propósito (ADR
+0025, decisão 10). O bootstrap roda o seed, que cria
+<code>owner@brabo.dev</code> já verificado com a senha de
+<code>BRABO_SMOKE_PASSWORD</code> (default <code>brabo12345678</code>) — é com isso que você entra
+no próprio login do web.</p>
+<p>O seed roda <strong>depois</strong> dos rollouts (o último passo dele ativa uma sessão,
+o que faz a api chamar o engine), e o bootstrap só segue depois de
+<strong>verificar que o login devolve 200</strong>. Essa checagem é por resultado, não
+por processo, e existe porque a anterior não era:
+<code>wait --for=condition=Ready=false</code> é satisfeito por um pod que nunca chegou a
+rodar, e por isso o bootstrap anunciava &quot;usuário do smoke pronto&quot;
+enquanto o login devolvia 401.</p>
+<blockquote>
+<p><strong>O seed é idempotente.</strong> Rodá-lo de novo sobre um banco semeado é o
+caso normal (<code>BRABO_KEEP_CLUSTER=1</code>): o workspace, o projeto e a sessão da
+demonstração são encontrados e reaproveitados, nunca duplicados, e a sessão reaproveitada
+não ganha os cinco eventos de novo (<code>apps/api/src/db/seed.ts</code>, o
+docblock do topo). Uma segunda execução não morre mais em <code>workspaces_slug_unique</code>. O
+bootstrap ainda decide pelo <strong>login</strong>, não pela fase do pod, e ainda
+remove o pod no fim para ele não reprovar o passo 1 do <code>smoke.sh</code>, que
+exige todo pod saudável.</p>
+</blockquote>
+<blockquote>
+<p><strong>Isto ocupa as portas do <code>make dev</code>.</strong> Manter as portas iguais é o que
+faz o <code>smoke.sh</code> valer para os dois modos, e o preço é que eles não
+coexistem: com o cluster de pé, o <code>make dev</code> não consegue publicar a porta da <code>api</code> e
+<strong>a 5173 nunca abre</strong>. Repare que o web muda de porta entre os modos —
+8088 aqui, 5173 lá. Para voltar ao desenvolvimento:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> k8s-down</span><span style="color:var(--shiki-token-punctuation)"> &#x26;&#x26;</span><span style="color:var(--shiki-token-function)"> make</span><span style="color:var(--shiki-token-string)"> dev</span></span>
+<span class="line"></span></code></pre>
+<p><code>node scripts/dev/preflight.mjs</code> diz em que modo você está, sem adivinhação. Os dois
+são tratados em
+<a href="../getting-started.html#the-two-local-modes-dont-coexist">Primeiros passos</a>.</p>
+</blockquote>
+<p>Outros alvos:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> smoke-k8s</span><span style="color:var(--shiki-token-comment)">        # só o smoke test, contra o cluster rodando</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> hpa-test</span><span style="color:var(--shiki-token-comment)">         # prova que o HPA do engine escala pela fila</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> k8s-validate</span><span style="color:var(--shiki-token-comment)">     # renderiza os overlays e valida contra o schema (sem cluster)</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> k8s-logs</span><span style="color:var(--shiki-token-comment)">         # últimas linhas de api, engine e web</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> k8s-down</span><span style="color:var(--shiki-token-comment)">         # remove o cluster</span></span>
+<span class="line"></span></code></pre>
+<p>Variáveis: <code>BRABO_SKIP_BUILD=1</code> (usa as imagens do daemon),
+<code>BRABO_KEEP_CLUSTER=1</code> (reaproveita o cluster), <code>BRABO_CLUSTER_TOOL=kind</code>,
+<code>BRABO_SKIP_OBSERVABILITY=1</code> (sem Tempo, Loki, Collector, Alloy nem Grafana —
+AT-177). A última é uma recusa explícita para as provas agendadas e o
+default não muda: <code>make deploy-local</code> ainda sobe a stack inteira.
+Prometheus e prometheus-adapter ficam de qualquer jeito, porque o HPA do engine
+escala por <code>oban_queue_depth</code> pela External Metrics API que eles servem.
+Releases de helm independentes (ESO, CNPG, metrics-server, Prometheus) instalam em
+paralelo; cada uma escreve o próprio log, impresso só se falhar.</p>
+<h3 id="validar-tag-do-pipeline">Validar uma tag da esteira</h3>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> deploy-local</span><span style="color:var(--shiki-token-string)"> TAG=v0.2.0-qa.1</span></span>
+<span class="line"></span></code></pre>
+<p>A esteira da Fase 6 <strong>não faz deploy</strong> — ela termina na tag. <code>TAG=</code> é como
+você vê, no cluster local, o que aquela tag carimbou: o bootstrap faz um
+checkout destacado da tag e constrói as imagens a partir daquele commit.</p>
+<p>Ele <strong>recusa</strong> rodar com árvore suja, em vez de adivinhar o que fazer
+com o seu trabalho em andamento. Ao terminar você fica num HEAD
+destacado; o comando para voltar aparece no log.</p>
+<p>Verificação: <strong>nenhuma</strong>. Nenhum workflow passa <code>TAG=</code>: o agendado
+<code>propriedades.yml</code> constrói a árvore do checkout, nunca uma tag, então o checkout
+destacado em <code>deploy/k8s/bootstrap.sh</code> (e a recusa dele com árvore suja) roda
+só quando alguém o digita. O que ele sobe depois é o mesmo bootstrap
+e smoke do <a href="#deploy-local">Deploy local</a>, que são provados.</p>
+<h3 id="imagens-de-uma-release">Fazendo deploy das imagens de uma release</h3>
+<p>Desde o <a href="../adr/0119-imagens-publicadas-no-ghcr-por-digest.html">ADR 0119</a> toda
+tag final publica as imagens de produção no GHCR
+(<code>ghcr.io/viralabs-dev/brabo-{api,engine,web,backup,broker}</code>, públicas — nenhum
+<code>imagePullSecret</code> em lugar nenhum) e registra o que publicou, <strong>por digest</strong>,
+em <code>.release/images.json</code>. A quinta, o broker de containers
+(<a href="../adr/0162-broker-publicado-e-oferecido-pelo-instalador.html">ADR 0162</a>), é
+para instalações — o overlay não tem Deployment do broker, e
+<code>make imagens-do-release</code> escreve só as outras quatro.</p>
+<p>Os overlays deste repositório mantêm <code>newTag: REPLACE_WITH_DIGEST</code>, um
+marcador. <strong>O repositório nunca declara que release está em produção</strong> —
+você declara, na hora do deploy:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># 1. pegue o registro da release de que você está fazendo deploy</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">gh</span><span style="color:var(--shiki-token-string)"> release</span><span style="color:var(--shiki-token-string)"> download</span><span style="color:var(--shiki-token-string)"> v3.2.0</span><span style="color:var(--shiki-token-string)"> --pattern</span><span style="color:var(--shiki-token-string)"> images.json</span><span style="color:var(--shiki-token-string)"> --dir</span><span style="color:var(--shiki-token-string)"> .release</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 2. escreva os digests dela no overlay</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> imagens-do-release</span><span style="color:var(--shiki-token-string)"> OVERLAY=prod</span><span style="color:var(--shiki-token-comment)">      # ou OVERLAY=staging</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 3. leia o diff antes de aplicar qualquer coisa</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">git</span><span style="color:var(--shiki-token-string)"> diff</span><span style="color:var(--shiki-token-string)"> deploy/k8s/overlays/prod/kustomization.yaml</span></span>
+<span class="line"></span></code></pre>
+<p>Três coisas que vale saber antes de rodar:</p>
+<ul>
+<li><strong>Não commite o resultado.</strong> <code>kustomize edit</code> faz a ida e volta do YAML: ele
+reordena chaves e desprende os comentários. A mudança é feita para viver na
+sua árvore de trabalho o tempo de um <code>kubectl apply -k</code>, e não mais.</li>
+<li><strong><code>digest:</code> substitui <code>newTag:</code></strong>, que é a questão — uma tag mutável em
+produção quer dizer nenhum rollback determinístico e dois pods do mesmo
+ReplicaSet possivelmente rodando binários diferentes.</li>
+<li><strong>Rollback é o mesmo comando com o arquivo da release anterior.</strong> Não há
+mais nada a desfazer: o digest é o estado inteiro.</li>
+</ul>
+<p>Se <code>make imagens-do-release</code> diz que não acha <code>.release/images.json</code>, você
+pulou o passo 1. Se não acha <code>kustomize</code>, a versão que o CI usa está
+fixada em <code>KUSTOMIZE_VERSION</code>, em <code>.github/workflows/ci.yml</code>.</p>
+<p>Verificação: <code>scripts/ci/aplicar-imagens.spec.ts</code>, em todo PR, prova a
+metade do passo 2 que <strong>lê</strong> o arquivo — ele aceita o <code>images.json</code> que o
+<code>release.yml</code> escreve e recusa um sem <code>imagens</code>, com lista vazia, ou sem
+versão e commit. O que ele entrega ao <code>kustomize edit set image</code> é provado por
+<code>scripts/ci/images-manifest.spec.ts</code> — sempre por digest, nunca uma tag, e só
+as quatro imagens que a base do kustomize declara. Rodar o <code>kustomize</code> no overlay
+não tem spec. A corrente inteira
+(baixar o arquivo de uma release real, escrevê-lo, <code>kubectl apply -k</code>) <strong>nunca
+rodou como prova</strong>: nada aplica os digests de uma release a um cluster, e o
+cluster agendado roda imagens construídas da árvore, não as publicadas.</p>
+<h3 id="que-versao-esta-no-ar">Que versão está no ar</h3>
+<p>Três lugares dizem a mesma coisa, e a resposta é a versão <strong>cozida
+no artefato</strong> — não uma configuração que alguém poderia ter mudado por
+acidente
+(<a href="../adr/0036-telas-de-auth-fieis-ao-design-e-fontes-auto-hospedadas.html">ADR 0036</a>):</p>
+<ol>
+<li>
+<p><strong>A tela de login</strong>, no rodapé. O caminho mais rápido, e não precisa de
+acesso ao cluster: abra <code>/login</code> e leia o primeiro item do rodapé.</p>
+</li>
+<li>
+<p><strong>A tag da imagem</strong>, se você tem <code>kubectl</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> get</span><span style="color:var(--shiki-token-string)"> deploy</span><span style="color:var(--shiki-token-string)"> -o</span><span style="color:var(--shiki-token-string)"> jsonpath=</span><span style="color:var(--shiki-token-string-expression)">'{range .items[*]}{.metadata.name}{"\t"}{.spec.template.spec.containers[0].image}{"\n"}{end}'</span></span>
+<span class="line"></span></code></pre>
+</li>
+<li>
+<p><strong><code>service.version</code> nos spans</strong>, da api, no Tempo. O único
+dos três que amarra uma requisição específica a um build.</p>
+</li>
+</ol>
+<p><code>dev</code> nos três não é falha: é o que uma imagem construída fora do
+<code>release.yml</code> informa, porque não nasceu de tag nenhuma. <code>docker compose</code>, <code>make deploy-local</code> sem <code>TAG=</code> e um build local caem todos
+aí.</p>
+<p><strong>Divergência entre os três é o achado.</strong> O rodapé mostrando uma
+versão e a tag da imagem outra quer dizer cache do bundle no navegador ou
+no nginx, não deploy errado — o bundle e a imagem vêm do mesmo
+build. Recarregue ignorando o cache antes de suspeitar do cluster.</p>
+<h3 id="semgrep-do-gate">O gate de SecOps está preso em &quot;SAST não rodou&quot;</h3>
+<p>O fio da sessão mostra um <code>agent.error</code> do SecOps (origem <code>infra</code>) dizendo
+<code>SAST não rodou: semgrep falhou (:invalid_output), pulado</code> (ou <code>:sem_saida</code>,
+ou <code>indisponível</code>) e a PR fica em <code>awaiting_secops</code>. Desde a
+<a href="../business-rules/engine.html#rn-714">RN-714</a> o gate nunca aprova sem análise
+estática: ele fica pendente e bloqueia a PR. Depois de corrigir a causa abaixo,
+o gate roda de novo sozinho — no próximo reinício do engine, ou quando o
+<code>GateRescuer</code> acha o ciclo parado (15 minutos). O erro aparece uma vez por
+motivo: um resgate que bate no mesmo motivo de novo só o registra no
+servidor do engine. Antes da RN-714 a mesma
+falha aprovava o gate. Nos composes de produção e de instalação o
+engine roda com <code>read_only: true</code> e um tmpfs em <code>/home/engine</code>; quando esse
+tmpfs é criado <code>root:root</code>, o usuário do engine (uid 1000) não consegue criar
+<code>/home/engine/.semgrep</code>, o semgrep sai com stdout vazio, e o gate
+não consegue ler um resultado.</p>
+<p>Confira de dentro do engine rodando:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> brabo-engine-1</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string-expression)"> 'ls -ld /home/engine; id -u'</span></span>
+<span class="line"></span></code></pre>
+<p>A pasta tem de pertencer ao uid 1000. Os dois composes declaram
+<code>/home/engine:uid=1000,gid=1000,mode=0700</code> desde a RN-707; uma instalação
+criada antes dela mantém a linha antiga até o compose dela ser atualizado e o
+serviço <code>engine</code> ser recriado (<code>docker compose ... up -d engine</code>). O Kubernetes
+não é afetado (<code>fsGroup: 1000</code>). Um binário <code>semgrep</code> ausente bloqueia o gate
+do mesmo jeito. O semgrep ainda busca as regras dele no
+registry: sem saída de rede a varredura falha com <code>scan_failed</code>, que é uma
+causa diferente.</p>
+<p>Um <code>scan_failed</code> também pode vir de um semgrep <strong>sem <code>semgrep-core</code></strong>, o
+binário que faz a varredura:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> brabo-dev-engine-1</span><span style="color:var(--shiki-token-string)"> semgrep</span><span style="color:var(--shiki-token-string)"> --version</span><span style="color:var(--shiki-token-comment)">   # compose de dev</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> brabo-dev-engine-1</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string-expression)"> 'semgrep --config p/security-audit --json --quiet --metrics=off /tmp >/dev/null'</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># "Failed to find semgrep-core in PATH or in the semgrep package." (exit 2)</span></span>
+<span class="line"></span></code></pre>
+<p>O Semgrep 1.179.0 parou de publicar wheels <code>musllinux</code>, então na imagem Alpine do engine
+o pip o constrói a partir do sdist e o binário do core falta. Os dois Dockerfiles do engine
+fixam <code>SEMGREP_VERSION=1.183.0</code> (o de dev desde 02/10, mantido igual
+ao de produção por <code>scripts/ci/semgrep-do-engine.spec.ts</code>); uma imagem de dev construída
+antes disso se reconstrói com <code>docker compose -p brabo-dev up -d --build engine</code>.
+Subir a versão exige uma release que tenha wheel <code>musllinux</code> no PyPI.</p>
+<h3 id="engine-sigaltstack">O engine aborta com <code>sys_sigaltstack(): Internal error</code></h3>
+<p><code>sys/unix/sys_signal_stack.c:101:sys_sigaltstack(): Internal error: Failed to set alternate signal stack</code>, exit 134, no boot ou no build da imagem (<code>mix local.hex</code>, <code>mix compile</code>): o ERTS pediu à musl uma pilha de sinal de tamanho fixo
+que a musl ≥ 1.2.6 recusa em CPUs com AMX (erlang/otp#11349). Aparece de forma
+intermitente no CI (só alguns runners têm AMX) e determinística num
+servidor desses. O engine roda OTP 29.1.1, que tem a correção
+(<a href="../adr/0209-engine-em-otp-29.html">ADR 0209</a>); vê-lo de novo quer dizer uma imagem com
+OTP &lt; 29.1 em Alpine ≥ 3.24 — reconstrua a partir dos Dockerfiles atuais. O passo de build
+do CI &quot;O host tem AMX?&quot; diz se uma dada execução caiu num host desses.</p>
+<h3 id="erro-de-cors">Erro de CORS</h3>
+<p>A mensagem do navegador nomeia o <strong>destino</strong> da chamada, nunca a
+causa. Leia primeiro a <strong>origem</strong> que ela cita — é essa a informação útil
+(<a href="../adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037</a>):</p>
+<pre class="codigo"><code>Access to fetch at 'http://localhost:3000/health' from origin
+'http://localhost:5174' has been blocked by CORS policy
+                     ^^^^ esta parte é o diagnóstico
+</code></pre>
+<p><strong>Se a origem não é a que você espera</strong> (<code>:5174</code> em vez de <code>:5173</code>, um
+host diferente, <code>https</code> em vez de <code>http</code>), o problema é a origem, não o
+CORS.</p>
+<p>Nos composes, <code>WEB_ORIGIN</code> é <strong>derivada</strong> de <code>WEB_PORT</code> — mudar
+<code>WEB_PORT</code> no <code>.env</code> (a orientação dos <a href="../getting-started.html">primeiros passos</a>
+para porta ocupada) já move a origem aceita junto, então essa
+divergência específica não acontece mais. O que ainda causa isto: alguém
+passou <code>--port</code> direto ao Vite fora do compose (o ADR 0037 fez o Vite
+recusar subir nesse caso, via <code>strictPort</code>, em vez de subir em silêncio
+noutra porta), o web é servido por outro caminho, ou
+<code>WEB_ORIGIN</code> foi definida à mão e sobrepôs a derivação. Corrija a origem,
+ou acrescente-a a <code>WEB_ORIGIN</code> — <strong>nos dois serviços</strong>, que leem a mesma
+variável.</p>
+<p><strong>Se a origem está certa</strong>, confirme o que cada serviço de fato responde.
+<code>curl</code> não faz CORS, então mostra o cabeçalho cru — exatamente o que o
+navegador olha:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># api — espera-se access-control-allow-origin + allow-credentials</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">curl</span><span style="color:var(--shiki-token-string)"> -sI</span><span style="color:var(--shiki-token-string)"> http://localhost:3000/health</span><span style="color:var(--shiki-token-string)"> -H</span><span style="color:var(--shiki-token-string-expression)"> "Origin: http://localhost:5173"</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string)"> -i</span><span style="color:var(--shiki-token-string)"> access-control</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># engine — espera-se access-control-allow-origin + vary: origin</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">curl</span><span style="color:var(--shiki-token-string)"> -sI</span><span style="color:var(--shiki-token-string)"> http://localhost:4000/health</span><span style="color:var(--shiki-token-string)"> -H</span><span style="color:var(--shiki-token-string-expression)"> "Origin: http://localhost:5173"</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string)"> -i</span><span style="color:var(--shiki-token-string)"> access-control</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># preflight, que é onde falta de allow-headers aparece</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">curl</span><span style="color:var(--shiki-token-string)"> -sI</span><span style="color:var(--shiki-token-string)"> -X</span><span style="color:var(--shiki-token-string)"> OPTIONS</span><span style="color:var(--shiki-token-string)"> http://localhost:3000/auth/login</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  -H</span><span style="color:var(--shiki-token-string-expression)"> "Origin: http://localhost:5173"</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  -H</span><span style="color:var(--shiki-token-string-expression)"> "Access-Control-Request-Method: POST"</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  -H</span><span style="color:var(--shiki-token-string-expression)"> "Access-Control-Request-Headers: content-type,x-csrf-token"</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string)"> -i</span><span style="color:var(--shiki-token-string)"> access-control</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Saída vazia é o achado</strong>: o serviço não reconheceu a origem.
+<code>WEB_ORIGIN</code> errada ou ausente, ou a porta errada.</p>
+<p><strong>Um preflight sem o cabeçalho que o web manda</strong> é o outro modo de
+falha, e o mais enganoso: a lista <code>allowedHeaders</code> da api é explícita
+e <strong>nenhum teste faz preflight</strong>, então um cabeçalho novo do cliente passa no CI e
+quebra só no navegador. A lista de hoje é <code>Content-Type</code>,
+<code>Authorization</code>, <code>X-CSRF-Token</code>, <code>traceparent</code>.</p>
+<p>Três coisas que <strong>não</strong> são problema de CORS, por mais que pareçam
+um:</p>
+<ul>
+<li><strong>api ↔ engine.</strong> CORS é mecanismo do navegador; ali quem chama é um
+cliente HTTP do lado do servidor, que ignora esses cabeçalhos. Uma falha nesse
+caminho é o service token (<code>401</code>/<code>403</code> — veja
+<a href="segredos.html#rotacao-das-chaves-do-auth">rotação</a>) ou o endereço errado
+(<code>ECONNREFUSED</code> — veja <a href="#sessao-nao-ativa">a sessão não sai de <code>created</code></a>).</li>
+<li><strong>O canal Phoenix ficando em silêncio.</strong> WebSocket não passa por CORS.
+Quem recusa é o <code>check_origin</code> do endpoint, também alimentado por
+<code>WEB_ORIGIN</code>, e a recusa aparece no log do engine — não no
+console do navegador como erro de CORS.</li>
+<li><strong>O <code>/metrics</code> do engine bloqueado no navegador.</strong> Isso é deliberado: uma
+métrica interna não é feita para ser legível pelo JavaScript da página. Use
+<code>curl</code>.</li>
+</ul>
+<h3 id="sessao-nao-ativa">A sessão não sai de <code>created</code></h3>
+<p>Sintoma: ativar uma sessão não faz nada. &quot;Abrir sessão criativa&quot; cria
+a sessão e a tela não se mexe; &quot;Ativar sessão&quot; também não.
+No log da api, <code>POST /projects/:id/sessions/:id/transition</code> devolve
+<code>500</code>:</p>
+<pre class="codigo"><code>TransitionSessionUseCase.activate ✗ TypeError
+  ↳ HttpApiToEngineClient.startSession ✗ TypeError: fetch failed
+      caused by: AggregateError [ECONNREFUSED]
+</code></pre>
+<p>Ativar uma sessão é o primeiro passo que <strong>atravessa</strong> para o engine
+(a api pede a sessão supervisionada por HTTP interno), então é
+aqui que um <code>ENGINE_URL</code> errado aparece — e não antes, porque nada mais
+no caminho de criação sai da api.</p>
+<p>Confirme de <strong>dentro</strong> do container, que é onde o endereço importa
+(<code>brabo-dev-api-1</code> no compose de dev; numa instalação é <code>brabo-api-1</code>,
+<a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170</a>):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> brabo-dev-api-1</span><span style="color:var(--shiki-token-string)"> node</span><span style="color:var(--shiki-token-string)"> -e</span><span style="color:var(--shiki-token-string-expression)"> '</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">for (const u of ["http://engine:4000/health", "http://localhost:4000/health"]) {</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">  fetch(u, { signal: AbortSignal.timeout(5000) })</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">    .then((r) => console.log(u, "->", r.status))</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">    .catch((e) => console.log(u, "-> FAILED:", e.cause?.code ?? e.message));</span></span>
+<span class="line"><span style="color:var(--shiki-token-string-expression)">}'</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> brabo-dev-api-1</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string-expression)"> 'echo $ENGINE_URL'</span></span>
+<span class="line"></span></code></pre>
+<p><code>engine:4000</code> respondendo <code>200</code> enquanto <code>localhost:4000</code> dá
+<code>ECONNREFUSED</code>, com <code>ENGINE_URL=http://localhost:4000</code>, é o diagnóstico
+fechado: <strong>dentro do container, <code>localhost</code> é a própria api</strong>.</p>
+<p>A causa costuma ser o <code>.env</code>, não o compose. <code>make dev</code> passa o <code>.env</code>
+como <code>--env-file</code>, e um valor ali <strong>vence</strong> o
+<code>${ENGINE_URL:-http://engine:4000}</code> do compose. Correção: remova (ou comente) a
+linha <code>ENGINE_URL</code> do seu <code>.env</code> e recrie a api —</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> compose</span><span style="color:var(--shiki-token-string)"> -f</span><span style="color:var(--shiki-token-string)"> docker/docker-compose.yml</span><span style="color:var(--shiki-token-string)"> --env-file</span><span style="color:var(--shiki-token-string)"> .env</span><span style="color:var(--shiki-token-string)"> up</span><span style="color:var(--shiki-token-string)"> -d</span><span style="color:var(--shiki-token-string)"> api</span></span>
+<span class="line"></span></code></pre>
+<p>— porque cada ambiente já traz o default certo sem ela:
+o compose aponta para o serviço <code>engine</code>, e a api rodando no host
+cai em <code>http://localhost:4000</code> pelo próprio código. Definir a
+variável só faz sentido para apontar para um engine que não é nenhum dos dois.
+Vale também para o compose de <strong>produção</strong>, que usa a mesma
+interpolação; no Kubernetes o valor vem do ConfigMap e sempre
+foi <code>http://engine:4000</code>.</p>
+<p>Duas checagens antes de culpar o endereço, se <code>ENGINE_URL</code> está correta:</p>
+<ul>
+<li><strong>O engine está de pé?</strong> <code>docker compose ps engine</code> e
+<code>curl -sI http://localhost:4000/health</code>. <code>ECONNREFUSED</code> com o
+endereço certo quer dizer serviço fora do ar, não mal configurado.</li>
+<li><strong>Uma sessão que ativa e se fecha sozinha ~30s depois</strong> não é este
+problema. Olhe o <code>termination_reason</code>: <code>heartbeat_timeout</code> quer dizer que a
+ativação funcionou e ninguém entrou no canal Phoenix — comportamento
+esperado ao ativar de fora da interface
+(<code>SESSION_HEARTBEAT_TIMEOUT_MS</code>). <code>conversation_idle_timeout</code> é o
+outro: um agente conversacional esperou o usuário por mais
+de <code>SESSION_CONVERSATION_IDLE_TIMEOUT_MS</code> (8h), contadas do fim do
+turno dele (<a href="../business-rules/api.html#rn-581">RN-581</a>). Para mudar esse teto,
+defina a variável no <code>.env</code> (os três composes a mapeiam para o engine)
+ou, no Kubernetes, acrescente um item <code>env:</code> ao patch do engine no overlay:
+<code>deploy/k8s/</code> não a escreve de propósito, porque uma variável ausente
+ali já é o default de 8h do código (AT-153). Um <code>409</code> com
+<code>reason: &quot;sessao_encerrada&quot;</code> depois disso é a sessão fechada recusando
+conversa — abra uma sessão nova.</li>
+</ul>
+<h3 id="terminal-preso-abrindo">A aba Terminal fica presa em &quot;Abrindo terminal...&quot; para sempre</h3>
+<p>Sintoma: num projeto em modo <code>runner</code> (ADR 0103/0104), a aba Código → Dev → Terminal
+nunca sai do esqueleto de carregamento. O console do navegador mostra, num
+laço apertado com backoff crescente:</p>
+<pre class="codigo"><code>socket do terminal com erro {&quot;erro&quot;:&quot;[object Event]&quot;}
+socket do terminal fechado
+</code></pre>
+<p>Isto é o WebSocket do navegador nunca alcançando o engine, não um
+problema do runner — acontece até antes de qualquer <code>brabo-runner</code> conectar. Três
+causas empilhadas, todas fechadas pela <a href="../business-rules/infra.html#rn-433">RN-433</a>:</p>
+<ol>
+<li>
+<p><strong><code>ENGINE_PUBLIC_URL</code> resolvendo para um hostname interno do Docker.</strong> O
+ticket que a api entrega ao navegador (<code>POST .../terminal-ticket</code>) leva
+<code>engineWsUrl</code>, montado a partir de <code>ENGINE_PUBLIC_URL</code> — distinta de
+<code>ENGINE_URL</code> (RN-419), que é para chamadas api→engine <strong>dentro</strong> da
+rede do compose. <code>docker/docker-compose.yml</code> agora define
+<code>ENGINE_PUBLIC_URL: ${ENGINE_PUBLIC_URL:-http://localhost:4000}</code> no
+serviço <code>api</code> (o mesmo default que <code>VITE_ENGINE_URL</code> já usa para o <code>web</code>).
+A instalação e o prod têm a mesma variável, com <code>VITE_ENGINE_URL</code> como
+default (<code>docker exec brabo-api-1 printenv ENGINE_PUBLIC_URL</code>). Confirme de
+dentro do container:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> brabo-dev-api-1</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string-expression)"> 'echo $ENGINE_PUBLIC_URL'</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># esperado: http://localhost:4000 (ou o endereço público real do seu engine)</span></span>
+<span class="line"></span></code></pre>
+<p>Um valor vazio aqui num ambiente construído antes desta correção quer dizer que o
+código caiu para <code>ENGINE_URL</code> (<code>http://engine:4000</code>) — um hostname que
+só resolve dentro da rede do Docker, nunca a partir do navegador. Correção:
+reconstrua/recrie o container <code>api</code> para o novo default do compose valer,
+ou defina <code>ENGINE_PUBLIC_URL</code> explicitamente no <code>.env</code> se o endereço público
+real do engine for outro (um túnel, outro host).</p>
+</li>
+<li>
+<p><strong>Um socket que nunca abre tentava de novo para sempre, em silêncio.</strong>
+Independente do endereço acima — mesmo um engine genuinamente inalcançável
+(fora do ar, atrás de firewall) deveria aparecer como erro, nunca girar para sempre.
+<code>apps/web/src/lib/terminal-channel.ts</code> agora desiste depois de 8s se o
+socket não abriu, e mostra o <code>RunnerOnboardingPanel</code> com uma
+mensagem acionável em vez de ficar no laço do comportamento padrão de
+reconexão do WebSocket do navegador.</p>
+</li>
+<li>
+<p><strong>A URL do socket duplicava o caminho.</strong> O bloqueio de verdade depois que
+os dois primeiros foram corrigidos: <code>terminal-channel.ts</code> concatenava
+<code>/runner/websocket</code> num <code>engineWsUrl</code> que a api já devolve
+completo (<code>ws://host:port/runner</code>) — e o próprio construtor <code>Socket</code> do <code>phoenix.js</code>
+acrescenta <code>/websocket</code> de novo sobre qualquer endpoint que
+receba. O engine recebia <code>GET /runner/runner/websocket/websocket</code> e
+o rejeitava (<code>Phoenix.Router.NoRouteError</code>), visível em
+<code>docker logs brabo-dev-engine-1</code> como uma conexão que nunca passa de
+<code>REFUSED CONNECTION</code>. Corrigido passando <code>engineWsUrl</code> direto ao
+<code>Socket</code> — <code>apps/runner/src/channel.ts</code> (o lado do CLI do mesmo
+contrato) já fazia isso corretamente.</p>
+</li>
+</ol>
+<h3 id="runner-com-ticket-morto">O runner inunda a api com um ticket morto</h3>
+<p>Sintoma: o web começa a responder <strong>429</strong> às requisições da própria pessoa, sem
+atividade incomum da parte dela; e/ou um projeto em modo <code>runner</code> aparece como
+sem agente local (tarefas de dev presas em <code>dev.blocked_by_container</code>,
+<code>RunnerReadiness</code> recusando) enquanto o <code>brabo-runner</code> está visivelmente rodando na
+máquina dela.</p>
+<p><strong>Como confirmar.</strong> No log do engine, procure o MESMO ticket sendo
+recusado de novo e de novo, numa cadência fixa de cerca de <strong>5,13 s</strong>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">docker</span><span style="color:var(--shiki-token-string)"> logs</span><span style="color:var(--shiki-token-string)"> brabo-dev-engine-1</span><span style="color:var(--shiki-token-keyword)"> 2>&#x26;1</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string-expression)"> 'REFUSED CONNECTION TO EngineWeb.RunnerSocket'</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> tail</span><span style="color:var(--shiki-token-string)"> -20</span></span>
+<span class="line"></span></code></pre>
+<p>Dezenas dessas em poucas horas, todas com a mesma string de ticket, é a
+assinatura. ~5,13 s não é arbitrário — é o teto do backoff interno
+<code>reconnectAfterMs</code> do <code>phoenix.js</code>.</p>
+<p><strong>Causa.</strong> O ticket do socket é de <strong>uso único</strong>
+(<a href="../business-rules/web.html#rn-108">RN-108</a>); o auto-reconnect embutido
+da biblioteca repete os MESMOS <code>params</code>, então ele tenta de novo um ticket que foi
+consumido na primeira conexão e nunca mais será aceito. Uma versão
+de <code>apps/runner/src/channel.ts</code> saiu com esse auto-reconnect LIGADO —
+enquanto o docblock do próprio módulo afirmava que ele estava neutralizado. Empilhado na
+política PRÓPRIA de nova tentativa do runner (que está correta: ticket fresco por rodada, backoff,
+teto de tentativas consecutivas), o resultado medido foi <strong>530 requisições em
+um minuto</strong> contra o teto de 300 req/min do <code>RATE_LIMIT_USER</code>, quatro minutos
+seguidos acima do limite. O limite é <strong>por usuário</strong>, e é por isso que o 429
+apareceu no navegador do dono da conta e não em algum lugar perto do runner.</p>
+<p>A segunda consequência é a pior: enquanto preso nesse laço o runner
+<strong>não está conectado</strong>, então o <code>RunnerReadiness</code> (<a href="../business-rules/runner.html#rn-507">RN-507</a>)
+recusa e o projeto parece não ter agente local — parte do que se lê
+como &quot;o container não sobe&quot; é isto.</p>
+<p><strong>Correção.</strong> Atualize o binário <code>brabo-runner</code> (ou reinstale a partir da tela
+do projeto). Nada a mudar no servidor: o rate limiter fez o trabalho dele, e o
+engine estava certo em recusar cada um daqueles tickets. Se a inundação ainda
+está em curso, parar o runner a encerra na hora, e os 429 somem à medida que
+a janela deslizante esvazia (um minuto).</p>
+<h3 id="segredo-de-oauth-no-boot">A api recusa subir por segredo de OAuth</h3>
+<p>Sintoma: com <code>NODE_ENV=production</code>, a api morre no início com uma mensagem
+sobre <code>GIT_OAUTH_STATE_SECRET</code> — ausente, definida com o valor de exemplo
+do repositório, ou curta demais.</p>
+<p><strong>Não é regressão, e não a contorne.</strong> Esta chave assina o <code>state</code> do
+OAuth de git, e o <code>state</code> é o que impede o callback público de ser
+forjado. Antes do <a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059</a>
+a api subia com um default publicado aqui mesmo neste repositório —
+quem vê este erro tinha, até agora, o fluxo de conexão de git aberto a
+qualquer um. O boot falhar é o aviso chegando, atrasado.</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> GIT_OAUTH_STATE_SECRET</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)">"$(</span><span style="color:var(--shiki-token-function)">openssl</span><span style="color:var(--shiki-token-string)"> rand</span><span style="color:var(--shiki-token-string)"> -base64</span><span style="color:var(--shiki-token-constant)"> 32</span><span style="color:var(--shiki-token-string-expression)">)"</span></span>
+<span class="line"></span></code></pre>
+<p>No Kubernetes o valor vem de <code>brabo-secrets</code>, sob a chave de mesmo nome
+do objeto <code>brabo</code> no cofre de segredos, que
+<code>deploy/k8s/base/common/externalsecrets.yaml</code> puxa inteiro — se o erro apareceu
+lá, o problema é o cofre não entregar a chave, e o caminho é
+<a href="#diagnostico-do-deploy">Diagnóstico do deploy</a>.</p>
+<p>Trocar a chave <strong>invalida os <code>state</code>s em voo</strong>: quem está no meio de
+&quot;conectar GitHub&quot; naquele instante é recusado e refaz o fluxo. Como
+o TTL do <code>state</code> é de 10 minutos, essa é a janela — não há migração
+a fazer, e nenhuma conexão <strong>já estabelecida</strong> é afetada (o
+token guardado não depende desta chave).</p>
+<h3 id="callback-login-social-nao-registrado">O provider recusa o callback do login social</h3>
+<p>Sintoma: clicar em &quot;Entrar com GitHub&quot;/&quot;Entrar com GitLab&quot; na tela de
+login vai ao provider e volta com um erro DO PRÓPRIO PROVIDER
+(<code>redirect_uri_mismatch</code> no GitHub, &quot;The redirect URI included is not
+valid&quot; no GitLab) — nem chega a
+<code>/auth/oauth/:provider/callback</code>.</p>
+<p><strong>Não é bug do produto — é um cadastro faltando do lado do
+provider.</strong> O login social (<a href="../adr/0084-login-social-github-e-gitlab.html">ADR 0084</a>)
+reaproveita o MESMO OAuth App que a conexão de git já usa
+(<code>GITHUB_OAUTH_CLIENT_ID</code>/<code>GITLAB_OAUTH_CLIENT_ID</code>, nenhuma variável nova), mas
+cada FLUXO tem o próprio <code>redirect_uri</code>, e o provider exige que TODOS
+os que a api pode pedir estejam cadastrados antes:</p>
+<ul>
+<li>Conexão de git (já existia): <code>${API_PUBLIC_URL}/git/oauth/&lt;provider&gt;/callback</code></li>
+<li>Login social (novo): <code>${API_PUBLIC_URL}/auth/oauth/&lt;provider&gt;/callback</code></li>
+</ul>
+<p>Cadastre o segundo na configuração do OAuth App (GitHub: Settings
+→ Developer settings → OAuth Apps; GitLab: Settings → Applications) — o GitHub
+aceita várias URLs de callback no mesmo App, o GitLab também. Não precisa de
+App separado nem de client id/secret novos.</p>
+<h3 id="segredos-irmaos-no-boot">Os quatro segredos irmãos também não sobem com o default</h3>
+<p>Sintoma: com <code>NODE_ENV=production</code>, a api (ou, para <code>SECRET_KEY_BASE</code>
+e <code>BRABO_SERVICE_TOKEN</code>, a release <code>:prod</code> do engine, que recusa os
+mesmos valores de token desde a <a href="../business-rules/engine.html#rn-601">RN-601</a>) morre
+no início com uma mensagem sobre <code>AUTH_JWT_SECRET</code>,
+<code>BRABO_SERVICE_TOKEN</code>, <code>CREDENTIALS_MASTER_KEY</code> ou <code>SECRET_KEY_BASE</code> —
+ausente, definida com o valor de exemplo do repositório, ou curta demais.</p>
+<p><strong>Mesma causa do segredo de OAuth acima, e a mesma orientação: não é
+regressão, e não a contorne.</strong>
+O <a href="../adr/0059-segredo-do-state-de-oauth-sem-default.html">ADR 0059</a> já
+declarava estes quatro como pendentes — o mesmo padrão, só ainda não
+replicado — e a <a href="../business-rules/api.html#rn-114">RN-114</a> o fechou. Cada um protege
+uma coisa diferente:</p>
+<ul>
+<li><code>AUTH_JWT_SECRET</code> público = qualquer um pode derivar o par que assina o
+access token e forjar um válido.</li>
+<li><code>BRABO_SERVICE_TOKEN</code> público = qualquer um pode chamar <code>/internal/*</code> passando por cima do
+<code>EngineServiceGuard</code>.</li>
+<li><code>CREDENTIALS_MASTER_KEY</code> público = qualquer um pode decifrar o cofre de
+credenciais do usuário (chaves de LLM, tokens de git).</li>
+<li><code>SECRET_KEY_BASE</code> (engine) já tinha <code>raise</code> no <code>runtime.exs</code> — o
+defeito era só o compose mascarando esse <code>raise</code> com um fallback
+público.</li>
+</ul>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> AUTH_JWT_SECRET</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)">"$(</span><span style="color:var(--shiki-token-function)">openssl</span><span style="color:var(--shiki-token-string)"> rand</span><span style="color:var(--shiki-token-string)"> -base64</span><span style="color:var(--shiki-token-constant)"> 32</span><span style="color:var(--shiki-token-string-expression)">)"</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> BRABO_SERVICE_TOKEN</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)">"$(</span><span style="color:var(--shiki-token-function)">openssl</span><span style="color:var(--shiki-token-string)"> rand</span><span style="color:var(--shiki-token-string)"> -base64</span><span style="color:var(--shiki-token-constant)"> 32</span><span style="color:var(--shiki-token-string-expression)">)"</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> CREDENTIALS_MASTER_KEY</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)">"$(</span><span style="color:var(--shiki-token-function)">openssl</span><span style="color:var(--shiki-token-string)"> rand</span><span style="color:var(--shiki-token-string)"> -base64</span><span style="color:var(--shiki-token-constant)"> 32</span><span style="color:var(--shiki-token-string-expression)">)"</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> SECRET_KEY_BASE</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)">"$(</span><span style="color:var(--shiki-token-function)">openssl</span><span style="color:var(--shiki-token-string)"> rand</span><span style="color:var(--shiki-token-string)"> -base64</span><span style="color:var(--shiki-token-constant)"> 64</span><span style="color:var(--shiki-token-string-expression)">)"</span></span>
+<span class="line"></span></code></pre>
+<p>Nada muda no Kubernetes, pelo mesmo motivo de
+<code>GIT_OAUTH_STATE_SECRET</code>: os quatro já vinham de <code>brabo-secrets</code>,
+sob a chave de mesmo nome do objeto <code>brabo</code> que
+<code>deploy/k8s/base/common/externalsecrets.yaml</code> puxa inteiro.</p>
+<p><strong>O grafo de conhecimento (<code>NEO4J_URI</code>/<code>NEO4J_USER</code>/<code>NEO4J_PASSWORD</code>,
+<a href="../adr/0099-neo4j-grafo-de-conhecimento-e-templates.html">ADR 0099</a>) segue
+a mesma regra, com uma diferença</strong>: <code>NEO4J_URI</code> e <code>NEO4J_USER</code> têm um
+default de desenvolvimento seguro (<code>bolt://neo4j:7687</code>, <code>neo4j</code> — não são
+segredos, e o <code>docker-compose.prod.yml</code> já os fornece); só
+<code>NEO4J_PASSWORD</code> não tem default público, pelo mesmo motivo dos quatro
+acima — e sem ela o boot da api falha em
+<code>GraphStore.onModuleInit</code> (<code>neo4j-config.ts</code>) ANTES mesmo de o próprio Neo4j
+recusar subir (o entrypoint da imagem oficial exige senha de 8+
+caracteres; um <code>NEO4J_AUTH</code> vazio derruba o container <code>neo4j</code> primeiro).</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> NEO4J_PASSWORD</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)">"$(</span><span style="color:var(--shiki-token-function)">openssl</span><span style="color:var(--shiki-token-string)"> rand</span><span style="color:var(--shiki-token-string)"> -hex</span><span style="color:var(--shiki-token-constant)"> 24</span><span style="color:var(--shiki-token-string-expression)">)"</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Em desenvolvimento a chave é <code>NEO4J_URI</code>, e ela vem vazia por padrão.</strong> O
+serviço <code>neo4j</code> roda no profile padrão do compose de dev, então o servidor está de pé
+falando alguém com ele ou não; a api só conecta quando <code>NEO4J_URI</code> está
+definida. Descomente-a no <code>.env</code> (<code>bolt://neo4j:7687</code>) e recrie a api —
+o <code>GraphStore</code> então registra <code>Neo4j conectado — constraints do grafo garantidas</code>
+em vez de <code>NEO4J_URI/NEO4J_USER/NEO4J_PASSWORD ausentes</code>. Usuário e senha
+chegam ao container com os mesmos defaults que o serviço <code>neo4j</code> usa para
+<code>NEO4J_AUTH</code>, então defina-os só para TROCAR a senha, e trocá-la ali
+muda os dois lados de uma vez.</p>
+<p>Até isto ser ligado, o <code>docker-compose.yml</code> não passava as três variáveis ao
+serviço <code>api</code> de jeito nenhum e o serviço não tem <code>env_file</code> — então o bloco
+que o <code>.env.example</code> documentava desde que o grafo nasceu não chegava a nada, e
+descomentá-lo não ligava nada. O <code>docker-compose.prod.yml</code> as fornecia
+desde o primeiro dia (é por isso que só o desenvolvimento foi afetado): um Neo4j saudável ficava
+ao lado de uma api informando as variáveis ausentes, indefinidamente.</p>
+<p><strong>HEX, não base64.</strong> O entrypoint do Neo4j lê <code>NEO4J_AUTH</code> como
+<code>usuario/senha</code> e separa na PRIMEIRA barra — uma senha base64 pode
+conter <code>/</code> (o alfabeto tem <code>/</code> e <code>+</code>), e isso quebra o parse com
+<code>Invalid value for NEO4J_AUTH</code>, derrubando o container <code>neo4j</code> num
+laço de reinício. Isso aconteceu de verdade: o smoke test do CI falhou assim depois de
+um merge que reintroduziu <code>-base64</code> por engano. Hex não tem <code>/</code>, <code>+</code> nem <code>=</code>.</p>
+<p>O <code>docker/smoke.sh</code> já gera as cinco variáveis efêmeras acima (os
+quatro irmãos mais <code>NEO4J_PASSWORD</code>, esta em hex) a cada execução — é
+assim que o job de CI
+&quot;Build, scan e smoke das imagens de produção&quot; sobe o
+<code>docker-compose.prod.yml</code> sem
+nenhum segredo commitado.</p>
+<p>Trocar <code>AUTH_JWT_SECRET</code> ou <code>BRABO_SERVICE_TOKEN</code> sem a
+dança do <code>_PREVIOUS</code> tem o mesmo efeito já documentado em
+<a href="segredos.html#rotacao-das-chaves-do-auth">Rotação das chaves do auth</a>; trocar
+<code>CREDENTIALS_MASTER_KEY</code> sem re-embrulhar tem o mesmo efeito já
+documentado em
+<a href="segredos.html#rotacao-da-chave-mestra">Rotação da chave mestra</a>. Esta checagem de BOOT não
+muda nenhum dos dois procedimentos — ela só impede a chave de chegar à produção
+como o literal público deste repositório.</p>
+<h3 id="smtp-real">SMTP real no <code>MailSender</code></h3>
+<p>O <code>MailSender</code> envia e-mail de verdade só quando <code>MAIL_TRANSPORT=smtp</code> — o
+default é <code>log</code> (o comportamento de sempre), <strong>inclusive em produção</strong>:
+enviar e-mail de verdade é escolha explícita do operador
+(<a href="../adr/0096-smtp-real-no-mailsender.html">ADR 0096</a>). Veja
+<a href="../reference/configuration.html#api">Configuração</a> para a tabela completa de <code>SMTP_*</code>.</p>
+<p>Sintoma de configuração incompleta: com <code>NODE_ENV=production</code> e
+<code>MAIL_TRANSPORT=smtp</code>, a api morre no início reclamando de
+<code>SMTP_HOST</code>, <code>SMTP_USER</code>, <code>SMTP_PASSWORD</code> ou <code>SMTP_FROM</code> — mesmo padrão
+de mensagem dos
+<a href="#segredos-irmaos-no-boot">quatro segredos irmãos</a> (<a href="../business-rules/api.html#rn-408">RN-408</a>),
+mas SEM o default público que eles têm: aqui a regra só entra em cena
+quando o operador escolheu <code>smtp</code>.</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> MAIL_TRANSPORT</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-foreground)">smtp</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> SMTP_HOST</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-foreground)">smtp.seu-provedor.com</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> SMTP_PORT</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-constant)">587</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> SMTP_USER</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-foreground)">usuario-do-provedor</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> SMTP_PASSWORD</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)">"$(</span><span style="color:var(--shiki-token-function)">sua-credencial-do-provedor</span><span style="color:var(--shiki-token-string-expression)">)"</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> SMTP_FROM</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)">"Brabo &#x3C;nao-responda@seu-dominio.com>"</span></span>
+<span class="line"></span></code></pre>
+<p><code>SMTP_PASSWORD</code> é um segredo de INFRAESTRUTURA do serviço (uma variável de ambiente simples, como
+<code>AUTH_JWT_SECRET</code>), não um segredo de USUÁRIO — ele não passa por envelope
+encryption, e não tem procedimento de rotação próprio além de trocar a
+variável e reiniciar (o provedor de SMTP decide a política de rotação
+dessa credencial). No Kubernetes, a chave vai para o objeto <code>brabo</code> do
+cofre de segredos como qualquer outra, e chega a <code>brabo-secrets</code> sem mudança de
+manifesto — <code>deploy/k8s/base/common/externalsecrets.yaml</code> puxa o objeto
+inteiro.</p>
+<p>Se o e-mail não chega mesmo sem erro de boot: confira no log da api
+<code>falha ao enviar e-mail via SMTP</code> (<code>type</code>/destinatário aparecem, o corpo e
+o token NUNCA aparecem — mesma regra do <code>LogMailSender</code>), e teste a
+credencial com o próprio cliente SMTP do provedor antes de suspeitar do Brabo.</p>
+<h3 id="k3d-is-the-default-even-with-kind-installed">k3d é o padrão mesmo com kind instalado</h3>
+<p>Não é preferência. O k3s vem com um controlador de NetworkPolicy
+embutido; <strong>o kindnet do kind não implementa NetworkPolicy</strong> e
+ignora os manifestos em silêncio. Num cluster kind, as policies desta fase
+existem no etcd sem efeito nenhum, e o deploy pareceria validado
+sem ter validado metade do item 4 do escopo. O smoke test avisa quando
+o cluster não está aplicando.</p>
+<h3 id="what-the-smoke-test-covers">O que o smoke test cobre</h3>
+<ol>
+<li>
+<p>Todo pod <strong>Ready</strong> — não só <code>Running</code>. Um pod cuja checagem de readiness
+falha fica <code>Running</code> para sempre sem receber tráfego.</p>
+</li>
+<li>
+<p>Nenhum container com <code>runAsUser: 0</code>.</p>
+</li>
+<li>
+<p>Login em <code>POST /auth/login</code> com o usuário do seed — exercita argon2id,
+emissão de access token e os cookies de sessão.</p>
+</li>
+<li>
+<p><code>workspace → project → session</code>. Este passo atravessa o conjunto inteiro de
+NetworkPolicies: criar uma sessão faz a api chamar o engine
+por HTTP interno, com o service token. A sessão é criada com
+<code>kind: consultiva</code> — obrigatório desde a FASE 20
+(<a href="../business-rules/api.html#rn-097">RN-097</a>) — e é <code>consultiva</code> de
+propósito: o smoke test exercita criar → ativar → fechar e nunca
+ativa execução, que numa sessão consultiva devolve <code>409</code>.</p>
+<p><strong>Este é o passo que prova que a rota tem consumidor fora do
+web.</strong> Quando <code>kind</code> passou a ser obrigatório, a suíte da api passou com 1562
+testes, e foi o smoke test que falhou, porque é o único
+que chama a rota como cliente externo, sem mock, contra
+a imagem de produção.</p>
+</li>
+<li>
+<p>Sondas distintas (<code>/live</code> e <code>/ready</code> para o engine, <code>/live</code> para a
+api) e o <code>/config.js</code> do web apontando para as URLs do cluster.</p>
+</li>
+<li>
+<p><code>oban_queue_depth</code> com os rótulos <code>queue</code> e <code>state</code> em <code>/metrics</code>.</p>
+</li>
+<li>
+<p><code>external.metrics.k8s.io</code> servindo a métrica — o modo de falha do
+prometheus-adapter é silencioso, então perguntamos direto à API agregada.</p>
+</li>
+</ol>
+<h3 id="diagnostico-do-deploy">Diagnóstico do deploy</h3>
+<h4 id="403-on-internal-or-401-on-the-apis-calls-to-the-engine"><code>403</code> no <code>/internal/*</code>, ou <code>401</code> nas chamadas da api para o engine</h4>
+<p>Os dois sintomas têm a mesma causa: o service token não bate
+entre os dois lados (a api recusa com <code>403</code>, o plug do engine com
+<code>401</code>). Confira que as duas cargas leem o <strong>mesmo</strong> valor:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> get</span><span style="color:var(--shiki-token-string)"> secret</span><span style="color:var(--shiki-token-string)"> brabo-secrets</span><span style="color:var(--shiki-token-string)"> -o</span><span style="color:var(--shiki-token-string)"> jsonpath=</span><span style="color:var(--shiki-token-string-expression)">'{.data.BRABO_SERVICE_TOKEN}'</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> base64</span><span style="color:var(--shiki-token-string)"> -d</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> sha256sum</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/engine</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> sh</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string-expression)"> 'printf %s "$BRABO_SERVICE_TOKEN" | sha256sum'</span></span>
+<span class="line"></span></code></pre>
+<p>Comparar o hash em vez do valor evita imprimir o segredo no
+terminal. Se divergem, o pod do engine tem uma versão velha do
+Secret: <code>kubectl -n brabo rollout restart deploy/engine</code>. Se batem,
+o cabeçalho não está passando: confira que <code>BRABO_SERVICE_TOKEN</code> está definido
+nas <strong>duas</strong> cargas — o engine tem um default de desenvolvimento
+(<code>dev-service-token-change-me</code>), então esquecer a variável só lá
+produz exatamente este sintoma, sem erro de boot — e que nenhum proxy no
+caminho está tirando cabeçalhos desconhecidos.</p>
+<h4 id="login-returning-401-for-everyone-after-a-deploy">Login devolvendo <code>401</code> para todo mundo depois de um deploy</h4>
+<p>Quase sempre um <code>AUTH_JWT_SECRET</code> novo pulando o passo de coexistência: o
+access token some junto com ele, mas o sintoma aparece no
+refresh. O procedimento correto está em
+<a href="segredos.html#rotacao-das-chaves-do-auth">Rotação das chaves do auth</a>.</p>
+<h4 id="externalsecret-never-becomes-ready">O <code>ExternalSecret</code> nunca fica Ready</h4>
+<p>O <code>SecretStore</code> lê o Secret de origem <code>brabo</code>, criado imperativamente pelo
+bootstrap. Confirme que ele existe e que o RBAC está no lugar:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> get</span><span style="color:var(--shiki-token-string)"> secret</span><span style="color:var(--shiki-token-string)"> brabo</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> describe</span><span style="color:var(--shiki-token-string)"> secretstore</span><span style="color:var(--shiki-token-string)"> brabo-secret-store</span></span>
+<span class="line"></span></code></pre>
+<p>Desde a AT-220 o <code>ExternalSecret</code> puxa o objeto <code>brabo</code> <strong>inteiro</strong> do
+cofre (<code>dataFrom.extract</code>) em vez de listar cada chave. Duas consequências para o
+diagnóstico:</p>
+<ul>
+<li>
+<p><strong>Uma chave ausente não o impede mais de ficar Ready.</strong> O <code>brabo-secrets</code> é
+criado sem ela, e a falha aparece em quem precisa da chave: um Pod
+com <code>secretKeyRef</code> (<code>NEO4J_PASSWORD</code> no Neo4j, <code>BACKUP_S3_ACCESS_KEY</code>/
+<code>BACKUP_S3_SECRET_KEY</code> no S3 local) fica em
+<code>CreateContainerConfigError</code>, e a api ou o engine recusa subir em
+produção nomeando a variável. O objeto no cofre tem de levar
+<code>DATABASE_URL</code>, <code>SECRET_KEY_BASE</code>, <code>CREDENTIALS_MASTER_KEY</code>,
+<code>GIT_OAUTH_STATE_SECRET</code>, <code>AUTH_JWT_SECRET</code>, <code>AUTH_TOKEN_PEPPER</code>,
+<code>BRABO_SERVICE_TOKEN</code>, <code>RELEASE_COOKIE</code>, <code>BACKUP_S3_ENDPOINT</code>,
+<code>BACKUP_S3_BUCKET</code>, <code>BACKUP_S3_ACCESS_KEY</code>, <code>BACKUP_S3_SECRET_KEY</code> e
+<code>NEO4J_PASSWORD</code> — a lista que o <code>deploy/k8s/bootstrap.sh</code> cria localmente.
+Compare o que chegou:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> get</span><span style="color:var(--shiki-token-string)"> secret</span><span style="color:var(--shiki-token-string)"> brabo-secrets</span><span style="color:var(--shiki-token-string)"> -o</span><span style="color:var(--shiki-token-string)"> go-template=</span><span style="color:var(--shiki-token-string-expression)">'{{range $k, $v := .data}}{{$k}}{{"\n"}}{{end}}'</span></span>
+<span class="line"></span></code></pre>
+</li>
+<li>
+<p><strong>Tudo nesse objeto chega aos Pods.</strong> Toda chave vira uma
+variável de ambiente da api, do engine, dos dois Jobs de migração e do CronJob
+de backup (<code>envFrom: brabo-secrets</code>). Não guarde em <code>brabo</code> nada que esses
+processos não deveriam ver; o segredo de outro consumidor vai em outro objeto.</p>
+</li>
+</ul>
+<h4 id="engine-hpa-at-unknown">HPA do engine em <code>&lt;unknown&gt;</code></h4>
+<p>Em ordem, do mais ao menos provável:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># 1. o engine está expondo a métrica?</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/engine</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> wget</span><span style="color:var(--shiki-token-string)"> -qO-</span><span style="color:var(--shiki-token-string)"> http://127.0.0.1:4000/metrics</span><span style="color:var(--shiki-token-keyword)"> |</span><span style="color:var(--shiki-token-function)"> grep</span><span style="color:var(--shiki-token-string)"> oban_queue_depth</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 2. o Prometheus a está coletando?</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> monitoring</span><span style="color:var(--shiki-token-string)"> port-forward</span><span style="color:var(--shiki-token-string)"> svc/prometheus-server</span><span style="color:var(--shiki-token-string)"> 9090:80</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># depois: http://localhost:9090 -> Status -> Targets</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># 3. o adapter a está servindo?</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> get</span><span style="color:var(--shiki-token-string)"> --raw</span><span style="color:var(--shiki-token-string-expression)"> "/apis/external.metrics.k8s.io/v1beta1/namespaces/brabo/oban_queue_depth?labelSelector=state%3Davailable"</span></span>
+<span class="line"></span></code></pre>
+<p>Se (1) responde e (3) não, o problema é a regra em
+<code>deploy/k8s/helm/prometheus-adapter-values.yaml</code>.</p>
+<h4 id="migration-job-doesnt-reapply">O Job de migração não reaplica</h4>
+<p>A spec de um <code>Job</code> é imutável: com o Job anterior ainda no cluster,
+reaplicar com uma imagem nova falha. O bootstrap já apaga os dois
+antes de aplicar; à mão:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> delete</span><span style="color:var(--shiki-token-string)"> job</span><span style="color:var(--shiki-token-string)"> migrate-api</span><span style="color:var(--shiki-token-string)"> migrate-engine</span><span style="color:var(--shiki-token-string)"> --ignore-not-found</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> apply</span><span style="color:var(--shiki-token-string)"> -k</span><span style="color:var(--shiki-token-string)"> deploy/k8s/overlays/local</span></span>
+<span class="line"></span></code></pre>
+<h4 id="binengine-rpc-responds-eaddrinuse"><code>bin/engine rpc</code> responde <code>eaddrinuse</code></h4>
+<p>A faixa de portas da distribuição Erlang (<code>ERL_AFLAGS</code>) precisa de mais de uma
+porta: o nó rodando ocupa a primeira, e o <code>rpc</code> sobe um nó
+oculto que precisa de outra. A faixa configurada é 9100–9110, aberta na
+NetworkPolicy.</p>
+<h4 id="checking-that-the-engines-replicas-are-clustered">Conferindo que as réplicas do engine estão em cluster</h4>
+<p>Sem cluster Erlang, o <code>:global.trans</code> de <code>Workspace.ensure!</code> não
+serializa nada e duas réplicas rodam um <code>git init</code> concorrente no
+mesmo diretório compartilhado:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/engine</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> /app/bin/engine</span><span style="color:var(--shiki-token-string)"> rpc</span><span style="color:var(--shiki-token-string-expression)"> 'IO.inspect(Node.list())'</span></span>
+<span class="line"></span></code></pre>
+<p>Deve listar os outros pods. Uma lista vazia com mais de uma réplica é um
+defeito.</p>
+<h3 id="fallback-sealed-secrets">Segredos: fallback para sealed-secrets</h3>
+<p>O padrão é o External Secrets Operator. Onde ele não é viável,
+substitua o <code>ExternalSecret</code> em
+<code>deploy/k8s/base/common/externalsecrets.yaml</code> por um <code>SealedSecret</code>,
+<strong>mantendo o mesmo nome de Secret (<code>brabo-secrets</code>) e as mesmas chaves</strong> —
+nada mais no deploy precisa mudar, porque tudo o consome
+via <code>secretRef</code>.</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> create</span><span style="color:var(--shiki-token-string)"> secret</span><span style="color:var(--shiki-token-string)"> generic</span><span style="color:var(--shiki-token-string)"> brabo-secrets</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --dry-run=client</span><span style="color:var(--shiki-token-string)"> -o</span><span style="color:var(--shiki-token-string)"> yaml</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --from-literal=DATABASE_URL=...</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  --from-literal=SECRET_KEY_BASE=...</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">  |</span><span style="color:var(--shiki-token-function)"> kubeseal</span><span style="color:var(--shiki-token-string)"> --format</span><span style="color:var(--shiki-token-string)"> yaml</span><span style="color:var(--shiki-token-keyword)"> ></span><span style="color:var(--shiki-token-string)"> deploy/k8s/overlays/</span><span style="color:var(--shiki-token-keyword)">&#x3C;</span><span style="color:var(--shiki-token-string)">en</span><span style="color:var(--shiki-foreground)">v</span><span style="color:var(--shiki-token-keyword)">></span><span style="color:var(--shiki-token-string)">/sealed-brabo-secrets.yaml</span></span>
+<span class="line"></span></code></pre>
+<p>O <code>SealedSecret</code> é cifrado para a chave pública daquele cluster e pode ser
+versionado. Um Secret simples <strong>nunca</strong> pode.</p>
+<p>Verificação: <strong>nenhuma</strong>. Nada no repositório roda <code>kubeseal</code>, e o
+cluster agendado (<code>propriedades.yml</code>) materializa o <code>brabo-secrets</code> pelo
+External Secrets, então este caminho nunca foi exercitado. Antes de confiar nele,
+suba um cluster com o <code>SealedSecret</code> no lugar e rode <code>make smoke-k8s</code>:
+o primeiro passo dele exige todo pod Ready, e um pod cujo <code>secretRef</code> aponta
+para um Secret que nunca se materializou não está.</p>
+<h3 id="known-limits-of-this-environment">Limites conhecidos deste ambiente</h3>
+<ul>
+<li><strong>RWO em vez de RWX.</strong> Funciona porque o cluster tem um nó só,
+e RWO quer dizer &quot;um NÓ&quot;, não &quot;um pod&quot;. Num cluster de verdade esta
+configuração poria api e engine em nós diferentes e o <code>git push</code> do dev
+agent falharia com <code>remote unpack failed</code>.</li>
+<li><strong>Sem pgvector</strong> no Postgres do CloudNativePG. Hoje nenhuma migration cria
+a extensão e nenhuma coluna <code>vector</code> existe.</li>
+<li><strong>O <code>.gitlab-ci.yml</code> não tem validação estática local</strong> (Fase 8c, ADR
+0039). O subagente de Workflows da área de Infra valida workflows do GitHub Actions
+com <code>actionlint</code> (fixado em <code>docker/engine/Dockerfile(.prod)</code>,
+mesmo padrão de <code>hadolint</code>/<code>gitleaks</code>); não há binário offline
+equivalente para o GitLab CI — o linter oficial precisa de uma instância viva.
+Lacuna documentada, não uma meia-solução inventada.</li>
+</ul>
+<hr>
+<h2 id="rollout-do-engine">Rollout do engine</h2>
+<p>Decisões no
+<a href="../adr/0026-fase5-observabilidade-e-graceful-shutdown.html">ADR 0026</a>.</p>
+<p>O engine hospeda os processos de sessão. Derrubar uma réplica sem cuidado
+deixava, antes da Fase 5, <strong>toda</strong> sessão daquele pod pendurada em
+<code>active</code> sem processo nenhum — nunca avançando, nunca fechando.</p>
+<h3 id="what-happens-during-a-rollout-in-order">O que acontece durante um rollout, em ordem</h3>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>fase</th>
+<th>quanto tempo</th>
+<th>o que acontece</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>preStop</code></td>
+<td>até 45s (<code>SHUTDOWN_DRAIN_TIMEOUT_MS</code>)</td>
+<td><code>Engine.Shutdown.drain/1</code>: <code>/ready</code> vira 503, <code>/internal/sessions</code> recusa sessões novas, e toda sessão deste nó é oferecida a um par vivo</td>
+</tr>
+<tr>
+<td>repasse por sessão</td>
+<td>5s (<code>@handoff_timeout_ms</code>)</td>
+<td><code>:erpc.call</code> para outro nó assumir o processo</td>
+</tr>
+<tr>
+<td>não adotada</td>
+<td>—</td>
+<td>vira <code>closing</code> com causa <code>node_shutdown</code>, depois <code>closed_abnormally</code></td>
+</tr>
+<tr>
+<td>SIGTERM</td>
+<td>o resto dos 90s (<code>terminationGracePeriodSeconds</code>)</td>
+<td>a árvore de supervisão cai</td>
+</tr>
+</tbody>
+</table></div>
+<p>Os 90s são deliberados: 45s de drain mais folga para o desmonte da BEAM.
+Baixar <code>terminationGracePeriodSeconds</code> sem baixar o timeout do drain
+faz o kubelet matar o pod <strong>no meio do repasse</strong> — que é exatamente como
+você recria o bug que o drain existe para evitar.</p>
+<h3 id="doing-the-rollout">Fazendo o rollout</h3>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> rollout</span><span style="color:var(--shiki-token-string)"> restart</span><span style="color:var(--shiki-token-string)"> deployment/engine</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> rollout</span><span style="color:var(--shiki-token-string)"> status</span><span style="color:var(--shiki-token-string)">  deployment/engine</span><span style="color:var(--shiki-token-string)"> --timeout=300s</span></span>
+<span class="line"></span></code></pre>
+<p>Com uma réplica só, não há par para adotar: <strong>toda</strong> sessão ativa
+vai terminar <code>closed_abnormally / node_shutdown</code>. Isso é correto, não
+falha — mas se o objetivo era não interromper ninguém, escale para 2 antes:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> scale</span><span style="color:var(--shiki-token-string)"> deployment/engine</span><span style="color:var(--shiki-token-string)"> --replicas=2</span></span>
+<span class="line"></span></code></pre>
+<h3 id="proving-nothing-was-left-orphaned">Provando que nada ficou órfão</h3>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> rollout-test</span></span>
+<span class="line"></span></code></pre>
+<p>Abre 5 sessões ativas, faz o rollout, e exige que <strong>cada uma</strong>
+esteja num de dois estados: <code>active</code> com um dono <code>:global</code> vivo (adotada),
+ou <code>closed_abnormally</code> com <code>node_shutdown</code> (drenada). Qualquer outra
+combinação reprova — em especial <code>active</code> sem dono, que é a
+definição operacional de órfã.</p>
+<p><strong>Ele guarda a evidência que os pods antigos levam embora</strong> (AT-078). Antes do
+<code>rollout restart</code>, <code>deploy/k8s/rollout-evidencia.sh</code> começa a escrever em
+<code>ROLLOUT_EVIDENCE_DIR</code> (um <code>mktemp -d</code> quando não definida; o caminho é impresso no
+fim):</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>arquivo</th>
+<th>o quê</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>engine-&lt;pod&gt;.log</code></td>
+<td><code>kubectl logs -f</code> de <strong>todo</strong> pod do engine — os já de pé (log inteiro, desde o boot), que o rollout mata, e todo pod criado depois — anexado assim que fica <code>Running</code></td>
+</tr>
+<tr>
+<td><code>final-&lt;pod&gt;.log</code></td>
+<td>uma cópia sem follow dos pods ainda de pé no fim, cobrindo um <code>logs -f</code> que caiu</td>
+</tr>
+<tr>
+<td><code>events.log</code></td>
+<td><code>kubectl get events -w</code> do namespace, com os timestamps próprios de cada evento (<code>SuccessfulRescale</code>, <code>ScalingReplicaSet</code>, <code>Killing</code>…)</td>
+</tr>
+<tr>
+<td><code>replicas.log</code></td>
+<td>a cada 2 s (<code>EVIDENCIA_INTERVALO</code>, que o spec encurta): <code>&lt;epoch&gt; &lt;spec.replicas do Deployment&gt; &lt;ready&gt; &lt;HPA current&gt; &lt;HPA desired&gt;</code></td>
+</tr>
+<tr>
+<td><code>donos.log</code></td>
+<td>toda leitura de dono da checagem: <code>&lt;epoch&gt; &lt;sessão&gt; &lt;nó dono ou -&gt;</code></td>
+</tr>
+<tr>
+<td><code>donos-durante-rollout.log</code></td>
+<td>a mesma leitura, em laço enquanto o <code>rollout status</code> roda — em que réplica cada repasse caiu. Guardado à parte porque uma leitura no meio do rollout às vezes bate num pod de saída, e não pode alimentar o veredito</td>
+</tr>
+<tr>
+<td><code>engine-estado.txt</code></td>
+<td>só leitura: as linhas das sessões do teste em <code>engine.session_states</code> (sem linha, nem o drain nem o <code>Adopter</code> veem uma sessão) e os últimos jobs do <code>SessionAdoptionWorker</code>, tirados no fim dos dois desfechos</td>
+</tr>
+<tr>
+<td><code>marcos.log</code>, <code>anexos.log</code>, <code>pods-antes.txt</code>, <code>pods-no-fim.txt</code></td>
+<td>marcos do teste (<code>rollout-restart</code>, <code>rollout-status-ok</code>…), quando cada log foi anexado, os pods no T0 e no fim</td>
+</tr>
+</tbody>
+</table></div>
+<p>Numa órfã a falha imprime toda linha que nomeia a sessão em todos
+esses arquivos — o log do pod antigo inclusive — mais as mudanças de réplica
+relativas ao rollout, e um veredito por órfã: <strong>sem dono ANTES
+ou DEPOIS do primeiro scale-down do HPA</strong>. Isso separa o confundidor conhecido: o
+<code>hpa-test</code> que roda antes deixa três réplicas, e ~75 s dentro da janela o
+HPA escala para uma, matando réplicas novas. Uma queda em <code>spec.replicas</code> é
+lida como o HPA, porque o <code>rollout restart</code> nunca a muda. Nada disso
+muda o que conta como adotada ou drenada, nem o teto de 120 s. As partes
+puras, e os coletores contra um <code>kubectl</code> de mentira, são cobertos por
+<code>scripts/ci/rollout-evidencia.spec.ts</code>. O workflow agendado sobe o
+diretório como o artefato <code>rollout-evidencia</code> em toda execução que chegou à
+prova, verde inclusive.</p>
+<p>O que ele <strong>não</strong> captura, medido na primeira execução verde com ele
+(<code>35449815544</code>): as linhas do próprio drain (<code>shutdown: drenando…</code>,
+<code>shutdown: drain concluído — …</code>) nunca chegam ao log do pod. <code>Engine.Shutdown.drain/0</code>
+roda dentro do <code>bin/engine rpc</code> do <code>preStop</code>, então a saída do <code>Logger</code> dele vai para
+o stdout desse hook, que o kubelet descarta quando o hook dá certo. Os
+logs dos pods antigos terminam em <code>SIGTERM received</code>. O desfecho do drain por sessão
+tem de ser lido de <code>donos-durante-rollout.log</code> (para que réplica cada sessão
+foi) e de <code>engine-estado.txt</code> (se a linha de <code>session_states</code> dela sobreviveu).</p>
+<p><strong>Causa corrigida, não confirmada no k3d</strong> (AT-078, RN-588). A órfã que esta prova
+pegou (~3 em 13 execuções: sem linha em <code>session_states</code>, e um segundo pod ANTIGO em
+<code>donos-durante-rollout.log</code>) vinha do <code>Monitor</code> do pod antigo apagando a linha
+depois que o par a regravou durante o repasse. O drain agora marca o repasse
+e o Monitor mantém a linha. Isso foi provado por um teste ExUnit determinístico,
+não por esta prova, que falha 1 em 4-6 e não consegue provar uma correção. Se uma órfã
+aparecer de novo, o log do pod que repassou a sessão leva uma
+linha <code>Monitor: session_state &lt;id&gt; mantido|apagado em &lt;node&gt;</code> por sessão: nenhuma
+linha quer dizer que o Monitor nunca processou o <code>:DOWN</code> (o pod morreu antes).</p>
+<p>À mão, a mesma pergunta:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)">-- sessões ativas segundo a api</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">select</span><span style="color:var(--shiki-foreground)"> id, </span><span style="color:var(--shiki-token-keyword)">status</span><span style="color:var(--shiki-foreground)">, updated_at </span><span style="color:var(--shiki-token-keyword)">from</span><span style="color:var(--shiki-token-keyword)"> sessions</span><span style="color:var(--shiki-token-keyword)"> where</span><span style="color:var(--shiki-token-keyword)"> status</span><span style="color:var(--shiki-token-keyword)"> =</span><span style="color:var(--shiki-token-string-expression)"> 'active'</span><span style="color:var(--shiki-foreground)">;</span></span>
+<span class="line"></span></code></pre>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># donos vivos segundo o engine</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/engine</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-foreground)"> \</span></span>
+<span class="line"><span style="color:var(--shiki-token-string)">  /app/bin/engine</span><span style="color:var(--shiki-token-string)"> rpc</span><span style="color:var(--shiki-token-string-expression)"> ':global.registered_names() |> Enum.filter(&#x26;match?({:brabo_session, _}, &#x26;1)) |> length()'</span></span>
+<span class="line"></span></code></pre>
+<p>Ativa na api sem dono no engine = órfã.</p>
+<h3 id="quando-a-sessao-escapa">Quando a sessão escapa</h3>
+<p><strong>Sessão presa em <code>closing</code>.</strong> <code>closing</code> é um estado de transição; presa
+ali quer dizer que o drain começou e não terminou. O alerta <em>Session stuck in
+closing</em> dispara depois de 15 minutos. Investigue o log do pod
+que estava saindo — se ele já se foi, o <code>Adopter</code> (uma varredura a cada
+30s) deveria ter assumido; se não assumiu, confira se a linha ainda
+existe em <code>engine.session_states</code>.</p>
+<p><strong>Órfã depois de <code>kill -9</code> / um OOMKill.</strong> O <code>preStop</code> não roda nesses
+casos, por definição. O que cobre é o <code>SessionAdoptionWorker</code>,
+que a cada 30s procura uma linha em <code>session_states</code> sem dono <code>:global</code>
+e a assume. Se ele não está rodando, a fila do Oban está parada —
+e aí o problema é outro (veja o alerta de fila não
+consumida, em <a href="operacao.html#observabilidade">Observabilidade</a>).</p>
+<p><strong>Um rollout preso no <code>preStop</code>.</strong> Sintoma: um pod <code>Terminating</code> por exatamente
+90s, toda vez. Quase certamente um <code>:erpc.call</code> esperando por um nó que
+já morreu mas ainda está em <code>Node.list()</code>. O timeout de 5s por sessão
+limita o estrago; 90s cheios querem dizer ~18 sessões em sequência ou um repasse
+que nunca volta.</p>
+<p><strong>Nada é adotado, mesmo com 2 réplicas.</strong> Os nós não se
+enxergam. Confira o cluster Erlang:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">kubectl</span><span style="color:var(--shiki-token-string)"> -n</span><span style="color:var(--shiki-token-string)"> brabo</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> deploy/engine</span><span style="color:var(--shiki-token-string)"> --</span><span style="color:var(--shiki-token-string)"> /app/bin/engine</span><span style="color:var(--shiki-token-string)"> rpc</span><span style="color:var(--shiki-token-string-expression)"> 'Node.list()'</span></span>
+<span class="line"></span></code></pre>
+<p>Lista vazia = o DNSCluster não resolveu o Service headless, ou a
+NetworkPolicy está bloqueando a faixa da distribuição (9100–9110). Sem
+cluster, cada réplica é uma ilha e todo rollout drena tudo.</p>
+<h3 id="aumentar-a-janela-de-drain">Aumentar a janela de drain</h3>
+<p>Se as sessões são longas e os 45s de drain não bastam, os dois valores sobem
+<strong>juntos</strong> — e nesta ordem de raciocínio: escolha o drain, depois acrescente
+folga:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># deploy/k8s/base/engine/deployment.yaml</span></span>
+<span class="line"><span style="color:var(--shiki-token-keyword)">terminationGracePeriodSeconds</span><span style="color:var(--shiki-token-keyword)">:</span><span style="color:var(--shiki-token-constant)"> 150</span><span style="color:var(--shiki-token-comment)">   # drain + ~30s de desmonte</span></span>
+<span class="line"><span style="color:var(--shiki-token-comment)"># env SHUTDOWN_DRAIN_TIMEOUT_MS: "120000"</span></span>
+<span class="line"></span></code></pre>
+<p>Mexer só em <code>terminationGracePeriodSeconds</code> não alonga o drain;
+mexer só no drain faz o kubelet matar no meio.</p>
+<p>Verificação: <strong>nenhuma própria</strong>. <code>make rollout-test</code> é a prova que
+se aplica, e a execução agendada prova só o par que o overlay <strong>local</strong>
+produz: 90 s de grace de <code>deploy/k8s/base/engine/deployment.yaml</code> e um
+drain de 20 s de <code>deploy/k8s/overlays/local/patches.yaml</code> — não os 45 s do
+default, e não um aumentado. Depois de subir os dois no overlay de que você faz deploy, rode
+<code>make rollout-test</code> com os mesmos valores no overlay local
+antes do rollout que importa; nada confere que o grace period fica
+acima do drain.</p>
+<hr>
+<nav class="site-pager"><a href="../runbook/ambiente-local.html">Ambiente local e de dev</a><a href="../runbook/instalacao.html">Instalação e artefatos</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-infra/blob/dev/deploy/docs/runbook/deploy.md">Editar esta página</a></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#deploy-local">Deploy local</a></li><li class="n3"><a href="#prerequisites">Pré-requisitos</a></li><li class="n3"><a href="#bringing-it-up">Subir</a></li><li class="n3"><a href="#validar-tag-do-pipeline">Validar uma tag da esteira</a></li><li class="n3"><a href="#imagens-de-uma-release">Fazendo deploy das imagens de uma release</a></li><li class="n3"><a href="#que-versao-esta-no-ar">Que versão está no ar</a></li><li class="n3"><a href="#semgrep-do-gate">O gate de SecOps está preso em &quot;SAST não rodou&quot;</a></li><li class="n3"><a href="#engine-sigaltstack">O engine aborta com sys_sigaltstack(): Internal error</a></li><li class="n3"><a href="#erro-de-cors">Erro de CORS</a></li><li class="n3"><a href="#sessao-nao-ativa">A sessão não sai de created</a></li><li class="n3"><a href="#terminal-preso-abrindo">A aba Terminal fica presa em &quot;Abrindo terminal...&quot; para sempre</a></li><li class="n3"><a href="#runner-com-ticket-morto">O runner inunda a api com um ticket morto</a></li><li class="n3"><a href="#segredo-de-oauth-no-boot">A api recusa subir por segredo de OAuth</a></li><li class="n3"><a href="#callback-login-social-nao-registrado">O provider recusa o callback do login social</a></li><li class="n3"><a href="#segredos-irmaos-no-boot">Os quatro segredos irmãos também não sobem com o default</a></li><li class="n3"><a href="#smtp-real">SMTP real no MailSender</a></li><li class="n3"><a href="#k3d-is-the-default-even-with-kind-installed">k3d é o padrão mesmo com kind instalado</a></li><li class="n3"><a href="#what-the-smoke-test-covers">O que o smoke test cobre</a></li><li class="n3"><a href="#diagnostico-do-deploy">Diagnóstico do deploy</a></li><li class="n3"><a href="#fallback-sealed-secrets">Segredos: fallback para sealed-secrets</a></li><li class="n3"><a href="#known-limits-of-this-environment">Limites conhecidos deste ambiente</a></li><li class="n2"><a href="#rollout-do-engine">Rollout do engine</a></li><li class="n3"><a href="#what-happens-during-a-rollout-in-order">O que acontece durante um rollout, em ordem</a></li><li class="n3"><a href="#doing-the-rollout">Fazendo o rollout</a></li><li class="n3"><a href="#proving-nothing-was-left-orphaned">Provando que nada ficou órfão</a></li><li class="n3"><a href="#quando-a-sessao-escapa">Quando a sessão escapa</a></li><li class="n3"><a href="#aumentar-a-janela-de-drain">Aumentar a janela de drain</a></li></ul></aside>
+</div>
+<script src="../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-pt-BR.json" data-base="../"></script></body>
+</html>

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Developing Brabo | Brabo</title>
+<script src="../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../../how-to/desenvolver-o-brabo.html">pt-BR</option><option value="../../en/how-to/desenvolver-o-brabo.html" selected>en</option><option value="../../ru/how-to/desenvolver-o-brabo.html">ru</option><option value="../../zh-Hans/how-to/desenvolver-o-brabo.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../../dev/en/how-to/desenvolver-o-brabo.html">dev</option><option value="../../../prd/en/how-to/desenvolver-o-brabo.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="../index.html">Home</a></li><li><a href="../getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><a href="../tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html" aria-current="page">Developing Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><a href="../runbook.html">Operations manual</a></li><li><a href="../tutorials/adotar.html">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">Architecture</a></li><li><a href="../explanation/gates.html">The gates, and how they're measured</a></li><li><a href="../explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">Branching policy</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="../explanation/release-do-produto.html">Product release</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="../explanation/localizacao.html">Localization</a></li><li><a href="../explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="../explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="../glossary.html">Glossary</a></li><li><a href="../reference/componentes-da-doc.html">Doc components</a></li><li><a href="../explanation/documentation-workflow.html">Docs sync</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">Business rules</a></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">Timeline</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="../explanation/historico-de-fases.html">Phase history</a></li><li><a href="../explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="../explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a></li><li><a href="../explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="../explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="../explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="../explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="../explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="developing-brabo">Developing Brabo</h1>
+<p>To <strong>use</strong> Brabo, see <a href="../getting-started.html">Getting Started</a>. This guide is
+for whoever will change the code: clone the 11 repositories and bring up dev from them.</p>
+<h2 id="before-you-start">Before you start</h2>
+<p>Git, Bash, Docker with Compose and ~6 GiB of free RAM. Node and pnpm only come in when
+you run a repository's tests; Elixir runs in the container.</p>
+<h2 id="1-clone-everything">1. Clone everything</h2>
+<p><code>brabo-workspace</code> is the parent folder: it only knows where each repository lives.</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">git</span><span style="color:var(--shiki-token-string)"> clone</span><span style="color:var(--shiki-token-string)"> https://github.com/viralabs-dev/brabo-workspace.git</span><span style="color:var(--shiki-token-string)"> ~/dev/brabo</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">cd</span><span style="color:var(--shiki-token-string)"> ~/dev/brabo</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">./clonar-tudo.sh</span></span>
+<span class="line"></span></code></pre>
+<p><code>clonar-tudo.sh</code> clones each missing <code>brabo-*</code> over HTTPS, runs <code>git fetch</code> on the
+ones that already exist and never deletes anything.</p>
+<p><strong>How to tell it worked:</strong> the last line says <code>pronto: 11 repositórios</code>.</p>
+<h2 id="2-bring-up-dev">2. Bring up dev</h2>
+<p>What brings dev up is <code>brabo-infra</code>, building each service from the sibling clones:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">cd</span><span style="color:var(--shiki-token-string)"> brabo-infra</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">cp</span><span style="color:var(--shiki-token-string)"> .env.example</span><span style="color:var(--shiki-token-string)"> .env</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">make</span><span style="color:var(--shiki-token-string)"> dev</span></span>
+<span class="line"></span></code></pre>
+<p><code>make dev</code> checks that the siblings are in place and brings up the compose. For another
+parent folder, <code>BRABO_IRMAOS=/other/folder make dev</code>. What else <code>brabo-infra</code> does
+is in its README.</p>
+<p><strong>How to tell it worked:</strong> <a href="http://localhost:5173">http://localhost:5173</a> opens the login screen. Create the
+test accounts with <code>pnpm seed</code> in the <code>brabo-api</code> clone (<code>owner@brabo.dev</code>,
+<code>maintainer@brabo.dev</code>, <code>developer@brabo.dev</code> and <code>viewer@brabo.dev</code>; the password comes from the
+seed and is changed with <code>BRABO_SEED_PASSWORD</code>).</p>
+<details>
+<summary>If it goes wrong: the two local modes fight over ports</summary>
+<p>There are two ways to run Brabo on your machine, and they <strong>fight over the same ports</strong>:</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>mode</th>
+<th>brought up with</th>
+<th>web at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>development</strong></td>
+<td><code>make dev</code></td>
+<td><a href="http://localhost:5173">http://localhost:5173</a></td>
+</tr>
+<tr>
+<td><strong>validation</strong></td>
+<td><code>make deploy-local</code> (k3d, production images)</td>
+<td><a href="http://localhost:8088">http://localhost:8088</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>Both publish the api on <code>:3000</code> and the engine on <code>:4000</code>, on purpose, so that
+<code>smoke.sh</code> holds in both. With the cluster up, <code>5173</code> never opens: tear it down with
+<code>make k8s-down</code>. Port taken by something else? Change <code>API_PORT</code>, <code>ENGINE_PORT</code>,
+<code>WEB_PORT</code> or <code>OLLAMA_PORT</code> in <code>.env</code>; CORS follows <code>WEB_PORT</code>.</p>
+<p>To know which mode you are in, the <code>preflight</code> of <code>make dev</code> tells you.</p>
+</details>
+<details>
+<summary>If it goes wrong: an installation and a checkout on the same machine</summary>
+<p>The dev compose is the Docker project <strong><code>brabo-dev</code></strong>; the <code>install.sh</code> installation
+is <strong><code>brabo</code></strong>. The names are separate, but <code>make dev</code> and <code>reset-total.sh</code>
+<strong>refuse</strong> while there is a container of the installation compose, and list them.
+Tear the installation down <strong>without</strong> <code>-v</code>: the data stays, and <code>up -d</code> brings it back.</p>
+</details>
+<h2 id="pasta-dos-workspaces">3. Workspaces folder</h2>
+<p>By default, what the agents write lives in a Docker volume. To use a real
+folder on your disk, set both <strong>together</strong> in the <code>.env</code> of <code>brabo-infra</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-foreground)">PROJECT_WORKSPACES_HOST_DIR</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string)">~/brabo-projetos</span></span>
+<span class="line"><span style="color:var(--shiki-foreground)">GIT_LOCAL_REPOS_HOST_DIR</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string)">~/brabo-projetos-bare</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li>Each project gets a subfolder <code>&lt;slug&gt;-&lt;8 chars of the id&gt;</code>, decided at creation.</li>
+<li>Do not point at your whole <code>$HOME</code> or at a folder with other secrets: it becomes the root of <strong>all</strong> projects.</li>
+<li>The containers run as root in dev, so what the agents write ends up owned by <code>root</code>. Run <code>sudo chown -R $USER ~/brabo-projetos</code> once.</li>
+<li>Only tested on Linux and macOS. On Windows, the bind mount has known traps.</li>
+</ul>
+<h2 id="4-everyday-commands">4. Everyday commands</h2>
+<p>Each repository has its own commands, in its <code>CLAUDE.md</code>. In <code>brabo-api</code>:</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> test</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> build</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> db:generate</span><span style="color:var(--shiki-token-comment)">  # depois de mudar apps/api/src/db/schema/&#x3C;agregado>.ts</span></span>
+<span class="line"><span style="color:var(--shiki-token-function)">pnpm</span><span style="color:var(--shiki-token-string)"> db:migrate</span></span>
+<span class="line"></span></code></pre>
+<p>In the <code>brabo-api</code> clone the schema path is <code>src/db/schema/&lt;agregado&gt;.ts</code>.
+The browser E2E (Playwright) lives in <code>brabo-qa</code> and runs against the installation compose; the step by step is in the README and in <a href="../rodadas-manuais.html">Manual rounds</a>.
+Always work on <code>feature/*</code> from <code>dev</code>, with conventional commits in pt-BR.</p>
+<h2 id="where-everything-lives">Where everything lives</h2>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>repository</th>
+<th>what it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>brabo</code></td>
+<td>front door: documentation, site, <code>install.sh</code> and the product release</td>
+</tr>
+<tr>
+<td><code>brabo-api</code></td>
+<td>NestJS, Drizzle and PostgreSQL: schema, RBAC, LLM, metering</td>
+</tr>
+<tr>
+<td><code>brabo-engine</code></td>
+<td>Elixir/OTP: agents, sessions, gates</td>
+</tr>
+<tr>
+<td><code>brabo-web</code></td>
+<td>React and Vite: screens and design system</td>
+</tr>
+<tr>
+<td><code>brabo-runner</code></td>
+<td>CLI on the user's machine</td>
+</tr>
+<tr>
+<td><code>brabo-broker</code></td>
+<td>the only process with the server's Docker socket</td>
+</tr>
+<tr>
+<td><code>brabo-contracts</code></td>
+<td>shared types and contracts, consumed by TAG</td>
+</tr>
+<tr>
+<td><code>brabo-ci</code></td>
+<td>reusable workflows and the PR policy</td>
+</tr>
+<tr>
+<td><code>brabo-infra</code></td>
+<td>composes, Kubernetes and <code>make dev</code></td>
+</tr>
+<tr>
+<td><code>brabo-qa</code></td>
+<td>browser E2E and golden sets</td>
+</tr>
+<tr>
+<td><code>brabo-workspace</code></td>
+<td>the parent folder and <code>clonar-tudo.sh</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The full map, with what each one consumes, is in <a href="../tutorials/orquestrar-repositorios/o-mapa.html">The map</a>.</p>
+<h2 id="for-more">For more</h2>
+<ul>
+<li><a href="../adr/0025-fase5-deploy-kubernetes-kustomize.html">ADR 0025</a> (dev modes), <a href="../adr/0170-compose-de-dev-brabo-dev.html">ADR 0170</a> (dev compose) and <a href="../business-rules/api.html#rn-109">RN-109</a> (each project's folder).</li>
+</ul>
+<nav class="site-pager"><a href="../tutorials/como-o-brabo-e-construido/copie-o-metodo.html">Copy the method</a><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/how-to/desenvolver-o-brabo.md">Edit this page</a><span>Updated 2026-11-08T19:29:43-03:00 · Daniel Souza</span></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#before-you-start">Before you start</a></li><li class="n2"><a href="#1-clone-everything">1. Clone everything</a></li><li class="n2"><a href="#2-bring-up-dev">2. Bring up dev</a></li><li class="n2"><a href="#pasta-dos-workspaces">3. Workspaces folder</a></li><li class="n2"><a href="#4-everyday-commands">4. Everyday commands</a></li><li class="n2"><a href="#where-everything-lives">Where everything lives</a></li><li class="n2"><a href="#for-more">For more</a></li></ul></aside>
+</div>
+<script src="../../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-en.json" data-base="../"></script></body>
+</html>

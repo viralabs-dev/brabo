@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="pt-BR" data-locale="pt-BR" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A política de branches em 10 minutos | Brabo</title>
+<script src="../assets/tema.js"></script>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/fonts.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Buscar" aria-label="Buscar" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Idioma"><option value="../explanation/politica-em-10-minutos.html" selected>pt-BR</option><option value="../en/explanation/politica-em-10-minutos.html">en</option><option value="../ru/explanation/politica-em-10-minutos.html">ru</option><option value="../zh-Hans/explanation/politica-em-10-minutos.html">zh-Hans</option></select>
+<select data-seletor aria-label="Ambiente"><option value="../../dev/explanation/politica-em-10-minutos.html">dev</option><option value="../../prd/explanation/politica-em-10-minutos.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Alternar tema">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Comece aqui</h2></summary><ul><li><a href="../index.html">Início</a></li><li><a href="../getting-started.html">Primeiros passos</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutoriais</h2></summary><ul><li><a href="../tutorials/from-zero-to-deliverable.html">Do zero a um entregável</a></li><li><a href="../tutorials/orquestrar-repositorios.html">Orquestrar repositórios</a></li><li><a href="../tutorials/como-o-brabo-e-construido.html">Como o Brabo é construído</a></li></ul></details></section><section><details open><summary><h2>🧭 Guias práticos</h2></summary><ul><li><a href="../how-to/desenvolver-o-brabo.html">Desenvolver o Brabo</a></li><li><a href="../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../how-to/token-do-github-packages.html">Token do GitHub Packages</a></li><li><a href="../runbook.html">Manual de operação</a></li><li><a href="../tutorials/adotar.html">Adotar a política</a></li><li><a href="../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contribuir</span></summary><ul><li><a href="../contribuir/como-escrevemos.html">Como escrevemos</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Como contribuir</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Onde pedir ajuda</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Reportar vulnerabilidade</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Conceitos</h2></summary><ul><li><a href="../intro.html">O que é o Brabo</a></li><li><a href="../architecture.html">Arquitetura</a></li><li><a href="../explanation/gates.html">Os gates, e como eles são medidos</a></li><li><a href="../explanation/modelo-de-time.html">Modelo de time e fluxo de entregáveis</a></li><li><a href="../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Processo e esteira</span></summary><ul><li><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../explanation/politica-em-10-minutos.html" aria-current="page">Política em 10 minutos</a></li><li><a href="../explanation/branching-policy.html">Política de branches</a></li><li><a href="../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a></li><li><a href="../explanation/release-do-produto.html">Release do produto</a></li><li><a href="../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localização</span></summary><ul><li><a href="../explanation/localizacao.html">Localização</a></li><li><a href="../explanation/localizacao-en.html">Localização — inglês (en)</a></li><li><a href="../explanation/localizacao-ru.html">Localização — russo (ru)</a></li><li><a href="../explanation/localizacao-zh-hans.html">Localização — chinês simplificado (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Notas técnicas</span></summary><ul><li><a href="../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Referência</h2></summary><ul><li><a href="../glossary.html">Glossário</a></li><li><a href="../reference/componentes-da-doc.html">Componentes da doc</a></li><li><a href="../explanation/documentation-workflow.html">Sincronia da doc</a></li><li><a href="../reference/configuration.html">Configuração</a></li><li><a href="../reference/events.html">Eventos</a></li><li><a href="../reference/permissions.html">Permissões</a></li><li><a href="../reference/artifacts.html">Artefatos</a></li><li><a href="../reference/git-providers.html">Provedores de git</a></li><li><a href="../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../reference/internal-api.html">API interna</a></li><li><a href="../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../reference/scripts.html">Scripts e comandos</a></li><li><a href="../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../reference/workflows/preparar.html">preparar</a></li><li><a href="../reference/workflows/promote.html">promote</a></li><li><a href="../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../reference/brb.html">Registro BRB</a></li><li><a href="../security-surface.html">Superfície exposta da api</a></li><li><a href="../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="../business-rules.html">Regras de negócio</a></li><li><span>Referência da API</span></li></ul></details></section><section><h2><a href="../adr.html">🏛️ Decisões (ADR)</a></h2></section><section><details><summary><h2>🗂️ Histórico do projeto</h2></summary><ul><li><a href="../historico/linha-do-tempo.html">Linha do tempo</a></li><li><a href="../tutorials/interface-antes-e-depois-shadcn.html">Interface antes e depois do shadcn (31/10/2026)</a></li><li><a href="../explanation/historico-de-fases.html">Histórico de fases</a></li><li><a href="../explanation/historico-de-fases-parte-1.html">Fases 1 a 15, parte 1</a></li><li><a href="../explanation/historico-de-fases-parte-2.html">Programa 16–26 e rodadas, parte 2</a></li><li><a href="../explanation/historico-de-fases-parte-3.html">Programa 28 e auditorias, parte 3</a></li><li><a href="../explanation/historico-de-fases-parte-4.html">Do runner local em diante, parte 4</a></li><li><a href="../explanation/fase-28-pasta-do-usuario.html">FASE 28 — pasta do usuário</a></li><li><a href="../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — instalação de uma linha</a></li><li><a href="../explanation/fase-30-runner-por-maquina.html">FASE 30 — agente local da máquina</a></li><li><a href="../explanation/backlog.html">Backlog triado</a></li><li><details><summary><span>Validações e medições</span></summary><ul><li><a href="../explanation/primeiro-dogfooding.html">Primeiro dogfooding</a></li><li><a href="../explanation/execucao-real-hello-world.html">Execução real (hello world)</a></li><li><a href="../explanation/achados-execucao-real.html">Achados da execução real da esteira</a></li><li><a href="../explanation/validacao-fase-12.html">Validação da Fase 12</a></li><li><a href="../explanation/validacao-real.html">Validação real (13b)</a></li><li><a href="../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../explanation/medicao-do-idioma.html">Medição da heurística de idioma</a></li><li><a href="../explanation/medicao-do-jev.html">Medição do roteador de ferramentas Jev</a></li><li><a href="../explanation/auditoria-fluxo-vs-codigo.html">Auditoria: fluxo.yml × código (v3, ADR 0085)</a></li><li><a href="../explanation/auditoria-visual-rodada-29.html">Auditoria visual, antes e depois da Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+
+<article class="doc">
+<h1 id="politica-em-10-minutos">A política de branches em 10 minutos</h1>
+<p><strong>Para quem é:</strong> qualquer pessoa que nunca viu esta política, seja do time da SmartSky ou de fora, e que foi barrada por um check ou quer copiar a esteira para o próprio produto.</p>
+<p><strong>Depois de ler, você consegue:</strong></p>
+<ul>
+<li>explicar a esteira <code>dev → main</code> e o caminho de um hotfix;</li>
+<li>dizer que versão a sua branch vai gerar, antes de abrir a PR;</li>
+<li>consertar sozinha uma reprovação do <code>pr-police</code> ou do <code>backmerge-gate</code>, usando o <a href="../reference/codigos-de-violacao.html">catálogo de códigos</a>.</li>
+</ul>
+<p>Os termos próprios (esteira, degrau, trava, carimbo) estão no <a href="../reference/glossario-da-politica.html">glossário da política</a>. A versão completa e detalhada é a <a href="branching-policy.html">Política de branches</a>; esta página é o resumo.</p>
+<h2 id="o-problema">O problema que a política resolve</h2>
+<p>Num time pequeno, &quot;combinar&quot; como se nomeia e se mergeia uma branch funciona até o primeiro incidente. Aí aparecem três falhas caras:</p>
+<ol>
+<li><strong>Correção que some.</strong> Um hotfix entra direto em produção e ninguém o leva de volta para o desenvolvimento. O próximo release desfaz a correção em silêncio.</li>
+<li><strong>Versão negociada.</strong> Cada release vira uma conversa sobre &quot;isso é patch ou minor?&quot;. A resposta depende de quem está online.</li>
+<li><strong>Deploy de emergência que leva carga demais.</strong> O conserto nasce da branch errada e arrasta tudo o que ainda estava em teste.</li>
+</ol>
+<p>A política troca o combinado por regras que um check confere em toda PR. Quem erra recebe a regra, o porquê e o conserto no log, com um link para a explicação.</p>
+<h2 id="a-esteira">A esteira: duas branches permanentes</h2>
+<p>Há duas branches permanentes, <strong>uma por ambiente</strong>. O trabalho nasce de <code>dev</code>, volta para <code>dev</code> por PR e sobe para <code>main</code> por uma PR de <strong>promoção</strong>.</p>
+<pre class="mermaid" data-mermaid>flowchart LR
+  T[feature/x&lt;br/&gt;bugfix/y] --&gt;|PR| D[dev&lt;br/&gt;desenvolvimento]
+  D --&gt;|promoção| M[main&lt;br/&gt;produção]
+  H[hotfix/z] --&gt;|PR| M
+  M -.-&gt;|retropropagação| D
+</pre>
+<p>Três regras sustentam o desenho:</p>
+<ul>
+<li><strong>Ninguém dá push direto</strong> numa permanente. Toda mudança entra por PR.</li>
+<li><strong>A promoção sobe um degrau por vez</strong> e só entre as permanentes (<code>dev → main</code>). Uma PR de promoção é a única que tem <code>dev</code> ou <code>main</code> como origem.</li>
+<li><strong>Merge em <code>main</code> é decisão da pessoa responsável pelo release.</strong> Nenhuma automação mergeia em branch protegida.</li>
+</ul>
+<h2 id="hotfix">O hotfix e a retropropagação</h2>
+<p>Um incidente em produção não espera a esteira. O <code>hotfix/</code> é a única função que <strong>nasce de <code>main</code></strong> e mira <code>main</code>. Como <code>main</code> passa a ter uma correção que <code>dev</code> não tem, o repositório fica em perigo, e é aí que entra a <strong>trava</strong>:</p>
+<ol>
+<li>O hotfix é mergeado em <code>main</code>. O workflow de tag gera a tag PATCH do hotfix e grava a trava (<code>.release/gate.json</code>, escrito pelo bot) com <code>dev</code> aguardando.</li>
+<li>A partir daí, o <code>backmerge-gate</code> reprova qualquer PR que mire <code>dev</code>, <strong>exceto</strong> a retropropagação: a PR de <code>main</code> para <code>dev</code>.</li>
+<li>Você abre e mergeia essa PR. A trava sai sozinha e a <code>dev</code> volta a aceitar trabalho.</li>
+</ol>
+<pre class="mermaid" data-mermaid>sequenceDiagram
+  participant H as hotfix/z
+  participant M as main
+  participant D as dev
+  H-&gt;&gt;M: PR de hotfix, merge
+  Note over M,D: dev trava
+  M-&gt;&gt;D: PR de retropropagação, merge
+  Note over D: dev destravada
+</pre>
+<p>A trava existe para uma garantia: <strong>todo conserto que está em produção também está em desenvolvimento antes de o próximo release sair</strong>. Detalhes em <a href="branching-policy.html#the-back-merge-gate">O portão de retropropagação</a>.</p>
+<h2 id="funcao-versao">A função da branch decide a versão</h2>
+<p>O nome antes da barra não é decoração. Ele é a entrada do cálculo de versão (<code>scripts/ci/version.ts</code>), então ninguém negocia a versão depois.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>função</th>
+<th>nasce de</th>
+<th>PR mira</th>
+<th>sobe a versão</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>breaking/</code></td>
+<td><code>dev</code></td>
+<td><code>dev</code></td>
+<td>MAJOR</td>
+</tr>
+<tr>
+<td><code>feature/</code></td>
+<td><code>dev</code></td>
+<td><code>dev</code></td>
+<td>MINOR</td>
+</tr>
+<tr>
+<td><code>bugfix/</code>, <code>perf/</code>, <code>refactor/</code>, <code>chore/</code>, <code>docs/</code>, <code>test/</code></td>
+<td><code>dev</code></td>
+<td><code>dev</code></td>
+<td>PATCH</td>
+</tr>
+<tr>
+<td><code>hotfix/</code></td>
+<td><code>main</code></td>
+<td><code>main</code></td>
+<td>PATCH</td>
+</tr>
+</tbody>
+</table></div>
+<p>O ciclo sobe pelo <strong>maior</strong> impacto entre as PRs. Uma <code>breaking/</code> e dez <code>bugfix/</code> geram um MAJOR.</p>
+<p>Quebra de compatibilidade precisa ser dita duas vezes, e o <code>pr-police</code> confere as duas: a função <code>breaking/</code> na branch <strong>e</strong> um commit com <code>!</code> no assunto (<code>feat(api)!: ...</code>) ou <code>BREAKING CHANGE:</code> no corpo. Mudança que exige ação da pessoa que instala, antes do deploy, nasce em <code>breaking/</code> mesmo sendo uma correção. Um PATCH diz &quot;atualize sem pensar&quot;, e esse seria um falso aviso.</p>
+<h2 id="o-nome">O nome da branch</h2>
+<p>O formato é <code>funcao/descritivo</code>: a função vem da lista fechada acima, a barra é obrigatória e o descritivo não tem espaços. O padrão é <code>^.{0,30}/\S{0,32}$</code>: até 30 caracteres antes da barra e até 32 depois.</p>
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>nome</th>
+<th>resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>feature/login-por-sso</code></td>
+<td>aceita</td>
+</tr>
+<tr>
+<td><code>login-por-sso</code></td>
+<td>reprovada: sem função (<a href="../reference/codigos-de-violacao.html#nome-fora-do-formato">NOME-FORA-DO-FORMATO</a>)</td>
+</tr>
+<tr>
+<td><code>feature/</code></td>
+<td>reprovada: sem descritivo (<a href="../reference/codigos-de-violacao.html#descritivo-vazio">DESCRITIVO-VAZIO</a>)</td>
+</tr>
+<tr>
+<td><code>fix/login</code></td>
+<td>reprovada: <code>fix</code> não está na lista (<a href="../reference/codigos-de-violacao.html#funcao-desconhecida">FUNCAO-DESCONHECIDA</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="tres-casos">Três casos para testar o que você entendeu</h2>
+<ol>
+<li><strong><code>hotfix/x</code> aberta contra <code>dev</code>.</strong> Reprova em <code>DESTINO-INVALIDO</code>: <code>hotfix/</code> volta para <code>main</code>. Conserto: <code>gh pr edit &lt;n&gt; --base main</code>.</li>
+<li><strong><code>feature/x</code> com um commit <code>feat!:</code>.</strong> Reprova em <code>MARCADOR-SEM-BREAKING</code>: ou a branch vira <code>breaking/x</code>, ou o marcador sai.</li>
+<li><strong><code>hotfix/x</code> criada a partir de <code>dev</code>.</strong> Reprova em <code>ORIGEM-CONTAMINADA</code>: ela carrega commits que ainda não estão em produção. Conserto: recriar a branch a partir de <code>main</code> e levar só o conserto com <code>git cherry-pick</code>.</li>
+</ol>
+<h2 id="alem">Para ir além</h2>
+<ul>
+<li><a href="../reference/codigos-de-violacao.html">Códigos de violação</a>: o que cada reprovação significa e como consertar.</li>
+<li><a href="licoes-do-ci.html">Lições do CI</a>: quatro armadilhas do GitHub Actions que moldaram os workflows.</li>
+<li><a href="branching-policy.html">Política de branches</a>: a fonte completa, com escada de aprovação, promoção e versionamento.</li>
+</ul>
+<nav class="site-pager"><a href="../explanation/painel-da-mudanca.html">Painel da mudança</a><a href="../explanation/branching-policy.html">Política de branches</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-ci/blob/dev/scripts/ci/docs/explanation/politica-em-10-minutos.md">Editar esta página</a></footer>
+</main>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#o-problema">O problema que a política resolve</a></li><li class="n2"><a href="#a-esteira">A esteira: duas branches permanentes</a></li><li class="n2"><a href="#hotfix">O hotfix e a retropropagação</a></li><li class="n2"><a href="#funcao-versao">A função da branch decide a versão</a></li><li class="n2"><a href="#o-nome">O nome da branch</a></li><li class="n2"><a href="#tres-casos">Três casos para testar o que você entendeu</a></li><li class="n2"><a href="#alem">Para ir além</a></li></ul></aside>
+</div>
+<script src="../assets/mermaid.min.js"></script>
+<script src="../assets/site.js"></script>
+<script defer src="../assets/busca.js" data-indice="../assets/busca-pt-BR.json" data-base="../"></script></body>
+</html>
