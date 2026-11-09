@@ -6,10 +6,10 @@ traducao_de: f9981957e3564e59e86f24d25dde64cac77ab183
 
 # 从零到交付物 {#from-zero-to-a-deliverable}
 
-本页端到端地跟随一个项目，从空工作区到可运行的交付物：一个短链接服务（Node 22 + SQLite），整个团队使用同一个模型。第 1 至 3 步的界面是当前界面的截图，由 `brabo-qa` 在每个版本生成，并隐藏了测试数据。
+本页端到端地跟随一个项目，从空工作区到可运行的交付物：一个短链接服务（Node 22 + SQLite），整个团队使用同一个模型。第 1 至 6 步的界面是当前界面的截图，由 `brabo-qa` 在每个版本生成，并隐藏了测试数据。
 
 :::historico 2026-10-14
-作为示例的运行是现场录制的，下面的数字都来自它。项目 `viralabs-app-2026-10-14b` 运行在 **Claude Haiku 5.5** 上，花费 **US$ 1.07**。从想法到开始执行用了 **13 分钟**，到最后一次合并约 **57 分钟**的交互。产出 **8 个任务中的 8 个**，外加 ADR 和基础设施 pull request，以及一个在干净克隆中测试套件通过 **102/102** 的交付物。第 4 至 6 步的界面来自这次录制，早于 shadcn 迁移。
+作为示例的运行是现场录制的，下面的数字都来自它。项目 `viralabs-app-2026-10-14b` 运行在 **Claude Haiku 5.5** 上，花费 **US$ 1.07**。从想法到开始执行用了 **13 分钟**，到最后一次合并约 **57 分钟**的交互。产出 **8 个任务中的 8 个**，外加 ADR 和基础设施 pull request，以及一个在干净克隆中测试套件通过 **102/102** 的交付物。下面各步的界面来自当前界面，而不是这次录制。
 :::
 
 :::dica[一切都在 Criativo 的聊天里完成]
@@ -28,7 +28,7 @@ traducao_de: f9981957e3564e59e86f24d25dde64cac77ab183
 6. **在聊天中合并**每一个通过闸门的 pull request。
 :::
 
-下面每一步都说明你要做什么以及智能体交回什么。第 1 至 3 步的界面来自当前版本；第 4 至 6 步是历史画面（见上方的框）。
+下面每一步都说明你要做什么以及智能体交回什么。界面来自当前版本；10 月 14 日这次运行的数字见上方的框。
 
 ## 1. 创建项目 {#1-create-the-project}
 
@@ -60,11 +60,7 @@ traducao_de: f9981957e3564e59e86f24d25dde64cac77ab183
 接受。Arquiteto 以 pull request 的形式提出 ADR（`arquiteto[bot]`，PR #1，"单模块，SQLite 位于持久卷上"），
 并在架构定义后请你确认：**"确认架构就绪"**会把 Infra 引入。
 
-:::historico 2026-10-14
-来自 10 月 14 日录制的画面，早于 shadcn 迁移。
-
-![PO、Arquiteto 与 ADR](../../../../docs/assets/historico/fluxo-do-zero/passo-04-po-arquiteto-adr.png "PO、Arquiteto 与 ADR（10 月 14 日，shadcn 之前）")
-:::
+![PO、Arquiteto 与 ADR](../../../../docs/assets/capturas/adr-no-chat-claro.png "Criativo 的聊天中，Arquiteto 提出的 ADR 正等待你的确认")
 
 ## 5. Infra、计划与自动模式 {#5-infra-the-plan-and-automatic-mode}
 
@@ -73,11 +69,7 @@ backlog 和模块图并提出执行计划；批准计划就会激活执行。界
 什么：合并到受保护分支仍由你决定。从那时起，dev agent 在容器内（`/work`）工作，你可以在聊天中查看它运行的
 每条命令及其输出。
 
-:::historico 2026-10-14
-来自 10 月 14 日录制的画面，早于 shadcn 迁移。
-
-![Infra、计划与自动模式](../../../../docs/assets/historico/fluxo-do-zero/passo-05-infra-plano-modo-automatico.png "Infra、计划与自动模式（10 月 14 日，shadcn 之前）")
-:::
+![Infra、计划与自动模式](../../../../docs/assets/capturas/plano-e-modo-automatico-claro.png "Dev Lead 的执行计划，以及面向团队的自动模式提示")
 
 ## 6. 从聊天中合并 {#6-merges-from-the-chat}
 
@@ -86,11 +78,7 @@ backlog 和模块图并提出执行计划；批准计划就会激活执行。界
 **Merge** 提出合并，同一区块中的 **Approve** 确认合并。在这次运行中，最后七个 pull request（#4 到 #10）在
 约两分钟内合并完毕，无需刷新页面。
 
-:::historico 2026-10-14
-来自 10 月 14 日录制的画面，早于 shadcn 迁移。
-
-![通过聊天合并](../../../../docs/assets/historico/fluxo-do-zero/passo-06-merges-pelo-chat.png "通过聊天合并（10 月 14 日，shadcn 之前）")
-:::
+![通过聊天合并](../../../../docs/assets/capturas/merges-no-chat-claro.png "Criativo 的聊天中，等待合并的 pull request 队列")
 
 ## 交付物 {#the-deliverable}
 

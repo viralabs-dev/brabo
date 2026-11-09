@@ -63,13 +63,28 @@
 
 ### 架构师以书面方式做决定
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/arquitetura-escuro.png" />
+  <img src="docs/assets/capturas/arquitetura-claro.png" alt="项目的架构标签页：模块图、C4 图和等待你确认的 ADR" />
+</picture>
+
 架构决策以 pull request 的形式产生，架构只有在你确认后才继续推进。
 
 ### 开发者在容器内工作
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/dev-agent-escuro.png" />
+  <img src="docs/assets/capturas/dev-agent-claro.png" alt="执行会话记录：开发智能体领取任务、提交、创建 pull request 并到达关卡" />
+</picture>
+
 每条命令都经过项目策略，开发智能体做的事情都留在会话记录中。
 
 ### 合并永远由你决定
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/merges-no-chat-escuro.png" />
+  <img src="docs/assets/capturas/merges-no-chat-claro.png" alt="Criativo 聊天中等待合并的 pull request 队列，带有合并与批准按钮" />
+</picture>
 
 通过各道关卡的 pull request 会出现在聊天中，点一下「批准」即可确认。
 

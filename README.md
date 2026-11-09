@@ -62,14 +62,29 @@ afeta. Você responde ali mesmo, e as respostas viram regras de negócio.
 
 ### O Arquiteto decide por escrito
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/arquitetura-escuro.png" />
+  <img src="docs/assets/capturas/arquitetura-claro.png" alt="A aba Arquitetura do projeto: mapa de módulos, diagrama C4 e o ADR proposto, à espera da sua confirmação" />
+</picture>
+
 A decisão de arquitetura nasce como pull request, e a arquitetura só segue com a sua confirmação.
 
 ### Os devs trabalham dentro do container
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/dev-agent-escuro.png" />
+  <img src="docs/assets/capturas/dev-agent-claro.png" alt="O fio da sessão de execução: o dev agent pega a tarefa, faz o commit, abre a pull request e chega ao gate" />
+</picture>
 
 Cada comando passa pela política do projeto, e o que o dev agent faz fica no fio
 da sessão.
 
 ### O merge é sempre seu
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/capturas/merges-no-chat-escuro.png" />
+  <img src="docs/assets/capturas/merges-no-chat-claro.png" alt="A fila de pull requests prontas para merge no chat do Criativo, com Mergear e Aprovar" />
+</picture>
 
 As PRs que passam pelos gates chegam ao chat, e um clique em Aprovar confirma.
 
