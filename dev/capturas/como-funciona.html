@@ -31,16 +31,25 @@
 <p><strong>Para quem é:</strong> quem mantém a doc do <code>brabo</code> e quem revisa a PR das capturas. <strong>O que a pessoa consegue fazer depois:</strong> rodar o cenário na própria máquina, ler a PR do bot e saber por que ela aparece. <strong>Como se prova:</strong> o spec da guarda (<code>scripts/ci/ocultar.spec.ts</code>) falha com um texto <code>/home/x</code>, e o job <code>capturar</code> roda o cenário inteiro contra as imagens.</p>
 <h2 id="como-funciona">Como funciona</h2>
 <pre class="mermaid" data-mermaid>flowchart LR
-  D[decidir: o MAJOR.MINOR do web mudou?] --&gt;|sim| C[capturar: compose + dublê + Playwright]
+  G[gatilho: repository_dispatch, cron ou manual] --&gt; D[decidir: a tag do web mudou?]
+  D --&gt;|sim| C[capturar: compose + dublê + Playwright + diff de pixels]
   D --&gt;|não| F[em dia, para em verde]
-  C --&gt; A[(artefato: PNGs + capturas.json)]
-  A --&gt; P[publicar: valida e abre a PR no brabo]
+  C --&gt; A[(artefato: PNGs + capturas.json + mudancas.json)]
+  A --&gt; P[publicar: valida o veredito]
+  P --&gt;|versao| V[PR chore/capturas-versao: só capturas.json]
+  P --&gt;|visual| W[PR chore/capturas-da-doc: só os PNG mudados]
 </pre>
 <ul>
-<li><strong><code>decidir</code></strong> compara a pin do <code>web</code> em <code>componentes.json</code> do <code>brabo</code> (na <code>dev</code>) com o <code>web</code> de <code>docs/assets/capturas.json</code>. Mesmo MAJOR.MINOR: para em verde (&quot;em dia&quot;) e não abre PR de ruído. Sem manifesto, segue. O <code>workflow_dispatch</code> aceita <code>forcar</code>.</li>
-<li><strong><code>capturar</code></strong> não tem o token do App. Sobe o compose do <code>brabo-infra</code> com as imagens por digest (tag resolvida uma vez, <code>cosign verify</code> antes), liga o provider dublê da api com o roteiro DIDÁTICO deste repo (<code>e2e/capturas/roteiro.json</code>, um encurtador de links) e roda <code>e2e/playwright.capturas.config.ts</code>.</li>
-<li><strong><code>publicar</code></strong> é o único job com o token do App (<code>repositories: brabo</code>, <code>contents: write</code>, <code>pull-requests: write</code>). Faz checkout limpo do <code>brabo</code> na <code>dev</code>, baixa o artefato e VALIDA na fronteira de confiança (<code>scripts/ci/capturas.ts validar</code>): só <code>.png</code> com nome do manifesto, cada um com até 400 KB, e o JSON conferido. Copia para <code>docs/assets/capturas/</code>, faz o commit do bot na branch fixa <code>chore/capturas-da-doc</code> e abre ou atualiza a PR para a <code>dev</code> (ou a fecha quando não há diferença).</li>
-<li>A PR passa pela escada INTEIRA do <code>brabo-ci</code>. A aprovação do dono é a conferência com zoom da AT-864.</li>
+<li><strong>Gatilhos:</strong> o <code>repository_dispatch</code> <code>capturas-pin-mudou</code> (o <code>brabo</code> o dispara quando a pin do <code>web</code> muda na <code>dev</code>, AT-878), o cron diário e o <code>workflow_dispatch</code> (com <code>forcar</code>).</li>
+<li><strong><code>decidir</code></strong> compara a pin do <code>web</code> em <code>componentes.json</code> do <code>brabo</code> (na <code>dev</code>) com o <code>web</code> de <code>docs/assets/capturas.json</code>. Mesma TAG: para em verde (&quot;em dia&quot;). Tag diferente, PATCH incluso: segue, porque a tela decide se há PR, não a versão. Sem manifesto, segue.</li>
+<li><strong><code>capturar</code></strong> não tem o token do App. Sobe o compose do <code>brabo-infra</code> com as imagens por digest (tag resolvida uma vez, <code>cosign verify</code> antes), liga o provider dublê da api com o roteiro DIDÁTICO deste repo (<code>e2e/capturas/roteiro.json</code>, um encurtador de links) e roda <code>e2e/playwright.capturas.config.ts</code>. Depois baixa os PNG atuais de <code>raw.githubusercontent.com/viralabs-dev/brabo/dev</code> (repo público, sem token) e roda <code>capturas.ts diferenca</code>: cada PNG novo contra o da <code>dev</code>, com <code>pixelmatch</code> (<code>threshold: 0.1</code>) e o limiar de 0,02% dos pixels (<code>LIMIAR = 0.0002</code>, ≈210 px em 1366×768). O veredito vai em <code>mudancas.json</code>, no artefato: <code>versao</code> (nada passou do limiar) ou <code>visual</code> (a lista dos PNG que passaram, com a fração). PNG novo, removido ou de outro tamanho conta como mudança.</li>
+<li><strong><code>publicar</code></strong> é o único job com o token do App (<code>repositories: brabo</code>, <code>contents: write</code>, <code>pull-requests: write</code>). Faz checkout limpo do <code>brabo</code> na <code>dev</code>, baixa o artefato e VALIDA na fronteira de confiança (<code>scripts/ci/capturas.ts validar &lt;pasta&gt; veredito</code>): só <code>.png</code> com nome do manifesto, cada um com até 400 KB, o JSON conferido e o <code>mudancas.json</code> bem formado e coerente. Nenhum PNG entra se o veredito for <code>versao</code>. Dois caminhos, com a mesma App:
+<ul>
+<li><strong><code>versao</code>:</strong> só <code>docs/assets/capturas.json</code> (os campos <code>web</code>, <code>api</code>, <code>engine</code> e <code>data</code>), na branch <code>chore/capturas-versao</code>, título &quot;docs: as capturas da doc conferem com o web vX.Y.Z&quot;. A isenção da escada para essa branch é do <code>brabo-ci</code>, e o <code>capturas-check</code> do <code>brabo</code> reprova se a PR tocar outra coisa.</li>
+<li><strong><code>visual</code>:</strong> só os PNG listados em <code>mudancas.json</code> mais o manifesto, na branch <code>chore/capturas-da-doc</code>. A PR passa pela escada INTEIRA do <code>brabo-ci</code>, o corpo lista os arquivos e a fração de cada um, e a aprovação do dono é a conferência com zoom da AT-864.</li>
+<li>Cada caminho fecha a PR do outro (o veredito mais novo a substitui), e fecha a sua quando não há diferença.</li>
+</ul>
+</li>
 </ul>
 <h2 id="o-cenário">O cenário</h2>
 <p><code>e2e/capturas/doc.captura.ts</code> não é spec: não leva <code>@f-</code>, mora fora de <code>e2e/testes/</code> e só roda pela config própria, que o <code>pnpm test</code> e o portão da <code>main</code> não enxergam. Cada tela sai em 1366×768, nos temas claro e escuro, em <code>&lt;nome&gt;-&lt;tema&gt;.png</code>, mais <code>capturas.json</code> com <code>arquivo</code>, <code>tela</code>, <code>tema</code>, <code>web</code>, <code>api</code>, <code>engine</code> e <code>data</code>.</p>
@@ -114,6 +123,8 @@
 <li><strong><code>mask</code>:</strong> o <code>page.screenshot({ mask })</code> cobre com cor chapada o e-mail e o nome do usuário (o botão do menu da barra lateral), campos de senha, e-mail, chave, token e caminho. Os seletores são estruturais, nunca texto.</li>
 <li><strong>Guarda de texto:</strong> <code>conferirSemDadoSensivel</code> LANÇA antes do screenshot se o texto visível ou o valor de um campo casar com <code>/home/</code>, o usuário da máquina, o handle do GitHub, um token (<code>ghp_</code>, <code>github_pat_</code>, <code>sk-</code>, JWT, chave AWS) ou um e-mail fora dos domínios de teste (<code>brabo.dev</code>, <code>brabo.test</code>, <code>loja-teste.local</code>, <code>exemplo.com</code>, <code>bot.brabo.local</code>, o e-mail fictício que o worktree do dev agent grava). A mensagem diz o TIPO do achado, nunca o trecho: ela vai para log de Actions.</li>
 </ol>
+<h3 id="o-que-muda-a-cada-execução-at-878">O que muda a cada execução (AT-878)</h3>
+<p>O diff de pixels só presta se duas capturas do mesmo build saírem iguais. Por isso <code>fixarNaPagina</code> (em <code>ocultar.ts</code>) troca, nos nós de texto e antes do screenshot, o que é de cada execução: o hash curto da sessão (<code>#425583c8</code>), o hash da branch da tarefa (<code>task-bb58781d</code>), o &quot;iniciada às HH:MM:SS&quot; e o &quot;há N min&quot;. Antes dessa troca, o ruído ia de 0,02% a 0,48% dos pixels, acima do limiar. Ela também espera o texto e as rolagens assentarem (o feed do chat media linhas depois do carregamento). O que a tela mostra de verdade continua igual, e a lista de padrões (<code>VOLATEIS</code>) tem spec. Ao achar outro valor que muda sozinho, acrescente-o lá.</p>
 <p>A captura não é repetida até passar (<code>retries: 0</code>). A guarda cobre o que a página mostra; o que a imagem tem de visual (um nome dentro de um gráfico, por exemplo) só a leitura com zoom pega.</p>
 <h2 id="rodar-na-máquina">Rodar na máquina</h2>
 <pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># compose de teste com o dublê (-f suporte/compose-duble.yml) e o seed do owner@brabo.dev</span></span>
@@ -123,6 +134,9 @@
 <span class="line"><span style="color:var(--shiki-token-string)">  pnpm</span><span style="color:var(--shiki-token-string)"> exec</span><span style="color:var(--shiki-token-string)"> playwright</span><span style="color:var(--shiki-token-string)"> test</span><span style="color:var(--shiki-token-string)"> -c</span><span style="color:var(--shiki-token-string)"> playwright.capturas.config.ts</span></span>
 <span class="line"></span></code></pre>
 <p>A saída vai para <code>e2e/capturas/saida/</code> (ignorada pelo git), ou para <code>CAPTURAS_SAIDA</code>. Nunca use o Postgres da instalação.</p>
+<p>Para ver o veredito entre duas pastas de capturas (precisa de <code>pnpm --dir scripts install</code>):</p>
+<pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-function)">node</span><span style="color:var(--shiki-token-string)"> scripts/ci/capturas.ts</span><span style="color:var(--shiki-token-string)"> diferenca</span><span style="color:var(--shiki-token-keyword)"> &#x3C;</span><span style="color:var(--shiki-token-string)">pasta-atua</span><span style="color:var(--shiki-foreground)">l</span><span style="color:var(--shiki-token-keyword)">></span><span style="color:var(--shiki-token-keyword)"> &#x3C;</span><span style="color:var(--shiki-token-string)">pasta-nov</span><span style="color:var(--shiki-foreground)">a</span><span style="color:var(--shiki-token-keyword)">></span><span style="color:var(--shiki-token-keyword)"> &#x3C;</span><span style="color:var(--shiki-token-string)">mudancas.jso</span><span style="color:var(--shiki-foreground)">n</span><span style="color:var(--shiki-token-keyword)">></span><span style="color:var(--shiki-token-comment)">   # imprime veredito=versao|visual e os PNG</span></span>
+<span class="line"></span></code></pre>
 <h2 id="ligar-a-publicação">Ligar a publicação</h2>
 <p>O job <code>publicar</code> só roda com a variável do repositório <code>CAPTURAS_PUBLICAR=true</code>, que não existe. Antes de criá-la:</p>
 <ol>
@@ -134,7 +148,7 @@
 </article>
 <footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-qa/blob/dev/docs/capturas/como-funciona.md">Editar esta página</a></footer>
 </main>
-<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#como-funciona">Como funciona</a></li><li class="n2"><a href="#o-cenário">O cenário</a></li><li class="n2"><a href="#a-ocultação-at-864">A ocultação (AT-864)</a></li><li class="n2"><a href="#rodar-na-máquina">Rodar na máquina</a></li><li class="n2"><a href="#ligar-a-publicação">Ligar a publicação</a></li></ul></aside>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#como-funciona">Como funciona</a></li><li class="n2"><a href="#o-cenário">O cenário</a></li><li class="n2"><a href="#a-ocultação-at-864">A ocultação (AT-864)</a></li><li class="n3"><a href="#o-que-muda-a-cada-execução-at-878">O que muda a cada execução (AT-878)</a></li><li class="n2"><a href="#rodar-na-máquina">Rodar na máquina</a></li><li class="n2"><a href="#ligar-a-publicação">Ligar a publicação</a></li></ul></aside>
 </div>
 <script src="../assets/mermaid.min.js"></script>
 <script src="../assets/site.js"></script>
