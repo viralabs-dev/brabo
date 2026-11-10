@@ -355,14 +355,14 @@ de LLM; senha gravada em qualquer lugar; e qualquer caminho que crie conta sem
 TTY — sem terminal interativo o script relata e <strong>sai 0</strong>, no passo que já
 existia, antes de qualquer escrita.</p>
 <ul>
-<li><strong>Código:</strong> <code>install.sh:1850</code> (<code>fechar_a_instalacao</code>, o encadeamento e o
-&quot;sempre 0&quot;), <code>:1649</code> (<code>perguntar_e_criar_a_conta</code>, o consentimento, o laço e
-o teto), <code>:1749</code> (<code>parear_esta_maquina</code>, o <code>id</code> virando <code>--id</code>), <code>:1826</code>
-(<code>subir_o_agente_como_servico</code>, a recusa repassada inteira), <code>:1552</code>
+<li><strong>Código:</strong> <code>install.sh:1946</code> (<code>fechar_a_instalacao</code>, o encadeamento e o
+&quot;sempre 0&quot;), <code>:1745</code> (<code>perguntar_e_criar_a_conta</code>, o consentimento, o laço e
+o teto), <code>:1845</code> (<code>parear_esta_maquina</code>, o <code>id</code> virando <code>--id</code>), <code>:1922</code>
+(<code>subir_o_agente_como_servico</code>, a recusa repassada inteira), <code>:1648</code>
 (<code>post_interno</code>, o corpo pelo stdin e o cabeçalho pelo <code>--config</code> 600),
-<code>:1571</code> (<code>criar_primeira_conta</code>) e <code>:1612</code> (<code>registrar_chave_de_maquina</code>) —
-os vereditos das duas rotas —, <code>:1627</code> (<code>ler_sem_eco</code>), <code>:1531</code>
-(<code>nome_da_maquina</code>), <code>:1790</code> (<code>avisar_chave_parcial</code>), <code>:1208</code>/<code>:1215</code>
+<code>:1689</code> (<code>criar_primeira_conta</code>) e <code>:1708</code> (<code>registrar_chave_de_maquina</code>) —
+os vereditos das duas rotas —, <code>:1723</code> (<code>ler_sem_eco</code>), <code>:1627</code>
+(<code>nome_da_maquina</code>), <code>:1909</code> (<code>avisar_chave_parcial</code>), <code>:1208</code>/<code>:1215</code>
 (<code>escapar_json</code>/<code>sem_controle</code>), <code>:109</code> (<code>MARCADOR_SCHEMA=4</code>, AT-738), <code>:1871</code> (a
 chamada, depois do runner e antes do marcador), <code>:1882</code> (o <code>ownerEmail</code>).
 Números relidos pelo símbolo em 18/09 (AT-096), em 27/09 (AT-065, que
@@ -596,9 +596,9 @@ que o serviço <code>backup</code> referencia, cuja falta recusava o arquivo int
 profile ligado. Coberto por <code>scripts/dev/prova-de-restauracao-env.spec.ts</code>.</p>
 <ul>
 <li><strong>Código:</strong> <code>install.sh:129</code> (<code>COMPOSE_DE_INSTALACAO</code> vazio até materializar),
-<code>:587</code> (<code>ASSETS_DO_INSTALADOR</code>), <code>:589</code> (<code>destino_do_asset_do_instalador</code>, a
-tabela do lado que baixa), <code>:614</code> (<code>baixar_e_verificar_os_arquivos_da_instalacao</code>),
-<code>:607</code>/<code>:615</code>/<code>:617</code> (as três recusas), <code>:648</code>
+<code>:602</code> (<code>ASSETS_DO_INSTALADOR</code>), <code>:604</code> (<code>destino_do_asset_do_instalador</code>, a
+tabela do lado que baixa), <code>:629</code> (<code>baixar_e_verificar_os_arquivos_da_instalacao</code>),
+<code>:607</code>/<code>:615</code>/<code>:617</code> (as três recusas), <code>:662</code>
 (<code>materializar_os_arquivos_da_instalacao</code>), <code>:1573</code> (a migração materializa
 antes do backup), <code>:1677</code> (a verificação logo depois da própria origem),
 <code>:1831</code> (a subida materializa antes do <code>up</code>);
@@ -669,9 +669,9 @@ no Linux. Docker rootless ou remoto não tem o socket em <code>/var/run/docker.s
 que é o caminho que o compose monta, e cai na recusa do item 2 — ligar o broker
 ali não é oferecido por outro caminho.</p>
 <ul>
-<li><strong>Código:</strong> <code>install.sh:1211</code> (<code>consentir_broker</code>), <code>:1163</code>
-(<code>medir_gid_do_socket</code>), <code>:1198</code> (<code>calcular_raiz_gerenciada</code>), <code>:1335</code>
-(<code>conferir_o_broker</code>), <code>:792</code> (<code>escrever_env_do_broker</code>), <code>:855</code> (o broker no
+<li><strong>Código:</strong> <code>install.sh:1243</code> (<code>consentir_broker</code>), <code>:1195</code>
+(<code>medir_gid_do_socket</code>), <code>:1230</code> (<code>calcular_raiz_gerenciada</code>), <code>:1431</code>
+(<code>conferir_o_broker</code>), <code>:807</code> (<code>escrever_env_do_broker</code>), <code>:855</code> (o broker no
 manifesto), <code>:1812</code> (a ordem: depois da base, antes do <code>.env</code>);
 <code>docker/docker-compose.install.yml</code> (o serviço <code>broker</code> e a rede <code>broker</code>)</li>
 <li><strong>Teste:</strong> <code>scripts/dev/install-broker.spec.ts:158</code> (sem terminal: desligado,
@@ -710,9 +710,9 @@ pulada (lado da api, outra frente); e o E2E da tag responde NÃO (ligar
 baixaria GBs de modelo), então a subida com o profile <code>llm</code> não é provada ponta
 a ponta.</p>
 <ul>
-<li><strong>Onde:</strong> <code>install.sh:1289</code> (<code>consentir_llm</code>), <code>:1274</code>
-(<code>escolher_porta_do_ollama</code>), <code>:1264</code> (<code>porta_em_uso</code>), <code>:800</code>
-(<code>escrever_env_do_llm</code>), <code>:821</code> (<code>escrever_env_dos_profiles</code>)</li>
+<li><strong>Onde:</strong> <code>install.sh:1321</code> (<code>consentir_llm</code>), <code>:1306</code>
+(<code>escolher_porta_do_ollama</code>), <code>:1296</code> (<code>porta_em_uso</code>), <code>:808</code>
+(<code>escrever_env_do_llm</code>), <code>:810</code> (<code>escrever_env_dos_profiles</code>)</li>
 <li><strong>Teste:</strong> <code>scripts/dev/install-llm.spec.ts</code> (sem terminal fica desligado
 dizendo o custo; 11434 ocupada escolhe a próxima; faixa inteira ocupada falha
 — caso de falha; um servidor escutando é medido como em uso; broker e modelos
@@ -735,7 +735,7 @@ os repositórios git. Enter continua não apagando nada.</p>
 <p>Junto, o fechamento deixa de dizer que parear uma pasta pela tela do projeto
 &quot;continua existindo (ADR 0118)&quot;: esse fluxo saiu no ADR 0203 (<a href="../web.html#rn-687">RN-687</a>).</p>
 <ul>
-<li><strong>Onde:</strong> <code>install.sh:440</code> (<code>detectar_por_sinais</code>), <code>:1935</code>
+<li><strong>Onde:</strong> <code>install.sh:452</code> (<code>detectar_por_sinais</code>), <code>:2031</code>
 (<code>migrar_instalacao_anterior</code>)</li>
 <li><strong>Teste:</strong> <code>scripts/dev/install-llm.spec.ts</code> (<code>brabo-dev</code> não conta e <code>brabo</code>
 conta; <code>z</code> apaga depois da prova e deixa <code>MIGRAR_DE</code> vazio; Enter não apaga —
@@ -783,12 +783,12 @@ diferentes.</li>
 <p>Ela revisa a <a href="../infra.html#rn-530">RN-530</a> (o dump deixa de ficar só na pasta) e
 a frase de <code>s</code> da <a href="#rn-692">RN-692</a>.</p>
 <ul>
-<li><strong>Onde:</strong> <code>install.sh:1935</code> (<code>migrar_instalacao_anterior</code>), <code>:1920</code>
-(<code>com_ambiente_do_backup</code>), <code>:2010</code> (<code>restaurar_o_banco</code>), <code>:2026</code>
-(<code>restaurar_os_repositorios_git</code>), <code>:2042</code> (<code>reprojetar</code>), <code>:2062</code>
-(<code>gravar_marcador</code>), <code>:930</code> (<code>relacao_com_o_instalado</code>), <code>:949</code>
-(<code>restauracao_pendente</code>), <code>:736</code> (<code>gerar_segredos</code>), <code>:971</code>
-(<code>preservar_do_env_anterior</code>), <code>:194</code> (<code>baixar</code>)</li>
+<li><strong>Onde:</strong> <code>install.sh:2031</code> (<code>migrar_instalacao_anterior</code>), <code>:2016</code>
+(<code>com_ambiente_do_backup</code>), <code>:2106</code> (<code>restaurar_o_banco</code>), <code>:2122</code>
+(<code>restaurar_os_repositorios_git</code>), <code>:2138</code> (<code>reprojetar</code>), <code>:2175</code>
+(<code>gravar_marcador</code>), <code>:952</code> (<code>relacao_com_o_instalado</code>), <code>:971</code>
+(<code>restauracao_pendente</code>), <code>:749</code> (<code>gerar_segredos</code>), <code>:993</code>
+(<code>preservar_do_env_anterior</code>), <code>:206</code> (<code>baixar</code>)</li>
 <li><strong>Teste:</strong> <code>scripts/dev/install-migracao.spec.ts</code> (um caso por item, com
 <code>docker</code>, <code>curl</code> e a prova de mentira no PATH; o caso de falha de cada um —
 backup que falha não apaga, restore recusado fica pendente, dono ilegível
@@ -797,7 +797,7 @@ recusa, 404 ≠ 504); <code>scripts/dev/install-fechamento.spec.ts</code> (o sch
 </ul>
 <nav class="site-pager"><a href="../../business-rules/produto/parte-01.html">Produto — parte 1 (desde RN-012)</a><a href="../../business-rules/runner.html">Runner</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/business-rules/produto/parte-02.md">Editar esta página</a><span>Atualizado em 2026-11-09T07:56:44-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/business-rules/produto/parte-02.md">Editar esta página</a><span>Atualizado em 2026-11-09T20:58:09-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#a-chave-de-dispositivo-passa-a-poder-ser-da-máquina-rn-543-fase-30">A chave de dispositivo passa a poder ser da MÁQUINA (RN-543, FASE 30)</a></li><li class="n3"><a href="#rn-543">RN-543 — runner_device_keys.project_id nulo é a chave de MÁQUINA: vale para os projetos do DONO, resolvida contra o projeto pedido</a></li><li class="n2"><a href="#a-primeira-conta-de-uma-instalação-nasce-no-terminal-rn-546">A primeira conta de uma instalação nasce no terminal (RN-546)</a></li><li class="n3"><a href="#rn-546">RN-546 — Rota interna cria a PRIMEIRA conta, já verificada, e recusa quando existe qualquer usuário</a></li><li class="n2"><a href="#o-installsh-fecha-a-instalação-rn-547-fase-30">O install.sh fecha a instalação (RN-547, FASE 30)</a></li><li class="n3"><a href="#rn-547">RN-547 — O instalador cria a primeira conta, registra a chave desta máquina e sobe o agente como serviço — e o que falha no meio é RELATADO, nunca desfeito nem engolido</a></li><li class="n2"><a href="#o-teto-de-auto-movimento-no-upsert-de-workspace-e-a-auto-promoção-que-fecha-rn-557">O teto de auto-movimento no upsert de WORKSPACE, e a auto-promoção que fecha (RN-557)</a></li><li class="n3"><a href="#rn-557">RN-557 — Mudar o PRÓPRIO papel é recusado com 403 nas duas rotas de associação, nos dois sentidos</a></li><li class="n2"><a href="#a-chave-de-dispositivo-ganha-tela-e-a-tela-diz-o-alcance-de-revogar-rn-561">A chave de dispositivo ganha tela, e a tela diz o alcance de revogar (RN-561)</a></li><li class="n3"><a href="#rn-570">RN-570 — O instalador sobe a instalação só com arquivos que a Release assinou, conferidos antes de perguntar ou gravar qualquer coisa</a></li><li class="n2"><a href="#o-broker-de-container-na-instalação-com-consentimento-rn-575">O broker de container na instalação, com consentimento (RN-575)</a></li><li class="n3"><a href="#rn-575">RN-575 — O instalador só liga o broker de container com um &quot;s&quot; digitado, mede o grupo do socket de dentro de um container, e grava as quatro linhas juntas ou nenhuma</a></li><li class="n2"><a href="#o-instalador-oferece-os-modelos-locais-e-não-confunde-o-dev-com-uma-instalação-rn-691-rn-692">O instalador oferece os modelos locais, e não confunde o dev com uma instalação (RN-691, RN-692)</a></li><li class="n3"><a href="#rn-691">RN-691 — O install.sh PERGUNTA se liga os modelos locais (profile llm), mede a porta do Ollama antes de gravar, e compõe UMA linha de COMPOSE_PROFILES</a></li><li class="n3"><a href="#rn-692">RN-692 — Só o projeto compose brabo é instalação anterior, e a migração oferece reinstalar DO ZERO depois do backup provado</a></li><li class="n2"><a href="#a-migração-do-instalador-traz-a-instalação-anterior-inteira-de-volta-rn-998">A migração do instalador traz a instalação anterior inteira de volta (RN-998)</a></li><li class="n3"><a href="#rn-998">RN-998 — A migração restaura o banco num banco vazio, mantém a chave mestra, é retomável e entende a linha de versões</a></li></ul></aside>
 </div>
