@@ -305,6 +305,7 @@ chunks 和混合搜索、对它的测量、Neo4j 图谱，以及从事件日志�
 | [0269](0269-indexacao-de-docs-com-teto-proprio-e-corte-declarado.md) | A indexação de docs tem teto próprio de 4 MiB, e o corte é declarado | 已接受 |
 | [0272](0272-a-busca-do-rag-limita-os-trechos-por-arquivo.md) | A busca híbrida do RAG limita os trechos por arquivo | 已接受 |
 | [0291](0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md) | As Percepções olham o produto do usuário; a falha técnica é sinal interno do TP-01 | 已接受 |
+| [0293](0293-a-memoria-do-projeto-e-markdown-versionado-e-o-grafo-e-o-rag-sao-indices.md) | O projeto tem memória em markdown que o dev lê antes de explorar | 已提议 |
 
 ## Web 界面与设计系统 {#tema-web}
 

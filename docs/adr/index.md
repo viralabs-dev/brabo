@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 285 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 286 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -304,6 +304,7 @@ Chunks e busca híbrida, a medição dela, o grafo Neo4j e os artefatos projetad
 | [0269](0269-indexacao-de-docs-com-teto-proprio-e-corte-declarado.md) | A indexação de docs tem teto próprio de 4 MiB, e o corte é declarado | aceito |
 | [0272](0272-a-busca-do-rag-limita-os-trechos-por-arquivo.md) | A busca híbrida do RAG limita os trechos por arquivo | aceito |
 | [0291](0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md) | As Percepções olham o produto do usuário; a falha técnica é sinal interno do TP-01 | aceito |
+| [0293](0293-a-memoria-do-projeto-e-markdown-versionado-e-o-grafo-e-o-rag-sao-indices.md) | O projeto tem memória em markdown que o dev lê antes de explorar | proposto |
 
 ## Interface web e design system {#tema-web}
 
@@ -425,7 +426,7 @@ Como a documentação é gerada, verificada e publicada.
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0292**.
+  é substituído — o próximo é **0294**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml`; a linha do índice é gerada. Quem revisa confirma. Um tema novo é uma
   mudança na lista em `temas.yml`, justificada no PR que o acrescenta; passar
