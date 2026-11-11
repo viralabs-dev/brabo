@@ -304,6 +304,7 @@ CLI на машине пользователя — канал, учётные д
 | [0205](0205-desvio-do-agente-como-sinal-do-produto.md) | Отклонение агента, которое наблюдает Anamnese, становится сигналом продукта, без персональных данных | принято |
 | [0269](0269-indexacao-de-docs-com-teto-proprio-e-corte-declarado.md) | A indexação de docs tem teto próprio de 4 MiB, e o corte é declarado | принято |
 | [0272](0272-a-busca-do-rag-limita-os-trechos-por-arquivo.md) | A busca híbrida do RAG limita os trechos por arquivo | принято |
+| [0291](0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md) | As Percepções olham o produto do usuário; a falha técnica é sinal interno do TP-01 | принято |
 
 ## Web-интерфейс и дизайн-система {#tema-web}
 

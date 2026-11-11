@@ -304,6 +304,7 @@ chunks 和混合搜索、对它的测量、Neo4j 图谱，以及从事件日志�
 | [0205](0205-desvio-do-agente-como-sinal-do-produto.md) | Anamnese 观察到的 agent 偏差成为产品信号，不含个人数据 | 已接受 |
 | [0269](0269-indexacao-de-docs-com-teto-proprio-e-corte-declarado.md) | A indexação de docs tem teto próprio de 4 MiB, e o corte é declarado | 已接受 |
 | [0272](0272-a-busca-do-rag-limita-os-trechos-por-arquivo.md) | A busca híbrida do RAG limita os trechos por arquivo | 已接受 |
+| [0291](0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md) | As Percepções olham o produto do usuário; a falha técnica é sinal interno do TP-01 | 已接受 |
 
 ## Web 界面与设计系统 {#tema-web}
 
