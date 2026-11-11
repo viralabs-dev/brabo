@@ -293,6 +293,7 @@ session timeline.
 | `psychologist.hypothesis_accepted` | — |
 | `psychologist.hypothesis_dismissed` | — |
 | `psychologist.hypothesis_accepted_for_anamnese` | accepted and forwarded — the link that closes the loop with the Anamnesis |
+| `psychologist.platform_signal` | an INTERNAL platform-failure signal about an agent (`agenteAlvo`), recorded only in a TP-01 test session (`projects.sessao_de_teste`); never becomes a hypothesis, does not appear in Insights nor enters the Anamnesis queue, and stays out of the graph ([RN-1076](../business-rules/engine.md), [ADR 0291](../adr/0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md)) |
 
 ### Anamnesis and instructions
 
@@ -303,7 +304,7 @@ session timeline.
 | `anamnese.run_skipped` | the round ended WITHOUT a profile, on purpose — `payload.motivo` says why ([RN-063](../business-rules/engine.md#rn-063)) |
 | `anamnese.analysis` | the text the Anamnesis model wrote during the round (`payload.content`); never drawn in the session thread ([RN-695](../business-rules/engine.md#rn-695)) |
 | `anamnese.profile_updated` | the `proficiency_profile` changed |
-| `anamnese.agent_deviation` | an AGENT deviation seen by the Anamnesis (loop, cancelled by the user, repaired by the user) — a product signal, never a user trait; `payload` is only `agente`, `tipo` and `evidenceEventIds`, no personal data, not projected into the graph ([RN-717](../business-rules/engine.md#rn-717), [ADR 0205](../adr/0205-desvio-do-agente-como-sinal-do-produto.md)) |
+| `anamnese.agent_deviation` | removed (ADR 0291) |
 | `instruction.rolled_back` | rollback of an instruction version — creates a new version, doesn't delete ([RN-027](../business-rules/api.md#rn-027)) |
 
 ---

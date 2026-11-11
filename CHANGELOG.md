@@ -4,6 +4,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **feat(psicologo)**: AT-898, ADR 0291 (substitui a 0205; lado do `brabo`, com as RNs e o `events.md`). As Percepções olham o produto do usuário: a `emit_hypotheses` traz `escopo` (`produto` ou `plataforma`); só `produto` vira hipótese. A falha da plataforma vira o evento interno `psychologist.platform_signal` só em sessão de teste do TP-01 (`projects.sessao_de_teste`, marcada por `pnpm projeto:marcar-teste <id>`) e é descartada nas outras. Lote vazio é válido, e `terminationAnalysis` só é exigida em sessão de teste. Sai o `anamnese.agent_deviation` (RN-717 revogada, `report_agent_deviation` removida). RN-1076 (engine) e nota de revisão na RN-079.
 - **feat(ci)**: AT-878, ADR 0289 (estende a 0286, emenda a 0255; lado do `brabo`). A recaptura da doc segue a pin do web: novo `capturas-gatilho.yml` (push na `dev` que toca `componentes.json` com a tag do web mudada faz `repository_dispatch` `capturas-pin-mudou` no `brabo-qa`, pelo App); o `capturas-check.mjs` ganha a guarda (e), em que a branch `chore/capturas-versao` só pode mudar `web`/`api`/`engine`/`data` de `capturas.json` (spec com mutação); repin do brabo-ci em `v1.5.0-dev.1` (`62f6d34`), que isenta essa branch da escada.
 - CI: repina o brabo-ci na release final `v1.4.0` (`5320046`), para a promoção `dev → main` de 09/11/2026 (a `main` só aceita release final).
 

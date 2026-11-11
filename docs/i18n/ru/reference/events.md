@@ -292,6 +292,7 @@ traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 | `psychologist.hypothesis_accepted` | — |
 | `psychologist.hypothesis_dismissed` | — |
 | `psychologist.hypothesis_accepted_for_anamnese` | принята и передана — звено, замыкающее цикл с Анамнезом |
+| `psychologist.platform_signal` | ВНУТРЕННИЙ сигнал о сбое платформы по агенту (`agenteAlvo`), записывается только в тестовой сессии TP-01 (`projects.sessao_de_teste`); никогда не становится гипотезой, не появляется в Percepções и не попадает в очередь Анамнеза, а в граф не проецируется ([RN-1076](../business-rules/engine.md), [ADR 0291](../adr/0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md)) |
 
 ### Анамнез и инструкции
 
@@ -302,7 +303,7 @@ traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 | `anamnese.run_skipped` | раунд завершился БЕЗ профиля, намеренно — `payload.motivo` говорит почему ([RN-063](../business-rules/engine.md#rn-063)) |
 | `anamnese.analysis` | текст, который модель Анамнеза написала во время раунда (`payload.content`); никогда не отрисовывается в ленте сессии ([RN-695](../business-rules/engine.md#rn-695)) |
 | `anamnese.profile_updated` | `proficiency_profile` изменился |
-| `anamnese.agent_deviation` | отклонение АГЕНТА, замеченное Анамнезом (цикл, отменено пользователем, исправлено пользователем) — сигнал продукта, никогда не черта пользователя; `payload` — только `agente`, `tipo` и `evidenceEventIds`, без персональных данных, в граф не проецируется ([RN-717](../business-rules/engine.md#rn-717), [ADR 0205](../adr/0205-desvio-do-agente-como-sinal-do-produto.md)) |
+| `anamnese.agent_deviation` | удалено (ADR 0291) |
 | `instruction.rolled_back` | откат версии инструкции — создаёт новую версию, не удаляет ([RN-027](../business-rules/api.md#rn-027)) |
 
 ---
