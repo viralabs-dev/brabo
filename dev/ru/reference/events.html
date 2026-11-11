@@ -779,6 +779,10 @@
 <td><code>psychologist.hypothesis_accepted_for_anamnese</code></td>
 <td>принята и передана — звено, замыкающее цикл с Анамнезом</td>
 </tr>
+<tr>
+<td><code>psychologist.platform_signal</code></td>
+<td>ВНУТРЕННИЙ сигнал о сбое платформы по агенту (<code>agenteAlvo</code>), записывается только в тестовой сессии TP-01 (<code>projects.sessao_de_teste</code>); никогда не становится гипотезой, не появляется в Percepções и не попадает в очередь Анамнеза, а в граф не проецируется (<a href="../business-rules/engine.html">RN-1076</a>, <a href="../adr/0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.html">ADR 0291</a>)</td>
+</tr>
 </tbody>
 </table></div>
 <h3 id="анамнез-и-инструкции">Анамнез и инструкции</h3>
@@ -812,7 +816,7 @@
 </tr>
 <tr>
 <td><code>anamnese.agent_deviation</code></td>
-<td>отклонение АГЕНТА, замеченное Анамнезом (цикл, отменено пользователем, исправлено пользователем) — сигнал продукта, никогда не черта пользователя; <code>payload</code> — только <code>agente</code>, <code>tipo</code> и <code>evidenceEventIds</code>, без персональных данных, в граф не проецируется (<a href="../business-rules/engine.html#rn-717">RN-717</a>, <a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205</a>)</td>
+<td>удалено (ADR 0291)</td>
 </tr>
 <tr>
 <td><code>instruction.rolled_back</code></td>
@@ -1095,7 +1099,7 @@ Postgres. Именно это предотвращает «событие зап
 </blockquote>
 <nav class="site-pager"><a href="../reference/configuration.html">Configuração</a><a href="../reference/permissions.html">Permissões</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/events.md">Редактировать страницу</a><span>Обновлено 2026-11-08T19:12:20Z · viralabs-dev-brabo[bot]</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/events.md">Редактировать страницу</a><span>Обновлено 2026-11-11T19:22:34-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#доменное-событие">Доменное событие</a></li><li class="n3"><a href="#сессия">Сессия</a></li><li class="n3"><a href="#чат-и-агенты">Чат и агенты</a></li><li class="n3"><a href="#предлагаемые-действия">Предлагаемые действия</a></li><li class="n3"><a href="#backlog">Backlog</a></li><li class="n3"><a href="#выполнение-и-gates">Выполнение и gates</a></li><li class="n3"><a href="#делегирование-фаза-8b-adr-0038">Делегирование (Фаза 8b, ADR 0038)</a></li><li class="n3"><a href="#цикл-инструментов">Цикл инструментов</a></li><li class="n3"><a href="#артефакты">Артефакты</a></li><li class="n3"><a href="#архитектура-и-готовность">Архитектура и готовность</a></li><li class="n3"><a href="#git-и-bootstrap">Git и bootstrap</a></li><li class="n3"><a href="#стоимость">Стоимость</a></li><li class="n3"><a href="#телеметрия-rag-rn-479480481">Телеметрия RAG (RN-479/480/481)</a></li><li class="n3"><a href="#локальный-runner-adr-01030104">Локальный runner (ADR 0103/0104)</a></li><li class="n3"><a href="#психолог">Психолог</a></li><li class="n3"><a href="#анамнез-и-инструкции">Анамнез и инструкции</a></li><li class="n2"><a href="#broadcast">Broadcast</a></li><li class="n3"><a href="#кто-может-слушать-rn-108">Кто может слушать (RN-108)</a></li><li class="n2"><a href="#span">Span</a></li><li class="n3"><a href="#доменные-имена">Доменные имена</a></li><li class="n3"><a href="#имена-производные-от-кода">Имена, производные от кода</a></li><li class="n2"><a href="#как-событие-доходит-до-engine">Как событие доходит до engine</a></li><li class="n2"><a href="#полный-инвентарь">Полный инвентарь</a></li></ul></aside>
 </div>

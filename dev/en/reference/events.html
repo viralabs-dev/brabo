@@ -780,6 +780,10 @@ session timeline.</p>
 <td><code>psychologist.hypothesis_accepted_for_anamnese</code></td>
 <td>accepted and forwarded — the link that closes the loop with the Anamnesis</td>
 </tr>
+<tr>
+<td><code>psychologist.platform_signal</code></td>
+<td>an INTERNAL platform-failure signal about an agent (<code>agenteAlvo</code>), recorded only in a TP-01 test session (<code>projects.sessao_de_teste</code>); never becomes a hypothesis, does not appear in Insights nor enters the Anamnesis queue, and stays out of the graph (<a href="../business-rules/engine.html">RN-1076</a>, <a href="../adr/0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.html">ADR 0291</a>)</td>
+</tr>
 </tbody>
 </table></div>
 <h3 id="anamnesis-and-instructions">Anamnesis and instructions</h3>
@@ -813,7 +817,7 @@ session timeline.</p>
 </tr>
 <tr>
 <td><code>anamnese.agent_deviation</code></td>
-<td>an AGENT deviation seen by the Anamnesis (loop, cancelled by the user, repaired by the user) — a product signal, never a user trait; <code>payload</code> is only <code>agente</code>, <code>tipo</code> and <code>evidenceEventIds</code>, no personal data, not projected into the graph (<a href="../business-rules/engine.html#rn-717">RN-717</a>, <a href="../adr/0205-desvio-do-agente-como-sinal-do-produto.html">ADR 0205</a>)</td>
+<td>removed (ADR 0291)</td>
 </tr>
 <tr>
 <td><code>instruction.rolled_back</code></td>
@@ -1097,7 +1101,7 @@ extraction of the emission points.</p>
 </blockquote>
 <nav class="site-pager"><a href="../reference/configuration.html">Configuração</a><a href="../reference/permissions.html">Permissões</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/events.md">Edit this page</a><span>Updated 2026-11-08T19:12:20Z · viralabs-dev-brabo[bot]</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/events.md">Edit this page</a><span>Updated 2026-11-11T19:22:34-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#domain-event">Domain event</a></li><li class="n3"><a href="#session">Session</a></li><li class="n3"><a href="#chat-and-agents">Chat and agents</a></li><li class="n3"><a href="#proposed-actions">Proposed actions</a></li><li class="n3"><a href="#backlog">Backlog</a></li><li class="n3"><a href="#execution-and-gates">Execution and gates</a></li><li class="n3"><a href="#delegation-phase-8b-adr-0038">Delegation (Phase 8b, ADR 0038)</a></li><li class="n3"><a href="#tool-loop">Tool loop</a></li><li class="n3"><a href="#artifacts">Artifacts</a></li><li class="n3"><a href="#architecture-and-readiness">Architecture and readiness</a></li><li class="n3"><a href="#git-and-bootstrap">Git and bootstrap</a></li><li class="n3"><a href="#cost">Cost</a></li><li class="n3"><a href="#rag-telemetry-rn-479480481">RAG telemetry (RN-479/480/481)</a></li><li class="n3"><a href="#local-runner-adr-01030104">Local runner (ADR 0103/0104)</a></li><li class="n3"><a href="#psychologist">Psychologist</a></li><li class="n3"><a href="#anamnesis-and-instructions">Anamnesis and instructions</a></li><li class="n2"><a href="#broadcast">Broadcast</a></li><li class="n3"><a href="#who-can-listen-rn-108">Who can listen (RN-108)</a></li><li class="n2"><a href="#span">Span</a></li><li class="n3"><a href="#domain-names">Domain names</a></li><li class="n3"><a href="#code-derived-names">Code-derived names</a></li><li class="n2"><a href="#how-the-event-reaches-the-engine">How the event reaches the engine</a></li><li class="n2"><a href="#complete-inventory">Complete inventory</a></li></ul></aside>
 </div>
