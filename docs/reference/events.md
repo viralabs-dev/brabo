@@ -291,6 +291,7 @@ o evento só põe o mesmo fato na linha do tempo da sessão.
 | `psychologist.hypothesis_accepted` | — |
 | `psychologist.hypothesis_dismissed` | — |
 | `psychologist.hypothesis_accepted_for_anamnese` | aceita e encaminhada — o elo que fecha o laço com a Anamnese |
+| `psychologist.platform_signal` | sinal INTERNO de falha da plataforma sobre um agente (`agenteAlvo`), gravado só em sessão de teste do TP-01 (`projects.sessao_de_teste`); nunca vira hipótese, não aparece em Percepções nem entra na fila da Anamnese, e fica fora do grafo ([RN-1076](../business-rules/engine.md), [ADR 0291](../adr/0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md)) |
 
 ### Anamnese e instruções
 
@@ -301,7 +302,7 @@ o evento só põe o mesmo fato na linha do tempo da sessão.
 | `anamnese.run_skipped` | a rodada terminou SEM perfil, de propósito — `payload.motivo` diz por quê ([RN-063](../business-rules/engine.md#rn-063)) |
 | `anamnese.analysis` | o texto que o modelo da Anamnese escreveu durante a rodada (`payload.content`); nunca desenhado no fio da sessão ([RN-695](../business-rules/engine.md#rn-695)) |
 | `anamnese.profile_updated` | o `proficiency_profile` mudou |
-| `anamnese.agent_deviation` | um desvio do AGENTE visto pela Anamnese (laço, cancelado pelo usuário, reparado pelo usuário) — sinal do produto, nunca traço do usuário; o `payload` é só `agente`, `tipo` e `evidenceEventIds`, sem dado pessoal, não projetado no grafo ([RN-717](../business-rules/engine.md#rn-717), [ADR 0205](../adr/0205-desvio-do-agente-como-sinal-do-produto.md)) |
+| `anamnese.agent_deviation` | removido (ADR 0291) |
 | `instruction.rolled_back` | rollback de uma versão de instrução — cria uma versão nova, não apaga ([RN-027](../business-rules/api.md#rn-027)) |
 
 ---

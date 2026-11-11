@@ -234,6 +234,7 @@ schema 是封闭的：缺少字段会拒绝发出（`Engine.Harness.ArtifactSche
 | `psychologist.hypothesis_accepted` | — |
 | `psychologist.hypothesis_dismissed` | — |
 | `psychologist.hypothesis_accepted_for_anamnese` | 已接受并转交——闭合与 Anamnese 之间循环的环节 |
+| `psychologist.platform_signal` | 关于某个 agent（`agenteAlvo`）的平台故障**内部**信号，仅在 TP-01 测试会话（`projects.sessao_de_teste`）中记录；从不成为假设，不出现在 Percepções 中，也不进入 Anamnese 队列，且不投影到图谱（[RN-1076](../business-rules/engine.md)，[ADR 0291](../adr/0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md)） |
 
 ### Anamnese 与指令
 
@@ -244,7 +245,7 @@ schema 是封闭的：缺少字段会拒绝发出（`Engine.Harness.ArtifactSche
 | `anamnese.run_skipped` | 这一轮故意以**没有**画像结束——`payload.motivo` 说明原因（[RN-063](../business-rules/engine.md#rn-063)） |
 | `anamnese.analysis` | Anamnese 的模型在这一轮中写下的文本（`payload.content`）；从不在会话对话流中绘制（[RN-695](../business-rules/engine.md#rn-695)） |
 | `anamnese.profile_updated` | `proficiency_profile` 发生了变化 |
-| `anamnese.agent_deviation` | Anamnese 观察到的 **agent** 偏差（循环、被用户取消、被用户修复）——是产品的信号，绝不是用户的特征；`payload` 只有 `agente`、`tipo` 和 `evidenceEventIds`，不含个人数据，不投影到图谱（[RN-717](../business-rules/engine.md#rn-717)，[ADR 0205](../adr/0205-desvio-do-agente-como-sinal-do-produto.md)） |
+| `anamnese.agent_deviation` | 已移除（ADR 0291） |
 | `instruction.rolled_back` | 某个指令版本的回滚——创建新版本，不删除（[RN-027](../business-rules/api.md#rn-027)） |
 
 ---
