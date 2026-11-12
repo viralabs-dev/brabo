@@ -161,6 +161,7 @@ ADR фиксирует, **почему** что-то было решено, в �
 | [0167](0167-modo-automatico-libera-o-escopo-de-caminho.md) | Автоматический режим снимает область путей, и только он | принято |
 | [0189](0189-o-piloto-automatico.md) | Автопилот: автоматический режим одобряет всё, кроме потолков, область сравнивается с реальной папкой исполнения, а «Всегда разрешать» записывает глагол + подкоманду | принято |
 | [0204](0204-modo-automatico-libera-push-e-pr.md) | Автоматический режим разрешает push и PR | принято |
+| [0295](0295-a-caixa-de-decisoes-le-as-filas-de-todos-os-projetos-numa-leitura.md) | A Caixa de decisões lê as filas de todos os projetos numa leitura do workspace | принято |
 
 ## Где живёт код — режимы исполнения {#tema-modos}
 

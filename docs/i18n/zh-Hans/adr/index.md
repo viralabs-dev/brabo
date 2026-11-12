@@ -161,6 +161,7 @@ gates 的注册表、QA 和 SecOps 的裁决，以及衡量它们的 golden-sets
 | [0167](0167-modo-automatico-libera-o-escopo-de-caminho.md) | 自动模式放行路径范围，而且只有它放行 | 已接受 |
 | [0189](0189-o-piloto-automatico.md) | 自动驾驶：自动模式批准一切（上限除外），作用域与真实执行目录比较，"始终允许"记录动词 + 子命令 | 已接受 |
 | [0204](0204-modo-automatico-libera-push-e-pr.md) | 自动模式放行 push 和 PR | 已接受 |
+| [0295](0295-a-caixa-de-decisoes-le-as-filas-de-todos-os-projetos-numa-leitura.md) | A Caixa de decisões lê as filas de todos os projetos numa leitura do workspace | 已接受 |
 
 ## 代码住在哪里——执行模式 {#tema-modos}
 

@@ -161,6 +161,7 @@ The dev agent at work, `proposed_action`, the terminal policy, path scope, auto 
 | [0167](0167-modo-automatico-libera-o-escopo-de-caminho.md) | Automatic mode releases the path scope, and only it | accepted |
 | [0189](0189-o-piloto-automatico.md) | The autopilot: automatic mode approves everything except the ceilings, the scope compares against the real execution folder, and "Always allow" records verb + subcommand | accepted |
 | [0204](0204-modo-automatico-libera-push-e-pr.md) | Automatic mode releases push and PR | accepted |
+| [0295](0295-a-caixa-de-decisoes-le-as-filas-de-todos-os-projetos-numa-leitura.md) | A Caixa de decisões lê as filas de todos os projetos numa leitura do workspace | accepted |
 
 ## Where the code lives — execution modes {#tema-modos}
 
