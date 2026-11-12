@@ -282,6 +282,7 @@ The provider contract, the model catalog and curation, model bindings, metering 
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | Dated list price in code for a provider that does not report a price | accepted |
 | [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | On direct Anthropic, switched-off reasoning is per model and the effort reduces Opus | accepted |
 | [0279](0279-provider-de-llm-duble-do-regressivo.md) | Provider de LLM dublê do regressivo, dentro da api | accepted |
+| [0296](0296-o-teto-de-gasto-e-mensal-e-o-workspace-tem-teto-proprio.md) | O teto de gasto é mensal e o workspace tem teto próprio | accepted |
 
 ## RAG, knowledge graph and artifacts {#tema-conhecimento}
 
