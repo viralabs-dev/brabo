@@ -341,6 +341,7 @@ chunks 和混合搜索、对它的测量、Neo4j 图谱，以及从事件日志�
 | [0244](0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.md) | 项目标签页的列左对齐 | 已接受 |
 | [0248](0248-conteudo-das-paginas-ocupa-a-largura-inteira.md) | 页面内容占满整个宽度 | 已接受 |
 | [0250](0250-chat-da-sessao-ocupa-a-largura-inteira.md) | 会话聊天占满整个宽度 | 已接受 |
+| [0294](0294-a-estrutura-v9-oito-secoes-com-sub-abas-caixa-de-decisoes-e-agentes-agora.md) | A estrutura v9: oito seções com sub-abas, Caixa de decisões e Agentes agora | 已接受 |
 
 ## 运维、部署与安装 {#tema-operacao}
 

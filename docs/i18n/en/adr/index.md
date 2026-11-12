@@ -341,6 +341,7 @@ Screens, navigation, themes and the structure of the web app's largest files.
 | [0244](0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.md) | Project tabs column aligned to the left | accepted |
 | [0248](0248-conteudo-das-paginas-ocupa-a-largura-inteira.md) | Page content takes up the full width | accepted |
 | [0250](0250-chat-da-sessao-ocupa-a-largura-inteira.md) | The Session chat takes up the full width | accepted |
+| [0294](0294-a-estrutura-v9-oito-secoes-com-sub-abas-caixa-de-decisoes-e-agentes-agora.md) | A estrutura v9: oito seções com sub-abas, Caixa de decisões e Agentes agora | accepted |
 
 ## Operation, deploy and installation {#tema-operacao}
 
