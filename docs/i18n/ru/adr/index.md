@@ -55,6 +55,7 @@ ADR фиксирует, **почему** что-то было решено, в �
 | [0267](0267-o-e2e-do-brabo-qa-e-portao-da-main.md) | O E2E do brabo-qa é portão da main, com aceite justificado | принято |
 | [0276](0276-a-pr-declara-de-que-pr-depende-o-merge.md) | A PR declara de que PR de outro repo depende, e um check do App espera o merge | принято |
 | [0284](0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.md) | A promoção infere as dependências pela ordem dos repos | принято |
+| [0292](0292-o-merge-automatico-e-opcao-do-projeto-desligada-por-padrao.md) | O merge automático é opção do projeto, desligada por padrão | принято |
 
 ## Harness агента, ходы и сессии {#tema-agentes}
 

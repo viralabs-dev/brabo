@@ -55,6 +55,7 @@ git provider 的契约、仓库的创建与采纳、分支的保护与策略。
 | [0267](0267-o-e2e-do-brabo-qa-e-portao-da-main.md) | O E2E do brabo-qa é portão da main, com aceite justificado | 已接受 |
 | [0276](0276-a-pr-declara-de-que-pr-depende-o-merge.md) | A PR declara de que PR de outro repo depende, e um check do App espera o merge | 已接受 |
 | [0284](0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.md) | A promoção infere as dependências pela ordem dos repos | 已接受 |
+| [0292](0292-o-merge-automatico-e-opcao-do-projeto-desligada-por-padrao.md) | O merge automático é opção do projeto, desligada por padrão | 已接受 |
 
 ## 智能体的 harness、回合与会话 {#tema-agentes}
 
