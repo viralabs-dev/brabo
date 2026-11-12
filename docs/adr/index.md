@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 288 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 289 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -281,6 +281,7 @@ O contrato de provider, o catálogo de modelos e a curadoria, os bindings de mod
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | Preço de lista datado no código para provider que não informa preço | aceito |
 | [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | Na Anthropic direta o raciocínio desligado é por modelo e o esforço reduz o Opus | aceito |
 | [0279](0279-provider-de-llm-duble-do-regressivo.md) | Provider de LLM dublê do regressivo, dentro da api | aceito |
+| [0296](0296-o-teto-de-gasto-e-mensal-e-o-workspace-tem-teto-proprio.md) | O teto de gasto é mensal e o workspace tem teto próprio | aceito |
 
 ## RAG, grafo de conhecimento e artefatos {#tema-conhecimento}
 
@@ -428,7 +429,7 @@ Como a documentação é gerada, verificada e publicada.
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0295**.
+  é substituído — o próximo é **0297**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml`; a linha do índice é gerada. Quem revisa confirma. Um tema novo é uma
   mudança na lista em `temas.yml`, justificada no PR que o acrescenta; passar

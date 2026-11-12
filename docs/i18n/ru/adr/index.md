@@ -282,6 +282,7 @@ CLI на машине пользователя — канал, учётные д
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | Датированная в коде прайс-цена для провайдера, не сообщающего цену | принято |
 | [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | В прямом Anthropic отключённое рассуждение задаётся по модели, а усилие снижает Opus | принято |
 | [0279](0279-provider-de-llm-duble-do-regressivo.md) | Provider de LLM dublê do regressivo, dentro da api | принято |
+| [0296](0296-o-teto-de-gasto-e-mensal-e-o-workspace-tem-teto-proprio.md) | O teto de gasto é mensal e o workspace tem teto próprio | принято |
 
 ## RAG, граф знаний и артефакты {#tema-conhecimento}
 
