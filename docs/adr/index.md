@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 289 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 290 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -160,6 +160,7 @@ O dev agent trabalhando, `proposed_action`, a política de terminal, o escopo de
 | [0167](0167-modo-automatico-libera-o-escopo-de-caminho.md) | O modo automático libera o escopo de caminho, e só ele | aceito |
 | [0189](0189-o-piloto-automatico.md) | O piloto automático: o modo automático aprova tudo, menos os tetos, o escopo compara com a pasta real de execução, e "Sempre permitir" grava verbo + subcomando | aceito |
 | [0204](0204-modo-automatico-libera-push-e-pr.md) | O modo automático libera push e PR | aceito |
+| [0295](0295-a-caixa-de-decisoes-le-as-filas-de-todos-os-projetos-numa-leitura.md) | A Caixa de decisões lê as filas de todos os projetos numa leitura do workspace | aceito |
 
 ## Onde o código mora — modos de execução {#tema-modos}
 
