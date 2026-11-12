@@ -340,6 +340,7 @@ CLI на машине пользователя — канал, учётные д
 | [0244](0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.md) | Колонка вкладок проекта выровнена по левому краю | принято |
 | [0248](0248-conteudo-das-paginas-ocupa-a-largura-inteira.md) | Содержимое страниц занимает всю ширину | принято |
 | [0250](0250-chat-da-sessao-ocupa-a-largura-inteira.md) | Чат сессии занимает всю ширину | принято |
+| [0294](0294-a-estrutura-v9-oito-secoes-com-sub-abas-caixa-de-decisoes-e-agentes-agora.md) | A estrutura v9: oito seções com sub-abas, Caixa de decisões e Agentes agora | принято |
 
 ## Эксплуатация, deploy и установка {#tema-operacao}
 
