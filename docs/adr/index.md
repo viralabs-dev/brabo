@@ -339,6 +339,7 @@ Telas, navegação, temas e a estrutura dos maiores arquivos do app web.
 | [0244](0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.md) | Coluna das abas do projeto alinhada à esquerda | aceito |
 | [0248](0248-conteudo-das-paginas-ocupa-a-largura-inteira.md) | O conteúdo das páginas ocupa a largura inteira | aceito |
 | [0250](0250-chat-da-sessao-ocupa-a-largura-inteira.md) | O chat da Sessão ocupa a largura inteira | aceito |
+| [0294](0294-a-estrutura-v9-oito-secoes-com-sub-abas-caixa-de-decisoes-e-agentes-agora.md) | A estrutura v9: oito seções com sub-abas, Caixa de decisões e Agentes agora | aceito |
 
 ## Operação, deploy e instalação {#tema-operacao}
 
