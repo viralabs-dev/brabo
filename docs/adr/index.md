@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 286 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 287 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -54,6 +54,7 @@ O contrato do provider de git, o nascimento e a adoção do repositório, a prot
 | [0267](0267-o-e2e-do-brabo-qa-e-portao-da-main.md) | O E2E do brabo-qa é portão da main, com aceite justificado | aceito |
 | [0276](0276-a-pr-declara-de-que-pr-depende-o-merge.md) | A PR declara de que PR de outro repo depende, e um check do App espera o merge | aceito |
 | [0284](0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.md) | A promoção infere as dependências pela ordem dos repos | aceito |
+| [0292](0292-o-merge-automatico-e-opcao-do-projeto-desligada-por-padrao.md) | O merge automático é opção do projeto, desligada por padrão | aceito |
 
 ## Harness de agente, turnos e sessões {#tema-agentes}
 
