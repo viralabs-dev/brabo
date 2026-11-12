@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 290 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 291 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -282,6 +282,7 @@ O contrato de provider, o catálogo de modelos e a curadoria, os bindings de mod
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | Preço de lista datado no código para provider que não informa preço | aceito |
 | [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | Na Anthropic direta o raciocínio desligado é por modelo e o esforço reduz o Opus | aceito |
 | [0279](0279-provider-de-llm-duble-do-regressivo.md) | Provider de LLM dublê do regressivo, dentro da api | aceito |
+| [0290](0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.md) | O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU que o roda | proposto |
 | [0296](0296-o-teto-de-gasto-e-mensal-e-o-workspace-tem-teto-proprio.md) | O teto de gasto é mensal e o workspace tem teto próprio | aceito |
 
 ## RAG, grafo de conhecimento e artefatos {#tema-conhecimento}
