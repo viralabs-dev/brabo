@@ -71,6 +71,7 @@ keywords: [scripts, pnpm, make, commands]
 | `pnpm --filter api gerar:areas` | `ts-node scripts/gerar-areas.ts` |
 | `pnpm --filter api lint:migracao` | `ts-node scripts/lint-migracao.ts` |
 | `pnpm --filter api relatorio:backup` | `ts-node scripts/relatorio-backup.ts` |
+| `pnpm --filter api projeto:marcar-teste` | `ts-node src/scripts/marcar-projeto-de-teste.ts` |
 | `pnpm --filter api migrar-projeto-para-trunk` | `ts-node src/scripts/migrar-projeto-para-trunk.ts` |
 | `pnpm --filter api grafo:reprojetar` | `ts-node src/scripts/reprojetar-grafo.ts` |
 | `pnpm --filter api artefatos:reprojetar` | `ts-node src/scripts/reprojetar-artefatos.ts` |
@@ -176,4 +177,4 @@ keywords: [scripts, pnpm, make, commands]
 
 ---
 
-Всего команд: 116. Цель Makefile без аннотации `## описание` здесь не появляется — добавьте её в исходнике.
+Всего команд: 117. Цель Makefile без аннотации `## описание` здесь не появляется — добавьте её в исходнике.

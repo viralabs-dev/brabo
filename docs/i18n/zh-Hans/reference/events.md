@@ -326,20 +326,21 @@ sequenceDiagram
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从发出点提取：**120 个标识符**，其中 **8** 个未在上文描述。
+从发出点提取：**123 个标识符**，其中 **11** 个未在上文描述。
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
 - `agent.delta` <sub>(apps/engine/lib/engine/agents/arquiteto_server.ex)</sub>
 - `agent.done` <sub>(apps/engine/lib/engine/agents/turno_assincrono.ex)</sub>
 - `agent.error` <sub>(apps/api/src/application/use-cases/agents/aceite-implicito-do-po.use-case.ts)</sub>
+- `agent.model_escalated` — ⚠️ **上文未描述** <sub>(apps/api/src/application/use-cases/execution/escalar-modelo-da-tarefa.use-case.ts)</sub>
+- `agent.model_escalation_exhausted` — ⚠️ **上文未描述** <sub>(apps/api/src/application/use-cases/execution/escalar-modelo-da-tarefa.use-case.ts)</sub>
 - `agent.plan` <sub>(apps/engine/lib/engine/agents/diario.ex)</sub>
 - `agent.reasoning_delta` — ⚠️ **上文未描述** <sub>(apps/engine/lib/engine/sessions/engine_api_client.ex)</sub>
 - `agent.response` <sub>(apps/api/src/application/use-cases/llm/send-chat-message.use-case.ts)</sub>
 - `agent.status` <sub>(apps/engine/lib/engine/agents/diario.ex)</sub>
 - `agent.turn` <sub>(apps/engine/lib/engine/harness/tool_loop.ex)</sub>
 - `agent.turn_resumed` <sub>(apps/engine/lib/engine/agents/diario.ex)</sub>
-- `anamnese.agent_deviation` <sub>(apps/engine/lib/engine/anamnese/tools/report_agent_deviation.ex)</sub>
 - `anamnese.analysis` <sub>(apps/engine/lib/engine/workers/anamnese_worker.ex)</sub>
 - `anamnese.profile_updated` <sub>(apps/api/src/application/use-cases/anamnese/record-proficiency.use-case.ts)</sub>
 - `anamnese.run_completed` <sub>(apps/api/src/application/use-cases/anamnese/record-proficiency.use-case.ts)</sub>
@@ -375,6 +376,7 @@ sequenceDiagram
 - `backlog.story_promotion_returned` <sub>(apps/api/src/application/use-cases/backlog/return-story.use-case.ts)</sub>
 - `backlog.story_transitioned` <sub>(apps/api/src/application/use-cases/backlog/transition-story.use-case.ts)</sub>
 - `backlog.story_updated` <sub>(apps/api/src/application/use-cases/backlog/corrigir-historia.use-case.ts)</sub>
+- `backlog.task_archived` — ⚠️ **上文未描述** <sub>(apps/api/src/application/use-cases/backlog/archive-task.use-case.ts)</sub>
 - `backlog.task_blocked` <sub>(apps/api/src/application/use-cases/execution/mark-task-blocked.use-case.ts)</sub>
 - `backlog.task_claimed` <sub>(apps/api/src/application/use-cases/execution/claim-next-task.use-case.ts)</sub>
 - `backlog.task_created` <sub>(apps/api/src/application/use-cases/backlog/create-task.use-case.ts)</sub>
@@ -438,6 +440,7 @@ sequenceDiagram
 - `psychologist.hypothesis_accepted_for_anamnese` <sub>(apps/api/src/application/use-cases/execution/accept-hypothesis.use-case.ts)</sub>
 - `psychologist.hypothesis_dismissed` <sub>(apps/api/src/application/use-cases/execution/dismiss-hypothesis.use-case.ts)</sub>
 - `psychologist.hypothesis_proposed` <sub>(apps/api/src/application/use-cases/execution/propose-hypotheses.use-case.ts)</sub>
+- `psychologist.platform_signal` <sub>(apps/api/src/application/use-cases/execution/propose-hypotheses.use-case.ts)</sub>
 - `rag.feedback` <sub>(apps/api/src/application/use-cases/rag/record-rag-feedback.use-case.ts)</sub>
 - `rag.search` <sub>(apps/api/src/application/use-cases/rag/hybrid-search.use-case.ts)</sub>
 - `readiness.confirmed` <sub>(apps/api/src/application/use-cases/agents/confirm-readiness.use-case.ts)</sub>
