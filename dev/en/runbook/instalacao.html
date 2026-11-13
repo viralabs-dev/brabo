@@ -294,6 +294,7 @@ broker sem flag nenhuma na linha de comando — medido no Compose v5.5.1. A
 variável da imagem, <code>BRABO_BROKER_IMAGE</code>, é escrita <strong>ligando-o você ou
 não</strong>: o Compose interpola o arquivo inteiro antes de filtrar por profile, então uma
 variável obrigatória num serviço desligado ainda recusa o arquivo.</p>
+<p>Com o broker ligado, a prova de compose do projeto (ADR 0297) não exige configuração: o broker escreve o override de limites e de rede em <code>/trabalho</code>, um tmpfs de 64 MB que o compose declara (<code>BROKER_TRABALHO_DIR</code>). Sem broker (instalação em Kubernetes, ou projeto no modo <code>runner</code>) o parecer aprova com o aviso &quot;sem prova de compose&quot;. O broker também enxerga, só para leitura (<code>:ro</code>), a pasta gerenciada dos projetos e a base dos montados, nos mesmos caminhos de api e engine (<code>PROJECT_WORKSPACES_BROKER_ROOT</code>, <code>BRABO_PROJECTS_BROKER_BASE</code>), e usa a própria imagem como imagem da sonda (<code>BRABO_PROVA_SONDA_IMAGE</code>); nada disso exige configuração.</p>
 <p><strong>Ligando depois</strong> (mesma pasta do <code>.env</code>):</p>
 <pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-comment)"># 1. o grupo do socket COMO UM CONTAINER O VÊ — com a própria imagem do broker,</span></span>
 <span class="line"><span style="color:var(--shiki-token-comment)">#    sem rede; é este o número de que o compose precisa</span></span>

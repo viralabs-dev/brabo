@@ -118,7 +118,7 @@ pendências de outras sessões tem o teto de 20 cards, e o resto continua na aba
 Aprovações; (d) as pendências de arquitetura e as hipóteses do Psicólogo
 continuam SEM decisão inline (não há <code>ApprovalCard</code> para elas).</p>
 <ul>
-<li><strong>Código:</strong> <code>apps/web/src/components/ApprovalCard.tsx:248</code> (<code>decidir</code>, a
+<li><strong>Código:</strong> <code>apps/web/src/components/ApprovalCard.tsx:253</code> (<code>decidir</code>, a
 decisão em voo e a recusa no card); <code>apps/web/src/lib/session-turno.ts:59</code>
 (<code>turnoEmCursoNoLog</code>), <code>:536</code> (<code>useRetomarTurnoDoLog</code>);
 <code>apps/web/src/lib/pendencias-do-projeto.ts:24</code> (<code>usePendenciasDoProjeto</code>),
@@ -127,7 +127,7 @@ decisão em voo e a recusa no card); <code>apps/web/src/lib/session-turno.ts:59<
 (<code>PendenciasDeOutrasSessoes</code>); <code>apps/web/src/routes/MergearNoChat.helpers.ts:14</code>
 (<code>prAbertaDaAcao</code>), <code>:42</code> (<code>jaHaMergeDaPr</code>), <code>apps/web/src/routes/MergearNoChat.tsx:55</code> (<code>MergearNoChat</code>);
 <code>apps/web/src/routes/SessionPage.tsx:144</code> (<code>podeDecidir</code>), <code>:266</code>
-(<code>useRetomarTurnoDoLog</code>), <code>:767</code> (<code>PendenciasDeOutrasSessoes</code>)</li>
+(<code>useRetomarTurnoDoLog</code>), <code>:771</code> (<code>PendenciasDeOutrasSessoes</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/components/ApprovalCard.decisao-em-voo.test.tsx:37</code>
 (duplo clique), <code>:52</code> (409 no card e botões inertes — caso de falha), <code>:67</code>
 (erro que não é 409 devolve os botões); <code>apps/web/src/lib/turno-em-curso-no-log.test.ts:18</code>
@@ -250,8 +250,8 @@ cláusula própria no engine. Nenhuma mudança de api nem de engine.</p>
 (<code>useAtivadosNaSessaoInteira</code>), <code>:141</code> (<code>ativadosSemJanela</code>);
 <code>apps/web/src/routes/SessionComposer.tsx:368</code> (<code>destinatarioRow</code>), <code>:266</code>
 (<code>ofertasForaDaJanela</code>); <code>apps/web/src/routes/SessionPage.tsx:342</code>
-(<code>aceitarHandoff</code>); <code>apps/web/src/routes/session-timeline-montagem.tsx:584</code>
-(<code>handoffIdDoEvento</code>), <code>:592</code> (<code>origem</code>); <code>apps/web/src/lib/session-handoffs.ts:68</code>
+(<code>aceitarHandoff</code>); <code>apps/web/src/routes/session-timeline-montagem.tsx:588</code>
+(<code>handoffIdDoEvento</code>), <code>:596</code> (<code>origem</code>); <code>apps/web/src/lib/session-handoffs.ts:68</code>
 (<code>activeFor</code>), <code>:120</code> (<code>ofertasAcionaveis</code>), <code>:142</code> (<code>ofertasForaDaJanela</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.destinatario-do-chat.test.tsx</code>
 (escolha → envio ao escolhido; dois agentes sem escolha não enviam e dizem
@@ -354,12 +354,12 @@ não dizia quais abas estavam abertas, e a leitura de que <code>/containers</cod
 numa delas é inferência pelos 106 ≈ 9 × 12.</p>
 <ul>
 <li><strong>Código:</strong> <code>apps/web/src/lib/canal-vivo.ts:54</code> (<code>INTERVALO_DO_PROJETO_MS</code>),
-<code>:255</code> (<code>aoEvento</code>, os <code>extras</code>); <code>apps/web/src/lib/hooks.ts:127</code>
-(<code>useProjectSessions</code>), <code>:158</code> (<code>useLatestSession</code>);
+<code>:255</code> (<code>aoEvento</code>, os <code>extras</code>); <code>apps/web/src/lib/hooks.ts:153</code>
+(<code>useProjectSessions</code>), <code>:184</code> (<code>useLatestSession</code>);
 <code>apps/web/src/routes/ProjectPage.tsx:77</code> (os contadores do trilho);
 <code>apps/web/src/components/AcoesDoContainer.tsx:46</code> (<code>useLatestSession</code>, sem poll);
-<code>apps/web/src/routes/ProjectExecutorsTab.tsx:207</code> (<code>invalidador</code>),
-<code>apps/web/src/routes/ProjectOverviewTab.tsx:206</code> (<code>invalidador</code>);
+<code>apps/web/src/routes/ProjectExecutorsTab.tsx:221</code> (<code>invalidador</code>),
+<code>apps/web/src/routes/ProjectOverviewTab.tsx:200</code> (<code>invalidador</code>);
 <code>apps/web/src/components/EsperaDoRunner.tsx:73</code> (<code>confirmadoPor</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/routes/duas-abas.orcamento.test.tsx</code> (as duas abas
 com canal vivo, com rajada, com o canal que nunca conecta, e <code>/containers</code>;
@@ -428,7 +428,7 @@ fica. Ativação recusada não navega e mostra a frase da api. Quem navega é a
 ROTA (<code>irParaSessao</code>, o <code>navigate</code> do router): a tela não depende do router.</p>
 <ul>
 <li><strong>Onde:</strong> <code>apps/web/src/lib/session-acoes-de-handoff.ts:147</code>
-(<code>handleActivateExecution</code>); <code>apps/web/src/router.tsx:376</code> (<code>irParaSessao</code>)</li>
+(<code>handleActivateExecution</code>); <code>apps/web/src/router.tsx:383</code> (<code>irParaSessao</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.handoff-obsoleto.test.tsx</code>
 (navega para o <code>sessionId</code> devolvido, com aviso; recusa não navega — caso de
 falha; sem quem navegue, só avisa)</li>
@@ -490,10 +490,10 @@ o do chat.</p>
 <ul>
 <li><strong>Código:</strong> <code>apps/web/src/routes/ProjectPage.tsx:82</code> (o contador),
 <code>:121</code> (os merges da mesma leitura);
-<code>apps/web/src/routes/ProjectApprovalsTab.tsx:115</code> (<code>pendentesQuery</code>), <code>:119</code>
-(<code>sessaoDeTrabalho</code>), <code>:326</code> (<code>handleApprove</code>);
-<code>apps/web/src/routes/ProjectOverviewTab.tsx:129</code> (<code>pendentesDoProjeto</code>);
-<code>apps/web/src/routes/ProjectExecutorsTab.tsx:111</code> (<code>pendentesQuery</code>), <code>:290</code>
+<code>apps/web/src/routes/ProjectApprovalsTab.tsx:106</code> (<code>pendentesQuery</code>), <code>:112</code>
+(<code>sessaoDeTrabalho</code>), <code>:312</code> (<code>handleApprove</code>);
+<code>apps/web/src/routes/ProjectOverviewTab.tsx:111</code> (<code>pendentesDoProjeto</code>);
+<code>apps/web/src/routes/ProjectExecutorsTab.tsx:124</code> (<code>pendentesQuery</code>), <code>:290</code>
 (o bloco); <code>apps/web/src/routes/code/CodeShell.tsx:101</code> (<code>pendentesQuery</code>);
 <code>apps/web/src/routes/SessionPage.tsx:782</code> (o bloco sem <code>isActive</code>);
 <code>apps/web/src/lib/canal-vivo.ts:134</code> (<code>alvosDoEvento</code>), <code>:180</code>
@@ -552,7 +552,7 @@ remontagem perguntam de novo, e o primeiro sucesso retoma o ritmo.</li>
 <code>apps/web/src/lib/poll-do-bootstrap.ts:33</code> (<code>pollDoBootstrap</code>),
 <code>apps/web/src/lib/poll-do-bootstrap.ts:47</code> (<code>bootstrapTerminou</code>),
 <code>apps/web/src/routes/ProvisioningPage.tsx:41</code> (<code>acompanharBootstrap</code>),
-<code>apps/web/src/routes/StatusPage.tsx:62</code> (<code>pollQueParaNoErro</code>)</li>
+<code>apps/web/src/routes/StatusPage.tsx:75</code> (<code>pollQueParaNoErro</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.streaming-isolado.test.tsx</code> (vinte
 tokens depois do primeiro não re-renderizam a página; o fim do turno
 re-renderiza), <code>apps/web/src/lib/streaming-do-turno.test.ts</code>,
@@ -651,10 +651,10 @@ os achados X1–X3 da auditoria. A duplicação de navegação por abas (gaveta 
 barra) fechou no ADR 0211.</p>
 <ul>
 <li><strong>Código:</strong> <code>apps/web/src/lib/layout-movel.ts:18</code> (<code>CONSULTA_MOVEL</code>),
-<code>:39</code> (<code>useLayoutMovel</code>); <code>apps/web/src/routes/Shell.tsx:444</code>
-(<code>movel</code>), <code>:463</code> (<code>fecharAoSeguirLink</code>);
-<code>apps/web/src/routes/ProjectPage.tsx:70</code> (<code>movel</code>);
-<code>apps/web/src/routes/ProjectOverviewTab.tsx:80</code> (<code>movel</code>)</li>
+<code>:39</code> (<code>useLayoutMovel</code>); <code>apps/web/src/routes/Shell.tsx:312</code>
+(<code>movel</code>), <code>:330</code> (<code>fecharAoSeguirLink</code>);
+<code>apps/web/src/routes/ProjectPage.tsx:115</code> (<code>movel</code>);
+<code>apps/web/src/routes/ProjectOverviewTab.tsx:72</code> (<code>movel</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/routes/Shell.test.tsx</code> (&quot;Shell — layout móvel
 (RN-643)&quot;: a gaveta abre com o foco dentro e o Esc a fecha devolvendo o foco;
 fecha pelo link, pelo X, pelo fundo e pela troca de rota; ignora o colapso
@@ -799,7 +799,7 @@ toda aba — a mesma lacuna que a <a href="#rn-632">RN-632</a> declara.</p>
 <ul>
 <li><strong>Código:</strong> <code>apps/web/src/lib/query-policy.ts:111</code>
 (<code>FRESCOR_DA_CONFIGURACAO_MS</code>); <code>apps/web/src/lib/hooks.ts:29</code>
-(<code>useCurrentWorkspaceWithRole</code>), <code>:535</code> (<code>useProficiency</code>);
+(<code>useCurrentWorkspaceWithRole</code>), <code>:561</code> (<code>useProficiency</code>);
 <code>apps/web/src/routes/settings/InstructionVersionsSection.tsx:31</code>
 (<code>instruction-versions</code>, sem poll); as seções de <code>apps/web/src/routes/settings/</code>
 e <code>apps/web/src/components/ModelCatalogSection.tsx</code>;
@@ -909,11 +909,11 @@ genérico, que ao lado de um brief ou de uma regra da mesma sessão parecia nega
 que eles existissem — o escopo da seção (PR e backlog, <a href="parte-02.html#rn-159">RN-159</a>) não
 muda.</p>
 <ul>
-<li><strong>Código:</strong> <code>apps/web/src/routes/Shell.tsx:604</code> (<code>execucao</code>), <code>:594</code>
-(<code>origemDaAtividade</code>), <code>:601</code> (<code>estadoDaAtividade</code>);
-<code>apps/web/src/lib/hooks.ts:127</code> (<code>useProjectSessions</code>, <code>frescorMs</code>);
-<code>apps/web/src/routes/Dashboard.tsx:75</code> (<code>lastActivityText</code>);
-<code>apps/web/src/routes/ContextAside.tsx:47</code> (<code>quantos</code>), <code>:340</code>
+<li><strong>Código:</strong> <code>apps/web/src/routes/Shell.tsx:454</code> (<code>execucao</code>), <code>:468</code>
+(<code>estadoDaAtividade</code>);
+<code>apps/web/src/lib/hooks.ts:153</code> (<code>useProjectSessions</code>, <code>frescorMs</code>);
+<code>apps/web/src/routes/Dashboard.tsx:83</code> (<code>lastActivityText</code>);
+<code>apps/web/src/routes/ContextAside.tsx:51</code> (<code>quantos</code>), <code>:350</code>
 (<code>totalDeArtefatos</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/routes/Shell.test.tsx</code> (&quot;Shell — Atividades&quot;: sem
 execução lê a sessão da Visão geral e o Criativo aparece; com execução lê a
@@ -986,10 +986,10 @@ verificador ainda relata nas Configurações e em Aprovações são ícones deco
 <ul>
 <li><strong>Código:</strong> <code>apps/web/src/lib/painel-de-contexto.ts:16</code>
 (<code>usePainelDeContexto</code>); <code>apps/web/src/routes/GavetaDoContexto.tsx:14</code>
-(<code>GavetaDoContexto</code>); <code>apps/web/src/routes/SessionTopbar.tsx:134</code>
+(<code>GavetaDoContexto</code>); <code>apps/web/src/routes/SessionTopbar.tsx:146</code>
 (<code>movel</code>); <code>apps/web/src/components/ui/Table.tsx:24</code> (<code>largaNoMovel</code>),
-<code>:43</code> (<code>movel</code>); <code>apps/web/src/routes/Dashboard.tsx:165</code> (<code>movel</code>);
-<code>apps/web/src/routes/ProjectSessionsTab.tsx:153</code> (<code>movel</code>)</li>
+<code>:43</code> (<code>movel</code>); <code>apps/web/src/routes/Dashboard.tsx:250</code> (<code>movel</code>);
+<code>apps/web/src/routes/ProjectSessionsTab.tsx:171</code> (<code>movel</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.layout-movel.test.tsx</code> (a gaveta
 nasce fechada, abre com o foco no X e o Esc fecha devolvendo o foco; X e
 fundo fecham; a barra quebra antes das ações; e o caso de falha, no desktop o
@@ -1084,7 +1084,7 @@ automático (RN-471).</p>
 <ul>
 <li><strong>Código:</strong> <code>apps/web/src/components/ModoAutomaticoDoTime.tsx:60</code>
 (<code>ModoAutomaticoDoTime</code>), <code>:97</code> (<code>ligar</code>), <code>:70</code>
-(<code>agentesEmModoAutomatico</code>); <code>apps/web/src/routes/ProjectExecutorsTab.tsx:93</code>
+(<code>agentesEmModoAutomatico</code>); <code>apps/web/src/routes/ProjectExecutorsTab.tsx:101</code>
 (<code>podeLigarModoAutomatico</code>), <code>:308</code> (onde a oferta monta)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/components/ModoAutomaticoDoTime.test.tsx:54</code> (nada
 gravado ao montar; o clique grava a curinga para cada escolhido — caminho
@@ -1226,7 +1226,7 @@ cartão pendente apareceu só DURANTE a sessão ao vivo — estado transitório 
 tela, não da api nem da janela. A próxima rodada da AT-015 captura a rede no
 momento em que ele aparecer, antes de qualquer correção.</p>
 <ul>
-<li><strong>Onde:</strong> <code>apps/web/src/routes/ContextAside.tsx:402</code> (<code>trailing</code>), <code>:415</code>
+<li><strong>Onde:</strong> <code>apps/web/src/routes/ContextAside.tsx:431</code> (<code>trailing</code>), <code>:515</code>
 (<code>nadaNaJanela</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.painel-e-agrupamento.test.tsx</code>
 (&quot;RN-701 (AT-365): com as regras fora da janela, o contador não afirma 0&quot;;
@@ -1313,10 +1313,10 @@ frase acima. O texto é <code>actions.containerRecreate.appDeclared</code> em
 <li>
 <p><strong>Onde:</strong> <code>apps/web/src/lib/aprovacoes.ts:485</code> (<code>verboDaAcao</code>),
 <code>apps/api/src/domain/actions/sempre-permitir.ts:33</code> (<code>TIPOS_SEM_SEMPRE_PERMITIR</code>),
-<code>apps/api/src/application/use-cases/actions/propose-action.use-case.ts:88</code> (<code>execute</code>),
+<code>apps/api/src/application/use-cases/actions/propose-action.use-case.ts:95</code> (<code>execute</code>),
 <code>apps/api/src/application/use-cases/execution/execute-execution-plan.use-case.ts:89</code> (<code>execute</code>),
 <code>apps/api/src/application/use-cases/execution/activate-execution.use-case.ts:123</code> (<code>execute</code>),
-<code>apps/engine/lib/engine/agents/dev_lead_tools.ex:674</code> (<code>resumo_do_plano</code>)</p>
+<code>apps/engine/lib/engine/agents/dev_lead_tools.ex:845</code> (<code>resumo_do_plano</code>)</p>
 </li>
 <li>
 <p><strong>Teste:</strong> <code>apps/web/src/lib/aprovacoes.test.ts</code> (&quot;AT-371 — o verbo segue o
@@ -1396,8 +1396,8 @@ resumo ganha — a pendente nova de uma sessão longa passa a contar em
 vivo) continua escrevendo a lista à mão: invalidar não grava dado.</p>
 <ul>
 <li><strong>Onde:</strong> <code>apps/web/src/lib/acoes-da-sessao.ts:76</code> (<code>chaveDasAcoesDaSessao</code>),
-<code>:80</code> (<code>consultaDasAcoesDaSessao</code>); <code>apps/web/src/lib/hooks.ts:432</code>
-(<code>usePendingActions</code>); <code>apps/web/src/routes/ProjectSessionsTab.tsx:274</code>
+<code>:80</code> (<code>consultaDasAcoesDaSessao</code>); <code>apps/web/src/lib/hooks.ts:461</code>
+(<code>usePendingActions</code>); <code>apps/web/src/routes/ProjectSessionsTab.tsx:260</code>
 (<code>acoesPorSessao</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/routes/ProjectSessionsTab.test.tsx</code> (describe &quot;a
 leitura de ações é a mesma do fio&quot;: com o fio tendo gravado a cauda, montar a

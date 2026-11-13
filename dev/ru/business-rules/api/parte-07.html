@@ -70,11 +70,11 @@ do <code>permissions.json</code> repetem os TOKENS do comando no texto (o <code>
 <code>matchAgainstFile</code>) — o mesmo comando que já mora em
 <code>proposed_actions.payload</code> e no card de aprovação.</p>
 <ul>
-<li><strong>Código:</strong> <code>src/application/use-cases/actions/propose-action.use-case.ts:277</code>
+<li><strong>Código:</strong> <code>src/application/use-cases/actions/propose-action.use-case.ts:279</code>
 (<code>reason</code> no payload do evento de sessão), <code>:223</code> (o comentário do outbox
 sem o campo), <code>:227</code> (o payload do outbox, intacto), <code>:356</code> (o
 <code>rejectionReason</code>, que continua só no <code>deny</code>);
-<code>src/domain/actions/decide.ts:294</code> (<code>Decision</code>, a fonte da string)</li>
+<code>src/domain/actions/decide.ts:307</code> (<code>Decision</code>, a fonte da string)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:902</code>
 (caminho feliz: auto-aprovação grava <code>agent_autonomy: auto_approve</code>),
 <code>:959</code> (<code>require_approval</code> pelo default e pelo teto da trava de merge),
@@ -138,11 +138,11 @@ no cluster local que o BRB-018 pede não foi feita — ele segue aberto.</p>
 tradutor), <code>:75</code> (<code>projetarEvento</code>), <code>:99</code> (<code>projetarFechamentoDeSessao</code>);
 <code>src/application/graph-projection/graph-projector.ts:77</code> (o projetor
 monta o MESMO tradutor), <code>:141</code> (chega à fonte pela outbox e delega);
-<code>src/scripts/reprojetar-grafo.ts:124</code> (<code>montarTradutor</code>), <code>:145</code>
+<code>src/scripts/reprojetar-grafo.ts:138</code> (<code>montarTradutor</code>), <code>:160</code>
 (<code>reprojetarGrafo</code>), <code>:154</code> (a recusa antes de ler), <code>:163</code> e <code>:169</code> (projeto
 inexistente), <code>:187</code> (a fase dos eventos, por cursor), <code>:213</code> (a interrupção
 nomeada), <code>:218</code> (a falha contada sem abortar o resto), <code>:230</code> (a fase das
-sessões fechadas), <code>:301</code> (<code>lerArgumentos</code>), <code>:370</code> (só a invocação direta
+sessões fechadas), <code>:337</code> (<code>lerArgumentos</code>), <code>:370</code> (só a invocação direta
 reprojeta); <code>package.json:44</code> (<code>grafo:reprojetar</code>); <code>Makefile:61</code>
 (<code>test-reprojecao</code>)</li>
 <li><strong>Teste:</strong> <code>test/scripts/reprojetar-grafo.spec.ts:349</code> (projetor para
@@ -194,7 +194,7 @@ compose de desenvolvimento, que sobe o broker por padrão (<a href="../infra.htm
 deixa <code>BROKER_URL</code> vazia até alguém a pôr no <code>.env</code>, o aviso aparece — e está
 certo, porque sem a variável a api nunca chama o broker.</p>
 <ul>
-<li><strong>Código:</strong> <code>src/interfaces/http/iam/workspaces.controller.ts:404</code>
+<li><strong>Código:</strong> <code>src/interfaces/http/iam/workspaces.controller.ts:431</code>
 (<code>getProjectsBase</code>, <code>:256</code> o campo novo),
 <code>src/interfaces/http/iam/dto/iam.response.dto.ts:554</code>,
 <code>src/interfaces/http/iam/iam-http.module.ts</code> (o módulo do broker
@@ -389,7 +389,7 @@ fechada seguem mostrando a mensagem da api.</p>
 <code>src/application/use-cases/sessions/append-session-event.use-case.ts:45</code>
 (<code>conflitoDeSessaoEncerrada</code>), <code>:114</code> (o estado no mesmo <code>UPDATE</code> do <code>seq</code>),
 <code>:248</code> (<code>garantirQueAceita</code>);
-<code>src/infrastructure/persistence/drizzle/session.repository.ts:117</code>
+<code>src/infrastructure/persistence/drizzle/session.repository.ts:175</code>
 (<code>incrementSeq</code>);
 <code>src/application/use-cases/llm/send-chat-message.use-case.ts:78</code>
 (o chat humano); <code>src/application/use-cases/agents/create-handoff.use-case.ts:67</code>,
@@ -403,10 +403,10 @@ instante), <code>:141</code> (<code>handle_info</code> do relógio próprio, AT-
 (<code>conversa_ociosa</code>), <code>:193</code> (<code>encerrar</code>), <code>:222</code>
 (<code>conversation_idle_timeout_ms</code>); <code>apps/engine/lib/engine/sessions/monitor.ex:185</code>
 (<code>classify</code>); <code>apps/engine/lib/engine/psychologist/termination_classifier.ex:46</code>;
-<code>apps/engine/lib/engine/sessions/engine_api_client.ex:1227</code>
-(<code>narrar_recusa_de_sessao_encerrada</code>), <code>:1592</code> (<code>pendencia_da_resposta</code>);</p>
-<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:1227</code>
-(<code>narrar_recusa_de_sessao_encerrada</code>), <code>:1592</code> (<code>pendencia_da_resposta</code>);
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex:1273</code>
+(<code>narrar_recusa_de_sessao_encerrada</code>), <code>:1653</code> (<code>pendencia_da_resposta</code>);</p>
+<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:1273</code>
+(<code>narrar_recusa_de_sessao_encerrada</code>), <code>:1653</code> (<code>pendencia_da_resposta</code>);
 <code>apps/engine/lib/engine/agents/conversacionais.ex:49</code> (<code>parar_da_sessao</code>),
 <code>:69</code> (<code>parar_da_sessao_no_cluster</code>);
 <code>apps/engine/lib/engine/agents/turno_assincrono.ex:471</code> (<code>abandonar</code>);
@@ -708,7 +708,7 @@ direta.</p>
 (recusa 409), <code>apps/web/src/routes/containers-subida.ts:181</code>
 (<code>semBrokerParaCicloDeVida</code>) e <code>:192</code> (<code>conversaoSemBroker</code>),
 <code>apps/web/src/routes/settings/ExecutionModeSection.tsx</code> (botão inerte),
-<code>apps/engine/lib/engine/infra/infra_lead_server.ex:886</code>
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:899</code>
 (<code>motivo_da_recusa_da_api</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:207</code>
 (409 nas três ações, e <code>container_stop</code> segue <code>pending</code> com broker),
@@ -746,9 +746,9 @@ campo do tipo GERADO do OpenAPI.</li>
 consultar o estado da sessão de cada handoff (a lacuna que a RN-582 declarou);
 decidir se passam a consultá-lo é decisão à parte, fora desta regra.</p>
 <ul>
-<li><strong>Código:</strong> <code>src/application/use-cases/sessions/list-sessions-for-project.use-case.ts:30</code>
+<li><strong>Código:</strong> <code>src/application/use-cases/sessions/list-sessions-for-project.use-case.ts:37</code>
 (<code>execute</code>), <code>src/interfaces/http/sessions/dto/sessions.response.dto.ts:110</code>
-(<code>SessionListItemResponseDto</code>), <code>apps/web/src/lib/hooks.ts:147</code>
+(<code>SessionListItemResponseDto</code>), <code>apps/web/src/lib/hooks.ts:173</code>
 (<code>sessaoMaisRecente</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/sessions/list-sessions-for-project.use-case.spec.ts:81</code>
 (vínculo e não nome; técnica de outro projeto não marca),
@@ -881,14 +881,14 @@ e o card do agente mostra uma frase sob o toggle — só quando a CURINGA está
 ligada, porque o toggle sobre o tipo representativo grava regra específica,
 que não libera o escopo.</p>
 <ul>
-<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:311</code> (<code>modoAutomaticoDoAgente</code>),
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:324</code> (<code>modoAutomaticoDoAgente</code>),
 <code>src/domain/actions/decide.ts:386</code> (o veredito sintetizado do
 composto ignorado), <code>src/domain/actions/decide.ts:504</code> (o teto de
 escopo pulado),
 <code>src/infrastructure/persistence/drizzle/agent-autonomy.repository.ts:25</code>
 (<code>resolve</code>, com a origem),
-<code>src/application/use-cases/actions/propose-action.use-case.ts:249</code>
-(<code>autonomyOrigin</code>), <code>apps/web/src/components/AgentTeamGrid.tsx:114</code>
+<code>src/application/use-cases/actions/propose-action.use-case.ts:376</code>
+(<code>autonomyOrigin</code>), <code>apps/web/src/components/AgentTeamGrid.tsx:121</code>
 (<code>autonomyHint</code>), <code>apps/web/src/components/ApprovalCard.tsx:313</code> (a nota
 nas duas variantes)</li>
 <li><strong>Teste:</strong> <code>test/domain/actions/decide.spec.ts</code> (&quot;modo automático
@@ -983,8 +983,8 @@ sai <code>teto-excedido</code>, com o nome certo.</p>
 <code>:252</code> (<code>TETO_DE_MUTACAO_MS</code>), <code>:264</code> (<code>FOLGA_DO_EXEC_NO_ENGINE_MS</code>),
 <code>:324</code> (<code>erroDeTransporte</code>);
 <code>src/application/ports/container-broker.port.ts:110</code> (<code>MotivoDeBrokerIndisponivel</code>);
-<code>apps/engine/lib/engine/sessions/engine_api_client.ex:2120</code> (<code>teto_do_container_exec_ms</code>)</p>
-<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:2120</code> (<code>teto_do_container_exec_ms</code>)</p>
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex:2189</code> (<code>teto_do_container_exec_ms</code>)</p>
+<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:2189</code> (<code>teto_do_container_exec_ms</code>)</p>
 </li>
 <li>
 <p><strong>Teste:</strong> <code>test/infrastructure/http-clients/container-broker.client.spec.ts:286</code>
@@ -1076,9 +1076,9 @@ raiz do ESCOPO, nunca onde o arquivo de política mora.</p>
 <li><strong>Código:</strong> <code>src/infrastructure/filesystem/project-workspaces-root.ts:907</code>
 (<code>raizDoEscopoNoEvento</code>), <code>:901</code> (<code>RaizDoEscopoNoEvento</code>), <code>:117</code>
 (<code>segmentoSobABaseDeProjetos</code>, reusada);
-<code>src/application/use-cases/actions/propose-action.use-case.ts:330</code>
+<code>src/application/use-cases/actions/propose-action.use-case.ts:280</code>
 (<code>scopeRoot</code> só em <code>terminal</code>);
-<code>src/domain/actions/decide.ts:648</code> (<code>terminalNoEscopo</code>, o único
+<code>src/domain/actions/decide.ts:677</code> (<code>terminalNoEscopo</code>, o único
 consumidor do escopo)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:1154</code>
 (<code>container</code>), <code>:1134</code> (<code>mounted</code>), <code>:1134</code> (<code>runner</code>), <code>:1123</code> (o caminho
@@ -1172,7 +1172,7 @@ projeto aberto, e as outras listas seguiam anunciando a revogada.</p>
 (<code>MachineDeviceKeysSection</code>);
 <code>apps/web/src/lib/chaves-de-dispositivo-queries.ts:31</code>
 (<code>invalidarChavesDeDispositivo</code>);
-<code>apps/web/src/lib/api-client.ts:455</code> (<code>listMachineDeviceKeys</code>);
+<code>apps/web/src/lib/api-client.ts:469</code> (<code>listMachineDeviceKeys</code>);
 <code>apps/web/src/locales/{en,pt-BR}/machineKeys.json</code></li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/auth/machine-device-keys.use-case.spec.ts</code>
 (a lista só pelo usuário, a revogada incluída; a revogação REAL derrubando
@@ -1309,7 +1309,7 @@ o ticket novo é recusado); tela (não existe seção de membros de workspace no
 <code>apps/web</code>). O TITULAR (<code>workspaces.created_by</code>) não sai por esta rota — é a
 <a href="#rn-616">RN-616</a>.</p>
 <ul>
-<li><strong>Código:</strong> <code>src/interfaces/http/iam/workspaces.controller.ts:262</code>
+<li><strong>Código:</strong> <code>src/interfaces/http/iam/workspaces.controller.ts:268</code>
 (<code>removeMember</code>);
 <code>src/application/use-cases/iam/remove-workspace-member.use-case.ts:79</code>
 (<code>RemoveWorkspaceMemberUseCase</code>);
@@ -1318,7 +1318,7 @@ o ticket novo é recusado); tela (não existe seção de membros de workspace no
 (<code>remocaoEhAutoRebaixamento</code>);
 <code>src/infrastructure/persistence/drizzle/workspace.repository.ts:84</code>
 (<code>removeMember</code>);
-<code>src/infrastructure/persistence/drizzle/project.repository.ts:167</code>
+<code>src/infrastructure/persistence/drizzle/project.repository.ts:177</code>
 (<code>removeMemberFromWorkspaceProjects</code>);
 <code>src/infrastructure/persistence/drizzle/runner-device-key.repository.ts:169</code>
 (<code>revogarChavesDeProjetoNoWorkspace</code>);
@@ -1381,7 +1381,7 @@ uma linha de log com de/para/quem.</p>
 (<code>TransferWorkspaceOwnershipUseCase</code>);
 <code>src/infrastructure/persistence/drizzle/workspace.repository.ts:98</code>
 (<code>transferirTitularidade</code>);
-<code>src/interfaces/http/iam/workspaces.controller.ts:324</code>
+<code>src/interfaces/http/iam/workspaces.controller.ts:351</code>
 (<code>transferOwnership</code>)</li>
 <li><strong>Teste:</strong>
 <code>test/application/use-cases/iam/remove-workspace-member.use-case.spec.ts</code>

@@ -1884,11 +1884,11 @@ spec и есть код, читающий окружение, а не модул
 <blockquote>
 <p>⚠️ Блок сгенерирован <code>pnpm docs:generate</code>. Не редактируйте вручную — следующая сборка его перезапишет.</p>
 </blockquote>
-<p>Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — <strong>194</strong>. У всех есть описание в таблицах выше.</p>
+<p>Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — <strong>205</strong>. У всех есть описание в таблицах выше.</p>
 <p>Каждый источник помечен как <strong>продукт</strong> — то, что оператор установки задаёт в <code>.env</code> развёртывания, — или <strong>инструменты</strong>: их читают только CI и разработчики продукта. Переменной инструментов не место в <code>.env</code> оператора.</p>
-<p><a href="#env-servico-api">api</a> (68) · <a href="#env-servico-engine">engine</a> (63) · <a href="#env-servico-web">web</a> (6) · <a href="#env-servico-broker">broker</a> (7) · <a href="#env-servico-api-scripts">api/scripts</a> (16) · <a href="#env-servico-e2e">e2e</a> (10) · <a href="#env-servico-deploy-k8s">deploy/k8s</a> (24)</p>
+<p><a href="#env-servico-api">api</a> (72) · <a href="#env-servico-engine">engine</a> (63) · <a href="#env-servico-web">web</a> (6) · <a href="#env-servico-broker">broker</a> (14) · <a href="#env-servico-api-scripts">api/scripts</a> (16) · <a href="#env-servico-e2e">e2e</a> (10) · <a href="#env-servico-deploy-k8s">deploy/k8s</a> (24)</p>
 <h3 id="env-servico-api">api</h3>
-<p>переменных: 68 · продукт</p>
+<p>переменных: 72 · продукт</p>
 <ul>
 <li><a id="env-API_JSON_BODY_LIMIT"></a><code>API_JSON_BODY_LIMIT</code> <sub>(apps/api/src/main.ts)</sub></li>
 <li><a id="env-API_PUBLIC_URL"></a><code>API_PUBLIC_URL</code> <sub>(apps/api/src/application/use-cases/auth/start-social-login.use-case.ts)</sub></li>
@@ -1947,6 +1947,7 @@ spec и есть код, читающий окружение, а не модул
 <li><a id="env-OTEL_SERVICE_NAME"></a><code>OTEL_SERVICE_NAME</code> <sub>(apps/api/src/tracing.ts)</sub></li>
 <li><a id="env-PORT"></a><code>PORT</code> <sub>(apps/api/src/main.ts)</sub></li>
 <li><a id="env-PROJECT_WORKSPACES_ROOT"></a><code>PROJECT_WORKSPACES_ROOT</code> <sub>(apps/api/src/infrastructure/filesystem/project-workspaces-root.ts)</sub></li>
+<li><a id="env-RAG_REINDEX_POLL_INTERVAL_MS"></a><code>RAG_REINDEX_POLL_INTERVAL_MS</code> <sub>(apps/api/src/application/rag-reindex/trunk-merged-reindexer.ts)</sub></li>
 <li><a id="env-RATE_LIMIT_ENABLED"></a><code>RATE_LIMIT_ENABLED</code> <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub></li>
 <li><a id="env-RATE_LIMIT_IP"></a><code>RATE_LIMIT_IP</code> <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub></li>
 <li><a id="env-RATE_LIMIT_USER"></a><code>RATE_LIMIT_USER</code> <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub></li>
@@ -1957,6 +1958,9 @@ spec и есть код, читающий окружение, а не модул
 <li><a id="env-SMTP_PORT"></a><code>SMTP_PORT</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
 <li><a id="env-SMTP_SECURE"></a><code>SMTP_SECURE</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
 <li><a id="env-SMTP_USER"></a><code>SMTP_USER</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
+<li><a id="env-TOOL_ROUTER_API_KEY"></a><code>TOOL_ROUTER_API_KEY</code> <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub></li>
+<li><a id="env-TOOL_ROUTER_LAYA_MODELO"></a><code>TOOL_ROUTER_LAYA_MODELO</code> <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub></li>
+<li><a id="env-TOOL_ROUTER_URL"></a><code>TOOL_ROUTER_URL</code> <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub></li>
 <li><a id="env-WEB_ORIGIN"></a><code>WEB_ORIGIN</code> <sub>(apps/api/src/infrastructure/mail/smtp-mail-sender.ts)</sub></li>
 </ul>
 <h3 id="env-servico-engine">engine</h3>
@@ -2037,14 +2041,21 @@ spec и есть код, читающий окружение, а не модул
 <li><a id="env-VITE_LOG_LEVEL"></a><code>VITE_LOG_LEVEL</code> <sub>(apps/web/src/lib/runtime-config.ts)</sub></li>
 </ul>
 <h3 id="env-servico-broker">broker</h3>
-<p>переменных: 7 · продукт</p>
+<p>переменных: 14 · продукт</p>
 <ul>
 <li><code>API_URL</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><a id="env-BRABO_PROJECTS_BROKER_BASE"></a><code>BRABO_PROJECTS_BROKER_BASE</code> <sub>(apps/broker/src/config.ts)</sub></li>
 <li><a id="env-BRABO_PROJECTS_HOST_BASE"></a><code>BRABO_PROJECTS_HOST_BASE</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><a id="env-BRABO_PROVA_SONDA_IMAGE"></a><code>BRABO_PROVA_SONDA_IMAGE</code> <sub>(apps/broker/src/config.ts)</sub></li>
 <li><code>BRABO_SERVICE_TOKEN</code> <sub>(apps/broker/src/config.ts)</sub></li>
 <li><code>BRABO_SERVICE_TOKEN_PREVIOUS</code> <sub>(apps/broker/src/config.ts)</sub></li>
 <li><a id="env-BROKER_PORT"></a><code>BROKER_PORT</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><a id="env-BROKER_TRABALHO_DIR"></a><code>BROKER_TRABALHO_DIR</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><a id="env-DOCKER_CONFIG"></a><code>DOCKER_CONFIG</code> <sub>(apps/broker/src/prova-de-compose.ts)</sub></li>
+<li><a id="env-DOCKER_HOST"></a><code>DOCKER_HOST</code> <sub>(apps/broker/src/prova-de-compose.ts)</sub></li>
 <li><code>NODE_ENV</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><a id="env-PATH"></a><code>PATH</code> <sub>(apps/broker/src/prova-de-compose.ts)</sub></li>
+<li><a id="env-PROJECT_WORKSPACES_BROKER_ROOT"></a><code>PROJECT_WORKSPACES_BROKER_ROOT</code> <sub>(apps/broker/src/config.ts)</sub></li>
 <li><a id="env-PROJECT_WORKSPACES_HOST_ROOT"></a><code>PROJECT_WORKSPACES_HOST_ROOT</code> <sub>(apps/broker/src/config.ts)</sub></li>
 </ul>
 <h3 id="env-servico-api-scripts">api/scripts</h3>
@@ -2120,7 +2131,7 @@ spec и есть код, читающий окружение, а не модул
 </blockquote>
 <nav class="site-pager"><a href="../explanation/documentation-workflow.html">Синхронизация документации</a><a href="../reference/events.html">Eventos</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Редактировать страницу</a><span>Обновлено 2026-11-09T06:57:53-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Редактировать страницу</a><span>Обновлено 2026-11-13T14:38:04-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>На этой странице</h2><ul><li class="n2"><a href="#compose-установки-docker-composeinstallyml">Compose установки (docker-compose.install.yml)</a></li><li class="n2"><a href="#api">api</a></li><li class="n3"><a href="#основные">Основные</a></li><li class="n3"><a href="#безопасность-">Безопасность 🔒</a></li><li class="n3"><a href="#auth-first-party">Auth first-party</a></li><li class="n3"><a href="#настоящий-smtp-mailsender">Настоящий SMTP (MailSender)</a></li><li class="n3"><a href="#recuperar-a-senha-sem-smtp">Восстановление пароля без SMTP</a></li><li class="n3"><a href="#seed-для-разработки">Seed для разработки</a></li><li class="n3"><a href="#rate-limit">Rate limit</a></li><li class="n3"><a href="#внутренний-трафик-">Внутренний трафик 🔒</a></li><li class="n3"><a href="#git">Git</a></li><li class="n3"><a href="#llm">LLM</a></li><li class="n3"><a href="#граф-знаний-adr-0099">Граф знаний (ADR 0099)</a></li><li class="n3"><a href="#наблюдаемость">Наблюдаемость</a></li><li class="n2"><a href="#engine">engine</a></li><li class="n3"><a href="#основные-1">Основные</a></li><li class="n3"><a href="#кластер-и-остановка">Кластер и остановка</a></li><li class="n3"><a href="#harness">Harness</a></li><li class="n3"><a href="#психолог">Психолог</a></li><li class="n3"><a href="#анамнез">Анамнез</a></li><li class="n3"><a href="#ограничители-нагрузки">Ограничители нагрузки</a></li><li class="n3"><a href="#внутренний-трафик-и-наблюдаемость">Внутренний трафик и наблюдаемость</a></li><li class="n2"><a href="#web">web</a></li><li class="n3"><a href="#почему-версия-не-идёт-через-configjs">Почему версия не идёт через /config.js</a></li><li class="n2"><a href="#резервное-копирование">Резервное копирование</a></li><li class="n2"><a href="#локальный-инференс-контейнеры">Локальный инференс (контейнеры)</a></li><li class="n2"><a href="#локальная-наблюдаемость-контейнеры">Локальная наблюдаемость (контейнеры)</a></li><li class="n2"><a href="#брокер-контейнеров">Брокер контейнеров</a></li><li class="n2"><a href="#dev-container-user-build-time">Пользователь контейнеров dev (сборка)</a></li><li class="n2"><a href="#переменные-инструментов-не-продукта">Переменные инструментов (не продукта)</a></li><li class="n3"><a href="#демонстрационные-скрипты-и-seed--appsapiscripts">Демонстрационные скрипты и seed — apps/api/scripts/</a></li><li class="n3"><a href="#браузерный-e2e--e2e">Браузерный E2E — e2e/</a></li><li class="n3"><a href="#локальный-кластер-и-плановые-проверки--deployk8s">Локальный кластер и плановые проверки — deploy/k8s/</a></li><li class="n2"><a href="#полный-инвентарь">Полный инвентарь</a></li><li class="n3"><a href="#env-servico-api">api</a></li><li class="n3"><a href="#env-servico-engine">engine</a></li><li class="n3"><a href="#env-servico-web">web</a></li><li class="n3"><a href="#env-servico-broker">broker</a></li><li class="n3"><a href="#env-servico-api-scripts">api/scripts</a></li><li class="n3"><a href="#env-servico-e2e">e2e</a></li><li class="n3"><a href="#env-servico-deploy-k8s">deploy/k8s</a></li></ul></aside>
 </div>

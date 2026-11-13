@@ -200,7 +200,7 @@ quiser — N eventos de renomeação empurrariam justamente o que importa para
 fora da cauda de 200 eventos.</p>
 <ul>
 <li><strong>Onde:</strong> <code>apps/web/src/lib/session-label.ts:61</code> (<code>rotuloDaSessao</code>),
-<code>apps/api/src/application/ports/session-repository.port.ts:52</code> (<code>rename</code>).
+<code>apps/api/src/application/ports/session-repository.port.ts:67</code> (<code>rename</code>).
 Alcançável tanto de dentro da sessão
 (<code>apps/web/src/routes/SessionPage.tsx:439</code>, <code>handleRename</code>) quanto da
 lista do projeto, sem precisar abrir a sessão antes
@@ -555,7 +555,7 @@ modelo: a rota de vínculo recebe o agente, nunca cai em fallback calado.</p>
 <ul>
 <li><strong>Onde:</strong> <code>apps/web/src/lib/session-destinatario.ts:290</code>
 (<code>useDestinatarioDoChat</code>, desde a RN-631),
-<code>apps/web/src/lib/api-client.ts:1192</code> (<code>getSessionModelBinding</code>, o
+<code>apps/web/src/lib/api-client.ts:1217</code> (<code>getSessionModelBinding</code>, o
 <code>agentId</code>), <code>apps/api/src/interfaces/http/llm/model-bindings.controller.ts:166</code>
 (<code>getSessionBinding</code>, <code>@Query('agentId')</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/routes/SessionPage.destinatario-do-chat.test.tsx</code>
@@ -580,7 +580,7 @@ OPCIONAL, padrão <code>false</code>: os outros consumidores do hook (Overview, 
 Provisioning, AdoptionPlan) não têm turno conversacional em andamento e
 ficam como estavam.</p>
 <ul>
-<li><strong>Onde:</strong> <code>apps/web/src/lib/hooks.ts:221</code> (<code>useSessionEvents</code>),
+<li><strong>Onde:</strong> <code>apps/web/src/lib/hooks.ts:250</code> (<code>useSessionEvents</code>),
 <code>apps/web/src/routes/SessionPage.tsx:269</code> (<code>eventsQuery</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/lib/hooks.pausar-poll.test.tsx</code></li>
 <li><strong>Caso de borda:</strong> pausar o timer não é desabilitar a query — a invalidação

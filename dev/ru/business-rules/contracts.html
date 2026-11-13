@@ -574,12 +574,12 @@ reaproveitadas na tentativa seguinte.</p>
 <code>packages/docker-port/src/docker-cli.ts:206</code> (<code>PullExcedeuTetoError</code>),
 <code>:754</code> (<code>garantirImagem</code>), <code>:129</code> (<code>CHAMADAS_DE_CONTROLE_NO_START</code>),
 <code>:116</code> (<code>TIMEOUT_DE_CONTROLE_MS</code>);
-<code>apps/broker/src/servidor.ts:240</code> (<code>PullExcedeuTetoError</code>);
+<code>apps/broker/src/servidor.ts:251</code> (<code>PullExcedeuTetoError</code>);
 <code>apps/api/src/infrastructure/http-clients/container-broker.client.ts:252</code> (<code>TETO_DE_MUTACAO_MS</code>),
 <code>:216</code> (<code>CHAMADAS_DE_CONTROLE_NO_START</code>),
 <code>:275</code> (<code>TETO_DO_PROPOSE_ACTION_DE_CONTAINER_NO_ENGINE_MS</code>);
-<code>apps/engine/lib/engine/sessions/engine_api_client.ex:2006</code> (<code>opcoes_do_propose_action</code>),</p>
-<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:2006</code> (<code>opcoes_do_propose_action</code>),
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex:2075</code> (<code>opcoes_do_propose_action</code>),</p>
+<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:2075</code> (<code>opcoes_do_propose_action</code>),
 <code>:1649</code> (<code>@teto_do_propose_action_de_container_ms</code>);
 <code>apps/engine/lib/engine/runners/runner_router.ex:52</code> (<code>@timeout_do_start_ms</code>)</p>
 </li>
@@ -622,7 +622,7 @@ e cinco operações continuam. Container já criado só muda ao ser recriado.</l
 <ul>
 <li><strong>Onde:</strong> <code>packages/docker-port/src/docker-cli.ts:838</code> (<code>argsDeCriacao</code>),
 <code>packages/docker-port/src/spec-de-container.ts:136</code> (<code>usuarioValidado</code>),
-<code>apps/broker/src/operacoes.ts:456</code> (<code>especificacaoDoProjeto</code>),
+<code>apps/broker/src/operacoes.ts:491</code> (<code>especificacaoDoProjeto</code>),
 <code>apps/api/src/application/use-cases/containers/obter-spec-de-container.use-case.ts:124</code>
 (<code>ObterSpecDeContainerUseCase</code>)</li>
 <li><strong>Teste:</strong> <code>packages/docker-port/src/docker-cli.spec.ts</code> (o <code>run</code> leva
@@ -712,7 +712,7 @@ com rótulo gerenciado, UM bind e as capabilities derrubadas&quot;)</li>
 <h3 id="rn-930">RN-930 — A instância de QA é efêmera, só mexe no que tem <code>brabo.papel=qa</code> e sobe os serviços que a Infra declarou por digest</h3>
 <ul>
 <li><strong>Regra:</strong> a spec com <code>qa: { chave, servicos }</code> sobe <code>brabo-qa-&lt;workspace_dir_name&gt;-&lt;chave&gt;</code> sem <code>--restart</code>, com <code>brabo.papel=qa</code> e <code>brabo.qa.instancia</code>, sem app nem porta. <code>stop</code>, <code>remove</code>, <code>inspect</code> e <code>exec</code> com <code>alvo</code> de QA filtram <code>brabo.papel=qa</code>; homônimo sem o papel é &quot;não gerenciado&quot; e nada é removido. Cada serviço (até 6, imagem por digest <code>@sha256:</code> obrigatório, <code>env</code> de chaves <code>[A-Z_][A-Z0-9_]*</code>) sobe com <code>--network container:&lt;qa&gt;</code>, <code>--cap-drop ALL</code>, sem privilégio nem porta publicada, tetos constantes e <code>--tmpfs</code>; serviço compartilhado vive na rede privada <code>--internal</code> do projeto. O broker expõe <code>/containers/:projectId/qa/:chave/{start,remove,exec}</code> e lê os serviços da api, conferindo a chave. (<a href="../adr/0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.html">ADR 0229</a>.)</li>
-<li><strong>Onde:</strong> <code>packages/docker-port/src/docker-cli.ts:625</code> (<code>iniciarQa</code>), <code>packages/docker-port/src/docker-cli.ts:933</code> (<code>argsDeServicoDeQa</code>), <code>packages/docker-port/src/spec-de-container.ts:439</code> (<code>instanciaDeQaValidada</code>), <code>apps/broker/src/operacoes.ts:212</code> (<code>startQa</code>), <code>apps/broker/src/servidor.ts:135</code> (<code>rotaDeContainer</code>)</li>
+<li><strong>Onde:</strong> <code>packages/docker-port/src/docker-cli.ts:625</code> (<code>iniciarQa</code>), <code>packages/docker-port/src/docker-cli.ts:933</code> (<code>argsDeServicoDeQa</code>), <code>packages/docker-port/src/spec-de-container.ts:439</code> (<code>instanciaDeQaValidada</code>), <code>apps/broker/src/operacoes.ts:222</code> (<code>startQa</code>), <code>apps/broker/src/servidor.ts:139</code> (<code>rotaDeContainer</code>)</li>
 <li><strong>Teste:</strong> <code>packages/docker-port/src/docker-cli.spec.ts:815</code> (remove só alcança o papel <code>qa</code>), <code>packages/docker-port/src/spec-de-container.spec.ts:256</code> (digest, chave, env), <code>apps/broker/src/operacoes.spec.ts:321</code> (lista da api e chave da rota), <code>apps/broker/src/servidor.spec.ts:405</code> (roteador fechado)</li>
 <li><strong>Origem:</strong> AT-612 (EP-030).</li>
 </ul>

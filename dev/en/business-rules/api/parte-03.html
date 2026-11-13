@@ -1115,7 +1115,7 @@ continuam numa linha só. Quem quer a quebra por credencial tem a lista própria
 e cruzar as duas dimensões multiplicaria as linhas do ranking sem responder
 pergunta que as duas listas separadas já não respondam.</p>
 <ul>
-<li><strong>Onde:</strong> <code>src/application/ports/token-usage-repository.port.ts:150</code>
+<li><strong>Onde:</strong> <code>src/application/ports/token-usage-repository.port.ts:156</code>
 (<code>SpendDimension</code>),
 <code>src/infrastructure/persistence/drizzle/token-usage.repository.ts:255</code>
 (o <code>GROUP BY</code>), <code>src/application/use-cases/llm/get-workspace-spend-report.use-case.ts:112</code>,
@@ -1145,7 +1145,7 @@ nasce alcançável pelas duas audiências, e tirá-la do alcance do membro vira 
 explícito <strong>neste ponto</strong> — nunca um esquecimento em outro arquivo.</p>
 <ul>
 <li><strong>Onde:</strong> <code>src/application/ports/token-usage-repository.port.ts:121</code>
-(as duas sobrecargas), <code>:147</code> (<code>SpendDimensionDoAtor</code>), <code>:163</code>/<code>:173</code> (os dois
+(as duas sobrecargas), <code>:152</code> (<code>SpendDimensionDoAtor</code>), <code>:163</code>/<code>:173</code> (os dois
 escopos), <code>src/application/use-cases/llm/get-my-spend.use-case.ts:73</code>,
 <code>src/interfaces/http/llm/spend.controller.ts:98</code></li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/llm/spend-audiencias.use-case.spec.ts</code>

@@ -134,14 +134,14 @@ toda chamada de LLM de turno SEM autor humano, e desde a <a href="../engine.html
 também como idioma do artefato compartilhado que um agente grava DURANTE um
 turno com autor humano — a divergência que esta regra declarava fechou.</p>
 <ul>
-<li><strong>Código:</strong> <code>src/db/schema/iam.ts:262</code> (<code>language</code>);
+<li><strong>Código:</strong> <code>src/db/schema/iam.ts:277</code> (<code>language</code>);
 <code>src/db/migrations/0062_idioma_do_projeto.sql</code> (o backfill);
 <code>src/application/use-cases/iam/idioma-do-projeto.ts:13</code>
 (<code>idiomaDoProjetoOuRecusa</code>);
 <code>src/application/use-cases/iam/create-project.use-case.ts:72</code>
-(<code>language</code>); <code>src/application/use-cases/iam/update-project.use-case.ts:18</code>
+(<code>language</code>); <code>src/application/use-cases/iam/update-project.use-case.ts:24</code>
 (<code>idiomaDoProjetoOuRecusa</code>);
-<code>src/interfaces/http/iam/dto/iam.response.dto.ts:233</code>
+<code>src/interfaces/http/iam/dto/iam.response.dto.ts:282</code>
 (<code>language</code>); <code>apps/web/src/routes/settings/ProjectLanguageSection.tsx</code></li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/iam/idioma-do-projeto.use-case.spec.ts:63</code>
 (nasce com o idioma de quem cria), <code>:74</code> (a escolha da conta vence a
@@ -291,8 +291,8 @@ outbox <code>project.trunk_merged</code> (<a href="parte-11.html#rn-1022">RN-102
 infra e de ADR igualmente.</li>
 </ol>
 <ul>
-<li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-git-action.use-case.ts:374</code>
-(<code>settleMerge</code>), <code>src/infrastructure/persistence/drizzle/backlog.repository.ts:494</code>
+<li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-git-action.use-case.ts:385</code>
+(<code>settleMerge</code>), <code>src/infrastructure/persistence/drizzle/backlog.repository.ts:500</code>
 (<code>markDoneIfNotDone</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/execute-git-action.use-case.spec.ts</code>
 (&quot;git_merge marca a tarefa como done&quot;: feliz, repetido, PR aberta/merge
@@ -390,7 +390,7 @@ ativo; com os dois assim, não grava nem chama o engine
 (<code>travarOfertasDoDestino</code>);
 <code>src/application/use-cases/agents/activate-agent.use-case.ts:88</code>
 (<code>substituirOfertasAoAtivar</code>);
-<code>src/application/use-cases/execution/activate-execution.use-case.ts:327</code>
+<code>src/application/use-cases/execution/activate-execution.use-case.ts:338</code>
 (<code>substituirOfertasAoAtivar</code>);
 <code>src/application/use-cases/agents/offer-infra-handoff.use-case.ts:96</code>
 (<code>jaAtendido</code>);
@@ -448,7 +448,7 @@ novas, não aparece no fio. Pendentes do PROJETO inteiro são outra leitura
 <code>src/application/ports/proposed-action-repository.port.ts</code>
 (<code>ListProposedActionsOptions</code>);
 <code>apps/web/src/lib/acoes-da-sessao.ts:48</code> (<code>buscarAcoesDaSessao</code>), <code>:30</code>
-(<code>juntarCaudaEPendentes</code>); <code>apps/web/src/lib/hooks.ts:432</code>
+(<code>juntarCaudaEPendentes</code>); <code>apps/web/src/lib/hooks.ts:461</code>
 (<code>usePendingActions</code>)</li>
 <li><strong>Teste:</strong> <code>test/infrastructure/persistence/proposed-action-latest.repository.spec.ts</code>
 (sem <code>latest</code> a pendente nova fica de fora — o defeito; com <code>latest</code> ela
@@ -600,7 +600,7 @@ toast com a frase dela. O fio narra <code>session.reopened</code> como &quot;ses
 com a causa do fechamento anterior quando ela foi gravada.</p>
 <ul>
 <li><strong>Onde:</strong> <code>src/interfaces/http/sessions/sessions.controller.ts:214</code>
-(<code>reopen</code>); <code>apps/web/src/lib/api-client.ts:634</code> (<code>reopenSession</code>);
+(<code>reopen</code>); <code>apps/web/src/lib/api-client.ts:648</code> (<code>reopenSession</code>);
 <code>apps/web/src/routes/SessionPage.tsx:147</code> (<code>podeReabrir</code>);
 <code>apps/web/src/lib/session-acoes-da-sessao.ts:77</code> (<code>handleReopen</code>); <code>apps/web/src/routes/SessionComposer.tsx:383</code> (o botão);
 <code>apps/web/src/lib/activity.ts:633</code> (a frase do fio)</li>
@@ -671,7 +671,7 @@ não medido em projeto real, e declarado.</p>
 (<code>TETO_DE_CHAVES_NO_LOTE</code>), <code>:37</code> (<code>lerListaDeChaves</code>), <code>:77</code>
 (<code>ResolveModelBindingsEmLoteUseCase</code>);
 <code>src/interfaces/http/llm/model-bindings.controller.ts:233</code>
-(<code>getResolvedBindings</code>); <code>apps/web/src/lib/api-client.ts:1217</code>
+(<code>getResolvedBindings</code>); <code>apps/web/src/lib/api-client.ts:1242</code>
 (<code>getResolvedModelBindings</code>); <code>apps/web/src/lib/bindings-resolvidos.ts:43</code>
 (<code>invalidarBindingsResolvidos</code>), <code>:69</code> (<code>useBindingsResolvidos</code>), <code>:111</code>
 (<code>useBindingsDosAgentes</code>); <code>apps/web/src/routes/ProjectOverviewTab.tsx:144</code>
@@ -716,7 +716,7 @@ estado de conta. Workspace inexistente é 404, e quem não é membro é recusado
 pelo <code>RolesGuard</code> (403). Continua não havendo TELA de membros de workspace: a
 leitura existe para nomear, e as rotas de escrita seguem sendo de API.</p>
 <ul>
-<li><strong>Código:</strong> <code>src/interfaces/http/iam/workspaces.controller.ts:216</code>
+<li><strong>Código:</strong> <code>src/interfaces/http/iam/workspaces.controller.ts:222</code>
 (<code>listMembers</code>);
 <code>src/application/use-cases/iam/list-workspace-members.use-case.ts:16</code>
 (<code>execute</code>);
@@ -877,7 +877,7 @@ faz merge nem push.</p>
 <li><strong>Código:</strong> <code>src/domain/sessions/estou-pronto.ts:62</code> (<code>decidirAceiteImplicitoDoPo</code>);
 <code>src/application/use-cases/agents/aceite-implicito-do-po.use-case.ts:37</code> (<code>AceiteImplicitoDoPoUseCase</code>),
 <code>:45</code> (<code>seCouber</code>);
-<code>src/interfaces/http/internal/internal-sessions.controller.ts:439</code> (<code>handoff</code>);
+<code>src/interfaces/http/internal/internal-sessions.controller.ts:443</code> (<code>handoff</code>);
 <code>src/application/use-cases/agents/accept-handoff.use-case.ts:135</code> (<code>implicito</code> no <code>handoff.accepted</code>);
 <code>src/application/use-cases/agents/activate-agent.use-case.ts:80</code> (<code>implicito</code> no <code>agent.activated</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/agents/aceite-implicito-do-po.use-case.spec.ts:105</code>
@@ -906,7 +906,7 @@ vale só para aquele projeto. Os dois scripts de validação que exercitam o flu
 manual (<code>validacao-fase-12.ts</code>, <code>validacao-real.ts</code>) passam a pedir <code>manual</code>
 explícito.</p>
 <ul>
-<li><strong>Código:</strong> <code>src/db/schema/iam.ts:287</code> (<code>storyPromotion</code>);
+<li><strong>Código:</strong> <code>src/db/schema/iam.ts:304</code> (<code>storyPromotion</code>);
 <code>src/db/migrations/0065_default_de_promocao_auto.sql</code>;
 <code>apps/web/src/routes/NewProjectWizard.tsx:978</code> (a linha do Confirmar);
 <code>apps/web/src/routes/settings/PromotionSection.tsx:75</code> (a nota do default)</li>
@@ -954,7 +954,7 @@ handoff manual (ADR 0109) também.</p>
 (<code>AceitarHandoffAutomaticamenteUseCase</code>);
 <code>src/application/use-cases/agents/accept-handoff.use-case.ts:91</code>
 (<code>AceitePeloSistema</code>);
-<code>src/interfaces/http/internal/internal-sessions.controller.ts:439</code>
+<code>src/interfaces/http/internal/internal-sessions.controller.ts:443</code>
 (<code>handoff</code>); <code>apps/engine/lib/engine/harness/tools/offer_handoff.ex:59</code>;
 <code>apps/web/src/routes/session-timeline-montagem.tsx:604</code> (o aviso no fio)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/agents/aceitar-handoff-automaticamente.use-case.spec.ts:73</code>
@@ -1007,19 +1007,19 @@ há trava por PR), e é a regra 2 que segura a segunda.</li>
 <li>
 <p><strong>Código:</strong> <code>src/domain/actions/merge-de-pr.ts:56</code> (<code>recusaDeMerge</code>),
 <code>:40</code> (<code>mergeouAPr</code>);
-<code>src/application/use-cases/actions/propose-action.use-case.ts:124</code> (<code>recusaDeMerge</code>);
+<code>src/application/use-cases/actions/propose-action.use-case.ts:132</code> (<code>recusaDeMerge</code>);
 <code>src/application/use-cases/actions/approve-action.use-case.ts:327</code> (<code>recusaDeMerge</code>);
 <code>src/infrastructure/git/local-git-provider.ts:339</code> (<code>GitPullRequestAlreadyMergedError</code>);
 <code>apps/web/src/lib/gate-do-merge.ts:19</code> (<code>gatePendenteNoMerge</code>);
-<code>apps/web/src/routes/ProjectPrsTab.tsx:214</code> (<code>gatePendenteNoMerge</code>);
-<code>apps/web/src/routes/session-timeline-montagem.tsx:1288</code> (<code>gatePendenteNoMerge</code>)
-<code>apps/web/src/routes/ProjectPrsTab.tsx:214</code> (<code>gatePendenteNoMerge</code>);
-<code>apps/web/src/routes/session-timeline-montagem.tsx:1288</code> (<code>gatePendenteNoMerge</code>)</p>
+<code>apps/web/src/routes/ProjectPrsTab.tsx:225</code> (<code>gatePendenteNoMerge</code>);
+<code>apps/web/src/routes/session-timeline-montagem.tsx:1316</code> (<code>gatePendenteNoMerge</code>)
+<code>apps/web/src/routes/ProjectPrsTab.tsx:225</code> (<code>gatePendenteNoMerge</code>);
+<code>apps/web/src/routes/session-timeline-montagem.tsx:1316</code> (<code>gatePendenteNoMerge</code>)</p>
 </li>
 <li>
 <p><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:675</code>
 (<code>merge_ja_proposto</code>), <code>:698</code> (<code>pr_ja_mergeado</code> — caso de falha), <code>:696</code></p>
-<p><code>apps/web/src/routes/session-timeline-montagem.tsx:1288</code> (<code>gatePendenteNoMerge</code>)</p>
+<p><code>apps/web/src/routes/session-timeline-montagem.tsx:1316</code> (<code>gatePendenteNoMerge</code>)</p>
 </li>
 <li>
 <p><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:675</code>
@@ -1070,8 +1070,8 @@ cobrada por fora — a linha cai no catálogo.</li>
 </ol>
 <ul>
 <li><strong>Onde:</strong> <code>src/domain/llm/custo-da-chamada.ts:43</code> (<code>custoDaChamada</code>),
-<code>src/application/use-cases/llm/run-llm-turn.use-case.ts:288</code> (<code>custoDaChamada</code>),
-<code>src/application/use-cases/llm/stream-llm-turn.use-case.ts:327</code> (<code>custoDaChamada</code>),
+<code>src/application/use-cases/llm/run-llm-turn.use-case.ts:294</code> (<code>custoDaChamada</code>),
+<code>src/application/use-cases/llm/stream-llm-turn.use-case.ts:333</code> (<code>custoDaChamada</code>),
 <code>src/application/use-cases/llm/send-chat-message.use-case.ts:286</code> (<code>custoDaChamada</code>),
 <code>src/infrastructure/llm/openai-compatible-provider.ts:410</code> (<code>extrairCustoReal</code>),
 <code>src/infrastructure/llm/openrouter-provider.ts:272</code> (<code>extrairCustoRealOpenRouter</code>),
@@ -1113,7 +1113,7 @@ no protocolo dele (<code>cache_read_input_tokens</code>) e isso NÃO é lido aqu
 <ul>
 <li><strong>Onde:</strong> <code>src/infrastructure/llm/openai-compatible-provider.ts:414</code> (<code>cachedInputTokens</code>),
 <code>src/infrastructure/llm/openai-compatible-provider.ts:817</code> (<code>contagem</code>),
-<code>src/application/use-cases/llm/run-llm-turn.use-case.ts:230</code> (<code>cachedInputTokens</code>),
+<code>src/application/use-cases/llm/run-llm-turn.use-case.ts:235</code> (<code>cachedInputTokens</code>),
 <code>src/application/use-cases/llm/record-llm-usage.use-case.ts:121</code> (<code>cachedInputTokens</code>),
 <code>src/db/schema/llm.ts:395</code> (<code>cachedInputTokens</code>),
 <code>scripts/medir-execucao.ts:89</code> (<code>formatarParteMedida</code>)</li>
@@ -1150,9 +1150,9 @@ existe.</p>
 <li><strong>Código:</strong> <code>src/domain/actions/path-scope.ts:153</code> (<code>cwdNoContainer</code>),
 <code>:174</code> (<code>comandoNoEscopoDoContainer</code>), <code>:112</code> (<code>comandoNoEscopo</code>, agora com
 várias raízes), <code>:137</code> (<code>PONTO_DE_MONTAGEM_DO_CONTAINER</code>);
-<code>src/domain/actions/decide.ts:291</code> (<code>execucaoNoContainer</code>), <code>:660</code>
+<code>src/domain/actions/decide.ts:285</code> (<code>execucaoNoContainer</code>), <code>:689</code>
 (<code>execucaoNoContainer</code>, em <code>terminalNoEscopo</code>);
-<code>src/application/use-cases/actions/propose-action.use-case.ts:203</code>
+<code>src/application/use-cases/actions/propose-action.use-case.ts:346</code>
 (<code>containerExecutionActive</code>, separado de <code>execucaoNoContainer</code>)</li>
 <li><strong>Teste:</strong> <code>test/domain/actions/decide.spec.ts:1274</code> (com container
 <code>/work</code>, <code>.worktrees</code>, <code>/tmp</code> e <code>..</code> dentro — caminho feliz; <code>/etc</code>, outro
@@ -1170,7 +1170,9 @@ dono de 01/10, <a href="../../adr/0189-o-piloto-automatico.html">ADR 0189</a></l
 <code>*: auto_approve</code> aprova TUDO, inclusive o composto sintetizado do
 <code>permissions.json</code>, caminho fora da pasta, <code>git commit</code> e criação de branch
 LOCAL. Seguem fora, nunca auto-aprováveis: push/PR/merge/deploy pelo terminal
-e <code>sudo</code>/<code>doas</code> (<a href="parte-04.html#rn-418">RN-418</a>), merge em branch protegida,
+e <code>sudo</code>/<code>doas</code> (<a href="parte-04.html#rn-418">RN-418</a>), merge em branch protegida
+(salvo a chave de merge automático do projeto na branch de trabalho, só pela
+origem do gatilho: <a href="parte-12.html#rn-1316">RN-1316</a>),
 <code>container_remove</code>, <code>instruction_patch</code> e paralelismo. <code>deny</code> explícito vence, e
 <code>ask</code> escrito no arquivo pede. A garantia de que isso não alcança o código do
 Brabo é a contenção do container — uma pasta só, em <code>/work</code>, estritamente
@@ -1197,7 +1199,7 @@ lugares onde o modo é ligado: o cartão de lote dos Executores
 <code>src/application/ports/agent-autonomy-repository.port.ts:5</code>
 (<code>AutonomiaResolvida</code>, com <code>especifica</code>);
 <code>src/application/use-cases/actions/approve-always-action.use-case.ts:263</code>
-(<code>especifica</code>); <code>src/domain/actions/decide.ts:311</code>
+(<code>especifica</code>); <code>src/domain/actions/decide.ts:324</code>
 (<code>modoAutomaticoDoAgente</code>); <code>apps/web/src/components/OQueOPilotoLibera.tsx:16</code>
 (<code>OQueOPilotoLibera</code>); <code>apps/web/src/components/ApprovalCard.tsx:434</code>,
 <code>apps/web/src/components/AgentCard.tsx:164</code>,
@@ -1259,9 +1261,9 @@ vence — pôr a Infra em &quot;manual&quot; não desliga esta semente.</p>
 <li>
 <p><strong>Código:</strong> <code>src/application/use-cases/agents/accept-handoff.use-case.ts:38</code>
 (<code>INFRA_AUTONOMY_SEEDS</code>);
-<code>apps/engine/lib/engine/infra/infra_lead_server.ex:259</code> (<code>handle_cast</code>),
-<code>:710</code> (<code>propor_container_start</code>), <code>:791</code> (<code>subir_no_aceite</code>), <code>:794</code>
-(<code>eleger_candidata</code>), <code>:1435</code> (<code>passo_da_subida</code>)</p>
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:263</code> (<code>handle_cast</code>),
+<code>:729</code> (<code>propor_container_start</code>), <code>:810</code> (<code>subir_no_aceite</code>), <code>:813</code>
+(<code>eleger_candidata</code>), <code>:1469</code> (<code>passo_da_subida</code>)</p>
 <p><code>:626</code> (<code>propor_container_start</code>), <code>:707</code> (<code>subir_no_aceite</code>), <code>:759</code>
 (<code>eleger_candidata</code>), <code>:1319</code> (<code>passo_da_subida</code>)</p>
 </li>
@@ -1270,10 +1272,10 @@ vence — pôr a Infra em &quot;manual&quot; não desliga esta semente.</p>
 (a semente, e só ela — caminho feliz), <code>:267</code> (outro agente não semeia —
 caso de falha);
 <code>apps/engine/test/engine/infra/infra_lead_server_test.exs:1263</code> (o servidor
-elege e propõe antes do modelo — caminho feliz), <code>:1458</code> (<code>mounted</code>), <code>:1468</code>
+elege e propõe antes do modelo — caminho feliz), <code>:1469</code> (<code>mounted</code>), <code>:1479</code>
 (<code>runner</code> não sobe pelo servidor), <code>:1377</code> (sem roteamento), <code>:1387</code> (a api
 recusa sem broker — caso de falha), <code>:1427</code> (container já <code>running</code>), <code>:1439</code>
-(negada pela política), <code>:1580</code> (<code>eleger_candidata/1</code>)</p>
+(negada pela política), <code>:1591</code> (<code>eleger_candidata/1</code>)</p>
 </li>
 <li>
 <p><strong>Origem:</strong> AT-260 (item A14 da análise do uso real de 29/09)</p>
@@ -1319,8 +1321,8 @@ instante, a oferta espera o fim do próximo turno dele.</p>
 <li>
 <p><strong>Código:</strong> <code>src/application/use-cases/agents/offer-infra-handoff.use-case.ts:15</code>
 (<code>ALVOS_DA_CONFIRMACAO</code>);
-<code>apps/engine/lib/engine/infra/infra_lead_server.ex:1169</code> (<code>oferecer_ao_dev_lead</code>),
-<code>:1164</code> (<code>concluir</code>), <code>:368</code> (<code>handle_info</code>), <code>:1075</code></p>
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:1180</code> (<code>oferecer_ao_dev_lead</code>),
+<code>:1175</code> (<code>concluir</code>), <code>:368</code> (<code>handle_info</code>), <code>:1075</code></p>
 <p><code>:1057</code> (<code>concluir</code>), <code>:345</code> (<code>handle_info</code>), <code>:1074</code>
 (<code>topico_do_container</code>);
 <code>apps/engine/lib/engine/workers/infra_oferece_dev_lead_worker.ex:29</code> (<code>perform</code>);

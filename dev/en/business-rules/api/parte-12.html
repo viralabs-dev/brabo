@@ -47,7 +47,7 @@
 <ul>
 <li><strong>Regra:</strong> refina a <a href="parte-07.html#rn-569">RN-569</a>. <code>Handoff (sessionId, seq)</code>, <code>Evento (sessionId, seq)</code>, <code>PerfilAnamnese (userId, dimensao)</code> e <code>Hipotese (id)</code> não tinham restrição, então dois <code>MERGE</code>s concorrentes (o projetor vivo e uma reprojeção, ou duas réplicas da api) criavam dois nós: a prova de reprojeção no k3d mediu <code>12|9</code> em vez de <code>9|6</code>. Agora eles têm restrição de unicidade, e os casos de uso continuam fazendo <code>MERGE</code> exatamente na chave restrita. Restrição de unicidade composta é aceita pelo Neo4j 5.26 Community (medido; só <code>NODE KEY</code> e restrições de existência são Enterprise), então não existe propriedade de chave sintética.</li>
 <li><strong>Subida:</strong> antes do <code>CREATE CONSTRAINT</code>, o <code>GraphStore</code> funde as duplicatas desses quatro rótulos já presentes num grafo instalado (fica o nó mais antigo por <code>elementId</code>, toda aresta dos outros é movida para ele sem duplicar uma existente, e os outros são apagados). É idempotente (sem duplicatas não grava nada), roda numa transação por rótulo e registra no log só o número de nós fundidos, nunca o conteúdo deles. Uma falha mantém o grafo desligado, como qualquer outra falha de bootstrap (<a href="parte-11.html#rn-960">RN-960</a>).</li>
-<li><strong>Onde:</strong> <code>apps/api/src/infrastructure/graph/graph-store.ts:51</code> (<code>CONSTRAINTS</code>), <code>apps/api/src/infrastructure/graph/graph-store.ts:160</code> (<code>bootstrapConstraints</code>), <code>apps/api/src/infrastructure/graph/graph-dedup.ts:34</code> (<code>deduplicarNos</code>).</li>
+<li><strong>Onde:</strong> <code>apps/api/src/infrastructure/graph/graph-store.ts:51</code> (<code>CONSTRAINTS</code>), <code>apps/api/src/infrastructure/graph/graph-store.ts:165</code> (<code>bootstrapConstraints</code>), <code>apps/api/src/infrastructure/graph/graph-dedup.ts:34</code> (<code>deduplicarNos</code>).</li>
 <li><strong>Teste:</strong> <code>apps/api/test/infrastructure/graph/neo4j-integration.spec.ts</code> (contra um Neo4j real: escritas concorrentes do mesmo nó dão um nó; as duplicatas são fundidas com as arestas mantidas, as restrições são criadas depois, uma segunda subida não muda nada), <code>apps/api/test/infrastructure/graph/graph-store.spec.ts</code> (a deduplicação roda antes das restrições).</li>
 <li><strong>Origem:</strong> AT-762 parte B (EP-033), decisão do dono de 06/11/2026; rodada 214, lane L1.</li>
 </ul>
@@ -64,7 +64,7 @@
 <h3 id="rn-1068">RN-1068 — O PO e o Dev Lead corrigem o texto de uma tarefa <code>todo</code>, com a régua da história</h3>
 <ul>
 <li><strong>Regra:</strong> <code>POST /internal/sessions/:sessionId/tasks/:taskId/update</code> (ferramenta <code>update_task</code> do PO e do Dev Lead) corrige título e/ou descrição de uma tarefa. Estende a <a href="parte-10.html#rn-727">RN-727</a> e a <a href="parte-10.html#rn-859">RN-859</a> à tarefa. Recusa em 409 nomeado: <code>tarefa_em_execucao</code> (status diferente de <code>todo</code>), <code>historia_arquivada</code> e <code>historia_nao_draft</code> (a história <code>ready</code> só aceita com <code>questionId</code> de pergunta já respondida pelo usuário). 400 sem campo ou com título vazio ou acima de 200; 404 para tarefa de outro projeto. Grava <code>backlog.task_updated</code> na sessão da história, com <code>taskId</code>, <code>storyId</code>, <code>previousTitle</code>, <code>title</code>, <code>descriptionChanged</code> e, quando houver, <code>questionId</code>; o ator é <code>agent</code> <code>po</code> (padrão) ou <code>dev-lead</code> (campo <code>agentId</code>). Nada mudou, nenhum evento.</li>
-<li><strong>Onde:</strong> <code>src/application/use-cases/backlog/corrigir-historia.use-case.ts:103</code> (<code>editarTarefa</code>), <code>src/domain/backlog/correcao-de-historia.ts:82</code> (<code>recusaDeCorrecaoDeTarefa</code>), <code>src/interfaces/http/internal/internal-sessions.controller.ts:614</code> (<code>updateTaskRoute</code>)</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/backlog/corrigir-historia.use-case.ts:103</code> (<code>editarTarefa</code>), <code>src/domain/backlog/correcao-de-historia.ts:82</code> (<code>recusaDeCorrecaoDeTarefa</code>), <code>src/interfaces/http/internal/internal-sessions.controller.ts:619</code> (<code>updateTaskRoute</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/backlog/corrigir-historia.use-case.spec.ts</code> (<code>CorrigirHistoriaUseCase.editarTarefa</code>: feliz com evento; <code>in_progress</code>/<code>in_review</code>/<code>done</code> recusadas; história <code>ready</code> com e sem resposta; arquivada; 404 e 400).</li>
 <li><strong>Origem:</strong> AT-805 (EP-030), achado 5 do TP-01 27ª; rodada 271, lane L2.</li>
 </ul>
@@ -75,12 +75,358 @@
 <li><strong>Teste:</strong> <code>test/domain/actions/adr-supersedes.spec.ts</code>, <code>test/application/use-cases/actions/propose-action.use-case.spec.ts</code> (<code>open_adr_pr com supersedes</code>, contra Postgres).</li>
 <li><strong>Origem:</strong> AT-806 (EP-030), decisão do dono (b) de 08/11/2026; ADR 0283; rodada 271, lane L2.</li>
 </ul>
+<h3 id="rn-1301">RN-1301 — O workspace escolhe quem roteia a ferramenta (<code>jev</code>, <code>laya</code> ou <code>desligado</code>), e <code>laya</code> só grava com o serviço proficiente na hora</h3>
+<ul>
+<li><strong>Regra:</strong> <code>workspaces.tool_router</code> (enum <code>jev</code> padrão, <code>laya</code>, <code>desligado</code>) substitui o liga/desliga da <a href="../engine.html#rn-625">RN-625</a>; <code>tool_router_enabled</code> segue existindo como coluna GERADA (<code>tool_router &lt;&gt; 'desligado'</code>), então o DTO do workspace e quem lê o booleano não mudam, e o <code>false</code> de antes migrou para <code>desligado</code>. <code>PUT /workspaces/:workspaceId/tool-router</code> (<code>owner</code>) aceita <code>{roteador}</code> e, por compatibilidade, <code>{enabled}</code> (<code>true</code> = <code>jev</code>); sem nenhum, 400. <code>roteador: &quot;laya&quot;</code> consulta o <code>/health</code> do serviço SEM cache e só grava com <code>estado = proficiente</code>; senão 409 <code>roteador_local_indisponivel</code>, com o estado e o motivo no corpo, e nada é gravado. <code>GET /workspaces/:workspaceId/tool-router</code> (<code>viewer</code>) devolve <code>{roteador, laya: {estado, motivo, desde, dispositivo, vramLivreMiB, p95Ms}}</code>, com cache de 30 s e teto de 1 s; o turno do agente NUNCA passa por ele.</li>
+<li><strong>Estados do Laya (nunca colapsados):</strong> <code>nao_configurado</code> (sem <code>TOOL_ROUTER_URL</code>), <code>sem_resposta</code> (rede, HTTP não 2xx ou corpo inválido), <code>sem_gpu</code> (dispositivo diferente de <code>cuda</code> ou VRAM livre abaixo de <code>TOOL_ROUTER_LAYA_VRAM_MIN_MIB</code>, padrão 2048), <code>lento</code> (p95 da sonda de boot acima de <code>TOOL_ROUTER_LAYA_P95_MAX_MS</code>, padrão 500, decisão do dono de 31/10/2026) e <code>proficiente</code>. <code>desde</code> só anda quando o estado muda.</li>
+<li><strong>Configuração:</strong> <code>TOOL_ROUTER_URL</code> (base do serviço, rede interna, sem porta publicada), <code>TOOL_ROUTER_API_KEY</code> (opcional), <code>TOOL_ROUTER_LAYA_LIMIAR</code> (padrão 0,72), <code>TOOL_ROUTER_LAYA_P95_MAX_MS</code>, <code>TOOL_ROUTER_LAYA_VRAM_MIN_MIB</code>, <code>TOOL_ROUTER_LAYA_TIMEOUT_MS</code> (padrão 2000), <code>TOOL_ROUTER_LAYA_MODELO</code> e <code>TOOL_ROUTER_LAYA_MAX_LEN</code>. Os padrões são os do levantamento de 09/11/2026; VRAM e RAM do ensemble de 4 (RAM mínima do serviço de 6 GiB) saem da medição da AT-630 e entram trocando a variável.</li>
+<li><strong>Onde:</strong> <code>src/db/schema/iam.ts</code> e <code>src/db/migrations/0084_laya_no_lugar_do_jev.sql</code> (<code>tool_router</code>), <code>src/application/use-cases/iam/set-workspace-tool-router.use-case.ts:27</code> (<code>execute</code>), <code>src/application/use-cases/iam/get-workspace-tool-router.use-case.ts:13</code> (<code>execute</code>), <code>src/infrastructure/llm/laya-status.ts:24</code> (<code>situacao</code>), <code>src/infrastructure/llm/laya-config.ts:8</code> (<code>configDoLaya</code>), <code>src/interfaces/http/iam/workspaces.controller.ts:296</code> (<code>getToolRouter</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/iam/set-workspace-tool-router.use-case.spec.ts</code> (409 sem serviço proficiente, grava sem cache, <code>enabled</code> legado, 400) e <code>test/infrastructure/llm/laya-tool-router.spec.ts</code> (<code>LayaStatus</code>: os cinco estados, cache e <code>desde</code>).</li>
+<li><strong>Origem:</strong> AT-626 (EP-026), decisões do dono de 31/10 e 07/11/2026; <a href="../../adr/0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.html">ADR 0290</a>; rodada 354, lane L2.</li>
+</ul>
+<h3 id="rn-1302">RN-1302 — Com o workspace em <code>laya</code>, todo provider é roteado por UMA chamada ao serviço local, e qualquer falha deixa o catálogo inteiro</h3>
+<ul>
+<li><strong>Regra:</strong> estende a <a href="../engine.html#rn-625">RN-625</a> e revisa o item 1 dela por ADR: com <code>tool_router = laya</code> o passo é roteado com QUALQUER provider e SEM credencial (o Laya é local e não cobra); com <code>jev</code> continua só com <code>openrouter</code> e chave. <code>LayaToolRouter</code> faz <code>POST {TOOL_ROUTER_URL}/v1/systemone</code> com o formato do Decisions API, SEM a opção reservada <code>responder_sem_ferramenta</code> (o Laya não a viu no treino), e o serviço devolve a distribuição já em média do ensemble. Regra p3 + limiar: confiança abaixo de <code>TOOL_ROUTER_LAYA_LIMIAR</code> vira <code>responder_sem_ferramenta</code>, que deixa o catálogo inteiro. O <code>tool_router.decided</code> grava <code>modelo = laya-multilingual</code>; não há linha em <code>token_usage</code>.</li>
+<li><strong>Queda:</strong> timeout (2 s), rede, HTTP, corpo inválido, escolha fora das opções ou URL ausente voltam como queda NOMEADA e o passo segue com o catálogo inteiro (decisão do dono de 31/10/2026): NUNCA cai para o Jev, e o turno nunca falha por causa do Laya.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/llm/laya-tool-router.ts:28</code> (<code>decidir</code>), <code>src/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.ts:123</code> (<code>preparar</code>), <code>src/infrastructure/llm/llm-infrastructure.module.ts:58</code> (<code>ToolRouterLocal</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/llm/laya-tool-router.spec.ts</code> (uma chamada sem a reservada, Bearer opcional, limiar, seis quedas nomeadas) e <code>test/application/use-cases/llm/decidir-ferramenta-do-passo.use-case.spec.ts</code> (<code>workspace em laya</code>: qualquer provider sem chave, queda para o catálogo inteiro sem chamar o Jev, sem <code>token_usage</code>).</li>
+<li><strong>Origem:</strong> AT-626 (EP-026), decisões do dono de 31/10 e 07/11/2026; ADR 0290; rodada 354, lane L2.</li>
+</ul>
+<h3 id="rn-1105">RN-1105 — Cadastrar ou testar com sucesso uma credencial de LLM sincroniza o catálogo daquele provider</h3>
+<ul>
+<li>
+<p><strong>Regra:</strong> Depois do <code>upsert</code> (ou de um teste <code>ok</code>), a api roda a sincronização só daquele provider. A falha da sincronização não desfaz o cadastro (ADR 0050) e fica no log com a origem. Modelo novo continua entrando inativo (RN-043).</p>
+</li>
+<li>
+<p><strong>Onde:</strong> <code>src/application/use-cases/llm/sync-model-catalog.use-case.ts</code> (<code>executarProvider</code>), <code>upsert-user-credential.use-case.ts</code> (<code>execute</code>), <code>credentials/test-stored-credential.use-case.ts</code> (<code>execute</code>).</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>test/application/use-cases/llm/upsert-user-credential.use-case.spec.ts</code> e <code>test/application/use-cases/credentials/test-stored-credential.use-case.spec.ts</code>.</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-900 (EP-036), rodada 366, lane AA2.</p>
+</li>
+</ul>
+<h3 id="rn-1106">RN-1106 — O <code>claude-sonnet-5</code> tem o raciocínio reduzido no pedido de <code>reasoningOff</code></h3>
+<ul>
+<li>
+<p><strong>Regra:</strong> O mapa de <code>raciocinioDesligado</code> ganha <code>claude-sonnet-5</code> com <code>output_config.effort: low</code> e <code>pensaAinda: true</code>. A forma ainda NÃO foi provada por smoke pago (pendente, com aviso ao dono antes de usar a chave de teste).</p>
+</li>
+<li>
+<p><strong>Onde:</strong> <code>src/infrastructure/llm/anthropic-provider.ts</code> (<code>raciocinioDesligado</code>).</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>test/domain/llm/raciocinio-do-agente.spec.ts</code>.</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-920 (EP-036), rodada 366, lane AA2.</p>
+</li>
+</ul>
+<h3 id="rn-1107">RN-1107 — A retentativa sem raciocínio vale também quando o raciocínio só foi reduzido</h3>
+<ul>
+<li>
+<p><strong>Regra:</strong> <code>devoRetentarSemRaciocinio</code> não sai mais cedo por <code>reasoningOff</code>: se a resposta veio cortada, vazia e o raciocínio comeu o orçamento, retenta uma vez sem raciocínio.</p>
+</li>
+<li>
+<p><strong>Onde:</strong> <code>src/domain/llm/raciocinio-do-agente.ts</code> (<code>devoRetentarSemRaciocinio</code>).</p>
+</li>
+<li>
+<p><strong>Teste:</strong> <code>test/domain/llm/raciocinio-do-agente.spec.ts</code>.</p>
+</li>
+<li>
+<p><strong>Origem:</strong> AT-920 (EP-036), rodada 366, lane AA2.</p>
+</li>
+</ul>
+<h3 id="rn-1108">RN-1108 — O índice RAG do projeto inclui <code>.brabo/memoria/</code>, e o merge na trunk o reindexa sozinho</h3>
+<ul>
+<li><strong>Regra:</strong> além de <code>docs/</code> e <code>docs/adr/</code>, a indexação varre <code>.brabo/memoria/**/*.md</code> do repositório do PRÓPRIO projeto (a memória em markdown da AT-923). Os chunks entram no escopo <code>docs</code>, sem migração; o caminho (<code>.brabo/memoria/...</code>) os distingue, e a cobertura os conta junto. Cada <code>project.trunk_merged</code> na outbox dispara a mesma reindexação de <code>docs</code>/<code>adr</code> (<code>IndexProjectDocsUseCase</code>) do botão &quot;Reindexar agora&quot;, sem as sessões. Falha na reindexação só loga: não desfaz nem atrasa o merge, que já aconteceu. Mesma ideia da <a href="parte-05.html#rn-455">RN-455</a>: o índice cobre fontes que o servidor consegue revisitar.</li>
+<li><strong>Como lê:</strong> quem drena <code>project.trunk_merged</code> é o engine (<code>TrunkMergedWorker</code>), que marca a linha como processada; por isso o consumidor da api só LÊ a outbox (<code>listByEventTypeAfter</code>) e guarda a própria marca d'água, em memória, iniciada no boot. Um merge com a api fora do ar só é reindexado no próximo merge ou pelo botão.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/rag/index-project-docs.use-case.ts</code> (<code>MEMORIA_ROOT</code>), <code>src/application/rag-reindex/trunk-merged-reindexer.ts</code> (<code>TrunkMergedReindexer</code>), <code>src/infrastructure/persistence/drizzle/outbox.repository.ts</code> (<code>listByEventTypeAfter</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/rag/index-project-docs.use-case.spec.ts</code> (<code>RN-1108</code>) e <code>test/application/rag-reindex/trunk-merged-reindexer.spec.ts</code> (um projeto por ciclo, sem <code>markProcessed</code>, marca d'água, falha só loga).</li>
+<li><strong>Origem:</strong> AT-923 (EP-036), lane A3 da rodada 371; ADR 0293 (a memória do projeto é markdown versionado; o RAG e o grafo são índices).</li>
+</ul>
+<h3 id="rn-1101">RN-1101 — A ativação da execução recusa o projeto sem container <code>running</code>, salvo o dev Noop</h3>
+<ul>
+<li><strong>Regra:</strong> <code>POST /projects/:projectId/execution/activate</code> responde 409 <code>execucao_sem_container</code> quando o container registrado do projeto não está <code>running</code>, depois da guarda do repositório (<a href="parte-07.html#rn-582">RN-582</a>) e antes de qualquer efeito. Sem isso cada dev bloqueava em <code>dev.blocked_by_container</code> (<a href="../engine.html#rn-502">RN-502</a>) no mesmo segundo, sem aviso. A frase diz o próximo passo: aprovar a subida proposta pela Infra, ou pedi-la. O dev <code>noop</code> (<code>devAgentImpl: 'noop'</code>) é isento, como no engine.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/activate-execution.use-case.ts</code> (<code>execute</code>, <code>containerRodando</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/activate-execution.use-case.spec.ts</code> (<code>RN-1101</code>: recusa sem container, recusa em <code>provisioning</code>, passa com <code>running</code>, Noop isento).</li>
+<li><strong>Origem:</strong> AT-899 (EP-036), parte da api; rodada 366, lane AA1.</li>
+</ul>
+<h3 id="rn-1102">RN-1102 — O dev extra de paralelização nasce com o modo do agente base</h3>
+<ul>
+<li><strong>Regra:</strong> No aceite da paralelização, se o agente base do módulo (<code>dev-&lt;módulo&gt;</code>) está no piloto automático (curinga <code>agent_autonomy (agente, &quot;*&quot;) = auto_approve</code>), o extra (<code>dev-&lt;módulo&gt;-2</code>) recebe a mesma curinga. Base manual não semeia curinga: o extra segue só com as linhas de <code>DEV_AUTO_GIT_ACTIONS</code>.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/accept-parallelization.use-case.ts</code> (<code>execute</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/accept-parallelization.use-case.spec.ts</code> (<code>RN-1102</code>: base automático herdado, base manual sem curinga).</li>
+<li><strong>Origem:</strong> AT-908 (EP-036); rodada 366, lane AA1.</li>
+</ul>
+<h3 id="rn-1103">RN-1103 — Ligar o piloto automático de um agente reavalia as ações pendentes dele pela régua da proposta</h3>
+<ul>
+<li><strong>Regra:</strong> <code>PUT /projects/:projectId/agent-autonomy</code> com <code>actionType &quot;*&quot;</code> e <code>mode auto_approve</code> lista as ações <code>pending</code> do agente no projeto e roda, para cada uma, o MESMO <code>decide()</code> da proposta (<code>ProposeActionUseCase.decidir</code>, sem segunda régua). A que agora resolve <code>auto_approve</code> é aprovada pelo <code>ApproveActionUseCase</code> em nome de quem ligou o piloto; os tetos (<code>git_push</code>, <code>pr_open</code>, <code>git_merge</code>) seguem pendentes. Falha em uma ação é registrada em log e não desfaz a regra gravada nem barra as outras. Rota, DTO e papel (<code>maintainer</code>) não mudam.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/actions/set-agent-autonomy.use-case.ts</code> (<code>reavaliarPendentes</code>), <code>src/application/use-cases/actions/propose-action.use-case.ts</code> (<code>decidir</code>), <code>src/interfaces/http/actions/agent-autonomy.controller.ts</code> (<code>set</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/actions/set-agent-autonomy.use-case.spec.ts</code> (libera o <code>terminal</code> pendente, mantém o <code>git_push</code>, ignora outro agente, regra específica ou modo manual não reavalia).</li>
+<li><strong>Origem:</strong> AT-908 (EP-036); rodada 366, lane AA1.</li>
+</ul>
+<h3 id="rn-1104">RN-1104 — O merge que não move o alvo fica registrado como <code>jaContida</code></h3>
+<ul>
+<li><strong>Regra:</strong> Quando o merge de uma PR termina <code>merged</code> mas a ponta da branch alvo é a mesma de antes (a fonte já estava contida), o <code>execution_result</code> da ação <code>git_merge</code> e o evento <code>action.git_merge</code> levam <code>jaContida: true</code>, e a tela diz &quot;nada a mergear&quot;. As pontas vêm de <code>listBranches</code> antes e depois do merge, em melhor esforço: sem leitura, nada é afirmado. Vale para os providers local e remoto; o contrato <code>@brabo/shared</code> não muda. O claim da fundação do módulo (AT-901, primeira parte) NÃO está aqui.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-git-action.use-case.ts</code> (<code>executeProviderAction</code>, ramo <code>git_merge</code>), <code>src/domain/git/git-action-execution-result.ts</code> (<code>GitMergeExecutionResult.jaContida</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/actions/execute-git-action.use-case.spec.ts</code> (<code>RN-1104</code>: pontas iguais gravam <code>jaContida</code>, pontas diferentes não).</li>
+<li><strong>Origem:</strong> AT-901 (EP-036), só o merge sem efeito; rodada 366, lane AA1.</li>
+</ul>
+<h3 id="rn-1124">RN-1124 — O Desbloquear aceita uma orientação opcional que vai ao dev</h3>
+<ul>
+<li><strong>Regra:</strong> <code>POST /projects/:projectId/sessions/:sessionId/tasks/:taskId/unblock</code> aceita o corpo opcional <code>{ orientacao }</code> (texto, até 2000 caracteres, 400 acima). A orientação aparada é gravada em <code>backlog.task_unblocked</code> e o dev-context da tarefa devolve <code>desbloqueio: { orientacao, em }</code> (o último com orientação), que o dev segue acima do último parecer. Sem corpo, nada muda.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/unblock-task.use-case.ts:24</code> (<code>execute</code>), <code>src/interfaces/http/execution/dto/unblock-task.dto.ts</code> (<code>UnblockTaskDto</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/unblock-task.use-case.spec.ts</code> (RN-1124); <code>test/interfaces/http/execution/orientacao-e-melhorias.dto.spec.ts</code></li>
+<li><strong>Origem:</strong> AT-909 (EP-036); rodada 368, lane api.</li>
+</ul>
+<h3 id="rn-1125">RN-1125 — O bloqueio por ciclo esgotado grava os itens do parecer no diagnóstico</h3>
+<ul>
+<li><strong>Regra:</strong> O diagnóstico de <code>backlog.task_blocked</code> por teto de correção passa a ser o <code>resumo</code> seguido dos <code>itens</code> (um por linha), e não só o resumo.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/record-gate-verdict.use-case.ts:208</code> (<code>execute</code>, ramo <code>blocked</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/record-gate-verdict.use-case.spec.ts</code> (estourando o teto)</li>
+<li><strong>Origem:</strong> AT-909 (EP-036); rodada 368, lane api.</li>
+</ul>
+<h3 id="rn-1126">RN-1126 — <code>melhorias</code> do parecer não reprovam, não contam correção e vão à PR e ao evento</h3>
+<ul>
+<li><strong>Regra:</strong> <code>POST /internal/sessions/:sessionId/gates/verdict</code> aceita <code>melhorias: [string]</code> opcional (o <code>forbidNonWhitelisted</code> não a recusa). Elas não entram em <code>nextGateStatus</code> (só o <code>veredito</code> conta), aparecem no comentário da PR na seção &quot;Melhorias (não bloqueiam)&quot; e em <code>pr.gate_changed</code>.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/record-gate-verdict.use-case.ts:45</code> (<code>melhorias</code>), <code>src/interfaces/http/internal/dto/record-gate-verdict-internal.dto.ts</code> (<code>melhorias</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/record-gate-verdict.use-case.spec.ts</code> (RN-1126); <code>test/interfaces/http/execution/orientacao-e-melhorias.dto.spec.ts</code> (verdict com <code>melhorias</code> aceito)</li>
+<li><strong>Origem:</strong> AT-905 (EP-036); formato do evento <code>artifact.qa_verdict</code> da engine#87.</li>
+</ul>
+<h3 id="rn-1127">RN-1127 — O Dev Lead e o dev leem o último parecer de gate da tarefa</h3>
+<ul>
+<li><strong>Regra:</strong> O dev-context da tarefa devolve <code>ultimoParecer: { gate, veredito, resumo, itens, melhorias }</code>, do <code>artifact.qa_verdict</code> ou <code>artifact.secops_verdict</code> mais recente da tarefa no PROJETO (o desbloqueio e o parecer moram em sessões diferentes); <code>null</code> sem parecer.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:348</code> (<code>execute</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/get-dev-task-context.use-case.spec.ts</code> (RN-1124/1125/1127)</li>
+<li><strong>Origem:</strong> AT-909 (EP-036).</li>
+</ul>
+<h3 id="rn-1128">RN-1128 — O <code>update_task</code> interno aceita o Arquiteto como autor</h3>
+<ul>
+<li><strong>Regra:</strong> <code>update_task</code> interno aceita <code>agentId: &quot;arquiteto&quot;</code> e grava esse ator no evento, em vez de cair em <code>po</code>.</li>
+<li><strong>Onde:</strong> <code>src/interfaces/http/internal/dto/create-story-internal.dto.ts</code> (<code>UpdateTaskInternalDto</code>), <code>src/application/use-cases/backlog/corrigir-historia.use-case.ts:20</code> (<code>AtorDaCorrecao</code>)</li>
+<li><strong>Teste:</strong> <code>test/interfaces/http/execution/orientacao-e-melhorias.dto.spec.ts</code> (RN-1128)</li>
+<li><strong>Origem:</strong> AT-918 (EP-036); engine#83.</li>
+</ul>
+<h3 id="rn-1129">RN-1129 — <code>search_workspace</code> está no piso do menu do Arquiteto</h3>
+<ul>
+<li><strong>Regra:</strong> O recorte do Jev nunca tira <code>search_workspace</code> do Arquiteto (RN-758): ele lê o código mergeado antes de declarar contrato.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/tool-router.ts:317</code> (<code>PISO_DO_MENU</code>)</li>
+<li><strong>Teste:</strong> <code>test/interfaces/http/execution/orientacao-e-melhorias.dto.spec.ts</code> (RN-1129)</li>
+<li><strong>Origem:</strong> AT-918 (EP-036).</li>
+</ul>
+<h3 id="rn-1138">RN-1138 — A tarefa criada pelo Dev Lead é a FUNDAÇÃO do módulo</h3>
+<ul>
+<li><strong>Regra:</strong> <code>create_task</code> com <code>agentRole: dev_lead</code> grava <code>tasks.fundacao = true</code> (migração 0087); a do PO nasce <code>false</code>. A coluna aparece em <code>TaskResponseDto.fundacao</code>.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/backlog/create-task.use-case.ts</code> (<code>execute</code>), <code>src/db/schema/backlog.ts</code> (<code>tasks.fundacao</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/backlog/create-task.use-case.spec.ts</code> (<code>RN-1138</code>).</li>
+<li><strong>Origem:</strong> AT-901 (EP-036), parte do claim; rodada 372, lane L1.</li>
+</ul>
+<h3 id="rn-1139">RN-1139 — A fundação do módulo sai primeiro no claim e segura as outras tarefas dele</h3>
+<ul>
+<li><strong>Regra:</strong> <code>claimNext</code> ordena <code>fundacao DESC</code> antes de <code>created_at</code>, e a tarefa que não é fundação só é pegável sem fundação do mesmo módulo aberta (não <code>done</code>, não arquivada, de história não arquivada). Quem arquiva a fundação a libera.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/backlog.repository.ts</code> (<code>claimNext</code>, <code>semFundacaoAberta</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/persistence/drizzle/backlog-arquivar-tarefa.repository.spec.ts</code> (<code>a fundação do módulo vem primeiro</code>).</li>
+<li><strong>Origem:</strong> AT-901 (EP-036); rodada 372, lane L1.</li>
+</ul>
+<h3 id="rn-1140">RN-1140 — A contagem de tarefas pegáveis usa a mesma guarda da fundação</h3>
+<ul>
+<li><strong>Regra:</strong> <code>countClaimableByModule</code> aplica <code>semFundacaoAberta</code>, o mesmo predicado do claim (AT-274), para a sugestão de paralelização nunca contar o que o claim segura.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/backlog.repository.ts</code> (<code>countClaimableByModule</code>)</li>
+<li><strong>Teste:</strong> o mesmo spec da RN-1139 (a contagem concorda com o claim).</li>
+<li><strong>Origem:</strong> AT-901 (EP-036); rodada 372, lane L1.</li>
+</ul>
+<h3 id="rn-1141">RN-1141 — Tarefa aberta da execução vigente segura a sessão, sem teto</h3>
+<ul>
+<li><strong>Regra:</strong> na sessão de execução vigente, toda tarefa não <code>done</code> e não arquivada, de história não arquivada, é pendência sem teto (<code>aguardandoUsuarioDesde: null</code>), com o motivo <code>aberta_na_execucao</code> quando nenhum motivo específico (RN-776, RN-856, AT-912) vale. O teto de 8 h da conversa ociosa não fecha essa sessão; ela fecha quando o backlog termina ou o usuário encerra. Amplia a <a href="parte-10.html#rn-776">RN-776</a>.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/backlog.repository.ts</code> (<code>findPendenteDaExecucao</code>), <code>src/application/use-cases/sessions/get-session-pending-work.use-case.ts</code> (<code>MOTIVO_DA_TAREFA</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/sessions/get-session-pending-work.use-case.spec.ts</code> (<code>aberta na execução em curso</code>, <code>in_review</code>, <code>tudo done</code>).</li>
+<li><strong>Origem:</strong> AT-919 (EP-036); rodada 372, lane L1.</li>
+</ul>
+<h3 id="rn-1148">RN-1148 — Sem grafo configurado, nenhuma linha de projeção do grafo entra na outbox</h3>
+<ul>
+<li><strong>Regra:</strong> A linha <code>graph_projection</code> só é gravada quando <code>grafoConfigurado()</code> (<code>resolverConfigNeo4j() !== null</code>). Com o grafo não configurado (sem <code>NEO4J_URI</code>, permitido só fora de produção), não há consumidor possível: a fila não cresce. Configurado e fora do ar continua gravando, e a linha fica para retry (RN-960). As linhas que já estavam pendentes são marcadas processadas de uma vez pelo projetor, que loga a contagem uma única vez. O grafo ligado depois se reconstrói pelo event log (RN-569).</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/graph/neo4j-config.ts</code> (<code>grafoConfigurado</code>), <code>src/application/use-cases/sessions/append-session-event.use-case.ts</code> (<code>execute</code>), <code>src/application/use-cases/sessions/transition-session.use-case.ts</code> (<code>execute</code>), <code>src/application/graph-projection/graph-projector.ts</code> (<code>drainOnce</code>), <code>src/infrastructure/persistence/drizzle/outbox.repository.ts</code> (<code>markAllProcessed</code>)</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/graph/neo4j-config.spec.ts</code> (<code>grafoConfigurado</code>), <code>test/application/use-cases/sessions/append-session-event.use-case.spec.ts</code> (grafo não configurado não grava), <code>test/application/use-cases/sessions/transition-session.use-case.spec.ts</code> (fechamento não configurado não grava), <code>test/application/graph-projection/graph-projector.spec.ts</code> (<code>RN-1148</code>: descarte de uma vez e um log só).</li>
+<li><strong>Origem:</strong> AT-925 (EP-036); rodada 373, lane L4.</li>
+</ul>
+<h3 id="rn-1149">RN-1149 — A fila da outbox aparece no <code>/metrics</code>, e a queda do grafo avisa uma vez</h3>
+<ul>
+<li><strong>Regra:</strong> O gauge <code>brabo_outbox_pending{aggregate_type}</code> publica as linhas não processadas da <code>outbox_events</code>, por tipo de agregado, atualizado pelo <code>DomainGaugesCollector</code> com <code>reset()</code> antes de reescrever. O <code>/health</code> não muda: ele não expõe fila nem topologia. Com o grafo configurado e fora do ar, o projetor avisa uma vez (<code>warn</code>) por indisponibilidade, e o aviso só volta depois de um ciclo completo sem queda; antes, o aviso repetia a cada 2 s.</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/observability/brabo-metrics.ts</code> (<code>outboxPending</code>), <code>src/infrastructure/observability/domain-gauges.collector.ts</code> (<code>collectOutboxPending</code>), <code>src/application/graph-projection/graph-projector.ts</code> (<code>drainOnce</code>, <code>indisponivelAvisado</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/graph-projection/graph-projector.spec.ts</code> (<code>RN-1149</code>: três ciclos com o grafo fora do ar geram um aviso só).</li>
+<li><strong>Origem:</strong> AT-925 (EP-036); rodada 373, lane L4.</li>
+</ul>
+<h3 id="rn-1163">RN-1163 — Todo merge na branch de trabalho projeta no grafo a memória do projeto daquele commit</h3>
+<ul>
+<li><strong>Regra:</strong> O merge na branch de trabalho (<code>project.trunk_merged</code>) grava uma SEGUNDA linha de outbox <code>graph_projection</code>, na mesma transação e só com o grafo configurado (RN-1148), com o mesmo payload (<code>projectId</code>, <code>sessionId</code>, <code>mergedSha</code>). O projetor lê <code>.brabo/memoria/modulos/*.md</code> e <code>.brabo/memoria/decisoes.md</code> na <code>mergedSha</code> (pela leitura de código do projeto, com a credencial do owner) e grava, por <code>MERGE</code> em chave natural: <code>(:Projeto)-[:TEM_MODULO]-&gt;(:Modulo {projectId, nome, stack, commit})</code>, <code>(:Modulo)-[:DEPENDE_DE]-&gt;(:Modulo)</code>, <code>(:Modulo)-[:EXPOE]-&gt;(:Interface {projectId, modulo, assinatura, tipo})</code>, <code>(:Modulo)-[:TEM_CONTRATO]-&gt;(:Contrato {projectId, modulo, versao})</code> (versão lida do BANCO, nunca do texto do cartão) e <code>(:Decisao {projectId, id, titulo})-[:CITA]-&gt;(:Modulo)</code>. A projeção converge para a <code>main</code>: dependência, interface, contrato, decisão e módulo que saíram do cartão saem do grafo, e repetir o mesmo merge não muda nada. Constraints compostas (<code>IF NOT EXISTS</code>): <code>modulo_projeto_nome_unico</code>, <code>interface_unica</code>, <code>contrato_unico</code>, <code>decisao_unica</code>.</li>
+<li><strong>Formato lido (engine, <code>MemoriaExtrator</code>):</strong> front-matter <code>modulo</code>, <code>stack</code>, <code>depende_de: [a, b]</code>, <code>commit</code>, e a seção <code>## Expõe</code> (<code>- \</code>nome` (tipo)<code>). </code>decisoes.md<code> não tem formato fixado em código: a projeção lê uma linha por ADR (</code>- ADR 0123 — título`) e considera que ela cita o módulo cujo nome aparece na linha.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-git-action.use-case.ts</code> (<code>settleMerge</code>), <code>src/domain/graph/graph-projection-events.ts</code> (<code>MERGES_PROJETAVEIS</code>), <code>src/application/graph-projection/graph-projector.ts</code> (<code>project</code>), <code>src/application/graph-projection/memoria-do-projeto-translator.ts</code> (<code>MemoriaDoProjetoTranslator.projetar</code>, <code>interpretarCartao</code>, <code>interpretarDecisoes</code>), <code>src/infrastructure/graph/graph-store.ts</code> (<code>CONSTRAINTS</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/graph-projection/memoria-do-projeto-translator.spec.ts</code>, <code>test/application/graph-projection/graph-projector.spec.ts</code> (<code>merge na branch de trabalho</code>), <code>test/application/use-cases/actions/execute-git-action.use-case.spec.ts</code> (linha <code>graph_projection</code> só com o grafo configurado).</li>
+<li><strong>Origem:</strong> AT-924 (EP-036); rodada 373, lane G1.</li>
+</ul>
+<h3 id="rn-1164">RN-1164 — A memória ausente não é falha, o cartão malformado é pulado e o grafo fora do ar mantém a linha</h3>
+<ul>
+<li><strong>Regra:</strong> Projeto sem <code>.brabo/memoria/</code> faz merge sem erro e sem nó (não há pasta nem <code>decisoes.md</code>: nada é gravado nem apagado). Cartão sem front-matter ou sem <code>modulo</code> é logado e pulado, sem travar os outros. Falha de leitura do git que não seja &quot;não encontrado&quot; (credencial, limite de taxa) e <code>GraphUnavailableError</code> mantêm a linha da outbox para retry (RN-1149).</li>
+<li><strong>Onde:</strong> <code>src/application/graph-projection/memoria-do-projeto-translator.ts</code> (<code>projetar</code>, <code>listarCartoes</code>, <code>lerOuNulo</code>), <code>src/application/graph-projection/graph-projector.ts</code> (<code>drainOnce</code>)</li>
+<li><strong>Teste:</strong> <code>test/application/graph-projection/memoria-do-projeto-translator.spec.ts</code> (pasta ausente, cartão malformado, erro de leitura propaga), <code>test/application/graph-projection/graph-projector.spec.ts</code> (grafo indisponível mantém a linha).</li>
+<li><strong>Origem:</strong> AT-924 (EP-036); rodada 373, lane G1.</li>
+</ul>
+<h3 id="rn-1165">RN-1165 — A reconstrução do grafo também reprojeta a memória de cada projeto</h3>
+<ul>
+<li><strong>Regra:</strong> <code>grafo:reprojetar</code> (RN-569) ganha a fase 3: para cada projeto com repositório (ou só o de <code>--project</code>), enfileira uma linha <code>graph_projection</code> <code>project.trunk_merged</code> sem <code>mergedSha</code>, que o projetor vivo drena lendo a ponta da <code>main</code>. A leitura do git precisa do contexto da api (credencial, cache), por isso o script não lê o repositório sozinho: com a api de pé, os módulos voltam em alguns ciclos do projetor. É a única escrita do script na outbox.</li>
+<li><strong>Onde:</strong> <code>src/scripts/reprojetar-grafo.ts</code> (<code>reprojetarGrafo</code>, fase 3)</li>
+<li><strong>Teste:</strong> <code>test/scripts/reprojetar-grafo.spec.ts</code> (o resultado carrega <code>memoriasEnfileiradas</code>).</li>
+<li><strong>Origem:</strong> AT-924 (EP-036); rodada 373, lane G1.</li>
+</ul>
+<h3 id="rn-1166">RN-1166 — A consulta de impacto de um módulo responde pelo grafo, e 503 com o grafo desligado</h3>
+<ul>
+<li><strong>Regra:</strong> <code>GET /internal/graph/projects/:projectId/modules/:nome/impacto</code> (service token do engine) devolve <code>{ projectId, modulo, stack, commit, contratoVersao, dependentes, dependeDe, expoe: [{assinatura, tipo}], decisoes: [{id, titulo}] }</code>: quem depende do módulo, de quem ele depende, o que expõe, que decisões o citam e a versão do contrato gravada na projeção (do banco; <code>null</code> sem contrato declarado). Leitura contida: escopo no projeto, chave natural, sem parâmetro livre. Módulo sem nó é 404; grafo desligado ou fora do ar é 503 (<code>GraphUnavailableError</code>), nunca uma lista vazia que pareça verdade.</li>
+<li><strong>Onde:</strong> <code>src/interfaces/http/internal/internal-graph.controller.ts</code> (<code>impactoDoModulo</code>), <code>src/application/use-cases/graph/consultar-impacto-do-modulo.use-case.ts</code> (<code>ConsultarImpactoDoModuloUseCase.execute</code>), <code>src/interfaces/http/internal/dto/graph.response.dto.ts</code> (<code>ImpactoDoModuloResponseDto</code>)</li>
+<li><strong>Teste:</strong> <code>test/interfaces/http/internal/internal-graph.controller.spec.ts</code> (delega com projeto e módulo). A consulta contra Neo4j real fica fora do CI da api (sem Neo4j no job).</li>
+<li><strong>Origem:</strong> AT-924 (EP-036); rodada 373, lane G1.</li>
+</ul>
 <p>A api cumpre a RN-1039 (o token do GitHub Packages nunca entra em camada nem em <code>ARG</code>/<code>ENV</code>; só como secret do BuildKit), definida no <a href="../broker.html">brabo-broker</a>. Quem prova na api é <code>test/dockerfile-sem-token.spec.ts:13</code> (todo <code>pnpm install</code> do <code>Dockerfile</code> monta o secret, nenhum <code>ARG</code>/<code>ENV</code> com token, <code>.npmrc</code> só com o registry).</p>
+<h3 id="rn-1150">RN-1150 — O <code>usage</code> do turno de LLM devolve <code>reasoningTokens</code> quando o provider os contou</h3>
+<ul>
+<li><strong>Regra:</strong> <code>LlmUsageResponseDto.reasoningTokens</code> é opcional e vem do mesmo valor que o <code>token_usage.reasoning_tokens</code> grava (<a href="parte-08.html#rn-666">RN-666</a>). Provider que não contou: o campo some, nunca vira <code>0</code> (a tela mostra traço).</li>
+<li><strong>Código:</strong> <code>apps/api/src/application/use-cases/llm/run-llm-turn.use-case.ts:124</code> (<code>execute</code>), <code>apps/api/src/application/use-cases/llm/stream-llm-turn.use-case.ts:133</code> (<code>execute</code>), <code>src/interfaces/http/internal/dto/internal.response.dto.ts:644</code> (<code>LlmUsageResponseDto</code>)</li>
+<li><strong>Teste:</strong> <code>apps/api/test/application/use-cases/llm/run-llm-turn.use-case.spec.ts</code> (presente com 120, ausente sem contagem)</li>
+<li><strong>Origem:</strong> AT-929 (EP-035).</li>
+</ul>
+<h3 id="rn-1151">RN-1151 — A lista de sessões do projeto traz custo, chamadas, agentes e passos</h3>
+<ul>
+<li><strong>Regra:</strong> <code>GET /projects/:projectId/sessions</code> ganha, por item, <code>costMicros</code>, <code>chamadas</code>, <code>agentes[]</code> (ids com gasto de <code>actor_kind = 'agent'</code>) e <code>passos</code> (eventos <code>tool.call</code>); sessão sem uso devolve zeros e lista vazia. Duas queries agregadas por projeto, sem N+1. O uso por agente da sessão (<code>GET .../token-usage</code>) ganha <code>chamadas</code>.</li>
+<li><strong>Código:</strong> <code>apps/api/src/infrastructure/persistence/drizzle/session.repository.ts:49</code> (<code>usoPorSessaoDoProjeto</code>), <code>apps/api/src/application/use-cases/sessions/list-sessions-for-project.use-case.ts:37</code> (<code>execute</code>)</li>
+<li><strong>Teste:</strong> <code>apps/api/test/application/use-cases/sessions/list-sessions-for-project.use-case.spec.ts</code> (soma, agentes, passos e sessão sem uso)</li>
+<li><strong>Origem:</strong> AT-930 (EP-035).</li>
+</ul>
+<h3 id="rn-1152">RN-1152 — O gasto do projeto para o membro vem quebrado por modelo e por sessão, nunca por provider</h3>
+<ul>
+<li><strong>Regra:</strong> <code>GET /projects/:projectId/spend/team</code> ganha <code>porModelo</code> e <code>porSessao</code> (mesmas linhas de <code>porAgente</code>). Modelo não é credencial; o eixo <code>provider</code> segue só do owner (<a href="parte-03.html#rn-186">RN-186</a>/<a href="parte-03.html#rn-187">RN-187</a>).</li>
+<li><strong>Código:</strong> <code>apps/api/src/application/use-cases/llm/get-project-spend-team.use-case.ts:39</code> (<code>execute</code>)</li>
+<li><strong>Teste:</strong> <code>apps/api/test/application/use-cases/llm/spend-audiencias.use-case.spec.ts</code> (o membro vê total e custo por agente/área; sem <code>provider</code> no JSON)</li>
+<li><strong>Origem:</strong> AT-931 (EP-035).</li>
+</ul>
+<h3 id="rn-1153">RN-1153 — O gasto do projeto traz a série por dia e por agente, esparsa</h3>
+<ul>
+<li><strong>Regra:</strong> <code>porDiaEAgente</code> em <code>spend/team</code> e em <code>GET /workspaces/:wid/spend-report</code> (owner, também com <code>?projectId=</code>): <code>{ dia (UTC), agente, costMicros, chamadas }</code>, só <code>actor_kind = 'agent'</code> e só dias com chamada, em ordem de dia; o cliente densifica.</li>
+<li><strong>Código:</strong> <code>apps/api/src/infrastructure/persistence/drizzle/token-usage.repository.ts:243</code> (<code>sumByDayAndAgent</code>)</li>
+<li><strong>Teste:</strong> <code>apps/api/test/application/use-cases/llm/spend-audiencias.use-case.spec.ts</code> (só o agente, só o projeto; o owner também, com e sem <code>projectId</code>)</li>
+<li><strong>Origem:</strong> AT-931, AT-896 (EP-035).</li>
+</ul>
+<h3 id="rn-1154">RN-1154 — As ações do projeto listam as decididas recentes, com o motivo</h3>
+<ul>
+<li><strong>Regra:</strong> <code>GET /projects/:projectId/actions?status=decided&amp;since=&lt;ISO&gt;</code> devolve o que deixou de ser <code>pending</code> (aprovadas, negadas com <code>rejectionReason</code>, <code>auto_approved</code>, executadas, falhas) mudado desde <code>since</code> (padrão 24 h), mais recentes primeiro, teto 100, <code>actionType</code> opcional; <code>since</code> inválido é 400. A recência é <code>updated_at</code> (<code>decided_at</code> é nulo nas automáticas).</li>
+<li><strong>Código:</strong> <code>apps/api/src/infrastructure/persistence/drizzle/proposed-action.repository.ts:187</code> (<code>listDecidedByProject</code>), <code>apps/api/src/application/use-cases/actions/list-project-pending-actions.use-case.ts:22</code> (<code>execute</code>), <code>apps/api/src/interfaces/http/actions/project-actions.controller.ts:60</code> (<code>list</code>)</li>
+<li><strong>Teste:</strong> <code>apps/api/test/application/use-cases/actions/list-project-pending-actions.use-case.spec.ts</code> (negada com motivo e automática entram; pendente e velha não)</li>
+<li><strong>Origem:</strong> AT-932 (EP-035).</li>
+</ul>
+<h3 id="rn-1142">RN-1142 — O teto por tarefa é do projeto, editável pelo PATCH, e chega aos agentes vivos</h3>
+<ul>
+<li><strong>Regra:</strong> <code>PATCH /projects/:projectId</code> aceita <code>taskBudgetMicros</code> (inteiro positivo, micro-USD). Ao mudar o teto, a api chama o engine em <code>POST /internal/projects/:projectId/execution/task-budget</code> (RN-1090 do engine); vale a partir da próxima volta de cada tarefa. Se o engine falhar, a mudança do projeto NÃO é desfeita e a falha vira log (<code>teto_nao_propagado</code>).</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/iam/update-project.use-case.ts</code> (<code>UpdateProjectUseCase.execute</code>), <code>src/infrastructure/http-clients/api-to-engine-client.ts</code> (<code>setTaskBudget</code>), <code>src/interfaces/http/iam/dto/create-project.dto.ts</code> (<code>taskBudgetMicros</code>).</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/iam/update-project-teto.use-case.spec.ts</code>, <code>test/infrastructure/http-clients/api-to-engine-client.spec.ts</code> (<code>RN-1142</code>).</li>
+<li><strong>Origem:</strong> AT-917 (EP-036), rodada 372, lane L2.</li>
+</ul>
+<h3 id="rn-1143">RN-1143 — Depois de 2 bloqueios por limite de iterações na mesma tarefa, o agente sobe um degrau da escada do projeto</h3>
+<ul>
+<li><strong>Regra:</strong> a escada é <code>projects.model_escalation</code> (<code>{ ladder: [{ modelId, taskBudgetMicros }] }</code>, do menor ao maior; nulo usa o padrão Haiku 5.5 → Sonnet 5, tetos US$ 0,50 e US$ 2,00, FIXOS por degrau). No 2º <code>backlog.task_blocked</code> por limite de iterações (origem <code>modelo</code>) da mesma tarefa, a api troca o <code>agent-binding</code> do dono da tarefa para o degrau seguinte, aplica o teto do degrau (RN-1142), emite <code>agent.model_escalated { agentId, taskId, de, para, tetoMicros }</code> e desbloqueia a tarefa sozinha (<code>UnblockTaskUseCase</code>, ator <code>system</code>). O engine não muda: o binding é resolvido pela api a cada <code>llm-turn</code>.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/escalar-modelo-da-tarefa.use-case.ts</code> (<code>aoBloquearPorLimite</code>), chamado por <code>mark-task-blocked.use-case.ts</code> (<code>MarkTaskBlockedUseCase.execute</code>) FORA da transação; <code>src/domain/execution/escada-de-modelos.ts</code>.</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/execution/escalar-modelo-da-tarefa.use-case.spec.ts</code>.</li>
+</ul>
+<h3 id="rn-1144">RN-1144 — O agente volta ao modelo base quando a tarefa fecha</h3>
+<ul>
+<li><strong>Regra:</strong> <code>task_model_escalations</code> guarda por tarefa o contador de bloqueios e a base (o binding próprio anterior, ou nenhum). Ao fechar a tarefa (merge da PR), <code>restaurar</code> devolve o binding base (ou o remove, voltando a herdar) e reaplica o teto do projeto; a linha some.</li>
+<li><strong>Onde:</strong> <code>escalar-modelo-da-tarefa.use-case.ts</code> (<code>restaurar</code>), chamado por <code>execute-git-action.use-case.ts</code> ao fechar as tarefas da PR; <code>src/db/schema/backlog.ts</code> (<code>taskModelEscalations</code>).</li>
+<li><strong>Teste:</strong> <code>escalar-modelo-da-tarefa.use-case.spec.ts</code> (tarefa fechada volta ao base).</li>
+</ul>
+<h3 id="rn-1145">RN-1145 — Escada esgotada: a tarefa fica bloqueada para o dono</h3>
+<ul>
+<li><strong>Regra:</strong> no último degrau (ou com o modelo atual fora da escada) a api não escala nem desbloqueia. No último degrau grava <code>agent.model_escalation_exhausted</code> (&quot;escada esgotada&quot;). Falha da escalada nunca desfaz o bloqueio; falha do engine nunca desfaz a escalada.</li>
+<li><strong>Onde:</strong> <code>escalar-modelo-da-tarefa.use-case.ts</code>.</li>
+<li><strong>Teste:</strong> <code>escalar-modelo-da-tarefa.use-case.spec.ts</code> (último degrau, falha do engine).</li>
+</ul>
+<h3 id="rn-1146">RN-1146 — A escada é configurável por projeto pelo PATCH</h3>
+<ul>
+<li><strong>Regra:</strong> <code>PATCH /projects/:projectId</code> aceita <code>modelEscalation</code> (<code>ladder</code> com ao menos 1 degrau, <code>modelId</code> e <code>taskBudgetMicros</code> positivo); a resposta do projeto o devolve (<code>null</code> = padrão). Contrato para o web: <code>ProjectResponseDto.modelEscalation</code>.</li>
+<li><strong>Onde:</strong> <code>create-project.dto.ts</code> (<code>EscadaDeModelosDto</code>), <code>iam.response.dto.ts</code>.</li>
+<li><strong>Teste:</strong> coberto pelo <code>openapi.json</code> versionado (<code>pnpm openapi:export</code> sem diff).</li>
+<li><strong>Nota:</strong> o teto do degrau vale para o PROJETO inteiro (o endpoint do engine é por projeto) enquanto a tarefa escalada não fecha; RN-1146 reservada.</li>
+</ul>
+<h3 id="rn-1168">RN-1168 — O teto de gasto do projeto é mensal, em UTC, e zera sem tarefa agendada</h3>
+<ul>
+<li><strong>Regra:</strong> o teto de projeto (e o de workspace, RN-1170, e o de área, RN-1169) conta o gasto do MÊS CIVIL EM UTC (ADR 0296). <code>budgets.periodo_inicio</code> guarda o 1º dia do mês a que <code>spent_micros</code> se refere; a virada é preguiçosa: a leitura de um período vencido devolve gasto 0 e limiar 0, e o <code>incrementSpent</code> do mês novo recomeça de <code>spent = delta</code>, <code>last_threshold_notified = 0</code>, numa só instrução. A chamada conta no mês em que é REGISTRADA. Os avisos 70/90/100 se rearmam a cada mês (revisa a RN-018) e <code>budget.threshold_crossed</code> ganha <code>periodo</code> (<code>YYYY-MM</code>). A tarefa já bloqueada pelo teto do mês NÃO retoma sozinha na virada: quem a retoma é o Desbloquear. A recusa diz &quot;Budget do projeto atingiu o teto do mês&quot; (o engine a classifica como <code>politica</code> pelo texto, sem mudança).</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/budget.repository.ts:144</code> (<code>incrementSpent</code>), <code>:14</code> (<code>vigente</code>); <code>src/domain/llm/periodo-do-teto.ts:8</code> (<code>inicioDoMes</code>), <code>:15</code> (<code>gastoVigente</code>); <code>src/application/use-cases/llm/check-budget-gate.use-case.ts:28</code> (<code>execute</code>).</li>
+<li><strong>Teste:</strong> <code>test/infrastructure/persistence/drizzle/teto-mensal.repository.spec.ts</code> (período vencido; mês corrente bloqueia).</li>
+</ul>
+<h3 id="rn-1169">RN-1169 — Sessão continua acumulada, a área vira mensal, e a previsão de fim de mês é derivada</h3>
+<ul>
+<li><strong>Regra:</strong> só os tetos de projeto, de área e de workspace têm mês; o de SESSÃO continua acumulado (<code>periodo_inicio</code> nulo, imposto por <code>budgets_periodo_check</code>). O teto de área usa o mesmo mecanismo (<code>agent_areas.periodo_inicio</code>; revisa a RN-443). <code>GET projects/:id/budget</code> e as rotas do workspace devolvem <code>periodo { inicio, fim, diasRestantes, previsaoMicros }</code>; a previsão é linear (<code>gasto × duração do mês ÷ decorrido</code>, mínimo 1 dia), derivada na leitura e nunca gravada.</li>
+<li><strong>Onde:</strong> <code>src/domain/llm/periodo-do-teto.ts:31</code> (<code>periodoDoTeto</code>); <code>src/infrastructure/persistence/drizzle/agent-area.repository.ts:151</code> (<code>incrementSpent</code>); <code>src/interfaces/http/llm/budgets.controller.ts:31</code> (<code>comPeriodo</code>).</li>
+<li><strong>Teste:</strong> <code>teto-mensal.repository.spec.ts</code> (sessão nunca zera; área vencida; previsão pura).</li>
+</ul>
+<h3 id="rn-1170">RN-1170 — O workspace tem teto de gasto mensal, só do owner, independente dos demais</h3>
+<ul>
+<li><strong>Regra:</strong> <code>budgets</code> aceita um terceiro escopo, <code>workspace_id</code> (unique), e <code>budgets_scope_check</code> exige exatamente um escopo (revisa a RN-017). O teto soma toda chamada de LLM de todos os projetos do workspace, de qualquer ator. Os tetos de workspace, projeto, sessão e área são independentes: basta UM no limite, com <code>policy: block</code>, para recusar (&quot;Budget do workspace atingiu o teto do mês&quot;); nenhum herda nem limita o valor do outro, e <code>allow</code> só avisa. <code>GET</code>/<code>PUT workspaces/:workspaceId/budget</code> são <code>owner</code> (mesma régua da RN-060).</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/budget.repository.ts:46</code> (<code>findForWorkspaceOfProject</code>), <code>:90</code> (<code>upsertForWorkspace</code>); <code>check-budget-gate.use-case.ts:28</code> (<code>execute</code>); <code>record-llm-usage.use-case.ts:136</code> (<code>applyToBudget</code>); <code>src/interfaces/http/llm/budgets.controller.ts:99</code> (<code>getWorkspaceBudget</code>), <code>:113</code> (<code>setWorkspaceBudget</code>).</li>
+<li><strong>Teste:</strong> <code>teto-mensal.repository.spec.ts</code> (soma de projetos bloqueia; <code>allow</code>; dois escopos recusados); a superfície <code>owner</code> em <code>test/interfaces/route-surface.spec.ts</code>.</li>
+</ul>
+<h3 id="rn-1171">RN-1171 — A migração 0089 recalcula o gasto do mês e o fuso do mês é UTC explícito</h3>
+<ul>
+<li><strong>Regra:</strong> a migração 0089 põe <code>periodo_inicio</code> do mês corrente nos tetos de projeto e de área e recalcula <code>spent_micros</code> como a soma de <code>token_usage</code> do mês (todos os atores no projeto; só <code>agent</code> na área, com o mapa ator → área congelado no SQL), e <code>last_threshold_notified</code> como o maior limiar já cruzado (sem reavisar). Sessão apagada leva o <code>token_usage</code> junto, então o recálculo pode ficar abaixo do real. O &quot;gasto do workspace no mês&quot; (RN-038) passa a usar <code>date_trunc</code> em UTC explícito, sem depender do <code>TimeZone</code> do servidor.</li>
+<li><strong>Onde:</strong> <code>src/db/migrations/0089_teto_mensal_e_do_workspace.sql</code>; <code>src/infrastructure/persistence/drizzle/token-usage.repository.ts:233</code>.</li>
+<li><strong>Teste:</strong> <code>teto-mensal.repository.spec.ts</code> (migração 0089: recálculo do mês).</li>
+</ul>
+<h3 id="rn-1195">RN-1195 — A Caixa de decisões lê as cinco filas de todos os projetos numa leitura do workspace</h3>
+<ul>
+<li><strong>Regra:</strong> <code>GET /workspaces/:workspaceId/decision-inbox</code> (<code>viewer</code>, só leitura) devolve as cinco filas separadas, <code>aprovacoes</code> (pendentes EXCETO <code>git_merge</code>), <code>prs</code> (só <code>git_merge</code>, a mesma partição do painel do projeto), <code>promocoes</code>, <code>arquitetura</code> e <code>hipoteses</code> (do Psicólogo, análise não <code>superseded</code>; as perguntas abertas do ADR 0214 e o <code>platform_signal</code> ficam fora), mais <code>projetos[]</code> com os cinco números de cada projeto e os <code>agentesAguardando</code>. Arquivadas ficam fora (RN-727). A decisão em si segue nos endpoints de hoje e nenhum teto muda (ADR 0295).</li>
+<li><strong>Onde:</strong> <code>src/interfaces/http/actions/decision-inbox.controller.ts:53</code> (<code>get</code>); <code>src/application/use-cases/actions/get-decision-inbox.use-case.ts:102</code> (<code>execute</code>).</li>
+<li><strong>Teste:</strong> <code>test/application/use-cases/actions/get-decision-inbox.use-case.spec.ts</code> (separa as cinco filas, respeita arquivadas e <code>superseded</code>).</li>
+</ul>
+<h3 id="rn-1196">RN-1196 — As filas da Caixa nunca se somam: nenhum total na raiz</h3>
+<ul>
+<li><strong>Regra:</strong> A resposta não tem <code>total</code> na raiz nem campo que some filas; cada fila traz o próprio <code>total</code> e <code>projetos[]</code> traz cinco números separados por projeto (RN-467).</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/actions/get-decision-inbox.use-case.ts:96</code> (<code>GetDecisionInboxUseCase</code>); <code>src/interfaces/http/actions/dto/decision-inbox.response.dto.ts:118</code> (<code>DecisionInboxResponseDto</code>).</li>
+<li><strong>Teste:</strong> <code>get-decision-inbox.use-case.spec.ts</code> (a raiz não tem <code>total</code>).</li>
+</ul>
+<h3 id="rn-1197">RN-1197 — A Caixa tem teto por fila e diz o total real quando trunca</h3>
+<ul>
+<li><strong>Regra:</strong> Cada fila devolve até <code>TETO_DE_ITENS_POR_FILA</code> (50, ponto de partida a medir) itens, o <code>total</code> REAL e <code>truncada</code> (ADR 0060). Pendentes saem das mais antigas para as mais novas; decididas, das mais novas para as mais antigas. As contagens de <code>projetos[]</code> e <code>agentesAguardando</code> vêm do <code>GROUP BY</code>, nunca dos itens truncados.</li>
+<li><strong>Onde:</strong> <code>src/application/use-cases/actions/get-decision-inbox.use-case.ts:10</code> (<code>TETO_DE_ITENS_POR_FILA</code>); <code>src/infrastructure/persistence/drizzle/decision-inbox.repository.ts:85</code> (<code>ler</code>).</li>
+<li><strong>Teste:</strong> <code>get-decision-inbox.use-case.spec.ts</code> (60 pendências: 50 itens, total 60, <code>truncada</code>, mais antigas primeiro).</li>
+</ul>
+<h3 id="rn-1198">RN-1198 — A Caixa lê com orçamento de consultas constante em N projetos</h3>
+<ul>
+<li><strong>Regra:</strong> O número de idas ao banco é o mesmo com 1 ou com 100 projetos: <code>inArray(project_id, ids)</code> + <code>GROUP BY</code>, sem laço sobre projetos (ADR 0060, molde da RN-090). O papel de projeto vem de UMA leitura de <code>project_members</code> do usuário no workspace. A arquitetura é derivada em memória das histórias não arquivadas, pela mesma função pura da aba do projeto (<code>derivarPendenciasDeArquitetura</code>), e a data dela é emprestada da história (<code>dataEmprestada</code>).</li>
+<li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/decision-inbox.repository.ts:68</code> (<code>papeisDeProjeto</code>); <code>src/domain/architecture/pendencias-de-arquitetura.ts:23</code> (<code>derivarPendenciasDeArquitetura</code>).</li>
+<li><strong>Teste:</strong> <code>get-decision-inbox.use-case.spec.ts</code> (o mesmo número de consultas com 1 e com 25 projetos).</li>
+</ul>
+<h3 id="rn-1199">RN-1199 — A Caixa aplica o papel efetivo de cada projeto, com o papel de decidir como mínimo da fila, e lista também as decididas</h3>
+<ul>
+<li><strong>Regra:</strong> O papel por projeto é <code>papelEfetivo(projectRole, workspaceRole)</code> (RN-471, a mesma função pura de <code>ResolveEffectiveRoleUseCase.forProject</code>). O mínimo é o do endpoint de decidir (RN-102): <code>developer</code> em aprovações, PRs, promoções e hipóteses; <code>viewer</code> em arquitetura, que só se lê. Projeto abaixo do mínimo não contribui com a fila (nem item nem contagem); sem papel de workspace, 403. <code>?status=decided&amp;since=</code> (padrão 24 h, o molde da RN-1154) lista o decidido: ações não pendentes, promoções recusadas, hipóteses decididas; a arquitetura não tem lado decidido e vem vazia. Promoção aceita não grava data própria e fica fora.</li>
+<li><strong>Onde:</strong> <code>src/domain/iam/papel-efetivo.ts:9</code> (<code>papelEfetivo</code>); <code>src/application/use-cases/actions/get-decision-inbox.use-case.ts:18</code> (<code>PAPEL_MINIMO_POR_FILA</code>).</li>
+<li><strong>Teste:</strong> <code>get-decision-inbox.use-case.spec.ts</code> (RN-471 nos dois sentidos; 403; modo <code>decided</code>).</li>
+</ul>
+<h3 id="rn-1304">RN-1304 — A volta retentada por corte de saída pede o dobro do teto</h3>
+<ul>
+<li><strong>Regra:</strong> <code>llm-turn</code> e <code>llm-turn-stream</code> internos aceitam <code>saidaAmpliada</code> (booleano, opcional; outro tipo é 400). Com a flag, o provider recebe <code>maxTokens</code> = 8192, o dobro do padrão de 4096; sem ela nada muda. O engine liga a flag na volta retentada de uma resposta só de raciocínio cortada pelo teto (ajuste da RN-780).</li>
+<li><strong>Código:</strong> <code>apps/api/src/application/use-cases/llm/run-llm-turn.use-case.ts:127</code> (<code>execute</code>), <code>apps/api/src/application/use-cases/llm/stream-llm-turn.use-case.ts:136</code> (<code>execute</code>), <code>apps/api/src/domain/llm/raciocinio-do-agente.ts:21</code> (<code>TETO_DE_SAIDA_AMPLIADO</code>)</li>
+<li><strong>Teste:</strong> <code>apps/api/test/application/use-cases/llm/run-llm-turn.use-case.spec.ts</code> (a flag dobra o teto; sem ela, nada), <code>apps/api/test/interfaces/saida-ampliada-dto.spec.ts</code> (booleano aceito, outro tipo recusado)</li>
+<li><strong>Origem:</strong> AT-920 (EP-036).</li>
+</ul>
+<h3 id="rn-1316">RN-1316 — O merge automático: a chave do projeto, a exceção da trava e o gatilho</h3>
+<ul>
+<li><strong>Regra:</strong> <code>projects.merge_automatico</code> (padrão <code>false</code>) liga o merge automático da PR na <strong>branch de trabalho</strong> do projeto do usuário (a <code>main</code> dele, em trunk, <a href="../../adr/0263-o-projeto-do-usuario-trabalha-em-trunk.html">ADR 0263</a>; <a href="../../adr/0292-o-merge-automatico-e-opcao-do-projeto-desligada-por-padrao.html">ADR 0292</a>). <code>PUT /projects/:projectId/auto-merge</code> (<code>{ habilitado }</code>): <strong>ligar exige <code>owner</code></strong> do workspace (403 para <code>maintainer</code>), <strong>desligar basta <code>maintainer</code></strong>; repetir o valor não muda nada e só mudança grava uma linha em <code>merge_automatico_eventos</code> (quem, quando, valor; só INSERT). O <code>PATCH</code> não aceita a chave. <code>decide()</code> ganha a ÚNICA exceção do teto da <a href="parte-01.html#rn-006">RN-006</a>/<a href="parte-08.html#rn-670">RN-670</a>: <code>git_merge</code> auto-aprovado quando a chave está ligada <strong>e</strong> <code>origem === 'merge_automatico'</code> <strong>e</strong> <code>targetBranch</code> é a branch de trabalho. Chave ausente ou desligada devolve o veredito de sempre; <code>qa</code>/<code>rc</code>/<code>dev</code> e o merge de pessoa, agente, &quot;sempre permitir&quot; ou <code>permissions.json</code> seguem <code>require_approval</code>; <code>deny</code> vence; a chave de um projeto não vale para outro. <code>git_merge</code> continua fora de &quot;sempre permitir&quot; (<a href="parte-08.html#rn-675">RN-675</a>). O gatilho é <code>POST /internal/projects/:projectId/tasks/:taskId/auto-merge</code> (service token, só o engine): confere, nesta ordem, chave ligada, todos os gates aprovados, PR aberta pela tarefa e a recusa de merge duplicado da <a href="parte-08.html#rn-663">RN-663</a> (409 com <code>code</code> nomeado: <code>chave_desligada</code>, <code>gate_pendente</code>, <code>sem_pr</code>, <code>pr_ja_mergeado</code>, <code>merge_ja_proposto</code>), e propõe o <code>git_merge</code> como ator <code>system</code>. Desligar vale na proposta seguinte; proposta já executada não volta. Merge que falha no provider (conflito, proteção) termina <code>failed</code> e vira manual. A <a href="parte-04.html#rn-418">RN-418</a> e o merge na <code>main</code> dos repositórios do próprio Brabo (do dono) não mudam.</li>
+<li><strong>Código:</strong> <code>src/domain/actions/decide.ts</code> (<code>decide</code>, exceção <code>merge_automatico</code>); <code>src/application/use-cases/iam/set-project-auto-merge.use-case.ts:34</code> (<code>execute</code>); <code>src/application/use-cases/actions/acionar-merge-automatico.use-case.ts:38</code> (<code>execute</code>); <code>src/application/use-cases/actions/propose-action.use-case.ts</code> (<code>decidir</code>)</li>
+<li><strong>Teste:</strong> <code>test/domain/actions/decide.spec.ts</code> (exceção e recusas); <code>test/application/use-cases/iam/set-project-auto-merge.use-case.spec.ts</code>; <code>test/application/use-cases/actions/acionar-merge-automatico.use-case.spec.ts</code>; <code>test/interfaces/http/iam/update-project-dto-merge-automatico.spec.ts</code></li>
+<li><strong>Origem:</strong> AT-902 (EP-036), decisão do dono de 12/11/2026.</li>
+</ul>
 <nav class="site-pager"><a href="../../business-rules/api/parte-11.html">API — parte 11 (desde RN-916)</a><a href="../../business-rules/broker.html">Broker</a></nav>
 </article>
 <footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-api/blob/dev/docs/business-rules/api/parte-12.md">Edit this page</a></footer>
 </main>
-<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#a-anamnese-não-paga-duas-vezes-pela-mesma-janela-e-o-resgate-de-gate-não-reinicia-ciclo-que-espera-alguém-rn-722">A Anamnese não paga duas vezes pela mesma janela, e o resgate de gate não reinicia ciclo que espera alguém (RN-722)</a></li><li class="n3"><a href="#rn-1029">RN-1029 — Depois do merge da PR de infra que declara run.app, a api propõe container_recreate com a porta do app, uma vez</a></li><li class="n3"><a href="#rn-1030">RN-1030 — Todo nó do grafo gravado por MERGE numa chave natural tem restrição de unicidade, e a subida funde as duplicatas preexistentes antes de criá-la</a></li><li class="n3"><a href="#rn-1065">RN-1065 — O provider de LLM dublê do regressivo só carrega com LLM_DUBLE=1 e com a imagem sem a marca prd; o custo dele é 0 e o modelo sai como duble-llm</a></li><li class="n3"><a href="#rn-1068">RN-1068 — O PO e o Dev Lead corrigem o texto de uma tarefa todo, com a régua da história</a></li><li class="n3"><a href="#rn-1069">RN-1069 — A ADR proposta declara qual ADR substitui (supersedes), e a api confere</a></li></ul></aside>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#a-anamnese-não-paga-duas-vezes-pela-mesma-janela-e-o-resgate-de-gate-não-reinicia-ciclo-que-espera-alguém-rn-722">A Anamnese não paga duas vezes pela mesma janela, e o resgate de gate não reinicia ciclo que espera alguém (RN-722)</a></li><li class="n3"><a href="#rn-1029">RN-1029 — Depois do merge da PR de infra que declara run.app, a api propõe container_recreate com a porta do app, uma vez</a></li><li class="n3"><a href="#rn-1030">RN-1030 — Todo nó do grafo gravado por MERGE numa chave natural tem restrição de unicidade, e a subida funde as duplicatas preexistentes antes de criá-la</a></li><li class="n3"><a href="#rn-1065">RN-1065 — O provider de LLM dublê do regressivo só carrega com LLM_DUBLE=1 e com a imagem sem a marca prd; o custo dele é 0 e o modelo sai como duble-llm</a></li><li class="n3"><a href="#rn-1068">RN-1068 — O PO e o Dev Lead corrigem o texto de uma tarefa todo, com a régua da história</a></li><li class="n3"><a href="#rn-1069">RN-1069 — A ADR proposta declara qual ADR substitui (supersedes), e a api confere</a></li><li class="n3"><a href="#rn-1301">RN-1301 — O workspace escolhe quem roteia a ferramenta (jev, laya ou desligado), e laya só grava com o serviço proficiente na hora</a></li><li class="n3"><a href="#rn-1302">RN-1302 — Com o workspace em laya, todo provider é roteado por UMA chamada ao serviço local, e qualquer falha deixa o catálogo inteiro</a></li><li class="n3"><a href="#rn-1105">RN-1105 — Cadastrar ou testar com sucesso uma credencial de LLM sincroniza o catálogo daquele provider</a></li><li class="n3"><a href="#rn-1106">RN-1106 — O claude-sonnet-5 tem o raciocínio reduzido no pedido de reasoningOff</a></li><li class="n3"><a href="#rn-1107">RN-1107 — A retentativa sem raciocínio vale também quando o raciocínio só foi reduzido</a></li><li class="n3"><a href="#rn-1108">RN-1108 — O índice RAG do projeto inclui .brabo/memoria/, e o merge na trunk o reindexa sozinho</a></li><li class="n3"><a href="#rn-1101">RN-1101 — A ativação da execução recusa o projeto sem container running, salvo o dev Noop</a></li><li class="n3"><a href="#rn-1102">RN-1102 — O dev extra de paralelização nasce com o modo do agente base</a></li><li class="n3"><a href="#rn-1103">RN-1103 — Ligar o piloto automático de um agente reavalia as ações pendentes dele pela régua da proposta</a></li><li class="n3"><a href="#rn-1104">RN-1104 — O merge que não move o alvo fica registrado como jaContida</a></li><li class="n3"><a href="#rn-1124">RN-1124 — O Desbloquear aceita uma orientação opcional que vai ao dev</a></li><li class="n3"><a href="#rn-1125">RN-1125 — O bloqueio por ciclo esgotado grava os itens do parecer no diagnóstico</a></li><li class="n3"><a href="#rn-1126">RN-1126 — melhorias do parecer não reprovam, não contam correção e vão à PR e ao evento</a></li><li class="n3"><a href="#rn-1127">RN-1127 — O Dev Lead e o dev leem o último parecer de gate da tarefa</a></li><li class="n3"><a href="#rn-1128">RN-1128 — O update_task interno aceita o Arquiteto como autor</a></li><li class="n3"><a href="#rn-1129">RN-1129 — search_workspace está no piso do menu do Arquiteto</a></li><li class="n3"><a href="#rn-1138">RN-1138 — A tarefa criada pelo Dev Lead é a FUNDAÇÃO do módulo</a></li><li class="n3"><a href="#rn-1139">RN-1139 — A fundação do módulo sai primeiro no claim e segura as outras tarefas dele</a></li><li class="n3"><a href="#rn-1140">RN-1140 — A contagem de tarefas pegáveis usa a mesma guarda da fundação</a></li><li class="n3"><a href="#rn-1141">RN-1141 — Tarefa aberta da execução vigente segura a sessão, sem teto</a></li><li class="n3"><a href="#rn-1148">RN-1148 — Sem grafo configurado, nenhuma linha de projeção do grafo entra na outbox</a></li><li class="n3"><a href="#rn-1149">RN-1149 — A fila da outbox aparece no /metrics, e a queda do grafo avisa uma vez</a></li><li class="n3"><a href="#rn-1163">RN-1163 — Todo merge na branch de trabalho projeta no grafo a memória do projeto daquele commit</a></li><li class="n3"><a href="#rn-1164">RN-1164 — A memória ausente não é falha, o cartão malformado é pulado e o grafo fora do ar mantém a linha</a></li><li class="n3"><a href="#rn-1165">RN-1165 — A reconstrução do grafo também reprojeta a memória de cada projeto</a></li><li class="n3"><a href="#rn-1166">RN-1166 — A consulta de impacto de um módulo responde pelo grafo, e 503 com o grafo desligado</a></li><li class="n3"><a href="#rn-1150">RN-1150 — O usage do turno de LLM devolve reasoningTokens quando o provider os contou</a></li><li class="n3"><a href="#rn-1151">RN-1151 — A lista de sessões do projeto traz custo, chamadas, agentes e passos</a></li><li class="n3"><a href="#rn-1152">RN-1152 — O gasto do projeto para o membro vem quebrado por modelo e por sessão, nunca por provider</a></li><li class="n3"><a href="#rn-1153">RN-1153 — O gasto do projeto traz a série por dia e por agente, esparsa</a></li><li class="n3"><a href="#rn-1154">RN-1154 — As ações do projeto listam as decididas recentes, com o motivo</a></li><li class="n3"><a href="#rn-1142">RN-1142 — O teto por tarefa é do projeto, editável pelo PATCH, e chega aos agentes vivos</a></li><li class="n3"><a href="#rn-1143">RN-1143 — Depois de 2 bloqueios por limite de iterações na mesma tarefa, o agente sobe um degrau da escada do projeto</a></li><li class="n3"><a href="#rn-1144">RN-1144 — O agente volta ao modelo base quando a tarefa fecha</a></li><li class="n3"><a href="#rn-1145">RN-1145 — Escada esgotada: a tarefa fica bloqueada para o dono</a></li><li class="n3"><a href="#rn-1146">RN-1146 — A escada é configurável por projeto pelo PATCH</a></li><li class="n3"><a href="#rn-1168">RN-1168 — O teto de gasto do projeto é mensal, em UTC, e zera sem tarefa agendada</a></li><li class="n3"><a href="#rn-1169">RN-1169 — Sessão continua acumulada, a área vira mensal, e a previsão de fim de mês é derivada</a></li><li class="n3"><a href="#rn-1170">RN-1170 — O workspace tem teto de gasto mensal, só do owner, independente dos demais</a></li><li class="n3"><a href="#rn-1171">RN-1171 — A migração 0089 recalcula o gasto do mês e o fuso do mês é UTC explícito</a></li><li class="n3"><a href="#rn-1195">RN-1195 — A Caixa de decisões lê as cinco filas de todos os projetos numa leitura do workspace</a></li><li class="n3"><a href="#rn-1196">RN-1196 — As filas da Caixa nunca se somam: nenhum total na raiz</a></li><li class="n3"><a href="#rn-1197">RN-1197 — A Caixa tem teto por fila e diz o total real quando trunca</a></li><li class="n3"><a href="#rn-1198">RN-1198 — A Caixa lê com orçamento de consultas constante em N projetos</a></li><li class="n3"><a href="#rn-1199">RN-1199 — A Caixa aplica o papel efetivo de cada projeto, com o papel de decidir como mínimo da fila, e lista também as decididas</a></li><li class="n3"><a href="#rn-1304">RN-1304 — A volta retentada por corte de saída pede o dobro do teto</a></li><li class="n3"><a href="#rn-1316">RN-1316 — O merge automático: a chave do projeto, a exceção da trava e o gatilho</a></li></ul></aside>
 </div>
 <script src="../../../assets/site.js"></script>
 <script defer src="../../assets/busca.js" data-indice="../../assets/busca-en.json" data-base="../../"></script></body>

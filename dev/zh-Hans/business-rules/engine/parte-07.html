@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="zh-Hans" data-locale="zh-Hans" data-degrau="dev" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regras de negócio — Engine — parte 7 (desde RN-1076) | Brabo</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="../../../assets/tema.js"></script>
+<link rel="stylesheet" href="../../../assets/tokens.css">
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="菜单">&#9776;</button>
+<a class="marca" href="../../index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="搜索" aria-label="搜索" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="语言"><option value="../../../business-rules/engine/parte-07.html">pt-BR</option><option value="../../../en/business-rules/engine/parte-07.html">en</option><option value="../../../ru/business-rules/engine/parte-07.html">ru</option><option value="../../../zh-Hans/business-rules/engine/parte-07.html" selected>zh-Hans</option></select>
+<select data-seletor aria-label="环境"><option value="../../../../dev/zh-Hans/business-rules/engine/parte-07.html" selected>dev</option><option value="../../../../prd/zh-Hans/business-rules/engine/parte-07.html">prd</option></select>
+<button type="button" data-tema-alternar aria-label="切换主题">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 从这里开始</h2></summary><ul><li><a href="../../index.html">首页</a></li><li><a href="../../getting-started.html">快速开始</a></li></ul></details></section><section><details open><summary><h2>🎓 教程</h2></summary><ul><li><a href="../../tutorials/from-zero-to-deliverable.html">从零到交付物</a></li><li><a href="../../tutorials/orquestrar-repositorios.html">编排多个仓库</a></li><li><a href="../../tutorials/como-o-brabo-e-construido.html">Brabo 是如何构建的</a></li></ul></details></section><section><details open><summary><h2>🧭 实用指南</h2></summary><ul><li><a href="../../how-to/desenvolver-o-brabo.html">开发 Brabo</a></li><li><a href="../../how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="../../how-to/token-do-github-packages.html">GitHub Packages 令牌</a></li><li><a href="../../how-to/escolher-o-laya.html">Escolher o Laya</a></li><li><a href="../../runbook.html">运维手册</a></li><li><a href="../../tutorials/adotar.html">Adotar a política</a></li><li><a href="../../explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="../../rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>参与贡献</span></summary><ul><li><a href="../../contribuir/como-escrevemos.html">我们如何撰写</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">如何贡献</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">在哪里求助</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">报告漏洞</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 概念</h2></summary><ul><li><a href="../../intro.html">O que é o Brabo</a></li><li><a href="../../architecture.html">架构</a></li><li><a href="../../explanation/gates.html">gates，以及如何测量它们</a></li><li><a href="../../explanation/modelo-de-time.html">团队模型与交付物流程</a></li><li><a href="../../explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="../../e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="../../regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="../../capturas/como-funciona.html">Capturas da doc</a></li><li><a href="../../explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>流程与流水线</span></summary><ul><li><a href="../../explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="../../explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="../../explanation/branching-policy.html">分支策略</a></li><li><a href="../../explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="../../explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="../../explanation/cadeia-de-suprimentos-do-ci.html">CI 的供应链</a></li><li><a href="../../explanation/release-do-produto.html">产品发布</a></li><li><a href="../../explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>本地化</span></summary><ul><li><a href="../../explanation/localizacao.html">本地化</a></li><li><a href="../../explanation/localizacao-en.html">本地化——英语（en）</a></li><li><a href="../../explanation/localizacao-ru.html">本地化——俄语（ru）</a></li><li><a href="../../explanation/localizacao-zh-hans.html">本地化——简体中文（zh-Hans）</a></li></ul></details></li><li><details><summary><span>技术笔记</span></summary><ul><li><a href="../../explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 参考</h2></summary><ul><li><a href="../../glossary.html">术语表</a></li><li><a href="../../reference/componentes-da-doc.html">文档组件</a></li><li><a href="../../explanation/documentation-workflow.html">文档同步</a></li><li><a href="../../reference/configuration.html">Configuração</a></li><li><a href="../../reference/events.html">Eventos</a></li><li><a href="../../reference/permissions.html">Permissões</a></li><li><a href="../../reference/artifacts.html">Artefatos</a></li><li><a href="../../reference/git-providers.html">Provedores de git</a></li><li><a href="../../reference/llm-providers.html">Provedores de LLM</a></li><li><a href="../../reference/internal-api.html">API interna</a></li><li><a href="../../reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="../../reference/scripts.html">Scripts e comandos</a></li><li><a href="../../reference/rulesets.html">Rulesets do repositório</a></li><li><a href="../../reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="../../reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="../../reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="../../reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="../../reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="../../reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="../../reference/workflows/cadeia.html">cadeia</a></li><li><a href="../../reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="../../reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="../../reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="../../reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="../../reference/workflows/pr-police.html">pr-police</a></li><li><a href="../../reference/workflows/preparar.html">preparar</a></li><li><a href="../../reference/workflows/promote.html">promote</a></li><li><a href="../../reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="../../reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="../../reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="../../reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="../../reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="../../reference/workflows/tag-release.html">tag-release</a></li><li><a href="../../reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="../../reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="../../reference/brb.html">Registro BRB</a></li><li><a href="../../security-surface.html">Superfície exposta da api</a></li><li><a href="../../dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="../../reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><details open><summary><span>业务规则</span></summary><ul><li><a href="../../business-rules.html">业务规则</a></li><li><a href="../../business-rules/custo.html">成本与计量</a></li><li><a href="../../business-rules/autenticacao.html">认证</a></li><li><a href="../../business-rules/api.html">API</a></li><li><a href="../../business-rules/broker.html">Broker</a></li><li><a href="../../business-rules/ci.html">CI</a></li><li><a href="../../business-rules/contracts.html">Contratos</a></li><li><details open><summary><span>Engine</span></summary><ul><li><a href="../../business-rules/engine.html">Engine</a></li><li><a href="../../business-rules/engine/parte-01.html">Engine — parte 1 (desde RN-016)</a></li><li><a href="../../business-rules/engine/parte-02.html">Engine — parte 2 (desde RN-305)</a></li><li><a href="../../business-rules/engine/parte-03.html">Engine — parte 3 (desde RN-577)</a></li><li><a href="../../business-rules/engine/parte-04.html">Engine — parte 4 (desde RN-622)</a></li><li><a href="../../business-rules/engine/parte-05.html">Engine — parte 5 (desde RN-724)</a></li><li><a href="../../business-rules/engine/parte-06.html">Engine — parte 6 (desde RN-880)</a></li><li><a href="../../business-rules/engine/parte-07.html" aria-current="page">Engine — parte 7 (desde RN-1076)</a></li></ul></details></li><li><a href="../../business-rules/infra.html">Infra</a></li><li><a href="../../business-rules/produto.html">Produto</a></li><li><a href="../../business-rules/runner.html">Runner</a></li><li><a href="../../business-rules/web.html">Web</a></li></ul></details></li><li><span>API 参考</span></li></ul></details></section><section><h2><a href="../../adr.html">🏛️ 决策（ADR）</a></h2></section><section><details><summary><h2>🗂️ 项目历史</h2></summary><ul><li><a href="../../historico/linha-do-tempo.html">时间线</a></li><li><a href="../../tutorials/interface-antes-e-depois-shadcn.html">shadcn 前后的界面（2026 年 10 月 31 日）</a></li><li><a href="../../explanation/historico-de-fases.html">阶段历史</a></li><li><a href="../../explanation/historico-de-fases-parte-1.html">第 1 至 15 阶段，第 1 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-2.html">16–26 计划与轮次，第 2 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-3.html">28 计划与审计，第 3 部分</a></li><li><a href="../../explanation/historico-de-fases-parte-4.html">从本地 runner 起，第 4 部分</a></li><li><a href="../../explanation/fase-28-pasta-do-usuario.html">FASE 28 — 用户的目录</a></li><li><a href="../../explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — 一行命令安装</a></li><li><a href="../../explanation/fase-30-runner-por-maquina.html">FASE 30——机器的本地智能体</a></li><li><a href="../../explanation/backlog.html">已分类的 backlog</a></li><li><details><summary><span>验证与测量</span></summary><ul><li><a href="../../explanation/primeiro-dogfooding.html">第一次 dogfooding</a></li><li><a href="../../explanation/execucao-real-hello-world.html">真实执行（hello world）</a></li><li><a href="../../explanation/achados-execucao-real.html">流水线真实执行中的发现</a></li><li><a href="../../explanation/validacao-fase-12.html">Fase 12 的验证</a></li><li><a href="../../explanation/validacao-real.html">真实验证（13b）</a></li><li><a href="../../explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="../../explanation/medicao-do-idioma.html">语言启发式的测量</a></li><li><a href="../../explanation/medicao-do-jev.html">Jev 工具路由器的测量</a></li><li><a href="../../explanation/auditoria-fluxo-vs-codigo.html">审计：fluxo.yml × 代码（v3，ADR 0085）</a></li><li><a href="../../explanation/auditoria-visual-rodada-29.html">视觉审计：Rodada 29 之前与之后</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">此页尚未翻译；显示葡萄牙语原文。</div>
+<article class="doc">
+<h1 id="engine--parte-7-desde-rn-1076">Engine — parte 7 (desde RN-1076)</h1>
+<h3 id="rn-1076">RN-1076 — As Percepções olham o produto do usuário; a falha da plataforma é sinal interno só no TP-01</h3>
+<blockquote>
+<p><strong>Revoga a <a href="parte-04.html#rn-717">RN-717</a></strong> (a Anamnese não registra mais desvio de agente) e <strong>revisa a <a href="parte-01.html#rn-079">RN-079</a></strong> (o material analisável ganha escopo).</p>
+</blockquote>
+<ul>
+<li><strong>Regra:</strong> o Psicólogo só emite hipótese sobre o que está sendo construído com o usuário e está errado em relação ao pedido (requisito mal entendido, entrega fora do pedido, regra de negócio do projeto quebrada). Cada item da <code>emit_hypotheses</code> traz <code>escopo</code> obrigatório (<code>produto</code> | <code>plataforma</code>). <code>produto</code> vira hipótese em Percepções, como antes. <code>plataforma</code> (agente ocioso, teto estourado, worktree, validador, ordem de início) nunca vira hipótese: com <code>sessaoDeTeste</code> verdadeiro vira <code>psychologist.platform_signal</code> no log da sessão (gravado pela api, fora do grafo e da fila da Anamnese); com <code>sessaoDeTeste</code> falso o prompt manda ignorá-lo e a api o descarta sem evento. O engine lê <code>sessaoDeTeste</code> (booleano) do contexto que a api devolve (<code>projects.sessao_de_teste</code>; ausente vale <code>false</code>), não cria flag de ambiente e o repassa no corpo do POST das hipóteses. Lote vazio é válido. <code>terminationAnalysis</code> só é exigida em sessão de teste com término anormal; fora dela o bloco de término some do prompt. O kickoff do Psicólogo vai à v4 e o inline do worker segue byte a byte igual ao template.</li>
+<li><strong>Por quê:</strong> TP-01 28ª (10/11): as 8 hipóteses do Psicólogo foram todas sobre a plataforma e nenhuma disse se o app do usuário estava sendo construído errado (achado 34). A falha técnica é do TP-01, não da Anamnese nem do Psicólogo.</li>
+<li><strong>Onde:</strong> <code>prompts/psychologist-kickoff.md</code> (v4), <code>apps/engine/lib/engine/workers/psychologist_worker.ex:311</code> (<code>render_inline</code>), <code>apps/engine/lib/engine/workers/psychologist_worker.ex:299</code> (<code>render_template</code>), <code>apps/engine/lib/engine/workers/psychologist_worker.ex:356</code> (<code>escopo_instruction</code>), <code>apps/engine/lib/engine/workers/psychologist_worker.ex:367</code> (<code>termination_instruction</code>), <code>apps/engine/lib/engine/workers/psychologist_worker.ex:230</code> (<code>build_ctx</code>), <code>apps/engine/lib/engine/psychologist/context_builder.ex:83</code> (<code>build</code>), <code>apps/engine/lib/engine/psychologist/tools/emit_hypotheses.ex:22</code> (<code>spec</code>), <code>apps/engine/lib/engine/psychologist/tools/emit_hypotheses.ex:99</code> (<code>run</code>), <code>apps/engine/lib/engine/sessions/engine_api_client.ex:1858</code> (<code>propose_hypotheses</code>); a regra de lote e o evento ficam na api, em <a href="https://github.com/viralabs-dev/brabo-api/blob/dev/src/application/use-cases/execution/propose-hypotheses.use-case.ts"><code>propose-hypotheses.use-case.ts</code></a> (<a href="../../adr/0288-link-entre-repos-nas-rns-e-url-do-repo-dono.html">ADR 0288</a>).</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/psychologist/tools/emit_hypotheses_test.exs</code> (&quot;<code>escopo</code> é obrigatório e só aceita produto ou plataforma&quot;, &quot;lista vazia é aceita&quot;, &quot;sessaoDeTeste do ctx é repassado&quot;), <code>apps/engine/test/engine/workers/psychologist_worker_test.exs</code> (describe &quot;RN-1076&quot;: critério de produto, sinal ligado, sinal desligado, &quot;template do repo e inline renderizam o MESMO texto&quot;), <code>apps/engine/test/engine/anamnese/tools_test.exs</code> (<code>refute &quot;report_agent_deviation&quot;</code>), <code>apps/engine/test/engine/workers/anamnese_worker_test.exs</code> (&quot;o kickoff (inline e template v5) não manda mais registrar desvio do agente&quot;).</li>
+<li><strong>Origem:</strong> AT-898, decisões do dono de 10/11/2026 (achado 34 do TP-01 28ª) e escolha da marcação por flag no projeto (11/11). Revoga a RN-717 e revisa a RN-079 (ADR 0291).</li>
+</ul>
+<h3 id="rn-1077">RN-1077 — A task reivindicada parte da PRÓPRIA branch quando ela tem trabalho fora da <code>main</code></h3>
+<blockquote>
+<p><strong>Revisa a <a href="parte-05.html#rn-760">RN-760</a></strong> (a <code>base_preservada</code> de outra task só vale quando a task não tem branch própria) e <strong>estende a <a href="parte-05.html#rn-779">RN-779</a></strong> (o caso &quot;própria branch&quot; deixa de exigir <code>base == main</code>).</p>
+</blockquote>
+<ul>
+<li><strong>Regra:</strong> a task que o agente reivindica parte da PRÓPRIA branch <code>feature/&lt;slug&gt;</code>, local ou em <code>origin/</code>, sempre que ela não é ancestral da ponta da <code>main</code>, mesmo quando o agente traz a branch preservada de OUTRA task (<code>base_preservada</code>, RN-743). Antes o <code>worktree add -B</code> redefinia a branch própria em cima da base alheia e o commit já enviado ao bare saía do histórico local: o push seguinte era recusado (non-fast-forward) e o gate julgava um commit diferente do que o merge usaria.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/worktree_manager.ex:464</code> (<code>retomada</code>), <code>apps/engine/lib/engine/dev/worktree_manager.ex:338</code> (<code>add_worktree</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/worktree_manager_test.exs</code> (&quot;a branch própria com commit no remoto vence a base_preservada de outra task, e o push segue&quot;); mutação provada: voltar a condição para <code>base == main</code> reprova o teste.</li>
+<li><strong>Origem:</strong> AT-911 (TP-01 28ª, achado 21), Rodada 365, lane X1.</li>
+</ul>
+<h3 id="rn-1078">RN-1078 — O gate só abre com commit e push executados e o HEAD igual ao do remoto</h3>
+<blockquote>
+<p><strong>Revisa a <a href="parte-04.html#rn-664">RN-664</a></strong> (o gate julga o diff da PR: agora a PR é o que está no remoto) e <strong>a <a href="../api.html#rn-715">RN-715</a></strong> (a correção pós-conflito não reabre o gate às cegas).</p>
+</blockquote>
+<ul>
+<li><strong>Regra:</strong> na entrega e na correção, o gate (QA, ou o recomeço da RN-715) só abre depois de <code>git_commit</code> e <code>git_push</code> com desfecho <code>executed</code> e com o HEAD do worktree igual a <code>origin/&lt;branch&gt;</code> (<code>head_igual_ao_remoto/2</code>, sem <code>fetch</code>: o push atualiza a ref e o push recusado a deixa velha). Push <code>refused</code> bloqueia a task com o motivo nomeado e origem <code>infra</code>, sem abrir PR nem gate; <code>pending</code> espera a aprovação (<code>awaiting_approval</code>); HEAD diferente do remoto bloqueia &quot;o worktree e a branch do remoto divergem&quot; com os dois SHAs. Sem a ref do remoto (branch nunca enviada) ou sem worktree local (modo <code>runner</code>) a guarda não bloqueia: quem recusa é o desfecho da ação.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:939</code> (<code>handle_correction_outcome</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1313</code> (<code>with_head_no_remoto</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1331</code> (<code>entregar</code>), <code>apps/engine/lib/engine/dev/worktree_manager.ex:511</code> (<code>head_igual_ao_remoto</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/conflito_e_push_test.exs</code> (push recusado na entrega e na correção bloqueia e não chama o QA; pendente espera), <code>apps/engine/test/engine/dev/worktree_manager_test.exs</code> (&quot;a guarda: HEAD à frente do remoto diverge&quot;); mutação provada: tirar o <code>:refused</code> do bloqueio reprova o teste.</li>
+<li><strong>Origem:</strong> AT-911, Rodada 365, lane X1.</li>
+</ul>
+<h3 id="rn-1079">RN-1079 — O <code>wip</code> de preservação não enviado é absorvido pelo commit da task</h3>
+<blockquote>
+<p><strong>Estende a <a href="parte-05.html#rn-743">RN-743</a></strong> (o commit <code>wip</code> continua sendo como o trabalho sobrevive ao bloqueio).</p>
+</blockquote>
+<ul>
+<li><strong>Regra:</strong> o commit <code>wip(&lt;agente&gt;): trabalho preservado…</code> que ainda não está em <code>origin/&lt;branch&gt;</code> é desfeito (<code>reset --soft HEAD~1</code>, em laço, só no topo e sem merge em curso) antes do <code>GitExecutor.commit/1</code>; o trabalho entra no commit real da task e o <code>wip</code> não chega à PR nem à <code>main</code>. Um <code>wip</code> já enviado fica: tirá-lo exigiria push forçado.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/actions/git_executor.ex:18</code> (<code>commit</code>), <code>apps/engine/lib/engine/actions/git_executor.ex:53</code> (<code>absorver_wip_nao_enviado</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/actions/git_executor_test.exs</code> (&quot;o wip não enviado é absorvido: um commit só…&quot;, &quot;o wip já enviado fica&quot;); mutação provada: remover a chamada reprova o teste.</li>
+<li><strong>Origem:</strong> AT-911 (o <code>wip</code> entrou na <code>main</code> pela PR #12), Rodada 365, lane X1.</li>
+</ul>
+<h3 id="rn-1080">RN-1080 — A branch presa no worktree de outro dev agent é liberada, e o conflito reentregue só retrabalha task viva</h3>
+<blockquote>
+<p><strong>Revisa a <a href="../api.html#rn-715">RN-715</a></strong> (a reentrega do conflito confere a task antes de readotar) e <strong>estende a <a href="parte-05.html#rn-743">RN-743</a></strong> (a preservação também vale para o worktree de OUTRO agente).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-915):</strong> quando <code>feature/&lt;slug&gt;</code> da task reivindicada está presa no worktree de outro dev agent em <code>.worktrees/&lt;outro&gt;</code>, o engine preserva o que esse worktree tem sem commit (<code>wip</code>, RN-743) e o remove antes de criar o próprio. A task desbloqueada nunca bloqueia por &quot;branch em uso&quot;. A branch presa fora de <code>.worktrees/</code> (o checkout do usuário) segue recusada pelo git, com a branch no motivo. Declarado: no modo <code>runner</code> a regra não roda.</li>
+<li><strong>Regra (AT-907):</strong> o <code>{:merge_conflict, _}</code> só inicia o retrabalho se a task, lida na api no momento da entrega, ainda está <code>in_progress</code> com este agente. Se a PR entrou por outro merge (<code>done</code>), ou a task mudou de estado ou de dono, o conflito é descartado com <code>dev.conflict_rework_dropped</code> (<code>taskId</code>, <code>motivo</code>) e o agente segue para a fila. Vale também para o agente com disjuntor aberto, que não bloqueia mais task <code>done</code>.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/worktree_manager.ex:482</code> (<code>liberar_branch_presa</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:354</code> (<code>handle_info</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:451</code> (<code>motivo_do_descarte</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:474</code> (<code>retrabalhar_conflito</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/worktree_manager_test.exs</code> (&quot;AT-915: a branch presa no worktree de outro agente é preservada…&quot;, &quot;…fora de .worktrees segue recusada&quot;), <code>apps/engine/test/engine/dev/conflito_e_push_test.exs</code> (a corrente: ocupado adia, a PR entra, a reentrega é descartada; outro dono; regressão in_progress; disjuntor); mutação provada: tirar a liberação ou o descarte reprova um teste cada.</li>
+<li><strong>Origem:</strong> AT-915 (achado 27) e AT-907 (achado 16), Rodada 365, lane X1.</li>
+</ul>
+<h3 id="rn-1099">RN-1099 — O merge da PR de infra faz a Infra propor de novo a subida do container</h3>
+<blockquote>
+<p><strong>Estende a <a href="../api.html#rn-671">RN-671</a></strong> (a subida pelo servidor deixa de existir só no kickoff) <strong>e a <a href="../api.html#rn-672">RN-672</a></strong> (o Dev Lead é oferecido também depois desse merge).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-899):</strong> o <code>project.trunk_merged</code> ganha um segundo consumidor, o <code>InfraOfereceDevLeadWorker</code>, que avisa <code>{:trunk_merged, project_id}</code> no tópico do projeto. O Infra Lead vivo, sem turno em curso, lê o container registrado: <code>running</code> oferece o Dev Lead (<code>if_absent</code>); <code>provisioning</code> não faz nada; qualquer outro estado repete o passo <code>subir_no_aceite/2</code> (mesma <code>propor_container_start/2</code>, mesmas recusas). Se a proposta não nasce (sem roteamento, modo <code>runner</code>, recusa), o fio diz o próximo passo (pedir a subida ou usar a página Containers). Com turno em curso nada é feito: o fecho do turno já pergunta. Entrega at-most-once, como a RN-672.</li>
+<li><strong>Por quê:</strong> TP-01 28ª (achados 3 e 4): a PR de infra entrou sem subida e a corrente parou até o usuário escrever; o &quot;aguardando&quot; ficou sem pergunta nem botão.</li>
+<li><strong>Onde:</strong> <code>lib/engine/outbox/drain.ex:116</code> (<code>handlers_for</code>), <code>lib/engine/workers/infra_oferece_dev_lead_worker.ex:29</code> (<code>perform</code>), <code>lib/engine/infra/infra_lead_server.ex</code> (<code>handle_info({:trunk_merged, _}, _)</code>, <code>ao_merge_da_pr_de_infra</code>).</li>
+<li><strong>Teste:</strong> <code>test/engine/infra/infra_lead_server_test.exs</code> (três casos &quot;RN-1099&quot;), <code>test/engine/workers/infra_oferece_dev_lead_worker_test.exs</code>, <code>test/engine/outbox/drain_test.exs</code> (&quot;project.trunk_merged enfileira o TrunkMergedWorker e o aviso à Infra&quot;).</li>
+<li><strong>Origem:</strong> AT-899 (parte do engine), Rodada 366, lane EB.</li>
+</ul>
+<h3 id="rn-1100">RN-1100 — A Infra escreve na raiz o índice &quot;Módulos&quot;</h3>
+<blockquote>
+<p><strong>Estende a <a href="parte-05.html#rn-846">RN-846</a></strong> (a rota de negócio mora no README do módulo, regra do kickoff do dev, na lane EA).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-903):</strong> o kickoff da Infra manda escrever no <code>README.md</code> da raiz, além de &quot;Rodar na sua máquina&quot;, uma seção &quot;Módulos&quot; com um link para o <code>modules/&lt;m&gt;/README.md</code> de cada módulo do <code>module_map</code>. A raiz deixa de ser tocada pelas tarefas, o que evita o conflito de merge entre módulos paralelos. Sem gerador: o índice é escrito uma vez, na PR de infra.</li>
+<li><strong>Onde:</strong> <code>lib/engine/infra/infra_lead_server.ex</code> (<code>build_kickoff</code>, item 3).</li>
+<li><strong>Teste:</strong> <code>test/engine/infra/infra_lead_server_test.exs</code> (&quot;o kickoff pede o índice Módulos&quot;).</li>
+<li><strong>Origem:</strong> AT-903 (parte da Infra), Rodada 366, lane EB.</li>
+</ul>
+<h3 id="rn-1086">RN-1086 — O dev ocioso volta a procurar tarefa sozinho, e a execução parada tenta o claim de novo</h3>
+<blockquote>
+<p><strong>Generaliza a <a href="../api.html#rn-1009">RN-1009</a></strong> (todo <code>done</code>, não só o merge, acorda os dependentes: a api grava <code>task.became_claimable</code> com <code>cause</code> <code>dependency_done</code> ou <code>plan_applied</code>, e o <code>DevAgentWakeWorker</code> já o entrega) e <strong>a <a href="parte-01.html#rn-047">RN-047</a></strong> (o rearm de agente fora de <code>idle_tripped</code> segue 409).</p>
+</blockquote>
+<ul>
+<li><strong>Regra:</strong> o claim vazio deixa o agente <code>:idle</code> e agenda a PRÓXIMA procura em <code>procura_ociosa_ms/0</code> (60 s, configurável), pela mesma mensagem do wake (<code>{:wake, :became_claimable}</code>); um timer por agente, que o wake externo substitui. Na re-tentativa o agente já está anunciado (<code>idle_anunciado</code>): sem <code>dev.idle</code>, sem persist e sem reagendar a checagem da parada, para não inundar o fio. O <code>ExecucaoParadaWorker</code> entrega o mesmo wake a todo agente <code>idle</code> da sessão antes de avaliar (re-tentar é inofensivo: o guard em processo decide). <code>POST /internal/sessions/:sessionId/dev-agents/:agentId/wake</code> responde 202 com o agente <code>idle</code>, 409 nomeado nos outros status e 404 se não existe (a api repassa o 409 e grava <code>dev.wake_requested</code>, que entra no <code>@movimento</code> da parada). O Dev Lead ganha <code>procurar_tarefa(agent_id)</code>: wake direto se <code>idle</code>, senão diz o status.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/agent_io.ex:219</code> (<code>sem_task_pegavel</code>), <code>apps/engine/lib/engine/dev/agent_io.ex:241</code> (<code>procura_ociosa_ms</code>), <code>apps/engine/lib/engine_web/controllers/execution_command_controller.ex:121</code> (<code>wake</code>), <code>apps/engine/lib/engine/workers/execucao_parada_worker.ex:124</code> (<code>reprocurar</code>), <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:503</code> (<code>run_procurar_tarefa</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/dev_agent_chain_test.exs</code> (a corrente: dependência aberta → ocioso → <code>mark_task done</code> → outbox <code>task.became_claimable</code> → drain → wake → claim; e o timer sozinho, sem <code>dev.idle</code> repetido), <code>apps/engine/test/engine_web/controllers/execution_command_controller_test.exs</code> (wake 202/409/404), <code>apps/engine/test/engine/workers/execucao_parada_worker_test.exs</code>, <code>apps/engine/test/engine/agents/dev_lead_tools_test.exs</code>; mutação provada: tirar o <code>agendar_procura</code> reprova o teste do timer.</li>
+<li><strong>Origem:</strong> AT-906 (TP-01 28ª, achados 15, 17 e 25), Rodada 366, lane X2a.</li>
+</ul>
+<h3 id="rn-1087">RN-1087 — A tarefa nasce com o módulo, e o Dev Lead arquiva a tarefa <code>todo</code> que ele criou</h3>
+<blockquote>
+<p><strong>Estende a <a href="parte-06.html#rn-1006">RN-1006</a></strong> (o <code>module</code> do Dev Lead passa a ser gravado) e <strong>a RN-727</strong> (<code>archive_story</code>, na api) (arquivar, agora também a tarefa).</p>
+</blockquote>
+<ul>
+<li><strong>Regra:</strong> o <code>Engine.Harness.Tools.CreateTask.run/2</code> envia <code>fields.module</code> quando o <code>module</code> vem nos argumentos (antes o descartava e a tarefa nascia órfã). A ferramenta <code>arquivar_tarefa(task_id, motivo)</code> do Dev Lead chama <code>POST /internal/sessions/:sessionId/tasks/:taskId/archive</code> com <code>{projectId, reason}</code>; o motivo é obrigatório (vazio é recusado sem chamar a api) e a api só arquiva <code>todo</code> criada por ele (409 nomeado <code>tarefa_em_execucao</code>, <code>tarefa_arquivada</code> ou <code>tarefa_de_outro_autor</code>, que volta ao modelo). <code>ExecucaoParadaWorker.pendentes/1</code> ignora tarefa com <code>archivedAt</code>.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tools/create_task.ex:52</code> (<code>put_module</code>), <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:464</code> (<code>run_arquivar_tarefa</code>), <code>apps/engine/lib/engine/sessions/engine_api_client.ex:1428</code> (<code>archive_task</code>), <code>apps/engine/lib/engine/workers/execucao_parada_worker.ex:112</code> (<code>pendentes</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/dev_lead_tools_test.exs</code> (o <code>create_task</code> envia <code>module</code>; arquivar com motivo, sem motivo e com recusa nomeada), <code>apps/engine/test/engine/workers/execucao_parada_worker_test.exs</code> (a parada não conta tarefa arquivada); mutação provada: tirar o <code>put_module</code> reprova o teste.</li>
+<li><strong>Origem:</strong> AT-912 (TP-01 28ª, achado 22), Rodada 366, lane X2a.</li>
+</ul>
+<h3 id="rn-1088">RN-1088 — A execução parada nomeia o ciclo entre o bloqueio e o <code>dependsOn</code></h3>
+<blockquote>
+<p><strong>Estende a <a href="parte-06.html#rn-1059">RN-1059</a></strong> (motivo novo da parada) e <strong>a <a href="parte-06.html#rn-1012">RN-1012</a></strong> (o caminho até o Arquiteto é o <code>pedir_ao_arquiteto</code>).</p>
+</blockquote>
+<ul>
+<li><strong>Regra:</strong> quando uma tarefa bloqueada do módulo Y cita, no <code>blockedReason</code>, um módulo X que depende de Y (direta ou transitivamente, pelo <code>module_map</code> vigente lido em <code>get_infra_context</code>), o <code>execution.stalled</code> traz <code>ciclosDeDependencia: [{taskId, modulo: Y, esperaPor: X}]</code>. A citação é <code>modules/X</code>, <code>dev-X</code> ou <code>X</code> com borda (<code>x-y</code> não cita <code>x</code>). O aviso ao Dev Lead diz &quot;IMPASSE de dependência&quot; e que só o contrato ou o <code>dependsOn</code> mudando destrava: leve ao Arquiteto com <code>pedir_ao_arquiteto</code>, em vez de repropor o plano. Sem canal novo.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/workers/execucao_parada_worker.ex:136</code> (<code>ciclos_de_dependencia</code>), <code>apps/engine/lib/engine/workers/execucao_parada_worker.ex:165</code> (<code>ciclos</code>), <code>apps/engine/lib/engine/agents/dev_lead_server.ex:381</code> (<code>aviso_de_ciclo</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/workers/execucao_parada_worker_test.exs</code> (ciclo direto, transitivo, sem ciclo, e a corrente até o Dev Lead), <code>apps/engine/test/engine/agents/dev_lead_server_test.exs</code> (o aviso manda <code>pedir_ao_arquiteto</code>).</li>
+<li><strong>Origem:</strong> AT-913 (TP-01 28ª, achado 25), Rodada 366, lane X2a. O id de tarefa como citação ficou fora: só o nome do módulo.</li>
+</ul>
+<h3 id="rn-1089">RN-1089 — A falha de reinício da app depois do merge avisa o Dev Lead com motivo, código e o caminho do log</h3>
+<blockquote>
+<p><strong>Estende a <a href="parte-06.html#rn-1028">RN-1028</a></strong> (o desfecho do reinício vai à linha do tempo, sem trecho de log).</p>
+</blockquote>
+<ul>
+<li><strong>Regra:</strong> <code>app.restart_failed</code> continua com <code>motivo</code> e <code>exitCode</code> (allowlist) e ganha <code>log: &quot;/tmp/brabo-app.log&quot;</code> (o caminho no container); o TEXTO do log nunca entra no evento nem no aviso, porque o comando do app pode carregar segredo. A falha também entrega <code>{:app_falhou, %{motivo, exitCode}}</code> ao Dev Lead, que abre turno com &quot;[Aviso do sistema]&quot; mandando criar a tarefa de correção no módulo dono e pedir ao dev que leia o log no container. O reinício bem-sucedido não acorda ninguém.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/workers/reiniciar_app_worker.ex:62</code> (<code>falhou</code>), <code>apps/engine/lib/engine/agents/dev_lead_server.ex:372</code> (<code>aviso_de_app</code>), <code>apps/engine/lib/engine/agents/dev_lead_server.ex:416</code> (<code>handle_info</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/workers/reiniciar_app_worker_test.exs</code> (a falha acorda o Dev Lead e o payload não tem o texto do log; o sucesso não acorda), <code>apps/engine/test/engine/agents/dev_lead_server_test.exs</code> (o aviso abre turno com motivo, código e caminho).</li>
+<li><strong>Origem:</strong> AT-914 (TP-01 28ª, achado 24), Rodada 366, lane X2a. Troca o &quot;fim do stderr&quot; por &quot;onde ler&quot; (regra transversal de segredo).</li>
+</ul>
+<h3 id="rn-1090">RN-1090 — O teto de gasto por tarefa vale para os dev agents vivos, e a memória nunca sobrescreve um teto mais novo</h3>
+<blockquote>
+<p><strong>Estende a <a href="parte-01.html#rn-036">RN-036</a></strong> (o teto por tarefa do agente); o campo na tela e o <code>PATCH</code> do projeto são da api e do web.</p>
+</blockquote>
+<ul>
+<li><strong>Regra:</strong> <code>POST /internal/projects/:projectId/execution/task-budget</code> com <code>{taskBudgetMicros}</code> (inteiro positivo, senão 400) grava o teto em toda linha <code>dev_agent_states</code> do projeto e troca <code>task_budget_micros</code> na memória de cada agente vivo (<code>DevAgentSupervisor.atualizar_teto/2</code>, por <code>:sys.replace_state</code>, sem handler novo no server real nem no Noop). O <code>start</code> sobre agente já vivo (<code>:existing</code>) com <code>taskBudgetMicros</code> faz o mesmo. A tarefa em curso mantém o teto com que o laço começou; o novo vale a partir da próxima volta (desbloqueio, correção ou tarefa nova), e o <code>persist</code> seguinte não devolve o valor velho ao banco. Quem chama é a api, ao mudar o teto do projeto.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine_web/controllers/execution_command_controller.ex:140</code> (<code>task_budget</code>), <code>apps/engine/lib/engine/dev/dev_agent_supervisor.ex:75</code> (<code>atualizar_teto</code>), <code>apps/engine/lib/engine/dev/dev_agent_state.ex:83</code> (<code>set_teto</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine_web/controllers/execution_command_controller_test.exs</code> (o teto vai ao banco e à memória, e o <code>persist</code> seguinte o mantém; 400; o <code>start</code> sobre agente vivo); mutação provada: tirar o <code>trocar_na_memoria</code> reprova o teste do <code>persist</code>.</li>
+<li><strong>Origem:</strong> AT-917 (TP-01 28ª, achado 29), Rodada 366, lane X2a. Parte do engine; a api chama a rota depois (lane posterior).</li>
+</ul>
+<h3 id="rn-1093">RN-1093 — O Arquiteto lê a <code>main</code> antes de declarar o contrato, e <code>declare_module_contracts</code> a confere</h3>
+<ul>
+<li><strong>Regra (AT-918):</strong> o Arquiteto tem <code>read_file</code> e <code>search_workspace</code>, que sem <code>workspace_root</code> leem a pasta do projeto, isto é, a <code>main</code> mergeada (RN-1021), e o prompt manda lê-la antes de declarar. <code>declare_module_contracts</code> confere cada item <code>funcao</code> contra essa pasta e devolve, no resultado, as funções que a <code>main</code> não tem hoje. Não recusa (contrato pode declarar interface futura). Pasta invisível ao engine (modo <code>runner</code>) devolve &quot;Não conferi o código&quot;.</li>
+<li><strong>Onde:</strong> <code>lib/engine/harness/contrato_contra_o_codigo.ex</code> (<code>texto_do_codigo</code>), <code>lib/engine/harness/tools/declare_module_contracts.ex</code> (<code>conferencia_com_codigo</code>), <code>lib/engine/agents/arquiteto_server.ex</code> (<code>tool_specs</code>, <code>run_tool</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/harness/tools/declare_module_contracts_test.exs</code> (&quot;função que a main não tem volta nomeada…&quot;, &quot;pasta invisível…&quot;), <code>test/engine/agents/arquiteto_server_test.exs</code> (catálogo)</li>
+<li><strong>Origem:</strong> AT-918 (achado 31 do TP-01 28ª), Rodada 366, lane X2b.</li>
+</ul>
+<h3 id="rn-1094">RN-1094 — Mudar o contrato lista as tarefas afetadas, e o Arquiteto as corrige no mesmo turno</h3>
+<ul>
+<li><strong>Regra (AT-918):</strong> ao declarar uma versão nova, o resultado lista as tarefas não concluídas (<code>todo</code>/em curso, não arquivadas) cujo título ou descrição cita função ou rota que a versão anterior tinha e a nova tirou ou mudou. O Arquiteto as corrige com <code>update_task</code> (RN-1068, que recusa tarefa em execução). Arquivar a que perdeu o sentido depende da ferramenta da AT-912; o texto só a oferece &quot;quando houver no catálogo&quot;.</li>
+<li><strong>Onde:</strong> <code>lib/engine/harness/contrato_contra_o_codigo.ex</code> (<code>texto_das_tarefas</code>), <code>lib/engine/harness/tools/declare_module_contracts.ex</code> (<code>versao_anterior</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/harness/tools/declare_module_contracts_test.exs</code> (&quot;tarefa não concluída que cita interface retirada…&quot;)</li>
+<li><strong>Origem:</strong> AT-918, Rodada 366, lane X2b.</li>
+</ul>
+<h3 id="rn-1116">RN-1116 — O parecer do QA separa <code>itens</code> (bloqueia) de <code>melhorias</code> (não bloqueia)</h3>
+<blockquote>
+<p><strong>Estende a <a href="parte-06.html#rn-944">RN-944</a></strong> (o QA não move a régua) e a RN-015 (a contagem de correção só considera <code>itens</code>).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-905):</strong> <code>emit_qa_verdict</code> ganha <code>melhorias</code> (lista de texto, opcional). <code>itens</code> é SÓ o que viola regra da história, critério da tarefa ou regra do recorte; o resto é melhoria e não reprova nem conta correção. O campo atravessa o hook de término, o consolidador (<code>QaLead</code>), o artefato <code>qa_verdict</code> e a chamada <code>gates/verdict</code> (só quando não vazio, no corpo como <code>melhorias</code>, para a api publicá-las no comentário da PR). O prompt da Automação e o recorte dizem a separação.</li>
+<li><strong>Onde:</strong> <code>lib/engine/gates/tools/emit_qa_verdict.ex</code> (<code>spec</code>), <code>lib/engine/gates/hooks/termination.ex</code> (<code>call</code>), <code>lib/engine/gates/qa_lead.ex</code> (<code>melhorias_de</code>), <code>lib/engine/gates/qa_lead_server.ex</code> (<code>extras_de_melhorias</code>), <code>lib/engine/gates/qa_automacao_agent.ex</code> (<code>initial_message</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/gates/qa_lead_test.exs</code> (&quot;melhorias acompanham…&quot;), <code>test/engine/gates/tools/emit_qa_verdict_test.exs</code></li>
+<li><strong>Origem:</strong> AT-905 (achados 14 e 30 do TP-01 28ª), Rodada 367, lane gates.</li>
+</ul>
+<h3 id="rn-1117">RN-1117 — <code>changes_requested</code> sem item bloqueante é recusado</h3>
+<ul>
+<li><strong>Regra (AT-905):</strong> a ferramenta recusa <code>changes_requested</code> com <code>itens</code> vazio (&quot;aprove e liste as melhorias&quot;). A recusa é resultado de ferramenta, entrada do laço (RN-163).</li>
+<li><strong>Onde:</strong> <code>lib/engine/gates/tools/emit_qa_verdict.ex</code> (<code>run</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/gates/tools/emit_qa_verdict_test.exs</code> (&quot;recusa changes_requested sem itens&quot;)</li>
+<li><strong>Origem:</strong> AT-905, Rodada 367, lane gates.</li>
+</ul>
+<h3 id="rn-1118">RN-1118 — Numa volta nova, item novo só reprova se trata de arquivo do diff da volta</h3>
+<blockquote>
+<p><strong>Estende a <a href="parte-06.html#rn-944">RN-944</a></strong>: a régua que era só de prompt passa a ser conferida por código.</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-905):</strong> <code>itens</code> aceita texto ou <code>{texto, origem}</code> (<code>anterior</code> | <code>regressao_no_diff</code>). Com pedido anterior, o <code>QaLeadServer</code> confere cada item <code>regressao_no_diff</code> contra os arquivos alterados desde o <code>headAvaliado</code> da volta anterior (gravado no <code>qa_verdict</code>, <code>git diff --name-only &lt;head&gt;..HEAD</code>). Item sem arquivo do diff vai para <code>melhorias</code>, com aviso no <code>resumo</code>, e não reprova; se todos os itens saem, o parecer vira <code>approved</code>. Sem head conhecido, nada é conferido.</li>
+<li><strong>Onde:</strong> <code>lib/engine/gates/itens_do_parecer.ex</code> (<code>aplicar</code>), <code>lib/engine/gates/qa_lead_server.ex</code> (<code>tratar_resultado</code>, <code>arquivos_da_volta</code>, <code>pedido_anterior</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/gates/itens_do_parecer_test.exs</code>, <code>test/engine/gates/qa_lead_server_test.exs</code> (&quot;a volta nova não move a régua&quot;)</li>
+<li><strong>Origem:</strong> AT-905, Rodada 367, lane gates.</li>
+</ul>
+<h3 id="rn-1119">RN-1119 — Requisito de execução que contradiz o contrato é observação, e o ponto de entrada é o da aplicação</h3>
+<blockquote>
+<p><strong>Revisa a <a href="../api.html#rn-786">RN-786</a></strong> (a divergência de nome já era observação; passa a valer para a execução) e a <a href="parte-05.html#rn-813">RN-813</a>.</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-909):</strong> o recorte exige que o ponto de entrada REAL que sobe seja o da APLICAÇÃO (o <code>run.app</code>/compose), não o <code>start</code> de cada módulo. Módulo que o contrato diz ser composto por outro (dependência injetada) não precisa subir sozinho: exigir isso é observação no <code>resumo</code>, nunca item.</li>
+<li><strong>Onde:</strong> <code>lib/engine/gates/recorte_da_tarefa.ex</code> (<code>secao_do_ponto_de_entrada</code>, <code>secao_do_contrato</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/gates/recorte_da_tarefa_test.exs</code> (&quot;AT-909: o ponto de entrada é o da aplicação…&quot;)</li>
+<li><strong>Origem:</strong> AT-909 (achado 19), Rodada 367, lane gates.</li>
+</ul>
+<h3 id="rn-1120">RN-1120 — O parecer de QA que a api guarda no bloqueio por teto leva os itens</h3>
+<ul>
+<li><strong>Regra (AT-909):</strong> o engine sempre manda à api os <code>itens</code> como lista de texto (nunca objetos) e grava no <code>artifact.qa_verdict</code> os campos <code>itens</code>, <code>melhorias</code> e <code>headAvaliado</code>, que são a fonte do Dev Lead e da orientação do Desbloquear. O bloqueio por &quot;ciclo de correção esgotado&quot; grava como diagnóstico o <code>resumo</code> mais os <code>itens</code> (parte da api, outra lane).</li>
+<li><strong>Onde:</strong> <code>lib/engine/gates/qa_lead_server.ex</code> (<code>aplicar</code>, <code>emit_parecer_interno</code>), <code>lib/engine/gates/itens_do_parecer.ex</code> (<code>textos</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/gates/qa_lead_server_test.exs</code> (&quot;o artefato qa_verdict leva itens, melhorias e headAvaliado&quot;)</li>
+<li><strong>Origem:</strong> AT-909, Rodada 367, lane gates.</li>
+</ul>
+<h3 id="rn-1121">RN-1121 — Entrega que toca manifesto ou build, ou a última tarefa, é provada num clone limpo</h3>
+<blockquote>
+<p><strong>Revisa a <a href="parte-05.html#rn-817">RN-817</a></strong> (o ambiente limpo limpava processos, não artefatos de build) e a <a href="../api.html#rn-935">RN-935</a>.</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-921):</strong> quando a entrega altera <code>package.json</code>, lockfile, <code>Dockerfile</code>, <code>docker-compose*.yml</code> ou <code>tsconfig*.json</code>, ou é a última tarefa pendente (irmãs <code>done</code> e nenhuma tarefa aberta no módulo), o <code>QaLeadServer</code> prepara <code>.brabo-qa/clone-limpo/</code> com <code>git archive HEAD</code> (sem <code>node_modules</code>, <code>dist</code> nem arquivo não versionado), sem Docker e sem LLM extra. O recorte manda instalar, compilar, testar e subir o app ali, conferindo <code>/docs</code> e <code>/openapi.json</code>. Nas demais tarefas nada muda. Se o clone não puder ser preparado, o recorte diz e isso não reprova.</li>
+<li><strong>Onde:</strong> <code>lib/engine/gates/clone_limpo.ex</code> (<code>disparar?</code>, <code>preparar</code>), <code>lib/engine/gates/qa_lead_server.ex</code> (<code>clone_limpo</code>), <code>lib/engine/gates/recorte_da_tarefa.ex</code> (<code>secao_do_clone_limpo</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/gates/clone_limpo_test.exs</code> (corrente com git de verdade), <code>test/engine/gates/recorte_da_tarefa_test.exs</code></li>
+<li><strong>Origem:</strong> AT-921 (achado 35), Rodada 367, lane gates.</li>
+</ul>
+<h3 id="rn-1122">RN-1122 — O QA confere a rota no README do módulo, não no da raiz</h3>
+<blockquote>
+<p><strong>Revisa a <a href="parte-05.html#rn-850">RN-850</a> e a <a href="parte-05.html#rn-854">RN-854</a></strong> no lado do recorte.</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-903):</strong> o recorte confere a seção &quot;Rotas HTTP&quot; do README da pasta do módulo da tarefa, e cada rota dela precisa estar no <code>/openapi.json</code> servido. Rota que só está no README da raiz não é exigida e não reprova. O kickoff do dev que manda a rota para o README do módulo é de outra lane.</li>
+<li><strong>Onde:</strong> <code>lib/engine/gates/recorte_da_tarefa.ex</code> (<code>texto</code>, <code>secao_do_ponto_de_entrada</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/gates/recorte_da_tarefa_test.exs</code> (&quot;AT-903: o QA confere o README do módulo&quot;)</li>
+<li><strong>Origem:</strong> AT-903 (achado 11), Rodada 367, lane gates.</li>
+</ul>
+<h3 id="rn-1123">RN-1123 — No clone limpo, falha de passo é item, falha de rede é <code>infra</code>, e o compose real segue observação</h3>
+<blockquote>
+<p><strong>Revisa a <a href="parte-05.html#rn-813">RN-813</a> e a <a href="parte-05.html#rn-854">RN-854</a></strong> (o compose como observação).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-921):</strong> instalação, build, suíte e subida a partir do clone limpo que falham são <code>itens</code>. Falha de REDE (registry inacessível) tem origem <code>infra</code> e vai ao <code>resumo</code>, não reprova. O build da imagem e o <code>docker compose up</code> real continuam observação (&quot;provado só na máquina do usuário&quot;): a instância de QA não tem Docker e o broker não faz build.</li>
+<li><strong>Onde:</strong> <code>lib/engine/gates/recorte_da_tarefa.ex</code> (<code>secao_do_ponto_de_entrada</code>, <code>secao_do_clone_limpo</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/gates/recorte_da_tarefa_test.exs</code> (&quot;AT-921: a seção do clone limpo…&quot;)</li>
+<li><strong>Origem:</strong> AT-921, Rodada 367, lane gates.</li>
+</ul>
+<h3 id="rn-1130">RN-1130 — Com a execução ativa, <code>propose_execution_plan</code> propõe só as tarefas restantes</h3>
+<ul>
+<li><strong>Regra (AT-910):</strong> com agentes do projeto vivos (<code>dev_agent_states</code>), a ferramenta descarta de <code>tarefas</code> as que o backlog diz <code>done</code>, <code>in_progress</code> ou <code>in_review</code> e as que já têm o mesmo módulo. Sobrando alguma, propõe só essas, com o <code>resumo</code> &quot;plano das tarefas restantes (N)&quot;. Sem sobra, recusa com &quot;NÃO reproponha: diga ao usuário o que destrava&quot;. Falha de leitura (banco ou backlog) não recusa, como a RN-792. Estende as RN-677 e RN-678.</li>
+<li><strong>Onde:</strong> <code>lib/engine/agents/dev_lead_tools.ex</code> (<code>restantes_e_conferir</code>, <code>execucao_ativa?</code>, <code>ja_resolvida?</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/agents/dev_lead_nao_repropoe_test.exs</code></li>
+<li><strong>Origem:</strong> AT-910, Rodada 368, lane Dev Lead.</li>
+</ul>
+<h3 id="rn-1131">RN-1131 — O backlog lido pelo Dev Lead lista os módulos entregues</h3>
+<ul>
+<li><strong>Regra (AT-910):</strong> o <code>tarefas_do_backlog</code> (kickoff e <code>read_backlog</code>) acrescenta &quot;ENTREGUE: módulo X (n tarefa(s) done, na main)&quot; para o módulo cujas tarefas estão todas <code>done</code>, sem listá-las, para ele não recriar fundação.</li>
+<li><strong>Onde:</strong> <code>lib/engine/agents/dev_lead_tools.ex</code> (<code>modulos_entregues</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/agents/dev_lead_nao_repropoe_test.exs</code> (&quot;ENTREGUE&quot;)</li>
+<li><strong>Origem:</strong> AT-910, Rodada 368, lane Dev Lead.</li>
+</ul>
+<h3 id="rn-1132">RN-1132 — O contrato novo e a parada não pedem replano, e a recusa sem motivo gera uma pergunta</h3>
+<ul>
+<li><strong>Regra (AT-910):</strong> o aviso de contrato (RN-1012) manda criar a tarefa no módulo dono e NÃO repropor o plano com a execução ativa; o aviso de parada (RN-1059) também proíbe repropor. A recusa do plano SEM motivo volta ao Dev Lead com &quot;pergunte UMA vez ao usuário o que mudar antes de propor de novo&quot;. Com motivo, o texto segue como antes.</li>
+<li><strong>Onde:</strong> <code>lib/engine/agents/dev_lead_server.ex</code> (<code>aviso_de_contrato</code>, <code>aviso_de_parada</code>, <code>texto_do_desfecho</code>, <code>pergunta_apos_recusa</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/agents/dev_lead_server_test.exs</code> (&quot;contrato_publicado…&quot;, o kickoff)</li>
+<li><strong>Origem:</strong> AT-910, Rodada 368, lane Dev Lead.</li>
+</ul>
+<h3 id="rn-1133">RN-1133 — A fundação do primeiro módulo cria a raiz do workspace</h3>
+<ul>
+<li><strong>Regra (AT-921):</strong> com mais de um módulo no mesmo runtime, o kickoff manda a fundação do primeiro módulo pegável (sem <code>dependsOn</code>) criar também a raiz do workspace: <code>package.json</code> com <code>workspaces</code>, lockfile, raiz do compose e script de build na ordem do grafo; cada módulo tem <code>package.json</code> próprio. Estende a RN-1006.</li>
+<li><strong>Onde:</strong> <code>lib/engine/agents/dev_lead_server.ex</code> (texto da FUNDAÇÃO no kickoff)</li>
+<li><strong>Teste:</strong> <code>test/engine/agents/dev_lead_server_test.exs</code> (kickoff com a &quot;RAIZ do workspace&quot;)</li>
+<li><strong>Origem:</strong> AT-921, Rodada 368, lane Dev Lead.</li>
+</ul>
+<h3 id="rn-1095">RN-1095 — A retentativa por corte pelo teto de saída dobra o teto, em vez de repetir o pedido</h3>
+<blockquote>
+<p><strong>Revisa a <a href="parte-05.html#rn-780">RN-780</a></strong> (a volta retentada deixa de ser idêntica à primeira).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-920):</strong> a volta retentada de uma resposta só de raciocínio cortada pelo teto (<code>truncated</code>) marca <code>saida_ampliada</code> e chama o <code>llm_turn</code> com <code>saida_ampliada: true</code>; a fachada leva <code>saidaAmpliada: true</code> no corpo para a api, que dobra o teto de saída do turno. A primeira chamada e as seguintes (uma chamada de ferramenta zera a marca) saem sem a opção.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tool_loop.ex:256</code> (<code>parada_sem_chamada</code>), <code>apps/engine/lib/engine/harness/tool_loop.ex:287</code> (<code>llm_turn_com_retentativa</code>), <code>apps/engine/lib/engine/sessions/engine_api_client.ex:2012</code> (<code>com_catalogo_completo</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tool_loop_test.exs</code> (&quot;RN-1095: só a volta retentada pede o teto de saída dobrado&quot;)</li>
+<li><strong>Declarado:</strong> a parte da api (dobrar <code>maxTokens</code> e o mapa de raciocínio do <code>claude-sonnet-5</code>) é de outra lane; até ela entrar, a api ignora o campo.</li>
+<li><strong>Origem:</strong> AT-920 (achado 33 da 28ª), Rodada 366, lane EA.</li>
+</ul>
+<h3 id="rn-1096">RN-1096 — O bloqueio por corte repetido diz o que mudar</h3>
+<ul>
+<li><strong>Regra (AT-920):</strong> repetido o corte, o diagnóstico do bloqueio diz que a retentativa já dobrou o teto de saída e que o próximo passo é trocar o modelo do agente ou desligar o raciocínio daquele modelo.</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1456</code> (<code>stop_diagnosis</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tool_loop_test.exs</code> (corte repetido marca <code>corte_pelo_teto</code>, que escolhe o diagnóstico)</li>
+<li><strong>Origem:</strong> AT-920, Rodada 366, lane EA.</li>
+</ul>
+<h3 id="rn-1097">RN-1097 — O kickoff do dev ensina a provar a rota com o app de pé, e o teto do terminal é dito como teto</h3>
+<blockquote>
+<p><strong>Estende a <a href="parte-05.html#rn-846">RN-846</a></strong> e espelha a <a href="parte-05.html#rn-854">RN-854</a>.</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-904):</strong> o <code>initial_message</code> do dev traz a receita: subida em segundo plano (<code>nohup</code>), espera da porta, <code>curl</code> e encerramento do grupo de processos, sem nunca subir o app em primeiro plano. O resultado do estouro do teto do terminal diz que é teto de tempo, não recusa de permissão. A causa do &quot;negado pelo sistema&quot; da 28ª foi lida como o teto de 120 s com o servidor em primeiro plano (hipótese do levantamento, sem o log da 28ª).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:715</code> (<code>@receita_de_subir_o_app</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:820</code> (<code>initial_message</code>), <code>apps/engine/lib/engine/harness/hooks/action_pipeline.ex:85</code> (<code>resultado_de_teto_do_terminal</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/report_done_instrucao_test.exs</code> (&quot;RN-1097…&quot;), <code>apps/engine/test/engine/sessions/engine_api_client_propose_terminal_test.exs</code> (&quot;o estouro da espera chega ao modelo…&quot;)</li>
+<li><strong>Origem:</strong> AT-904 (achado 13), Rodada 366, lane EA.</li>
+</ul>
+<h3 id="rn-1098">RN-1098 — A rota HTTP entra no README do módulo, nunca no da raiz</h3>
+<blockquote>
+<p><strong>Revisa a <a href="parte-05.html#rn-846">RN-846</a></strong> e a <a href="parte-05.html#rn-850">RN-850</a> (o destino da seção &quot;Rotas HTTP&quot;).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-903):</strong> o kickoff do dev manda a rota criada ou mudada para a seção &quot;Rotas HTTP&quot; do <code>README.md</code> da PASTA DO SEU MÓDULO; o README da raiz é da Infra (uso e índice de módulos) e da tarefa de integração. Dependências de outras lanes, não feitas aqui: o índice &quot;Módulos&quot; da raiz (<code>infra_lead_server.ex</code>) e a conferência do recorte do QA (<code>recorte_da_tarefa.ex</code>, que ainda exige a rota na raiz).</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:820</code> (<code>initial_message</code>)</li>
+<li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/report_done_instrucao_test.exs</code> (&quot;RN-846: kickoff pede a rota no README…&quot;)</li>
+<li><strong>Origem:</strong> AT-903 (achado 11), Rodada 366, lane EA.</li>
+</ul>
+<h3 id="rn-1110">RN-1110 — O kickoff do dev leva, fixada, a memória do módulo da tarefa e a dos módulos de que ele depende</h3>
+<blockquote>
+<p><strong>ADR 0293</strong> (<a href="../../adr/0293-a-memoria-do-projeto-e-markdown-versionado-e-o-grafo-e-o-rag-sao-indices.html">a memória do projeto é markdown versionado</a>).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-923):</strong> o kickoff do dev agent traz uma mensagem FIXADA (<code>:pinned</code>, que o <code>ContextManager</code> não compacta), &quot;Memória dos módulos&quot;, entre o enunciado e o retrato do worktree. Ela tem o cartão do módulo da tarefa por inteiro e, dos módulos de <code>dependeDe</code>, só as seções Expõe e Como usar, mais o contrato declarado de cada um (lido do banco, a fonte única). São no máximo 8 000 tokens estimados: o módulo próprio é o último a ser cortado (pela cauda, com marcador) e as seções de dependência que não cabem são omitidas e contadas; o total real é dito (ADR 0060). Os outros módulos ficam a um <code>read_file</code>, e a mensagem diz o caminho. Cartão ausente ou pasta que o engine não vê (modo <code>runner</code>) não quebra: a mensagem diz isso.</li>
+<li><strong>Onde:</strong> <code>lib/engine/dev/memoria_do_projeto.ex:55</code> (<code>mensagem</code>), <code>lib/engine/dev/dev_agent_server.ex:709</code> (<code>memoria_message</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/dev/memoria_do_projeto_test.exs</code>, <code>test/engine/dev/memoria_corrente_test.exs</code> (&quot;report_done → cartão → kickoff da próxima tarefa…&quot;)</li>
+<li><strong>Origem:</strong> AT-923 (EP-036), Rodada 372, lane L4 (A1 e A2).</li>
+</ul>
+<h3 id="rn-1111">RN-1111 — A correção pedida por um gate começa com a mesma memória, o retrato e o resumo anterior</h3>
+<blockquote>
+<p><strong>ADR 0293</strong> (<a href="../../adr/0293-a-memoria-do-projeto-e-markdown-versionado-e-o-grafo-e-o-rag-sao-indices.html">a memória do projeto é markdown versionado</a>).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-923):</strong> a volta de correção (<code>implement_correction</code>) não recomeça só com o enunciado: monta enunciado, a mesma mensagem fixada da RN-1110, o retrato do worktree, o resumo do <code>report_done</code> anterior (guardado no estado do agente) e, por último, o parecer do gate.</li>
+<li><strong>Onde:</strong> <code>lib/engine/dev/dev_agent_server.ex:900</code> (<code>implement_correction</code>), <code>lib/engine/dev/dev_agent_server.ex:768</code> (<code>resumo_anterior</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/dev/memoria_corrente_test.exs</code> (&quot;a correção de gate leva a memória…&quot;)</li>
+<li><strong>Origem:</strong> AT-923 (EP-036), Rodada 372, lane L4 (A1 e A2).</li>
+</ul>
+<h3 id="rn-1112">RN-1112 — No <code>report_done</code>, o sistema regenera o cartão do módulo, sem LLM, e ele entra no mesmo commit</h3>
+<blockquote>
+<p><strong>ADR 0293</strong> (<a href="../../adr/0293-a-memoria-do-projeto-e-markdown-versionado-e-o-grafo-e-o-rag-sao-indices.html">a memória do projeto é markdown versionado</a>).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-923):</strong> antes do <code>propose_commit</code> (entrega e correção), o engine regenera <code>.brabo/memoria/modulos/&lt;m&gt;.md</code> do módulo da tarefa a partir do código do worktree: <code>package.json</code> (scripts, dependência irmã), exports do ponto de entrada (com <code>export *</code> seguido um nível), rotas por regex ou <code>openapi.json</code>, pasta de migrações. Sem LLM, sem rede, sem timestamp (o mesmo código gera o mesmo arquivo). Linguagem desconhecida sai só com a lista de arquivos e a seção humana. O <code>AGENTS.md</code> da raiz ganha uma linha de ponteiro. Falha na geração não derruba a entrega, e pasta fora do alcance do engine (modo <code>runner</code>) é ignorada. Limite: a rota é o caminho como escrito no arquivo, sem o prefixo de <code>app.use</code>.</li>
+<li><strong>Onde:</strong> <code>lib/engine/dev/memoria_extrator.ex:71</code> (<code>escrever</code>), <code>lib/engine/dev/dev_agent_server.ex:784</code> (<code>escrever_memoria</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/dev/memoria_extrator_test.exs</code>, <code>test/engine/dev/memoria_corrente_test.exs</code></li>
+<li><strong>Origem:</strong> AT-923 (EP-036), Rodada 372, lane L4 (A1 e A2).</li>
+</ul>
+<h3 id="rn-1113">RN-1113 — A seção humana &quot;Como usar&quot; só muda pelo <code>como_usar</code> do dev daquele módulo</h3>
+<blockquote>
+<p><strong>ADR 0293</strong> (<a href="../../adr/0293-a-memoria-do-projeto-e-markdown-versionado-e-o-grafo-e-o-rag-sao-indices.html">a memória do projeto é markdown versionado</a>).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-923):</strong> o <code>report_done</code> ganha o parâmetro opcional <code>como_usar</code> (texto curto, teto de 4 000 bytes com o total dito quando corta). Ele substitui só a seção &quot;Como usar&quot; do cartão do PRÓPRIO módulo; sem ele, o que estava lá (inclusive edição do usuário) fica, e a parte gerada, entre <code>&lt;!-- brabo:gerado --&gt;</code> e <code>&lt;!-- /brabo:gerado --&gt;</code>, é sobrescrita. O kickoff pede o parâmetro quando a tarefa muda o que o módulo expõe ou como sobe e testa.</li>
+<li><strong>Onde:</strong> <code>lib/engine/dev/memoria_extrator.ex:495</code> (<code>humana</code>), <code>lib/engine/dev/tools/report_done.ex:33</code> (<code>como_usar</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/dev/memoria_extrator_test.exs</code> (&quot;como_usar troca só a seção humana…&quot;)</li>
+<li><strong>Origem:</strong> AT-923 (EP-036), Rodada 372, lane L4 (A1 e A2).</li>
+</ul>
+<h3 id="rn-1114">RN-1114 — O cartão diz o que o contrato declara e o código não expõe, e o contrário</h3>
+<blockquote>
+<p><strong>ADR 0293</strong> (<a href="../../adr/0293-a-memoria-do-projeto-e-markdown-versionado-e-o-grafo-e-o-rag-sao-indices.html">a memória do projeto é markdown versionado</a>). Relaciona-se com a <a href="parte-07.html#rn-1093">RN-1093</a> (o Arquiteto confere o código).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-923):</strong> o contrato declarado (versão e itens, do banco) é renderizado no cartão, com a seção &quot;Divergência contrato × código&quot;: função ou rota declarada que o código não tem, e função exportada ou rota servida que o contrato não declara. A divergência é dita, nunca corrigida em silêncio, e a fonte do contrato continua no banco (RN-684).</li>
+<li><strong>Onde:</strong> <code>lib/engine/dev/memoria_extrator.ex:420</code> (<code>divergencia</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/dev/memoria_extrator_test.exs</code> (&quot;RN-1114…&quot;)</li>
+<li><strong>Origem:</strong> AT-923 (EP-036), Rodada 372, lane L4 (A1 e A2).</li>
+</ul>
+<h3 id="rn-1115">RN-1115 — A varredura do workspace e a leitura de <code>AGENTS.md</code> não descem em <code>node_modules</code></h3>
+<blockquote>
+<p><strong>ADR 0293</strong> (<a href="../../adr/0293-a-memoria-do-projeto-e-markdown-versionado-e-o-grafo-e-o-rag-sao-indices.html">a memória do projeto é markdown versionado</a>).</p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-923):</strong> <code>WorkspaceFiles.search</code>/<code>count</code> pulam <code>.git</code> e <code>node_modules</code>; o <code>InstructionFiles</code> pula também <code>.brabo</code> (a memória não é instrução). Descer em <code>node_modules</code> custava segundos e enchia a busca do dev de código de terceiro.</li>
+<li><strong>Onde:</strong> <code>lib/engine/harness/workspace_files.ex:137</code> (<code>walk</code>), <code>lib/engine/harness/instruction_files.ex:241</code> (<code>collect</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/harness/workspace_files_test.exs</code>, <code>test/engine/harness/instruction_files_test.exs</code> (&quot;AT-923…&quot;)</li>
+<li><strong>Origem:</strong> AT-923 (EP-036), Rodada 372, lane L4 (A1 e A2).</li>
+</ul>
+<h3 id="rn-1158">RN-1158 — O fecho do turno grava o que foi gravado como CAMPO</h3>
+<blockquote>
+<p><strong>Estende a <a href="parte-05.html#rn-731">RN-731</a>.</strong></p>
+</blockquote>
+<ul>
+<li><strong>Regra (AT-933):</strong> o <code>agent.response</code> de fecho dos agentes conversacionais leva <code>gravadoNoTurno: %{itens: [%{tipo, total}], recusadas}</code> (<code>tipo</code> é a classe da RN-731, ex. <code>&quot;regra&quot;</code>, <code>&quot;adr&quot;</code>, na ordem fixa da linha), além da linha &quot;Gravado neste turno: …&quot; no <code>content</code>, que segue igual por compatibilidade. Turno sem escrita não leva o campo.</li>
+<li><strong>Onde:</strong> <code>lib/engine/agents/gravado_no_turno.ex</code> (<code>descarregar_com_campos</code>), <code>lib/engine/agents/texto_do_turno.ex</code> (<code>payload_do_turno</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/agents/metricas_do_turno_test.exs</code> (&quot;RN-1158/1160…&quot;)</li>
+<li><strong>Origem:</strong> AT-933, Rodada 374, lane F1-engine.</li>
+</ul>
+<h3 id="rn-1159">RN-1159 — O fecho do turno grava custo, chamadas, raciocínio e duração</h3>
+<ul>
+<li><strong>Regra (AT-933):</strong> a cada chamada de LLM concluída o engine soma o <code>usage</code> do turno; o fecho leva <code>custoMicros</code> (chat mais Jev), <code>chamadasLlm</code>, <code>raciocinioTokens</code> (só se algum <code>usage</code> trouxe <code>reasoningTokens</code>, que a api passa a devolver em outra lane da AT-933) e <code>duracaoMs</code> (da primeira chamada ao fecho).</li>
+<li><strong>Onde:</strong> <code>lib/engine/agents/metricas_do_turno.ex</code> (<code>registrar</code>), <code>lib/engine/sessions/engine_api_client.ex</code> (<code>registrar_raciocinio</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/agents/metricas_do_turno_test.exs</code> (&quot;RN-1159…&quot;)</li>
+<li><strong>Origem:</strong> AT-933, Rodada 374, lane F1-engine.</li>
+</ul>
+<h3 id="rn-1160">RN-1160 — O texto do fecho não muda</h3>
+<ul>
+<li><strong>Regra (AT-933):</strong> os campos das RN-1158 e RN-1159 são acrescentados FORA do <code>content</code>; o texto da resposta e a linha da RN-731 ficam como eram, e quem não conhece os campos os ignora.</li>
+<li><strong>Onde:</strong> <code>lib/engine/agents/texto_do_turno.ex</code> (<code>payload_do_turno</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/agents/metricas_do_turno_test.exs</code> (&quot;RN-1158/1160…&quot;)</li>
+<li><strong>Origem:</strong> AT-933, Rodada 374, lane F1-engine.</li>
+</ul>
+<h3 id="rn-1161">RN-1161 — Sem fato, sem campo</h3>
+<ul>
+<li><strong>Regra (AT-933):</strong> turno sem escrita não leva <code>gravadoNoTurno</code>; turno sem chamada de LLM não leva os campos de métrica; turno sem texto algum (<code>payload_do_turno</code> nulo) descarta o acúmulo. O <code>ToolLoop</code> (dev, QA, gates) não entra nesta regra: ele já grava <code>tokensSpentMicros</code> por iteração.</li>
+<li><strong>Onde:</strong> <code>lib/engine/agents/metricas_do_turno.ex</code> (<code>descarregar</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/agents/metricas_do_turno_test.exs</code> (&quot;RN-1161…&quot;)</li>
+<li><strong>Origem:</strong> AT-933, Rodada 374, lane F1-engine.</li>
+</ul>
+<h3 id="rn-1167">RN-1167 — O dev consulta o impacto de um módulo pelo grafo, e grafo desligado nunca vira lista vazia</h3>
+<ul>
+<li><strong>Regra (AT-924):</strong> o dev agent ganha a ferramenta <code>consultar_impacto_do_modulo</code> (<code>:direct</code>, leitura contida, ADR 0060): o projeto vem do contexto, o único parâmetro é o nome do módulo, e cada lista tem teto de 40 com o total dito. Responde quem depende do módulo, o que ele expõe, as decisões que o citam e a versão do contrato. 503 da api (grafo desligado) volta como <code>ok: false</code> &quot;grafo desligado&quot;, nunca como lista vazia; 404 diz que o módulo não tem nó.</li>
+<li><strong>Onde:</strong> <code>lib/engine/harness/tools/consultar_impacto_do_modulo.ex:42</code> (<code>run</code>), <code>lib/engine/sessions/engine_api_client.ex</code> (<code>consultar_impacto_do_modulo</code>), <code>lib/engine/dev/tools.ex</code> (<code>registry</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/harness/tools/consultar_impacto_do_modulo_test.exs</code></li>
+<li><strong>Origem:</strong> AT-924, lane E1-engine; estende a RN-1166 da api.</li>
+</ul>
+<h3 id="rn-1134">RN-1134 — O dev recebe os mesmos critérios da entrega que o QA, antes de codar</h3>
+<ul>
+<li><strong>Regra (AT-905):</strong> o kickoff e a volta de correção do dev levam uma mensagem fixada com os critérios da entrega (forma da resposta, ponto de entrada, contrato), os mesmos do recorte do QA, sem a régua do veredito. Uma função só, <code>criterios_da_entrega/1</code>, gera os dois textos.</li>
+<li><strong>Onde:</strong> <code>lib/engine/gates/recorte_da_tarefa.ex</code> (<code>criterios_da_entrega</code>), <code>lib/engine/dev/dev_agent_server.ex</code> (<code>criterios_message</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/gates/recorte_da_tarefa_test.exs</code> (&quot;AT-905: criterios_da_entrega&quot;)</li>
+<li><strong>Origem:</strong> AT-905, Rodada 369, lane engine.</li>
+</ul>
+<h3 id="rn-1135">RN-1135 — O Desbloquear leva orientação e o último parecer ao dev, e a orientação prevalece</h3>
+<ul>
+<li><strong>Regra (AT-909):</strong> o <code>dev-context</code> traz <code>desbloqueio</code> e <code>ultimoParecer</code> (api#105); quando há orientação, o dev recebe uma mensagem fixada com o parecer e a orientação, que prevalece sobre o parecer.</li>
+<li><strong>Onde:</strong> <code>lib/engine/dev/context_builder.ex</code> (<code>build</code>), <code>lib/engine/dev/dev_agent_server.ex</code> (<code>desbloqueio_message</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/dev/context_builder_test.exs</code> (&quot;RN-1135&quot;)</li>
+<li><strong>Origem:</strong> AT-909, Rodada 369, lane engine.</li>
+</ul>
+<h3 id="rn-1136">RN-1136 — O Dev Lead lê o último parecer de gate de uma tarefa</h3>
+<ul>
+<li><strong>Regra (AT-909):</strong> a ferramenta <code>ler_parecer_da_tarefa(task_id)</code> devolve veredito, resumo, itens e melhorias do último parecer, lidos pelo <code>dev-context</code>; tarefa sem parecer e falha de leitura têm resposta nomeada.</li>
+<li><strong>Onde:</strong> <code>lib/engine/agents/dev_lead_tools.ex</code> (<code>run_ler_parecer_da_tarefa</code>), <code>lib/engine/agents/dev_lead_server.ex</code> (<code>tool_specs</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/agents/dev_lead_tools_test.exs</code> (&quot;RN-1136&quot;)</li>
+<li><strong>Origem:</strong> AT-909, Rodada 369, lane engine.</li>
+</ul>
+<h3 id="rn-1137">RN-1137 — O <code>update_task</code> do Arquiteto vai com o autor <code>arquiteto</code></h3>
+<ul>
+<li><strong>Regra (AT-918):</strong> a ferramenta manda <code>agentId: &quot;arquiteto&quot;</code> quando chamada pelo Arquiteto (a api aceita o autor desde a api#105); PO continua <code>po</code> e Dev Lead <code>dev-lead</code>.</li>
+<li><strong>Onde:</strong> <code>lib/engine/harness/tools/update_task.ex</code> (<code>run</code>), <code>lib/engine/agents/arquiteto_server.ex</code> (<code>run_tool</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/harness/tools/update_task_test.exs</code> (&quot;o Arquiteto manda agentId arquiteto&quot;)</li>
+<li><strong>Origem:</strong> AT-918, Rodada 369, lane engine.</li>
+</ul>
+<h3 id="rn-1190">RN-1190 — O gate de QA esgotado avisa o Dev Lead com os itens</h3>
+<ul>
+<li><strong>Regra (AT-909):</strong> quando a api devolve <code>nextAction: blocked</code> ao veredito do QA, o <code>QaLeadServer</code> entrega ao Dev Lead um <code>:tarefa_bloqueada</code> com o motivo &quot;ciclo de correção esgotado (gate qa)&quot; e os itens no diagnóstico. A exclusão da RN-1012 cai só para este caso; o gate de SecOps segue fora.</li>
+<li><strong>Onde:</strong> <code>lib/engine/gates/qa_lead_server.ex</code> (<code>avisar_ciclo</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/gates/qa_lead_server_test.exs</code> (&quot;RN-1190&quot;)</li>
+<li><strong>Origem:</strong> AT-909, Rodada 369, lane avisos.</li>
+</ul>
+<h3 id="rn-1191">RN-1191 — Na penúltima correção permitida o Dev Lead é avisado com os itens</h3>
+<ul>
+<li><strong>Regra (AT-909):</strong> quando o veredito do QA pede correção e <code>gateCorrectionCount == max_gate_corrections - 1</code>, o Dev Lead recebe <code>:ciclo_quase_esgotado</code> com os itens da volta e o caminho (<code>ler_parecer_da_tarefa</code>, <code>pedir_ao_arquiteto</code>). São os itens desta volta, sem diferença contra a anterior.</li>
+<li><strong>Onde:</strong> <code>lib/engine/gates/qa_lead_server.ex</code> (<code>avisar_ciclo</code>), <code>lib/engine/agents/dev_lead_server.ex</code> (<code>aviso_de_ciclo_quase_esgotado</code>)</li>
+<li><strong>Teste:</strong> <code>test/engine/gates/qa_lead_server_test.exs</code> (&quot;RN-1191&quot;), <code>test/engine/agents/dev_lead_server_test.exs</code> (&quot;ciclo_quase_esgotado&quot;)</li>
+<li><strong>Origem:</strong> AT-909, Rodada 369, lane avisos.</li>
+</ul>
+<h3 id="rn-1320">RN-1320 — O gate resolvido aciona o merge automático e o desfecho tem origem nomeada</h3>
+<ul>
+<li><strong>Regra (AT-902):</strong> <code>task.gate_resolved</code> (<code>nextAction: done</code>) vai também ao <code>MergeAutomaticoWorker</code>, que chama <code>POST /internal/projects/:projectId/tasks/:taskId/auto-merge</code> (RN-1316). O engine não decide merge: chave, gates, PR e duplicidade são da api. Recusa 409 <code>chave_desligada</code>, <code>gate_pendente</code>, <code>pr_ja_mergeado</code> e <code>merge_ja_proposto</code> é o caminho normal (<code>:ok</code>, só log). <code>sem_pr</code> ou código desconhecido grava <code>merge_automatico.recusado</code> (origem <code>politica</code>). Proposta <code>failed</code> grava <code>merge_automatico.falhou</code> com origem <code>codigo</code> (conflito, com os arquivos; o dev acorda pela RN-715) ou <code>infra</code> (provider). 5xx e queda de rede tentam de novo (5 tentativas) e, esgotadas, gravam <code>merge_automatico.falhou</code> com origem <code>infra</code> (só o status, nunca o corpo); outro 4xx grava na hora. A PR sempre fica pronta para o clique manual.</li>
+<li><strong>Onde:</strong> <code>lib/engine/workers/merge_automatico_worker.ex</code>, <code>lib/engine/outbox/drain.ex</code> (<code>handlers_for</code>), <code>Engine.Sessions.EngineApiClient.acionar_merge_automatico/3</code></li>
+<li><strong>Teste:</strong> <code>test/engine/workers/merge_automatico_worker_test.exs</code>, <code>test/engine/outbox/drain_test.exs</code></li>
+<li><strong>Origem:</strong> AT-902 (EP-036), decisão do dono de 12/11/2026; espelha a RN-1316 da api.</li>
+</ul>
+<nav class="site-pager"><a href="../../business-rules/engine/parte-06.html">Engine — parte 6 (desde RN-880)</a><a href="../../business-rules/infra.html">Infra</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-engine/blob/dev/docs/business-rules/engine/parte-07.md">编辑此页</a></footer>
+</main>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n3"><a href="#rn-1076">RN-1076 — As Percepções olham o produto do usuário; a falha da plataforma é sinal interno só no TP-01</a></li><li class="n3"><a href="#rn-1077">RN-1077 — A task reivindicada parte da PRÓPRIA branch quando ela tem trabalho fora da main</a></li><li class="n3"><a href="#rn-1078">RN-1078 — O gate só abre com commit e push executados e o HEAD igual ao do remoto</a></li><li class="n3"><a href="#rn-1079">RN-1079 — O wip de preservação não enviado é absorvido pelo commit da task</a></li><li class="n3"><a href="#rn-1080">RN-1080 — A branch presa no worktree de outro dev agent é liberada, e o conflito reentregue só retrabalha task viva</a></li><li class="n3"><a href="#rn-1099">RN-1099 — O merge da PR de infra faz a Infra propor de novo a subida do container</a></li><li class="n3"><a href="#rn-1100">RN-1100 — A Infra escreve na raiz o índice &quot;Módulos&quot;</a></li><li class="n3"><a href="#rn-1086">RN-1086 — O dev ocioso volta a procurar tarefa sozinho, e a execução parada tenta o claim de novo</a></li><li class="n3"><a href="#rn-1087">RN-1087 — A tarefa nasce com o módulo, e o Dev Lead arquiva a tarefa todo que ele criou</a></li><li class="n3"><a href="#rn-1088">RN-1088 — A execução parada nomeia o ciclo entre o bloqueio e o dependsOn</a></li><li class="n3"><a href="#rn-1089">RN-1089 — A falha de reinício da app depois do merge avisa o Dev Lead com motivo, código e o caminho do log</a></li><li class="n3"><a href="#rn-1090">RN-1090 — O teto de gasto por tarefa vale para os dev agents vivos, e a memória nunca sobrescreve um teto mais novo</a></li><li class="n3"><a href="#rn-1093">RN-1093 — O Arquiteto lê a main antes de declarar o contrato, e declare_module_contracts a confere</a></li><li class="n3"><a href="#rn-1094">RN-1094 — Mudar o contrato lista as tarefas afetadas, e o Arquiteto as corrige no mesmo turno</a></li><li class="n3"><a href="#rn-1116">RN-1116 — O parecer do QA separa itens (bloqueia) de melhorias (não bloqueia)</a></li><li class="n3"><a href="#rn-1117">RN-1117 — changes_requested sem item bloqueante é recusado</a></li><li class="n3"><a href="#rn-1118">RN-1118 — Numa volta nova, item novo só reprova se trata de arquivo do diff da volta</a></li><li class="n3"><a href="#rn-1119">RN-1119 — Requisito de execução que contradiz o contrato é observação, e o ponto de entrada é o da aplicação</a></li><li class="n3"><a href="#rn-1120">RN-1120 — O parecer de QA que a api guarda no bloqueio por teto leva os itens</a></li><li class="n3"><a href="#rn-1121">RN-1121 — Entrega que toca manifesto ou build, ou a última tarefa, é provada num clone limpo</a></li><li class="n3"><a href="#rn-1122">RN-1122 — O QA confere a rota no README do módulo, não no da raiz</a></li><li class="n3"><a href="#rn-1123">RN-1123 — No clone limpo, falha de passo é item, falha de rede é infra, e o compose real segue observação</a></li><li class="n3"><a href="#rn-1130">RN-1130 — Com a execução ativa, propose_execution_plan propõe só as tarefas restantes</a></li><li class="n3"><a href="#rn-1131">RN-1131 — O backlog lido pelo Dev Lead lista os módulos entregues</a></li><li class="n3"><a href="#rn-1132">RN-1132 — O contrato novo e a parada não pedem replano, e a recusa sem motivo gera uma pergunta</a></li><li class="n3"><a href="#rn-1133">RN-1133 — A fundação do primeiro módulo cria a raiz do workspace</a></li><li class="n3"><a href="#rn-1095">RN-1095 — A retentativa por corte pelo teto de saída dobra o teto, em vez de repetir o pedido</a></li><li class="n3"><a href="#rn-1096">RN-1096 — O bloqueio por corte repetido diz o que mudar</a></li><li class="n3"><a href="#rn-1097">RN-1097 — O kickoff do dev ensina a provar a rota com o app de pé, e o teto do terminal é dito como teto</a></li><li class="n3"><a href="#rn-1098">RN-1098 — A rota HTTP entra no README do módulo, nunca no da raiz</a></li><li class="n3"><a href="#rn-1110">RN-1110 — O kickoff do dev leva, fixada, a memória do módulo da tarefa e a dos módulos de que ele depende</a></li><li class="n3"><a href="#rn-1111">RN-1111 — A correção pedida por um gate começa com a mesma memória, o retrato e o resumo anterior</a></li><li class="n3"><a href="#rn-1112">RN-1112 — No report_done, o sistema regenera o cartão do módulo, sem LLM, e ele entra no mesmo commit</a></li><li class="n3"><a href="#rn-1113">RN-1113 — A seção humana &quot;Como usar&quot; só muda pelo como_usar do dev daquele módulo</a></li><li class="n3"><a href="#rn-1114">RN-1114 — O cartão diz o que o contrato declara e o código não expõe, e o contrário</a></li><li class="n3"><a href="#rn-1115">RN-1115 — A varredura do workspace e a leitura de AGENTS.md não descem em node_modules</a></li><li class="n3"><a href="#rn-1158">RN-1158 — O fecho do turno grava o que foi gravado como CAMPO</a></li><li class="n3"><a href="#rn-1159">RN-1159 — O fecho do turno grava custo, chamadas, raciocínio e duração</a></li><li class="n3"><a href="#rn-1160">RN-1160 — O texto do fecho não muda</a></li><li class="n3"><a href="#rn-1161">RN-1161 — Sem fato, sem campo</a></li><li class="n3"><a href="#rn-1167">RN-1167 — O dev consulta o impacto de um módulo pelo grafo, e grafo desligado nunca vira lista vazia</a></li><li class="n3"><a href="#rn-1134">RN-1134 — O dev recebe os mesmos critérios da entrega que o QA, antes de codar</a></li><li class="n3"><a href="#rn-1135">RN-1135 — O Desbloquear leva orientação e o último parecer ao dev, e a orientação prevalece</a></li><li class="n3"><a href="#rn-1136">RN-1136 — O Dev Lead lê o último parecer de gate de uma tarefa</a></li><li class="n3"><a href="#rn-1137">RN-1137 — O update_task do Arquiteto vai com o autor arquiteto</a></li><li class="n3"><a href="#rn-1190">RN-1190 — O gate de QA esgotado avisa o Dev Lead com os itens</a></li><li class="n3"><a href="#rn-1191">RN-1191 — Na penúltima correção permitida o Dev Lead é avisado com os itens</a></li><li class="n3"><a href="#rn-1320">RN-1320 — O gate resolvido aciona o merge automático e o desfecho tem origem nomeada</a></li></ul></aside>
+</div>
+<script src="../../../assets/site.js"></script>
+<script defer src="../../assets/busca.js" data-indice="../../assets/busca-zh-Hans.json" data-base="../../"></script></body>
+</html>

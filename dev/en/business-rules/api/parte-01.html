@@ -144,6 +144,10 @@ mínimo. Sem ele, <code>deny</code> com motivo explícito.</p>
 é rebaixado de <code>auto_approve</code> para <code>require_approval</code> <strong>depois</strong> que toda a
 política rodou. Nem <code>agent_autonomy</code> nem <code>permissions.json</code> conseguem
 promovê-lo.</p>
+<p><strong>Exceção (RN-1316, AT-902):</strong> com a chave <code>merge_automatico</code> do projeto ligada,
+o <code>git_merge</code> proposto pelo gatilho do engine (<code>origem: merge_automatico</code>) com
+destino na branch de trabalho (<code>main</code>, trunk) é auto-aprovado. Qualquer outro
+caminho, e <code>dev</code>/<code>qa</code>/<code>rc</code>, segue rebaixado como acima.</p>
 <p><code>rc</code> continua na lista mesmo depois que a etapa saiu da política
 (<a href="../../adr/0030-politica-de-branches-mecanizada.html">ADR 0030</a>) e o bootstrap
 deixou de criá-la (<a href="#rn-029">RN-029</a>). Esta lista decide o que a trava
@@ -151,7 +155,7 @@ deixou de criá-la (<a href="#rn-029">RN-029</a>). Esta lista decide o que a tra
 branch: proteger uma que não existe não custa nada; desproteger uma que
 existe custa caro.</p>
 <ul>
-<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:523</code> (<code>isProtectedBranch</code>, o teto da trava de merge) + <code>protected-branches.ts:4</code></li>
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:552</code> (<code>isProtectedBranch</code>, o teto da trava de merge) + <code>protected-branches.ts:4</code></li>
 <li><strong>Teste:</strong> <code>test/domain/actions/decide.spec.ts</code></li>
 <li><strong>Origem:</strong> <a href="../../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011</a> §1</li>
 <li><strong>Nota:</strong> a proteção equivalente <strong>na plataforma</strong> (GitHub/GitLab)
@@ -301,6 +305,15 @@ lote inteiro.</p>
 <li><strong>Teste:</strong> <code>test/domain/psychologist/hypothesis-evidence.spec.ts</code></li>
 <li><strong>Origem:</strong> <a href="../../adr/0015-psicologo-real-toolloop-hipoteses-evidencia.html">ADR 0015</a> §3</li>
 </ul>
+<blockquote>
+<p><strong>Revisada pela <a href="../engine.html#rn-1076">RN-1076</a> (<a href="../../adr/0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.html">ADR 0291</a>, AT-898).</strong>
+O lote <strong>vazio deixou de ser recusado</strong>: sessão analisada sem nada errado no
+produto grava análise com zero hipóteses. O resto fica: o lote INTEIRO
+(itens de <code>produto</code> e de <code>plataforma</code>) passa pela validação de evidência, e um
+id inválido reprova tudo. A <code>terminationAnalysis</code> só é exigida em sessão de
+teste (<code>projects.sessao_de_teste</code>). Código: <code>hypothesis-evidence.ts</code>,
+<code>propose-hypotheses.use-case.ts</code>.</p>
+</blockquote>
 <h3 id="rn-022">RN-022 — O ciclo de vida da hipótese é compare-and-swap</h3>
 <p><code>proposed → accepted | dismissed</code>. Duas decisões concorrentes sobre a mesma
 hipótese: uma vence, a outra recebe conflito — não 500, não silêncio.</p>

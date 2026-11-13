@@ -123,8 +123,8 @@ resposta, não um erro do broker. O limite de tempo (<code>TIMEOUT_DO_REINICIO_M
 roteador fechado (<code>/containers/:id/app/restart</code> é o único caminho com <code>app</code>).</p>
 </li>
 <li>
-<p><strong>Onde:</strong> <code>apps/broker/src/operacoes.ts:268</code> (<code>reiniciarApp</code>),
-<code>apps/broker/src/operacoes.ts:281</code> (<code>SemComandoDoAppError</code>),
+<p><strong>Onde:</strong> <code>apps/broker/src/operacoes.ts:303</code> (<code>reiniciarApp</code>),
+<code>apps/broker/src/operacoes.ts:311</code> (<code>SemComandoDoAppError</code>),
 <code>apps/broker/src/servidor.ts:146</code> (rota), <code>apps/broker/src/servidor.ts:209</code> (despacho)</p>
 </li>
 <li>
@@ -161,11 +161,39 @@ Nenhum <code>ARG</code>/<code>ENV</code> leva token, e o <code>~/.npmrc</code> n
 <p><strong>Decisão arquitetural:</strong> ADR 0270</p>
 </li>
 </ul>
+<h2 id="a-prova-de-compose-do-qa-rn-1326-rn-1327">A prova de compose do QA (RN-1326, RN-1327)</h2>
+<h3 id="rn-1326">RN-1326 — O broker só roda o compose do projeto depois da allowlist, e nunca como está</h3>
+<p><code>POST /containers/:id/qa/:chave/compose</code> (sem corpo; o caminho vem da <code>localizacao</code> da api) lê o clone limpo
+<code>&lt;raiz&gt;/&lt;segmento&gt;/.brabo-qa/clone-limpo</code>, somente leitura. Antes de qualquer <code>up</code>: <code>include</code>, <code>extends</code> e <code>env_file</code>
+fora do contexto são recusados no TEXTO cru (o <code>config</code> os resolveria ou leria, ex. <code>/proc/self/environ</code>); o JSON de
+<code>docker compose config</code> passa pela allowlist (<code>build</code> com contexto dentro do clone, <code>image</code>, <code>environment</code>, <code>ports</code> só em
+<code>127.0.0.1</code>, <code>depends_on</code>, <code>healthcheck</code>, <code>command</code> e poucos mais). <code>privileged</code>, <code>cap_add</code>, <code>network_mode</code>, <code>pid</code>, <code>ipc</code>,
+<code>devices</code>, <code>extra_hosts</code>, volume de host e porta fora de <code>127.0.0.1</code> voltam em <code>recusas</code> com o nome do campo; qualquer outra
+chave volta como <code>&lt;serviço&gt;.&lt;campo&gt;</code>. Recusado, nada sobe (<code>subiu: false</code>, origem <code>projeto</code>). O <code>docker</code> roda com ambiente
+limpo (sem <code>BRABO_SERVICE_TOKEN</code>, que o compose interpolaria). Sem plugin, sem clone, sem raiz visível ou sem imagem de
+sonda: <code>503</code> origem <code>infra</code> (&quot;sem prova de compose&quot;).</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/prova-de-compose.ts:118</code> (<code>recusasDoTexto</code>), <code>src/prova-de-compose.ts:136</code> (<code>recusasDoConfig</code>), <code>src/operacoes.ts:235</code> (<code>provaDeComposeQa</code>)</li>
+<li><strong>Teste:</strong> <code>src/prova-de-compose.spec.ts</code> (&quot;allowlist (cada campo recusado pelo nome)&quot;)</li>
+<li><strong>Decisão arquitetural:</strong> ADR 0297</li>
+</ul>
+<h3 id="rn-1327">RN-1327 — A prova limpa sempre, tem teto de 10 min e 4 GiB e é uma por projeto</h3>
+<p>Um override gerado pelo broker dá a cada serviço <code>mem_limit</code>, <code>cpus</code>, <code>pids_limit</code> e <code>no-new-privileges</code> (e <code>cap_drop: [ALL]</code>
+nos serviços com <code>build</code>; banco só de imagem mantém as capacidades padrão). <code>up --build --wait</code> e as sondas de <code>/docs</code> e
+<code>/openapi.json</code> (container <code>wget</code> na rede do projeto, até 5 tentativas) dividem os 10 minutos; estourou o tempo, ou as imagens
+somam mais de 4 GiB depois do build, o resultado é origem <code>infra</code>. Em qualquer saída (sucesso, recusa, falha, exceção, teto)
+roda <code>down -v --rmi local --remove-orphans</code> e <code>builder prune</code>; falha de limpeza é logada. Segunda prova do mesmo projeto
+enquanto há uma viva: <code>409</code>. O teto de disco é conferido depois do build, não imposto durante.</p>
+<ul>
+<li><strong>Onde:</strong> <code>src/prova-de-compose.ts:291</code> (<code>provaDeCompose</code>)</li>
+<li><strong>Teste:</strong> <code>src/prova-de-compose.spec.ts</code> (&quot;prova de compose (Docker dublê)&quot;)</li>
+<li><strong>Decisão arquitetural:</strong> ADR 0297</li>
+</ul>
 <nav class="site-pager"><a href="../business-rules/api/parte-12.html">API — parte 12 (desde RN-1029)</a><a href="../business-rules/ci.html">CI</a></nav>
 </article>
 <footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-broker/blob/dev/docs/business-rules/broker.md">Editar esta página</a></footer>
 </main>
-<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#a-busca-do-rag-deixa-rastro-e-o-rastro-congela-os-pesos-rn-479481">A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)</a></li><li class="n3"><a href="#rn-494">RN-494 — O portão da imagem (RN-105) vale nos TRÊS modos de execução</a></li><li class="n2"><a href="#o-broker-reinicia-só-o-processo-do-app-rn-1025">O broker reinicia só o processo do app (RN-1025)</a></li><li class="n3"><a href="#rn-1025">RN-1025 — POST /containers/:projectId/app/restart reinicia o processo do app no lugar</a></li><li class="n2"><a href="#o-token-do-registry-só-entra-como-secret-do-buildkit-rn-1039">O token do registry só entra como secret do BuildKit (RN-1039)</a></li><li class="n3"><a href="#rn-1039">RN-1039 — O token do GitHub Packages nunca vai para camada, ARG ou ENV</a></li></ul></aside>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#a-busca-do-rag-deixa-rastro-e-o-rastro-congela-os-pesos-rn-479481">A busca do RAG deixa rastro, e o rastro congela os pesos (RN-479..481)</a></li><li class="n3"><a href="#rn-494">RN-494 — O portão da imagem (RN-105) vale nos TRÊS modos de execução</a></li><li class="n2"><a href="#o-broker-reinicia-só-o-processo-do-app-rn-1025">O broker reinicia só o processo do app (RN-1025)</a></li><li class="n3"><a href="#rn-1025">RN-1025 — POST /containers/:projectId/app/restart reinicia o processo do app no lugar</a></li><li class="n2"><a href="#o-token-do-registry-só-entra-como-secret-do-buildkit-rn-1039">O token do registry só entra como secret do BuildKit (RN-1039)</a></li><li class="n3"><a href="#rn-1039">RN-1039 — O token do GitHub Packages nunca vai para camada, ARG ou ENV</a></li><li class="n2"><a href="#a-prova-de-compose-do-qa-rn-1326-rn-1327">A prova de compose do QA (RN-1326, RN-1327)</a></li><li class="n3"><a href="#rn-1326">RN-1326 — O broker só roda o compose do projeto depois da allowlist, e nunca como está</a></li><li class="n3"><a href="#rn-1327">RN-1327 — A prova limpa sempre, tem teto de 10 min e 4 GiB e é uma por projeto</a></li></ul></aside>
 </div>
 <script src="../assets/site.js"></script>
 <script defer src="../assets/busca.js" data-indice="../assets/busca-pt-BR.json" data-base="../"></script></body>

@@ -285,7 +285,7 @@ nunca <code>startsWith</code> cru — <code>/base-outra</code> não está dentro
 <code>:333</code> (<code>caminhoForaDaBase</code>), <code>:360</code> (a sugestão);
 <code>apps/web/src/lib/wizard.ts:143</code> (<code>caminhoSugeridoNaBase</code>) e <code>:171</code>
 (<code>caminhoDentroDaBase</code>) — as funções puras;
-<code>apps/web/src/lib/api-client.ts:305</code> (<code>getProjectsBase</code>)</li>
+<code>apps/web/src/lib/api-client.ts:309</code> (<code>getProjectsBase</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/routes/NewProjectWizard.test.tsx</code>
 (<code>describe('NewProjectWizard — a base de projetos decide o que é oferecido')</code> — base presente, base <code>null</code>, consulta recusada com 403, a
 escolha humana antes de a base chegar, e os dois estados do aviso);
@@ -528,8 +528,8 @@ diferença não é escolha de desenho: é a forma do endpoint.</p>
 <code>maquinaJaPareada</code>), <code>apps/web/src/components/RunnerOnboardingPanel.tsx:173</code>
 (as duas consultas e o <code>ReconhecimentoDeMaquina</code>),
 <code>apps/web/src/components/RunnerOnboardingPanel.module.css</code>
-(<code>.reconhecimento</code>, <code>.gesto</code>), <code>apps/web/src/lib/api-client.ts:442</code>
-(<code>listRunnerDeviceKeys</code>), <code>apps/web/src/lib/api-types.ts:807</code>
+(<code>.reconhecimento</code>, <code>.gesto</code>), <code>apps/web/src/lib/api-client.ts:456</code>
+(<code>listRunnerDeviceKeys</code>), <code>apps/web/src/lib/api-types.ts:824</code>
 (<code>RunnerDeviceKeyListItem</code>, <code>RunnerDeviceKeyEspecie</code>),
 <code>apps/web/src/locales/{en,pt-BR}/terminal.json</code> (<code>agenteDeMaquina.*</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/lib/agente-de-maquina.test.ts</code> — o caminho feliz
@@ -1208,7 +1208,7 @@ conversão salvou), <code>:452</code> (o bloco do próximo passo), <code>:487</c
 (<code>RunnerOnboardingPanel</code>, o mesmo da aba Código);
 <code>apps/web/src/locales/pt-BR/settings.json:249</code> e
 <code>apps/web/src/locales/en/settings.json:249</code> (<code>executionMode.nextStep.*</code>) e
-<code>:238</code> (<code>executionMode.path.runnerTyped</code>, reescrito); a cadência medida em
+<code>:251</code> (<code>executionMode.path.runnerTyped</code>, reescrito); a cadência medida em
 <code>apps/runner/src/espera-de-projetos.ts:60</code> (<code>CADENCIA_DA_ESPERA_MS</code>) e a
 lista lida uma vez em <code>apps/runner/src/index.ts</code> (<code>rodarComoAgenteDeMaquina</code>)</li>
 <li><strong>Teste:</strong> o describe <code>RN-612</code> em
@@ -1283,7 +1283,7 @@ tela não reconstrói caminho nenhum. As frases estão em <code>en</code> e <cod
 <code>apps/web/src/lib/activity.ts:804</code> (o ramo de <code>proposed_action.created</code>);
 <code>apps/web/src/components/ApprovalCard.tsx:272</code> (a linha do card);
 <code>apps/web/src/routes/session-timeline-montagem.tsx:825</code> e
-<code>apps/web/src/routes/ProjectApprovalsTab.tsx:311</code> (<code>decisoesDaPolitica</code>, desde a
+<code>apps/web/src/routes/ProjectApprovalsTab.tsx:297</code> (<code>decisoesDaPolitica</code>, desde a
 AT-336 por <code>useDecisoesDaPolitica</code>) e <code>:499</code> (quem passa o dado)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/lib/decisao-da-politica.test.ts:43</code> (as âncoras,
 <code>:43</code>/<code>:54</code>/<code>:65</code>/<code>:76</code>), <code>:87</code> (evento antigo), <code>:102</code> (âncora desconhecida
@@ -1342,8 +1342,8 @@ linha — &quot;Encerrar&quot; vira ícone com nome acessível só na barra mín
 <li><strong>Código:</strong> <code>apps/web/src/routes/SessionLanguageIndicator.tsx:72</code>
 (<code>SessionLanguageIndicator</code>), <code>:29</code> (<code>idiomaSemOverride</code>), <code>:163</code>
 (<code>origemPorExtenso</code>), <code>:215</code> (<code>podeTrocar</code>);
-<code>apps/web/src/routes/SessionTopbar.tsx:260</code> (<code>SessionLanguageIndicator</code>),
-<code>:128</code> (<code>modoDaBarra</code>), <code>:377</code> (<code>AjustesAgrupados</code>);
+<code>apps/web/src/routes/SessionTopbar.tsx:281</code> (<code>SessionLanguageIndicator</code>),
+<code>:139</code> (<code>modoDaBarra</code>), <code>:398</code> (<code>AjustesAgrupados</code>);
 <code>apps/web/src/lib/modo-da-barra-da-sessao.ts:35</code> (<code>modoDaBarra</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/routes/SessionTopbar.test.tsx:174</code> (a barra de
 1440px não é completa), <code>:191</code> (agrupa, e o painel traz idioma com origem),

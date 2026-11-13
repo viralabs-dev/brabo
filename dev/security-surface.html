@@ -242,7 +242,10 @@ runner, a única parte com autoridade sobre o host real (RN-423, ver
 <code>workspace_verified_at</code> do mesmo jeito. O modo fica <strong>congelado</strong> depois:
 <code>UpdateProjectDto</code> omite os dois campos de propósito, senão
 <code>PartialType(CreateProjectDto)</code> os exporia num <code>PATCH</code> sem guarda
-nenhuma.</p>
+nenhuma. O mesmo <code>PATCH /projects/:projectId</code> (<code>maintainer</code>, sem mudança de
+papel) passou a aceitar <code>taskBudgetMicros</code> (RN-1142, propagado ao engine por
+chamada interna best-effort) e <code>modelEscalation</code> (a escada de modelos,
+RN-1143/RN-1146).</p>
 </li>
 <li>
 <p><strong><code>GET /workspaces/:workspaceId/containers</code> agora lista TODO projeto do
@@ -530,6 +533,22 @@ broker; o corpo da resposta nunca lança por recusa do broker nem por broker
 inalcançável (<code>{ sucesso: false, motivo }</code> é a forma normal, pela RN-486 —
 uma linha <code>running</code> nunca garante que o container está de pé agora), então
 um container morto é um comando falho comum, não um 5xx.</p>
+</li>
+<li>
+<p><strong><code>PUT /projects/:projectId/auto-merge</code> e <code>POST /internal/projects/:projectId/tasks/:taskId/auto-merge</code>
+abrem a ÚNICA exceção do teto de merge</strong> (<a href="business-rules/api.html#rn-1316">RN-1316</a>,
+<a href="adr/0292-o-merge-automatico-e-opcao-do-projeto-desligada-por-padrao.html">ADR 0292</a>).
+A chave <code>projects.merge_automatico</code> (padrão <code>false</code>) só muda pela rota
+própria, nunca pelo <code>PATCH</code>: ligar exige <code>owner</code> do workspace (a rota exige
+<code>maintainer</code> e o caso de uso recusa o resto com 403), desligar basta
+<code>maintainer</code> e vale na proposta seguinte; cada mudança grava uma linha
+imutável em <code>merge_automatico_eventos</code>. A rota interna é só do engine
+(service token) e confere TUDO na api (chave, gates, PR, merge duplicado da
+RN-663) antes de propor o <code>git_merge</code> com <code>origem: merge_automatico</code>. Em
+<code>decide()</code> a exceção exige as TRÊS condições juntas (chave ligada, origem do
+gatilho, destino na branch de trabalho): <code>ProposeActionInput.origem</code> não vem
+de DTO nenhum, então pessoa, agente, &quot;sempre permitir&quot; e <code>permissions.json</code>
+nunca a carregam; <code>git_merge</code> continua em <code>TIPOS_SEM_SEMPRE_PERMITIR</code>.</p>
 </li>
 <li>
 <p><strong><code>POST /internal/projects/:projectId/mirror-sync-result</code></strong> (<a href="business-rules/api.html#rn-517">RN-517</a>,
@@ -1040,6 +1059,14 @@ PRÓPRIO somado por projeto: o ator vem do token e o escopo de ator impede
 outro workspace.</p>
 </li>
 <li>
+<p><strong>Fontes da v9 (AT-929..932, <a href="business-rules/api.html#rn-1150">RN-1150</a>..<a href="business-rules/api.html#rn-1154">RN-1154</a>): sem rota nova, papéis intactos.</strong>
+<code>GET /projects/:projectId/spend/team</code> (<code>viewer</code>) ganhou <code>porModelo</code>, <code>porSessao</code> e
+<code>porDiaEAgente</code>; modelo não é credencial e <code>provider</code> segue só do owner.
+<code>GET /projects/:projectId/actions</code> (<code>developer</code>) aceita <code>status=decided</code> e <code>since</code>,
+sempre escopado ao projeto, com teto de 100. O listar sessões (<code>viewer</code>) ganhou
+custo e contagens agregados do próprio projeto.</p>
+</li>
+<li>
 <p><strong><code>GET /workspaces/:workspaceId/spend-report</code> passou a devolver o recorte
 por provider, que é um recorte por CREDENCIAL</strong>
 (<a href="adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076</a>,
@@ -1290,6 +1317,22 @@ por <code>GET .../sessions/:sessionId/handoffs</code>; ela nunca nomeia sessão 
 usuário.</p>
 </li>
 <li>
+<p><strong><code>POST /projects/:projectId/execution/activate</code> recusa com <code>409</code>
+<code>execucao_sem_container</code> quando o container não está <code>running</code>, e a
+classificação não mudou</strong> — continua <code>role:maintainer</code>
+(<a href="business-rules/api/parte-12.html#rn-1101">RN-1101</a>). Recusa por ESTADO, antes
+de qualquer efeito; a mensagem só diz o próximo passo e não revela nada além
+do que <code>GET .../container</code> já mostra a um <code>viewer</code>.</p>
+</li>
+<li>
+<p><strong><code>PUT /projects/:projectId/agent-autonomy</code> com a curinga <code>auto_approve</code>
+reavalia as pendentes do agente, e a classificação não mudou</strong> — continua
+<code>role:maintainer</code> (<a href="business-rules/api/parte-12.html#rn-1103">RN-1103</a>). A
+aprovação em nome de quem ligou usa a MESMA régua de <code>decide()</code>, com os
+tetos de <code>git_push</code>, <code>pr_open</code> e <code>git_merge</code> intactos e <code>deny</code> de
+<code>permissions.json</code> ainda vencendo.</p>
+</li>
+<li>
 <p><strong>Oferecer handoff a um agente já ativo no projeto é <code>409</code>
 <code>agente_ja_ativo</code>, e a classificação não mudou</strong> — a rota humana
 <code>POST .../sessions/:sessionId/handoffs</code> continua <code>role:developer</code> e a
@@ -1324,6 +1367,15 @@ CORRENTE do projeto — <code>active</code> com <code>execution.activated</code>
 <code>null</code>; nunca a sessão mais recente do projeto, que era o que a
 aba Executores lia e que trocava de sessão em silêncio no
 instante em que outra sessão nascia depois dela.</p>
+</li>
+<li>
+<p><strong><code>GET /workspaces/:workspaceId/decision-inbox</code> (AT-928, <a href="business-rules/api.html#rn-1195">RN-1195</a>..<a href="business-rules/api.html#rn-1199">RN-1199</a>): <code>role:viewer</code> é só a porta do workspace.</strong>
+O papel EFETIVO de cada projeto (<code>projectRole ?? workspaceRole</code>, RN-471) é
+aplicado em lote pelo caso de uso, e o mínimo de cada fila é o papel de
+DECIDIR (<code>developer</code>; arquitetura, que só se lê, <code>viewer</code>): projeto abaixo do
+mínimo não contribui com a fila, nem com item nem com contagem. Quem não tem
+papel de workspace recebe 403. A rota só lê, expõe o <code>payload</code> da ação como o
+<code>GET .../actions</code> já expõe, e nenhum teto muda.</p>
 </li>
 <li>
 <p><strong><code>GET /workspaces/:workspaceId/projects-summary</code> ganhou
@@ -1387,6 +1439,17 @@ chamada que o modelo faça fora do menu continua virando Proposed Action sob
 a mesma política. Qualquer falha da chamada cai no catálogo inteiro.</p>
 </li>
 <li>
+<p><strong>O Laya (AT-626, <a href="adr/0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.html">ADR 0290</a>) é a alternativa LOCAL ao Jev:
+com <code>tool_router = laya</code> o mesmo <code>state</code> vai ao serviço da 6ª imagem
+(<code>TOOL_ROUTER_URL</code>, rede interna do compose, sem porta publicada) em vez de sair
+para o OpenRouter.</strong> Nenhum dado de agente sai da máquina nesse caminho, não há chave
+de terceiro envolvida e a <code>TOOL_ROUTER_API_KEY</code>, se houver, nunca é logada nem devolvida.
+A escolha é <code>owner</code> (<code>PUT</code>); o estado do serviço é <code>GET .../tool-router</code>
+(<code>viewer</code>), com cache de 30 s e teto de 1 s, e traz só estado, motivo, dispositivo,
+VRAM livre e p95 — nada do conteúdo dos agentes. Falha do serviço cai no catálogo
+inteiro, nunca no Jev.</p>
+</li>
+<li>
 <p><strong><code>POST .../actions/:actionId/approve_always</code> ganhou <code>desfecho</code> e
 <code>padraoGravado</code> na resposta, e a classificação não mudou</strong> —
 continua <code>role:developer</code> (<a href="business-rules/api.html#rn-642">RN-642</a>). A aprovação
@@ -1439,6 +1502,14 @@ raciocínio provado por smoke), não dado do usuário nem segredo; a escrita é 
 por migration, sem rota nova.</p>
 </li>
 </ul>
+<h3 id="psicologo-escopo">O Psicólogo separa produto de plataforma (RN-1076, AT-898)</h3>
+<p>Duas rotas <code>engine-service</code> mudaram de corpo, sem rota nova e sem mudar o guard.
+<code>GET /internal/sessions/:sessionId/psychologist-context</code> devolve
+<code>sessaoDeTeste</code> (<code>projects.sessao_de_teste</code>). <code>POST /internal/sessions/:sessionId/hypotheses</code> passa a exigir <code>escopo</code> (<code>produto</code> |
+<code>plataforma</code>) por item e <code>sessaoDeTeste</code> no corpo, e aceita lote vazio. O item
+de plataforma vira o evento <code>psychologist.platform_signal</code> só em projeto
+marcado, fora do grafo; nos demais é descartado sem evento. A marca é ligada por
+<code>pnpm projeto:marcar-teste &lt;projectId&gt;</code> (operador, sem rota pública).</p>
 <h2 id="table">Tabela</h2>
 <!-- INÍCIO DA TABELA — o teste parseia daqui até o fim do documento. -->
 <div class="tabela-rolavel"><table>
@@ -1666,6 +1737,11 @@ por migration, sem rota nova.</p>
 <td>engine-service</td>
 </tr>
 <tr>
+<td>GET</td>
+<td><code>/internal/graph/projects/:projectId/modules/:nome/impacto</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
 <td>POST</td>
 <td><code>/internal/graph/prompt-templates</code></td>
 <td>engine-service</td>
@@ -1728,6 +1804,11 @@ por migration, sem rota nova.</p>
 <tr>
 <td>POST</td>
 <td><code>/internal/projects/:projectId/mirror-sync-result</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/projects/:projectId/tasks/:taskId/auto-merge</code></td>
 <td>engine-service</td>
 </tr>
 <tr>
@@ -1833,6 +1914,11 @@ por migration, sem rota nova.</p>
 <tr>
 <td>POST</td>
 <td><code>/internal/sessions/:sessionId/tasks/:taskId/update</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/tasks/:taskId/archive</code></td>
 <td>engine-service</td>
 </tr>
 <tr>
@@ -1953,6 +2039,11 @@ por migration, sem rota nova.</p>
 <tr>
 <td>PUT</td>
 <td><code>/projects/:projectId/mirror-path</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/auto-merge</code></td>
 <td>role:maintainer</td>
 </tr>
 <tr>
@@ -2452,6 +2543,11 @@ por migration, sem rota nova.</p>
 </tr>
 <tr>
 <td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/agents/:agentId/wake</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
 <td><code>/projects/:projectId/sessions/:sessionId/agents/arquiteto/handoff-infra</code></td>
 <td>role:developer</td>
 </tr>
@@ -2622,6 +2718,11 @@ por migration, sem rota nova.</p>
 </tr>
 <tr>
 <td>POST</td>
+<td><code>/projects/:projectId/tasks/:taskId/archive</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
 <td><code>/projects/:projectId/stories/promote</code></td>
 <td>role:developer</td>
 </tr>
@@ -2661,6 +2762,11 @@ por migration, sem rota nova.</p>
 <td>role:owner</td>
 </tr>
 <tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/tool-router</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
 <td>PUT</td>
 <td><code>/workspaces/:workspaceId/tool-router</code></td>
 <td>role:owner</td>
@@ -2674,6 +2780,16 @@ por migration, sem rota nova.</p>
 <td>PUT</td>
 <td><code>/workspaces/:workspaceId/model-binding</code></td>
 <td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/budget</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/workspaces/:workspaceId/budget</code></td>
+<td>role:owner</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -2782,6 +2898,11 @@ por migration, sem rota nova.</p>
 </tr>
 <tr>
 <td>GET</td>
+<td><code>/workspaces/:workspaceId/decision-inbox</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
 <td><code>/workspaces/:workspaceId/summary</code></td>
 <td>role:viewer</td>
 </tr>
@@ -2801,7 +2922,7 @@ por migration, sem rota nova.</p>
 </article>
 <footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-api/blob/dev/docs/security-surface.md">Editar esta página</a></footer>
 </main>
-<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#classifications">Classificações</a></li><li class="n2"><a href="#the-fifteen-public-routes">As quinze rotas públicas</a></li><li class="n3"><a href="#infrastructure">Infraestrutura</a></li><li class="n3"><a href="#first-party-auth">Auth first-party</a></li><li class="n3"><a href="#social-login-adr-0084">Login social (ADR 0084)</a></li><li class="n2"><a href="#notes">Notas</a></li><li class="n2"><a href="#table">Tabela</a></li></ul></aside>
+<aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#classifications">Classificações</a></li><li class="n2"><a href="#the-fifteen-public-routes">As quinze rotas públicas</a></li><li class="n3"><a href="#infrastructure">Infraestrutura</a></li><li class="n3"><a href="#first-party-auth">Auth first-party</a></li><li class="n3"><a href="#social-login-adr-0084">Login social (ADR 0084)</a></li><li class="n2"><a href="#notes">Notas</a></li><li class="n3"><a href="#psicologo-escopo">O Psicólogo separa produto de plataforma (RN-1076, AT-898)</a></li><li class="n2"><a href="#table">Tabela</a></li></ul></aside>
 </div>
 <script src="assets/site.js"></script>
 <script defer src="assets/busca.js" data-indice="assets/busca-pt-BR.json" data-base=""></script></body>

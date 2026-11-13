@@ -523,21 +523,18 @@ recusar subir (o entrypoint da imagem oficial exige senha de 8+
 caracteres; um <code>NEO4J_AUTH</code> vazio derruba o container <code>neo4j</code> primeiro).</p>
 <pre class="shiki brabo" style="background-color:var(--shiki-background);color:var(--shiki-foreground)" tabindex="0"><code><span class="line"><span style="color:var(--shiki-token-keyword)">export</span><span style="color:var(--shiki-foreground)"> NEO4J_PASSWORD</span><span style="color:var(--shiki-token-keyword)">=</span><span style="color:var(--shiki-token-string-expression)">"$(</span><span style="color:var(--shiki-token-function)">openssl</span><span style="color:var(--shiki-token-string)"> rand</span><span style="color:var(--shiki-token-string)"> -hex</span><span style="color:var(--shiki-token-constant)"> 24</span><span style="color:var(--shiki-token-string-expression)">)"</span></span>
 <span class="line"></span></code></pre>
-<p><strong>Em desenvolvimento a chave é <code>NEO4J_URI</code>, e ela vem vazia por padrão.</strong> O
-serviço <code>neo4j</code> roda no profile padrão do compose de dev, então o servidor está de pé
-falando alguém com ele ou não; a api só conecta quando <code>NEO4J_URI</code> está
-definida. Descomente-a no <code>.env</code> (<code>bolt://neo4j:7687</code>) e recrie a api —
-o <code>GraphStore</code> então registra <code>Neo4j conectado — constraints do grafo garantidas</code>
-em vez de <code>NEO4J_URI/NEO4J_USER/NEO4J_PASSWORD ausentes</code>. Usuário e senha
-chegam ao container com os mesmos defaults que o serviço <code>neo4j</code> usa para
-<code>NEO4J_AUTH</code>, então defina-os só para TROCAR a senha, e trocá-la ali
+<p><strong>Em desenvolvimento o grafo vem LIGADO por padrão</strong> (<code>NEO4J_URI</code> =
+<code>bolt://neo4j:7687</code>, igual à instalação; AT-924). O serviço <code>neo4j</code> roda no
+profile padrão do compose de dev, e a api conecta nele sozinha. O
+<code>GraphStore</code> registra <code>Neo4j conectado — constraints do grafo garantidas</code>.
+Para desligar, defina <code>NEO4J_URI=</code> vazio no <code>.env</code> e recrie a api: a forma
+sem dois pontos do compose (<code>${NEO4J_URI-…}</code>) faz o vazio valer vazio. Usuário
+e senha chegam ao container com os mesmos defaults que o serviço <code>neo4j</code> usa
+para <code>NEO4J_AUTH</code>, então defina-os só para TROCAR a senha, e trocá-la ali
 muda os dois lados de uma vez.</p>
-<p>Até isto ser ligado, o <code>docker-compose.yml</code> não passava as três variáveis ao
-serviço <code>api</code> de jeito nenhum e o serviço não tem <code>env_file</code> — então o bloco
-que o <code>.env.example</code> documentava desde que o grafo nasceu não chegava a nada, e
-descomentá-lo não ligava nada. O <code>docker-compose.prod.yml</code> as fornecia
-desde o primeiro dia (é por isso que só o desenvolvimento foi afetado): um Neo4j saudável ficava
-ao lado de uma api informando as variáveis ausentes, indefinidamente.</p>
+<p>Antes da AT-924 o dev vinha com <code>NEO4J_URI</code> vazia, e o <code>.env.example</code> pedia
+para descomentá-la. Quem tem um <code>.env</code> antigo com a linha vazia continua
+desligado; para ligar, apague a linha ou defina <code>NEO4J_URI=bolt://neo4j:7687</code>.</p>
 <p><strong>HEX, não base64.</strong> O entrypoint do Neo4j lê <code>NEO4J_AUTH</code> como
 <code>usuario/senha</code> e separa na PRIMEIRA barra — uma senha base64 pode
 conter <code>/</code> (o alfabeto tem <code>/</code> e <code>+</code>), e isso quebra o parse com

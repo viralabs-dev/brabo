@@ -972,6 +972,26 @@ comparar com <code>process.cwd()</code> (<code>/workspace</code> dentro do próp
 <td>teto, em ms, de UMA chamada ao roteador de ferramentas Jev (<a href="../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179</a>, <a href="../business-rules/engine.html#rn-625">RN-625</a>). Lida pela <strong>api</strong>, não pelo engine. Passado o teto, o passo cai no catálogo inteiro de ferramentas com <code>motivoDaQueda: timeout</code>; o turno nunca falha por causa do Jev. 0 de 328 requisições medidas passou de 2 000 ms. A chave liga/desliga é por workspace (<code>PUT workspaces/:id/tool-router</code>), não variável de ambiente</td>
 </tr>
 <tr>
+<td><code>TOOL_ROUTER_URL</code></td>
+<td>—</td>
+<td>base HTTP do serviço Laya, o roteador de ferramentas local (<a href="../adr/0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.html">ADR 0290</a>). Sem ela, o Laya aparece como <code>nao_configurado</code> e o workspace segue no Jev. Lida pela <strong>api</strong> (<code>laya-config.ts</code>)</td>
+</tr>
+<tr>
+<td><code>TOOL_ROUTER_API_KEY</code> 🔒</td>
+<td>—</td>
+<td>chave opcional que a api manda ao serviço Laya. Nunca é impressa</td>
+</tr>
+<tr>
+<td><code>TOOL_ROUTER_LAYA_MODELO</code></td>
+<td><code>multilingual</code></td>
+<td>modelo que o serviço Laya carrega</td>
+</tr>
+<tr>
+<td><code>RAG_REINDEX_POLL_INTERVAL_MS</code></td>
+<td><code>5000</code></td>
+<td>intervalo, em ms, com que a api procura merges novos na trunk para reindexar o RAG (<code>trunk-merged-reindexer.ts</code>)</td>
+</tr>
+<tr>
 <td><code>TERMINAL_ACTION_TIMEOUT_MS</code></td>
 <td><code>120000</code></td>
 <td>teto de um comando de terminal (2 min desde a <a href="../business-rules/engine.html#rn-757">RN-757</a>: um <code>npm install</code> simples não cabia nos 15 s antigos). O engine espera esse valor + 90 s no <code>container-exec</code> e + 120 s no <code>propose_action</code> de uma ação <code>terminal</code>; acima de ~180 s a espera de fora passa do limite de 300 s de cabeçalhos do <code>fetch</code> do Node que a api usa para chamar <code>/internal/actions/execute</code></td>
@@ -1518,6 +1538,41 @@ operacional mora no <a href="../runbook.html#broker-de-container">runbook</a>.</
 <td><code>999</code> (compose)</td>
 <td>O gid do grupo <code>docker</code> do host (<code>getent group docker | cut -d: -f3</code>). O socket é <code>root:docker</code> e o broker roda sem root, então o compose usa <code>group_add</code>. O default é o mais comum e está errado em várias distribuições. Desde o <a href="../adr/0146-base-consentida-no-bootstrap.html">ADR 0146</a> isso importa em TODA máquina de desenvolvimento, não só onde alguém ligou o profile — errar não quebra o boot, quebra o uso: toda operação morre com &quot;permission denied&quot; no socket, e isso só aparece quando alguém propõe <code>container_start</code>. O <code>pnpm dev</code> informa o estado desta variável a cada execução (<a href="../business-rules/infra.html#rn-512">RN-512</a>), e diz &quot;não se aplica&quot; numa máquina sem grupo <code>docker</code> em vez de acusá-la</td>
 </tr>
+<tr>
+<td><code>BROKER_TRABALHO_DIR</code></td>
+<td><code>/trabalho</code></td>
+<td>Onde a prova de compose (ADR 0297) grava o override e os arquivos temporários. Nos composes é um tmpfs de 64 MB</td>
+</tr>
+<tr>
+<td><code>PROJECT_WORKSPACES_BROKER_ROOT</code></td>
+<td>— (compose: <code>/data/project-workspaces</code>)</td>
+<td>Onde o broker enxerga, SOMENTE LEITURA, a pasta gerenciada dos projetos, para achar o clone limpo da prova. Sem ela, a prova responde 503 (origem <code>infra</code>) e o parecer aprova com o aviso &quot;sem prova de compose&quot;</td>
+</tr>
+<tr>
+<td><code>BRABO_PROJECTS_BROKER_BASE</code></td>
+<td>— (compose: o valor de <code>BRABO_PROJECTS_BASE</code>)</td>
+<td>O mesmo, para a base dos projetos montados (por identidade, <code>$X:$X</code>)</td>
+</tr>
+<tr>
+<td><code>BRABO_PROVA_SONDA_IMAGE</code></td>
+<td>— (compose: a imagem do próprio broker)</td>
+<td>Imagem com <code>wget</code> que sonda <code>/docs</code> e <code>/openapi.json</code> do entregável. Sem ela, a prova responde 503 (origem <code>infra</code>)</td>
+</tr>
+<tr>
+<td><code>DOCKER_HOST</code></td>
+<td>—</td>
+<td>Repassada ao <code>docker compose</code> da prova quando definida; sem ela vale o socket padrão</td>
+</tr>
+<tr>
+<td><code>DOCKER_CONFIG</code></td>
+<td><code>/tmp/.docker</code></td>
+<td>Pasta de configuração do Docker CLI na prova; o ambiente do <code>docker</code> é limpo (sem o token de serviço)</td>
+</tr>
+<tr>
+<td><code>PATH</code></td>
+<td><code>/usr/bin:/bin</code></td>
+<td>Repassado ao <code>docker</code> da prova, que roda com ambiente limpo</td>
+</tr>
 </tbody>
 </table></div>
 <p><code>PROJECT_WORKSPACES_HOST_ROOT</code> não pode ser derivada de um volume Docker
@@ -1907,11 +1962,11 @@ ninguém perceba.</p>
 <blockquote>
 <p>⚠️ Bloco gerado por <code>pnpm docs:generate</code>. Não edite à mão — o próximo build o sobrescreve.</p>
 </blockquote>
-<p>Inventário extraído do código: <strong>194 variáveis</strong> lidas em tempo de execução. Todas têm descrição nas tabelas acima.</p>
+<p>Inventário extraído do código: <strong>205 variáveis</strong> lidas em tempo de execução. Todas têm descrição nas tabelas acima.</p>
 <p>Cada fonte é marcada <strong>produto</strong> — o que quem opera a instalação configura no <code>.env</code> do deploy — ou <strong>ferramenta</strong>, lida só pelo CI e por quem desenvolve o produto. Variável de ferramenta nunca pertence ao <code>.env</code> de um operador.</p>
-<p><a href="#env-servico-api">api</a> (68) · <a href="#env-servico-engine">engine</a> (63) · <a href="#env-servico-web">web</a> (6) · <a href="#env-servico-broker">broker</a> (7) · <a href="#env-servico-api-scripts">api/scripts</a> (16) · <a href="#env-servico-e2e">e2e</a> (10) · <a href="#env-servico-deploy-k8s">deploy/k8s</a> (24)</p>
+<p><a href="#env-servico-api">api</a> (72) · <a href="#env-servico-engine">engine</a> (63) · <a href="#env-servico-web">web</a> (6) · <a href="#env-servico-broker">broker</a> (14) · <a href="#env-servico-api-scripts">api/scripts</a> (16) · <a href="#env-servico-e2e">e2e</a> (10) · <a href="#env-servico-deploy-k8s">deploy/k8s</a> (24)</p>
 <h3 id="env-servico-api">api</h3>
-<p>68 variáveis · produto</p>
+<p>72 variáveis · produto</p>
 <ul>
 <li><a id="env-API_JSON_BODY_LIMIT"></a><code>API_JSON_BODY_LIMIT</code> <sub>(apps/api/src/main.ts)</sub></li>
 <li><a id="env-API_PUBLIC_URL"></a><code>API_PUBLIC_URL</code> <sub>(apps/api/src/application/use-cases/auth/start-social-login.use-case.ts)</sub></li>
@@ -1970,6 +2025,7 @@ ninguém perceba.</p>
 <li><a id="env-OTEL_SERVICE_NAME"></a><code>OTEL_SERVICE_NAME</code> <sub>(apps/api/src/tracing.ts)</sub></li>
 <li><a id="env-PORT"></a><code>PORT</code> <sub>(apps/api/src/main.ts)</sub></li>
 <li><a id="env-PROJECT_WORKSPACES_ROOT"></a><code>PROJECT_WORKSPACES_ROOT</code> <sub>(apps/api/src/infrastructure/filesystem/project-workspaces-root.ts)</sub></li>
+<li><a id="env-RAG_REINDEX_POLL_INTERVAL_MS"></a><code>RAG_REINDEX_POLL_INTERVAL_MS</code> <sub>(apps/api/src/application/rag-reindex/trunk-merged-reindexer.ts)</sub></li>
 <li><a id="env-RATE_LIMIT_ENABLED"></a><code>RATE_LIMIT_ENABLED</code> <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub></li>
 <li><a id="env-RATE_LIMIT_IP"></a><code>RATE_LIMIT_IP</code> <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub></li>
 <li><a id="env-RATE_LIMIT_USER"></a><code>RATE_LIMIT_USER</code> <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub></li>
@@ -1980,6 +2036,9 @@ ninguém perceba.</p>
 <li><a id="env-SMTP_PORT"></a><code>SMTP_PORT</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
 <li><a id="env-SMTP_SECURE"></a><code>SMTP_SECURE</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
 <li><a id="env-SMTP_USER"></a><code>SMTP_USER</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
+<li><a id="env-TOOL_ROUTER_API_KEY"></a><code>TOOL_ROUTER_API_KEY</code> <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub></li>
+<li><a id="env-TOOL_ROUTER_LAYA_MODELO"></a><code>TOOL_ROUTER_LAYA_MODELO</code> <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub></li>
+<li><a id="env-TOOL_ROUTER_URL"></a><code>TOOL_ROUTER_URL</code> <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub></li>
 <li><a id="env-WEB_ORIGIN"></a><code>WEB_ORIGIN</code> <sub>(apps/api/src/infrastructure/mail/smtp-mail-sender.ts)</sub></li>
 </ul>
 <h3 id="env-servico-engine">engine</h3>
@@ -2060,14 +2119,21 @@ ninguém perceba.</p>
 <li><a id="env-VITE_LOG_LEVEL"></a><code>VITE_LOG_LEVEL</code> <sub>(apps/web/src/lib/runtime-config.ts)</sub></li>
 </ul>
 <h3 id="env-servico-broker">broker</h3>
-<p>7 variáveis · produto</p>
+<p>14 variáveis · produto</p>
 <ul>
 <li><code>API_URL</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><a id="env-BRABO_PROJECTS_BROKER_BASE"></a><code>BRABO_PROJECTS_BROKER_BASE</code> <sub>(apps/broker/src/config.ts)</sub></li>
 <li><a id="env-BRABO_PROJECTS_HOST_BASE"></a><code>BRABO_PROJECTS_HOST_BASE</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><a id="env-BRABO_PROVA_SONDA_IMAGE"></a><code>BRABO_PROVA_SONDA_IMAGE</code> <sub>(apps/broker/src/config.ts)</sub></li>
 <li><code>BRABO_SERVICE_TOKEN</code> <sub>(apps/broker/src/config.ts)</sub></li>
 <li><code>BRABO_SERVICE_TOKEN_PREVIOUS</code> <sub>(apps/broker/src/config.ts)</sub></li>
 <li><a id="env-BROKER_PORT"></a><code>BROKER_PORT</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><a id="env-BROKER_TRABALHO_DIR"></a><code>BROKER_TRABALHO_DIR</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><a id="env-DOCKER_CONFIG"></a><code>DOCKER_CONFIG</code> <sub>(apps/broker/src/prova-de-compose.ts)</sub></li>
+<li><a id="env-DOCKER_HOST"></a><code>DOCKER_HOST</code> <sub>(apps/broker/src/prova-de-compose.ts)</sub></li>
 <li><code>NODE_ENV</code> <sub>(apps/broker/src/config.ts)</sub></li>
+<li><a id="env-PATH"></a><code>PATH</code> <sub>(apps/broker/src/prova-de-compose.ts)</sub></li>
+<li><a id="env-PROJECT_WORKSPACES_BROKER_ROOT"></a><code>PROJECT_WORKSPACES_BROKER_ROOT</code> <sub>(apps/broker/src/config.ts)</sub></li>
 <li><a id="env-PROJECT_WORKSPACES_HOST_ROOT"></a><code>PROJECT_WORKSPACES_HOST_ROOT</code> <sub>(apps/broker/src/config.ts)</sub></li>
 </ul>
 <h3 id="env-servico-api-scripts">api/scripts</h3>
@@ -2143,7 +2209,7 @@ marcadas com 🔒, que falham explicitamente em produção.</p>
 </blockquote>
 <nav class="site-pager"><a href="../explanation/documentation-workflow.html">Sincronia da doc</a><a href="../reference/events.html">Eventos</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Editar esta página</a><span>Atualizado em 2026-11-09T06:57:53-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Editar esta página</a><span>Atualizado em 2026-11-13T14:38:04-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#compose-de-instalação-docker-composeinstallyml">Compose de instalação (docker-compose.install.yml)</a></li><li class="n2"><a href="#api">api</a></li><li class="n3"><a href="#essenciais">Essenciais</a></li><li class="n3"><a href="#segurança-">Segurança 🔒</a></li><li class="n3"><a href="#auth-first-party">Auth first-party</a></li><li class="n3"><a href="#smtp-real-mailsender">SMTP real (MailSender)</a></li><li class="n3"><a href="#recuperar-a-senha-sem-smtp">Recuperar a senha sem SMTP</a></li><li class="n3"><a href="#seed-de-desenvolvimento">Seed de desenvolvimento</a></li><li class="n3"><a href="#rate-limit">Rate limit</a></li><li class="n3"><a href="#tráfego-interno-">Tráfego interno 🔒</a></li><li class="n3"><a href="#git">Git</a></li><li class="n3"><a href="#llm">LLM</a></li><li class="n3"><a href="#grafo-de-conhecimento-adr-0099">Grafo de conhecimento (ADR 0099)</a></li><li class="n3"><a href="#observabilidade">Observabilidade</a></li><li class="n2"><a href="#engine">engine</a></li><li class="n3"><a href="#essenciais-1">Essenciais</a></li><li class="n3"><a href="#cluster-e-desligamento">Cluster e desligamento</a></li><li class="n3"><a href="#harness">Harness</a></li><li class="n3"><a href="#psicólogo">Psicólogo</a></li><li class="n3"><a href="#anamnese">Anamnese</a></li><li class="n3"><a href="#guardas-de-carga">Guardas de carga</a></li><li class="n3"><a href="#tráfego-interno-e-observabilidade">Tráfego interno e observabilidade</a></li><li class="n2"><a href="#web">web</a></li><li class="n3"><a href="#por-que-a-versão-não-passa-pelo-configjs">Por que a versão não passa pelo /config.js</a></li><li class="n2"><a href="#backup">Backup</a></li><li class="n2"><a href="#inferência-local-containers">Inferência local (containers)</a></li><li class="n2"><a href="#observabilidade-local-containers">Observabilidade local (containers)</a></li><li class="n2"><a href="#broker-de-containers">Broker de containers</a></li><li class="n2"><a href="#dev-container-user-build-time">Usuário dos containers de dev (build)</a></li><li class="n2"><a href="#variáveis-de-ferramenta-não-do-produto">Variáveis de ferramenta (não do produto)</a></li><li class="n3"><a href="#scripts-de-demonstração-e-seed--appsapiscripts">Scripts de demonstração e seed — apps/api/scripts/</a></li><li class="n3"><a href="#e2e-de-navegador--e2e">E2E de navegador — e2e/</a></li><li class="n3"><a href="#cluster-local-e-provas-agendadas--deployk8s">Cluster local e provas agendadas — deploy/k8s/</a></li><li class="n2"><a href="#inventário-completo">Inventário completo</a></li><li class="n3"><a href="#env-servico-api">api</a></li><li class="n3"><a href="#env-servico-engine">engine</a></li><li class="n3"><a href="#env-servico-web">web</a></li><li class="n3"><a href="#env-servico-broker">broker</a></li><li class="n3"><a href="#env-servico-api-scripts">api/scripts</a></li><li class="n3"><a href="#env-servico-e2e">e2e</a></li><li class="n3"><a href="#env-servico-deploy-k8s">deploy/k8s</a></li></ul></aside>
 </div>
