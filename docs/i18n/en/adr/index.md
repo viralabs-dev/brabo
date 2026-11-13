@@ -206,6 +206,7 @@ The project container's lifecycle, the image decision, the Docker port and the b
 | [0229](0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.md) | QA tests on an ephemeral instance, with the services the Infra declared | accepted |
 | [0264](0264-o-app-reinicia-so-o-processo.md) | Depois do avanço da pasta, o app reinicia só o processo, sem recriar o container | accepted |
 | [0265](0265-o-app-declarado-propoe-recriar-o-container.md) | O app declarado pela Infra propõe recriar o container, com a porta na faixa 13000+ | accepted |
+| [0297](0297-o-broker-prova-o-compose-do-projeto-num-ambiente-descartavel.md) | O broker prova o compose do projeto num ambiente descartável | accepted |
 
 ## The local runner {#tema-runner}
 
