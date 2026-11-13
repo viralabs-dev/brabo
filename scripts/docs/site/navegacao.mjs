@@ -149,7 +149,7 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
       pg('reference/codigos-de-violacao', 'Códigos de violação'), pg('reference/glossario-da-politica', 'Glossário da política'),
       cat('Workflows do brabo-ci', pgs(...slugsDeWorkflows(raiz, raizesDeDoc)), { colapsada: true }),
       pg('reference/paridade-de-traducao', 'Paridade de tradução'), pg('reference/brb', 'Registro BRB'),
-      pg('security-surface'), pg('dependencias-e-imagens', 'Dependências e imagens do broker'), pg('reference/contratos-e-imagem', 'Contratos e imagem da api'),
+      pg('security-surface'), pg('security-surface-parte-2'), pg('dependencias-e-imagens', 'Dependências e imagens do broker'), pg('reference/contratos-e-imagem', 'Contratos e imagem da api'),
       cat('Regras de negócio', itensDeRegras(raiz, raizesDeDoc), { slug: 'business-rules', colapsada: true }),
       { tipo: 'rota', slug: 'reference/api', rotulo: t('Referência da API') },
     ], { espera: ['referencia'] }),

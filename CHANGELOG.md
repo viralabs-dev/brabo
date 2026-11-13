@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs**: a `security-surface` da api foi dividida em duas fontes (brabo-api#123); o `irmaos.lock` sobe o `brabo-api` para `784c2f1`, a `security-surface-parte-2` entra na navegação e no docmap, e a página `ru/security-surface` deixa de passar do teto de 150 KB do orçamento. A api não tem `docs/i18n`, então não há tradução a dividir.
+
 - CI: repina o brabo-ci na release final `v1.5.0` (`22a5cd0`), para a promoção `dev → main` de 13/11/2026 (a `main` só aceita release final).
 
 - **docs(adr)**: AT-626, ADR 0290 (proposto; lado do `brabo`). O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU NVIDIA que o roda: enum `tool_router` no workspace, 409 `roteador_local_indisponivel`, todo provider roteado com `laya`, queda para o catálogo inteiro (nunca o Jev), 6ª imagem opcional e requisitos mínimos (RAM de 6 GiB). Runbook em `docs/how-to/escolher-o-laya.md`.
