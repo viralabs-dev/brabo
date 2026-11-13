@@ -577,11 +577,11 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从代码中提取的清单：运行时读取 **198 个变量**。全部都在上方表格中有描述。
+从代码中提取的清单：运行时读取 **205 个变量**。全部都在上方表格中有描述。
 
 每个来源都标记为 **产品**——运维安装的人在部署 `.env` 中设置的内容——或 **工具**，仅由 CI 和开发产品的人读取。工具变量绝不应出现在运维人员的 `.env` 中。
 
-[api](#env-servico-api) (72) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (7) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
+[api](#env-servico-api) (72) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (14) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
 
 ### api {#env-servico-api}
 
@@ -741,14 +741,21 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 
 ### broker {#env-servico-broker}
 
-7 个变量 · 产品
+14 个变量 · 产品
 
 - `API_URL` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BRABO_PROJECTS_BROKER_BASE"></a>`BRABO_PROJECTS_BROKER_BASE` <sub>(apps/broker/src/config.ts)</sub>
 - <a id="env-BRABO_PROJECTS_HOST_BASE"></a>`BRABO_PROJECTS_HOST_BASE` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BRABO_PROVA_SONDA_IMAGE"></a>`BRABO_PROVA_SONDA_IMAGE` <sub>(apps/broker/src/config.ts)</sub>
 - `BRABO_SERVICE_TOKEN` <sub>(apps/broker/src/config.ts)</sub>
 - `BRABO_SERVICE_TOKEN_PREVIOUS` <sub>(apps/broker/src/config.ts)</sub>
 - <a id="env-BROKER_PORT"></a>`BROKER_PORT` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BROKER_TRABALHO_DIR"></a>`BROKER_TRABALHO_DIR` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-DOCKER_CONFIG"></a>`DOCKER_CONFIG` <sub>(apps/broker/src/prova-de-compose.ts)</sub>
+- <a id="env-DOCKER_HOST"></a>`DOCKER_HOST` <sub>(apps/broker/src/prova-de-compose.ts)</sub>
 - `NODE_ENV` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-PATH"></a>`PATH` <sub>(apps/broker/src/prova-de-compose.ts)</sub>
+- <a id="env-PROJECT_WORKSPACES_BROKER_ROOT"></a>`PROJECT_WORKSPACES_BROKER_ROOT` <sub>(apps/broker/src/config.ts)</sub>
 - <a id="env-PROJECT_WORKSPACES_HOST_ROOT"></a>`PROJECT_WORKSPACES_HOST_ROOT` <sub>(apps/broker/src/config.ts)</sub>
 
 ### api/scripts {#env-servico-api-scripts}

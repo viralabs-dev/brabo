@@ -883,11 +883,11 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 > ⚠️ Блок сгенерирован `pnpm docs:generate`. Не редактируйте вручную — следующая сборка его перезапишет.
 
-Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **198**. У всех есть описание в таблицах выше.
+Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **205**. У всех есть описание в таблицах выше.
 
 Каждый источник помечен как **продукт** — то, что оператор установки задаёт в `.env` развёртывания, — или **инструменты**: их читают только CI и разработчики продукта. Переменной инструментов не место в `.env` оператора.
 
-[api](#env-servico-api) (72) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (7) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
+[api](#env-servico-api) (72) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (14) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
 
 ### api {#env-servico-api}
 
@@ -1047,14 +1047,21 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 ### broker {#env-servico-broker}
 
-переменных: 7 · продукт
+переменных: 14 · продукт
 
 - `API_URL` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BRABO_PROJECTS_BROKER_BASE"></a>`BRABO_PROJECTS_BROKER_BASE` <sub>(apps/broker/src/config.ts)</sub>
 - <a id="env-BRABO_PROJECTS_HOST_BASE"></a>`BRABO_PROJECTS_HOST_BASE` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BRABO_PROVA_SONDA_IMAGE"></a>`BRABO_PROVA_SONDA_IMAGE` <sub>(apps/broker/src/config.ts)</sub>
 - `BRABO_SERVICE_TOKEN` <sub>(apps/broker/src/config.ts)</sub>
 - `BRABO_SERVICE_TOKEN_PREVIOUS` <sub>(apps/broker/src/config.ts)</sub>
 - <a id="env-BROKER_PORT"></a>`BROKER_PORT` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BROKER_TRABALHO_DIR"></a>`BROKER_TRABALHO_DIR` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-DOCKER_CONFIG"></a>`DOCKER_CONFIG` <sub>(apps/broker/src/prova-de-compose.ts)</sub>
+- <a id="env-DOCKER_HOST"></a>`DOCKER_HOST` <sub>(apps/broker/src/prova-de-compose.ts)</sub>
 - `NODE_ENV` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-PATH"></a>`PATH` <sub>(apps/broker/src/prova-de-compose.ts)</sub>
+- <a id="env-PROJECT_WORKSPACES_BROKER_ROOT"></a>`PROJECT_WORKSPACES_BROKER_ROOT` <sub>(apps/broker/src/config.ts)</sub>
 - <a id="env-PROJECT_WORKSPACES_HOST_ROOT"></a>`PROJECT_WORKSPACES_HOST_ROOT` <sub>(apps/broker/src/config.ts)</sub>
 
 ### api/scripts {#env-servico-api-scripts}
