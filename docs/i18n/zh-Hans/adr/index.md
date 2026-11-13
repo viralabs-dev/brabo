@@ -283,6 +283,7 @@ provider 的契约、模型目录与人工筛选、模型的 bindings、计量�
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | 对不提供价格的 provider，在代码中标注日期的标价 | 已接受 |
 | [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | 在直连 Anthropic 时，关闭推理是按模型的，而 effort 会降低 Opus 的推理 | 已接受 |
 | [0279](0279-provider-de-llm-duble-do-regressivo.md) | Provider de LLM dublê do regressivo, dentro da api | 已接受 |
+| [0290](0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.md) | O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU que o roda | 已提议 |
 | [0296](0296-o-teto-de-gasto-e-mensal-e-o-workspace-tem-teto-proprio.md) | O teto de gasto é mensal e o workspace tem teto próprio | 已接受 |
 
 ## RAG、知识图谱与工件 {#tema-conhecimento}

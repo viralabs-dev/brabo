@@ -126,7 +126,7 @@ export function construirNavegacao({ raiz, repo, rotulos = {}, raizesDeDoc }) {
       cat('Como o Brabo é construído', pgs(...['do-pedido-a-atividade', 'a-rodada', 'a-regra-vira-codigo', 'qualidade-e-o-teste-permanente', 'copie-o-metodo'].map((s) => `tutorials/como-o-brabo-e-construido/${s}`)), { slug: 'tutorials/como-o-brabo-e-construido', colapsada: true }),
     ], { espera: ['tutorial'] }),
     cat('🧭 Guias práticos', [
-      ...pgs('how-to/desenvolver-o-brabo', 'how-to/usar-o-runner', 'how-to/token-do-github-packages'),
+      ...pgs('how-to/desenvolver-o-brabo', 'how-to/usar-o-runner', 'how-to/token-do-github-packages', 'how-to/escolher-o-laya'),
       ...runbook,
       ...pgs('tutorials/adotar', 'explanation/usar-em-outra-org', 'rodadas-manuais'),
       cat('Contribuir', [pg('contribuir/como-escrevemos', 'Como escrevemos'), link('Como contribuir', 'CONTRIBUTING.md'), link('Onde pedir ajuda', 'SUPPORT.md'), link('Reportar vulnerabilidade', 'SECURITY.md')]),
