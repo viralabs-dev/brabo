@@ -754,7 +754,7 @@ erDiagram
   users ||--o{ detected_language_declines : "idioma detectado que a pessoa recusou (RN-624)"
 ```
 
-Всего 60 таблиц. Самая новая — `task_model_escalations` ([RN-1144](business-rules/api.md#rn-1144): счётчик блокировок и базовая модель каждой задачи на лестнице моделей); перед ней — `chat_attachments` ([RN-986](business-rules/api.md#rn-986): байты вложений чата; `chat.message` хранит только ссылку, RN-987); перед ней появилась `source_clicks` ([RN-983](business-rules/api.md#rn-983): клик по использованному источнику, который не является голосом); перед ней появилась `detected_language_declines`
+Всего 61 таблица. Самая новая — `merge_automatico_eventos` ([RN-1316](business-rules/api.md#rn-1316): кто включал и выключал автоматическое слияние проекта, только вставка); перед ней — `task_model_escalations` ([RN-1144](business-rules/api.md#rn-1144): счётчик блокировок и базовая модель каждой задачи на лестнице моделей); перед ней — `chat_attachments` ([RN-986](business-rules/api.md#rn-986): байты вложений чата; `chat.message` хранит только ссылку, RN-987); перед ней появилась `source_clicks` ([RN-983](business-rules/api.md#rn-983): клик по использованному источнику, который не является голосом); перед ней появилась `detected_language_declines`
 ([RN-624](business-rules/api.md#rn-624)): одна строка на человека и язык, от
 которого человек ОТКАЗАЛСЯ, когда его спросили «мы заметили, что вы пишете на
 X, — использовать X в ответах?», с датой. Её присутствие и не даёт тому же

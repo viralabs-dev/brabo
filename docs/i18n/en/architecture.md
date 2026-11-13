@@ -742,7 +742,7 @@ erDiagram
   users ||--o{ detected_language_declines : "detected language the person said no to (RN-624)"
 ```
 
-60 tables in total. The most recent is `task_model_escalations` ([RN-1144](business-rules/api.md#rn-1144): the block counter and the base model of each task on the model ladder); before it came `chat_attachments` ([RN-986](business-rules/api.md#rn-986): the bytes of the chat attachments; `chat.message` keeps only the reference, RN-987); and before that, `source_clicks` ([RN-983](business-rules/api.md#rn-983): the click on a consulted source, which is not a vote); before it came `detected_language_declines`
+61 tables in total. The most recent is `merge_automatico_eventos` ([RN-1316](business-rules/api.md#rn-1316): who turned the project's automatic merge on and off, insert-only); before it came `task_model_escalations` ([RN-1144](business-rules/api.md#rn-1144): the block counter and the base model of each task on the model ladder); before it came `chat_attachments` ([RN-986](business-rules/api.md#rn-986): the bytes of the chat attachments; `chat.message` keeps only the reference, RN-987); and before that, `source_clicks` ([RN-983](business-rules/api.md#rn-983): the click on a consulted source, which is not a vote); before it came `detected_language_declines`
 ([RN-624](business-rules/api.md#rn-624)): one row per person and language the
 person DECLINED when asked "we noticed you write in X — use X for the
 answers?", with the date. Its presence is what keeps the same question from
