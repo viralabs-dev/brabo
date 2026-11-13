@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 291 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 292 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -205,6 +205,7 @@ O ciclo de vida do container do projeto, a decisão de imagem, a porta de Docker
 | [0229](0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.md) | O QA testa numa instância efêmera, com os serviços que a Infra declarou | aceito |
 | [0264](0264-o-app-reinicia-so-o-processo.md) | Depois do avanço da pasta, o app reinicia só o processo, sem recriar o container | aceito |
 | [0265](0265-o-app-declarado-propoe-recriar-o-container.md) | O app declarado pela Infra propõe recriar o container, com a porta na faixa 13000+ | aceito |
+| [0297](0297-o-broker-prova-o-compose-do-projeto-num-ambiente-descartavel.md) | O broker prova o compose do projeto num ambiente descartável | aceito |
 
 ## O runner local {#tema-runner}
 
@@ -431,7 +432,7 @@ Como a documentação é gerada, verificada e publicada.
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0297**.
+  é substituído — o próximo é **0298**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml`; a linha do índice é gerada. Quem revisa confirma. Um tema novo é uma
   mudança na lista em `temas.yml`, justificada no PR que o acrescenta; passar

@@ -206,6 +206,7 @@ ADR фиксирует, **почему** что-то было решено, в �
 | [0229](0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.md) | QA тестирует в эфемерном экземпляре, с сервисами, объявленными Infra | принято |
 | [0264](0264-o-app-reinicia-so-o-processo.md) | Depois do avanço da pasta, o app reinicia só o processo, sem recriar o container | принято |
 | [0265](0265-o-app-declarado-propoe-recriar-o-container.md) | O app declarado pela Infra propõe recriar o container, com a porta na faixa 13000+ | принято |
+| [0297](0297-o-broker-prova-o-compose-do-projeto-num-ambiente-descartavel.md) | O broker prova o compose do projeto num ambiente descartável | принято |
 
 ## Локальный runner {#tema-runner}
 
