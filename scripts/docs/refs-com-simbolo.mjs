@@ -162,12 +162,20 @@ export function conferir(linhasDoArquivo, linha, simbolo, janela = JANELA) {
 
 /**
  * Resolve o caminho citado: da raiz, ou o ÚNICO arquivo versionado que
- * termine nele. `null` quando não resolve ou é ambíguo.
+ * termine nele (com `doc`, vários candidatos preferem os da raiz de repo do doc).
+ * `null` quando não resolve ou é ambíguo.
  */
-export function resolverCaminho(caminho, raiz, versionados, real = (c) => join(raiz, c)) {
+export function resolverCaminho(caminho, raiz, versionados, real = (c) => join(raiz, c), doc = null) {
   if (existsSync(real(caminho))) return caminho;
   const sufixo = `/${caminho.replace(/^\.?\//, '')}`;
-  const achados = versionados.filter((v) => v.endsWith(sufixo));
+  let achados = versionados.filter((v) => v.endsWith(sufixo));
+  // A ref de irmão é relativa ao repo do PRÓPRIO doc. No layout (montar-layout.sh) api/engine/web/
+  // runner/broker moram em `apps/<x>/`; os demais irmãos ficam na raiz (fora de `apps/`).
+  if (achados.length > 1 && doc !== null) {
+    const app = /^apps\/[^/]+\//.exec(doc)?.[0] ?? null;
+    const daRaizDoDoc = achados.filter((v) => (app ? v.startsWith(app) : !v.startsWith('apps/')));
+    if (daRaizDoDoc.length > 0) achados = daRaizDoDoc;
+  }
   return achados.length === 1 ? achados[0] : null;
 }
 
@@ -214,7 +222,7 @@ export function aferir(
   for (const doc of arquivos) {
     for (const ref of extrairRefs(readFileSync(join(raiz, doc), 'utf8'))) {
       const onde = { doc, ...ref };
-      const resolvido = resolverCaminho(ref.caminho, raiz, versionados, real);
+      const resolvido = resolverCaminho(ref.caminho, raiz, versionados, real, doc);
       if (resolvido === null) {
         resultado.naoResolvidas.push(onde);
         continue;
