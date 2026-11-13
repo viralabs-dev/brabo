@@ -785,14 +785,14 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 
 - <a id="env-CAPTURAS_API"></a>`CAPTURAS_API` <sub>(e2e/capturas/doc.captura.ts)</sub>
 - <a id="env-CAPTURAS_ENGINE"></a>`CAPTURAS_ENGINE` <sub>(e2e/capturas/doc.captura.ts)</sub>
-- <a id="env-CAPTURAS_SAIDA"></a>`CAPTURAS_SAIDA` <sub>(e2e/capturas/doc.captura.ts)</sub>
+- <a id="env-CAPTURAS_SAIDA"></a>`CAPTURAS_SAIDA` <sub>(e2e/capturas-v9/v9.captura.ts)</sub>
 - <a id="env-CAPTURAS_WEB"></a>`CAPTURAS_WEB` <sub>(e2e/capturas/doc.captura.ts)</sub>
 - <a id="env-E2E_API_URL"></a>`E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
 - <a id="env-E2E_ENGINE_URL"></a>`E2E_ENGINE_URL` <sub>(e2e/testes/instalacao.spec.ts)</sub>
 - <a id="env-E2E_PASSWORD"></a>`E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
 - <a id="env-E2E_SERVICE_TOKEN"></a>`E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
 - <a id="env-E2E_USER"></a>`E2E_USER` <sub>(e2e/suporte/api.ts)</sub>
-- <a id="env-E2E_WEB_URL"></a>`E2E_WEB_URL` <sub>(e2e/playwright.capturas.config.ts)</sub>
+- <a id="env-E2E_WEB_URL"></a>`E2E_WEB_URL` <sub>(e2e/capturas-v9/v9.captura.ts)</sub>
 
 ### deploy/k8s {#env-servico-deploy-k8s}
 

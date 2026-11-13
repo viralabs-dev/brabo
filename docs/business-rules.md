@@ -14,9 +14,9 @@ Cada regra tem um **enunciado**, **onde ela mora** (`arquivo:linha`) e **o teste
 As regras moram na página da **área dona** (`business-rules/<área>.md`), no repositório que as implementa: a api, o engine, o web, o runner, o ci e os demais. Esta página é só o **índice**: uma linha por área, com a contagem, e por baixo a grade de números. Cada número é uma âncora (`#rn-NNN`) que leva à página, ou à parte da página, onde a RN mora. Os links antigos continuam valendo.
 
 <!-- BEGIN:GENERATED:indice-de-rn -->
-- [api](business-rules/api.md) — 420 RN
-- [engine](business-rules/engine.md) — 253 RN
-- [web](business-rules/web.md) — 226 RN
+- [api](business-rules/api.md) — 421 RN
+- [engine](business-rules/engine.md) — 254 RN
+- [web](business-rules/web.md) — 228 RN
 - [ci](business-rules/ci.md) — 30 RN
 - [contracts](business-rules/contracts.md) — 25 RN
 - [produto](business-rules/produto.md) — 22 RN
@@ -125,5 +125,5 @@ As regras moram na página da **área dona** (`business-rules/<área>.md`), no r
 <a id="rn-1167"></a>[1167](business-rules/engine/parte-07.md#rn-1167) <a id="rn-1168"></a>[1168](business-rules/api/parte-12.md#rn-1168) <a id="rn-1169"></a>[1169](business-rules/api/parte-12.md#rn-1169) <a id="rn-1170"></a>[1170](business-rules/api/parte-12.md#rn-1170) <a id="rn-1171"></a>[1171](business-rules/api/parte-12.md#rn-1171) <a id="rn-1180"></a>[1180](business-rules/web/parte-07.md#rn-1180) <a id="rn-1185"></a>[1185](business-rules/web/parte-07.md#rn-1185) <a id="rn-1190"></a>[1190](business-rules/engine/parte-07.md#rn-1190) <a id="rn-1191"></a>[1191](business-rules/engine/parte-07.md#rn-1191) <a id="rn-1195"></a>[1195](business-rules/api/parte-12.md#rn-1195)
 <a id="rn-1196"></a>[1196](business-rules/api/parte-12.md#rn-1196) <a id="rn-1197"></a>[1197](business-rules/api/parte-12.md#rn-1197) <a id="rn-1198"></a>[1198](business-rules/api/parte-12.md#rn-1198) <a id="rn-1199"></a>[1199](business-rules/api/parte-12.md#rn-1199) <a id="rn-1200"></a>[1200](business-rules/web/parte-07.md#rn-1200) <a id="rn-1201"></a>[1201](business-rules/web/parte-07.md#rn-1201) <a id="rn-1205"></a>[1205](business-rules/web/parte-07.md#rn-1205) <a id="rn-1210"></a>[1210](business-rules/web/parte-07.md#rn-1210) <a id="rn-1215"></a>[1215](business-rules/web/parte-07.md#rn-1215) <a id="rn-1220"></a>[1220](business-rules/web/parte-07.md#rn-1220)
 <a id="rn-1225"></a>[1225](business-rules/web/parte-07.md#rn-1225) <a id="rn-1265"></a>[1265](business-rules/web/parte-07.md#rn-1265) <a id="rn-1270"></a>[1270](business-rules/web/parte-07.md#rn-1270) <a id="rn-1275"></a>[1275](business-rules/web/parte-07.md#rn-1275) <a id="rn-1280"></a>[1280](business-rules/web/parte-07.md#rn-1280) <a id="rn-1300"></a>[1300](business-rules/web/parte-07.md#rn-1300) <a id="rn-1301"></a>[1301](business-rules/api/parte-12.md#rn-1301) <a id="rn-1302"></a>[1302](business-rules/api/parte-12.md#rn-1302) <a id="rn-1303"></a>[1303](business-rules/web/parte-07.md#rn-1303) <a id="rn-1304"></a>[1304](business-rules/api/parte-12.md#rn-1304)
-<a id="rn-1316"></a>[1316](business-rules/api/parte-12.md#rn-1316) <a id="rn-1320"></a>[1320](business-rules/engine/parte-07.md#rn-1320) <a id="rn-1326"></a>[1326](business-rules/broker.md#rn-1326) <a id="rn-1327"></a>[1327](business-rules/broker.md#rn-1327)
+<a id="rn-1316"></a>[1316](business-rules/api/parte-12.md#rn-1316) <a id="rn-1320"></a>[1320](business-rules/engine/parte-07.md#rn-1320) <a id="rn-1326"></a>[1326](business-rules/broker.md#rn-1326) <a id="rn-1327"></a>[1327](business-rules/broker.md#rn-1327) <a id="rn-1328"></a>[1328](business-rules/api/parte-12.md#rn-1328) <a id="rn-1329"></a>[1329](business-rules/web/parte-07.md#rn-1329) <a id="rn-1330"></a>[1330](business-rules/engine/parte-07.md#rn-1330) <a id="rn-1331"></a>[1331](business-rules/web/parte-07.md#rn-1331)
 <!-- END:GENERATED:indice-de-rn -->
