@@ -22,6 +22,7 @@ Esta página é para **usar** o Brabo. Para mexer no código dele, veja
 |---|---|
 | Docker com Compose | tudo sobe em container |
 | ~6 GiB de RAM livre | banco, api, engine, web e, se quiser agente local, o Ollama |
+| GPU NVIDIA e 6 GiB de RAM livres para o serviço (opcional) | só para escolher o Laya no lugar do Jev ([como](how-to/escolher-o-laya.md)) |
 | Linux ou macOS | o instalador e o agente local são testados neles |
 
 ## 1. Instalar
