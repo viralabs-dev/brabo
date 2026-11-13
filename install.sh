@@ -1083,8 +1083,9 @@ resolver_imagens_do_ghcr() {
   # O Laya é OPCIONAL: release sem o alvo `laya` não oferece, e não recusa.
   BRABO_LAYA_IMAGE=''
   entrada="$(printf '%s' "$compacto" | grep -o "{[^{}]*\"alvo\": *\"laya\"[^{}]*}" || true)"
-  repo="$(printf '%s' "$entrada" | grep -o '"repositorio": *"[^"]*"' | cut -d'"' -f4)"
-  digest="$(printf '%s' "$entrada" | grep -o '"digest": *"[^"]*"' | cut -d'"' -f4)"
+  # `|| true`: sem a entrada, o `grep` sai 1 e o `pipefail` mataria o instalador em silêncio (v2.3.0)
+  repo="$(printf '%s' "$entrada" | grep -o '"repositorio": *"[^"]*"' | cut -d'"' -f4 || true)"
+  digest="$(printf '%s' "$entrada" | grep -o '"digest": *"[^"]*"' | cut -d'"' -f4 || true)"
   if [ -n "$repo" ] && [ -n "$digest" ]; then
     BRABO_LAYA_IMAGE="${repo}@${digest}"
     ok "laya: ${digest}"
