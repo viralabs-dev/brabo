@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 327 de 357 (91.6%) | 97.2% de 3.460.375 | 309 | 16 | 2 | 30 | 6 |
-| `ru` | 327 de 357 (91.6%) | 97.2% de 3.460.375 | 309 | 16 | 2 | 30 | 6 |
-| `zh-Hans` | 327 de 357 (91.6%) | 97.2% de 3.460.375 | 309 | 16 | 2 | 30 | 6 |
+| `en` | 327 de 367 (89.1%) | 95.8% de 3.526.287 | 308 | 17 | 2 | 40 | 6 |
+| `ru` | 327 de 367 (89.1%) | 95.8% de 3.526.287 | 308 | 17 | 2 | 40 | 6 |
+| `zh-Hans` | 327 de 367 (89.1%) | 95.8% de 3.526.287 | 308 | 17 | 2 | 40 | 6 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -30,6 +30,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `contribuir/como-escrevemos.md` (tradução de 2026-11-08)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-08)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
+- `getting-started.md` (tradução de 2026-11-08)
 - `index.md` (tradução de 2026-11-08)
 - `reference/configuration.md` (tradução de 2026-11-08)
 - `reference/events.md` (tradução de 2026-11-06)
@@ -49,6 +50,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `contribuir/como-escrevemos.md` (tradução de 2026-11-08)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-08)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
+- `getting-started.md` (tradução de 2026-11-08)
 - `index.md` (tradução de 2026-11-08)
 - `reference/configuration.md` (tradução de 2026-11-08)
 - `reference/events.md` (tradução de 2026-11-06)
@@ -68,6 +70,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `contribuir/como-escrevemos.md` (tradução de 2026-11-08)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-08)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
+- `getting-started.md` (tradução de 2026-11-08)
 - `index.md` (tradução de 2026-11-08)
 - `reference/configuration.md` (tradução de 2026-11-08)
 - `reference/events.md` (tradução de 2026-11-06)

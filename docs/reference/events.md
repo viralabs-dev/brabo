@@ -291,6 +291,7 @@ o evento só põe o mesmo fato na linha do tempo da sessão.
 | `psychologist.hypothesis_accepted` | — |
 | `psychologist.hypothesis_dismissed` | — |
 | `psychologist.hypothesis_accepted_for_anamnese` | aceita e encaminhada — o elo que fecha o laço com a Anamnese |
+| `psychologist.platform_signal` | sinal INTERNO de falha da plataforma sobre um agente (`agenteAlvo`), gravado só em sessão de teste do TP-01 (`projects.sessao_de_teste`); nunca vira hipótese, não aparece em Percepções nem entra na fila da Anamnese, e fica fora do grafo ([RN-1076](../business-rules/engine.md), [ADR 0291](../adr/0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md)) |
 
 ### Anamnese e instruções
 
@@ -301,7 +302,7 @@ o evento só põe o mesmo fato na linha do tempo da sessão.
 | `anamnese.run_skipped` | a rodada terminou SEM perfil, de propósito — `payload.motivo` diz por quê ([RN-063](../business-rules/engine.md#rn-063)) |
 | `anamnese.analysis` | o texto que o modelo da Anamnese escreveu durante a rodada (`payload.content`); nunca desenhado no fio da sessão ([RN-695](../business-rules/engine.md#rn-695)) |
 | `anamnese.profile_updated` | o `proficiency_profile` mudou |
-| `anamnese.agent_deviation` | um desvio do AGENTE visto pela Anamnese (laço, cancelado pelo usuário, reparado pelo usuário) — sinal do produto, nunca traço do usuário; o `payload` é só `agente`, `tipo` e `evidenceEventIds`, sem dado pessoal, não projetado no grafo ([RN-717](../business-rules/engine.md#rn-717), [ADR 0205](../adr/0205-desvio-do-agente-como-sinal-do-produto.md)) |
+| `anamnese.agent_deviation` | removido (ADR 0291) |
 | `instruction.rolled_back` | rollback de uma versão de instrução — cria uma versão nova, não apaga ([RN-027](../business-rules/api.md#rn-027)) |
 
 ---
@@ -416,20 +417,21 @@ ele.
 
 > ⚠️ Bloco gerado por `pnpm docs:generate`. Não edite à mão — o próximo build o sobrescreve.
 
-Extraídos dos pontos de emissão: **120 identificadores**, dos quais **8** não estão descritos acima.
+Extraídos dos pontos de emissão: **123 identificadores**, dos quais **11** não estão descritos acima.
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
 - `agent.delta` <sub>(apps/engine/lib/engine/agents/arquiteto_server.ex)</sub>
 - `agent.done` <sub>(apps/engine/lib/engine/agents/turno_assincrono.ex)</sub>
 - `agent.error` <sub>(apps/api/src/application/use-cases/agents/aceite-implicito-do-po.use-case.ts)</sub>
+- `agent.model_escalated` — ⚠️ **não descrito acima** <sub>(apps/api/src/application/use-cases/execution/escalar-modelo-da-tarefa.use-case.ts)</sub>
+- `agent.model_escalation_exhausted` — ⚠️ **não descrito acima** <sub>(apps/api/src/application/use-cases/execution/escalar-modelo-da-tarefa.use-case.ts)</sub>
 - `agent.plan` <sub>(apps/engine/lib/engine/agents/diario.ex)</sub>
 - `agent.reasoning_delta` — ⚠️ **não descrito acima** <sub>(apps/engine/lib/engine/sessions/engine_api_client.ex)</sub>
 - `agent.response` <sub>(apps/api/src/application/use-cases/llm/send-chat-message.use-case.ts)</sub>
 - `agent.status` <sub>(apps/engine/lib/engine/agents/diario.ex)</sub>
 - `agent.turn` <sub>(apps/engine/lib/engine/harness/tool_loop.ex)</sub>
 - `agent.turn_resumed` <sub>(apps/engine/lib/engine/agents/diario.ex)</sub>
-- `anamnese.agent_deviation` <sub>(apps/engine/lib/engine/anamnese/tools/report_agent_deviation.ex)</sub>
 - `anamnese.analysis` <sub>(apps/engine/lib/engine/workers/anamnese_worker.ex)</sub>
 - `anamnese.profile_updated` <sub>(apps/api/src/application/use-cases/anamnese/record-proficiency.use-case.ts)</sub>
 - `anamnese.run_completed` <sub>(apps/api/src/application/use-cases/anamnese/record-proficiency.use-case.ts)</sub>
@@ -465,6 +467,7 @@ Extraídos dos pontos de emissão: **120 identificadores**, dos quais **8** não
 - `backlog.story_promotion_returned` <sub>(apps/api/src/application/use-cases/backlog/return-story.use-case.ts)</sub>
 - `backlog.story_transitioned` <sub>(apps/api/src/application/use-cases/backlog/transition-story.use-case.ts)</sub>
 - `backlog.story_updated` <sub>(apps/api/src/application/use-cases/backlog/corrigir-historia.use-case.ts)</sub>
+- `backlog.task_archived` — ⚠️ **não descrito acima** <sub>(apps/api/src/application/use-cases/backlog/archive-task.use-case.ts)</sub>
 - `backlog.task_blocked` <sub>(apps/api/src/application/use-cases/execution/mark-task-blocked.use-case.ts)</sub>
 - `backlog.task_claimed` <sub>(apps/api/src/application/use-cases/execution/claim-next-task.use-case.ts)</sub>
 - `backlog.task_created` <sub>(apps/api/src/application/use-cases/backlog/create-task.use-case.ts)</sub>
@@ -528,6 +531,7 @@ Extraídos dos pontos de emissão: **120 identificadores**, dos quais **8** não
 - `psychologist.hypothesis_accepted_for_anamnese` <sub>(apps/api/src/application/use-cases/execution/accept-hypothesis.use-case.ts)</sub>
 - `psychologist.hypothesis_dismissed` <sub>(apps/api/src/application/use-cases/execution/dismiss-hypothesis.use-case.ts)</sub>
 - `psychologist.hypothesis_proposed` <sub>(apps/api/src/application/use-cases/execution/propose-hypotheses.use-case.ts)</sub>
+- `psychologist.platform_signal` <sub>(apps/api/src/application/use-cases/execution/propose-hypotheses.use-case.ts)</sub>
 - `rag.feedback` <sub>(apps/api/src/application/use-cases/rag/record-rag-feedback.use-case.ts)</sub>
 - `rag.search` <sub>(apps/api/src/application/use-cases/rag/hybrid-search.use-case.ts)</sub>
 - `readiness.confirmed` <sub>(apps/api/src/application/use-cases/agents/confirm-readiness.use-case.ts)</sub>

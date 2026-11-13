@@ -292,6 +292,7 @@ traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 | `psychologist.hypothesis_accepted` | — |
 | `psychologist.hypothesis_dismissed` | — |
 | `psychologist.hypothesis_accepted_for_anamnese` | принята и передана — звено, замыкающее цикл с Анамнезом |
+| `psychologist.platform_signal` | ВНУТРЕННИЙ сигнал о сбое платформы по агенту (`agenteAlvo`), записывается только в тестовой сессии TP-01 (`projects.sessao_de_teste`); никогда не становится гипотезой, не появляется в Percepções и не попадает в очередь Анамнеза, а в граф не проецируется ([RN-1076](../business-rules/engine.md), [ADR 0291](../adr/0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md)) |
 
 ### Анамнез и инструкции
 
@@ -302,7 +303,7 @@ traducao_de: 230b42a4884c0612c19a43e45081a9221642030b
 | `anamnese.run_skipped` | раунд завершился БЕЗ профиля, намеренно — `payload.motivo` говорит почему ([RN-063](../business-rules/engine.md#rn-063)) |
 | `anamnese.analysis` | текст, который модель Анамнеза написала во время раунда (`payload.content`); никогда не отрисовывается в ленте сессии ([RN-695](../business-rules/engine.md#rn-695)) |
 | `anamnese.profile_updated` | `proficiency_profile` изменился |
-| `anamnese.agent_deviation` | отклонение АГЕНТА, замеченное Анамнезом (цикл, отменено пользователем, исправлено пользователем) — сигнал продукта, никогда не черта пользователя; `payload` — только `agente`, `tipo` и `evidenceEventIds`, без персональных данных, в граф не проецируется ([RN-717](../business-rules/engine.md#rn-717), [ADR 0205](../adr/0205-desvio-do-agente-como-sinal-do-produto.md)) |
+| `anamnese.agent_deviation` | удалено (ADR 0291) |
 | `instruction.rolled_back` | откат версии инструкции — создаёт новую версию, не удаляет ([RN-027](../business-rules/api.md#rn-027)) |
 
 ---
@@ -417,20 +418,21 @@ sequenceDiagram
 
 > ⚠️ Блок сгенерирован `pnpm docs:generate`. Не редактируйте вручную — следующая сборка его перезапишет.
 
-Извлечено из точек генерации идентификаторов: **120**, из них не описаны выше: **8**.
+Извлечено из точек генерации идентификаторов: **123**, из них не описаны выше: **11**.
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
 - `agent.delta` <sub>(apps/engine/lib/engine/agents/arquiteto_server.ex)</sub>
 - `agent.done` <sub>(apps/engine/lib/engine/agents/turno_assincrono.ex)</sub>
 - `agent.error` <sub>(apps/api/src/application/use-cases/agents/aceite-implicito-do-po.use-case.ts)</sub>
+- `agent.model_escalated` — ⚠️ **не описан выше** <sub>(apps/api/src/application/use-cases/execution/escalar-modelo-da-tarefa.use-case.ts)</sub>
+- `agent.model_escalation_exhausted` — ⚠️ **не описан выше** <sub>(apps/api/src/application/use-cases/execution/escalar-modelo-da-tarefa.use-case.ts)</sub>
 - `agent.plan` <sub>(apps/engine/lib/engine/agents/diario.ex)</sub>
 - `agent.reasoning_delta` — ⚠️ **не описан выше** <sub>(apps/engine/lib/engine/sessions/engine_api_client.ex)</sub>
 - `agent.response` <sub>(apps/api/src/application/use-cases/llm/send-chat-message.use-case.ts)</sub>
 - `agent.status` <sub>(apps/engine/lib/engine/agents/diario.ex)</sub>
 - `agent.turn` <sub>(apps/engine/lib/engine/harness/tool_loop.ex)</sub>
 - `agent.turn_resumed` <sub>(apps/engine/lib/engine/agents/diario.ex)</sub>
-- `anamnese.agent_deviation` <sub>(apps/engine/lib/engine/anamnese/tools/report_agent_deviation.ex)</sub>
 - `anamnese.analysis` <sub>(apps/engine/lib/engine/workers/anamnese_worker.ex)</sub>
 - `anamnese.profile_updated` <sub>(apps/api/src/application/use-cases/anamnese/record-proficiency.use-case.ts)</sub>
 - `anamnese.run_completed` <sub>(apps/api/src/application/use-cases/anamnese/record-proficiency.use-case.ts)</sub>
@@ -466,6 +468,7 @@ sequenceDiagram
 - `backlog.story_promotion_returned` <sub>(apps/api/src/application/use-cases/backlog/return-story.use-case.ts)</sub>
 - `backlog.story_transitioned` <sub>(apps/api/src/application/use-cases/backlog/transition-story.use-case.ts)</sub>
 - `backlog.story_updated` <sub>(apps/api/src/application/use-cases/backlog/corrigir-historia.use-case.ts)</sub>
+- `backlog.task_archived` — ⚠️ **не описан выше** <sub>(apps/api/src/application/use-cases/backlog/archive-task.use-case.ts)</sub>
 - `backlog.task_blocked` <sub>(apps/api/src/application/use-cases/execution/mark-task-blocked.use-case.ts)</sub>
 - `backlog.task_claimed` <sub>(apps/api/src/application/use-cases/execution/claim-next-task.use-case.ts)</sub>
 - `backlog.task_created` <sub>(apps/api/src/application/use-cases/backlog/create-task.use-case.ts)</sub>
@@ -529,6 +532,7 @@ sequenceDiagram
 - `psychologist.hypothesis_accepted_for_anamnese` <sub>(apps/api/src/application/use-cases/execution/accept-hypothesis.use-case.ts)</sub>
 - `psychologist.hypothesis_dismissed` <sub>(apps/api/src/application/use-cases/execution/dismiss-hypothesis.use-case.ts)</sub>
 - `psychologist.hypothesis_proposed` <sub>(apps/api/src/application/use-cases/execution/propose-hypotheses.use-case.ts)</sub>
+- `psychologist.platform_signal` <sub>(apps/api/src/application/use-cases/execution/propose-hypotheses.use-case.ts)</sub>
 - `rag.feedback` <sub>(apps/api/src/application/use-cases/rag/record-rag-feedback.use-case.ts)</sub>
 - `rag.search` <sub>(apps/api/src/application/use-cases/rag/hybrid-search.use-case.ts)</sub>
 - `readiness.confirmed` <sub>(apps/api/src/application/use-cases/agents/confirm-readiness.use-case.ts)</sub>

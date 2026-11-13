@@ -55,6 +55,7 @@ git provider 的契约、仓库的创建与采纳、分支的保护与策略。
 | [0267](0267-o-e2e-do-brabo-qa-e-portao-da-main.md) | O E2E do brabo-qa é portão da main, com aceite justificado | 已接受 |
 | [0276](0276-a-pr-declara-de-que-pr-depende-o-merge.md) | A PR declara de que PR de outro repo depende, e um check do App espera o merge | 已接受 |
 | [0284](0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.md) | A promoção infere as dependências pela ordem dos repos | 已接受 |
+| [0292](0292-o-merge-automatico-e-opcao-do-projeto-desligada-por-padrao.md) | O merge automático é opção do projeto, desligada por padrão | 已接受 |
 
 ## 智能体的 harness、回合与会话 {#tema-agentes}
 
@@ -160,6 +161,7 @@ gates 的注册表、QA 和 SecOps 的裁决，以及衡量它们的 golden-sets
 | [0167](0167-modo-automatico-libera-o-escopo-de-caminho.md) | 自动模式放行路径范围，而且只有它放行 | 已接受 |
 | [0189](0189-o-piloto-automatico.md) | 自动驾驶：自动模式批准一切（上限除外），作用域与真实执行目录比较，"始终允许"记录动词 + 子命令 | 已接受 |
 | [0204](0204-modo-automatico-libera-push-e-pr.md) | 自动模式放行 push 和 PR | 已接受 |
+| [0295](0295-a-caixa-de-decisoes-le-as-filas-de-todos-os-projetos-numa-leitura.md) | A Caixa de decisões lê as filas de todos os projetos numa leitura do workspace | 已接受 |
 
 ## 代码住在哪里——执行模式 {#tema-modos}
 
@@ -204,6 +206,7 @@ gates 的注册表、QA 和 SecOps 的裁决，以及衡量它们的 golden-sets
 | [0229](0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.md) | QA 在临时实例中测试，使用 Infra 声明的服务 | 已接受 |
 | [0264](0264-o-app-reinicia-so-o-processo.md) | Depois do avanço da pasta, o app reinicia só o processo, sem recriar o container | 已接受 |
 | [0265](0265-o-app-declarado-propoe-recriar-o-container.md) | O app declarado pela Infra propõe recriar o container, com a porta na faixa 13000+ | 已接受 |
+| [0297](0297-o-broker-prova-o-compose-do-projeto-num-ambiente-descartavel.md) | O broker prova o compose do projeto num ambiente descartável | 已接受 |
 
 ## 本地 runner {#tema-runner}
 
@@ -281,6 +284,8 @@ provider 的契约、模型目录与人工筛选、模型的 bindings、计量�
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | 对不提供价格的 provider，在代码中标注日期的标价 | 已接受 |
 | [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | 在直连 Anthropic 时，关闭推理是按模型的，而 effort 会降低 Opus 的推理 | 已接受 |
 | [0279](0279-provider-de-llm-duble-do-regressivo.md) | Provider de LLM dublê do regressivo, dentro da api | 已接受 |
+| [0290](0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.md) | O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU que o roda | 已提议 |
+| [0296](0296-o-teto-de-gasto-e-mensal-e-o-workspace-tem-teto-proprio.md) | O teto de gasto é mensal e o workspace tem teto próprio | 已接受 |
 
 ## RAG、知识图谱与工件 {#tema-conhecimento}
 
@@ -304,6 +309,8 @@ chunks 和混合搜索、对它的测量、Neo4j 图谱，以及从事件日志�
 | [0205](0205-desvio-do-agente-como-sinal-do-produto.md) | Anamnese 观察到的 agent 偏差成为产品信号，不含个人数据 | 已接受 |
 | [0269](0269-indexacao-de-docs-com-teto-proprio-e-corte-declarado.md) | A indexação de docs tem teto próprio de 4 MiB, e o corte é declarado | 已接受 |
 | [0272](0272-a-busca-do-rag-limita-os-trechos-por-arquivo.md) | A busca híbrida do RAG limita os trechos por arquivo | 已接受 |
+| [0291](0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md) | As Percepções olham o produto do usuário; a falha técnica é sinal interno do TP-01 | 已接受 |
+| [0293](0293-a-memoria-do-projeto-e-markdown-versionado-e-o-grafo-e-o-rag-sao-indices.md) | O projeto tem memória em markdown que o dev lê antes de explorar | 已提议 |
 
 ## Web 界面与设计系统 {#tema-web}
 
@@ -337,6 +344,7 @@ chunks 和混合搜索、对它的测量、Neo4j 图谱，以及从事件日志�
 | [0244](0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.md) | 项目标签页的列左对齐 | 已接受 |
 | [0248](0248-conteudo-das-paginas-ocupa-a-largura-inteira.md) | 页面内容占满整个宽度 | 已接受 |
 | [0250](0250-chat-da-sessao-ocupa-a-largura-inteira.md) | 会话聊天占满整个宽度 | 已接受 |
+| [0294](0294-a-estrutura-v9-oito-secoes-com-sub-abas-caixa-de-decisoes-e-agentes-agora.md) | A estrutura v9: oito seções com sub-abas, Caixa de decisões e Agentes agora | 已接受 |
 
 ## 运维、部署与安装 {#tema-operacao}
 
@@ -389,6 +397,7 @@ chunks 和混合搜索、对它的测量、Neo4j 图谱，以及从事件日志�
 | [0282](0282-a-pin-dos-componentes-segue-a-release-final.md) | A pin dos componentes segue a última Release final | 已接受 |
 | [0285](0285-a-prova-de-uma-aresta-e-arquivo-mais-trecho.md) | A prova de uma aresta do `repos.yml` é arquivo mais trecho literal, não arquivo:linha | 已接受 |
 | [0286](0286-as-capturas-da-doc-sao-geradas-pelo-qa-e-entram-por-pr.md) | As capturas da doc são geradas pelo brabo-qa e entram no brabo por PR do App | 已提议 |
+| [0289](0289-a-recaptura-segue-a-pin-e-so-pede-o-dono-quando-a-imagem-muda.md) | A recaptura segue a pin do web e só pede o dono quando a imagem muda | 已提议 |
 
 ## 文档 {#tema-docs}
 

@@ -883,15 +883,15 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 > ⚠️ Блок сгенерирован `pnpm docs:generate`. Не редактируйте вручную — следующая сборка его перезапишет.
 
-Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **194**. У всех есть описание в таблицах выше.
+Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **205**. У всех есть описание в таблицах выше.
 
 Каждый источник помечен как **продукт** — то, что оператор установки задаёт в `.env` развёртывания, — или **инструменты**: их читают только CI и разработчики продукта. Переменной инструментов не место в `.env` оператора.
 
-[api](#env-servico-api) (68) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (7) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
+[api](#env-servico-api) (72) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (14) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
 
 ### api {#env-servico-api}
 
-переменных: 68 · продукт
+переменных: 72 · продукт
 
 - <a id="env-API_JSON_BODY_LIMIT"></a>`API_JSON_BODY_LIMIT` <sub>(apps/api/src/main.ts)</sub>
 - <a id="env-API_PUBLIC_URL"></a>`API_PUBLIC_URL` <sub>(apps/api/src/application/use-cases/auth/start-social-login.use-case.ts)</sub>
@@ -950,6 +950,7 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 - <a id="env-OTEL_SERVICE_NAME"></a>`OTEL_SERVICE_NAME` <sub>(apps/api/src/tracing.ts)</sub>
 - <a id="env-PORT"></a>`PORT` <sub>(apps/api/src/main.ts)</sub>
 - <a id="env-PROJECT_WORKSPACES_ROOT"></a>`PROJECT_WORKSPACES_ROOT` <sub>(apps/api/src/infrastructure/filesystem/project-workspaces-root.ts)</sub>
+- <a id="env-RAG_REINDEX_POLL_INTERVAL_MS"></a>`RAG_REINDEX_POLL_INTERVAL_MS` <sub>(apps/api/src/application/rag-reindex/trunk-merged-reindexer.ts)</sub>
 - <a id="env-RATE_LIMIT_ENABLED"></a>`RATE_LIMIT_ENABLED` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_IP"></a>`RATE_LIMIT_IP` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_USER"></a>`RATE_LIMIT_USER` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
@@ -960,6 +961,9 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 - <a id="env-SMTP_PORT"></a>`SMTP_PORT` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_SECURE"></a>`SMTP_SECURE` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_USER"></a>`SMTP_USER` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
+- <a id="env-TOOL_ROUTER_API_KEY"></a>`TOOL_ROUTER_API_KEY` <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
+- <a id="env-TOOL_ROUTER_LAYA_MODELO"></a>`TOOL_ROUTER_LAYA_MODELO` <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
+- <a id="env-TOOL_ROUTER_URL"></a>`TOOL_ROUTER_URL` <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
 - <a id="env-WEB_ORIGIN"></a>`WEB_ORIGIN` <sub>(apps/api/src/infrastructure/mail/smtp-mail-sender.ts)</sub>
 
 ### engine {#env-servico-engine}
@@ -1043,14 +1047,21 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 ### broker {#env-servico-broker}
 
-переменных: 7 · продукт
+переменных: 14 · продукт
 
 - `API_URL` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BRABO_PROJECTS_BROKER_BASE"></a>`BRABO_PROJECTS_BROKER_BASE` <sub>(apps/broker/src/config.ts)</sub>
 - <a id="env-BRABO_PROJECTS_HOST_BASE"></a>`BRABO_PROJECTS_HOST_BASE` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BRABO_PROVA_SONDA_IMAGE"></a>`BRABO_PROVA_SONDA_IMAGE` <sub>(apps/broker/src/config.ts)</sub>
 - `BRABO_SERVICE_TOKEN` <sub>(apps/broker/src/config.ts)</sub>
 - `BRABO_SERVICE_TOKEN_PREVIOUS` <sub>(apps/broker/src/config.ts)</sub>
 - <a id="env-BROKER_PORT"></a>`BROKER_PORT` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BROKER_TRABALHO_DIR"></a>`BROKER_TRABALHO_DIR` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-DOCKER_CONFIG"></a>`DOCKER_CONFIG` <sub>(apps/broker/src/prova-de-compose.ts)</sub>
+- <a id="env-DOCKER_HOST"></a>`DOCKER_HOST` <sub>(apps/broker/src/prova-de-compose.ts)</sub>
 - `NODE_ENV` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-PATH"></a>`PATH` <sub>(apps/broker/src/prova-de-compose.ts)</sub>
+- <a id="env-PROJECT_WORKSPACES_BROKER_ROOT"></a>`PROJECT_WORKSPACES_BROKER_ROOT` <sub>(apps/broker/src/config.ts)</sub>
 - <a id="env-PROJECT_WORKSPACES_HOST_ROOT"></a>`PROJECT_WORKSPACES_HOST_ROOT` <sub>(apps/broker/src/config.ts)</sub>
 
 ### api/scripts {#env-servico-api-scripts}
@@ -1080,14 +1091,14 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 - <a id="env-CAPTURAS_API"></a>`CAPTURAS_API` <sub>(e2e/capturas/doc.captura.ts)</sub>
 - <a id="env-CAPTURAS_ENGINE"></a>`CAPTURAS_ENGINE` <sub>(e2e/capturas/doc.captura.ts)</sub>
-- <a id="env-CAPTURAS_SAIDA"></a>`CAPTURAS_SAIDA` <sub>(e2e/capturas/doc.captura.ts)</sub>
+- <a id="env-CAPTURAS_SAIDA"></a>`CAPTURAS_SAIDA` <sub>(e2e/capturas-v9/v9.captura.ts)</sub>
 - <a id="env-CAPTURAS_WEB"></a>`CAPTURAS_WEB` <sub>(e2e/capturas/doc.captura.ts)</sub>
 - <a id="env-E2E_API_URL"></a>`E2E_API_URL` <sub>(e2e/suporte/api.ts)</sub>
 - <a id="env-E2E_ENGINE_URL"></a>`E2E_ENGINE_URL` <sub>(e2e/testes/instalacao.spec.ts)</sub>
 - <a id="env-E2E_PASSWORD"></a>`E2E_PASSWORD` <sub>(e2e/suporte/api.ts)</sub>
 - <a id="env-E2E_SERVICE_TOKEN"></a>`E2E_SERVICE_TOKEN` <sub>(e2e/suporte/interno.ts)</sub>
 - <a id="env-E2E_USER"></a>`E2E_USER` <sub>(e2e/suporte/api.ts)</sub>
-- <a id="env-E2E_WEB_URL"></a>`E2E_WEB_URL` <sub>(e2e/playwright.capturas.config.ts)</sub>
+- <a id="env-E2E_WEB_URL"></a>`E2E_WEB_URL` <sub>(e2e/capturas-v9/v9.captura.ts)</sub>
 
 ### deploy/k8s {#env-servico-deploy-k8s}
 

@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 283 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 292 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -54,6 +54,7 @@ O contrato do provider de git, o nascimento e a adoção do repositório, a prot
 | [0267](0267-o-e2e-do-brabo-qa-e-portao-da-main.md) | O E2E do brabo-qa é portão da main, com aceite justificado | aceito |
 | [0276](0276-a-pr-declara-de-que-pr-depende-o-merge.md) | A PR declara de que PR de outro repo depende, e um check do App espera o merge | aceito |
 | [0284](0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.md) | A promoção infere as dependências pela ordem dos repos | aceito |
+| [0292](0292-o-merge-automatico-e-opcao-do-projeto-desligada-por-padrao.md) | O merge automático é opção do projeto, desligada por padrão | aceito |
 
 ## Harness de agente, turnos e sessões {#tema-agentes}
 
@@ -159,6 +160,7 @@ O dev agent trabalhando, `proposed_action`, a política de terminal, o escopo de
 | [0167](0167-modo-automatico-libera-o-escopo-de-caminho.md) | O modo automático libera o escopo de caminho, e só ele | aceito |
 | [0189](0189-o-piloto-automatico.md) | O piloto automático: o modo automático aprova tudo, menos os tetos, o escopo compara com a pasta real de execução, e "Sempre permitir" grava verbo + subcomando | aceito |
 | [0204](0204-modo-automatico-libera-push-e-pr.md) | O modo automático libera push e PR | aceito |
+| [0295](0295-a-caixa-de-decisoes-le-as-filas-de-todos-os-projetos-numa-leitura.md) | A Caixa de decisões lê as filas de todos os projetos numa leitura do workspace | aceito |
 
 ## Onde o código mora — modos de execução {#tema-modos}
 
@@ -203,6 +205,7 @@ O ciclo de vida do container do projeto, a decisão de imagem, a porta de Docker
 | [0229](0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.md) | O QA testa numa instância efêmera, com os serviços que a Infra declarou | aceito |
 | [0264](0264-o-app-reinicia-so-o-processo.md) | Depois do avanço da pasta, o app reinicia só o processo, sem recriar o container | aceito |
 | [0265](0265-o-app-declarado-propoe-recriar-o-container.md) | O app declarado pela Infra propõe recriar o container, com a porta na faixa 13000+ | aceito |
+| [0297](0297-o-broker-prova-o-compose-do-projeto-num-ambiente-descartavel.md) | O broker prova o compose do projeto num ambiente descartável | aceito |
 
 ## O runner local {#tema-runner}
 
@@ -280,6 +283,8 @@ O contrato de provider, o catálogo de modelos e a curadoria, os bindings de mod
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | Preço de lista datado no código para provider que não informa preço | aceito |
 | [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | Na Anthropic direta o raciocínio desligado é por modelo e o esforço reduz o Opus | aceito |
 | [0279](0279-provider-de-llm-duble-do-regressivo.md) | Provider de LLM dublê do regressivo, dentro da api | aceito |
+| [0290](0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.md) | O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU que o roda | proposto |
+| [0296](0296-o-teto-de-gasto-e-mensal-e-o-workspace-tem-teto-proprio.md) | O teto de gasto é mensal e o workspace tem teto próprio | aceito |
 
 ## RAG, grafo de conhecimento e artefatos {#tema-conhecimento}
 
@@ -303,6 +308,8 @@ Chunks e busca híbrida, a medição dela, o grafo Neo4j e os artefatos projetad
 | [0205](0205-desvio-do-agente-como-sinal-do-produto.md) | O desvio do agente que a Anamnese observa vira sinal do produto, sem dado pessoal | aceito |
 | [0269](0269-indexacao-de-docs-com-teto-proprio-e-corte-declarado.md) | A indexação de docs tem teto próprio de 4 MiB, e o corte é declarado | aceito |
 | [0272](0272-a-busca-do-rag-limita-os-trechos-por-arquivo.md) | A busca híbrida do RAG limita os trechos por arquivo | aceito |
+| [0291](0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md) | As Percepções olham o produto do usuário; a falha técnica é sinal interno do TP-01 | aceito |
+| [0293](0293-a-memoria-do-projeto-e-markdown-versionado-e-o-grafo-e-o-rag-sao-indices.md) | O projeto tem memória em markdown que o dev lê antes de explorar | proposto |
 
 ## Interface web e design system {#tema-web}
 
@@ -336,6 +343,7 @@ Telas, navegação, temas e a estrutura dos maiores arquivos do app web.
 | [0244](0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.md) | Coluna das abas do projeto alinhada à esquerda | aceito |
 | [0248](0248-conteudo-das-paginas-ocupa-a-largura-inteira.md) | O conteúdo das páginas ocupa a largura inteira | aceito |
 | [0250](0250-chat-da-sessao-ocupa-a-largura-inteira.md) | O chat da Sessão ocupa a largura inteira | aceito |
+| [0294](0294-a-estrutura-v9-oito-secoes-com-sub-abas-caixa-de-decisoes-e-agentes-agora.md) | A estrutura v9: oito seções com sub-abas, Caixa de decisões e Agentes agora | aceito |
 
 ## Operação, deploy e instalação {#tema-operacao}
 
@@ -388,6 +396,7 @@ O pipeline, as imagens publicadas, a assinatura, a varredura, o pin, as camadas 
 | [0282](0282-a-pin-dos-componentes-segue-a-release-final.md) | A pin dos componentes segue a última Release final | aceito |
 | [0285](0285-a-prova-de-uma-aresta-e-arquivo-mais-trecho.md) | A prova de uma aresta do `repos.yml` é arquivo mais trecho literal, não arquivo:linha | aceito |
 | [0286](0286-as-capturas-da-doc-sao-geradas-pelo-qa-e-entram-por-pr.md) | As capturas da doc são geradas pelo brabo-qa e entram no brabo por PR do App | proposto |
+| [0289](0289-a-recaptura-segue-a-pin-e-so-pede-o-dono-quando-a-imagem-muda.md) | A recaptura segue a pin do web e só pede o dono quando a imagem muda | proposto |
 
 ## Documentação {#tema-docs}
 
@@ -423,7 +432,7 @@ Como a documentação é gerada, verificada e publicada.
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0289**.
+  é substituído — o próximo é **0298**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml`; a linha do índice é gerada. Quem revisa confirma. Um tema novo é uma
   mudança na lista em `temas.yml`, justificada no PR que o acrescenta; passar

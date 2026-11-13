@@ -14,7 +14,7 @@ Este documento é o mapa para quem vai **trabalhar** no código. Ele diz por
 onde começar a ler, o que cada fronteira promete e o que já se sabe que está
 torto.
 
-As decisões e suas justificativas moram nos [ADRs](adr/index.md) — 283
+As decisões e suas justificativas moram nos [ADRs](adr/index.md) — 292
 deles, vários registrando um defeito real encontrado em execução. Aqui não
 repetimos o argumento: apontamos para ele.
 
@@ -740,7 +740,7 @@ erDiagram
   users ||--o{ detected_language_declines : "idioma detectado que a pessoa recusou (RN-624)"
 ```
 
-59 tabelas no total. A mais recente é `chat_attachments` ([RN-986](business-rules/api.md#rn-986): os bytes dos anexos do chat; o `chat.message` guarda só a referência, RN-987); antes dela veio `source_clicks` ([RN-983](business-rules/api.md#rn-983): o clique numa fonte consultada, que não é voto); antes dela veio `detected_language_declines`
+61 tabelas no total. A mais recente é `merge_automatico_eventos` ([RN-1316](business-rules/api.md#rn-1316): quem ligou e quem desligou o merge automático do projeto, só inclusão); antes dela veio `task_model_escalations` ([RN-1144](business-rules/api.md#rn-1144): o contador de bloqueios e o modelo base de cada tarefa na escada de modelos); antes dela veio `chat_attachments` ([RN-986](business-rules/api.md#rn-986): os bytes dos anexos do chat; o `chat.message` guarda só a referência, RN-987); antes, veio `source_clicks` ([RN-983](business-rules/api.md#rn-983): o clique numa fonte consultada, que não é voto); antes dela veio `detected_language_declines`
 ([RN-624](business-rules/api.md#rn-624)): uma linha por pessoa e idioma que a
 pessoa RECUSOU quando perguntada "notamos que você escreve em X — usar X nas
 respostas?", com a data. A presença dela é o que impede a mesma pergunta de

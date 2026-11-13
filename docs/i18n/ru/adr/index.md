@@ -55,6 +55,7 @@ ADR фиксирует, **почему** что-то было решено, в �
 | [0267](0267-o-e2e-do-brabo-qa-e-portao-da-main.md) | O E2E do brabo-qa é portão da main, com aceite justificado | принято |
 | [0276](0276-a-pr-declara-de-que-pr-depende-o-merge.md) | A PR declara de que PR de outro repo depende, e um check do App espera o merge | принято |
 | [0284](0284-a-promocao-infere-as-dependencias-pela-ordem-dos-repos.md) | A promoção infere as dependências pela ordem dos repos | принято |
+| [0292](0292-o-merge-automatico-e-opcao-do-projeto-desligada-por-padrao.md) | O merge automático é opção do projeto, desligada por padrão | принято |
 
 ## Harness агента, ходы и сессии {#tema-agentes}
 
@@ -160,6 +161,7 @@ ADR фиксирует, **почему** что-то было решено, в �
 | [0167](0167-modo-automatico-libera-o-escopo-de-caminho.md) | Автоматический режим снимает область путей, и только он | принято |
 | [0189](0189-o-piloto-automatico.md) | Автопилот: автоматический режим одобряет всё, кроме потолков, область сравнивается с реальной папкой исполнения, а «Всегда разрешать» записывает глагол + подкоманду | принято |
 | [0204](0204-modo-automatico-libera-push-e-pr.md) | Автоматический режим разрешает push и PR | принято |
+| [0295](0295-a-caixa-de-decisoes-le-as-filas-de-todos-os-projetos-numa-leitura.md) | A Caixa de decisões lê as filas de todos os projetos numa leitura do workspace | принято |
 
 ## Где живёт код — режимы исполнения {#tema-modos}
 
@@ -204,6 +206,7 @@ ADR фиксирует, **почему** что-то было решено, в �
 | [0229](0229-instancia-de-qa-efemera-com-servicos-declarados-pela-infra.md) | QA тестирует в эфемерном экземпляре, с сервисами, объявленными Infra | принято |
 | [0264](0264-o-app-reinicia-so-o-processo.md) | Depois do avanço da pasta, o app reinicia só o processo, sem recriar o container | принято |
 | [0265](0265-o-app-declarado-propoe-recriar-o-container.md) | O app declarado pela Infra propõe recriar o container, com a porta na faixa 13000+ | принято |
+| [0297](0297-o-broker-prova-o-compose-do-projeto-num-ambiente-descartavel.md) | O broker prova o compose do projeto num ambiente descartável | принято |
 
 ## Локальный runner {#tema-runner}
 
@@ -281,6 +284,8 @@ CLI на машине пользователя — канал, учётные д
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | Датированная в коде прайс-цена для провайдера, не сообщающего цену | принято |
 | [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | В прямом Anthropic отключённое рассуждение задаётся по модели, а усилие снижает Opus | принято |
 | [0279](0279-provider-de-llm-duble-do-regressivo.md) | Provider de LLM dublê do regressivo, dentro da api | принято |
+| [0290](0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.md) | O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU que o roda | предложено |
+| [0296](0296-o-teto-de-gasto-e-mensal-e-o-workspace-tem-teto-proprio.md) | O teto de gasto é mensal e o workspace tem teto próprio | принято |
 
 ## RAG, граф знаний и артефакты {#tema-conhecimento}
 
@@ -304,6 +309,8 @@ CLI на машине пользователя — канал, учётные д
 | [0205](0205-desvio-do-agente-como-sinal-do-produto.md) | Отклонение агента, которое наблюдает Anamnese, становится сигналом продукта, без персональных данных | принято |
 | [0269](0269-indexacao-de-docs-com-teto-proprio-e-corte-declarado.md) | A indexação de docs tem teto próprio de 4 MiB, e o corte é declarado | принято |
 | [0272](0272-a-busca-do-rag-limita-os-trechos-por-arquivo.md) | A busca híbrida do RAG limita os trechos por arquivo | принято |
+| [0291](0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md) | As Percepções olham o produto do usuário; a falha técnica é sinal interno do TP-01 | принято |
+| [0293](0293-a-memoria-do-projeto-e-markdown-versionado-e-o-grafo-e-o-rag-sao-indices.md) | O projeto tem memória em markdown que o dev lê antes de explorar | предложено |
 
 ## Web-интерфейс и дизайн-система {#tema-web}
 
@@ -337,6 +344,7 @@ CLI на машине пользователя — канал, учётные д
 | [0244](0244-coluna-das-abas-do-projeto-alinhada-a-esquerda.md) | Колонка вкладок проекта выровнена по левому краю | принято |
 | [0248](0248-conteudo-das-paginas-ocupa-a-largura-inteira.md) | Содержимое страниц занимает всю ширину | принято |
 | [0250](0250-chat-da-sessao-ocupa-a-largura-inteira.md) | Чат сессии занимает всю ширину | принято |
+| [0294](0294-a-estrutura-v9-oito-secoes-com-sub-abas-caixa-de-decisoes-e-agentes-agora.md) | A estrutura v9: oito seções com sub-abas, Caixa de decisões e Agentes agora | принято |
 
 ## Эксплуатация, deploy и установка {#tema-operacao}
 
@@ -389,6 +397,7 @@ Production-образы, Kubernetes, наблюдаемость, бэкап, dev
 | [0282](0282-a-pin-dos-componentes-segue-a-release-final.md) | A pin dos componentes segue a última Release final | принято |
 | [0285](0285-a-prova-de-uma-aresta-e-arquivo-mais-trecho.md) | A prova de uma aresta do `repos.yml` é arquivo mais trecho literal, não arquivo:linha | принято |
 | [0286](0286-as-capturas-da-doc-sao-geradas-pelo-qa-e-entram-por-pr.md) | As capturas da doc são geradas pelo brabo-qa e entram no brabo por PR do App | предложено |
+| [0289](0289-a-recaptura-segue-a-pin-e-so-pede-o-dono-quando-a-imagem-muda.md) | A recaptura segue a pin do web e só pede o dono quando a imagem muda | предложено |
 
 ## Документация {#tema-docs}
 

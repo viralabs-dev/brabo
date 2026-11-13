@@ -234,6 +234,7 @@ schema 是封闭的：缺少字段会拒绝发出（`Engine.Harness.ArtifactSche
 | `psychologist.hypothesis_accepted` | — |
 | `psychologist.hypothesis_dismissed` | — |
 | `psychologist.hypothesis_accepted_for_anamnese` | 已接受并转交——闭合与 Anamnese 之间循环的环节 |
+| `psychologist.platform_signal` | 关于某个 agent（`agenteAlvo`）的平台故障**内部**信号，仅在 TP-01 测试会话（`projects.sessao_de_teste`）中记录；从不成为假设，不出现在 Percepções 中，也不进入 Anamnese 队列，且不投影到图谱（[RN-1076](../business-rules/engine.md)，[ADR 0291](../adr/0291-as-percepcoes-olham-o-produto-do-usuario-e-a-falha-tecnica-e-sinal-interno-do-tp-01.md)） |
 
 ### Anamnese 与指令
 
@@ -244,7 +245,7 @@ schema 是封闭的：缺少字段会拒绝发出（`Engine.Harness.ArtifactSche
 | `anamnese.run_skipped` | 这一轮故意以**没有**画像结束——`payload.motivo` 说明原因（[RN-063](../business-rules/engine.md#rn-063)） |
 | `anamnese.analysis` | Anamnese 的模型在这一轮中写下的文本（`payload.content`）；从不在会话对话流中绘制（[RN-695](../business-rules/engine.md#rn-695)） |
 | `anamnese.profile_updated` | `proficiency_profile` 发生了变化 |
-| `anamnese.agent_deviation` | Anamnese 观察到的 **agent** 偏差（循环、被用户取消、被用户修复）——是产品的信号，绝不是用户的特征；`payload` 只有 `agente`、`tipo` 和 `evidenceEventIds`，不含个人数据，不投影到图谱（[RN-717](../business-rules/engine.md#rn-717)，[ADR 0205](../adr/0205-desvio-do-agente-como-sinal-do-produto.md)） |
+| `anamnese.agent_deviation` | 已移除（ADR 0291） |
 | `instruction.rolled_back` | 某个指令版本的回滚——创建新版本，不删除（[RN-027](../business-rules/api.md#rn-027)） |
 
 ---
@@ -325,20 +326,21 @@ sequenceDiagram
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从发出点提取：**120 个标识符**，其中 **8** 个未在上文描述。
+从发出点提取：**123 个标识符**，其中 **11** 个未在上文描述。
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
 - `agent.delta` <sub>(apps/engine/lib/engine/agents/arquiteto_server.ex)</sub>
 - `agent.done` <sub>(apps/engine/lib/engine/agents/turno_assincrono.ex)</sub>
 - `agent.error` <sub>(apps/api/src/application/use-cases/agents/aceite-implicito-do-po.use-case.ts)</sub>
+- `agent.model_escalated` — ⚠️ **上文未描述** <sub>(apps/api/src/application/use-cases/execution/escalar-modelo-da-tarefa.use-case.ts)</sub>
+- `agent.model_escalation_exhausted` — ⚠️ **上文未描述** <sub>(apps/api/src/application/use-cases/execution/escalar-modelo-da-tarefa.use-case.ts)</sub>
 - `agent.plan` <sub>(apps/engine/lib/engine/agents/diario.ex)</sub>
 - `agent.reasoning_delta` — ⚠️ **上文未描述** <sub>(apps/engine/lib/engine/sessions/engine_api_client.ex)</sub>
 - `agent.response` <sub>(apps/api/src/application/use-cases/llm/send-chat-message.use-case.ts)</sub>
 - `agent.status` <sub>(apps/engine/lib/engine/agents/diario.ex)</sub>
 - `agent.turn` <sub>(apps/engine/lib/engine/harness/tool_loop.ex)</sub>
 - `agent.turn_resumed` <sub>(apps/engine/lib/engine/agents/diario.ex)</sub>
-- `anamnese.agent_deviation` <sub>(apps/engine/lib/engine/anamnese/tools/report_agent_deviation.ex)</sub>
 - `anamnese.analysis` <sub>(apps/engine/lib/engine/workers/anamnese_worker.ex)</sub>
 - `anamnese.profile_updated` <sub>(apps/api/src/application/use-cases/anamnese/record-proficiency.use-case.ts)</sub>
 - `anamnese.run_completed` <sub>(apps/api/src/application/use-cases/anamnese/record-proficiency.use-case.ts)</sub>
@@ -374,6 +376,7 @@ sequenceDiagram
 - `backlog.story_promotion_returned` <sub>(apps/api/src/application/use-cases/backlog/return-story.use-case.ts)</sub>
 - `backlog.story_transitioned` <sub>(apps/api/src/application/use-cases/backlog/transition-story.use-case.ts)</sub>
 - `backlog.story_updated` <sub>(apps/api/src/application/use-cases/backlog/corrigir-historia.use-case.ts)</sub>
+- `backlog.task_archived` — ⚠️ **上文未描述** <sub>(apps/api/src/application/use-cases/backlog/archive-task.use-case.ts)</sub>
 - `backlog.task_blocked` <sub>(apps/api/src/application/use-cases/execution/mark-task-blocked.use-case.ts)</sub>
 - `backlog.task_claimed` <sub>(apps/api/src/application/use-cases/execution/claim-next-task.use-case.ts)</sub>
 - `backlog.task_created` <sub>(apps/api/src/application/use-cases/backlog/create-task.use-case.ts)</sub>
@@ -437,6 +440,7 @@ sequenceDiagram
 - `psychologist.hypothesis_accepted_for_anamnese` <sub>(apps/api/src/application/use-cases/execution/accept-hypothesis.use-case.ts)</sub>
 - `psychologist.hypothesis_dismissed` <sub>(apps/api/src/application/use-cases/execution/dismiss-hypothesis.use-case.ts)</sub>
 - `psychologist.hypothesis_proposed` <sub>(apps/api/src/application/use-cases/execution/propose-hypotheses.use-case.ts)</sub>
+- `psychologist.platform_signal` <sub>(apps/api/src/application/use-cases/execution/propose-hypotheses.use-case.ts)</sub>
 - `rag.feedback` <sub>(apps/api/src/application/use-cases/rag/record-rag-feedback.use-case.ts)</sub>
 - `rag.search` <sub>(apps/api/src/application/use-cases/rag/hybrid-search.use-case.ts)</sub>
 - `readiness.confirmed` <sub>(apps/api/src/application/use-cases/agents/confirm-readiness.use-case.ts)</sub>
