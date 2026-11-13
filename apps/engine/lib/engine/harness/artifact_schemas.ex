@@ -1,0 +1,217 @@
+defmodule Engine.Harness.ArtifactSchemas do
+  @moduledoc """
+  Validação de artefatos por tipo (emit_artifact). Um artefato é um
+  `session_event` `"artifact.<tipo>"` com payload validado AQUI (não há tabela
+  de artefatos nem validação por tipo na api). Registro de chaves obrigatórias
+  por tipo, mais validações extras (ex.: `business_rule.origin` não pode ser
+  vazia — é a rastreabilidade da regra até a conversa).
+
+  Nem todo tipo pode ser emitido por FERRAMENTA: `known/0` (usado na descrição
+  do tool pro LLM e como whitelist em `EmitArtifact`) lista só os
+  model-emittable. O `product_brief` é validável mas NÃO tool-emittable — ele
+  é emitido pelo servidor do Criativo só após a confirmação de prontidão do
+  usuário (CLAUDE.md 3b.3), nunca por uma tool call do modelo.
+  """
+
+  # tipo => [chaves obrigatórias no payload]
+  @schemas %{
+    "note" => ["title", "body"],
+    "business_rule" => ["title", "description", "origin"],
+    "product_brief" => ["title", "summary", "rules"],
+    # Fase 4a — o DevAgent desistiu da task (suite não fecha, limite de
+    # iterações, orçamento estourado, ou parou sem sinalizar). Emitido pelo
+    # SERVIDOR (`Engine.Dev.AgentIo.block_task/3`), nunca por tool call: é o
+    # registro do desfecho, não algo que o modelo escolhe declarar.
+    "task_blocked" => ["taskId", "agentId", "reason", "diagnosis"],
+    # Fase 4a — pareceres dos gates de PR (QA e SecOps). Server-emitted como o
+    # task_blocked: o SecOps é determinístico (nem tem LLM), e o parecer do QA
+    # nasce da tool `emit_qa_verdict`, que é enforçada à parte — em nenhum dos
+    # dois o modelo escolhe emitir o artefato. `coverageMatrix` (só do QA) é
+    # opcional de propósito: um parecer sem matriz ainda é um parecer válido,
+    # e perdê-lo por validação seria pior do que registrá-lo incompleto. O
+    # SUJEITO do parecer não entra nas chaves obrigatórias porque varia entre
+    # os dois consumidores — ver `check_extra/2`.
+    "qa_verdict" => ["veredito", "resumo", "itens"],
+    "secops_verdict" => ["veredito", "resumo", "itens"],
+    # Fase 8c — resultado de UM delegado da área de Infra (o próprio Lead,
+    # gerando Dockerfiles/compose; ou o Workflows, gerando o pipeline de CI).
+    # Server-emitted como `task_blocked`/`qa_verdict`: o `InfraLeadServer`
+    # emite depois que cada delegado termina, só pra ter um
+    # `parecer_artifact_id` pra referenciar em `delegations` — nunca visto
+    # de fora da área (o que a api vê é a PR consolidada, via
+    # `open_infra_pr`).
+    "infra_delegation_files" => ["files", "summary"],
+    # UX Designer (ADR 0087) — o protótipo navegável que `propose_prototype`
+    # emite. NÃO entra em `@tool_emittable`: é uma ferramenta PRÓPRIA
+    # (`Engine.Agents.UxDesignerTools`), não `emit_artifact`, e reusa este
+    # módulo só pra validação de forma — mesmo mecanismo de `product_brief`,
+    # que também é validável aqui sem ser tool-emittable por `emit_artifact`.
+    "prototipo_navegavel" => ["personas", "jornadas", "prototipo", "resumo"],
+    # ADR 0090 — o entregável da QA-estratégia (segundo MOMENTO do qa-lead,
+    # docs/fluxo.yml). Desde o ADR 0192 (RN-674) é o plano de teste da
+    # ENTREGA de uma task, DEPOIS do código existir — por isso `taskId` é
+    # obrigatório: é por ele que o `QaLeadServer` reencontra o plano na
+    # rodada de correção. Server-emitted, como `qa_verdict`: emitido por
+    # `Engine.Gates.QaEstrategiaAgent` depois que `emit_plano_de_teste`
+    # termina o laço, nunca por tool call direto de fora do harness.
+    "plano_de_teste" => [
+      "storyId",
+      "taskId",
+      "planoDeTeste",
+      "criteriosExecutaveis",
+      "estrategiaDeAutomacao"
+    ],
+    # RN-360 (docs/fluxo.yml `id: appsec`, ADR 0090) — threat model de
+    # DESIGN, server-emitted por `Engine.Gates.SecOpsAgentServer.run_design/2`
+    # depois que `Engine.Gates.AppSecAgent` termina o laço com
+    # `emit_threat_model`. `riscos` fica de fora das obrigatórias: lista
+    # vazia é resposta válida (nem toda story carrega risco residual) e a
+    # ferramenta já garante que a CHAVE existe — não há "esquecido" pra
+    # distinguir de "nenhum".
+    "threat_model" => ["storyId", "threatModel", "requisitosDeSeguranca"],
+    # RN a confirmar no merge — o "ADR resumido" dos agentes conversacionais
+    # (Criativo, PO, Arquiteto, Dev Lead, UX Designer, Staff). Reusa o padrão
+    # GENÉRICO deste módulo em vez do padrão dedicado de
+    # `project_image`/`c4_diagram`: uma decisão é log append-only por
+    # natureza, não um "vigente" que se substitui a cada versão — o mesmo
+    # raciocínio de `note`/`business_rule`. Tool-emittable (ver
+    # `@tool_emittable`); distinto de `open_adr_pr` (que COMMITA um arquivo
+    # real em `docs/adr/*.md` e abre PR de verdade, sempre com aprovação
+    # humana, só o Arquiteto tem) — os dois coexistem, propósitos
+    # diferentes: este é para toda decisão relevante, sem fricção,
+    # pesquisável no log da sessão. Sem validação cruzada de propósito:
+    # `choice` não precisa bater com um item de `options` — texto livre é
+    # mais robusto, e o schema genérico só valida presença de chave.
+    "decision_record" => ["context", "options", "choice", "consequences"],
+    # ADR 0214 (RN-862) — a pergunta que um agente deixa para o usuário. Sai
+    # só pela ferramenta PRÓPRIA `declare_open_question`, nunca por
+    # `emit_artifact` (fora de `@tool_emittable`).
+    "open_question" => ["questionId", "pergunta", "afeta"]
+  }
+
+  # ADR 0214: `needs_user_decision` é o requisito que só o usuário decide.
+  # Pareceres de gate. Os vereditos possíveis são os mesmos da máquina de
+  # estados da api (`pr-gate-state-machine.ts`) — um veredito fora disso faria
+  # o `RecordGateVerdictUseCase` estourar, então é melhor recusar o artefato.
+  @gate_verdict_types ["qa_verdict", "secops_verdict"]
+  @gate_verdicts ["approved", "changes_requested", "needs_user_decision"]
+
+  # Um parecer é sobre UMA task de dev (`taskId`) ou sobre UMA PR de infra
+  # (`prActionId`, ver `Engine.Infra.InfraGateRunner`) — nunca sobre as duas,
+  # nunca sobre nenhuma. Mesmo tipo de artefato, sujeitos diferentes: a UI já
+  # trata os dois estruturalmente (`GateSubject` em PrGateTimeline.tsx).
+  @gate_subject_keys ["taskId", "prActionId"]
+
+  # Tipos que o modelo pode emitir via a ferramenta emit_artifact.
+  @tool_emittable ["note", "business_rule", "decision_record"]
+
+  @doc "Tipos de artefato emitíveis por ferramenta (model-facing)."
+  def known, do: @tool_emittable
+
+  @doc """
+  Campos obrigatórios de um tipo. Existe para a DESCRIÇÃO da ferramenta poder
+  nomeá-los ao modelo: um modelo conversando em português emitiu `titulo`,
+  `descricao` e `comportamento` contra um schema que exige `title`,
+  `description` e `origin` — as quatro regras de negócio da conversa foram
+  recusadas, e ninguém ficou sabendo.
+  """
+  def required(type), do: Map.get(@schemas, type, [])
+
+  @doc """
+  Valida `payload` (map com chaves string) contra o schema do `type`.
+  `:ok` | `{:error, reason}` (tipo desconhecido, chaves faltando, ou
+  validação extra do tipo).
+  """
+  def validate(type, payload) when is_map(payload) do
+    with {:ok, required} <- fetch_schema(type),
+         :ok <- check_required(required, payload),
+         :ok <- check_extra(type, payload) do
+      :ok
+    end
+  end
+
+  def validate(_type, _payload), do: {:error, :invalid_payload}
+
+  defp fetch_schema(type) do
+    case Map.fetch(@schemas, type) do
+      :error -> {:error, {:unknown_type, type}}
+      {:ok, required} -> {:ok, required}
+    end
+  end
+
+  defp check_required(required, payload) do
+    missing = Enum.reject(required, &Map.has_key?(payload, &1))
+    if missing == [], do: :ok, else: {:error, {:missing_keys, missing}}
+  end
+
+  # A origem de uma regra de negócio referencia os eventos da conversa que a
+  # originaram — precisa ser uma lista NÃO-vazia (CLAUDE.md 3b.2).
+  defp check_extra("business_rule", payload) do
+    case Map.get(payload, "origin") do
+      origin when is_list(origin) and origin != [] -> :ok
+      _ -> {:error, :origem_invalida}
+    end
+  end
+
+  defp check_extra(type, payload) when type in @gate_verdict_types do
+    with :ok <- check_gate_subject(payload) do
+      check_gate_verdict(payload)
+    end
+  end
+
+  # Um delegado de Infra sem NENHUM arquivo não terminou nada — mesma lição
+  # do `nada_a_validar/1` do `InfraGateRunner` (ADR 0021), aplicada um passo
+  # antes: nunca deixar "vazio" passar por "concluído".
+  defp check_extra("infra_delegation_files", payload) do
+    case Map.get(payload, "files") do
+      files when is_list(files) and files != [] -> :ok
+      _ -> {:error, :arquivos_vazios}
+    end
+  end
+
+  # O protótipo do UX Designer: personas e jornadas não-vazias (mesma régua
+  # de `business_rule.origin` — um artefato sem conteúdo não vale registrar),
+  # e o `prototipo` precisa ter ao menos UMA tela, senão não há o que o PO ou
+  # o Dev Lead consultem.
+  defp check_extra("prototipo_navegavel", payload) do
+    with :ok <- lista_nao_vazia(payload, "personas"),
+         :ok <- lista_nao_vazia(payload, "jornadas") do
+      validar_telas(Map.get(payload, "prototipo"))
+    end
+  end
+
+  # Mesma lição do `infra_delegation_files`: um plano sem NENHUM critério
+  # executável não é plano — nunca deixar "vazio" passar por "concluído".
+  defp check_extra("plano_de_teste", payload) do
+    case Map.get(payload, "criteriosExecutaveis") do
+      criterios when is_list(criterios) and criterios != [] -> :ok
+      _ -> {:error, :criterios_vazios}
+    end
+  end
+
+  defp check_extra(_type, _payload), do: :ok
+
+  defp lista_nao_vazia(payload, chave) do
+    case Map.get(payload, chave) do
+      lista when is_list(lista) and lista != [] -> :ok
+      _ -> {:error, {:lista_vazia, chave}}
+    end
+  end
+
+  defp validar_telas(%{"telas" => telas}) when is_list(telas) and telas != [], do: :ok
+  defp validar_telas(_), do: {:error, :prototipo_sem_telas}
+
+  defp check_gate_subject(payload) do
+    case Enum.filter(@gate_subject_keys, &Map.has_key?(payload, &1)) do
+      [_only_one] -> :ok
+      keys -> {:error, {:sujeito_invalido, keys}}
+    end
+  end
+
+  defp check_gate_verdict(payload) do
+    case Map.get(payload, "veredito") do
+      veredito when veredito in @gate_verdicts -> :ok
+      other -> {:error, {:veredito_invalido, other}}
+    end
+  end
+end

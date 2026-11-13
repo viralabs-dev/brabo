@@ -392,6 +392,9 @@ comparar com `process.cwd()` (`/workspace` dentro do próprio container). Veja o
 | `HUGGINGFACE_API_TOKEN` | *(não definida)* | token **opcional** do Hugging Face Hub para a busca de modelos (`GET /workspaces/:workspaceId/huggingface/models`). Presente, vai como `Authorization: Bearer …` e sobe o rate limit do Hub; ausente, o cabeçalho simplesmente não é enviado — o Hub aceita busca pública sem credencial, e token ausente nunca é erro |
 | `HUGGINGFACE_HUB_URL` | `https://huggingface.co` | URL base do Hub com que a busca fala. Sobreposição para testes (um servidor HTTP falso numa porta efêmera); em produção fica sem definir |
 | `HUGGINGFACE_REQUEST_TIMEOUT_MS` | `15000` | teto de **inatividade** da requisição de busca ao Hub, mesma semântica de `LLM_REQUEST_TIMEOUT_MS` (o nome é montado numa constante, então o inventário gerado abaixo não o vê) |
+| `TOOL_ROUTER_URL` | *(sem default)* | URL do serviço Laya, o roteador de ferramentas local (ADR 0290). Sem ela, o roteador `laya` fica `nao_configurado`. Lida em `laya-config.ts` da api, a cada uso |
+| `TOOL_ROUTER_API_KEY` 🔒 | *(sem default)* | chave do serviço Laya. Segredo: não vai para log nem para resposta de API. Lida em `laya-config.ts` da api |
+| `TOOL_ROUTER_LAYA_MODELO` | `multilingual` | modelo que o serviço Laya usa para rotear. Lida em `laya-config.ts` da api |
 
 > **TODO(humano):** nenhum arquivo de compose mapeia as três variáveis `HUGGINGFACE_*` no `environment:` do serviço `api`, e o serviço não tem `env_file`, então defini-las no `.env` não tem efeito sob o Compose — `HUGGINGFACE_API_TOKEN` deve ser repassada (ao menos em produção e na instalação)?
 
@@ -404,6 +407,7 @@ comparar com `process.cwd()` (`/workspace` dentro do próprio container). Veja o
 | `NEO4J_PASSWORD` 🔒 | `dev-neo4j-password-change-me` (só dev) | mesma regra de pareamento de `NEO4J_USER`. **Sem default público em produção** de propósito — não há "valor de exemplo" plausível para senha de banco, e o `docker-compose.prod.yml` mantém `NEO4J_AUTH` vazio para que o próprio entrypoint da imagem oficial recuse subir em vez de subir com uma senha adivinhável |
 | `GRAPH_PROJECTOR_INTERVAL_MS` | `2000` | período do poller que esvazia a fila `graph_projection` da outbox e escreve handoffs/hipóteses/perfis/interações no grafo (RN-416) |
 | `CUSTO_RECONCILIACAO_INTERVAL_MS` | `300000` | período do job da api que troca a ESTIMATIVA de custo de uma chamada abortada pelo orçamento de raciocínio pelo custo real do `GET /generation` do OpenRouter ([RN-915](../business-rules/api.md#rn-915)); `0` desliga |
+| `RAG_REINDEX_POLL_INTERVAL_MS` | `5000` | intervalo do poll do reindexador do RAG, que reindexa os docs do projeto depois do merge na trunk. Lida no `onModuleInit` do `trunk-merged-reindexer.ts` da api |
 | `ARTIFACT_PROJECTOR_INTERVAL_MS` | `2000` | período do poller que esvazia a fila `artifact_projection` da outbox e escreve os artefatos de cada agente como Markdown sob a pasta `docs/` do projeto ([RN-523](../business-rules/engine.md#rn-523)). Projeção DERIVADA: o event log continua sendo a fonte, e a pasta pode ser apagada e reconstruída |
 
 ### Observabilidade

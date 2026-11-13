@@ -1,0 +1,24 @@
+{
+  "name": "@brabo/broker",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "packageManager": "pnpm@11.3.0",
+  "description": "O broker de container: o ÚNICO processo do produto que fala com o daemon Docker do servidor. Não aceita especificação — recebe um projectId e uma das seis operações, lê a decisão do Arquiteto da api e COMPÕE a especificação ele mesmo.",
+  "type": "module",
+  "scripts": {
+    "start": "tsup && node dist/index.cjs",
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint --deny-warnings src tsup.config.ts vitest.config.ts"
+  },
+  "devDependencies": {
+    "@brabo/docker-port": "npm:@viralabs-dev/brabo-docker-port@1.2.0",
+    "@types/node": "^24.0.0",
+    "oxlint": "^1.71.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.12"
+  }
+}

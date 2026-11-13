@@ -1,0 +1,256 @@
+# Testes marcados com a tag de um binário rodam o BINÁRIO de verdade (não um
+# Fake). São as regressões dos gates que já aprovaram vazio: `:gitleaks`
+# (varria o histórico em vez da árvore, ADR 0020), `:hadolint`/`:yamllint`
+# (o gate de QA de infra aprovava qualquer arquivo, ADR 0021), e `:actionlint`
+# (o Workflows geraria pipeline de CI sem validação nenhuma, Fase 8c/ADR
+# 0039 — mesma lição, um binário depois). Dentro do container do engine os
+# quatro existem e os testes rodam; numa máquina sem eles são excluídos,
+# mesma disciplina de detecção opcional dos detectors (ausência nunca quebra
+# nada).
+binary_exclusions =
+  Enum.reject(
+    [
+      if(System.find_executable("gitleaks"), do: nil, else: :gitleaks),
+      if(System.find_executable("hadolint"), do: nil, else: :hadolint),
+      if(System.find_executable("yamllint"), do: nil, else: :yamllint),
+      if(System.find_executable("actionlint"), do: nil, else: :actionlint)
+    ],
+    &is_nil/1
+  )
+
+# Os golden-sets (ADR 0123/0132) saíram deste repositório: precisam do seed da api e vão para o brabo-qa (AT-703).
+# Os testes de cluster (`:peer`) precisam do epmd; o runner do CI não o sobe sozinho (AT-776).
+System.cmd("epmd", ["-daemon"], stderr_to_stdout: true)
+
+ExUnit.start(exclude: binary_exclusions)
+Ecto.Adapters.SQL.Sandbox.mode(Engine.Repo, :manual)
+
+# outbox_events é gerenciada pela api (Drizzle, schema "public") — o banco
+# de teste do engine (engine_test) é isolado do banco de teste da api
+# (brabo_test), então a tabela não existe aqui. Este é um fixture de
+# teste, nunca uma migration real (não vai em priv/repo/migrations).
+# `sandbox: false` faz o checkout numa conexão crua (sem transação
+# rollback-able), pra que o CREATE TABLE persista de verdade e fique
+# visível pras conexões sandboxed que cada teste vai usar depois.
+:ok = Ecto.Adapters.SQL.Sandbox.checkout(Engine.Repo, sandbox: false)
+
+Engine.Repo.query!("""
+CREATE TABLE IF NOT EXISTS public.outbox_events (
+  id uuid PRIMARY KEY,
+  aggregate_type text NOT NULL,
+  aggregate_id uuid NOT NULL,
+  event_type text NOT NULL,
+  payload jsonb NOT NULL DEFAULT '{}',
+  metadata jsonb NOT NULL DEFAULT '{}',
+  created_at timestamptz NOT NULL DEFAULT now(),
+  processed_at timestamptz
+)
+""")
+
+# `CREATE TABLE IF NOT EXISTS` não acrescenta coluna numa tabela que já existe,
+# e o banco de teste do engine sobrevive entre execuções: sem este ALTER
+# idempotente, quem já tinha rodado a suite antes da Fase 5 veria erro de coluna
+# inexistente em vez de um fixture atualizado.
+Engine.Repo.query!(
+  "ALTER TABLE public.outbox_events ADD COLUMN IF NOT EXISTS metadata jsonb NOT NULL DEFAULT '{}'"
+)
+
+# Mesmo motivo do fixture de outbox_events acima — session_events também é
+# gerenciada pela api (Drizzle, schema "public") e não existe no banco de
+# teste isolado do engine. Enum actor_kind simplificado pra text (o
+# PsychologistWorker só lê/escreve strings, não valida o enum).
+Engine.Repo.query!("""
+CREATE TABLE IF NOT EXISTS public.session_events (
+  id text PRIMARY KEY,
+  session_id uuid NOT NULL,
+  seq integer NOT NULL,
+  type text NOT NULL,
+  actor_kind text NOT NULL,
+  actor_id text NOT NULL,
+  payload jsonb NOT NULL DEFAULT '{}',
+  created_at timestamptz NOT NULL DEFAULT now()
+)
+""")
+
+# RN-722: o `GateRescuer` lê ação PENDENTE de ator do gate direto daqui.
+# Gerenciada pela api (Drizzle); enums simplificados para text.
+Engine.Repo.query!("""
+CREATE TABLE IF NOT EXISTS public.proposed_actions (
+  id uuid PRIMARY KEY,
+  session_id uuid NOT NULL,
+  seq bigserial,
+  action_type text NOT NULL,
+  payload jsonb NOT NULL DEFAULT '{}',
+  status text NOT NULL DEFAULT 'pending',
+  resolved_policy text NOT NULL,
+  actor_kind text NOT NULL,
+  actor_id text NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+)
+""")
+
+# RN-772: `ListarAdrsPropostas` lê as `open_adr_pr` do PROJETO, com o
+# resultado da execução e o motivo da recusa; RN-845 cruza com o `git_merge`
+# executado, pela data da decisão.
+Engine.Repo.query!("""
+ALTER TABLE public.proposed_actions
+  ADD COLUMN IF NOT EXISTS project_id uuid,
+  ADD COLUMN IF NOT EXISTS execution_result jsonb,
+  ADD COLUMN IF NOT EXISTS rejection_reason text,
+  ADD COLUMN IF NOT EXISTS decided_at timestamptz
+""")
+
+# Mesmo motivo dos fixtures acima — project_repositories também é
+# gerenciada pela api (Drizzle, schema "public"). Enum git_provider
+# simplificado pra text (Engine.Projects.ProjectRepository só lê a
+# string, não valida o enum).
+Engine.Repo.query!("""
+CREATE TABLE IF NOT EXISTS public.project_repositories (
+  id uuid PRIMARY KEY,
+  project_id uuid NOT NULL,
+  provider text NOT NULL,
+  external_id text NOT NULL,
+  url text NOT NULL,
+  default_branch text NOT NULL DEFAULT 'main',
+  visibility text NOT NULL,
+  provisioned_by uuid NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+)
+""")
+
+# Mesmo motivo dos fixtures acima — projects e agent_instructions são
+# gerenciadas pela api (Drizzle, schema "public"). O harness lê projects
+# (nome/slug pra camada de contexto, workspace_dir_name pra RN-109) e
+# agent_instructions (arquivo de agente do banco pro InstructionFiles). Só as
+# colunas que o engine lê.
+Engine.Repo.query!("""
+CREATE TABLE IF NOT EXISTS public.projects (
+  id uuid PRIMARY KEY,
+  workspace_id uuid,
+  name text NOT NULL,
+  slug text NOT NULL,
+  workspace_dir_name text,
+  created_by uuid,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+)
+""")
+
+# `CREATE TABLE IF NOT EXISTS` não acrescenta coluna numa tabela que já
+# existe — mesmo motivo do ALTER idempotente de outbox_events acima.
+# NULLABLE de propósito, ao contrário da api (NOT NULL lá): dezenas de specs
+# no engine inserem em "projects" sem saber do conceito de nome de pasta, e
+# `Engine.Projects.Project.workspace_dir_name/1` já degrada pra `nil` (que
+# quem chama trata como "usa o project_id cru").
+Engine.Repo.query!("ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS workspace_dir_name text")
+
+# RN-169/RN-421 (ADR 0072/0104): o localizador da pasta deixou de ser só o
+# nome. As colunas são lidas pela MESMA consulta que resolve
+# `workspace_dir_name/1`, e sem elas o fixture reprovaria com "column does
+# not exist". Nullable e sem default de propósito, como a de cima:
+# `case when execution_mode <> 'container'` com a coluna nula cai no ramo
+# `container`, que é o comportamento que as dezenas de specs que inserem em
+# "projects" sempre tiveram. `text` solto, e não o enum real da api — o
+# fixture nunca precisou do CHECK/enum, só do valor lido de volta.
+Engine.Repo.query!("ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS execution_mode text")
+Engine.Repo.query!("ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS workspace_path text")
+# `nil` = não verificado (RN-423) — só ganha sentido em `execution_mode:
+# "runner"`, checado por `Engine.Actions.TerminalExecutor` antes de rotear.
+Engine.Repo.query!(
+  "ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS workspace_verified_at timestamptz"
+)
+
+# RN-515/RN-516 (ADR 0147 ponto 4): o DESTINO do espelho, gravado pela api e
+# LIDO aqui — é ele que decide se o `join` do canal do runner exige a
+# capacidade `espelho`, e é ele que viaja na concessão daquele join. Nullable
+# como na api: `nil` é o estado normal, não uma pendência.
+Engine.Repo.query!("ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS mirror_path text")
+
+# RN-619/RN-622: o idioma do projeto, gravado pela api e LIDO aqui para a
+# orientação efêmera dos turnos sem autor. NULLABLE e sem default de
+# propósito (na api é NOT NULL, default 'pt-BR'): coluna nula é "sem
+# orientação", e é isso que mantém intactas as dezenas de specs que conferem a
+# lista EXATA de mensagens mandada ao modelo.
+Engine.Repo.query!("ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS language text")
+
+# Mesmo motivo dos fixtures acima — project_containers também é gerenciada
+# pela api (Drizzle, schema "public", ADR 0081/0130/0134). O engine lê só
+# `status` (`Engine.Containers.ProjectContainerLifecycle.running?/1`, RN-492)
+# pra decidir se o comando de terminal de um dev agent atravessa pro
+# container real; as demais colunas existem pra os testes conseguirem
+# inserir uma linha completa, como a api faria. `image_version`/`cpus`/
+# `memory_mb`/`pids_limit` são NOT NULL na api — mantidos NOT NULL aqui
+# também, sem default: um teste que esquecer de informá-los reprova alto,
+# não silenciosamente com uma linha incompleta.
+Engine.Repo.query!("""
+CREATE TABLE IF NOT EXISTS public.project_containers (
+  id uuid PRIMARY KEY,
+  project_id uuid NOT NULL UNIQUE,
+  status text NOT NULL DEFAULT 'provisioning',
+  image_version integer NOT NULL,
+  container_id text,
+  cpus double precision NOT NULL,
+  memory_mb integer NOT NULL,
+  pids_limit integer NOT NULL,
+  failure_reason text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  status_changed_at timestamptz NOT NULL DEFAULT now()
+)
+""")
+
+# sessions: lida pela Anamnese (Fase 4b) — pra achar a sessão do projeto
+# onde narrar a rodada, e pra filtrar a janela de eventos por projeto
+# (session_events não carrega project_id). Só as colunas que o engine lê.
+Engine.Repo.query!("""
+CREATE TABLE IF NOT EXISTS public.sessions (
+  id uuid PRIMARY KEY,
+  project_id uuid NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now()
+)
+""")
+
+# `status` (ADR 0183, RN-649): o `SessionLifecycleWorker` o lê para ignorar o
+# fechamento que uma reabertura já desfez. `ADD COLUMN IF NOT EXISTS` porque o
+# banco de teste sobrevive entre rodadas e o `CREATE` acima não altera tabela
+# que já existe.
+Engine.Repo.query!("ALTER TABLE public.sessions ADD COLUMN IF NOT EXISTS status text")
+
+# Mesmo motivo dos fixtures acima — session_socket_tickets também é
+# gerenciada pela api (Drizzle, schema "public"). RN-108: é o que
+# Engine.Sessions.SocketTicket lê e consome pra autenticar connect/3 de
+# EngineWeb.SessionSocket. Enum socket_ticket_scope simplificado pra text —
+# só a api valida o vocabulário fechado na emissão.
+Engine.Repo.query!("""
+CREATE TABLE IF NOT EXISTS public.session_socket_tickets (
+  id uuid PRIMARY KEY,
+  session_id uuid NOT NULL,
+  project_id uuid NOT NULL,
+  user_id uuid NOT NULL,
+  scope text NOT NULL,
+  ticket_hash text NOT NULL,
+  expires_at timestamptz NOT NULL,
+  consumed_at timestamptz,
+  created_at timestamptz NOT NULL DEFAULT now()
+)
+""")
+
+# AT-676: a coluna nasce numa migration da api; aqui o fixture a espelha.
+Engine.Repo.query!(
+  "ALTER TABLE public.session_socket_tickets ADD COLUMN IF NOT EXISTS pode_ver_raciocinio boolean NOT NULL DEFAULT false"
+)
+
+Engine.Repo.query!("""
+CREATE TABLE IF NOT EXISTS public.agent_instructions (
+  id uuid PRIMARY KEY,
+  project_id uuid NOT NULL,
+  agent text NOT NULL,
+  content text NOT NULL,
+  version integer NOT NULL DEFAULT 1,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+)
+""")
+
+Ecto.Adapters.SQL.Sandbox.checkin(Engine.Repo)

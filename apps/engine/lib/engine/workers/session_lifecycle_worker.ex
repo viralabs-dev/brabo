@@ -1,0 +1,122 @@
+defmodule Engine.Workers.SessionLifecycleWorker do
+  @moduledoc """
+  Processa eventos de ciclo de vida de sessão consumidos da outbox da api
+  (aggregate_type = "session") por Engine.Outbox.Drain. session.created
+  NÃO é mais tratado aqui — a criação do processo agora é um comando
+  síncrono da api (POST /internal/sessions, ver
+  EngineWeb.SessionCommandController); este worker só para um processo
+  ainda rodando quando a api já sabe do encerramento — e, desde a RN-581, os
+  agentes CONVERSACIONAIS da sessão (`Engine.Agents.Conversacionais`), em
+  todos os nós — e, desde a RN-763, os dev agents dela e os gates do projeto
+  (`Engine.Dev.EncerramentoDaSessao`).
+
+  Desde o ADR 0183 (RN-649) uma sessão encerrada pode ser REABERTA. O job de
+  um fechamento que chega DEPOIS da reabertura (retentativa do Oban, drain
+  atrasado) não para nada: a api já diz que a sessão não é mais terminal, e
+  parar ali derrubaria o processo e os agentes da sessão reaberta. Quem decide
+  é o `status` gravado pela api (`ProjectSession.status/1`); sem linha, o
+  fechamento segue como sempre.
+
+  É aqui, e não no `SessionServer`, porque este é o ponto por onde TODO
+  fechamento passa: heartbeat, conversa ociosa, fechamento humano, crash. O
+  `SessionServer` só vê os que ele mesmo causa, e só no nó dele.
+  """
+
+  use Oban.Worker, queue: :default, max_attempts: 5
+
+  require Logger
+
+  alias Engine.Agents.Conversacionais
+  alias Engine.Sessions.{Monitor, ProjectSession, SessionServer}
+  alias Engine.Telemetry.Span
+
+  @impl true
+  def perform(%Oban.Job{
+        args: %{"event_type" => event_type, "aggregate_id" => session_id} = args
+      })
+      when event_type in ["session.closed", "session.closed_abnormally"] do
+    # `session_id` em toda linha de log deste job (ADR 0035). O
+    # `JsonLogFormatter` lê `meta[:session_id]` desde a Fase 5, e o campo sempre
+    # saiu ausente porque `Logger.metadata/1` não era chamado em lugar nenhum do
+    # engine.
+    Logger.metadata(session_id: session_id)
+
+    # Pendura o trabalho na trace da sessão, usando o `traceparent` que a api
+    # gravou no metadado do evento. `with_session/4` trata nil como "sem parent
+    # remoto, abre trace própria", então evento antigo (pré-Fase 5) segue
+    # funcionando.
+    Span.with_session(
+      args["traceparent"],
+      "outbox.session_lifecycle",
+      %{"brabo.session_id" => session_id, "brabo.event_type" => event_type},
+      fn -> encerrar_se_ainda_encerrada(session_id, event_type) end
+    )
+  end
+
+  # Catch-all: outros event_type futuros de aggregate_type "session" não
+  # falham/retry infinito num desconhecido.
+  def perform(%Oban.Job{}), do: :ok
+
+  defp encerrar_se_ainda_encerrada(session_id, event_type) do
+    case ProjectSession.status(session_id) do
+      status when status in ["created", "active", "closing"] ->
+        Logger.info(
+          "#{event_type} ignorado para a sessão #{session_id}: ela foi " <>
+            "reaberta (status atual #{status}) — nada é parado"
+        )
+
+        :ok
+
+      _ ->
+        encerrar(session_id)
+    end
+  end
+
+  # Busca em `:global`: o job do Oban pode ser executado por qualquer réplica,
+  # e não necessariamente pela que hospeda a sessão. Com lookup local, um job
+  # sorteado para o nó "errado" não achava o processo e retornava :ok — a
+  # sessão seguia rodando depois de a api já a ter encerrado.
+  defp encerrar(session_id) do
+    case SessionServer.whereis(session_id) do
+      pid when is_pid(pid) ->
+        :ok = Monitor.expect_stop(session_id)
+        SessionServer.stop(pid)
+
+      nil ->
+        :ok
+    end
+
+    parar_conversacionais(session_id)
+    parar_execucao(session_id)
+  end
+
+  # RN-763 (AT-456): a mesma régua para os dev agents da sessão e os gates.
+  defp parar_execucao(session_id) do
+    case Engine.Dev.EncerramentoDaSessao.parar_da_sessao(session_id) do
+      [] ->
+        :ok
+
+      parados ->
+        Logger.info(
+          "sessão #{session_id} encerrada: dev agents parados (#{Enum.join(parados, ", ")})"
+        )
+    end
+
+    :ok
+  end
+
+  defp parar_conversacionais(session_id) do
+    case Conversacionais.parar_da_sessao_no_cluster(session_id) do
+      [] ->
+        :ok
+
+      parados ->
+        Logger.info(
+          "sessão #{session_id} encerrada: agentes conversacionais parados " <>
+            "(#{Enum.join(parados, ", ")})"
+        )
+    end
+
+    :ok
+  end
+end

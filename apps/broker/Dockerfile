@@ -1,0 +1,105 @@
+# Imagem de PRODUÇÃO do broker de container (ADR 0130) — o único processo do
+# produto que fala com o daemon Docker do servidor.
+#
+# Contexto de build: a RAIZ deste repo. `@brabo/docker-port` é o pacote
+# `@viralabs-dev/brabo-docker-port` do GitHub Packages (alias do pnpm, AT-770). O
+# registry exige token: ele entra SÓ como secret do BuildKit (`--secret
+# id=npmrc,src=$HOME/.npmrc`), montado durante o `RUN` do install e nunca em
+# `ARG`, `ENV` ou camada (RN-1039).
+#
+# hadolint global ignore=DL3018
+
+# ---------------------------------------------------------------------------
+# Estágio 1: dependências + bundle.
+# ---------------------------------------------------------------------------
+FROM node:26.13.0-alpine3.24@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216 AS build
+
+# pnpm sem corepack (AT-360): o Node 25+ não traz corepack. Tarball do registry
+# conferido contra o sha512 GRAVADO aqui (`npm view pnpm@<v> dist.integrity`, em
+# hex), instalado em /usr/local/bin. A versão bate com o `packageManager` do
+# package.json, então o pnpm nunca tenta baixar outra em runtime.
+ARG PNPM_VERSION=11.3.0
+ARG PNPM_SHA512=2c403d6594527287672b1f7056343a1f7c3634036a67ffabfcc2b3d7595d843768f8787148d1b57cf7956c90606bbd192857c363af19e96d2d0ec9ec5741d215
+RUN npm pack "pnpm@${PNPM_VERSION}" --silent \
+  && printf "%s  %s\n" "${PNPM_SHA512}" "pnpm-${PNPM_VERSION}.tgz" > /tmp/pnpm.sha512 \
+  && sha512sum -c /tmp/pnpm.sha512 && rm /tmp/pnpm.sha512 \
+  && npm i -g "./pnpm-${PNPM_VERSION}.tgz" \
+  && rm "pnpm-${PNPM_VERSION}.tgz"
+
+WORKDIR /repo
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+
+RUN --mount=type=secret,id=npmrc,target=/root/.npmrc pnpm install --frozen-lockfile
+
+COPY src src
+COPY tsconfig.json tsup.config.ts ./
+
+# `tsup` produz UM `dist/index.cjs` com `@brabo/docker-port` embutido: o pacote é
+# `devDependency` e a imagem final não tem `node_modules` nem registry.
+RUN pnpm build
+
+# ---------------------------------------------------------------------------
+# Estágio 2: runtime. O bundle, o CLI do docker, e mais nada.
+# ---------------------------------------------------------------------------
+FROM node:26.13.0-alpine3.24@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216 AS runtime
+
+ARG BRABO_VERSION=dev
+
+# `DOCKER_CONFIG` apontando para o tmpfs, e isto é load-bearing: o compose de
+# produção monta o rootfs `read_only` (o `x-app-hardening` que todas as nossas
+# imagens compartilham), e o CLI do docker tenta escrever/criar
+# `$HOME/.docker`. Sem esta linha o container sobe e a primeira operação falha
+# por um motivo que não tem nada a ver com Docker — e o erro seria de escrita
+# em disco, não um dos nomeados.
+ENV NODE_ENV=production \
+    BRABO_VERSION=$BRABO_VERSION \
+    DOCKER_CONFIG=/tmp/.docker
+
+# `apk upgrade` antes do install pelo mesmo motivo dos outros Dockerfile.prod:
+# a tag da base é pinada (bom para reprodutibilidade) e congela também os
+# patches de segurança do Alpine.
+#
+# `docker-cli` é o CLIENTE — sem daemon, sem containerd. É a única dependência
+# de sistema deste serviço, e ela é o preço declarado da decisão do ADR 0128 de
+# usar um mecanismo só dos dois lados. `wget` (busybox) já vem na base e é o
+# que o HEALTHCHECK usa.
+RUN apk upgrade --no-cache && apk add --no-cache docker-cli
+
+# Remove npm/npx/corepack, pelo mesmo motivo da imagem da api: o runtime executa
+# `node index.cjs`, e gerenciador de pacote aqui é superfície pronta para quem
+# conseguir execução — o que num processo com acesso ao socket do Docker pesa
+# mais do que em qualquer outra imagem nossa.
+RUN rm -rf /usr/local/lib/node_modules/npm \
+           /usr/local/lib/node_modules/corepack \
+           /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack
+
+WORKDIR /app
+
+# Só o bundle. Não há `node_modules` no estágio final: o `tsup` embutiu tudo, e
+# este pacote não tem binding nativo nenhum.
+COPY --from=build --chown=node:node /repo/dist/index.cjs ./index.cjs
+
+# A oferta escrita de fonte viaja DENTRO da imagem (AT-120): quem faz
+# `docker pull` não tem o repositório. A PASTA nasce antes, por um `RUN`, não
+# pelo `COPY`: o BuildKit aplica o `--chmod` também às pastas que o `COPY` cria,
+# e a pasta nascia `0644`, sem o bit de execução.
+RUN install -d -m 0755 /usr/share/doc/brabo
+COPY --chown=root:root --chmod=0644 THIRD_PARTY_NOTICES.md \
+     /usr/share/doc/brabo/THIRD_PARTY_NOTICES.md
+
+# `node` (uid 1000) já vem na imagem oficial. O acesso ao socket NÃO vem daqui:
+# ele depende do GID do grupo `docker` do HOST, que só o compose/orquestrador
+# conhece (`group_add`). Embutir um GID na imagem seria acertar numa máquina e
+# errar em todas as outras, em silêncio.
+USER node
+
+EXPOSE 8090
+
+# `/health` fala do PROCESSO, nunca do daemon — reiniciar este serviço não
+# conserta um Docker fora do ar, e um healthcheck que reprovasse por isso
+# produziria um laço de reinício que não resolve nada.
+HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=5 \
+  CMD wget -qO- http://127.0.0.1:8090/health >/dev/null || exit 1
+
+CMD ["node", "index.cjs"]

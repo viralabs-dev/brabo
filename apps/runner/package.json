@@ -1,0 +1,56 @@
+{
+  "name": "@brabo/runner",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "CLI que executa, na máquina do próprio usuário, os comandos que os agentes propõem e o pipeline de aprovação já aprovou — conectado ao engine por canal Phoenix autenticado por ticket de uso único.",
+  "keywords": [
+    "brabo",
+    "cli",
+    "runner",
+    "agents"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viralabs-dev/brabo-runner.git"
+  },
+  "homepage": "https://github.com/viralabs-dev/brabo-runner#readme",
+  "type": "module",
+  "bin": {
+    "brabo-runner": "./dist/index.cjs"
+  },
+  "files": [
+    "dist",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "scripts": {
+    "start": "node src/index.ts",
+    "build": "tsup",
+    "build:bin": "node scripts/build-bin.mjs",
+    "smoke": "node scripts/smoke-dist.mjs",
+    "smoke:bin": "node scripts/smoke-bin.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint --deny-warnings src scripts"
+  },
+  "dependencies": {
+    "jose": "^6.2.4",
+    "node-pty": "^1.1.0"
+  },
+  "devDependencies": {
+    "@brabo/docker-port": "npm:@viralabs-dev/brabo-docker-port@1.2.0",
+    "@types/node": "^24.0.0",
+    "@types/phoenix": "^1.6.7",
+    "oxlint": "^1.71.0",
+    "phoenix": "^1.8.9",
+    "tsup": "^8.5.1",
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.12"
+  },
+  "packageManager": "pnpm@11.3.0"
+}

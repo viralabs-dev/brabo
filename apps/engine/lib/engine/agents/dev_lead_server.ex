@@ -1,0 +1,929 @@
+defmodule Engine.Agents.DevLeadServer do
+  @moduledoc """
+  Dev Lead conversacional (FASE 14d item 5, [ADR 0053]).
+
+  Ativado pelo handoff aceito do Arquiteto, lê o `module_map` VIGENTE do
+  projeto (a leitura de `get_infra_context`, RN-699 — nunca um evento da
+  sessão) e o backlog, relê os dois quando quiser por `read_backlog`, e propõe o PLANO de execução: quantos agentes por módulo e por quê. Ele **não
+  escreve código** — distribui trabalho e responde por ele.
+
+  Desde o ADR 0090 ele também é dono do gate `implementavel`
+  (`docs/gates.yml`, ativo): a ferramenta `assess_implementability` propõe o
+  parecer de implementabilidade de uma story, a partir da própria história e
+  do `module_map` que o kickoff já lhe dá — desde o ADR 0192 (RN-674) o plano
+  de teste da QA-estratégia nasce DEPOIS da entrega do dev e alimenta o gate
+  `qa-verificada`, não este. Mesmo mecanismo de suspensão do
+  `propose_execution_plan`.
+
+  Espelha o `Engine.Agents.ArquitetoServer` e o `Engine.Infra.InfraLeadServer`:
+  GenServer por sessão, estado + rehydration + streaming + loop bounded de tool
+  use. Kickoff no start fresco.
+
+  ## Por que ele existe
+
+  Antes, o Arquiteto terminava e a execução subia por um botão, **sem ninguém
+  no meio para avaliar o trabalho**. O teto de paralelismo da
+  [RN-083](../../../../docs/business-rules.md) dizia "quem decide é o lead", e o
+  lead não existia — a frase não tinha dono.
+
+  ## Por que ele é o único endereço externo da execução
+
+  Ao virarem membros da área de `dev`, os `dev-<modulo>` deixaram de ser
+  endereçáveis por handoff (`agent-areas.ts` na api). Isso não é exceção nova:
+  é a regra de handoff do ADR 0038 passando a valer para o dev como já valia
+  para QA e Infra.
+
+  Sem `Terminal` e sem `write_file` — restrição ESTRUTURAL, não de política: um
+  lead que escrevesse código faria o trabalho que delegou.
+
+  ## O plano suspende o turno esperando aprovação (ADR 0086, RN-284)
+
+  `propose_execution_plan` virou `proposed_action` de verdade (ver o
+  moduledoc de `Engine.Agents.DevLeadTools`), e este servidor é a PRIMEIRA
+  vez que um agente conversacional (síncrono, `GenServer.call` de até 180s
+  via `TurnoAssincrono`) suspende esperando decisão humana — o dev agent
+  (ADR 0052) e os gates de QA/Infra (ADR 0057) já suspendiam, mas os três são
+  disparados por `cast` e nunca esperavam resposta síncrona.
+
+  O mecanismo: quando `run_turn/2` recebe `{:pending, action_id}` de um tool
+  call, ele PARA o laço (sem processar mais chamadas nem recursar) e devolve
+  o `state` com a chave `:aguardando_aprovacao` —
+  `%{action_id:, tool_call_id:, tool_name:, remaining:}`.
+  `TurnoAssincrono.tratar_resultado/2` vê essa chave, responde ao `from` (o
+  que rompe o bloqueio síncrono no momento certo) e emite só
+  `agent.status: awaiting_approval` — SEM `agent.done`, porque o turno não
+  terminou.
+
+  Assinado via `Engine.Dev.Wake.subscribe/2` (o MESMO módulo que
+  `Engine.Gates.QaLeadServer` reusa para os subagentes de QA, apesar do nome
+  ser "dev" — a entrega de `{:action_settled, ...}` é por AGENTE, e "dev-lead"
+  é só mais um id de agente para o worker que drena a outbox), este servidor
+  recebe `{:action_settled, desfecho}` quando a api decide a ação. A mensagem
+  `role: "tool"` com o resultado REAL só entra em `state.messages` NESSE
+  momento — nunca antes, porque gravar "pending" ali mentiria pro modelo que
+  o comando já respondeu isso (mesmo raciocínio do dev agent, ver
+  `Engine.Harness.Hooks.ActionPipeline` e `Engine.Harness.ToolLoop`). O laço
+  retoma de `pendente.remaining`, que já desconta a iteração suspensa. O
+  `tool.result` da chamada suspensa nasce no MESMO momento e pelo mesmo
+  motivo (RN-593): na suspensão não há desfecho para gravar, e o log fica só
+  com o `tool.call` até a decisão chegar.
+
+  Enquanto `aguardando_aprovacao` está setado, uma segunda `user_message`
+  NÃO inicia turno novo — vira `agent.error` (origem `politica`) explicando
+  que há uma decisão pendente em Aprovações.
+
+  **Lacuna aceita, declarada**: se o engine reiniciar enquanto o Dev Lead
+  está suspenso, o `aguardando_aprovacao` (só em memória) se perde — ao
+  contrário do dev agent, este servidor NÃO reidrata `laco_pendente`. A
+  decisão continua registrada e visível em Aprovações (é durável na api), mas
+  o Dev Lead não narra o desfecho automaticamente quando ele chegar: o
+  processo que assinou o `Wake` morreu, e o próximo restart sobe um Dev Lead
+  novo, sem inscrição para aquela ação. Fechar isto exigiria o mesmo
+  mecanismo de reidratação do ADR 0052 (`handle_continue`, resume por linha
+  durável) — fora do escopo desta mudança, que só faz o comportamento bater
+  com o que `docs/fluxo.yml` já declarava.
+  """
+
+  use GenServer, restart: :temporary
+
+  alias Engine.Harness.{ContextBuilder, PromptAssembler, ContextManager, ToolCallRecovery}
+  alias Engine.Harness.Tools.{DeclareOpenQuestion, EmitArtifact, ListarAdrsPropostas}
+
+  alias Engine.Agents.{
+    DevLeadTools,
+    FilaDeMensagens,
+    FalhaDeTurno,
+    Reidratacao,
+    ResultadoDeFerramenta,
+    TextoDoTurno,
+    TurnoAssincrono,
+    TurnoOrfao
+  }
+
+  alias Engine.Dev.Wake
+  alias Engine.Sessions.EngineApiClient
+
+  @agent "dev-lead"
+
+  # Conversacional: o teto do TIPO (RN-085) vale para o laço do harness; este
+  # servidor tem laço próprio, e 14 é o mesmo do Arquiteto e do Infra Lead.
+  @max_iterations 14
+
+  # Frente 3 do plano de decision_record — IDÊNTICA nos 5 conversacionais que
+  # ganharam emit_artifact nesta leva (PO, Arquiteto, Dev Lead, UX Designer,
+  # Staff; o Criativo já tinha a ferramenta antes). Fica de fora do texto de
+  # identidade (`Engine.Harness.Agents`) porque não é sobre QUEM o agente é —
+  # é uma instrução operacional sobre UMA ferramenta, igual nos 5.
+  @instrucao_decision_record "Use `emit_artifact` com `type: decision_record` para " <>
+                               "registrar uma decisão relevante tomada nesta conversa, " <>
+                               "com contexto, opções consideradas, a escolha e as " <>
+                               "consequências aceitas. Se a decisão orienta o dev de um " <>
+                               "módulo, inclua `afeta: {modulos: [\"<módulo>\"]}` e cite " <>
+                               "`modules/<módulo>`."
+
+  # RN-1070 (AT-809): o Dev Lead cita id e estado só do que leu neste turno.
+  @instrucao_ler_antes_de_citar "Não afirme estado de ADR, PR ou tarefa sem ler " <>
+                                  "`listar_adrs_propostas`/`read_backlog` no mesmo turno; " <>
+                                  "se não leu, diga que não sabe."
+
+  # --- API pública ---
+
+  def start_link({session_id, project_id}) do
+    GenServer.start_link(__MODULE__, {session_id, project_id}, name: via(session_id))
+  end
+
+  def via(session_id),
+    do: {:via, Registry, {Engine.Sessions.Registry, "dev-lead:" <> session_id}}
+
+  def kickoff(session_id), do: GenServer.cast(via(session_id), :kickoff)
+
+  # `idioma` é o idioma da resposta do AUTOR desta mensagem, resolvido pela api
+  # (RN-622); `nil` = sem orientação neste turno.
+  def user_message(session_id, text, idioma \\ nil, mensagem_id \\ nil),
+    do: GenServer.call(via(session_id), {:user_message, text, idioma, mensagem_id}, 180_000)
+
+  @doc "Cancela uma mensagem que espera na fila deste agente (RN-673)."
+  def cancelar_mensagem(session_id, mensagem_id, user_id),
+    do: GenServer.call(via(session_id), {:cancelar_mensagem, mensagem_id, user_id}, 15_000)
+
+  # --- Callbacks ---
+
+  @impl true
+  def init({session_id, project_id}) do
+    system_msg = %{
+      "role" => "system",
+      "content" => system_prompt(project_id),
+      :pinned => true
+    }
+
+    # A conversa que já existe na sessão — a CAUDA, com as perguntas e as
+    # ferramentas deste agente, e o começo resumido quando não cabe (RN-580).
+    # RN-586: o turno que o reinício do engine deixou pela metade fecha com
+    # desfecho durável (nunca reexecuta).
+    _ = TurnoOrfao.fechar_ao_subir(project_id, session_id, @agent)
+
+    history = Reidratacao.historico(project_id, session_id, @agent)
+
+    # Assina pelo próprio id — `task.action_settled` chega chaveado pelo ator
+    # que PROPÔS a ação (`acao.actor.id`, ver `avisarQuemEsperava` na api), e
+    # quem propõe `propose_execution_plan` é sempre "dev-lead". Mesmo módulo
+    # que `Engine.Gates.QaLeadServer` já reusa para os subagentes de QA.
+    :ok = Wake.subscribe(project_id, @agent)
+
+    {:ok,
+     %{
+       session_id: session_id,
+       project_id: project_id,
+       agent: @agent,
+       messages: [system_msg | history],
+       # ADR 0090: `assess_implementability` entrou como SEGUNDA ferramenta,
+       # aditiva — `propose_execution_plan` continua a primeira e intocada.
+       # Frente 3 do plano de decision_record: `emit_artifact` entra como
+       # TERCEIRA, também aditiva — não precisa do tratamento especial de
+       # `propose_execution_plan`/`assess_implementability` (nunca devolve
+       # `{:pending, _}`), só o `run_tool/3` comum abaixo.
+       tool_specs: tool_specs(),
+       # Guardado enquanto o turno roda numa Task supervisionada, fora do
+       # handler que bloqueava o processo inteiro — é o que permite um
+       # `:cancel` chegar e ser atendido (RN-122). Ver `TurnoAssincrono`.
+       # RN-673: a fila de mensagens que chegaram com turno em curso,
+       # reconstruída do log (sobrevive a restart), e como montar o turno
+       # que a lê. Ver `TurnoAssincrono.receber_mensagem/4`.
+       # AT-582: a retomada do turno interrompido, ANTES da fila (a fila espera o fim dela).
+       retomada_agendada: TurnoAssincrono.retomada_ao_subir(project_id, session_id, @agent),
+       montar_turno_de_retomada: &turno_de_retomada/1,
+       fila_de_mensagens: TurnoAssincrono.fila_ao_subir(project_id, session_id, @agent),
+       montar_turno_de_mensagem: &turno_de_mensagem/2,
+       turno_assincrono: nil,
+       # O laço suspenso esperando a decisão do plano de execução (ADR 0086,
+       # RN-284). Só em memória — ver a lacuna de restart declarada no
+       # moduledoc.
+       aguardando_aprovacao: nil
+     }}
+  end
+
+  # O turno passou a rodar numa Task (`TurnoAssincrono`), fora deste
+  # handler: antes o processo inteiro ficava bloqueado até o turno terminar,
+  # e um `:cancel` nunca era atendido nesse meio tempo (RN-122).
+  @impl true
+  def handle_cast(:kickoff, state) do
+    work = state |> append(user_msg(kickoff_instruction(state))) |> compact()
+
+    TurnoAssincrono.iniciar(state, nil, fn ->
+      run_turn(work, Engine.Harness.FalhaRepetida.inicio_de_turno(@max_iterations))
+    end)
+  end
+
+  @impl true
+  def handle_cast(:cancel, state) do
+    {:noreply, TurnoAssincrono.cancelar(state)}
+  end
+
+  # RN-581: a sessão fechou e `Engine.Agents.Conversacionais` está parando
+  # este agente — o turno em curso morre junto, sem gravar nada.
+  @impl true
+  def terminate(_reason, state) do
+    TurnoAssincrono.abandonar(state)
+    :ok
+  end
+
+  # Guarda: enquanto o plano de execução está aguardando decisão do usuário,
+  # a conversa NÃO recomeça — precisa vir ANTES da cláusula genérica de
+  # `{:user_message, text}` para o pattern match casar aqui primeiro. A
+  # resposta HTTP desta rota já é descartada pelo controller do engine para
+  # todos os agentes, então `{:reply, :ok, state}` basta.
+  #
+  # Desde o ADR 0163 (RN-578) o controller NÃO descarta mais: o turno deixou
+  # de segurar o request, e a resposta do `handle_call` passou a ser o único
+  # sinal síncrono que o clique recebe. Responder `:ok` aqui diria "aceito"
+  # sobre uma mensagem que não foi lida — por isso `{:error,
+  # :aguardando_aprovacao}`, que vira 409 com a mesma frase do `agent.error`.
+  #
+  # `emit` (durável) E `broadcast` (efêmero) — mesmo par que `emit_falha/2`
+  # usa em todo o resto deste arquivo. Só `emit` deixaria quem está com a
+  # aba aberta sem sinal nenhum até o próximo poll do event log.
+  #
+  # RN-673 (ADR 0191): a fila de mensagens NÃO vale aqui, por decisão — o turno
+  # suspenso não tem fim previsto (depende de um humano decidir em Aprovações),
+  # e enfileirar seria prometer leitura "no fim do turno" sem fim à vista. A
+  # mensagem que já estava na fila quando o turno suspendeu espera a RETOMADA
+  # terminar (`TurnoAssincrono.entregar_fila/1` pula estado suspenso).
+  @impl true
+  def handle_call(
+        {:user_message, _text, _idioma, _mensagem_id},
+        _from,
+        %{aguardando_aprovacao: %{}} = state
+      ) do
+    origem = "politica"
+
+    mensagem =
+      "Há uma decisão de plano de execução pendente em Aprovações — a " <>
+        "conversa não segue até ela ser decidida."
+
+    emit(state, "agent.error", %{
+      origem: origem,
+      mensagem: mensagem,
+      reason: "aguardando_aprovacao_de_plano"
+    })
+
+    broadcast(state, "agent.error", %{origem: origem, mensagem: mensagem})
+
+    {:reply, {:error, :aguardando_aprovacao}, state}
+  end
+
+  # RN-622: o idioma do AUTOR vale para o turno que esta mensagem sobe, e só
+  # para ele — `IdiomaDaResposta.com_idioma_do_autor/2` o põe no dicionário
+  # durante o `handle_call` (a Task do turno o herda) e o tira ao sair.
+  #
+  # RN-673 (ADR 0191): a mensagem passa por `TurnoAssincrono.receber_mensagem/4`
+  # — com turno em curso ela ENTRA NA FILA em vez de ser recusada, e a fila
+  # vira um turno só no fim dele. `mensagem_id` é o do `chat.message` que a api
+  # gravou; é por ele que a mensagem pendente pode ser cancelada.
+  @impl true
+  def handle_call({:user_message, text, idioma, mensagem_id}, from, state) do
+    TurnoAssincrono.receber_mensagem(
+      state,
+      from,
+      %{texto: text, idioma: idioma, id: mensagem_id},
+      &turno_de_mensagem/2
+    )
+  end
+
+  def handle_call({:user_message, text, idioma}, from, state),
+    do: handle_call({:user_message, text, idioma, nil}, from, state)
+
+  def handle_call({:user_message, text}, from, state),
+    do: handle_call({:user_message, text, nil, nil}, from, state)
+
+  @impl true
+  def handle_call({:cancelar_mensagem, mensagem_id, user_id}, _from, state),
+    do: TurnoAssincrono.cancelar_mensagem(state, mensagem_id, user_id)
+
+  # A ação que segurava o laço teve desfecho (ADR 0086/RN-284 — mesmo padrão
+  # do dev agent, ADR 0052, e do `QaLeadServer` para os subagentes de QA). O
+  # resultado de verdade entra no lugar onde estaria a palavra "pending", e o
+  # laço RETOMA de onde parou — `pendente.remaining` já desconta a iteração
+  # suspensa contra o teto.
+  #
+  # Guard de identidade: só age se for a MESMA ação que este Dev Lead está
+  # esperando — entrega duplicada (retry do Oban, drain concorrente) ou
+  # tardia (o servidor já morreu e um novo subiu, ver a lacuna declarada no
+  # moduledoc) vira no-op na cláusula seguinte, nunca derruba o processo.
+  # RN-673: como UMA fala do usuário vira turno — a mesma montagem que o
+  # `handle_call` fazia inline. `TurnoAssincrono` a guarda no state e a usa
+  # também para o turno que lê a FILA (várias falas num texto só).
+  defp turno_de_mensagem(state, text) do
+    work = state |> append(user_msg(text)) |> compact()
+    fn -> run_turn(work, Engine.Harness.FalhaRepetida.inicio_de_turno(@max_iterations)) end
+  end
+
+  defp avisar(state, texto) do
+    fila = state.fila_de_mensagens
+
+    cond do
+      is_nil(state.turno_assincrono) and is_nil(state.aguardando_aprovacao) and fila == [] ->
+        {:noreply, novo} =
+          TurnoAssincrono.iniciar(state, nil, turno_de_mensagem(state, texto))
+
+        novo
+
+      length(fila) < FilaDeMensagens.teto() ->
+        %{state | fila_de_mensagens: fila ++ [%{id: nil, texto: texto, idioma: nil, anexos: []}]}
+
+      true ->
+        state
+    end
+  end
+
+  defp aviso_de_bloqueio(info) do
+    "[Aviso do sistema] A tarefa #{info.task_id} do módulo #{info.modulo} bloqueou: " <>
+      "#{info.reason}. Diagnóstico: #{String.slice(to_string(info.diagnosis), 0, 600)}. " <>
+      "Se falta interface de OUTRO módulo, confira o contrato e o mapa (`read_backlog`), " <>
+      "peça ao Arquiteto com `pedir_ao_arquiteto` e crie a tarefa no módulo dono com " <>
+      "`create_task`. Se não, diga ao usuário o que falta."
+  end
+
+  # AT-800 (RN-1059): a execução inteira parou. Rearmar e Desbloquear seguem gesto humano.
+  defp aviso_de_parada(info) do
+    tarefas =
+      Enum.map_join(info.tarefasBloqueadas, "; ", &"#{&1.taskId} (#{&1.title}): #{&1.reason}")
+
+    agentes = Enum.map_join(info.agentesTravados, ", ", & &1.agentId)
+
+    "[Aviso do sistema] A execução parou: todos os dev agents estão parados e " <>
+      "#{info.tarefasPendentes} tarefa(s) seguem pendentes. " <>
+      "Tarefas bloqueadas: #{if tarefas == "", do: "nenhuma", else: tarefas}. " <>
+      "Agentes travados pelo disjuntor: #{if agentes == "", do: "nenhum", else: agentes}. " <>
+      "Diga ao usuário, numa frase, o que destrava (Rearmar o agente, Desbloquear a tarefa ou " <>
+      "responder uma pergunta). Se falta interface de OUTRO módulo, siga o caminho do aviso de bloqueio."
+  end
+
+  defp aviso_de_contrato(version) do
+    "[Aviso do sistema] O Arquiteto publicou o contrato v#{version}. Se uma tarefa bloqueada " <>
+      "esperava por ele, crie agora a tarefa no módulo dono com `create_task` e reproponha o plano."
+  end
+
+  # AT-582: o turno de retomada não tem fala nova do usuário; o histórico
+  # reidratado já termina nela e a orientação vai efêmera (`RetomadaDoTurno`).
+  defp turno_de_retomada(state) do
+    fn ->
+      run_turn(compact(state), Engine.Harness.FalhaRepetida.inicio_de_turno(@max_iterations))
+    end
+  end
+
+  # AT-748 (RN-1012): avisos do sistema (bloqueio do dev, contrato novo) abrem
+  # turno com o Dev Lead parado; com turno em curso ou suspenso em aprovação
+  # entram na fila e esperam o fim dele. Não passa por `receber_mensagem/4`:
+  # ele responde a um `from` que aqui não existe.
+  @impl true
+  def handle_info({:tarefa_bloqueada, info}, state),
+    do: {:noreply, avisar(state, aviso_de_bloqueio(info))}
+
+  def handle_info({:execucao_parada, info}, state),
+    do: {:noreply, avisar(state, aviso_de_parada(info))}
+
+  def handle_info({:contrato_publicado, version}, state),
+    do: {:noreply, avisar(state, aviso_de_contrato(version))}
+
+  def handle_info(
+        {:action_settled, %{action_id: action_id} = desfecho},
+        %{aguardando_aprovacao: %{action_id: action_id} = pendente} = state
+      ) do
+    texto = texto_do_desfecho(desfecho)
+
+    # O `tool.result` que a suspensão NÃO gravou (RN-593): é aqui que o
+    # desfecho real existe, e é ele — nunca a palavra "pending" — que vai para
+    # o log, pelo MESMO módulo dos seis (RN-589). Sem isto, o Dev Lead
+    # reidratado lia "o log não registra o desfecho" sobre um plano que o
+    # usuário já tinha aprovado ou recusado.
+    emit(
+      state,
+      "tool.result",
+      ResultadoDeFerramenta.payload(pendente.tool_name, {sentido_do_desfecho(desfecho), texto})
+    )
+
+    mensagem_tool = %{
+      "role" => "tool",
+      "content" => texto,
+      "toolCallId" => pendente.tool_call_id,
+      "name" => pendente.tool_name,
+      :pinned => false
+    }
+
+    state =
+      state
+      |> append(mensagem_tool)
+      |> Map.put(:aguardando_aprovacao, nil)
+
+    TurnoAssincrono.iniciar(state, nil, fn -> run_turn(state, pendente.remaining) end)
+  end
+
+  # Desfecho de OUTRA ação, ou o Dev Lead já não está esperando: ignora em
+  # vez de derrubar. A entrega é por agente, e nada garante que só chegue o
+  # que se espera.
+  def handle_info({:action_settled, _outro}, state), do: {:noreply, state}
+
+  @impl true
+  def handle_info(msg, state) do
+    case TurnoAssincrono.tratar_resultado(msg, state) do
+      {:ok, novo_state} -> {:noreply, novo_state}
+      :ignorado -> {:noreply, state}
+    end
+  end
+
+  # --- Turno com loop bounded de tool use ---
+
+  # O teto de iterações deixou de ser SILENCIOSO — mesma correção da RN-166
+  # já aplicada ao PO: um Dev Lead que esgotasse as 14 iterações terminava
+  # sem evento nenhum, indistinguível de um turno que simplesmente acabou.
+  defp run_turn(state, remaining) when remaining <= 0 do
+    # AT-590: lê a linha ANTES de gravar o texto (que a esvaziaria) e a põe no evento.
+    gravado = Engine.Agents.GravadoNoTurno.descarregar()
+    gravar_texto_do_turno(state, "", nil)
+
+    Engine.Harness.FalhaRepetida.narrar_ou(state.project_id, state.session_id, @agent, fn ->
+      emit(state, "toolloop.limit_reached", %{
+        iteration: @max_iterations,
+        max_iterations: @max_iterations,
+        gravado: gravado
+      })
+    end)
+
+    state
+  end
+
+  defp run_turn(state, remaining) do
+    # Ver o comentário em `criativo_server.ex`: quem fala é o agente (achado C).
+    on_delta = fn text -> broadcast(state, "agent.delta", %{text: text, agent: @agent}) end
+    wire = Enum.map(state.messages, &to_wire/1)
+
+    case EngineApiClient.llm_turn_stream(
+           state.project_id,
+           state.session_id,
+           @agent,
+           wire,
+           state.tool_specs,
+           on_delta
+         ) do
+      # A api narra a falha no PRÓPRIO frame final (budget, credencial, binding).
+      # Isto não caía no `{:error, _}` abaixo e não emitia evento nenhum: o
+      # turno terminava em silêncio absoluto, pior que o balão vazio.
+      #
+      # Devolve `state` (mapa), e NÃO `{state, ""}` (tupla): quem recebe o
+      # retorno de `run_turn/2` é `TurnoAssincrono.tratar_resultado/2`, que faz
+      # `Map.put(resultado, :turno_assincrono, nil)`. `Map.put/3` numa tupla
+      # levanta `BadMapError` DENTRO do `handle_info` do agente e, como o
+      # servidor é `restart: :temporary`, ele morria e não voltava — a correção
+      # de uma falha silenciosa tinha virado uma QUEDA, com o gatilho mais
+      # corriqueiro que existe (acabar o orçamento).
+      {:ok, %{"error" => erro} = frame} when is_binary(erro) and erro != "" ->
+        gravar_texto_do_turno(state, "", nil)
+        emit_falha(state, {:final, erro, Map.get(frame, "errorCode")})
+        state
+
+      {:ok, %{"message" => message} = frame} ->
+        content = Map.get(message, "content", "")
+        model_name = Map.get(frame, "modelName")
+        state = append(state, Engine.Agents.MensagemDoAssistente.de(content, message))
+
+        case tool_calls(message, state.tool_specs) do
+          [] ->
+            # AT-572: fecho sem texto nem corte é falha do modelo, dita no fio (agent.error).
+            if gravar_texto_do_turno(state, content, model_name) == :vazio,
+              do: emit_falha(state, :resposta_vazia)
+
+            state
+
+          calls ->
+            # RN-698: o texto desta volta continua na próxima.
+            TextoDoTurno.acumular(content, model_name)
+            # `reduce_while` — não `reduce` — porque `:pending` precisa PARAR
+            # o laço no meio da lista, sem processar as chamadas seguintes
+            # nem recursar para a próxima iteração. Antes de ADR 0086 as três
+            # saídas de `dispatch_tool/2` cabiam num booleano; agora são três
+            # desfechos distintos, e só um deles (suspensão) precisa
+            # interromper o `Enum.reduce`.
+            resultado =
+              Enum.reduce_while(calls, {state, false}, fn call, {st, planou} ->
+                case dispatch_tool(call, st) do
+                  # RN-699: só o PLANO bem-sucedido encerra o turno. Antes,
+                  # qualquer `:ok` da última chamada (uma leitura, um
+                  # `emit_artifact`) encerrava, e um `:error` depois de um
+                  # plano aceito apagava o encerramento.
+                  {st2, :ok} ->
+                    {:cont, {st2, planou or Map.get(call, "name") == "propose_execution_plan"}}
+
+                  {st2, :error} ->
+                    {:cont, {st2, planou}}
+
+                  {st2, {:pending, action_id, tool_call_id, tool_name}} ->
+                    {:halt, {:suspenso, st2, action_id, tool_call_id, tool_name}}
+                end
+              end)
+
+            case resultado do
+              {:suspenso, st2, action_id, tool_call_id, tool_name} ->
+                st2 = recusar_irmas(st2, calls, tool_call_id, tool_name)
+                gravar_texto_do_turno(st2, "", model_name)
+
+                # O `-1` documenta que a iteração suspensa CONTA contra o teto
+                # quando retomada — mesma vizinhança de raciocínio do
+                # comentário logo abaixo, sobre por que "bem-sucedido" encerra
+                # o laço.
+                Map.put(st2, :aguardando_aprovacao, %{
+                  action_id: action_id,
+                  tool_call_id: tool_call_id,
+                  tool_name: tool_name,
+                  remaining: remaining - 1
+                })
+
+              # O plano BEM-SUCEDIDO encerra o turno, como o `propose_infra_pr`
+              # encerra o do Infra Lead. Sem isto o laço volta ao modelo, que
+              # propõe de novo: na primeira execução real ele registrou DOIS
+              # planos, com textos diferentes e o mesmo total — e o event log é
+              # imutável, então nada dizia qual valia. A instrução "use UMA vez"
+              # no spec é pedido, não garantia; quem garante é o laço parar.
+              #
+              # BEM-SUCEDIDO, e não "chamou a ferramenta": um plano RECUSADO
+              # (vazio, ou com zero agente num módulo, ou denied pela api)
+              # precisa deixar o laço seguir, senão a recusa vira fim de turno
+              # e o modelo nunca chega a corrigir. A primeira versão desta
+              # guarda olhava só o nome da ferramenta e tinha esse defeito.
+              {st2, true} ->
+                gravar_texto_do_turno(st2, "", model_name)
+                st2
+
+              {st2, false} ->
+                run_turn(st2, Engine.Harness.FalhaRepetida.restante(remaining - 1))
+            end
+        end
+
+      {:error, reason} ->
+        # NUNCA mais `agent.response` vazio aqui: no event log ele é
+        # indistinguível de sucesso, e o motivo real ia só por broadcast, que
+        # é efêmero. A falha vira evento durável COM origem, e o agente diz o
+        # que houve no próprio fio.
+        gravar_texto_do_turno(state, "", nil)
+        emit_falha(state, reason)
+        state
+    end
+  end
+
+  # Devolve `{state, :ok | :error | {:pending, action_id, tool_call_id,
+  # tool_name}}` — o segundo elemento é o que `run_turn/2` usa para decidir
+  # entre continuar, parar (sucesso) e SUSPENDER (pending, ADR 0086).
+  defp dispatch_tool(call, state) do
+    name = Map.get(call, "name")
+    args = Map.get(call, "arguments", %{})
+    id = Map.get(call, "id")
+
+    emit(state, "tool.call", %{tool: name, args: args})
+    broadcast(state, "tool.call", %{tool: name, agent: @agent})
+
+    case executar_ferramenta(name, args, state) do
+      {:ok, texto} ->
+        emit(state, "tool.result", ResultadoDeFerramenta.payload(name, {:ok, texto}))
+        Engine.Agents.FontesDoTurno.anotar(name, args, {:ok, texto}, state.project_id)
+        {append_tool_message(state, id, name, texto), :ok}
+
+      {:pending, action_id} ->
+        # A mensagem `role: "tool"` NÃO entra ainda — gravar "pending" ali
+        # mentiria pro modelo que o comando já respondeu isso (mesmo
+        # raciocínio do dev agent, ver `Engine.Harness.Hooks.ActionPipeline`
+        # e `Engine.Harness.ToolLoop`, ~linhas 250-266). Ela entra de
+        # verdade em `handle_info({:action_settled, ...})`, com o resultado
+        # real.
+        {state, {:pending, action_id, id, name}}
+
+      {:error, texto} ->
+        emit(state, "tool.result", ResultadoDeFerramenta.payload(name, {:error, texto}))
+        {append_tool_message(state, id, name, texto), :error}
+    end
+  end
+
+  # RN-1001 (AT-739): as chamadas depois da pendente não rodam; cada uma ganha
+  # `tool` de recusa e `tool.result` `ok: false`, senão a retomada manda
+  # `tool_use` sem `tool_result` e a Anthropic recusa com 400.
+  defp recusar_irmas(state, calls, pendente_id, pendente_nome) do
+    texto = ResultadoDeFerramenta.recusa_de_irma(pendente_nome)
+
+    calls
+    |> Enum.drop_while(&(Map.get(&1, "id") != pendente_id))
+    |> Enum.drop(1)
+    |> Enum.reduce(state, fn call, st ->
+      name = Map.get(call, "name")
+      emit(st, "tool.result", ResultadoDeFerramenta.payload(name, {:error, texto}))
+      append_tool_message(st, Map.get(call, "id"), name, texto)
+    end)
+  end
+
+  defp append_tool_message(state, id, name, texto) do
+    append(state, %{
+      "role" => "tool",
+      "content" => texto,
+      "toolCallId" => id,
+      "name" => name,
+      :pinned => false
+    })
+  end
+
+  # RN-719: argumentos normalizados contra a spec e exceção vira erro do laço.
+  defp executar_ferramenta(name, args, state) do
+    Engine.Harness.ArgumentosDeFerramenta.executar(name, args, state.tool_specs, fn a ->
+      run_tool(name, a, state)
+    end)
+  end
+
+  defp run_tool("propose_execution_plan", args, state), do: DevLeadTools.run(args, state)
+
+  # ADR 0090 — aditivo, sem tocar o clause acima. Devolve o MESMO contrato
+  # de três desfechos: `run_turn/2` já sabe suspender em `{:pending, _}`
+  # (gate `implementavel`, `aprovacao_humana: true` em docs/gates.yml).
+  defp run_tool("assess_implementability", args, state),
+    do: DevLeadTools.run_assessment(args, state)
+
+  # RN-1070 (AT-809): leitura do estado das ADRs, a mesma ferramenta do Arquiteto.
+  defp run_tool("listar_adrs_propostas", args, state), do: ListarAdrsPropostas.run(args, state)
+
+  # RN-699 (AT-363): leitura contida do backlog e do module_map do PROJETO.
+  defp run_tool("read_backlog", _args, state), do: DevLeadTools.run_read_backlog(state)
+
+  # RN-1006 (AT-742): a tarefa de fundação do módulo de que outro depende.
+  defp run_tool("create_task", args, state), do: DevLeadTools.run_create_task(args, state)
+
+  # RN-1068 (AT-805): corrige título/descrição de tarefa `todo`.
+  defp run_tool("update_task", args, state),
+    do: Engine.Harness.Tools.UpdateTask.run(args, Map.put(state, :agent, @agent))
+
+  # AT-748 (RN-1012): o pedido do Dev Lead ao Arquiteto.
+  defp run_tool("pedir_ao_arquiteto", args, state),
+    do: Engine.Harness.Tools.PedirAoArquiteto.run(args, state)
+
+  defp run_tool("emit_artifact", args, state), do: EmitArtifact.run(args, state)
+
+  defp run_tool("declare_open_question", args, state),
+    do: DeclareOpenQuestion.run(args, state)
+
+  defp run_tool("answer_open_question", args, state),
+    do: Engine.Harness.Tools.AnswerOpenQuestion.run(args, state)
+
+  defp run_tool("list_open_questions", args, state),
+    do: Engine.Harness.Tools.ListOpenQuestions.run(args, state)
+
+  defp run_tool("rag_search", args, state), do: Engine.Harness.Tools.RagSearch.run(args, state)
+
+  defp run_tool("registrar_plano", args, state),
+    do: Engine.Harness.Tools.RegistrarPlano.run(args, state)
+
+  defp run_tool(name, _args, _state), do: {:error, "ferramenta desconhecida: #{name}"}
+
+  # --- Kickoff ---
+
+  defp kickoff_instruction(state) do
+    # Leitura POR TIPO, pela cauda (RN-580) — não os PRIMEIROS 200 eventos de
+    # todos os tipos, que numa sessão longa deixavam de fora o que nasceu depois.
+    #
+    # RN-699 (AT-362): o module_map NÃO vem do log da sessão. Esta leitura
+    # procurava `architecture.module_map_created`, tipo que NENHUM código emite
+    # — o kickoff dizia sempre "(sem module_map)". O mapa vigente vem da MESMA
+    # leitura de projeto que o AppSec usa (`get_infra_context`, `findCurrent`
+    # na api), que não depende da sessão em que o Arquiteto o gravou.
+    modulos = DevLeadTools.module_map_vigente(state.project_id, state.session_id)
+
+    case Reidratacao.eventos_do_tipo(state.project_id, state.session_id, [
+           "backlog.story_created"
+         ]) do
+      {:ok, events, truncado?} ->
+        build_kickoff(modulos, events) <>
+          Reidratacao.aviso_de_recorte(truncado?) <>
+          DevLeadTools.tarefas_do_backlog(state.project_id)
+
+      _ ->
+        "Proponha o plano de execução (propose_execution_plan).\n\nMÓDULOS:\n" <>
+          modulos <> DevLeadTools.tarefas_do_backlog(state.project_id)
+    end
+  end
+
+  defp build_kickoff(modulos, events) do
+    stories =
+      events
+      |> Enum.filter(&(Map.get(&1, "type") == "backlog.story_created"))
+      |> Enum.map_join("\n", fn s ->
+        p = Map.get(s, "payload", %{})
+        "- story_id=#{Map.get(p, "storyId")} | #{Map.get(p, "title", "")}"
+      end)
+
+    """
+    Você recebeu a arquitetura do Arquiteto. Avalie o trabalho e proponha o
+    PLANO DE EXECUÇÃO com `propose_execution_plan`. Aprovar o plano é o que
+    ATIVA a execução — antes dele nenhum dev agent sobe. No plano, atribua
+    CADA tarefa pendente a UM módulo do module_map (`tarefas`): só o dev
+    daquele módulo pega a tarefa, e tarefa sem módulo recusa o plano.
+
+    FUNDAÇÃO (RN-1006): módulo de que outro depende (`dependsOn` nos MÓDULOS
+    abaixo) precisa de uma tarefa de FUNDAÇÃO — esqueleto, package.json,
+    entrypoint, contrato exposto. Se ninguém a tem, crie-a com `create_task`
+    (`story_id`, `title`, `module`, numa história que liste o módulo) ANTES de
+    propor o plano; a api recusa o plano em que um módulo de que outro depende
+    ficou sem tarefa.
+
+    Não crie tarefa só para relatório JUnit: o dev configura o reporter do
+    runner de teste na primeira tarefa que tocar o módulo, no mesmo PR da
+    tarefa de código (tarefa paralela disputa package.json, lock e README).
+    É dele que o QA lê os testes que rodaram (RN-996, RN-1016).
+
+    Você NÃO escreve código. Decide quantos agentes valem a pena para o
+    trabalho em mão, e responde por essa escolha.
+
+    Um agente por módulo é o começo razoável. Peça mais de um SÓ quando o
+    backlog daquele módulo justificar — mais agentes num módulo com duas
+    histórias não acelera nada e custa o dobro. Acima do teto da área, o
+    usuário precisa autorizar, então o `porque` de cada módulo é o que ele vai
+    ler para decidir.
+
+    Antes (ou depois) de propor o plano, você também pode avaliar a
+    IMPLEMENTABILIDADE de uma story com `assess_implementability` — é
+    OPCIONAL, use o julgamento: se uma história parece arriscada ou mal
+    especificada, vale registrar o parecer antes de contar com ela no plano.
+    Só diga que avaliou as histórias em que você de fato chamou a ferramenta.
+
+    Use SÓ os task_id listados abaixo — nunca invente um. A lista é deste
+    momento: se o plano for recusado, ou se o backlog pode ter mudado, chame
+    `read_backlog` para reler as tarefas pendentes e o module_map vigente, e
+    proponha o plano corrigido.
+
+    MÓDULOS:
+    #{modulos}
+
+    HISTÓRIAS DO BACKLOG:
+    #{stories}
+    """
+  end
+
+  # --- Helpers ---
+
+  defp compact(state) do
+    {:ok, state} = ContextManager.maybe_compact(state)
+    state
+  end
+
+  defp system_prompt(project_id) do
+    base =
+      project_id
+      |> ContextBuilder.build_layers(@agent)
+      |> PromptAssembler.assemble()
+      |> PromptAssembler.Default.render()
+
+    base <> "\n\n" <> @instrucao_decision_record <> "\n\n" <> @instrucao_ler_antes_de_citar
+  end
+
+  defp user_msg(text), do: %{"role" => "user", "content" => text, :pinned => false}
+
+  defp append(state, message), do: %{state | messages: state.messages ++ [message]}
+
+  defp to_wire(message), do: Map.delete(message, :pinned)
+
+  # Modelo local costuma descrever a chamada em TEXTO em vez de usar o
+  # protocolo nativo. O ToolLoop já recuperava isso (ADR 0020), mas os agentes
+  # conversacionais têm loop PRÓPRIO e ficaram de fora — o InfraAgent morria
+  # com resposta vazia tendo escrito o `propose_infra_pr` certo em texto.
+  defp tool_calls(message, tool_specs) do
+    case Map.get(message, "toolCalls") || [] do
+      [] ->
+        ToolCallRecovery.from_content(
+          Map.get(message, "content", ""),
+          Enum.map(tool_specs, & &1.name)
+        )
+
+      nativas ->
+        nativas
+    end
+  end
+
+  # O que o modelo lê no lugar da palavra "pending" quando a ação retoma
+  # (ADR 0086, RN-284) — mesmo vocabulário de `Engine.Dev.DevAgentServer` e
+  # `Engine.Gates.QaLeadServer`, para quem lê os três não aprender três
+  # frases diferentes para o mesmo conceito.
+  # O plano aprovado ATIVA a execução (AT-263, RN-677): o resultado é o do
+  # `ExecuteExecutionPlanUseCase` na api, reconhecido pela chave
+  # `sessaoDeExecucao` — e vem ANTES das cláusulas genéricas de
+  # `executed`/`failed`, que leriam "exit ?" de um resultado sem `exitCode`.
+  defp texto_do_desfecho(%{
+         status: "executed",
+         execution_result: %{"sessaoDeExecucao" => sessao} = exec
+       }) do
+    "plano aprovado e execução ATIVADA na sessão #{sessao}: " <>
+      "#{Enum.join(Map.get(exec, "modulos", []), ", ")}; " <>
+      "#{Map.get(exec, "tarefasAtribuidas", 0)} tarefa(s) com módulo atribuído." <>
+      Engine.Agents.DevLeadTools.resumo_do_plano(exec)
+  end
+
+  defp texto_do_desfecho(%{
+         status: "failed",
+         execution_result: %{"sessaoDeExecucao" => _, "motivo" => motivo}
+       }) do
+    "o plano foi aprovado, mas a ativação da execução falhou: #{motivo}"
+  end
+
+  defp texto_do_desfecho(%{status: "executed", execution_result: %{} = exec}) do
+    "exit #{Map.get(exec, "exitCode", "?")}\n#{Map.get(exec, "stdout", "")}"
+  end
+
+  # `assess_implementability` não tem execute-* pipeline — a aprovação manual
+  # fica em `"approved"`. Os três contam como sucesso.
+  defp texto_do_desfecho(%{status: status})
+       when status in ["executed", "auto_approved", "approved"],
+       do: "plano aprovado e registrado."
+
+  defp texto_do_desfecho(%{status: "failed", execution_result: %{} = exec}) do
+    "falhou: #{Map.get(exec, "stderr", "")}#{Map.get(exec, "stdout", "")}"
+  end
+
+  # Recusa é RESPOSTA, não silêncio: o motivo entra no lugar do resultado,
+  # para o modelo aprender que aquele plano não foi aceito e propor outro.
+  defp texto_do_desfecho(%{status: "denied"} = desfecho) do
+    motivo = Map.get(desfecho, :rejection_reason) || "sem motivo informado"
+    "recusado pelo usuário: #{motivo}"
+  end
+
+  defp texto_do_desfecho(%{status: status}), do: "desfecho da ação: #{status}"
+
+  # O `ok` do `tool.result` da retomada — a MESMA partição de
+  # `texto_do_desfecho/1`: os três status de sucesso contam como sucesso, e
+  # todo o resto (recusa, falha, status que este módulo não conhece) como
+  # erro. Status desconhecido cair em `:error` é de propósito: `ok: true`
+  # sobre um desfecho que ninguém classificou seria afirmar sucesso sem saber.
+  defp sentido_do_desfecho(%{status: status})
+       when status in ["executed", "auto_approved", "approved"],
+       do: :ok
+
+  defp sentido_do_desfecho(_desfecho), do: :error
+
+  # `model_name` viaja do frame `final` da api (achado do problema 2). Sem
+  # default: o único call site aqui sempre passa os 3 argumentos.
+  # RN-698: o texto do turno inteiro, numa `agent.response` só.
+  defp gravar_texto_do_turno(state, ultimo, model_name) do
+    case TextoDoTurno.payload_do_turno(ultimo, model_name) do
+      nil -> :vazio
+      payload -> emit(state, "agent.response", payload)
+    end
+  end
+
+  # A falha, gravada e DITA. O `broadcast` continua, para quem está com a aba
+  # aberta ver na hora — mas ele deixou de ser a única fonte.
+  defp emit_falha(state, reason) do
+    origem = FalhaDeTurno.origem(reason)
+    mensagem = FalhaDeTurno.mensagem(reason, state.project_id)
+
+    emit(state, "agent.error", %{
+      origem: origem,
+      mensagem: mensagem,
+      reason: FalhaDeTurno.diagnostico(reason)
+    })
+
+    broadcast(state, "agent.error", %{origem: origem, mensagem: mensagem})
+  end
+
+  defp emit(state, type, payload) do
+    EngineApiClient.append_event(state.project_id, state.session_id, %{
+      type: type,
+      actorKind: "agent",
+      actorId: @agent,
+      payload: payload
+    })
+  end
+
+  # `agent.status` (o único evento que PRECISA ser persistido, não só
+  # broadcastado — ver ADR 0021) passou a ser emitido por
+  # `Engine.Agents.TurnoAssincrono`, que envolve o `handle_call`/`handle_cast`
+  # de cada turno desde RN-122. O que sobra aqui é só o broadcast efêmero.
+  defp broadcast(state, event, payload) do
+    EngineWeb.Endpoint.broadcast("session:" <> state.session_id, event, payload)
+  end
+
+  @doc "AT-686: o catálogo completo de ferramentas deste agente (o `init/1` e o catálogo leem daqui)."
+  def tool_specs do
+    [
+      DevLeadTools.spec(),
+      DevLeadTools.spec_assess_implementability(),
+      EmitArtifact.spec(),
+      DeclareOpenQuestion.spec(),
+      Engine.Harness.Tools.AnswerOpenQuestion.spec(),
+      Engine.Harness.Tools.ListOpenQuestions.spec(),
+      # RN-699 (AT-363): leitura do backlog e do module_map vigente.
+      DevLeadTools.spec_read_backlog(),
+      # RN-1070 (AT-809): o estado das ADRs se lê, não se lembra.
+      ListarAdrsPropostas.spec(),
+      # RN-1006 (AT-742): cria a tarefa de fundação que ficou sem dono.
+      DevLeadTools.spec_create_task(),
+      # RN-1068 (AT-805): corrige a tarefa `todo` que contradiz uma decisão.
+      Engine.Harness.Tools.UpdateTask.spec(),
+      # AT-582: o plano do próprio agente, lido pelo diário na retomada.
+      Engine.Harness.Tools.RegistrarPlano.spec(),
+      # AT-716 (RN-982): consulta ao RAG do projeto, a mesma ferramenta dos dev agents.
+      Engine.Harness.Tools.RagSearch.spec(),
+      # AT-748 (RN-1012): pede interface que falta no contrato entre módulos.
+      Engine.Harness.Tools.PedirAoArquiteto.spec()
+    ]
+  end
+end

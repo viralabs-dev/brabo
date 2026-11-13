@@ -1,0 +1,128 @@
+defmodule Engine.Harness.Tools.ProposeAdr do
+  @moduledoc """
+  Ferramenta do Arquiteto: propõe um ADR — cria uma proposed_action
+  `open_adr_pr` (efeito git → pipeline de aprovação). Quando o usuário aprova, a
+  api commita `docs/adr/<slug>.md` no repo do projeto e abre a PR real.
+  `:pipeline` (não executa direto; nasce pending).
+
+  Desde a RN-577 ela RECUSA localmente, ANTES de propor, quando o projeto não
+  tem repositório (`ProjectRepository.recusa_de_pr_sem_repositorio/2`). Sob a
+  RN-522 isso era o caso comum: o Arquiteto trabalhava ANTES do handoff ao Dev
+  Lead, que era quem provisionava. Desde a RN-582 (ADR 0165) o repositório
+  nasce no aceite do handoff AO Arquiteto, antes do primeiro turno dele, e a
+  recusa passou a cobrir o que sobra — provisionamento que falhou no aceite, e
+  projeto que passou pelo Arquiteto antes da regra. Sem a recusa, cada chamada virava uma `proposed_action` que o humano aprovava
+  e que `ExecuteAdrPrUseCase` só podia terminar `failed` (AT-088). A recusa é
+  resultado de ferramenta (RN-163) e deixa rastro durável: o `tool.call` o
+  `ArquitetoServer` já emite antes de rodar a tool, e o motivo vai num
+  `tool.result` com `ok: false` — a forma que o Criativo já usa.
+  """
+
+  @behaviour Engine.Harness.Tool
+
+  alias Engine.Harness.Tools.RecusaDeHistoria
+  alias Engine.Projects.ProjectRepository
+  alias Engine.Sessions.EngineApiClient
+
+  @impl true
+  def spec do
+    %{
+      name: "propose_adr",
+      description:
+        "Propõe um ADR (Architecture Decision Record) a ser commitado no repo do projeto " <>
+          "via PR, sujeito à aprovação do usuário. `slug` vira docs/adr/<slug>.md e a branch " <>
+          "feature/adr-<slug>. `content` é o markdown do ADR. `modules` lista os módulos do " <>
+          "module_map a que a decisão se aplica — os dev agents desses módulos recebem o ADR " <>
+          "no contexto. Omita (ou deixe vazio) quando a decisão for transversal ao projeto: " <>
+          "aí ela vale pra todos os módulos. Proponha UM ADR por resposta: vários ADRs " <>
+          "inteiros numa resposta só estouram o limite de saída e o último chega cortado. " <>
+          "ADR já mergeada não se edita: quando ela ficou velha (por exemplo, uma pergunta que " <>
+          "ela dava como aberta foi respondida depois), proponha uma ADR NOVA, com slug novo, e " <>
+          "passe em `supersedes` o slug da ADR que ela substitui (só ADR já executada). Antes, " <>
+          "leia `list_open_questions` e `listar_adrs_propostas`. ADR ainda pendente não se " <>
+          "substitui: peça ao usuário para recusá-la e proponha de novo.",
+      parameters: %{
+        "type" => "object",
+        "properties" => %{
+          "title" => %{"type" => "string"},
+          "slug" => %{"type" => "string"},
+          "content" => %{"type" => "string"},
+          "modules" => %{"type" => "array", "items" => %{"type" => "string"}},
+          "supersedes" => %{
+            "type" => "string",
+            "description" => "slug da ADR já mergeada que esta ADR substitui"
+          }
+        },
+        "required" => ["title", "slug", "content"]
+      }
+    }
+  end
+
+  @impl true
+  def category, do: :pipeline
+
+  @impl true
+  def run(%{"title" => _, "slug" => _, "content" => _} = args, ctx) do
+    case ProjectRepository.recusa_de_pr_sem_repositorio(ctx.project_id, "open_adr_pr") do
+      nil ->
+        propor(args, ctx)
+
+      motivo ->
+        # O `tool.result` da recusa é gravado pelo servidor do Arquiteto para
+        # TODA ferramenta (RN-589); gravá-lo aqui também o duplicaria.
+        {:error, motivo}
+    end
+  end
+
+  def run(_args, _ctx), do: {:error, "propose_adr exige `title`, `slug` e `content`"}
+
+  defp propor(%{"title" => title, "slug" => slug, "content" => content} = args, ctx) do
+    actor = %{kind: "agent", id: ctx.agent}
+
+    supersedes = args |> Map.get("supersedes") |> slug_substituido()
+
+    payload = %{
+      title: title,
+      slug: slug,
+      content: com_substitui(content, supersedes),
+      # Vínculo ADR↔módulo (Fase 4a): lista vazia = decisão transversal, entra
+      # no contexto de todos os dev agents.
+      modules: Map.get(args, "modules", [])
+    }
+
+    payload = if supersedes, do: Map.put(payload, :supersedes, supersedes), else: payload
+
+    case EngineApiClient.propose_action(
+           ctx.project_id,
+           ctx.session_id,
+           "open_adr_pr",
+           actor,
+           payload
+         ) do
+      {:ok, %{"id" => id, "status" => status}} ->
+        {:ok,
+         "ADR proposta (ação #{id}, status=#{status}) — aguardando aprovação do usuário. " <>
+           "O status muda fora desta conversa: consulte `listar_adrs_propostas` antes de afirmá-lo."}
+
+      {:error, reason} ->
+        {:error, "falha ao propor ADR: #{RecusaDeHistoria.texto(reason)}"}
+    end
+  end
+
+  # RN-1069: a api aceita o slug ou `docs/adr/<slug>.md` e valida a ADR citada;
+  # aqui só se normaliza para escrever a linha `Substitui:` no topo do content.
+  defp slug_substituido(valor) when is_binary(valor) do
+    case valor
+         |> String.trim()
+         |> String.replace_prefix("docs/adr/", "")
+         |> String.replace_suffix(".md", "") do
+      "" -> nil
+      slug -> slug
+    end
+  end
+
+  defp slug_substituido(_), do: nil
+
+  defp com_substitui(content, nil), do: content
+  defp com_substitui(content, slug), do: "Substitui: docs/adr/#{slug}.md\n\n" <> content
+end

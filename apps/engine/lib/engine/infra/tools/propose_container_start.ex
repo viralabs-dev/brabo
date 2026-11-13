@@ -1,0 +1,94 @@
+defmodule Engine.Infra.Tools.ProposeContainerStart do
+  @moduledoc """
+  Spec da ferramenta `propose_container_start` — pro modelo do Infra Lead
+  (ADR 0131/RN-487 deu o roteamento; este é o PR 1.5, quem ELEGE). O
+  Arquiteto candidata uma imagem por módulo via `route_modules_to_infra`
+  (`artifact.module_routing`); esta tool elege UMA dessas candidatas — nunca
+  uma imagem fora da lista — e propõe subir o container real do projeto.
+
+  Diferente de `propose_infra_pr`, `InfraLeadServer.dispatch_calls/2`
+  intercepta esta tool também, mas NÃO consolida com o `WorkflowsAgent`: é
+  ação independente, despachada inline (`propose_action(..., "container_start",
+  ...)`), sem HALT — o turno continua. `propose_infra_pr` é que encerra o
+  turno, então esta vem ANTES dela ou na MESMA resposta (o lote inteiro é
+  despachado antes do HALT desde a RN-668); depois dela, só num turno novo.
+
+  Desde a RN-566, `InfraLeadServer.dispatch_container_start/2` CONSULTA
+  LOCALMENTE (`Project.get/1`, sem HTTP) o `execution_mode` do projeto ANTES
+  de chamar `propose_action`: projeto `runner` é RECUSADO com motivo nomeado,
+  apontando `container_start_via_runner` — o broker nunca alcança a pasta
+  dele, e não há roteamento contra o qual eleger candidata. A recusa é texto
+  de RESULTADO de ferramenta (entrada do laço, RN-163), nunca erro de turno.
+  `container`/`mounted` seguem propondo, INCLUSIVE sem imagem decidida:
+  a recusa é sobre MODO, e eleger a imagem é o que esta proposta faz. Desde
+  a RN-610 ela recusa também quando o container já está REGISTRADO
+  `running`/`provisioning` — elegeria uma imagem que o container de pé, com a
+  versão congelada, não usaria.
+
+  Desde o ADR 0190 (RN-671) o kickoff não depende desta tool: o servidor
+  elege e propõe a subida antes da primeira ida ao modelo, pelo mesmo
+  caminho, e a proposta nasce auto-aprovada pela autonomia que o aceite do
+  handoff semeia (`container_start: auto_approve`).
+
+  `run/2` fica só como salvaguarda de behaviour (`@behaviour
+  Engine.Harness.Tool` exige as três callbacks) — NUNCA deveria ser chamado
+  de verdade, porque o servidor intercepta antes.
+  """
+
+  @behaviour Engine.Harness.Tool
+
+  @impl true
+  def spec do
+    %{
+      name: "propose_container_start",
+      description:
+        "Propõe subir o container real do projeto, elegendo UMA das imagens candidatas " <>
+          "que o Arquiteto roteou por módulo (`route_modules_to_infra`, ADR 0131) — nunca " <>
+          "inventando uma imagem fora dessa lista. No aceite do handoff o servidor já " <>
+          "propõe a subida sozinho; use esta para eleger de novo numa conversa. Nasce " <>
+          "auto-aprovada pela autonomia da Infra, a menos que o usuário a tenha desligado.",
+      parameters: %{
+        "type" => "object",
+        "properties" => %{
+          "imagem" => %{
+            "type" => "string",
+            "description" =>
+              "Uma das `imagemCandidata` do roteamento vigente — nunca uma imagem fora da lista."
+          },
+          "network" => %{
+            "type" => "string",
+            "enum" => ["none", "egress"],
+            "description" => "Postura de rede do container. Default \"none\"."
+          },
+          "resources" => %{
+            "type" => "object",
+            "description" =>
+              "Teto de recursos: cpus, memoryMb, pidsLimit. Omitir (o recomendado) sobe com o " <>
+                "MÍNIMO derivado do module_map — a soma do que o Arquiteto declarou por " <>
+                "módulo (RN-683). Abaixo desse mínimo a subida é recusada.",
+            "properties" => %{
+              "cpus" => %{"type" => "number"},
+              "memoryMb" => %{"type" => "number"},
+              "pidsLimit" => %{"type" => "number"}
+            }
+          },
+          "rationale" => %{
+            "type" => "string",
+            "description" => "Por que ESTA candidata — mínimo 10 caracteres (validado pela api)."
+          }
+        },
+        "required" => ["imagem", "rationale"]
+      }
+    }
+  end
+
+  @impl true
+  def category, do: :direct
+
+  @impl true
+  def run(_args, _ctx),
+    do:
+      {:error,
+       "propose_container_start é interceptada pelo InfraLeadServer antes de chegar aqui — " <>
+         "run/2 nunca deveria ser invocado"}
+end

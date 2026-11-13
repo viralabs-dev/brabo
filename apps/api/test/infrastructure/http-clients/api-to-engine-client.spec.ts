@@ -1,0 +1,854 @@
+import { describe, expect, it, afterEach } from 'vitest';
+import { createServer, type Server } from 'node:http';
+import type { AddressInfo } from 'node:net';
+import {
+  BadRequestException,
+  ConflictException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import {
+  HttpApiToEngineClient,
+  entregaDaResposta,
+} from '../../../src/infrastructure/http-clients/api-to-engine-client';
+import {
+  RunnerNaoConectadoError,
+  RunnerRecusouContainerError,
+} from '../../../src/application/ports/api-to-engine-client.port';
+
+/**
+ * `sessionId`/`projectId`/`agent`/`agentId` viram segmento de URL de uma
+ * requisição interna api -> engine sem DTO/`class-validator` no meio (RN-128,
+ * CodeQL "URL de requisição interna montada com valor não validado").
+ *
+ * A prova de que a validação acontece ANTES do transporte é a MESMA usada em
+ * `llm-credential-connection-tester.spec.ts`: apontar `ENGINE_URL` pra uma
+ * porta que nada escuta — se a chamada malformada chegasse a tentar a rede,
+ * o erro seria de conexão recusada, não `BadRequestException`.
+ */
+
+const PORTA_QUE_NADA_ESCUTA = 'http://127.0.0.1:1';
+const PROJETO = '3f2b1c8e-0a5d-4f6b-9c1e-2d7a8b3c4d5e';
+const SESSAO = 'a1b2c3d4-0000-4000-8000-000000000000';
+
+async function subirServidorEngine(): Promise<{
+  baseUrl: string;
+  chamadas: string[];
+  fechar: () => Promise<void>;
+}> {
+  const chamadas: string[] = [];
+  const server: Server = createServer((req, res) => {
+    chamadas.push(req.url ?? '');
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end('{}');
+  });
+
+  await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
+  const { port } = server.address() as AddressInfo;
+
+  return {
+    baseUrl: `http://127.0.0.1:${port}`,
+    chamadas,
+    fechar: () =>
+      new Promise<void>((resolve) => {
+        server.closeAllConnections();
+        server.close(() => resolve());
+      }),
+  };
+}
+
+describe('HttpApiToEngineClient — validação de segmento de URL interna (RN-128)', () => {
+  afterEach(() => {
+    delete process.env.ENGINE_URL;
+  });
+
+  it('startAgent: `sessionId` malformado é recusado ANTES de tocar a rede', async () => {
+    process.env.ENGINE_URL = PORTA_QUE_NADA_ESCUTA;
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.startAgent(PROJETO, '../../etc/passwd', 'arquiteto'),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('startAgent: caminho feliz — ids válidos chegam a fazer a requisição', async () => {
+    const servidor = await subirServidorEngine();
+    process.env.ENGINE_URL = servidor.baseUrl;
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.startAgent(PROJETO, SESSAO, 'arquiteto'),
+    ).resolves.toBeUndefined();
+    expect(servidor.chamadas).toEqual([
+      `/internal/sessions/${SESSAO}/agent/start`,
+    ]);
+
+    await servidor.fechar();
+  });
+
+  it('invalidateInstructions: `agent` malformado é recusado (projectId e agent são os DOIS segmentos)', async () => {
+    process.env.ENGINE_URL = PORTA_QUE_NADA_ESCUTA;
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.invalidateInstructions(PROJETO, 'agente/../outro'),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('rearmDevAgent: `agentId` malformado é recusado mesmo com `sessionId` válido', async () => {
+    process.env.ENGINE_URL = PORTA_QUE_NADA_ESCUTA;
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.rearmDevAgent(PROJETO, SESSAO, 'a b c/malformado'),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('reanalyzeSession: não usa postCommand, e ainda assim recusa `sessionId` malformado', async () => {
+    process.env.ENGINE_URL = PORTA_QUE_NADA_ESCUTA;
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.reanalyzeSession(PROJETO, '../../internal/outra-rota'),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('runAnamnese: não usa postCommand, e ainda assim recusa `projectId` malformado', async () => {
+    process.env.ENGINE_URL = PORTA_QUE_NADA_ESCUTA;
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.runAnamnese('../../internal/outra-rota'),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('reanalyzeSession: caminho feliz — `sessionId` válido chega a fazer a requisição', async () => {
+    const servidor = await subirServidorEngine();
+    process.env.ENGINE_URL = servidor.baseUrl;
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.reanalyzeSession(PROJETO, SESSAO),
+    ).resolves.toBeUndefined();
+    expect(servidor.chamadas).toEqual([
+      `/internal/sessions/${SESSAO}/psychologist/reanalyze`,
+    ]);
+
+    await servidor.fechar();
+  });
+
+  it('getPsychologistStatus: sem segmento de URL variável — lê o corpo da resposta do engine (RN-454)', async () => {
+    const server: Server = createServer((req, res) => {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ enabled: false }));
+    });
+    await new Promise<void>((resolve) =>
+      server.listen(0, '127.0.0.1', resolve),
+    );
+    const { port } = server.address() as AddressInfo;
+    process.env.ENGINE_URL = `http://127.0.0.1:${port}`;
+
+    const client = new HttpApiToEngineClient();
+    const resultado = await client.getPsychologistStatus();
+
+    expect(resultado).toEqual({ enabled: false });
+
+    await new Promise<void>((resolve) => {
+      server.closeAllConnections();
+      server.close(() => resolve());
+    });
+  });
+
+  it('requestRunnerTicket: `projectId` malformado é recusado ANTES de tocar a rede', async () => {
+    process.env.ENGINE_URL = PORTA_QUE_NADA_ESCUTA;
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.requestRunnerTicket('../../etc/passwd', 'user-1', 'runner'),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('requestRunnerTicket: caminho feliz — devolve ticket/expiresAt do corpo da resposta do engine', async () => {
+    const expiresAt = new Date(Date.now() + 30_000).toISOString();
+    const server: Server = createServer((req, res) => {
+      res.writeHead(201, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ticket: 'ticket-bruto-do-engine', expiresAt }));
+    });
+    await new Promise<void>((resolve) =>
+      server.listen(0, '127.0.0.1', resolve),
+    );
+    const { port } = server.address() as AddressInfo;
+    process.env.ENGINE_URL = `http://127.0.0.1:${port}`;
+
+    const client = new HttpApiToEngineClient();
+    const resultado = await client.requestRunnerTicket(
+      PROJETO,
+      'user-1',
+      'runner',
+    );
+
+    expect(resultado.ticket).toBe('ticket-bruto-do-engine');
+    expect(resultado.expiresAt.toISOString()).toBe(expiresAt);
+
+    await new Promise<void>((resolve) => {
+      server.closeAllConnections();
+      server.close(() => resolve());
+    });
+  });
+});
+
+describe('HttpApiToEngineClient — o runner sobe o container (ADR 0137)', () => {
+  afterEach(() => {
+    delete process.env.ENGINE_URL;
+  });
+
+  const SPEC = {
+    workspaceDirName: 'proj-abc12345',
+    projectId: 'proj-1',
+    projectSlug: 'proj-1',
+    workspaceId: 'ws-1',
+    imagem: 'node:22-bookworm-slim',
+    imagemVersao: 3,
+    rede: 'none' as const,
+    cpus: 1,
+    memoriaMb: 512,
+    pidsLimit: 256,
+  };
+
+  it('startContainerViaRunner: `projectId` malformado é recusado ANTES de tocar a rede', async () => {
+    process.env.ENGINE_URL = PORTA_QUE_NADA_ESCUTA;
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.startContainerViaRunner('../../etc/passwd', SPEC),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('startContainerViaRunner: caminho feliz — devolve containerId/nome/jaEstavaDePe', async () => {
+    const server: Server = createServer((req, res) => {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(
+        JSON.stringify({
+          sucesso: true,
+          containerId: 'container-1',
+          nome: 'brabo-proj-abc12345',
+          jaEstavaDePe: false,
+        }),
+      );
+    });
+    await new Promise<void>((resolve) =>
+      server.listen(0, '127.0.0.1', resolve),
+    );
+    const { port } = server.address() as AddressInfo;
+    process.env.ENGINE_URL = `http://127.0.0.1:${port}`;
+
+    const client = new HttpApiToEngineClient();
+    const resultado = await client.startContainerViaRunner(PROJETO, SPEC);
+
+    expect(resultado).toEqual({
+      containerId: 'container-1',
+      nome: 'brabo-proj-abc12345',
+      jaEstavaDePe: false,
+    });
+
+    await new Promise<void>((resolve) => {
+      server.closeAllConnections();
+      server.close(() => resolve());
+    });
+  });
+
+  it('startContainerViaRunner: motivoCodigo "not_connected" lança RunnerNaoConectadoError', async () => {
+    const server: Server = createServer((req, res) => {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(
+        JSON.stringify({
+          sucesso: false,
+          motivoCodigo: 'not_connected',
+          motivo: 'nenhum runner conectado a este projeto',
+        }),
+      );
+    });
+    await new Promise<void>((resolve) =>
+      server.listen(0, '127.0.0.1', resolve),
+    );
+    const { port } = server.address() as AddressInfo;
+    process.env.ENGINE_URL = `http://127.0.0.1:${port}`;
+
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.startContainerViaRunner(PROJETO, SPEC),
+    ).rejects.toBeInstanceOf(RunnerNaoConectadoError);
+
+    await new Promise<void>((resolve) => {
+      server.closeAllConnections();
+      server.close(() => resolve());
+    });
+  });
+
+  it('startContainerViaRunner: sucesso:false SEM motivoCodigo lança RunnerRecusouContainerError (o runner tentou e recusou)', async () => {
+    const server: Server = createServer((req, res) => {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(
+        JSON.stringify({
+          sucesso: false,
+          motivo: 'Docker indisponível na máquina do usuário',
+        }),
+      );
+    });
+    await new Promise<void>((resolve) =>
+      server.listen(0, '127.0.0.1', resolve),
+    );
+    const { port } = server.address() as AddressInfo;
+    process.env.ENGINE_URL = `http://127.0.0.1:${port}`;
+
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.startContainerViaRunner(PROJETO, SPEC),
+    ).rejects.toBeInstanceOf(RunnerRecusouContainerError);
+
+    await new Promise<void>((resolve) => {
+      server.closeAllConnections();
+      server.close(() => resolve());
+    });
+  });
+
+  it('stopContainerViaRunner: `projectId` malformado é recusado ANTES de tocar a rede', async () => {
+    process.env.ENGINE_URL = PORTA_QUE_NADA_ESCUTA;
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.stopContainerViaRunner(
+        '../../caminho-de-teste-sem-segredo',
+        'workspace-de-teste',
+      ),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('stopContainerViaRunner: caminho feliz — POST .../containers/stop com workspaceDirName no corpo', async () => {
+    let corpoRecebido: unknown;
+    const server: Server = createServer((req, res) => {
+      let bruto = '';
+      req.on('data', (chunk) => (bruto += chunk));
+      req.on('end', () => {
+        corpoRecebido = JSON.parse(bruto);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ sucesso: true }));
+      });
+    });
+    await new Promise<void>((resolve) =>
+      server.listen(0, '127.0.0.1', resolve),
+    );
+    const { port } = server.address() as AddressInfo;
+    process.env.ENGINE_URL = `http://127.0.0.1:${port}`;
+
+    const client = new HttpApiToEngineClient();
+    await expect(
+      client.stopContainerViaRunner(PROJETO, 'proj-abc12345'),
+    ).resolves.toBeUndefined();
+    expect(corpoRecebido).toEqual({ workspaceDirName: 'proj-abc12345' });
+
+    await new Promise<void>((resolve) => {
+      server.closeAllConnections();
+      server.close(() => resolve());
+    });
+  });
+
+  it('removeContainerViaRunner: timeout do engine lança RunnerNaoConectadoError', async () => {
+    const server: Server = createServer((req, res) => {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(
+        JSON.stringify({
+          sucesso: false,
+          motivoCodigo: 'timeout',
+          motivo: 'o runner não respondeu a tempo',
+        }),
+      );
+    });
+    await new Promise<void>((resolve) =>
+      server.listen(0, '127.0.0.1', resolve),
+    );
+    const { port } = server.address() as AddressInfo;
+    process.env.ENGINE_URL = `http://127.0.0.1:${port}`;
+
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.removeContainerViaRunner(PROJETO, 'proj-abc12345'),
+    ).rejects.toBeInstanceOf(RunnerNaoConectadoError);
+
+    await new Promise<void>((resolve) => {
+      server.closeAllConnections();
+      server.close(() => resolve());
+    });
+  });
+});
+
+describe('HttpApiToEngineClient — a revogação derruba a conexão viva (RN-520)', () => {
+  afterEach(() => {
+    delete process.env.ENGINE_URL;
+  });
+
+  async function servidorQueResponde(corpo: unknown, status = 200) {
+    const recebido: { url?: string; body?: string } = {};
+    const server: Server = createServer((req, res) => {
+      recebido.url = req.url ?? '';
+      let dados = '';
+      req.on('data', (pedaco) => (dados += String(pedaco)));
+      req.on('end', () => {
+        recebido.body = dados;
+        res.writeHead(status, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(corpo));
+      });
+    });
+    await new Promise<void>((resolve) =>
+      server.listen(0, '127.0.0.1', resolve),
+    );
+    const { port } = server.address() as AddressInfo;
+    process.env.ENGINE_URL = `http://127.0.0.1:${port}`;
+    return {
+      recebido,
+      fechar: () =>
+        new Promise<void>((resolve) => {
+          server.closeAllConnections();
+          server.close(() => resolve());
+        }),
+    };
+  }
+
+  it('`projectId` malformado é recusado ANTES de tocar a rede (RN-128)', async () => {
+    process.env.ENGINE_URL = PORTA_QUE_NADA_ESCUTA;
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.disconnectRunnerOfUser('../../etc/passwd', 'user-1'),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('caminho feliz: bate na rota do engine com o userId no corpo e devolve o desfecho', async () => {
+    const servidor = await servidorQueResponde({ desfecho: 'derrubado' });
+    const client = new HttpApiToEngineClient();
+
+    const desfecho = await client.disconnectRunnerOfUser(PROJETO, 'user-1');
+
+    expect(desfecho).toBe('derrubado');
+    expect(servidor.recebido.url).toBe(
+      `/internal/projects/${PROJETO}/runner/disconnect`,
+    );
+    expect(JSON.parse(servidor.recebido.body ?? '{}')).toEqual({
+      userId: 'user-1',
+    });
+
+    await servidor.fechar();
+  });
+
+  it('desfecho desconhecido vira "timeout", nunca "derrubado" — não se promete o que não se sabe', async () => {
+    const servidor = await servidorQueResponde({ desfecho: 'algo_novo' });
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.disconnectRunnerOfUser(PROJETO, 'user-1'),
+    ).resolves.toBe('timeout');
+
+    await servidor.fechar();
+  });
+
+  it('CASO DE FALHA: engine respondendo 500 LANÇA — quem trata é o caso de uso, que não pode deixar isso derrubar o 204', async () => {
+    const servidor = await servidorQueResponde({ error: 'boom' }, 500);
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.disconnectRunnerOfUser(PROJETO, 'user-1'),
+    ).rejects.toThrow(/Falha ao pedir a desconexão do runner/);
+
+    await servidor.fechar();
+  });
+
+  describe('o alvo é a CREDENCIAL (ADR 0201, RN-685)', () => {
+    it('requestRunnerTicket leva a credencial no corpo — os dois campos juntos', async () => {
+      const servidor = await servidorQueResponde({
+        ticket: 't',
+        expiresAt: new Date().toISOString(),
+      });
+      const client = new HttpApiToEngineClient();
+
+      await client.requestRunnerTicket(PROJETO, 'user-1', 'runner', {
+        tipo: 'device_key',
+        id: 'kid-1',
+      });
+
+      expect(JSON.parse(servidor.recebido.body ?? '{}')).toEqual({
+        userId: 'user-1',
+        kind: 'runner',
+        credentialKind: 'device_key',
+        credentialId: 'kid-1',
+      });
+
+      await servidor.fechar();
+    });
+
+    it('requestRunnerTicket sem credencial manda o corpo de sempre', async () => {
+      const servidor = await servidorQueResponde({
+        ticket: 't',
+        expiresAt: new Date().toISOString(),
+      });
+      const client = new HttpApiToEngineClient();
+
+      await client.requestRunnerTicket(PROJETO, 'user-1', 'terminal', null);
+
+      expect(JSON.parse(servidor.recebido.body ?? '{}')).toEqual({
+        userId: 'user-1',
+        kind: 'terminal',
+      });
+
+      await servidor.fechar();
+    });
+
+    it('disconnectRunnerCredential: caminho feliz — rota sem projeto, credencial e alcance legado no corpo, balanço de volta', async () => {
+      const servidor = await servidorQueResponde({
+        derrubados: 2,
+        legados: 1,
+        intocados: 3,
+        semResposta: 0,
+        ticketsAnulados: 1,
+      });
+      const client = new HttpApiToEngineClient();
+
+      const balanco = await client.disconnectRunnerCredential(
+        { tipo: 'device_key', id: 'kid-1' },
+        { userId: 'user-1', projectIds: [PROJETO] },
+      );
+
+      expect(balanco).toEqual({
+        derrubados: 2,
+        legados: 1,
+        intocados: 3,
+        semResposta: 0,
+        ticketsAnulados: 1,
+      });
+      expect(servidor.recebido.url).toBe(
+        '/internal/runner/disconnect-credential',
+      );
+      expect(JSON.parse(servidor.recebido.body ?? '{}')).toEqual({
+        credentialKind: 'device_key',
+        credentialId: 'kid-1',
+        userId: 'user-1',
+        projectIds: [PROJETO],
+      });
+
+      await servidor.fechar();
+    });
+
+    it('disconnectRunnerCredential sem alcance legado manda userId nulo e lista vazia; campo estranho vira 0', async () => {
+      const servidor = await servidorQueResponde({ derrubados: 'muitos' });
+      const client = new HttpApiToEngineClient();
+
+      const balanco = await client.disconnectRunnerCredential(
+        { tipo: 'pat', id: 'pat-1' },
+        null,
+      );
+
+      expect(balanco.derrubados).toBe(0);
+      expect(JSON.parse(servidor.recebido.body ?? '{}')).toEqual({
+        credentialKind: 'pat',
+        credentialId: 'pat-1',
+        userId: null,
+        projectIds: [],
+      });
+
+      await servidor.fechar();
+    });
+
+    it('CASO DE FALHA: engine anterior à rota (404) LANÇA — é o sinal para o caso de uso cair no plano B', async () => {
+      const servidor = await servidorQueResponde({ errors: 'Not Found' }, 404);
+      const client = new HttpApiToEngineClient();
+
+      await expect(
+        client.disconnectRunnerCredential(
+          { tipo: 'device_key', id: 'kid-1' },
+          null,
+        ),
+      ).rejects.toThrow(/Falha ao pedir a desconexão da credencial.*404/);
+
+      await servidor.fechar();
+    });
+  });
+});
+
+/**
+ * ADR 0163 (RN-578): o engine responde AO ACEITAR o comando que dispara turno,
+ * e a recusa que acontece antes de o turno subir volta com status próprio
+ * (409/422, com a frase em `error`). Até lá o engine dizia 202 a tudo — a
+ * mensagem recusada era aceita e nunca lida. Aqui se prova que a recusa chega
+ * ao clique com o MESMO status e a MESMA frase, e que 202 continua sendo
+ * sucesso sem corpo.
+ */
+describe('HttpApiToEngineClient — comando de turno: aceite e recusa (ADR 0163)', () => {
+  afterEach(() => {
+    delete process.env.ENGINE_URL;
+  });
+
+  async function engineQueResponde(status: number, corpo?: unknown) {
+    const urls: string[] = [];
+    const corpos: string[] = [];
+    const server: Server = createServer((req, res) => {
+      urls.push(req.url ?? '');
+      let recebido = '';
+      req.on('data', (parte: Buffer) => {
+        recebido += parte.toString('utf8');
+      });
+      req.on('end', () => {
+        corpos.push(recebido);
+        if (corpo === undefined) {
+          res.writeHead(status);
+          res.end();
+          return;
+        }
+        res.writeHead(status, { 'Content-Type': 'application/json' });
+        res.end(typeof corpo === 'string' ? corpo : JSON.stringify(corpo));
+      });
+    });
+    await new Promise<void>((resolve) =>
+      server.listen(0, '127.0.0.1', resolve),
+    );
+    const { port } = server.address() as AddressInfo;
+    process.env.ENGINE_URL = `http://127.0.0.1:${port}`;
+    return {
+      urls,
+      corpos,
+      fechar: () =>
+        new Promise<void>((resolve) => {
+          server.closeAllConnections();
+          server.close(() => resolve());
+        }),
+    };
+  }
+
+  it('202 sem corpo é o aceite de sempre: a mensagem foi lida', async () => {
+    const engine = await engineQueResponde(202);
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.sendAgentMessage(PROJETO, SESSAO, 'po', 'oi'),
+    ).resolves.toEqual({ entrega: 'lida' });
+    expect(engine.urls).toEqual([`/internal/sessions/${SESSAO}/agent/message`]);
+
+    await engine.fechar();
+  });
+
+  // RN-673 (ADR 0191): com turno em curso o engine responde 202 COM corpo — a
+  // mensagem entrou na fila. O id do chat.message vai no pedido.
+  it('202 com corpo de fila: enfileirada, na posição dada; o mensagemId vai no pedido', async () => {
+    const engine = await engineQueResponde(202, {
+      entrega: 'enfileirada',
+      posicao: 3,
+    });
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.sendAgentMessage(PROJETO, SESSAO, 'po', 'Continue', null, 'evt-9'),
+    ).resolves.toEqual({ entrega: 'enfileirada', posicao: 3 });
+    expect(JSON.parse(engine.corpos[0])).toMatchObject({ mensagemId: 'evt-9' });
+
+    await engine.fechar();
+  });
+
+  it('corpo que não se lê como fila (engine antigo, JSON estranho) é o aceite de sempre', () => {
+    expect(entregaDaResposta('')).toEqual({ entrega: 'lida' });
+    expect(entregaDaResposta('não é json')).toEqual({ entrega: 'lida' });
+    expect(entregaDaResposta('{"entrega":"enfileirada"}')).toEqual({
+      entrega: 'lida',
+    });
+  });
+
+  it('cancelar mensagem da fila: 409 do engine (já lida) vira ConflictException com a frase dele', async () => {
+    const engine = await engineQueResponde(409, {
+      error:
+        'Esta mensagem não está mais na fila — ela já foi lida pelo agente.',
+      motivo: 'mensagem_fora_da_fila',
+    });
+    const client = new HttpApiToEngineClient();
+
+    const erro = await client
+      .cancelQueuedMessage(PROJETO, SESSAO, 'po', 'evt-9', 'u-1')
+      .catch((e: unknown) => e);
+
+    expect(erro).toBeInstanceOf(ConflictException);
+    expect((erro as ConflictException).message).toMatch(
+      /não está mais na fila/,
+    );
+    expect(engine.urls).toEqual([
+      `/internal/sessions/${SESSAO}/agent/queued-message/cancel`,
+    ]);
+    expect(JSON.parse(engine.corpos[0])).toEqual({
+      projectId: PROJETO,
+      agent: 'po',
+      mensagemId: 'evt-9',
+      userId: 'u-1',
+    });
+
+    await engine.fechar();
+  });
+
+  // RN-622: o idioma do autor viaja só quando resolvido — `null` não vira
+  // chave no corpo, e o engine trata ausente como turno sem orientação.
+  it('idiomaDaResposta vai no corpo quando resolvido, e fica de fora quando null', async () => {
+    const engine = await engineQueResponde(202);
+    const client = new HttpApiToEngineClient();
+
+    await client.sendAgentMessage(PROJETO, SESSAO, 'po', 'oi', 'pt-BR');
+    await client.sendAgentMessage(PROJETO, SESSAO, 'po', 'oi', null);
+
+    expect(JSON.parse(engine.corpos[0])).toEqual({
+      projectId: PROJETO,
+      agent: 'po',
+      text: 'oi',
+      idiomaDaResposta: 'pt-BR',
+    });
+    expect(JSON.parse(engine.corpos[1])).not.toHaveProperty('idiomaDaResposta');
+
+    await engine.fechar();
+  });
+
+  // RN-680: os fatos do perfil do autor seguem a MESMA regra do idioma.
+  it('perfilDoAutor vai no corpo quando há fatos, e fica de fora quando null', async () => {
+    const engine = await engineQueResponde(202);
+    const client = new HttpApiToEngineClient();
+
+    await client.sendAgentMessage(
+      PROJETO,
+      SESSAO,
+      'po',
+      'oi',
+      null,
+      null,
+      'Fatos…',
+    );
+    await client.sendAgentMessage(
+      PROJETO,
+      SESSAO,
+      'po',
+      'oi',
+      'pt-BR',
+      null,
+      null,
+    );
+
+    expect(JSON.parse(engine.corpos[0])).toEqual({
+      projectId: PROJETO,
+      agent: 'po',
+      text: 'oi',
+      perfilDoAutor: 'Fatos…',
+    });
+    expect(JSON.parse(engine.corpos[1])).not.toHaveProperty('perfilDoAutor');
+
+    await engine.fechar();
+  });
+
+  it('409 turno_em_andamento vira ConflictException com a frase do engine', async () => {
+    const engine = await engineQueResponde(409, {
+      error:
+        'O agente ainda está no meio de um turno — a mensagem ficou registrada, mas não foi lida.',
+      motivo: 'turno_em_andamento',
+    });
+    const client = new HttpApiToEngineClient();
+
+    const erro = await client
+      .sendAgentMessage(PROJETO, SESSAO, 'po', 'Continue')
+      .catch((e: unknown) => e);
+
+    expect(erro).toBeInstanceOf(ConflictException);
+    expect((erro as ConflictException).message).toMatch(/não foi lida/);
+
+    await engine.fechar();
+  });
+
+  it('422 sem_regra_de_negocio na prontidão vira UnprocessableEntityException', async () => {
+    const engine = await engineQueResponde(422, {
+      error: 'Nenhuma regra de negócio foi capturada nesta conversa.',
+      motivo: 'sem_regra_de_negocio',
+    });
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.confirmReadiness(PROJETO, SESSAO),
+    ).rejects.toBeInstanceOf(UnprocessableEntityException);
+
+    await engine.fechar();
+  });
+
+  it('409 no fechamento de arquitetura e na devolução de história também chegam como 409', async () => {
+    const engine = await engineQueResponde(409, {
+      error: 'turno em curso',
+      motivo: 'turno_em_andamento',
+    });
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.offerInfraHandoff(PROJETO, SESSAO),
+    ).rejects.toBeInstanceOf(ConflictException);
+    await expect(
+      client.reviseStory(PROJETO, SESSAO, 'story-1', 'Cadastro', 'motivo'),
+    ).rejects.toBeInstanceOf(ConflictException);
+
+    await engine.fechar();
+  });
+
+  it('RN-584: o destino viaja como a pessoa escolheu, e a recusa 422 do engine chega com a frase', async () => {
+    const engine = await engineQueResponde(422, {
+      error:
+        'O agente "qa" não recebe mensagem de chat nesta sessão. A mensagem ficou registrada, mas nenhum agente a leu.',
+      motivo: 'agente_sem_conversa',
+    });
+    const client = new HttpApiToEngineClient();
+
+    const erro = await client
+      .sendAgentMessage(PROJETO, SESSAO, 'qa', 'roda os testes')
+      .catch((e: unknown) => e);
+
+    expect(erro).toBeInstanceOf(UnprocessableEntityException);
+    expect((erro as UnprocessableEntityException).message).toMatch(
+      /nenhum agente a leu/,
+    );
+    // A api não troca o destino por um padrão: o `qa` chega ao engine, e é
+    // o engine — dono das cláusulas — quem recusa. (Até a RN-617 o exemplo era
+    // o `infra`, que passou a conversar.)
+    expect(JSON.parse(engine.corpos[0])).toMatchObject({ agent: 'qa' });
+
+    await engine.fechar();
+  });
+
+  it('corpo de recusa fora da forma não vira mensagem inventada', async () => {
+    const engine = await engineQueResponde(409, 'não é json');
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.sendAgentMessage(PROJETO, SESSAO, 'po', 'oi'),
+    ).rejects.toThrow('O agente recusou o comando antes de começar o turno.');
+
+    await engine.fechar();
+  });
+
+  it('CASO DE FALHA: 500 continua sendo Error genérico, não recusa de agente', async () => {
+    const engine = await engineQueResponde(500, { error: 'boom' });
+    const client = new HttpApiToEngineClient();
+
+    const erro = await client
+      .sendAgentMessage(PROJETO, SESSAO, 'po', 'oi')
+      .catch((e: unknown) => e);
+
+    expect(erro).not.toBeInstanceOf(ConflictException);
+    expect((erro as Error).message).toMatch(/Falha no comando ao engine/);
+
+    await engine.fechar();
+  });
+
+  it('`sessionId` malformado continua recusado ANTES de tocar a rede (RN-128)', async () => {
+    process.env.ENGINE_URL = PORTA_QUE_NADA_ESCUTA;
+    const client = new HttpApiToEngineClient();
+
+    await expect(
+      client.sendAgentMessage(PROJETO, '../x', 'po', 'oi'),
+    ).rejects.toThrow(BadRequestException);
+  });
+});

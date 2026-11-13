@@ -1,0 +1,319 @@
+import type { ComponentType, CSSProperties } from 'react';
+import { AREAS, SOLO_CONVERSATIONAL_AGENTS } from './agent-areas.generated';
+import {
+  BulbIcon,
+  ClockIcon,
+  CodeIcon,
+  DeployIcon,
+  FileIcon,
+  GaugeIcon,
+  HypothesisIcon,
+  LayoutSidebarIcon,
+  LockIcon,
+  PencilIcon,
+  PermissionIcon,
+  ServerIcon,
+  StackIcon,
+  UserIcon,
+} from '../components/ui/icons';
+
+// Roster fixo dos agentes (CLAUDE.md) — cor e ícone consistentes em toda
+// a UI (chat, overview do projeto, feed de atividade). Ver design/COMPONENTS.md.
+//
+// `qa-automacao`/`qa-performance-seguranca`/`infra-workflows` (Fase 8d) são
+// SUBAGENTES de área (ADR 0038, Fases 8b/8c) — `qa`/`infra` continuam sendo
+// os LEADS (contato externo inalterado). Ver `AREAS`/`areaFor` abaixo pra a
+// relação entre eles.
+export type AgentKey =
+  | 'psicologo'
+  | 'psicologo-leve'
+  | 'anamnese'
+  | 'criativo'
+  | 'arquiteto'
+  | 'po'
+  | 'ux-designer'
+  | 'staff'
+  | 'dev-lead'
+  | 'dev-backend'
+  | 'dev-frontend'
+  | 'infra'
+  | 'infra-workflows'
+  | 'qa'
+  | 'qa-automacao'
+  | 'qa-performance-seguranca'
+  | 'secops';
+
+export interface AgentDef {
+  key: AgentKey;
+  name: string;
+  /**
+   * Duas letras para o avatar quadrado da tela de Configurações
+   * (`design/SCREENS.md`). Escritas, não derivadas do nome: o desenho abrevia
+   * "Dev Backend" como BE e "Dev Frontend" como FE — regra nenhuma sobre o
+   * nome produz isso.
+   */
+  initials: string;
+  role: string;
+  /**
+   * Cor do agente, sempre um `var(--token)` — nunca hex.
+   *
+   * Três agentes (Psicólogo leve, Dev Frontend, SecOps) não têm contraparte
+   * semântica, e até o ADR 0181 eram hex soltos aqui (`#B9A5E8`, `#5EBEB1`,
+   * `#8AA6AE`), escolhidos contra o fundo escuro e lavados no claro. Viraram
+   * `--agent-leve`/`--agent-frontend`/`--agent-secops` em `design/tokens.css`,
+   * com valor próprio por tema, dessaturados junto com o resto da paleta e
+   * medidos como elemento de interface (3:1) nas três superfícies pelo
+   * `lib/contraste.test.ts`. Cor de agente NOVA continua sendo decisão de
+   * produto: reuse um semântico antes de abrir outro token.
+   */
+  color: string;
+  icon: ComponentType<{ size?: number; className?: string }>;
+}
+
+export const AGENTS: Record<AgentKey, AgentDef> = {
+  psicologo: {
+    key: 'psicologo',
+    name: 'Psicólogo',
+    initials: 'PS',
+    role: 'Anamnese emocional do time',
+    color: 'var(--violet)',
+    icon: HypothesisIcon,
+  },
+  // Tier barato da triagem do Psicólogo (Fase 4b) — entra no roster pra
+  // aparecer na tabela de bindings de modelo (ProjectSettingsTab), já que
+  // é o binding dele que torna a análise leve realmente mais barata.
+  'psicologo-leve': {
+    key: 'psicologo-leve',
+    name: 'Psicólogo (leve)',
+    initials: 'PL',
+    role: 'Triagem econômica de sessões simples',
+    color: 'var(--agent-leve)',
+    icon: HypothesisIcon,
+  },
+  anamnese: {
+    key: 'anamnese',
+    name: 'Anamnese',
+    initials: 'AN',
+    role: 'Levantamento de contexto inicial',
+    color: 'var(--success)',
+    icon: ClockIcon,
+  },
+  criativo: {
+    key: 'criativo',
+    name: 'Criativo',
+    initials: 'CR',
+    role: 'Ideação e direção de produto',
+    color: 'var(--warning)',
+    icon: BulbIcon,
+  },
+  arquiteto: {
+    key: 'arquiteto',
+    name: 'Arquiteto',
+    initials: 'AR',
+    role: 'Design técnico e decisões estruturais',
+    color: 'var(--accent)',
+    icon: StackIcon,
+  },
+  po: {
+    key: 'po',
+    name: 'PO',
+    initials: 'PO',
+    role: 'Priorização e backlog',
+    color: 'var(--violet)',
+    icon: UserIcon,
+  },
+  // Quinto agente conversacional (ADR 0087, `docs/fluxo.yml` id `ux-designer`
+  // — status `active`, antecipado pelo dono do produto antes do gatilho de
+  // separação declarado ter disparado). SOLO, sem área. `--accent` é o token
+  // semântico menos reusado do roster (só o Arquiteto o usava até aqui) —
+  // nenhum dos cinco tokens semânticos de `design/tokens.css` está livre de
+  // outro agente, e a regra do design system proíbe inventar hex novo.
+  'ux-designer': {
+    key: 'ux-designer',
+    name: 'UX Designer',
+    initials: 'UX',
+    role: 'Personas, jornadas e protótipo navegável',
+    color: 'var(--accent)',
+    icon: PencilIcon,
+  },
+  // Staff/Principal Engineer (docs/fluxo.yml, camada_decisao_tecnica, ADR
+  // 0088) — RFC + PoC descartável para problema sistêmico RECORRENTE,
+  // devolvido ao Arquiteto por handoff. Dormente para disparo AUTOMÁTICO
+  // (nenhum gatilho automático existe — a Anamnese, religada na RN-680, não
+  // o dispara);
+  // acionável MANUALMENTE por handoff aceito, mesmo mecanismo genérico dos
+  // demais leads (sem entrar em USER_STARTED_AGENTS).
+  staff: {
+    key: 'staff',
+    name: 'Staff',
+    initials: 'ST',
+    role: 'Parecer sistêmico e RFC',
+    color: 'var(--violet)',
+    icon: FileIcon,
+  },
+  'dev-lead': {
+    key: 'dev-lead',
+    name: 'Dev Lead',
+    initials: 'DL',
+    role: 'Distribui o trabalho de implementação e responde por ele',
+    color: 'var(--success)',
+    icon: LayoutSidebarIcon,
+  },
+  'dev-backend': {
+    key: 'dev-backend',
+    name: 'Dev Backend',
+    initials: 'BE',
+    role: 'Implementação de API e domínio',
+    color: 'var(--success)',
+    icon: CodeIcon,
+  },
+  'dev-frontend': {
+    key: 'dev-frontend',
+    name: 'Dev Frontend',
+    initials: 'FE',
+    role: 'Implementação de interface',
+    color: 'var(--agent-frontend)',
+    icon: LayoutSidebarIcon,
+  },
+  infra: {
+    key: 'infra',
+    name: 'Infra',
+    initials: 'IN',
+    role: 'Provisionamento e operação',
+    color: 'var(--warning)',
+    icon: ServerIcon,
+  },
+  // Subagente da área de Infra (Fase 8c/8d) — gera o pipeline de CI,
+  // delegado pelo lead `infra`. Mesma cor do lead, de propósito: é a
+  // mesma área, só um ícone diferente pra distinguir o card no painel.
+  'infra-workflows': {
+    key: 'infra-workflows',
+    name: 'Workflows',
+    initials: 'WF',
+    role: 'Pipeline de CI (GitHub Actions / GitLab CI)',
+    color: 'var(--warning)',
+    icon: DeployIcon,
+  },
+  qa: {
+    key: 'qa',
+    name: 'QA',
+    initials: 'QA',
+    role: 'Verificação e testes',
+    color: 'var(--danger)',
+    icon: PermissionIcon,
+  },
+  // Subespecialidades da área de QA (Fase 8b/8d) — delegadas pelo lead
+  // `qa`. Mesma cor do lead, ícone próprio por papel.
+  'qa-automacao': {
+    key: 'qa-automacao',
+    name: 'QA de Automação',
+    initials: 'QA',
+    role: 'Suite de testes e coverage_matrix',
+    color: 'var(--danger)',
+    icon: CodeIcon,
+  },
+  'qa-performance-seguranca': {
+    key: 'qa-performance-seguranca',
+    name: 'QA de Performance e Segurança',
+    initials: 'QP',
+    role: 'RNFs de performance e apoio de segurança em nível de código',
+    color: 'var(--danger)',
+    icon: GaugeIcon,
+  },
+  secops: {
+    key: 'secops',
+    name: 'SecOps',
+    initials: 'SO',
+    role: 'Segurança e conformidade',
+    color: 'var(--agent-secops)',
+    icon: LockIcon,
+  },
+};
+
+export const AGENT_LIST: AgentDef[] = Object.values(AGENTS);
+
+/** Área da hierarquia de agentes (ADR 0038, Fases 8b/8c): um lead + subagentes. */
+export interface AreaDef {
+  key: string;
+  label: string;
+  lead: AgentKey;
+  members: AgentKey[];
+}
+
+/**
+ * As áreas, DERIVADAS da api (FASE 18).
+ *
+ * A lista era escrita aqui à mão e travada por teste contra a cópia da api —
+ * duas listas que combinavam de não divergir. Agora a fonte é
+ * `apps/api/src/domain/agents/agent-areas.ts` e este módulo só reexporta o que
+ * `pnpm --filter api gerar:areas` escreveu: editar à mão é reprovado.
+ *
+ * A área de `dev` continua com `members` vazio, e não é omissão — os membros
+ * dela são um por módulo do `module_map`, por projeto, e vêm de
+ * `agent_areas`/`agent_area_members` (RN-094). Quem endereça a execução de
+ * fora é o lead.
+ */
+export { AREAS };
+
+/**
+ * Área de um agente, se houver — pelo `AgentKey` do LEAD ou de um MEMBRO
+ * (`agentKey` aceita string solta porque `agenteAlvo`/`actor.id` no wire
+ * nunca são tipados como `AgentKey`, ver `api-types.ts`). `undefined` pra
+ * qualquer agente sem área (Criativo, PO, Arquiteto, dev-*, Psicólogo,
+ * Anamnese) — o chamador decide o fallback.
+ */
+export function areaFor(agentKey: string): AreaDef | undefined {
+  return Object.values(AREAS).find(
+    (area) => area.lead === agentKey || (area.members as string[]).includes(agentKey),
+  );
+}
+
+/**
+ * Agentes conversacionais SOLO — sem área, sem subagentes (ADR 0109/RN-440),
+ * DERIVADOS da api como `AREAS`. A fonte é `SOLO_CONVERSATIONAL_AGENTS` em
+ * `apps/api/src/domain/agents/agent-areas.ts`; `pnpm --filter api gerar:areas`
+ * escreve a cópia em `agent-areas.generated.ts` e `agent-areas.spec.ts` (api)
+ * reprova quando o disco diverge do gerador. Até a AT-046 isto era um mirror
+ * MANUAL que nenhum teste cruzava.
+ *
+ * O tipo é checado lá, não aqui: a lista gerada sai
+ * `as const satisfies readonly AgentKey[]`, então um nome que este roster não
+ * conhece quebra o build do web. A validação de VERDADE (quem o backend aceita)
+ * continua sendo o `RequestManualHandoffUseCase`.
+ */
+export { SOLO_CONVERSATIONAL_AGENTS };
+
+/**
+ * Handoff manual a agente à escolha (ADR 0109/RN-440): todo agente que a
+ * tela pode oferecer no seletor de "Endereçar handoff a..." —
+ * leads de área ∪ agentes solo. Mesma regra do backend
+ * (`addressableAgents` em `agent-areas.ts`), calculada aqui só para
+ * povoar o `<Select>`; a validação de VERDADE mora no
+ * `RequestManualHandoffUseCase`, do lado do servidor.
+ */
+export function addressableAgents(): AgentKey[] {
+  const leads = Object.values(AREAS).map((area) => area.lead);
+  return [...new Set([...leads, ...SOLO_CONVERSATIONAL_AGENTS])];
+}
+
+/**
+ * Nome de exibição do agente; degrada para o id quando ele não está no
+ * roster. Movida de `SessionPage.tsx` (faixa de atividade do turno,
+ * RN-460) para ser a MESMA fonte que `TurnActivityStrip.tsx` usa — evitar
+ * duas cópias da mesma regra de fallback.
+ */
+export function nomeDoAgente(id: string | undefined): string {
+  if (!id) return 'agente';
+  return AGENTS[id as keyof typeof AGENTS]?.name ?? id;
+}
+
+/**
+ * Cor do agente — a mesma do card, do avatar e da marca de handoff.
+ *
+ * O fallback é `--accent` porque nem todo ator é agente do roster: no chat sem
+ * agente ativo quem responde é o MODELO, e `actor.id` é o slug dele.
+ */
+export function corDoAgente(id: string | undefined): CSSProperties {
+  const cor = id ? AGENTS[id as keyof typeof AGENTS]?.color : undefined;
+  return { ['--msg-color' as string]: cor ?? 'var(--accent)' } as CSSProperties;
+}

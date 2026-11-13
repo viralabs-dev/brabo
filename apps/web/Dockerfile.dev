@@ -1,0 +1,34 @@
+FROM node:26-alpine@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216
+
+# UID/GID do usuário que roda o container — ver docker/api/Dockerfile, mesmo
+# mecanismo (docker-compose.yml `build.args` + .env.example).
+ARG DEV_UID=1000
+ARG DEV_GID=1000
+
+# pnpm sem corepack (AT-360): o Node 25+ não traz corepack. Tarball do registry
+# conferido contra o sha512 GRAVADO aqui (`npm view pnpm@<v> dist.integrity`, em
+# hex), instalado em /usr/local/bin. A versão bate com o `packageManager` do
+# package.json, então o pnpm nunca tenta baixar outra em runtime.
+ARG PNPM_VERSION=11.3.0
+ARG PNPM_SHA512=2c403d6594527287672b1f7056343a1f7c3634036a67ffabfcc2b3d7595d843768f8787148d1b57cf7956c90606bbd192857c363af19e96d2d0ec9ec5741d215
+RUN npm pack "pnpm@${PNPM_VERSION}" --silent \
+  && printf "%s  %s\n" "${PNPM_SHA512}" "pnpm-${PNPM_VERSION}.tgz" > /tmp/pnpm.sha512 \
+  && sha512sum -c /tmp/pnpm.sha512 && rm /tmp/pnpm.sha512 \
+  && npm i -g "./pnpm-${PNPM_VERSION}.tgz" \
+  && rm "pnpm-${PNPM_VERSION}.tgz"
+
+RUN (getent group "$DEV_GID" >/dev/null 2>&1 || addgroup -g "$DEV_GID" devuser) \
+  && (getent passwd "$DEV_UID" >/dev/null 2>&1 || adduser -D -u "$DEV_UID" -G "$(getent group "$DEV_GID" | cut -d: -f1)" devuser)
+
+WORKDIR /workspace
+
+# O volume de `node_modules` do serviço `web` (docker-compose do brabo-infra) nascem
+# `root:root` quando o caminho não existe NA IMAGEM, e o `pnpm install` do CMD
+# morre com EACCES (AT-172). Mesmo remédio das linhas de `/data` em
+# docker/api/Dockerfile: criar e dar dono aos pontos de montagem antes do USER.
+RUN mkdir -p /workspace/node_modules \
+  && chown "${DEV_UID}:${DEV_GID}" /workspace/node_modules
+
+USER ${DEV_UID}:${DEV_GID}
+
+CMD ["sh", "-c", "pnpm install --frozen-lockfile=false && pnpm dev"]

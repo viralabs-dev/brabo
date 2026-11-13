@@ -1,0 +1,161 @@
+name: promote
+# propósito: Calcula a versão do ciclo e abre a PR de promoção de um degrau ao próximo (padrão dev->main); o merge continua humano.
+# chamador:
+#   workflow_dispatch:
+
+# REUTILIZÁVEL (workflow_call) — brabo-ci. O chamador declara os gatilhos; veja o README.
+# Comentários abaixo vêm do monorepo de origem (`viralabs-dev/brabo-legacy`, arquivado) e falam dos gatilhos do chamador.
+
+# Dispara a promoção de um degrau para o próximo.
+# Fonte da política: scripts/ci/docs/explanation/branching-policy.md
+#
+# O workflow NÃO mergeia nada: ele calcula a versão do ciclo e abre o PR de
+# promoção. O merge continua sendo ato manual do humano, como toda entrada em
+# branch permanente.
+on:
+  workflow_call:
+    inputs:
+      ci_ref:
+        description: 'O MESMO SHA de 40 hex do `uses:` do chamador (sem padrão: tag ou ausência rodaria scripts de outra versão)'
+        required: true
+        type: string
+      ci_repo:
+        description: 'O repo do brabo-ci de onde vêm os scripts (owner/repo). Só muda num fork; o `uses:` do chamador deve apontar para o mesmo.'
+        required: false
+        type: string
+        default: 'viralabs-dev/brabo-ci'
+      par:
+        description: 'Par da esteira a promover'
+        required: false
+        type: string
+        default: 'dev->main'
+    secrets:
+      APP_ID:
+        description: 'ID do GitHub App do bot da organização'
+        required: false
+      APP_PRIVATE_KEY:
+        description: 'Chave privada do GitHub App do bot da organização'
+        required: false
+      BOT_TOKEN:
+        description: 'PAT ou token do GitHub App do bot (opcional: sem ele os checks do PR de promoção nascem em action_required)'
+        required: false
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: promote
+  cancel-in-progress: false
+
+jobs:
+  promover:
+    name: Abrir PR de promoção
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    env:
+      # `secrets` não existe no `if:` de um step — só em `env`. Passar por aqui
+      # é o que torna a presença do PAT testável dentro do job, igual ao
+      # `tag-release.yml`.
+      TEM_PAT: ${{ (secrets.BOT_TOKEN != '' || secrets.APP_ID != '') }}
+      TEM_APP: ${{ secrets.APP_ID != '' }}
+    steps:
+      - name: Token do GitHub App
+        id: app
+        if: env.TEM_APP == 'true'
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510  # v3.3.0
+        with:
+          client-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+      # PRIMEIRO passo do job, antes de qualquer checkout: quem dispara é
+      # restrito. `workflow_dispatch` já exige permissão de escrita no repo,
+      # mas isso não é a mesma coisa que ser o responsável de release — e a
+      # política nomeia um responsável.
+      - name: Quem pode disparar
+        env:
+          ATOR: ${{ github.actor }}
+          MODO: ${{ vars.APPROVAL_MODE || 'solo' }}
+          OWNER: ${{ vars.OWNER_HANDLE }}
+        run: |
+          set -euo pipefail
+          if [ "$MODO" != "solo" ]; then
+            echo "::notice::APPROVAL_MODE=$MODO — a restrição de dispatch por owner vale no modo solo."
+            exit 0
+          fi
+          if [ -z "${OWNER:-}" ]; then
+            echo "::error::OWNER_HANDLE não está definido. Sem ele não há como saber quem é o responsável de release."
+            exit 1
+          fi
+          if [ "$ATOR" != "$OWNER" ]; then
+            echo "::error::'$ATOR' não pode disparar a promoção."
+            {
+              echo "### promote: dispatch recusado"
+              echo
+              echo "\`$ATOR\` disparou, mas em \`APPROVAL_MODE=solo\` o responsável de"
+              echo "release é **\`$OWNER\`** — o único autorizado a promover."
+              echo
+              echo "A política está em https://viralabs-dev.github.io/brabo/prd/explanation/branching-policy.html#roles"
+              echo "(seção \"Papéis\"). Para mudar quem promove, mude a variável"
+              echo "\`OWNER_HANDLE\`, não este workflow."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          echo "ator autorizado: $ATOR"
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          # O cálculo da versão lê TODAS as tags e o histórico desde a última
+          # final. Com checkout raso não há tag nenhuma e a versão sairia
+          # errada — em silêncio.
+          fetch-depth: 0
+          persist-credentials: false
+
+      # Os scripts da política moram no brabo-ci, não no repositório que chama.
+      - name: Scripts do brabo-ci
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          repository: ${{ inputs.ci_repo }}
+          ref: ${{ inputs.ci_ref }}
+          path: .brabo-ci
+          persist-credentials: false
+
+      - uses: ./.brabo-ci/.github/actions/preparar
+        with:
+          ci_ref: ${{ inputs.ci_ref }}
+
+      - name: Validar o par e calcular a versão
+        id: calculo
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAR: ${{ inputs.par }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node .brabo-ci/scripts/ci/promote.ts
+
+      - name: O PAT está configurado?
+        if: env.TEM_PAT != 'true'
+        run: |
+          echo "::warning::sem BRABO_BOT_TOKEN: o PR de promoção abre, mas os checks dele nascem em 'action_required' e alguém precisa liberá-los à mão — inclusive o Check de promoção."
+
+      # O PR é aberto pelo PAT, e isso NÃO é cosmético.
+      #
+      # PR criado com o `GITHUB_TOKEN` sai com autor `app/github-actions`, e os
+      # workflows de PR nascem em `action_required` esperando aprovação manual.
+      # O efeito prático foi medido: o PR de promoção chegava a `MERGEABLE`
+      # com quatro checks — todos herdados do push da branch de origem — e o
+      # **Check de promoção não tinha rodado**. Quem mergeasse sem reparar
+      # promoveria sem o portão que valida range limpo, degrau carimbado e
+      # merge commit possível.
+      #
+      # É a MESMA regra do GitHub contra recursão que o `tag-release.yml` já
+      # documenta desde a v0.2.0 — o aviso de lá diz, literalmente, "nem abre
+      # PR com checks". Este workflow só nunca tinha recebido o mesmo remédio.
+      #
+      # Sem o segredo, cai no token padrão: o PR ainda abre, só nasce travado —
+      # degradação visível (o aviso acima), não silenciosa.
+      - name: Abrir o PR de promoção
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token || secrets.BOT_TOKEN || github.token }}
+          DE: ${{ steps.calculo.outputs.de }}
+          PARA: ${{ steps.calculo.outputs.para }}
+          VERSAO: ${{ steps.calculo.outputs.versao }}
+        run: bash .brabo-ci/scripts/ci/abrir-pr-de-promocao.sh

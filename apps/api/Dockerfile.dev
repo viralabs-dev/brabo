@@ -1,0 +1,68 @@
+FROM node:26-alpine@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216
+
+# UID/GID do usuário que roda o container — casam com o dono do bind mount
+# no host (ver docker-compose.yml `build.args` e .env.example), pra tudo que
+# for escrito em `dist`/`node_modules` nascer com o SEU dono, nunca
+# root. Default 1000 é o mais comum em máquina Linux de desenvolvedor único
+# — e coincide com o usuário `node` que a própria imagem já traz.
+ARG DEV_UID=1000
+ARG DEV_GID=1000
+
+# git: usado pelo LocalGitProvider (git init --bare) — Alpine não traz o
+# binário por padrão.
+RUN apk add --no-cache git
+
+# pnpm sem corepack (AT-360): o Node 25+ não traz corepack. Tarball do registry
+# conferido contra o sha512 GRAVADO aqui (`npm view pnpm@<v> dist.integrity`, em
+# hex), instalado em /usr/local/bin. A versão bate com o `packageManager` do
+# package.json, então o pnpm nunca tenta baixar outra em runtime.
+ARG PNPM_VERSION=11.3.0
+ARG PNPM_SHA512=2c403d6594527287672b1f7056343a1f7c3634036a67ffabfcc2b3d7595d843768f8787148d1b57cf7956c90606bbd192857c363af19e96d2d0ec9ec5741d215
+RUN npm pack "pnpm@${PNPM_VERSION}" --silent \
+  && printf "%s  %s\n" "${PNPM_SHA512}" "pnpm-${PNPM_VERSION}.tgz" > /tmp/pnpm.sha512 \
+  && sha512sum -c /tmp/pnpm.sha512 && rm /tmp/pnpm.sha512 \
+  && npm i -g "./pnpm-${PNPM_VERSION}.tgz" \
+  && rm "pnpm-${PNPM_VERSION}.tgz"
+
+# Só cria grupo/usuário quando o UID/GID pedido diverge do que a imagem já
+# tem — `node:26-alpine` já vem com o usuário "node" em 1000:1000, o default
+# mais comum, e recriar um grupo/usuário nesse UID quebraria o build
+# (`addgroup`/`adduser` recusam ID já em uso). USER abaixo referencia o par
+# numérico, não o nome — não importa se quem acabou dono dele foi "node" ou
+# "devuser".
+RUN (getent group "$DEV_GID" >/dev/null 2>&1 || addgroup -g "$DEV_GID" devuser) \
+  && (getent passwd "$DEV_UID" >/dev/null 2>&1 || adduser -D -u "$DEV_UID" -G "$(getent group "$DEV_GID" | cut -d: -f1)" devuser)
+
+WORKDIR /workspace
+
+# Os dois volumes NOMEADOS do compose (`/data/git-repos`,
+# `/data/project-workspaces`) precisam existir aqui, com o dono certo, ANTES
+# do USER: um volume nomeado novo herda dono e conteúdo do caminho que existir
+# NA IMAGEM, e quando o caminho não existe ele nasce root — deixando o processo
+# non-root de fora. Sem estas duas linhas, `git init --bare` do LocalGitProvider
+# morria com "permissão negada: /data/git-repos/<slug>.git" e o
+# permissions.json de cada projeto não tinha onde ser escrito.
+#
+# O Dockerfile.prod (`:104-109`) já fazia exatamente isto, com este mesmo
+# comentário, desde que o modo produção existe. A lição estava aprendida e
+# nunca tinha atravessado para o desenvolvimento — que é justamente onde
+# alguém provisiona um repositório pela primeira vez.
+RUN mkdir -p /data/git-repos /data/project-workspaces \
+  && chown -R "${DEV_UID}:${DEV_GID}" /data
+
+# Os TRÊS volumes de `node_modules` (docker-compose.yml, serviço `api`) seguem a
+# mesma lição, e o defeito é o mesmo: com o volume inexistente, sem o caminho
+# aqui ele nasce `root:root 755` e o `pnpm install` do CMD morre com
+# `EACCES: mkdir '/workspace/node_modules/.pnpm'` (AT-172). O `chown` é só dos
+# pontos de montagem, vazios — nunca recursivo sobre `/workspace`.
+RUN mkdir -p /workspace/node_modules \
+  && chown "${DEV_UID}:${DEV_GID}" /workspace/node_modules
+
+USER ${DEV_UID}:${DEV_GID}
+
+# O pnpm instala a api e as dependências dela (incluindo
+# @brabo/shared, do brabo-contracts), nunca o monorepo — apps/runner
+# (node-pty, binding nativo) roda na máquina do usuário e não existe aqui;
+# instalá-lo no container faria o postinstall compilar com node-gyp e quebrar
+# o boot (Alpine não tem Python/toolchain). Mesmo padrão do Dockerfile.prod.
+CMD ["sh", "-c", "pnpm install --frozen-lockfile=false && pnpm db:migrate && pnpm start:dev"]

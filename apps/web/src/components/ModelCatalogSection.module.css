@@ -1,0 +1,277 @@
+.section {
+  margin-bottom: 36px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+/* Mesmas métricas de cabeçalho das demais seções de Configurações. */
+.tituloLinha {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Os dois botões do cabeçalho: minimizar tudo e sincronizar. */
+.acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  max-width: 60ch;
+}
+
+.relatorio {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+
+.relatorioLinha {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.relatorioProvider {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  min-width: 96px;
+}
+
+.relatorioNumeros {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.barraDeLote {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  /* AT-442: a barra SOBREPÕE a lista, presa ao pé da janela — inserida no
+     fluxo, ela empurrava a lista e o checkbox fugia do cursor. */
+  position: fixed;
+  bottom: var(--space-4);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  z-index: 50;
+  background: var(--surface-1);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+/* O espaço no FIM da seção para a barra não cobrir as últimas linhas. */
+.respiroDaBarraDeLote {
+  height: 160px;
+}
+
+.contagem {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.vazio {
+  font-size: var(--fs-body);
+  color: var(--text-muted);
+  padding: 12px 0;
+}
+
+.linha {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.linha:hover {
+  background: var(--surface-2);
+}
+
+.linha input {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Esmaecido, nunca escondido: o binding que aponta pra ele continua no banco,
+   e o histórico de custo também. */
+.linhaIndisponivel .nome {
+  opacity: 0.6;
+}
+
+.nome {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.motivoDoAlias {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.slug {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  /* O slug é um token só ("moonshotai/Kimi-K2.5"): em 390px ele estourava a
+     coluna do nome (AT-330). Quebra em qualquer ponto em vez de vazar. */
+  overflow-wrap: anywhere;
+}
+
+.selos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+  max-width: 60%;
+}
+
+/* Contagem ao lado do rótulo do grupo — com 338 modelos, saber o tamanho
+   antes de abrir é o que decide se vale rolar. */
+/* O cabeçalho do grupo também abre e fecha. */
+
+/* Quem serve o catálogo do hub — em caixa normal, porque é nome próprio. */
+
+.grupoContagem {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-left: 8px;
+}
+
+/* Sub-grupo por fabricante, dentro de um hub. Recuo pequeno: é hierarquia,
+   não uma seção nova. */
+.subgrupo {
+  margin-bottom: 10px;
+}
+
+/* O cabeçalho do subgrupo é o BOTÃO que abre e fecha — a área de clique é a
+   linha inteira, não só o chevron. */
+.subgrupoTitulo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 7px 0 7px 10px;
+  border: none;
+  border-left: 2px solid var(--border-strong);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.1s, border-color 0.1s;
+}
+
+.subgrupoTitulo:hover {
+  color: var(--text-primary);
+  border-left-color: var(--accent);
+}
+
+/* Um subgrupo fechado com itens marcados precisa dizer isso: a barra de lote
+   conta o total, e sem este selo você ativaria em lote sem ver o que. */
+.marcadosOcultos {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--accent);
+  margin-left: auto;
+}
+
+/* A barra de facetas. Chip com o mesmo peso do selo da linha: o filtro e o
+   selo que ele casa são a MESMA linguagem, para a relação entre os dois ser
+   visível sem legenda. */
+.facetas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.facetaContagem {
+  margin-left: 4px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* O divisor entre os dois eixos de filtro — capability provada e uso decidido. */
+.divisorDeFiltro {
+  width: 1px;
+  align-self: stretch;
+  min-height: 18px;
+  margin: 0 4px;
+  background: var(--border);
+}
+
+/* Uso tem tom próprio (o mesmo do selo na linha): quem olha a barra vê de
+   relance qual metade é do provider e qual é do time. */
+.facetaDeUso[aria-pressed='true'],
+.facetaDeUso[aria-pressed='true']:hover {
+  color: var(--warning);
+  border-color: var(--warning-line);
+  background: var(--warning-soft);
+}
+
+.rotuloDoLote {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* Busca por nome/id (RN-694). */
+.busca {
+  width: 100%;
+  max-width: 420px;
+}

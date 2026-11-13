@@ -1,0 +1,248 @@
+name: CI
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  NODE_VERSION: '26.10.0'
+  ELIXIR_VERSION: '1.20.4'
+  OTP_VERSION: '29.1.1'
+  # Mesmas versões e checksums do Dockerfile (o teste dos gates precisa do mesmo scanner da imagem).
+  GITLEAKS_VERSION: '8.30.1'
+  HADOLINT_VERSION: '2.12.0'
+  YAMLLINT_VERSION: '1.38.0'
+  ACTIONLINT_VERSION: '1.7.12'
+  GITLEAKS_SHA256: '551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb'
+  HADOLINT_SHA256: '56de6d5e5ec427e17b74fa48d51271c7fc0d61244bf5c90e828aab8362d55010'
+  ACTIONLINT_SHA256: '8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8'
+
+jobs:
+  # Actionlint e pins do brabo-ci (AT-819). Não é check obrigatório.
+  cadeia:
+    name: Cadeia (actionlint e pins)
+    uses: viralabs-dev/brabo-ci/.github/workflows/cadeia.yml@53200467cadc73c5c23b90545474d4948764932f  # v1.4.0
+    with:
+      ci_ref: 53200467cadc73c5c23b90545474d4948764932f  # v1.4.0
+
+  # Versão do brabo-contracts alinhada entre as constantes dos scripts (AT-770, RN-1038). Não é check obrigatório.
+  contracts-alinhado:
+    name: Contracts alinhado
+    uses: viralabs-dev/brabo-ci/.github/workflows/contracts-alinhado.yml@53200467cadc73c5c23b90545474d4948764932f  # v1.4.0
+    with:
+      ci_ref: 53200467cadc73c5c23b90545474d4948764932f  # v1.4.0
+
+  lint:
+    name: Lint, contratos e Dockerfiles
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124  # v1
+        with:
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
+      # `mix format` precisa das deps (.formatter.exs usa import_deps).
+      - run: mix deps.get
+      - run: mix format --check-formatted
+      # As cópias de contracts/ são as da tag fixada em brabo-contracts; divergência reprova.
+      - name: Contratos batem com a tag fixada
+        run: |
+          scripts/baixar-contratos.sh
+          git diff --exit-code contracts/
+      - name: Versões dos scanners batem com o Dockerfile
+        run: |
+          set -euo pipefail
+          for v in GITLEAKS_VERSION GITLEAKS_SHA256 HADOLINT_VERSION HADOLINT_SHA256 ACTIONLINT_VERSION ACTIONLINT_SHA256 YAMLLINT_VERSION; do
+            ci="$(printf '%s' "${!v}")"
+            df="$(grep -oP "^ARG ${v}=\K.+" Dockerfile)"
+            [ "$ci" = "$df" ] || { echo "::error::${v}: ci.yml=${ci} Dockerfile=${df}"; exit 1; }
+          done
+      - name: Hadolint nos Dockerfiles
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/hadolint \
+            "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64"
+          echo "${HADOLINT_SHA256}  /tmp/hadolint" | sha256sum -c -
+          chmod +x /tmp/hadolint
+          /tmp/hadolint Dockerfile
+
+  test:
+    name: Testes do engine (ExUnit)
+    runs-on: ubuntu-26.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16@sha256:7b822b0aac60967beb1ea5e576b8602c94c300a157d187f385ae3e0da199b90a
+        env:
+          POSTGRES_USER: brabo
+          POSTGRES_PASSWORD: brabo
+          POSTGRES_DB: brabo
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U brabo -d brabo"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      POSTGRES_USER: brabo
+      POSTGRES_PASSWORD: brabo
+      POSTGRES_HOST: localhost
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124  # v1
+        with:
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-mix-${{ env.OTP_VERSION }}-${{ env.ELIXIR_VERSION }}-${{ hashFiles('mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-${{ env.OTP_VERSION }}-${{ env.ELIXIR_VERSION }}-
+      # Sem estes binários os testes dos gates somem em silêncio (test_helper.exs exclui por ausência).
+      - name: Instalar os binários dos gates (gitleaks, hadolint, yamllint, actionlint)
+        run: |
+          set -euxo pipefail
+          curl -fsSL -o /tmp/gitleaks.tar.gz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  /tmp/gitleaks.tar.gz" | sha256sum -c -
+          sudo tar -xzf /tmp/gitleaks.tar.gz -C /usr/local/bin gitleaks
+          sudo chmod 0755 /usr/local/bin/gitleaks
+          sudo curl -fsSL -o /usr/local/bin/hadolint \
+            "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64"
+          echo "${HADOLINT_SHA256}  /usr/local/bin/hadolint" | sha256sum -c -
+          sudo chmod 0755 /usr/local/bin/hadolint
+          curl -fsSL -o /tmp/actionlint.tar.gz \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          echo "${ACTIONLINT_SHA256}  /tmp/actionlint.tar.gz" | sha256sum -c -
+          sudo tar -xzf /tmp/actionlint.tar.gz -C /usr/local/bin actionlint
+          sudo chmod 0755 /usr/local/bin/actionlint
+          pipx install "yamllint==${YAMLLINT_VERSION}"
+          gitleaks version && hadolint --version && yamllint --version && actionlint -version
+      # Testes que conferem um espelho entre repos leem os irmãos (Engine.Irmaos).
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          repository: viralabs-dev/brabo-api
+          ref: dev
+          path: .irmaos/brabo-api
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          repository: viralabs-dev/brabo-runner
+          ref: dev
+          path: .irmaos/brabo-runner
+          persist-credentials: false
+      - run: mix deps.get
+      - run: mix compile --warnings-as-errors
+      - name: mix test --cover
+        env:
+          BRABO_API_DIR: ${{ github.workspace }}/.irmaos/brabo-api
+          BRABO_RUNNER_DIR: ${{ github.workspace }}/.irmaos/brabo-runner
+        # pipefail: sem ele o `tee` esconde o código de saída do mix test (AT-776).
+        run: set -o pipefail; mix test --cover 2>&1 | tee /tmp/mix-test.log
+      # Os golden-sets saíram do repo: nenhum teste pode ter sido excluído.
+      - name: Nenhum teste excluído
+        run: |
+          excluidos="$(grep -oE '[0-9]+ excluded' /tmp/mix-test.log | head -1 | grep -oE '^[0-9]+' || true)"
+          if [ "${excluidos:-0}" -gt 0 ]; then
+            echo "::error::testes excluídos — binário dos gates ausente:"; grep -E 'excluded' /tmp/mix-test.log; exit 1
+          fi
+      - name: Piso de cobertura
+        run: node scripts/ci/coverage-floor.ts < /tmp/mix-test.log
+
+  imagem:
+    name: Build da imagem (sem publicar)
+    runs-on: ubuntu-26.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - run: docker build -f Dockerfile -t brabo-engine:ci .
+
+  # Imagem da PR: publica `:sha-<12 do head>` para o E2E (PR hotfix/* -> main, AT-765) e para o regressivo
+  # (PR -> dev, AT-769; decisão do dono 06/11: assinada, apagada ao fechar a PR ou em 7 dias).
+  # Fora de PR de fork e de Dependabot (sem packages: write).
+  # Mesmas flags de Trivy e assinatura por digest do release.yml; permissões só neste job.
+  # A identidade do cosign é este ci.yml (o brabo-qa aceita release|ci).
+  imagem-hotfix:
+    name: Imagem da PR (sha-)
+    if: github.event_name == 'pull_request' && (github.base_ref == 'dev' || (github.base_ref == 'main' && startsWith(github.head_ref, 'hotfix/'))) && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    env:
+      IMAGEM: ghcr.io/viralabs-dev/brabo-engine
+      TRIVY_VERSION: '0.70.0'
+      TRIVY_SHA256: '8b4376d5d6befe5c24d503f10ff136d9e0c49f9127a4279fd110b727929a5aa9'
+      TAG_SHA: sha-${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}  # head, não o merge ref
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069  # v4.4.1
+      - name: Login no GHCR
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550  # v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Tag sha-<12>
+        id: v
+        run: echo "tag=${TAG_SHA:0:16}" >> "$GITHUB_OUTPUT"
+      - name: Build e push
+        id: build
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc  # v7.4.0
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGEM }}:${{ steps.v.outputs.tag }}
+      - name: Instalar o binário do trivy
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/trivy.tar.gz \
+            "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
+          echo "${TRIVY_SHA256}  /tmp/trivy.tar.gz" | sha256sum -c -
+          sudo tar -xzf /tmp/trivy.tar.gz -C /usr/local/bin trivy
+      - name: Trivy — HIGH/CRITICAL com correção reprova
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          set -euo pipefail
+          ignore=(); [ -f .trivyignore.yaml ] && ignore=(--ignorefile .trivyignore.yaml)
+          trivy image --cache-dir /tmp/trivy-cache --image-src remote --no-progress \
+            --format table --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed \
+            "${ignore[@]}" --exit-code 1 "${IMAGEM}@${DIGEST}"
+      - uses: sigstore/cosign-installer@756fe2d284c7292c4e9b62c8a28f1e5629c59532  # v4.1.3
+      - name: Assinar por digest e verificar no mesmo run
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          set -euo pipefail
+          test -n "${DIGEST}"
+          cosign sign --yes "${IMAGEM}@${DIGEST}"
+          cosign verify \
+            --certificate-identity-regexp "^https://github.com/${GITHUB_REPOSITORY}/\.github/workflows/ci\.yml@" \
+            --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+            "${IMAGEM}@${DIGEST}" > /dev/null

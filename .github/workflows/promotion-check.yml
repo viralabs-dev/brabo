@@ -1,0 +1,80 @@
+name: promotion-check
+# propósito: Confere o estado da PR de promoção: range limpo, tag do degrau de baixo carimbada e merge possível.
+# chamador:
+#   pull_request:
+#     types: [opened, reopened, synchronize, edited]
+
+# REUTILIZÁVEL (workflow_call) — brabo-ci. O chamador declara os gatilhos; veja o README.
+# Comentários abaixo vêm do monorepo de origem (`viralabs-dev/brabo-legacy`, arquivado) e falam dos gatilhos do chamador.
+
+# Confere o ESTADO do repositório num PR de promoção.
+# Fonte da política: scripts/ci/docs/explanation/branching-policy.md
+#
+# Workflow separado do `pr-police` de propósito: aquele valida a FORMA do PR
+# (nome, origem, destino) e este valida o ESTADO (range, tag do degrau de
+# baixo, método de merge). Juntos, um check reprovaria por dois motivos sem
+# relação, e quem lesse o veredito teria que adivinhar qual.
+on:
+  workflow_call:
+    inputs:
+      ci_ref:
+        description: 'O MESMO SHA de 40 hex do `uses:` do chamador (sem padrão: tag ou ausência rodaria scripts de outra versão)'
+        required: true
+        type: string
+      ci_repo:
+        description: 'O repo do brabo-ci de onde vêm os scripts (owner/repo). Só muda num fork; o `uses:` do chamador deve apontar para o mesmo.'
+        required: false
+        type: string
+        default: 'viralabs-dev/brabo-ci'
+
+permissions:
+  contents: read
+  actions: read  # AT-663: perguntar se o tag-release do commit ainda está rodando
+
+concurrency:
+  group: promotion-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  conferir:
+    name: Check de promoção
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    steps:
+      # Sem `if:` no JOB — check required indexado por sha que não roda deixa
+      # veredito velho colado. O filtro de "é promoção?" acontece DENTRO, com
+      # saída explícita, para que o check sempre exista e sempre se pronuncie.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # Os scripts da política moram no brabo-ci, não no repositório que chama.
+      - name: Scripts do brabo-ci
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          repository: ${{ inputs.ci_repo }}
+          ref: ${{ inputs.ci_ref }}
+          path: .brabo-ci
+          persist-credentials: false
+
+      - uses: ./.brabo-ci/.github/actions/preparar
+        with:
+          ci_ref: ${{ inputs.ci_ref }}
+
+      - name: Conferir a promoção
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_MESMO_REPO: ${{ github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          for b in dev main; do
+            git fetch --no-tags --quiet origin "+refs/heads/$b:refs/remotes/origin/$b" || \
+              echo "::notice::branch permanente '$b' não existe no remoto"
+          done
+          git fetch --tags --quiet origin || true
+          node .brabo-ci/scripts/ci/promotion-check.ts

@@ -1,0 +1,39 @@
+# Imagem de DESENVOLVIMENTO do broker (ADR 0130). Roda o bundle do `tsup` (`pnpm start`),
+# não `src/index.ts`. O `@brabo/docker-port` vem do GitHub Packages: o token entra só como
+# secret do BuildKit (`--secret id=npmrc,src=$HOME/.npmrc`), nunca em `ARG`/`ENV` (RN-1039).
+#
+# O socket do Docker NÃO entra na imagem: o serviço que a usa recebe
+# `/var/run/docker.sock` por volume, e só ele. Sem a linha `docker-cli` abaixo o
+# serviço sobe e falha na primeira operação com erro NOMEADO (CLI ausente).
+#
+# O `pnpm install` roda no BUILD, nunca no start: a rede do serviço, quando
+# existe, não alcança registry. Mexer em dependência exige rebuild da imagem.
+FROM node:26-alpine@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216
+
+# hadolint ignore=DL3018
+RUN apk add --no-cache docker-cli
+
+# pnpm sem corepack (AT-360), mesmo tarball conferido por sha512 da imagem de produção.
+ARG PNPM_VERSION=11.3.0
+ARG PNPM_SHA512=2c403d6594527287672b1f7056343a1f7c3634036a67ffabfcc2b3d7595d843768f8787148d1b57cf7956c90606bbd192857c363af19e96d2d0ec9ec5741d215
+RUN npm pack "pnpm@${PNPM_VERSION}" --silent \
+  && printf "%s  %s\n" "${PNPM_SHA512}" "pnpm-${PNPM_VERSION}.tgz" > /tmp/pnpm.sha512 \
+  && sha512sum -c /tmp/pnpm.sha512 && rm /tmp/pnpm.sha512 \
+  && npm i -g "./pnpm-${PNPM_VERSION}.tgz" \
+  && rm "pnpm-${PNPM_VERSION}.tgz"
+
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+RUN --mount=type=secret,id=npmrc,target=/root/.npmrc pnpm install --frozen-lockfile
+
+COPY . .
+# O bundle é gerado aqui, ainda como root: como `node`, o tsup não escreve em /app (EACCES).
+# O código não é montado no compose de dev, então o bundle da imagem é o que roda.
+RUN pnpm build
+
+USER node
+
+EXPOSE 8090
+
+CMD ["node", "dist/index.cjs"]

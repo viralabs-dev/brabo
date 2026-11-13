@@ -1,0 +1,84 @@
+.painel {
+  flex-shrink: 0;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border);
+  background: var(--surface-1);
+}
+
+.abas {
+  flex-shrink: 0;
+  min-height: 0;
+  padding: 4px 8px 0;
+}
+
+.aba {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.conteudo {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.terminalVazio {
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.terminalVazio p {
+  margin: 0;
+  max-width: 440px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* A aba Terminal ganhou dado real (runner local + PTY): uma faixa fina com
+   o estado do CONTAINER gerido pelo produto (outra informação, RN-267/268)
+   sobre a área do terminal interativo em si, que ocupa o resto do espaço. */
+.terminalAba {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cicloDeVidaFaixa {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.terminalArea {
+  flex: 1;
+  min-height: 0;
+}
+
+.cicloDeVida {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cicloDeVidaDetalhe {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.cicloDeVidaFalha {
+  margin: 0;
+  max-width: 440px;
+  font-size: 11px;
+  color: var(--danger);
+  width: 100%;
+}

@@ -1,0 +1,55 @@
+import { Module } from '@nestjs/common';
+import { SessionsUseCasesModule } from '../sessions/sessions-use-cases.module';
+// A recusa de promoção precisa avisar o PO no engine (Fase 12c) — é a
+// primeira vez que o backlog atravessa a fronteira api→engine.
+import { EngineHttpClientsModule } from '../../../infrastructure/http-clients/engine-http-clients.module';
+// A duplicata semântica (RN-681, ADR 0198) vetoriza pelo MESMO ponto do RAG
+// (`RagEmbeddingService`) e grava o gasto pelo ÚNICO caminho de metering
+// (`RecordLlmUsageUseCase`). Nenhum dos dois módulos importa o backlog.
+import { RagUseCasesModule } from '../rag/rag-use-cases.module';
+import { LlmUseCasesModule } from '../llm/llm-use-cases.module';
+import { VerificarDuplicataSemanticaUseCase } from './verificar-duplicata-semantica.use-case';
+import { CreateEpicUseCase } from './create-epic.use-case';
+import { CreateStoryUseCase } from './create-story.use-case';
+import { CompleteStoryUseCase } from './complete-story.use-case';
+import { CreateTaskUseCase } from './create-task.use-case';
+import { TransitionStoryUseCase } from './transition-story.use-case';
+import { PromoteStoriesUseCase } from './promote-stories.use-case';
+import { ReturnStoryUseCase } from './return-story.use-case';
+import { CorrigirHistoriaUseCase } from './corrigir-historia.use-case';
+import { PerguntasEmAbertoUseCase } from './perguntas-em-aberto.use-case';
+import { ListBacklogUseCase } from './list-backlog.use-case';
+import { GetCoverageUseCase } from './get-coverage.use-case';
+import { RetireBusinessRuleUseCase } from './retire-business-rule.use-case';
+import { ListBusinessRulesUseCase } from './list-business-rules.use-case';
+import { ListProductMetricsUseCase } from './list-product-metrics.use-case';
+
+const USE_CASES = [
+  CreateEpicUseCase,
+  CreateStoryUseCase,
+  CompleteStoryUseCase,
+  CreateTaskUseCase,
+  TransitionStoryUseCase,
+  PromoteStoriesUseCase,
+  ReturnStoryUseCase,
+  CorrigirHistoriaUseCase,
+  PerguntasEmAbertoUseCase,
+  ListBacklogUseCase,
+  GetCoverageUseCase,
+  ListBusinessRulesUseCase,
+  RetireBusinessRuleUseCase,
+  ListProductMetricsUseCase,
+  VerificarDuplicataSemanticaUseCase,
+];
+
+@Module({
+  imports: [
+    SessionsUseCasesModule,
+    EngineHttpClientsModule,
+    RagUseCasesModule,
+    LlmUseCasesModule,
+  ],
+  providers: USE_CASES,
+  exports: USE_CASES,
+})
+export class BacklogUseCasesModule {}

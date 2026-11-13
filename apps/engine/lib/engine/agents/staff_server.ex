@@ -1,0 +1,389 @@
+defmodule Engine.Agents.StaffServer do
+  @moduledoc """
+  Agente Staff conversacional (papel `staff`/Staff-Principal Engineer,
+  `docs/fluxo.yml` `camada_decisao_tecnica`, ADR 0088).
+
+  Espelha `Engine.Agents.ArquitetoServer`: GenServer por sessão, estado +
+  rehydration + streaming + laço bounded de tool use (`propose_rfc`, único).
+  Produz um RFC — problema, opções com trade-offs, recomendação e o escopo
+  de uma PoC descartável — e devolve o handoff ao Arquiteto (dentro do
+  próprio tool call, ver `Engine.Agents.StaffTools`).
+
+  ## Por que este servidor NÃO define `kickoff/1`
+
+  Todos os outros leads conversacionais (Criativo, PO, Arquiteto, Dev Lead,
+  Infra) sintetizam uma instrução de abertura a partir do event log da
+  sessão (`kickoff_instruction/1` em cada um deles) — há sempre um artefato
+  anterior (product_brief, module_map, backlog) para resumir. O Staff não
+  tem essa fonte: o gatilho que o traria à tona — a Anamnese notando um
+  problema sistêmico RECORRENTE (`docs/fluxo.yml`: "ativacao") — está
+  pendente enquanto `ANAMNESE_ENABLED=false` (decisão de produto de
+  2026-08-10). Sem kickoff automático, o processo sobe (rehidrata o
+  histórico) e fica ocioso até uma `user_message` chegar — que é como quem
+  cria o handoff manualmente (outro agente ou o usuário, ver ADR 0088)
+  explica o problema pela primeira vez.
+
+  ## Ativação: o caminho GENÉRICO, sem `USER_STARTED_AGENTS`
+
+  `staff` não entra em `USER_STARTED_AGENTS`
+  (`apps/api/src/domain/sessions/agent-activation.ts`) — essa lista é a
+  exceção do Criativo (inicia SEM handoff, por comando direto do usuário).
+  O Staff segue a regra PADRÃO de `canActivateAgent`: ativa com qualquer
+  handoff `accepted` endereçado a ele, o mesmo caminho que já vale para
+  `dev-lead`/`arquiteto`/`infra`. Nenhuma mudança de domínio foi necessária
+  na api para isto — `assertHandoffTargetAllowed`
+  (`apps/api/src/domain/agents/agent-areas.ts`) já permite endereçar
+  qualquer agente que não seja SUBAGENTE de área, e o Staff não tem área.
+  """
+
+  use GenServer, restart: :temporary
+
+  alias Engine.Harness.{ContextBuilder, PromptAssembler, ContextManager, ToolCallRecovery}
+  alias Engine.Harness.Tools.EmitArtifact
+
+  alias Engine.Agents.{
+    FalhaDeTurno,
+    Reidratacao,
+    ResultadoDeFerramenta,
+    StaffTools,
+    TextoDoTurno,
+    TurnoAssincrono,
+    TurnoOrfao
+  }
+
+  alias Engine.Sessions.EngineApiClient
+
+  @agent "staff"
+
+  # Conversacional, sem área: mesmo teto (14) de Arquiteto e Dev Lead — é
+  # raciocínio (montar um RFC), não conversa leve.
+  @max_iterations 14
+
+  # Frente 3 do plano de decision_record — IDÊNTICA nos 5 conversacionais que
+  # ganharam emit_artifact nesta leva (PO, Arquiteto, Dev Lead, UX Designer,
+  # Staff; o Criativo já tinha a ferramenta antes). Fica de fora do texto de
+  # identidade (`Engine.Harness.Agents`) porque não é sobre QUEM o agente é —
+  # é uma instrução operacional sobre UMA ferramenta, igual nos 5.
+  @instrucao_decision_record "Use `emit_artifact` com `type: decision_record` para " <>
+                               "registrar uma decisão relevante tomada nesta conversa, " <>
+                               "com contexto, opções consideradas, a escolha e as " <>
+                               "consequências aceitas. Se a decisão orienta o dev de um " <>
+                               "módulo, inclua `afeta: {modulos: [\"<módulo>\"]}` e cite " <>
+                               "`modules/<módulo>`."
+
+  # --- API pública ---
+
+  def start_link({session_id, project_id}) do
+    GenServer.start_link(__MODULE__, {session_id, project_id}, name: via(session_id))
+  end
+
+  def via(session_id),
+    do: {:via, Registry, {Engine.Sessions.Registry, "staff:" <> session_id}}
+
+  # `idioma` é o idioma da resposta do AUTOR desta mensagem, resolvido pela api
+  # (RN-622); `nil` = sem orientação neste turno.
+  def user_message(session_id, text, idioma \\ nil, mensagem_id \\ nil),
+    do: GenServer.call(via(session_id), {:user_message, text, idioma, mensagem_id}, 180_000)
+
+  @doc "Cancela uma mensagem que espera na fila deste agente (RN-673)."
+  def cancelar_mensagem(session_id, mensagem_id, user_id),
+    do: GenServer.call(via(session_id), {:cancelar_mensagem, mensagem_id, user_id}, 15_000)
+
+  # --- Callbacks ---
+
+  @impl true
+  def init({session_id, project_id}) do
+    system_msg = %{
+      "role" => "system",
+      "content" => system_prompt(project_id),
+      :pinned => true
+    }
+
+    # A conversa que já existe na sessão — a CAUDA, com as perguntas e as
+    # ferramentas deste agente, e o começo resumido quando não cabe (RN-580).
+    # RN-586: o turno que o reinício do engine deixou pela metade fecha com
+    # desfecho durável (nunca reexecuta).
+    _ = TurnoOrfao.fechar_ao_subir(project_id, session_id, @agent)
+
+    history = Reidratacao.historico(project_id, session_id, @agent)
+
+    {:ok,
+     %{
+       session_id: session_id,
+       project_id: project_id,
+       agent: @agent,
+       messages: [system_msg | history],
+       # Frente 3 do plano de decision_record: `emit_artifact` entra como
+       # SEGUNDA ferramenta, aditiva — `propose_rfc` continua a primeira.
+       tool_specs: tool_specs(),
+       # Guardado enquanto o turno roda numa Task supervisionada, fora do
+       # handler que bloqueava o processo inteiro — é o que permite um
+       # `:cancel` chegar e ser atendido (RN-122). Ver `TurnoAssincrono`.
+       # RN-673: a fila de mensagens que chegaram com turno em curso,
+       # reconstruída do log (sobrevive a restart), e como montar o turno
+       # que a lê. Ver `TurnoAssincrono.receber_mensagem/4`.
+       # AT-582: a retomada do turno interrompido, ANTES da fila (a fila espera o fim dela).
+       retomada_agendada: TurnoAssincrono.retomada_ao_subir(project_id, session_id, @agent),
+       montar_turno_de_retomada: &turno_de_retomada/1,
+       fila_de_mensagens: TurnoAssincrono.fila_ao_subir(project_id, session_id, @agent),
+       montar_turno_de_mensagem: &turno_de_mensagem/2,
+       turno_assincrono: nil
+     }}
+  end
+
+  @impl true
+  def handle_cast(:cancel, state) do
+    {:noreply, TurnoAssincrono.cancelar(state)}
+  end
+
+  # RN-581: a sessão fechou e `Engine.Agents.Conversacionais` está parando
+  # este agente — o turno em curso morre junto, sem gravar nada.
+  @impl true
+  def terminate(_reason, state) do
+    TurnoAssincrono.abandonar(state)
+    :ok
+  end
+
+  # RN-622: o idioma do AUTOR vale para o turno que esta mensagem sobe, e só
+  # para ele — `IdiomaDaResposta.com_idioma_do_autor/2` o põe no dicionário
+  # durante o `handle_call` (a Task do turno o herda) e o tira ao sair.
+  #
+  # RN-673 (ADR 0191): a mensagem passa por `TurnoAssincrono.receber_mensagem/4`
+  # — com turno em curso ela ENTRA NA FILA em vez de ser recusada, e a fila
+  # vira um turno só no fim dele. `mensagem_id` é o do `chat.message` que a api
+  # gravou; é por ele que a mensagem pendente pode ser cancelada.
+  @impl true
+  def handle_call({:user_message, text, idioma, mensagem_id}, from, state) do
+    TurnoAssincrono.receber_mensagem(
+      state,
+      from,
+      %{texto: text, idioma: idioma, id: mensagem_id},
+      &turno_de_mensagem/2
+    )
+  end
+
+  def handle_call({:user_message, text, idioma}, from, state),
+    do: handle_call({:user_message, text, idioma, nil}, from, state)
+
+  def handle_call({:user_message, text}, from, state),
+    do: handle_call({:user_message, text, nil, nil}, from, state)
+
+  @impl true
+  def handle_call({:cancelar_mensagem, mensagem_id, user_id}, _from, state),
+    do: TurnoAssincrono.cancelar_mensagem(state, mensagem_id, user_id)
+
+  # RN-673: como UMA fala do usuário vira turno — a mesma montagem que o
+  # `handle_call` fazia inline. `TurnoAssincrono` a guarda no state e a usa
+  # também para o turno que lê a FILA (várias falas num texto só).
+  defp turno_de_mensagem(state, text) do
+    work = state |> append(user_msg(text)) |> compact()
+    fn -> run_turn(work, Engine.Harness.FalhaRepetida.inicio_de_turno(@max_iterations)) end
+  end
+
+  # AT-582: o turno de retomada não tem fala nova do usuário; o histórico
+  # reidratado já termina nela e a orientação vai efêmera (`RetomadaDoTurno`).
+  defp turno_de_retomada(state) do
+    fn ->
+      run_turn(compact(state), Engine.Harness.FalhaRepetida.inicio_de_turno(@max_iterations))
+    end
+  end
+
+  @impl true
+  def handle_info(msg, state) do
+    case TurnoAssincrono.tratar_resultado(msg, state) do
+      {:ok, novo_state} -> {:noreply, novo_state}
+      :ignorado -> {:noreply, state}
+    end
+  end
+
+  # --- Turno com loop bounded de tool use ---
+
+  # O teto de iterações deixou de ser SILENCIOSO — mesma correção da RN-166
+  # já aplicada ao PO: um Staff que esgotasse as 14 iterações terminava sem
+  # evento nenhum, indistinguível de um turno que simplesmente acabou.
+  defp run_turn(state, remaining) when remaining <= 0 do
+    # AT-590: lê a linha ANTES de gravar o texto (que a esvaziaria) e a põe no evento.
+    gravado = Engine.Agents.GravadoNoTurno.descarregar()
+    gravar_texto_do_turno(state, "", nil)
+
+    Engine.Harness.FalhaRepetida.narrar_ou(state.project_id, state.session_id, @agent, fn ->
+      emit(state, "toolloop.limit_reached", %{
+        iteration: @max_iterations,
+        max_iterations: @max_iterations,
+        gravado: gravado
+      })
+    end)
+
+    state
+  end
+
+  defp run_turn(state, remaining) do
+    on_delta = fn text -> broadcast(state, "agent.delta", %{text: text, agent: @agent}) end
+    wire = Enum.map(state.messages, &to_wire/1)
+
+    case EngineApiClient.llm_turn_stream(
+           state.project_id,
+           state.session_id,
+           @agent,
+           wire,
+           state.tool_specs,
+           on_delta
+         ) do
+      # A api narra a falha no PRÓPRIO frame final (budget, credencial, binding).
+      # Devolve `state` (mapa), e NÃO `{state, ""}` (tupla) — ver o comentário
+      # equivalente em `arquiteto_server.ex`/`dev_lead_server.ex`.
+      {:ok, %{"error" => erro} = frame} when is_binary(erro) and erro != "" ->
+        gravar_texto_do_turno(state, "", nil)
+        emit_falha(state, {:final, erro, Map.get(frame, "errorCode")})
+        state
+
+      {:ok, %{"message" => message} = frame} ->
+        content = Map.get(message, "content", "")
+        model_name = Map.get(frame, "modelName")
+        state = append(state, Engine.Agents.MensagemDoAssistente.de(content, message))
+
+        case tool_calls(message, state.tool_specs) do
+          [] ->
+            # AT-572: fecho sem texto nem corte é falha do modelo, dita no fio (agent.error).
+            if gravar_texto_do_turno(state, content, model_name) == :vazio,
+              do: emit_falha(state, :resposta_vazia)
+
+            state
+
+          calls ->
+            # RN-698: o texto desta volta continua na próxima.
+            TextoDoTurno.acumular(content, model_name)
+            state = Enum.reduce(calls, state, &dispatch_tool/2)
+            run_turn(state, Engine.Harness.FalhaRepetida.restante(remaining - 1))
+        end
+
+      {:error, reason} ->
+        gravar_texto_do_turno(state, "", nil)
+        emit_falha(state, reason)
+        state
+    end
+  end
+
+  defp dispatch_tool(call, state) do
+    name = Map.get(call, "name")
+    args = Map.get(call, "arguments", %{})
+    id = Map.get(call, "id")
+
+    emit(state, "tool.call", %{tool: name, args: args})
+    broadcast(state, "tool.call", %{tool: name, agent: @agent})
+
+    resultado = executar_ferramenta(name, args, state)
+    emit(state, "tool.result", ResultadoDeFerramenta.payload(name, resultado))
+    Engine.Agents.GravadoNoTurno.anotar(name, args, resultado, state.project_id)
+    Engine.Agents.FontesDoTurno.anotar(name, args, resultado, state.project_id)
+    {_, text} = resultado
+
+    append(state, %{
+      "role" => "tool",
+      "content" => text,
+      "toolCallId" => id,
+      "name" => name,
+      :pinned => false
+    })
+  end
+
+  # RN-719: argumentos normalizados contra a spec e exceção vira erro do laço.
+  defp executar_ferramenta(name, args, state) do
+    Engine.Harness.ArgumentosDeFerramenta.executar(name, args, state.tool_specs, fn a ->
+      run_tool(name, a, state)
+    end)
+  end
+
+  defp run_tool("propose_rfc", args, state), do: StaffTools.run(args, state)
+  defp run_tool("emit_artifact", args, state), do: EmitArtifact.run(args, state)
+
+  defp run_tool("rag_search", args, state), do: Engine.Harness.Tools.RagSearch.run(args, state)
+
+  defp run_tool("registrar_plano", args, state),
+    do: Engine.Harness.Tools.RegistrarPlano.run(args, state)
+
+  defp run_tool(name, _args, _state), do: {:error, "ferramenta desconhecida: #{name}"}
+
+  # --- Helpers ---
+
+  defp compact(state) do
+    {:ok, state} = ContextManager.maybe_compact(state)
+    state
+  end
+
+  defp system_prompt(project_id) do
+    base =
+      project_id
+      |> ContextBuilder.build_layers(@agent)
+      |> PromptAssembler.assemble()
+      |> PromptAssembler.Default.render()
+
+    base <> "\n\n" <> @instrucao_decision_record
+  end
+
+  defp user_msg(text), do: %{"role" => "user", "content" => text, :pinned => false}
+
+  defp append(state, message), do: %{state | messages: state.messages ++ [message]}
+
+  defp to_wire(message), do: Map.delete(message, :pinned)
+
+  # Modelo local costuma descrever a chamada em TEXTO em vez de usar o
+  # protocolo nativo — mesma recuperação dos demais conversacionais.
+  defp tool_calls(message, tool_specs) do
+    case Map.get(message, "toolCalls") || [] do
+      [] ->
+        ToolCallRecovery.from_content(
+          Map.get(message, "content", ""),
+          Enum.map(tool_specs, & &1.name)
+        )
+
+      nativas ->
+        nativas
+    end
+  end
+
+  # RN-698: o texto do turno inteiro, numa `agent.response` só.
+  defp gravar_texto_do_turno(state, ultimo, model_name) do
+    case TextoDoTurno.payload_do_turno(ultimo, model_name) do
+      nil -> :vazio
+      payload -> emit(state, "agent.response", payload)
+    end
+  end
+
+  defp emit_falha(state, reason) do
+    origem = FalhaDeTurno.origem(reason)
+    mensagem = FalhaDeTurno.mensagem(reason, state.project_id)
+
+    emit(state, "agent.error", %{
+      origem: origem,
+      mensagem: mensagem,
+      reason: FalhaDeTurno.diagnostico(reason)
+    })
+
+    broadcast(state, "agent.error", %{origem: origem, mensagem: mensagem})
+  end
+
+  defp emit(state, type, payload) do
+    EngineApiClient.append_event(state.project_id, state.session_id, %{
+      type: type,
+      actorKind: "agent",
+      actorId: @agent,
+      payload: payload
+    })
+  end
+
+  defp broadcast(state, event, payload) do
+    EngineWeb.Endpoint.broadcast("session:" <> state.session_id, event, payload)
+  end
+
+  @doc "AT-686: o catálogo completo de ferramentas deste agente (o `init/1` e o catálogo leem daqui)."
+  def tool_specs do
+    [
+      StaffTools.spec(),
+      EmitArtifact.spec(),
+      Engine.Harness.Tools.RegistrarPlano.spec(),
+      # AT-716 (RN-982): consulta ao RAG do projeto, a mesma ferramenta dos dev agents.
+      Engine.Harness.Tools.RagSearch.spec()
+    ]
+  end
+end
