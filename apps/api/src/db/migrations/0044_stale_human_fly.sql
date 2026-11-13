@@ -1,1 +1,0 @@
-CREATE INDEX "token_usage_created_at_idx" ON "token_usage" USING btree ("created_at");
