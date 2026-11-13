@@ -883,7 +883,7 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 > ⚠️ Блок сгенерирован `pnpm docs:generate`. Не редактируйте вручную — следующая сборка его перезапишет.
 
-Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **198**. Без описания в таблицах выше пока: **4**.
+Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **198**. У всех есть описание в таблицах выше.
 
 Каждый источник помечен как **продукт** — то, что оператор установки задаёт в `.env` развёртывания, — или **инструменты**: их читают только CI и разработчики продукта. Переменной инструментов не место в `.env` оператора.
 
@@ -950,7 +950,7 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 - <a id="env-OTEL_SERVICE_NAME"></a>`OTEL_SERVICE_NAME` <sub>(apps/api/src/tracing.ts)</sub>
 - <a id="env-PORT"></a>`PORT` <sub>(apps/api/src/main.ts)</sub>
 - <a id="env-PROJECT_WORKSPACES_ROOT"></a>`PROJECT_WORKSPACES_ROOT` <sub>(apps/api/src/infrastructure/filesystem/project-workspaces-root.ts)</sub>
-- <a id="env-RAG_REINDEX_POLL_INTERVAL_MS"></a>`RAG_REINDEX_POLL_INTERVAL_MS` — ⚠️ **нет описания выше** <sub>(apps/api/src/application/rag-reindex/trunk-merged-reindexer.ts)</sub>
+- <a id="env-RAG_REINDEX_POLL_INTERVAL_MS"></a>`RAG_REINDEX_POLL_INTERVAL_MS` <sub>(apps/api/src/application/rag-reindex/trunk-merged-reindexer.ts)</sub>
 - <a id="env-RATE_LIMIT_ENABLED"></a>`RATE_LIMIT_ENABLED` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_IP"></a>`RATE_LIMIT_IP` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_USER"></a>`RATE_LIMIT_USER` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
@@ -961,9 +961,9 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 - <a id="env-SMTP_PORT"></a>`SMTP_PORT` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_SECURE"></a>`SMTP_SECURE` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_USER"></a>`SMTP_USER` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
-- <a id="env-TOOL_ROUTER_API_KEY"></a>`TOOL_ROUTER_API_KEY` — ⚠️ **нет описания выше** <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
-- <a id="env-TOOL_ROUTER_LAYA_MODELO"></a>`TOOL_ROUTER_LAYA_MODELO` — ⚠️ **нет описания выше** <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
-- <a id="env-TOOL_ROUTER_URL"></a>`TOOL_ROUTER_URL` — ⚠️ **нет описания выше** <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
+- <a id="env-TOOL_ROUTER_API_KEY"></a>`TOOL_ROUTER_API_KEY` <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
+- <a id="env-TOOL_ROUTER_LAYA_MODELO"></a>`TOOL_ROUTER_LAYA_MODELO` <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
+- <a id="env-TOOL_ROUTER_URL"></a>`TOOL_ROUTER_URL` <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
 - <a id="env-WEB_ORIGIN"></a>`WEB_ORIGIN` <sub>(apps/api/src/infrastructure/mail/smtp-mail-sender.ts)</sub>
 
 ### engine {#env-servico-engine}
