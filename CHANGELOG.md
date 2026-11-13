@@ -4,6 +4,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **fix (instalador)**: o `install.sh` da v2.3.0 morria em silêncio logo depois de verificar o `broker` quando a Release não traz o alvo opcional `laya` (toda Release até aqui): o `grep` do repositório/digest saía 1 e o `set -euo pipefail` derrubava o script. As duas linhas ganham `|| true`, e `scripts/dev/install-laya-opcional.spec.ts` roda a função com e sem o Laya no manifesto.
 - **docs**: a `security-surface` da api foi dividida em duas fontes (brabo-api#123); o `irmaos.lock` sobe o `brabo-api` para `784c2f1`, a `security-surface-parte-2` entra na navegação e no docmap, e a página `ru/security-surface` deixa de passar do teto de 150 KB do orçamento. A api não tem `docs/i18n`, então não há tradução a dividir.
 
 - CI: repina o brabo-ci na release final `v1.5.0` (`22a5cd0`), para a promoção `dev → main` de 13/11/2026 (a `main` só aceita release final).
