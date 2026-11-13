@@ -455,6 +455,10 @@ comparar com `process.cwd()` (`/workspace` dentro do próprio container). Veja o
 | `CONTEXT_COMPACTION_THRESHOLD` | `0.7` | fração da janela que dispara a compactação |
 | `LLM_TURN_TIMEOUT_MS` | `300000` | 5 min por turno |
 | `TOOL_ROUTER_TIMEOUT_MS` | `2000` | teto, em ms, de UMA chamada ao roteador de ferramentas Jev ([ADR 0179](../adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.md), [RN-625](../business-rules/engine.md#rn-625)). Lida pela **api**, não pelo engine. Passado o teto, o passo cai no catálogo inteiro de ferramentas com `motivoDaQueda: timeout`; o turno nunca falha por causa do Jev. 0 de 328 requisições medidas passou de 2 000 ms. A chave liga/desliga é por workspace (`PUT workspaces/:id/tool-router`), não variável de ambiente |
+| `TOOL_ROUTER_URL` | — | base HTTP do serviço Laya, o roteador de ferramentas local ([ADR 0290](../adr/0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.md)). Sem ela, o Laya aparece como `nao_configurado` e o workspace segue no Jev. Lida pela **api** (`laya-config.ts`) |
+| `TOOL_ROUTER_API_KEY` 🔒 | — | chave opcional que a api manda ao serviço Laya. Nunca é impressa |
+| `TOOL_ROUTER_LAYA_MODELO` | `multilingual` | modelo que o serviço Laya carrega |
+| `RAG_REINDEX_POLL_INTERVAL_MS` | `5000` | intervalo, em ms, com que a api procura merges novos na trunk para reindexar o RAG (`trunk-merged-reindexer.ts`) |
 | `TERMINAL_ACTION_TIMEOUT_MS` | `120000` | teto de um comando de terminal (2 min desde a [RN-757](../business-rules/engine.md#rn-757): um `npm install` simples não cabia nos 15 s antigos). O engine espera esse valor + 90 s no `container-exec` e + 120 s no `propose_action` de uma ação `terminal`; acima de ~180 s a espera de fora passa do limite de 300 s de cabeçalhos do `fetch` do Node que a api usa para chamar `/internal/actions/execute` |
 | `TERMINAL_OUTPUT_MAX_BYTES` | `32768` | teto em BYTES da saída de um comando ([RN-074](../business-rules/engine.md#rn-074)). A saída fica no histórico do laço e viaja em todo turno seguinte; sem teto, um `find` numa árvore grande derruba a execução inteira com um `413` do provider |
 | `READ_FILE_MAX_BYTES` | `32768` | teto em BYTES do conteúdo lido por `read_file` ([RN-141](../business-rules/engine.md#rn-141)) — a mesma classe de estouro da RN-074, pela porta do `read_file` em vez do terminal; variável independente, mesmo valor por coincidência de contexto |
@@ -694,6 +698,13 @@ docker compose -f docker/docker-compose.prod.yml \
 | `API_URL` | `http://api:3000` | De onde o broker LÊ a decisão do Arquiteto. Ele não recebe uma especificação de container; ele vem buscá-la ([RN-485](../business-rules/produto.md#rn-485)) |
 | `PROJECT_WORKSPACES_HOST_ROOT` | — | A raiz das pastas de projeto **no HOST**, não dentro de container nenhum. Sem ela, `start` recusa nomeando esta variável e as outras quatro operações continuam funcionando. Não a confunda com `PROJECT_WORKSPACES_ROOT`, que é o caminho dentro dos containers: o `-v` é resolvido pelo DAEMON contra o sistema de arquivos do host, e um caminho de dentro da api o faria criar e montar uma pasta VAZIA |
 | `DOCKER_GID` | `999` (compose) | O gid do grupo `docker` do host (`getent group docker \| cut -d: -f3`). O socket é `root:docker` e o broker roda sem root, então o compose usa `group_add`. O default é o mais comum e está errado em várias distribuições. Desde o [ADR 0146](../adr/0146-base-consentida-no-bootstrap.md) isso importa em TODA máquina de desenvolvimento, não só onde alguém ligou o profile — errar não quebra o boot, quebra o uso: toda operação morre com "permission denied" no socket, e isso só aparece quando alguém propõe `container_start`. O `pnpm dev` informa o estado desta variável a cada execução ([RN-512](../business-rules/infra.md#rn-512)), e diz "não se aplica" numa máquina sem grupo `docker` em vez de acusá-la |
+| `BROKER_TRABALHO_DIR` | `/trabalho` | Onde a prova de compose (ADR 0297) grava o override e os arquivos temporários. Nos composes é um tmpfs de 64 MB |
+| `PROJECT_WORKSPACES_BROKER_ROOT` | — (compose: `/data/project-workspaces`) | Onde o broker enxerga, SOMENTE LEITURA, a pasta gerenciada dos projetos, para achar o clone limpo da prova. Sem ela, a prova responde 503 (origem `infra`) e o parecer aprova com o aviso "sem prova de compose" |
+| `BRABO_PROJECTS_BROKER_BASE` | — (compose: o valor de `BRABO_PROJECTS_BASE`) | O mesmo, para a base dos projetos montados (por identidade, `$X:$X`) |
+| `BRABO_PROVA_SONDA_IMAGE` | — (compose: a imagem do próprio broker) | Imagem com `wget` que sonda `/docs` e `/openapi.json` do entregável. Sem ela, a prova responde 503 (origem `infra`) |
+| `DOCKER_HOST` | — | Repassada ao `docker compose` da prova quando definida; sem ela vale o socket padrão |
+| `DOCKER_CONFIG` | `/tmp/.docker` | Pasta de configuração do Docker CLI na prova; o ambiente do `docker` é limpo (sem o token de serviço) |
+| `PATH` | `/usr/bin:/bin` | Repassado ao `docker` da prova, que roda com ambiente limpo |
 
 `PROJECT_WORKSPACES_HOST_ROOT` não pode ser derivada de um volume Docker
 gerenciado. No compose de **dev** ela deriva de `PROJECT_WORKSPACES_HOST_DIR`
@@ -896,15 +907,15 @@ ninguém perceba.
 
 > ⚠️ Bloco gerado por `pnpm docs:generate`. Não edite à mão — o próximo build o sobrescreve.
 
-Inventário extraído do código: **194 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
+Inventário extraído do código: **205 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
 
 Cada fonte é marcada **produto** — o que quem opera a instalação configura no `.env` do deploy — ou **ferramenta**, lida só pelo CI e por quem desenvolve o produto. Variável de ferramenta nunca pertence ao `.env` de um operador.
 
-[api](#env-servico-api) (68) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (7) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
+[api](#env-servico-api) (72) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (14) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
 
 ### api {#env-servico-api}
 
-68 variáveis · produto
+72 variáveis · produto
 
 - <a id="env-API_JSON_BODY_LIMIT"></a>`API_JSON_BODY_LIMIT` <sub>(apps/api/src/main.ts)</sub>
 - <a id="env-API_PUBLIC_URL"></a>`API_PUBLIC_URL` <sub>(apps/api/src/application/use-cases/auth/start-social-login.use-case.ts)</sub>
@@ -963,6 +974,7 @@ Cada fonte é marcada **produto** — o que quem opera a instalação configura 
 - <a id="env-OTEL_SERVICE_NAME"></a>`OTEL_SERVICE_NAME` <sub>(apps/api/src/tracing.ts)</sub>
 - <a id="env-PORT"></a>`PORT` <sub>(apps/api/src/main.ts)</sub>
 - <a id="env-PROJECT_WORKSPACES_ROOT"></a>`PROJECT_WORKSPACES_ROOT` <sub>(apps/api/src/infrastructure/filesystem/project-workspaces-root.ts)</sub>
+- <a id="env-RAG_REINDEX_POLL_INTERVAL_MS"></a>`RAG_REINDEX_POLL_INTERVAL_MS` <sub>(apps/api/src/application/rag-reindex/trunk-merged-reindexer.ts)</sub>
 - <a id="env-RATE_LIMIT_ENABLED"></a>`RATE_LIMIT_ENABLED` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_IP"></a>`RATE_LIMIT_IP` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_USER"></a>`RATE_LIMIT_USER` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
@@ -973,6 +985,9 @@ Cada fonte é marcada **produto** — o que quem opera a instalação configura 
 - <a id="env-SMTP_PORT"></a>`SMTP_PORT` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_SECURE"></a>`SMTP_SECURE` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_USER"></a>`SMTP_USER` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
+- <a id="env-TOOL_ROUTER_API_KEY"></a>`TOOL_ROUTER_API_KEY` <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
+- <a id="env-TOOL_ROUTER_LAYA_MODELO"></a>`TOOL_ROUTER_LAYA_MODELO` <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
+- <a id="env-TOOL_ROUTER_URL"></a>`TOOL_ROUTER_URL` <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
 - <a id="env-WEB_ORIGIN"></a>`WEB_ORIGIN` <sub>(apps/api/src/infrastructure/mail/smtp-mail-sender.ts)</sub>
 
 ### engine {#env-servico-engine}
@@ -1056,14 +1071,21 @@ Cada fonte é marcada **produto** — o que quem opera a instalação configura 
 
 ### broker {#env-servico-broker}
 
-7 variáveis · produto
+14 variáveis · produto
 
 - `API_URL` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BRABO_PROJECTS_BROKER_BASE"></a>`BRABO_PROJECTS_BROKER_BASE` <sub>(apps/broker/src/config.ts)</sub>
 - <a id="env-BRABO_PROJECTS_HOST_BASE"></a>`BRABO_PROJECTS_HOST_BASE` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BRABO_PROVA_SONDA_IMAGE"></a>`BRABO_PROVA_SONDA_IMAGE` <sub>(apps/broker/src/config.ts)</sub>
 - `BRABO_SERVICE_TOKEN` <sub>(apps/broker/src/config.ts)</sub>
 - `BRABO_SERVICE_TOKEN_PREVIOUS` <sub>(apps/broker/src/config.ts)</sub>
 - <a id="env-BROKER_PORT"></a>`BROKER_PORT` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-BROKER_TRABALHO_DIR"></a>`BROKER_TRABALHO_DIR` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-DOCKER_CONFIG"></a>`DOCKER_CONFIG` <sub>(apps/broker/src/prova-de-compose.ts)</sub>
+- <a id="env-DOCKER_HOST"></a>`DOCKER_HOST` <sub>(apps/broker/src/prova-de-compose.ts)</sub>
 - `NODE_ENV` <sub>(apps/broker/src/config.ts)</sub>
+- <a id="env-PATH"></a>`PATH` <sub>(apps/broker/src/prova-de-compose.ts)</sub>
+- <a id="env-PROJECT_WORKSPACES_BROKER_ROOT"></a>`PROJECT_WORKSPACES_BROKER_ROOT` <sub>(apps/broker/src/config.ts)</sub>
 - <a id="env-PROJECT_WORKSPACES_HOST_ROOT"></a>`PROJECT_WORKSPACES_HOST_ROOT` <sub>(apps/broker/src/config.ts)</sub>
 
 ### api/scripts {#env-servico-api-scripts}
