@@ -577,15 +577,15 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从代码中提取的清单：运行时读取 **194 个变量**。全部都在上方表格中有描述。
+从代码中提取的清单：运行时读取 **198 个变量**。其中 **4** 个在上方表格中仍无描述。
 
 每个来源都标记为 **产品**——运维安装的人在部署 `.env` 中设置的内容——或 **工具**，仅由 CI 和开发产品的人读取。工具变量绝不应出现在运维人员的 `.env` 中。
 
-[api](#env-servico-api) (68) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (7) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
+[api](#env-servico-api) (72) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (7) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
 
 ### api {#env-servico-api}
 
-68 个变量 · 产品
+72 个变量 · 产品
 
 - <a id="env-API_JSON_BODY_LIMIT"></a>`API_JSON_BODY_LIMIT` <sub>(apps/api/src/main.ts)</sub>
 - <a id="env-API_PUBLIC_URL"></a>`API_PUBLIC_URL` <sub>(apps/api/src/application/use-cases/auth/start-social-login.use-case.ts)</sub>
@@ -644,6 +644,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 - <a id="env-OTEL_SERVICE_NAME"></a>`OTEL_SERVICE_NAME` <sub>(apps/api/src/tracing.ts)</sub>
 - <a id="env-PORT"></a>`PORT` <sub>(apps/api/src/main.ts)</sub>
 - <a id="env-PROJECT_WORKSPACES_ROOT"></a>`PROJECT_WORKSPACES_ROOT` <sub>(apps/api/src/infrastructure/filesystem/project-workspaces-root.ts)</sub>
+- <a id="env-RAG_REINDEX_POLL_INTERVAL_MS"></a>`RAG_REINDEX_POLL_INTERVAL_MS` — ⚠️ **上文无描述** <sub>(apps/api/src/application/rag-reindex/trunk-merged-reindexer.ts)</sub>
 - <a id="env-RATE_LIMIT_ENABLED"></a>`RATE_LIMIT_ENABLED` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_IP"></a>`RATE_LIMIT_IP` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_USER"></a>`RATE_LIMIT_USER` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
@@ -654,6 +655,9 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 - <a id="env-SMTP_PORT"></a>`SMTP_PORT` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_SECURE"></a>`SMTP_SECURE` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_USER"></a>`SMTP_USER` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
+- <a id="env-TOOL_ROUTER_API_KEY"></a>`TOOL_ROUTER_API_KEY` — ⚠️ **上文无描述** <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
+- <a id="env-TOOL_ROUTER_LAYA_MODELO"></a>`TOOL_ROUTER_LAYA_MODELO` — ⚠️ **上文无描述** <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
+- <a id="env-TOOL_ROUTER_URL"></a>`TOOL_ROUTER_URL` — ⚠️ **上文无描述** <sub>(apps/api/src/infrastructure/llm/laya-config.ts)</sub>
 - <a id="env-WEB_ORIGIN"></a>`WEB_ORIGIN` <sub>(apps/api/src/infrastructure/mail/smtp-mail-sender.ts)</sub>
 
 ### engine {#env-servico-engine}
