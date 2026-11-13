@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- CI: repina o brabo-ci na release final `v1.5.0` (`22a5cd0`), para a promoção `dev → main` de 13/11/2026 (a `main` só aceita release final).
+
 - **docs(adr)**: AT-626, ADR 0290 (proposto; lado do `brabo`). O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU NVIDIA que o roda: enum `tool_router` no workspace, 409 `roteador_local_indisponivel`, todo provider roteado com `laya`, queda para o catálogo inteiro (nunca o Jev), 6ª imagem opcional e requisitos mínimos (RAM de 6 GiB). Runbook em `docs/how-to/escolher-o-laya.md`.
 
 - **docs(adr)**: AT-928, ADR 0295 (aceito; lado do `brabo`). A Caixa de decisões lê as cinco filas (aprovações, PRs, promoções, arquitetura, hipóteses) de todos os projetos numa rota de workspace, `GET /workspaces/:id/decision-inbox`, só de leitura, com pendentes e decididas (janela de 24 h), filas nunca somadas, papel efetivo em lote (RN-471), teto de 50 itens por fila com total real, orçamento de queries constante em N e sem migração. A implementação vem na lane da api.
