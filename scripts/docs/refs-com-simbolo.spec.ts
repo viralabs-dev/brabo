@@ -128,6 +128,15 @@ describe('resolverCaminho e aferir', () => {
     expect(resolverCaminho('dup.ts', raiz, versionados)).toBeNull();
   });
 
+  it('ref relativa com vários candidatos prefere a raiz de repo do doc; ambiguidade dentro dela reprova', () => {
+    const v = ['apps/broker/src/p.ts', 'packages/docker-port/src/p.ts', 'apps/broker/src/x/q.ts', 'apps/broker/q.ts'];
+    expect(resolverCaminho('src/p.ts', raiz, v)).toBeNull();
+    expect(resolverCaminho('src/p.ts', raiz, v, undefined, 'apps/broker/docs/business-rules/broker.md')).toBe('apps/broker/src/p.ts');
+    expect(resolverCaminho('src/p.ts', raiz, v, undefined, 'contracts/docs/rn.md')).toBe('packages/docker-port/src/p.ts');
+    const dup = ['apps/broker/a/p.ts', 'apps/broker/b/p.ts', 'packages/p.ts'];
+    expect(resolverCaminho('p.ts', raiz, dup, undefined, 'apps/broker/docs/rn.md')).toBeNull();
+  });
+
   it('conta, confere e separa o que não resolve', () => {
     writeFileSync(
       join(raiz, 'docs/rn.md'),
