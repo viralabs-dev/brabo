@@ -1,0 +1,2131 @@
+<!doctype html>
+<html lang="en" data-locale="en" data-degrau="prd" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Superfície exposta da api (parte 2) | Brabo</title>
+<script src="../assets/tema.js"></script>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/fonts.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-nav">
+<button type="button" data-menu-alternar aria-label="Menu">&#9776;</button>
+<a class="marca" href="index.html"><span class="marca-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.4 3.6v16.8" stroke-width="3.4"/><path d="M10.4 4.6l5.6 3.8-5.6 3.8" stroke-width="2.8"/><path d="M10.4 12l5.6 3.8-5.6 3.8" stroke-width="2.8" opacity=".58"/></svg></span>Brabo</a>
+<a class="site-github" href="https://github.com/viralabs-dev/brabo">GitHub</a>
+<input type="search" data-busca placeholder="Search" aria-label="Search" autocomplete="off">
+<ul data-busca-lista hidden></ul>
+<select data-seletor aria-label="Language"><option value="../security-surface-parte-2.html">pt-BR</option><option value="../en/security-surface-parte-2.html" selected>en</option><option value="../ru/security-surface-parte-2.html">ru</option><option value="../zh-Hans/security-surface-parte-2.html">zh-Hans</option></select>
+<select data-seletor aria-label="Environment"><option value="../../dev/en/security-surface-parte-2.html">dev</option><option value="../../prd/en/security-surface-parte-2.html" selected>prd</option></select>
+<button type="button" data-tema-alternar aria-label="Toggle theme">&#9680;</button>
+</header>
+<div class="site-corpo">
+<nav class="site-side" aria-label="docs"><section><details open><summary><h2>🚀 Start here</h2></summary><ul><li><a href="index.html">Home</a></li><li><a href="getting-started.html">Getting Started</a></li></ul></details></section><section><details open><summary><h2>🎓 Tutorials</h2></summary><ul><li><a href="tutorials/from-zero-to-deliverable.html">From zero to a deliverable</a></li><li><a href="tutorials/orquestrar-repositorios.html">Orchestrate repositories</a></li><li><a href="tutorials/como-o-brabo-e-construido.html">How Brabo is built</a></li></ul></details></section><section><details open><summary><h2>🧭 How-to guides</h2></summary><ul><li><a href="how-to/desenvolver-o-brabo.html">Developing Brabo</a></li><li><a href="how-to/usar-o-runner.html">Manual do brabo-runner</a></li><li><a href="how-to/token-do-github-packages.html">GitHub Packages token</a></li><li><a href="how-to/escolher-o-laya.html">Escolher o Laya</a></li><li><a href="runbook.html">Operations manual</a></li><li><a href="tutorials/adotar.html">Adotar a política</a></li><li><a href="explanation/usar-em-outra-org.html">Usar em outra org (AT-831)</a></li><li><a href="rodadas-manuais.html">Rodadas manuais e agendadas</a></li><li><details open><summary><span>Contributing</span></summary><ul><li><a href="contribuir/como-escrevemos.html">How we write</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/CONTRIBUTING.md">Contributing</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SUPPORT.md">Getting help</a></li><li><a href="https://github.com/viralabs-dev/brabo/blob/dev/SECURITY.md">Report a vulnerability</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>💡 Concepts</h2></summary><ul><li><a href="intro.html">O que é o Brabo</a></li><li><a href="architecture.html">Architecture</a></li><li><a href="explanation/gates.html">The gates, and how they're measured</a></li><li><a href="explanation/modelo-de-time.html">Team model and deliverable flow</a></li><li><a href="explanation/regressivo-por-funcionalidade.html">Regressivo por funcionalidade</a></li><li><a href="e2e-portao/como-funciona.html">O E2E do brabo-qa como portão da main</a></li><li><a href="regressivo/como-funciona.html">Regressivo por funcionalidade</a></li><li><a href="capturas/como-funciona.html">Capturas da doc</a></li><li><a href="explanation/observability.html">Observabilidade</a></li><li><details open><summary><span>Process and pipeline</span></summary><ul><li><a href="explanation/painel-da-mudanca.html">Painel da mudança</a></li><li><a href="explanation/politica-em-10-minutos.html">Política em 10 minutos</a></li><li><a href="explanation/branching-policy.html">Branching policy</a></li><li><a href="explanation/ordem-da-promocao.html">Ordem da promoção</a></li><li><a href="explanation/reutilizaveis-sem-chamador.html">Reutilizáveis sem chamador (AT-819)</a></li><li><a href="explanation/cadeia-de-suprimentos-do-ci.html">CI supply chain</a></li><li><a href="explanation/release-do-produto.html">Product release</a></li><li><a href="explanation/licoes-do-ci.html">Lições do CI</a></li></ul></details></li><li><details><summary><span>Localization</span></summary><ul><li><a href="explanation/localizacao.html">Localization</a></li><li><a href="explanation/localizacao-en.html">Localization — English (en)</a></li><li><a href="explanation/localizacao-ru.html">Localization — Russian (ru)</a></li><li><a href="explanation/localizacao-zh-hans.html">Localization — Simplified Chinese (zh-Hans)</a></li></ul></details></li><li><details><summary><span>Technical notes</span></summary><ul><li><a href="explanation/tanstack-ai.html">TanStack AI — não adotado</a></li></ul></details></li></ul></details></section><section><details open><summary><h2>📖 Reference</h2></summary><ul><li><a href="glossary.html">Glossary</a></li><li><a href="reference/componentes-da-doc.html">Doc components</a></li><li><a href="explanation/documentation-workflow.html">Docs sync</a></li><li><a href="reference/configuration.html">Configuração</a></li><li><a href="reference/events.html">Eventos</a></li><li><a href="reference/permissions.html">Permissões</a></li><li><a href="reference/artifacts.html">Artefatos</a></li><li><a href="reference/git-providers.html">Provedores de git</a></li><li><a href="reference/llm-providers.html">Provedores de LLM</a></li><li><a href="reference/internal-api.html">API interna</a></li><li><a href="reference/internal-open-questions-api.html">Perguntas em aberto da API interna</a></li><li><a href="reference/scripts.html">Scripts e comandos</a></li><li><a href="reference/rulesets.html">Rulesets do repositório</a></li><li><a href="reference/codigos-de-violacao.html">Códigos de violação</a></li><li><a href="reference/glossario-da-politica.html">Glossário da política</a></li><li><details><summary><span>Workflows do brabo-ci</span></summary><ul><li><a href="reference/workflows/approval-ladder.html">approval-ladder</a></li><li><a href="reference/workflows/archive-merged-branch.html">archive-merged-branch</a></li><li><a href="reference/workflows/arestas-alinhadas.html">arestas-alinhadas</a></li><li><a href="reference/workflows/backmerge-gate.html">backmerge-gate</a></li><li><a href="reference/workflows/cadeia.html">cadeia</a></li><li><a href="reference/workflows/contracts-alinhado.html">contracts-alinhado</a></li><li><a href="reference/workflows/dependabot-para-dev.html">dependabot-para-dev</a></li><li><a href="reference/workflows/dependencias-de-merge.html">dependencias-de-merge</a></li><li><a href="reference/workflows/mapa-alinhado.html">mapa-alinhado</a></li><li><a href="reference/workflows/pr-police.html">pr-police</a></li><li><a href="reference/workflows/preparar.html">preparar</a></li><li><a href="reference/workflows/promote.html">promote</a></li><li><a href="reference/workflows/promotion-check.html">promotion-check</a></li><li><a href="reference/workflows/publish-npm.html">publish-npm</a></li><li><a href="reference/workflows/qa-e2e-gatilho.html">qa-e2e-gatilho</a></li><li><a href="reference/workflows/readme-esqueleto.html">readme-esqueleto</a></li><li><a href="reference/workflows/refs-com-simbolo.html">refs-com-simbolo</a></li><li><a href="reference/workflows/tag-release.html">tag-release</a></li><li><a href="reference/workflows/vinculos.html">vinculos</a></li></ul></details></li><li><a href="reference/paridade-de-traducao.html">Paridade de tradução</a></li><li><a href="reference/brb.html">Registro BRB</a></li><li><a href="security-surface.html">Superfície exposta da api</a></li><li><a href="security-surface-parte-2.html" aria-current="page">Superfície exposta da api (parte 2)</a></li><li><a href="dependencias-e-imagens.html">Dependências e imagens do broker</a></li><li><a href="reference/contratos-e-imagem.html">Contratos e imagem da api</a></li><li><a href="business-rules.html">Business rules</a></li><li><span>API reference</span></li></ul></details></section><section><h2><a href="adr.html">🏛️ Decisions (ADR)</a></h2></section><section><details><summary><h2>🗂️ Project history</h2></summary><ul><li><a href="historico/linha-do-tempo.html">Timeline</a></li><li><a href="tutorials/interface-antes-e-depois-shadcn.html">Interface before and after shadcn (10/31/2026)</a></li><li><a href="explanation/historico-de-fases.html">Phase history</a></li><li><a href="explanation/historico-de-fases-parte-1.html">Phases 1 to 15, part 1</a></li><li><a href="explanation/historico-de-fases-parte-2.html">Program 16–26 and rounds, part 2</a></li><li><a href="explanation/historico-de-fases-parte-3.html">Program 28 and audits, part 3</a></li><li><a href="explanation/historico-de-fases-parte-4.html">From the local runner onward, part 4</a></li><li><a href="explanation/fase-28-pasta-do-usuario.html">FASE 28 — user's folder</a></li><li><a href="explanation/fase-29-instalacao-de-uma-linha.html">FASE 29 — one-line installation</a></li><li><a href="explanation/fase-30-runner-por-maquina.html">FASE 30 — machine's local agent</a></li><li><a href="explanation/backlog.html">Triaged backlog</a></li><li><details><summary><span>Validations and measurements</span></summary><ul><li><a href="explanation/primeiro-dogfooding.html">First dogfooding</a></li><li><a href="explanation/execucao-real-hello-world.html">Real execution (hello world)</a></li><li><a href="explanation/achados-execucao-real.html">Findings from the real execution of the pipeline</a></li><li><a href="explanation/validacao-fase-12.html">Phase 12 validation</a></li><li><a href="explanation/validacao-real.html">Real validation (13b)</a></li><li><a href="explanation/aceite-providers.html">Aceite dos providers</a></li><li><a href="explanation/medicao-do-idioma.html">Measuring the language heuristic</a></li><li><a href="explanation/medicao-do-jev.html">Measuring the Jev tool router</a></li><li><a href="explanation/auditoria-fluxo-vs-codigo.html">Audit: fluxo.yml × code (v3, ADR 0085)</a></li><li><a href="explanation/auditoria-visual-rodada-29.html">Visual audit, before and after Rodada 29</a></li></ul></details></li></ul></details></section></nav>
+<main>
+<div class="site-faixa" role="note">This page is not translated yet; showing the original in Portuguese.</div>
+<article class="doc">
+<h1 id="superfície-exposta-da-api-parte-2">Superfície exposta da api (parte 2)</h1>
+<p>Continuação de <a href="security-surface.html"><code>security-surface.md</code></a>: o restante das notas e a <strong>tabela de rotas</strong>. As classificações e as rotas públicas estão na parte 1. <code>test/interfaces/route-surface.spec.ts</code> lê as duas partes como uma fonte só.</p>
+<h2 id="notes-2">Notas (continuação)</h2>
+<ul>
+<li>
+<p><strong>Revogar uma chave de dispositivo agora alcança a conexão VIVA, e o alvo
+é <code>{project, user}</code> — nunca <code>{key}</code></strong>
+(<a href="business-rules/api.html#rn-520">RN-520</a>, <a href="adr/0147-agente-local-com-capacidades.html">ADR 0147</a>
+ponto 6). O <code>DELETE</code> só barrava o PRÓXIMO ticket: um <code>brabo-runner</code> já
+conectado mantinha vivo o canal <code>terminal:&lt;projectId&gt;</code>, rodando comandos
+aprovados com a chave revogada, até cair sozinho. A api agora pede ao
+engine (<code>POST /internal/projects/:projectId/runner/disconnect</code>) que o
+derrube, e o engine alcança o pid do canal — a api nunca fala com o canal, e
+o engine nunca lê a tabela de chaves.
+A precisão que NÃO existe é por credencial, e isso é propriedade do caminho
+do ticket, não preferência: <code>runner_socket_tickets</code> guarda
+<code>project_id</code>/<code>user_id</code>/<code>kind</code> e nada mais, então qual PAT ou qual <code>kid</code> abriu
+aquele socket morre no <code>PatAuthGuard</code> e nunca chega ao engine. <strong>Custo
+declarado:</strong> um runner do MESMO usuário conectado com um PAT, ou com outra
+chave do mesmo projeto, também cai — e reconecta sozinho, porque a rodada
+seguinte pede ticket novo e uma credencial que continua válida o obtém. Um
+runner de outro usuário no mesmo projeto fica de pé. Derrubar a conexão é
+EFEITO COLATERAL: engine fora do ar, nenhum runner conectado ou um timeout
+nunca podem fazer o <code>DELETE</code> (204, idempotente) falhar ou virar 5xx — a
+mesma régua de <code>rag_searches</code> (<a href="business-rules/api.html#rn-479">RN-479</a>) e
+<code>mirror_sync_result</code> (<a href="business-rules/api.html#rn-517">RN-517</a>).
+<strong>Revisado pela <a href="business-rules/api.html#rn-685">RN-685</a>
+(<a href="adr/0201-revogacao-por-chave.html">ADR 0201</a>): o alvo agora é a CHAVE.</strong>
+O ticket registra qual credencial o pediu (o <code>kid</code>, ou o id do PAT), e a
+revogação pede ao engine
+(<code>POST /internal/runner/disconnect-credential</code>) que anule os tickets
+pendentes da credencial e derrube só os runners nascidos dela — o custo
+declarado acima sumiu: um runner do mesmo usuário com PAT ou outra chave
+fica de pé. A revogação de PAT (própria, ou como <code>maintainer</code>) agora derruba
+as conexões dele também. Uma conexão aberta com ticket anterior ao deploy
+(sem credencial) continua caindo pelo par, e um engine que não conhece a
+rota faz a api voltar a <code>runner/disconnect</code>; a rota do par também fica como
+alvo da remoção de membro.
+A visão de <code>maintainer</code> que o PAT tem (RN-427, listar/revogar de QUALQUER
+usuário) fica DE FORA para chaves de dispositivo — agora por decisão, não
+omissão: aquele par nasceu de resposta a incidente com um segredo
+COMPARTILHADO circulando, e a metade privada de uma chave de dispositivo
+nunca sai da máquina que a fez. Essa frase dizia &quot;o navegador que a fez&quot;, e
+a <a href="business-rules/runner.html#rn-551">RN-551</a> alargou o fabricante sem enfraquecer a
+afirmação: o terminal é agora um segundo gerador, e a metade privada continua
+nunca viajando — o que sai é a JWK pública. O que MUDOU é onde ela repousa:
+uma chave feita no navegador pousa numa pasta de projeto que o usuário
+escolheu, uma feita pelo CLI pousa em <code>$XDG_CONFIG_HOME/brabo/</code> com modo 600.
+Nenhuma das duas é alcançável pela api, e é disso que a decisão acima
+depende.</p>
+</li>
+<li>
+<p><strong>As rotas <code>engine-service</code> não são &quot;internas&quot; por convenção de nome.</strong>
+O que as protege é o <code>EngineServiceGuard</code> comparando
+<code>X-Brabo-Service-Token</code> com o segredo compartilhado em tempo constante, mais
+a NetworkPolicy. O prefixo <code>/internal</code> é sinalização para humanos. Elas
+ficam <strong>fora do JWT</strong> via <code>@ServiceRoute()</code>: o token de usuário não funciona
+aqui e o service token não funciona em nenhuma outra rota — os dois
+mecanismos nunca se sobrepõem (<a href="business-rules/api.html#rn-035">RN-035</a>).</p>
+</li>
+<li>
+<p><strong><code>POST /internal/first-account</code> é um segundo caminho que cria USUÁRIO, e
+funciona em produção</strong> (<a href="business-rules/produto.html#rn-546">RN-546</a>,
+<a href="adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155</a>). Declarado aqui
+em vez de deixado para ser descoberto. O registro normal é o primeiro
+caminho e não foi tocado; este existe porque uma instalação nova de uma
+linha não deixa ninguém entrar — o <code>.env</code> gerado não tem variável de e-mail,
+<code>MAIL_TRANSPORT</code> cai em <code>log</code>, e o registro espera um e-mail que ninguém
+envia.</p>
+<p>Ele é estreito por construção, por três motivos independentes. <strong>É
+<code>engine-service</code></strong>, então o que o abre é o <code>BRABO_SERVICE_TOKEN</code> — que o
+próprio <code>install.sh</code> gerou e gravou com modo <code>600</code>, tornando-o prova de
+controle sobre a MÁQUINA, não sobre uma caixa de e-mail. <strong>Recusa com <code>409</code>
+quando a instalação tem QUALQUER usuário</strong>, condição sobre a instalação e não
+sobre o e-mail pedido, então não pode ser chamado repetidamente com endereços
+diferentes, e fica calado para sempre assim que alguém existe (inclusive
+depois de uma restauração de migração, <a href="business-rules/infra.html#rn-530">RN-530</a>).
+<strong>E nenhuma rota pública nasceu</strong>: um &quot;criar o primeiro owner&quot; público é uma
+corrida entre quem instalou e quem varreu a porta, e <code>owner</code> do primeiro
+workspace não é papel que alguém recupere por HTTP.</p>
+<p>A conta nasce com o e-mail já verificado, e essa é a única coisa que esta
+rota relaxa — para um caso nomeado, nunca para o outro caminho. O que a
+verificação prova é <em>&quot;esta pessoa controla esta caixa de e-mail&quot;</em>; quem roda
+o instalador já provou a máquina, o <code>.env</code> e o daemon do Docker. A senha é
+digitada no TTY, lida sem eco, passada por hash com argon2id e descartada:
+nunca no <code>.env</code>, nunca no marcador, nunca num log, e nunca gerada por
+código nenhum.</p>
+<p>Uma janela é declarada em vez de fechada: a checagem &quot;existe algum
+usuário?&quot; roda dentro da transação, mas <code>READ COMMITTED</code> não impede que duas
+chamadas concorrentes com e-mails diferentes passem as duas. Fechá-la
+exigiria um advisory lock sobre a ausência de linhas, e não é ali que mora a
+contenção — quem alcança esta rota já detém o service token, ou seja, já
+controla a instalação.</p>
+</li>
+<li>
+<p><strong><code>POST /internal/machine-device-keys</code> CUNHA UMA CREDENCIAL DURÁVEL DE
+USUÁRIO a partir de um segredo de máquina</strong> (<a href="business-rules/api.html#rn-552">RN-552</a>,
+<a href="adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155</a> ponto 4). Esta é
+a borda mais afiada que o service token tem, e é declarada aqui pelo mesmo
+motivo que a irmã acima: o próximo passo do instalador depois de criar a
+primeira conta é parear o agente local, e parear exige uma credencial — a
+única que existia era amarrada a um PROJETO, numa instalação que ainda não
+tem nenhum.</p>
+<p><strong>O que custa, dito com todas as letras:</strong> um <code>BRABO_SERVICE_TOKEN</code> vazado
+agora pode FABRICAR uma chave de dispositivo que age como usuário contra
+rotas com checagem de papel (<code>POST .../runner-ticket</code>, e por ela o canal do
+runner), em vez de só falar com as rotas internas. A credencial alternativa
+— a do próprio usuário recém-criado — foi considerada e recusada porque
+contradiz o próprio <a href="adr/0155-a-primeira-conta-nasce-no-terminal.html">ADR 0155</a>:
+a senha é lida no TTY, <em>usada e descartada</em>, e o ponto 5 afirma que o
+instalador <em>&quot;não faz login por ninguém&quot;</em>, e é por isso que a resposta da
+primeira conta deliberadamente não leva token de sessão. Exigi-la aqui
+forçaria o instalador a criar, na máquina, exatamente a sessão viva que
+aquele ADR recusou criar.</p>
+<p>Três contenções moram na ROTA, não neste parágrafo. <strong>Não há <code>userId</code> no
+corpo</strong>: o dono é o ÚNICO usuário da instalação, resolvido pela api, então o
+token nunca compra a escolha de qual credencial cunhar — com zero usuários ou
+mais de um ela recusa com <code>409</code> e não grava nada, o mesmo formato de condição
+da primeira conta (sobre a instalação, nunca sobre o argumento), e fica calada
+de vez assim que a instalação tem um time. <strong>Registrar SUBSTITUI</strong>: as chaves
+de máquina ativas do dono são revogadas na mesma transação, então uma máquina
+reinstalada é caso legítimo e mil chaves de máquina são impossíveis — teto
+por cláusula, não por um número que envelhece. <strong>Uma JWK privada é recusada
+pelo nome</strong>: <code>d</code> presente responde <code>400</code> dizendo o que chegou, pela mesma
+regra de domínio que o registro do navegador usa, porque guardar uma metade
+privada é o pior desfecho que esta rota tem.</p>
+<p>O que a chave concede não é alargado: ela dá ao agente local exatamente os
+projetos que o dono já alcança como <code>developer</code>, resolvidos contra o projeto
+pedido (<a href="business-rules/produto.html#rn-543">RN-543</a>). Duas lacunas são declaradas em
+vez de escondidas: não há <code>GET</code> nem <code>DELETE</code> aqui (listar publicaria o
+inventário de credenciais de uma pessoa a quem detém só o segredo da máquina;
+revogar já existe onde tem um dono humano), e numa instalação que ainda não
+tem projeto nenhuma tela alcança uma chave de máquina —
+que é exatamente por que registrar substitui em vez de deixar órfãs para trás.</p>
+</li>
+<li>
+<p><strong><code>/docs</code> e <code>/docs-json</code> NÃO estão na tabela, e essa é uma lacuna
+conhecida.</strong> A Swagger UI é montada por <code>SwaggerModule.setup()</code> no nível do
+Express, não como controller, e o teste enumera via <code>DiscoveryService</code> — ele
+estruturalmente não as vê. As duas só existem com
+<code>NODE_ENV !== 'production'</code> (<code>main.ts</code>), são públicas, e servem o mesmo
+documento que a
+<a href="reference/api.html">referência gerada</a> publica. Registrado aqui em vez de
+deixado de fora: o que o teste não alcança precisa estar na prosa.</p>
+</li>
+<li>
+<p><strong><code>GET</code>/<code>POST /auth/dev-login</code> (acesso rápido por papel, AT-722) NÃO estão
+na tabela, de propósito.</strong> O módulo só é registrado com
+<code>BRABO_AMBIENTE=local</code> e a imagem sem marca ou marcada <code>local</code>
+(<code>infrastructure/security/ambiente.ts</code>); o <code>route-surface.spec.ts</code> sobe o
+<code>AppModule</code> sem a variável, então a rota não existe para ele e fora de <code>local</code>
+responde 404. Quando existe é pública como o <code>/auth/login</code> (sem CSRF, sem
+rate limit) e emite a sessão de uma conta <code>&lt;papel&gt;@brabo.dev</code> do
+<code>ROLE_ORDER</code>, nunca de e-mail livre; sem usuário na instalação responde 409.
+Registrado aqui porque o teste não a vê (ADR 0245, RN-984).</p>
+</li>
+<li>
+<p><strong><code>GET /projects/:projectId/agent-areas</code> passou a devolver dados reais, e a
+classificação não mudou</strong> — continua <code>role:developer</code>, enquanto o <code>PATCH</code>
+do teto segue <code>role:maintainer</code>. Até a FASE 18 a tabela <code>agent_areas</code> nunca
+era escrita e a rota respondia <code>[]</code> a todos, o que fazia a classificação
+parecer permissiva por acidente, não por decisão. Com a área nascendo junto
+com o projeto (<a href="business-rules/api.html#rn-094">RN-094</a>), a divisão volta ao
+que a FASE 14d pretendia: <strong>ler</strong> o teto é trabalho de quem executa;
+<strong>mudá-lo</strong> é decidir quanto o produto gasta sem perguntar, e é por isso que
+exige o mesmo papel que ativa a execução.</p>
+</li>
+<li>
+<p><strong>As cinco rotas <code>/projects/:projectId/rag/*</code> dividem o papel pelo mesmo
+critério do teto de paralelismo da área (RN-083)</strong> (PROGRAMA 28, Onda 4 —
+RN-231..234, ADR 0080): <code>search</code> e <code>coverage</code> são <code>role:viewer</code> (leitura pura
+sobre o que já está indexado), e <code>reindex</code> é <code>role:maintainer</code> — dispara N
+chamadas ao repositório do projeto e ao provider de embedding, o mesmo &quot;muda
+o que o produto gasta sem perguntar&quot; que já justifica o papel mais alto em
+outras rotas de disparo caro. <code>local</code> (RN-455, ADR 0113) é
+<code>role:maintainer</code> também, pelo mesmo raciocínio: chama o provider de
+embedding e substitui o que o projeto tem indexado para aquele escopo. O
+corpo é TEXTO lido pelo navegador, nunca um caminho do host.
+<code>feedback</code> (RN-480) é <code>role:viewer</code>, o <strong>mesmo</strong> papel de <code>search</code>, e o
+critério acima é o porquê: votar não gasta nada nem configura nada — é
+observação, e é o único sinal de verdade que a medição do RAG tem
+(<code>medir:rag</code>). Subi-lo para <code>maintainer</code> esvaziaria esse sinal para não
+proteger nada. O voto continua contido no servidor: um <code>searchId</code> de outro
+projeto, ou um <code>chunkId</code> que não estava entre os resultados daquela busca, é
+400 — um voto sem posição não mede nada.</p>
+</li>
+<li>
+<p><strong><code>GET /projects/:projectId/git/open-pull-requests</code> (AT-843) é <code>role:viewer</code>
+e fica FORA do portão da imagem (<a href="business-rules/api.html#rn-105">RN-105</a>).</strong>
+Devolve só os metadados das PRs abertas (sem conteúdo de arquivo), com o
+mesmo papel e a mesma credencial do dono da lista <code>/code/pull-requests</code>; a
+superfície efetiva não cresce. Mora no <code>GitController</code> para o
+<code>CodeController</code> continuar inteiro atrás do portão.</p>
+</li>
+<li>
+<p><strong>As quatro rotas <code>/projects/:projectId/code/*</code> são <code>role:viewer</code> e
+SOMENTE LEITURA</strong> (FASE 26b). Ver o código de um projeto é a mesma permissão
+que ver o projeto — o mesmo corte de <code>GET /projects/:id/git/repository</code>. Três
+coisas fazem dessa aparente permissividade uma decisão e não um descuido:</p>
+<ul>
+<li><strong>não há verbo de escrita no controller</strong>, e não pode haver: a aba Código
+é para ler, e escrever é efeito externo, que nasce <code>proposed_action</code> e
+pertence a uma fase posterior. Um <code>@Post</code> neste arquivo é mudança de fase,
+não de rota;</li>
+<li><strong>o caminho é contido num lugar SÓ</strong> (<a href="business-rules/api.html#rn-095">RN-095</a>),
+pela mesma checagem central da <a href="business-rules/api.html#rn-092">RN-092</a> —
+e a contenção importa aqui mais que o papel, porque nos providers remotos o
+caminho vira segmento de URL da API do provider e um <code>../</code> troca o
+<strong>endpoint</strong>, não o arquivo;</li>
+<li><strong>a credencial gasta é a do owner do workspace</strong>
+(<a href="business-rules/api.html#rn-058">RN-058</a>/<a href="business-rules/api.html#rn-082">RN-082</a>),
+como na escrita. Ler custa o rate limit do provider, e é por isso que a
+busca tem orçamento: sem teto, um <code>viewer</code> poderia inflar a conta do owner
+à vontade.</li>
+</ul>
+</li>
+<li>
+<p><strong>Três rotas de gasto/curadoria nasceram na AT-632
+(<a href="business-rules/api.html#rn-952">RN-952</a>..<a href="business-rules/api.html#rn-954">RN-954</a>,
+<a href="adr/0233-membro-ve-o-gasto-do-projeto-sem-credencial.html">ADR 0233</a>).</strong>
+<code>GET /projects/:projectId/spend/team</code> (<code>role:viewer</code>) devolve o total do
+projeto e o custo por agente/área a QUALQUER membro, e nunca provider nem
+credencial: a rota não tem parâmetro de dimensão e o caso de uso só pede
+<code>actor</code>. <code>GET /workspaces/:workspaceId/spend/me</code> (<code>role:viewer</code>) é o consumo
+PRÓPRIO somado por projeto: o ator vem do token e o escopo de ator impede
+<code>provider</code> por tipo (RN-187). <code>PATCH /workspaces/:workspaceId/models/:modelId/billing</code>
+(<code>role:owner</code>, o nível de <code>…/pricing</code>) grava a marca curada. O
+<code>?projectId=</code> do <code>spend-report</code> segue <code>owner</code> e responde 404 para projeto de
+outro workspace.</p>
+</li>
+<li>
+<p><strong>Fontes da v9 (AT-929..932, <a href="business-rules/api.html#rn-1150">RN-1150</a>..<a href="business-rules/api.html#rn-1154">RN-1154</a>): sem rota nova, papéis intactos.</strong>
+<code>GET /projects/:projectId/spend/team</code> (<code>viewer</code>) ganhou <code>porModelo</code>, <code>porSessao</code> e
+<code>porDiaEAgente</code>; modelo não é credencial e <code>provider</code> segue só do owner.
+<code>GET /projects/:projectId/actions</code> (<code>developer</code>) aceita <code>status=decided</code> e <code>since</code>,
+sempre escopado ao projeto, com teto de 100. O listar sessões (<code>viewer</code>) ganhou
+custo e contagens agregados do próprio projeto.</p>
+</li>
+<li>
+<p><strong><code>GET /workspaces/:workspaceId/spend-report</code> passou a devolver o recorte
+por provider, que é um recorte por CREDENCIAL</strong>
+(<a href="adr/0076-provider-volta-a-ser-dimensao-de-gasto.html">ADR 0076</a>,
+<a href="business-rules/api.html#rn-186">RN-186</a>/<a href="business-rules/api.html#rn-187">RN-187</a>).
+Nenhuma rota nova e nenhuma mudança de papel — continua <code>role:owner</code>, como
+já era —, mas o que ela CONCEDE mudou, e é por isso que esta nota existe. O
+ADR <a href="adr/0063-duas-audiencias-para-o-mesmo-gasto.html">0063</a> tinha recusado
+esse eixo exatamente por este motivo; o 0076 o revisa por decisão do dono do
+produto. O que agora segura a fronteira são DUAS barreiras independentes:
+<code>GET /projects/:projectId/spend/me</code> (<code>role:viewer</code>) não tem parâmetro de
+dimensão nenhum, e o TIPO recusa a combinação — um escopo com <code>actor</code> só
+aceita <code>Exclude&lt;SpendDimension, 'provider'&gt;</code>, então pedir provider na visão
+do membro não compila. A segunda é mais fraca que a garantia anterior (&quot;a
+dimensão não existia&quot;), e é por isso que são duas.</p>
+</li>
+<li>
+<p><strong><code>POST /projects/:projectId/sessions/:sessionId/socket-ticket</code> é
+<code>role:viewer</code> na tabela, mas isso é o PISO, não o teto</strong>
+(RN-108). O <code>@RequireRole('viewer')</code> cobre <code>scope: &quot;heartbeat&quot;</code> —
+o socket de heartbeat/eventos ao vivo que já existe; <code>scope: &quot;terminal&quot;</code>
+exige <code>developer</code>, conferido DENTRO de <code>CreateSocketTicketUseCase</code>
+contra <code>request.effectiveRole</code> (o mesmo que o <code>RolesGuard</code> já
+resolveu), porque o papel mínimo depende do CORPO da requisição, não
+só da rota — o mesmo padrão de
+<code>MIN_ROLE_FOR_ACTION_TYPE.terminal</code> em <code>domain/actions/decide.ts</code>.
+Hoje nenhum caminho real pede <code>scope: &quot;terminal&quot;</code> (o socket do terminal
+interativo é a FASE 25); o valor já nasce certo para
+quando ele existir.</p>
+</li>
+<li>
+<p><strong><code>POST /projects/:projectId/members</code> é <code>role:maintainer</code> na tabela,
+e esse papel é NECESSÁRIO mas não SUFICIENTE</strong>
+(<a href="adr/0127-tetos-de-rebaixamento-em-project-members.html">ADR 0127</a>,
+<a href="business-rules/api.html#rn-472">RN-472</a>). É o espelho da nota do
+<code>socket-ticket</code> acima: lá o papel da tabela é o piso e o
+corpo pode elevá-lo; aqui o papel da tabela é o portão inteiro que o
+<code>RolesGuard</code> aplica, e o caso de uso então recusa <strong>dois movimentos com
+403 mesmo para quem o tem</strong> — rebaixar alguém que é <code>owner</code> do
+WORKSPACE, e rebaixar a SI MESMO. Nenhuma rota nova e nenhuma troca de papel
+(<code>RequireRole('maintainer')</code>, como já era); o que mudou é que a
+classificação deixou de ser a resposta completa para &quot;quem pode fazer o quê
+aqui&quot;. O motivo de isso não poder morar no <code>RolesGuard</code> é o mesmo que a nota
+do <code>socket-ticket</code> dá — a decisão depende do CORPO da requisição
+(<code>dto.role</code>) e do ALVO dela (<code>dto.userId</code>), que o guard não
+vê —, então a regra é uma função pura em
+<code>domain/iam/tetos-de-rebaixamento.ts</code> aplicada por
+<code>AddProjectMemberUseCase</code>, na FORMA dos tetos absolutos de
+<code>domain/actions/decide.ts</code> (<a href="business-rules/api.html#rn-418">RN-418</a>): nenhuma
+chave de configuração, nada que possa ligá-los. O <code>owner</code> protegido
+é <code>workspace_members.role</code>, nunca <code>workspaces.created_by</code>.
+O que os tetos NÃO cobrem está escrito no ADR e na RN.</p>
+</li>
+<li>
+<p><strong><code>DELETE /projects/:projectId/members/:userId</code> também é <code>role:maintainer</code>
+e também não basta</strong> — a segunda porta do teto de auto-rebaixamento
+(<a href="adr/0156-teto-de-auto-rebaixamento-na-remocao.html">ADR 0156</a>,
+<a href="business-rules/api.html#rn-556">RN-556</a>). O ADR 0127 deixou esta rota sem teto por
+uma premissa que se mostrou falsa — <em>&quot;remoção é benigna&quot;</em>. Apagar a linha de
+<code>project_members</code> não apaga um papel: ele <strong>troca</strong> o
+efetivo, porque <code>forProject</code> é <code>projectRole ?? workspaceRole</code>
+(<a href="business-rules/web.html#rn-471">RN-471</a>). Um <code>maintainer</code> por linha de projeto que é
+<code>viewer</code> no workspace se rebaixava, de forma irreversível pela
+tela — repor a linha é <code>POST :projectId/members</code>, que exige o
+<code>maintainer</code> recém-abandonado; <strong>sem</strong> papel nenhum no workspace, a queda é
+para nenhum acesso. O teto agora é aplicado por <code>RemoveProjectMemberUseCase</code>,
+que teve de passar a receber o ATOR (a rota não o passava, então nenhum
+teto poderia ter sido aplicado), e a regra REUSA
+<code>ehAutoRebaixamento</code> — <code>remocaoEhAutoRebaixamento</code> delega a ela com
+o papel de workspace no lugar do pedido, nunca uma segunda régua.
+O teto 1 <strong>não</strong> tem par aqui, por decisão fixada em teste: <code>owner</code> é
+o topo do <code>ROLE_ORDER</code>, então remover uma linha de projeto só pode ELEVAR o
+papel efetivo desse usuário — e é justamente assim que se desfaz a restrição
+que o teto 1 proíbe criar. Preço declarado, já que o teto 2 não tem
+limiar: a auto-remoção de <code>owner</code> de projeto para <code>maintainer</code> de workspace é
+reversível e também é recusada — o único movimento benigno que muda
+desfecho, ainda alcançável por outro <code>maintainer</code>.</p>
+</li>
+<li>
+<p><strong><code>POST /workspaces/:workspaceId/members</code> é <code>role:owner</code> na tabela, e
+isso também deixou de ser a resposta inteira</strong> — a terceira rota desta família
+(<a href="adr/0157-teto-de-auto-movimento-no-upsert-de-workspace.html">ADR 0157</a>,
+<a href="business-rules/produto.html#rn-557">RN-557</a>). O ADR 0127 nomeou esta rota como a mesma
+classe de defeito <em>um escopo acima</em>, e o ADR 0156 a deixou como decisão à parte;
+ela era um passa-adiante de doze linhas que <strong>nunca recebia o ator</strong>, então nenhum
+teto poderia ter sido aplicado. Aqui é pior que no projeto por dois motivos
+que lá não existem: nenhum nível acima segura a queda (no projeto,
+rebaixar a si mesmo derruba o papel efetivo para o do workspace, que muitas vezes
+segura), e <strong>não há <code>@Delete</code> de membro nenhum</strong> neste controller
+(medido) — desfazer é esta mesma rota, exigindo o <code>owner</code> recém-
+abandonado. Por isso <code>AddWorkspaceMemberUseCase</code> agora recebe o ator e recusa
+<strong>mudar o SEU PRÓPRIO papel com 403, nos dois sentidos</strong>. O teto <strong>não
+conta owners</strong>, de propósito: a cláusula não tem número para envelhecer (critério
+do ADR 0127), e ela já produz o invariante que uma contagem existiria para
+garantir — um workspace nunca chega a zero owners, já que remover o último
+exigiria que esse owner o fizesse. O teto 1 <strong>não tem par neste
+escopo</strong>, considerado e não espelhado: é uma regra sobre <em>inversão de
+hierarquia</em>, e o <code>@RequireRole('owner')</code> já torna a inversão impossível —
+quem pode chamar nunca está abaixo de quem toca. Acrescentá-lo, somado à
+rota de remoção ausente, faria de <code>owner</code> um estado absorvente do qual ninguém sai
+por HTTP, que é a classe de estado que o ADR 0127 nasceu para eliminar.
+Rebaixar <strong>outro</strong> owner, portanto, continua permitido — a única forma de a propriedade
+ser revogada, e reversível pela mesma rota por qualquer owner que reste.</p>
+</li>
+<li>
+<p><strong><code>DELETE /workspaces/:workspaceId/members/:userId</code> é <code>role:owner</code>, e é
+a quinta porta da mesma família</strong>
+(<a href="adr/0173-remocao-de-membro-de-workspace.html">ADR 0173</a>,
+<a href="business-rules/api.html#rn-615">RN-615</a>). Ela não existia quando o ADR 0157 foi
+escrito — a frase acima sobre &quot;nenhum <code>@Delete</code> de membro&quot; descreve aquele
+momento. Ela carrega o mesmo teto sem regra nova: <code>remocaoEhAutoRebaixamento</code>
+com o papel de workspace como o efetivo de hoje e <em>nenhum</em> como o papel
+de depois, já que nenhum nível acima segura a queda — então <strong>remover a SI MESMO é
+sempre 403</strong>. Essa mesma cláusula é o que protege o <strong>último owner</strong>, sem
+contar: só um <code>owner</code> chama a rota, ninguém remove a si mesmo, então
+toda chamada bem-sucedida deixa ao menos o chamador como <code>owner</code>. Remover
+<strong>outro</strong> owner é permitido (é como a propriedade é revogada por inteiro), e
+o teto 1 continua sem par aqui — o <code>@RequireRole('owner')</code> segue
+impedindo a inversão de hierarquia. A remoção também <strong>cascateia</strong>, numa
+transação: as linhas de <code>project_members</code> do alvo neste workspace (sem
+isso a regra de projeto-sobrepõe-workspace o manteria dentro de todo projeto
+onde ele tinha linha própria), as chaves de dispositivo de PROJETO dele e os PATs dele
+aqui (todo PAT pertence a um projeto); depois do commit a conexão viva do runner
+dele em cada projeto é derrubada, em melhor esforço, pelo caminho da
+RN-520. Declarado e não feito: chaves de máquina (da conta inteira; elas deixam de alcançar
+este workspace porque o papel resolve para nenhum), sockets de
+sessão já conectados. O <strong>titular</strong> (<code>workspaces.created_by</code>, cujas
+credenciais de LLM e de git os agentes gastam, RN-058) não pode ser removido: 409
+<code>criador_do_workspace</code> até que <code>PUT /workspaces/:workspaceId/owner-of-record</code>
+(<code>role:owner</code>, o destino já tem de ser <code>owner</code>, senão 409
+<code>titular_precisa_ser_owner</code>) a transfira — <a href="business-rules/api.html#rn-616">RN-616</a>.
+Qualquer owner pode transferi-la, inclusive para outro owner que não pediu.</p>
+</li>
+<li>
+<p><strong><code>GET /workspaces/:workspaceId/members</code> é <code>role:viewer</code>, não o <code>owner</code>
+das três rotas de escrita ao lado</strong> (<a href="business-rules/web.html#rn-652">RN-652</a>,
+AT-335). O mínimo é o do endpoint (RN-102): ler a lista não é
+mantê-la. <code>viewer</code> é o que as leituras vizinhas usam
+(<code>GET /workspaces/:workspaceId</code>, <code>/projects</code>) e o que
+<code>GET /projects/:projectId/members</code> usa — a leitura que esta completa, já que
+quem entra num projeto só pelo papel de workspace não tem linha de
+projeto. Quem pode abrir uma sessão pode ver quem falou nela, e um
+<code>viewer</code> de workspace já vê todo projeto do workspace. O corpo tem
+a mesma forma da leitura de projeto — <code>userId</code>, <code>name</code>, <code>email</code>, <code>role</code> —
+e nada mais (sem <code>createdAt</code>, sem estado da conta).</p>
+</li>
+<li>
+<p><strong>A auto-PROMOÇÃO agora é recusada nas duas rotas de associação</strong>, o que muda
+também <code>POST /projects/:projectId/members</code>. O ADR 0127 a tinha registrado como
+capacidade que ficava (<em>&quot;os tetos são sobre descer&quot;</em>); o ADR 0157 revisa
+isso. As duas metades são um movimento só — uma pessoa decidindo sozinha que autoridade
+tem — e a metade de subida é a única que <strong>escala privilégio</strong>,
+justamente o que o ADR 0127 podia afirmar que seus tetos nunca faziam. Reescrever o MESMO
+papel continua passando: um upsert idempotente não é movimento. A comparação
+ficou num lugar só: <code>autoMovimentoDoProprioPapel</code> devolve o SENTIDO em vez
+de um booleano (o chamador precisa dele para escolher a mensagem), e
+<code>ehAutoRebaixamento</code> sobrevive como leitura dele para que a porta da REMOÇÃO
+continue vendo só a metade de baixo, como o ADR 0156 decidiu.</p>
+</li>
+<li>
+<p><strong><code>jwt</code> sem papel não quer dizer sem autorização.</strong> Em
+<code>/users/me/*</code> o escopo é o próprio usuário; em <code>GET /workspaces</code>
+a listagem já é filtrada pela associação de quem chama.</p>
+</li>
+<li>
+<p><strong><code>X-Brabo-Service-Token</code> passou a ser redigido no log</strong>
+(<a href="adr/0035-observabilidade-legivel-e-trace-sem-coletor.html">ADR 0035</a>).
+Ele é o portador de todo o tráfego api↔engine e <strong>não</strong> estava na lista
+<code>redact</code> do pino: se caísse num corpo de erro logado, iria para o
+Loki em texto puro e com retenção. <code>serviceToken</code>, <code>privateKey</code>,
+<code>encryptedDek</code> e <code>dek</code> entraram junto. A lista completa está
+em <code>src/infrastructure/observability/logger.config.ts</code>, e
+há um teste afirmando cada caminho — a lista é contrato, não
+conveniência.</p>
+</li>
+<li>
+<p><strong>O <code>allowedHeaders</code> do CORS é explícito</strong>, e a lista precisa conter
+todo cabeçalho que o web envia: <code>Content-Type</code>, <code>Authorization</code>,
+<code>X-CSRF-Token</code> e <code>traceparent</code>. Faltar um não quebra teste nenhum
+(nenhum teste faz preflight) e quebra o navegador.</p>
+</li>
+<li>
+<p><strong>O engine tem CORS só nas rotas de saúde</strong>
+(<a href="adr/0037-cors-do-engine-e-a-porta-como-contrato.html">ADR 0037</a>).
+<code>/health</code>, <code>/live</code> e <code>/ready</code> devolvem
+<code>Access-Control-Allow-Origin</code> para as origens de <code>WEB_ORIGIN</code>;
+<strong><code>/internal/*</code> e <code>/metrics</code> não</strong>, e a exclusão é o
+ponto. As 13 rotas internas são servidor-a-servidor com um segredo
+compartilhado (<a href="business-rules/api.html#rn-035">RN-035</a>); CORS ali não
+habilitaria nada — o cliente HTTP da api ignora esses cabeçalhos —, mas
+<strong>anunciaria a um navegador que ele é cliente esperado daquele
+canal</strong>. Há um teste afirmando a ausência, e um afirmando que a
+lista de caminhos tem exatamente três entradas, para que mover a fronteira apareça
+no diff.</p>
+</li>
+<li>
+<p><strong>Origem desconhecida recebe resposta, não <code>403</code>.</strong> Nos dois serviços,
+a requisição é atendida e sai sem o cabeçalho; quem bloqueia a
+leitura é o navegador, de quem é a decisão. Responder <code>403</code>
+quebraria todo cliente que não manda <code>Origin</code> — a probe do kubelet,
+<code>curl</code>, <code>docker/smoke.sh</code>.</p>
+</li>
+<li>
+<p><strong><code>POST .../delegations</code> é engine-service como as outras rotas
+internas</strong> (QA da Fase 8b, Infra da Fase 8c — ADR 0038) — o lead de cada área
+registra o desfecho de cada delegado (<code>completed</code>/<code>failed</code>/<code>dispensed</code>)
+SEPARADO da chamada que a área usa para reportar o resultado
+consolidado para fora (<code>gates/verdict</code> no QA, <code>open_infra_pr</code> na
+Infra). Escopo de sessão, não de tarefa — <code>taskId</code> é opcional no
+corpo. Delegação nunca é visível como handoff.</p>
+</li>
+<li>
+<p><strong><code>POST /projects/:projectId/execution/activate</code> ganhou um
+<code>originSessionId</code> opcional no corpo, e a classificação não mudou</strong>
+— continua <code>role:maintainer</code> (RN-135). O campo deixa quem já tem
+esse papel fechar a sessão de CHAT que originou o pedido, mas com
+duas contenções que impedem usá-lo para fechar a sessão de
+outra pessoa: <code>findInProject(projectId, originSessionId)</code> recusa em silêncio
+um id que não pertence ao PRÓPRIO projeto do caminho, e o fechamento
+só acontece se <code>GetSessionPendingWorkUseCase</code> (a mesma guarda do
+heartbeat de inatividade, <a href="business-rules/engine.html#rn-073">RN-073</a>) confirmar
+que não há handoff, ação ou turno pendurado ali. Nunca fecha a
+sessão de execução que a própria chamada acabou de ativar.</p>
+</li>
+<li>
+<p><strong><code>GET /internal/sessions/:sessionId/pending-work</code> ganhou
+<code>aguardandoUsuarioDesde</code>, e nenhuma rota mudou de classificação</strong>
+(<a href="business-rules/api.html#rn-581">RN-581</a>). Continua <code>engine-service</code>: o campo
+é o instante em que o turno de um agente conversacional terminou, lido do mesmo
+event log que o engine já escreve, e só decide por quanto tempo o
+engine mantém uma sessão aberta. A mesma RN fez as rotas de sessão que
+acrescentam conversa (<code>POST .../agents/:agent/message</code>, o chat,
+handoffs, <code>POST .../agents/:agent/start</code>,
+<code>POST /internal/sessions/:sessionId/events</code>) responderem <strong>409</strong>
+<code>sessao_encerrada</code> em sessão terminal — uma recusa por ESTADO, depois
+da checagem de papel, nunca um papel novo. <code>terminationReason</code> nas
+respostas de sessão ganhou um valor documentado, <code>conversation_idle_timeout</code>.</p>
+</li>
+<li>
+<p><strong><code>POST /projects/:projectId/execution/activate</code> recusa com <code>409</code> quando
+o projeto não tem repositório, e a classificação não mudou</strong>
+— continua <code>role:maintainer</code> (<a href="business-rules/api.html#rn-582">RN-582</a>,
+<a href="adr/0165-o-repositorio-nasce-no-handoff-ao-arquiteto.html">ADR 0165</a>). A
+recusa vem antes de qualquer efeito. A mensagem é escolhida a partir dos
+handoffs do projeto, lidos em TODAS as sessões dele — por isso ela pode dizer &quot;aceite
+o handoff ao Arquiteto/Dev Lead&quot;. O que ela revela é só que esse
+handoff existe e o status dele, que qualquer <code>viewer</code> do projeto já lê
+por <code>GET .../sessions/:sessionId/handoffs</code>; ela nunca nomeia sessão nem
+usuário.</p>
+</li>
+<li>
+<p><strong><code>POST /projects/:projectId/execution/activate</code> recusa com <code>409</code>
+<code>execucao_sem_container</code> quando o container não está <code>running</code>, e a
+classificação não mudou</strong> — continua <code>role:maintainer</code>
+(<a href="business-rules/api/parte-12.html#rn-1101">RN-1101</a>). Recusa por ESTADO, antes
+de qualquer efeito; a mensagem só diz o próximo passo e não revela nada além
+do que <code>GET .../container</code> já mostra a um <code>viewer</code>.</p>
+</li>
+<li>
+<p><strong><code>PUT /projects/:projectId/agent-autonomy</code> com a curinga <code>auto_approve</code>
+reavalia as pendentes do agente, e a classificação não mudou</strong> — continua
+<code>role:maintainer</code> (<a href="business-rules/api/parte-12.html#rn-1103">RN-1103</a>). A
+aprovação em nome de quem ligou usa a MESMA régua de <code>decide()</code>, com os
+tetos de <code>git_push</code>, <code>pr_open</code> e <code>git_merge</code> intactos e <code>deny</code> de
+<code>permissions.json</code> ainda vencendo.</p>
+</li>
+<li>
+<p><strong>Oferecer handoff a um agente já ativo no projeto é <code>409</code>
+<code>agente_ja_ativo</code>, e a classificação não mudou</strong> — a rota humana
+<code>POST .../sessions/:sessionId/handoffs</code> continua <code>role:developer</code> e a
+interna continua <code>engine-service</code> (<a href="business-rules/api.html#rn-635">RN-635</a>,
+<a href="adr/0182-ciclo-de-vida-do-handoff.html">ADR 0182</a>). Ao contrário da recusa acima,
+esta NOMEIA uma sessão: a mensagem diz em que sessão do mesmo
+projeto o destino está ativo, porque é o texto que o agente lê como
+resultado de ferramenta e o ponteiro de que uma pessoa precisa para ir falar com ele. Qualquer <code>viewer</code> do
+projeto já lista as sessões dele e lê <code>agent.activated</code> em cada uma,
+então nada atravessa fronteira de projeto. As mesmas rotas agora respondem com a
+oferta CORRENTE em vez de sempre uma linha nova (<code>desfecho</code>), e a interna
+aceita <code>seAusente</code> — uma chave que só pode fazer a chamada escrever MENOS.</p>
+</li>
+<li>
+<p><strong>O <code>POST /internal/sessions/:sessionId/handoffs</code> interno agora pode ACEITAR
+a oferta Criativo→PO que ele cria, e a classificação não mudou</strong> —
+continua <code>engine-service</code> (<a href="business-rules/api.html#rn-658">RN-658</a>,
+<a href="adr/0185-estou-pronto-fecha-os-dois-gates.html">ADR 0185</a>). O engine não ganha
+poder de ativar agente: quem decide é a api, a partir do <code>readiness.confirmed</code>
+que uma PESSOA gravou por <code>POST .../readiness</code> (<code>role:developer</code>, o mesmo
+mínimo de aceitar pelo card), e ela grava essa pessoa como o ator. O
+engine não consegue forjar a marca — ele nunca escreve <code>readiness.confirmed</code> — e
+a oferta precisa carregar o <code>product_brief</code> nascido depois daquele clique, na mesma
+sessão. <code>POST .../agents/criativo/validate-necessity</code> mantém a rota e o
+papel, sem chamador no web (<a href="business-rules/api.html#rn-657">RN-657</a>).</p>
+</li>
+<li>
+<p><strong><code>GET /projects/:projectId/execution/session</code> é <code>role:viewer</code>, o
+mesmo papel de <code>GET /sessions/:sessionId</code></strong>
+(<a href="business-rules/api.html#rn-139">RN-139</a>). Devolve a sessão de execução
+CORRENTE do projeto — <code>active</code> com <code>execution.activated</code> gravado — ou
+<code>null</code>; nunca a sessão mais recente do projeto, que era o que a
+aba Executores lia e que trocava de sessão em silêncio no
+instante em que outra sessão nascia depois dela.</p>
+</li>
+<li>
+<p><strong><code>GET /workspaces/:workspaceId/decision-inbox</code> (AT-928, <a href="business-rules/api.html#rn-1195">RN-1195</a>..<a href="business-rules/api.html#rn-1199">RN-1199</a>): <code>role:viewer</code> é só a porta do workspace.</strong>
+O papel EFETIVO de cada projeto (<code>projectRole ?? workspaceRole</code>, RN-471) é
+aplicado em lote pelo caso de uso, e o mínimo de cada fila é o papel de
+DECIDIR (<code>developer</code>; arquitetura, que só se lê, <code>viewer</code>): projeto abaixo do
+mínimo não contribui com a fila, nem com item nem com contagem. Quem não tem
+papel de workspace recebe 403. A rota só lê, expõe o <code>payload</code> da ação como o
+<code>GET .../actions</code> já expõe, e nenhum teto muda.</p>
+</li>
+<li>
+<p><strong><code>GET /workspaces/:workspaceId/projects-summary</code> ganhou
+<code>roster.activatedAgents</code>, e a classificação não mudou</strong> — continua
+<code>role:viewer</code>. O campo é a lista de ids de agente com um <code>agent.activated</code>
+na sessão mais recente do projeto (<a href="business-rules/api.html#rn-630">RN-630</a>),
+calculada na mesma varredura por sessão que já produz
+<code>executionActivated</code> e <code>gatesEverOpened</code> (<a href="business-rules/web.html#rn-568">RN-568</a>).
+Não nomeia usuário, sessão nem credencial, e não acrescenta consulta.</p>
+</li>
+<li>
+<p><strong><code>POST .../llm-turn</code> e <code>POST .../llm-turn-stream</code> ganharam
+<code>modelName</code> no corpo da resposta/quadro final, e a classificação
+não mudou</strong> — continua <code>engine-service</code> como sempre
+(<a href="business-rules/api.html#rn-146">RN-146</a>). O nome do modelo já
+era resolvido para chamar o provider; ele só passou a viajar de volta ao
+engine, que o inclui no payload de <code>agent.response</code>. Nenhum dado novo
+é lido, nenhuma credencial nova é exposta — é o mesmo nome que
+já aparece em <code>token_usage</code>.</p>
+</li>
+<li>
+<p><strong><code>PUT /projects/:projectId/agent-autonomy</code> passou a aceitar
+<code>actionType: &quot;*&quot;</code> — o &quot;modo automático&quot; (<a href="business-rules/api.html#rn-153">RN-153</a>)
+— e a classificação não mudou:</strong> continua <code>role:maintainer</code>,
+o mesmo do <code>GET</code> ao lado. A diferença é o que o corpo agora
+AUTORIZA, não quem pode chamar: a curinga concede autonomia para QUALQUER
+tipo de ação do agente de uma vez, em vez de um tipo por vez como antes.
+A resolução (regra ESPECÍFICA sempre vence a curinga) mora
+inteira no repositório
+(<code>DrizzleAgentAutonomyRepository.findMode</code>), nunca em <code>decide()</code> —
+que continua recebendo só a <code>PermissionPolicy</code> já resolvida,
+exatamente como antes de a curinga existir. É por isso que os três
+tetos absolutos — merge em branch protegida, <code>instruction_patch</code>,
+<code>parallelize</code>/<code>raise_max_parallel</code> — continuam bloqueando mesmo com a
+curinga em <code>auto_approve</code> (<a href="business-rules/api.html#rn-154">RN-154</a>):
+eles reagem a <code>current.policy === 'auto_approve'</code>, nunca a de onde ela
+veio, e nenhuma exceção precisou entrar em <code>decide()</code> para isso continuar
+valendo. O <code>ApprovalCard.tsx</code> só oferece o botão que grava a
+curinga a um cliente que já sabe ter <code>maintainer</code>/<code>owner</code> —
+mas o que de fato garante o papel é este mesmo
+<code>@RequireRole('maintainer')</code>, inalterado.</p>
+</li>
+<li>
+<p><strong>O roteador de ferramentas Jev é uma chamada de SAÍDA nova levando contexto de agente</strong>
+(<a href="adr/0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179</a>,
+<a href="business-rules/engine.html#rn-625">RN-625</a>). Antes de uma chamada de chat a um modelo do
+OpenRouter, a api faz POST em <code>https://openrouter.ai/api/alpha/decisions</code> (a
+Decisions API, alfa) com a chave do OpenRouter do owner do workspace — a MESMA
+chave que o chat já gasta, decifrada no mesmo caso de uso, nunca logada
+e nunca devolvida. O que viaja é o <code>state</code>: o id do agente, a última
+mensagem do usuário (cortada em 6.000 caracteres), o começo da mensagem de sistema (1.500)
+e até seis chamadas de ferramenta recentes com argumentos e resultados cortados em 500
+caracteres cada — mais os NOMES e as DESCRIÇÕES das ferramentas, nunca os
+<code>parameters</code> delas. É conteúdo que a chamada de chat já manda para a mesma
+conta do OpenRouter, numa fatia menor, mas que agora chega a um segundo modelo
+(<code>typesafe/jev-1.13</code>) por trás dela. A chave é por workspace
+(<code>PUT /workspaces/:workspaceId/tool-router</code>, <code>role:owner</code>, ligada por padrão) e
+só dispara com modelo de chat do OpenRouter. O roteador estreita o menu de
+ferramentas e nada mais: não consegue aprovar, negar nem alargar nada, e uma
+chamada que o modelo faça fora do menu continua virando Proposed Action sob
+a mesma política. Qualquer falha da chamada cai no catálogo inteiro.</p>
+</li>
+<li>
+<p><strong>O Laya (AT-626, <a href="adr/0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.html">ADR 0290</a>) é a alternativa LOCAL ao Jev:
+com <code>tool_router = laya</code> o mesmo <code>state</code> vai ao serviço da 6ª imagem
+(<code>TOOL_ROUTER_URL</code>, rede interna do compose, sem porta publicada) em vez de sair
+para o OpenRouter.</strong> Nenhum dado de agente sai da máquina nesse caminho, não há chave
+de terceiro envolvida e a <code>TOOL_ROUTER_API_KEY</code>, se houver, nunca é logada nem devolvida.
+A escolha é <code>owner</code> (<code>PUT</code>); o estado do serviço é <code>GET .../tool-router</code>
+(<code>viewer</code>), com cache de 30 s e teto de 1 s, e traz só estado, motivo, dispositivo,
+VRAM livre e p95 — nada do conteúdo dos agentes. Falha do serviço cai no catálogo
+inteiro, nunca no Jev.</p>
+</li>
+<li>
+<p><strong><code>POST .../actions/:actionId/approve_always</code> ganhou <code>desfecho</code> e
+<code>padraoGravado</code> na resposta, e a classificação não mudou</strong> —
+continua <code>role:developer</code> (<a href="business-rules/api.html#rn-642">RN-642</a>). A aprovação
+e o padrão gravado agora dividem uma transação; clicar numa ação que
+já estava APROVADA responde <code>201</code> com <code>desfecho: &quot;ja_aprovada&quot;</code> em vez de
+<code>409</code>, e uma ação RECUSADA continua respondendo <code>409</code> (<code>acao_ja_recusada</code>) sem
+nada gravado. Os tetos da RN-418 e <code>container_remove</code> continuam recusados
+com <code>400</code> antes de qualquer estado ser lido, então o caminho idempotente nunca grava
+um padrão que o teto proíbe.</p>
+</li>
+<li>
+<p><strong>Um erro de git ganhou resposta nomeada nova: <code>409 merge_conflict</code></strong> — nenhuma rota,
+papel ou guard mudou (<a href="business-rules/api.html#rn-704">RN-704</a>).
+<code>GitProviderErrorFilter</code> mapeia <code>GitMergeConflictError</code> (o merge do
+repositório local achou conflito) para <code>409</code> com os arquivos em conflito na
+mensagem; a ref de destino fica intacta e a pull request continua aberta.
+Pelo pipeline de aprovação a ação <code>git_merge</code> termina <code>failed</code> com
+essa mensagem, o mesmo caminho de <code>GitPullRequestAlreadyMergedError</code>.</p>
+</li>
+<li>
+<p><strong><code>GET /projects/:projectId/actions</code> aceita <code>status=failed</code></strong> — mesma rota,
+mesmo papel <code>developer</code> (<a href="business-rules/api.html#rn-705">RN-705</a>). Até aqui só
+<code>pending</code> era aceito; <code>failed</code> lista as ações do projeto cuja
+execução falhou, e EXIGE <code>actionType</code> (<code>400</code> sem ele), para que a
+leitura seja de um tipo e nunca o histórico inteiro. Devolve a mesma
+forma <code>ProposedAction</code> que a leitura de pendentes devolve; a ação de git falhada agora
+carrega o próprio <code>kind</code>, a mensagem de erro e, num conflito de merge, os
+nomes dos arquivos em conflito — caminhos do repositório que o mesmo papel já lê
+no diff.</p>
+</li>
+<li>
+<p><strong>Duas respostas ganharam campos na Rodada 135</strong> — nenhuma rota, papel ou
+guard mudou. <code>GET /workspaces/:workspaceId/models/catalog</code> (<code>role:maintainer</code>)
+devolve <code>sugestao</code> por modelo (<a href="business-rules/api.html#rn-965">RN-965</a>): a
+faixa de cobrança e o preço publicado pelo fabricante, com link e data da
+fonte — dado curado no repositório, não dado do usuário nem segredo, e nada
+é gravado pela leitura (quem aplica é o <code>owner</code>, pelas rotas de curadoria de
+sempre). <code>GET /projects/:projectId/sessions/:sessionId/token-usage</code>
+(<code>role:developer</code>) devolve <code>lastCall</code> por agente
+(<a href="business-rules/api.html#rn-969">RN-969</a>): tokens de entrada, nome do modelo
+e janela da última chamada, do mesmo escopo de sessão que a soma já expunha,
+sem provider nem credencial.</p>
+</li>
+<li>
+<p><strong>A resposta do catálogo de modelos ganhou <code>reasoningBudget</code></strong> — nenhuma rota,
+papel ou guard mudou (<a href="business-rules/api.html#rn-914">RN-914</a>, ADR 0223). O campo
+(inteiro ou <code>null</code>) sai no DTO de modelo das leituras do catálogo que já
+existiam, com os mesmos papéis. É curadoria do produto (o orçamento de
+raciocínio provado por smoke), não dado do usuário nem segredo; a escrita é só
+por migration, sem rota nova.</p>
+</li>
+</ul>
+<h3 id="psicologo-escopo">O Psicólogo separa produto de plataforma (RN-1076, AT-898)</h3>
+<p>Duas rotas <code>engine-service</code> mudaram de corpo, sem rota nova e sem mudar o guard.
+<code>GET /internal/sessions/:sessionId/psychologist-context</code> devolve
+<code>sessaoDeTeste</code> (<code>projects.sessao_de_teste</code>). <code>POST /internal/sessions/:sessionId/hypotheses</code> passa a exigir <code>escopo</code> (<code>produto</code> |
+<code>plataforma</code>) por item e <code>sessaoDeTeste</code> no corpo, e aceita lote vazio. O item
+de plataforma vira o evento <code>psychologist.platform_signal</code> só em projeto
+marcado, fora do grafo; nos demais é descartado sem evento. A marca é ligada por
+<code>pnpm projeto:marcar-teste &lt;projectId&gt;</code> (operador, sem rota pública).</p>
+<h2 id="table">Tabela</h2>
+<!-- INÍCIO DA TABELA — o teste parseia daqui até o fim do documento. -->
+<div class="tabela-rolavel"><table>
+<thead>
+<tr>
+<th>método</th>
+<th>caminho</th>
+<th>classificação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/.well-known/jwks.json</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/auth/login</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/auth/logout</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/auth/oauth/:provider/callback</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/auth/oauth/:provider/start</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/auth/refresh</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/auth/register</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/auth/request-password-reset</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/auth/reset-password</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/auth/verify-email</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/gates</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/git/oauth/:provider/callback</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/health</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/live</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/metrics</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/runner-releases/binary</code></td>
+<td>public</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/actions</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/sessions/:sessionId/anamnese-context</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/anamnese-window</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/delegations</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/sessions/:sessionId/dev-context</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/epics</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/sessions/:sessionId/events</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/sessions/:sessionId/pending-work</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/events</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/gates/verdict</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/handoffs</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/hypotheses</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/sessions/:sessionId/infra-artifacts/:prActionId/files</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/sessions/:sessionId/infra-context</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/infra-gates/verdict</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/instruction-patches</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/max-parallel-proposals</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/llm-turn</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/llm-turn-stream</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/c4-diagram</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/module-map</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/module-routing</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/module-contracts</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/project-image</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/proficiency</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/models/sync</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/graph/prompt-templates/:name</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/graph/projects/:projectId/modules/:nome/impacto</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/graph/prompt-templates</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/rag/search</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/rag/feedback</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/gates</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/projects/:projectId/git-remote</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/projects/:projectId/business-rules</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/projects/:projectId/backlog</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/projects/:projectId/product-metrics</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/projects/:projectId/module-contracts</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/projects/:projectId/workspace-verification</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/projects/:projectId/container-exec</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/projects/:projectId/app/restart</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/projects/:projectId/mirror-sync-result</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/projects/:projectId/tasks/:taskId/auto-merge</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/projects/:projectId/container-spec</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/projects/:projectId/qa-environments/:taskId/start</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/projects/:projectId/qa-environments/:taskId/remove</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/projects/:projectId/qa-environments/:taskId/compose</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/qa-environments/sweep</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/projects/:projectId/open-questions/:questionId/answer</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/projects/:projectId/business-rules/:ruleId/retire</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/first-account</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/machine-device-keys</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/sessions/:sessionId/psychologist-context</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/stories</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/stories/:storyId/complete</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/stories/:storyId/update</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/stories/:storyId/archive</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/semantic-duplicate-check</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/story-modules</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/tasks</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/tasks/:taskId/block</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/tasks/:taskId/unblock</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/tasks/:taskId/gate/open</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/tasks/:taskId/status</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/tasks/:taskId/update</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/tasks/:taskId/archive</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/tasks/claim</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/internal/sessions/:sessionId/tasks/in-progress-by-dev</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/internal/sessions/:sessionId/termination</code></td>
+<td>engine-service</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/runner/projects</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/runner/llm-credentials</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/llm/provider-capabilities</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/users/me/credentials</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/users/me/credentials</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/users/me/credentials/:provider/test</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/users/me/credentials/:provider</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/users/me/git-credentials</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/users/me/machine-device-keys</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/users/me/machine-device-keys/:deviceKeyId</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/users/me/preferences</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/users/me/preferences</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/users/me/preferences/detected-language</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/workspaces</code></td>
+<td>jwt</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/projects/:projectId</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/projects/:projectId</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/execution-mode</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/mirror-path</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/auto-merge</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/container/network</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/mirror-state</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/models</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/actions</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/agent-autonomy</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/agent-autonomy</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/projects/:projectId/agent-bindings/:agentSlug</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/agent-bindings/:agentSlug</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/agent-bindings/:agentSlug</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/projects/:projectId/area-bindings/:areaKey</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/area-bindings/:areaKey</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/area-bindings/:areaKey</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/agent-catalog</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/agent-costs</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/agents/:agent/instruction-versions</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/agents/:agent/instruction-versions/:version/rollback</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/anamnese/run</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/architecture</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/backlog</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/budget</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/budget</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/agent-areas</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/projects/:projectId/agent-areas/:key/max-parallel</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/agent-areas/:key/budget</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/code/blame</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/code/branches</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/code/file</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/code/pull-requests</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/code/pull-requests/:pullRequestId/diff</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/code/search</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/code/tree</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/rag/search</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/rag/reindex</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/rag/local</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/rag/feedback</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/source-clicks</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/rag/coverage</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/container</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/container/lifecycle</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/container/network</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/coverage</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/events/:eventId</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/execution/activate</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/execution/session</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/git/:provider/connect</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/git/:provider/repository</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/git/:provider/repository/adopt</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/git/bootstrap</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/git/bootstrap/plan</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/git/bootstrap/plan/approve</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/git/bootstrap/plan/skip</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/git/bootstrap/acknowledge-protection-failure</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/git/repository</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/git/open-pull-requests</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/hypotheses</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/hypotheses/:hypothesisId/accept</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/hypotheses/:hypothesisId/dismiss</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/infra-artifacts</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/instruction-versions</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/members</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/members</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/projects/:projectId/members/:userId</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/model-binding</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/model-binding</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/model-bindings/resolved</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/permissions</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/permissions</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/personal-access-tokens</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/personal-access-tokens</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/personal-access-tokens/all</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/projects/:projectId/personal-access-tokens/:tokenId</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/projects/:projectId/personal-access-tokens/:tokenId/admin</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/open-questions</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/open-questions/:questionId/answer</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/run-instructions</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/runner-device-keys</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/projects/:projectId/runner-device-keys/:deviceKeyId</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/proficiency</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/projects/:projectId/proficiency/me</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/proficiency/me/opt-in</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/psychologist/analyses</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/psychologist/status</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/runner-ticket</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/terminal-ticket</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/sessions</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/sessions/:sessionId</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/projects/:projectId/sessions/:sessionId</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/sessions/:sessionId/actions</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/actions</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/actions/:actionId/approve</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/actions/:actionId/approve_always</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/actions/:actionId/deny</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/agents/:agent/cancel</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/agents/:agent/message</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/agents/:agent/messages/:messageId/cancel</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/agents/:agent/start</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/agents/:agent/structured-question/:questionSetId/answer</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/agents/:agentId/rearm</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/agents/:agentId/wake</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/agents/arquiteto/handoff-infra</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/agents/criativo/validate-necessity</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/attachments</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/sessions/:sessionId/attachments/:attachmentId</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/sessions/:sessionId/budget</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/sessions/:sessionId/budget</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/chat</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/sessions/:sessionId/events</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/events</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/messages</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/sessions/:sessionId/events/:eventId</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/sessions/:sessionId/context-summary</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/execution/parallelize</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/sessions/:sessionId/handoffs</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/handoffs</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/handoffs/:handoffId/accept</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/sessions/:sessionId/model-binding</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/sessions/:sessionId/model-binding</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/psychologist/reanalyze</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/readiness</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/sessions/:sessionId/response-language</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/projects/:projectId/sessions/:sessionId/response-language</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/socket-ticket</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/tasks/:taskId/unblock</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/sessions/:sessionId/token-usage</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/transition</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/reopen</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/sessions/:sessionId/agents/:agent/resume</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/tasks/:taskId/gates/:gate/resume</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/spend/me</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/projects/:projectId/spend/team</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/stories/:storyId/return</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/projects/:projectId/stories/:storyId/title</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/stories/:storyId/archive</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/tasks/:taskId/archive</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/projects/:projectId/stories/promote</code></td>
+<td>role:developer</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/workspaces/:workspaceId</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/workspaces/:workspaceId</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/members</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/workspaces/:workspaceId/members</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/workspaces/:workspaceId/members/:userId</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/workspaces/:workspaceId/owner-of-record</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/tool-router</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/workspaces/:workspaceId/tool-router</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/model-binding</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/workspaces/:workspaceId/model-binding</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/budget</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/workspaces/:workspaceId/budget</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/credential-spend</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/spend-report</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/spend/me</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/huggingface/models</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/workspaces/:workspaceId/huggingface/pull-requests</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/workspaces/:workspaceId/huggingface/pull-requests/:id/confirm</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/huggingface/pull-requests/:id</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/llm-providers/credentialed</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/workspaces/:workspaceId/models/activate</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/models/catalog</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/workspaces/:workspaceId/models/sync</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/workspaces/:workspaceId/models/uses</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/models/:modelId/price-changes</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/workspaces/:workspaceId/models/:modelId/pricing</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/workspaces/:workspaceId/models/:modelId/billing</code></td>
+<td>role:owner</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/projects</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/workspaces/:workspaceId/projects</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/projects-base</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/project-folders</code></td>
+<td>role:maintainer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/projects-status</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/projects-summary</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/decision-inbox</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/summary</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/workspaces/:workspaceId/unread-events</code></td>
+<td>role:viewer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/workspaces/:workspaceId/containers</code></td>
+<td>role:viewer</td>
+</tr>
+</tbody>
+</table></div>
+<nav class="site-pager"><a href="security-surface.html">Superfície exposta da api</a><a href="dependencias-e-imagens.html">Dependências e imagens do broker</a></nav>
+</article>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo-api/blob/dev/docs/security-surface-parte-2.md">Edit this page</a></footer>
+</main>
+<aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#notes-2">Notas (continuação)</a></li><li class="n3"><a href="#psicologo-escopo">O Psicólogo separa produto de plataforma (RN-1076, AT-898)</a></li><li class="n2"><a href="#table">Tabela</a></li></ul></aside>
+</div>
+<script src="../assets/site.js"></script>
+<script defer src="assets/busca.js" data-indice="assets/busca-en.json" data-base=""></script></body>
+</html>
