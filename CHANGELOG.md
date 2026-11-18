@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **fix (ci)**: o artefato `irmaos-patch` do `regenera-gerados.yml` saía com 0 bytes quando havia pendência própria (o `git reset` vinha antes do `git diff`). O patch agora nasce no passo "Separar", por `scripts/ci/patch-dos-irmaos.sh` (com spec), e aplica no repo dono com `git apply -p3` (AT-947).
+
 - **fix (instalador)**: o `install.sh` da v2.3.0 morria em silêncio logo depois de verificar o `broker` quando a Release não traz o alvo opcional `laya` (toda Release até aqui): o `grep` do repositório/digest saía 1 e o `set -euo pipefail` derrubava o script. As duas linhas ganham `|| true`, e `scripts/dev/install-laya-opcional.spec.ts` roda a função com e sem o Laya no manifesto.
 - **docs**: a `security-surface` da api foi dividida em duas fontes (brabo-api#123); o `irmaos.lock` sobe o `brabo-api` para `784c2f1`, a `security-surface-parte-2` entra na navegação e no docmap, e a página `ru/security-surface` deixa de passar do teto de 150 KB do orçamento. A api não tem `docs/i18n`, então não há tradução a dividir.
 
