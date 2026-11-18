@@ -28,7 +28,7 @@
 <article class="doc">
 <h1 id="adr-0290--o-usuário-escolhe-o-laya-no-lugar-do-jev-quando-a-máquina-tem-gpu-que-o-roda">ADR 0290 — O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU que o roda</h1>
 <ul>
-<li><strong>Status:</strong> proposto (12/11/2026, AT-626; a implementação está em <code>brabo-api#94</code> e <code>brabo#123</code>, a imagem e a tela ainda não)</li>
+<li><strong>Status:</strong> aceito (AT-626; proposto em 12/11/2026, a tela e a imagem passam a existir: api#94/#95/#120, web#107, infra#56 e a 6ª imagem opcional no <code>componentes.json</code> do <code>brabo</code>)</li>
 <li><strong>Data:</strong> 2026-11-12</li>
 <li><strong>Tema:</strong> <code>llm</code></li>
 <li><strong>Referencia:</strong> revisa o item 1 da RN-625 (só o OpenRouter é roteado) e estende o <a href="0179-o-laco-pergunta-ao-jev-qual-ferramenta.html">ADR 0179</a>. AT-626 (EP-026), pedido do dono de 31/10/2026, decisões do dono de 31/10 e de 07/11/2026 (AT-627/AT-630).</li>
@@ -62,26 +62,23 @@
 <td>AT-592</td>
 </tr>
 <tr>
-<td>RAM do serviço</td>
-<td>6 GiB</td>
-<td>OOM medido com 2 GiB no ensemble de 4; 2,06 GiB de uso com 6 GiB</td>
+<td>RAM total do host</td>
+<td>8 192 MiB (<code>LAYA_RAM_MIN_MIB</code>)</td>
+<td>~6 GiB da pilha + 2 GiB do serviço (modelo 1a, AT-592)</td>
 </tr>
 <tr>
 <td>VRAM livre</td>
-<td>4 096 MiB no instalador hoje (<code>LAYA_VRAM_MIN_MIB</code>)</td>
-<td>estimativa de ~3–3,5 GiB para o ensemble (não medida)</td>
+<td>2 048 MiB (<code>LAYA_VRAM_MIN_MIB</code>)</td>
+<td>decisão do dono (31/10); medido ~1,8 GiB; o mesmo número da api e do serviço</td>
 </tr>
 <tr>
 <td>p95 da sonda</td>
 <td>até 500 ms</td>
-<td>decisão do dono, 31/10 (medido: 251 ms com o ensemble de 4 na RTX 4060)</td>
+<td>decisão do dono, 31/10 (medido: 55 ms com o 1a)</td>
 </tr>
 </tbody>
 </table></div>
-<p>O Ollama do profile <code>llm</code> e o ensemble não cabem juntos em ~5,6 GiB de VRAM livre (o <code>qwen2.5-coder:7b</code> Q4 usa 4,7 GB).</p>
-<blockquote>
-<p><strong>TODO(humano):</strong> o critério final de VRAM livre é &quot;pico medido do ensemble + 512 MiB&quot;, e o número sai da AT-630 (L1). Qual valor fixar quando a medição chegar? E o instalador deve recusar o Laya quando o Ollama está na mesma GPU?</p>
-</blockquote>
+<p>O Ollama do profile <code>llm</code> e o Laya podem disputar a VRAM (o <code>qwen2.5-coder:7b</code> Q4 usa 4,7 GB): o instalador só AVISA quando os dois estão ligados, não recusa.</p>
 <h2 id="alternativas-rejeitadas">Alternativas rejeitadas</h2>
 <ul>
 <li><strong>Cair para o Jev quando o Laya falha.</strong> O dono decidiu pelo catálogo inteiro (31/10).</li>
@@ -93,14 +90,12 @@
 <li>Quem tem GPU escolhe o Laya sem depender de terceiro, e provider fora do OpenRouter passa a ser roteado.</li>
 <li>O release ganha a 6ª imagem (CUDA, vários GB). O job do bake precisa liberar disco no runner (~14 GB) e um CVE corrigível na base CUDA pode bloquear o release.</li>
 <li>A primeira tela do roteador (seção <code>tool-router</code> em Configurações) vem na lane web.</li>
-<li>A RN-625 ganha nota de revisão no repo do engine (RN-1070 e RN-1071 moram na api).</li>
+<li>A RN-625 ganha nota de revisão no repo do engine (RN-1301 e RN-1302 moram na api).</li>
 </ul>
-<blockquote>
-<p><strong>TODO(humano):</strong> a tela diz &quot;desde quando&quot; o serviço está fora do ar? O estado atual da api não guarda o instante da queda.</p>
-</blockquote>
+<p>A tela diz &quot;desde quando&quot; o serviço está fora do ar (campo <code>desde</code> do <code>GET /workspaces/:id/tool-router</code>).</p>
 <nav class="site-pager"><a href="../adr/0279-provider-de-llm-duble-do-regressivo.html">ADR 0279 — Provider de LLM dublê do regressivo, dentro da api</a><a href="../adr/0296-o-teto-de-gasto-e-mensal-e-o-workspace-tem-teto-proprio.html">ADR 0296 — O teto de gasto é mensal e o workspace tem teto próprio</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.md">Edit this page</a><span>Updated 2026-11-12T22:02:07-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.md">Edit this page</a><span>Updated 2026-11-17T23:17:35-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>On this page</h2><ul><li class="n2"><a href="#contexto">Contexto</a></li><li class="n2"><a href="#decisão">Decisão</a></li><li class="n2"><a href="#requisitos-mínimos-da-máquina">Requisitos mínimos da máquina</a></li><li class="n2"><a href="#alternativas-rejeitadas">Alternativas rejeitadas</a></li><li class="n2"><a href="#consequências">Consequências</a></li></ul></aside>
 </div>

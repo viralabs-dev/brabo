@@ -31,18 +31,16 @@
 <h2 id="requisitos">Requisitos</h2>
 <ul>
 <li>GPU NVIDIA com runtime <code>nvidia</code> (ou CDI) no Docker.</li>
-<li>6 GiB de RAM livres para o serviço.</li>
-<li>VRAM livre: o instalador exige 4 096 MiB hoje.</li>
+<li>8 192 MiB de RAM total na máquina (a pilha usa ~6 GiB e o serviço, 2 GiB).</li>
+<li>2 048 MiB de VRAM livre.</li>
 <li>A imagem <code>laya</code> no manifesto da release (alvo opcional). Sem ela a oferta não aparece.</li>
 </ul>
-<blockquote>
-<p><strong>TODO(humano):</strong> valor final da VRAM mínima, que sai de uma medição do ensemble ainda não feita.</p>
-</blockquote>
+<p>Se a máquina só tem o Ollama dos modelos locais na GPU, o instalador só avisa que os dois disputam a VRAM.</p>
 <h2 id="passos">Passos</h2>
 <ol>
 <li>Rode o instalador. Com GPU e recursos suficientes ele pergunta se liga o Laya (padrão NÃO). Se um critério falhar, ele diz qual. Sem terminal interativo, o Laya fica desligado.</li>
 <li>Responder sim grava <code>BRABO_LAYA_IMAGE</code> no <code>.env</code> e soma <code>tool-router-gpu</code> aos profiles.</li>
-<li>Escolha o roteador do workspace (<code>owner</code>): <code>PUT /workspaces/:id/tool-router</code> com <code>{&quot;roteador&quot;: &quot;laya&quot;}</code>. Não há tela ainda.</li>
+<li>Escolha o roteador do workspace (<code>owner</code>): <code>PUT /workspaces/:id/tool-router</code> com <code>{&quot;roteador&quot;: &quot;laya&quot;}</code>. Ou, pela tela, em Configurações › Modelos › Roteador de ferramentas.</li>
 <li>Confira com <code>GET /workspaces/:id/tool-router</code> (<code>viewer</code>): o estado deve ser <code>proficiente</code>.</li>
 </ol>
 <h2 id="se-der-errado">Se der errado</h2>
@@ -58,7 +56,7 @@
 </ul>
 <nav class="site-pager"><a href="../how-to/token-do-github-packages.html">Token do GitHub Packages</a><a href="../runbook.html">Manual de operação</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/how-to/escolher-o-laya.md">Editar esta página</a><span>Atualizado em 2026-11-12T22:02:07-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/how-to/escolher-o-laya.md">Editar esta página</a><span>Atualizado em 2026-11-17T23:17:35-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#requisitos">Requisitos</a></li><li class="n2"><a href="#passos">Passos</a></li><li class="n2"><a href="#se-der-errado">Se der errado</a></li><li class="n2"><a href="#para-saber-mais">Para saber mais</a></li></ul></aside>
 </div>

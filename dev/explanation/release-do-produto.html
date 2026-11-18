@@ -93,7 +93,7 @@ para a primeira tag.</p>
 </tr>
 <tr>
 <td><code>imagens.&lt;alvo&gt;</code></td>
-<td>repositório, tag e imagem de cada componente de imagem; o <code>imagem.json</code> precisa bater</td>
+<td>repositório, tag e imagem de cada componente de imagem; o <code>imagem.json</code> precisa bater. <code>laya</code> é <code>opcional</code> (asset <code>imagem-laya.json</code>): sem o asset a Release sai sem ele e o instalador não o oferece</td>
 </tr>
 <tr>
 <td><code>runner</code></td>
@@ -102,7 +102,7 @@ para a primeira tag.</p>
 </tbody>
 </table></div>
 <p>A pin <strong>não anda sozinha no Git</strong>, mas anda por um bot (AT-796, ADR 0282): a cada 6 h o <code>regenera-gerados.yml</code> lê a <code>releases/latest</code> de cada componente, confere o asset que o produto consome (<code>imagem.json</code>; <code>checksums.txt</code> e a assinatura no runner) e, se a Release for mais nova, troca só a tag na linha do <code>componentes.json</code>. Nunca desce a pin. O <code>infra</code> e a imagem de backup andam juntos, e o <code>RUNNER_TAG</code> do <code>install.sh</code> muda no mesmo commit. Tudo cai na PR fixa <code>chore/regenera-gerados</code>, que dispensa a escada; o merge é humano.</p>
-<p>A trava (<code>scripts/ci/pins-dos-componentes.ts --conferir</code>) reprova quando uma pin está atrás da Latest, não tem Release final, falta o asset, <code>infra.ref</code> difere de <code>imagens.backup.tag</code> ou o <code>RUNNER_TAG</code> difere de <code>runner.tag</code>. Ela roda no check <code>Pins dos componentes</code> (PR para a <code>main</code>) e no <code>release.yml</code>: na tag reprova, no ensaio só avisa. Cinco de cinco imagens ou nenhuma: Release de produto com componente sem <code>imagem.json</code> é recusada.</p>
+<p>A trava (<code>scripts/ci/pins-dos-componentes.ts --conferir</code>) reprova quando uma pin está atrás da Latest, não tem Release final, falta o asset, <code>infra.ref</code> difere de <code>imagens.backup.tag</code> ou o <code>RUNNER_TAG</code> difere de <code>runner.tag</code>. Ela roda no check <code>Pins dos componentes</code> (PR para a <code>main</code>) e no <code>release.yml</code>: na tag reprova, no ensaio só avisa. Todas as imagens obrigatórias ou nenhuma: Release de produto com componente obrigatório sem <code>imagem.json</code> é recusada; o <code>laya</code> (opcional) só exige a Release final e <code>imagens.laya.tag</code> igual a <code>infra.ref</code>.</p>
 <h2 id="open">Decisões que ainda não estão tomadas</h2>
 <blockquote>
 <p><strong>TODO(humano):</strong> quem decide, e em que ordem, o momento de ligar <code>PRODUTO_RELEASE_LIGADA</code> e
@@ -123,7 +123,7 @@ Releases dos componentes existam antes da dele).</p>
 <p>Se um componente soltar Release entre o merge na <code>main</code> e o carimbo, a trava do <code>release.yml</code> reprova na tag e o produto fica com a tag sem Release (aconteceu na v2.1.0 e na v2.1.1). A saída: mergear a PR do bot na <code>dev</code>, promover e deixar sair um <strong>patch</strong> do produto. Exemplo: o web v1.2.1 virou Latest com a pin em v1.2.0; depois do merge da PR do bot, a promoção seguinte leva o web v1.2.1.</p>
 <nav class="site-pager"><a href="../explanation/cadeia-de-suprimentos-do-ci.html">Cadeia de suprimentos do CI</a><a href="../explanation/licoes-do-ci.html">Lições do CI</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/release-do-produto.md">Editar esta página</a><span>Atualizado em 2026-11-08T19:19:56-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/explanation/release-do-produto.md">Editar esta página</a><span>Atualizado em 2026-11-17T23:23:11-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#stages">As três etapas</a></li><li class="n2"><a href="#gate">O portão</a></li><li class="n2"><a href="#components">O que componentes.json fixa</a></li><li class="n2"><a href="#open">Decisões que ainda não estão tomadas</a></li><li class="n2"><a href="#hotfix">Hotfix de um componente</a></li><li class="n2"><a href="#pin-atras">Tag sem Release por pin atrás</a></li></ul></aside>
 </div>
