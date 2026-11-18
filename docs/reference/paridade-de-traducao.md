@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 327 de 367 (89.1%) | 95.8% de 3.526.790 | 307 | 18 | 2 | 40 | 6 |
-| `ru` | 327 de 367 (89.1%) | 95.8% de 3.526.790 | 307 | 18 | 2 | 40 | 6 |
-| `zh-Hans` | 327 de 367 (89.1%) | 95.8% de 3.526.790 | 307 | 18 | 2 | 40 | 6 |
+| `en` | 333 de 461 (72.2%) | 52.9% de 6.795.634 | 307 | 24 | 2 | 128 | 0 |
+| `ru` | 333 de 461 (72.2%) | 52.9% de 6.795.634 | 307 | 24 | 2 | 128 | 0 |
+| `zh-Hans` | 333 de 461 (72.2%) | 52.9% de 6.795.634 | 307 | 24 | 2 | 128 | 0 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
@@ -24,10 +24,15 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `adr/index.md` (tradução de 2026-11-08)
 - `architecture.md` (tradução de 2026-11-08)
 - `business-rules.md` (tradução de 2026-11-08)
+- `business-rules/ci.md` (tradução de commit inexistente)
+- `business-rules/ci/parte-01.md` (tradução de commit inexistente)
+- `business-rules/ci/parte-02.md` (tradução de commit inexistente)
 - `business-rules/produto.md` (tradução de 2026-11-06)
 - `business-rules/produto/parte-01.md` (tradução de 2026-11-06)
 - `business-rules/produto/parte-02.md` (tradução de 2026-11-06)
 - `contribuir/como-escrevemos.md` (tradução de 2026-11-08)
+- `explanation/branching-policy.md` (tradução de 2026-11-06)
+- `explanation/cadeia-de-suprimentos-do-ci.md` (tradução de 2026-11-05)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-08)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `explanation/release-do-produto.md` (tradução de 2026-11-08)
@@ -35,6 +40,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `index.md` (tradução de 2026-11-08)
 - `reference/configuration.md` (tradução de 2026-11-08)
 - `reference/events.md` (tradução de 2026-11-06)
+- `reference/rulesets.md` (tradução de 2026-11-06)
 - `tutorials/como-o-brabo-e-construido/a-regra-vira-codigo.md` (tradução de 2026-11-08)
 - `tutorials/from-zero-to-deliverable.md` (tradução de 2026-11-08)
 - `tutorials/interface-antes-e-depois-shadcn.md` (tradução de 2026-11-08)
@@ -45,10 +51,15 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `adr/index.md` (tradução de 2026-11-08)
 - `architecture.md` (tradução de 2026-11-08)
 - `business-rules.md` (tradução de 2026-11-08)
+- `business-rules/ci.md` (tradução de commit inexistente)
+- `business-rules/ci/parte-01.md` (tradução de commit inexistente)
+- `business-rules/ci/parte-02.md` (tradução de commit inexistente)
 - `business-rules/produto.md` (tradução de 2026-11-06)
 - `business-rules/produto/parte-01.md` (tradução de 2026-11-06)
 - `business-rules/produto/parte-02.md` (tradução de 2026-11-06)
 - `contribuir/como-escrevemos.md` (tradução de 2026-11-08)
+- `explanation/branching-policy.md` (tradução de 2026-11-06)
+- `explanation/cadeia-de-suprimentos-do-ci.md` (tradução de 2026-11-05)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-08)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `explanation/release-do-produto.md` (tradução de 2026-11-08)
@@ -56,6 +67,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `index.md` (tradução de 2026-11-08)
 - `reference/configuration.md` (tradução de 2026-11-08)
 - `reference/events.md` (tradução de 2026-11-06)
+- `reference/rulesets.md` (tradução de 2026-11-06)
 - `tutorials/como-o-brabo-e-construido/a-regra-vira-codigo.md` (tradução de 2026-11-08)
 - `tutorials/from-zero-to-deliverable.md` (tradução de 2026-11-08)
 - `tutorials/interface-antes-e-depois-shadcn.md` (tradução de 2026-11-08)
@@ -66,10 +78,15 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `adr/index.md` (tradução de 2026-11-08)
 - `architecture.md` (tradução de 2026-11-08)
 - `business-rules.md` (tradução de 2026-11-08)
+- `business-rules/ci.md` (tradução de commit inexistente)
+- `business-rules/ci/parte-01.md` (tradução de commit inexistente)
+- `business-rules/ci/parte-02.md` (tradução de commit inexistente)
 - `business-rules/produto.md` (tradução de 2026-11-06)
 - `business-rules/produto/parte-01.md` (tradução de 2026-11-06)
 - `business-rules/produto/parte-02.md` (tradução de 2026-11-06)
 - `contribuir/como-escrevemos.md` (tradução de 2026-11-08)
+- `explanation/branching-policy.md` (tradução de 2026-11-06)
+- `explanation/cadeia-de-suprimentos-do-ci.md` (tradução de 2026-11-05)
 - `explanation/documentation-workflow.md` (tradução de 2026-11-08)
 - `explanation/localizacao.md` (tradução de 2026-11-05)
 - `explanation/release-do-produto.md` (tradução de 2026-11-08)
@@ -77,6 +94,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 - `index.md` (tradução de 2026-11-08)
 - `reference/configuration.md` (tradução de 2026-11-08)
 - `reference/events.md` (tradução de 2026-11-06)
+- `reference/rulesets.md` (tradução de 2026-11-06)
 - `tutorials/como-o-brabo-e-construido/a-regra-vira-codigo.md` (tradução de 2026-11-08)
 - `tutorials/from-zero-to-deliverable.md` (tradução de 2026-11-08)
 - `tutorials/interface-antes-e-depois-shadcn.md` (tradução de 2026-11-08)
