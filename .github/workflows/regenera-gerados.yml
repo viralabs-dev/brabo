@@ -109,6 +109,9 @@ jobs:
             if git cat-file -e "HEAD:$f" 2>/dev/null || ! git ls-files --error-unmatch -- "$f" >/dev/null 2>&1; then echo "$f" >> "$RUNNER_TEMP/meus.lst"; else echo "$f" >> "$RUNNER_TEMP/irmaos.lst"; fi
           done
           # a trava está em HEAD, então já caiu em meus.lst quando mudou
+          # AT-947: o patch dos irmãos sai AQUI, antes do `git reset` do próximo passo (depois dele
+          # os arquivos dos irmãos viram não rastreados e o diff sai vazio)
+          bash scripts/ci/patch-dos-irmaos.sh "$RUNNER_TEMP/irmaos.lst" "$RUNNER_TEMP/irmaos.patch"
           echo "meus=$(wc -l < "$RUNNER_TEMP/meus.lst" | tr -d ' ')" >> "$GITHUB_OUTPUT"
 
       - name: Commitar e abrir, atualizar ou fechar a PR
@@ -144,9 +147,9 @@ jobs:
             fi
           fi
           if [ -s "$RUNNER_TEMP/irmaos.lst" ]; then
-            # 3b: o conserto no irmão vira `git apply`, sem montar o layout na máquina
-            xargs -d '\n' -a "$RUNNER_TEMP/irmaos.lst" git diff -- > "$RUNNER_TEMP/irmaos.patch" || true
-            echo '::error::O gerador alterou arquivos que são de repositórios irmãos; a correção é uma PR no repo dono:'
+            # 3b: o conserto no irmão vira `git apply`, sem montar o layout na máquina (patch feito no passo "Separar")
+            # shellcheck disable=SC2016  # as crases são texto literal da mensagem
+            echo '::error::O gerador alterou arquivos que são de repositórios irmãos; a correção é uma PR no repo dono. O artefato `irmaos-patch` aplica com `git apply -p3` na raiz do repo dono:'
             while read -r f; do
               case "$f" in
                 apps/api/*) d=brabo-api;; apps/engine/*) d=brabo-engine;; apps/web/*) d=brabo-web;;
