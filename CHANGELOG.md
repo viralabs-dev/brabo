@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **feat (instalador)**: AT-626, o Laya entra no `componentes.json` como 6ª imagem OPCIONAL (`laya`, asset `imagem-laya.json`, tag igual à do `infra.ref`). Os pisos do `install.sh` passam ao modelo 1a: VRAM livre 2048 MiB e RAM total 8192 MiB. `montar-images` pula o opcional sem arquivo, `pins-dos-componentes` exige dele só a Release final (e a tag do Laya igual a `infra.ref`), e o `release.yml` libera disco no runner e sobe o timeout para 60 min.
+
 - **fix (instalador)**: o `install.sh` da v2.3.0 morria em silêncio logo depois de verificar o `broker` quando a Release não traz o alvo opcional `laya` (toda Release até aqui): o `grep` do repositório/digest saía 1 e o `set -euo pipefail` derrubava o script. As duas linhas ganham `|| true`, e `scripts/dev/install-laya-opcional.spec.ts` roda a função com e sem o Laya no manifesto.
 - **docs**: a `security-surface` da api foi dividida em duas fontes (brabo-api#123); o `irmaos.lock` sobe o `brabo-api` para `784c2f1`, a `security-surface-parte-2` entra na navegação e no docmap, e a página `ru/security-surface` deixa de passar do teto de 150 KB do orçamento. A api não tem `docs/i18n`, então não há tradução a dividir.
 

@@ -13,17 +13,17 @@ O roteador de ferramentas reduz o menu que o modelo vê a cada passo. O padrão 
 ## Requisitos
 
 - GPU NVIDIA com runtime `nvidia` (ou CDI) no Docker.
-- 6 GiB de RAM livres para o serviço.
-- VRAM livre: o instalador exige 4 096 MiB hoje.
+- 8 192 MiB de RAM total na máquina (a pilha usa ~6 GiB e o serviço, 2 GiB).
+- 2 048 MiB de VRAM livre.
 - A imagem `laya` no manifesto da release (alvo opcional). Sem ela a oferta não aparece.
 
-> **TODO(humano):** valor final da VRAM mínima, que sai de uma medição do ensemble ainda não feita.
+Se a máquina só tem o Ollama dos modelos locais na GPU, o instalador só avisa que os dois disputam a VRAM.
 
 ## Passos
 
 1. Rode o instalador. Com GPU e recursos suficientes ele pergunta se liga o Laya (padrão NÃO). Se um critério falhar, ele diz qual. Sem terminal interativo, o Laya fica desligado.
 2. Responder sim grava `BRABO_LAYA_IMAGE` no `.env` e soma `tool-router-gpu` aos profiles.
-3. Escolha o roteador do workspace (`owner`): `PUT /workspaces/:id/tool-router` com `{"roteador": "laya"}`. Não há tela ainda.
+3. Escolha o roteador do workspace (`owner`): `PUT /workspaces/:id/tool-router` com `{"roteador": "laya"}`. Ou, pela tela, em Configurações › Modelos › Roteador de ferramentas.
 4. Confira com `GET /workspaces/:id/tool-router` (`viewer`): o estado deve ser `proficiente`.
 
 ## Se der errado
