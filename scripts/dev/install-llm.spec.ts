@@ -202,10 +202,10 @@ describe('install.sh — a oferta do Laya (AT-626)', () => {
   });
 
   it('GPU com VRAM ou RAM abaixo do piso: não oferece, nomeando qual falhou', () => {
-    const vram = rodar(`${GPU(2048)}\nBRABO_LAYA_IMAGE=i\nconsentir_laya; echo L=$LAYA_LIGADO`);
-    expect(vram.saida).toContain('VRAM livre 2048 MiB, abaixo dos 4096 MiB');
-    const ram = rodar(`${GPU(6000, 2048)}\nBRABO_LAYA_IMAGE=i\nconsentir_laya; echo L=$LAYA_LIGADO`);
-    expect(ram.saida).toContain('RAM 2048 MiB, abaixo dos 6144 MiB');
+    const vram = rodar(`${GPU(1800)}\nBRABO_LAYA_IMAGE=i\nconsentir_laya; echo L=$LAYA_LIGADO`);
+    expect(vram.saida).toContain('VRAM livre 1800 MiB, abaixo dos 2048 MiB');
+    const ram = rodar(`${GPU(6000, 4096)}\nBRABO_LAYA_IMAGE=i\nconsentir_laya; echo L=$LAYA_LIGADO`);
+    expect(ram.saida).toContain('RAM total 4096 MiB, abaixo dos 8192 MiB');
     expect(ram.saida).toContain('L=nao');
   });
 

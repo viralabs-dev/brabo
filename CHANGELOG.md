@@ -4,6 +4,7 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **feat (instalador)**: AT-626, o Laya entra no `componentes.json` como 6ª imagem OPCIONAL (`laya`, asset `imagem-laya.json`, tag igual à do `infra.ref`). Os pisos do `install.sh` passam ao modelo 1a: VRAM livre 2048 MiB e RAM total 8192 MiB. `montar-images` pula o opcional sem arquivo, `pins-dos-componentes` exige dele só a Release final (e a tag do Laya igual a `infra.ref`), e o `release.yml` libera disco no runner e sobe o timeout para 60 min.
 - **fix (ci)**: o artefato `irmaos-patch` do `regenera-gerados.yml` saía com 0 bytes quando havia pendência própria (o `git reset` vinha antes do `git diff`). O patch agora nasce no passo "Separar", por `scripts/ci/patch-dos-irmaos.sh` (com spec), e aplica no repo dono com `git apply -p3` (AT-947).
 
 - **fix (instalador)**: o `install.sh` da v2.3.0 morria em silêncio logo depois de verificar o `broker` quando a Release não traz o alvo opcional `laya` (toda Release até aqui): o `grep` do repositório/digest saía 1 e o `set -euo pipefail` derrubava o script. As duas linhas ganham `|| true`, e `scripts/dev/install-laya-opcional.spec.ts` roda a função com e sem o Laya no manifesto.

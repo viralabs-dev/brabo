@@ -65,12 +65,12 @@ para a primeira tag.
 | Campo | Para quê |
 |---|---|
 | `infra` | repositório e ref de onde vêm o compose, o `.trivyignore.yaml` e o `trivy-do-release.ts` |
-| `imagens.<alvo>` | repositório, tag e imagem de cada componente de imagem; o `imagem.json` precisa bater |
+| `imagens.<alvo>` | repositório, tag e imagem de cada componente de imagem; o `imagem.json` precisa bater. `laya` é `opcional` (asset `imagem-laya.json`): sem o asset a Release sai sem ele e o instalador não o oferece |
 | `runner` | repositório e tag do `brabo-runner`; o `install.sh` baixa o binário dali (`RUNNER_TAG`, conferido por `scripts/dev/install-runner-release.spec.ts`) |
 
 A pin **não anda sozinha no Git**, mas anda por um bot (AT-796, ADR 0282): a cada 6 h o `regenera-gerados.yml` lê a `releases/latest` de cada componente, confere o asset que o produto consome (`imagem.json`; `checksums.txt` e a assinatura no runner) e, se a Release for mais nova, troca só a tag na linha do `componentes.json`. Nunca desce a pin. O `infra` e a imagem de backup andam juntos, e o `RUNNER_TAG` do `install.sh` muda no mesmo commit. Tudo cai na PR fixa `chore/regenera-gerados`, que dispensa a escada; o merge é humano.
 
-A trava (`scripts/ci/pins-dos-componentes.ts --conferir`) reprova quando uma pin está atrás da Latest, não tem Release final, falta o asset, `infra.ref` difere de `imagens.backup.tag` ou o `RUNNER_TAG` difere de `runner.tag`. Ela roda no check `Pins dos componentes` (PR para a `main`) e no `release.yml`: na tag reprova, no ensaio só avisa. Cinco de cinco imagens ou nenhuma: Release de produto com componente sem `imagem.json` é recusada.
+A trava (`scripts/ci/pins-dos-componentes.ts --conferir`) reprova quando uma pin está atrás da Latest, não tem Release final, falta o asset, `infra.ref` difere de `imagens.backup.tag` ou o `RUNNER_TAG` difere de `runner.tag`. Ela roda no check `Pins dos componentes` (PR para a `main`) e no `release.yml`: na tag reprova, no ensaio só avisa. Todas as imagens obrigatórias ou nenhuma: Release de produto com componente obrigatório sem `imagem.json` é recusada; o `laya` (opcional) só exige a Release final e `imagens.laya.tag` igual a `infra.ref`.
 
 ## Decisões que ainda não estão tomadas {#open}
 
