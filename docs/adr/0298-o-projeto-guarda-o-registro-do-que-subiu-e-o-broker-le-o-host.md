@@ -1,6 +1,6 @@
 # ADR 0298 — O projeto guarda o registro do que subiu, e o broker lê o host e remove o que é do projeto apagado
 
-- **Status:** proposto
+- **Status:** aceito
 - **Data:** 2026-11-17
 - **Tema:** `container`
 - **Referencia:** AT-980 (EP-036), levantamento da Rodada 382 e decisões do dono de 17/11/2026 (P1 e P2). Estende o ADR [0130](0130-broker-de-container.md) (broker sem especificação livre) e o ADR [0264](0264-o-app-reinicia-so-o-processo.md), e revisa a escolha de porta do ADR [0265](0265-o-app-declarado-propoe-recriar-o-container.md) (porta na faixa 13000+) e a frase "seis operações/rotas" do `CLAUDE.md` do `brabo-broker`: o ADR aceito não se edita, esta ADR é quem acrescenta as rotas.
@@ -21,7 +21,7 @@
 6. **Um laço de reconciliação** (no boot e periódico, intervalo por variável de ambiente) retoma as linhas `removendo`, remove o resto de subida que `falhou` em projeto sem ciclo `running` e transforma em linha `removendo` todo `brabo.project.id` do host que não existe em `projects`. Broker fora do ar: registra o motivo e tenta no tique seguinte.
 7. **Apagar o projeto não espera o broker.** Na mesma transação do `DELETE` as linhas viram `removendo`; depois do commit a api tenta `orfao/remove` e, se falhar, a remoção fica pendente (e visível na página global de containers) até o laço retomá-la. Modo `runner`: nada vai ao broker.
 
-> **A confirmar pelo dono ao revisar:** o item 7 (o apagamento não espera o broker). A alternativa, o projeto só sumir depois de o host estar limpo, muda apenas esse passo; o resto da decisão não depende dele.
+> **Confirmado pelo dono em 18/11/2026:** o item 7 vale como escrito. Apagar o projeto com o broker fora do ar o faz sumir na hora; o registro marca os recursos como `removendo` e o laço de reconciliação limpa o host quando o broker voltar.
 
 Nas palavras do dono (17/11/2026): "Cada projeto deve ter memória do que foi subido, logo conseguirá resolver e deletar o que não ocorreu e erro para conseguir resolver."
 
