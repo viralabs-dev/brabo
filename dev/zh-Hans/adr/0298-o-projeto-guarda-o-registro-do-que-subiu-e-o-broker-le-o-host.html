@@ -68,11 +68,19 @@
 <li>Volumes nomeados ficam fora do registro: o broker só cria bind, e a prova de compose limpa com <code>down -v</code>.</li>
 <li>A RN-1025 não muda. Nenhum teto absoluto muda (merge em branch protegida, nenhum <code>privileged</code>/<code>cap_add</code>/<code>network: host</code>/<code>-v</code> livre).</li>
 </ul>
+<h2 id="revisão-19112026">Revisão (19/11/2026)</h2>
+<p>Revisão a partir da decisão do dono tomada na implementação (api#133, AT-980 L7). Corrige o item 6 e acrescenta quatro pontos; o resto da decisão fica como está.</p>
+<ul>
+<li><strong>O laço de reconciliação só age sobre o que está no registro <code>project_resources</code> desta api</strong> (RN-1384 da api).</li>
+<li><strong>Sai do item 6 a parte que transformava em pendência todo <code>brabo.project.id</code> do host sem projeto.</strong> O <code>brabo</code> e o <code>brabo-dev</code> dividem o mesmo daemon Docker; uma instalação apagaria os containers da outra. Por isso o laço não varre o host por rótulo.</li>
+<li><strong>Órfãos de antes do registro ficam para limpeza manual.</strong> Recursos subidos antes da tabela <code>project_resources</code> não têm linha e o laço não os toca.</li>
+<li><strong>Prova de rede que falha em container já de pé</strong> marca o ciclo <code>failed</code> e não remove o container. A remoção fica só para a subida nova (RN-1386 da api).</li>
+</ul>
 <nav class="site-pager"><a href="../adr/0297-o-broker-prova-o-compose-do-projeto-num-ambiente-descartavel.html">ADR 0297 — O broker prova o compose do projeto num ambiente descartável</a><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — 本地 runner：通过带一次性 ticket 的 Phoenix 通道在用户机器上执行</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0298-o-projeto-guarda-o-registro-do-que-subiu-e-o-broker-le-o-host.md">编辑此页</a><span>更新于 2026-11-18T09:14:22-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0298-o-projeto-guarda-o-registro-do-que-subiu-e-o-broker-le-o-host.md">编辑此页</a><span>更新于 2026-11-19T10:44:22-03:00 · Daniel Souza</span></footer>
 </main>
-<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#contexto">Contexto</a></li><li class="n2"><a href="#decisão">Decisão</a></li><li class="n2"><a href="#alternativas-recusadas-pelo-dono-17112026">Alternativas recusadas pelo dono (17/11/2026)</a></li><li class="n2"><a href="#consequências">Consequências</a></li></ul></aside>
+<aside class="site-toc"><h2>本页内容</h2><ul><li class="n2"><a href="#contexto">Contexto</a></li><li class="n2"><a href="#decisão">Decisão</a></li><li class="n2"><a href="#alternativas-recusadas-pelo-dono-17112026">Alternativas recusadas pelo dono (17/11/2026)</a></li><li class="n2"><a href="#consequências">Consequências</a></li><li class="n2"><a href="#revisão-19112026">Revisão (19/11/2026)</a></li></ul></aside>
 </div>
 <script src="../../assets/site.js"></script>
 <script defer src="../assets/busca.js" data-indice="../assets/busca-zh-Hans.json" data-base="../"></script></body>
