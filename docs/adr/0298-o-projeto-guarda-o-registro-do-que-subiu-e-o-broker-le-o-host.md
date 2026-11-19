@@ -39,3 +39,12 @@ Nas palavras do dono (17/11/2026): "Cada projeto deve ter memória do que foi su
 - A api ganha migração (`project_resources`), o helper de registro e o laço de reconciliação; a web mostra "remoção pendente" na página global de containers. O órfão de hoje some pelo laço, sem gesto manual.
 - Volumes nomeados ficam fora do registro: o broker só cria bind, e a prova de compose limpa com `down -v`.
 - A RN-1025 não muda. Nenhum teto absoluto muda (merge em branch protegida, nenhum `privileged`/`cap_add`/`network: host`/`-v` livre).
+
+## Revisão (19/11/2026)
+
+Revisão a partir da decisão do dono tomada na implementação (api#133, AT-980 L7). Corrige o item 6 e acrescenta quatro pontos; o resto da decisão fica como está.
+
+- **O laço de reconciliação só age sobre o que está no registro `project_resources` desta api** (RN-1384 da api).
+- **Sai do item 6 a parte que transformava em pendência todo `brabo.project.id` do host sem projeto.** O `brabo` e o `brabo-dev` dividem o mesmo daemon Docker; uma instalação apagaria os containers da outra. Por isso o laço não varre o host por rótulo.
+- **Órfãos de antes do registro ficam para limpeza manual.** Recursos subidos antes da tabela `project_resources` não têm linha e o laço não os toca.
+- **Prova de rede que falha em container já de pé** marca o ciclo `failed` e não remove o container. A remoção fica só para a subida nova (RN-1386 da api).
