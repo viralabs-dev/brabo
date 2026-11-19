@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs(adr)**: AT-980, ADR 0298 ganha a seção "Revisão (19/11/2026)" (api#133, L7): o laço de reconciliação só age sobre `project_resources`, sai a varredura do host por rótulo (o `brabo` e o `brabo-dev` dividem o daemon), órfãos anteriores ao registro vão para limpeza manual, e a prova de rede que falha em container de pé não remove o container.
+
 - **docs(adr)**: AT-980, ADR 0298 (aceito; lado do `brabo`). O broker ganha `GET /host/recursos` (portas de todo container, só o número para os de terceiros) e a remoção de órfão por rótulo (só quando a api responde 404); a api escolhe a porta lendo o host e mantém o registro `project_resources` (pedido, criado, falhou, removendo, removido) com um laço de reconciliação. Recusa a porta às cegas e o só-falhar. Confirmado pelo dono em 18/11: apagar o projeto não espera o broker.
 
 - **feat (instalador)**: AT-626, o Laya entra no `componentes.json` como 6ª imagem OPCIONAL (`laya`, asset `imagem-laya.json`, tag igual à do `infra.ref`). Os pisos do `install.sh` passam ao modelo 1a: VRAM livre 2048 MiB e RAM total 8192 MiB. `montar-images` pula o opcional sem arquivo, `pins-dos-componentes` exige dele só a Release final (e a tag do Laya igual a `infra.ref`), e o `release.yml` libera disco no runner e sobe o timeout para 60 min.
