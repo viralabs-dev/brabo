@@ -326,7 +326,7 @@ sequenceDiagram
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从发出点提取：**123 个标识符**，其中 **11** 个未在上文描述。
+从发出点提取：**125 个标识符**，其中 **13** 个未在上文描述。
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
@@ -410,6 +410,7 @@ sequenceDiagram
 - `execution.stalled` — ⚠️ **上文未描述** <sub>(apps/engine/lib/engine/workers/execucao_parada_worker.ex)</sub>
 - `gate.interrupted` <sub>(apps/engine/lib/engine/gates/gate_rescuer.ex)</sub>
 - `gate.rescue_parked` <sub>(apps/engine/lib/engine/gates/gate_rescuer.ex)</sub>
+- `gate.retry_scheduled` — ⚠️ **上文未描述** <sub>(apps/engine/lib/engine/gates/qa_lead_server.ex)</sub>
 - `gate.scanner` <sub>(apps/engine/lib/engine/gates/scanner.ex)</sub>
 - `handoff.accepted` <sub>(apps/api/src/application/use-cases/agents/accept-handoff.use-case.ts)</sub>
 - `handoff.auto_accept_failed` <sub>(apps/api/src/application/use-cases/agents/aceitar-handoff-automaticamente.use-case.ts)</sub>
@@ -433,6 +434,7 @@ sequenceDiagram
 - `proposed_action.created` <sub>(apps/api/src/application/use-cases/actions/propose-action.use-case.ts)</sub>
 - `proposed_action.denied` <sub>(apps/api/src/application/use-cases/actions/deny-action.use-case.ts)</sub>
 - `proposed_action.executed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
+- `proposed_action.failed` — ⚠️ **上文未描述** <sub>(apps/engine/lib/engine/agents/dev_lead_tools.ex)</sub>
 - `psychologist.analysis_completed` <sub>(apps/api/src/application/use-cases/execution/propose-hypotheses.use-case.ts)</sub>
 - `psychologist.analysis_failed` <sub>(apps/engine/lib/engine/workers/psychologist_worker.ex)</sub>
 - `psychologist.analysis_skipped` <sub>(apps/engine/lib/engine/workers/psychologist_worker.ex)</sub>
