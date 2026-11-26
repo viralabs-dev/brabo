@@ -417,7 +417,7 @@ ele.
 
 > ⚠️ Bloco gerado por `pnpm docs:generate`. Não edite à mão — o próximo build o sobrescreve.
 
-Extraídos dos pontos de emissão: **125 identificadores**, dos quais **13** não estão descritos acima.
+Extraídos dos pontos de emissão: **127 identificadores**, dos quais **13** não estão descritos acima.
 
 - `action.failed` <sub>(apps/api/src/application/use-cases/actions/execute-git-action.use-case.ts)</sub>
 - `agent.activated` <sub>(apps/api/src/application/use-cases/agents/activate-agent.use-case.ts)</sub>
@@ -498,6 +498,8 @@ Extraídos dos pontos de emissão: **125 identificadores**, dos quais **13** nã
 - `execution.activated` <sub>(apps/api/src/application/use-cases/execution/activate-execution.use-case.ts)</sub>
 - `execution.parallelization_accepted` <sub>(apps/api/src/application/use-cases/execution/accept-parallelization.use-case.ts)</sub>
 - `execution.parallelization_suggested` <sub>(apps/api/src/application/use-cases/execution/activate-execution.use-case.ts)</sub>
+- `execution.plan_applied` <sub>(apps/engine/lib/engine/agents/dev_lead_tools.ex)</sub>
+- `execution.plan_failed` <sub>(apps/engine/lib/engine/agents/dev_lead_tools.ex)</sub>
 - `execution.stalled` — ⚠️ **não descrito acima** <sub>(apps/engine/lib/engine/workers/execucao_parada_worker.ex)</sub>
 - `gate.interrupted` <sub>(apps/engine/lib/engine/gates/gate_rescuer.ex)</sub>
 - `gate.rescue_parked` <sub>(apps/engine/lib/engine/gates/gate_rescuer.ex)</sub>
