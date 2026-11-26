@@ -73,7 +73,7 @@
 <ul>
 <li><code>brabo-contracts</code> PR #48: serviços no trabalho e <code>run.env</code> no <code>docker-port</code> (RN-1518), TAG <code>v1.5.0-dev.1</code>.</li>
 <li><code>brabo-broker</code> PR #55: repin da TAG e repasse de <code>servicos</code>/<code>env</code> no papel de trabalho.</li>
-<li><code>brabo-api</code> PRs #156 e #159: <code>Run.env</code>, resolução de digest na proposta, <code>files</code> vazio recusado (RN-1507, RN-1508, RN-1520).</li>
+<li><code>brabo-api</code> PRs #156 e #159: <code>Run.env</code>, resolução de digest na proposta, <code>files</code> vazio recusado (RN-1522, RN-1523 e RN-1520; as duas primeiras nasceram como RN-1507 e RN-1508 e foram renumeradas na api#160, porque o engine já usa esses números).</li>
 <li><code>brabo-engine</code> PRs #136 e #140: tag explícita aceita, guarda do compose, recusa de PR sem arquivo, prompt (RN-1507, RN-1508, RN-1521).
 Cada elo depende da TAG do anterior.</li>
 </ul>
@@ -86,7 +86,7 @@ Cada elo depende da TAG do anterior.</li>
 </ul>
 <nav class="site-pager"><a href="../adr/0298-o-projeto-guarda-o-registro-do-que-subiu-e-o-broker-le-o-host.html">ADR 0298 — O projeto guarda o registro do que subiu, e o broker lê o host e remove o que é do projeto apagado</a><a href="../adr/0103-runner-local-execucao-na-maquina-do-usuario.html">ADR 0103 — Runner local: execução na máquina do usuário por canal Phoenix com ticket de uso único</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0299-os-servicos-de-dados-tambem-sobem-no-container-de-trabalho.md">Editar esta página</a><span>Atualizado em 2026-11-26T05:46:18-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/adr/0299-os-servicos-de-dados-tambem-sobem-no-container-de-trabalho.md">Editar esta página</a><span>Atualizado em 2026-11-26T06:44:35-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#contexto">Contexto</a></li><li class="n2"><a href="#decisão">Decisão</a></li><li class="n2"><a href="#alternativas-rejeitadas">Alternativas rejeitadas</a></li><li class="n2"><a href="#consequências">Consequências</a></li><li class="n2"><a href="#medição-26112026-docker-real-container-descartável-r402-b1015-pg-sem-porta-publicada">Medição (26/11/2026, Docker real, container descartável r402-b1015-pg, sem porta publicada)</a></li><li class="n2"><a href="#implementação-mergeada-na-dev-em-26112026">Implementação (mergeada na dev em 26/11/2026)</a></li><li class="n2"><a href="#ressalvas">Ressalvas</a></li></ul></aside>
 </div>

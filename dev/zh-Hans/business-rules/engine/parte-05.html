@@ -119,7 +119,7 @@ Desde a RN-730 o 402 chega com <code>code</code> próprio (<code>insufficient_cr
 ele que decide; o reconhecimento pelo texto ficou só como rede.</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/falha_de_turno.ex:142</code>
 (<code>credito_esgotado?</code>),
-<code>apps/engine/lib/engine/dev/dev_agent_server.ex:1228</code> (<code>handle_outcome</code>),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:1257</code> (<code>handle_outcome</code>),
 <code>apps/engine/lib/engine/dev/agent_io.ex:343</code> (<code>pausar_por_credito</code>),
 <code>apps/web/src/lib/agent-status.ts:178</code> (<code>breakerReasonFor</code>),
 <code>apps/api/src/application/use-cases/sessions/get-session-pending-work.use-case.ts</code></li>
@@ -480,12 +480,11 @@ exija. Continua régua de prompt: nenhuma reprovação nova no código.</p>
 <li>
 <p><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:18</code> (<code>texto</code>),
 <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:89</code> (<code>secao_da_forma</code>),
-<code>apps/api/src/application/use-cases/execution/get-dev-task-context.use-case.ts:275</code>
+<code>apps/api/src/application/use-cases/execution/get-dev-task-context.use-case.ts:282</code>
 (<code>tarefasIrmas</code>) e <code>apps/engine/lib/engine/gates/qa_automacao_agent.ex:170</code></p>
 <p><code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:89</code> (<code>secao_da_forma</code>),
-<code>apps/api/src/application/use-cases/execution/get-dev-task-context.use-case.ts:275</code>
-(<code>tarefasIrmas</code>) e <code>apps/engine/lib/engine/gates/qa_automacao_agent.ex:225</code>
-(<code>com_o_recorte</code>)</p>
+<code>apps/api/src/application/use-cases/execution/get-dev-task-context.use-case.ts:282</code>
+(<code>tarefasIrmas</code>) e <code>apps/engine/lib/engine/gates/qa_automacao_agent.ex:399</code> (<code>com_o_recorte</code>)</p>
 </li>
 <li>
 <p><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code> (desde
@@ -561,8 +560,8 @@ US$ 1.00&quot;). Os gates de QA seguem com o <code>task_budget_micros</code> bas
 recorte do card.</p>
 <ul>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/teto_da_tarefa.ex:32</code> (<code>efetivo</code>);
-<code>apps/engine/lib/engine/dev/dev_agent_server.ex:952</code> (<code>diagnostico_de_orcamento</code>);
-<code>apps/api/src/application/use-cases/execution/get-dev-task-context.use-case.ts:262</code>
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:965</code> (<code>diagnostico_de_orcamento</code>);
+<code>apps/api/src/application/use-cases/execution/get-dev-task-context.use-case.ts:269</code>
 (<code>ehPrimeiraTarefaDoModulo</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/dev_agent_server_test.exs</code> (describe
 &quot;RN-774&quot;: a primeira com US$ 0,53 não bloqueia, a segunda do mesmo módulo
@@ -640,8 +639,8 @@ o engine recebe da api <code>truncated</code> e <code>usage.outputTokens</code>,
 <code>reasoningTokens</code> (ficam só em <code>token_usage</code>), então a resposta vazia que
 bate no teto sem <code>finish_reason: length</code> não é reconhecida.</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tool_loop.ex:243</code>
-(<code>parada_sem_chamada</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1395</code>
-(<code>motivo_da_parada</code>), <code>:1582</code> (<code>stop_diagnosis</code>)</li>
+(<code>parada_sem_chamada</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1424</code>
+(<code>motivo_da_parada</code>), <code>:1611</code> (<code>stop_diagnosis</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tool_loop_test.exs</code> (<code>corte só de raciocínio</code>: retentada uma vez e segue; repetido para com
 <code>corte_pelo_teto</code>), <code>apps/engine/test/engine/dev/dev_agent_server_test.exs</code>
 (<code>resposta só de raciocínio cortada pelo teto bloqueia com motivo nomeado</code>)</li>
@@ -768,7 +767,7 @@ para os gates, nunca fecha sozinha. Mede DIFF e não ancestralidade, então
 cobre também o merge por squash que a <a href="#rn-760">RN-760</a> declara não ver.
 Declarado: a PR antiga da branch, se existir, não é fechada no provider.</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/worktree_manager.ex:418</code>
-(<code>sem_diff_contra_a_dev?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1495</code>
+(<code>sem_diff_contra_a_dev?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1524</code>
 (<code>ja_na_dev</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/tarefa_ja_na_dev_test.exs</code></li>
 <li><strong>Origem:</strong> AT-474</li>
@@ -787,7 +786,7 @@ subcomando embutido do gerenciador (<code>pnpm install</code>, <code>pnpm dlx</c
 com flag antes do script (<code>pnpm --filter x test</code>), flags de CLI do próprio
 projeto e comando que não é de Node.</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/conferencia_do_readme.ex:28</code>
-(<code>conferir</code>), <code>apps/engine/lib/engine/gates/qa_lead_server.ex:1033</code>
+(<code>conferir</code>), <code>apps/engine/lib/engine/gates/qa_lead_server.ex:1040</code>
 (<code>conferencia_do_readme</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/conferencia_do_readme_test.exs</code></li>
 <li><strong>Origem:</strong> AT-475</li>
@@ -847,7 +846,7 @@ do dev agent por essa causa NÃO incrementa o contador de bloqueios seguidos
 (AT-621, <a href="#rn-864">RN-864</a>).</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tool_loop.ex:312</code>
 (<code>llm_turn_com_retentativa</code>), <code>apps/engine/lib/engine/agents/falha_de_turno.ex:119</code>
-(<code>falha_de_rede?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1364</code>
+(<code>falha_de_rede?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1393</code>
 (<code>bloquear_parada</code>), <code>apps/engine/lib/engine/dev/agent_io.ex:275</code>
 (<code>finish_task</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tool_loop_test.exs</code> (&quot;falha de
@@ -868,7 +867,7 @@ por QA e SecOps com 0 arquivos. <code>fetch</code> que falha não decide nada �
 com o que há, e na dúvida a task segue para os gates.</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/worktree_manager.ex:418</code>
 (<code>sem_diff_contra_a_dev?</code>), <code>apps/engine/lib/engine/dev/worktree_manager.ex:442</code>
-(<code>sem_diff_atualizado?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1228</code>
+(<code>sem_diff_atualizado?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1257</code>
 (<code>handle_outcome</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/tarefa_ja_na_dev_test.exs</code> (&quot;caminho
 feliz: com a dev atualizada, a branch não tem diff&quot;; &quot;falha: remoto
@@ -887,7 +886,7 @@ essa evidência, a lacuna vai para <code>itens</code>. É régua de PROMPT: o co
 externo dos gates (<code>apps/api/config/gates.yml</code>) e o código do <code>emit_qa_verdict</code> não
 mudam, e nenhum gate novo nasce. Tarefa que não toca nada disso não ganha a
 seção.</li>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:141</code>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:156</code>
 (<code>secao_do_ponto_de_entrada</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
 (&quot;tarefa que toca a fiação exige evidência do ponto de entrada real&quot; e &quot;tarefa
@@ -910,6 +909,9 @@ recorte pede todas as lacunas numa volta só&quot;)</li>
 duas lacunas que já existiam na entrega original)</li>
 </ul>
 <h3 id="rn-817">RN-817 — O QA roda a suíte em estado limpo, e teste pulado não é verde</h3>
+<blockquote>
+<p><strong>Revisada pela <a href="parte-07.html#rn-1513">RN-1513</a> (AT-1023):</strong> teste pulado (<code>skip</code> ou retorno antecipado) não cobre a regra, a linha dela é <code>covered: false</code>, e não vai mais ao <code>resumo</code> como observação nem é melhoria.</p>
+</blockquote>
 <ul>
 <li><strong>Regra:</strong> extensão do recorte da <a href="#rn-765">RN-765</a>, para toda tarefa. Antes
 de rodar a suíte, o gate de QA encerra o que o PRÓPRIO projeto deixou de pé
@@ -923,7 +925,7 @@ observação. É instrução do recorte, não passo do harness: quem roda a suí
 roteamento de container dos três modos — um <code>pkill</code> no harness precisaria
 de um segundo caminho de execução por modo. Régua de prompt; o contrato dos
 gates não muda.</li>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:209</code>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:244</code>
 (<code>secao_do_ambiente_limpo</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
 (&quot;RN-817: pede ambiente limpo, encerrar o grupo e pulado como observação&quot;)</li>
@@ -940,7 +942,7 @@ entrypoint na pasta do projeto, rodar o script no container do projeto,
 bater numa rota do processo de pé — e o que NÃO cabe ali: construir imagem
 Docker, <code>docker compose</code>, rede externa. Exigência desse segundo tipo nunca
 vai para <code>itens</code>; vai ao <code>resumo</code> como observação. Régua de prompt.</li>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:141</code>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:156</code>
 (<code>secao_do_ponto_de_entrada</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
 (&quot;RN-818: com ponto de entrada diz o que conta e o que não cabe&quot; e &quot;RN-818:
@@ -1099,9 +1101,9 @@ OBRIGATÓRIO <code>run</code> (<code>command</code> até 300 caracteres; <code>u
 <code>http://127.0.0.1:</code>; <code>envExample</code> booleano), validado no engine ANTES do HALT
 com recusa nomeada que entra no laço (RN-163) e repassado no
 payload de <code>open_infra_pr</code>. Decisão no <a href="../../adr/0213-o-entregavel-roda-na-maquina-pelo-compose-da-infra.html">ADR 0213</a>.</li>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/infra/instrucoes_de_execucao.ex:27</code>
-(<code>validar</code>), <code>apps/engine/lib/engine/infra/infra_lead_server.ex:1550</code>
-(<code>build_kickoff</code>) e <code>:1451</code> (<code>abrir_pr</code>), e
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/infra/instrucoes_de_execucao.ex:31</code>
+(<code>validar</code>), <code>apps/engine/lib/engine/infra/infra_lead_server.ex:1585</code>
+(<code>build_kickoff</code>) e <code>:1486</code> (<code>abrir_pr</code>), e
 <code>apps/engine/lib/engine/infra/tools/propose_infra_pr.ex:24</code> (<code>spec</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/infra/infra_lead_server_test.exs</code>
 (describe &quot;o compose sobe o app e a PR leva <code>run</code> (RN-851)&quot;)</li>
@@ -1117,7 +1119,7 @@ cláusula: módulo que expõe HTTP serve <code>/openapi.json</code> (OpenAPI 3) 
 swagger-ui de CDN; módulo web serve a página inicial; a URL entra na seção
 &quot;Rodar na sua máquina&quot; do README. Tarefa que não toca rotas não paga a
 cláusula (a mensagem é fixada e volta a cada iteração).</li>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:917</code>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:930</code>
 (<code>clausula_de_openapi</code>),
 <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:133</code>
 (<code>toca_ponto_de_entrada?</code>)</li>
@@ -1135,7 +1137,7 @@ comando do README em background DENTRO do container, bate em
 <code>node -e fetch</code>) e encerra o grupo de processos (<a href="#rn-817">RN-817</a>). Falha
 vai a <code>itens</code>; o <code>docker compose up</code> real fica no <code>resumo</code> como &quot;provado só
 na máquina do usuário&quot;.</li>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:141</code>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:156</code>
 (<code>secao_do_ponto_de_entrada</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/recorte_da_tarefa_test.exs</code>
 (&quot;tarefa que toca rotas pede /openapi.json e /docs, compose em resumo&quot;;
@@ -1161,9 +1163,9 @@ para esta tarefa/módulo — vencem RF/DoR quando conflitam&quot; (<code>pergunt
 nada. A pergunta gravada conta no fecho do turno (RN-731), e o PO passa
 <code>question_id</code> em <code>update_story</code>/<code>complete_story</code> quando corrige a história a
 partir de uma resposta (<a href="../../adr/0214-pergunta-em-aberto-vira-pendencia.html">ADR 0214</a>).</li>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tools/declare_open_question.ex:54</code> (<code>run</code>),
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tools/declare_open_question.ex:60</code> (<code>run</code>),
 <code>apps/engine/lib/engine/harness/fluxo_do_time.ex:116</code> (<code>frase_da_pergunta</code>),
-<code>apps/engine/lib/engine/gates/tools/emit_qa_verdict.ex:81</code> (<code>run</code>),
+<code>apps/engine/lib/engine/gates/tools/emit_qa_verdict.ex:91</code> (<code>run</code>),
 <code>apps/engine/lib/engine/gates/qa_lead.ex:89</code> (<code>consolidar_decisao</code>),
 <code>apps/engine/lib/engine/gates/qa_lead_server.ex:703</code> (<code>estacionar_por_decisao</code>),
 <code>apps/engine/lib/engine/dev/context_builder.ex:127</code> (<code>secao_de_decisoes</code>)</li>
@@ -1190,12 +1192,12 @@ estar em <code>paths</code> do <code>/openapi.json</code> servido; rota faltando
 reprova, nunca observação (estende a RN-854).</p>
 </li>
 <li>
-<p><strong>Onde:</strong> <code>apps/engine/lib/engine/infra/instrucoes_de_execucao.ex:60</code> (<code>url</code>),
+<p><strong>Onde:</strong> <code>apps/engine/lib/engine/infra/instrucoes_de_execucao.ex:65</code> (<code>url</code>),
 <code>apps/api/src/domain/infra/run-instructions.ts:77</code> (<code>recusaDoRun</code>),
-<code>apps/engine/lib/engine/infra/infra_lead_server.ex:1550</code> (<code>build_kickoff</code>),
-<code>apps/engine/lib/engine/dev/dev_agent_server.ex:917</code> (<code>clausula_de_openapi</code>),</p>
-<p><code>apps/engine/lib/engine/infra/infra_lead_server.ex:1550</code> (<code>build_kickoff</code>),
-<code>apps/engine/lib/engine/dev/dev_agent_server.ex:917</code> (<code>clausula_de_openapi</code>),
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:1585</code> (<code>build_kickoff</code>),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:930</code> (<code>clausula_de_openapi</code>),</p>
+<p><code>apps/engine/lib/engine/infra/infra_lead_server.ex:1585</code> (<code>build_kickoff</code>),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:930</code> (<code>clausula_de_openapi</code>),
 <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:20</code> (<code>texto</code>)</p>
 </li>
 <li>
@@ -1228,9 +1230,9 @@ bloqueiam na hora. O contador de retomadas é só em memória: reiniciar o
 engine o zera. Vale também para a correção pós-gate (AT-621): o 503 do
 provider numa correção segue o mesmo caminho do laço principal (crédito
 RN-726 + retomada), com o motivo marcado &quot;(correção)&quot;.</li>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1000</code>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1015</code>
 (<code>handle_correction_outcome</code>), <code>apps/engine/lib/engine/agents/falha_de_turno.ex:140</code>
-(<code>passageira?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1392</code>
+(<code>passageira?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1421</code>
 (<code>bloquear_passageira</code>), <code>apps/engine/lib/engine/dev/agent_io.ex:366</code>
 (<code>pausar_por_rede</code>), <code>apps/engine/lib/engine/workers/retomada_de_tarefa_worker.ex:33</code>
 (<code>agendar</code>), <code>apps/api/src/application/use-cases/execution/unblock-task.use-case.ts:33</code>
@@ -1332,8 +1334,7 @@ api, <code>openQuestionId</code> que não é uuid.</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/gates/qa_lead_server.ex:709</code>
 (<code>devolver_ao_qa</code>), <code>apps/engine/lib/engine/gates/qa_lead_server.ex:365</code>
 (<code>devolver_ao_qa</code>), <code>apps/engine/lib/engine/gates/qa_lead_server.ex:856</code>
-(<code>texto_da_recusa</code>), <code>apps/engine/lib/engine/gates/qa_automacao_agent.ex:186</code>
-(<code>devolver</code>), <code>apps/engine/lib/engine/gates/tools/emit_qa_verdict.ex:107</code>
+(<code>texto_da_recusa</code>), <code>apps/engine/lib/engine/gates/qa_automacao_agent.ex:244</code> (<code>devolver</code>), <code>apps/engine/lib/engine/gates/tools/emit_qa_verdict.ex:117</code>
 (<code>uuid</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/gates/qa_lead_server_test.exs</code> (&quot;400:
 nada estaciona, o QA recebe o motivo e uma nova volta acontece&quot;; &quot;409 no
@@ -1388,8 +1389,8 @@ venha de <code>PUBLIC_BASE_URL</code> ou do <code>Host</code> da requisição CO
 erro responda o mesmo <code>code</code> em todas as rotas. O recorte do QA confere as
 duas coisas e trata a divergência (ex.: <code>not_found</code> × <code>link_not_found</code>)
 como ITEM. Decisão do dono de 14/10: regra geral.</li>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:917</code> (<code>clausula_de_openapi</code>);
-<code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:141</code> (<code>secao_do_ponto_de_entrada</code>)</li>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:930</code> (<code>clausula_de_openapi</code>);
+<code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:156</code> (<code>secao_do_ponto_de_entrada</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/report_done_instrucao_test.exs</code>
 (&quot;RN-879/880: tarefa que toca rotas leva URL com porta, code único e CORS&quot; e
 a falha &quot;RN-879/880 falha: tarefa sem rota não recebe CORS nem PUBLIC_BASE_URL&quot;);

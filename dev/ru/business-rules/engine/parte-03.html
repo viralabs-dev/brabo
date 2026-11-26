@@ -884,17 +884,17 @@ amostrado nesta mudança (o item (c) da <a href="#rn-589">RN-589</a>); a saída 
 PRÓPRIO agente escreveu, e o corte é a única contenção — é o item (d) da
 <a href="#rn-589">RN-589</a> com o primeiro caso concreto.</p>
 <ul>
-<li><strong>Código:</strong> <code>apps/engine/lib/engine/agents/dev_lead_server.ex:433</code>
-(<code>handle_info/2</code> do <code>action_settled</code>, o <code>tool.result</code> em <code>:271</code>), <code>:963</code>
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/agents/dev_lead_server.ex:454</code>
+(<code>handle_info/2</code> do <code>action_settled</code>, o <code>tool.result</code> em <code>:271</code>), <code>:1001</code>
 (<code>sentido_do_desfecho/1</code>);
-<code>apps/engine/lib/engine/infra/infra_lead_server.ex:1217</code>
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:1252</code>
 (<code>registrar_resultado/4</code>), <code>:317</code> (a recusa de <code>propose_infra_pr</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/dev_lead_server_test.exs:292</code> (a
 suspensão não grava), <code>:364</code> (a retomada grava o texto que o modelo leu),
 <code>:488</code> (recusado é <code>ok: false</code> com o motivo);
 <code>apps/engine/test/engine/infra/infra_lead_server_test.exs:253</code>
 (o desfecho de <code>validate_infra_file</code>), <code>:409</code> (proposta aceita), <code>:485</code> (recusa por modo),
-<code>:863</code> e <code>:914</code> (<code>container_start_via_runner</code> com e sem runner)</li>
+<code>:863</code> e <code>:940</code> (<code>container_start_via_runner</code> com e sem runner)</li>
 <li><strong>Origem:</strong> AT-190 — declarado aberto na <a href="#rn-589">RN-589</a> (AT-151)</li>
 </ul>
 <h3 id="rn-601">RN-601 — O engine e o broker aplicam aos dois tokens de serviço a régua da api</h3>
@@ -1036,18 +1036,18 @@ não lê <code>BROKER_URL</code>; quem recusa é a api ao propor, com 409
 quem clica). A cláusula de pasta usa o carimbo, que não é batimento
 (<a href="../web.html#rn-468">RN-468</a>) — por isso a de runner conectado continua depois dela.</p>
 <ul>
-<li><strong>Código:</strong> <code>apps/engine/lib/engine/infra/infra_lead_server.ex:941</code>
-(<code>recusa_local_de_subida</code>), <code>:1055</code> (<code>recusa_por_estado</code>), <code>:1129</code>
-(<code>recusa_ja_de_pe</code>), <code>:1137</code> (<code>recusa_sem_imagem_decidida</code>), <code>:1138</code>
-(<code>recusa_pasta_nunca_confirmada</code>), <code>:1139</code> (<code>recusa_runner_desconectado</code>);
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/infra/infra_lead_server.ex:976</code>
+(<code>recusa_local_de_subida</code>), <code>:1090</code> (<code>recusa_por_estado</code>), <code>:1164</code>
+(<code>recusa_ja_de_pe</code>), <code>:1172</code> (<code>recusa_sem_imagem_decidida</code>), <code>:1173</code>
+(<code>recusa_pasta_nunca_confirmada</code>), <code>:1174</code> (<code>recusa_runner_desconectado</code>);
 <code>apps/engine/lib/engine/containers/project_container_lifecycle.ex:83</code>
 (<code>status_registrado</code>);
 <code>apps/engine/lib/engine/session_events/event.ex:120</code> (<code>imagem_decidida?</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/infra/infra_lead_server_test.exs:742</code>
-(via runner, <code>running</code> recusa), <code>:808</code> (<code>provisioning</code> recusa), <code>:818</code>
+(via runner, <code>running</code> recusa), <code>:834</code> (<code>provisioning</code> recusa), <code>:844</code>
 (<code>stopped</code> não recusa), <code>:779</code> (sem imagem), <code>:790</code> (pasta nunca
-confirmada), <code>:854</code> (<code>propose_container_start</code> com container <code>running</code>),
-<code>:854</code> (<code>propose_container_start</code> sem imagem PROPÕE), <code>:863</code> (caminho feliz
+confirmada), <code>:880</code> (<code>propose_container_start</code> com container <code>running</code>),
+<code>:880</code> (<code>propose_container_start</code> sem imagem PROPÕE), <code>:863</code> (caminho feliz
 do via runner), <code>:901</code> (sem runner conectado)</li>
 <li><strong>Origem:</strong> AT-142</li>
 </ul>
@@ -1128,7 +1128,7 @@ deu e com as quatro ferramentas.</p>
 (<code>handle_cast(:kickoff</code>), <code>:270</code> (<code>handle_cast({:correct</code>, a fila), <code>:280</code>
 (<code>handle_cast(:cancel</code>), <code>:296</code> (<code>handle_call({:user_message</code>), <code>:393</code>
 (<code>handle_info</code>), <code>:419</code> (<code>drenar_correcao_pendente</code>), <code>:502</code>
-(<code>toolloop.limit_reached</code>), <code>:1269</code> (<code>concluir</code>);</p>
+(<code>toolloop.limit_reached</code>), <code>:1304</code> (<code>concluir</code>);</p>
 <p>(<code>toolloop.limit_reached</code>), <code>:1057</code> (<code>concluir</code>);
 <code>apps/engine/lib/engine_web/controllers/agent_command_controller.ex:44</code>
 (<code>@agentes_de_conversa</code>), <code>:192</code> (a cláusula do <code>infra</code>), <code>:618</code>
@@ -1140,7 +1140,7 @@ deu e com as quatro ferramentas.</p>
 <p><strong>Teste:</strong> <code>apps/engine/test/engine/infra/infra_lead_server_test.exs:1033</code>
 (aceite imediato, <code>working</code> antes), <code>:1048</code> (409 com turno em curso — caso
 de falha), <code>:1077</code> (&quot;Parar&quot;), <code>:1103</code> (&quot;Parar&quot; sem turno), <code>:1107</code> (a
-correção de gate na fila), <code>:1849</code> (<code>toolloop.limit_reached</code>);
+correção de gate na fila), <code>:1875</code> (<code>toolloop.limit_reached</code>);
 <code>apps/engine/test/engine/agents/turno_orfao_test.exs:76</code> (o órfão, agora nos
 sete); <code>apps/engine/test/engine/agents/reidratacao_dos_seis_test.exs:62</code> (a
 reidratação, nos sete);

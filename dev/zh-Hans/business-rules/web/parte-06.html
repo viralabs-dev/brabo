@@ -930,7 +930,7 @@ o Dev Lead lê marca a linha com <code>| BLOQUEADA: &lt;motivo, até 120 caracte
 e a tarefa segue na lista. Claim, desbloqueio e retomada não mudam.</li>
 <li><strong>Onde:</strong> <code>apps/web/src/lib/execution.ts:10</code> (<code>estadoDaTarefa</code>);
 <code>apps/web/src/routes/ProjectBacklogTab.tsx</code> (o selo da lista de tarefas);
-<code>apps/engine/lib/engine/agents/dev_lead_tools.ex:987</code> (<code>bloqueio</code>)</li>
+<code>apps/engine/lib/engine/agents/dev_lead_tools.ex:1011</code> (<code>bloqueio</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/lib/execution.test.ts</code> (&quot;blocked vence o status&quot;;
 falha: &quot;sem bloqueio, o status&quot;); <code>apps/web/src/routes/ProjectBacklogTab.test.tsx</code>
 (&quot;a bloqueada mostra &quot;Bloqueada&quot; e o motivo, sem o selo &quot;a fazer&quot;&quot;);

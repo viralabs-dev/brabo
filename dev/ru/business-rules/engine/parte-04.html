@@ -608,8 +608,8 @@ roteamento, <code>runner</code>) e o modelo não a propôs.</p>
 <ul>
 <li>
 <p><strong>Código:</strong> <code>apps/engine/lib/engine/infra/infra_lead_server.ex:551</code>
-(<code>dispatch_calls</code>), <code>:587</code> (<code>recusa_pr_repetida_no_lote</code>), <code>:1380</code>
-(<code>registrar_subida</code>), <code>:1279</code> (<code>fechar_subida</code>), <code>:1155</code></p>
+(<code>dispatch_calls</code>), <code>:587</code> (<code>recusa_pr_repetida_no_lote</code>), <code>:1415</code>
+(<code>registrar_subida</code>), <code>:1308</code> (<code>fechar_subida</code>), <code>:1155</code></p>
 <p>(<code>dispatch_calls</code>), <code>:539</code> (<code>recusa_pr_repetida_no_lote</code>), <code>:1140</code>
 (<code>registrar_subida</code>), <code>:1150</code> (<code>fechar_subida</code>), <code>:1154</code>
 (<code>desfecho_da_subida</code>); <code>apps/engine/lib/engine/infra/tools/propose_infra_pr.ex</code>
@@ -757,9 +757,9 @@ OBRIGATÓRIAS da <code>coverageMatrix</code> (e portanto reprovar entrega).</p>
 <code>:906</code> (<code>arquivos_alterados</code>);
 <code>apps/engine/lib/engine/gates/qa_estrategia_agent.ex:87</code> (<code>run</code>),
 <code>:104</code> (<code>token_budget_micros</code>), <code>:189</code> (<code>descrever_arquivos</code>);
-<code>apps/engine/lib/engine/gates/qa_automacao_agent.ex:226</code> (<code>com_o_plano</code>);
-<code>apps/engine/lib/engine/agents/dev_lead_tools.ex:1036</code> (<code>run_assessment</code>),
-<code>:1115</code> (<code>propor_parecer</code>);
+<code>apps/engine/lib/engine/gates/qa_automacao_agent.ex:425</code> (<code>com_o_plano</code>);
+<code>apps/engine/lib/engine/agents/dev_lead_tools.ex:1055</code> (<code>run_assessment</code>),
+<code>:1136</code> (<code>propor_parecer</code>);
 <code>apps/engine/lib/engine/harness/artifact_schemas.ex:59</code> (<code>taskId</code>);
 <code>apps/api/config/gates.yml</code> (<code>qa-verificada</code>, <code>implementavel</code>); <code>packages/contracts/fluxo.yml</code>
 (<code>qa-estrategia</code>, <code>area-qa</code>, <code>dev-lead</code>)</li>
@@ -989,15 +989,15 @@ kickoff proíbe inventar <code>task_id</code> e pede que ele só diga ter avalia
 histórias em que chamou <code>assess_implementability</code>.</p>
 <ul>
 <li>
-<p><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:899</code> (<code>module_map_vigente</code>);
-<code>:488</code> (<code>spec_read_backlog</code>); <code>:930</code> (<code>tarefas_do_backlog</code>);
-<code>apps/engine/lib/engine/agents/dev_lead_server.ex:766</code> (<code>kickoff_instruction</code>);</p>
+<p><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:909</code> (<code>module_map_vigente</code>);
+<code>:488</code> (<code>spec_read_backlog</code>); <code>:910</code> (<code>tarefas_do_backlog</code>);
+<code>apps/engine/lib/engine/agents/dev_lead_server.ex:798</code> (<code>kickoff_instruction</code>);</p>
 </li>
 <li>
-<p><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:899</code> (<code>module_map_vigente</code>);
-<code>:488</code> (<code>spec_read_backlog</code>); <code>:930</code> (<code>tarefas_do_backlog</code>);
-<code>apps/engine/lib/engine/agents/dev_lead_server.ex:766</code> (<code>kickoff_instruction</code>);
-<code>:422</code> (<code>run_turn</code>)</p>
+<p><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:909</code> (<code>module_map_vigente</code>);
+<code>:488</code> (<code>spec_read_backlog</code>); <code>:910</code> (<code>tarefas_do_backlog</code>);
+<code>apps/engine/lib/engine/agents/dev_lead_server.ex:798</code> (<code>kickoff_instruction</code>);
+<code>:443</code> (<code>run_turn</code>)</p>
 </li>
 <li>
 <p><strong>Teste:</strong> <code>apps/engine/test/engine/agents/dev_lead_server_test.exs:164</code> (o
@@ -1153,8 +1153,8 @@ modelo ainda não começa com ele (sem diferenciar maiúsculas) — antes saía
 <p><strong>Onde:</strong> <code>apps/engine/lib/engine/infra/workflows_agent.ex:61</code> (<code>dispensa</code>),
 <code>apps/engine/lib/engine/infra/infra_lead.ex:69</code> (<code>com_prefixo</code>),
 <code>apps/engine/lib/engine/infra/workflows_agent.ex:183</code> (<code>parada_sem_ferramenta</code>),
-<code>apps/engine/lib/engine/infra/infra_lead_server.ex:1424</code> (<code>finalize</code>)</p>
-<p><code>apps/engine/lib/engine/infra/infra_lead_server.ex:1424</code> (<code>finalize</code>)</p>
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:1459</code> (<code>finalize</code>)</p>
+<p><code>apps/engine/lib/engine/infra/infra_lead_server.ex:1459</code> (<code>finalize</code>)</p>
 </li>
 <li>
 <p><strong>Teste:</strong> <code>apps/engine/test/engine/infra/workflows_agent_test.exs</code> (&quot;RN-710: …&quot;)
@@ -1418,7 +1418,7 @@ a tool <code>propose_container_start</code> sem <code>network</code>. A autonomi
 publicadas da máquina, ADR 0189) está declarado no ADR.</p>
 <ul>
 <li><strong>Código:</strong> <code>apps/engine/lib/engine/session_events/event.ex:139</code> (<code>rede_do_arquiteto</code>),
-<code>apps/engine/lib/engine/infra/infra_lead_server.ex:855</code> (<code>rede_herdada</code>)</li>
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:890</code> (<code>rede_herdada</code>)</li>
 <li><strong>Testes:</strong> <code>apps/engine/test/engine/infra/infra_lead_server_test.exs</code> —
 &quot;RN-723: a subida herda a rede <code>egress</code> que o Arquiteto declarou&quot; e
 &quot;RN-723: rede do Arquiteto fora do vocabulário — a subida segue <code>none</code>&quot;</li>

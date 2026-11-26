@@ -28,6 +28,7 @@
 <article class="doc">
 <h1 id="ambiente-local-e-de-dev">Ambiente local e de dev</h1>
 <p>Parte do <a href="../runbook.html">Runbook operacional</a>. Comece pela triagem do índice.</p>
+<p><strong>Porta do Postgres ocupada.</strong> O dev publica o Postgres em <code>127.0.0.1:${POSTGRES_PORT}</code> (padrão 5432). Se outro projeto já usa a 5432 da sua máquina, ponha <code>POSTGRES_PORT=15432</code> (ou outra livre) no <code>.env</code>: o <code>make dev</code> passa a usar essa porta, e a mensagem do preflight lista a variável.</p>
 <h2 id="broker-de-container">O broker de containers</h2>
 <p>O broker (<a href="../adr/0130-broker-de-container.html">ADR 0130</a>) é o único processo do
 produto que fala com um daemon do Docker, e o único serviço com
