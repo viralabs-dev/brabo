@@ -208,6 +208,7 @@ gates 的注册表、QA 和 SecOps 的裁决，以及衡量它们的 golden-sets
 | [0265](0265-o-app-declarado-propoe-recriar-o-container.md) | O app declarado pela Infra propõe recriar o container, com a porta na faixa 13000+ | 已接受 |
 | [0297](0297-o-broker-prova-o-compose-do-projeto-num-ambiente-descartavel.md) | O broker prova o compose do projeto num ambiente descartável | 已接受 |
 | [0298](0298-o-projeto-guarda-o-registro-do-que-subiu-e-o-broker-le-o-host.md) | O projeto guarda o registro do que subiu, e o broker lê o host e remove o que é do projeto apagado | 已接受 |
+| [0299](0299-os-servicos-de-dados-tambem-sobem-no-container-de-trabalho.md) | Os serviços de dados também sobem no container de trabalho, e `run.env` leva a URL de conexão aos dois containers | 已提议 |
 
 ## 本地 runner {#tema-runner}
 
