@@ -208,6 +208,7 @@ The project container's lifecycle, the image decision, the Docker port and the b
 | [0265](0265-o-app-declarado-propoe-recriar-o-container.md) | O app declarado pela Infra propõe recriar o container, com a porta na faixa 13000+ | accepted |
 | [0297](0297-o-broker-prova-o-compose-do-projeto-num-ambiente-descartavel.md) | O broker prova o compose do projeto num ambiente descartável | accepted |
 | [0298](0298-o-projeto-guarda-o-registro-do-que-subiu-e-o-broker-le-o-host.md) | O projeto guarda o registro do que subiu, e o broker lê o host e remove o que é do projeto apagado | accepted |
+| [0299](0299-os-servicos-de-dados-tambem-sobem-no-container-de-trabalho.md) | Os serviços de dados também sobem no container de trabalho, e `run.env` leva a URL de conexão aos dois containers | proposed |
 
 ## The local runner {#tema-runner}
 
