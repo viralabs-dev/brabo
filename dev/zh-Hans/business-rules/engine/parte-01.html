@@ -110,6 +110,9 @@ mesmo princípio do <code>MarkTaskBlockedUseCase</code>/<code>unblock</code>, ap
 em vez da tarefa. Rearmar um agente que <strong>não</strong> está travado é <strong>409</strong>, não
 sucesso silencioso: o evento <code>dev.rearmed</code> é imutável, e registrá-lo para um
 rearme que não aconteceu seria uma mentira no event log.</p>
+<blockquote>
+<p><strong>Revisão (AT-984, <a href="parte-07.html#rn-1345">RN-1345</a>):</strong> só conta bloqueio atribuível ao dev; origem <code>infra</code>, falha do próprio gate e <code>report_blocked</code> por dependência ou decisão não incrementam.</p>
+</blockquote>
 <p>Um bloqueio que vem de FORA do agente (o <code>QaLeadServer</code> falhando
 internamente, por exemplo) também precisa acordá-lo — é por isso que a
 emissão de <code>task.gate_resolved</code> mora no <code>MarkTaskBlockedUseCase</code>, o funil por

@@ -56,11 +56,11 @@ quantas tarefas tem.</li>
 <code>src/application/use-cases/backlog/corrigir-historia.use-case.ts:52</code>
 (<code>editar</code>), <code>:162</code> (<code>arquivar</code>),
 <code>src/infrastructure/persistence/drizzle/backlog.repository.ts:97</code>
-(<code>findByProject</code>), <code>:404</code> (<code>claimNext</code>),
+(<code>findByProject</code>), <code>:452</code> (<code>claimNext</code>),
 <code>src/interfaces/http/backlog/backlog.controller.ts:209</code>
 (<code>updateTitle</code>), <code>:223</code> (<code>archive</code>),
-<code>src/interfaces/http/internal/internal-sessions.controller.ts:583</code>
-(<code>updateStoryRoute</code>), <code>:652</code> (<code>archiveStoryRoute</code>),
+<code>src/interfaces/http/internal/internal-sessions.controller.ts:589</code>
+(<code>updateStoryRoute</code>), <code>:656</code> (<code>archiveStoryRoute</code>),
 <code>apps/engine/lib/engine/harness/tools/update_story.ex:45</code> (<code>run</code>),
 <code>apps/engine/lib/engine/harness/tools/archive_story.ex:38</code> (<code>run</code>),
 <code>apps/web/src/lib/correcao-de-historia.ts:10</code> (<code>motivoDeCorrecaoInerte</code>)</li>
@@ -106,10 +106,10 @@ query nem poll novo.</li>
 <li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-infra-pr.use-case.ts:71</code>
 (<code>ExecuteInfraPrUseCase</code>),
 <code>apps/web/src/routes/ProjectApprovalsTab.tsx:98</code> (<code>ProjectApprovalsTab</code>),
-<code>apps/web/src/routes/Shell.tsx:379</code> (<code>currentProject</code>),
+<code>apps/web/src/routes/Shell.tsx:460</code> (<code>currentProject</code>),
 <code>apps/web/src/routes/NewProjectWizard.tsx:155</code> (<code>NewProjectWizard</code>),
-<code>apps/web/src/routes/ProjectPrsTab.tsx:150</code> (<code>invalidateMergeActions</code>),
-<code>apps/web/src/lib/agent-status.ts:254</code> (<code>gateStatus</code>)</li>
+<code>apps/web/src/routes/ProjectPrsTab.tsx:164</code> (<code>invalidateMergeActions</code>),
+<code>apps/web/src/lib/agent-status.ts:273</code> (<code>gateStatus</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/execute-infra-pr.use-case.spec.ts</code>
 (&quot;a branch nasce de dev, a PR mira dev e leva infra[bot]&quot;; falha:
 &quot;repositório sem dev falha nomeado, sem cair na default&quot;),
@@ -140,8 +140,8 @@ ao campo, e caminho que só leva a mensagem.</li>
 <code>src/application/use-cases/llm/stream-llm-turn.use-case.ts:311</code>
 (<code>streamErrorCode</code>),
 <code>apps/engine/lib/engine/agents/falha_de_turno.ex:91</code> (<code>credito_esgotado?</code>),
-<code>:71</code> (<code>origem</code>), <code>apps/engine/lib/engine/harness/tool_loop.ex:168</code>
-(<code>last_error_code</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1117</code>
+<code>:71</code> (<code>origem</code>), <code>apps/engine/lib/engine/harness/tool_loop.ex:193</code>
+(<code>last_error_code</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1228</code>
 (<code>handle_outcome</code>)</li>
 <li><strong>Teste:</strong> <code>test/contract/llm-provider.contract.ts</code> (<code>erro_402 vira chunk de erro com code &quot;insufficient_credit&quot;</code>; falha: <code>erro_500</code> segue
 <code>upstream</code>), rodado por todas as suítes de contrato de provider;
@@ -396,11 +396,11 @@ tem piso de <code>12rem</code> POR COLUNA e cresce por fração, com o contêine
 <code>min-content</code> — com <code>max-content</code> ela ficava da largura do texto sem quebra
 (medido no Chromium: 2 236px num balão de 708px) e a última coluna sumia.</li>
 <li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-adr-pr.use-case.ts:95</code>
-(<code>openPullRequest</code>); <code>apps/engine/lib/engine/infra/infra_lead_server.ex:1644</code>
-(<code>gravar_texto_do_turno</code>); <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1504</code>
+(<code>openPullRequest</code>); <code>apps/engine/lib/engine/infra/infra_lead_server.ex:1746</code>
+(<code>gravar_texto_do_turno</code>); <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1472</code>
 (<code>propose_pr</code>); <code>apps/web/src/lib/session-destinatario.ts:228</code>
 (<code>agentesEmConversa</code>) e <code>apps/web/src/lib/session-kind.ts:69</code>
-(<code>tipoDaSessao</code>); <code>apps/web/src/routes/NewProjectWizard.tsx:1143</code>
+(<code>tipoDaSessao</code>); <code>apps/web/src/routes/NewProjectWizard.tsx:1150</code>
 (<code>quebraPorSegmento</code>); <code>apps/web/src/components/ui/MarkdownMessage.tsx:178</code>
 (<code>TabelaMarkdown</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/execute-adr-pr.use-case.spec.ts</code>,
@@ -440,7 +440,7 @@ módulo da tarefa, então é o dev dele que tem de acordar. O conflito de merge
 já acorda o dono (<a href="parte-09.html#rn-715">RN-715</a>); com a sessão de execução de pé
 (<a href="#rn-776">RN-776</a>), o dono continua com linha em <code>dev_agent_states</code> para
 ser acordado.</li>
-<li><strong>Onde:</strong> <code>src/application/use-cases/execution/unblock-task.use-case.ts:68</code>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/unblock-task.use-case.ts:106</code>
 (<code>modules</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/execution/unblock-task.use-case.spec.ts</code>
 (tarefa com módulo acorda o dev desse módulo)</li>
@@ -513,7 +513,7 @@ contida (ADR 0060): no máximo 20, com o total real em
 <code>moduleOpenTasksTotal</code> e o corte dito no recorte. Requisito da entrega que
 depende do que outra história ainda vai entregar (uma rota, uma tela) vai ao
 <code>resumo</code> como observação e não reprova. A régua é de PROMPT, como na RN-765.</li>
-<li><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:269</code>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:290</code>
 (<code>tarefasAbertasDoModulo</code>), <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:20</code>
 (<code>texto</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/execution/get-dev-task-context.use-case.spec.ts</code>
@@ -541,11 +541,11 @@ diz Y), para o usuário e o Arquiteto. Régua de PROMPT, como a
 contra as rotas citadas nas histórias ao declará-lo.</p>
 </li>
 <li>
-<p><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:314</code>
+<p><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:335</code>
 (<code>moduloDoContrato</code>), <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:66</code></p>
 </li>
 <li>
-<p><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:314</code>
+<p><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:335</code>
 (<code>moduloDoContrato</code>), <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:91</code>
 (<code>secao_do_contrato</code>)</p>
 </li>
@@ -638,7 +638,7 @@ commit/PR nova (a chave da query), no foco e na remontagem.</li>
 <li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/session-context-summary.repository.ts:24</code>
 (<code>resumir</code>), <code>apps/web/src/lib/contexto-da-sessao.ts:15</code>
 (<code>useContextoDaSessaoInteira</code>), <code>apps/web/src/lib/contexto-da-sessao.ts:34</code>
-(<code>totalDaSessao</code>), <code>apps/web/src/routes/ContextAside.tsx:185</code> (<code>resumo</code>)</li>
+(<code>totalDaSessao</code>), <code>apps/web/src/routes/ContextAside.tsx:197</code> (<code>resumo</code>)</li>
 <li><strong>Teste:</strong> <code>test/infrastructure/persistence/drizzle/session-context-summary.repository.spec.ts</code>
 (&quot;conta a sessão INTEIRA, além de qualquer cauda de 200…&quot;),
 <code>test/application/use-cases/sessions/get-session-context-summary.use-case.spec.ts</code>
@@ -659,7 +659,7 @@ do mesmo projeto. Sessão sem essa ligação não entra. A lista vem do mais
 recente para o mais antigo, cortada em 100 (<code>TETO_DE_ARQUIVOS_TOCADOS</code>), e o
 <code>total</code> diz o número real; a tela declara o recorte quando ele corta.</li>
 <li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/session-context-summary.repository.ts:33</code>
-(<code>ligadas</code>), <code>apps/web/src/routes/ContextAside.tsx:376</code> (<code>filesTouched</code>)</li>
+(<code>ligadas</code>), <code>apps/web/src/routes/ContextAside.tsx:388</code> (<code>filesTouched</code>)</li>
 <li><strong>Teste:</strong> <code>test/infrastructure/persistence/drizzle/session-context-summary.repository.spec.ts</code>
 (&quot;…e soma os arquivos da execução ligada&quot;; falha: &quot;corta a lista de arquivos
 no teto e devolve o total real; não lê sessão sem ligação&quot;)</li>
@@ -672,9 +672,9 @@ no teto e devolve o total real; não lê sessão sem ligação&quot;)</li>
 com modelo de <code>supportsReasoning</code>, o provider que sabe dizer &quot;desligado&quot;
 manda <code>reasoning: { enabled: false }</code>, mantendo a folga da
 <a href="#rn-782">RN-782</a>. O QA-estratégia (<code>qa-estrategia</code>) e os demais gates não
-mudam. Medição que motivou: o raciocínio dos gates subiu de 44 mil para 211
+mudavam; a <a href="parte-12.html#rn-1404">RN-1404</a> incluiu a QA-estratégia. Medição que motivou: o raciocínio dos gates subiu de 44 mil para 211
 mil tokens por rodada, e o custo deles de US$ 0,15 para US$ 0,55.</li>
-<li><strong>Onde:</strong> <code>src/domain/llm/raciocinio-do-agente.ts:39</code>
+<li><strong>Onde:</strong> <code>src/domain/llm/raciocinio-do-agente.ts:45</code>
 (<code>raciocinioDesligadoParaOAgente</code>)</li>
 <li><strong>Teste:</strong> <code>test/domain/llm/raciocinio-do-agente.spec.ts</code>
 (<code>QA de Automação desliga; QA-estratégia e outros gates não (RN-838)</code>;
@@ -739,8 +739,8 @@ repositório; sessão de outro projeto continua 404 sem ler PR nenhuma.</li>
 <li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/session-context-summary.repository.ts:151</code>
 (<code>itensDeRegras</code>), <code>src/infrastructure/persistence/drizzle/session-context-summary.repository.ts:195</code>
 (<code>prsDasSessoes</code>), <code>src/application/use-cases/git/resumir-contexto-da-sessao.use-case.ts:37</code>
-(<code>prs</code>), <code>apps/web/src/routes/ContextAside.tsx:207</code> (<code>businessRules</code>),
-<code>apps/web/src/routes/ContextAside.tsx:232</code> (<code>decisoes</code>)</li>
+(<code>prs</code>), <code>apps/web/src/routes/ContextAside.tsx:219</code> (<code>businessRules</code>),
+<code>apps/web/src/routes/ContextAside.tsx:244</code> (<code>decisoes</code>)</li>
 <li><strong>Teste:</strong> <code>test/infrastructure/persistence/drizzle/session-context-summary.repository.spec.ts</code>
 (&quot;RN-844: devolve os ITENS de regra e decisão fora de qualquer cauda, com
 teto de 50&quot;; &quot;RN-844: lista as PRs executadas da sessão e da execução
@@ -774,7 +774,7 @@ assinatura do backlog, por prefixo <code>['session-context-summary', projectId]<
 <li><strong>Onde:</strong> <code>src/infrastructure/git/local-git-provider.ts:374</code>
 (<code>mergedBaseSha</code>), <code>src/infrastructure/git/local-git-provider.ts:862</code>
 (<code>rangeDoDiff</code>), <code>apps/web/src/lib/canal-vivo.ts:221</code> (<code>prs</code>),
-<code>apps/web/src/components/PendenciasDeOutrasSessoes.tsx:105</code> (<code>invalidateQueries</code>)</li>
+<code>apps/web/src/components/PendenciasDeOutrasSessoes.tsx:123</code> (<code>invalidateQueries</code>)</li>
 <li><strong>Teste:</strong> <code>test/infrastructure/git/local-git-provider.contract.spec.ts</code>
 (&quot;PR mergeada por fast-forward devolve os arquivos que mudou&quot;; &quot;PR mergeada
 por commit de merge devolve só os arquivos dela&quot;; &quot;PR mergeada antes de os
@@ -802,7 +802,7 @@ passa a ser avisado: <code>ProposeActionUseCase</code> executa a ação sob a ma
 marca. O evento que o engine pediu (inclusive o <code>proposed_action.created</code>)
 continua sem aviso da api, para não sair em dobro.</li>
 <li><strong>Onde:</strong> <code>src/application/efeito-de-acao.ts:18</code> (<code>ehEfeitoDeAcao</code>),
-<code>src/application/use-cases/actions/propose-action.use-case.ts:297</code>
+<code>src/application/use-cases/actions/propose-action.use-case.ts:310</code>
 (<code>runComoEfeitoDeAcao</code>),
 <code>src/infrastructure/http-clients/session-channel-notifier.ts:73</code>
 (<code>ehEfeitoDeAcao</code>)</li>
@@ -870,7 +870,7 @@ que nenhuma linha de <code>dev_agent_states</code> segura, com o mesmo motivo e 
 <code>politica</code>; a lista só vem para sessão de EXECUÇÃO, então encerrar uma
 consultiva do mesmo projeto não bloqueia nada.</li>
 <li><strong>Onde:</strong> <code>src/infrastructure/persistence/drizzle/backlog.repository.ts:252</code>
-(<code>findPendenteDaExecucao</code>), <code>:404</code> (<code>claimNext</code>), <code>:221</code> (<code>listEmCursoDeDev</code>),
+(<code>findPendenteDaExecucao</code>), <code>:452</code> (<code>claimNext</code>), <code>:221</code> (<code>listEmCursoDeDev</code>),
 <code>src/application/use-cases/sessions/get-session-pending-work.use-case.ts:49</code>
 (<code>em_curso_de_dev</code>),
 <code>apps/engine/lib/engine/dev/encerramento_da_sessao.ex:133</code> (<code>bloquear_orfas</code>)</li>
@@ -925,15 +925,19 @@ com o usuário como ator (<code>context</code> = a pergunta, <code>choice</code>
 <code>open_question.answered</code>, avisa o canal da sessão (pelo funil, RN-579) e pede
 ao engine para retomar o gate de QA ESTACIONADO de cada tarefa afetada
 (caminho da RN-724) — melhor esforço: gate que não estava estacionado ou
-engine fora do ar não desfaz a resposta. ADR 0214.</li>
+engine fora do ar não desfaz a resposta. AT-997: <code>POST .../open-questions/accept-suggestions</code> com <code>{questionIds}</code> (1 a 50) aceita
+a sugestão de várias perguntas num gesto humano, cada uma pelo caminho acima;
+a já respondida, a sem sugestão, a de outro autor e a inexistente são puladas
+com o status (<code>already_answered</code>, <code>sem_sugestao</code>, <code>nao_autor</code>,
+<code>nao_encontrada</code>), sem 409. ADR 0214.</li>
 <li><strong>Onde:</strong> <code>src/domain/open-questions/pergunta-em-aberto.ts:44</code>
 (<code>validarPerguntaEmAberto</code>), <code>:112</code> (<code>respostaEscolhida</code>),
 <code>src/application/use-cases/sessions/append-session-event.use-case.ts:102</code>
 (<code>EVENTO_PERGUNTA_EM_ABERTO</code>),
-<code>src/application/use-cases/backlog/perguntas-em-aberto.use-case.ts:72</code>
-(<code>listar</code>), <code>:118</code> (<code>responder</code>), <code>:285</code> (<code>resumeParkedGate</code>),
-<code>src/interfaces/http/backlog/open-questions.controller.ts:51</code>
-(<code>list</code>), <code>:81</code> (<code>answer</code>)</li>
+<code>src/application/use-cases/backlog/perguntas-em-aberto.use-case.ts:83</code>
+(<code>listar</code>), <code>:129</code> (<code>responder</code>), <code>:195</code> (<code>aceitarSugestoes</code>), <code>:333</code> (<code>resumeParkedGate</code>),
+<code>src/interfaces/http/backlog/open-questions.controller.ts:53</code>
+(<code>list</code>), <code>:83</code> (<code>answer</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/backlog/perguntas-em-aberto.use-case.spec.ts</code>
 (&quot;o autor responde: decision_record (ator usuário, com questionId) e
 answered, e o gate é religado&quot;; &quot;aceitar a sugestão grava a sugestão como
@@ -968,14 +972,14 @@ história; a API nunca infere o <code>questionId</code> no lugar do agente (AT-7
 engine lista cada decisão com o <code>questionId</code> e as histórias afetadas
 (<code>apps/engine/lib/engine/harness/decisoes_do_projeto.ex</code>), para o PO achar o
 id.</li>
-<li><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:157</code>
-(<code>decisoesDaTarefa</code>), <code>:169</code> (<code>decisoesDoContexto</code>),
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:178</code>
+(<code>decisoesDaTarefa</code>), <code>:182</code> (<code>decisoesDoContexto</code>),
 <code>src/domain/backlog/correcao-de-historia.ts:33</code>
 (<code>recusaDeCorrecaoDeHistoria</code>),
 <code>src/application/use-cases/backlog/corrigir-historia.use-case.ts:130</code>
 (<code>respostaDoUsuario</code>),
 <code>src/application/use-cases/backlog/complete-story.use-case.ts:101</code>
-(<code>corrigindoReady</code>), <code>src/application/use-cases/backlog/perguntas-em-aberto.use-case.ts:107</code>
+(<code>corrigindoReady</code>), <code>src/application/use-cases/backlog/perguntas-em-aberto.use-case.ts:118</code>
 (<code>respondidasQueAfetam</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/execution/get-dev-task-context.use-case.spec.ts</code>
 (&quot;devolve só as que afetam a tarefa, a história ou uma regra dela, mais
@@ -1048,7 +1052,7 @@ do dev, <code>decisoes</code> casa também pelo título das regras da história,
 decisões gravadas antes desta regra.</li>
 <li><strong>Onde:</strong> <code>src/domain/open-questions/pergunta-em-aberto.ts:179</code>
 (<code>resolverRegrasDoAfeta</code>), <code>src/application/use-cases/sessions/append-session-event.use-case.ts:122</code>
-(<code>resolverRegrasDoAfeta</code>), <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:161</code>
+(<code>resolverRegrasDoAfeta</code>), <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:182</code>
 (<code>decisoesDoContexto</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/backlog/perguntas-em-aberto.use-case.spec.ts</code>
 (&quot;título exato é convertido para o id da regra&quot;; falha: &quot;texto que não é id
@@ -1070,8 +1074,8 @@ módulo dela ou o texto (<code>context</code>/<code>choice</code>) cita <code>mo
 <code>dev-&lt;módulo&gt;</code> (com borda: <code>catalogo</code> não casa <code>catalogo-admin</code>). Exemplo: a
 orientação do Dev Lead &quot;documentar em <code>modules/catalogo/README.md</code>&quot; chega ao
 <code>dev-catalogo</code> em <code>decisoes</code>, mesmo entre mais de 10 decisões.</li>
-<li><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:161</code>
-(<code>decisoesDoContexto</code>), <code>src/interfaces/http/internal/dto/internal.response.dto.ts:237</code>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/get-dev-task-context.use-case.ts:182</code>
+(<code>decisoesDoContexto</code>), <code>src/interfaces/http/internal/dto/internal.response.dto.ts:262</code>
 (<code>decisoesDoProjeto</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/execution/get-dev-task-context.use-case.spec.ts</code>
 (&quot;as que não tocam a tarefa vêm em decisoesDoProjeto; teto de 10 somado, as
@@ -1094,7 +1098,7 @@ marcador segue <code>auth</code>.</li>
 <li><strong>Onde:</strong> <code>src/domain/llm/llm-provider-errors.ts:86</code> (<code>normalizeHttpStatus</code>),
 <code>:140</code> (<code>pareceOrcamento</code>); <code>apps/engine/lib/engine/agents/falha_de_turno.ex:212</code>
 (<code>orcamento_esgotado</code>), <code>:226</code> (<code>frase_de_orcamento</code>), <code>:163</code>
-(<code>credito_esgotado?</code>); <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1236</code>
+(<code>credito_esgotado?</code>); <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1371</code>
 (<code>motivo_de_credito</code>)</li>
 <li><strong>Teste:</strong> <code>test/domain/llm/llm-provider-errors.spec.ts</code> (&quot;o 403 de
 orçamento vira insufficient_credit com o corpo inteiro&quot;; falha: &quot;403 sem

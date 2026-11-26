@@ -91,7 +91,7 @@ reordena os handoffs.</p>
 duas tools); <code>apps/engine/lib/engine/harness/tools/propose_adr.ex:54</code> (a
 recusa antes de propor), <code>:61</code> (o <code>tool.result</code> com o motivo);
 <code>apps/engine/lib/engine/infra/infra_lead_server.ex:251</code> (a interceptação de
-<code>propose_infra_pr</code> perguntando antes do HALT), <code>:651</code>
+<code>propose_infra_pr</code> perguntando antes do HALT), <code>:684</code>
 (<code>recusa_de_infra_pr/4</code>), <code>:309</code> (o <code>tool.call</code> com os caminhos), <code>:314</code> (o
 <code>tool.result</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/arquiteto_server_test.exs:107</code>
@@ -280,7 +280,7 @@ desde a Fase 4a —, e o que muda é a latência máxima das escritas sem aviso.
 <ul>
 <li>
 <p><strong>Código:</strong> <code>apps/engine/lib/engine/sessions/engine_api_client.ex:581</code>,
-<code>:607</code>, <code>:630</code>, <code>:1188</code> (<code>avisar_canal</code>);</p>
+<code>:607</code>, <code>:630</code>, <code>:1199</code> (<code>avisar_canal</code>);</p>
 <p><code>:607</code>, <code>:630</code>, <code>:953</code> (<code>avisar_canal</code>);
 <code>apps/engine/lib/engine/sessions/live_broadcast.ex</code> (<code>event_appended/3</code>);
 <code>apps/engine/lib/engine_web/controllers/session_command_controller.ex:46</code>
@@ -403,7 +403,7 @@ contexto vivo tinha (a cauda inteira, mesmo o que já tinha sido compactado); o
 subtração), <code>:274</code> (o resumo do começo), <code>:294</code> (a compactação), <code>:328</code> (a
 abertura); <code>apps/engine/lib/engine/harness/context_manager.ex:138</code> (o resumo
 gravado); <code>apps/engine/lib/engine/sessions/engine_api_client.ex:1077</code></p>
-<p>gravado); <code>apps/engine/lib/engine/sessions/engine_api_client.ex:1319</code>
+<p>gravado); <code>apps/engine/lib/engine/sessions/engine_api_client.ex:1330</code>
 (<code>list_events/3</code>); os seis <code>init/1</code> —
 <code>apps/engine/lib/engine/agents/criativo_server.ex:89</code>, <code>po_server.ex:93</code>,
 <code>arquiteto_server.ex:87</code>, <code>dev_lead_server.ex:132</code>, <code>ux_designer_server.ex:85</code>,
@@ -884,10 +884,10 @@ amostrado nesta mudança (o item (c) da <a href="#rn-589">RN-589</a>); a saída 
 PRÓPRIO agente escreveu, e o corte é a única contenção — é o item (d) da
 <a href="#rn-589">RN-589</a> com o primeiro caso concreto.</p>
 <ul>
-<li><strong>Código:</strong> <code>apps/engine/lib/engine/agents/dev_lead_server.ex:416</code>
-(<code>handle_info/2</code> do <code>action_settled</code>, o <code>tool.result</code> em <code>:271</code>), <code>:923</code>
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/agents/dev_lead_server.ex:433</code>
+(<code>handle_info/2</code> do <code>action_settled</code>, o <code>tool.result</code> em <code>:271</code>), <code>:963</code>
 (<code>sentido_do_desfecho/1</code>);
-<code>apps/engine/lib/engine/infra/infra_lead_server.ex:1126</code>
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:1217</code>
 (<code>registrar_resultado/4</code>), <code>:317</code> (a recusa de <code>propose_infra_pr</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/agents/dev_lead_server_test.exs:292</code> (a
 suspensão não grava), <code>:364</code> (a retomada grava o texto que o modelo leu),
@@ -1036,10 +1036,10 @@ não lê <code>BROKER_URL</code>; quem recusa é a api ao propor, com 409
 quem clica). A cláusula de pasta usa o carimbo, que não é batimento
 (<a href="../web.html#rn-468">RN-468</a>) — por isso a de runner conectado continua depois dela.</p>
 <ul>
-<li><strong>Código:</strong> <code>apps/engine/lib/engine/infra/infra_lead_server.ex:908</code>
-(<code>recusa_local_de_subida</code>), <code>:964</code> (<code>recusa_por_estado</code>), <code>:1038</code>
-(<code>recusa_ja_de_pe</code>), <code>:1046</code> (<code>recusa_sem_imagem_decidida</code>), <code>:1047</code>
-(<code>recusa_pasta_nunca_confirmada</code>), <code>:1048</code> (<code>recusa_runner_desconectado</code>);
+<li><strong>Código:</strong> <code>apps/engine/lib/engine/infra/infra_lead_server.ex:941</code>
+(<code>recusa_local_de_subida</code>), <code>:1055</code> (<code>recusa_por_estado</code>), <code>:1129</code>
+(<code>recusa_ja_de_pe</code>), <code>:1137</code> (<code>recusa_sem_imagem_decidida</code>), <code>:1138</code>
+(<code>recusa_pasta_nunca_confirmada</code>), <code>:1139</code> (<code>recusa_runner_desconectado</code>);
 <code>apps/engine/lib/engine/containers/project_container_lifecycle.ex:83</code>
 (<code>status_registrado</code>);
 <code>apps/engine/lib/engine/session_events/event.ex:120</code> (<code>imagem_decidida?</code>)</li>
@@ -1126,9 +1126,9 @@ deu e com as quatro ferramentas.</p>
 <p><strong>Código:</strong> <code>apps/engine/lib/engine/infra/infra_lead_server.ex:191</code>
 (<code>user_message</code>), <code>:215</code> (<code>TurnoOrfao.fechar_ao_subir</code>), <code>:248</code>
 (<code>handle_cast(:kickoff</code>), <code>:270</code> (<code>handle_cast({:correct</code>, a fila), <code>:280</code>
-(<code>handle_cast(:cancel</code>), <code>:296</code> (<code>handle_call({:user_message</code>), <code>:368</code>
-(<code>handle_info</code>), <code>:392</code> (<code>drenar_correcao_pendente</code>), <code>:475</code>
-(<code>toolloop.limit_reached</code>), <code>:1175</code> (<code>concluir</code>);</p>
+(<code>handle_cast(:cancel</code>), <code>:296</code> (<code>handle_call({:user_message</code>), <code>:393</code>
+(<code>handle_info</code>), <code>:419</code> (<code>drenar_correcao_pendente</code>), <code>:502</code>
+(<code>toolloop.limit_reached</code>), <code>:1269</code> (<code>concluir</code>);</p>
 <p>(<code>toolloop.limit_reached</code>), <code>:1057</code> (<code>concluir</code>);
 <code>apps/engine/lib/engine_web/controllers/agent_command_controller.ex:44</code>
 (<code>@agentes_de_conversa</code>), <code>:192</code> (a cláusula do <code>infra</code>), <code>:618</code>

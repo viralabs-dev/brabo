@@ -906,8 +906,8 @@ nada: ausência de resposta não é prova de ausência de artefato, e disparar a
 reabriria a rechamada por outra porta. A cláusula de args inválidos também não
 dispara — ela não sabe qual é a story.</p>
 <ul>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:717</code>
-(<code>run_assessment/2</code>, a leitura única do histórico) e <code>:749</code>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:1036</code>
+(<code>run_assessment/2</code>, a leitura única do histórico) e <code>:1096</code>
 (<code>disparar_appsec_se_preciso/3</code>, a guarda de idempotência);
 <code>apps/engine/lib/engine/gates/dispatcher.ex:29</code> (o callback) e <code>:86</code>
 (<code>Engine.Gates.Dispatcher.Live.run_appsec_design/2</code>);
@@ -1059,7 +1059,7 @@ semeia no aceite do handoff da Infra), e <code>container_remove</code> segue no
 teto absoluto de git push/comando privilegiado (<a href="../api.html#rn-418">RN-418</a>).</p>
 <ul>
 <li><strong>Código:</strong> <code>apps/engine/lib/engine/infra/infra_lead_server.ex:599</code> (o
-dispatch de <code>container_start</code> consultando antes de propor), <code>:908</code>
+dispatch de <code>container_start</code> consultando antes de propor), <code>:941</code>
 (<code>recusa_local_de_subida/2</code> — a leitura ÚNICA do projeto), <code>:474</code> (a
 cláusula de <code>container_start</code>: lista de permitidos), <code>:477</code> (a recusa
 nomeando <code>container_start_via_runner</code>), <code>:492</code> (a cláusula da irmã, com a

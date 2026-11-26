@@ -787,6 +787,11 @@ comparar com <code>process.cwd()</code> (<code>/workspace</code> dentro do próp
 <td>período do job da api que troca a ESTIMATIVA de custo de uma chamada abortada pelo orçamento de raciocínio pelo custo real do <code>GET /generation</code> do OpenRouter (<a href="../business-rules/api.html#rn-915">RN-915</a>); <code>0</code> desliga</td>
 </tr>
 <tr>
+<td><code>RECURSOS_RECONCILIACAO_INTERVAL_MS</code></td>
+<td><code>300000</code></td>
+<td>intervalo, em ms, da reconciliação de recursos de container (<a href="../business-rules/api/parte-12.html#rn-1386">RN-1386</a>): conclui a remoção pendente de projeto apagado e remove o resto de subida que falhou. Roda também no boot. <code>0</code> desliga o laço; broker fora do ar só registra o motivo e tenta no tique seguinte</td>
+</tr>
+<tr>
 <td><code>ARTIFACT_PROJECTOR_INTERVAL_MS</code></td>
 <td><code>2000</code></td>
 <td>período do poller que esvazia a fila <code>artifact_projection</code> da outbox e escreve os artefatos de cada agente como Markdown sob a pasta <code>docs/</code> do projeto (<a href="../business-rules/engine.html#rn-523">RN-523</a>). Projeção DERIVADA: o event log continua sendo a fonte, e a pasta pode ser apagada e reconstruída</td>
@@ -1962,11 +1967,11 @@ ninguém perceba.</p>
 <blockquote>
 <p>⚠️ Bloco gerado por <code>pnpm docs:generate</code>. Não edite à mão — o próximo build o sobrescreve.</p>
 </blockquote>
-<p>Inventário extraído do código: <strong>205 variáveis</strong> lidas em tempo de execução. Todas têm descrição nas tabelas acima.</p>
+<p>Inventário extraído do código: <strong>206 variáveis</strong> lidas em tempo de execução. Todas têm descrição nas tabelas acima.</p>
 <p>Cada fonte é marcada <strong>produto</strong> — o que quem opera a instalação configura no <code>.env</code> do deploy — ou <strong>ferramenta</strong>, lida só pelo CI e por quem desenvolve o produto. Variável de ferramenta nunca pertence ao <code>.env</code> de um operador.</p>
-<p><a href="#env-servico-api">api</a> (72) · <a href="#env-servico-engine">engine</a> (63) · <a href="#env-servico-web">web</a> (6) · <a href="#env-servico-broker">broker</a> (14) · <a href="#env-servico-api-scripts">api/scripts</a> (16) · <a href="#env-servico-e2e">e2e</a> (10) · <a href="#env-servico-deploy-k8s">deploy/k8s</a> (24)</p>
+<p><a href="#env-servico-api">api</a> (73) · <a href="#env-servico-engine">engine</a> (63) · <a href="#env-servico-web">web</a> (6) · <a href="#env-servico-broker">broker</a> (14) · <a href="#env-servico-api-scripts">api/scripts</a> (16) · <a href="#env-servico-e2e">e2e</a> (10) · <a href="#env-servico-deploy-k8s">deploy/k8s</a> (24)</p>
 <h3 id="env-servico-api">api</h3>
-<p>72 variáveis · produto</p>
+<p>73 variáveis · produto</p>
 <ul>
 <li><a id="env-API_JSON_BODY_LIMIT"></a><code>API_JSON_BODY_LIMIT</code> <sub>(apps/api/src/main.ts)</sub></li>
 <li><a id="env-API_PUBLIC_URL"></a><code>API_PUBLIC_URL</code> <sub>(apps/api/src/application/use-cases/auth/start-social-login.use-case.ts)</sub></li>
@@ -2030,6 +2035,7 @@ ninguém perceba.</p>
 <li><a id="env-RATE_LIMIT_IP"></a><code>RATE_LIMIT_IP</code> <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub></li>
 <li><a id="env-RATE_LIMIT_USER"></a><code>RATE_LIMIT_USER</code> <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub></li>
 <li><a id="env-RATE_LIMIT_WINDOW_MS"></a><code>RATE_LIMIT_WINDOW_MS</code> <sub>(apps/api/src/infrastructure/observability/domain-gauges.collector.ts)</sub></li>
+<li><a id="env-RECURSOS_RECONCILIACAO_INTERVAL_MS"></a><code>RECURSOS_RECONCILIACAO_INTERVAL_MS</code> <sub>(apps/api/src/application/use-cases/containers/reconciliar-recursos.use-case.ts)</sub></li>
 <li><a id="env-SMTP_FROM"></a><code>SMTP_FROM</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
 <li><a id="env-SMTP_HOST"></a><code>SMTP_HOST</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
 <li><a id="env-SMTP_PASSWORD"></a><code>SMTP_PASSWORD</code> <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub></li>
@@ -2209,7 +2215,7 @@ marcadas com 🔒, que falham explicitamente em produção.</p>
 </blockquote>
 <nav class="site-pager"><a href="../explanation/documentation-workflow.html">Sincronia da doc</a><a href="../reference/events.html">Eventos</a></nav>
 </article>
-<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Editar esta página</a><span>Atualizado em 2026-11-13T17:20:25-03:00 · Daniel Souza</span></footer>
+<footer class="site-foot"><a href="https://github.com/viralabs-dev/brabo/blob/dev/docs/reference/configuration.md">Editar esta página</a><span>Atualizado em 2026-11-25T23:42:02-03:00 · Daniel Souza</span></footer>
 </main>
 <aside class="site-toc"><h2>Nesta página</h2><ul><li class="n2"><a href="#compose-de-instalação-docker-composeinstallyml">Compose de instalação (docker-compose.install.yml)</a></li><li class="n2"><a href="#api">api</a></li><li class="n3"><a href="#essenciais">Essenciais</a></li><li class="n3"><a href="#segurança-">Segurança 🔒</a></li><li class="n3"><a href="#auth-first-party">Auth first-party</a></li><li class="n3"><a href="#smtp-real-mailsender">SMTP real (MailSender)</a></li><li class="n3"><a href="#recuperar-a-senha-sem-smtp">Recuperar a senha sem SMTP</a></li><li class="n3"><a href="#seed-de-desenvolvimento">Seed de desenvolvimento</a></li><li class="n3"><a href="#rate-limit">Rate limit</a></li><li class="n3"><a href="#tráfego-interno-">Tráfego interno 🔒</a></li><li class="n3"><a href="#git">Git</a></li><li class="n3"><a href="#llm">LLM</a></li><li class="n3"><a href="#grafo-de-conhecimento-adr-0099">Grafo de conhecimento (ADR 0099)</a></li><li class="n3"><a href="#observabilidade">Observabilidade</a></li><li class="n2"><a href="#engine">engine</a></li><li class="n3"><a href="#essenciais-1">Essenciais</a></li><li class="n3"><a href="#cluster-e-desligamento">Cluster e desligamento</a></li><li class="n3"><a href="#harness">Harness</a></li><li class="n3"><a href="#psicólogo">Psicólogo</a></li><li class="n3"><a href="#anamnese">Anamnese</a></li><li class="n3"><a href="#guardas-de-carga">Guardas de carga</a></li><li class="n3"><a href="#tráfego-interno-e-observabilidade">Tráfego interno e observabilidade</a></li><li class="n2"><a href="#web">web</a></li><li class="n3"><a href="#por-que-a-versão-não-passa-pelo-configjs">Por que a versão não passa pelo /config.js</a></li><li class="n2"><a href="#backup">Backup</a></li><li class="n2"><a href="#inferência-local-containers">Inferência local (containers)</a></li><li class="n2"><a href="#observabilidade-local-containers">Observabilidade local (containers)</a></li><li class="n2"><a href="#broker-de-containers">Broker de containers</a></li><li class="n2"><a href="#dev-container-user-build-time">Usuário dos containers de dev (build)</a></li><li class="n2"><a href="#variáveis-de-ferramenta-não-do-produto">Variáveis de ferramenta (não do produto)</a></li><li class="n3"><a href="#scripts-de-demonstração-e-seed--appsapiscripts">Scripts de demonstração e seed — apps/api/scripts/</a></li><li class="n3"><a href="#e2e-de-navegador--e2e">E2E de navegador — e2e/</a></li><li class="n3"><a href="#cluster-local-e-provas-agendadas--deployk8s">Cluster local e provas agendadas — deploy/k8s/</a></li><li class="n2"><a href="#inventário-completo">Inventário completo</a></li><li class="n3"><a href="#env-servico-api">api</a></li><li class="n3"><a href="#env-servico-engine">engine</a></li><li class="n3"><a href="#env-servico-web">web</a></li><li class="n3"><a href="#env-servico-broker">broker</a></li><li class="n3"><a href="#env-servico-api-scripts">api/scripts</a></li><li class="n3"><a href="#env-servico-e2e">e2e</a></li><li class="n3"><a href="#env-servico-deploy-k8s">deploy/k8s</a></li></ul></aside>
 </div>

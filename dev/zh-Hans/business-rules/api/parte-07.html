@@ -74,7 +74,7 @@ do <code>permissions.json</code> repetem os TOKENS do comando no texto (o <code>
 (<code>reason</code> no payload do evento de sessão), <code>:223</code> (o comentário do outbox
 sem o campo), <code>:227</code> (o payload do outbox, intacto), <code>:356</code> (o
 <code>rejectionReason</code>, que continua só no <code>deny</code>);
-<code>src/domain/actions/decide.ts:307</code> (<code>Decision</code>, a fonte da string)</li>
+<code>src/domain/actions/decide.ts:314</code> (<code>Decision</code>, a fonte da string)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:902</code>
 (caminho feliz: auto-aprovação grava <code>agent_autonomy: auto_approve</code>),
 <code>:959</code> (<code>require_approval</code> pelo default e pelo teto da trava de merge),
@@ -256,7 +256,7 @@ instalação sem broker continua possível pelo agente.</p>
 <code>mounted</code> recusam antes da imagem), <code>:75</code> (<code>runner</code> não é afetado), <code>:84</code>
 (campo ausente recusa), <code>:93</code> (já de pé continua dizendo isso);
 <code>apps/web/src/routes/ContainersPage.test.tsx:562</code> (botão inerte e o motivo
-em texto, nunca propõe), <code>:726</code> (<code>runner</code> segue subindo)</li>
+em texto, nunca propõe), <code>:744</code> (<code>runner</code> segue subindo)</li>
 <li><strong>Origem:</strong> AT-085 — instalação real da v6.1.0 em 2026-09-14, decidido pelo
 mantenedor em 2026-09-18</li>
 </ul>
@@ -396,17 +396,17 @@ fechada seguem mostrando a mensagem da api.</p>
 <code>accept-handoff.use-case.ts:90</code>, <code>activate-agent.use-case.ts:52</code>;
 <code>src/application/use-cases/sessions/get-session-pending-work.use-case.ts:30</code>
 (<code>FALA_DO_AGENTE</code>), <code>:238</code> (o quinto sinal);
-<code>src/infrastructure/persistence/drizzle/session-event.repository.ts:124</code>
+<code>src/infrastructure/persistence/drizzle/session-event.repository.ts:129</code>
 (<code>findLatestOfTypesInSession</code>);
 <code>apps/engine/lib/engine/sessions/session_server.ex:115</code> (a pendência com
 instante), <code>:141</code> (<code>handle_info</code> do relógio próprio, AT-152), <code>:168</code>
 (<code>conversa_ociosa</code>), <code>:193</code> (<code>encerrar</code>), <code>:222</code>
 (<code>conversation_idle_timeout_ms</code>); <code>apps/engine/lib/engine/sessions/monitor.ex:185</code>
 (<code>classify</code>); <code>apps/engine/lib/engine/psychologist/termination_classifier.ex:46</code>;
-<code>apps/engine/lib/engine/sessions/engine_api_client.ex:1285</code>
-(<code>narrar_recusa_de_sessao_encerrada</code>), <code>:1665</code> (<code>pendencia_da_resposta</code>);</p>
-<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:1285</code>
-(<code>narrar_recusa_de_sessao_encerrada</code>), <code>:1665</code> (<code>pendencia_da_resposta</code>);
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex:1297</code>
+(<code>narrar_recusa_de_sessao_encerrada</code>), <code>:1693</code> (<code>pendencia_da_resposta</code>);</p>
+<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:1297</code>
+(<code>narrar_recusa_de_sessao_encerrada</code>), <code>:1693</code> (<code>pendencia_da_resposta</code>);
 <code>apps/engine/lib/engine/agents/conversacionais.ex:49</code> (<code>parar_da_sessao</code>),
 <code>:69</code> (<code>parar_da_sessao_no_cluster</code>);
 <code>apps/engine/lib/engine/agents/turno_assincrono.ex:471</code> (<code>abandonar</code>);
@@ -708,7 +708,7 @@ direta.</p>
 (recusa 409), <code>apps/web/src/routes/containers-subida.ts:181</code>
 (<code>semBrokerParaCicloDeVida</code>) e <code>:192</code> (<code>conversaoSemBroker</code>),
 <code>apps/web/src/routes/settings/ExecutionModeSection.tsx</code> (botão inerte),
-<code>apps/engine/lib/engine/infra/infra_lead_server.ex:899</code>
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:932</code>
 (<code>motivo_da_recusa_da_api</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:207</code>
 (409 nas três ações, e <code>container_stop</code> segue <code>pending</code> com broker),
@@ -748,7 +748,7 @@ decidir se passam a consultá-lo é decisão à parte, fora desta regra.</p>
 <ul>
 <li><strong>Código:</strong> <code>src/application/use-cases/sessions/list-sessions-for-project.use-case.ts:37</code>
 (<code>execute</code>), <code>src/interfaces/http/sessions/dto/sessions.response.dto.ts:110</code>
-(<code>SessionListItemResponseDto</code>), <code>apps/web/src/lib/hooks.ts:173</code>
+(<code>SessionListItemResponseDto</code>), <code>apps/web/src/lib/hooks.ts:183</code>
 (<code>sessaoMaisRecente</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/sessions/list-sessions-for-project.use-case.spec.ts:81</code>
 (vínculo e não nome; técnica de outro projeto não marca),
@@ -881,13 +881,13 @@ e o card do agente mostra uma frase sob o toggle — só quando a CURINGA está
 ligada, porque o toggle sobre o tipo representativo grava regra específica,
 que não libera o escopo.</p>
 <ul>
-<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:324</code> (<code>modoAutomaticoDoAgente</code>),
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:333</code> (<code>modoAutomaticoDoAgente</code>),
 <code>src/domain/actions/decide.ts:386</code> (o veredito sintetizado do
 composto ignorado), <code>src/domain/actions/decide.ts:504</code> (o teto de
 escopo pulado),
 <code>src/infrastructure/persistence/drizzle/agent-autonomy.repository.ts:25</code>
 (<code>resolve</code>, com a origem),
-<code>src/application/use-cases/actions/propose-action.use-case.ts:376</code>
+<code>src/application/use-cases/actions/propose-action.use-case.ts:398</code>
 (<code>autonomyOrigin</code>), <code>apps/web/src/components/AgentTeamGrid.tsx:121</code>
 (<code>autonomyHint</code>), <code>apps/web/src/components/ApprovalCard.tsx:313</code> (a nota
 nas duas variantes)</li>
@@ -979,12 +979,12 @@ sai <code>teto-excedido</code>, com o nome certo.</p>
 </li>
 <li>
 <p><strong>Código:</strong>
-<code>src/infrastructure/http-clients/container-broker.client.ts:304</code> (<code>tetoDaOperacao</code>),
-<code>:266</code> (<code>TETO_DE_MUTACAO_MS</code>), <code>:281</code> (<code>FOLGA_DO_EXEC_NO_ENGINE_MS</code>),
-<code>:324</code> (<code>erroDeTransporte</code>);
-<code>src/application/ports/container-broker.port.ts:122</code> (<code>MotivoDeBrokerIndisponivel</code>);
-<code>apps/engine/lib/engine/sessions/engine_api_client.ex:2216</code> (<code>teto_do_container_exec_ms</code>)</p>
-<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:2216</code> (<code>teto_do_container_exec_ms</code>)</p>
+<code>src/infrastructure/http-clients/container-broker.client.ts:330</code> (<code>tetoDaOperacao</code>),
+<code>:291</code> (<code>TETO_DE_MUTACAO_MS</code>), <code>:306</code> (<code>FOLGA_DO_EXEC_NO_ENGINE_MS</code>),
+<code>:349</code> (<code>erroDeTransporte</code>);
+<code>src/application/ports/container-broker.port.ts:129</code> (<code>MotivoDeBrokerIndisponivel</code>);
+<code>apps/engine/lib/engine/sessions/engine_api_client.ex:2244</code> (<code>teto_do_container_exec_ms</code>)</p>
+<p><code>apps/engine/lib/engine/sessions/engine_api_client.ex:2244</code> (<code>teto_do_container_exec_ms</code>)</p>
 </li>
 <li>
 <p><strong>Teste:</strong> <code>test/infrastructure/http-clients/container-broker.client.spec.ts:286</code>
@@ -1078,7 +1078,7 @@ raiz do ESCOPO, nunca onde o arquivo de política mora.</p>
 (<code>segmentoSobABaseDeProjetos</code>, reusada);
 <code>src/application/use-cases/actions/propose-action.use-case.ts:280</code>
 (<code>scopeRoot</code> só em <code>terminal</code>);
-<code>src/domain/actions/decide.ts:677</code> (<code>terminalNoEscopo</code>, o único
+<code>src/domain/actions/decide.ts:710</code> (<code>terminalNoEscopo</code>, o único
 consumidor do escopo)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/propose-action.use-case.spec.ts:1154</code>
 (<code>container</code>), <code>:1134</code> (<code>mounted</code>), <code>:1134</code> (<code>runner</code>), <code>:1123</code> (o caminho
@@ -1172,7 +1172,7 @@ projeto aberto, e as outras listas seguiam anunciando a revogada.</p>
 (<code>MachineDeviceKeysSection</code>);
 <code>apps/web/src/lib/chaves-de-dispositivo-queries.ts:31</code>
 (<code>invalidarChavesDeDispositivo</code>);
-<code>apps/web/src/lib/api-client.ts:475</code> (<code>listMachineDeviceKeys</code>);
+<code>apps/web/src/lib/api-client.ts:491</code> (<code>listMachineDeviceKeys</code>);
 <code>apps/web/src/locales/{en,pt-BR}/machineKeys.json</code></li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/auth/machine-device-keys.use-case.spec.ts</code>
 (a lista só pelo usuário, a revogada incluída; a revogação REAL derrubando

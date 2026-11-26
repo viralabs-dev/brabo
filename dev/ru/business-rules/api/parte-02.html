@@ -569,6 +569,10 @@ da área</strong>. Mas a decisão dele não é soberana sobre GASTO — até
 <code>agent_areas.max_parallel</code> (nasce com <strong>5</strong> no <code>dev</code>, <a href="parte-10.html#rn-910">RN-910</a>) ele sobe e segue; <strong>acima disso vira
 <code>proposed_action</code> do tipo <code>parallelize</code></strong>, pelo mesmo pipeline de toda ação com
 efeito externo.</p>
+<p><strong>Exceção (AT-991, <a href="parte-12.html#rn-1398">RN-1398</a>):</strong> o segundo dev do módulo
+(<code>dev-&lt;modulo&gt;-2</code>) é permitido sem nova aprovação quando o plano de execução
+aprovado declara lote disjunto (<code>agentes: 2</code>, tarefas sem <code>depende_de</code> entre si e
+com arquivos disjuntos). A autorização acima vale para a paralelização FORA do plano.</p>
 <p><strong>O teto é da SESSÃO, não do módulo.</strong> É a única parte da regra que não é
 óbvia, e a que um refactor desatento desfaz: contar por módulo permitiria N
 módulos × 2 agentes sem autorização nenhuma — o buraco anterior com outro nome.

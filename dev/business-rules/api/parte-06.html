@@ -226,6 +226,7 @@ modo <code>runner</code>, sem fallback pro host</li>
 <hr>
 <h2 id="o-navegador-de-pastas-servido-pela-api-rn-504">O navegador de pastas servido pela api (RN-504)</h2>
 <h3 id="rn-509">RN-509 — &quot;Sempre permitir&quot; de um Dev Agent de módulo escopa a <code>agent_autonomy</code>, POR AGENTE — não mais o <code>permissions.json</code> de projeto inteiro</h3>
+<p><strong>Estendida pela <a href="parte-12.html#rn-1437">RN-1437</a></strong> (AT-998): a decisão repetida vira regra do projeto em <code>automacoes_do_projeto</code>, fora do caminho do &quot;sempre permitir&quot;.</p>
 <p><code>ApproveAlwaysActionUseCase</code> sempre gravou em <code>permissions.json/allow</code> —
 escopo de <strong>PROJETO INTEIRO</strong>, compartilhado por qualquer ator. Isso
 significava que &quot;sempre permitir&quot; um comando pro <code>dev-checkout</code> liberava o
@@ -758,7 +759,7 @@ reparável (termina em toast), não o invisível.</p>
 <code>src/application/ports/containers-overview-repository.port.ts:20</code>
 (<code>executionMode</code>/<code>lifecycle</code> nulo/<code>temImagemDecidida</code>/<code>workspaceVerifiedAt</code>);
 <code>src/application/use-cases/containers/obter-visao-geral-de-containers.use-case.ts:33</code>
-(<code>sem_container_registrado</code>) e <code>:101</code> (<code>elegivelParaVerificacao</code>, que é o que
+(<code>sem_container_registrado</code>) e <code>:108</code> (<code>elegivelParaVerificacao</code>, que é o que
 mantém o orçamento intacto);
 <code>src/interfaces/http/containers/containers-overview.controller.ts:60</code>;
 <code>apps/web/src/routes/containers-subida.ts:114</code> (<code>decidirSubida</code>, a regra

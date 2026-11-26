@@ -76,12 +76,12 @@ ativação falhou: …&quot;), nunca &quot;plano registrado&quot;. Falhar não d
 aprovação: a decisão do humano já está gravada.</li>
 </ol>
 <ul>
-<li><strong>Onde:</strong> <code>src/application/use-cases/execution/execute-execution-plan.use-case.ts:89</code>
-(<code>execute</code>); <code>src/application/use-cases/actions/approve-action.use-case.ts:221</code>
-(<code>executeExecutionPlan</code>); <code>src/application/use-cases/actions/propose-action.use-case.ts:459</code>
+<li><strong>Onde:</strong> <code>src/application/use-cases/execution/execute-execution-plan.use-case.ts:97</code>
+(<code>execute</code>); <code>src/application/use-cases/actions/approve-action.use-case.ts:242</code>
+(<code>executeExecutionPlan</code>); <code>src/application/use-cases/actions/propose-action.use-case.ts:484</code>
 (<code>executeExecutionPlan</code>); <code>apps/web/src/lib/session-acoes-de-handoff.ts:91</code>
-(<code>handleAcceptHandoff</code>); <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:291</code>
-(<code>classificar</code>); <code>apps/engine/lib/engine/agents/dev_lead_server.ex:869</code>
+(<code>handleAcceptHandoff</code>); <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:409</code>
+(<code>classificar</code>); <code>apps/engine/lib/engine/agents/dev_lead_server.ex:912</code>
 (<code>texto_do_desfecho</code>); <code>apps/web/src/lib/aprovacoes.ts:359</code>
 (<code>propose_execution_plan</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/execution/execute-execution-plan.use-case.spec.ts:106</code>
@@ -137,14 +137,14 @@ HISTÓRIA (acordar um dev a mais não pega nada, só gasta uma consulta); e o
 módulo do <code>module_map</code>, como antes, e o paralelismo extra continua pelo
 <code>parallelize</code> (<a href="parte-02.html#rn-083">RN-083</a>).</p>
 <ul>
-<li><strong>Onde:</strong> <code>src/domain/execution/plano-de-execucao.ts:39</code>
-(<code>lerPlanoDeExecucao</code>); <code>src/infrastructure/persistence/drizzle/backlog.repository.ts:797</code>
-(<code>daTarefaDoModulo</code>), <code>:404</code> (<code>claimNext</code>), <code>:392</code> (<code>assignModules</code>);
+<li><strong>Onde:</strong> <code>src/domain/execution/plano-de-execucao.ts:125</code>
+(<code>lerPlanoDeExecucao</code>); <code>src/infrastructure/persistence/drizzle/backlog.repository.ts:898</code>
+(<code>daTarefaDoModulo</code>), <code>:452</code> (<code>claimNext</code>), <code>:392</code> (<code>assignModules</code>);
 <code>src/application/use-cases/actions/propose-action.use-case.ts:149</code>
-(<code>recusaNaProposta</code>); <code>src/application/use-cases/execution/execute-execution-plan.use-case.ts:67</code>
+(<code>recusaNaProposta</code>); <code>src/application/use-cases/execution/execute-execution-plan.use-case.ts:72</code>
 (<code>recusaNaProposta</code>); <code>src/db/schema/backlog.ts:187</code> (<code>module</code>);
-<code>apps/engine/lib/engine/agents/dev_lead_tools.ex:611</code>
-(<code>tarefas_do_backlog</code>); <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:275</code>
+<code>apps/engine/lib/engine/agents/dev_lead_tools.ex:930</code>
+(<code>tarefas_do_backlog</code>); <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:394</code>
 (<code>erro_da_proposta</code>)</li>
 <li><strong>Teste:</strong> <code>test/domain/execution/plano-de-execucao.spec.ts:22</code>
 (caminho feliz), <code>:41</code> (tarefa sem módulo — caso de falha), <code>:49</code> (módulo
@@ -245,7 +245,7 @@ quantas quando corta) e 10 s de relógio para a checagem inteira.</li>
 <code>src/application/use-cases/backlog/verificar-duplicata-semantica.use-case.ts:112</code> (<code>VerificarDuplicataSemanticaUseCase</code>),
 <code>:247</code> (<code>medir</code>), <code>:291</code> (<code>narrar</code>), <code>:355</code> (<code>fraseParaOAgente</code>),
 <code>src/application/use-cases/backlog/create-story.use-case.ts:199</code> (<code>semanticDuplicate</code>),
-<code>src/interfaces/http/internal/internal-sessions.controller.ts:710</code> (<code>semanticDuplicateCheck</code>),
+<code>src/interfaces/http/internal/internal-sessions.controller.ts:741</code> (<code>semanticDuplicateCheck</code>),
 <code>src/application/use-cases/rag/rag-embedding.service.ts:106</code> (<code>uso</code>),
 <code>apps/engine/lib/engine/harness/tools/emit_artifact.ex</code> (<code>aviso_semantico</code>),
 <code>apps/engine/lib/engine/harness/tools/create_story.ex</code> (<code>aviso_semantico</code>)</li>
@@ -378,10 +378,10 @@ mudam; a recusa abaixo do mínimo acontece na execução, não ao propor.</p>
 (<code>explicarRecursosMinimos</code>);
 <code>src/application/use-cases/architecture/create-module-map.use-case.ts:134</code>
 (<code>normalizarModulo</code>);
-<code>src/application/use-cases/actions/execute-container-start.use-case.ts:175</code>
+<code>src/application/use-cases/actions/execute-container-start.use-case.ts:186</code>
 (<code>resolverRecursosDaSubida</code>);
 <code>apps/engine/lib/engine/harness/tools/create_module_map.ex:103</code> (<code>normalize</code>);
-<code>apps/engine/lib/engine/infra/infra_lead_server.ex:824</code>
+<code>apps/engine/lib/engine/infra/infra_lead_server.ex:857</code>
 (<code>rationale_do_servidor</code>)</li>
 <li><strong>Teste:</strong> <code>test/domain/containers/recursos-minimos.spec.ts:18</code>
 (soma — caminho feliz), <code>:35</code> (mapa antigo = padrão), <code>:41</code> (piso e nomeado),
@@ -408,13 +408,13 @@ lendo o worktree de outros módulos para descobrir a interface deles: o
 <code>module_routing</code> e o <code>c4_diagram</code>: o vigente é o de maior <code>version</code>, com
 desempate por <code>seq</code>. Cada declaração leva a lista INTEIRA e SUBSTITUI a
 anterior; mudar contrato é versão nova do Arquiteto.</li>
-<li><strong>Por módulo, só o que ele EXPÕE</strong>: <code>{modulo, expoe: [{tipo, assinatura, descricao}]}</code>, <code>tipo</code> em <code>funcao | rota | evento | dado</code>, <code>assinatura</code>
+<li><strong>Por módulo, só o que ele EXPÕE</strong>: <code>{modulo, expoe: [{tipo, assinatura, descricao}]}</code>, <code>tipo</code> em <code>funcao | rota | evento | dado | tabela | identidade</code> (AT-981: <code>tabela</code> leva o nome da tabela no começo da <code>assinatura</code> e tem UM módulo dono, a api recusa a segunda declaração com os dois nomes; <code>identidade</code> exige <code>-&gt;</code> na <code>assinatura</code>, ex.: <code>profissional.usuarioId -&gt; usuario.id</code>), <code>assinatura</code>
 obrigatória (até 300 caracteres), de 1 a 40 itens. O que ele CONSOME é o
 <code>dependsOn</code> do <code>module_map</code> vigente, derivado na leitura — nunca redigitado.</li>
 <li><strong>A api recusa com 400 e o motivo inteiro</strong> (que volta ao modelo, RN-061):
 lista vazia, módulo repetido, módulo fora do <code>module_map</code> vigente (listando
 os válidos) ou sem <code>module_map</code>, <code>expoe</code> vazio ou acima de 40, <code>tipo</code>
-desconhecido, <code>assinatura</code> vazia ou acima de 300. Nada é gravado.</li>
+desconhecido, <code>assinatura</code> vazia ou acima de 300, <code>tabela</code> com dois donos ou <code>identidade</code> sem <code>-&gt;</code> (<a href="parte-12.html#rn-1351">RN-1351</a>). Nada é gravado.</li>
 <li><strong>Artefato SEPARADO do <code>module_map</code></strong>, nunca um campo dele: revisar um não
 reemite o outro.</li>
 <li><strong>O dev lê por <code>listar_contratos_de_modulos</code></strong>, <code>:direct</code>, no registro de
@@ -436,15 +436,15 @@ interface, <code>report_blocked</code> nomeando o módulo — nunca reler o work
 (<code>execute</code>);
 <code>src/application/use-cases/architecture/list-module-contracts.use-case.ts:42</code>
 (<code>execute</code>);
-<code>src/interfaces/http/internal/internal-sessions.controller.ts:851</code>
+<code>src/interfaces/http/internal/internal-sessions.controller.ts:882</code>
 (<code>moduleContracts</code>);
 <code>src/interfaces/http/internal/internal-projects.controller.ts:186</code>
 (<code>moduleContracts</code>);
-<code>apps/engine/lib/engine/harness/tools/declare_module_contracts.ex:97</code> (<code>run</code>);
+<code>apps/engine/lib/engine/harness/tools/declare_module_contracts.ex:102</code> (<code>run</code>);
 <code>apps/engine/lib/engine/harness/tools/listar_contratos_de_modulos.ex:43</code>
 (<code>run</code>), <code>:66</code> (<code>renderizar</code>);
 <code>apps/engine/lib/engine/dev/tools.ex:36</code> (<code>ListarContratosDeModulos</code>);
-<code>apps/engine/lib/engine/dev/dev_agent_server.ex:566</code> (<code>module</code>), <code>:501</code>;
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:624</code> (<code>module</code>), <code>:501</code>;
 <code>apps/engine/lib/engine/agents/arquiteto_server.ex:112</code>, <code>:335</code>, <code>:399</code></li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/architecture/module-contracts.use-case.spec.ts:173</code>
 (grava a versão 1 — caminho feliz), <code>:185</code> (a vigente substitui), <code>:210</code>
@@ -605,7 +605,7 @@ bootstrap (<code>git_repo_create</code>/<code>git_branch_create</code>/<code>git
 passam por <code>decide()</code>); e <code>deploy</code>, que não é tipo de <code>proposed_action</code> — só
 existe como destino da mensagem do comando de terminal.</p>
 <ul>
-<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:442</code> (<code>ehAcaoTipadaComEfeitoExterno</code>);
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:451</code> (<code>ehAcaoTipadaComEfeitoExterno</code>);
 <code>src/domain/actions/external-effect.ts:318</code>
 (<code>ACOES_TIPADAS_COM_EFEITO_EXTERNO</code>), <code>:326</code> (<code>ehAcaoTipadaComEfeitoExterno</code>),
 <code>:340</code> (<code>mensagemDoTetoDaAcaoTipada</code>);
@@ -765,8 +765,8 @@ protegida, e <code>git merge</code>/<code>gh pr merge</code> pelo terminal), dep
 <code>container_remove</code>, <code>instruction_patch</code> e paralelismo. O toggle em manual
 restaura a aprovação.</p>
 <ul>
-<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:324</code> (<code>modoAutomaticoDoAgente</code>),
-<code>:339</code> (<code>decide</code>); <code>src/domain/actions/external-effect.ts:354</code>
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:333</code> (<code>modoAutomaticoDoAgente</code>),
+<code>:348</code> (<code>decide</code>); <code>src/domain/actions/external-effect.ts:354</code>
 (<code>mensagemDoModoAutomaticoNoEfeitoExterno</code>);
 <code>apps/web/src/components/OQueOPilotoLibera.tsx</code></li>
 <li><strong>Teste:</strong> <code>test/domain/actions/decide.spec.ts</code> (o piloto libera
@@ -786,7 +786,7 @@ liberados)</li>
 <ul>
 <li><strong>Regra:</strong> quando o merge aprovado de uma PR é recusado por conflito com a
 <code>dev</code> (<code>GitMergeConflictError</code>, <a href="#rn-704">RN-704</a>), cada tarefa da PR que
-está <code>in_review</code> volta a <code>in_progress</code> com <code>gate_status</code> zerado (os vereditos
+está com o gate em <code>awaiting_user</code> (e não <code>done</code>; AT-983) volta a <code>in_progress</code> com <code>gate_status</code> zerado (os vereditos
 antigos de QA/SecOps não valem para a branch que vai mudar), grava
 <code>backlog.task_status_changed</code> com <code>cause: merge_conflict</code> e põe
 <code>task.merge_conflict</code> na outbox, com o agente que propôs o <code>pr_open</code> (o
@@ -809,11 +809,11 @@ não está <code>in_review</code> (merge repetido) não é reaberta nem acorda n
 PR aberta por humano não tem dono a acordar.</li>
 <li><strong>Medição (AT-383, 02/10, loja-teste):</strong> a #6 terminou <code>failed</code> por conflito
 em <code>package.json</code>, e a tarefa ficou <code>in_review</code> sem ninguém para resolvê-lo.</li>
-<li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-git-action.use-case.ts:484</code> (<code>devolverAoDono</code>),
-<code>src/infrastructure/persistence/drizzle/backlog.repository.ts:510</code> (<code>reabrirPorConflitoDeMerge</code>),
-<code>apps/engine/lib/engine/workers/dev_agent_wake_worker.ex:151</code> (<code>task.merge_conflict</code>),
-<code>apps/engine/lib/engine/dev/dev_agent_server.ex:350</code> (<code>handle_info</code>),
-<code>apps/engine/lib/engine/dev/dev_agent_server.ex:1036</code> (<code>trigger_gate_recheck</code>),
+<li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-git-action.use-case.ts:492</code> (<code>devolverAoDono</code>),
+<code>src/infrastructure/persistence/drizzle/backlog.repository.ts:560</code> (<code>reabrirPorConflitoDeMerge</code>),
+<code>apps/engine/lib/engine/workers/dev_agent_wake_worker.ex:157</code> (<code>task.merge_conflict</code>),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:360</code> (<code>handle_info</code>),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:1072</code> (<code>trigger_gate_recheck</code>),
 <code>apps/engine/lib/engine/dev/worktree_manager.ex:47</code> (<code>adopt</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/execute-git-action.use-case.spec.ts</code> (&quot;conflito de merge → kind git_merge, arquivos no
 resultado e evento na tarefa&quot;; falha: &quot;RN-715: tarefa que já não está em
@@ -901,7 +901,7 @@ continua aviso.</li>
 <ul>
 <li><strong>Onde:</strong> <code>src/application/use-cases/backlog/complete-story.use-case.ts:53</code>
 (<code>CompleteStoryUseCase</code>);
-<code>src/interfaces/http/internal/internal-sessions.controller.ts:545</code>
+<code>src/interfaces/http/internal/internal-sessions.controller.ts:551</code>
 (<code>completeStoryRoute</code>); <code>apps/engine/lib/engine/harness/tools/complete_story.ex:47</code>
 (<code>run</code>); <code>apps/engine/lib/engine/harness/tools/offer_handoff.ex:52</code>
 (<code>recusa_por_cobertura</code>); <code>apps/engine/lib/engine/harness/tools/emit_artifact.ex:188</code>

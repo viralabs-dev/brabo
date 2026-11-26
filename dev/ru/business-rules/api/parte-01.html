@@ -136,7 +136,7 @@ domínio)</li>
 <p>Antes de qualquer política, o IAM: cada <code>ActionType</code> exige um papel efetivo
 mínimo. Sem ele, <code>deny</code> com motivo explícito.</p>
 <ul>
-<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:117</code> (<code>MIN_ROLE_FOR_ACTION_TYPE</code>)</li>
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:121</code> (<code>MIN_ROLE_FOR_ACTION_TYPE</code>)</li>
 <li><strong>Teste:</strong> <code>test/domain/actions/decide.spec.ts</code></li>
 </ul>
 <h3 id="rn-006">RN-006 — Teto: merge em branch protegida nunca é auto-aprovável</h3>
@@ -155,7 +155,7 @@ deixou de criá-la (<a href="#rn-029">RN-029</a>). Esta lista decide o que a tra
 branch: proteger uma que não existe não custa nada; desproteger uma que
 existe custa caro.</p>
 <ul>
-<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:552</code> (<code>isProtectedBranch</code>, o teto da trava de merge) + <code>protected-branches.ts:4</code></li>
+<li><strong>Onde:</strong> <code>src/domain/actions/decide.ts:561</code> (<code>isProtectedBranch</code>, o teto da trava de merge) + <code>protected-branches.ts:4</code></li>
 <li><strong>Teste:</strong> <code>test/domain/actions/decide.spec.ts</code></li>
 <li><strong>Origem:</strong> <a href="../../adr/0011-infra-dev-agents-worktrees-merge-lock.html">ADR 0011</a> §1</li>
 <li><strong>Nota:</strong> a proteção equivalente <strong>na plataforma</strong> (GitHub/GitLab)
