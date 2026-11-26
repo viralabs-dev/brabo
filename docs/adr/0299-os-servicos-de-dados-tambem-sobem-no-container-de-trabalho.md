@@ -42,7 +42,7 @@ Flags reproduzidas do `docker-cli.ts` do contracts (`argsBase` do trabalho e `ar
 ## Implementação (mergeada na `dev` em 26/11/2026)
 - `brabo-contracts` PR #48: serviços no trabalho e `run.env` no `docker-port` (RN-1518), TAG `v1.5.0-dev.1`.
 - `brabo-broker` PR #55: repin da TAG e repasse de `servicos`/`env` no papel de trabalho.
-- `brabo-api` PRs #156 e #159: `Run.env`, resolução de digest na proposta, `files` vazio recusado (RN-1507, RN-1508, RN-1520).
+- `brabo-api` PRs #156 e #159: `Run.env`, resolução de digest na proposta, `files` vazio recusado (RN-1522, RN-1523 e RN-1520; as duas primeiras nasceram como RN-1507 e RN-1508 e foram renumeradas na api#160, porque o engine já usa esses números).
 - `brabo-engine` PRs #136 e #140: tag explícita aceita, guarda do compose, recusa de PR sem arquivo, prompt (RN-1507, RN-1508, RN-1521).
 Cada elo depende da TAG do anterior.
 
