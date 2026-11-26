@@ -883,7 +883,7 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 > ⚠️ Блок сгенерирован `pnpm docs:generate`. Не редактируйте вручную — следующая сборка его перезапишет.
 
-Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **206**. Без описания в таблицах выше пока: **1**.
+Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **206**. У всех есть описание в таблицах выше.
 
 Каждый источник помечен как **продукт** — то, что оператор установки задаёт в `.env` развёртывания, — или **инструменты**: их читают только CI и разработчики продукта. Переменной инструментов не место в `.env` оператора.
 
@@ -955,7 +955,7 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 - <a id="env-RATE_LIMIT_IP"></a>`RATE_LIMIT_IP` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_USER"></a>`RATE_LIMIT_USER` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_WINDOW_MS"></a>`RATE_LIMIT_WINDOW_MS` <sub>(apps/api/src/infrastructure/observability/domain-gauges.collector.ts)</sub>
-- <a id="env-RECURSOS_RECONCILIACAO_INTERVAL_MS"></a>`RECURSOS_RECONCILIACAO_INTERVAL_MS` — ⚠️ **нет описания выше** <sub>(apps/api/src/application/use-cases/containers/reconciliar-recursos.use-case.ts)</sub>
+- <a id="env-RECURSOS_RECONCILIACAO_INTERVAL_MS"></a>`RECURSOS_RECONCILIACAO_INTERVAL_MS` <sub>(apps/api/src/application/use-cases/containers/reconciliar-recursos.use-case.ts)</sub>
 - <a id="env-SMTP_FROM"></a>`SMTP_FROM` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_HOST"></a>`SMTP_HOST` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_PASSWORD"></a>`SMTP_PASSWORD` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>

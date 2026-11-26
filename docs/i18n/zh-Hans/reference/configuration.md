@@ -577,7 +577,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 
 > ⚠️ 此区块由 `pnpm docs:generate` 生成。请勿手动编辑——下次构建会覆盖它。
 
-从代码中提取的清单：运行时读取 **206 个变量**。其中 **1** 个在上方表格中仍无描述。
+从代码中提取的清单：运行时读取 **206 个变量**。全部都在上方表格中有描述。
 
 每个来源都标记为 **产品**——运维安装的人在部署 `.env` 中设置的内容——或 **工具**，仅由 CI 和开发产品的人读取。工具变量绝不应出现在运维人员的 `.env` 中。
 
@@ -649,7 +649,7 @@ bootstrap（`make deploy-local`）以及 `.github/workflows/propriedades.yml` �
 - <a id="env-RATE_LIMIT_IP"></a>`RATE_LIMIT_IP` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_USER"></a>`RATE_LIMIT_USER` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_WINDOW_MS"></a>`RATE_LIMIT_WINDOW_MS` <sub>(apps/api/src/infrastructure/observability/domain-gauges.collector.ts)</sub>
-- <a id="env-RECURSOS_RECONCILIACAO_INTERVAL_MS"></a>`RECURSOS_RECONCILIACAO_INTERVAL_MS` — ⚠️ **上文无描述** <sub>(apps/api/src/application/use-cases/containers/reconciliar-recursos.use-case.ts)</sub>
+- <a id="env-RECURSOS_RECONCILIACAO_INTERVAL_MS"></a>`RECURSOS_RECONCILIACAO_INTERVAL_MS` <sub>(apps/api/src/application/use-cases/containers/reconciliar-recursos.use-case.ts)</sub>
 - <a id="env-SMTP_FROM"></a>`SMTP_FROM` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_HOST"></a>`SMTP_HOST` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_PASSWORD"></a>`SMTP_PASSWORD` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>

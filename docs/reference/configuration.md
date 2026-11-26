@@ -908,7 +908,7 @@ ninguém perceba.
 
 > ⚠️ Bloco gerado por `pnpm docs:generate`. Não edite à mão — o próximo build o sobrescreve.
 
-Inventário extraído do código: **206 variáveis** lidas em tempo de execução. **1** ainda não têm descrição nas tabelas acima.
+Inventário extraído do código: **206 variáveis** lidas em tempo de execução. Todas têm descrição nas tabelas acima.
 
 Cada fonte é marcada **produto** — o que quem opera a instalação configura no `.env` do deploy — ou **ferramenta**, lida só pelo CI e por quem desenvolve o produto. Variável de ferramenta nunca pertence ao `.env` de um operador.
 
@@ -980,7 +980,7 @@ Cada fonte é marcada **produto** — o que quem opera a instalação configura 
 - <a id="env-RATE_LIMIT_IP"></a>`RATE_LIMIT_IP` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_USER"></a>`RATE_LIMIT_USER` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_WINDOW_MS"></a>`RATE_LIMIT_WINDOW_MS` <sub>(apps/api/src/infrastructure/observability/domain-gauges.collector.ts)</sub>
-- <a id="env-RECURSOS_RECONCILIACAO_INTERVAL_MS"></a>`RECURSOS_RECONCILIACAO_INTERVAL_MS` — ⚠️ **sem descrição acima** <sub>(apps/api/src/application/use-cases/containers/reconciliar-recursos.use-case.ts)</sub>
+- <a id="env-RECURSOS_RECONCILIACAO_INTERVAL_MS"></a>`RECURSOS_RECONCILIACAO_INTERVAL_MS` <sub>(apps/api/src/application/use-cases/containers/reconciliar-recursos.use-case.ts)</sub>
 - <a id="env-SMTP_FROM"></a>`SMTP_FROM` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_HOST"></a>`SMTP_HOST` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_PASSWORD"></a>`SMTP_PASSWORD` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
