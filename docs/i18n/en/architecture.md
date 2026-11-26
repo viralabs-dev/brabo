@@ -454,7 +454,7 @@ confirmed folder.
 | directory | what it is |
 |---|---|
 | `packages/shared/` | the `GitProviderContract` — fifteen operations, **types and nothing else**: a value that survives `tsc` breaks the api's boot (locked by a test), so the constant lives in the consumer |
-| `packages/docker-port/` | the Docker PORT (six operations) and its CLI adapter, shared by `apps/runner` and `apps/broker` — [ADR 0130](adr/0130-broker-de-container.md). It is runtime code, which is exactly why it is NOT in `packages/shared`; it has no build step and both consumers BUNDLE it, so no image ever resolves it from `node_modules` |
+| `packages/docker-port/` | the Docker PORT (eight operations) and its CLI adapter, shared by `apps/runner` and `apps/broker` — [ADR 0130](adr/0130-broker-de-container.md). It is runtime code, which is exactly why it is NOT in `packages/shared`; it has no build step and both consumers BUNDLE it, so no image ever resolves it from `node_modules` |
 | `docker/` | dev and production images; `smoke.sh` |
 | `deploy/k8s/` | Kustomize base + overlays (local, staging, prod) |
 | `design/` | design system: tokens, typography, components |
@@ -742,7 +742,7 @@ erDiagram
   users ||--o{ detected_language_declines : "detected language the person said no to (RN-624)"
 ```
 
-61 tables in total. The most recent is `merge_automatico_eventos` ([RN-1316](business-rules/api.md#rn-1316): who turned the project's automatic merge on and off, insert-only); before it came `task_model_escalations` ([RN-1144](business-rules/api.md#rn-1144): the block counter and the base model of each task on the model ladder); before it came `chat_attachments` ([RN-986](business-rules/api.md#rn-986): the bytes of the chat attachments; `chat.message` keeps only the reference, RN-987); and before that, `source_clicks` ([RN-983](business-rules/api.md#rn-983): the click on a consulted source, which is not a vote); before it came `detected_language_declines`
+63 tables in total. The most recent is `merge_automatico_eventos` ([RN-1316](business-rules/api.md#rn-1316): who turned the project's automatic merge on and off, insert-only); before it came `task_model_escalations` ([RN-1144](business-rules/api.md#rn-1144): the block counter and the base model of each task on the model ladder); before it came `chat_attachments` ([RN-986](business-rules/api.md#rn-986): the bytes of the chat attachments; `chat.message` keeps only the reference, RN-987); and before that, `source_clicks` ([RN-983](business-rules/api.md#rn-983): the click on a consulted source, which is not a vote); before it came `detected_language_declines`
 ([RN-624](business-rules/api.md#rn-624)): one row per person and language the
 person DECLINED when asked "we noticed you write in X — use X for the
 answers?", with the date. Its presence is what keeps the same question from

@@ -883,15 +883,15 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 
 > ⚠️ Блок сгенерирован `pnpm docs:generate`. Не редактируйте вручную — следующая сборка его перезапишет.
 
-Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **205**. У всех есть описание в таблицах выше.
+Инвентарь, извлечённый из кода: переменных, читаемых во время выполнения, — **206**. У всех есть описание в таблицах выше.
 
 Каждый источник помечен как **продукт** — то, что оператор установки задаёт в `.env` развёртывания, — или **инструменты**: их читают только CI и разработчики продукта. Переменной инструментов не место в `.env` оператора.
 
-[api](#env-servico-api) (72) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (14) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
+[api](#env-servico-api) (73) · [engine](#env-servico-engine) (63) · [web](#env-servico-web) (6) · [broker](#env-servico-broker) (14) · [api/scripts](#env-servico-api-scripts) (16) · [e2e](#env-servico-e2e) (10) · [deploy/k8s](#env-servico-deploy-k8s) (24)
 
 ### api {#env-servico-api}
 
-переменных: 72 · продукт
+переменных: 73 · продукт
 
 - <a id="env-API_JSON_BODY_LIMIT"></a>`API_JSON_BODY_LIMIT` <sub>(apps/api/src/main.ts)</sub>
 - <a id="env-API_PUBLIC_URL"></a>`API_PUBLIC_URL` <sub>(apps/api/src/application/use-cases/auth/start-social-login.use-case.ts)</sub>
@@ -955,6 +955,7 @@ Bootstrap (`make deploy-local`) и проверки свойств, которы
 - <a id="env-RATE_LIMIT_IP"></a>`RATE_LIMIT_IP` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_USER"></a>`RATE_LIMIT_USER` <sub>(apps/api/src/interfaces/http/shared/rate-limit.guard.ts)</sub>
 - <a id="env-RATE_LIMIT_WINDOW_MS"></a>`RATE_LIMIT_WINDOW_MS` <sub>(apps/api/src/infrastructure/observability/domain-gauges.collector.ts)</sub>
+- <a id="env-RECURSOS_RECONCILIACAO_INTERVAL_MS"></a>`RECURSOS_RECONCILIACAO_INTERVAL_MS` <sub>(apps/api/src/application/use-cases/containers/reconciliar-recursos.use-case.ts)</sub>
 - <a id="env-SMTP_FROM"></a>`SMTP_FROM` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_HOST"></a>`SMTP_HOST` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>
 - <a id="env-SMTP_PASSWORD"></a>`SMTP_PASSWORD` <sub>(apps/api/src/infrastructure/mail/smtp-config.ts)</sub>

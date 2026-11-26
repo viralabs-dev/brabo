@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **Doc (AT-1011)**: contagens do `DockerPort` (oito métodos) e das tabelas da api em dia em `docs/architecture.md` e na regra do broker; `RECURSOS_RECONCILIACAO_INTERVAL_MS` descrita em `docs/reference/configuration.md`.
+
 - **docs(adr)**: AT-980, ADR 0298 ganha a seção "Revisão (19/11/2026)" (api#133, L7): o laço de reconciliação só age sobre `project_resources`, sai a varredura do host por rótulo (o `brabo` e o `brabo-dev` dividem o daemon), órfãos anteriores ao registro vão para limpeza manual, e a prova de rede que falha em container de pé não remove o container.
 
 - **docs(adr)**: AT-980, ADR 0298 (aceito; lado do `brabo`). O broker ganha `GET /host/recursos` (portas de todo container, só o número para os de terceiros) e a remoção de órfão por rótulo (só quando a api responde 404); a api escolhe a porta lendo o host e mantém o registro `project_resources` (pedido, criado, falhou, removendo, removido) com um laço de reconciliação. Recusa a porta às cegas e o só-falhar. Confirmado pelo dono em 18/11: apagar o projeto não espera o broker.
