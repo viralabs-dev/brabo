@@ -427,6 +427,7 @@ Como a documentação é gerada, verificada e publicada.
 | [0275](0275-cada-irmao-confere-as-proprias-refs-com-simbolo.md) | Cada irmão confere as próprias refs com símbolo no PR | aceito |
 | [0287](0287-o-indice-de-adr-e-gerado-e-as-referencias-grandes-viram-indice-mais-partes.md) | O índice de ADR é gerado, e a referência grande vira índice mais partes | proposto |
 | [0288](0288-link-entre-repos-nas-rns-e-url-do-repo-dono.md) | O link entre repos nas RNs é a URL do repo dono, e o site a devolve para relativo | proposto |
+| [0300](0300-o-indice-de-rn-e-gerado-das-partes-e-o-ci-de-cada-repo-confere-a-fronteira.md) | O índice de RN é gerado das partes, e o CI de cada repo confere o que cruza a fronteira | proposto |
 <!-- END:GENERATED:indice-de-adr -->
 
 ## A convenção
