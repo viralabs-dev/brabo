@@ -78,7 +78,7 @@ aprovação: a decisão do humano já está gravada.</li>
 <ul>
 <li><strong>Onde:</strong> <code>src/application/use-cases/execution/execute-execution-plan.use-case.ts:89</code>
 (<code>execute</code>); <code>src/application/use-cases/actions/approve-action.use-case.ts:242</code>
-(<code>executeExecutionPlan</code>); <code>src/application/use-cases/actions/propose-action.use-case.ts:509</code>
+(<code>executeExecutionPlan</code>); <code>src/application/use-cases/actions/propose-action.use-case.ts:522</code>
 (<code>executeExecutionPlan</code>); <code>apps/web/src/lib/session-acoes-de-handoff.ts:91</code>
 (<code>handleAcceptHandoff</code>); <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:409</code>
 (<code>classificar</code>); <code>apps/engine/lib/engine/agents/dev_lead_server.ex:947</code>
@@ -140,7 +140,7 @@ módulo do <code>module_map</code>, como antes, e o paralelismo extra continua p
 <li><strong>Onde:</strong> <code>src/domain/execution/plano-de-execucao.ts:131</code>
 (<code>lerPlanoDeExecucao</code>); <code>src/infrastructure/persistence/drizzle/backlog.repository.ts:905</code>
 (<code>daTarefaDoModulo</code>), <code>:452</code> (<code>claimNext</code>), <code>:392</code> (<code>assignModules</code>);
-<code>src/application/use-cases/actions/propose-action.use-case.ts:155</code>
+<code>src/application/use-cases/actions/propose-action.use-case.ts:159</code>
 (<code>recusaNaProposta</code>); <code>src/application/use-cases/execution/execute-execution-plan.use-case.ts:72</code>
 (<code>recusaNaProposta</code>); <code>src/db/schema/backlog.ts:192</code> (<code>module</code>);
 <code>apps/engine/lib/engine/agents/dev_lead_tools.ex:913</code>
@@ -378,7 +378,7 @@ mudam; a recusa abaixo do mínimo acontece na execução, não ao propor.</p>
 (<code>explicarRecursosMinimos</code>);
 <code>src/application/use-cases/architecture/create-module-map.use-case.ts:134</code>
 (<code>normalizarModulo</code>);
-<code>src/application/use-cases/actions/execute-container-start.use-case.ts:186</code>
+<code>src/application/use-cases/actions/execute-container-start.use-case.ts:191</code>
 (<code>resolverRecursosDaSubida</code>);
 <code>apps/engine/lib/engine/harness/tools/create_module_map.ex:103</code> (<code>normalize</code>);
 <code>apps/engine/lib/engine/infra/infra_lead_server.ex:893</code>
@@ -813,7 +813,7 @@ em <code>package.json</code>, e a tarefa ficou <code>in_review</code> sem ningu�
 <code>src/infrastructure/persistence/drizzle/backlog.repository.ts:560</code> (<code>reabrirPorConflitoDeMerge</code>),
 <code>apps/engine/lib/engine/workers/dev_agent_wake_worker.ex:157</code> (<code>task.merge_conflict</code>),
 <code>apps/engine/lib/engine/dev/dev_agent_server.ex:374</code> (<code>handle_info</code>),
-<code>apps/engine/lib/engine/dev/dev_agent_server.ex:1126</code> (<code>trigger_gate_recheck</code>),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:1132</code> (<code>trigger_gate_recheck</code>),
 <code>apps/engine/lib/engine/dev/worktree_manager.ex:47</code> (<code>adopt</code>)</li>
 <li><strong>Teste:</strong> <code>test/application/use-cases/actions/execute-git-action.use-case.spec.ts</code> (&quot;conflito de merge → kind git_merge, arquivos no
 resultado e evento na tarefa&quot;; falha: &quot;RN-715: tarefa que já não está em

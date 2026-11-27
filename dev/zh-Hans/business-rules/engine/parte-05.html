@@ -119,7 +119,7 @@ Desde a RN-730 o 402 chega com <code>code</code> próprio (<code>insufficient_cr
 ele que decide; o reconhecimento pelo texto ficou só como rede.</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/agents/falha_de_turno.ex:142</code>
 (<code>credito_esgotado?</code>),
-<code>apps/engine/lib/engine/dev/dev_agent_server.ex:1293</code> (<code>handle_outcome</code>),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:1299</code> (<code>handle_outcome</code>),
 <code>apps/engine/lib/engine/dev/agent_io.ex:343</code> (<code>pausar_por_credito</code>),
 <code>apps/web/src/lib/agent-status.ts:178</code> (<code>breakerReasonFor</code>),
 <code>apps/api/src/application/use-cases/sessions/get-session-pending-work.use-case.ts</code></li>
@@ -560,7 +560,7 @@ US$ 1.00&quot;). Os gates de QA seguem com o <code>task_budget_micros</code> bas
 recorte do card.</p>
 <ul>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/teto_da_tarefa.ex:32</code> (<code>efetivo</code>);
-<code>apps/engine/lib/engine/dev/dev_agent_server.ex:998</code> (<code>diagnostico_de_orcamento</code>);
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:1004</code> (<code>diagnostico_de_orcamento</code>);
 <code>apps/api/src/application/use-cases/execution/get-dev-task-context.use-case.ts:269</code>
 (<code>ehPrimeiraTarefaDoModulo</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/dev_agent_server_test.exs</code> (describe
@@ -639,8 +639,8 @@ o engine recebe da api <code>truncated</code> e <code>usage.outputTokens</code>,
 <code>reasoningTokens</code> (ficam só em <code>token_usage</code>), então a resposta vazia que
 bate no teto sem <code>finish_reason: length</code> não é reconhecida.</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tool_loop.ex:243</code>
-(<code>parada_sem_chamada</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1473</code>
-(<code>motivo_da_parada</code>), <code>:1671</code> (<code>stop_diagnosis</code>)</li>
+(<code>parada_sem_chamada</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1479</code>
+(<code>motivo_da_parada</code>), <code>:1677</code> (<code>stop_diagnosis</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tool_loop_test.exs</code> (<code>corte só de raciocínio</code>: retentada uma vez e segue; repetido para com
 <code>corte_pelo_teto</code>), <code>apps/engine/test/engine/dev/dev_agent_server_test.exs</code>
 (<code>resposta só de raciocínio cortada pelo teto bloqueia com motivo nomeado</code>)</li>
@@ -767,7 +767,7 @@ para os gates, nunca fecha sozinha. Mede DIFF e não ancestralidade, então
 cobre também o merge por squash que a <a href="#rn-760">RN-760</a> declara não ver.
 Declarado: a PR antiga da branch, se existir, não é fechada no provider.</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/worktree_manager.ex:418</code>
-(<code>sem_diff_contra_a_dev?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1584</code>
+(<code>sem_diff_contra_a_dev?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1590</code>
 (<code>ja_na_dev</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/tarefa_ja_na_dev_test.exs</code></li>
 <li><strong>Origem:</strong> AT-474</li>
@@ -846,7 +846,7 @@ do dev agent por essa causa NÃO incrementa o contador de bloqueios seguidos
 (AT-621, <a href="#rn-864">RN-864</a>).</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/harness/tool_loop.ex:312</code>
 (<code>llm_turn_com_retentativa</code>), <code>apps/engine/lib/engine/agents/falha_de_turno.ex:119</code>
-(<code>falha_de_rede?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1441</code>
+(<code>falha_de_rede?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1447</code>
 (<code>bloquear_parada</code>), <code>apps/engine/lib/engine/dev/agent_io.ex:275</code>
 (<code>finish_task</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/harness/tool_loop_test.exs</code> (&quot;falha de
@@ -867,7 +867,7 @@ por QA e SecOps com 0 arquivos. <code>fetch</code> que falha não decide nada �
 com o que há, e na dúvida a task segue para os gates.</li>
 <li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/worktree_manager.ex:418</code>
 (<code>sem_diff_contra_a_dev?</code>), <code>apps/engine/lib/engine/dev/worktree_manager.ex:442</code>
-(<code>sem_diff_atualizado?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1293</code>
+(<code>sem_diff_atualizado?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1299</code>
 (<code>handle_outcome</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/tarefa_ja_na_dev_test.exs</code> (&quot;caminho
 feliz: com a dev atualizada, a branch não tem diff&quot;; &quot;falha: remoto
@@ -1119,7 +1119,7 @@ cláusula: módulo que expõe HTTP serve <code>/openapi.json</code> (OpenAPI 3) 
 swagger-ui de CDN; módulo web serve a página inicial; a URL entra na seção
 &quot;Rodar na sua máquina&quot; do README. Tarefa que não toca rotas não paga a
 cláusula (a mensagem é fixada e volta a cada iteração).</li>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:963</code>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:969</code>
 (<code>clausula_de_openapi</code>),
 <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:133</code>
 (<code>toca_ponto_de_entrada?</code>)</li>
@@ -1195,9 +1195,9 @@ reprova, nunca observação (estende a RN-854).</p>
 <p><strong>Onde:</strong> <code>apps/engine/lib/engine/infra/instrucoes_de_execucao.ex:65</code> (<code>url</code>),
 <code>apps/api/src/domain/infra/run-instructions.ts:77</code> (<code>recusaDoRun</code>),
 <code>apps/engine/lib/engine/infra/infra_lead_server.ex:1585</code> (<code>build_kickoff</code>),
-<code>apps/engine/lib/engine/dev/dev_agent_server.ex:963</code> (<code>clausula_de_openapi</code>),</p>
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:969</code> (<code>clausula_de_openapi</code>),</p>
 <p><code>apps/engine/lib/engine/infra/infra_lead_server.ex:1585</code> (<code>build_kickoff</code>),
-<code>apps/engine/lib/engine/dev/dev_agent_server.ex:963</code> (<code>clausula_de_openapi</code>),
+<code>apps/engine/lib/engine/dev/dev_agent_server.ex:969</code> (<code>clausula_de_openapi</code>),
 <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:20</code> (<code>texto</code>)</p>
 </li>
 <li>
@@ -1230,9 +1230,9 @@ bloqueiam na hora. O contador de retomadas é só em memória: reiniciar o
 engine o zera. Vale também para a correção pós-gate (AT-621): o 503 do
 provider numa correção segue o mesmo caminho do laço principal (crédito
 RN-726 + retomada), com o motivo marcado &quot;(correção)&quot;.</li>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1048</code>
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1054</code>
 (<code>handle_correction_outcome</code>), <code>apps/engine/lib/engine/agents/falha_de_turno.ex:140</code>
-(<code>passageira?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1469</code>
+(<code>passageira?</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1475</code>
 (<code>bloquear_passageira</code>), <code>apps/engine/lib/engine/dev/agent_io.ex:366</code>
 (<code>pausar_por_rede</code>), <code>apps/engine/lib/engine/workers/retomada_de_tarefa_worker.ex:33</code>
 (<code>agendar</code>), <code>apps/api/src/application/use-cases/execution/unblock-task.use-case.ts:33</code>
@@ -1389,7 +1389,7 @@ venha de <code>PUBLIC_BASE_URL</code> ou do <code>Host</code> da requisição CO
 erro responda o mesmo <code>code</code> em todas as rotas. O recorte do QA confere as
 duas coisas e trata a divergência (ex.: <code>not_found</code> × <code>link_not_found</code>)
 como ITEM. Decisão do dono de 14/10: regra geral.</li>
-<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:963</code> (<code>clausula_de_openapi</code>);
+<li><strong>Onde:</strong> <code>apps/engine/lib/engine/dev/dev_agent_server.ex:969</code> (<code>clausula_de_openapi</code>);
 <code>apps/engine/lib/engine/gates/recorte_da_tarefa.ex:156</code> (<code>secao_do_ponto_de_entrada</code>)</li>
 <li><strong>Teste:</strong> <code>apps/engine/test/engine/dev/report_done_instrucao_test.exs</code>
 (&quot;RN-879/880: tarefa que toca rotas leva URL com porta, code único e CORS&quot; e

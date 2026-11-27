@@ -141,7 +141,7 @@ ao campo, e caminho que só leva a mensagem.</li>
 (<code>streamErrorCode</code>),
 <code>apps/engine/lib/engine/agents/falha_de_turno.ex:91</code> (<code>credito_esgotado?</code>),
 <code>:71</code> (<code>origem</code>), <code>apps/engine/lib/engine/harness/tool_loop.ex:193</code>
-(<code>last_error_code</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1293</code>
+(<code>last_error_code</code>), <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1299</code>
 (<code>handle_outcome</code>)</li>
 <li><strong>Teste:</strong> <code>test/contract/llm-provider.contract.ts</code> (<code>erro_402 vira chunk de erro com code &quot;insufficient_credit&quot;</code>; falha: <code>erro_500</code> segue
 <code>upstream</code>), rodado por todas as suítes de contrato de provider;
@@ -396,8 +396,8 @@ tem piso de <code>12rem</code> POR COLUNA e cresce por fração, com o contêine
 <code>min-content</code> — com <code>max-content</code> ela ficava da largura do texto sem quebra
 (medido no Chromium: 2 236px num balão de 708px) e a última coluna sumia.</li>
 <li><strong>Onde:</strong> <code>src/application/use-cases/actions/execute-adr-pr.use-case.ts:95</code>
-(<code>openPullRequest</code>); <code>apps/engine/lib/engine/infra/infra_lead_server.ex:1826</code>
-(<code>gravar_texto_do_turno</code>); <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1718</code>
+(<code>openPullRequest</code>); <code>apps/engine/lib/engine/infra/infra_lead_server.ex:1833</code>
+(<code>gravar_texto_do_turno</code>); <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1724</code>
 (<code>propose_pr</code>); <code>apps/web/src/lib/session-destinatario.ts:228</code>
 (<code>agentesEmConversa</code>) e <code>apps/web/src/lib/session-kind.ts:69</code>
 (<code>tipoDaSessao</code>); <code>apps/web/src/routes/NewProjectWizard.tsx:1150</code>
@@ -576,7 +576,7 @@ um espelho declarado, porque a tela não deve copiar a constante e o engine não
 é consultado na proposta. Mudar um exige mudar o outro.</p>
 <ul>
 <li><strong>Onde:</strong> <code>src/application/use-cases/execution/activate-execution.use-case.ts:83</code> (<code>MULTIPLICADOR_DA_PRIMEIRA_TAREFA_DO_MODULO</code>);
-<code>src/application/use-cases/actions/propose-action.use-case.ts:247</code> (<code>multiplicadorDaPrimeiraDoModulo</code>);
+<code>src/application/use-cases/actions/propose-action.use-case.ts:260</code> (<code>multiplicadorDaPrimeiraDoModulo</code>);
 <code>apps/web/src/lib/aprovacoes.ts:382</code> (<code>multiplicador</code>)</li>
 <li><strong>Teste:</strong> <code>apps/web/src/lib/aprovacoes.test.ts</code> (it &quot;RN-802 (AT-473)&quot;: 8 tarefas, 1 módulo → US$ 4,50; 3 tarefas, 2 módulos → US$ 2,50; sem orçamento, sem número — caso de falha);
 <code>test/application/use-cases/actions/propose-action.use-case.spec.ts</code> (&quot;plano válido nasce pending&quot;)</li>
@@ -802,7 +802,7 @@ passa a ser avisado: <code>ProposeActionUseCase</code> executa a ação sob a ma
 marca. O evento que o engine pediu (inclusive o <code>proposed_action.created</code>)
 continua sem aviso da api, para não sair em dobro.</li>
 <li><strong>Onde:</strong> <code>src/application/efeito-de-acao.ts:18</code> (<code>ehEfeitoDeAcao</code>),
-<code>src/application/use-cases/actions/propose-action.use-case.ts:335</code>
+<code>src/application/use-cases/actions/propose-action.use-case.ts:348</code>
 (<code>runComoEfeitoDeAcao</code>),
 <code>src/infrastructure/http-clients/session-channel-notifier.ts:73</code>
 (<code>ehEfeitoDeAcao</code>)</li>
@@ -831,7 +831,7 @@ Infra, nunca verificado na máquina de quem lê (RN-468). E o contexto da
 Infra (<code>/internal/.../infra-context</code>) passa a levar <code>projectImage</code>, a
 decisão vigente de imagem, rede e recursos, <code>null</code> sem decisão.</li>
 <li><strong>Onde:</strong> <code>src/domain/infra/run-instructions.ts:77</code> (<code>recusaDoRun</code>),
-<code>src/application/use-cases/actions/propose-action.use-case.ts:219</code>
+<code>src/application/use-cases/actions/propose-action.use-case.ts:225</code>
 (<code>recusaDoRun</code>),
 <code>src/application/use-cases/actions/execute-infra-pr.use-case.ts:121</code>
 (<code>recusaDoRun</code>), <code>:338</code> (<code>EVENTO_INSTRUCOES_DE_EXECUCAO</code>),
@@ -1098,7 +1098,7 @@ marcador segue <code>auth</code>.</li>
 <li><strong>Onde:</strong> <code>src/domain/llm/llm-provider-errors.ts:86</code> (<code>normalizeHttpStatus</code>),
 <code>:140</code> (<code>pareceOrcamento</code>); <code>apps/engine/lib/engine/agents/falha_de_turno.ex:212</code>
 (<code>orcamento_esgotado</code>), <code>:226</code> (<code>frase_de_orcamento</code>), <code>:163</code>
-(<code>credito_esgotado?</code>); <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1448</code>
+(<code>credito_esgotado?</code>); <code>apps/engine/lib/engine/dev/dev_agent_server.ex:1454</code>
 (<code>motivo_de_credito</code>)</li>
 <li><strong>Teste:</strong> <code>test/domain/llm/llm-provider-errors.spec.ts</code> (&quot;o 403 de
 orçamento vira insufficient_credit com o corpo inteiro&quot;; falha: &quot;403 sem
