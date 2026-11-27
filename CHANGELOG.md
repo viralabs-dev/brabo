@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs(adr)**: AT-1029 F5, ADR 0300 (proposto). Revisa o 0287: a grade de âncoras do índice de RN é gerada das partes e completa (`indice-de-rn` do brabo-ci v1.6.0); o link de RN para outro repo aponta para o índice `<x>.md#rn-N` e a citação da parte vale só dentro do repo (o `links-das-rns` confere a âncora; a regra de URL para `parte-NN` de outro repo e o `--nova-parte` ficam como convenção, sem check); peso da página de RN com aviso a 90 KB e erro a 105 KB (estimativa, sem calibração contra o `docs:build`); `refs-entre-repos` e `rn-unica` fecham os itens 3 e 4 do ADR 0274. Fora: a PR automática no repo dono.
+
 - **Doc (AT-1011)**: contagens do `DockerPort` (oito métodos) e das tabelas da api em dia em `docs/architecture.md` e na regra do broker; `RECURSOS_RECONCILIACAO_INTERVAL_MS` descrita em `docs/reference/configuration.md`.
 
 - **docs(adr)**: AT-980, ADR 0298 ganha a seção "Revisão (19/11/2026)" (api#133, L7): o laço de reconciliação só age sobre `project_resources`, sai a varredura do host por rótulo (o `brabo` e o `brabo-dev` dividem o daemon), órfãos anteriores ao registro vão para limpeza manual, e a prova de rede que falha em container de pé não remove o container.
