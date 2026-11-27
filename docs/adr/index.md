@@ -3,7 +3,7 @@ id: adr-index
 title: Decisões arquiteturais (ADR)
 sidebar_label: Índice de ADRs
 sidebar_position: 0
-description: Os 292 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
+description: Os 294 registros de decisão arquitetural do Brabo, agrupados por tema, com o que cada um decidiu.
 keywords: [ADR, decisão arquitetural, arquitetura, histórico]
 ---
 
@@ -206,6 +206,8 @@ O ciclo de vida do container do projeto, a decisão de imagem, a porta de Docker
 | [0264](0264-o-app-reinicia-so-o-processo.md) | Depois do avanço da pasta, o app reinicia só o processo, sem recriar o container | aceito |
 | [0265](0265-o-app-declarado-propoe-recriar-o-container.md) | O app declarado pela Infra propõe recriar o container, com a porta na faixa 13000+ | aceito |
 | [0297](0297-o-broker-prova-o-compose-do-projeto-num-ambiente-descartavel.md) | O broker prova o compose do projeto num ambiente descartável | aceito |
+| [0298](0298-o-projeto-guarda-o-registro-do-que-subiu-e-o-broker-le-o-host.md) | O projeto guarda o registro do que subiu, e o broker lê o host e remove o que é do projeto apagado | aceito |
+| [0299](0299-os-servicos-de-dados-tambem-sobem-no-container-de-trabalho.md) | Os serviços de dados também sobem no container de trabalho, e `run.env` leva a URL de conexão aos dois containers | proposto |
 
 ## O runner local {#tema-runner}
 
@@ -283,7 +285,7 @@ O contrato de provider, o catálogo de modelos e a curadoria, os bindings de mod
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | Preço de lista datado no código para provider que não informa preço | aceito |
 | [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | Na Anthropic direta o raciocínio desligado é por modelo e o esforço reduz o Opus | aceito |
 | [0279](0279-provider-de-llm-duble-do-regressivo.md) | Provider de LLM dublê do regressivo, dentro da api | aceito |
-| [0290](0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.md) | O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU que o roda | proposto |
+| [0290](0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.md) | O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU que o roda | aceito |
 | [0296](0296-o-teto-de-gasto-e-mensal-e-o-workspace-tem-teto-proprio.md) | O teto de gasto é mensal e o workspace tem teto próprio | aceito |
 
 ## RAG, grafo de conhecimento e artefatos {#tema-conhecimento}
@@ -432,7 +434,7 @@ Como a documentação é gerada, verificada e publicada.
 - **Um arquivo por decisão**, em `docs/adr/NNNN-short-title.md`, com
   numeração sequencial de 4 dígitos, e título `# ADR NNNN — <título>`
   ([0218](0218-titulo-de-adr-com-prefixo.md)). **Sem reuso de número**, nem quando um ADR
-  é substituído — o próximo é **0298**.
+  é substituído — o próximo é **0300**.
 - **Um tema por decisão**, escolhido por quem escreve o ADR, no mesmo
   PR: uma linha em `docs/adr/temas.yml`; a linha do índice é gerada. Quem revisa confirma. Um tema novo é uma
   mudança na lista em `temas.yml`, justificada no PR que o acrescenta; passar

@@ -207,6 +207,8 @@ ADR фиксирует, **почему** что-то было решено, в �
 | [0264](0264-o-app-reinicia-so-o-processo.md) | Depois do avanço da pasta, o app reinicia só o processo, sem recriar o container | принято |
 | [0265](0265-o-app-declarado-propoe-recriar-o-container.md) | O app declarado pela Infra propõe recriar o container, com a porta na faixa 13000+ | принято |
 | [0297](0297-o-broker-prova-o-compose-do-projeto-num-ambiente-descartavel.md) | O broker prova o compose do projeto num ambiente descartável | принято |
+| [0298](0298-o-projeto-guarda-o-registro-do-que-subiu-e-o-broker-le-o-host.md) | O projeto guarda o registro do que subiu, e o broker lê o host e remove o que é do projeto apagado | принято |
+| [0299](0299-os-servicos-de-dados-tambem-sobem-no-container-de-trabalho.md) | Os serviços de dados também sobem no container de trabalho, e `run.env` leva a URL de conexão aos dois containers | предложено |
 
 ## Локальный runner {#tema-runner}
 
@@ -284,7 +286,7 @@ CLI на машине пользователя — канал, учётные д
 | [0251](0251-preco-de-lista-datado-para-provider-sem-preco.md) | Датированная в коде прайс-цена для провайдера, не сообщающего цену | принято |
 | [0257](0257-na-anthropic-direta-o-raciocinio-desligado-e-por-modelo.md) | В прямом Anthropic отключённое рассуждение задаётся по модели, а усилие снижает Opus | принято |
 | [0279](0279-provider-de-llm-duble-do-regressivo.md) | Provider de LLM dublê do regressivo, dentro da api | принято |
-| [0290](0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.md) | O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU que o roda | предложено |
+| [0290](0290-o-usuario-escolhe-o-laya-no-lugar-do-jev-quando-a-maquina-tem-gpu.md) | O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU que o roda | принято |
 | [0296](0296-o-teto-de-gasto-e-mensal-e-o-workspace-tem-teto-proprio.md) | O teto de gasto é mensal e o workspace tem teto próprio | принято |
 
 ## RAG, граф знаний и артефакты {#tema-conhecimento}

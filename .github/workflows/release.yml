@@ -37,7 +37,7 @@ jobs:
     if: vars.PRODUTO_RELEASE_LIGADA == 'true' || (github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' && inputs.tag == '')
     name: Release do produto
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    timeout-minutes: 60  # a imagem do Laya passa de 9 GB
     steps:
       - name: Quem pode republicar
         if: github.event_name == 'workflow_dispatch'
@@ -105,6 +105,13 @@ jobs:
         with:
           irmaos: infra
 
+      # A imagem do Laya (base CUDA) passa de 9 GB e o runner tem ~14 GB livres.
+      - name: Liberar disco do runner
+        run: |
+          set -euo pipefail
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h / | tail -1
+
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
         with:
           node-version: '26.10.0'
@@ -135,15 +142,21 @@ jobs:
           for alvo in $(jq -r '.imagens | keys[]' componentes.json); do
             repo="$(jq -r ".imagens.$alvo.repo" componentes.json)"
             tag="$(jq -r ".imagens.$alvo.tag" componentes.json)"
-            if gh release download "$tag" -R "$repo" -p imagem.json -O "${RUNNER_TEMP}/imagens/${alvo}.json"; then
+            asset="$(jq -r ".imagens.$alvo.asset // \"imagem.json\"" componentes.json)"
+            opcional="$(jq -r ".imagens.$alvo.opcional // false" componentes.json)"
+            if gh release download "$tag" -R "$repo" -p "$asset" -O "${RUNNER_TEMP}/imagens/${alvo}.json"; then
               echo "ok: $alvo <- $repo@$tag"
             else
-              echo "::warning::$alvo: $repo@$tag não tem imagem.json"
-              faltam=$((faltam + 1))
+              if [ "$opcional" = 'true' ]; then
+                echo "::notice::$alvo é opcional e $repo@$tag não tem $asset: a release sai sem ele."
+              else
+                echo "::warning::$alvo: $repo@$tag não tem $asset"
+                faltam=$((faltam + 1))
+              fi
             fi
           done
           if [ "$faltam" -gt 0 ]; then
-            [ "$ENSAIO" = 'true' ] || { echo "::error::$faltam componente(s) sem imagem.json — cinco de cinco ou nenhuma."; exit 1; }
+            [ "$ENSAIO" = 'true' ] || { echo "::error::$faltam componente(s) sem imagem.json — todas as obrigatórias ou nenhuma."; exit 1; }
             echo "::notice::ENSAIO: imagens não montadas ($faltam sem Release); Trivy e verificação de imagem ficam para a 1ª tag."
           fi
           echo "completo=$([ "$faltam" -eq 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"

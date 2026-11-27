@@ -14,7 +14,7 @@ Este documento é o mapa para quem vai **trabalhar** no código. Ele diz por
 onde começar a ler, o que cada fronteira promete e o que já se sabe que está
 torto.
 
-As decisões e suas justificativas moram nos [ADRs](adr/index.md) — 292
+As decisões e suas justificativas moram nos [ADRs](adr/index.md) — 294
 deles, vários registrando um defeito real encontrado em execução. Aqui não
 repetimos o argumento: apontamos para ele.
 
@@ -452,7 +452,7 @@ pasta confirmada.
 | diretório | o que é |
 |---|---|
 | `packages/shared/` | o `GitProviderContract` — quinze operações, **tipos e nada mais**: um valor que sobrevive ao `tsc` quebra o boot da api (travado por um teste), então a constante mora no consumidor |
-| `packages/docker-port/` | a PORTA do Docker (seis operações) e seu adaptador de CLI, compartilhados por `apps/runner` e `apps/broker` — [ADR 0130](adr/0130-broker-de-container.md). É código de runtime, e é exatamente por isso que NÃO está em `packages/shared`; não tem passo de build e os dois consumidores o EMPACOTAM, então nenhuma imagem jamais o resolve a partir de `node_modules` |
+| `packages/docker-port/` | a PORTA do Docker (oito operações) e seu adaptador de CLI, compartilhados por `apps/runner` e `apps/broker` — [ADR 0130](adr/0130-broker-de-container.md). É código de runtime, e é exatamente por isso que NÃO está em `packages/shared`; não tem passo de build e os dois consumidores o EMPACOTAM, então nenhuma imagem jamais o resolve a partir de `node_modules` |
 | `docker/` | imagens de dev e de produção; `smoke.sh` |
 | `deploy/k8s/` | base do Kustomize + overlays (local, staging, prod) |
 | `design/` | design system: tokens, tipografia, componentes |
@@ -740,7 +740,7 @@ erDiagram
   users ||--o{ detected_language_declines : "idioma detectado que a pessoa recusou (RN-624)"
 ```
 
-61 tabelas no total. A mais recente é `merge_automatico_eventos` ([RN-1316](business-rules/api.md#rn-1316): quem ligou e quem desligou o merge automático do projeto, só inclusão); antes dela veio `task_model_escalations` ([RN-1144](business-rules/api.md#rn-1144): o contador de bloqueios e o modelo base de cada tarefa na escada de modelos); antes dela veio `chat_attachments` ([RN-986](business-rules/api.md#rn-986): os bytes dos anexos do chat; o `chat.message` guarda só a referência, RN-987); antes, veio `source_clicks` ([RN-983](business-rules/api.md#rn-983): o clique numa fonte consultada, que não é voto); antes dela veio `detected_language_declines`
+63 tabelas no total. A mais recente é `merge_automatico_eventos` ([RN-1316](business-rules/api.md#rn-1316): quem ligou e quem desligou o merge automático do projeto, só inclusão); antes dela veio `task_model_escalations` ([RN-1144](business-rules/api.md#rn-1144): o contador de bloqueios e o modelo base de cada tarefa na escada de modelos); antes dela veio `chat_attachments` ([RN-986](business-rules/api.md#rn-986): os bytes dos anexos do chat; o `chat.message` guarda só a referência, RN-987); antes, veio `source_clicks` ([RN-983](business-rules/api.md#rn-983): o clique numa fonte consultada, que não é voto); antes dela veio `detected_language_declines`
 ([RN-624](business-rules/api.md#rn-624)): uma linha por pessoa e idioma que a
 pessoa RECUSOU quando perguntada "notamos que você escreve em X — usar X nas
 respostas?", com a data. A presença dela é o que impede a mesma pergunta de

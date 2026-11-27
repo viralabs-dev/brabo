@@ -366,7 +366,7 @@ INNER JOIN 恰好隐藏了需要这个页面的项目。因此 `ContainerOvervie
 | 目录 | 是什么 |
 |---|---|
 | `packages/shared/` | `GitProviderContract`——十五个操作，**只有类型，别无其他**：一个在 `tsc` 之后仍存在的值会破坏 api 的启动（由一个测试锁定），所以常量放在消费者处 |
-| `packages/docker-port/` | Docker 的**端口**（六个操作）及其 CLI 适配器，由 `apps/runner` 和 `apps/broker` 共享——[ADR 0130](adr/0130-broker-de-container.md)。它是运行时代码，正因如此它**不**在 `packages/shared` 中；它没有构建步骤，两个消费者都会**打包**它，因此没有任何镜像会从 `node_modules` 解析它 |
+| `packages/docker-port/` | Docker 的**端口**（八个操作）及其 CLI 适配器，由 `apps/runner` 和 `apps/broker` 共享——[ADR 0130](adr/0130-broker-de-container.md)。它是运行时代码，正因如此它**不**在 `packages/shared` 中；它没有构建步骤，两个消费者都会**打包**它，因此没有任何镜像会从 `node_modules` 解析它 |
 | `docker/` | dev 和生产镜像；`smoke.sh` |
 | `deploy/k8s/` | Kustomize 基础 + overlays（local、staging、prod） |
 | `design/` | 设计系统：tokens、字体、组件 |
@@ -600,7 +600,7 @@ erDiagram
   users ||--o{ detected_language_declines : "idioma detectado que a pessoa recusou (RN-624)"
 ```
 
-总共 61 张表。最新的是 `merge_automatico_eventos`（[RN-1316](business-rules/api.md#rn-1316)：谁开启和关闭了项目的自动合并，只追加）；在它之前是 `task_model_escalations`（[RN-1144](business-rules/api.md#rn-1144)：每个任务在模型阶梯上的阻塞计数和基础模型）；在它之前是 `chat_attachments`（[RN-986](business-rules/api.md#rn-986)：聊天附件的字节；`chat.message` 只保存引用，RN-987）；在它之前是 `source_clicks`（[RN-983](business-rules/api.md#rn-983)：对被查阅来源的点击，不是投票）；在它之前是 `detected_language_declines`（[RN-624](business-rules/api.md#rn-624)）：
+总共 63 张表。最新的是 `merge_automatico_eventos`（[RN-1316](business-rules/api.md#rn-1316)：谁开启和关闭了项目的自动合并，只追加）；在它之前是 `task_model_escalations`（[RN-1144](business-rules/api.md#rn-1144)：每个任务在模型阶梯上的阻塞计数和基础模型）；在它之前是 `chat_attachments`（[RN-986](business-rules/api.md#rn-986)：聊天附件的字节；`chat.message` 只保存引用，RN-987）；在它之前是 `source_clicks`（[RN-983](business-rules/api.md#rn-983)：对被查阅来源的点击，不是投票）；在它之前是 `detected_language_declines`（[RN-624](business-rules/api.md#rn-624)）：
 每个人和语言一行，记录此人在被问到"我们注意到你用 X 写作——回答中使用 X 吗？"时**拒绝**
 的语言，以及日期。它的存在使同一问题不会再回来；之后确认该语言会删除这一行。检测本身
 不保存状态——样本通过部分索引 `session_events_evidencia_de_idioma_idx`（用户执行者、两种

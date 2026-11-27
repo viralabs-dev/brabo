@@ -33,7 +33,8 @@ export function pinsDe(c: any): Pin[] {
     { nome: 'infra', repo: c.infra.repo, tag: c.infra.ref, requer: ASSET_IMAGEM },
     { nome: 'runner', repo: c.runner.repo, tag: c.runner.tag, requer: ASSET_RUNNER },
   ];
-  for (const [nome, i] of Object.entries<any>(c.imagens)) p.push({ nome, repo: i.repo, tag: i.tag, requer: ASSET_IMAGEM });
+  // `opcional` (o Laya) exige só a Release final: sem o asset a release sai sem ele.
+  for (const [nome, i] of Object.entries<any>(c.imagens)) p.push({ nome, repo: i.repo, tag: i.tag, requer: i.opcional ? [] : [i.asset ?? 'imagem.json'] });
   return p;
 }
 
@@ -56,6 +57,7 @@ export function compararPins(c: any, install: string, lido: Lido): string[] {
     }
     if (final(latest) && maior(latest.tag, p.tag)) erros.push(`${p.nome}: a pin ${p.tag} está atrás da Latest ${latest.tag} de ${p.repo}`);
   }
+  if (c.imagens.laya && c.imagens.laya.tag !== c.infra.ref) erros.push(`imagens.laya.tag (${c.imagens.laya.tag}) ≠ infra.ref (${c.infra.ref})`);
   if (c.infra.ref !== c.imagens.backup?.tag) erros.push(`infra.ref (${c.infra.ref}) ≠ imagens.backup.tag (${c.imagens.backup?.tag})`);
   const rt = runnerTagDoInstall(install);
   if (rt !== c.runner.tag) erros.push(`RUNNER_TAG do install.sh (${rt}) ≠ runner.tag (${c.runner.tag})`);
@@ -71,7 +73,7 @@ export function subirPins(texto: string, install: string, latest: Record<string,
     const r = repo ? latest[repo] : undefined;
     const m = /"(tag|ref)": "(v[^"]+)"/.exec(linha);
     if (!repo || !m || !final(r) || !maior(r.tag, m[2])) return linha;
-    const requer = repo.endsWith('/brabo-runner') ? ASSET_RUNNER : ASSET_IMAGEM;
+    const requer = repo.endsWith('/brabo-runner') ? ASSET_RUNNER : /"opcional": true/.test(linha) ? [] : [/"asset": "([^"]+)"/.exec(linha)?.[1] ?? 'imagem.json'];
     if (requer.some((a) => !r.assets.includes(a))) {
       console.log(`::warning::${repo}: a Latest ${r.tag} ainda não traz ${requer.join(' e ')}; a pin fica em ${m[2]}`);
       return linha;

@@ -1,6 +1,6 @@
 # ADR 0290 — O usuário escolhe o Laya no lugar do Jev quando a máquina tem GPU que o roda
 
-- **Status:** proposto (12/11/2026, AT-626; a implementação está em `brabo-api#94` e `brabo#123`, a imagem e a tela ainda não)
+- **Status:** aceito (AT-626; proposto em 12/11/2026, a tela e a imagem passam a existir: api#94/#95/#120, web#107, infra#56 e a 6ª imagem opcional no `componentes.json` do `brabo`)
 - **Data:** 2026-11-12
 - **Tema:** `llm`
 - **Referencia:** revisa o item 1 da RN-625 (só o OpenRouter é roteado) e estende o [ADR 0179](0179-o-laco-pergunta-ao-jev-qual-ferramenta.md). AT-626 (EP-026), pedido do dono de 31/10/2026, decisões do dono de 31/10 e de 07/11/2026 (AT-627/AT-630).
@@ -26,13 +26,11 @@ O Laya é um classificador nosso, treinado na AT-627. Na AT-592 (22/10) ele foi 
 | recurso | mínimo | origem |
 |---|---|---|
 | GPU | NVIDIA, runtime `nvidia` ou CDI | AT-592 |
-| RAM do serviço | 6 GiB | OOM medido com 2 GiB no ensemble de 4; 2,06 GiB de uso com 6 GiB |
-| VRAM livre | 4 096 MiB no instalador hoje (`LAYA_VRAM_MIN_MIB`) | estimativa de ~3–3,5 GiB para o ensemble (não medida) |
-| p95 da sonda | até 500 ms | decisão do dono, 31/10 (medido: 251 ms com o ensemble de 4 na RTX 4060) |
+| RAM total do host | 8 192 MiB (`LAYA_RAM_MIN_MIB`) | ~6 GiB da pilha + 2 GiB do serviço (modelo 1a, AT-592) |
+| VRAM livre | 2 048 MiB (`LAYA_VRAM_MIN_MIB`) | decisão do dono (31/10); medido ~1,8 GiB; o mesmo número da api e do serviço |
+| p95 da sonda | até 500 ms | decisão do dono, 31/10 (medido: 55 ms com o 1a) |
 
-O Ollama do profile `llm` e o ensemble não cabem juntos em ~5,6 GiB de VRAM livre (o `qwen2.5-coder:7b` Q4 usa 4,7 GB).
-
-> **TODO(humano):** o critério final de VRAM livre é "pico medido do ensemble + 512 MiB", e o número sai da AT-630 (L1). Qual valor fixar quando a medição chegar? E o instalador deve recusar o Laya quando o Ollama está na mesma GPU?
+O Ollama do profile `llm` e o Laya podem disputar a VRAM (o `qwen2.5-coder:7b` Q4 usa 4,7 GB): o instalador só AVISA quando os dois estão ligados, não recusa.
 
 ## Alternativas rejeitadas
 
@@ -45,6 +43,6 @@ O Ollama do profile `llm` e o ensemble não cabem juntos em ~5,6 GiB de VRAM liv
 - Quem tem GPU escolhe o Laya sem depender de terceiro, e provider fora do OpenRouter passa a ser roteado.
 - O release ganha a 6ª imagem (CUDA, vários GB). O job do bake precisa liberar disco no runner (~14 GB) e um CVE corrigível na base CUDA pode bloquear o release.
 - A primeira tela do roteador (seção `tool-router` em Configurações) vem na lane web.
-- A RN-625 ganha nota de revisão no repo do engine (RN-1070 e RN-1071 moram na api).
+- A RN-625 ganha nota de revisão no repo do engine (RN-1301 e RN-1302 moram na api).
 
-> **TODO(humano):** a tela diz "desde quando" o serviço está fora do ar? O estado atual da api não guarda o instante da queda.
+A tela diz "desde quando" o serviço está fora do ar (campo `desde` do `GET /workspaces/:id/tool-router`).

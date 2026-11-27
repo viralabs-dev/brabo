@@ -44,6 +44,20 @@ describe('compararPins', () => {
   });
 });
 
+describe('laya opcional', () => {
+  const T = TEXTO.replace('    "backup"', '    "laya": { "repo": "o/brabo-infra", "tag": "v1.0.0", "imagem": "ghcr.io/o/brabo-laya", "asset": "imagem-laya.json", "opcional": true },\n    "backup"');
+  const cl = JSON.parse(T);
+  it('em dia, mesmo sem o asset do Laya (opcional)', () => expect(compararPins(cl, INSTALL, emDia)).toEqual([]));
+  it('diverge do infra.ref', () => {
+    const d = JSON.parse(T.replace('"tag": "v1.0.0", "imagem": "ghcr.io/o/brabo-laya"', '"tag": "v0.9.0", "imagem": "ghcr.io/o/brabo-laya"'));
+    expect(compararPins(d, INSTALL, emDia).some((x) => x.includes('imagens.laya.tag'))).toBe(true);
+  });
+  it('subirPins: Latest do infra sem imagem-laya.json ainda sobe a linha do Laya', () => {
+    const r = subirPins(T, INSTALL, { 'o/brabo-infra': img('v1.1.0') });
+    expect(r.json).toContain('"tag": "v1.1.0", "imagem": "ghcr.io/o/brabo-laya"');
+  });
+});
+
 describe('subirPins', () => {
   it('sobe só a tag da linha, infra e backup juntos, e o RUNNER_TAG', () => {
     const latest = { 'o/brabo-infra': img('v1.1.0'), 'o/brabo-runner': run('v1.1.1'), 'o/brabo-web': img('v1.2.1') };

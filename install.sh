@@ -170,13 +170,14 @@ OLLAMA_PORTA_TETO=11443
 # `LAYA_LIGADO` é `sim` só com GPU NVIDIA que o roda (VRAM livre e RAM do
 # host medidas), um "s" digitado e a imagem no manifesto da Release.
 # `BRABO_LAYA_IMAGE` vem do manifesto (alvo OPCIONAL `laya`); a imagem é da
-# brabo-infra, e sem ela a oferta fica de fora. Os pisos são o pico medido do
-# ensemble (estimado ~3,5 GiB) + 512 MiB, e o OOM de RAM medido com 2 GiB;
-# sobrescreva por ambiente se a medição da AT-630 mudar o número.
+# brabo-infra, e sem ela a oferta fica de fora. Pisos do modelo 1a (ADR 0290):
+# VRAM livre 2048 MiB (medido ~1,8 GiB; igual ao da api e ao do serviço) e RAM
+# TOTAL do host 8192 MiB (~6 GiB da pilha + 2 GiB do serviço); sobrescreva por
+# ambiente se a medição mudar o número.
 LAYA_LIGADO='nao'
 BRABO_LAYA_IMAGE=''
-LAYA_VRAM_MIN_MIB="${LAYA_VRAM_MIN_MIB:-4096}"
-LAYA_RAM_MIN_MIB="${LAYA_RAM_MIN_MIB:-6144}"
+LAYA_VRAM_MIN_MIB="${LAYA_VRAM_MIN_MIB:-2048}"
+LAYA_RAM_MIN_MIB="${LAYA_RAM_MIN_MIB:-8192}"
 
 # O volume da pasta GERENCIADA (modo `container`), com o prefixo do projeto
 # compose (`name: brabo` no compose de instalação). É o único nome que este
@@ -1385,7 +1386,7 @@ laya_proficiente() {
   if [ "$vram" -lt "$LAYA_VRAM_MIN_MIB" ]; then LAYA_MOTIVO="VRAM livre ${vram} MiB, abaixo dos ${LAYA_VRAM_MIN_MIB} MiB que o Laya pede"; return 1; fi
   ram="$(laya_ram_mib || true)"
   case "$ram" in ''|*[!0-9]*) LAYA_MOTIVO='não medi a RAM desta máquina'; return 1 ;; esac
-  if [ "$ram" -lt "$LAYA_RAM_MIN_MIB" ]; then LAYA_MOTIVO="RAM ${ram} MiB, abaixo dos ${LAYA_RAM_MIN_MIB} MiB que o Laya pede"; return 1; fi
+  if [ "$ram" -lt "$LAYA_RAM_MIN_MIB" ]; then LAYA_MOTIVO="RAM total ${ram} MiB, abaixo dos ${LAYA_RAM_MIN_MIB} MiB que o Laya pede"; return 1; fi
   return 0
 }
 
@@ -1405,7 +1406,7 @@ consentir_laya() {
   dizer ''
   dizer "${C_BOLD}Laya (roteador de ferramentas na GPU)${C_RESET}"
   dizer 'Esta máquina tem GPU NVIDIA que roda o Laya (profile tool-router-gpu), no lugar do Jev.'
-  dizer "O custo: alguns GB de disco para a imagem e a GPU reservada (${LAYA_VRAM_MIN_MIB} MiB de VRAM livre, ${LAYA_RAM_MIN_MIB} MiB de RAM)."
+  dizer "O custo: alguns GB de disco para a imagem e a GPU reservada (${LAYA_VRAM_MIN_MIB} MiB de VRAM livre, ${LAYA_RAM_MIN_MIB} MiB de RAM total)."
   if [ "$LLM_LIGADO" = 'sim' ]; then
     dizer 'Atenção: o Ollama dos modelos locais, se usar a mesma GPU, disputa a VRAM com o Laya.'
   fi
