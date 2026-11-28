@@ -1457,7 +1457,7 @@ conferir_o_broker() {
 # o spec `install-runner-release` reprova a divergência. É o hash DESTE script que o
 # manifesto do produto assina, então a tag pinada aqui é tão confiável quanto ele.
 RUNNER_REPO='viralabs-dev/brabo-runner'
-RUNNER_TAG='v1.2.0'
+RUNNER_TAG='v1.2.1'
 URL_DO_RUNNER="https://github.com/${RUNNER_REPO}/releases/download/${RUNNER_TAG}"
 IDENTIDADE_REGEX_RUNNER="^https://github.com/${RUNNER_REPO}/\.github/workflows/build-runner-binaries\.yml@"
 
