@@ -4,6 +4,8 @@ Gerado dos conventional commits por `scripts/changelog.mjs`.
 
 ## Unreleased
 
+- **docs(adr)**: AT-1039 F3, o ADR 0300 diz o estado real: desde a `v1.7.0` do `brabo-ci` os scripts de refs conhecem a infra e o `packages/` do contracts, o teto de página é 99,8 KB (calibrado contra o site publicado) e a URL de `parte-NN` de outro repo reprova (regra 3c). Segue sem implementação o `--nova-parte`.
+
 - **docs(adr)**: AT-1034 F2, ADR 0301 (aceito, decisão do dono de 27/11/2026). Revisa o ponto 4 do ADR 0146: com base consentida e broker confirmado o projeto novo volta a nascer em `container` (padrão do ADR 0072); "Pasta montada" continua oferecida, sem vir pré-selecionada. A RN-513 do `brabo-web` é revisada na PR do web.
 
 - **docs(adr)**: AT-1029 F5, ADR 0300 (proposto). Revisa o 0287: a grade de âncoras do índice de RN é gerada das partes e completa (`indice-de-rn` do brabo-ci v1.6.0); o link de RN para outro repo aponta para o índice `<x>.md#rn-N` e a citação da parte vale só dentro do repo (o `links-das-rns` confere a âncora; a regra de URL para `parte-NN` de outro repo e o `--nova-parte` ficam como convenção, sem check); peso da página de RN com aviso a 90 KB e erro a 105 KB (estimativa, sem calibração contra o `docs:build`); `refs-entre-repos` e `rn-unica` fecham os itens 3 e 4 do ADR 0274. Fora: a PR automática no repo dono.

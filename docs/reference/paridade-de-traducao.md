@@ -13,9 +13,9 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 327 de 371 (88.1%) | 95.2% de 3.563.689 | 306 | 19 | 2 | 44 | 6 |
-| `ru` | 327 de 371 (88.1%) | 95.2% de 3.563.689 | 306 | 19 | 2 | 44 | 6 |
-| `zh-Hans` | 327 de 371 (88.1%) | 95.2% de 3.563.689 | 306 | 19 | 2 | 44 | 6 |
+| `en` | 327 de 371 (88.1%) | 95.2% de 3.564.213 | 306 | 19 | 2 | 44 | 6 |
+| `ru` | 327 de 371 (88.1%) | 95.2% de 3.564.213 | 306 | 19 | 2 | 44 | 6 |
+| `zh-Hans` | 327 de 371 (88.1%) | 95.2% de 3.564.213 | 306 | 19 | 2 | 44 | 6 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
