@@ -178,6 +178,7 @@ ADR фиксирует, **почему** что-то было решено, в �
 | [0141](0141-base-unica-dos-projetos-montados.md) | Единая база монтируемых проектов, смонтированная по тождеству | принято |
 | [0142](0142-validacao-de-workspace-montado-adiada.md) | Проверка смонтированного workspace откладывается до материализации | принято |
 | [0146](0146-base-consentida-no-bootstrap.md) | База, согласованная в bootstrap, и `mounted` как локальный режим по умолчанию | принято |
+| [0301](0301-o-projeto-novo-nasce-em-container-mesmo-com-base-consentida.md) | O projeto novo nasce em Container, mesmo com base consentida | принято |
 
 ## Контейнер проекта и broker {#tema-container}
 

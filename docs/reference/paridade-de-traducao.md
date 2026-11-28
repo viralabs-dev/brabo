@@ -13,14 +13,15 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 | locale | páginas traduzidas | caracteres traduzidos | em dia | defasadas | sem procedência | ausentes | órfãs |
 |---|---|---|---|---|---|---|---|
-| `en` | 327 de 370 (88.4%) | 95.2% de 3.561.316 | 307 | 18 | 2 | 43 | 6 |
-| `ru` | 327 de 370 (88.4%) | 95.2% de 3.561.316 | 307 | 18 | 2 | 43 | 6 |
-| `zh-Hans` | 327 de 370 (88.4%) | 95.2% de 3.561.316 | 307 | 18 | 2 | 43 | 6 |
+| `en` | 327 de 371 (88.1%) | 95.2% de 3.563.689 | 306 | 19 | 2 | 44 | 6 |
+| `ru` | 327 de 371 (88.1%) | 95.2% de 3.563.689 | 306 | 19 | 2 | 44 | 6 |
+| `zh-Hans` | 327 de 371 (88.1%) | 95.2% de 3.563.689 | 306 | 19 | 2 | 44 | 6 |
 
 > **TODO(humano):** revisão nativa por idioma — quem revisou e quando. Ainda não há revisão nativa registrada.
 
 ### Defasadas em `en`
 
+- `adr/0146-base-consentida-no-bootstrap.md` (tradução de 2026-11-04)
 - `adr/index.md` (tradução de 2026-11-08)
 - `architecture.md` (tradução de 2026-11-08)
 - `business-rules.md` (tradução de 2026-11-08)
@@ -42,6 +43,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 ### Defasadas em `ru`
 
+- `adr/0146-base-consentida-no-bootstrap.md` (tradução de 2026-11-04)
 - `adr/index.md` (tradução de 2026-11-08)
 - `architecture.md` (tradução de 2026-11-08)
 - `business-rules.md` (tradução de 2026-11-08)
@@ -63,6 +65,7 @@ A fonte é o pt-BR em `docs/` do `brabo` (ADR 0216, ADR 0273), inclusive `docs/r
 
 ### Defasadas em `zh-Hans`
 
+- `adr/0146-base-consentida-no-bootstrap.md` (tradução de 2026-11-04)
 - `adr/index.md` (tradução de 2026-11-08)
 - `architecture.md` (tradução de 2026-11-08)
 - `business-rules.md` (tradução de 2026-11-08)
