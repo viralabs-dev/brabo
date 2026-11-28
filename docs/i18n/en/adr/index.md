@@ -178,6 +178,7 @@ The three execution modes, the user's folder, the projects base and converting a
 | [0141](0141-base-unica-dos-projetos-montados.md) | The single base for mounted projects, mounted by identity | accepted |
 | [0142](0142-validacao-de-workspace-montado-adiada.md) | Validation of the mounted workspace is deferred until materialization | accepted |
 | [0146](0146-base-consentida-no-bootstrap.md) | The base consented at bootstrap, and `mounted` as the local default | accepted |
+| [0301](0301-o-projeto-novo-nasce-em-container-mesmo-com-base-consentida.md) | O projeto novo nasce em Container, mesmo com base consentida | accepted |
 
 ## Project container and broker {#tema-container}
 

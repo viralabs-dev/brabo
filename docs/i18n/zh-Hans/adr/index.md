@@ -178,6 +178,7 @@ gates 的注册表、QA 和 SecOps 的裁决，以及衡量它们的 golden-sets
 | [0141](0141-base-unica-dos-projetos-montados.md) | 挂载项目的唯一 base，按同一路径挂载 | 已接受 |
 | [0142](0142-validacao-de-workspace-montado-adiada.md) | 挂载 workspace 的验证推迟到实体化时进行 | 已接受 |
 | [0146](0146-base-consentida-no-bootstrap.md) | 在 bootstrap 中经同意设定的 base，以及 `mounted` 作为本地默认值 | 已接受 |
+| [0301](0301-o-projeto-novo-nasce-em-container-mesmo-com-base-consentida.md) | O projeto novo nasce em Container, mesmo com base consentida | 已接受 |
 
 ## 项目容器与 broker {#tema-container}
 
