@@ -1,5 +1,7 @@
 # ADR 0146 — A base consentida no bootstrap, e `mounted` como padrão local
 
+**Revisado em parte pelo ADR [0301](0301-o-projeto-novo-nasce-em-container-mesmo-com-base-consentida.md)**: o ponto 4 (`mounted` pré-selecionado com base) deixa de valer; o projeto novo volta a nascer em `container`.
+
 ## Context
 
 O ADR 0141 criou `BRABO_PROJECTS_BASE`: **uma** base no host, montada por

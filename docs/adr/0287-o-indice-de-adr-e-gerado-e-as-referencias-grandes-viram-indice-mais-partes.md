@@ -3,7 +3,7 @@
 - **Status:** proposto (08/11/2026, AT-862)
 - **Data:** 2026-11-08
 - **Tema:** `docs`
-- **Referencia:** ADR [0202](0202-o-indice-de-adr-por-tema.md) (o índice por tema; este revisa o item 2), [0254](0254-a-doc-de-cada-area-mora-na-raiz-dela.md) (a RN mora na área dona), [0274](0274-os-gerados-leem-os-irmaos-por-uma-trava-de-shas.md) (os gerados leem os irmãos), [0216](0216-quatro-idiomas-com-pt-br-como-fonte.md) (locales)
+- **Referencia:** ADR [0202](0202-o-indice-de-adr-por-tema.md) (o índice por tema; este revisa o item 2), [0254](0254-a-doc-de-cada-area-mora-na-raiz-dela.md) (a RN mora na área dona), [0274](0274-os-gerados-leem-os-irmaos-por-uma-trava-de-shas.md) (os gerados leem os irmãos), [0216](0216-quatro-idiomas-com-pt-br-como-fonte.md) (locales). **Revisado em parte pelo ADR [0300](0300-o-indice-de-rn-e-gerado-das-partes-e-o-ci-de-cada-repo-confere-a-fronteira.md)**: a grade de âncoras deixa de ser congelada (é gerada das partes e completa) e a regra de citar a parte vale só dentro do mesmo repo.
 
 ## Contexto
 

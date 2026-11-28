@@ -178,6 +178,7 @@ The three execution modes, the user's folder, the projects base and converting a
 | [0141](0141-base-unica-dos-projetos-montados.md) | The single base for mounted projects, mounted by identity | accepted |
 | [0142](0142-validacao-de-workspace-montado-adiada.md) | Validation of the mounted workspace is deferred until materialization | accepted |
 | [0146](0146-base-consentida-no-bootstrap.md) | The base consented at bootstrap, and `mounted` as the local default | accepted |
+| [0301](0301-o-projeto-novo-nasce-em-container-mesmo-com-base-consentida.md) | O projeto novo nasce em Container, mesmo com base consentida | accepted |
 
 ## Project container and broker {#tema-container}
 
@@ -428,6 +429,7 @@ How documentation is generated, verified and published.
 | [0275](0275-cada-irmao-confere-as-proprias-refs-com-simbolo.md) | Cada irmão confere as próprias refs com símbolo no PR | accepted |
 | [0287](0287-o-indice-de-adr-e-gerado-e-as-referencias-grandes-viram-indice-mais-partes.md) | O índice de ADR é gerado, e a referência grande vira índice mais partes | proposed |
 | [0288](0288-link-entre-repos-nas-rns-e-url-do-repo-dono.md) | O link entre repos nas RNs é a URL do repo dono, e o site a devolve para relativo | proposed |
+| [0300](0300-o-indice-de-rn-e-gerado-das-partes-e-o-ci-de-cada-repo-confere-a-fronteira.md) | O índice de RN é gerado das partes, e o CI de cada repo confere o que cruza a fronteira | proposed |
 <!-- END:GENERATED:indice-de-adr -->
 
 ## The convention

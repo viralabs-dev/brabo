@@ -178,6 +178,7 @@ gates 的注册表、QA 和 SecOps 的裁决，以及衡量它们的 golden-sets
 | [0141](0141-base-unica-dos-projetos-montados.md) | 挂载项目的唯一 base，按同一路径挂载 | 已接受 |
 | [0142](0142-validacao-de-workspace-montado-adiada.md) | 挂载 workspace 的验证推迟到实体化时进行 | 已接受 |
 | [0146](0146-base-consentida-no-bootstrap.md) | 在 bootstrap 中经同意设定的 base，以及 `mounted` 作为本地默认值 | 已接受 |
+| [0301](0301-o-projeto-novo-nasce-em-container-mesmo-com-base-consentida.md) | O projeto novo nasce em Container, mesmo com base consentida | 已接受 |
 
 ## 项目容器与 broker {#tema-container}
 
@@ -428,6 +429,7 @@ chunks 和混合搜索、对它的测量、Neo4j 图谱，以及从事件日志�
 | [0275](0275-cada-irmao-confere-as-proprias-refs-com-simbolo.md) | Cada irmão confere as próprias refs com símbolo no PR | 已接受 |
 | [0287](0287-o-indice-de-adr-e-gerado-e-as-referencias-grandes-viram-indice-mais-partes.md) | O índice de ADR é gerado, e a referência grande vira índice mais partes | 已提议 |
 | [0288](0288-link-entre-repos-nas-rns-e-url-do-repo-dono.md) | O link entre repos nas RNs é a URL do repo dono, e o site a devolve para relativo | 已提议 |
+| [0300](0300-o-indice-de-rn-e-gerado-das-partes-e-o-ci-de-cada-repo-confere-a-fronteira.md) | O índice de RN é gerado das partes, e o CI de cada repo confere o que cruza a fronteira | 已提议 |
 <!-- END:GENERATED:indice-de-adr -->
 
 ## 约定 {#a-convenção}
